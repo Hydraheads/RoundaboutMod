@@ -822,6 +822,11 @@ public class StandPowers extends AbilityScapeBasis {
         return null;
     }
 
+    public boolean bigJumpBlocker(){
+        return isBarraging() || super.bigJumpBlocker();
+    }
+
+
     /**Some standard bytes for sound noises, stay clear of 40-62 as they exist universally*/
     public static final byte TIME_STOP_NOISE = 40;
     public static final byte TIME_STOP_NOISE_2 = TIME_STOP_NOISE+1;

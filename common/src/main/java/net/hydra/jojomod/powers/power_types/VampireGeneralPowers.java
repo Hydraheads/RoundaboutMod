@@ -4,9 +4,11 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.DamageHandler;
@@ -16,6 +18,7 @@ import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Options;
@@ -25,6 +28,8 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
@@ -33,6 +38,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.List;
 
 public class VampireGeneralPowers extends PunchingGeneralPowers {
     public VampireGeneralPowers(LivingEntity self) {
@@ -52,6 +59,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public static final byte POWER_SPIKE = PowerIndex.POWER_1;
     public static final byte POWER_SPIKE_HIT = PowerIndex.POWER_1_BONUS;
 
+    public static final byte POWER_HAIR_GRAB = PowerIndex.POWER_1_SNEAK;
+
     /**The text name of the fate*/
     public Component getPowerName(){
         return Component.translatable("text.roundabout.powers.vampire");
@@ -70,6 +79,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 case SKILL_1_NORMAL -> {
                     clientSpikeAttack();
                 }
+                case SKILL_1_CROUCH -> {
+                    clientHairGrab();
+                }
                 case SKILL_3_NORMAL -> {
                     vp.dashOrWallWalk();
                 }
@@ -80,12 +92,20 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         }
     };
 
+    public void clientHairGrab(){
+        if (canAttack2() && !onCooldown(PowerIndex.GENERAL_1_SNEAK)){
+            this.tryPower(POWER_HAIR_GRAB);
+        }
+    }
+
     @Override
     /**Stand related things that slow you down or speed you up, override and call super to make
      * any stand ability slow you down*/
     public float inputSpeedModifiers(float basis){
         if (getActivePower() == POWER_SPIKE) {
             basis*=0.2f;
+        } else if (isSweeping() && !self.isCrouching()){
+            basis*=0.1f;
         }
         return super.inputSpeedModifiers(basis);
     }
@@ -95,7 +115,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     }
 
     public void clientSpikeAttack(){
-        if (canAttack2()){
+        if (canAttack2() && !onCooldown(PowerIndex.GENERAL_1)){
             this.tryPower(POWER_SPIKE);
             tryPowerPacket(POWER_SPIKE);
         }
@@ -104,6 +124,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         this.attackTimeDuring = 0;
         setActivePower(POWER_SPIKE);
         if (!self.level().isClientSide()) {
+            setCooldown(PowerIndex.GENERAL_1,80);
             if (getPlayerPos2() != PlayerPosIndex.HAIR_SPIKE) {
                 playSoundsIfNearby(SoundIndex.HAIR_SPIKE_CHARGE, 100, true);
                 setPlayerPos2(PlayerPosIndex.HAIR_SPIKE);
@@ -121,6 +142,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if (move != POWER_SWEEP && pos2 == PlayerPosIndex.SWEEP_KICK) {
                 setPlayerPos2(PlayerPosIndex.NONE);
             } else if (move != POWER_SPIKE && (pos2 == PlayerPosIndex.HAIR_SPIKE || pos2 == PlayerPosIndex.HAIR_SPIKE_2)) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            } else if (move != POWER_HAIR_GRAB && (pos2 == PlayerPosIndex.HAIR_EXTENSION_2)) {
                 setPlayerPos2(PlayerPosIndex.NONE);
             }
         }
@@ -147,6 +170,12 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         } else {
             super.buttonInputAttack(keyIsDown,options);
         }
+    }
+
+
+
+    public boolean isSweeping(){
+        return getActivePower() == POWER_SWEEP;
     }
 
     public int spikeTimeDuring = 0;
@@ -198,6 +227,11 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         xTryPower(POWER_SPIKE_HIT, false);
                         tryPowerPacket(POWER_SPIKE_HIT);
                     }
+                } else if (getActivePower() == POWER_HAIR_GRAB) {
+                    if (attackTimeDuring > 10) {
+                        xTryPower(PowerIndex.NONE, false);
+                        tryPowerPacket(NONE);
+                    }
                 }
             }
 
@@ -241,7 +275,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public boolean retract = false;
     public boolean extended = false;
     public static int maxSpike= 20;
-    public static int maxSpike2= 48;
+    public static int maxSpike2= 56;
 
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime) {
@@ -250,10 +284,40 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 attackTargetId = chargeTime;
             } if (move == POWER_SWEEP) {
                 attackTargetId = chargeTime;
+            } if (move == POWER_HAIR_GRAB) {
+                attackTargetId = chargeTime;
             }
         }
         return super.tryIntPower(move,forced,chargeTime);
     }
+
+
+    public void doHairGrab(){
+        if (!self.level().isClientSide()) {
+            Entity target = null;
+            if (attackTargetId > 0) {
+                target = self.level().getEntity(attackTargetId);
+            }
+            if (target != null){
+                setCooldown(PowerIndex.GENERAL_1_SNEAK,80);
+            } else {
+                setCooldown(PowerIndex.GENERAL_1_SNEAK,40);
+            }
+            hairPullEntity(target);
+        }
+    }
+
+    public void hairPullEntity(Entity entity) {
+        if (!this.self.level().isClientSide()) {
+            if (entity != null) {
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.LASSO_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5f + Math.random() * 0.05f));
+                entity.setDeltaMovement(self.getEyePosition().subtract(entity.position()).normalize().scale(1));
+            } else {
+                this.self.level().playSound(null, this.self.blockPosition(),ModSounds.VAMPIRE_DIVE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5f + Math.random() * 0.08f));
+            }
+        }
+    }
+
 
 
     public float getPunchStrength(Entity entity){
@@ -273,7 +337,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampiricFate vp) {
 
             if (isHoldingSneak()) {
-                setSkillIcon(context, x, y, 1, StandIcons.DODGE, PowerIndex.GENERAL_1_SNEAK);
+                setSkillIcon(context, x, y, 1, StandIcons.HAIR_GRAB, PowerIndex.GENERAL_1_SNEAK);
             } else {
                 setSkillIcon(context, x, y, 1, StandIcons.HAIR_SPIKE, PowerIndex.GENERAL_1);
             }
@@ -288,6 +352,32 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         }
     }
 
+    public boolean isSpiking(){
+        return getActivePower() == POWER_SPIKE;
+    }
+
+    public boolean bigJumpBlocker(){
+        return isSpiking() || super.bigJumpBlocker();
+    }
+
+    @Override
+    public void renderAttackHud(GuiGraphics context, Player playerEntity,
+                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
+                                float flashAlpha, float otherFlashAlpha) {
+        super.renderAttackHud(context,playerEntity,scaledWidth,scaledHeight,ticks,vehicleHeartCount,flashAlpha,otherFlashAlpha);
+        boolean powerOn = PowerTypes.hasPowerActive(playerEntity);
+        int j = scaledHeight / 2 - 7 - 4;
+        int k = scaledWidth / 2 - 8;
+
+        float attackTimeDuring = getAttackTimeDuring();
+        Entity TE2 = getTargetEntity(playerEntity, 5, getPunchAngle());
+        if (powerOn && !hasRendered && (getActivePower() == NONE || attackTimeDuring <= -1)  &&
+                TE2 != null && TE2.isAlive()) {
+            int barTexture = 89;
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, barTexture, 15, 6);
+            hasRendered = true;
+        }
+    }
 
     @Override
     /**Override this to set the special move*/
@@ -302,9 +392,44 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             spikeAttack();
         }else if (move == POWER_SPIKE_HIT){
             spikeHit();
+        }else if (move == POWER_HAIR_GRAB){
+            hairGrab();
         }
 
         return super.setPowerOther(move,lastMove);
+    }
+
+    public void hairGrab(){
+        this.attackTimeDuring = 0;
+        setActivePower(POWER_HAIR_GRAB);
+        if (!self.level().isClientSide()) {
+
+            if (getPlayerPos2() != PlayerPosIndex.HAIR_EXTENSION_2) {
+                setPlayerPos2(PlayerPosIndex.HAIR_EXTENSION_2);
+            }
+
+            doHairGrab();
+        } else {
+
+            Entity TE = getTargetEntity(self, 5F, getPunchAngle());
+            int id = 0;
+            if (TE != null){
+                id = TE.getId();
+            }
+            tryIntPowerPacket(POWER_HAIR_GRAB,id);
+        }
+    }
+
+    public float getSpikeStrength(Entity entity){
+        if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
+            if (this.getReducedDamage(entity)){
+                return 1.2F * (1+ (vp.getVampireData().strengthLevel * 0.1F));
+            } else {
+                return 3.4F * (1+ (vp.getVampireData().strengthLevel * 0.1F));
+            }
+        } else {
+            return super.getPunchStrength(entity);
+        }
     }
 
     public void spikeHit(){
@@ -314,13 +439,38 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 setPlayerPos2(PlayerPosIndex.HAIR_SPIKE_2);
             }
             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXTEND_SPIKES_EVENT, SoundSource.PLAYERS, 1F, (float) (1.05f + Math.random() * 0.05f));
-
+            List<Entity> hitbox = StandGrabHitbox(self,DamageHandler.genHitbox(self, self.getX(), self.getY(),
+                    self.getZ(), 4, 4, 4), 4, 360);
+            if (hitbox != null) {
+                boolean combo = false;
+                for (Entity value : hitbox) {
+                    if (!value.isInvulnerable() && value.isAlive() && value.getUUID() != self.getUUID() && (MainUtil.isStandPickable(value) || value instanceof StandEntity)) {
+                        if (!(value instanceof StandEntity SE1 && SE1.getUser() != null && SE1.getUser().is(self))) {
+                            if (DamageHandler.VampireDamageEntity(value, getSpikeStrength(value), this.self)) {
+                                value.setDeltaMovement(0,0,0);
+                                if (value instanceof Player pl){
+                                    ((StandUser)pl).roundabout$setDazed((byte) 16);
+                                } else if (value instanceof LivingEntity livingEntity && !MainUtil.isBossMob(livingEntity)){
+                                    ((StandUser)livingEntity).roundabout$setDazed((byte) 16);
+                                }
+                                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SPIKE_HIT_EVENT, SoundSource.PLAYERS, 1F, (float) (1.0f + Math.random() * 0.05f));
+                                if (!combo){
+                                    combo = true;
+                                    addToCombo();
+                                }
+                            } else {
+                                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (1.0f + Math.random() * 0.1f));
+                            }
+                        }
+                    }
+                }
+            }
 
         }
     }
 
     public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
-        if (num == PowerIndex.GENERAL_1) {
+        if (num == PowerIndex.GENERAL_1 || num == PowerIndex.GENERAL_1_SNEAK) {
             return true;
         }
         return super.isServerControlledCooldown(ci, num);

@@ -186,7 +186,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
                 attackTargetId = chargeTime;
             }
         }
-        return super.tryPower(move,forced);
+        return super.tryIntPower(move,forced,chargeTime);
     }
 
 
@@ -210,6 +210,11 @@ public class PunchingGeneralPowers extends GeneralPowers {
             this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
         }
         return super.tryPower(move,forced);
+    }
+
+
+    public boolean bigJumpBlocker(){
+        return isBarraging() || super.bigJumpBlocker();
     }
 
     public int attackTargetId = -1;
@@ -622,10 +627,12 @@ public class PunchingGeneralPowers extends GeneralPowers {
         return ModSounds.COMBAT_PUNCH_4_EVENT;
     }
 
+    public boolean hasRendered = false;
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
+        hasRendered = false;
         boolean powerOn = PowerTypes.hasPowerActive(playerEntity);
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
@@ -635,12 +642,12 @@ public class PunchingGeneralPowers extends GeneralPowers {
             int ClashTime = 15 - Math.round((attackTimeDuring / getBarrageLength()) * 15);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
-
+            hasRendered = true;
         } else if (powerOn && isBarrageCharging()) {
             int ClashTime = Math.round((attackTimeDuring / getBarrageWindup()) * 15);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
-
+            hasRendered = true;
         } else {
             int barTexture = 0;
             Entity TE = getTargetEntity(playerEntity, 3, getPunchAngle());
@@ -662,7 +669,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
                     context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
                     int finalATimeInt = Math.round(finalATime * 15);
                     context.blit(StandIcons.JOJO_ICONS, k, j, 193, barTexture, finalATimeInt, 6);
-
+                    hasRendered = true;
 
                 }
             }
@@ -674,6 +681,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
                         } else {
                             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
                         }
+                        hasRendered = true;
                     }
                 }
             }

@@ -437,6 +437,9 @@ public class VampireFate extends VampiricFate {
     }
     @Override
     public float getJumpHeightAddon(){
+        if (getStandUserSelf().roundabout$getStandPowers().bigJumpBlocker() ||
+        self instanceof Player pl && (((IPowersPlayer)pl).rdbt$getPowers().bigJumpBlocker()))
+            return super.getJumpHeightAddon();
         //if (self.isCrouching() || isFast()){
         //    return super.getJumpHeightAddon()+4;
         //} else {
@@ -495,8 +498,10 @@ public class VampireFate extends VampiricFate {
 
     public void tickHair(){
         if (self.level().isClientSide()){
-            if (getPlayerPos2() == PlayerPosIndex.HAIR_EXTENSION){
+            if (getPlayerPos2() == PlayerPosIndex.HAIR_EXTENSION) {
                 animationProgress++;
+            } else if (getPlayerPos2() == PlayerPosIndex.HAIR_EXTENSION_2){
+                animationProgress = Math.max(animationProgress+1,16);
             } else {
                 animationProgress = 0;
             }

@@ -214,7 +214,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     if (pos2 == PlayerPosIndex.BARRAGE) {
                         renderBarrageArmsPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
                                 r, g, b);
-                    } else if (pos2 == PlayerPosIndex.HAIR_EXTENSION){
+                    } else if (pos2 == PlayerPosIndex.HAIR_EXTENSION || pos2 == PlayerPosIndex.HAIR_EXTENSION_2){
                         if (!isHurt){
                             r = pl.rdbt$getHairColorX();
                             g = pl.rdbt$getHairColorY();

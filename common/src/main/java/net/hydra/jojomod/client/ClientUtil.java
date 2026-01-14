@@ -1496,30 +1496,13 @@ public class ClientUtil {
                     }
                 }
 
-                    Direction gravityDirection = GravityAPI.getGravityDirection(cameraEnt);
 
-                    //RotationUtil.rotPlayerToWorld(cameraEnt.getYHeadRot(), cameraEnt.getXRot(), gravityDirection);
+                Vec3 gtranslation = new Vec3(0, -0.5, 0);
+                stack.translate(gtranslation.x, gtranslation.y, gtranslation.z);
+                stack.mulPose(Axis.ZP.rotationDegrees(180f));
+                stack.mulPose(Axis.XP.rotationDegrees(1));
 
-//                    RotationAnimation animation = GravityAPI.getRotationAnimation(player);
-//                    if (animation == null) {
-//                        return;
-//                    }
-//                    long timeMs = player.level().getGameTime() * 50 + (long) ($$4 * 50);
-//                    //ELA.getModel().setupAnim((AbstractClientPlayer) $$0, 0, 0, $$4 %1, $$8, $$11);
-
-
-                    if (gravityDirection == Direction.UP){
-                        Vec3 vector = new Vec3(0,cameraEnt.getEyeHeight()*0.4f,0);
-                    } else {
-                        Vec3 vector = new Vec3(0,cameraEnt.getEyeHeight()*0.15f,0);
-                        stack.translate(vector.x,vector.y,vector.z);
-                    }
-
-
-                    //stack.mulPose(new Quaternionf(animation.getCurrentGravityRotation(gravityDirection, timeMs)).conjugate());
-
-
-                    ModStrayModels.VampireHairFlesh.render(cameraEnt, $$4, stack, source, poggers, r, g, b, 1);
+                ModStrayModels.VampireHairFlesh.render(cameraEnt, $$4, stack, source, poggers, r, g, b, 1);
 
                 stack.popPose();
             }
@@ -1559,11 +1542,6 @@ public class ClientUtil {
 
 
                 ItemStack visage = pl.roundabout$getMaskSlot();
-                if (isHurt){
-                    r = isHurt ? 1.0F : 1.0F;
-                    g = isHurt ? 0.6F : 1.0F;
-                    b = isHurt ? 0.6F : 1.0F;
-                } else {
                     if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
                         VisageData vd = ME.visageData;
                         if (vd != null && vd.isCharacterVisage()) {
@@ -1572,7 +1550,6 @@ public class ClientUtil {
                             b = ((float) vd.getHairColor().getZ()) / 255;
                         }
                     }
-                }
                 Vec3 gtranslation = new Vec3(0, 0.1, 0);
                 stack.translate(gtranslation.x, gtranslation.y, gtranslation.z);
 
