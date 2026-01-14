@@ -28,6 +28,8 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
@@ -296,6 +298,11 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if (attackTargetId > 0) {
                 target = self.level().getEntity(attackTargetId);
             }
+            if (target != null){
+                setCooldown(PowerIndex.GENERAL_1_SNEAK,80);
+            } else {
+                setCooldown(PowerIndex.GENERAL_1_SNEAK,40);
+            }
             hairPullEntity(target);
         }
     }
@@ -303,7 +310,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public void hairPullEntity(Entity entity) {
         if (!this.self.level().isClientSide()) {
             if (entity != null) {
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.LASSO_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5f + Math.random() * 0.05f));
                 entity.setDeltaMovement(self.getEyePosition().subtract(entity.position()).normalize().scale(1));
+            } else {
+                this.self.level().playSound(null, this.self.blockPosition(),ModSounds.VAMPIRE_DIVE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5f + Math.random() * 0.08f));
             }
         }
     }
@@ -397,6 +407,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if (getPlayerPos2() != PlayerPosIndex.HAIR_EXTENSION_2) {
                 setPlayerPos2(PlayerPosIndex.HAIR_EXTENSION_2);
             }
+
             doHairGrab();
         } else {
 
@@ -459,7 +470,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     }
 
     public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
-        if (num == PowerIndex.GENERAL_1) {
+        if (num == PowerIndex.GENERAL_1 || num == PowerIndex.GENERAL_1_SNEAK) {
             return true;
         }
         return super.isServerControlledCooldown(ci, num);
