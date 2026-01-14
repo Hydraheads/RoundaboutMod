@@ -86,9 +86,9 @@ public class BodySpikePart extends PsuedoHierarchicalModel {
 
         PartDefinition spike11 = body_spikes.addOrReplaceChild("spike11", CubeListBuilder.create().texOffs(0, 0).addBox(-0.996F, -0.9218F, -1.9897F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-5.2172F, 7.8564F, -0.728F, 1.9358F, 0.2547F, 0.518F));
 
-        PartDefinition spike12 = body_spikes.addOrReplaceChild("spike12", CubeListBuilder.create().texOffs(0, 0).addBox(-0.996F, -0.9218F, -1.9897F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.3078F, 7.8564F, -0.728F, 1.9358F, -0.2547F, -0.518F));
+        PartDefinition spike12 = body_spikes.addOrReplaceChild("spike12", CubeListBuilder.create().texOffs(0, 0).addBox(-0.9959F, -0.9218F, -1.9897F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.3078F, 7.8564F, -0.728F, 1.9358F, -0.2547F, -0.518F));
 
-        return LayerDefinition.create(meshdefinition, 32, 32);
+        return LayerDefinition.create(meshdefinition, 8, 8);
     }
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {

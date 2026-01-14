@@ -1757,6 +1757,74 @@ public class AbilityScapeBasis {
             }
         }
     }
+
+    public boolean isAirDashing = false;
+    public void airDash(){
+        Options options = Minecraft.getInstance().options;
+
+        inputDash = true;
+        if (this.getSelf().level().isClientSide) {
+            if (!((TimeStop) this.getSelf().level()).CanTimeStopEntity(this.getSelf())  && !this.getStandUserSelf().roundabout$isPossessed()   ) {
+                if (!this.onCooldown(PowerIndex.GLOBAL_DASH)) {
+                    byte forward = 0;
+                    byte strafe = 0;
+                    if (options.keyUp.isDown()) forward++;
+                    if (options.keyDown.isDown()) forward--;
+                    if (options.keyLeft.isDown()) strafe++;
+                    if (options.keyRight.isDown()) strafe--;
+                    int degrees = (int) (this.getSelf().getYRot() % 360);
+                    int backwards = 0;
+
+                    if (strafe > 0 && forward == 0) {
+                        degrees -= 90;
+                        degrees = degrees % 360;
+                        backwards = 1;
+                    } else if (strafe > 0 && forward > 0) {
+                        degrees -= 45;
+                        degrees = degrees % 360;
+                        backwards = 2;
+                    } else if (strafe > 0) {
+                        degrees -= 135;
+                        degrees = degrees % 360;
+                        backwards = -1;
+                    } else if (strafe < 0 && forward == 0) {
+                        degrees += 90;
+                        degrees = degrees % 360;
+                        backwards = 3;
+                    } else if (strafe < 0 && forward > 0) {
+                        degrees += 45;
+                        degrees = degrees % 360;
+                        backwards = 4;
+                    } else if (strafe < 0) {
+                        degrees += 135;
+                        degrees = degrees % 360;
+                        backwards = -2;
+                    } else if (forward < 0) {
+                        degrees += 180;
+                        degrees = degrees % 360;
+                        backwards = -3;
+                    }
+
+                    int cdTime = ClientNetworking.getAppropriateConfig().generalStandSettings.jumpingDashCooldown;
+                    if (this.getSelf() instanceof Player) {
+                        ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(0);
+                    }
+                    this.setCooldown(PowerIndex.GLOBAL_DASH, cdTime);
+                    MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.75F,
+                            Mth.sin(degrees * ((float) Math.PI / 180)),
+                            Mth.sin(-20 * ((float) Math.PI / 180)),
+                            -Mth.cos(degrees * ((float) Math.PI / 180)));
+
+                    doDashMove(backwards);
+                }
+            }
+        }
+    }
+    public void doDashMove(int backwards){
+        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.MOVEMENT, true);
+        tryIntPowerPacket(PowerIndex.MOVEMENT, backwards);
+    }
+
     /**If you need to temporarily save an entity use this*/
     public Entity storeEnt = null;
 

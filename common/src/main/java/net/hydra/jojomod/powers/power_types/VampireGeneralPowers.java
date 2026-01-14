@@ -3,6 +3,7 @@ package net.hydra.jojomod.powers.power_types;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
@@ -28,9 +29,8 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -60,6 +60,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public static final byte POWER_SPIKE_HIT = PowerIndex.POWER_1_BONUS;
 
     public static final byte POWER_HAIR_GRAB = PowerIndex.POWER_1_SNEAK;
+    public static final byte AIR_DASH = PowerIndex.POWER_3;
 
     /**The text name of the fate*/
     public Component getPowerName(){
@@ -96,6 +97,66 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         if (canAttack2() && !onCooldown(PowerIndex.GENERAL_1_SNEAK)){
             this.tryPower(POWER_HAIR_GRAB);
         }
+    }
+
+    @Override
+    public void doDashMove(int backwards){
+        ((StandUser) this.getSelf()).roundabout$tryPower(AIR_DASH, true);
+        tryIntPowerPacket(AIR_DASH, backwards);
+    }
+
+    public boolean setPowerMovementAir(int lastMove) {
+        if (this.getSelf() instanceof Player) {
+            cancelConsumableItem(this.getSelf());
+            this.setPowerNone();
+            if (!this.getSelf().level().isClientSide()) {
+                ((IPlayerEntity)this.getSelf()).roundabout$setClientDodgeTime(0);
+                ((IPlayerEntity) this.getSelf()).roundabout$setDodgeTime(0);
+                if (storedInt < 0) {
+                    ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_BACKWARD);
+                } else {
+                    ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_FORWARD);
+                }
+
+                int degrees = (int) (this.getSelf().getYRot() % 360);
+                int offset = switch (storedInt) { case 1 -> -90; case 2 -> -45; case -1 -> -135; case 3 -> 90; case 4 -> 45; case -2 -> 135; case -3 -> 180; default -> 0; };
+                degrees = (degrees + offset) % 360;
+
+                for (int i = 0; i < 3; i++){
+                    float j = 0.1F;
+                    if (i == 1){
+                        degrees -= 20;
+                    } else if (i == 2){
+                        degrees += 40;
+                    } else {
+                        j = 0.2F;
+                    }
+
+
+                    Vec3 cvec = new Vec3(0,0.1,0);
+                    Vec3 dvec = new Vec3(Mth.sin(degrees * ((float) Math.PI / 180))*0.3,
+                            Mth.sin(-20 * ((float) Math.PI / 180))*-j,
+                            -Mth.cos(degrees * ((float) Math.PI / 180))*0.3);
+                    Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+                    if (gravD != Direction.DOWN){
+                        cvec = RotationUtil.vecPlayerToWorld(cvec,gravD);
+                        dvec = RotationUtil.vecPlayerToWorld(dvec,gravD);
+                    }
+
+                    ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
+                            this.getSelf().getX()+cvec.x, this.getSelf().getY()+cvec.y, this.getSelf().getZ()+cvec.z,
+                            0,
+                            dvec.x,
+                            dvec.y,
+                            dvec.z,
+                            0.8);
+                }
+            }
+        }
+        if (!this.getSelf().level().isClientSide()) {
+            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.98 + (Math.random() * 0.04)));
+        }
+        return true;
     }
 
     @Override
@@ -288,6 +349,12 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 attackTargetId = chargeTime;
             }
         }
+
+        if (this.canChangePower(move, forced)) {
+            if (move == AIR_DASH) {
+                this.storedInt = chargeTime;
+            }
+        }
         return super.tryIntPower(move,forced,chargeTime);
     }
 
@@ -311,6 +378,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         if (!this.self.level().isClientSide()) {
             if (entity != null) {
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.LASSO_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5f + Math.random() * 0.05f));
+
+                entity.hurtMarked = true;
+                entity.hasImpulse = true;
                 entity.setDeltaMovement(self.getEyePosition().subtract(entity.position()).normalize().scale(1));
             } else {
                 this.self.level().playSound(null, this.self.blockPosition(),ModSounds.VAMPIRE_DIVE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5f + Math.random() * 0.08f));
@@ -394,6 +464,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             spikeHit();
         }else if (move == POWER_HAIR_GRAB){
             hairGrab();
+        } else if (move == AIR_DASH){
+            setPowerMovementAir(lastMove);
         }
 
         return super.setPowerOther(move,lastMove);
@@ -447,7 +519,15 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     if (!value.isInvulnerable() && value.isAlive() && value.getUUID() != self.getUUID() && (MainUtil.isStandPickable(value) || value instanceof StandEntity)) {
                         if (!(value instanceof StandEntity SE1 && SE1.getUser() != null && SE1.getUser().is(self))) {
                             if (DamageHandler.VampireDamageEntity(value, getSpikeStrength(value), this.self)) {
+
+                                value.hurtMarked = true;
+                                value.hasImpulse = true;
                                 value.setDeltaMovement(0,0,0);
+
+                                if (value instanceof LivingEntity LE){
+                                    MainUtil.makeBleed(LE,1,300,this.self);
+                                }
+
                                 if (value instanceof Player pl){
                                     ((StandUser)pl).roundabout$setDazed((byte) 16);
                                 } else if (value instanceof LivingEntity livingEntity && !MainUtil.isBossMob(livingEntity)){
@@ -487,6 +567,12 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if (getPlayerPos2() != PlayerPosIndex.SWEEP_KICK) {
                 setPlayerPos2(PlayerPosIndex.SWEEP_KICK);
             }
+
+            Vec3 pos = self.getPosition(1f).add(self.getLookAngle().scale(0.75f));
+
+            ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.SWEEP_ATTACK,
+                    pos.x, pos.y+0.5F, pos.z,
+                    0, 0, 0, 0, 0.8);
             doSweepHit();
         } else {
 
