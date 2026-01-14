@@ -905,6 +905,10 @@ public class PowersAnubis extends NewDashPreset {
                             this.getActivePower() == PowerIndex.ATTACK) {
 
                         ((StandUser)this.getSelf()).roundabout$setBubbleEncased((byte)(0));
+                        this.getSelf().swing(InteractionHand.MAIN_HAND);
+                        if (this.getSelf() instanceof Player P) {
+                            S2CPacketUtil.sendIntPowerDataPacket(P,PowersAnubis.SWING,0);
+                        }
                         if (getActivePower() == PowerIndex.SNEAK_ATTACK) {
                             SAttack();
                         } else {
@@ -966,6 +970,7 @@ public class PowersAnubis extends NewDashPreset {
 
 
     public void NAttack(){
+
 
         setAnimation(PowerIndex.ATTACK);
         Entity targetEntity = getTargetEntity(this.self,-1,15);
