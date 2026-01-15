@@ -4,6 +4,7 @@ package net.hydra.jojomod.mixin.items.visages;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
@@ -32,6 +33,14 @@ public abstract class VisageHumanoidArmorLayer<T extends LivingEntity, M extends
             if (!((IPlayerEntity)PE).roundabout$getMaskSlot().isEmpty()
                     && ((IPlayerEntity)PE).roundabout$getMaskSlot().getItem() instanceof MaskItem ME
                     && !ME.visageData.generateVisageData(PE).rendersArmor() &&
+                    !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)
+            ){
+                ci.cancel();
+            }
+        } else if ($$3 instanceof CloneEntity CE && CE.player != null) {
+            if (!((IPlayerEntity)CE.player).roundabout$getMaskSlot().isEmpty()
+                    && ((IPlayerEntity)CE.player).roundabout$getMaskSlot().getItem() instanceof MaskItem ME
+                    && !ME.visageData.generateVisageData(CE.player).rendersArmor() &&
                     !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)
             ){
                 ci.cancel();

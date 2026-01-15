@@ -8,7 +8,9 @@ import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
@@ -47,8 +49,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         this.dispatcher = context.getEntityRenderDispatcher();
     }
 
-    protected boolean getRenderT(T $$0, boolean $$1, boolean $$2, boolean $$3) {
-        ResourceLocation $$4 = this.getTextureLocation($$0);
+    protected boolean getRenderT(boolean $$1, boolean $$2, boolean $$3) {
         if ($$2 || $$1) {
             return true;
         } else {
@@ -61,10 +62,14 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, float var9, float var10) {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft != null){
+            if (entity instanceof CloneEntity fcg && fcg.player != null){
+                entity = (T)fcg.player;
+            }
+
             boolean $$18 = !entity.isInvisible();
             boolean $$19 = !$$18 && !entity.isInvisibleTo(minecraft.player);
             boolean $$20 = minecraft.shouldEntityAppearGlowing(entity);
-            boolean $$21 = this.getRenderT(entity, $$18, $$19, $$20);
+            boolean $$21 = this.getRenderT($$18, $$19, $$20);
             if ($$21) {
 
                 ItemStack visage = null;
