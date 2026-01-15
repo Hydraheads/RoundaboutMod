@@ -827,6 +827,15 @@ public class ModSounds {
     public static final ResourceLocation BOWLER_HAT_FLY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BOWLER_HAT_FLY_SOUND);
     public static SoundEvent BOWLER_HAT_FLY_SOUND_EVENT = SoundEvent.createVariableRangeEvent(BOWLER_HAT_FLY_ID);
 
+
+    public static final String VAMPIRE_DASH = "vampire_dash";
+    public static final ResourceLocation VAMPIRE_DASH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VAMPIRE_DASH);
+    public static SoundEvent VAMPIRE_DASH_EVENT = SoundEvent.createVariableRangeEvent(VAMPIRE_DASH_ID);
+    public static final String VAMPIRE_GLEAM = "vampire_gleam";
+    public static final ResourceLocation VAMPIRE_GLEAM_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VAMPIRE_GLEAM);
+    public static SoundEvent VAMPIRE_GLEAM_EVENT = SoundEvent.createVariableRangeEvent(VAMPIRE_GLEAM_ID);
+
+
     public static final String GLAIVE_CHARGE = "glaive_charge";
     public static final ResourceLocation GLAIVE_CHARGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GLAIVE_CHARGE);
     public static SoundEvent GLAIVE_CHARGE_EVENT = SoundEvent.createVariableRangeEvent(GLAIVE_CHARGE_ID);
