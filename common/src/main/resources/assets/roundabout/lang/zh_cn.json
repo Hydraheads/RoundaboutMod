@@ -8,8 +8,25 @@
   "text.roundabout.warn_trap_triggered": " 被触发了！",
   "text.roundabout.warn_unnamed_trap_triggered": "有一个迷雾陷阱被触发了！",
 
+  "text.roundabout.powers.stand": "替身使者",
+  "text.roundabout.powers.stand_select": "替身",
+  "text.roundabout.powers.vampire": "石鬼面之力",
+  "text.roundabout.powers.vampire_select": "吸血鬼",
+  "text.roundabout.powers.hamon": "波纹使者",
+  "text.roundabout.powers.hamon_select": "波纹",
+  "text.roundabout.powers.spin": "回旋技艺",
+  "text.roundabout.powers.spin_select": "回旋",
+  "text.roundabout.powers.martial_arts": "武术家",
+  "text.roundabout.powers.martial_arts_select": "武术",
 
-  "text.roundabout.respawn_as_human": "Respawn as Human",
+  "text.roundabout.fate.vampire": "吸血鬼",
+  "text.roundabout.fate.vampire_hair": "改变发色",
+
+  "text.roundabout.bullets.revolver": "史密夫韦森M638转轮手枪与柯尔特转轮手枪通用子弹",
+  "text.roundabout.bullets.tommy": "汤姆逊冲锋枪通用子弹",
+  "text.roundabout.bullets.sniper": "狙击步枪通用子弹",
+
+  "text.roundabout.respawn_as_human": "再一次作为人类活下去",
 
   "text.roundabout.out_of_bullets": "弹药耗尽，潜行状态下按下交互键以装填子弹！",
   "text.roundabout.already_reloaded": "看起来枪里已经装满子弹了。",
@@ -61,6 +78,7 @@
   "item.roundabout.lucky_lipstick.desc": "为了更好的美容效果，请持续使用直到入睡",
   "item.roundabout.sacrificial_dagger": "献祭匕首",
   "item.roundabout.cherries": "樱桃",
+  "item.roundabout.hairspray": "发胶",
 
 
   "item.roundabout.star_platinum_disc": "替身光碟",
@@ -123,6 +141,14 @@
   "item.roundabout.snubnose_revolver": "史密夫韦森M638转轮手枪",
   "item.roundabout.snubnose_ammo": "转轮手枪子弹",
 
+  "item.roundabout.tommy_gun": "汤姆逊冲锋枪",
+  "item.roundabout.tommy_ammo": "冲锋枪子弹",
+
+  "item.roundabout.colt_revolver": "柯尔特转轮手枪",
+
+  "item.roundabout.jackal_rifle": "狙击步枪",
+  "item.roundabout.sniper_ammo": "狙击步枪子弹",
+
   "item.roundabout.light_bulb": "灯泡",
 
   "item.roundabout.blank_mask": "纯粹假面",
@@ -165,9 +191,15 @@
   "item.roundabout.avdol_mask": "阿布德尔之颜",
   "item.roundabout.avdol_mask.desc": "穆罕穆德·阿布德尔",
   "item.roundabout.avdol_mask.tag": "阿布德尔",
+  "item.roundabout.kakyoin_mask": "花京院之颜",
+  "item.roundabout.kakyoin_mask.desc": "花京院典明",
+  "item.roundabout.kakyoin_mask.tag": "花京院",
   "item.roundabout.aya_mask": "辻彩之颜",
   "item.roundabout.aya_mask.desc": "辻彩",
   "item.roundabout.aya_mask.tag": "辻彩",
+  "item.roundabout.speedwagon_foundation_mask": "史比特瓦根基金会之颜",
+  "item.roundabout.speedwagon_foundation_mask.desc": "基金会员工",
+  "item.roundabout.speedwagon_foundation_mask.tag": "SPWd的工作人员",
   "item.roundabout.aesthetician_mask_1": "美容师之颜",
   "item.roundabout.aesthetician_mask_1.desc": "美容师",
   "item.roundabout.aesthetician_mask_1.tag": "美容师",
@@ -206,7 +238,7 @@
 
   "item.roundabout.d4c.lost_emeralds": "你失去了%s个绿宝石。",
 
-  "item.roundabout.stand_arrow.roll": "???",
+  "item.roundabout.stand_arrow.roll": "？？？",
   "item.roundabout.stand_arrow.usedUp": "“箭”的力量已经耗尽，请将其与陨石合成以恢复其力量",
   "item.roundabout.stand_arrow.haveStand": "你已有替身，若需移除替身请使用替身光碟！",
   "item.roundabout.stand_arrow.acquireStand": "替身已获取，按下召唤键唤出替身！",
@@ -218,12 +250,13 @@
   "item.roundabout.stand_arrow.noStandsInPool": "箭的随机池中已经没有替身了！",
   "item.roundabout.stand_arrow.magnet": "箭矢会在有[才能]的生物附近颤动。",
   "item.roundabout.stand_arrow.acquireVampire1": "你不做人类了，你超越了人类！",
-  "item.roundabout.stand_arrow.acquireVampire2": "召唤替身键在你未获得替身时将用于切换你的技能组",
-  "item.roundabout.stand_arrow.acquireVampire3": "避开曾经对你来说是救赎的阳光",
-  "item.roundabout.stand_arrow.acquireVampire4": "吸取鲜血以让你变得更强",
+  "item.roundabout.stand_arrow.acquireVampire2": "按下召唤替身键在你未获得替身时将用于切换你的技能组",
+  "item.roundabout.stand_arrow.acquireVampire3": "避开曾经是安全象征的阳光",
+  "item.roundabout.stand_arrow.acquireVampire4": "吸取鲜血以变得更强",
 
   "item.roundabout.worthy_arrow.info": "仅创造模式方可获得，给予[才能]。",
   "item.roundabout.worthy_arrow.info_2": "创造模式下将其射出可以去除替身或[才能]。",
+  "item.roundabout.hairspray.info": "仅创造模式方可获得。",
 
   "effect.roundabout.bleed": "流血",
   "effect.roundabout.hex": "妖术",
@@ -233,6 +266,7 @@
   "effect.roundabout.melting": "融化",
   "effect.roundabout.gravity_flip": "重力翻转",
   "effect.roundabout.warding": "庇佑",
+  "effect.roundabout.vampire_blood": "血之庇佑？",
 
   "item.roundabout.creative_only.info": "仅创造模式可获得",
 
@@ -274,6 +308,7 @@
   "entity.roundabout.knife": "飞刀",
   "entity.roundabout.gasoline_can": "汽油罐",
   "entity.roundabout.gasoline_splatter": "汽油渍",
+  "entity.roundabout.blood_splatter": "飞溅血液",
   "entity.roundabout.flesh_pile": "肉堆",
   "entity.roundabout.stand_arrow": "替身箭",
   "entity.roundabout.worthy_arrow": "[才能]之箭",
@@ -432,6 +467,7 @@
   "key.roundabout.show_exp": "切换替身经验显示",
   "key.roundabout.pose": "摆出JOJO立",
   "key.roundabout.hide_icons": "隐藏能力图标",
+  "key.roundabout.fire_firearms": "扣下手中枪械扳机（非必要）",
 
   "roundabout:item.roundabout.smithing_template.execution_upgrade.applies_to": "铁斧",
   "roundabout:item.roundabout.smithing_template.execution_upgrade.base_slot_description": "Add to iron axe",
@@ -534,6 +570,8 @@
   "death.attack.stand_virus.item": "%1$s变成了一滩番茄酱",
   "death.attack.disintegration": "%1$碎裂了。",
   "death.attack.disintegration.player": "%1$被%$2s弄得稀碎",
+  "death.attack.kick": "%1$s变扁了。",
+  "death.attack.kick.player": "%$2s踩扁了%1$s，+100分！",
   "death.attack.melting": "%1$s和史莱姆当了兄弟",
   "death.attack.melting.player": "%1$s被%$2s变成了一滩液体",
   "death.attack.dagger": "%1$s成了一个完美的祭品",
@@ -548,7 +586,10 @@
   "death.attack.blood_drain.item": "%1$s苍白如纸。",
   "death.attack.blood_drain.player": "%1$s被榨干了。",
   "death.attack.blood_drain.player.item": "干尸%1$s制作成功。",
-  "death.attack.bullet": "%1$s变成了一个要被扔掉的标靶。",
+  "death.attack.bullet": "%1$s被射中了心脏——可惜不是丘比特的箭。",
+  "death.attack.bullet.item": "%1$s正中靶心——作为靶心",
+  "death.attack.bullet.player": "%1$s被猜中心意",
+  "death.attack.bullet.player.item": "%1$s心底的秘密被翻出来了",
 
   "item.glaive.charge_power": "蓄力攻击",
 
@@ -569,7 +610,10 @@
   "commands.roundabout.argument.standtype.valid_2": "将%s的替身设置为%s",
   "commands.roundabout.argument.standtype.invalid": "未知替身类型：%s",
   "commands.roundabout.argument.standtype.invalid_2": "输入项必须是替身类型，或是“无”。",
-  "commands.roundabaout.d4c_world": "成功生成世界\"%s\"。",
+  "commands.roundabout.argument.fate_type.invalid": "未知命运类型：%s (命运类型：人类，吸血鬼)",
+  "commands.roundabout.argument.fate_type.valid": "将实体%s的命运设置为%s",
+  "commands.roundabout.argument.fate_type.valid_2": "将%s的命运设置为%s",
+  "commands.roundabout.d4c_world": "成功生成世界\"%s\"。",
   "commands.roundabout.d4c_world.tooltip": "点此传送。",
 
   "sounds.roundabout.stand_arrow_charge":  "替身箭颤动着……",
@@ -619,7 +663,7 @@
   "sounds.roundabout.justice_select":  "选择对象",
   "sounds.roundabout.justice_select_attack":  "攻击指令",
   "sounds.roundabout.cackle":  "轻笑",
-  "sounds.roundabout.go_beyond_launch":  "???",
+  "sounds.roundabout.go_beyond_launch":  "？？？",
   "sounds.roundabout.go_beyond_hit":  "[看不见]的事物命中了……",
   "sounds.roundabout.hypnosis":  "催眠",
   "sounds.roundabout.blood_regen":  "血肉滋生",
@@ -650,6 +694,7 @@
   "sounds.roundabout.vampire_crumble":  "身体碎裂",
   "sounds.roundabout.vampire_wall_grip":  "邦",
   "sounds.roundabout.vampire_speed": "血液流入肌肉",
+  "sounds.roundabout.vampire_awaken":  "？？？",
 
   "sounds.roundabout.mandom_rewind":  "时间回溯",
 
@@ -664,6 +709,18 @@
   "sounds.roundabout.snubnose_fire":  "枪声响起",
   "sounds.roundabout.snubnose_dry_fire":  "击针空击",
   "sounds.roundabout.snubnose_reload":  "装填子弹",
+
+  "sounds.roundabout.bullet_ricochet":  "跳弹",
+
+  "sounds.roundabout.tommy_gun_fire":  "枪声响起",
+  "sounds.roundabout.tommy_reload":  "装填子弹",
+
+
+  "sounds.roundabout.colt_fire":  "枪声响起",
+  "sounds.roundabout.colt_reload":  "装填子弹",
+
+  "sounds.roundabout.jackal_fire":  "枪声响起",
+  "sounds.roundabout.jackal_reload":  "装填子弹",
 
   "sounds.roundabout.bullet_penetration":  "子弹击中",
 
@@ -791,6 +848,14 @@
   "sounds.roundabout.anubis_pogo_hit": "转体命中",
   "sounds.roundabout.anubis_barrage_1": "剑刃挥动",
   "sounds.roundabout.anubis_barrage_1_hit": "剑刃快速连击",
+  "sounds.roundabout.anubis_barrage_end": "抖剑",
+  "sounds.roundabout.anubis_swing": "剑刃挥动",
+  "sounds.roundabout.anubis_crouch_swing": "剑刃挥动",
+  "sounds.roundabout.anubis_double_cut": "剑刃挥动",
+  "sounds.roundabout.anubis_thrust_cut": "剑刃刺击",
+  "sounds.roundabout.anubis_thrust_miss": "剑刃未命中",
+  "sounds.roundabout.anubis_uppercut": "剑刃上撩",
+
 
 
 
@@ -848,6 +913,9 @@
   "sounds.roundabout.road_roller_ambient":  "压路机：柴油机运作……",
   "sounds.roundabout.road_roller_explosion":  "压路机：爆炸",
   "sounds.roundabout.road_roller_mixing":  "压路机：搅拌着混凝土",
+  "sounds.roundabout.flesh_bud_goes":  "肉芽附着",
+  "sounds.roundabout.flesh_bud_removal":  "肉芽被拔出来了",
+  "sounds.roundabout.hair_toggle":  "头发诡异的伸长了",
 
   "sounds.roundabout.dio_hoho":  "吼吼！",
   "sounds.roundabout.dio_hoho_2":  "吼~",
@@ -964,6 +1032,7 @@
   "instruction.roundabout.press_2_skill": "在使用%2$s时按下技能%1$s",
   "instruction.roundabout.passive": "被动",
   "instruction.roundabout.shop_item": "商店物品",
+  "instruction.roundabout.use_item": "物品交互",
 
   "ability.roundabout.punch": "拳击",
   "ability.roundabout.punch.desc": "替身向你面前挥出一拳，长按可进行最大3连击。",
@@ -977,6 +1046,11 @@
   "ability.roundabout.forward_barrage": "前进连打",
   "ability.roundabout.forward_barrage.desc": "连打时可使用此技能。长按时，替身将向前缓慢移动直到攻击到目标。",
 
+  "ability.roundabout.disc_imprint": "插入光碟",
+  "ability.roundabout.disc_imprint.desc": "在拥有替身时使用无存储替身的光碟将会将当前替身存入光碟。",
+  "ability.roundabout.disc_swap": "光碟替换",
+  "ability.roundabout.disc_swap.desc": "使用一个存有替身的光碟来替换当前的替身。过程中当前替身将变为一个新的光碟物品。",
+
   "ability.roundabout.impale": "穿胸重拳",
   "ability.roundabout.impale.desc": "蓄力一次在完全蓄力后可造成3级流血的致命攻击。为了命中，你需要站的近一些……",
   "ability.roundabout.impale_blitz": "穿胸重拳/流星闪击",
@@ -986,6 +1060,8 @@
   "ability.roundabout.item_grab": "强力抓取（物品）",
   "ability.roundabout.item_grab.desc": "抓取你手中的物品，左键让替身将其投掷出。许多物品有着独特的效果。",
   "ability.roundabout.mob_grab": "强力抓取（实体）",
+  "ability.roundabout.mob_grab_sp": "强力抓取（实体）",
+  "ability.roundabout.mob_grab_sp.desc": "抓取一个你面向的距离足够近的实体，你可以搬运、扔出、放下它。如果你抓取后潜行并按下攻击键，将会在进行释放时攻击一次该实体。可以移除被附着的人的肉芽。",
   "ability.roundabout.mob_grab.desc": "抓取一个你面向的距离足够近的实体，你可以搬运、扔出、放下它。如果你抓取后潜行并按下攻击键，将会在进行释放时攻击一次该实体。",
   "ability.roundabout.phase_grab": "虚化抓取",
   "ability.roundabout.phase_grab.desc": "你的替身向前飞去，穿过有缝隙的方块比如铁栏杆和台阶。可拿取远方地上的物品或是与拉杆和门交互。",
@@ -1083,7 +1159,7 @@
   "ability.roundabout.flame_extinguish": "熄灭",
   "ability.roundabout.flame_extinguish.desc": "打个响指，将你生成的所有替身火焰全部熄灭。",
   "ability.roundabout.projectile_burn": "焰防",
-  "ability.roundabout.projectile_burn.desc": "烧毁所有来袭的投射物，若投射物为汽油类物品，则点燃他们。",
+  "ability.roundabout.projectile_burn.desc": "烧毁所有来袭的投射物，若投射物为汽油类物品，则点燃他们。可摧毁肉芽。",
   "ability.roundabout.crossfire_firestorm": "十字火焰风暴",
   "ability.roundabout.crossfire_firestorm.desc": "生成一个大范围散布微小火焰的火焰埃及十字架，加强你所有的十字火焰旋风技能并且使你的火焰技能可在雨中使用。然而生效期间，十字火焰旋风系列技能的冷却延长。",
   "ability.roundabout.fire_slam": "全功率火焰冲击",
@@ -1101,7 +1177,8 @@
   "ability.roundabout.firm_swing.desc": "使得你在植入鞋跟期间所有的攻击都为暴击，因为你“立场坚定”。",
   "ability.roundabout.fall_disperse": "冲击吸收",
   "ability.roundabout.fall_disperse.desc": "减半受到的摔落伤害，将其通过鞋跟传递地面之中。",
-
+  "ability.roundabout.corner_cut": "自动转角",
+  "ability.roundabout.corner_cut.desc": "启用此功能可以在从墙上跑下来转角时跳过方向调整的过程直接转动方向。同时抑制意外跳跃并降低速度。可以将其视为辅助训练轮。",
 
 
 
@@ -1169,6 +1246,14 @@
   "ability.roundabout.target_zap": "狂怒丘比特",
   "ability.roundabout.target_zap.desc": "让你选择哪些生物会互相战斗。先进入选择模式，随后使用攻击键选择一个激活的[生存者]，再选择一个目标以及想要与其战斗的目标。接下来看着他们战斗就行。再次按下技能按键会取消选择或是重做选择。当这个模式启用时，[生存者]将不会自动电击聚集的生物。",
 
+  "ability.roundabout.stand_vision": "替身使者视觉",
+  "ability.roundabout.stand_vision.desc": "作为替身使者，你可以看到替身和其他幽灵类生物。此能力在使用其他能力时依然生效。",
+  "ability.roundabout.stand_passives": "替身被动能力",
+  "ability.roundabout.stand_passives.desc": "替身被动的能力，例如减少坠落伤害或点燃熔炉，在使用其他能力时依然生效，只要装备了对应的替身。",
+  "ability.roundabout.stand_summon": "替身召唤",
+  "ability.roundabout.stand_summon.desc": "允许你召唤并使用你的替身，以及在替身能力栏位中看到的所有能力。",
+
+
   "ability.roundabout.invisivision": "隐身视觉",
   "ability.roundabout.invisivision.desc": "开关看见由自己能力变透明的生物和方块的能力。关闭时可以更好的体会没有[隐身宝贝]替身的人的视角，同事也可以更好的透过透明方块观察。",
   "ability.roundabout.invisiburst": "隐匿爆发",
@@ -1197,6 +1282,68 @@
   "ability.roundabout.ratt_leap": "溶蚀针飞跃",
   "ability.roundabout.ratt_leap.desc": "将溶蚀针发射到所指为止，以让其快速部署在新的位置。",
 
+
+  "ability.roundabout.blood_drink": "血液吸取",
+  "ability.roundabout.blood_drink.desc": "通过手臂吸取目标的血液，只要你仍然面朝目标此技能就不会被主动打断。进度结束后造成伤害并恢复血槽。当对方可以被吸血，面对其时将会出现一个指示器。如果目标并未被激怒（中立生物或未察觉你的敌对生物）此次吸血将格外有效。村民和掠夺者将会在被此技能击杀时变为听你指挥的尸生人。",
+  "ability.roundabout.vampire_passive": "吸血鬼化",
+  "ability.roundabout.vampire_passive.desc": "你在阳光下会快速崩解。饱食度将会转化为血液度，且不会饥饿。吃生食和怪物掉落物不会造成任何惩罚而是提供血液（熟食无效)。溺水只降低有用速度。被铁傀儡主动攻击，而僵尸对你保持中立。",
+  "ability.roundabout.mass_heal": "血液自愈",
+  "ability.roundabout.mass_heal.desc": "将你血液度的所有血液消耗用于回血（消耗血液和回复血量为1:1），持续期间严重降低你的速度，但是不会被打断。此技能在存在血液度时受到致命攻击自动触发，给予虚弱和缓慢，可当做劣化版不死图腾。",
+  "ability.roundabout.wall_walk_vamp": "飞檐走壁",
+  "ability.roundabout.wall_walk_vamp.desc": "将自己定在墙上以在墙上缓慢行走。在空中面对墙时可以触发，再次按下可以攀上另一面墙或是天花板。",
+  "ability.roundabout.vampire_vision": "吸血鬼视角",
+  "ability.roundabout.vampire_vision.desc": "启用后，开启夜视以及在跳跃时随着长按获得增加的跳跃高度。",
+
+  "ability.roundabout.vamp_jump_boost": "究极的运动能力",
+  "ability.roundabout.vamp_jump_boost.desc": "常态跳跃高度为3格，潜行状态跳跃为5格。长按跳跃键跳的更高，短按跳的少阿伟低一些。此技能激活时，常态跳跃高度为%1$s格，潜行状态跳跃为%2$s格。",
+  "ability.roundabout.vamp_strength": "非人的力量",
+  "ability.roundabout.vamp_strength.desc": "超越人体的力量极限。+%1$s %的对怪物物理伤害与+%2$s %对玩家物理伤害。（比替身有用太多了）",
+  "ability.roundabout.vampire_growth_room": "剩余成长等级： %1$s",
+  "ability.roundabout.vampire_level_gate": "必须达到%1$s级才能解锁。",
+  "ability.roundabout.vampire_level_ready": "点击升级。",
+  "ability.roundabout.vamp_dexterity": "至高敏捷",
+  "ability.roundabout.vamp_dexterity.desc": "经过练习，你可以以非同寻常的速度移动自己。 +%1$s百分比挖掘速度， +%2$s百分比攻击速度。",
+  "ability.roundabout.vamp_resilience": "黑暗韧性",
+  "ability.roundabout.vamp_resilience.desc": "经过练习，你可以让自己的身体对一些攻击有一定的抵抗能力。对受到的物理攻击减伤+%1$s %, +%2$s %的投掷物伤害抗性",
+  "ability.roundabout.hypnotism": "催眠",
+  "ability.roundabout.hypnotism.locked": "？？？",
+  "ability.roundabout.hypnotism.desc": "开启或关闭催眠脉冲，使附近的生物跟随你。被催眠的村民在血液被吸取时不会因被吸血而降低声望。",
+  "ability.roundabout.hypnotism.locked.desc": "解锁吸血鬼的催眠能力……",
+  "ability.roundabout.super_hearing": "超人听觉",
+  "ability.roundabout.super_hearing.desc": "集中全部注意力于心跳声，使你能穿过墙壁发现生物并估算其血量。药效半径%1$s格。",
+
+  "ability.roundabout.blood_speed": "血之速度",
+  "ability.roundabout.blood_speed.desc": "花费5格（10点）血液度，%1$s %的速度加成，并使得你自动翻越一格高度。",
+  "ability.roundabout.blood_speed.locked": "？？？",
+  "ability.roundabout.blood_speed.locked.desc": "使用吸取血液的力量来增加你的速度。",
+
+  "ability.roundabout.grafting": "人体工艺学",
+  "ability.roundabout.grafting.desc": "使得一些生物掉落可以被用于改造尸生人的部件。可改变其投掷物或是给予其能力。 ",
+  "ability.roundabout.grafting.locked": "？？？",
+  "ability.roundabout.grafting.locked.desc": "我可以对那些愚笨的尸生人进行改造……",
+
+  "ability.roundabout.flesh_bud": "肉芽植入",
+  "ability.roundabout.flesh_bud.desc": "在生物额头处植入肉芽，让他们可以攻击你的敌人且永远不会主动攻击你。有些生物需要低血量方可植入肉芽。",
+  "ability.roundabout.flesh_bud.locked": "？？？",
+  "ability.roundabout.flesh_bud.locked.desc": "看起来吸血鬼的肉体可以做更多的事情……",
+
+  "ability.roundabout.sacrificial_dagger": "泼洒吸血鬼之血",
+  "ability.roundabout.sacrificial_dagger.desc": "使用献祭匕首将不会伤害你，而是消耗血液度并泼洒血液，被命中的生物将会回血并获得独特buff，在此buff下死亡将会如同触发吸血鬼回血技能一样存活并回血，同时转化为吸血鬼。",
+  "ability.roundabout.sacrificial_dagger.locked": "？？？",
+  "ability.roundabout.sacrificial_dagger.locked.desc": "看起来，你血液中的精粹不只是可以对那些死去的人起效……",
+
+  "ability.roundabout.unleash_the_cold": "汽化冻结",
+  "ability.roundabout.unleash_the_cold.desc": "在技能表中加入气化冷冻法。升级此处以提升其强度。",
+  "ability.roundabout.unleash_the_cold.locked": "？？？",
+  "ability.roundabout.unleash_the_cold.locked.desc": "看起来我的体温要比正常人类低得多，也许这意味着我可以再试试能不能降低自己的体温……",
+
+  "ability.roundabout.eye_manipulation": "眼部操控",
+  "ability.roundabout.eye_manipulation.desc": "在技能表中加入空裂眼刺惊升级此处以提升其强度。",
+  "ability.roundabout.eye_manipulation.locked": "？？？",
+  "ability.roundabout.eye_manipulation.locked.desc": "随着我对自己身体掌控度的提升，一些压力也许可以让眼液也可以变成致命的武器……",
+
+
+
   "ability.roundabout.gd_punch_left": "发射左臂",
   "ability.roundabout.gd_return_left": "接回左臂",
   "ability.roundabout.gd_spin_left": "左臂回旋",
@@ -1209,6 +1356,8 @@
   "ability.roundabout.gd_mold_field.desc": "将霉菌宝子散布在以自身为中心的较大区域。在此区域内，任何比你所处y轴高度低的生物都将受到会持续增大的伤害。玩家和有头颅的生物被霉菌击杀后会掉落其头颅。处于霉菌场中的有机物将会消失的更快。",
   "ability.roundabout.gd_stitch": "缝补身体",
   "ability.roundabout.gd_stitch.desc": "将自己的身体部位缝上，血量少量恢复并将流血效果降低一级。",
+  "ability.roundabout.gd_pardon": "友军区分",
+  "ability.roundabout.gd_pardon.desc": "选中友军实体，使得他们不会被来自你的霉菌影响。",
 
   "ability.roundabout.diver_selection": "潜行者行为选择",
   "ability.roundabout.diver_selection.desc": "开启一个可以选择给自己添加buff的损坏的转轮样子的界面。",
@@ -1219,6 +1368,10 @@
   "ability.roundabout.locked.ctrl": "锁定",
   "ability.roundabout.locked.desc": "于成长阶段%1$s解锁",
 
+  "leveling.roundabout.fate_development_point": "1点",
+  "leveling.roundabout.fate_development_points": "%s点",
+  "leveling.roundabout.fate_development_potential_level": "成长等级：%s",
+  "leveling.roundabout.fate_maxed": "力量已达极限",
   "leveling.roundabout.disc_development_potential_level": "成长度: %s",
   "leveling.roundabout.disc_skin": "风格：",
   "leveling.roundabout.disc_maxed": "成长完成",
@@ -1230,6 +1383,10 @@
   "leveling.roundabout.levelup.max.both": "成长完成：新皮肤与能力解锁！",
   "leveling.roundabout.disc_wip": "制作中，非作弊无法获得",
   "leveling.roundabout.disc_wip_2": "技能尚未完成/尚未完成测试",
+
+  "leveling.roundabout.levelup.vampire": "血液的生命能量让你更加强大，获得技能点！",
+
+  "leveling.roundabout.max_levelup.vampire": "我真是HIGh到不行了！能力全开!WRYYY!!",
 
   "gamerule.roundaboutStandGriefing": "替身破坏",
   "gamerule.roundaboutStandGriefing.description": "替身是否可以影响方块",
@@ -1494,9 +1651,23 @@
 
   "skins.roundabout.anubis.anime" : "动漫版",
   "skins.roundabout.anubis.evil" : "邪恶之剑",
+  "skins.roundabout.anubis.aquamarine" : "海蓝宝石",
+  "skins.roundabout.anubis.wooden" : "木剑",
+  "skins.roundabout.anubis.stone" : "石剑",
+  "skins.roundabout.anubis.golden" : "金剑",
+  "skins.roundabout.anubis.diamond" : "钻石剑",
+  "skins.roundabout.anubis.ancient" : "下界合金剑",
+  "skins.roundabout.anubis.grass": "割草机刀片",
+  "skins.roundabout.anubis.gray_wagon": "灰狗",
+  "skins.roundabout.anubis.timekeeper": "时光守卫者",
+  "skins.roundabout.anubis.chorus": "紫颂",
+  "skins.roundabout.anubis.alluring": "怒火冲天武士刀",
+  "skins.roundabout.anubis.raging": "迷人的武士刀",
 
-  "roundabout.anubis.playback_title": "重现学到的招式",
-  "roundabout.anubis.memory_title": "学习敌人的招式",
+
+
+  "roundabout.anubis.playback_title": "重现记录的招式",
+  "roundabout.anubis.memory_title": "记录招式",
 
   "skins.roundabout.achtung_baby.base": "无形",
 
@@ -1548,7 +1719,7 @@
   "roundabout.soft_and_wet_plunder.potion_effects": "效果",
   "roundabout.soft_and_wet_plunder.potion_effects.desc": "夺取药水效果，可以转移到其他生物上或是在泡泡爆裂前为效果承受者临时去除他们",
 
-  "roundabout.stand_switch.main": "主替身",
+  "roundabout.stand_switch.main": "主要替身",
   "roundabout.stand_switch.main.desc": "拥有战斗潜力的替身，可进行升级。获取需消耗%s级经验。",
   "roundabout.stand_switch.secondary": "次要替身",
   "roundabout.stand_switch.secondary.desc": "拥有更少能力且无法升级的替身，获取无需消耗经验",
@@ -1590,6 +1761,11 @@
   "roundabout.cinderella.mod_visage_gui.chest_type.four": "D",
   "roundabout.cinderella.mod_visage.voice_available": "兼容语音槽位",
 
+  "roundabout.hairspray.red": "红色",
+  "roundabout.hairspray.green": "绿色",
+  "roundabout.hairspray.blue": "蓝色",
+  "roundabout.hairspray.base": "头发",
+
   "power_inventory.roundabout.settings.general": "替身设置",
   "power_inventory.roundabout.settings.offset": "跟随位置",
   "power_inventory.roundabout.settings.attack_offset": "攻击位置",
@@ -1603,6 +1779,10 @@
   "power_inventory.roundabout.settings.reset": "重置设置",
   "power_inventory.roundabout.settings.next": "下一个",
   "roundabout.menu.ts_paused": "时间停止了！",
+
+  "power_inventory.roundabout.tabs.fate": "命运",
+  "power_inventory.roundabout.tabs.stand": "替身",
+  "power_inventory.roundabout.tabs.powers": "能力",
 
   "roundabout.warden_ts_movement": "这家伙！可以在只属于我的时间里行动！",
 
@@ -1703,7 +1883,8 @@
   "text.roundabout.walking.cut_on": "开启爬墙角接处自动转面",
   "text.roundabout.walking.cut_ff": "关闭爬墙角接处自动转面",
 
-
+  "text.roundabout.vampire.flesh_bud_fail": "目标不够虚弱或是处于愤怒状态。",
+  "text.roundabout.vampire.flesh_bud_fail_already": "目标已经植入肉芽",
 
 
 
@@ -1762,6 +1943,8 @@
 
   "config.roundabout.enableBowlerHatRender.name": "开启锯帽渲染",
   "config.roundabout.enableBowlerHatRender.desc": "锯帽是否在手持时，渲染为头戴帽子的形式。",
+  "config.roundabout.vampireLeveling.name": "开启吸血鬼等级提升",
+  "config.roundabout.vampireLeveling.desc": "若此项为false，吸血鬼玩家将会在变为吸血鬼后获得所有能力。",
 
 
   "config.roundabout.cinderellaSpacing.name": "灰姑娘沙龙布局",
@@ -1780,6 +1963,18 @@
   "config.roundabout.modifyStructureWeights.desc": "不管是否调整了结构权重，仍有可能与其他mod的结构冲突。",
   "config.roundabout.hideGUI.name": "隐藏能力图标",
   "config.roundabout.hideGUI.desc": "主动开启或关闭HUD渲染。",
+
+  "config.roundabout.beetleArrowTradeChance.name": "流浪商人替身箭交易权重",
+  "config.roundabout.beetleArrowTradeChance.desc": "改变替身箭交易权重。权重越大可能性越高",
+  "config.roundabout.beetleArrowCost.name": "虫箭绿宝石价格",
+  "config.roundabout.beetleArrowCost.desc": "每次交易的绿宝石价格。最大为64个（俩刷铁机半天都不用就能凑够）",
+  "config.roundabout.brokenArrowTradeChance.name": "流浪商人失效替身箭交易权重",
+  "config.roundabout.brokenArrowTradeChance.desc": "改变失效替身箭交易权重。权重越大可能性越高",
+  "config.roundabout.brokenArrowCost.name": "失效替身箭绿宝石价格",
+  "config.roundabout.brokenArrowCost.desc": "每次交易的绿宝石价格。最大为64个（俩刷铁机半天都不用就能凑够）",
+  "config.roundabout.brokenArrowsHaveStands.name": "失效替身箭商人携带替身",
+  "config.roundabout.brokenArrowsHaveStands.desc": "流浪商人是否携带失效替身箭交易时会为替身使者。（你是说，。我买个破箭自带变成好箭？只要3个跳劈？）",
+
 
   "config.roundabout.disableMeleeWhileStandActive.name": "替身召唤时关闭近战攻击",
   "config.roundabout.disableMeleeWhileStandActive.desc": "默认情况下，唤出拥有替身攻击技能的替身时会自动覆盖近战攻击，修改此选项以同时使用两者。",
@@ -1801,8 +1996,10 @@
   "config.roundabout.barrageDeflectsArrows.desc": "使连打可以偏转箭矢。",
   "config.roundabout.standPunchesGoThroughDoorsAndCorners.name": "替身攻击穿墙",
   "config.roundabout.standPunchesGoThroughDoorsAndCorners.desc": "开启后替身攻击将会穿过墙角和门（算是个老特性），默认关闭。因为开启后非常容易利用这个无脑机制，也会让一些其他的东西能够穿墙，例如超越泡泡。",
-  "config.roundabout.standGuardDelayTicks.name": "防御延迟刻",
+  "config.roundabout.standGuardDelayTicks.name": "替身防御延迟刻",
   "config.roundabout.standGuardDelayTicks.desc": "你按下防御键到防御起效的时间。原版盾牌起效时间是5刻，因此替身防御的默认起效时间是3刻。",
+  "config.roundabout.powerGuardDelayTicks.name": "力量防御延迟刻",
+  "config.roundabout.powerGuardDelayTicks.desc": "你按下力量防御键到力量防御起效的时间。原版盾牌起效时间是5刻，因此力量防御的默认起效时间是1刻。",
   "config.roundabout.standGuardMultiplier.name": "替身防御槽倍率",
   "config.roundabout.standGuardMultiplier.desc": "根据当前数值调整你防御槽的上限以应对更高难度的模组包",
   "config.roundabout.crouchingStopsStandsFromMiningOres.name": "潜行挖掘取消",
@@ -1936,8 +2133,27 @@
   "config.roundabout.rattLeapStrength.name": "溶蚀针飞跃的跳跃力度",
   "config.roundabout.rattLeapStrength.desc": "溶蚀针的跳跃力度，影响其跳跃的高度和距离。",
 
+  "config.roundabout.anubisMemoryOpen.name": "阿努比斯神记忆槽",
+  "config.roundabout.anubisMemories.name": "阿努比斯神客户端设置",
   "config.roundabout.anubisPogoCounter.name": "阿努比斯踩头攻击指示器",
   "config.roundabout.anubisPogoCounter.desc": "为你进行踩头攻击设置一个计数器。",
+
+  "config.roundabout.mem1.name": "记忆 1",
+  "config.roundabout.mem1.desc": "记忆 1",
+  "config.roundabout.mem2.name": "记忆 2",
+  "config.roundabout.mem2.desc": "记忆 2",
+  "config.roundabout.mem3.name": "记忆 3",
+  "config.roundabout.mem3.desc": "记忆 3",
+  "config.roundabout.mem4.name": "记忆 4",
+  "config.roundabout.mem4.desc": "记忆 4",
+  "config.roundabout.mem5.name": "记忆 5",
+  "config.roundabout.mem5.desc": "记忆 5",
+  "config.roundabout.mem6.name": "记忆 6",
+  "config.roundabout.mem6.desc": "记忆 6",
+  "config.roundabout.mem7.name": "记忆 7",
+  "config.roundabout.mem7.desc": "记忆 7",
+  "config.roundabout.mem8.name": "记忆 8",
+  "config.roundabout.mem8.desc": "记忆 8",
 
 
 
@@ -2208,6 +2424,10 @@
   "config.roundabout.enableWallWalking.name": "开启攀墙功能",
   "config.roundabout.enableWallWalking.desc": "允许使用者旋转视角以在墙上行走。通常情况下，此开关默认开启，但是如果你使用的模组包会使其出现bug或是无法正常触发此功能，就关闭此开关。关闭攀墙能力时，使用植入鞋跟的替身使者将会获得额外一格的自动攀登距离（即为从自动爬上1格变为自动爬上两格高）。",
 
+  "config.roundabout.enableCornerCutting.name": "开启拐角转向",
+  "config.roundabout.enableCornerCutting.desc": "允许通过按下V键启用步行之心的“辅助轮”，这样你就可以快速翻过拐角。",
+
+
   "config.roundabout.invisibilityPotionAsWell.name": "隐身添加药水效果",
   "config.roundabout.invisibilityPotionAsWell.desc": "如果你想让隐身能力同时附加隐身药水效果，将其开启吧。此举是为了对有些地图mod中对隐身玩家的特定检测。",
   "config.roundabout.hidesArmor.name": "隐藏护甲",
@@ -2337,6 +2557,12 @@
   "config.roundabout.vampireUsesPotionEffectForNightVision.name": "吸血鬼夜视使用夜视药水效果",
   "config.roundabout.vampireUsesPotionEffectForNightVision.desc": "如果你使用了像Bad Optimizations这种删除了原版光照系统和代码的模组（这是个优化模组，删了大量光照贴图以降低性能消耗），开启此项保证无论如何夜视都能起效。",
 
+  "config.roundabout.expPerVampLevelUp.name": "每级血液经验要求",
+  "config.roundabout.expPerVampLevelUp.desc": "增加此项以延长升级所需时间，减少此项以缩短升级所需时间。",
+  "config.roundabout.expTypeCapPerDay.name": "每种生物类型每日血液经验上限（拉满，傻逼设计）",
+  "config.roundabout.expTypeCapPerDay.desc": "增加此项以允许你从每种生物类型每游戏日获得更多的血液经验。此项保持较低值是为了防止需要大量动物农场囤积。（傻逼设计，没人有你那个闲工夫慢慢等级，不知道你这个傻逼mod为什么数值不够吗？耗时高同时性价比完全不够，默认设置替身原版强度都没有的东西）",
+
+
   "config.roundabout.sunDamageUnderwaterReach.name": "水中阳光伤害判定深度",
   "config.roundabout.sunDamageUnderwaterReach.desc": "调整水中阳光可以影响吸血鬼的深度。设为0则在水下吸血鬼不会受到太阳造成的伤害。",
   "config.roundabout.drownSpeedModifier.name": "吸血鬼氧气耗尽后水下游泳速率",
@@ -2409,6 +2635,7 @@
   "config.roundabout.generalStandUserMobSettings.name": "替身使者生物",
   "config.roundabout.vanillaMinecraftTweaks.name": "原版调整机制",
   "config.roundabout.worldgenSettings.name": "世界生成",
+  "config.roundabout.wanderingTraderSettings.name": "流浪商人交易",
   "config.roundabout.itemSettings.name": "物品",
   "config.roundabout.nameTagSettings.name": "命名牌及名字标签",
   "config.roundabout.griefSettings.name": "破坏行为",
@@ -2421,6 +2648,7 @@
   "config.roundabout.magiciansRedSettings.name": "魔术师之红",
   "config.roundabout.walkingHeartSettings.name": "步行之心",
   "config.roundabout.rattSettings.name": "溶蚀针",
+  "config.roundabout.standTweak.name": "溶蚀针",
   "config.roundabout.justiceSettings.name": "正义",
   "config.roundabout.cinderellaSettings.name": "灰姑娘",
   "config.roundabout.heyYaSettings.name": "嘿呀！",
@@ -2495,6 +2723,9 @@
   "config.roundabout.vampireVisionMode.name": "选择的吸血鬼视野模式",
   "config.roundabout.vampireVisionMode.desc": "切换吸血鬼夜视的开启和关闭。对吸血鬼种族来说默认为V键。",
 
+  "config.roundabout.currentPowerInventoryTab.name": "当前能力栏标签",
+  "config.roundabout.currentPowerInventoryTab.desc": "存储你退出时最后所处的界面。",
+
   "config.roundabout.mobThrowRecoilTicks.name": "生物投掷后保护",
   "config.roundabout.mobThrowRecoilTicks.desc": "在投掷生物后需要多少刻，生物才可以被替身拳击攻击。",
 
@@ -2513,14 +2744,22 @@
   "config.roundabout.timeStopFreezesScreen.desc": "时间停止是否会让非时停角色看不见游戏中内容变化。这个选项默认关闭因为作者认为盯着一副画一样的灰白画面九秒没有意思。（虽然这样对我来说pvp更刺激就是了，pve就算了）",
   "config.roundabout.tsStandsSeeTSTeleportAndDontFreeze.name": "时停视觉替身",
   "config.roundabout.tsStandsSeeTSTeleportAndDontFreeze.desc": "时停视觉（即有时停能力或是和重力有关以可以看到时停的替身使者）者看待时停瞬移是否为末影人传送而非黑屏瞬移。如果开启了屏幕冻结，这个过程对时停视力者看起来就像一次普通的时停。",
-  "config.roundabout.simpleTimeStopShader.name": "开启特效",
+  "config.roundabout.simpleTimeStopShader.name": "开启基础特效",
   "config.roundabout.simpleTimeStopShader.desc": "时间停止的灰白画面特效是否开启。",
+  "config.roundabout.advancedTimeStopShader.name": "进阶特效",
+  "config.roundabout.advancedTimeStopShader.desc": "时停停止特效是否有球形扩张。开启后会覆盖基础特效。",
 
-  "config.roundabout.walkingHeartMaxHits.name": "最大扎根状态受击抗性",
+  "config.roundabout.alternateShaderEntry.name": "备用时停特效",
+  "config.roundabout.alternateShaderEntry.desc": "如果时停特效在模组包中不生效，开启这个。因为有些模组会对实体特效产生影响。注意，如果此项开启，地平面将扫过实体，反之它们会出现在实体下方。",
+
+
+  "config.roundabout.walkingHeartMaxHits.name": "扎根状态受击抗性",
   "config.roundabout.walkingHeartMaxHits.desc": "当你进入攀墙模式和鞋跟植入时能够不受击退影响的最大受击数。",
-
-  "config.roundabout.walkingHeartCooldownPerHit.name": "每击冷却",
+  "config.roundabout.walkingHeartCooldownPerHit.name": "刺击每击冷却",
   "config.roundabout.walkingHeartCooldownPerHit.desc": "在攀墙模式和鞋跟植入模式下，每次攻击增加的冷却刻。",
+
+  "config.roundabout.usePreciseMath.name": "使用精确球体计算",
+  "config.roundabout.usePreciseMath.desc": "如果你希望时间停止的气泡能准确覆盖完成球体的半径，而不是简单的方块计算就开启此项。默认开启，因为时间停止会阻止大部分的随机刻节省性能。",
 
   "config.roundabout.configButtonOffsetX.name": "配置文件按钮X轴位置",
   "config.roundabout.configButtonOffsetX.desc": "调整游戏内配置文件按钮的按键X轴位置。如果你输入值出问题导致游戏里没法调整这一段，你可以去配置文件文件夹里直接打开文件修改。",

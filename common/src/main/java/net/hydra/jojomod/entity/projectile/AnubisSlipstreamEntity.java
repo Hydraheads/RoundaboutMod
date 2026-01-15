@@ -25,7 +25,7 @@ public class AnubisSlipstreamEntity extends Entity {
         setLifetime(lifetime);
     }
     public AnubisSlipstreamEntity(EntityType<?> $$0, Level $$1) {
-        this($$0, $$1,60);
+        this($$0, $$1,90);
     }
 
 
@@ -65,12 +65,6 @@ public class AnubisSlipstreamEntity extends Entity {
     @Override
     public void playerTouch(Player $$0) {
         StandUser SU = (StandUser) $$0;
-        if (!level().isClientSide()) {
-            // TODO: POTENTIALLY CHANGE THIS TO NOT BE AN EFFECT?
-            if (!(SU.roundabout$getStandPowers() instanceof PowersAnubis)) {
-                $$0.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED,1,10));
-            }
-        }
     }
 
     @Override

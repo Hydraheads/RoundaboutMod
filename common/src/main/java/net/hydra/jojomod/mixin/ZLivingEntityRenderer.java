@@ -1,12 +1,14 @@
 package net.hydra.jojomod.mixin;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.ILivingEntityRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.BigBubbleLayer;
+import net.hydra.jojomod.client.models.stand.renderers.*;
 import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
 import net.hydra.jojomod.entity.visages.mobs.JosukePartEightNPC;
 import net.hydra.jojomod.entity.visages.mobs.PlayerAlexNPC;
@@ -16,6 +18,9 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
+import net.hydra.jojomod.stand.powers.PowersMetallica;
+import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -36,40 +41,81 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArgs; // Importante
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args; // Importante
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
 
 @Mixin(LivingEntityRenderer.class)
-public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> implements RenderLayerParent<T, M>,
-        ILivingEntityRenderer {
-
+public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> implements RenderLayerParent<T, M>, ILivingEntityRenderer {
 
     @Shadow protected abstract boolean addLayer(RenderLayer<T, M> $$0);
-
     @Shadow protected M model;
-
     @Shadow public abstract void render(T $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5);
+    @Shadow public M getModel() { return null; }
+    @Shadow @Nullable protected abstract RenderType getRenderType(T $$0, boolean $$1, boolean $$2, boolean $$3);
 
     protected ZLivingEntityRenderer(EntityRendererProvider.Context $$0) {
         super($$0);
     }
 
     @Unique
-    private static int roundabout$PackRed(int $$0, int $$1) {
-        return $$0 | $$1 << 16;
-    }
-    @Unique
-    private static int roundabout$PackGreen(int $$0, int $$1) {
-        return $$0 | $$1 << 8;
-    }
-    @Unique
-    private static int roundabout$PackBlue(int $$0, int $$1) {
-        return $$0 | $$1;
+    private static int roundabout$PackRed(int $$0, int $$1) { return $$0 | $$1 << 16; }
+
+    @Inject(method = "isBodyVisible", at = @At("HEAD"), cancellable = true)
+    private void roundabout$forceBodyVisible(T entity, CallbackInfoReturnable<Boolean> cir) {
+        if (entity instanceof IEntityAndData data && data.roundabout$getMetallicaInvisibility() > -1) {
+            cir.setReturnValue(true);
+        }
     }
 
-    @Unique private boolean roundabout$isRenderingYellowLines = false;
+    @ModifyArgs(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/EntityModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V"))
+    private void roundabout$modifyRenderAlpha(Args args, T entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+        if (entity instanceof IEntityAndData data && data.roundabout$getMetallicaInvisibility() > -1) {
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.cameraEntity != null) {
+                double dist = entity.distanceTo(mc.cameraEntity);
+                float alpha = PowersMetallica.getMetallicaInvisibilityAlpha(entity, dist, partialTicks);
+
+                args.set(7, alpha);
+            }
+        }
+    }
+
+    @Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
+    private void roundabout$forceTranslucent(T entity, boolean bodyVisible, boolean translucent, boolean glowing, CallbackInfoReturnable<RenderType> cir) {
+        if (entity instanceof IEntityAndData data && data.roundabout$getMetallicaInvisibility() > -1) {
+            ResourceLocation texture = this.getTextureLocation(entity);
+            cir.setReturnValue(RenderType.itemEntityTranslucentCull(texture));
+        }
+    }
+
+    @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "TAIL"))
+    private void roundabout$renderTail(T entity, float $$1, float $$2, PoseStack matrixStack, MultiBufferSource buffer, int $$5, CallbackInfo ci) {
+        ClientUtil.setThrowFadeToTheEther(1.0F);
+        MetallicaClientRenderer.renderMetalMeterBar(entity, matrixStack, buffer);
+    }
+
+    @Inject(method = "shouldShowName(Lnet/minecraft/world/entity/LivingEntity;)Z", at=@At("HEAD"), cancellable = true)
+    private void roundabout$shouldShowName(T entity, CallbackInfoReturnable<Boolean> cir)
+    {
+        if (((StandUser)entity).roundabout$isParallelRunning()) {
+            cir.setReturnValue(false);
+            cir.cancel();
+            return;
+        }
+
+        if (entity instanceof IEntityAndData data && MainUtil.isUsingMetallica(entity)) {
+            if (!ClientUtil.getInvisibilityVision()) {
+                cir.setReturnValue(false);
+                cir.cancel();
+            }
+        }
+    }
+
 
     @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$renderX(T entity, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
@@ -77,12 +123,6 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 //            return;
 
         ClientUtil.savedPose = $$3.last().pose();
-    }
-
-
-    @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "TAIL"))
-    private void roundabout$renderTail(T entity, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
-
     }
 
     @Inject(method= "<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Lnet/minecraft/client/model/EntityModel;F)V", at = @At(value = "RETURN"))
@@ -115,14 +155,14 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
             StandUser SU = (StandUser) P;
             if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
-                int backflip = PA.getAttackTime();
+                int backflip = Math.abs(PA.getAttackTimeDuring());
                 if (SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_MOVEMENT) {
                     if (backflip < 16) {
                         $$1.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,360 * (backflip/15F)), 0, P.getEyeHeight()*0.6F, 0 );
                     }
                 } else if (SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_ATTACK_CHARGE) {
                     if (true) {
-                        float scale = Math.min((float)backflip/PowersAnubis.PogoDelay,1);
+                        float scale = Math.min( (backflip+$$4)/PowersAnubis.PogoDelay,1);
                         $$1.translate(0,0.5*scale,0.5*scale);
                         $$1.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,-100-P.getViewXRot(0F) * scale), 0, P.getEyeHeight()*0.4F, 0 );
                     }
@@ -190,29 +230,6 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
             ci.setReturnValue(roundabout$PackRed(
                     ((StandUser)$$0).roundabout$getStoredDamageByte(),
                     10));
-        }
-    }
-    @Shadow
-    public M getModel() {
-        return null;
-    }
-
-    @Shadow
-    protected float getFlipDegrees(T $$0) {
-        return 90.0F;
-    }
-
-    @Shadow protected abstract boolean isBodyVisible(T $$0);
-
-    @Shadow @Nullable protected abstract RenderType getRenderType(T $$0, boolean $$1, boolean $$2, boolean $$3);
-
-    @Inject(method = "shouldShowName(Lnet/minecraft/world/entity/LivingEntity;)Z", at=@At("HEAD"), cancellable = true)
-    private void roundabout$shouldShowName(T entity, CallbackInfoReturnable<Boolean> cir)
-    {
-        if (((StandUser)entity).roundabout$isParallelRunning())
-        {
-            cir.setReturnValue(false);
-            cir.cancel();
         }
     }
 }

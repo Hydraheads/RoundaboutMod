@@ -28,6 +28,8 @@ public class StandIcons {
             "textures/gui/move_square_novelty.png");
     public static final ResourceLocation LOCKED_SQUARE_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_square3.png");
+    public static final ResourceLocation UNLOCK_SQUARE_ICON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/move_square5.png");
     public static final ResourceLocation COOLDOWN_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_cooldown.png");
     public static final ResourceLocation FROZEN_COOLDOWN_ICON = new ResourceLocation(Roundabout.MOD_ID,
@@ -42,16 +44,34 @@ public class StandIcons {
     public static final ResourceLocation CREAM_ICONS = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/cream_icons.png");
 
+    public static final ResourceLocation STAND_PASSIVES = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/stand/stand_passives.png");
+    public static final ResourceLocation STAND_SUMMON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/stand/stand_summon.png");
+    public static final ResourceLocation STAND_VISION = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/stand/stand_vision.png");
+    public static final ResourceLocation DISC_SWAP = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/stand/disc_swap.png");
+    public static final ResourceLocation DISC_IMPRINT = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/stand/disc_imprint.png");
     public static final ResourceLocation BLOOD_DRINK = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/fates/vampire/drink.png");
+    public static final ResourceLocation VAMPIRE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/fates/vampire/vampire.png");
     public static final ResourceLocation CHEETAH_SPEED = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui//icons/fates/vampire/cheetah_speed.png");
+    public static final ResourceLocation GRAFTING = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/grafting.png");
     public static final ResourceLocation REGENERATE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui//icons/fates/vampire/regenerate.png");
     public static final ResourceLocation HYPNOTISM = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui//icons/fates/vampire/hypnotism.png");
     public static final ResourceLocation FLESH_BUD = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui//icons/fates/vampire/flesh_bud.png");
+    public static final ResourceLocation DAGGER = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/dagger.png");
+    public static final ResourceLocation VAMP_JUMP_BOOST = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/jump_boost.png");
     public static final ResourceLocation VAMP_VISION_ON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui//icons/fates/vampire/vision_on.png");
     public static final ResourceLocation VAMP_VISION_OFF = new ResourceLocation(Roundabout.MOD_ID,
@@ -60,6 +80,12 @@ public class StandIcons {
             "textures/gui//icons/fates/vampire/hearing_mode.png");
     public static final ResourceLocation WALL_WALK_VAMP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/fates/vampire/wall_walk.png");
+    public static final ResourceLocation VAMPIRE_STRENGTH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/strength.png");
+    public static final ResourceLocation VAMPIRE_RESILIENCE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/resilience.png");
+    public static final ResourceLocation VAMPIRE_DEXTERITY = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/dexterity.png");
 
     public static final ResourceLocation SURVIVOR_ANGER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/survivor_anger.png");
@@ -149,6 +175,10 @@ public class StandIcons {
 
     public static final ResourceLocation DODGE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/dodge.png");
+    public static final ResourceLocation HAIR_SPIKE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/vampire/hair_spike.png");
+    public static final ResourceLocation HAIR_GRAB = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/vampire/hair_grab.png");
     public static final ResourceLocation STAND_LEAP_WORLD = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/stand_leap.png");
     public static final ResourceLocation STAND_LEAP_REBOUND_WORLD = new ResourceLocation(Roundabout.MOD_ID,

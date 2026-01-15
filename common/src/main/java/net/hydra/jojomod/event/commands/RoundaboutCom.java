@@ -56,6 +56,115 @@ public class RoundaboutCom {
                                         )
                                 )))
                 )));
+
+        dispatcher.register(Commands.literal("roundaboutSetFate")
+                .requires(source
+                        -> source.hasPermission(2))
+                .executes(context -> net.hydra.jojomod.RoundaboutCommands.roundaboutSetFate((CommandSourceStack)context.getSource(),
+                        ImmutableList.of(((CommandSourceStack)context.getSource()).getEntityOrException()),
+                        "human",
+                        0, 0))
+                .then(Commands.argument("targets", EntityArgument.entities())
+                        .then(Commands.argument("fate_name", StringArgumentType.word())
+                                .then(Commands.argument("level", IntegerArgumentType.integer())
+                                        .then(Commands.argument("exp", IntegerArgumentType.integer())
+                                             .executes(context -> RoundaboutCommands.roundaboutSetFate((CommandSourceStack)context.getSource(),
+                                                                        EntityArgument.getEntities(context, "targets"),
+                                                                        StringArgumentType.getString(context, "fate_name"),
+                                                                        IntegerArgumentType.getInteger(context,"level"),
+                                                                        IntegerArgumentType.getInteger(context,"exp")))
+                                                        )
+                                )
+                        )));
+        dispatcher.register(Commands.literal("roundaboutMaxFateSkills")
+                .requires(source
+                        -> source.hasPermission(2))
+                .executes(context -> net.hydra.jojomod.RoundaboutCommands.roundaboutMaxFateSkills((CommandSourceStack)context.getSource(),
+                        ImmutableList.of(((CommandSourceStack)context.getSource()).getEntityOrException())))
+                .then(Commands.argument("targets", EntityArgument.entities())
+                                                .executes(context -> RoundaboutCommands.roundaboutMaxFateSkills(    (CommandSourceStack)context.getSource(),
+                                                        EntityArgument.getEntities(context, "targets")
+                                        )
+                                )
+                        ));
+        dispatcher.register(Commands.literal("roundaboutClearFateSkills")
+                .requires(source
+                        -> source.hasPermission(2))
+                .executes(context -> net.hydra.jojomod.RoundaboutCommands.roundaboutClearFateSkills((CommandSourceStack)context.getSource(),
+                        ImmutableList.of(((CommandSourceStack)context.getSource()).getEntityOrException())))
+                .then(Commands.argument("targets", EntityArgument.entities())
+                        .executes(context -> RoundaboutCommands.roundaboutClearFateSkills(    (CommandSourceStack)context.getSource(),
+                                        EntityArgument.getEntities(context, "targets")
+                                )
+                        )
+                ));
+        dispatcher.register(Commands.literal("roundaboutResetVampireData")
+                .requires(source
+                        -> source.hasPermission(2))
+                .executes(context -> net.hydra.jojomod.RoundaboutCommands.roundaboutResetVampireData((CommandSourceStack)context.getSource(),
+                        ImmutableList.of(((CommandSourceStack)context.getSource()).getEntityOrException())))
+                .then(Commands.argument("targets", EntityArgument.entities())
+                        .executes(context -> RoundaboutCommands.roundaboutResetVampireData(    (CommandSourceStack)context.getSource(),
+                                        EntityArgument.getEntities(context, "targets")
+                                )
+                        )
+                ));
+        dispatcher.register(Commands.literal("roundaboutSetVampireSkills")
+                .requires(source
+                        -> source.hasPermission(2))
+                .executes(context -> net.hydra.jojomod.RoundaboutCommands.roundaboutSetVampireSkills((CommandSourceStack)context.getSource(),
+                        ImmutableList.of(((CommandSourceStack)context.getSource()).getEntityOrException()),
+                        0,0,0,0,0,0,
+                        0,0,0,0,0,0))
+                .then(Commands.argument("targets", EntityArgument.entities())
+                        .then(Commands.argument("strength", IntegerArgumentType.integer())
+                                .then(Commands.argument("dexterity", IntegerArgumentType.integer())
+                                        .then(Commands.argument("resilience", IntegerArgumentType.integer())
+                                        .then(Commands.argument("hypnotism", IntegerArgumentType.integer())
+                                                .then(Commands.argument("superHearing", IntegerArgumentType.integer())
+                                                        .then(Commands.argument("bloodSpeed", IntegerArgumentType.integer())
+                                                                .then(Commands.argument("grafting", IntegerArgumentType.integer())
+                                                                        .then(Commands.argument("fleshBud", IntegerArgumentType.integer())
+                                                                                .then(Commands.argument("daggerSplatter", IntegerArgumentType.integer())
+                                                                                        .then(Commands.argument("jump", IntegerArgumentType.integer())
+                                                                                                .then(Commands.argument("ripperEyes", IntegerArgumentType.integer())
+                                                                                                        .then(Commands.argument("freeze", IntegerArgumentType.integer())
+                                                .executes(context -> RoundaboutCommands.roundaboutSetVampireSkills((CommandSourceStack)context.getSource(),
+                                                        EntityArgument.getEntities(context, "targets"),
+                                                        IntegerArgumentType.getInteger(context, "strength"),
+                                                        IntegerArgumentType.getInteger(context,"dexterity"),
+                                                        IntegerArgumentType.getInteger(context,"resilience"),
+                                                        IntegerArgumentType.getInteger(context,"hypnotism"),
+                                                        IntegerArgumentType.getInteger(context,"superHearing"),
+                                                        IntegerArgumentType.getInteger(context,"bloodSpeed"),
+                                                        IntegerArgumentType.getInteger(context,"grafting"),
+                                                        IntegerArgumentType.getInteger(context,"fleshBud"),
+                                                        IntegerArgumentType.getInteger(context,"daggerSplatter"),
+                                                        IntegerArgumentType.getInteger(context,"jump"),
+                                                        IntegerArgumentType.getInteger(context,"ripperEyes"),
+                                                        IntegerArgumentType.getInteger(context,"freeze")
+                                                ))
+                                        )
+                                )
+                        ))))))))))));
+        dispatcher.register(Commands.literal("roundaboutSetVampireSkill")
+                .requires(source
+                        -> source.hasPermission(2))
+                .executes(context -> net.hydra.jojomod.RoundaboutCommands.roundaboutSetVampireSkill((CommandSourceStack)context.getSource(),
+                        ImmutableList.of(((CommandSourceStack)context.getSource()).getEntityOrException()),
+                        0,0))
+                .then(Commands.argument("targets", EntityArgument.entities())
+                        .then(Commands.argument("skill_number", IntegerArgumentType.integer())
+                                        .then(Commands.argument("value", IntegerArgumentType.integer())
+                                                .executes(context -> RoundaboutCommands.roundaboutSetVampireSkill((CommandSourceStack)context.getSource(),
+                                                        EntityArgument.getEntities(context, "targets"),
+                                                        IntegerArgumentType.getInteger(context, "skill_number"),
+                                                        IntegerArgumentType.getInteger(context,"value")
+                                                ))
+                                        )
+                                )
+                        ));
+
         dispatcher.register(Commands.literal("roundaboutSetStandExp")
                 .requires(source
                         -> source.hasPermission(2))

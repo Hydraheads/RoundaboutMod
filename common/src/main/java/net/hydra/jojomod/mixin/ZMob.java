@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -228,15 +229,15 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Unique
     @Override
     public boolean roundabout$isVampire(){
-        return roundabout$getFate() == FateTypes.VAMPIRE.id;
+        return roundabout$getFate() == FateTypes.VAMPIRE.ordinal();
     }
     @Unique
     @Override
     public void roundabout$setVampire(boolean vampire){
         if (vampire){
-            roundabout$setFate(FateTypes.VAMPIRE.id);
+            roundabout$setFate((byte) FateTypes.VAMPIRE.ordinal());
         } else {
-            roundabout$setFate(FateTypes.HUMAN.id);
+            roundabout$setFate((byte) FateTypes.HUMAN.ordinal());
         }
     }
     @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
@@ -676,7 +677,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
                 Mob mb = ((Mob) (Object) this);
                 if (isStandUser) {
                     if (this.getTarget() != null && !this.roundabout$getFightOrFlight()) {
-                        if (!user.roundabout$getActive() &&
+                        if (!PowerTypes.hasStandActive(this) &&
                                 !user.roundabout$isSealed()) {
                             user.roundabout$summonStand(this.level(), true, true);
                         }
@@ -690,7 +691,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
                                     (this.roundabout$getFightOrFlight() && !((Mob) (Object) this instanceof JojoNPC JP &&
                                             JP.canSummonStandThroughFightOrFlightActive()))
                             ) {
-                                if (user.roundabout$getActive()) {
+                                if (PowerTypes.hasStandActive(this)) {
                                     user.roundabout$summonStand(this.level(), false, false);
                                 }
                             }

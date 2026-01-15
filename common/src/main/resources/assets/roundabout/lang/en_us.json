@@ -8,6 +8,20 @@
   "text.roundabout.warn_trap_triggered": " has been triggered!",
   "text.roundabout.warn_unnamed_trap_triggered": "A fog trap has been triggered!",
 
+  "text.roundabout.powers.stand": "Stand User",
+  "text.roundabout.powers.stand_select": "Yuhamon",
+  "text.roundabout.powers.vampire": "Vampire Powers",
+  "text.roundabout.powers.vampire_select": "Vampire",
+  "text.roundabout.powers.hamon": "Hamon Powers",
+  "text.roundabout.powers.hamon_select": "Hamon",
+  "text.roundabout.powers.spin": "Spin Arts",
+  "text.roundabout.powers.spin_select": "Spin",
+  "text.roundabout.powers.martial_arts": "Martial Arts",
+  "text.roundabout.powers.martial_arts_select": "MA",
+
+  "text.roundabout.fate.vampire": "Vampire",
+  "text.roundabout.fate.vampire_hair": "Change Hair Color",
+
   "text.roundabout.bullets.revolver": "Compatible with Snubnosed Revolvers and Colt Revolvers.",
   "text.roundabout.bullets.tommy": "Compatible with Tommy Guns.",
   "text.roundabout.bullets.sniper": "Compatible with Jackal Rifles.",
@@ -556,8 +570,12 @@
   "death.attack.stand_virus.item": "%1$s was turned into tomato sauce",
   "death.attack.disintegration": "%1$s disintegrated",
   "death.attack.disintegration.player": "%1$s was disintegrated by %$2s",
+  "death.attack.disintegration.item": "%1$s disintegrated",
+  "death.attack.disintegration.player.item": "%1$s was disintegrated by %$2s",
   "death.attack.kick": "%1$s was ran over",
   "death.attack.kick.player": "%$2s trampled %1$s",
+  "death.attack.kick.item": "%1$s was ran over",
+  "death.attack.kick.player.item": "%$2s trampled %1$s",
   "death.attack.melting": "%1$s became a fluid",
   "death.attack.melting.player":"%1$s was reduced to a puddle by %2$s",
   "death.attack.dagger": "%1$s became a human sacrifice",
@@ -573,6 +591,15 @@
   "death.attack.blood_drain.player": "%1$s lost all color.",
   "death.attack.blood_drain.player.item": "%1$s lost all color.",
   "death.attack.bullet": "%1$s was shot through the heart.",
+  "death.attack.bullet.item": "%1$s was shot through the heart.",
+  "death.attack.bullet.player": "%1$s was shot through the heart.",
+  "death.attack.bullet.player.item": "%1$s was shot through the heart.",
+  "death.attack.vampire": "%1$s was pulverized by %2$s.",
+  "death.attack.vampire.item": "%1$s was pulverized by %2$s.",
+  "death.attack.hamon": "%1$s saw the light while fighting %2$s.",
+  "death.attack.hamon.item": "%1$s saw the light while fighting %2$s.",
+  "death.attack.martial_arts": "%1$s was shown no mercy by %2$s.",
+  "death.attack.martial_arts.item": "%1$s was shown no mercy by %2$s.",
 
   "item.glaive.charge_power": "Charge Attack",
 
@@ -593,6 +620,9 @@
   "commands.roundabout.argument.standtype.valid_2": "Set Stand of %s to %s",
   "commands.roundabout.argument.standtype.invalid": "Unknown stand type: %s",
   "commands.roundabout.argument.standtype.invalid_2": "Must enter a stand type, or 'none'.",
+  "commands.roundabout.argument.fate_type.invalid": "Unknown Fate type: %s (Fate Types: human, vampire)",
+  "commands.roundabout.argument.fate_type.valid": "Set Fate of %s entities to %s",
+  "commands.roundabout.argument.fate_type.valid_2": "Set Fate of %s to %s",
   "commands.roundabaout.d4c_world": "Generated world \"%s\" successfully.",
   "commands.roundabout.d4c_world.tooltip": "Click to teleport.",
 
@@ -613,6 +643,7 @@
   "sounds.roundabout.ova_summon":  "Stand summoned",
   "sounds.roundabout.ova_summon_the_world":  "Stand summoned",
   "sounds.roundabout.summon_diver_down":  "Stand summoned",
+  "sounds.roundabout.vampire_dive":  "Whoosh",
   "sounds.roundabout.punch_sfx1":  "Air Cracks",
   "sounds.roundabout.punch_sfx2":  "Air Cracks",
   "sounds.roundabout.punch_sfx3":  "Impact",
@@ -648,6 +679,12 @@
   "sounds.roundabout.hypnosis":  "Hypnosis",
   "sounds.roundabout.blood_regen":  "Flesh",
   "sounds.roundabout.blood_regen_finish":  "Healed",
+  "sounds.roundabout.combat_punch_1":  "Punch",
+  "sounds.roundabout.combat_punch_2":  "Punch",
+  "sounds.roundabout.combat_punch_3":  "Punch",
+  "sounds.roundabout.combat_punch_4":  "Punch",
+
+  "sounds.roundabout.hair_sharpen":  "Hair Sharpens",
 
   "sounds.roundabout.bubble_hover_over":  "Bubble",
   "sounds.roundabout.bubble_pop":  "Bubble popping",
@@ -829,6 +866,13 @@
   "sounds.roundabout.anubis_barrage_1": "Sword Swing",
   "sounds.roundabout.anubis_barrage_1_hit": "Sword Barrage",
   "sounds.roundabout.anubis_barrage_end": "Sword Click",
+  "sounds.roundabout.anubis_swing": "Sword Click",
+  "sounds.roundabout.anubis_crouch_swing": "Sword Swing",
+  "sounds.roundabout.anubis_double_cut": "Sword Swing",
+  "sounds.roundabout.anubis_thrust_cut": "Sword Crit",
+  "sounds.roundabout.anubis_thrust_miss": "Sword Whiff",
+  "sounds.roundabout.anubis_uppercut": "Sword Swing",
+
 
 
 
@@ -985,6 +1029,7 @@
   "sounds.roundabout.female_zombie_death":  "Zombie Aesthetician death",
 
   "instruction.roundabout.press_attack": "Click Attack",
+  "instruction.roundabout.press_attack_crouch": "Click Attack While Crouching",
   "instruction.roundabout.hold_attack": "Hold Attack",
   "instruction.roundabout.hold_attack_crouch": "Hold Attack While Crouching",
   "instruction.roundabout.press_block": "Click Interact",
@@ -1002,9 +1047,16 @@
   "instruction.roundabout.press_skill_shooting_mode": "Press Skill %1$s During Shooting Mode",
   "instruction.roundabout.press_skill_explosive_spin_mode": "Press Skill %1$s During Explosive Spin Mode",
   "instruction.roundabout.press_skill_air": "Press Skill %1$s In The Air",
+  "instruction.roundabout.press_skill_air_crouch": "Press Skill %1$s In The Air While Crouching",
   "instruction.roundabout.press_2_skill": "Press Skill %1$s While Using Skill %2$s",
   "instruction.roundabout.passive": "Passive",
   "instruction.roundabout.shop_item": "Shop Item",
+  "instruction.roundabout.use_item": "Item Interaction",
+
+  "instruction.roundabout.anubis_normal": "Press Attack Twice",
+  "instruction.roundabout.anubis_one": "Press Crouch Once",
+  "instruction.roundabout.anubis_two": "Press Crouch Twice",
+  "instruction.roundabout.press_skill_memory":"Press Skill %1$s While Selecting A Memory",
 
   "ability.roundabout.punch": "Punch",
   "ability.roundabout.punch.desc": "Throws a punch directly in front of you. Hold it down for a 3 hit-combo!",
@@ -1017,6 +1069,11 @@
 
   "ability.roundabout.forward_barrage": "Forward Barrage",
   "ability.roundabout.forward_barrage.desc": "While barraging, your stand starts to float forward slowly.",
+
+  "ability.roundabout.disc_imprint": "Disc Imprint",
+  "ability.roundabout.disc_imprint.desc": "Use a stand disc with no stand on it to remove your current stand and store its data on the disc.",
+  "ability.roundabout.disc_swap": "Disc Swap",
+  "ability.roundabout.disc_swap.desc": "Use a different stand disc with a stand on it to swap stands. No materials are lost in the process.",
 
   "ability.roundabout.impale": "Impale",
   "ability.roundabout.impale.desc": "Winds up a deadly attack that may inflict level 3 bleed. You have to get within close range to land it.",
@@ -1213,6 +1270,14 @@
   "ability.roundabout.target_zap": "Rage Cupid",
   "ability.roundabout.target_zap.desc": "Lets you select which mobs fight each other! Enter selection mode, use your attack key to select an activated survivor, then one target, and then another. They will then fight! Press the ability key again to cancel or redo selection. While this mode is active, your survivors will not automatically zap mobs together.",
 
+  "ability.roundabout.stand_vision": "Stand Sight",
+  "ability.roundabout.stand_vision.desc": "Allows you to see stands and ghost phenomenon passively. This ability applies even when using other powers, so long as you have a stand.",
+  "ability.roundabout.stand_passives": "Stand Passives",
+  "ability.roundabout.stand_passives.desc": "Some stand abilities like passive fall damage reduction or furnace activation apply even when using other powers, so long as you have the corresponding stands equipped.",
+  "ability.roundabout.stand_summon": "Stand Summon",
+  "ability.roundabout.stand_summon.desc": "Allows you to summon and use your stand, and all of its abilities seen in the stand disc tab.",
+
+
   "ability.roundabout.invisivision": "Invisi-Vision",
   "ability.roundabout.invisivision.desc": "Turn on and off the able to see see-through versions of blocks and entities that you turn invisible with your power. Turning it off is useful to get the perspective of someone without the stand, and to see through invisible blocks better.",
   "ability.roundabout.invisiburst": "Invisiburst",
@@ -1241,6 +1306,101 @@
   "ability.roundabout.ratt_leap": "Ratt Leap",
   "ability.roundabout.ratt_leap.desc": "Launches Ratt in a direction, allowing you to quickly reposition them",
 
+  "ability.roundabout.anubis_attack": "Slash",
+  "ability.roundabout.anubis_attack.desc": "Swing Anubis, dealing a sweeping attack. Goes through walls",
+  "ability.roundabout.anubis_sneak_attack": "Crouching Slash",
+  "ability.roundabout.anubis_sneak_attack.desc": "Swipe lower, dealing more knockback and sending further. Different combinations of your first and second attack will result in a different third attack ",
+  "ability.roundabout.anubis_pogo": "Diving Slash",
+  "ability.roundabout.anubis_pogo.desc": "Dive forwards and swing your sword, breaking shield. Does not require your attacks to be off cooldown.",
+  "ability.roundabout.anubis_double_cut": "Double Cut",
+  "ability.roundabout.anubis_double_cut.desc": "Swipe twice, launching targets away. Done by using normal attack twice",
+  "ability.roundabout.anubis_uppercut": "Uppercut",
+  "ability.roundabout.anubis_uppercut.desc": "Swipe upwards, launching you and the target into the air. Holding sneak keeps you grounded. Done by using at least one crouching attack",
+  "ability.roundabout.anubis_thrust": "Thrust Cut",
+  "ability.roundabout.anubis_thrust.desc": "Stab forwards, bleeding and pulling in targets. Is more effective at the right distance. Done by using two sneak attacks.",
+  "ability.roundabout.anubis_quickdraw": "Rushing Slice",
+  "ability.roundabout.anubis_quickdraw.desc": "Wind up your sword, then lunge forwards with incredible speed, cutting everything in your path",
+  "ability.roundabout.anubis_shieldbreak": "Shield Breaker",
+  "ability.roundabout.anubis_shieldbreak.desc": "Do a brief windup, then swipe in front of you. Does moderate knockback and breaks shields for a long time.",
+  "ability.roundabout.anubis_alluring_light": "Alluring Light",
+  "ability.roundabout.anubis_alluring_light.desc": "Hypnotize all mobs near you, causing them to follow you for a while.",
+  "ability.roundabout.anubis_raging_light": "Raging Light",
+  "ability.roundabout.anubis_raging_light.desc": "Force all mobs nearby to target you.",
+  "ability.roundabout.anubis_backflip": "Backflip",
+  "ability.roundabout.anubis_backflip.desc": "Backflip to safety. Can be done midair",
+  "ability.roundabout.anubis_record": "Record Memories",
+  "ability.roundabout.anubis_record.desc": "Choose a slot and record a series of inputs. Pressing your hotbar keys lets you change the icon",
+  "ability.roundabout.anubis_replay": "Replay Memories",
+  "ability.roundabout.anubis_replay.desc": "Choose a slot and replay the memories stored within.",
+  "ability.roundabout.anubis_mouse": "Mouse Mode",
+  "ability.roundabout.anubis_mouse.desc": "Using this while hovering on a memory slot will allow it to remember your mouse motions.",
+  "ability.roundabout.anubis_exp": "Knowledge Accumulation",
+  "ability.roundabout.anubis_exp.desc": "Due to Anubis' learning ability, you passively gain 50% more exp, even while it is inactive",
+  "ability.roundabout.anubis_speed": "Extreme Speed",
+  "ability.roundabout.anubis_speed.desc": "Anubis grants incredible athletic ability, allowing you to move much faster and jump higher than before",
+
+
+
+  "ability.roundabout.blood_drink": "Blood Suck",
+  "ability.roundabout.blood_drink.desc": "Consume blood through your hands so long as you remain facing your target, damaging them to restore your blood. If a mob has drinkable blood, the indicator will appear in the middle of the screen. If a mob is not agitated, you can score a critical blood suck. Villagers and Illagers will zombify upon being killed by this skill, and can be controlled.",
+  "ability.roundabout.vampire_passive": "Vampiric",
+  "ability.roundabout.vampire_passive.desc": "You evaporate in sunlight. You run on blood instead of hunger, and eating raw foods and monster drops provide blood with no penalties. You cannot die of starvation. Drowning only lowers your speed. Iron Golems detest you, while zombies are neutral with your presence.",
+  "ability.roundabout.mass_heal": "Blood Healing",
+  "ability.roundabout.mass_heal.desc": "Funnels all of your blood into health regeneration, temporarily slowing you down. This ability triggers automatically when you die, if possible, providing a last stand.",
+  "ability.roundabout.wall_walk_vamp": "Wall Walking",
+  "ability.roundabout.wall_walk_vamp.desc": "Latches onto walls, allowing you to walk slowly on them. Trigger by facing a wall in the air. Press again while wall walking and facing another wall to switch walls, or to step onto ceilings.",
+  "ability.roundabout.vampire_vision": "Vampire Perspective",
+  "ability.roundabout.vampire_vision.desc": "While enabled, allows for passive dark vision as well as a longer jump height while jump is held.",
+
+  "ability.roundabout.vamp_jump_boost": "Ultra Athleticism",
+  "ability.roundabout.vamp_jump_boost.desc": "Grants 3 meter jump height and 5 meters while sneaking. Hold down for the longer jumps, and tap for shorter ones. With the powers moveset active, grants %1$s meter jump height and %2$s meters while sneaking.",
+  "ability.roundabout.vamp_strength": "Evolved Strength",
+  "ability.roundabout.vamp_strength.desc": "Exceed the limits of humanity. +%1$s percent damage for direct melee attacks against mobs, +%2$s against players.",
+  "ability.roundabout.vampire_growth_room": "Remaining Growth Levels: %1$s",
+  "ability.roundabout.vampire_level_gate": "Must be level %1$s to unlock.",
+  "ability.roundabout.vampire_level_ready": "Click to upgrade.",
+  "ability.roundabout.vamp_dexterity": "Supreme Dexterity",
+  "ability.roundabout.vamp_dexterity.desc": "Practice moving your limbs at unnatural speeds. +%1$s percent mining speed, +%2$s percent attack speed.",
+  "ability.roundabout.vamp_resilience": "Dark Resilience",
+  "ability.roundabout.vamp_resilience.desc": "Practice shifting your body to cushion against certain attack types. +%1$s percent reduced incoming melee damage, +%2$s percent reduced incoming damage from some projectiles.",
+  "ability.roundabout.hypnotism": "Hypnotism",
+  "ability.roundabout.hypnotism.locked": "???",
+  "ability.roundabout.hypnotism.desc": "Turn on and off hypnotic pulses that cause nearby mobs to follow you. Hypnotized villagers do not alert for reputation changes when their blood is drained.",
+  "ability.roundabout.hypnotism.locked.desc": "Unlock your hypnotic potential...",
+  "ability.roundabout.super_hearing": "Super Hearing",
+  "ability.roundabout.super_hearing.desc": "Concentrate entirely on the sound of heartbeats, allowing you to find mobs through walls and estimate their health. %1$s block radius.",
+
+  "ability.roundabout.blood_speed": "Blood Speed",
+  "ability.roundabout.blood_speed.desc": "A massive cheetah-like speed boost at the cost of half of your blood, allowing you to step up blocks as well. Speed increases by %1$s percent.",
+  "ability.roundabout.blood_speed.locked": "???",
+  "ability.roundabout.blood_speed.locked.desc": "Use consumed life force to amplify your speed...",
+
+  "ability.roundabout.grafting": "Zombie Grafting",
+  "ability.roundabout.grafting.desc": "Makes certain mobs drop parts which can be applied to your zombie minions through interaction. Changes their properties and/or grants new abilities.",
+  "ability.roundabout.grafting.locked": "???",
+  "ability.roundabout.grafting.locked.desc": "Give your undead army an upgrade...",
+
+  "ability.roundabout.flesh_bud": "Flesh Bud",
+  "ability.roundabout.flesh_bud.desc": "Plants a flesh bud in the mob, making them attack your enemies (and never you). Some mobs need to be at low health first.",
+  "ability.roundabout.flesh_bud.locked": "???",
+  "ability.roundabout.flesh_bud.locked.desc": "Assert further control over most mobs...",
+
+  "ability.roundabout.sacrificial_dagger": "Vampire Blood Splash",
+  "ability.roundabout.sacrificial_dagger.desc": "Instead of hurting you, sacrificial daggers now shoot out your blood as healing projectiles. It also puts living mobs under a special effect, and if they die under this effect they become vampire versions and fully heal. As a vampire, they are stronger but die in the sun- and drink blood of nearby mobs to heal.",
+  "ability.roundabout.sacrificial_dagger.locked": "???",
+  "ability.roundabout.sacrificial_dagger.locked.desc": "Your blood has special healing properties. Maybe you can use that to your advantage...",
+
+  "ability.roundabout.unleash_the_cold": "Unleash The Cold",
+  "ability.roundabout.unleash_the_cold.desc": "Grants vaporization freeze to the powers moveset. Power it up to make it better.",
+  "ability.roundabout.unleash_the_cold.locked": "???",
+  "ability.roundabout.unleash_the_cold.locked.desc": "You notice your body temperature is below that of a human. Can you make use of this unique property? (powers moveset)",
+
+  "ability.roundabout.eye_manipulation": "Eye Manipulation",
+  "ability.roundabout.eye_manipulation.desc": "Grants space ripper stingy eyes to the powers moveset. Power it up to make it better.",
+  "ability.roundabout.eye_manipulation.locked": "???",
+  "ability.roundabout.eye_manipulation.locked.desc": "As you practice your newfound body manipulation skills, you wonder what would happen if you manipulate your eye fluids. (powers moveset)",
+
+
   "ability.roundabout.gd_punch_left": "Left Arm Launch",
   "ability.roundabout.gd_return_left": "Left Arm Reattach",
   "ability.roundabout.gd_spin_left": "Left Arm Spin",
@@ -1265,6 +1425,10 @@
   "ability.roundabout.locked.ctrl": "Locked",
   "ability.roundabout.locked.desc": "Unlock at Development Stage %1$s",
 
+  "leveling.roundabout.fate_development_point": "1 Point!",
+  "leveling.roundabout.fate_development_points": "%s Points!",
+  "leveling.roundabout.fate_development_potential_level": "Level: %s",
+  "leveling.roundabout.fate_maxed": "Full Power",
   "leveling.roundabout.disc_development_potential_level": "Development: %s",
   "leveling.roundabout.disc_skin": "Style: ",
   "leveling.roundabout.disc_maxed": "Complete",
@@ -1276,6 +1440,10 @@
   "leveling.roundabout.levelup.max.both": "Max Development: New Ability & Skin!",
   "leveling.roundabout.disc_wip": "Work in Progress, Not Obtainable",
   "leveling.roundabout.disc_wip_2": "Abilities are not complete or ready",
+
+  "leveling.roundabout.levelup.vampire": "You Became Stronger, Skill Point Unlocked!",
+
+  "leveling.roundabout.max_levelup.vampire": "Greatest High, Final Skill Point Unlocked!",
 
   "gamerule.roundaboutStandGriefing": "Stand Griefing",
   "gamerule.roundaboutStandGriefing.description": "Controls whether or not stands can mess with blocks",
@@ -1546,10 +1714,17 @@
   "skins.roundabout.anubis.golden" : "Gilded",
   "skins.roundabout.anubis.diamond" : "Diamond",
   "skins.roundabout.anubis.ancient" : "Ancient",
-
+  "skins.roundabout.anubis.grass": "The Mower",
+  "skins.roundabout.anubis.gray_wagon": "Gray Wagon",
+  "skins.roundabout.anubis.timekeeper": "Timekeeper",
+  "skins.roundabout.anubis.chorus": "Chorus",
+  "skins.roundabout.anubis.alluring": "Raging",
+  "skins.roundabout.anubis.raging": "Alluring",
 
   "roundabout.anubis.playback_title": "Replay Memories",
   "roundabout.anubis.memory_title": "Record Memories",
+
+
 
   "skins.roundabout.achtung_baby.base": "Has No Form",
 
@@ -1661,6 +1836,10 @@
   "power_inventory.roundabout.settings.reset": "Reset",
   "power_inventory.roundabout.settings.next": "Next",
   "roundabout.menu.ts_paused": "Time is Stopped!",
+
+  "power_inventory.roundabout.tabs.fate": "Fate",
+  "power_inventory.roundabout.tabs.stand": "Stand",
+  "power_inventory.roundabout.tabs.powers": "Powers",
 
   "roundabout.warden_ts_movement": "It did not stop?!",
 
@@ -1819,6 +1998,9 @@
   "config.roundabout.enablePickyIconRendering.desc": "Hides ability icons when all of your cooldowns are off.",
 
 
+  "config.roundabout.opacityOfPlayerBarrageArms.name": "Player Skin Barrage Arms",
+  "config.roundabout.opacityOfPlayerBarrageArms.desc": "The opacity of first person barrage arms coming from the player (as in vampirism or hamon rushes).",
+
   "config.roundabout.spiritOutInterruption.name": "Full Spirit Interrupt",
   "config.roundabout.spiritOutInterruption.desc": "By default, you need your powers activated (or to be powerless) to interrupt attacks. This mechanic is called full spirit interrupt, and serves to make the interrupting mechanic more satisfying. Turn off this setting for classic roundabout interrupts.",
   "config.roundabout.standThrownEntityFallDamageImmmunityTicks.name": "Thrown Fall Prot Ticks",
@@ -1826,6 +2008,8 @@
 
   "config.roundabout.enableBowlerHatRender.name": "Enable Bowler Hat Render",
   "config.roundabout.enableBowlerHatRender.desc": "Whether or not the bowler hat renders on your head while holding it.",
+  "config.roundabout.vampireLeveling.name": "Enable Vampire Leveling",
+  "config.roundabout.vampireLeveling.desc": "If this config is set to false, vampires start with everything.",
 
 
   "config.roundabout.cinderellaSpacing.name": "Cinderella Salon Spacing",
@@ -1879,6 +2063,8 @@
   "config.roundabout.standPunchesGoThroughDoorsAndCorners.desc": "Turn on if you want the legacy feature (that was unintended) of stands punching through corners and doors. Off by default. Very easy cheesing, and also may make other things go through walls like go beyond highlighting.",
   "config.roundabout.standGuardDelayTicks.name": "Guard Delay Ticks",
   "config.roundabout.standGuardDelayTicks.desc": "The amount of ticks before your stand guard starts working. Vanilla shields take 5 ticks to start registering blocking, so stand guard takes 3 ticks by default.",
+  "config.roundabout.powerGuardDelayTicks.name": "Power Guard Ticks",
+  "config.roundabout.powerGuardDelayTicks.desc": "The amount of ticks before your powers guard starts working. Vanilla shields take 5 ticks to start registering blocking, so vampire power guard takes 1 tick by default.",
   "config.roundabout.standGuardMultiplier.name": "Stand Guard Multiplier",
   "config.roundabout.standGuardMultiplier.desc": "Buff stand guard across the board if you're playing a harder modpack.",
   "config.roundabout.crouchingStopsStandsFromMiningOres.name": "Crouch Mining Cancel",
@@ -2012,6 +2198,7 @@
   "config.roundabout.rattLeapStrength.name": "Ratt Leap Strength",
   "config.roundabout.rattLeapStrength.desc": "How strong Ratt's leap is",
 
+  "config.roundabout.anubisMemoryOpen.name": "Anubis Memories",
   "config.roundabout.anubisMemories.name": "Anubis Client Settings",
   "config.roundabout.anubisPogoCounter.name": "Anubis Pogo Indicator",
   "config.roundabout.anubisPogoCounter.desc": "Displays a counter showing how many pogos you have done.",
@@ -2031,7 +2218,7 @@
   "config.roundabout.mem7.name": "Memory 7",
   "config.roundabout.mem7.desc": "Memory 7",
   "config.roundabout.mem8.name": "Memory 8",
-  "config.roundabout.mem9.desc": "Memory 8",
+  "config.roundabout.mem8.desc": "Memory 9",
 
 
 
@@ -2405,7 +2592,7 @@
   "config.roundabout.postTSiframes.name": "Invincibility Ticks",
   "config.roundabout.postTSiframes.desc": "The amount of ticks after taking time damage in which you are immune to damage. Default is 19.",
   "config.roundabout.postTSSoften.name": "Post Stop Soften",
-  "config.roundabout.postTSsoften.desc": "Whether or not players take reduced damage from things beyond your control (gasoline, stand attacks) after a time stop ends. The duration is proportionate to how long they are stopped, and only applies for stops that last more than a second.",
+  "config.roundabout.postTSSoften.desc": "Whether or not players take reduced damage from things beyond your control (gasoline, stand attacks) after a time stop ends. The duration is proportionate to how long they are stopped, and only applies for stops that last more than a second.",
   "config.roundabout.postTSCancel.name": "Post Stop Cancel",
   "config.roundabout.postTSCancel.desc": "Whether or not certain moves get canceled when time resumes. Disable for legacy version.",
 
@@ -2434,6 +2621,12 @@
 
   "config.roundabout.vampireUsesPotionEffectForNightVision.name": "Vampire Uses NV Potion",
   "config.roundabout.vampireUsesPotionEffectForNightVision.desc": "If you have a mod like Bad Optimizations that deletes the vanilla code that scope uses to light things up, turn this on so it works regardless.",
+
+  "config.roundabout.expPerVampLevelUp.name": "Blood Experience Per Level",
+  "config.roundabout.expPerVampLevelUp.desc": "Increase to make leveling take longer, decrease to make shorter.",
+  "config.roundabout.expTypeCapPerDay.name": "Blood Experience Per Type",
+  "config.roundabout.expTypeCapPerDay.desc": "Increase to let you get more blood exp from each mob type daily. it is kept low to prevent the need for massive animal farm hording.",
+
 
   "config.roundabout.sunDamageUnderwaterReach.name": "Underwater Sun Damage Reach",
   "config.roundabout.sunDamageUnderwaterReach.desc": "Change how far underwater sunlight reaches. Zero makes sunlight not intrude on water.",
@@ -2514,7 +2707,7 @@
   "config.roundabout.miscellaneousSettings.name": "Miscellaneous",
   "config.roundabout.vampireSettings.name": "Vampire",
   "config.roundabout.standLevelingSettings.name": "Stand Leveling",
-  "config.roundabout.generalStandSettings.name": "General Stand",
+  "config.roundabout.anubisSettings.name": "Anubis",
   "config.roundabout.softAndWetSettings.name": "Soft And Wet",
   "config.roundabout.magiciansRedSettings.name": "Magician's Red",
   "config.roundabout.walkingHeartSettings.name": "Walking Heart",
@@ -2595,6 +2788,9 @@
   "config.roundabout.vampireVisionMode.name": "Selected Vision Type",
   "config.roundabout.vampireVisionMode.desc": "Toggle on and off vampiric night vision. V is the hotkey for vampiric fates.",
 
+  "config.roundabout.currentPowerInventoryTab.name": "Current Power Inventory Tab",
+  "config.roundabout.currentPowerInventoryTab.desc": "Stores your last tab (fate vs stand disc tab, etc).",
+
   "config.roundabout.mobThrowRecoilTicks.name": "Mob Throw Recoil",
   "config.roundabout.mobThrowRecoilTicks.desc": "How many ticks after throwing a mob you can attack with basic punches again.",
 
@@ -2617,6 +2813,10 @@
   "config.roundabout.simpleTimeStopShader.desc": "Whether or not stopping time renders a simple shader.",
   "config.roundabout.advancedTimeStopShader.name": "Advanced Shader",
   "config.roundabout.advancedTimeStopShader.desc": "Whether or not stopping time renders a bubble shader. Overrides simple shader when on.",
+
+  "config.roundabout.alternateShaderEntry.name": "Alternate Shader Entry",
+  "config.roundabout.alternateShaderEntry.desc": "If the time stop shader does not work in your modpack, try turning this on/off, in case other mods break the other entry point. Note this with this enabled, ground lines sweep through entities, otherwise they go underneath them.",
+
 
   "config.roundabout.walkingHeartMaxHits.name": "Max Planted Hits",
   "config.roundabout.walkingHeartMaxHits.desc": "How many hits can you take in heel planted/wall walking mode before you are knocked out of that state.",

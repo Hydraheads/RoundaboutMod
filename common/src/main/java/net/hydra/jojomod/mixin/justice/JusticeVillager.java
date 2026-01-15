@@ -31,7 +31,7 @@ public abstract class JusticeVillager extends AbstractVillager implements Reputa
         ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
         if (shift != ShapeShifts.PLAYER) {
             if (ShapeShifts.isVillager(shift)) {
-                cir.setReturnValue(24);
+                cir.setReturnValue(30);
                 return;
             }
         }

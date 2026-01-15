@@ -7,10 +7,14 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersStarPlatinum;
+import net.hydra.jojomod.stand.powers.PowersTheWorld;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Options;
@@ -106,11 +110,6 @@ public class NewPunchingStand extends NewDashPreset {
 
     @Override
     public boolean setPowerAttack(){
-        if (((StandUser)this.getSelf()).roundabout$isParallelRunning())
-        {
-            return false;
-        }
-
         if (this.activePowerPhase >= 3){
             this.activePowerPhase = 1;
         } else {
@@ -175,7 +174,7 @@ public class NewPunchingStand extends NewDashPreset {
                     if (lasthit){addEXP(2,LE);} else {addEXP(1,LE);}
                 }
 
-                this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
+                takeDeterminedKnockback(this.self, entity, knockbackStrength);
             } else {
                 if (this.activePowerPhase >= this.activePowerPhaseMax) {
                     if (entity instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers().interceptGuard()
@@ -316,7 +315,7 @@ public class NewPunchingStand extends NewDashPreset {
             if (throwPunch) {
                 this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
                 if (StandDamageEntityAttack(this.getSelf(), pow, 0, this.self)) {
-                    this.takeDeterminedKnockback(this.self, this.getSelf(), kbs);
+                    takeDeterminedKnockback(this.self, this.getSelf(), kbs);
                     if ((kbs *= (float) (1.0 - ((LivingEntity)this.getSelf()).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
                         return;
                     }
@@ -363,7 +362,7 @@ public class NewPunchingStand extends NewDashPreset {
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
         StandUser standUser = ((StandUser) playerEntity);
-        boolean standOn = standUser.roundabout$getActive();
+        boolean standOn = PowerTypes.hasStandActive(playerEntity);
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
 
@@ -414,7 +413,22 @@ public class NewPunchingStand extends NewDashPreset {
             if (standOn) {
                 if (TE != null) {
                     if (barTexture == 0) {
-                        context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
+                        boolean converted = false;
+                        // Mob Grab range shows green
+                        if (this instanceof BlockGrabPreset bgp && (this instanceof PowersStarPlatinum || this instanceof PowersTheWorld)){
+                            Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(), 2.1F);
+                            Entity targetEntity2 = MainUtil.getTargetEntity(this.getSelf(), 5F);
+                            if (targetEntity2 != null && bgp.canGrab(targetEntity2)) {
+                                if (targetEntity != null && bgp.canGrab(targetEntity)) {
+                                    converted = true;
+                                }
+                            }
+                        }
+                        if (!converted) {
+                            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
+                        } else {
+                            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 82, 15, 6);
+                        }
                     }
                 }
             }

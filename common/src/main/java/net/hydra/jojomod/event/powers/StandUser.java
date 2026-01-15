@@ -29,6 +29,7 @@ public interface StandUser {
     boolean roundabout$hasStandOut();
     void roundabout$tryBlockPosPower(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit);
     void roundabout$tryBlockPosPowerF(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit);
+    void roundabout$tryBlockPosPowerP(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit);
     Vec3 roundabout$frictionSave();
     void roundabout$deeplyRemoveAttackTarget();
     boolean roundabout$getQueForTargetDeletion();
@@ -44,7 +45,8 @@ public interface StandUser {
     void roundabout$setEmulator(LivingEntity le);
     boolean rdbt$tickEffectsBleedEdition(boolean grav);
     void rdbt$setRemoveLoveSafety(boolean yup);
-
+    void roundabout$setGlow(byte glow);
+    byte roundabout$getGlow();
     void roundabout$updateStandOutPosition(FollowingStandEntity passenger);
 
     int roundabout$increaseAirSupply(int $$0);
@@ -77,6 +79,7 @@ public interface StandUser {
     float roundabout$getMaxGuardPoints();
     void roundabout$setGuardPoints(float GuardPoints);
     boolean roundabout$getGuardBroken();
+    void roundabout$syncGuard();
     void roundabout$setGuardBroken(boolean guardBroken);
     void roundabout$fixGuard();
     void roundabout$regenGuard(float regen);
@@ -91,8 +94,6 @@ public interface StandUser {
     int roundabout$getAttackTimeDuring();
     void roundabout$setBleedLevel(int bleedLevel);
     int roundabout$getBleedLevel();
-    byte roundabout$getGlow();
-    void roundabout$setGlow(byte glowingSkin);
     boolean roundabout$getOnlyBleeding();
     void roundabout$setOnlyBleeding(boolean only);
     byte roundabout$getActivePowerPhase();
@@ -175,6 +176,11 @@ public interface StandUser {
     void roundabout$tryIntPowerF(int move,boolean forced, int chargeTime, int move2, int move3);
     void roundabout$tryBlockPosPowerF(int move, boolean forced, BlockPos blockPos);
     void roundabout$tryPosPowerF(int move, boolean forced, Vec3 blockPos);
+    void roundabout$tryPowerP(int move, boolean forced);
+    void roundabout$tryIntPowerP(int move, boolean forced, int chargeTime);
+    void roundabout$tryIntPowerP(int move,boolean forced, int chargeTime, int move2, int move3);
+    void roundabout$tryBlockPosPowerP(int move, boolean forced, BlockPos blockPos);
+    void roundabout$tryPosPowerP(int move, boolean forced, Vec3 blockPos);
     void roundabout$addFollower(FollowingStandEntity $$0);
     void roundabout$removeFollower(FollowingStandEntity $$0);
 
@@ -228,11 +234,6 @@ public interface StandUser {
 
     byte roundabout$getStoredDamageByte();
 
-    byte roundabout$getMeleeImmunity();
-    boolean roundabout$isMeleeImmune();
-    void roundabout$setMeleeImmunity(int i);
-    void roundabout$setMeleeImmunity(byte i);
-
     void roundabout$UniversalTick();
     void roundabout$startAutoSpinAttack(int p_204080_);
 
@@ -285,6 +286,11 @@ public interface StandUser {
     void roundabout$setTrueInvis(int bound);
     int roundabout$getTrueInvis();
 
+
+    /**Metallica*/
+    void roundabout$setMetallicaInvis(int invis);
+    int roundabout$getMetallicaInvis();
+
     /**Gravity Direction*/
 
     /**Soft and Wet Bubble Encasing**/
@@ -304,8 +310,6 @@ public interface StandUser {
 
     /**Anubis Possesion */
     boolean roundabout$isPossessed();
-    void roundabout$setPossessionTime(int adj);
-    int roundabout$getPossessionTime();
     PathfinderMob roundabout$getPossessor();
     void roundabout$setPossessor(PathfinderMob e);
 

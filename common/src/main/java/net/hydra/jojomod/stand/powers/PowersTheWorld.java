@@ -126,7 +126,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public Vec3 getTSColor(){
         byte skin = ((StandUser) self).roundabout$getStandSkin();
         if (skin == TheWorldEntity.OVA_SKIN)
-            return new Vec3(1.5f, 0.5f, 0.5f);
+            return new Vec3(1.7f, 0.4f, 0.4f);
         if (skin == TheWorldEntity.THE_NETHER)
             return new Vec3(1.5f, 1.0f, 0.5f);
         if (skin == TheWorldEntity.OVER_HEAVEN)
@@ -574,11 +574,6 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
-        StandUser standUser = ((StandUser) playerEntity);
-        boolean standOn = standUser.roundabout$getActive();
-        int j = scaledHeight / 2 - 7 - 4;
-        int k = scaledWidth / 2 - 8;
-
             super.renderAttackHud(context,playerEntity,
                     scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
     }
@@ -1019,7 +1014,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         //Roundabout.LOGGER.info("AT: "+this.attackTime+" ATD: "+this.attackTimeDuring+" kickstarted: "+this.kickStarted+" APP: "+this.getActivePowerPhase()+" MAX:"+this.getActivePowerPhaseMax());
         super.tickPower();
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
-            if (this.getSelf().getAirSupply() < this.getSelf().getMaxAirSupply() && ((StandUser) this.getSelf()).roundabout$getActive()){
+            if (this.getSelf().getAirSupply() < this.getSelf().getMaxAirSupply() && PowerTypes.hasStandActive(self)){
             } else {
                 if (this.getSelf().isEyeInFluid(FluidTags.WATER)
                         && !this.getSelf().level().getBlockState(BlockPos.containing(
@@ -1028,7 +1023,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                     /***Removed weird code*/
 
                 } else {
-                    if (((StandUser) this.getSelf()).roundabout$getActive()) {
+                    if (PowerTypes.hasStandActive(self)) {
                             this.setAirAmount(Math.min(this.getAirAmount() + 4, this.getMaxAirAmount()));
                     }
                 }
@@ -1036,7 +1031,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         }
 
 
-        if (((StandUser) this.getSelf()).roundabout$getActive()) {
+        if (PowerTypes.hasStandActive(self)) {
             if (this.getAirAmount() > 0 && this.getSelf().getAirSupply() < this.getSelf().getMaxAirSupply()) {
                 this.getSelf().setAirSupply(Math.max(0, Math.min(this.getSelf().getAirSupply() + 4, this.getSelf().getMaxAirSupply())));
                 this.setAirAmount(Math.max(0, Math.min(this.getAirAmount() - 4, this.getMaxAirAmount())));

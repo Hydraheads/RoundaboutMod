@@ -7,6 +7,7 @@
   "mixins": [
     "ExperimentalFixD4CForge",
     "ForgeCoffinSleepAtDayMixin",
+    "ForgeEatingMixin",
     "ForgeMilkBucketMixin",
     "ForgePlayer",
     "ForgeServerPlayer"

@@ -251,6 +251,13 @@ public class FabricSounds {
         addSound(ModSounds.ANUBIS_BARRAGE_1_ID, ModSounds.ANUBIS_BARRAGE_1_EVENT);
         addSound(ModSounds.ANUBIS_BARRAGE_1_HIT_ID, ModSounds.ANUBIS_BARRAGE_1_HIT_EVENT);
         addSound(ModSounds.ANUBIS_BARRAGE_END_ID, ModSounds.ANUBIS_BARRAGE_END_EVENT);
+        addSound(ModSounds.ANUBIS_SWING_ID, ModSounds.ANUBIS_SWING_EVENT);
+        addSound(ModSounds.ANUBIS_CROUCH_SWING_ID, ModSounds.ANUBIS_CROUCH_SWING_EVENT);
+        addSound(ModSounds.ANUBIS_DOUBLE_CUT_ID, ModSounds.ANUBIS_DOUBLE_CUT_EVENT);
+        addSound(ModSounds.ANUBIS_THRUST_CUT_ID, ModSounds.ANUBIS_THRUST_CUT_EVENT);
+        addSound(ModSounds.ANUBIS_THRUST_MISS_ID, ModSounds.ANUBIS_THRUST_MISS_EVENT);
+        addSound(ModSounds.ANUBIS_UPPERCUT_ID, ModSounds.ANUBIS_UPPERCUT_EVENT);
+
 
 
         addSound(ModSounds.KILLER_QUEEN_BARRAGE_ID, ModSounds.KILLER_QUEEN_BARRAGE_EVENT);
@@ -404,6 +411,7 @@ public class FabricSounds {
         addSound(ModSounds.FEMALE_ZOMBIE_HURT_ID, ModSounds.FEMALE_ZOMBIE_HURT_EVENT);
         addSound(ModSounds.FEMALE_ZOMBIE_DEATH_ID, ModSounds.FEMALE_ZOMBIE_DEATH_EVENT);
         addSound(ModSounds.AESTHETICIAN_EXHALE_ID, ModSounds.AESTHETICIAN_EXHALE_EVENT);
+        addSound(ModSounds.VAMPIRE_DIVE_ID, ModSounds.VAMPIRE_DIVE_EVENT);
 
         addSound(ModSounds.TORTURE_DANCE_ID, ModSounds.TORTURE_DANCE_EVENT);
         addSound(ModSounds.HALLELUJAH_ID, ModSounds.HALLELUJAH_EVENT);
@@ -416,5 +424,6 @@ public class FabricSounds {
         addSound(ModSounds.FLESH_BUD_ID, ModSounds.FLESH_BUD_EVENT);
         addSound(ModSounds.FLESH_BUD_REMOVAL_ID, ModSounds.FLESH_BUD_REMOVAL_EVENT);
         addSound(ModSounds.HAIR_TOGGLE_ID, ModSounds.HAIR_TOGGLE_EVENT);
+        addSound(ModSounds.HAIR_SHARPEN_ID, ModSounds.HAIR_SHARPEN_EVENT);
     }
 }

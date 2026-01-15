@@ -8,6 +8,31 @@
   "text.roundabout.warn_trap_triggered": " задет(а)!",
   "text.roundabout.warn_unnamed_trap_triggered": "Туманная ловушка была задета!",
 
+  "text.roundabout.powers.stand": "Владелец Стенда",
+  "text.roundabout.powers.stand_select": "Ю-Хамон",
+  "text.roundabout.powers.vampire": "Вампирские Силы",
+  "text.roundabout.powers.vampire_select": "Вампир",
+  "text.roundabout.powers.hamon": "Силы Хамона",
+  "text.roundabout.powers.hamon_select": "Хамон",
+  "text.roundabout.powers.spin": "Искусства Вращения",
+  "text.roundabout.powers.spin_select": "Спин",
+  "text.roundabout.powers.martial_arts": "Боевые Искусства",
+  "text.roundabout.powers.martial_arts_select": "Искусства Боя",
+
+  "text.roundabout.fate.vampire": "Вампир",
+  "text.roundabout.fate.vampire_hair": "Изменить Цвет Волос",
+
+  "text.roundabout.bullets.revolver": "Совместимо с Короткоствольными Револьверами и Кольтами.",
+  "text.roundabout.bullets.tommy": "Совместимо с Томми Ганами.",
+  "text.roundabout.bullets.sniper": "Совместимо с Винтовками Шакала.",
+
+  "text.roundabout.respawn_as_human": "Переродиться как Человек",
+
+  "text.roundabout.out_of_bullets": "Шифт + правая кнопка мыши чтобы перезарядиться!",
+  "text.roundabout.already_reloaded": "Вы уже перезаряжены.",
+  "text.roundabout.no_more_usable_ammo": "У вас нет Боеприпасов!",
+
+
   "item.roundabout.stand_arrow": "Стрела Стенда",
   "item.roundabout.stand_beetle_arrow": "Стрела Стенда",
   "item.roundabout.worthy_arrow": "Стрела Достоинства",
@@ -53,6 +78,7 @@
   "item.roundabout.lucky_lipstick.desc": "Нанеси до сна для успешных сделок.",
   "item.roundabout.sacrificial_dagger": "Кинжал жертвоприношений",
   "item.roundabout.cherries": "Вишенки",
+  "item.roundabout.hairspray": "Спрей Для Волос",
 
 
   "item.roundabout.star_platinum_disc": "Диск со Стендом",
@@ -65,12 +91,16 @@
   "item.roundabout.survivor_disc": "Диск со Стендом",
   "item.roundabout.hey_ya_disc": "Диск со Стендом",
   "item.roundabout.ratt_disc": "Диск со Стендом",
+  "item.roundabout.cream_disc": "Диск со Стендом",
+  "item.roundabout.max_cream_disc": "Диск со Стендом+",
+  "item.roundabout.anubis_disc": "Диск со Стендом",
   "item.roundabout.achtung_baby_disc": "Диск со Стендом",
   "item.roundabout.max_ratt_disc": "Диск со Стендом+",
+  "item.roundabout.max_anubis_disc": "Диск со Стендом+",
   "item.roundabout.mandom_disc": "Диск со Стендом",
   "item.roundabout.walking_heart_disc": "Диск со Стендом",
-  "item.roundabout.max_walking_heart_disc": "Диск со Стендомc+",
-  "item.roundabout.max_star_platinum_disc": "Диск со Стендомc+",
+  "item.roundabout.max_walking_heart_disc": "Диск со Стендом+",
+  "item.roundabout.max_star_platinum_disc": "Диск со Стендом+",
   "item.roundabout.magicians_red_disc": "Диск со Стендом",
   "item.roundabout.killer_queen_disc": "Диск со Стендом",
   "item.roundabout.max_the_world_disc": "Диск со Стендом+",
@@ -93,6 +123,10 @@
   "item.roundabout.cinderella_disc.desc": "Cinderella",
   "item.roundabout.max_ratt_disc.desc": "Ratt",
   "item.roundabout.ratt_disc.desc": "Ratt",
+  "item.roundabout.max_cream_disc.desc": "Cream",
+  "item.roundabout.cream_disc.desc": "Cream",
+  "item.roundabout.anubis_disc.desc": "Anubis",
+  "item.roundabout.max_anubis_disc.desc": "Anubis",
   "item.roundabout.achtung_baby_disc.desc": "Achtung Baby",
   "item.roundabout.survivor_disc.desc": "Survivor",
   "item.roundabout.hey_ya_disc.desc": "Hey Ya!",
@@ -103,6 +137,17 @@
   "item.roundabout.none_disc.desc": "None",
 
   "item.roundabout.road_roller": "Асфальтоукладчик",
+
+  "item.roundabout.snubnose_revolver": "Короткоствольный Револьвер",
+  "item.roundabout.snubnose_ammo": "Боеприпасы Револьвера",
+
+  "item.roundabout.tommy_gun": "Томми Ган",
+  "item.roundabout.tommy_ammo": "Боеприпасы Для ПП",
+
+  "item.roundabout.colt_revolver": "Кольт",
+
+  "item.roundabout.jackal_rifle": "Винтовка Шакала",
+  "item.roundabout.sniper_ammo": "Боеприпасы Для Винтовки",
 
   "item.roundabout.light_bulb": "Лампочка",
 
@@ -146,9 +191,15 @@
   "item.roundabout.avdol_mask": "Облик Абдула",
   "item.roundabout.avdol_mask.desc": "Мухаммед Абдул",
   "item.roundabout.avdol_mask.tag": "Абдул",
+  "item.roundabout.kakyoin_mask": "Облик Какёина",
+  "item.roundabout.kakyoin_mask.desc": "Нориаки Какёин",
+  "item.roundabout.kakyoin_mask.tag": "Какёин",
   "item.roundabout.aya_mask": "Облик Аи",
   "item.roundabout.aya_mask.desc": "Ая Цуджи",
   "item.roundabout.aya_mask.tag": "Ая",
+  "item.roundabout.speedwagon_foundation_mask": "Облик Фонда Спидвагона",
+  "item.roundabout.speedwagon_foundation_mask.desc": "Сотрудник",
+  "item.roundabout.speedwagon_foundation_mask.tag": "Работник ФС",
   "item.roundabout.aesthetician_mask_1": "Облик косметолога",
   "item.roundabout.aesthetician_mask_1.desc": "косметолог",
   "item.roundabout.aesthetician_mask_1.tag": "косметолог",
@@ -191,6 +242,11 @@
   "item.roundabout.stand_arrow.usedUp": "Заряд истощён, совмести с метеоритом.",
   "item.roundabout.stand_arrow.haveStand": "У тебя уже имеется Стенд, чтобы избавится, используй пустой диск для Стенда",
   "item.roundabout.stand_arrow.acquireStand": "Вы получили Стенд! Нажмите клавишу призыва!",
+  "item.roundabout.stand_arrow.acquireStand_2": "Нажмите Кнопку Меню Способностей чтобы Посмотреть Навыки!",
+  "item.roundabout.stand_arrow.acquireVampire1": "Теперь вы Вампир",
+  "item.roundabout.stand_arrow.acquireVampire2": "Кнопка Призыва переключает Режим Атаки",
+  "item.roundabout.stand_arrow.acquireVampire3": "Избегайте Солнечного Света",
+  "item.roundabout.stand_arrow.acquireVampire4": "Пейте Кровь чтобы Стать Сильнее",
   "item.roundabout.stand_arrow.bowTip": "Во второй руке, луки используют в качестве боеприпаса.",
   "item.roundabout.stand_arrow.reroll": "Присядьте чтобы использовать %1$s опыта",
   "item.roundabout.stand_arrow.reroll2": "уровней для другого Станда!",
@@ -200,6 +256,7 @@
 
   "item.roundabout.worthy_arrow.info": "Только для Креатива, гарантированный эффект.",
   "item.roundabout.worthy_arrow.info_2": "Если выстрелить в Креативе, может удалить стенд/убрать эффект гарантии.",
+  "item.roundabout.hairspray.info": "Только Креатив",
 
   "effect.roundabout.bleed": "Кровотечение",
   "effect.roundabout.hex": "Наговор",
@@ -209,6 +266,7 @@
   "effect.roundabout.melting": "Разложение",
   "effect.roundabout.gravity_flip": "Гравитация",
   "effect.roundabout.warding": "Отражение",
+  "effect.roundabout.vampire_blood": "Вампирская Кровь",
 
   "item.roundabout.creative_only.info": "Только Креатив",
 
@@ -234,6 +292,9 @@
   "entity.roundabout.justice_pirate": "Justice",
   "entity.roundabout.dark_mirage": "Dark Mirage",
   "entity.roundabout.cinderella": "Cinderella",
+  "entity.roundabout.ratt": "Ratt",
+  "entity.roundabout.chair_ratt": "Ratt",
+  "entity.roundabout.redd": "Redd",
   "entity.roundabout.soft_and_wet": "Soft And Wet",
   "entity.roundabout.soft_and_wet_debut": "Soft And Wet",
   "entity.roundabout.soft_and_wet_king": "Soft And Wet",
@@ -247,6 +308,7 @@
   "entity.roundabout.knife": "Нож",
   "entity.roundabout.gasoline_can": "Канистра с бензином",
   "entity.roundabout.gasoline_splatter": "Брызги бензина",
+  "entity.roundabout.blood_splatter": "Брызги Крови",
   "entity.roundabout.flesh_pile": "Куча Плоти",
   "entity.roundabout.stand_arrow": "Стрела Стенда",
   "entity.roundabout.worthy_arrow": "Стрела Достоинства",
@@ -297,6 +359,10 @@
   "entity.roundabout.painting_van_gough": "Картина В.Г.",
   "entity.roundabout.painting_mona_lisa": "Картина М.Л",
   "entity.roundabout.painting_venus": "Картина В",
+  "entity.roundabout.road_roller_entity": "Асфальтоукладчик",
+  "entity.roundabout.anubis_possessor": "Обладатель Anubis",
+  "entity.roundabout.anubis_slipstream": "Скользящий Поток Anubis",
+
 
   "block.roundabout.meteor_block": "Блок Метеорита",
   "block.roundabout.regal_wall": "Роскошная стена",
@@ -377,6 +443,7 @@
   "block.roundabout.cultivated_cherry_sapling": "Культивированный Саженец Вишни",
   "block.roundabout.cultivated_oak_sapling": "Культивированный Саженец Дуба",
   "block.roundabout.cultivated_locacaca": "Культивированная Локакака",
+  "block.roundabout.melon_parfait": "Дынное Парфе",
 
   "itemgroup.jojo": "Roundabout",
   "itemgroup.jojo_discs": "Диски со Стендами",
@@ -399,6 +466,8 @@
   "key.roundabout.switch_rows": "Переключение на ряд способностей в присяде",
   "key.roundabout.show_exp": "Переключение отображение опыта Стенда",
   "key.roundabout.pose": "ДжоДжо Позинг",
+  "key.roundabout.hide_icons": "Скрыть Иконки Способностей",
+  "key.roundabout.fire_firearms": "Стрельба во время Прицеливания",
 
   "roundabout:item.roundabout.smithing_template.execution_upgrade.applies_to": "Железный Топор",
   "roundabout:item.roundabout.smithing_template.execution_upgrade.base_slot_description": "Добавьте железный Топор",
@@ -427,6 +496,13 @@
   "key.category.roundabout.jojo": "Клавишы управления Roundabout",
   "hud.roundabout.standout": "Стенд призван",
   "sounds.roundabout.dsp_summon": "Призыв Стенда со взрывом",
+  "sounds.roundabout.vampire_message": "Вибрация",
+  "sounds.roundabout.vsong_silent_reveries": "Тихое Забытья",
+  "sounds.roundabout.vsong_twisted": "Искажение",
+  "sounds.roundabout.vsong_bloodcurdling_moments": "Bloodcurdling Moments",
+  "sounds.roundabout.vsong_damnable_ceremony": "Чёртово Торжество",
+  "sounds.roundabout.vsong_gothic_organ": "Готический Орган",
+
 
   "death.attack.stand": "%1$s умер(ла) от таинственной силы, борясь с %2$s",
   "death.attack.stand.item": "%1$s умер(ла) от таинственной силы, борясь с %2$s",
@@ -494,13 +570,26 @@
   "death.attack.stand_virus.item": "%1$s превращён(а) в фарш",
   "death.attack.disintegration": "%1$ растерзан(а)",
   "death.attack.disintegration.player": "%1$ был(а) растерзан(а) в борьбе с %$2s",
+  "death.attack.kick": "%1$s был(а) продавлен(а)",
+  "death.attack.kick.player": "%$2s растоптал(а) %1$s",
   "death.attack.melting": "%1$s был(а) растворён(а) в лужу благодаря %2$s",
   "death.attack.melting.player":"%1$s был(а) сведён(а) до лужи благодаря %2$s",
   "death.attack.dagger": "%1$s стал(а) человеческим жертвоприношением",
   "death.attack.dagger.item": "%1$s стал(а) человечесим жертвоприношением",
   "death.attack.dagger.player": "%1$s стал(а) человеческим жертвоприношением",
   "death.attack.dagger.player.item": "%1$s стал(а) человечесим жертвоприношением",
-
+  "death.attack.road_roller_entity": "%1$s был(а) закатан(а) в могилу.",
+  "death.attack.road_roller_entity.item": "%1$s был(а) закатан(а) в могилу",
+  "death.attack.road_roller.player": "%1$s был(а) закатан(а) в могилу.",
+  "death.attack.road_roller.player.item": "%1$s был(а) закатан(а) в могилу.",
+  "death.attack.blood_drain": "%1$s утратил(а) все живые цвета.",
+  "death.attack.blood_drain.item": "%1$s утратил(а) все живые цвета.",
+  "death.attack.blood_drain.player": "%1$s утратил(а) все живые цвета.",
+  "death.attack.blood_drain.player.item": "%1$s утратил(а) все живые цвета.",
+  "death.attack.bullet": "%1$s был(а) подстрелен(а) в сердце.",
+  "death.attack.bullet.item": "%1$s был(а) подстрелен(а) в сердце.",
+  "death.attack.bullet.player": "%1$s был(а) подстрелен(а) в сердце.",
+  "death.attack.bullet.player.item": "%1$s был(а) подстрелен(а) в сердце.",
 
   "item.glaive.charge_power": "Усиленная Атака",
 
@@ -521,6 +610,9 @@
   "commands.roundabout.argument.standtype.valid_2": "Изменён Стенд у %s на %s",
   "commands.roundabout.argument.standtype.invalid": "Неизвестный тип Стенда: %s",
   "commands.roundabout.argument.standtype.invalid_2": "Необходим тип стенда, или 'none'.",
+  "commands.roundabout.argument.fate_type.invalid": "Неизвестный Тип Судьбы: %s (Типы Судьбы: Человек, Вампир)",
+  "commands.roundabout.argument.fate_type.valid": "Изменена Судьба у %s сущностей на %s",
+  "commands.roundabout.argument.fate_type.valid_2": "Изменена Судьба у %s на %s",
   "commands.roundabaout.d4c_world": "Мир \"%s\" был успешно сгенерирован.",
   "commands.roundabout.d4c_world.tooltip": "Нажми, чтобы телепортироваться.",
 
@@ -535,6 +627,7 @@
   "sounds.roundabout.summon_magician":  "Стенд призван",
   "sounds.roundabout.summon_mandom":  "Стенд призван",
   "sounds.roundabout.summon_achtung":  "'Невидиый' Стенд призван",
+  "sounds.roundabout.summon_cream":  "Стенд призван",
   "sounds.roundabout.hey_ya_summon":  "'Удачливый' Стенд призван",
   "sounds.roundabout.survivor_summon":  "Стенд призван",
   "sounds.roundabout.ova_summon":  "Стенд призван",
@@ -572,6 +665,9 @@
   "sounds.roundabout.cackle":  "Насмешка",
   "sounds.roundabout.go_beyond_launch":  "???",
   "sounds.roundabout.go_beyond_hit":  "Нечто невидимое",
+  "sounds.roundabout.hypnosis":  "Гипноз",
+  "sounds.roundabout.blood_regen":  "Звуки Плоти",
+  "sounds.roundabout.blood_regen_finish":  "Заживление",
 
   "sounds.roundabout.bubble_hover_over":  "Бульканье",
   "sounds.roundabout.bubble_pop":  "Бульканье пузырьков",
@@ -596,6 +692,9 @@
   "sounds.roundabout.spike_hit":  "Удар шпилькой",
   "sounds.roundabout.spike_miss":  "Выдвижение шпильки",
   "sounds.roundabout.vampire_crumble":  "Крошение",
+  "sounds.roundabout.vampire_speed":  "Приближение",
+  "sounds.roundabout.vampire_wall_grip":  "Треск",
+  "sounds.roundabout.vampire_awaken":  "???",
 
   "sounds.roundabout.mandom_rewind":  "Отмотка времени",
 
@@ -604,6 +703,27 @@
   "sounds.roundabout.survivor_remove":  "Хлопок",
 
   "sounds.roundabout.achtung_burst":  "Исчезновение",
+
+  "sounds.roundabout.cream_void_attack":  "Пожирание Cream",
+
+  "sounds.roundabout.bullet_ricochet":  "Пуля отрикошетила",
+
+  "sounds.roundabout.snubnose_fire":  "Выстрел оружия!",
+  "sounds.roundabout.snubnose_dry_fire":  "Щелчок оружия",
+  "sounds.roundabout.snubnose_reload":  "Перезарядка оружия",
+
+  "sounds.roundabout.tommy_gun_fire":  "Выстрел оружия!",
+  "sounds.roundabout.tommy_reload":  "Перезарядка оружия",
+
+
+  "sounds.roundabout.colt_fire":  "Выстрел оружия!",
+  "sounds.roundabout.colt_reload":  "Перезарядка оружия",
+
+  "sounds.roundabout.jackal_fire":  "Выстрел оружия!",
+  "sounds.roundabout.jackal_reload":  "Перезарядка оружия",
+
+  "sounds.roundabout.bullet_penetration":  "Проникновение пули",
+
 
   "sounds.roundabout.snap":  "Щелчок",
   "sounds.roundabout.star_finger_silent":  "Стар Фингер",
@@ -719,6 +839,27 @@
   "sounds.roundabout.ratt_leap": "Мини Скачок",
   "sounds.roundabout.ratt_mode_change": "Изменение Режима",
 
+  "sounds.roundabout.anubis_possession": "Зловещий Рёв",
+  "sounds.roundabout.anubis_summon" : "Будь Спокоен",
+  "sounds.roundabout.anubis_backflip": "Уклоняйся",
+  "sounds.roundabout.anubis_alluring": "Притягающий Свет",
+  "sounds.roundabout.anubis_raging": "Яростный Свет",
+  "sounds.roundabout.anubis_pogo_launch": "Вжух",
+  "sounds.roundabout.anubis_pogo_hit": "Взмах Меча",
+  "sounds.roundabout.anubis_barrage_1": "Взмах Меча",
+  "sounds.roundabout.anubis_barrage_1_hit": "Шквал Взмахов Мечом",
+  "sounds.roundabout.anubis_barrage_end": "Щелчок Меча",
+  "sounds.roundabout.anubis_swing": "Щелчок Меча",
+  "sounds.roundabout.anubis_crouch_swing": "Взмах Меча",
+  "sounds.roundabout.anubis_double_cut": "Взмах Меча",
+  "sounds.roundabout.anubis_thrust_cut": "Крит Меча",
+  "sounds.roundabout.anubis_thrust_miss": "Дуновение Меча",
+  "sounds.roundabout.anubis_uppercut": "Взмах Меча",
+
+
+
+
+
   "sounds.roundabout.arcade_impale":  "[Аркадный Удар]",
   "sounds.roundabout.arcade_long_ts":  "[Остановка Времени]",
   "sounds.roundabout.arcade_muda":  "[Аркадное Муда]",
@@ -762,9 +903,19 @@
   "sounds.roundabout.hey_ya_6": "Стенд болтает",
   "sounds.roundabout.hey_ya_7": "Стенд болтает",
 
+  "sounds.roundabout.killer_queen_summon": "Стенд Призван!",
+  "sounds.roundabout.killer_queen_barrage": "Shibabababa!",
+
   "sounds.roundabout.levelup": "Повышение уровня Стенда!",
 
   "sounds.roundabout.vampire_drain": "Высасывание крови",
+
+  "sounds.roundabout.road_roller_ambient":  "Шум Асфальтоукладчика",
+  "sounds.roundabout.road_roller_explosion":  "Взрыв Асфальтоукладчика",
+  "sounds.roundabout.road_roller_mixing":  "Перемешивание Асфальтоукладчика",
+  "sounds.roundabout.flesh_bud_goes":  "Заражение Плоти",
+  "sounds.roundabout.flesh_bud_removal":  "Паразит Из Плоти Удалён",
+  "sounds.roundabout.hair_toggle":  "Вытягивание Волос",
 
   "sounds.roundabout.dio_hoho":  "Хо-Хо!",
   "sounds.roundabout.dio_hoho_2":  "Хо!",
@@ -849,6 +1000,11 @@
   "sounds.roundabout.jotaro_judgement":  "Суждение",
   "sounds.roundabout.jotaro_dio":  "ДИО!",
   "sounds.roundabout.jotaro_getting_closer":  "Если я не подойду...",
+  "sounds.roundabout.blood_suck":  "Потеря крови",
+  "sounds.roundabout.blood_suck_crit":  "Потеря крови",
+  "sounds.roundabout.heartbeat":  "Стук сердца",
+  "sounds.roundabout.heartbeat2":  "Стук сердца",
+  "sounds.roundabout.heartbeat3":  "Стук сердца",
 
   "sounds.roundabout.aesthetician_exhale":  "Выдох Косметолога",
   "sounds.roundabout.female_zombie_ambient":  "Дыхание Зомби Косметолога",
@@ -876,6 +1032,7 @@
   "instruction.roundabout.press_2_skill": "Нажмите кнопку способности %1$s во время способности %2$s",
   "instruction.roundabout.passive": "Пассивное",
   "instruction.roundabout.shop_item": "Магазин Предметов",
+  "instruction.roundabout.use_item": "Взаимодействие с Предметом",
 
   "ability.roundabout.punch": "Удар",
   "ability.roundabout.punch.desc": "Наносит удар кулаком прямо перед вами. Удерживайте кнопку для трёхударного комбо!",
@@ -889,6 +1046,11 @@
   "ability.roundabout.forward_barrage": "Шквал ударов с продвижением",
   "ability.roundabout.forward_barrage.desc": "Вовремя шквала ударов ваш стенд начнёт медленно парить вперёд.",
 
+  "ability.roundabout.disc_imprint": "Отпечаток Диска",
+  "ability.roundabout.disc_imprint.desc": "Используйте Диск Стенда без Стенда, чтобы удалить текущий Стенд и сохранить его данные на диске.",
+  "ability.roundabout.disc_swap": "Смена Диска",
+  "ability.roundabout.disc_swap.desc": "Для смены Стенда используйте другой Диск со Стендом. При этом материалы не теряются.",
+
   "ability.roundabout.impale": "Пронзание",
   "ability.roundabout.impale.desc": "Заряжает смертоносный удар, накладывающий эффект кровотечения 3-го уровня. Для нанесения наобходимо находиться на близком расстоянии.",
   "ability.roundabout.impale_blitz": "Пробитие/Блиц",
@@ -899,6 +1061,8 @@
   "ability.roundabout.item_grab.desc": "Стенд берёт предмет, который вы держите, из вашего инвентаря для броска. Многие предметы имеют уникальные свойства.",
   "ability.roundabout.mob_grab": "Силовой захват (Сущности)",
   "ability.roundabout.mob_grab.desc": "Стенд берёт возможное для подбора существо, на которого направлен взгляд, и если оно находиться на близком расстоянии. Бросайте, перемещайте, или аккуратно поставьте на землю. Присядьте во время броска для нанесения удара по существу.",
+  "ability.roundabout.mob_grab_sp": "Силовой захват (Сущности)",
+  "ability.roundabout.mob_grab_sp.desc": "Стенд берёт возможное для подбора существо, на которого направлен взгляд, и если оно находиться на близком расстоянии. Бросайте, перемещайте, или аккуратно поставьте на землю. Присядьте во время броска для нанесения удара по существу. Так же может удалять паразитов из плоти.",
   "ability.roundabout.phase_grab": "Фазовый захват",
   "ability.roundabout.phase_grab.desc": "Ваш стенд левитирует вперёд, проходя сквозь некоторые блоки в призрачном обличии, через железные прутья или плиты. Подбирает предметы издалека, или взаимодействует с рычагами и дверьми.",
   "ability.roundabout.dodge": "Рывок",
@@ -995,7 +1159,7 @@
   "ability.roundabout.flame_extinguish": "Погашение Огня",
   "ability.roundabout.flame_extinguish.desc": "Щёлкните чтобы потушить весь огонь который вы создали.",
   "ability.roundabout.projectile_burn": "Пламенная защита",
-  "ability.roundabout.projectile_burn.desc": "Сжигает все летящие снаряды, и поджигает летящие канистры.",
+  "ability.roundabout.projectile_burn.desc": "Сжигает все летящие снаряды, и поджигает летящие канистры. Сжигает паразитов из плоти.",
   "ability.roundabout.crossfire_firestorm": "Ураган Перекрестного Огня",
   "ability.roundabout.crossfire_firestorm.desc": "Формирует огромный Анкх, разбрасывающий повсюду огненные искры, повышая эффективность способностей Урагана Перекрестного Огня и позволяя использовать их в дождь. Однако, увеличивает их перезарядку.",
   "ability.roundabout.fire_slam": "Пиковый Пламенный Удар",
@@ -1011,6 +1175,10 @@
   "ability.roundabout.wall_walk_move.desc": "Прикрепляется к вертикальным поверхностям, позволяя вам ходить по ним. Активируется, когда вы стоите лицом к стене, Установив Шпильки, или находясь в воздухе.",
   "ability.roundabout.firm_swing": "Уверенный Взмах",
   "ability.roundabout.firm_swing.desc": "Делает все атаки критическими, пока ваша шпилька установлена, благодаря увеличенной силе от крепкой стойки.",
+  "ability.roundabout.fall_disperse": "Поглощение Падения",
+  "ability.roundabout.fall_disperse.desc": "Разделяет получаемый урон от падения, распределяя удар от падения по вашим шпилькам",
+  "ability.roundabout.corner_cut": "Угловое Сцепление",
+  "ability.roundabout.corner_cut.desc": "Включите это, чтобы пропустить процесс выпрямления направления при выбегании за угол стены. Также предотвращает случайные прыжки и снижает скорость. Воспринимайте это как вспомогательное средство.",
 
 
 
@@ -1078,6 +1246,14 @@
   "ability.roundabout.target_zap": "Купидон Ярости",
   "ability.roundabout.target_zap.desc": "Позволяет выбрать, какие мобы будут сражаться друг с другом. Войдите в режим выбора, используйте клавишу атаки, чтобы выбрать активную часть вашего стенда, затем конкретного моба, а затем другого. И они начнут сражаться! Нажмите клавишу способности снова, чтобы отменить или перезапустить выбор. Пока этот режим активен, другие части стенда не будут автоматически воздействовать на мобов.",
 
+  "ability.roundabout.stand_vision": "Созерцание Стендов",
+  "ability.roundabout.stand_vision.desc": "Позволяет вам видеть феномен Стендов и Призраков пассивно. Эта способность приминима даже когда вы используете другие способности, пока у вас есть стенд.",
+  "ability.roundabout.stand_passives": "Пассивности Стендов",
+  "ability.roundabout.stand_passives.desc": "Некоторые способности Стендов как пассивное поглощение урона или активация печки применяется даже если используете другие способности, при условии, что у вас есть соответствующий Стенд.",
+  "ability.roundabout.stand_summon": "Вызов Стенда",
+  "ability.roundabout.stand_summon.desc": "Позволяет вызвать и использовать ваш стенд и все его способности, показанные на вкладке Диск стенда.",
+
+
   "ability.roundabout.invisivision": "Невиди-Зрение",
   "ability.roundabout.invisivision.desc": "Включает и выключает способность видеть прозрачные версии блоков и существ, которые вы сделали невидимыми с помощью своего стенда. Выключение этой способности полезно, чтобы взглянуть на мир глазами человека без стенда и лучше видеть сквозь невидимые блоки.",
   "ability.roundabout.invisiburst": "Всплеск",
@@ -1088,21 +1264,99 @@
   "ability.roundabout.place_invis.desc": "Размещайте блоки, передавая им вашу длительность невидимости. Работает только пока вы сами невидимы. Чтобы активировать навык вы должны быть невидимыми и держать блок.",
 
   "ability.roundabout.ratt_scope": "Режим Прицела",
-  "ability.roundabout.ratt_scope.desc": "Удерживание Ratt на себе зажатие и прицела, позволяет вам стрелять во время движения.",
+  "ability.roundabout.ratt_scope.desc": "Удерживание Ratt на себе зажатие и прицела, позволяет вам стрелять во время движения. Кнопка взаимодействия заряжает, а кнопка удара высвобождает шквала дротиков.",
   "ability.roundabout.ratt_single": "Точный Выстрел",
   "ability.roundabout.ratt_single.desc": "Зарядите дротик и атакуйте, чтобы выстрелить им.",
   "ability.roundabout.ratt_burst": "Множественный Выстрел",
   "ability.roundabout.ratt_burst.desc": "Стреляет альтернативной формой выстрела, которая больше плавит, но наносит меньше урона.",
   "ability.roundabout.ratt_place": "Установка Ratt",
-  "ability.roundabout.ratt_place.desc": "Устанавливает Ratt на землю позволяя ему стрелять рядом с вами.",
+  "ability.roundabout.ratt_place.desc": "Устанавливает Ratt на землю позволяя ему стрелять рядом с вами. Подкрадывание выделяет крысу и отображает расстояние до вас.",
   "ability.roundabout.ratt_place_burst": "Установленный Множественный Выстрел",
   "ability.roundabout.ratt_place_burst.desc": "Выпускает множественный выстрел 3 дротиков из положения Ratt туда куда смотрит ваш курсор.",
   "ability.roundabout.ratt_auto": "Автоматический Режим",
   "ability.roundabout.ratt_auto.desc": "Наведите прицел на объект в поле зрения, и Ratt автоматически откроет по нему огонь.",
   "ability.roundabout.ratt_flesh": "Куски/Блоки Плоти",
   "ability.roundabout.ratt_flesh.desc": "Падают от плавящихся существ. Замедляют мобов и их трудно разбить. Однако, имея Ratt, вы можете обойти эти ограничения, свободно передвигаться по ним и мгновенно подбирать их, нажав Правую Кнопку Мыши.",
+  "ability.roundabout.ratt_bucket": "Ведро Плоти",
+  "ability.roundabout.ratt_bucket.desc": "Вёдра могут собирать плоть Ratt в обширной области, позволяя вам быстро черпать и выбрасывать их.",
   "ability.roundabout.ratt_leap": "Рывок Ratt",
   "ability.roundabout.ratt_leap.desc": "Бросает Ratt в сторону, позволяя вам быстро сменить его позицию.",
+
+
+  "ability.roundabout.blood_drink": "Высасывание Крови",
+  "ability.roundabout.blood_drink.desc": "Поглощает кровь цели с помощью ваших рук пока ваш взгляд направлен на неё, нанося урон и восполняя кровь. Если у моба есть кровь которую можно выпить, в середине экрана появится нужный индикатор. Если моб не встревожен, вы можете достигнуть критическое высасывание крови. Жители и Разбойники будут зомбифицированы после смерти от этой способности, и могут быть под контроллем.",
+  "ability.roundabout.vampire_passive": "Вампиризм",
+  "ability.roundabout.vampire_passive.desc": "Вы растворяетесь на солнечном свету. Вы расходуете кровь вместо голода, и поедание сырой еды и плоти мобов обеспечивает кровь без штрафов. Вы не можете умереть от голода. А утопание только замедляет вас. Жезелные Големы ненавидят вас, пока зомби спокойно относятся к вашему присутствию.",
+  "ability.roundabout.mass_heal": "Лечение Кровью",
+  "ability.roundabout.mass_heal.desc": "Расходует всю вашу кровь на регенерацию, временно замедляя вас. Эта способность активируется автоматически когда вы умрёте, если возможно, позволяя стоять до последнего.",
+  "ability.roundabout.wall_walk_vamp": "Ходьба по Стенам",
+  "ability.roundabout.wall_walk_vamp.desc": "Цепляется за стены, позволяя вам медленно ходить по ним. Активируется в воздухе при взгляде стену. Нажмите снова пока вы на стене и смотрите на следующую стену чтобы переключаться между стен, или ходить по потолкам.",
+  "ability.roundabout.vampire_vision": "Вампирское Зрение",
+  "ability.roundabout.vampire_vision.desc": "Пока включено, позволяет пассивно видеть в темноте а так же обеспечивает большую высоту прыжка при его зажатии.",
+
+  "ability.roundabout.vamp_jump_boost": "Ультра-Атлетизм",
+  "ability.roundabout.vamp_jump_boost.desc": "Даёт прыжкам 3 метровую высоту, и 5 метров при прыжке во время подкрадывания. Удерживайте для более долгих прыжков, и нажимайте для более коротких. С активным набором способностей, позволяет прыжки в %1$s метров в высоту и %2$s метров во время подкрадывания.",
+  "ability.roundabout.vamp_strength": "Развитая Сила",
+  "ability.roundabout.vamp_strength.desc": "Превосходит человеческие лимиты. +%1$s процентов за прямые ближние атаки против мобов, +%2$s против игроков.",
+  "ability.roundabout.vampire_growth_room": "Осталось Уровней Роста: %1$s",
+  "ability.roundabout.vampire_level_gate": "Должны быть %1$s уровня чтобы разблокировать.",
+  "ability.roundabout.vampire_level_ready": "Нажмите для улучшения.",
+  "ability.roundabout.vamp_dexterity": "Высочайшая Ловкость",
+  "ability.roundabout.vamp_dexterity.desc": "Научитесь двигать свои конечности с неестественной скоростью. +%1$s процентов к скорости копания, +%2$s процентов к скорости ударов.",
+  "ability.roundabout.vamp_resilience": "Тёмная Стойкость",
+  "ability.roundabout.vamp_resilience.desc": "Практикуйтесь в перемещении тела, чтобы смягчить удар при определенных типах атак. +%1$s процентов поглощения приходящего ближнего урона, +%2$s процентов поглощения приходящего урона от некоторых снарядов",
+  "ability.roundabout.hypnotism": "Гипнотизм",
+  "ability.roundabout.hypnotism.locked": "???",
+  "ability.roundabout.hypnotism.desc": "Включайте и выключайте свои гипнотически пульсации заставляющие ближайших мобов следовать за вами. Загипнотизированные Жители не беспокоятся о изменении репутации когда их кровь поглощают.",
+  "ability.roundabout.hypnotism.locked.desc": "Разблокируйте ваш Гипнотический потенциал...",
+  "ability.roundabout.super_hearing": "Супер Слух",
+  "ability.roundabout.super_hearing.desc": "Полностью концентрируется на звуках сердцебиений, позволяя вам обнаруживать мобов сквозь стены и оценивать их здоровье. %1$s блоков радиус.",
+
+  "ability.roundabout.blood_speed": "Скорость Кровью",
+  "ability.roundabout.blood_speed.desc": "Массивное увеличение скорости, подобное гепарду, взамен на половину вашей крови, так же позволяет вам мгновенно взбираться на блоки. Скорость возрастает на %1$s процентов.",
+  "ability.roundabout.blood_speed.locked": "???",
+  "ability.roundabout.blood_speed.locked.desc": "Используй поглощённую жизненую силу чтобы повысить скорость...",
+
+  "ability.roundabout.grafting": "Сращивание зомби",
+  "ability.roundabout.grafting.desc": "Заставляет некоторых мобов ронять части тела которые могут быть срощенны к вашим зомби миньонам с помощью взаимодействия. Изменяя их пропорции и/или давая новые способности.",
+  "ability.roundabout.grafting.locked": "???",
+  "ability.roundabout.grafting.locked.desc": "Даёт вашей армии нежити улучшение...",
+
+  "ability.roundabout.flesh_bud": "Паразит из Плоти",
+  "ability.roundabout.flesh_bud.desc": "Вставляет паразита в моба, заставляя их атаковать ваших врагов (и не позволит вас). Некоторым мобам нужно сначала быть с низким здоровьем.",
+  "ability.roundabout.flesh_bud.locked": "???",
+  "ability.roundabout.flesh_bud.locked.desc": "Обеспечивает дальнейший контроль над мобами...",
+
+  "ability.roundabout.sacrificial_dagger": "Плескание Вампирской Крови",
+  "ability.roundabout.sacrificial_dagger.desc": "Вместо того чтобы вредить вам, Кинжалы жертвоприношений теперь стреляет вашей кровью как лечащими снарядами. Это так же выдаёт мобам специальный эффект, и если они умрут под этим эффектом они станут вампирскими версиями самих себя и полностью излечатся. Будучи вампирами, они сильнее но гибнут под солнцем и пьют кровь ближайших мобов чтобы вылечиться.",
+  "ability.roundabout.sacrificial_dagger.locked": "???",
+  "ability.roundabout.sacrificial_dagger.locked.desc": "Ваша кровь имеет исцеляющие свойства. Может вы могли бы использовать это для ваших целей...",
+
+  "ability.roundabout.unleash_the_cold": "Познание Холода",
+  "ability.roundabout.unleash_the_cold.desc": "Одаряет набор способностей, испаряющей заморозкой. Усиляйте, чтобы делать это лучше.",
+  "ability.roundabout.unleash_the_cold.locked": "???",
+  "ability.roundabout.unleash_the_cold.locked.desc": "Ты заметил что температура твоего тела ниже чем человеческая. Могли бы вы извлечь пользу из этой уникальной особенности? (набор способностей)",
+
+  "ability.roundabout.eye_manipulation": "Манипуляция Глазами",
+  "ability.roundabout.eye_manipulation.desc": "Одаряет набор способностей, способностью Space Ripper Stingy Eyes. Power it up to make it better.",
+  "ability.roundabout.eye_manipulation.locked": "???",
+  "ability.roundabout.eye_manipulation.locked.desc": "Практикуя вашу новообретенную способность манипулировать телом, вы задумались, что произойдёт если вы начнёте манипулировать вашими глазными жидкостями. (набор способностей)",
+
+
+  "ability.roundabout.gd_punch_left": "Запуск Левой Руки",
+  "ability.roundabout.gd_return_left": "Присоединение Левой Руки",
+  "ability.roundabout.gd_spin_left": "Вращение Левой Руки",
+  "ability.roundabout.gd_punch_right": "Запуск Правой Руки",
+  "ability.roundabout.gd_return_right": "Присоединение Правой Руки",
+  "ability.roundabout.gd_spin_right": "Вращение Правой Руки",
+  "ability.roundabout.gd_mold_leap": "Разделяющий Рывок",
+  "ability.roundabout.gd_mold_leap.desc": "Разделяет ваш торс и ноги, и запускает вас в сторону в которую вы смотрите, обеспечивая отличную всестороннюю мобильность и позволяя избежать урона от падения. Оставляет вас ползающим пока ваши ноги плывут к вам, атакуя мобов которые контактируют с ними, снова позволяя вам ходить. Твои ноги самостоятельно вернутся через какое то время",
+  "ability.roundabout.gd_mold_field": "Плесневое Поле",
+  "ability.roundabout.gd_mold_field.desc": "Выпускает Споры Плесени в огромной области вокруг вас. Любой моб что опустится в этой области нижн вас, получит массивный урон который со временем усиливается. Игроки и определённые мобы могут выронить свою голову после смерти от Плесневого Поля. Органические снаряды ниже вас в области Плесневого Поля, будут быстро дезинтигрированы",
+  "ability.roundabout.gd_stitch": "Зашиться",
+  "ability.roundabout.gd_stitch.desc": "Зашивает рану, восстанавливая небольшую часть здоровья и уменьшая кровотечение на 1 уровень.",
+  "ability.roundabout.gd_pardon": "Выбор Союзника",
+  "ability.roundabout.gd_pardon.desc": "Выбирает Энтити как союзника, делая их невосприимчивыми к Плесневому Полю",
 
   "ability.roundabout.diver_selection": "Погружённый выбор",
   "ability.roundabout.diver_selection.desc": "Открывает колесо ослаблений, которое вы можете применить к себе.",
@@ -1113,6 +1367,10 @@
   "ability.roundabout.locked.ctrl": "Недоступно",
   "ability.roundabout.locked.desc": "Разблокируется на %1$s уровне",
 
+  "leveling.roundabout.fate_development_point": "1 Очко!",
+  "leveling.roundabout.fate_development_points": "%s Очков!",
+  "leveling.roundabout.fate_development_potential_level": "Уровень: %s",
+  "leveling.roundabout.fate_maxed": "Полная Сила",
   "leveling.roundabout.disc_development_potential_level": "Уровень: %s",
   "leveling.roundabout.disc_skin": "Скин: ",
   "leveling.roundabout.disc_maxed": "Завершён",
@@ -1124,6 +1382,10 @@
   "leveling.roundabout.levelup.max.both": "Максимальное Развитие: Новая Способность и Скин!",
   "leveling.roundabout.disc_wip": "Ведутся работы, не доступно в Выживании",
   "leveling.roundabout.disc_wip_2": "Это означает, что не все приёмы доступны",
+
+  "leveling.roundabout.levelup.vampire": "Вы стали сильнее, Очко Навыка Открыто!",
+
+  "leveling.roundabout.max_levelup.vampire": "Величайший Кайф, Последнее Очко Навыка Открыто!",
 
   "gamerule.roundaboutStandGriefing": "Разрушение блоков стендом",
   "gamerule.roundaboutStandGriefing.description": "Контролирует возможность стендов разрушать блоки.",
@@ -1139,8 +1401,12 @@
   "gamerule.roundaboutMobGrabbing.description": "Могут ли стенды брать и переносить мобов или нет",
   "gamerule.roundaboutSpawnWorthyMobs": "Появление Достойных мобов",
   "gamerule.roundaboutSpawnWorthyMobs.description": "Будут ли появляться мобы достойные получения стенда или нет",
-  "gamerule.roundaboutSpawnStandUserMobs": "Появление мобов обладателей стендов",
+  "gamerule.roundaboutSpawnStandUserMobs": "Появление Мобов Обладателей Стендов",
   "gamerule.roundaboutSpawnStandUserMobs.description": "Могут ли появиться мобы со стендами или нет",
+  "gamerule.roundaboutRoadRollerBreakIce": "Асфальтоукладчик Ломает Лёд",
+  "gamerule.roundaboutRoadRollerBreakIce.description": "Разрушает ли Асфальтоукладчик хрупкие блоки",
+  "gamerule.roundaboutLoseFateOnDeath": "Терять Судьбу После Смерти",
+  "gamerule.roundaboutLoseFateOnDeath.description": "Потеряете ли вы свою судьбу после смерти, например вампиризм",
 
   "idle.roundabout.passive": "Нейтральная Поза",
   "idle.roundabout.battle": "Боеготовность",
@@ -1158,6 +1424,9 @@
 
   "idle.roundabout.ratt_1": "На голове",
   "idle.roundabout.ratt_2": "На плече",
+
+  "idle.roundabout.anubis_1": "Только меч",
+  "idle.roundabout.anubis_2": "Гуманоид",
 
 
   "skins.roundabout.star_platinum.base": "Часть 3",
@@ -1294,6 +1563,7 @@
   "skins.roundabout.ratt.tower" : "Пещерный",
   "skins.roundabout.ratt.redd" : "Redd",
   "skins.roundabout.ratt.snowy" : "Снежный",
+  "skins.roundabout.ratt.nether" : "Незер",
   "skins.roundabout.ratt.guardian" : "Страж",
   "skins.roundabout.ratt.elder_guardian" : "Древний Страж",
   "skins.roundabout.ratt.rat" : "Крыса?",
@@ -1331,6 +1601,7 @@
   "skins.roundabout.hey_ya.angel": "Ангел",
   "skins.roundabout.hey_ya.knight": "Доспехи",
   "skins.roundabout.hey_ya.saint": "Святой",
+  "skins.roundabout.hey_ya.vampire": "Вампир",
 
   "skins.roundabout.mandom.manga": "Манга",
   "skins.roundabout.mandom.purple": "Фиолетовый",
@@ -1369,6 +1640,33 @@
   "skins.roundabout.diver_down.treasurediver": "Кладоискатель",
   "skins.roundabout.diver_down.birthdaydiver": "День Рождения!",
   "skins.roundabout.diver_down.firediver": "Fire Down",
+
+  "death.attack.anubis_possess": "%1$s не смог противостоять %2$s",
+  "death.attack.anubis_spin": "%1$s был порублен на кусочки %2$s",
+
+  "item.roundabout.anubis_item": "Загадочный Меч",
+  "item.roundabout.anubis_item.message1" : "Этот меч проклят! Отыщите Клирика!",
+  "item.roundabout.anubis_item.sword_cleansed": "Анубис был Очищен!",
+
+  "skins.roundabout.anubis.anime" : "Аниме",
+  "skins.roundabout.anubis.evil" : "Зловещий",
+  "skins.roundabout.anubis.wooden" : "Деревянный",
+  "skins.roundabout.anubis.stone" : "Камень",
+  "skins.roundabout.anubis.aquamarine" : "Aquamarine",
+  "skins.roundabout.anubis.golden" : "Позолоченный",
+  "skins.roundabout.anubis.diamond" : "Алмазный",
+  "skins.roundabout.anubis.ancient" : "Средневековый",
+  "skins.roundabout.anubis.grass": "The Mower",
+  "skins.roundabout.anubis.gray_wagon": "Gray Wagon",
+  "skins.roundabout.anubis.timekeeper": "Timekeeper",
+  "skins.roundabout.anubis.chorus": "Хорус",
+  "skins.roundabout.anubis.alluring": "Яростная Катана",
+  "skins.roundabout.anubis.raging": "Манящая Катана",
+
+
+
+  "roundabout.anubis.playback_title": "Повторить Воспоминания",
+  "roundabout.anubis.memory_title": "Записать Воспоминания",
 
   "skins.roundabout.achtung_baby.base": "Не имеет формы",
 
@@ -1463,6 +1761,11 @@
   "roundabout.cinderella.mod_visage_gui.chest_type.four": "D",
   "roundabout.cinderella.mod_visage.voice_available": "Совместимо с Аудио Слотом.",
 
+  "roundabout.hairspray.red": "Красный",
+  "roundabout.hairspray.green": "Зелёный",
+  "roundabout.hairspray.blue": "Синий",
+  "roundabout.hairspray.base": "Волосы",
+
   "power_inventory.roundabout.settings.general": "Настройки Стенда",
   "power_inventory.roundabout.settings.offset": "Позиция",
   "power_inventory.roundabout.settings.distance": "Расстояние",
@@ -1476,6 +1779,10 @@
   "power_inventory.roundabout.settings.reset": "Сброс",
   "power_inventory.roundabout.settings.next": "Дальше",
   "roundabout.menu.ts_paused": "Время остановлено!",
+
+  "power_inventory.roundabout.tabs.fate": "Судьба",
+  "power_inventory.roundabout.tabs.stand": "Стенд",
+  "power_inventory.roundabout.tabs.powers": "Способности",
 
   "roundabout.warden_ts_movement": "Оно не остановилось?!",
 
@@ -1573,7 +1880,11 @@
   "text.roundabout.achtung.vision_off": "Невиди-Зрение: Отключено",
   "text.roundabout.achtung.vision_on": "Невиди-Зрение: Включено",
 
+  "text.roundabout.walking.cut_on": "Угловое Сцепление : Включено",
+  "text.roundabout.walking.cut_ff": "Угловое Сцепление : Выключено",
 
+  "text.roundabout.vampire.flesh_bud_fail": "Жертва не ослаблена, или встревожена",
+  "text.roundabout.vampire.flesh_bud_fail_already": "Плотяной паразит уже установлен",
 
 
 
@@ -1581,7 +1892,6 @@
   "config_translatiors_note": "(Text of this string not ingame): Hello, translators of the mod! I have no expectations",
   "config_translatiors_note_2": "of everything beneath this being translated, it is a lot of work. But if you really",
   "config_translatiors_note_3": "have the time and drive to do so, you deserve a cookie. :)",
-
 
 
   "config.roundabout.mountingHorsesInCreativeTamesThem.name": "Creative Mount To Tame",

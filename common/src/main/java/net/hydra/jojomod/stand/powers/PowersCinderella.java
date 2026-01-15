@@ -561,7 +561,7 @@ public class PowersCinderella extends NewDashPreset {
                         MainUtil.makeFaceless(entity, 200, 0, this.getSelf());
                     }
                 }
-                this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
+                takeDeterminedKnockback(this.self, entity, knockbackStrength);
             }
         }
 

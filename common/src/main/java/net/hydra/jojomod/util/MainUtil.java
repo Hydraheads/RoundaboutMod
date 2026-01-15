@@ -24,14 +24,17 @@ import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModGamerules;
+import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampiricFate;
+import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersMetallica;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -311,7 +314,7 @@ public class MainUtil {
         if (ent instanceof LivingEntity LE){
             StandUser SU = ((StandUser) LE);
             if (SU.roundabout$getStandPowers() instanceof PowersWalkingHeart PW && (PW.hasExtendedHeelsForWalking()
-            || (SU.roundabout$getActive() && ent instanceof Mob mb && mb.onGround()))){
+            || (PowerTypes.hasStandActive(ent) && ent instanceof Mob mb && mb.onGround()))){
                 return true;
             }
 
@@ -914,6 +917,15 @@ public class MainUtil {
         return !level.noCollision(player, headSpace);
     }
 
+    public static boolean isUsingMetallica(Entity ent){
+        if (ent instanceof LivingEntity LE && ((StandUser)ent).roundabout$getStandPowers() instanceof PowersMetallica PM){
+            if (PM.hasStandActive(LE)){
+                return true;
+            }
+        }
+
+        return false;
+    }
     public static void makeFaceless(Entity entity, int ticks, int power, Entity user){
         if (entity instanceof LivingEntity LE){
             if (((LivingEntity)entity).hasEffect(ModEffects.FACELESS)){
@@ -981,8 +993,8 @@ public class MainUtil {
             iplayer.rdbt$setHairColorY(green);
             iplayer.rdbt$setHairColorZ(blue);
         }
-
     }
+
     private static double clampVertical(double $$0) {
         return Mth.clamp($$0, -2.0E7, 2.0E7);
     }
@@ -1679,8 +1691,20 @@ public class MainUtil {
         }
         return false;
     }
-    public static boolean isArmorBypassingButNotShieldBypassing(DamageSource sauce){
-        if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.CORPSE) || sauce.is(ModDamageTypes.EXPLOSIVE_STAND)  || sauce.is(ModDamageTypes.HEEL_SPIKE)  ||
+
+
+    public static boolean getReducedDamage(Entity entity){
+        return (entity instanceof Player || entity instanceof StandEntity ||
+                ((entity instanceof LivingEntity LE && !((StandUser)LE).roundabout$getStandDisc().isEmpty()) &&
+                        ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.standUserMobsTakePlayerDamageMultipliers)
+        );
+    }
+
+    public static boolean isArmorBypassingButNotShieldBypassing(DamageSource sauce, Entity target){
+        if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.CORPSE)
+                || sauce.is(ModDamageTypes.VAMPIRE) || sauce.is(ModDamageTypes.HAMON) ||
+                (sauce.is(ModDamageTypes.MARTIAL_ARTS) && getReducedDamage(target))
+                || sauce.is(ModDamageTypes.EXPLOSIVE_STAND)  || sauce.is(ModDamageTypes.HEEL_SPIKE)  ||
                 sauce.is(ModDamageTypes.CORPSE_ARROW) ||  sauce.is(ModDamageTypes.STAND_RUSH) ||  sauce.is(ModDamageTypes.CROSSFIRE) ||
                 sauce.is(ModDamageTypes.CORPSE_EXPLOSION)) {
             return true;
@@ -1689,7 +1713,7 @@ public class MainUtil {
     }
 
 
-    /**Returns the vertical angle between two mobs*/
+    /**Returns the vertical angle between two mobs in degrees*/
     public static float getLookAtEntityPitch(Entity user, Entity targetEntity) {
         double f;
         double d = targetEntity.getEyePosition().x - user.getEyePosition().x;
@@ -1717,7 +1741,7 @@ public class MainUtil {
         return new Vec2(xRot, yRot); // Vec2 is (xRot, yRot)
     }
 
-    /**Returns the horizontal angle between two mobs*/
+    /**Returns the horizontal angle between two mobs in degrees*/
     public static float getLookAtEntityYaw(Entity user, Entity targetEntity) {
         double d = targetEntity.getX() - user.getX();
         double e = targetEntity.getZ() - user.getZ();
@@ -2219,6 +2243,7 @@ public class MainUtil {
     public static void handShakeCooldowns(ServerPlayer player){
         ((StandUser)player).roundabout$getStandPowers().syncAllCooldowns();
         S2CPacketUtil.affirmCooldownsS2C(player);
+        ((StandUser)player).roundabout$syncGuard();
     }
 
 
@@ -2295,6 +2320,7 @@ public class MainUtil {
         } else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_POWER_INVENTORY) {
             StandUser standUser = ((StandUser) player);
             standUser.roundabout$getStandPowers().setCooldown(context,-1);
+            PowerTypes.initializeStandPower(player);
             IPlayerEntity iplay = ((IPlayerEntity) player);
             byte unlocked = 0;
             if (iplay.roundabout$getUnlockedBonusSkin()){
@@ -2368,7 +2394,7 @@ public class MainUtil {
         } else if (context == PacketDataIndex.SINGLE_BYTE_DESUMMON) {
             if (player != null) {
                 StandUser user = ((StandUser) player);
-                if (user.roundabout$getActive()){
+                if (PowerTypes.hasStandActive(player)){
                     user.roundabout$summonStand(player.level(), false, false);
                 }
             }
@@ -2386,6 +2412,43 @@ public class MainUtil {
             if (player != null) {
                 ((StandUser)player).roundabout$getStandPowers().serverQueried2();
             }
+        } else if (context == PacketDataIndex.QUERY_VAMPIRE_UPDATE) {
+            if (player != null) {
+                S2CPacketUtil.beamVampireData(player);
+            }
+        } else if (context == PacketDataIndex.SINGLE_BYTE_LEFT_POWERS) {
+            List<PowerTypes> powerTypes = PowerTypes.getAvailablePowers(player);
+            int queryNumber = 0;
+            int powerNumber = ((IPlayerEntity)player).roundabout$getPower();
+            for (var i = 0; i < powerTypes.size(); i++){
+                PowerTypes pt = powerTypes.get(i);
+                if (powerNumber == pt.ordinal()){
+                    queryNumber = i;
+                }
+            }
+
+            queryNumber++;
+            if (queryNumber > powerTypes.size()-1){
+                queryNumber = 0;
+            }
+            ((IPlayerEntity)player).roundabout$setPower((byte)powerTypes.get(queryNumber).ordinal());
+
+        } else if (context == PacketDataIndex.SINGLE_BYTE_RIGHT_POWERS) {
+            List<PowerTypes> powerTypes = PowerTypes.getAvailablePowers(player);
+            int queryNumber = 0;
+            int powerNumber = ((IPlayerEntity) player).roundabout$getPower();
+            for (var i = 0; i < powerTypes.size(); i++) {
+                PowerTypes pt = powerTypes.get(i);
+                if (powerNumber == pt.ordinal()) {
+                    queryNumber = i;
+                }
+            }
+
+            queryNumber--;
+            if (queryNumber < 0) {
+                queryNumber = powerTypes.size()-1;
+            }
+            ((IPlayerEntity) player).roundabout$setPower((byte)powerTypes.get(queryNumber).ordinal());
         }
     }
 
@@ -2642,6 +2705,71 @@ public class MainUtil {
                 vf.justFlippedTicks = 5;
             }
             ((IGravityEntity) player).roundabout$setGravityDirection(cd);
+        } else if (context == PacketDataIndex.INT_VAMPIRE_SKILL_BUY){
+            VampireData vdata = ((IPlayerEntity)player).rdbt$getVampireData();
+            if (vdata.getPoints() > 0){
+                if (data==1) {
+                    if (vdata.strengthLevel < VampireData.strengthMaxLevel) {
+                        vdata.setStrengthLevel(vdata.strengthLevel + 1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 2) {
+                    if (vdata.dexterityLevel < VampireData.dexterityMaxLevel){
+                        vdata.setDexterityLevel(vdata.dexterityLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 3) {
+                    if (vdata.resilienceLevel < VampireData.reslienceMaxLevel){
+                        vdata.setResilienceLevel(vdata.resilienceLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 4) {
+                    if (vdata.hypnotismLevel < VampireData.hypnotismMaxLevel){
+                        vdata.setHypnotismLevel(vdata.hypnotismLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 5) {
+                    if (vdata.superHearingLevel < VampireData.superHearingMaxLevel){
+                        vdata.setSuperHearingLevel(vdata.superHearingLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 6) {
+                    if (vdata.bloodSpeedLevel < VampireData.bloodSpeedMaxLevel){
+                        vdata.setBloodSpeedLevel(vdata.bloodSpeedLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 7) {
+                    if (vdata.graftingLevel < VampireData.graftingMaxLevel){
+                        vdata.setGraftingLevel(vdata.graftingLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 8) {
+                    if (vdata.fleshBudLevel < VampireData.fleshBudMaxLevel){
+                        vdata.setFleshBudLevel(vdata.fleshBudLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 9) {
+                    if (vdata.daggerSplatterLevel < VampireData.daggerSplatterMaxLevel){
+                        vdata.setDaggerSplatterLevel(vdata.daggerSplatterLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 10) {
+                    if (vdata.jumpLevel < VampireData.jumpMaxLevel){
+                        vdata.setJumpLevel(vdata.jumpLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 11) {
+                    if (vdata.ripperEyesLevel < VampireData.ripperEyesMaxLevel){
+                        vdata.setRipperEyesLevel(vdata.ripperEyesLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 12) {
+                    if (vdata.freezeLevel < VampireData.freezeMaxLevel){
+                        vdata.setFreezeLevel(vdata.freezeLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                }
+            }
         }
     }
     public static void addItem(Player player, ItemStack stack){
@@ -2689,6 +2817,19 @@ public class MainUtil {
     public static void syncActivePowerPowers(Player pl, byte activePower){
 
         //FILL THIS IN FOR POWERS
+
+        GeneralPowers powers = ((IPowersPlayer) pl).rdbt$getPowers();
+
+        if (powers.activePower != activePower){
+            if (activePower == PowerIndex.NONE){
+                powers.setAttackTimeDuring(-1);
+            } else {
+                powers.setAttackTimeDuring(0);
+            }
+        }
+        powers.updateMovesFromPacket(activePower);
+        powers.setActivePower(activePower);
+        powers.kickStartClient();
 
     }
     public static void syncCooldownsForAttacks(int attackTime, int attackTimeMax, int attackTimeDuring,

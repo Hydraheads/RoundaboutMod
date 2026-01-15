@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.entity.ModEntities;
@@ -21,6 +22,7 @@ import net.hydra.jojomod.item.HarpoonItem;
 import net.hydra.jojomod.item.KnifeItem;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.StandDiscItem;
+import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
@@ -91,6 +93,9 @@ public class StandPowers extends AbilityScapeBasis {
 
 
 
+    public boolean hasPassiveCombatMode(){
+        return false;
+    }
 
     // -----------------------------------------------------------------------------------------
     // FUNCTIONS TO OVERRIDE (Excluding hud stuff, see next section for that)
@@ -125,18 +130,11 @@ public class StandPowers extends AbilityScapeBasis {
 
 
 
-    /**If the standard right click input should usually be canceled while your stand is active*/
-    public boolean interceptGuard(){
-        return false;
-    }
+
     /**The above, but for canceling all right click interactions like villager interactions etc*/
     public boolean interceptAllInteractions(){
         return false;
     }
-    public boolean buttonInputGuard(boolean keyIsDown, Options options) {
-        return false;
-    }
-
 
 
     /**Override this if you need ultra specific timing on tickpower after other entity functions are called,
@@ -160,11 +158,7 @@ public class StandPowers extends AbilityScapeBasis {
     /** Called per client tick, use for particle FX and such */
     public void visualFrameTick() {};
 
-    /**Override this to determine how many points of damage your stand's guard can take before it breaks,
-     * generally hooks into config settings.*/
-    public int getMaxGuardPoints(){
-        return 10;
-    }
+
 
     /**Runs this code while switching out of your stand with a disc*/
     public void onStandSwitch(){
@@ -212,7 +206,7 @@ public class StandPowers extends AbilityScapeBasis {
         if (standUser.roundabout$isDazed()) {
             basis = 0;
         } else if (!(this.getSelf().getVehicle() != null && this.getSelf().getControlledVehicle() == null) &&
-                (standUser.roundabout$isGuarding() && this.getSelf().getVehicle() == null)) {
+                (isGuarding() && this.getSelf().getVehicle() == null)) {
             basis*=0.3f;
         } else if (this.isBarrageAttacking() || standUser.roundabout$isClashing()) {
             basis*=0.2f;
@@ -233,34 +227,14 @@ public class StandPowers extends AbilityScapeBasis {
 
     public int getJumpHeightAddon() {return 0;}
 
-    /**If a power can be interrupted, that means you can hit the person using the power to cancel it,
-     * like when someone charging a barrage gets their barrage canceled to damage*/
-    public boolean canInterruptPower(){
-        return false;
-    }
 
     /**Probably will only apply to magician's red but leaving it in here just in case*/
     public boolean canLightFurnace(){
         return false;
     }
 
-    /**This value prevents you from resummoning/blocking to cheese the 3 hit combo's last hit faster*/
-
-    public int getMobRecoilTime(){
-        return -30;
-    }
 
 
-    /**Guard + Attack to use a barrage*/
-    public void buttonInputBarrage(boolean keyIsDown, Options options){
-        if (keyIsDown) {
-            if (this.getAttackTime() >= this.getAttackTimeMax() ||
-                    (this.getActivePowerPhase() != this.getActivePowerPhaseMax())) {
-                this.tryPower(PowerIndex.BARRAGE_CHARGE, true);
-                tryPowerPacket(PowerIndex.BARRAGE_CHARGE);
-            }
-        }
-    }
 
     /**This gets set to true when you begin using a forward barrage, not many stands will use this mechanic likely*/
     public boolean forwardBarrage = false;
@@ -270,11 +244,6 @@ public class StandPowers extends AbilityScapeBasis {
         return false;
     }
 
-    /**The Guard Variation is prioritized over this for most stands but it may find niche uses*/
-    public void buttonInputUse(boolean keyIsDown, Options options) {
-        if (keyIsDown) {
-        }
-    }
 
 
 
@@ -392,10 +361,7 @@ public class StandPowers extends AbilityScapeBasis {
     /**Similar to above but less strict on damage source and doesn't outright cancel*/
     public void onActuallyHurt(DamageSource $$0, float $$1){
     }
-    /**When damage is dealt to you, intercept or run code based off of it, or potentially cancel it*/
-    public boolean interceptDamageEvent(DamageSource $$0, float $$1){
-        return false;
-    }
+
     /**When you eat food, intercept or run code based off of it*/
     public void eatEffectIntercept(ItemStack $$0, Level $$1, LivingEntity $$2){
     }
@@ -747,10 +713,7 @@ public class StandPowers extends AbilityScapeBasis {
                 generalStandSettings.barrageRecoilCooldown;
     }
 
-    /**returns if you are using stand guard*/
-    public boolean isGuarding(){
-        return this.activePower == PowerIndex.GUARD;
-    }
+
 
     public int getKickBarrageWindup(){
         return ClientNetworking.getAppropriateConfig().generalStandSettings.kickBarrageWindup;
@@ -758,9 +721,7 @@ public class StandPowers extends AbilityScapeBasis {
     public int getBarrageWindup(){
         return ClientNetworking.getAppropriateConfig().generalStandSettings.barrageWindup;
     }
-    public int getBarrageLength(){
-        return 60;
-    }
+
 
     public boolean setPowerAttack(){
         return false;
@@ -855,9 +816,16 @@ public class StandPowers extends AbilityScapeBasis {
             return ModSounds.CACKLE_EVENT;
         } else if (soundChoice == SoundIndex.BLOOD_REGEN) {
             return ModSounds.BLOOD_REGEN_EVENT;
+        } else if (soundChoice == SoundIndex.HAIR_SPIKE_CHARGE) {
+            return ModSounds.HAIR_SHARPEN_EVENT;
         }
         return null;
     }
+
+    public boolean bigJumpBlocker(){
+        return isBarraging() || super.bigJumpBlocker();
+    }
+
 
     /**Some standard bytes for sound noises, stay clear of 40-62 as they exist universally*/
     public static final byte TIME_STOP_NOISE = 40;
@@ -960,6 +928,13 @@ public class StandPowers extends AbilityScapeBasis {
     } //Plays the Summon sound. Happens when stand is summoned with summon key.
 
     public float getBarrageChargePitch(){
+        //Scales to hamon/vampire barrage length if the player has those equipped instead of a stand
+        if (self instanceof Player pe && PowerTypes.hasPowerActive(pe) && ((IPowersPlayer)pe).rdbt$getPowers()
+        instanceof PunchingGeneralPowers pgp){
+            return 1/((float) pgp.getBarrageWindup() /20);
+        }
+
+        //Scales to barrage length otherwise
         return 1/((float) this.getBarrageWindup() /20);
     }
 
@@ -967,9 +942,7 @@ public class StandPowers extends AbilityScapeBasis {
     public ResourceLocation getBarrageCryID(){
         return ModSounds.STAND_THEWORLD_MUDA1_SOUND_ID;
     }
-    public SoundEvent getBarrageChargeSound(){
-        return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
-    }
+
 
     public ResourceLocation getBarrageChargeID(){
         return ModSounds.STAND_BARRAGE_WINDUP_ID;
@@ -997,14 +970,7 @@ public class StandPowers extends AbilityScapeBasis {
         if (!this.self.level().isClientSide()) {
         }
     }
-    public void playBarrageChargeSound(){
-        if (!this.self.level().isClientSide()) {
-            SoundEvent barrageChargeSound = this.getBarrageChargeSound();
-            if (barrageChargeSound != null) {
-                playSoundsIfNearby(SoundIndex.BARRAGE_CHARGE_SOUND, 27, false);
-            }
-        }
-    }
+
 
 
 
@@ -1083,30 +1049,31 @@ public class StandPowers extends AbilityScapeBasis {
         }
     }
 
-    /**An easy way to replace the EXP bar with a stand bar, see the function below this one*/
-    public boolean replaceHudActively(){
-        return false;
-    }
-    /**If the above function is set to true, this will be the code called instead of the exp bar one. Make
-     * a call to another class so too much client code doesn't unnecessarily exist in the standpowers class.*/
-    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x){
-    }
 
     /**In the power inventory, the stand that displays is the one that exists while your powers are active.
      * But if no stand is out, then it can generate a fake stand. Override to return true like survivor for
      * a fake stand to render.*/
     public boolean returnFakeStandForHud(){
-        return false;
+        return !hasStandActive(self);
     }
 
     /**if the above is true, override this to actually create a fake stand for the power inventory display.*/
     public StandEntity getStandForHUDIfFake(){
         if (displayStand == null){
-            displayStand = ModEntities.SURVIVOR.create(this.getSelf().level());
+            displayStand = getNewStandEntity();
         }
-        if (this.self instanceof Player PL && ((IPlayerEntity)PL).roundabout$getStandSkin() != displayStand.getSkin()){
-            displayStand = ModEntities.SURVIVOR.create(this.getSelf().level());
-            displayStand.setSkin(((IPlayerEntity)PL).roundabout$getStandSkin());
+        if (displayStand != null) {
+            if (this.self instanceof Player PL && ((IPlayerEntity) PL).roundabout$getStandSkin() != displayStand.getSkin()) {
+                displayStand = getNewStandEntity();
+            }
+        }
+        if (displayStand != null) {
+            displayStand.setSkin(((StandUser) self).roundabout$getStandSkin());
+            displayStand.setAnimation(((StandUser) self).roundabout$getStandAnimation());
+            displayStand.setIdleAnimation(((StandUser) self).roundabout$getIdlePos());
+            displayStand.tickCount = self.tickCount;
+            displayStand.setUser(self);
+            displayStand.setupAnimationStates();
         }
         return displayStand;
     }
@@ -1313,78 +1280,6 @@ public class StandPowers extends AbilityScapeBasis {
         return false;
     }
 
-
-    /**Inflict knockback*/
-    public void takeKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
-
-        if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
-            return;
-        }
-        if (MainUtil.isKnockbackImmune(entity)){
-            return;
-        }
-        entity.hurtMarked = true;
-        Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
-        entity.setDeltaMovement(- vec3d2.x,
-                -vec3d2.y,
-                - vec3d2.z);
-        entity.hasImpulse = true;
-    }
-
-
-    /**Inflict knockback with push upwards*/
-    public void takeKnockbackUp(Entity entity, double strength) {
-        if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
-            return;
-        }
-        if (MainUtil.isKnockbackImmune(entity)){
-            return;
-        }
-        entity.hasImpulse = true;
-
-        Vec3 vec3d2 = new Vec3(0, strength, 0).normalize().scale(strength);
-        entity.setDeltaMovement(vec3d2.x,
-                vec3d2.y,
-                vec3d2.z);
-    }
-
-    /**Look at where these are called for context*/
-    public void takeDeterminedKnockbackWithY(LivingEntity user, Entity target, float knockbackStrength){
-        float xRot; if (!target.onGround()){xRot=user.getXRot();} else {xRot = -15;}
-        this.takeKnockbackWithY(target, knockbackStrength,
-                Mth.sin(user.getYRot() * ((float) Math.PI / 180)),
-                Mth.sin(xRot * ((float) Math.PI / 180)),
-                -Mth.cos(user.getYRot() * ((float) Math.PI / 180)));
-
-    }
-
-    public Vec3 defaultKnockbackAngle(LivingEntity user,Entity target,float knockbackStrength) {
-        Vec3 vec3d2 = new Vec3(Mth.sin(
-                user.getYRot() * ((float) Math.PI / 180)),
-                0,
-                -Mth.cos(user.getYRot() * ((float) Math.PI / 180))).normalize().scale(knockbackStrength);
-        vec3d2 = new Vec3(-vec3d2.x,
-                target.onGround() ? 0.28 : 0,
-                -vec3d2.z);
-        return vec3d2;
-    }
-
-    public void takeDeterminedKnockback(LivingEntity user, Entity target, float knockbackStrength){
-
-        if (target instanceof LivingEntity && (knockbackStrength *= (float) (1.0 - ((LivingEntity)target).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
-            return;
-        }
-
-        if (MainUtil.isKnockbackImmune(target)){
-            return;
-        }
-        Vec3 vec3d2 = defaultKnockbackAngle(user,target,knockbackStrength);
-        target.setDeltaMovement(vec3d2);
-        target.hasImpulse = true;
-    }
-
-
-
     /**Multiply damage by this to add compatibility for stand levelup config*/
     public float levelupDamageMod(float damage){
         int percent = ClientNetworking.getAppropriateConfig().
@@ -1518,7 +1413,6 @@ public class StandPowers extends AbilityScapeBasis {
 
     /**Preloads guard points*/
     public StandPowers generateStandPowersPre(LivingEntity entity){
-        ((StandUser)entity).roundabout$setGuardPoints(getMaxGuardPoints());
         StandPowers powers = generateStandPowers(entity);
 
         // If the stand powers are enabled, return them. Otherwise, return empty powers.
@@ -1605,7 +1499,7 @@ public class StandPowers extends AbilityScapeBasis {
             ((StandUser)winner).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
             ((StandUser)loser).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
             ((StandUser)winner).roundabout$getStandPowers().playBarrageEndNoise(0, loser);
-            this.takeDeterminedKnockbackWithY(winner, loser, this.getBarrageFinisherKnockback());
+            takeDeterminedKnockbackWithY(winner, loser, this.getBarrageFinisherKnockback());
             ((StandUser)winner).roundabout$getStandPowers().animateStand(StandEntity.BARRAGE_FINISHER);
             ((StandUser)loser).roundabout$tryPower(PowerIndex.NONE,true);
         }
@@ -1650,7 +1544,7 @@ public class StandPowers extends AbilityScapeBasis {
                 if (!this.self.level().isClientSide) {
 
                     if ((this.getClashDone() && ((StandUser) entity).roundabout$getStandPowers().getClashDone())
-                            || !((StandUser) this.self).roundabout$getActive() || !((StandUser) entity).roundabout$getActive()) {
+                            || !PowerTypes.hasStandActive(self) || !PowerTypes.hasStandActive(entity)) {
                         this.updateClashing2();
                     } else {
                         playBarrageNoise(this.attackTimeDuring+ clashStarter, entity);
@@ -1679,8 +1573,8 @@ public class StandPowers extends AbilityScapeBasis {
 
     private void updateClashing2(){
         if (this.getClashOp() != null) {
-            boolean thisActive = ((StandUser) this.self).roundabout$getActive();
-            boolean opActive = ((StandUser) this.getClashOp()).roundabout$getActive();
+            boolean thisActive = PowerTypes.hasStandActive(self);
+            boolean opActive = PowerTypes.hasStandActive(this.getClashOp());
             if (thisActive && !opActive){
                 breakClash(this.self, this.getClashOp());
             } else if (!thisActive && opActive){
@@ -1739,16 +1633,6 @@ public class StandPowers extends AbilityScapeBasis {
         return this.activePower == PowerIndex.BARRAGE_CLASH && this.attackTimeDuring > -1;
     }
 
-    public boolean isBarrageCharging(){
-        return (this.activePower == PowerIndex.BARRAGE_CHARGE);
-    }
-    public boolean isBarraging(){
-        return (this.activePower == PowerIndex.BARRAGE || this.activePower == PowerIndex.BARRAGE_CHARGE);
-    }
-    public boolean isBarrageAttacking(){
-        return this.activePower == PowerIndex.BARRAGE;
-    }
-
     public void updateBarrageCharge(){
         if (this.attackTimeDuring >= this.getBarrageWindup()) {
             ((StandUser) this.self).roundabout$tryPower(PowerIndex.BARRAGE, true);
@@ -1796,47 +1680,7 @@ public class StandPowers extends AbilityScapeBasis {
     private int clashMod =0;
 
 
-    /**While you can override this, it might be more sensible to just edit this base function,
-     * also veeery conditional use canInterruptPower instead*/
-    public boolean preCanInterruptPower(DamageSource sauce, Entity interrupter, boolean isStandDamage){
-        if (ClientNetworking.getAppropriateConfig().generalStandSettings.spiritOutInterruption){
-            if (sauce != null){
-                if (interrupter instanceof LivingEntity LE){
-                    StandUser user = ((StandUser) LE);
-                    if (user.roundabout$hasAStand()){
-                        if (!user.roundabout$getActive()){
-                            return false;
-                        }
-                    }
-                }
-            }
-        }
 
-        boolean interrupt = false;
-        if (interrupter != null){
-            if (this.isBarraging() && ClientNetworking.getAppropriateConfig().generalStandSettings.barragesAreAlwaysInterruptable) {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                return true;
-            } else if (isStandDamage && ClientNetworking.getAppropriateConfig().generalStandSettings.standsInterruptSomeStandAttacks){
-                interrupt = true;
-            } else if (this instanceof TWAndSPSharedPowers && this.getActivePower() == PowerIndex.SPECIAL &&
-                    ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopIsAlwaysInterruptable){
-                interrupt = true;
-            } else if (interrupter instanceof Player && ClientNetworking.getAppropriateConfig().generalStandSettings.playersInterruptSomeStandAttacks){
-                interrupt = true;
-            } else if (interrupter instanceof Mob && ClientNetworking.getAppropriateConfig().generalStandSettings.mobsInterruptSomeStandAttacks){
-                interrupt = true;
-            }
-        } else {
-            interrupt = true;
-        }
-
-        if (interrupt){
-            return canInterruptPower();
-        } else {
-            return false;
-        }
-    }
 
     @Override
     public void preButtonInput4(boolean keyIsDown, Options options){
@@ -1884,27 +1728,6 @@ public class StandPowers extends AbilityScapeBasis {
 
 
 
-    public void preCheckButtonInputAttack(boolean keyIsDown, Options options) {
-        if (hasStandActive(this.getSelf()) && !this.isGuarding()) {
-            buttonInputAttack(keyIsDown, options);
-        }
-    }
-    public void preCheckButtonInputUse(boolean keyIsDown, Options options) {
-        if (hasStandActive(this.getSelf())) {
-            buttonInputUse(keyIsDown, options);
-        }
-    }
-    public void preCheckButtonInputBarrage(boolean keyIsDown, Options options) {
-        if (hasStandActive(this.getSelf())) {
-            buttonInputBarrage(keyIsDown, options);
-        }
-    }
-    public boolean preCheckButtonInputGuard(boolean keyIsDown, Options options) {
-        if (hasStandActive(this.getSelf())) {
-            return buttonInputGuard(keyIsDown, options);
-        }
-        return false;
-    }
 
 
 
@@ -1938,57 +1761,6 @@ public class StandPowers extends AbilityScapeBasis {
         return Math.max(0.0f, Math.min(1.0f, normalized)) * maxOverlay;
     }
 
-
-
-    public Vec3 getRandPos(Entity ent){
-        Vec3 funnyVec = new Vec3(0,(ent.getBbHeight()*0.65),0);
-        Direction gd = ((IGravityEntity)ent).roundabout$getGravityDirection();
-        if (gd != Direction.DOWN){
-            funnyVec = RotationUtil.vecPlayerToWorld(funnyVec,gd);
-        }
-        return new Vec3(
-                ent.getRandomX(1)+funnyVec.x,
-                getRandomY(ent,0.33)+funnyVec.y,
-                ent.getRandomZ(1)+funnyVec.z
-        );
-    }
-
-    public double getRandomY(Entity ent, double $$0) {
-        return ent.getY((2.0 * Math.random() - 1.0) * $$0);
-    }
-
-
-    public SimpleParticleType getImpactParticle(){
-        SimpleParticleType punchpart;
-        float random = (float) (Math.random()*3);
-        if (random > 2){
-            punchpart = ModParticles.PUNCH_IMPACT_A;
-        } else if (random > 1){
-            punchpart = ModParticles.PUNCH_IMPACT_B;
-        } else {
-            punchpart = ModParticles.PUNCH_IMPACT_C;
-        }
-        return punchpart;
-    }
-
-    public void hitParticles(Entity entity){
-        Vec3 vec = getRandPos(entity);
-        ((ServerLevel) this.self.level()).sendParticles(
-                getImpactParticle(),
-                vec.x,vec.y,vec.z,
-                1, 0.0, 0.0, 0.0, 1);
-    }
-    public void hitParticlesCenter(Entity entity){
-        Vec3 funnyVec = new Vec3(0,(entity.getBbHeight()*0.65),0);
-        Direction gd = ((IGravityEntity)entity).roundabout$getGravityDirection();
-        if (gd != Direction.DOWN){
-            funnyVec = RotationUtil.vecPlayerToWorld(funnyVec,gd);
-        }
-        ((ServerLevel) this.self.level()).sendParticles(
-                getImpactParticle(),
-                entity.getX()+funnyVec.x,entity.getY()+funnyVec.y,entity.getZ()+funnyVec.z,
-                1, 0.0, 0.0, 0.0, 1);
-    }
 
     /**If you override this for any reason, you should probably call the super(). Although SP and TW override
      * this, you can probably do better*/
@@ -2085,9 +1857,9 @@ public class StandPowers extends AbilityScapeBasis {
     public void barrageImpact2(Entity entity, boolean lastHit, float knockbackStrength){
         if (entity instanceof LivingEntity){
             if (lastHit) {
-                this.takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
+                takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
             } else {
-                this.takeKnockbackUp(entity,knockbackStrength);
+                takeKnockbackUp(entity,knockbackStrength);
             }
         }
     }
@@ -2257,8 +2029,10 @@ public class StandPowers extends AbilityScapeBasis {
                 SE.roundabout$setStandSkin((skins.get(skinind)));
             }
             if (!sealed) {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                SE.roundabout$summonStand(this.getSelf().level(), true, false);
+                if (hasStandActive(self)) {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                    SE.roundabout$summonStand(this.getSelf().level(), true, false);
+                }
             }
         }
     }

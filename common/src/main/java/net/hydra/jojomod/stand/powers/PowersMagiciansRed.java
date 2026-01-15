@@ -712,7 +712,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                                 float flashAlpha, float otherFlashAlpha) {
         StandUser standUser = ((StandUser) playerEntity);
         StandPowers powers = standUser.roundabout$getStandPowers();
-        boolean standOn = standUser.roundabout$getActive();
+        boolean standOn = PowerTypes.hasStandActive(playerEntity);
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
         if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
@@ -1158,7 +1158,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 }
             }
             if (move == PowerIndex.GUARD ||
-                    !((StandUser)this.self).roundabout$getActive()) {
+                    !PowerTypes.hasStandActive(self)) {
                 clearLeaded();
             }
         }
@@ -2095,7 +2095,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                         addEXP(5, LE);
                     }
                 }
-                this.takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
+                takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
             } else {
                 if (chargedFinal >= maxSuperHitTime) {
                     knockShield2(entity, getKickAttackKnockShieldTime());
@@ -3216,7 +3216,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                     if (lasthit){addEXP(2,LE);} else {addEXP(1,LE);}
                 }
 
-                this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
+                takeDeterminedKnockback(this.self, entity, knockbackStrength);
             } else {
                 if (this.activePowerPhase >= this.activePowerPhaseMax) {
                     knockShield2(entity, 40);

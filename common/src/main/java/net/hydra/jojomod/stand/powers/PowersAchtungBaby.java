@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.block.InvisiBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
@@ -651,13 +652,6 @@ public class PowersAchtungBaby extends NewDashPreset {
     }
      **/
 
-
-    public boolean replaceHudActively(){
-        return invisibleVisionOn() && ((IEntityAndData)this.self).roundabout$getTrueInvisibility() > -1;
-    }
-    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x){
-        StandHudRender.renderInvisibilityHUD(context,cameraPlayer,screenWidth,screenHeight,x);
-    }
 
     public boolean invisibleVisionSwitch(){
         if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {

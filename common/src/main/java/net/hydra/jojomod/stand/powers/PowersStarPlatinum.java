@@ -9,10 +9,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.RattDartEntity;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
-import net.hydra.jojomod.entity.stand.JusticeEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumBaseballEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
@@ -735,7 +732,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 if (entity instanceof LivingEntity LE) {
                     addEXP(1, LE);
                 }
-                this.takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
+                takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
                 entity.setDeltaMovement(entity.getDeltaMovement().add(0,0.3,0));
             } else {
                 knockShield2(entity, 30);
@@ -871,6 +868,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public Vec3 getTSColor(){
         byte skin = ((StandUser) self).roundabout$getStandSkin();
+        if (skin == StarPlatinumEntity.OVA_SKIN)
+            return new Vec3(1.7f, 0.4f, 0.4f);
         if (skin == StarPlatinumEntity.ARCADE || skin == StarPlatinumEntity.ARCADE_2)
             return Vec3.ZERO;
         if (skin == StarPlatinumEntity.MANGA_SKIN || skin == StarPlatinumEntity.MANGA_PURPLE_SKIN
@@ -931,7 +930,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         hitParticlesCenter(entity);
         if(ticksForFinger < 26){
             if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
-                this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
+                takeDeterminedKnockback(this.self, entity, knockbackStrength);
                 if (entity instanceof LivingEntity LE){
                     addEXP(1, LE);
                     if (ticksForFinger >13){
@@ -941,7 +940,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             }
         } else {
             if (StarFingerDamageEntityAttack(entity, pow, 0, this.self)) {
-                this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
+                takeDeterminedKnockback(this.self, entity, knockbackStrength);
                 if (entity instanceof LivingEntity LE){
                     addEXP(2, LE);
                     MainUtil.makeBleed(LE,1,200,this.self);

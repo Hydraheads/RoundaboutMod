@@ -57,9 +57,7 @@ public class ModParticles {
     public static SimpleParticleType MAGIC_DUST;
     public static SimpleParticleType BRIEF_MAGIC_DUST;
     public static SimpleParticleType STITCH;
-    public static SimpleParticleType METALLICA_NAIL;
-    public static SimpleParticleType METALLICA_RAZOR;
-    public static SimpleParticleType METALLICA_SCISSORS;
+
     public static SimpleParticleType MOLD_DUST;
     public static SimpleParticleType MOLD;
     public static SimpleParticleType RAGING_LIGHT; // anubis particles
@@ -74,4 +72,14 @@ public class ModParticles {
     public static SimpleParticleType DUST_CRUMBLE;
     public static SimpleParticleType FIRE_CRUMBLE;
     public static SimpleParticleType SOUL_FIRE_CRUMBLE;
+
+    public static SimpleParticleType METALLICA_A;
+    public static SimpleParticleType METALLICA_B;
+    public static SimpleParticleType METALLICA_C;
+    public static SimpleParticleType METALLICA_D;
+    public static SimpleParticleType METALLICA_FIELD_PNG;
+    public static SimpleParticleType METALLICA_NAIL;
+    public static SimpleParticleType METALLICA_RAZOR;
+    public static SimpleParticleType METALLICA_SCISSORS;
+
 }

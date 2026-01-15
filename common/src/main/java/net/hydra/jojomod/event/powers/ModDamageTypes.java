@@ -22,6 +22,9 @@ public class ModDamageTypes {
         public static final ResourceKey<DamageType> GO_BEYOND = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "go_beyond"));
         public static final ResourceKey<DamageType> PENETRATING_STAND = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "penetrating_stand"));
         public static final ResourceKey<DamageType> CORPSE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "corpse"));
+        public static final ResourceKey<DamageType> HAMON = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "hamon"));
+        public static final ResourceKey<DamageType> VAMPIRE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "vampire"));
+        public static final ResourceKey<DamageType> MARTIAL_ARTS = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "martial_arts"));
         public static final ResourceKey<DamageType> CORPSE_ARROW = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "corpse_arrow"));
         public static final ResourceKey<DamageType> CORPSE_EXPLOSION = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "corpse_explosion"));
         public static final ResourceKey<DamageType> TIME = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "time"));

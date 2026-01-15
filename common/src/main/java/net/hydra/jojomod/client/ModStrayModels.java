@@ -31,6 +31,7 @@ public class ModStrayModels {
     public static SmallWatchModel MANDOM_WATCH_SMALL;
     public static ChestPart ChestPart;
     public static SmallChestPart SmallChestPart;
+    public static BodySpikePart bodySpikePart;
     public static PonytailPart PonytailPart;
     public static BigHairPart BigHairPart;
     public static KakyoinHairPart KakyoinHairPart;
@@ -42,6 +43,7 @@ public class ModStrayModels {
     public static JosukeDecalsPart JosukeDecalsPart;
     public static TasselHatPart TasselHatPart;
     public static LegCloakPart LegCloakPart;
+    public static BarrageArmsPart barrageArmsPart;
     public static PlayerChestPart PlayerChestPart;
     public static PlayerSmallChestPart PlayerSmallChestPart;
     public static ChestPart Body;

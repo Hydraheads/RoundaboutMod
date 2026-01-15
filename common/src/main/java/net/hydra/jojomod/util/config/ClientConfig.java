@@ -25,7 +25,11 @@ public class ClientConfig implements Cloneable {
 
 
 
-
+    @CommentedOption(comment = "FILE FORM OF ANUBIS MEMORIES, SCROLL DOWN")
+    @Hidden
+    @NestedOption(group = "modded")
+    public ClientConfig.AnubisMemories anubisMemories;
+    @CommentedOption(comment = "THE ACTUAL SETTINGS")
     @NestedOption(group = "modded")
     public ClientConfig.GeneralSettings generalSettings;
     @BooleanOption(group = "inherit", value = true)
@@ -89,7 +93,7 @@ public class ClientConfig implements Cloneable {
     @NestedOption(group = "modded")
     public ClientConfig.VanillaMCTweaks vanillaMinecraftTweaks;
     @NestedOption(group = "modded")
-    public ClientConfig.AnubisMemories anubisMemories;
+    public ClientConfig.AnubisSettings anubisSettings;
     @NestedOption(group = "modded")
     public ClientConfig.TimeStopSettings timeStopSettings;
   /*  @NestedOption(group = "modded")
@@ -156,6 +160,8 @@ public class ClientConfig implements Cloneable {
         public Float opacityWhileAttacking;
         @FloatOption(group = "inherit", value = 100, min = 0, max = 100)
         public Float opacityOfOthers;
+        @FloatOption(group = "inherit", value = 0.5F, min = 0, max = 1)
+        public Float opacityOfPlayerBarrageArms;
 
     }
     public static class DynamicSettings {
@@ -165,6 +171,8 @@ public class ClientConfig implements Cloneable {
         public Boolean hideGUI;
         @BooleanOption(group = "inherit", value = true)
         public Boolean vampireVisionMode;
+        @IntOption(group = "inherit", value = 1, min = 1, max = 8)
+        public Integer currentPowerInventoryTab;
     }
     public static class VanillaMCTweaks {
         @BooleanOption(group = "inherit", value = true)
@@ -184,11 +192,11 @@ public class ClientConfig implements Cloneable {
         @BooleanOption(group = "inherit", value = true)
         public Boolean simpleTimeStopShader;
     }
-    public static class AnubisMemories {
-
+    public static class AnubisSettings {
         @BooleanOption(group = "inherit", value = false)
         public Boolean anubisPogoCounter;
-
+    }
+    public static class AnubisMemories {
         @StringOption(group = "inherit", value = "")
         public String mem1;
         @StringOption(group = "inherit", value = "")

@@ -1,17 +1,21 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
@@ -20,8 +24,10 @@ import net.hydra.jojomod.item.ScissorItem;
 import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.item.WorthyArrowItem;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.PlayerMaskSlots;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
@@ -104,6 +110,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             EntityDataSerializers.BYTE);
     @Unique
     private static final EntityDataAccessor<Byte> ROUNDABOUT$FATE = SynchedEntityData.defineId(Player.class,
+            EntityDataSerializers.BYTE);
+    @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$POWERS = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.BYTE);
 
     @Unique
@@ -291,7 +300,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Override
     public void roundabout$setFate(byte style){
         if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$FATE)) {
-            this.getEntityData().set(ROUNDABOUT$FATE, style);
+            if (roundabout$getFate() != style) {
+                roundabout$SetPos2(PlayerPosIndex.NONE);
+                this.getEntityData().set(ROUNDABOUT$FATE, style);
+            }
         }
     }
     @Unique
@@ -299,6 +311,29 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public byte roundabout$getFate(){
         if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$FATE)) {
             return this.entityData.get(ROUNDABOUT$FATE);
+        }
+        return 0;
+    }
+    @Unique
+    @Override
+    public void roundabout$setPower(byte style){
+        if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$POWERS)) {
+            roundabout$SetPos2(PlayerPosIndex.NONE);
+            this.getEntityData().set(ROUNDABOUT$POWERS, style);
+        }
+    }
+    @Unique
+    @Override
+    public byte roundabout$getPower(){
+        if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$POWERS)) {
+            byte pows = this.entityData.get(ROUNDABOUT$POWERS);
+            if (!level().isClientSide()) {
+                if (pows == PowerTypes.NONE.ordinal() && ((StandUser) this).roundabout$hasAStand()) {
+                    this.entityData.set(ROUNDABOUT$POWERS, (byte)PowerTypes.STAND.ordinal());
+                    return this.entityData.get(ROUNDABOUT$POWERS);
+                }
+            }
+            return pows;
         }
         return 0;
     }
@@ -741,9 +776,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 modifier = 0.6F;
             }
         }
-        boolean standActive = ((StandUser) this).roundabout$getActive();
-        if (standActive){
+        boolean active = ((StandUser) this).roundabout$getActive();
+        if (active && PowerTypes.hasStandActivelyEquipped(this)){
             modifier*= ((StandUser)this).roundabout$getStandPowers().getBonusAttackSpeed();
+        } else if (active){
+            modifier*= ((IPowersPlayer)this).rdbt$getPowers().getBonusAttackSpeed();
         }
         float bpow = ((IFatePlayer)this).rdbt$getFatePowers().getBonusAttackSpeed();
         if (bpow != 1){
@@ -780,12 +817,14 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 dSpeed *= 0.6F;
             }
 
-            boolean standActive = ((StandUser) this).roundabout$getActive();
-            if (standActive){
+            boolean active = ((StandUser) this).roundabout$getActive();
+            if (active && PowerTypes.hasStandActivelyEquipped(this)){
                 dSpeed*= ((StandUser)this).roundabout$getStandPowers().getBonusPassiveMiningSpeed();
+            } else if (active){
+                dSpeed*= ((IPowersPlayer)this).rdbt$getPowers().getBonusPassiveMiningSpeed();
             }
 
-            if (!(((StandUser) this).roundabout$getActive() && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()
+            if (!(PowerTypes.hasStandActive(this) && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()
             )) {
                 float bpow = ((IFatePlayer) this).rdbt$getFatePowers().getBonusPassiveMiningSpeed();
                 if (bpow != 1){
@@ -874,6 +913,14 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public AnimationState roundabout$getOffsetCorrect(){
         return roundabout$OffsetCorrect;
     }
+    @Unique
+    public final AnimationState roundabout$barrageArms = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getBarrageArms(){
+        return roundabout$barrageArms;
+    }
+
 
     @Unique
     public final AnimationState roundabout$anubishUnsheath = new AnimationState();
@@ -1163,6 +1210,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         } else {
             this.roundabout$JONATHAN.stop();
         }
+        if (roundabout$GetPos2() == PlayerPosIndex.BARRAGE) {
+            this.roundabout$barrageArms.startIfStopped(this.tickCount);
+        } else {
+            this.roundabout$barrageArms.stop();
+        }
         if (roundabout$GetPoseEmote() == Poses.JOTARO.id) {
             this.roundabout$JOTARO.startIfStopped(this.tickCount);
         } else {
@@ -1289,10 +1341,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Inject(method = "getSpeed", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$getSpeed(CallbackInfoReturnable<Float> cir) {
         float basis = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
-        if (!((StandUser)this).roundabout$getStandDisc().isEmpty()){
-            basis = ((StandUser)this).roundabout$getStandPowers().inputSpeedModifiers(basis);
-        }
-        basis = ((IFatePlayer)this).rdbt$getFatePowers().inputSpeedModifiers(basis);
         basis = ((StandUser)this).roundabout$mutualGetSpeed(basis);
 
         cir.setReturnValue(basis);
@@ -1320,6 +1368,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
     }
 
+
+    @Unique
+    public VampireData rdbt$vampireData = new VampireData(level());
+
     @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "TAIL"),
             ordinal = 0, argsOnly = true)
     public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0){
@@ -1344,12 +1396,55 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         compoundtag.putByte("teamColor",roundabout$getTeamColor());
         compoundtag.putByte("watchStyle",roundabout$getWatchStyle());
         compoundtag.putByte("fate",roundabout$getFate());
+        compoundtag.putByte("power",roundabout$getPower());
         compoundtag.putFloat("hairColorX",rdbt$getHairColorX());
         compoundtag.putFloat("hairColorY",rdbt$getHairColorY());
         compoundtag.putFloat("hairColorZ",rdbt$getHairColorZ());
+
+
+        compoundtag.putFloat("guard",((StandUser)this).roundabout$getGuardPoints());
+        compoundtag.putBoolean("guard_break",((StandUser)this).roundabout$getGuardBroken());
+
         $$0.put("roundabout",compoundtag);
+        if (ClientNetworking.getAppropriateConfig().vampireSettings.vampireLeveling) {
+            CompoundTag vampire = $$0.getCompound("roundaboutVampire");
+            vampire.putInt("vampireLevel", rdbt$vampireData.vampireLevel);
+            vampire.putInt("bloodExp", rdbt$vampireData.bloodExp);
+            vampire.putInt("animalExp", rdbt$vampireData.animalExp);
+            vampire.putInt("monsterEXP", rdbt$vampireData.monsterEXP);
+            vampire.putInt("npcExp", rdbt$vampireData.npcExp);
+            vampire.putInt("timeSinceAnimal", rdbt$vampireData.timeSinceAnimal);
+            vampire.putInt("timeSinceNpc", rdbt$vampireData.timeSinceNpc);
+            vampire.putInt("timeSinceMonster", rdbt$vampireData.timeSinceMonster);
+
+
+            vampire.putByte("strengthLevel", rdbt$vampireData.strengthLevel);
+            vampire.putByte("dexterityLevel", rdbt$vampireData.dexterityLevel);
+            vampire.putByte("resilienceLevel", rdbt$vampireData.resilienceLevel);
+            vampire.putByte("hypnotismLevel", rdbt$vampireData.hypnotismLevel);
+            vampire.putByte("superHearingLevel", rdbt$vampireData.superHearingLevel);
+
+            vampire.putByte("bloodSpeedLevel", rdbt$vampireData.bloodSpeedLevel);
+            vampire.putByte("graftingLevel", rdbt$vampireData.graftingLevel);
+            vampire.putByte("fleshBudLevel", rdbt$vampireData.fleshBudLevel);
+            vampire.putByte("daggerSplatterLevel", rdbt$vampireData.daggerSplatterLevel);
+            vampire.putByte("jumpLevel", rdbt$vampireData.jumpLevel);
+
+            vampire.putByte("ripperEyesLevel", rdbt$vampireData.ripperEyesLevel);
+            vampire.putByte("freezeLevel", rdbt$vampireData.freezeLevel);
+            $$0.put("roundaboutVampire", vampire);
+        }
 
         return $$0;
+    }
+
+    @Override
+    public VampireData rdbt$getVampireData(){
+        return rdbt$vampireData;
+    }
+    @Override
+    public void rdbt$setVampireData(VampireData vdata){
+        rdbt$vampireData = vdata;
     }
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "TAIL"))
     public void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci){
@@ -1396,6 +1491,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         if (compoundtag2.contains("fate")) {
             roundabout$setFate(compoundtag2.getByte("fate"));
         }
+        if (compoundtag2.contains("power")) {
+            roundabout$setPower(compoundtag2.getByte("power"));
+        }
         if (compoundtag2.contains("hairColorX")) {
             rdbt$setHairColorX(compoundtag2.getFloat("hairColorX"));
         }
@@ -1406,6 +1504,81 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             rdbt$setHairColorZ(compoundtag2.getFloat("hairColorZ"));
         }
 
+
+        if (ClientNetworking.getAppropriateConfig().vampireSettings.vampireLeveling) {
+            CompoundTag vampire = $$0.getCompound("roundaboutVampire");
+            if (vampire.contains("vampireLevel")) {
+                rdbt$vampireData.vampireLevel = vampire.getInt("vampireLevel");
+            }
+            if (vampire.contains("bloodExp")) {
+                rdbt$vampireData.bloodExp = vampire.getInt("bloodExp");
+            }
+            if (vampire.contains("animalExp")) {
+                rdbt$vampireData.animalExp = vampire.getInt("animalExp");
+            }
+            if (vampire.contains("monsterEXP")) {
+                rdbt$vampireData.monsterEXP = vampire.getInt("monsterEXP");
+            }
+            if (vampire.contains("npcExp")) {
+                rdbt$vampireData.npcExp = vampire.getInt("npcExp");
+            }
+            if (vampire.contains("timeSinceAnimal")) {
+                rdbt$vampireData.timeSinceAnimal = vampire.getInt("timeSinceAnimal");
+            }
+            if (vampire.contains("timeSinceNpc")) {
+                rdbt$vampireData.timeSinceNpc = vampire.getInt("timeSinceNpc");
+            }
+            if (vampire.contains("timeSinceMonster")) {
+                rdbt$vampireData.timeSinceMonster = vampire.getInt("timeSinceMonster");
+            }
+
+            if (vampire.contains("strengthLevel")) {
+                rdbt$vampireData.strengthLevel = vampire.getByte("strengthLevel");
+            }
+            if (vampire.contains("dexterityLevel")) {
+                rdbt$vampireData.dexterityLevel = vampire.getByte("dexterityLevel");
+            }
+            if (vampire.contains("resilienceLevel")) {
+                rdbt$vampireData.resilienceLevel = vampire.getByte("resilienceLevel");
+            }
+            if (vampire.contains("hypnotismLevel")) {
+                rdbt$vampireData.hypnotismLevel = vampire.getByte("hypnotismLevel");
+            }
+            if (vampire.contains("superHearingLevel")) {
+                rdbt$vampireData.superHearingLevel = vampire.getByte("superHearingLevel");
+            }
+            if (vampire.contains("bloodSpeedLevel")) {
+                rdbt$vampireData.bloodSpeedLevel = vampire.getByte("bloodSpeedLevel");
+            }
+            if (vampire.contains("graftingLevel")) {
+                rdbt$vampireData.graftingLevel = vampire.getByte("graftingLevel");
+            }
+            if (vampire.contains("fleshBudLevel")) {
+                rdbt$vampireData.fleshBudLevel = vampire.getByte("fleshBudLevel");
+            }
+            if (vampire.contains("daggerSplatterLevel")) {
+                rdbt$vampireData.daggerSplatterLevel = vampire.getByte("daggerSplatterLevel");
+            }
+            if (vampire.contains("jumpLevel")) {
+                rdbt$vampireData.jumpLevel = vampire.getByte("jumpLevel");
+            }
+            if (vampire.contains("ripperEyesLevel")) {
+                rdbt$vampireData.ripperEyesLevel = vampire.getByte("ripperEyesLevel");
+            }
+            if (vampire.contains("freezeLevel")) {
+                rdbt$vampireData.freezeLevel = vampire.getByte("freezeLevel");
+            }
+        }
+
+        PowerTypes.initializeStandPower(this);
+
+        PowerTypes.fixPowers(this);
+        if (compoundtag2.contains("guard")){
+            ((StandUser)this).roundabout$setGuardPoints(compoundtag2.getFloat("guard"));
+            if (compoundtag2.contains("guard_break")) {
+                ((StandUser) this).roundabout$setGuardBroken(compoundtag2.getBoolean("guard_break"));
+            }
+        }
         //roundabout$maskInventory.addItem()
     }
 
@@ -1436,7 +1609,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     /**stand mining intercepts tools for drop so that it is hand level*/
     @Inject(method = "hasCorrectToolForDrops(Lnet/minecraft/world/level/block/state/BlockState;)Z", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$hasCorrectTool(BlockState $$0, CallbackInfoReturnable<Boolean> cir) {
-        if (((StandUser) this).roundabout$getActive() && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()
+        if (PowerTypes.hasStandActive(this) && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()
         ) {
             int MiningTier = ((StandUser) this).roundabout$getStandPowers().getMiningLevel();
             if (MiningTier >= 4){
@@ -1457,10 +1630,77 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Inject(method = "getDestroySpeed(Lnet/minecraft/world/level/block/state/BlockState;)F", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$getDestroySpeed2(BlockState $$0, CallbackInfoReturnable<Float> cir) {
         StandPowers powers = ((StandUser) this).roundabout$getStandPowers();
-        if (((StandUser) this).roundabout$getActive() && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()) {
-
+        GeneralPowers gp = ((IPowersPlayer)this).rdbt$getPowers();
+        if (PowerTypes.hasStandActive(this) && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()) {
             cir.setReturnValue(rdbt$mutualMiningSpeedFunction($$0,powers));
+            return;
         }
+        if (PowerTypes.isUsingPower(this) && ((IPowersPlayer)this).rdbt$getPowers().isMining()){
+            cir.setReturnValue(rdbt$mutualMiningSpeedFunction2($$0,gp));
+            return;
+        }
+    }
+
+
+    @Override
+    @Unique
+    public float rdbt$mutualMiningSpeedFunction2(BlockState $$0, GeneralPowers powers){
+        float mspeed;
+        if (!$$0.is(BlockTags.MINEABLE_WITH_PICKAXE)){
+            if ($$0.is(BlockTags.MINEABLE_WITH_SHOVEL)) {
+                mspeed = powers.getShovelMiningSpeed() / 2;
+            } else if ($$0.is(BlockTags.MINEABLE_WITH_AXE)){
+                mspeed = powers.getAxeMiningSpeed() / 2;
+            } else {
+                mspeed= powers.getSwordMiningSpeed()/4;
+            }
+        } else {
+            mspeed= powers.getPickMiningSpeed()*3;
+        }
+
+
+        if (this.isEyeInFluid(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(this)) {
+            mspeed /= 5.0F;
+        }
+
+        if (!this.onGround()) {
+            mspeed /= 5.0F;
+        }
+
+        if (this.isCrouching() && $$0.getBlock() instanceof DropExperienceBlock && ClientNetworking.getAppropriateConfig().generalStandSettings.crouchingStopsStandsFromMiningOres) {
+            mspeed = 0.0F;
+        }
+
+        if ($$0.is(Blocks.COBWEB)){
+            mspeed *= 5.0F;
+        }
+
+        if (MobEffectUtil.hasDigSpeed(this)) {
+            mspeed *= 1.0F + (float)(MobEffectUtil.getDigSpeedAmplification(this) + 1) * 0.2F;
+        }
+
+        if (this.hasEffect(MobEffects.DIG_SLOWDOWN)) {
+            float f1;
+            switch (this.getEffect(MobEffects.DIG_SLOWDOWN).getAmplifier()) {
+                case 0:
+                    f1 = 0.3F;
+                    break;
+                case 1:
+                    f1 = 0.09F;
+                    break;
+                case 2:
+                    f1 = 0.0027F;
+                    break;
+                case 3:
+                default:
+                    f1 = 8.1E-4F;
+            }
+
+            mspeed *= f1;
+        }
+
+        mspeed *= powers.getMiningMultiplier();
+        return  mspeed;
     }
 
     @Override
@@ -1569,8 +1809,14 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$Tick(CallbackInfo ci) {
-
         if (this.level().isClientSide()) {
+            if (FateTypes.isVampire(this)){
+                if (rdbt$getVampireData().vampireLevel == -1){
+                    rdbt$getVampireData().vampireLevel = 0;
+                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.QUERY_VAMPIRE_UPDATE);
+                }
+            }
+
             roundabout$setupAnimationStates();
             if (!rdbt$getCooldownQuery()){
                 if (!rdbt$attemptedQuery){
@@ -1580,6 +1826,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
             }
         } else {
+            PowerTypes.fixPowers(this);
             roundabout$qmessageTick();
         }
         if (!(this.getVehicle() != null && this.getVehicle() instanceof StandEntity SE && SE.canRestrainWhileMounted())) {
@@ -1732,6 +1979,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$TEAM_COLOR, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$WATCH_STYLE, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$FATE, (byte) 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$POWERS, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BLINDED, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$HAIR_COLOR, new Rotations(rdbt$hairColorX,rdbt$hairColorY,rdbt$hairColorZ));
         }
@@ -1834,6 +2082,16 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public void roundabout$hasLineOfSight(ServerLevel $$0, LivingEntity $$1, CallbackInfoReturnable<Boolean> cir) {
         if (((StandUser)this).roundabout$getStandPowers().onKilledEntity($$0,$$1)){
             cir.setReturnValue(false);
+        }
+    }
+
+    @Inject(method = "die",at = @At(value = "HEAD"))
+    public void roundabout$onDeath(DamageSource $$0, CallbackInfo ci) {
+        StandUser SU = (StandUser) this;
+        if (SU.roundabout$getStandPowers() instanceof PowersRatt PR) {
+            if (PR.active) {
+                PR.active = false;
+            }
         }
     }
 

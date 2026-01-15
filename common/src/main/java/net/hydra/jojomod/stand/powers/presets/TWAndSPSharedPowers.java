@@ -87,7 +87,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     @Override
     public float getPickMiningSpeed() {
-        return 12F;
+        return 14F;
     }
     @Override
     public float getAxeMiningSpeed() {
@@ -478,7 +478,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                             MainUtil.makeMobBleed(entity);
                     }
                 }
-                this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
+                takeDeterminedKnockback(this.self, entity, knockbackStrength);
             } else {
                 knockShield2(entity, 100);
             }
@@ -1076,10 +1076,10 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public void kickBarrageImpact2(Entity entity, boolean lastHit, float knockbackStrength){
         if (entity instanceof LivingEntity){
             if (lastHit) {
-                this.takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
+                takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
             } else {
 
-                this.takeKnockbackWithY(entity, knockbackStrength,
+                takeKnockbackWithY(entity, knockbackStrength,
                         Mth.sin(this.getSelf().getYRot() * ((float) Math.PI / 180)),
                         Mth.sin(-15 * ((float) Math.PI / 180)),
                         -Mth.cos(this.getSelf().getYRot() * ((float) Math.PI / 180)));
@@ -1313,7 +1313,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
         StandUser standUser = ((StandUser) playerEntity);
-        boolean standOn = standUser.roundabout$getActive();
+        boolean standOn = PowerTypes.hasStandActive(playerEntity);
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
         if (standOn && this.getActivePower() == PowerIndex.BARRAGE_2 && attackTimeDuring > -1) {
@@ -1835,7 +1835,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         addEXP(5, LE);
                     }
                 }
-                this.takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
+                takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
             } else {
                 if (chargedFinal >= maxSuperHitTime) {
                     knockShield2(entity, getFinalAttackKnockShieldTime());

@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -335,7 +336,6 @@ public class PowersRatt extends NewDashPreset {
     public void blipStand(Vec3 pos) {
         StandEntity stand = getNewStandEntity();
         if (stand instanceof RattEntity RE) {
-            StandUser user = getStandUserSelf();
             RE.setMaster(this.self);
             RE.absMoveTo(pos.x(),pos.y(),pos.z());
             RE.setSavedSkin( ((StandUser)this.getSelf()).roundabout$getStandSkin() );
@@ -513,7 +513,7 @@ public class PowersRatt extends NewDashPreset {
                 }
             }
         } else if (active) {
-            if (this.getStandUserSelf().roundabout$getActive()) {
+            if (PowerTypes.hasStandActive(self)) {
                 if (!isClient()) {
                     if (Placement != null) {
                         placeRatt(Placement);
@@ -987,7 +987,7 @@ public class PowersRatt extends NewDashPreset {
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
 
-        if(this.getStandUserSelf().roundabout$getActive()) {
+        if(PowerTypes.hasStandActive(self)) {
 
             if (getValidPlacement() != null && !isPlaced() || shotcooldown != 0 || scopeLevel != 0) {
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
@@ -1028,7 +1028,7 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public boolean canScope() {
-        return getStandUserSelf().roundabout$getActive() && !isPlaced();
+        return PowerTypes.hasStandActive(self) && !isPlaced();
     }
 
     @Override

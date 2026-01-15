@@ -1,5 +1,7 @@
 package net.hydra.jojomod.util;
 
+import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.stand.powers.PowersCream;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -38,6 +40,67 @@ public class S2CPacketUtil {
         if (player instanceof ServerPlayer SP) {
             ModMessageEvents.sendToPlayer(SP,
                     ServerToClientPackets.S2CPackets.MESSAGES.RefreshAllCooldowns.value
+            );
+        }
+    }
+
+    public static void beamVampireData(Player player){
+        if (player instanceof ServerPlayer SP) {
+            VampireData data = ((IPlayerEntity)player).rdbt$getVampireData();
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData.value,
+                    data.vampireLevel,
+                    data.bloodExp,
+                    data.animalExp,
+                    data.monsterEXP,
+                    data.npcExp,
+                    data.timeSinceAnimal,
+                    data.timeSinceMonster,
+                    data.timeSinceNpc,
+
+                    data.strengthLevel,
+                    data.dexterityLevel,
+                    data.resilienceLevel,
+
+                    data.hypnotismLevel,
+                    data.superHearingLevel,
+                    data.bloodSpeedLevel,
+
+                    data.graftingLevel,
+                    data.fleshBudLevel,
+                    data.daggerSplatterLevel,
+
+                    data.jumpLevel,
+                    data.ripperEyesLevel,
+                    data.freezeLevel
+            );
+        }
+    }
+    public static void beamVampireData2(Player player){
+        if (player instanceof ServerPlayer SP) {
+            VampireData data = ((IPlayerEntity)player).rdbt$getVampireData();
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData2.value,
+                    data.vampireLevel,
+                    data.bloodExp,
+                    data.animalExp,
+                    data.monsterEXP,
+                    data.npcExp,
+                    data.timeSinceAnimal,
+                    data.timeSinceMonster,
+                    data.timeSinceNpc
+            );
+        }
+    }
+
+    public static void beamVampireTimings(Player player){
+        if (player instanceof ServerPlayer SP) {
+            VampireData data = ((IPlayerEntity)player).rdbt$getVampireData();
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData3.value,
+                    data.timeSinceAnimal,
+                    data.timeSinceMonster,
+                    data.timeSinceNpc
             );
         }
     }
@@ -302,6 +365,15 @@ public class S2CPacketUtil {
             ModMessageEvents.sendToPlayer(SP,
                     ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTransformDirection.value,
                     transformDirectionValue
+            );
+        }
+    }
+
+    public static void syncPossessor(Player player, int i) {
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SyncPossessor.value,
+                    i
             );
         }
     }

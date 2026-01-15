@@ -8,6 +8,20 @@
   "text.roundabout.warn_trap_triggered": " a été déclenché !",
   "text.roundabout.warn_unnamed_trap_triggered": "Un piège brumeux a été déclenché !",
 
+  "text.roundabout.fate.vampire": "Vampire",
+  "text.roundabout.fate.vampire_hair": "Changer la couleur des cheveux",
+
+  "text.roundabout.bullets.revolver": "Compatible avec le Snubnosed Revolvers et Colt Revolvers.",
+  "text.roundabout.bullets.tommy": "Compatible avec le Thompson.",
+  "text.roundabout.bullets.sniper": "Compatible avec le fusil Jackal.",
+
+  "text.roundabout.respawn_as_human": "Réssusciter en tant qu'Humain",
+
+  "text.roundabout.out_of_bullets": "Accroupisser et Intéragisser pour recharger !",
+  "text.roundabout.already_reloaded": "Vous avez déjà recharger.",
+  "text.roundabout.no_more_usable_ammo": "Vous n'avez plus de munition !",
+
+
   "item.roundabout.stand_arrow": "Flèche de Stand",
   "item.roundabout.stand_beetle_arrow": "Flèche scarabée",
   "item.roundabout.worthy_arrow": "Digne flèche",
@@ -53,7 +67,8 @@
   "item.roundabout.lucky_lipstick.desc": "Pour des meilleurs échanges, appliquez jusqu'à que vous dormiez",
   "item.roundabout.sacrificial_dagger": "Dague sacrificielle",
   "item.roundabout.cherries": "Cerises",
-  
+  "item.roundabout.hairspray": "Laque",
+
 
   "item.roundabout.star_platinum_disc": "Disque Stand",
   "item.roundabout.the_world_disc": "Disque Stand",
@@ -65,8 +80,12 @@
   "item.roundabout.survivor_disc": "Disque Stand",
   "item.roundabout.hey_ya_disc": "Disque Stand",
   "item.roundabout.ratt_disc": "Disque Stand",
+  "item.roundabout.cream_disc": "Disque Stand",
+  "item.roundabout.max_cream_disc": "Disque Stand+",
+  "item.roundabout.anubis_disc": "Disque Stand",
   "item.roundabout.achtung_baby_disc": "Disque Stand",
   "item.roundabout.max_ratt_disc": "Disque Stand+",
+  "item.roundabout.max_anubis_disc": "Disque Stand+",
   "item.roundabout.mandom_disc": "Disque Stand",
   "item.roundabout.walking_heart_disc": "Disque Stand",
   "item.roundabout.max_walking_heart_disc": "Disque Stand+",
@@ -93,6 +112,10 @@
   "item.roundabout.cinderella_disc.desc": "Cinderella",
   "item.roundabout.max_ratt_disc.desc": "Ratt",
   "item.roundabout.ratt_disc.desc": "Ratt",
+  "item.roundabout.max_cream_disc.desc": "Cream",
+  "item.roundabout.cream_disc.desc": "Cream",
+  "item.roundabout.anubis_disc.desc": "Anubis",
+  "item.roundabout.max_anubis_disc.desc": "Anubis",
   "item.roundabout.achtung_baby_disc.desc": "Achtung Baby",
   "item.roundabout.survivor_disc.desc": "Survivor",
   "item.roundabout.hey_ya_disc.desc": "Hey Ya!",
@@ -101,8 +124,19 @@
   "item.roundabout.diver_down_disc.desc": "Diver Down",
   "item.roundabout.max_diver_down_disc.desc": "Diver Down",
   "item.roundabout.none_disc.desc": "Aucun",
-  
+
   "item.roundabout.road_roller": "Rouleau compresseur",
+
+  "item.roundabout.snubnose_revolver": "Snubnose Revolver",
+  "item.roundabout.snubnose_ammo": "Munition de Revolver",
+
+  "item.roundabout.tommy_gun": "Thompson",
+  "item.roundabout.tommy_ammo": "Munition de mitraillette",
+
+  "item.roundabout.colt_revolver": "Colt Revolver",
+
+  "item.roundabout.jackal_rifle": "Fusil Jackal",
+  "item.roundabout.sniper_ammo": "Munition de fusil",
 
   "item.roundabout.light_bulb": "Ampoule",
 
@@ -146,9 +180,15 @@
   "item.roundabout.avdol_mask": "Visage d'Avdol",
   "item.roundabout.avdol_mask.desc": "Muhammad Avdol",
   "item.roundabout.avdol_mask.tag": "Avdol",
+  "item.roundabout.kakyoin_mask": "Visage de Kakyoin",
+  "item.roundabout.kakyoin_mask.desc": "Noriaki Kakyoin",
+  "item.roundabout.kakyoin_mask.tag": "Kakyoin",
   "item.roundabout.aya_mask": "Visage d'Aya",
   "item.roundabout.aya_mask.desc": "Aya Tsuji",
   "item.roundabout.aya_mask.tag": "Aya",
+  "item.roundabout.speedwagon_foundation_mask": "Visage de la Fondation Speedwagon",
+  "item.roundabout.speedwagon_foundation_mask.desc": "Employé",
+  "item.roundabout.speedwagon_foundation_mask.tag": "Employé de la SPW",
   "item.roundabout.aesthetician_mask_1": "Visage d'esthéticienne",
   "item.roundabout.aesthetician_mask_1.desc": "Esthéticienne",
   "item.roundabout.aesthetician_mask_1.tag": "Esthéticienne",
@@ -191,6 +231,11 @@
   "item.roundabout.stand_arrow.usedUp": "Puissance épuisée, fabriquer avec une météorite.",
   "item.roundabout.stand_arrow.haveStand": "Vous avez déjà un Stand, pour le retirer utiliser un Disque Stand",
   "item.roundabout.stand_arrow.acquireStand": "Stand Acquis ! Pressez le bouton d'invocation!",
+  "item.roundabout.stand_arrow.acquireStand_2": "Pressez le bouton de l'Inventaire des Pouvoirs pour voir ses capacités!",
+  "item.roundabout.stand_arrow.acquireVampire1": "Vous êtes maintenant un Vampire",
+  "item.roundabout.stand_arrow.acquireVampire2": "Le Bouton d'Invocation vous met en mode attaque",
+  "item.roundabout.stand_arrow.acquireVampire3": "Évitez la Lumière du Soleil",
+  "item.roundabout.stand_arrow.acquireVampire4": "Buvez du Sang pour devenir plus Puissant",
   "item.roundabout.stand_arrow.bowTip": "Dans la main secondaire, les arcs l'utilise comme une munition.",
   "item.roundabout.stand_arrow.reroll": "Accroupissez-vous pour utiliser %1$s niveau",
   "item.roundabout.stand_arrow.reroll2": "d'expérience pour changer le Stand!",
@@ -200,6 +245,7 @@
 
   "item.roundabout.worthy_arrow.info": "Objet pour créatif, rends digne.",
   "item.roundabout.worthy_arrow.info_2": "Si tirer en créatif, peut retirer le stand/le fait d'être digne.",
+  "item.roundabout.hairspray.info": "Créatif seulement",
 
   "effect.roundabout.bleed": "Saignement",
   "effect.roundabout.hex": "Mauvais Sort",
@@ -209,7 +255,8 @@
   "effect.roundabout.melting": "Fondu",
   "effect.roundabout.gravity_flip": "Gravité",
   "effect.roundabout.warding": "Gardiennage",
-  
+  "effect.roundabout.vampire_blood": "Sang Vampirique",
+
   "item.roundabout.creative_only.info": "Créatif Uniquement",
 
   "text.roundabout.meteorite": "Météorite",
@@ -217,7 +264,7 @@
   "item.roundabout.terrier_spawn_egg": "Oeuf d'apparition de terrier (de Boston)",
   "item.roundabout.aesthetician_spawn_egg": "Oeuf d'apparition d'esthéticienne",
   "item.roundabout.zombie_aesthetician_spawn_egg": "Oeuf d'apparition d'esthéticienne zombie",
-  
+
   "item.roundabout.painting_van_gough": "Autoportrait de Van Gogh",
   "item.roundabout.painting_mona_lisa": "Mona Lisa",
   "item.roundabout.painting_venus": "La Naissance de Vénus",
@@ -234,6 +281,9 @@
   "entity.roundabout.justice_pirate": "Justice",
   "entity.roundabout.dark_mirage": "Dark Mirage",
   "entity.roundabout.cinderella": "Cinderella",
+  "entity.roundabout.ratt": "Ratt",
+  "entity.roundabout.chair_ratt": "Ratt",
+  "entity.roundabout.redd": "Redd",
   "entity.roundabout.soft_and_wet": "Soft And Wet",
   "entity.roundabout.soft_and_wet_debut": "Soft And Wet",
   "entity.roundabout.soft_and_wet_king": "Soft And Wet",
@@ -247,6 +297,7 @@
   "entity.roundabout.knife": "Couteau",
   "entity.roundabout.gasoline_can": "Bidon de gasoil",
   "entity.roundabout.gasoline_splatter": "Éclaboussure de gasoil",
+  "entity.roundabout.blood_splatter": "Éclaboussure de sang",
   "entity.roundabout.flesh_pile": "Tas de chair",
   "entity.roundabout.stand_arrow": "Flèche de Stand",
   "entity.roundabout.worthy_arrow": "Digne flèche",
@@ -285,7 +336,7 @@
   "entity.roundabout.item_launching_bubble": "Bulle de propulsion d'objet",
   "entity.roundabout.go_beyond": "Go Beyond",
   "entity.roundabout.ground_bubble": "Bulle souterraine",
-  
+
   "entity.roundabout.water_bottle": "Fiole d'eau",
   "entity.roundabout.bowler_hat": "Chapeau Melon",
 
@@ -298,6 +349,9 @@
   "entity.roundabout.painting_mona_lisa": "Peinture ML",
   "entity.roundabout.painting_venus": "Peinture V",
   "entity.roundabout.road_roller_entity": "Rouleau compresseur",
+  "entity.roundabout.anubis_possessor": "Anubis possesseur",
+  "entity.roundabout.anubis_slipstream": "Sillage d'Anubis",
+
 
   "block.roundabout.meteor_block": "Bloc de météorite",
   "block.roundabout.regal_wall": "Mur régale",
@@ -401,6 +455,8 @@
   "key.roundabout.switch_rows": "Activer la rangée des capacités accroupis",
   "key.roundabout.show_exp": "Activer le Stand EXP Display",
   "key.roundabout.pose": "Faire une pose",
+  "key.roundabout.hide_icons": "Cacher les icones de Capacités",
+  "key.roundabout.fire_firearms": "Tirer avec l'arme à feu tenu",
 
   "roundabout:item.roundabout.smithing_template.execution_upgrade.applies_to": "Hache en fer",
   "roundabout:item.roundabout.smithing_template.execution_upgrade.base_slot_description": "Forgée avec une Hache en fer",
@@ -416,7 +472,7 @@
   "item.minecraft.lingering_potion.effect.roundabout.hex": "Potion de mauvais sort persistante",
   "item.minecraft.splash_potion.effect.roundabout.hex": "Potion de mauvais sort jetable",
   "item.minecraft.tipped_arrow.effect.roundabout.hex": "Flèche de mauvais sort",
-  
+
   "item.roundabout.interdimensional_key": "Clé interdimensionnel",
   "item.roundabout.interdimensional_key.error": "Vous ne savez pas comment utiliser ça.",
   "item.roundabout.interdimensional_key.success": "Connecté !",
@@ -429,6 +485,13 @@
   "key.category.roundabout.jojo": "Contrôle de Roundabout",
   "hud.roundabout.standout": "Stand Invoqué",
   "sounds.roundabout.dsp_summon": "Invocation de Stand Explosive",
+  "sounds.roundabout.vampire_message": "-serrated-",
+  "sounds.roundabout.vsong_silent_reveries": "Silent Reveries",
+  "sounds.roundabout.vsong_twisted": "Twisted",
+  "sounds.roundabout.vsong_bloodcurdling_moments": "Bloodcurdling Moments",
+  "sounds.roundabout.vsong_damnable_ceremony": "Damnable Ceremony",
+  "sounds.roundabout.vsong_gothic_organ": "Gothic Organ",
+
 
   "death.attack.stand": "%1$s est mort à cause d'une force mystérieuse en combattant (un(e)) %2$s",
   "death.attack.stand.item": "%1$s est mort à cause d'une force mystérieuse en combattant (un(e)) %2$s",
@@ -494,8 +557,10 @@
   "death.attack.glaive.item": "%1$s a été embroché(e) par %2$s en utilisant %3$s",
   "death.attack.stand_virus": "%1$s a été transformé(e) en sauce tomate",
   "death.attack.stand_virus.item": "%1$s a été transformé(e) en sauce tomate",
-  "death.attack.disintegration": "%1$ a été désintégrer",
-  "death.attack.disintegration.player": "%1$ a été désintégrer par %$2s",
+  "death.attack.disintegration": "%1$s a été désintégrer",
+  "death.attack.disintegration.player": "%1$s a été désintégrer par %$2s",
+  "death.attack.kick": "%1$s a été piétiner",
+  "death.attack.kick.player": "%$2s a poétiné %1$s",
   "death.attack.melting": "%1$s est devenu un liquide",
   "death.attack.melting.player": "%1$s a été transformé(e) en flaque par %2$s",
   "death.attack.dagger": "%1$s est devenu(e) un sacrifice humain",
@@ -506,7 +571,14 @@
   "death.attack.road_roller.item": "La tombe de %1$s vient d'être pavée.",
   "death.attack.road_roller.player": "La tombe de %1$s vient d'être pavée.",
   "death.attack.road_roller.player.item": "La tombe de %1$s vient d'être pavée.",
-
+  "death.attack.blood_drain": "%1$s a perdu toutes ses couleurs.",
+  "death.attack.blood_drain.item": "%1$s a perdu toutes ses couleurs.",
+  "death.attack.blood_drain.player": "%1$s a perdu toutes ses couleurs.",
+  "death.attack.blood_drain.player.item": "%1$s a perdu toutes ses couleurs.",
+  "death.attack.bullet": "%1$s a reçu une balle dans le coeur.",
+  "death.attack.bullet.item": "%1$s a reçu une balle dans le coeur.",
+  "death.attack.bullet.player": "%1$s a reçu une balle dans le coeur.",
+  "death.attack.bullet.player.item": "%1$s a reçu une balle dans le coeur.",
 
   "item.glaive.charge_power": "Chargé l'attaque",
 
@@ -527,6 +599,9 @@
   "commands.roundabout.argument.standtype.valid_2": "Set Stand of %s to %s",
   "commands.roundabout.argument.standtype.invalid": "Type de Stand inconnue : %s",
   "commands.roundabout.argument.standtype.invalid_2": "Must enter a stand type, or 'none'.",
+  "commands.roundabout.argument.fate_type.invalid": "Destin inconnue : %s (Destin: human, vampire)",
+  "commands.roundabout.argument.fate_type.valid": "Mis le Destin de %s créatures comme %s",
+  "commands.roundabout.argument.fate_type.valid_2": "Mis le Destin de %s comme %s",
   "commands.roundabaout.d4c_world": "Succès de la génération du monde \"%s\".",
   "commands.roundabout.d4c_world.tooltip": "Cliquer pour vous y téléporté.",
 
@@ -541,6 +616,7 @@
   "sounds.roundabout.summon_magician":  "Invocation de Magician's Red",
   "sounds.roundabout.summon_mandom":  "Invocation de Mandom",
   "sounds.roundabout.summon_achtung":  "Invocation d'Achtung Baby",
+  "sounds.roundabout.summon_cream":  "Invocation de Cream",
   "sounds.roundabout.hey_ya_summon":  "Invocation d'Hey Ya",
   "sounds.roundabout.survivor_summon":  "Invocation de Survivor",
   "sounds.roundabout.ova_summon":  "Invocation de OAV Star Platinium",
@@ -578,7 +654,10 @@
   "sounds.roundabout.cackle":  "Ricanement",
   "sounds.roundabout.go_beyond_launch":  "???",
   "sounds.roundabout.go_beyond_hit":  "Quelque chose d'invisible",
-  
+  "sounds.roundabout.hypnosis":  "Hypnose",
+  "sounds.roundabout.blood_regen":  "Régénération dégoutante",
+  "sounds.roundabout.blood_regen_finish":  "Fin de Régénération dégoutante",
+
   "sounds.roundabout.bubble_hover_over":  "Bulle",
   "sounds.roundabout.bubble_pop":  "Bulle qui éclate",
   "sounds.roundabout.explosive_bubble_pop":  "Eclatement bruyant",
@@ -602,14 +681,38 @@
   "sounds.roundabout.spike_hit":  "Talon qui touche",
   "sounds.roundabout.spike_miss":  "Talon qui s'étend",
   "sounds.roundabout.vampire_crumble":  "Tombe en poussière",
-  
+  "sounds.roundabout.vampire_speed":  "Zoom",
+  "sounds.roundabout.vampire_wall_grip":  "Bang",
+  "sounds.roundabout.vampire_awaken":  "???",
+
   "sounds.roundabout.mandom_rewind":  "Retour dans le temps",
-  
+
   "sounds.roundabout.survivor_shock":  "Choque",
   "sounds.roundabout.survivor_place":  "Craquement électrique",
   "sounds.roundabout.survivor_remove":  "Pop",
-  
+
   "sounds.roundabout.achtung_burst":  "Disparu",
+
+  "sounds.roundabout.cream_void_attack":  "Cream qui dévore",
+
+  "sounds.roundabout.bullet_ricochet":  "Balle qui ricoche",
+
+  "sounds.roundabout.snubnose_fire":  "Tir de Revolver !",
+  "sounds.roundabout.snubnose_dry_fire":  "échec de tir",
+  "sounds.roundabout.snubnose_reload":  "Rechargement de Revolver",
+
+  "sounds.roundabout.tommy_gun_fire":  "Tirs de Thompson !",
+  "sounds.roundabout.tommy_reload":  "Rechargement de Thompson",
+
+
+  "sounds.roundabout.colt_fire":  "Tir de Revolver !",
+  "sounds.roundabout.colt_reload":  "Rechargement de Revolver",
+
+  "sounds.roundabout.jackal_fire":  "Tir de Fusil Jackal!",
+  "sounds.roundabout.jackal_reload":  "Rechargement de Fusil Jackal",
+
+  "sounds.roundabout.bullet_penetration":  "Balle qui pénétres",
+
 
   "sounds.roundabout.snap":  "Claquement de doigt",
   "sounds.roundabout.star_finger_silent":  "Star Finger",
@@ -713,7 +816,7 @@
   "sounds.roundabout.cinderella_sparkle":  "Étincelles magiques",
   "sounds.roundabout.cinderella_fail":  "Uh oh",
   "sounds.roundabout.cinderella_visage_creation":  "Tourbillon mécanique",
-  
+
   "sounds.roundabout.ratt_summon":  "Bruit de gargouillement",
   "sounds.roundabout.ratt_place":  "Invocation de Ratt",
   "sounds.roundabout.ratt_deplace":  "Désinvocation de Ratt",
@@ -724,6 +827,27 @@
   "sounds.roundabout.ratt_firing": "Ratt tire",
   "sounds.roundabout.ratt_leap": "Mini Bond",
   "sounds.roundabout.ratt_mode_change": "Changement de Mode",
+
+  "sounds.roundabout.anubis_possession": "Rugissement Funeste",
+  "sounds.roundabout.anubis_summon" : "Calme",
+  "sounds.roundabout.anubis_backflip": "Esquive !",
+  "sounds.roundabout.anubis_alluring": "Lumières Attrayantes",
+  "sounds.roundabout.anubis_raging": "Lumières Rageante",
+  "sounds.roundabout.anubis_pogo_launch": "Woosh",
+  "sounds.roundabout.anubis_pogo_hit": "Coup d'épée",
+  "sounds.roundabout.anubis_barrage_1": "Coup d'épée",
+  "sounds.roundabout.anubis_barrage_1_hit": "Multiples coups d'épée",
+  "sounds.roundabout.anubis_barrage_end": "Retrait de la lame",
+  "sounds.roundabout.anubis_swing": "Sword Click",
+  "sounds.roundabout.anubis_crouch_swing": "Coup d'épée",
+  "sounds.roundabout.anubis_double_cut": "Coup d'épée",
+  "sounds.roundabout.anubis_thrust_cut": "Coup d'estoc",
+  "sounds.roundabout.anubis_thrust_miss": "Estoc dans le vide",
+  "sounds.roundabout.anubis_uppercut": "Coup d'épée",
+
+
+
+
 
   "sounds.roundabout.arcade_impale":  "[Arcade Empalement]",
   "sounds.roundabout.arcade_long_ts":  "[Arrêt du Temps]",
@@ -767,17 +891,20 @@
   "sounds.roundabout.hey_ya_5": "Stand qui parle",
   "sounds.roundabout.hey_ya_6": "Stand qui parle",
   "sounds.roundabout.hey_ya_7": "Stand qui parle",
-  
+
   "sounds.roundabout.killer_queen_summon": "Invocation de Killer Queen !",
   "sounds.roundabout.killer_queen_barrage": "Shibabababa!",
 
   "sounds.roundabout.levelup": "Monté de niveau de Développement !",
-  
+
   "sounds.roundabout.vampire_drain": "Absorbtion de sang",
 
   "sounds.roundabout.road_roller_ambient":  "Bruit de rouleau compresseur",
   "sounds.roundabout.road_roller_explosion":  "Explosion de rouleau compresseur",
   "sounds.roundabout.road_roller_mixing":  "Rouleau compresseur qui mélange",
+  "sounds.roundabout.flesh_bud_goes":  "Implant d'un Bourgeon de Chair",
+  "sounds.roundabout.flesh_bud_removal":  "Retrait d'un Bourgeon de Chair",
+  "sounds.roundabout.hair_toggle":  "Cheveux qui s'allongent",
 
   "sounds.roundabout.dio_hoho":  "Hoho!",
   "sounds.roundabout.dio_hoho_2":  "Ho!",
@@ -807,7 +934,7 @@
   "sounds.roundabout.dio_interesting":  "Amusant !",
   "sounds.roundabout.dio_jotaro":  "Jotaro!",
   "sounds.roundabout.dio_jotaro_2":  "Jotaro-",
-  
+
   "sounds.roundabout.diego_ho":  "Ho!",
   "sounds.roundabout.diego_ho_2":  "Ho!",
   "sounds.roundabout.diego_death":  "Diego qui meurt",
@@ -862,6 +989,11 @@
   "sounds.roundabout.jotaro_judgement":  "Jugement",
   "sounds.roundabout.jotaro_dio":  "DIO!",
   "sounds.roundabout.jotaro_getting_closer":  "De quel autre manière...",
+  "sounds.roundabout.blood_suck":  "Absorbtion de sang",
+  "sounds.roundabout.blood_suck_crit":  "Absorbtion de sang",
+  "sounds.roundabout.heartbeat":  "Battement de coeur",
+  "sounds.roundabout.heartbeat2":  "Battement de coeur",
+  "sounds.roundabout.heartbeat3":  "Battement de coeur",
 
   "sounds.roundabout.aesthetician_exhale":  "Expiration",
   "sounds.roundabout.female_zombie_ambient":  "Gémissement d'Esthéticienne zombie",
@@ -924,6 +1056,8 @@
   "ability.roundabout.fall_brace.desc": "Utilisez le pouvoir de votre Stand pour ammortir votre chute. Les longues chutes infligent toujours des dégâts, mais c'est réduit.",
   "ability.roundabout.vault": "Saut",
   "ability.roundabout.vault.desc": "Pressez en regardant à un rebord, votre Stand va étendre ses bras pour l'attraper et vous propulser au-dessus.",
+  "ability.roundabout.vault": "Vault",
+  "ability.roundabout.vault.desc": "Pressez quand vous regardez un rebord (au dessus de vous), votre stand va tendre ses bras pour l'attraper vous propulsez vers le haut.",
   "ability.roundabout.time_stop": "Arrêt du Temps",
   "ability.roundabout.time_stop.desc": "Se concentre pour arrêter le temps lui-même, arrêtant tout ! Vous pouvez relancer le temps plus tôt pour recharger plus vite, et les actions prises durant le temps arrêté influence aussi le temps de recharge.",
   "ability.roundabout.time_stop_impulse": "Arrêt du Temps (Impulse)",
@@ -973,7 +1107,7 @@
   "ability.roundabout.spider_corpse.desc": "Les cadavres d'araignée peuvent être obtenu à partir basique, araignée de taille normal. Iels sont très rapides et difficile à attaquer. Si vous intéragissez avec un, vous pouvez le monter, et l'utilisez pour escalader un mur. Iels sont parfaits pour gagner du terrain pendant que vous mangez ou chargez votre coutille.",
   "ability.roundabout.phantom_corpse": "Cadavre de Phantom",
   "ability.roundabout.phantom_corpse.desc": "Les cadavres de phantom peuvent être obtenu à partir des phantoms. Iels peuvent lentement aller vers le haut ou bas pour attaquer des ennemis qui sont à une altitude différente de vous, mais leur vie est très faible et iels sont particulièment vulnérable aux harpons. C'est car leur principale utilisation est en tant que monture. Exclusivement la nuit dans l'Overworld, iels peuvent vous porter pour voler. C'est parce que le ciel nocturne leur donne de la puissance. Maintenir Espace vous fait aller plus haut, et maintenir le bouton de la capacité du Dash fait diminué votre altitude.",
-  
+
   "ability.roundabout.fog_clones": "Clones Illusoires",
   "ability.roundabout.fog_clones.desc": "Créez des mirages brumeuses de vous-même. Si vous êtes attaquez, peut-être que c'était un de vos mirages qui a été attaqué, pas vous...",
   "ability.roundabout.tactics": "Menu Tactique",
@@ -1013,7 +1147,7 @@
   "ability.roundabout.crossfire_firestorm.desc": "Créez un gigantesque ankh qui répend des minuscules flammes partout, augmentant la puissance de vos crossfire hurricane et vous permettant de les utiliser sous la pluie. Le massif coût en énergie, cependant, augmente leur temps de recharge.",
   "ability.roundabout.fire_slam": "Maximum Flame Crash",
   "ability.roundabout.fire_slam.desc": "Vous lancez Magician's Red en avant, le transformant en une boule de flamme. Il rentre en collision avec une immense force et beaucoup de flamme, mais en faisant cela votre stand est scellé pendant un moment. À utiliser seulement en dernier recourt.",
-  
+
   "ability.roundabout.spike_attack_mode": "Mode Attaque",
   "ability.roundabout.spike_attack_mode.desc": "Vous laisses pressez ou maintenir le bouton d'attaque pour lancer une attaque au talon, attirant les créatures avec une attaque qui inflige pas mal de dégâts et l'effet saignement. Si intéragir est maintenu, ça les repoussent à la place. Ce mode utilise une jauge qui doit être remplie pour utiliser cette capacité, et se recharges quand il n'est pas utilisé.",
   "ability.roundabout.heel_plant": "Planté de talon",
@@ -1024,9 +1158,13 @@
   "ability.roundabout.wall_walk_move.desc": "S'accroche aux murs, vous permettant de marcher sur ceci. S'active en faisant face à un mur en ayant vos talons plantés, ou en étant en l'air.",
   "ability.roundabout.firm_swing": "Attaque ferme",
   "ability.roundabout.firm_swing.desc": "Fait de toute vos attaques des coups critiques pendant que vos talons sont planté, grâce à la puissance accordée par vos appuies solides.",
-  
-  
-  
+  "ability.roundabout.fall_disperse": "Absorbe Chute",
+  "ability.roundabout.fall_disperse.desc": "Divise par 2 les prochains dégâts de chutes, en divisant l'impacte à travers vos talons.",
+  "ability.roundabout.corner_cut": "Passage d'angle",
+  "ability.roundabout.corner_cut.desc": "Activez cela pour vous réorienté sur le mur suivant quand vous êtes sur la partie extérieur d'un angle. Ça vous empêche aussi de sauté accidentellement et diminue votre vitesse. Pensez y comme des roues d'entraînement ou un mode prudent.",
+
+
+
   "ability.roundabout.visage_creation": "Création de visages",
   "ability.roundabout.visage_creation.desc": "Vous permez d'utiliser des niveau d'expérience pour créé n'importe quel visage que vous désirez, ou pour créé du baume à lèvres chanceux. Les PNJ avec ce stand demanderont des émeraudes en échanges.",
   "ability.roundabout.face_removal": "Arrachage de visage",
@@ -1035,7 +1173,7 @@
   "ability.roundabout.visages.desc": "Les Visages de personnages que vous pouvez créé. S'équipe dans l'inventaire des pouvoirs (ce menu). L'emplacement du masque change l'apparence, et l'emplacement de la voix peut ajoutez des doublages dépendant du visage.",
   "ability.roundabout.lucky_lipstick": "Baume à lèvres chanceux",
   "ability.roundabout.lucky_lipstick.desc": "Appliquez toute les 3 minutes, avant que l'effet se termine, et vous serait scintillant de beauté, attirant l'amour. Les villageois auront de meilleurs offre pour vous. Appliquez jusqu'à que vous dormiez ou buvait du lait, ou quelque chose de mal pourrait arrivé...",
-  
+
   "ability.roundabout.encasement_strike": "Coup de pied lourd / Coup d'isolement",
   "ability.roundabout.encasement_strike.desc": "Maintenez puis relachez pour lancer un puissant coup de pied ! Si vous le chargez entièrement, ça devient un coup de point qui fait moins de dégâts, mais qui enferme la victime dans une bulle et les envoyant flotté plus loin.",
   "ability.roundabout.bubble_barrage": "Barrage de Bulle",
@@ -1064,14 +1202,14 @@
   "ability.roundabout.shooting_mode.desc": "Active le Mode Tir. Vous arrêtez de tenir un objet, et à la place vous tirez des bulles explosives quand vous pressez le bouton d'attaque. Quand la barre rouge en bas est complète, vous ne pouvait pas tirer, et vous avait besoin d'attendre qu'elle diminue. Remplissez la barre bleu en tirant pour rentrer en Mode Rotation Explosive où vous pouvez temporairement tirez un nombre infini de bulle explosive et potentiellement utiliser Go Beyond.",
   "ability.roundabout.water_shield": "Bouclier d'Eau",
   "ability.roundabout.water_shield.desc": "Consomme l'eau dans une fiole d'eau tenu pour vous protéger de nombreux types projectile pour un petit moment. Si ils rentrent en contacte, ils sont à la place mis dans des bulles explosive à objets que vous pouvez éclaté pour les renvoyer à vos ennemis. Eteint aussi les flammes sur vous.",
-  
+
   "ability.roundabout.danger_yap": "Mode Surveillance",
   "ability.roundabout.danger_yap.desc": "Hey Ya va resté attentif pour les créatures qui vous cible, et attirer votre attention sur eux.",
   "ability.roundabout.mining_yap": "Recherche de minerai",
   "ability.roundabout.mining_yap.desc": "Hey Ya va resté attentif pour les minerais autour de vous, et attirer votre attention sur eux.",
   "ability.roundabout.yap_yap": "Encouragement",
   "ability.roundabout.yap_yap.desc": "Hey Ya vous encourage et améliore votre journée !",
-  
+
   "ability.roundabout.chrono_vision": "Chrono Vision",
   "ability.roundabout.chrono_vision.desc": "Vous laisse voir des horloges fantômes au positions de retour des entités. Les étincelles de leur flot temporel montre la direction vers laquel la créature faisait face.",
   "ability.roundabout.rewind_time": "Retour dans le temps",
@@ -1080,8 +1218,8 @@
   "ability.roundabout.watch_switch.desc": "Une manifestation physique de votre activation mental pour retourner le temps. Boucle entre les potentiels montres. Comme c'est un objet physique, ceux qui n'ont pas de stand peuvent le voir.",
   "ability.roundabout.clock": "Lecture du temps",
   "ability.roundabout.clock.desc": "Montre une montre quand Mandom est actif, de tel manière que vous pouvez savoir l'heure de la journée dans les dimensions que ça concerne.",
-  
-  
+
+
   "ability.roundabout.throw_bottle": "Lancer de fiole d'eau",
   "ability.roundabout.throw_bottle.desc": "Lance une fiole d'eau tenu directement depuis votre inventaire, elle va loin et est un bon moyen d'activé le Stand.",
   "ability.roundabout.summon_survivor": "Invocation du Stand",
@@ -1090,7 +1228,7 @@
   "ability.roundabout.desummon_survivor.desc": "Chaque instance de votre Stand que vous avez placé commence à disparaitre. Ça n'efface pas une fureur prééxistante, alors soyez prudent avec quel violence vous choissez de provoquer.",
   "ability.roundabout.target_zap": "Cupidon de la Rage",
   "ability.roundabout.target_zap.desc": "Vous laisse sélectionné quel créature doivent s'affronté ! Entre un mode sélection, utilisez votre bouton d'attaque pour sélectionné un Survivor actif, puis une cible, et puis une autre. Iels vont se battre ! Pressez le bouton de cette capacité à nouveau pour annuler ou refaire la sélection. Pendant que ce mode est actif, vos Survivors ne vont pas automatiquement électriser des créatures ensembles.",
-  
+
   "ability.roundabout.invisivision": "Invisi-Vision",
   "ability.roundabout.invisivision.desc": "Active ou désactive la capacité de voir des versions transparentes des blocs et créatures que vous avez rendu invisible avec vos pouvoirs. La désactivée est utile pour obtenir la perspective de quelqu'un qui n'a pas ce stand, et de voir plus facilement à travers les blocs invisibles.",
   "ability.roundabout.invisiburst": "Débordement d'Invisibilité",
@@ -1099,13 +1237,13 @@
   "ability.roundabout.controlled_burst.desc": "Une variation du débordement d'invisibilité avec une porté réduite et aucune invisibilité de blocs. Signifie un plus grand contrôle des émotions de l'utilisateur. Utile si vous ne voulez pas rendre vos adversaires invisibles.",
   "ability.roundabout.place_invis": "Placement de Bloc Invisible",
   "ability.roundabout.place_invis.desc": "Place un bloc, partageant une duré d'invisibilité avec vous. Marche seulement lorsque vous êtes invisible.",
-  
+
   "ability.roundabout.ratt_scope": "Mode Viseur",
   "ability.roundabout.ratt_scope.desc": "Tiens Ratt et vise à travers, vous permettant de tirer en vous déplaçant",
-  "ability.roundabout.ratt_single": "Tire Simple",
-  "ability.roundabout.ratt_single.desc": "Charge un dard, et utilisez Attaquer pour le tirer",
-  "ability.roundabout.ratt_burst": "Tire en Rafale",
-  "ability.roundabout.ratt_burst.desc": "Le tir prend une forme alternative, qui fait fondre plus mais inflige moins de dégâts",
+  "ability.roundabout.ratt_single": "Fire Darts",
+  "ability.roundabout.ratt_single.desc": "Shoots a volley of three darts, inflicting melt. Single Fire instead shoots one, stronger dart with greater knockback and damage",
+  "ability.roundabout.ratt_burst": "Mode Change",
+  "ability.roundabout.ratt_burst.desc": "Changes your manual firing mode between Single Fire and Burst Fire",
   "ability.roundabout.ratt_place": "Placer Ratt",
   "ability.roundabout.ratt_place.desc": "Place Ratt au sol, permettant à Ratt de tirer à vos côtés",
   "ability.roundabout.ratt_place_burst": "Tire en Rafale Placé",
@@ -1114,14 +1252,16 @@
   "ability.roundabout.ratt_auto.desc": "Cible une créature en vue et Ratt va automatiquement lui tirer dessus",
   "ability.roundabout.ratt_flesh": "Bloc/Morceau de Chair",
   "ability.roundabout.ratt_flesh.desc": "Laisser par les créatures affecté par l'effet Fondu. Ralenti les créatures et est difficile à cassé. Cependant, avoir Ratt équipé outrepasse ces restrictions, vous permettant de bouger librement et de les ramasser instantanément avec Accroupie+Intéragir",
+  "ability.roundabout.ratt_bucket": "Seau de Chair",
+  "ability.roundabout.ratt_bucket.desc": "Buckets can pick up ratt flesh in a wide area, allowing you to quickly pick and place them down.",
   "ability.roundabout.ratt_leap": "Bond de Ratt",
   "ability.roundabout.ratt_leap.desc": "Fait bondir Ratt dans la même direction vous êtes orienté, vous permettant de rapidement le repositionné",
-  
+
   "ability.roundabout.diver_selection": "Option de Diver",
   "ability.roundabout.diver_selection.desc": "Ouvres une roues de modification négative dont vous pouvez faire usages sur vous-même.",
   "ability.roundabout.diver_zip": "Diver Zip",
   "ability.roundabout.diver_zip.desc": "Votre Stand plonge dans le sol et vous déplace rapidement ! Contrôlez vos direction avec vos contrôles",
-  
+
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Non débloqué",
   "ability.roundabout.locked.desc": "Débloquer au niveau de Développement %1$s",
@@ -1164,11 +1304,11 @@
 
   "idle.roundabout.passive_justice": "Au repos",
   "idle.roundabout.battle_justice": "Menaçant",
-  
+
   "idle.roundabout.hey_ya_1": "Devant",
   "idle.roundabout.hey_ya_2": "En face",
   "idle.roundabout.mandom_back": "Dans le dos",
-  
+
   "idle.roundabout.ratt_1": "Tête",
   "idle.roundabout.ratt_2": "Epaule",
 
@@ -1286,7 +1426,7 @@
   "skins.roundabout.d4c.promo_l": "Promo (L)",
   "skins.roundabout.d4c.special": "Spécial",
   "skins.roundabout.d4c.grand": "Grand",
-  
+
   "skins.roundabout.walking_heart.base": "Manga",
   "skins.roundabout.walking_heart.model": "Modèle",
   "skins.roundabout.walking_heart.purple": "Violet",
@@ -1296,9 +1436,9 @@
   "skins.roundabout.walking_heart.gothic": "Gothique",
   "skins.roundabout.walking_heart.spider": "Entoilée",
   "skins.roundabout.walking_heart.scarecrow": "Épouvantail",
-  
+
   "skins.roundabout.green_day.base": "Partie 5",
-  
+
   "skins.roundabout.ratt.anime" : "Anime",
   "skins.roundabout.ratt.manga" : "Manga",
   "skins.roundabout.ratt.melon" : "Pasthèque",
@@ -1320,7 +1460,7 @@
   "skins.roundabout.cinderella.jack_in_the_box": "Clown",
   "skins.roundabout.cinderella.business": "Business",
   "skins.roundabout.cinderella.face_off": "Sans Visage",
-  
+
   "skins.roundabout.hey_ya.manga": "Manga",
   "skins.roundabout.hey_ya.gothic": "Gothic",
   "skins.roundabout.hey_ya.volume_2": "Vol 2",
@@ -1345,7 +1485,7 @@
   "skins.roundabout.hey_ya.angel": "Ange",
   "skins.roundabout.hey_ya.knight": "Chevalier",
   "skins.roundabout.hey_ya.saint": "Le Saint",
-  
+
   "skins.roundabout.mandom.manga": "Manga",
   "skins.roundabout.mandom.purple": "Violet",
   "skins.roundabout.mandom.sky": "Ciel",
@@ -1360,7 +1500,7 @@
   "skins.roundabout.mandom.eye": "Oeil de l'End",
   "skins.roundabout.mandom.melon": "Pastèque",
   "skins.roundabout.mandom.esidisi": "Esidisi",
-  
+
   "skins.roundabout.survivor.base": "Partie 6",
   "skins.roundabout.survivor.green": "Vert",
   "skins.roundabout.survivor.purple": "Violet",
@@ -1375,7 +1515,7 @@
   "skins.roundabout.survivor.sculk": "Sculk",
 
   "skins.roundabout.killer_queen.base": "Partie 4",
-  
+
   "skins.roundabout.diver_down.base": "Partie 6",
   "skins.roundabout.diver_down.lavadiver": "Plongeur Infernal",
   "skins.roundabout.diver_down.reddiver": "Rouge Diver",
@@ -1383,7 +1523,7 @@
   "skins.roundabout.diver_down.treasurediver": "Aventurier",
   "skins.roundabout.diver_down.birthdaydiver": "Anniversaire !",
   "skins.roundabout.diver_down.firediver": "Consummé",
-  
+
   "skins.roundabout.achtung_baby.base": "N'a pas de Forme",
 
   "unlock_skin.roundabout.the_world.over_heaven": "Skin The World: Skin Over Heaven Débloqué !",
@@ -1493,14 +1633,14 @@
   "roundabout.warden_ts_movement": "Ça ne s'est pas arrêter ?!",
 
   "roundabout.warning.fabulous_graphics.v2": "§cNote : Certains effets de shader de Roundabout sont désactivé pendant que le niveau graphique fabuleux est utilisé !§r",
-  
+
   "advancements.roundabout.root.title": "Roundabout",
   "advancements.roundabout.root.description": "Obtenez une Météorite antique",
   "advancements.roundabout.stand_arrow.title": "Digne",
   "advancements.roundabout.stand_arrow.description": "Obtenez une flèche de Stand",
   "advancements.roundabout.dimension_hop.title": "Là-bas",
   "advancements.roundabout.dimension_hop.description": "Changez de Dimension avec D4C pour la première fois",
-  
+
   "text.roundabout.hey_ya_messaging.no_1": "Y a pas de chose comme une défaite, juste des leçons !",
   "text.roundabout.hey_ya_messaging.no_2": "Ta chance est une parmi 5 milliard, Tu peux tout réussir !",
   "text.roundabout.hey_ya_messaging.no_3": "Crois en toi-même comme je crois en toi !",
@@ -1547,7 +1687,7 @@
   "text.roundabout.hey_ya_messaging.evil.no_8": "De quoi j'ai l'air, un magicien ? Fait le toi-même.",
   "text.roundabout.hey_ya_messaging.evil.no_9": "T'es coincé avec moi, poto. Habitues toi à ça.",
   "text.roundabout.hey_ya_messaging.evil.no_10": "Tu sais, me parler ne vas pas accomplir quoique ce soit.",
-  
+
   "text.roundabout.hey_ya_messaging.mining.no_1": "Laisse moi jeter une coup d'oeil!",
   "text.roundabout.hey_ya_messaging.mining.no_2": "C'est le moment de miner !",
   "text.roundabout.hey_ya_messaging.mining.no_3": "Qu'est-ce qu'on a là ?",
@@ -1556,33 +1696,33 @@
   "text.roundabout.hey_ya_messaging.mining.no_6": "Je vais t'aider à cherché des minerais!",
   "text.roundabout.hey_ya_messaging.mining.no_7": "Quel trésors allons nous découvrir aujourd'hui ?",
   "text.roundabout.hey_ya_messaging.mining.no_8": "J'ai un bon présentiment là !",
-  
+
   "text.roundabout.hey_ya_messaging.mining.evil.no_1": "Bien. Je suppose je vais jeter un coup d'oeil.",
   "text.roundabout.hey_ya_messaging.mining.evil.no_2": "T'es aveugle ?",
   "text.roundabout.hey_ya_messaging.mining.evil.no_3": "Finissons en avec ça.",
   "text.roundabout.hey_ya_messaging.mining.evil.no_4": "Pourquoi tu cherches pas toi-même ? Pff. D'accord.",
   "text.roundabout.hey_ya_messaging.mining.evil.no_5": "Faignant aujourd'hui ?",
-  
+
   "text.roundabout.hey_ya_messaging.danger.no_1": "%1$s, look out!",
   "text.roundabout.hey_ya_messaging.danger.no_2": "%1$s détecté(e), en garde !",
   "text.roundabout.hey_ya_messaging.danger.no_3": "%1$s est proche!",
   "text.roundabout.hey_ya_messaging.danger.no_4": "%1$s attaque !",
-  
+
   "text.roundabout.hey_ya_messaging.danger.evil.no_1": "%1$s, idiot.",
   "text.roundabout.hey_ya_messaging.danger.evil.no_2": "alerte %1$s, utilises ton cerveau.",
   "text.roundabout.hey_ya_messaging.danger.evil.no_3": "%1$s est proche, tu l'vois pas ?",
   "text.roundabout.hey_ya_messaging.danger.evil.no_4": "%1$s va nous avoir, idiot !",
-  
+
   "text.roundabout.mandom.vision_off": "Chrono Vision Désactivée",
   "text.roundabout.mandom.vision_on": "Chrono Vision Activée",
   "text.roundabout.mandom.watch_off": "Sans Montre",
   "text.roundabout.mandom.watch_on": "Montre principale",
   "text.roundabout.mandom.watch_on_rolex": "Montre Rolex",
-  
+
   "text.roundabout.survivor.match": "Affrontes %1$s!",
   "text.roundabout.survivor.anger_selection": "Mode Cupidon de la Fureur Activé",
   "text.roundabout.survivor.anger_selection_off": "Mode Cupidon de la Fureur Désactivé",
-  
+
   "text.roundabout.achtung.vision_off": "Invisi-Vision Désactivée",
   "text.roundabout.achtung.vision_on": "Invisi-Vision Activée",
 
@@ -1599,21 +1739,21 @@
 
   "config.roundabout.mountingHorsesInCreativeTamesThem.name": "Dresser une monture en Créatif",
   "config.roundabout.mountingHorsesInCreativeTamesThem.desc": "Si vous montez un cheval en mode Créatif, vous le dressez instantanément.",
-  
-  
+
+
   "config.roundabout.bonusStandDmgByMaxLevel.name": "Dégâts Bonus par Niveau monté",
   "config.roundabout.bonusStandDmgByMaxLevel.desc": "Par défaut les stands n'ont pas de dégât bonus, parce que JoJo n'est pas un RPG. Mais si vous voulez faire du jeu un RPG, cette option est sur la table. Un pourcentage d'augmentation des dégâts pour tous les stands, distribué le long de leur monte de niveau. Si vous le mettez à 100, les dégâts seront doublé au niveau maximal.",
   "config.roundabout.standExperienceNeededForLevelupMultiplier.name": "Multiplicateur du Dévelopment",
   "config.roundabout.standExperienceNeededForLevelupMultiplier.desc": "Multiplie la quantité d'experience nécessaire pour monter de niveau. Augmenter ce nombre rend les monter de niveau plus lente, et vice versa.",
   "config.roundabout.enableStandLeveling.name": "Active le Développement des Stand",
   "config.roundabout.enableStandLeveling.desc": "Le développement des Stand est pour débloquer des cosmétiques et capacités",
-  
+
   "config.roundabout.spiritOutInterruption.name": "Interruption à l'Esprit Complet",
   "config.roundabout.spiritOutInterruption.desc": "Par défaut, vous avez besoin que vos pouvoir soit actif (ou que vous n'ayait pas de pouvoir) pour interrompre des attaques. Cette mécanique est appelé Interruption à l'Esprit Complet, et sert à rendre la mécanique d'interruption plus satisfaisant. Désactivé cette option pour les interruption roundabout à l'ancienne.",
   "config.roundabout.standThrownEntityFallDamageImmmunityTicks.name": "Tick de protection contre les chutes du lancé",
   "config.roundabout.standThrownEntityFallDamageImmmunityTicks.desc": "Par défaut, lancé une créature lui donne quelques ticks d'immunité au dégâts de chute, donc vous avez besoin de les faire avoir une longue chute pour les blesser de cette manière.",
-  
-  
+
+
   "config.roundabout.cinderellaSpacing.name": "Espacement max des Salons Cinderella",
   "config.roundabout.cinderellaSpacing.desc": "A quel point sont éloigné au maximum ces structures les unes des autres.",
   "config.roundabout.cinderellaSeparationMakeSmallerThanSpacing.name": "Espacement min des Salons Cinderella",
@@ -1628,9 +1768,9 @@
   "config.roundabout.meteoriteSeparationMakeSmallerThanSpacing.desc": "Doit être plus petit que l'espacement max, à quel point au minimum ces structures sont séparé.",
   "config.roundabout.modifyStructureWeights.name": "Modify Structure Weights",
   "config.roundabout.modifyStructureWeights.desc": "Whether or not to modify structure weights, there is an off chance that it will conflict with other mods. (unlikely)",
-  
-  
-  
+
+
+
   "config.roundabout.levelsToGetStand.name": "Coût en niveau de la Flèche de Stand",
   "config.roundabout.levelsToGetStand.desc": "Obtenir un Stand (principal) depuis la Flèche de Stand coûtes 15 niveaux par défaut.",
   "config.roundabout.levelsToRerollStandWithArrow.name": "Coût en niveau pour rerouler la Flèche",
@@ -1657,7 +1797,7 @@
   "config.roundabout.switchStandDiscLength.desc": "Le temps pour changé de stand est de 100 ticks, ou 5 secondes par défaut.",
   "config.roundabout.switchStandDiscWhileOnCooldownsLength.name": "Changement de Disques sur Rechargement",
   "config.roundabout.switchStandDiscWhileOnCooldownsLength.desc": "Le temps pour changé de stand quand déjà sur le rechargement d'une capacité augmente à 300 ticks (15 secondes) par défaut.",
-  
+
   "config.roundabout.worthyMobOdds.name": "Chance de créatures dignes",
   "config.roundabout.worthyMobOdds.desc": "Met le pourcentage de créatures qui sont digne d'avoir un stand si tirer dessus avec une des flèches. Par défaut, c'est 0.05, ou 5 pourcent de toute les créatures (1 sur 20). 100 pourcent serait 1.0.",
   "config.roundabout.standUserOdds.name": "Chance de créatures utilisatrice de stand",
@@ -1676,12 +1816,12 @@
   "config.roundabout.standUserMobsTakePlayerDamageMultipliers.desc": "Par défaut, les créatures utilisatrice de stand prennent le multiplicateur de dégât des joueurs qui est dans la config au lieu du multiplicateur de dégât pour les autres créatures pour des raisons d'équilibrage. Changer ceci leur fait se prendre les dégâts complet à la place.",
   "config.roundabout.percentOfZombieVillagersThatBecomeZombieAestheticians.name": "Taux de Zombie Esthéticienne",
   "config.roundabout.percentOfZombieVillagersThatBecomeZombieAestheticians.desc": "Le pourcentage de zombie villageois qui deviennent des Zombies Esthéticiennes.",
-  
+
   "config.roundabout.generalDetectionGoThroughDoorsAndCorners.name": "Détection à travers les Murs",
   "config.roundabout.generalDetectionGoThroughDoorsAndCorners.desc": "Certaines mécaniques d'effet de zone ou de ligne de vue de Roundabout s'arrêtent quand ils rencontrent un bloc, désactivé ceci vous laisse frapper à travers des angles et les portes avec certaines choses. Pas recommandé.",
   "config.roundabout.disableBleedingAndBloodSplatters.name": "Désactive le Sang",
   "config.roundabout.disableBleedingAndBloodSplatters.desc": "Si vous êtes sensibles au sang, cette option pourrait vous aider.",
-  
+
   "config.roundabout.major.done": "Terminer",
   "config.roundabout.major.reset": "Réinitialiser",
   "config.roundabout.major.edit": "Editer",
@@ -1689,7 +1829,7 @@
   "config.roundabout.major.edit_value": "Editer la Valeur",
   "config.roundabout.major.client_config": "Config Client",
   "config.roundabout.major.common_config": "Config Général",
-  
+
   "config.roundabout.generalStandUserMobSettings.name": "Créatures Utilisatrices de Stand",
   "config.roundabout.vanillaMinecraftTweaks.name": "Tweaks de Vanilla",
   "config.roundabout.worldgenSettings.name": "Génération du Monde",
@@ -1710,10 +1850,10 @@
   "config.roundabout.theWorldSettings.name": "The World",
   "config.roundabout.starPlatinumSettings.name": "Star Platinum",
   "config.roundabout.timeStopSettings.name": "Arrêt du Temps",
-  
-  
-  
-  
+
+
+
+
   "config.roundabout.onlyStandUsersCanSeeStands.name": "Sans Stand = Stands Invisibles",
   "config.roundabout.onlyStandUsersCanSeeStands.desc": "Si vous n'avait pas de stand, cette option rends les stands pour vous invisible comme dans la séries.",
   "config.roundabout.onlyStandUsersCanSeeVanillaGhostMobs.name": "Sans Stand = Invisible Vanilla",
@@ -1746,7 +1886,7 @@
   "config.roundabout.mandomRewindShowsVisualEffectsToNonMandomUsers.desc": "Whether or not the visual effect of rewinding time appears on other players' screens. The ability is meant to be subtle and confusing canonically, but in the mod we didn't want people to mistake being rewound for lag or rubberbanding.",
   "config.roundabout.mandomRewindAttemptsToSkipInterpolation.name": "Blipping du Retour dans le temps",
   "config.roundabout.mandomRewindAttemptsToSkipInterpolation.desc": "Désactivé ceci si vous avez un mod qui rend les créatures invisible après l'utilisation de Mandom. Si le retour dans le temps essaie de sauter l'interpolation ou pas, pour que les créatures apparaissent immédiatement à leur nouvel position au lieu de visuellement glisser extrêmement vite comme les endermen se téléportent.",
-  
+
   "config.roundabout.renderJusticeParticlesWhilePilotingInFirstPerson.name": "Brouillard à la 1ère personne",
   "config.roundabout.renderJusticeParticlesWhilePilotingInFirstPerson.desc": "Les particules de brouillard peuvent être désactivé pour le rendu à la première personne dans le mode contrôle de Justice.",
   "config.roundabout.renderJusticeParticlesInFirstPerson.name": "Particules de Justice",
@@ -1761,40 +1901,40 @@
   "config.roundabout.bodyBagHoldingParticlesPerFiveTicks.desc": "Quand vous tenez un sac de cadavre, combien de particules apparaissent sur les cadavres tout les 5 ticks ?",
   "config.roundabout.magiciansRedFirestormEmbersRate.name": "Rythme d'Apparition des Braises de la Firestorm",
   "config.roundabout.magiciansRedFirestormEmbersRate.desc": "Le rythme auquel des particules de braises apparaissent quand la firestorm est active.",
-  
+
   "config.roundabout.opacityOfStand.name": "Opacité des Stands",
   "config.roundabout.opacityOfStand.desc": "Avec quel clareté vous voyez votre stand quand vous ne faites rien.",
   "config.roundabout.opacityWhileAttacking.name": "Opacité en Attaquant",
   "config.roundabout.opacityWhileAttacking.desc": "Avec quel clareté vous voyez votre stand pendant que vous attaquer avec.",
   "config.roundabout.opacityOfOthers.name": "Opacité des Autres",
   "config.roundabout.opacityOfOthers.desc": "Avec quel clareté vous voyez le stand des autres quand iels ne font rien.",
-  
+
   "config.roundabout.SoftAndWetCurrentlySelectedBubble.name": "Type de Bulle sélectionné",
   "config.roundabout.SoftAndWetCurrentlySelectedBubble.desc": "Pour Soft and Wet, votre instance se souvient quel bulle est actuellement sélectionné.",
 
   "config.roundabout.namedSBRHorseSkins.name": "Chevaux nommés de SBR",
   "config.roundabout.namedSBRHorseSkins.desc": "Renommé un chaval d'après certains de SBR changes son apparence.",
-  
+
   "config.roundabout.timeStopFreezesScreen.name": "Freeze de l'écran",
   "config.roundabout.timeStopFreezesScreen.desc": "Si l'arrêt du temps vous rend incapable de voir quoique ce soit ou pas, vu que l'écran est figé. Cette option est désactivé par défaut à cause des ennuyantes implication de ne rien voir bouger pendant 9 secondes.",
   "config.roundabout.tsStandsSeeTSTeleportAndDontFreeze.name": "Stand a vision dans l'arrêt du temps",
   "config.roundabout.tsStandsSeeTSTeleportAndDontFreeze.desc": "Si avoir un stand qui vois dans l'arrêt du temps (The World, Star Platinum, ou C-Moon) vous permet de voir les choses se téléporté comme un enderman au lieu de soudainement apparaitre dans leur nouvelle position ou pas. Si vous avez freeze de l'écran activé, cette option vous permet de voir l'arrêt du temps normalement.",
   "config.roundabout.simpleTimeStopShader.name": "Simple Shader",
   "config.roundabout.simpleTimeStopShader.desc": "Si l'arrêt du temps donne un simple shader ou pas.",
-  
+
   "config.roundabout.configButtonOffsetX.name": "Offset du bouton de Config X",
   "config.roundabout.configButtonOffsetX.desc": "Adjuste la position de la config en jeu. Si vous faites une si grosse erreur que vous ne puissiez plus appuyé sur le bouton en jeu, vous pouvez changer le fichier manuellement dans le dossier config.",
   "config.roundabout.configButtonOffsetY.name": "Offset du bouton de Config Y",
   "config.roundabout.configButtonOffsetY.desc": "Adjuste la position de la config en jeu. Si vous faites une si grosse erreur que vous ne puissiez plus appuyé sur le bouton en jeu, vous pouvez changer le fichier manuellement dans le dossier config.",
   "config.roundabout.shouldShowConfigButton.name": "Montrer le Bouton de Config",
   "config.roundabout.shouldShowConfigButton.desc": "Si le bouton de config n'a besoin ou pas d'être montrer. Si vous êtes un créateur de modpack vous allez certainement vouloir désactivé ceci quand votre modpack sera pleinement configuré.",
-  
+
   "config.roundabout.generalSettings.name": "Configuration Général",
   "config.roundabout.configSettings.name": "Configuration de la config",
   "config.roundabout.particleSettings.name": "Configuration des Particules",
   "config.roundabout.opacitySettings.name": "Configuration des Opacités",
   "config.roundabout.dynamicSettings.name": "Dynamic Configuration",
-  
+
   "config.roundabout.roundaboutconfig.name": "JoJo",
   "config.roundabout.z.name": "",
   "config.roundabout.z.desc": "",

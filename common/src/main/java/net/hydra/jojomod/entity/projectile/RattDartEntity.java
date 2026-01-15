@@ -265,7 +265,7 @@ public class RattDartEntity extends AbstractArrow {
             $$5 = ModDamageTypes.of($$1.level(),ModDamageTypes.STAND,$$4);
         }
         SoundEvent $$6 = ModSounds.RATT_DART_IMPACT_EVENT;
-        if ($$1.hurt($$5,this.damage + (($$1 instanceof Mob) ? ClientNetworking.getAppropriateConfig().rattSettings.rattAttackBonusOnMobs : 0) )) {
+        if ($$1.hurt($$5,this.damage + (($$1 instanceof Mob) ? ClientNetworking.getAppropriateConfig().rattSettings.rattAttackBonusOnMobs : 0) * (this.charged > 90 ? 3 : 1) )) {
             force *= blockDamp;
 
 

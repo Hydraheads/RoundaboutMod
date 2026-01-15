@@ -5,6 +5,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
@@ -162,6 +163,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
             }
             if (!itemstack.isEmpty() && itemstack.getItem() instanceof StandDiscItem de) {
                 if (grantStand(itemstack, live)) {
+                    PowerTypes.forceInitializeStandPower(live);
                     $$1.playSound(null, live.blockPosition(), ModSounds.STAND_ARROW_USE_EVENT, SoundSource.PLAYERS, 1.5F, 1F);
                     ((ServerLevel) $$1).sendParticles(ParticleTypes.FIREWORK, live.getX(),
                             live.getY() + live.getEyeHeight(), live.getZ(),

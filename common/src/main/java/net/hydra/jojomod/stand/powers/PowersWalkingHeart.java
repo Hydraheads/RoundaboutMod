@@ -483,7 +483,7 @@ public class PowersWalkingHeart extends NewDashPreset {
         return super.inputSpeedModifiers(basis);
     }
     public boolean inCombatMode(){
-        return getStandUserSelf().roundabout$getCombatMode();
+        return getStandUserSelf().roundabout$getCombatMode() && PowerTypes.hasStandActivelyEquipped(self);
     }
 
     public boolean canCornerCutConfig(){
@@ -740,7 +740,7 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public boolean replaceHudActively(){
-        return inCombatMode() || getShootTicks() > 0;
+        return (inCombatMode() || getShootTicks() > 0) && PowerTypes.hasStandActivelyEquipped(self);
     }
     public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x){
         StandHudRender.renderWalkingHeartHud(context,cameraPlayer,screenWidth,screenHeight,x);
@@ -1286,7 +1286,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
         if (canWallWalkConfig()) {
             $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.wall_walk_move",
-                    "instruction.roundabout.press_skill", StandIcons.WALL_WALK, 3, level, bypass));
+                    "instruction.roundabout.press_skill_air", StandIcons.WALL_WALK, 3, level, bypass));
             $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.firm_swing",
                     "instruction.roundabout.passive", StandIcons.FIRM_SWING, 0, level, bypass));
             $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.fall_disperse",

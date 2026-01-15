@@ -191,10 +191,18 @@ public class Config implements Cloneable {
     public static class VampireSettings {
         @BooleanOption(group = "inherit", value = false)
         public Boolean vampireUsesPotionEffectForNightVision;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean vampireLeveling;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer sunDamageUnderwaterReach;
+        @IntOption(group = "inherit", value = 200, min = 1, max = 72000)
+        public Integer expPerVampLevelUp;
+        @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
+        public Integer expTypeCapPerDay;
         @FloatOption(group = "inherit", value = 0.75F, min = 0, max = 1F)
         public Float drownSpeedModifier;
+        @IntOption(group = "inherit", value = 3, min = 0, max = 72000)
+        public Integer powerGuardDelayTicks;
         @FloatOption(group = "inherit", value = 0.4F, min = 0, max = 100F)
         public Float sunDamagePercentPerDamageTick;
         @BooleanOption(group = "inherit", value = true)
@@ -636,7 +644,7 @@ public class Config implements Cloneable {
         public Integer rattMaxDespawnRange;
         @IntOption(group = "inherit", value = 30, min = 0, max = 100)
         public Integer rattChargePerHit;
-        @IntOption(group = "inherit", value = 2, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 4, min = 0, max = 72000)
         public Integer rattManualChargeRate;
         @IntOption(group = "inherit", value = 150, min = 0, max = 72000)
         public Integer rattLeapCooldown;

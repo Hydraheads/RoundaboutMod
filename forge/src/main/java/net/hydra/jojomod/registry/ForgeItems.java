@@ -547,8 +547,8 @@ public class ForgeItems {
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersCream(null))));
 
     //metallica (i gotta do the max_stand_disc_metallica too, i have both sprites)
-    //public static final RegistryObject<Item> STAND_DISC_METALLICA = addToWIPTab(ITEMS.register("metallica_disc",
-    //        () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMetallica(null))));
+    public static final RegistryObject<Item> STAND_DISC_METALLICA = addToWIPTab(ITEMS.register("metallica_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMetallica(null))));
 
     public static final RegistryObject<Item> WORTHY_ARROW = addToTab(ITEMS.register("worthy_arrow",
             () -> new WorthyArrowItem(new Item.Properties().stacksTo(1))));

@@ -5,21 +5,29 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPowersPlayer;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
+import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.GraphicsStatus;
@@ -28,6 +36,7 @@ import net.minecraft.client.OptionInstance;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
@@ -38,6 +47,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 
@@ -68,11 +79,80 @@ public class PowerInventoryScreen
     private StandEntity stand = null;
     public List<AbilityIconInstance> abilityList = ImmutableList.of();
 
+    public boolean shouldRenderPowersTab(Player player){
+        List<PowerTypes> powerList = PowerTypes.getAvailablePowers(player);
+        if (!powerList.isEmpty()){
+            return true;
+        }
+        return false;
+    }
+
     public PowerInventoryScreen(Player player, PowerInventoryMenu pim) {
         super(pim, player.getInventory(), ((StandUser)player).roundabout$getStandPowers().getStandName());
         this.titleLabelX = 80;
+
+        if (player != null){
+            tab = ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab;
+            int tab2 = tab;
+            boolean hasFate = !FateTypes.isHuman(player);
+            StandUser standUser = ((StandUser) player);
+            boolean hasStand =standUser.roundabout$hasAStand();
+            if (tab == 2 && !hasStand){
+                if (hasFate){
+                    tab2 = 1;
+                }
+            }
+            if (tab == 1 && !hasFate){
+                if (hasStand){
+                    tab2 = 2;
+                } else {
+                    tab2 = 2;
+                }
+            }
+            if (tab == 3 && !shouldRenderPowersTab(player)){
+                if (hasFate){
+                    tab2 = 1;
+                } else {
+                    tab = 3;
+                }
+            }
+            if (tab != tab2){
+                ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab = tab2;
+                ConfigManager.saveClientConfig();
+            }
+        }
     }
 
+    int tab = 1;
+
+    public void renderTabChosen(int slot, boolean isOn, GuiGraphics context,
+                                int i, int j, ItemStack render,
+                                int mouseX, int mouseY, String translatable){
+        if (!isOn){
+            if (slot == 1){
+                context.blit(POWER_INVENTORY_LOCATION, i-25+(25*slot), j-24, 209, 123, 24, 27);
+            } else {
+                context.blit(POWER_INVENTORY_LOCATION, i-25+(25*slot), j-24, 209, 96, 24, 26);
+            }
+        } else {
+            if (slot == 1){
+                context.blit(POWER_INVENTORY_LOCATION, i-25+(25*slot), j-24, 209, 67, 24, 28);
+            } else {
+                context.blit(POWER_INVENTORY_LOCATION, i-25+(25*slot), j-24, 209, 38, 24, 28);
+            }
+        }
+        RenderSystem.enableBlend();
+        context.renderItem(render, i-25+(25*slot) +4, j-18);  // Draw the item itself
+
+        RenderSystem.enableBlend();
+        if (isSurelyHovering(i-25+(25*slot), j-24, 24, 26, mouseX, mouseY)) {
+
+
+            List<Component> compList = Lists.newArrayList();
+            compList.add(Component.translatable(translatable).withStyle(ChatFormatting.LIGHT_PURPLE));
+            context.renderTooltip(Minecraft.getInstance().font, compList, Optional.empty(), mouseX, mouseY);
+        }
+    }
 
     @Override
     protected void renderBg(GuiGraphics context, float delta, int mouseX, int mouseY) {
@@ -93,8 +173,37 @@ public class PowerInventoryScreen
 
 
         if (pl != null) {
+
             StandUser standUser = ((StandUser) pl);
-            if (standUser.roundabout$hasAStand()) {
+
+            int slot = 1;
+            boolean hasFate = !FateTypes.isHuman(pl);
+            boolean hasStand =standUser.roundabout$hasAStand();
+            tab = ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab;
+            boolean shouldPowers = shouldRenderPowersTab(pl);
+
+            if (hasFate){
+                renderTabChosen(slot,tab == 1, context, i, j, ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem().getDefaultInstance(),
+                        mouseX,mouseY,"power_inventory.roundabout.tabs.fate");
+                slot++;
+            }
+            if (hasStand){
+                renderTabChosen(slot,tab == 2, context, i, j, ModItems.STAND_DISC.getDefaultInstance(),
+                        mouseX,mouseY,"power_inventory.roundabout.tabs.stand");
+                slot++;
+            }
+            if (shouldPowers){
+                renderTabChosen(slot,tab == 3, context, i, j, ModItems.METEORITE.getDefaultInstance(),
+                        mouseX,mouseY,"power_inventory.roundabout.tabs.powers");
+                slot++;
+            }
+
+
+            if (hasFate && tab == 1){
+                renderEntityInInventoryFollowsMouse2(
+                        context, i + 51, j + 75, 30, (float) (i + 51) - this.xMouse, (float) (j + 75 - 50) - this.yMouse, this.minecraft.player
+                );
+            } else if (hasStand && tab == 2) {
 
                 StandPowers sp = standUser.roundabout$getStandPowers();
                 if (sp.rendersPlayer()) {
@@ -110,8 +219,6 @@ public class PowerInventoryScreen
 
                     }
                 }
-                context.drawString(this.font, sp.getSkinName(((StandUser) pl).roundabout$getStandSkin()), this.titleLabelX + 11 + leftPos, this.titleLabelY + 18 + topPos, 16777215, false);
-                context.drawString(this.font, sp.getPosName(standUser.roundabout$getIdlePos()), this.titleLabelX + 11 + leftPos, this.titleLabelY + 36 + topPos, 16777215, false);
                 int lefXPos = leftPos + 77;
                 int rightXPos = leftPos + 164;
                 int topYPos = topPos + 22;
@@ -144,13 +251,6 @@ public class PowerInventoryScreen
                     context.blit(POWER_INVENTORY_LOCATION, lefXPos, bottomYPos, 185, 19, 7, 11);
                 }}
 
-                int leftGearPos = leftPos + 5;
-                int topGearPos = topPos + 60;
-                if (isSurelyHovering(leftGearPos, topGearPos, 19, 18, mouseX, mouseY)) {
-                    context.blit(POWER_INVENTORY_LOCATION, leftGearPos, topGearPos, 198, 0, 19, 18);
-                } else {
-                    context.blit(POWER_INVENTORY_LOCATION, leftGearPos, topGearPos, 178, 0, 19, 18);
-                }
 
                 int ss = this.leftPos + 78;
                 int sss = this.topPos + 57;
@@ -171,6 +271,18 @@ public class PowerInventoryScreen
                 int blt = (int) Math.floor(((double) 92 / maxXP) * (exp));
                 context.blit(POWER_INVENTORY_LOCATION, ss, sss, 10, 244, 92, 4);
                 context.blit(POWER_INVENTORY_LOCATION, ss, sss, 10, 240, blt, 4);
+            } else if (shouldPowers && tab == 3) {
+                renderEntityInInventoryFollowsMouse2(
+                        context, i + 51, j + 75, 30, (float) (i + 51) - this.xMouse, (float) (j + 75 - 50) - this.yMouse, this.minecraft.player
+                );
+            }
+
+            int leftGearPos = leftPos + 5;
+            int topGearPos = topPos + 60;
+            if (isSurelyHovering(leftGearPos, topGearPos, 19, 18, mouseX, mouseY)) {
+                context.blit(POWER_INVENTORY_LOCATION, leftGearPos, topGearPos, 198, 0, 19, 18);
+            } else {
+                context.blit(POWER_INVENTORY_LOCATION, leftGearPos, topGearPos, 178, 0, 19, 18);
             }
         }
 
@@ -398,36 +510,80 @@ public class PowerInventoryScreen
                             .withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC), i- 65, j+148, 4210752, false);
                 }
             }
-            StandUser standUser = ((StandUser) pl);
-            boolean bypass = false;
-            if ((!((StandUser) pl).roundabout$getStandDisc().isEmpty() &&
-                    ((StandUser) pl).roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem) ||
-            pl.isCreative()){
-                bypass = true;
-            }
-            if (!ClientNetworking.getAppropriateConfig().standLevelingSettings.enableStandLeveling) {
-                bypass=true;
-            }
-            abilityList = standUser.roundabout$getStandPowers().drawGUIIcons(context, delta, mouseX, mouseY, i, j,
-                    ((IPlayerEntity)pl).roundabout$getStandLevel(),bypass);
 
-            if (!this.abilityList.isEmpty()) {
-                AbilityIconInstance aii;
-                for (int g = abilityList.size() - 1; g >= 0; --g) {
-                    aii = abilityList.get(g);
-                    if (isSurelyHovering(aii.startingLeft, aii.startingTop, aii.size, aii.size, mouseX, mouseY)) {
-                        List<Component> compList = Lists.newArrayList();
-                        compList.add(aii.name);
-                        compList.add(aii.instruction);
-                        String[] strung2 = ClientUtil.splitIntoLine(aii.description.getString(), 30);
-                        for (String s : strung2) {
-                            compList.add(Component.literal(s));
-                        }
-                        context.renderTooltip(this.font, compList, Optional.empty(), mouseX, mouseY);
+
+            boolean hasFate = !FateTypes.isHuman(pl);
+            StandUser user = ((StandUser) pl);
+            boolean hasStand =user.roundabout$hasAStand();
+            boolean shouldPowers = shouldRenderPowersTab(pl);
+            tab = ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab;
+            if (tab == 1 && hasFate) {
+                FatePowers fp = ((IFatePlayer)pl).rdbt$getFatePowers();
+                boolean bypass = false;
+                if (pl.isCreative()) {
+                    bypass = true;
+                }
+                fp.drawOtherGUIElements(this.font, context, delta, mouseX, mouseY, i, j, POWER_INVENTORY_LOCATION);
+                abilityList = fp.drawGUIIcons(context, delta, mouseX, mouseY, i, j,
+                        ((IPlayerEntity) pl).roundabout$getStandLevel(), bypass);
+                drawIcons(context,mouseX,mouseY);
+            } else if (tab == 2 && hasStand) {
+                context.blit(POWER_INVENTORY_LOCATION, i +85, j + 19, 178, 221, 78, 35);
+                StandUser standUser = ((StandUser) pl);
+                boolean bypass = false;
+                if ((!((StandUser) pl).roundabout$getStandDisc().isEmpty() &&
+                        ((StandUser) pl).roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem) ||
+                        pl.isCreative()) {
+                    bypass = true;
+                }
+                if (!ClientNetworking.getAppropriateConfig().standLevelingSettings.enableStandLeveling) {
+                    bypass = true;
+                }
+                StandPowers sp = standUser.roundabout$getStandPowers();
+                abilityList = sp.drawGUIIcons(context, delta, mouseX, mouseY, i, j,
+                        ((IPlayerEntity) pl).roundabout$getStandLevel(), bypass);
+
+                drawIcons(context,mouseX,mouseY);
+                context.drawString(this.font, sp.getSkinName(((StandUser) pl).roundabout$getStandSkin()), this.titleLabelX + 11 + leftPos, this.titleLabelY + 18 + topPos, 16777215, false);
+                context.drawString(this.font, sp.getPosName(standUser.roundabout$getIdlePos()), this.titleLabelX + 11 + leftPos, this.titleLabelY + 36 + topPos, 16777215, false);
+
+            } else if (tab == 3 && shouldPowers) {
+                GeneralPowers gp = ((IPowersPlayer)pl).rdbt$getPowers();
+                context.blit(gp.getSource(), i +85, j + 19, gp.getCoords().x, gp.getCoords().y, 78, 17);
+                boolean bypass = false;
+                if (pl.isCreative()) {
+                    bypass = true;
+                }
+                gp.drawOtherGUIElements(this.font, context, delta, mouseX, mouseY, i, j, POWER_INVENTORY_LOCATION);
+                abilityList = gp.drawGUIIcons(context, delta, mouseX, mouseY, i, j,
+                        ((IPlayerEntity) pl).roundabout$getStandLevel(), bypass);
+
+                int lefXPos = leftPos + 77;
+                int rightXPos = leftPos + 164;
+                int topYPos = topPos + 22;
+                List<PowerTypes> powerList = PowerTypes.getAvailablePowers(pl);
+
+                if (powerList.size() > 1) {
+                    if (isSurelyHovering(rightXPos, topYPos, 7, 13, mouseX, mouseY)) {
+                        context.blit(POWER_INVENTORY_LOCATION, rightXPos, topYPos, 177, 31, 7, 11);
+                    } else {
+                        context.blit(POWER_INVENTORY_LOCATION, rightXPos, topYPos, 177, 19, 7, 11);
+                    }
+
+                    if (isSurelyHovering(lefXPos, topYPos, 7, 13, mouseX, mouseY)) {
+                        context.blit(POWER_INVENTORY_LOCATION, lefXPos, topYPos, 185, 31, 7, 11);
+                    } else {
+                        context.blit(POWER_INVENTORY_LOCATION, lefXPos, topYPos, 185, 19, 7, 11);
                     }
                 }
+
+
+                drawIcons(context,mouseX,mouseY);
+                context.drawString(this.font, gp.getPowerTagName(), this.titleLabelX + 25 + leftPos, this.titleLabelY + 18 + topPos, 16777215, false);
+
             }
         }
+
 
         //this.recipeBookComponent.renderTooltip(context, this.leftPos, this.topPos, mouseX, mouseY);
         this.xMouse = (float)mouseX;
@@ -436,6 +592,30 @@ public class PowerInventoryScreen
     }
 
 
+    public void drawIcons(GuiGraphics context, int mouseX, int mouseY){
+        if (!this.abilityList.isEmpty()) {
+            AbilityIconInstance aii;
+            for (int g = abilityList.size() - 1; g >= 0; --g) {
+                aii = abilityList.get(g);
+                if (isSurelyHovering(aii.startingLeft, aii.startingTop, aii.size, aii.size, mouseX, mouseY)) {
+                    List<Component> compList = Lists.newArrayList();
+                    compList.add(aii.name);
+                    compList.add(aii.instruction);
+                    String[] strung2 = ClientUtil.splitIntoLine(aii.description.getString(), 30);
+                    for (String s : strung2) {
+                        compList.add(Component.literal(s));
+                    }
+                    if (aii.description2 != null){
+                        compList.add(aii.description2);
+                    }
+                    if (aii.description3 != null){
+                        compList.add(aii.description3);
+                    }
+                    context.renderTooltip(this.font, compList, Optional.empty(), mouseX, mouseY);
+                }
+            }
+        }
+    }
 
     @Override
     public void containerTick() {
@@ -461,6 +641,24 @@ public class PowerInventoryScreen
 
     @Override
     protected void renderLabels(GuiGraphics $$0, int $$1, int $$2) {
+        tab = ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab;
+        Player pl = Minecraft.getInstance().player;
+        if (pl != null) {
+            boolean hasFate = !FateTypes.isHuman(pl);
+            if (tab == 1 && hasFate){
+                $$0.drawString(this.font,
+                        ((IFatePlayer)pl).rdbt$getFatePowers().getFateName().getString(),
+                        this.titleLabelX, this.titleLabelY, 4210752, false);
+                return;
+            }
+            boolean shouldPowers = shouldRenderPowersTab(pl);
+            if (tab == 3 && shouldPowers){
+                $$0.drawString(this.font,
+                        ((IPowersPlayer)pl).rdbt$getPowers().getPowerName().getString(),
+                        this.titleLabelX, this.titleLabelY, 4210752, false);
+                return;
+            }
+        }
         $$0.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false);
     }
 
@@ -478,6 +676,7 @@ public class PowerInventoryScreen
         }
 
         $$7.setRenderShadow(false);
+
         $$7.render($$6, 0.0, 0.0, 0.0, 0.0F, 1.0F, $$0.pose(), $$0.bufferSource(), 15728880);
         $$0.flush();
         $$7.setRenderShadow(true);
@@ -604,6 +803,11 @@ public class PowerInventoryScreen
     public boolean updateClicked(double $$0, double $$1, int $$2){
         Player pl = Minecraft.getInstance().player;
         if (pl != null) {
+
+
+
+
+
             if (isOptionsOut) {
                 int i = this.leftPos;
                 int j = this.topPos;
@@ -723,7 +927,7 @@ public class PowerInventoryScreen
         super.onClose();
     }
     @Override
-    public boolean mouseClicked(double $$0, double $$1, int $$2) {
+    public boolean mouseClicked(double mouseX, double mouseY, int $$2) {
         Player pl = Minecraft.getInstance().player;
         if (pl != null) {
             if (pl.isSpectator()) {
@@ -731,13 +935,136 @@ public class PowerInventoryScreen
                 return true;
             }
 
-            if (updateClicked($$0, $$1, $$2)) {
+
+            int i = this.leftPos;
+            int j = this.topPos;
+
+            int slot = 1;
+            boolean hasFate = !FateTypes.isHuman(pl);
+            StandUser user = ((StandUser) pl);
+            boolean hasStand =user.roundabout$hasAStand();
+            boolean shouldPowers = shouldRenderPowersTab(pl);
+            tab = ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab;
+
+            StandUser standUser = ((StandUser) pl);
+            StandPowers sp = standUser.roundabout$getStandPowers();
+            StandUserClientPlayer scp = ((StandUserClientPlayer) pl);
+            int menuTicks = scp.roundabout$getMenuTicks();
+            if (hasFate){
+                if (tab != 1) {
+                    if (isSurelyHovering(i - 25 + (25 * slot), j - 24, 24, 26, mouseX, mouseY)) {
+                        tab = ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab = 1;
+                        ConfigManager.saveClientConfig();
+                        SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
+                        soundmanager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                    }
+                } else {
+                    FatePowers fp = ((IFatePlayer)pl).rdbt$getFatePowers();
+                    fp.handleCustomGUIClick(i,j,mouseX,mouseY);
+                }
+                slot++;
+            }
+            if (hasStand){
+                if (tab != 2) {
+                    if (isSurelyHovering(i - 25 + (25 * slot), j - 24, 24, 26, mouseX, mouseY)) {
+                        tab = ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab = 2;
+                        ConfigManager.saveClientConfig();
+                        SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
+                        soundmanager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                    }
+                } else {
+
+                    int lefXPos = leftPos + 77;
+                    int rightXPos = leftPos + 164;
+                    int topYPos = topPos + 22;
+                    int bottomYPos = topPos + 40;
+                    stand = standUser.roundabout$getStandPowers().getStandForHUD();
+                    if (sp.hasMoreThanOneSkin()) {
+                        if (isSurelyHovering(rightXPos, topYPos, 7, 13, mouseX, mouseY)) {
+                            if (menuTicks <= -1) {
+                                scp.roundabout$setMenuTicks(5);
+                                scp.roundabout$setMenuTicks(5);
+                                if (standUser.roundabout$isSealed()) {
+                                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT_SEALED);
+                                } else {
+                                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT);
+                                }
+                            }
+                            return true;
+                        }
+
+                        if (isSurelyHovering(lefXPos, topYPos, 7, 13, mouseX, mouseY)) {
+                            if (menuTicks <= -1) {
+                                scp.roundabout$setMenuTicks(5);
+                                if (standUser.roundabout$isSealed()) {
+                                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SKIN_LEFT_SEALED);
+                                } else {
+                                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SKIN_LEFT);
+                                }
+                            }
+                            return true;
+                        }
+                    }
+                    if (sp.hasMoreThanOnePos()) {
+                        if (isSurelyHovering(rightXPos, bottomYPos, 7, 13, mouseX, mouseY)) {
+                            if (menuTicks <= -1) {
+                                scp.roundabout$setMenuTicks(5);
+                                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_IDLE_RIGHT);
+                            }
+                            return true;
+                        }
+
+                        if (isSurelyHovering(lefXPos, bottomYPos, 7, 13, mouseX, mouseY)) {
+                            if (menuTicks <= -1) {
+                                scp.roundabout$setMenuTicks(5);
+                                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_IDLE_LEFT);
+                            }
+                            return true;
+                        }
+                    }
+                }
+                slot++;
+            }
+            if (shouldPowers){
+                if (tab != 3) {
+                    if (isSurelyHovering(i - 25 + (25 * slot), j - 24, 24, 26, mouseX, mouseY)) {
+                        tab = ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab = 3;
+                        ConfigManager.saveClientConfig();
+                        SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
+                        soundmanager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                    }
+                } else {
+                    int lefXPos = leftPos + 77;
+                    int rightXPos = leftPos + 164;
+                    int topYPos = topPos + 22;
+                    List<PowerTypes> powerList = PowerTypes.getAvailablePowers(pl);
+
+                    if (powerList.size() > 1) {
+                        if (isSurelyHovering(rightXPos, topYPos, 7, 13, mouseX, mouseY)) {
+                            if (menuTicks <= -1) {
+                                scp.roundabout$setMenuTicks(5);
+                                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_RIGHT_POWERS);
+                            }
+                            return true;
+                        }
+
+                        if (isSurelyHovering(lefXPos, topYPos, 7, 13, mouseX, mouseY)) {
+                            if (menuTicks <= -1) {
+                                scp.roundabout$setMenuTicks(5);
+                                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_LEFT_POWERS);
+                            }
+                            return true;
+                        }
+                    }
+                }
+                slot++;
+            }
+
+            if (updateClicked(mouseX, mouseY, $$2)) {
                 return true;
             }
             IPlayerEntity ipe = ((IPlayerEntity) pl);
-            int i = this.leftPos;
-            int j = this.topPos;
-            if (isSurelyHovering(i - 136, j + 146, 65, 11, $$0, $$1)) {
+            if (isSurelyHovering(i - 136, j + 146, 65, 11, mouseX, mouseY)) {
                 if (pageNumber == 1) {
                     ipe.roundabout$setAnchorPlace(55);
                     ipe.roundabout$setDistanceOut(1.07F);
@@ -759,7 +1086,7 @@ public class PowerInventoryScreen
                 }
                 return true;
             }
-            if (isSurelyHovering(i - 66, j + 146, 65, 11, $$0, $$1)) {
+            if (isSurelyHovering(i - 66, j + 146, 65, 11, mouseX, mouseY)) {
                 if (pageNumber == 1) {
                     pageNumber = 2;
                 } else {
@@ -770,67 +1097,18 @@ public class PowerInventoryScreen
 
             int leftGearPos = leftPos + 6;
             int topGearPos = topPos + 60;
-            if (isSurelyHovering(leftGearPos, topGearPos, 18, 18, $$0, $$1)) {
+            if (isSurelyHovering(leftGearPos, topGearPos, 18, 18, mouseX, mouseY)) {
                 gearChange();
                 SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
                 soundmanager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                 return true;
             }
 
-            int lefXPos = leftPos + 77;
-            int rightXPos = leftPos + 164;
-            int topYPos = topPos + 22;
-            int bottomYPos = topPos + 40;
-            StandUser standUser = ((StandUser) pl);
-            StandPowers sp = standUser.roundabout$getStandPowers();
-            StandUserClientPlayer scp = ((StandUserClientPlayer) pl);
-            int menuTicks = scp.roundabout$getMenuTicks();
-            stand = standUser.roundabout$getStandPowers().getStandForHUD();
-            if (sp.hasMoreThanOneSkin()) {
-                if (isSurelyHovering(rightXPos, topYPos, 7, 13, $$0, $$1)) {
-                    if (menuTicks <= -1) {
-                        scp.roundabout$setMenuTicks(5);
-                        scp.roundabout$setMenuTicks(5);
-                        if (standUser.roundabout$isSealed()) {
-                            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT_SEALED);
-                        } else {
-                            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT);
-                        }
-                    }
-                    return true;
-                }
-
-                if (isSurelyHovering(lefXPos, topYPos, 7, 13, $$0, $$1)) {
-                    if (menuTicks <= -1) {
-                        scp.roundabout$setMenuTicks(5);
-                        if (standUser.roundabout$isSealed()) {
-                            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SKIN_LEFT_SEALED);
-                        } else {
-                            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SKIN_LEFT);
-                        }
-                    }
-                    return true;
-                }
-            }
 
 
-            if (sp.hasMoreThanOnePos()) {
-                if (isSurelyHovering(rightXPos, bottomYPos, 7, 13, $$0, $$1)) {
-                    if (menuTicks <= -1) {
-                        scp.roundabout$setMenuTicks(5);
-                        C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_IDLE_RIGHT);
-                    }
-                    return true;
-                }
 
-                if (isSurelyHovering(lefXPos, bottomYPos, 7, 13, $$0, $$1)) {
-                    if (menuTicks <= -1) {
-                        scp.roundabout$setMenuTicks(5);
-                        C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_IDLE_LEFT);
-                    }
-                    return true;
-                }
-            }
+
+
         }
         /**
         if (this.recipeBookComponent.mouseClicked($$0, $$1, $$2)) {
@@ -838,7 +1116,7 @@ public class PowerInventoryScreen
             return true;
         } else {
          **/
-            return this.widthTooNarrow ? false : super.mouseClicked($$0, $$1, $$2);
+            return this.widthTooNarrow ? false : super.mouseClicked(mouseX, mouseY, $$2);
         //}
     }
 

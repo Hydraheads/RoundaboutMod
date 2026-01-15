@@ -6,17 +6,23 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
+import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.AnubisMemory;
 import net.hydra.jojomod.event.index.AnubisMoment;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.fates.powers.VampireFate;
+import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersCream;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
@@ -76,8 +82,9 @@ public class StandHudRender {
             Minecraft mc = Minecraft.getInstance();
             float tickDelta = mc.getDeltaFrameTime();
 
-            boolean standOn = ((StandUser) playerEntity).roundabout$getActive();
-            boolean renderIcons = (standOn || !FateTypes.isHuman(playerEntity)) && !ConfigManager.getClientConfig().dynamicSettings.hideGUI
+            boolean powerOn = ((StandUser) playerEntity).roundabout$getActive();
+            boolean standOn = PowerTypes.hasStandActive(playerEntity);
+            boolean renderIcons = (powerOn || !FateTypes.isHuman(playerEntity)) && !ConfigManager.getClientConfig().dynamicSettings.hideGUI
                     && !(ConfigManager.getClientConfig().enablePickyIconRendering && !((StandUser) playerEntity).roundabout$getStandPowers().hasCooldowns());
             if (renderIcons || presentX > 0.1){
                 if (!renderIcons){
@@ -101,8 +108,10 @@ public class StandHudRender {
                 //context.drawTexture(ARROW_ICON,x,y-2,0, 0, textureWidth, textureHeight, textureWidth, textureHeight);
 
 
-                if (standOn){
+                if ((standOn || FateTypes.isHuman(playerEntity)) && PowerTypes.hasStandActivelyEquipped(playerEntity)) {
                     ((StandUser) playerEntity).roundabout$getStandPowers().renderIcons(context, x, y);
+                }else if ((powerOn || FateTypes.isHuman(playerEntity)) && !PowerTypes.hasStandActivelyEquipped(playerEntity)){
+                    ((IPowersPlayer) playerEntity).rdbt$getPowers().renderIcons(context, x, y);
                 } else {
                     ((IFatePlayer) playerEntity).rdbt$getFatePowers().renderIcons(context, x, y);
                 }
@@ -144,6 +153,8 @@ public class StandHudRender {
             ((StandUser) playerEntity).roundabout$getStandPowers().renderAttackHud(context,playerEntity,
                     scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
             ((IFatePlayer) playerEntity).rdbt$getFatePowers().renderAttackHud(context,playerEntity,
+                    scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
+            ((IPowersPlayer) playerEntity).rdbt$getPowers().renderAttackHud(context,playerEntity,
                     scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
         }
     }
@@ -419,6 +430,39 @@ public class StandHudRender {
 
     }
 
+    public static void renderBloodExp(GuiGraphics context, Player playerEntity,
+                                             int scaledWidth, int scaledHeight, int x) {
+
+        int l;
+        VampireData vdata = ((IPlayerEntity)playerEntity).rdbt$getVampireData();
+        int gb = VampireFate.getLevelUpExpCost();
+        int gc = vdata.bloodExp;  gc= Mth.clamp(gc,0,gb);
+        int gc2 = vdata.vampireLevel+1;
+        l = scaledHeight - 32 + 3;
+        StandUser standUser = ((StandUser)playerEntity);
+        int blt = (int) Math.floor(((double) 182 /gb)*(gc));
+        context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 40, 182, 5);
+        if (blt > 0) {
+            context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 45, blt, 5);
+        }
+
+        Minecraft minecraft = Minecraft.getInstance();
+        int y = 11284539;
+        Font renderer = minecraft.font;
+        String $$6 = gc2 + "";
+        if (gc2 >= 41){
+            $$6 = "C";
+        }
+        int $$7 = (scaledWidth - renderer.width($$6)) / 2;
+        int $$8 = scaledHeight - 31 - 4;
+        context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7 - 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8, y, false);
+
+    }
+
     public static void renderShootModeSoftAndWet(GuiGraphics context, Minecraft client, Player playerEntity,
                                     int scaledWidth, int scaledHeight, int x,
                                     PowersSoftAndWet PW) {
@@ -480,6 +524,51 @@ public class StandHudRender {
         } else {
             context.blit(StandIcons.JOJO_ICONS, k, l, u, 90, 9, 9);
         }
+    }
+
+    private static final ResourceLocation FIRE_0 =
+            new ResourceLocation("minecraft", "textures/block/fire_0.png");
+    public static void renderComboHudNumber(GuiGraphics context, Minecraft client, Player playerEntity,
+                                                      int scaledWidth, int scaledHeight, int x,
+                                                      PunchingGeneralPowers pgp) {
+
+        int l;
+        int k;
+        k = scaledWidth/2 - 5;
+        l = scaledHeight - 31 - 5;
+
+        int comboAmt = pgp.getComboAmt();
+        int comboTime = pgp.getComboExpireTicks();
+
+        int locX = - 1;
+        int locY = - 9;
+        int comboTier = pgp.getComboTier();
+
+
+        if (comboTier == 1) {
+            RenderSystem.enableBlend();
+            context.blit(StandIcons.JOJO_ICONS_2, k + locX, l+locY, 223, 153, 13, 15);
+        } else if (comboTier == 2){
+            RenderSystem.enableBlend();
+            context.blit(StandIcons.JOJO_ICONS_2, k + locX, l+locY, 223, 135, 13, 15);
+        } else if (comboTier == 3){
+            RenderSystem.enableBlend();
+            context.blit(StandIcons.JOJO_ICONS_2, k + locX, l+locY, 240, 135, 13, 15);
+        } else {
+            RenderSystem.enableBlend();
+            context.blit(StandIcons.JOJO_ICONS_2, k + locX, l+locY, 240, 153, 13, 15);
+        }
+
+        int y = 16766790;
+        Font renderer = client.font;
+        String $$6 = comboAmt + "";
+        int $$7 = (scaledWidth - renderer.width($$6)) / 2;
+        int $$8 = scaledHeight - 31 - 4;
+        context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7 - 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8, y, false);
     }
 
     public static void renderExpHud(GuiGraphics context, Minecraft client, Player playerEntity,
@@ -604,7 +693,7 @@ public class StandHudRender {
     }
     public static void renderGuardHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                       int scaledWidth, int scaledHeight, int ticks, int x,
-                                      float flashAlpha, float otherFlashAlpha) {
+                                      float flashAlpha, float otherFlashAlpha, boolean removeThing) {
         int l;
         int k;
         int v;
@@ -624,24 +713,29 @@ public class StandHudRender {
         int u = 183;
         k = scaledWidth/2 - 5;
         l = scaledHeight - 31 - 5;
-        context.blit(StandIcons.JOJO_ICONS, k, l, u, v, 9, 9);
+        if (!removeThing) {
+            context.blit(StandIcons.JOJO_ICONS, k, l, u, v, 9, 9);
+        }
     }
 
     public static void renderPossessionHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                       int scaledWidth, int scaledHeight, int x) {
         int l = scaledHeight - 32 + 3;
-        int k = (int)(((float) 182 / PowersAnubis.MaxPossesionTime) * (float) ((StandUser)playerEntity).roundabout$getPossessionTime() );
+        AnubisPossessorEntity poss = (AnubisPossessorEntity) ((StandUser)playerEntity).roundabout$getPossessor();
+        if (poss != null && poss.getTarget() != null) {
+            int k = (int) ((182.0F / poss.getTarget().getMaxHealth()) * poss.getTarget().getHealth()) ;
 
-        context.blit(StandIcons.JOJO_ICONS, x, l, 0, 161, 182, 5);
+            context.blit(StandIcons.JOJO_ICONS, x, l, 0, 161, 182, 5);
 
-        if (k > 0) {
-            context.blit(StandIcons.JOJO_ICONS, x, l, 0, 166, k, 5);
+            if (k > 0) {
+                context.blit(StandIcons.JOJO_ICONS, x, l, 0, 166, k, 5);
+            }
+
+            int iconX = scaledWidth / 2 - 5;
+            int iconY = scaledHeight - 32 - 4;
+
+            context.blit(StandIcons.JOJO_ICONS, iconX, iconY, 182, 161, 11, 9);
         }
-
-        int iconX = scaledWidth / 2 - 5;
-        int iconY = scaledHeight - 32 - 4;
-
-        context.blit(StandIcons.JOJO_ICONS, iconX, iconY, 182, 161, 11, 9);
     }
     public static void renderRecordingHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                            int scaledWidth, int scaledHeight, int x) {
@@ -655,10 +749,11 @@ public class StandHudRender {
         if (SU.roundabout$getUniqueStandModeToggle()) {
             AnubisMemory memory = PA.getUsedMemory();
             if (memory != null) {
-                List<AnubisMoment> moments = memory.moments;
 
-                int sTime = moments.get(0).time;
-                int eTime = moments.get(moments.size()-1).time;
+                int sTime = memory.getFirstTime();
+                int eTime = memory.getLastTime();
+
+
 
                 int time = PowersAnubis.MaxPlayTime-PA.playTime-sTime;
                 int maxTime = eTime-sTime;

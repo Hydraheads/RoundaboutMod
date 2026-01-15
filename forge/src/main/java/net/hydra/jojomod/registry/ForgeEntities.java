@@ -533,7 +533,7 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<AnubisSlipstreamEntity>> ANUBIS_SLIPSTREAM =
             ENTITY_TYPES.register("anubis_slipstream", () ->
-                    EntityType.Builder.<AnubisSlipstreamEntity>of(AnubisSlipstreamEntity::new, MobCategory.MISC).sized(3f, 3f).
+                    EntityType.Builder.<AnubisSlipstreamEntity>of(AnubisSlipstreamEntity::new, MobCategory.MISC).sized(0.1F, 0.1f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "anubis_slipstream").toString())
             );

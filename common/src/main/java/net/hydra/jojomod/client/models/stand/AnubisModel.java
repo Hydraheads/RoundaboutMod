@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.ModItemModels;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.AnubisAnimations;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.ModItems;
@@ -75,12 +76,17 @@ public class AnubisModel extends PsuedoHierarchicalModel {
 
     public static ResourceLocation item = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/anime_item.png");
     public static ResourceLocation anime = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/anime.png");
+    public static ResourceLocation raging = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/raging_katana.png");
+    public static ResourceLocation alluring = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/alluring_katana.png");
     public static ResourceLocation evil = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/evil.png");
     public static ResourceLocation wooden = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/wooden.png");
     public static ResourceLocation stone = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/stone.png");
+    public static ResourceLocation grass = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/grass.png");
     public static ResourceLocation aquamarine = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/aquamarine.png");
-    public static ResourceLocation golden = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/golden.png");
+    public static ResourceLocation gray_wagon = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/gray_wagon.png");
+    public static ResourceLocation timekeeper = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/timekeeper.png");
     public static ResourceLocation diamond = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/diamond.png");
+    public static ResourceLocation chorus = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/ender.png");
     public static ResourceLocation ancient = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/ancient.png");
 
 
@@ -94,9 +100,15 @@ public class AnubisModel extends PsuedoHierarchicalModel {
             case 3 -> {return wooden;}
             case 4 -> {return stone;}
             case 5 -> {return aquamarine;}
-            case 6 -> {return golden;}
+            case 6 -> {return timekeeper;}
             case 7 -> {return diamond;}
             case 8 -> {return ancient;}
+            case 9 -> {return grass;}
+            case 10 -> {return gray_wagon;}
+            case 11 -> {return chorus;}
+            case 12 -> {return raging;}
+            case 13 -> {return alluring;}
+
             default -> {return anime;}
         }
     }
@@ -121,7 +133,7 @@ public class AnubisModel extends PsuedoHierarchicalModel {
             } else {
                 user.roundabout$getWornStandIdleAnimation().stop();
             }
-            if (user.roundabout$getStandPowers() instanceof PowersAnubis PA && user.roundabout$getActive()) {
+            if (user.roundabout$getStandPowers() instanceof PowersAnubis PA && PowerTypes.hasStandActive(LE)) {
                 boolean start = false;
                 AnimationDefinition anim = null;
                 switch (user.roundabout$getStandAnimation()) {
@@ -132,8 +144,6 @@ public class AnubisModel extends PsuedoHierarchicalModel {
                 }
                 if (start) {
                     this.animate(user.roundabout$getWornStandAnimation(),anim,partialTicks,1F);
-                } else {
-                    user.roundabout$getWornStandAnimation().stop();
                 }
             }
 

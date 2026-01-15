@@ -32,6 +32,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
@@ -234,6 +235,11 @@ public class BlockGrabPreset extends NewPunchingStand {
     @Override
     public void tickPower(){
         super.tickPower();
+        if (!isClient()){
+            if (hardBlocker > 0){
+                hardBlocker--;
+            }
+        }
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
             StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
             if (!this.getSelf().level().isClientSide) {
@@ -303,6 +309,8 @@ public class BlockGrabPreset extends NewPunchingStand {
         }
     }
 
+    public int hardBlocker = 0;
+
     @SuppressWarnings("deprecation")
     @Override
     public boolean setPowerAttack(){
@@ -330,7 +338,8 @@ public class BlockGrabPreset extends NewPunchingStand {
                     }
                     return false;
                 } else if (standEntity.getFirstPassenger() != null){
-                    if (!this.getSelf().level().isClientSide) {
+                    if (!this.getSelf().level().isClientSide && hardBlocker < 1) {
+                        hardBlocker = 10;
 
                         if (!onCooldown(PowerIndex.SKILL_2)) {
                             if (getAttackTimeDuring() > 0) {
@@ -441,7 +450,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                                     }
                                     if (!this.getSelf().level().isClientSide) {
                                         if (ent instanceof NeutralMob NE && !(ent instanceof Animal) && !((ServerPlayer) this.getSelf()).isCreative()) {
-                                            if (!(ent instanceof IronGolem ig && ig.isPlayerCreated())) {
+                                            if (!(ent instanceof IronGolem ig && ig.isPlayerCreated()) && self.level().getDifficulty() != Difficulty.PEACEFUL) {
                                                 NE.setTarget(this.getSelf());
                                             }
                                         }
@@ -478,13 +487,17 @@ public class BlockGrabPreset extends NewPunchingStand {
                     } else {
                         this.setAttackTime(0);
                         this.setActivePowerPhase(getActivePowerPhaseMax());
+                        setActivePower(PowerIndex.NONE);
                         this.setAttackTimeMax(ClientNetworking.getAppropriateConfig().generalStandSettings.mobThrowRecoilTicks);
                     }
                     return false;
                 }
             }
         }
-        return super.setPowerAttack();
+        if ((isClient() && canAttack()) || hardBlocker < 1) {
+            return super.setPowerAttack();
+        }
+        return false;
     }
     @Override
     public boolean setPowerOther(int move, int lastMove) {

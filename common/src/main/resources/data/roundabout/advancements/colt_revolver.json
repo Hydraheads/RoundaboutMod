@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_nether_brick": {
+    "has_blaze_powder": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:nether_brick"
+              "minecraft:blaze_powder"
             ]
           }
         ]
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_nether_brick",
+      "has_blaze_powder",
       "has_the_recipe"
     ]
   ],

@@ -1,10 +1,13 @@
 package net.hydra.jojomod.client;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.C2SPacketUtil;
@@ -22,27 +25,46 @@ public class KeyInputs {
     public static int roundaboutClickCount = 0;
 
     public static void summonKey(Player player, Minecraft client){
-        StandUser user = ((StandUser) player);
-        if (user.roundabout$getStandPowers().canSummonStand() && !user.roundabout$isSealed() && !user.roundabout$isPossessed()) {
-            if (((StandUser) player).roundabout$getSummonCD() && roundaboutClickCount == 0) {
-                if (user.roundabout$getActive()) {
-                    user.roundabout$setSummonCD(8);
-                    user.roundabout$setActive(false);
-                    user.roundabout$tryPower(PowerIndex.NONE, true);
-                } else {
-                    user.roundabout$setActive(true);
-                    user.roundabout$setSummonCD(2);
+        if (PowerTypes.hasStandActivelyEquipped(player)){
+            StandUser user = ((StandUser) player);
+            if (user.roundabout$getStandPowers().canSummonStand() && !user.roundabout$isSealed() && !user.roundabout$isPossessed()) {
+                if (((StandUser) player).roundabout$getSummonCD() && roundaboutClickCount == 0) {
+                    if (user.roundabout$getActive()) {
+                        user.roundabout$setSummonCD(8);
+                        user.roundabout$setActive(false);
+                        user.roundabout$tryPower(PowerIndex.NONE, true);
+                    } else {
+                        user.roundabout$setActive(true);
+                        user.roundabout$setSummonCD(2);
+                    }
+                    C2SPacketUtil.standSummonPacket();
                 }
-                C2SPacketUtil.standSummonPacket();
+                roundaboutClickCount = 2;
             }
-            roundaboutClickCount = 2;
+        } else {
+            if (PowerTypes.getPowerType(player) != PowerTypes.NONE.ordinal()){
+                StandUser user = ((StandUser) player);
+                if (!user.roundabout$isPossessed()){
+                    if (((StandUser) player).roundabout$getSummonCD() && roundaboutClickCount == 0) {
+                        if (user.roundabout$getActive()) {
+                            user.roundabout$setSummonCD(8);
+                            user.roundabout$setActive(false);
+                            user.roundabout$tryPowerP(PowerIndex.NONE, true);
+                        } else {
+                            user.roundabout$setActive(true);
+                            user.roundabout$setSummonCD(2);
+                        }
+                        C2SPacketUtil.standSummonPacket();
+                    }
+                    roundaboutClickCount = 2;
+                }
+            }
         }
     }
 
     public static void menuKey(Player player, Minecraft client){
         if (((StandUser) player).roundabout$getSummonCD() && roundaboutClickCount == 0
         && !player.isSpectator()) {
-            forceSummon(player,true);
             PlayerMaskSlots ms = ((IPlayerEntity)player).roundabout$getMaskInventory();
             ItemStack stack = ms.getItem(0);
             ItemStack stack2 = ms.getItem(1);
@@ -87,47 +109,71 @@ public class KeyInputs {
         ((IPlayerEntity) player).roundabout$showExp(keyIsDown);
     }
     public static void MoveKey4(Player player, Minecraft client, boolean keyIsDown, Options option){
-        if (!((StandUser) player).roundabout$isSealed() && !((StandUser)player).roundabout$isPossessed()) {
-            if (FateTypes.isHuman(player)) {
-                forceSummon(player, keyIsDown);
+        if (!((StandUser)player).roundabout$isPossessed()) {
+            if (PowerTypes.hasStandActivelyEquipped(player)) {
+                if (!((StandUser) player).roundabout$isSealed()) {
+                    if (FateTypes.isHuman(player)) {
+                        forceSummon(player, keyIsDown);
+                    }
+                    ((StandUser) player).roundabout$getStandPowers().preButtonInput4(keyIsDown, option);
+                }
+            } else {
+                ((IPowersPlayer) player).rdbt$getPowers().preButtonInput4(keyIsDown, option);
             }
-            ((StandUser) player).roundabout$getStandPowers().preButtonInput4(keyIsDown, option);
-        }
-        if (!FateTypes.isHuman(player)) {
-            ((IFatePlayer) player).rdbt$getFatePowers().preButtonInput4(keyIsDown, option);
+            if (!FateTypes.isHuman(player)) {
+                ((IFatePlayer) player).rdbt$getFatePowers().preButtonInput4(keyIsDown, option);
+            }
         }
     }
     public static void MoveKey3(Player player, Minecraft client, boolean keyIsDown, Options option){
-        if (!((StandUser) player).roundabout$isSealed() && !((StandUser)player).roundabout$isPossessed()) {
-            if (FateTypes.isHuman(player)) {
-                forceSummon(player, keyIsDown);
+        if (!((StandUser)player).roundabout$isPossessed()) {
+            if (PowerTypes.hasStandActivelyEquipped(player)) {
+                if (!((StandUser) player).roundabout$isSealed()) {
+                    if (FateTypes.isHuman(player)) {
+                        forceSummon(player, keyIsDown);
+                    }
+                    ((StandUser) player).roundabout$getStandPowers().preButtonInput3(keyIsDown, option);
+                }
+            } else {
+                ((IPowersPlayer) player).rdbt$getPowers().preButtonInput3(keyIsDown, option);
             }
-            ((StandUser) player).roundabout$getStandPowers().preButtonInput3(keyIsDown, option);
-        }
-        if (!FateTypes.isHuman(player)) {
-            ((IFatePlayer) player).rdbt$getFatePowers().preButtonInput3(keyIsDown, option);
+            if (!FateTypes.isHuman(player)) {
+                ((IFatePlayer) player).rdbt$getFatePowers().preButtonInput3(keyIsDown, option);
+            }
         }
     }
     public static void MoveKey2(Player player, Minecraft client, boolean keyIsDown, Options option){
-        if (!((StandUser) player).roundabout$isSealed() && !((StandUser)player).roundabout$isPossessed()) {
-            if (FateTypes.isHuman(player)) {
-                forceSummon(player, keyIsDown);
+        if (!((StandUser)player).roundabout$isPossessed()) {
+            if (PowerTypes.hasStandActivelyEquipped(player)) {
+                if (!((StandUser) player).roundabout$isSealed()) {
+                    if (FateTypes.isHuman(player)) {
+                        forceSummon(player, keyIsDown);
+                    }
+                    ((StandUser) player).roundabout$getStandPowers().preButtonInput2(keyIsDown, option);
+                }
+            } else {
+                ((IPowersPlayer) player).rdbt$getPowers().preButtonInput2(keyIsDown, option);
             }
-            ((StandUser) player).roundabout$getStandPowers().preButtonInput2(keyIsDown, option);
-        }
-        if (!FateTypes.isHuman(player)) {
-            ((IFatePlayer) player).rdbt$getFatePowers().preButtonInput2(keyIsDown, option);
+            if (!FateTypes.isHuman(player)) {
+                ((IFatePlayer) player).rdbt$getFatePowers().preButtonInput2(keyIsDown, option);
+            }
         }
     }
     public static void MoveKey1(Player player, Minecraft client, boolean keyIsDown, Options option){
-        if (!((StandUser) player).roundabout$isSealed() && !((StandUser)player).roundabout$isPossessed()) {
-            if (FateTypes.isHuman(player)) {
-                forceSummon(player, keyIsDown);
+        if (!((StandUser)player).roundabout$isPossessed()) {
+            if (PowerTypes.hasStandActivelyEquipped(player)) {
+                if (!((StandUser) player).roundabout$isSealed()) {
+                    if (FateTypes.isHuman(player)) {
+                        forceSummon(player, keyIsDown);
+                    }
+                    ((StandUser) player).roundabout$getStandPowers().preButtonInput1(keyIsDown, option);
+                }
+            } else {
+                ((IPowersPlayer) player).rdbt$getPowers().preButtonInput1(keyIsDown, option);
             }
-            ((StandUser) player).roundabout$getStandPowers().preButtonInput1(keyIsDown, option);
-        }
-        if (!FateTypes.isHuman(player)) {
-            ((IFatePlayer) player).rdbt$getFatePowers().preButtonInput1(keyIsDown, option);
+            if (!FateTypes.isHuman(player)) {
+                ((IFatePlayer) player).rdbt$getFatePowers().preButtonInput1(keyIsDown, option);
+            }
         }
     }
 

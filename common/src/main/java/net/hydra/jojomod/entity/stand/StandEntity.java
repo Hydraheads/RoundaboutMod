@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.access.NoVibrationEntity;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.util.MainUtil;
@@ -630,7 +631,7 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                     LivingEntity userEntity = this.getUser();
                     if (userEntity != null && !userEntity.isRemoved()) {
                         StandUser user = this.getUserData(userEntity);
-                        boolean userActive = user.roundabout$getActive();
+                        boolean userActive = PowerTypes.hasStandActive(userEntity);
                         LivingEntity thisStand = user.roundabout$getStand();
                         if (isValid(userActive,thisStand, userEntity)) {
 

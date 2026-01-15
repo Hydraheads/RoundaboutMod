@@ -206,6 +206,7 @@ public class ClientForgeEvents {
         ModStrayModels.MoldSpine = new MoldSpineModel();
         ModStrayModels.ChestPart = new ChestPart();
         ModStrayModels.SmallChestPart = new SmallChestPart();
+        ModStrayModels.bodySpikePart = new BodySpikePart();
         ModStrayModels.PonytailPart = new PonytailPart();
         ModStrayModels.BigHairPart = new BigHairPart();
         ModStrayModels.KakyoinHairPart = new KakyoinHairPart();
@@ -217,6 +218,7 @@ public class ClientForgeEvents {
         ModStrayModels.JosukeDecalsPart = new JosukeDecalsPart();
         ModStrayModels.TasselHatPart = new TasselHatPart();
         ModStrayModels.LegCloakPart = new LegCloakPart();
+        ModStrayModels.barrageArmsPart = new BarrageArmsPart();
         ModStrayModels.PlayerChestPart = new PlayerChestPart();
         ModStrayModels.PlayerSmallChestPart = new PlayerSmallChestPart();
         ModStrayModels.RightArm = new RightArmPart();

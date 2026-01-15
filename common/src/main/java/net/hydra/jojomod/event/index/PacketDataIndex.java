@@ -47,6 +47,7 @@ public class PacketDataIndex {
     public static final byte INT_GRAVITY_FLIP_2 = 16;
     public static final byte INT_GRAVITY_FLIP_3 = 17;
     public static final byte INT_GRAVITY_FLIP_4 = 18;
+    public static final byte INT_VAMPIRE_SKILL_BUY = 19;
 
     /**Single Byte packets*/
     public static final byte SINGLE_BYTE_GLAIVE_START_SOUND = 1;
@@ -69,6 +70,9 @@ public class PacketDataIndex {
     public static final byte END_BLOOD_SPEED = 32;
     public static final byte QUERY_STAND_UPDATE = 33;
     public static final byte QUERY_STAND_UPDATE_2 = 34;
+    public static final byte QUERY_VAMPIRE_UPDATE = 35;
+    public static final byte SINGLE_BYTE_LEFT_POWERS = 36;
+    public static final byte SINGLE_BYTE_RIGHT_POWERS = 37;
 
     /**Byte packets*/
     public static final byte BYTE_CHANGE_MORPH = 6;
@@ -97,6 +101,8 @@ public class PacketDataIndex {
     public static final byte S2C_INT_STAND_MODE = 10;
     public static final byte S2C_INT_FLESH_BUD = 11;
     public static final byte S2C_INT_CORNER_CUT = 12;
+    public static final byte S2C_INT_COMBO_AMT = 13;
+    public static final byte S2C_INT_COMBO_SEC_LEFT = 14;
 
     /**S2C BUNDLE packets*/
     public static final byte S2C_BUNDLE_POWER_INV = 1;

@@ -401,6 +401,19 @@ public class ForgeSounds {
             register(ModSounds.ANUBIS_BARRAGE_1_HIT, ModSounds.ANUBIS_BARRAGE_1_HIT_ID);
     public static final RegistryObject<SoundEvent> ANUBIS_BARRAGE_END =
             register(ModSounds.ANUBIS_BARRAGE_END, ModSounds.ANUBIS_BARRAGE_END_ID);
+    public static final RegistryObject<SoundEvent> ANUBIS_SWING =
+            register(ModSounds.ANUBIS_SWING, ModSounds.ANUBIS_SWING_ID);
+    public static final RegistryObject<SoundEvent> ANUBIS_CROUCH_SWING =
+            register(ModSounds.ANUBIS_CROUCH_SWING, ModSounds.ANUBIS_CROUCH_SWING_ID);
+    public static final RegistryObject<SoundEvent> ANUBIS_DOUBLE_CUT =
+            register(ModSounds.ANUBIS_DOUBLE_CUT, ModSounds.ANUBIS_DOUBLE_CUT_ID);
+    public static final RegistryObject<SoundEvent> ANUBIS_THRUST_CUT =
+            register(ModSounds.ANUBIS_THRUST_CUT, ModSounds.ANUBIS_THRUST_CUT_ID);
+    public static final RegistryObject<SoundEvent> ANUBIS_THRUST_MISS =
+            register(ModSounds.ANUBIS_THRUST_MISS, ModSounds.ANUBIS_THRUST_MISS_ID);
+    public static final RegistryObject<SoundEvent> ANUBIS_UPPERCUT =
+            register(ModSounds.ANUBIS_UPPERCUT, ModSounds.ANUBIS_UPPERCUT_ID);
+
 
 
 
@@ -674,6 +687,9 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> DIEGO_INTERESTING =
             register(ModSounds.DIEGO_INTERESTING, ModSounds.DIEGO_INTERESTING_ID);
 
+    public static final RegistryObject<SoundEvent> VAMPIRE_DIVE =
+            register(ModSounds.VAMPIRE_DIVE, ModSounds.VAMPIRE_DIVE_ID);
+
     public static final RegistryObject<SoundEvent> JOTARO_HURT_1 =
             register(ModSounds.JOTARO_HURT_1, ModSounds.JOTARO_HURT_1_ID);
     public static final RegistryObject<SoundEvent> JOTARO_HURT_2 =
@@ -744,6 +760,8 @@ public class ForgeSounds {
             register(ModSounds.FLESH_BUD_REMOVAL, ModSounds.FLESH_BUD_REMOVAL_ID);
     public static final RegistryObject<SoundEvent> HAIR_TOGGLE =
             register(ModSounds.HAIR_TOGGLE, ModSounds.HAIR_TOGGLE_ID);
+    public static final RegistryObject<SoundEvent> HAIR_SHARPEN =
+            register(ModSounds.HAIR_SHARPEN, ModSounds.HAIR_SHARPEN_ID);
     public static final RegistryObject<SoundEvent> HALLELUJAH =
             register(ModSounds.HALLELUJAH, ModSounds.HALLELUJAH_ID);
     public static final RegistryObject<SoundEvent> TORTURE_DANCE =

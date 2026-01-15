@@ -8,19 +8,19 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AnubisItem extends Item {
@@ -35,14 +35,20 @@ public class AnubisItem extends Item {
 
     @Override
     public ItemStack finishUsingItem(ItemStack $$0, Level $$1, LivingEntity $$2) {
-        if (!$$1.isClientSide) {
-            if ($$2 instanceof Player P) {
-                StandUser SU = (StandUser)P;
-                SU.roundabout$setPossessionTime(PowersAnubis.MaxPossesionTime);
-                ((Player) $$2).getCooldowns().addCooldown($$0.getItem(),10/*2400*/);
+        if ($$2 instanceof Player P) {
+            StandUser SU = (StandUser)P;
+            if (!$$1.isClientSide) {
+                P.getCooldowns().addCooldown($$0.getItem(),10/*2400*/);
                 P.level().playSound(null,P.blockPosition(), ModSounds.ANUBIS_POSSESSION_EVENT,SoundSource.PLAYERS,1.0F,1.3F);
 
-                AnubisPossessorEntity p = new AnubisPossessorEntity($$2.level(), $$2 );
+
+                List<LivingEntity> targets = new ArrayList<>();
+                for (LivingEntity target : $$2.level().getNearbyEntities(LivingEntity.class, TargetingConditions.forCombat(),$$2,$$2.getBoundingBox().inflate(20))) {
+                    if (!target.equals($$2) && target.isAlive() && target.attackable()) {
+                        targets.add(target);
+                    }
+                }
+                AnubisPossessorEntity p = new AnubisPossessorEntity($$2.level(), $$2, targets );
                 p.setPos($$2.getPosition(1));
                 $$1.addFreshEntity(p);
                 SU.roundabout$setPossessor(p);

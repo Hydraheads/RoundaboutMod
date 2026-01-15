@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -14,6 +15,7 @@ import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -49,7 +51,7 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
     public FatePowers rdbt$fatePowers = null;
 
     @Unique
-    public byte rdbt$lastFate = FateTypes.HUMAN.id;
+    public byte rdbt$lastFate = (byte) FateTypes.HUMAN.ordinal();
 
     @Unique
     @Override
@@ -129,7 +131,7 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
     }
     @Unique
     public void rdbt$tickThroughVampire(){
-        if (FateTypes.hasBloodHunger(this)){
+        if (FateTypes.takesSunlightDamage(this)){
             if (FateTypes.isInSunlight(this)){
                 this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth()*ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick);
             }
@@ -140,6 +142,39 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
         }
         if (MainUtil.isWearingStoneMask(this) && hasEffect(ModEffects.BLEED)){
             MainUtil.activateStoneMask(this);
+        }
+        if (FateTypes.isVampire(this)){
+            VampireData vdata = ((IPlayerEntity)this).rdbt$getVampireData();
+            if (vdata.timeSinceNpc > 0){
+                vdata.timeSinceNpc--;
+                if (vdata.timeSinceNpc == 0){
+                    vdata.npcExp = 0;
+                    S2CPacketUtil.beamVampireData2((Player) (Object)this);
+                } else {
+                    rdbt$changed = true;
+                }
+            }
+            if (vdata.timeSinceAnimal > 0){
+                vdata.timeSinceAnimal--;
+                if (vdata.timeSinceAnimal == 0){
+                    vdata.animalExp = 0;
+                    S2CPacketUtil.beamVampireData2((Player) (Object)this);
+                } else {
+                    rdbt$changed = true;
+                }
+            }
+            if (vdata.timeSinceMonster > 0){
+                vdata.timeSinceMonster--;
+                if (vdata.timeSinceMonster == 0){
+                    vdata.monsterEXP = 0;
+                    S2CPacketUtil.beamVampireData2((Player) (Object)this);
+                } else {
+                    rdbt$changed = true;
+                }
+            }
+            if (tickCount % 20 == 1){
+                S2CPacketUtil.beamVampireTimings((Player) (Object)this);
+            }
         }
 
 
@@ -163,6 +198,7 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
 
         //This can move into a dedicated fate class eventually
     }
+    public boolean rdbt$changed = false;
     @Unique
     public void rdbt$tickThroughVampireChange(){
         if (rdbt$vampireTransformation >= 0){

@@ -83,6 +83,12 @@
       "roundabout:tommy_gun_fire"
     ]
   },
+  "hair_sharpen": {
+    "subtitle": "sounds.roundabout.hair_sharpen",
+    "sounds": [
+      "roundabout:hair_sharpen"
+    ]
+  },
   "tommy_reload": {
     "subtitle": "sounds.roundabout.tommy_reload",
     "sounds": [
@@ -435,6 +441,36 @@
     "subtitle": "sounds.roundabout.dio_hoho_2",
     "sounds": [
       "roundabout:dio_hoho_2"
+    ]
+  },
+  "melee_guard": {
+    "subtitle": "sounds.roundabout.melee_guard",
+    "sounds": [
+      "roundabout:melee_guard"
+    ]
+  },
+  "timestop_resume_theworld2": {
+    "subtitle": "sounds.roundabout.timestop_resume_theworld2",
+    "sounds": [
+      "roundabout:timestop_resume_theworld2"
+    ]
+  },
+  "diego_kono_diego": {
+    "subtitle": "sounds.roundabout.diego_kono_diego",
+    "sounds": [
+      "roundabout:diego_kono_diego"
+    ]
+  },
+  "diego_hoho": {
+    "subtitle": "sounds.roundabout.diego_hoho",
+    "sounds": [
+      "roundabout:diego_hoho"
+    ]
+  },
+  "diego_hoho_2": {
+    "subtitle": "sounds.roundabout.diego_hoho_2",
+    "sounds": [
+      "roundabout:diego_hoho_2"
     ]
   },
   "bubble_hover_over": {
@@ -1238,6 +1274,42 @@
       "roundabout:anubis_barrage_end"
     ]
   },
+  "anubis_swing": {
+    "subtitle": "sounds.roundabout.anubis_swing",
+    "sounds": [
+      "roundabout:anubis_swing"
+    ]
+  },
+  "anubis_crouch_swing": {
+    "subtitle": "sounds.roundabout.anubis_crouch_swing",
+    "sounds": [
+      "roundabout:anubis_crouch_swing"
+    ]
+  },
+  "anubis_double_cut": {
+    "subtitle": "sounds.roundabout.anubis_double_cut",
+    "sounds": [
+      "roundabout:anubis_double_cut"
+    ]
+  },
+  "anubis_thrust_cut": {
+    "subtitle": "sounds.roundabout.anubis_thrust_cut",
+    "sounds": [
+      "roundabout:anubis_thrust_cut"
+    ]
+  },
+  "anubis_thrust_miss": {
+    "subtitle": "sounds.roundabout.anubis_thrust_miss",
+    "sounds": [
+      "roundabout:anubis_thrust_miss"
+    ]
+  },
+  "anubis_uppercut": {
+    "subtitle": "sounds.roundabout.anubis_uppercut",
+    "sounds": [
+      "roundabout:anubis_uppercut"
+    ]
+  },
 
 
 
@@ -1683,6 +1755,12 @@
     "subtitle": "sounds.roundabout.stand_guard",
     "sounds": [
       "roundabout:stand_guard"
+    ]
+  },
+  "vampire_dive": {
+    "subtitle": "sounds.roundabout.vampire_dive",
+    "sounds": [
+      "roundabout:vampire_dive"
     ]
   },
   "timestop_the_world": {
@@ -2133,6 +2211,30 @@
     "subtitle": "sounds.roundabout.fog_clone",
     "sounds": [
       "roundabout:fog_clone"
+    ]
+  },
+  "combat_punch_1": {
+    "subtitle": "sounds.roundabout.combat_punch_1",
+    "sounds": [
+      "roundabout:combat_punch_1"
+    ]
+  },
+  "combat_punch_2": {
+    "subtitle": "sounds.roundabout.combat_punch_2",
+    "sounds": [
+      "roundabout:combat_punch_2"
+    ]
+  },
+  "combat_punch_3": {
+    "subtitle": "sounds.roundabout.combat_punch_3",
+    "sounds": [
+      "roundabout:combat_punch_3"
+    ]
+  },
+  "combat_punch_4": {
+    "subtitle": "sounds.roundabout.combat_punch_4",
+    "sounds": [
+      "roundabout:combat_punch_4"
     ]
   },
   "hallelujah": {

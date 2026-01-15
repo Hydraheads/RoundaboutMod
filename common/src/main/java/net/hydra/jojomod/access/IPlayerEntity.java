@@ -1,8 +1,10 @@
 package net.hydra.jojomod.access;
 
+import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
+import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.util.PlayerMaskSlots;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Mob;
@@ -15,6 +17,7 @@ public interface IPlayerEntity {
     boolean roundabout$getBlinded();
     byte roundabout$getModChest();
     float rdbt$mutualMiningSpeedFunction(BlockState $$0, StandPowers powers);
+    float rdbt$mutualMiningSpeedFunction2(BlockState $$0, GeneralPowers powers);
     void roundabout$setModChest(byte chestType);
     void roundabout$setBlinded(boolean blinded);
     void roundabout$SetPos(byte Pos);
@@ -35,6 +38,8 @@ public interface IPlayerEntity {
     void roundabout$shapeShift();
     void rdbt$setRespawnStrategy(byte strat);
     byte rdbt$getRespawnStrategy();
+    void roundabout$setPower(byte style);
+    byte roundabout$getPower();
 
     /// bypasses the combat mode overrides
     ItemStack roundabout$getForRealMainHand();
@@ -56,6 +61,8 @@ public interface IPlayerEntity {
     void rdbt$setCooldownQuery(boolean query);
 
 
+    void rdbt$setVampireData(VampireData vdata);
+    VampireData rdbt$getVampireData();
     void roundabout$setShapeShiftExtraData(byte level);
     byte roundabout$getShapeShift();
     byte roundabout$getShapeShiftExtraData();
@@ -86,6 +93,7 @@ public interface IPlayerEntity {
     void roundabout$setStandSkin(byte level);
     void roundabout$setIdlePos(byte level);
     byte roundabout$getIdlePos();
+    AnimationState roundabout$getBarrageArms();
     byte roundabout$getTeam();
     void roundabout$setTeamColor(byte color);
     byte roundabout$getTeamColor();

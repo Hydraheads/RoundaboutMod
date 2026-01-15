@@ -2,6 +2,7 @@ package net.hydra.jojomod.networking;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
+import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.advancement.criteria.ModCriteria;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
@@ -9,9 +10,11 @@ import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.event.index.Corpses;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
@@ -48,6 +51,12 @@ public class ClientToServerPackets {
             TryHitResultPosPowerF("try_hit_result_pos_power_f"),
             TryIntPowerF("try_int_power_f"),
             TryTripleIntPowerF("try_triple_int_power_f"),
+            TryPowerP("try_power_p"),
+            TryPosPowerP("try_pos_power_p"),
+            TryBlockPosPowerP("try_block_pos_power_p"),
+            TryHitResultPosPowerP("try_hit_result_pos_power_p"),
+            TryIntPowerP("try_int_power_p"),
+            TryTripleIntPowerP("try_triple_int_power_p"),
             IntToServer("int_to_server"),
             FloatToServer("float_to_server"),
             ByteToServer("byte_to_server"),
@@ -61,6 +70,7 @@ public class ClientToServerPackets {
             MoveSync("thread_hop_moving_sync"),
             StandPunch("stand_punch"),
             StandBarrageHit("stand_barrage_hit"),
+            PowersBarrageHit("general_powers_barrage_hit"),
             BarrageClashUpdate("barrage_clash_update"),
             Handshake("thread_hop_handshake"),
             Inventory("inventory"),
@@ -203,6 +213,63 @@ public class ClientToServerPackets {
                         int d = (int) vargs[2];
                         int e = (int) vargs[3];
                         powers.roundabout$tryIntPowerF(b, true, c, d, e);
+                    });
+                }
+
+
+                if (message.equals(MESSAGES.TryPowerP.value)) {
+                    server.execute(() -> {
+                        StandUser powers = basicChecks(sender);
+                        byte b = (byte) vargs[0];
+                        powers.roundabout$tryPowerP(b, true);
+                    });
+                }
+                /**Try Power Packet*/
+                if (message.equals(MESSAGES.TryPosPowerP.value)) {
+                    server.execute(() -> {
+                        StandUser powers = basicChecks(sender);
+                        byte b = (byte) vargs[0];
+                        Vector3f c = (Vector3f) vargs[1];
+                        powers.roundabout$tryPosPowerP(b, true, new Vec3(c.x, c.y, c.z));
+                    });
+                }
+                /**Try Block Pos Power Packet*/
+                if (message.equals(MESSAGES.TryBlockPosPowerP.value)) {
+                    server.execute(() -> {
+                        StandUser powers = basicChecks(sender);
+                        byte b = (byte) vargs[0];
+                        BlockPos c = (BlockPos) vargs[1];
+                        powers.roundabout$tryBlockPosPowerP(b, true, c);
+                    });
+                }
+                /**Try Block Pos Power Packet*/
+                if (message.equals(MESSAGES.TryHitResultPosPowerP.value)) {
+                    server.execute(() -> {
+                        StandUser powers = basicChecks(sender);
+                        byte b = (byte) vargs[0];
+                        BlockPos c = (BlockPos) vargs[1];
+                        BlockHitResult d = (BlockHitResult) vargs[2];
+                        powers.roundabout$tryBlockPosPowerP(b, true, c, d);
+                    });
+                }
+                /**Try Power Packet*/
+                if (message.equals(MESSAGES.TryIntPowerP.value)) {
+                    server.execute(() -> {
+                        StandUser powers = basicChecks(sender);
+                        byte b = (byte) vargs[0];
+                        int c = (int) vargs[1];
+                        powers.roundabout$tryIntPowerP(b, true, c);
+                    });
+                }
+                /**Try Triple Int Power Packet*/
+                if (message.equals(MESSAGES.TryTripleIntPowerP.value)) {
+                    server.execute(() -> {
+                        StandUser powers = basicChecks(sender);
+                        byte b = (byte) vargs[0];
+                        int c = (int) vargs[1];
+                        int d = (int) vargs[2];
+                        int e = (int) vargs[3];
+                        powers.roundabout$tryIntPowerP(b, true, c, d, e);
                     });
                 }
 
@@ -423,6 +490,15 @@ public class ClientToServerPackets {
                     Entity TE = sender.level().getEntity(targetID);
                     ((StandUser) sender).roundabout$getStandPowers().barrageImpact(TE, hitNumber);
                 }
+                /**Basic powers barrage hit packet*/
+                if (message.equals(MESSAGES.PowersBarrageHit.value)) {
+                    int targetID = (int)vargs[0];
+                    int hitNumber = (int)vargs[1];
+                    Entity TE = sender.level().getEntity(targetID);
+                    if (((IPowersPlayer) sender).rdbt$getPowers() instanceof PunchingGeneralPowers pgp){
+                        pgp.barrageImpact(TE, hitNumber);
+                    }
+                }
                 /**Barrage Clash packet*/
                 if (message.equals(MESSAGES.BarrageClashUpdate.value)) {
                     float clashProg = (float)vargs[0];
@@ -458,8 +534,14 @@ public class ClientToServerPackets {
                 /**Release right click to stop guarding*/
                 if (message.equals(MESSAGES.GuardCancel.value)) {
                     if (((StandUser) sender).roundabout$isGuarding() || ((StandUser) sender).roundabout$isBarraging()
+                            || (((IPowersPlayer)sender).rdbt$getPowers() instanceof PunchingGeneralPowers pgp &&
+                            pgp.isBarraging())
                             || ((StandUser) sender).roundabout$getStandPowers().clickRelease()) {
-                        ((StandUser) sender).roundabout$tryPower(PowerIndex.NONE, true);
+                        if (PowerTypes.hasPowerActivelyEquipped(sender)) {
+                            ((StandUser) sender).roundabout$tryPowerP(PowerIndex.NONE, true);
+                        } else {
+                            ((StandUser) sender).roundabout$tryPower(PowerIndex.NONE, true);
+                        }
                     }
                 }
                 /**Release right click to stop guarding*/

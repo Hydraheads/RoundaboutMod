@@ -1,11 +1,18 @@
 package net.hydra.jojomod.event.powers;
 
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.Comparator;
 import java.util.List;
 
 public class DamageHandler {
@@ -48,6 +55,9 @@ public class DamageHandler {
     public static boolean StandDamageEntity(Entity entity, float power, Entity attacker){
         return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.STAND, attacker), power);
     }
+    public static boolean VampireDamageEntity(Entity entity, float power, Entity attacker){
+        return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.VAMPIRE, attacker), power);
+    }
     public static boolean StandRushDamageEntity(Entity entity, float power, Entity attacker){
         return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.STAND_RUSH, attacker), power);
     }
@@ -86,5 +96,43 @@ public class DamageHandler {
             return true;
         }
         return false;
+    }
+
+    public static Entity damageMobBelow(Entity player, double horizontalRange, double verticalRange) {
+        if (player == null)
+            return null;
+        Level level = player.level();
+
+        Vec3 playerPos = player.position();
+
+
+         AABB shiftBox = RotationUtil.boxPlayerToWorld(
+                 new AABB(-horizontalRange,-verticalRange,-horizontalRange,horizontalRange,0,horizontalRange),
+                 ((IGravityEntity)player).roundabout$getGravityDirection());
+        // Define search area
+        AABB box = new AABB(
+                playerPos.x + shiftBox.minX,
+                playerPos.y + shiftBox.minY,
+                playerPos.z + shiftBox.minZ,
+                playerPos.x + shiftBox.maxX,
+                playerPos.y + shiftBox.maxY,
+                playerPos.z + shiftBox.maxZ
+        );
+
+        // Get all mobs below
+        List<LivingEntity> mobs = level.getEntitiesOfClass(LivingEntity.class, box, e -> (e != player
+        && !(e instanceof StandEntity)));
+
+        if (mobs.isEmpty()) return null;
+
+        // Choose closest
+        LivingEntity closest = mobs.stream()
+                .min(Comparator.comparingDouble(m -> m.distanceTo(player)))
+                .orElse(null);
+
+        if (closest != null) {
+            return closest;
+        }
+        return null;
     }
 }

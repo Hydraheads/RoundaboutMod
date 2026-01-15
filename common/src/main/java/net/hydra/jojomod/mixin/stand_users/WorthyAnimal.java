@@ -38,11 +38,15 @@ public abstract class WorthyAnimal extends AgeableMob {
                 if ($$2 != null) {
                     $$2.setBaby(true);
 
-                    double UserOdds = MainUtil.getStandUserOdds($$2);
-                    if (partnerUser){
-                        UserOdds+= MainUtil.getStandUserBreedBonus($$2);
-                    } if (thisUser){
-                        UserOdds+= MainUtil.getStandUserBreedBonus($$2);
+                    double UserOdds = 0;
+                    if (partnerUser || thisUser) {
+                        UserOdds = MainUtil.getStandUserOdds($$2);
+                        if (partnerUser) {
+                            UserOdds += MainUtil.getStandUserBreedBonus($$2);
+                        }
+                        if (thisUser) {
+                            UserOdds += MainUtil.getStandUserBreedBonus($$2);
+                        }
                     }
 
                     RandomSource $$5 = $$0.getRandom();

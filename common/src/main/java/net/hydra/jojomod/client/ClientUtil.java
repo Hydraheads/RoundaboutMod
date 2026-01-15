@@ -3,6 +3,7 @@ package net.hydra.jojomod.client;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.gui.*;
@@ -18,7 +19,9 @@ import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampireFate;
@@ -26,8 +29,10 @@ import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
 import net.hydra.jojomod.networking.ClientToServerPackets;
+import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.gravity.GravityAPI;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;
@@ -36,9 +41,13 @@ import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.networking.ServerToClientPackets;
@@ -55,6 +64,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.TooltipFlag;
 import net.zetalasis.client.shader.D4CShaderFX;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.D4CCloneEntity;
@@ -106,6 +116,7 @@ public class ClientUtil {
     public static Matrix4f savedPose;
     public static int checkthis = 0;
     public static int checkthisdat = 0;
+    public static int renderBloodTicks = 0;
     public static boolean skipInterpolation = false;
 
     /**Fallback in case the client exits the range and can't be fed the packet anymore.
@@ -126,6 +137,7 @@ public class ClientUtil {
         return false;
     }
 
+
     public static int clientTicker;
     public static int getClientTicker(){
         return clientTicker;
@@ -133,6 +145,9 @@ public class ClientUtil {
     public static void tickClientUtilStuff(){
         clientTicker++;
 
+        if (renderBloodTicks > 0){
+            renderBloodTicks--;
+        }
         /**
         Minecraft mc = Minecraft.getInstance();
         if (mc!= null && mc.player != null) {
@@ -271,6 +286,12 @@ public class ClientUtil {
         }
     }
 
+    public static void clickVampireSlot(int slot){
+        C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_VAMPIRE_SKILL_BUY,slot);
+        SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
+        soundmanager.play(SimpleSoundInstance.forUI(ModSounds.VAMPIRE_DRAIN_EVENT, 1.0F));
+    }
+
     public static @Nullable Connection getC2SConnection()
     {
         Minecraft client = Minecraft.getInstance();
@@ -280,6 +301,9 @@ public class ClientUtil {
         Connection integratedServerCon = ((IClientNetworking)client).roundabout$getServer();
 
         return (integratedServerCon != null ? integratedServerCon : client.player.connection.getConnection());
+    }
+    public static boolean renderBloodMeter(){
+        return renderBloodTicks > 0;
     }
 
     public static void handleGeneralPackets(String message, Object... vargs) {
@@ -556,9 +580,58 @@ public class ClientUtil {
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.VampireMessage.value)) {
                     playSound(ModSounds.VAMPIRE_MESSAGE_EVENT,player,2,1);
                 }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData.value)) {
+                    VampireData vdata = ((IPlayerEntity)player).rdbt$getVampireData();
+                    vdata.vampireLevel = (int) vargs[0];
+                    vdata.bloodExp = (int) vargs[1];
+                    vdata.animalExp = (int) vargs[2];
+                    vdata.monsterEXP = (int) vargs[3];
+                    vdata.npcExp = (int) vargs[4];
+                    vdata.timeSinceAnimal = (int) vargs[5];
+                    vdata.timeSinceMonster = (int) vargs[6];
+                    vdata.timeSinceNpc = (int) vargs[7];
+
+                    vdata.strengthLevel = (byte) vargs[8];
+                    vdata.dexterityLevel = (byte) vargs[9];
+                    vdata.resilienceLevel = (byte) vargs[10];
+
+                    vdata.hypnotismLevel = (byte) vargs[11];
+                    vdata.superHearingLevel = (byte) vargs[12];
+                    vdata.bloodSpeedLevel = (byte) vargs[13];
+
+                    vdata.graftingLevel = (byte) vargs[14];
+                    vdata.fleshBudLevel = (byte) vargs[15];
+                    vdata.daggerSplatterLevel = (byte) vargs[16];
+
+                    vdata.jumpLevel = (byte) vargs[17];
+                    vdata.ripperEyesLevel = (byte) vargs[18];
+                    vdata.freezeLevel = (byte) vargs[19];
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData2.value)) {
+                    VampireData vdata = ((IPlayerEntity)player).rdbt$getVampireData();
+                    vdata.vampireLevel = (int) vargs[0];
+                    vdata.bloodExp = (int) vargs[1];
+                    vdata.animalExp = (int) vargs[2];
+                    vdata.monsterEXP = (int) vargs[3];
+                    vdata.npcExp = (int) vargs[4];
+                    vdata.timeSinceAnimal = (int) vargs[5];
+                    vdata.timeSinceMonster = (int) vargs[6];
+                    vdata.timeSinceNpc = (int) vargs[7];
+                    renderBloodTicks = 60;
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData3.value)) {
+                    VampireData vdata = ((IPlayerEntity)player).rdbt$getVampireData();
+                    vdata.timeSinceAnimal = (int) vargs[0];
+                    vdata.timeSinceMonster = (int) vargs[1];
+                    vdata.timeSinceNpc = (int) vargs[2];
+                }
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.GunRecoil.value)) {
                     String sigmaString = (String) vargs[0];
                     ClientUtil.applyClientRecoil(player, sigmaString);
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPossessor.value)) {
+                    int i = (int) vargs[0];
+                    ((StandUser)player).roundabout$getPossessor().setTarget((LivingEntity) player.level().getEntity(i));
                 }
                 // theoretical deregister dynamic worlds packet
                 // String name = buf.readUtf();
@@ -570,7 +643,9 @@ public class ClientUtil {
             }
         });
     }
-
+    public static List<Component> getTooltipFromItem(Minecraft p_281881_, ItemStack p_282833_) {
+        return p_282833_.getTooltipLines(p_281881_.player, p_281881_.options.advancedItemTooltips ? TooltipFlag.Default.ADVANCED : TooltipFlag.Default.NORMAL);
+    }
     public static boolean getDirectionRight(LivingEntity self){
 
         Direction rightAxis = Direction.DOWN;
@@ -634,6 +709,14 @@ public class ClientUtil {
             Entity target = player.level().getEntity(data);
             if (target != null && !target.isRemoved() && target.isAlive()) {
                 playSound(ModSounds.FLESH_BUD_EVENT,target,1,1);
+            }
+        } else if (context == PacketDataIndex.S2C_INT_COMBO_AMT){
+            if (((IPowersPlayer) player).rdbt$getPowers() instanceof PunchingGeneralPowers pgp){
+                pgp.setComboAmt(data);
+            }
+        } else if (context == PacketDataIndex.S2C_INT_COMBO_SEC_LEFT){
+            if (((IPowersPlayer) player).rdbt$getPowers() instanceof PunchingGeneralPowers pgp){
+                pgp.setComboExpireTicks(data);
             }
         }
     }
@@ -1311,8 +1394,10 @@ public class ClientUtil {
         } else if (context == PacketDataIndex.S2C_SIMPLE_FREEZE_STAND) {
                 int switchTicks = ClientNetworking.getAppropriateConfig().itemSettings.switchStandDiscLength;
                 if (switchTicks > 0){
-                    ((StandUser) player).roundabout$setMaxSealedTicks(switchTicks);
-                    ((StandUser) player).roundabout$setSealedTicks(switchTicks);
+                    if (((StandUser) player).roundabout$getSealedTicks() < switchTicks) {
+                        ((StandUser) player).roundabout$setMaxSealedTicks(switchTicks);
+                        ((StandUser) player).roundabout$setSealedTicks(switchTicks);
+                    }
                 }
         } else if (context == PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK) {
             ((StandUser) player).roundabout$getStandPowers().suspendGuard = true;
@@ -1411,31 +1496,67 @@ public class ClientUtil {
                     }
                 }
 
-                    Direction gravityDirection = GravityAPI.getGravityDirection(cameraEnt);
 
-                    //RotationUtil.rotPlayerToWorld(cameraEnt.getYHeadRot(), cameraEnt.getXRot(), gravityDirection);
+                Vec3 gtranslation = new Vec3(0, -0.5, 0);
+                stack.translate(gtranslation.x, gtranslation.y, gtranslation.z);
+                stack.mulPose(Axis.ZP.rotationDegrees(180f));
+                stack.mulPose(Axis.XP.rotationDegrees(1));
 
-//                    RotationAnimation animation = GravityAPI.getRotationAnimation(player);
-//                    if (animation == null) {
-//                        return;
-//                    }
-//                    long timeMs = player.level().getGameTime() * 50 + (long) ($$4 * 50);
-//                    //ELA.getModel().setupAnim((AbstractClientPlayer) $$0, 0, 0, $$4 %1, $$8, $$11);
+                ModStrayModels.VampireHairFlesh.render(cameraEnt, $$4, stack, source, light, r, g, b, 1);
+
+                stack.popPose();
+            }
+        }
+        if (cameraEnt instanceof Player play){
+            byte bt = ((IPlayerEntity)play).roundabout$GetPos2();
+            if (bt == PlayerPosIndex.BARRAGE) {
+                stack.pushPose();
+
+                boolean isHurt = play.hurtTime > 0;
+                float r = isHurt ? 1.0F : 1.0F;
+                float g = isHurt ? 0.6F : 1.0F;
+                float b = isHurt ? 0.6F : 1.0F;
+                Direction gravityDirection = GravityAPI.getGravityDirection(cameraEnt);
+                Vec3 gtranslation = new Vec3(0, -0.4, 0);
+
+                //gtranslation = RotationUtil.vecPlayerToWorld(gtranslation,gravityDirection);
+                stack.translate(gtranslation.x, gtranslation.y, gtranslation.z);
+
+                float opacity = 0.5F;
+                if (ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().opacitySettings != null) {
+                    opacity = ConfigManager.getClientConfig().opacitySettings.opacityOfPlayerBarrageArms;
+                }
+                stack.mulPose(Axis.ZP.rotationDegrees(180f));
+                stack.mulPose(Axis.XP.rotationDegrees(-22));
+                ModStrayModels.barrageArmsPart.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light,
+                        r, g, b, opacity);
+                stack.popPose();
+            } else if (bt == PlayerPosIndex.HAIR_SPIKE_2 || bt == PlayerPosIndex.HAIR_SPIKE) {
+                stack.pushPose();
+                boolean isHurt = play.hurtTime > 0;
+
+                IPlayerEntity pl = ((IPlayerEntity) cameraEnt);
+                float r = pl.rdbt$getHairColorX();
+                float g = pl.rdbt$getHairColorY();
+                float b = pl.rdbt$getHairColorZ();
 
 
-                    if (gravityDirection == Direction.UP){
-                        Vec3 vector = new Vec3(0,cameraEnt.getEyeHeight()*0.4f,0);
-                    } else {
-                        Vec3 vector = new Vec3(0,cameraEnt.getEyeHeight()*0.15f,0);
-                        stack.translate(vector.x,vector.y,vector.z);
+                ItemStack visage = pl.roundabout$getMaskSlot();
+                    if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
+                        VisageData vd = ME.visageData;
+                        if (vd != null && vd.isCharacterVisage()) {
+                            r = ((float) vd.getHairColor().getX()) / 255;
+                            g = ((float) vd.getHairColor().getY()) / 255;
+                            b = ((float) vd.getHairColor().getZ()) / 255;
+                        }
                     }
+                Vec3 gtranslation = new Vec3(0, 0.1, 0);
+                stack.translate(gtranslation.x, gtranslation.y, gtranslation.z);
 
-
-                    //stack.mulPose(new Quaternionf(animation.getCurrentGravityRotation(gravityDirection, timeMs)).conjugate());
-
-
-                    ModStrayModels.VampireHairFlesh.render(cameraEnt, $$4, stack, source, poggers, r, g, b, 1);
-
+                stack.mulPose(Axis.ZP.rotationDegrees(180f));
+                stack.mulPose(Axis.XP.rotationDegrees(-22));
+                ModStrayModels.bodySpikePart.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light,
+                        r, g, b, 1);
                 stack.popPose();
             }
         }
@@ -1453,7 +1574,8 @@ public class ClientUtil {
                 slimBoolean = ipm.roundabout$getSlim();
             }
 
-            if (play.getUseItem().getItem() instanceof SnubnoseRevolverItem && !play.getCooldowns().isOnCooldown(play.getUseItem().getItem())) {
+            if (play.getUseItem().getItem() instanceof SnubnoseRevolverItem &&
+                    !play.getCooldowns().isOnCooldown(play.getUseItem().getItem())) {
                 stack.pushPose();
 
                 FirstPersonArmsModel.player = play;
@@ -1614,6 +1736,9 @@ public class ClientUtil {
         pl.roundabout$getSnubnoseModelRecoilLeft().stop();
         pl.roundabout$getSnubnoseAimLeft().stop();
         pl.roundabout$getSnubnoseRecoilLeft().stop();
+    }
+    public static boolean isJumpKeyHeld(){
+        return Minecraft.getInstance().options.keyJump.isDown();
     }
     public static void tommyRenderCleanupHelper(Entity cameraEnt) {
         IPlayerEntity pl = ((IPlayerEntity) cameraEnt);

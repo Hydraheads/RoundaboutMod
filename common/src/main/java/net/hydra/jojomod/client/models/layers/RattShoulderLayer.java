@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaskItem;
@@ -53,7 +54,7 @@ public class RattShoulderLayer<T extends LivingEntity, A extends HumanoidModel<T
                     }
                     StandUser user = ((StandUser) livent);
                     int heyTicks = user.roundabout$getRattShoulderVanishTicks();
-                    boolean hasHeyYaOut = (user.roundabout$getActive() && user.roundabout$getStandPowers() instanceof PowersRatt);
+                    boolean hasHeyYaOut = (PowerTypes.hasStandActive(livent) && user.roundabout$getStandPowers() instanceof PowersRatt);
                     /* all of this code is copied from hey ya! */
                     if (heyTicks > 0 || hasHeyYaOut) {
                         byte skin = user.roundabout$getStandSkin();

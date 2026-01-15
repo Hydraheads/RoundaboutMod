@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin.stand_users;
 import net.hydra.jojomod.access.IInputEvents;
 import net.hydra.jojomod.access.IMultiplayerGameMode;
 import net.hydra.jojomod.client.KeyInputRegistry;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -34,7 +35,7 @@ public abstract class PowersMultiPlayerGameMode implements IMultiplayerGameMode 
     /**Prevents stand mining from making your vanilla attack cooldown reset*/
     @Inject(method = "stopDestroyBlock()V", at = @At("HEAD"), cancellable = true)
     public void roundabout$stopDestroyBlock(CallbackInfo ci) {
-        if (((StandUser) this.minecraft.player).roundabout$getActive() && ((StandUser) this.minecraft.player).roundabout$getStandPowers().canUseMiningStand()) {
+        if (PowerTypes.hasStandActive(this.minecraft.player) && ((StandUser) this.minecraft.player).roundabout$getStandPowers().canUseMiningStand()) {
             if (this.isDestroying) {
                 BlockState $$0 = this.minecraft.level.getBlockState(this.destroyBlockPos);
                 this.minecraft.getTutorial().onDestroyBlock(this.minecraft.level, this.destroyBlockPos, $$0, -1.0F);

@@ -845,7 +845,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
 
         StandUser standUser = ((StandUser) playerEntity);
         StandPowers powers = standUser.roundabout$getStandPowers();
-        boolean standOn = standUser.roundabout$getActive();
+        boolean standOn = PowerTypes.hasStandActive(playerEntity);;
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
         if (standOn && this.getActivePower() == PowerIndex.BARRAGE_2 && attackTimeDuring > -1) {
@@ -1141,7 +1141,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
     }
 
     public boolean inShootingMode(){
-        return getStandUserSelf().roundabout$getCombatMode();
+        return getStandUserSelf().roundabout$getCombatMode() && PowerTypes.hasStandActivelyEquipped(self);
     }
     public boolean shootExplosiveBubble(){
         this.setCooldown(PowerIndex.SKILL_4, 3);
@@ -2143,7 +2143,7 @@ public void unlockSkin(){
                         addEXP(1, LE);
                     }
                 }
-                this.takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
+                takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
             } else {
                 if (chargedFinal >= maxSuperHitTime) {
                     knockShield2(entity, getKickAttackKnockShieldTime());
