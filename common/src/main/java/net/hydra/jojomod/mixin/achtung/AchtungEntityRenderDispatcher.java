@@ -23,12 +23,7 @@ public class AchtungEntityRenderDispatcher {
      */
     @Inject(method = "render(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"), cancellable = true)
     protected <E extends Entity>  void roundabout$render(E entity, double $$1, double $$2, double $$3, float $$4, float $$5, PoseStack $$6, MultiBufferSource $$7, int light, CallbackInfo ci) {
-        float throwFadeToTheEther = 1f;
-
-        IEntityAndData entityAndData = ((IEntityAndData) entity);
-        if (entityAndData.roundabout$getTrueInvisibility() > -1) {
-            throwFadeToTheEther = throwFadeToTheEther * 0.4F;
-        }
+        float throwFadeToTheEther = ClientUtil.getThrowFadePercent(entity,$$5);
 
         /**Insert code for other partially visible stands here, this is mirrored across visage
          * parts and armor rendering.*/

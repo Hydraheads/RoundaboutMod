@@ -1,6 +1,8 @@
 package net.hydra.jojomod.powers;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -186,6 +188,7 @@ public class GeneralPowers extends AbilityScapeBasis {
 
     @Override
     public void tickPower() {
+        tickFaded();
         if (!self.level().isClientSide()) {
             if (getActivePower() != PowerIndex.GUARD && getPlayerPos2() == PlayerPosIndex.GUARD) {
                 setPlayerPos2(PlayerPosIndex.NONE);
@@ -211,6 +214,51 @@ public class GeneralPowers extends AbilityScapeBasis {
         }
         super.tickPower();
     }
+
+
+    public int fadeOutTicks = 0;
+    public int fadeOutInterpolation = 0;
+    public boolean faded = false;
+
+    public boolean isFaded(){
+        return faded;
+    }
+    public void setFaded(int fadeOutTicks){
+        if (fadeOutTicks > 0) {
+            this.fadeOutTicks = fadeOutTicks;
+            faded = true;
+        } else {
+            this.fadeOutTicks = 0;
+            if (faded){
+                faded = false;
+            }
+        }
+        if (!self.level().isClientSide()){
+            if (fadeOutInterpolation >= 5) {
+                sendIntPacketIfNearby(PacketDataIndex.S2C_INT_FADE_UPDATE, fadeOutTicks, 100);
+            } else {
+                sendIntPacketIfNearby(PacketDataIndex.S2C_INT_FADE, fadeOutTicks, 100);
+            }
+        }
+    }
+    public void tickFaded(){
+        if (faded){
+            if (fadeOutInterpolation < 5){
+                fadeOutInterpolation++;
+            }
+            fadeOutTicks--;
+            if (fadeOutTicks <= 0){
+                setFaded(0);
+            } else {
+                setFaded(fadeOutTicks);
+            }
+        } else {
+            if (fadeOutInterpolation > 0){
+                fadeOutInterpolation--;
+            }
+        }
+    }
+
 
     /**Releasing right click normally stops guarding but that's something you can adjust*/
     public boolean clickRelease(){

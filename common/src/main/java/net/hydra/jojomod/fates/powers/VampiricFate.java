@@ -518,11 +518,7 @@ public int speedActivated = 0;
         if (canLatchOntoWall() && canWallWalkConfig()) {
             doWallLatchClient();
         } else if (!isPlantedInWall()) {
-            if (self.onGround()){
                 dash();
-            } else {
-                airDash();
-            }
         }
     }
     public void doWallLatchClient(){
