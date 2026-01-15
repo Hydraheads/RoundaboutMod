@@ -48,6 +48,9 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> BLOODY_STONE_MASK_BLOCK = BLOCKS.register("bloody_stone_mask",
             () -> BLOODY_STONE_MASK_PROPERTIES
     );
+    public static final RegistryObject<Block> COFFIN_BLOCK = BLOCKS.register("coffin_block",
+            () -> COFFIN_BLOCK_PROPERTIES
+    );
     public static final RegistryObject<Block> REGAL_WALL = BLOCKS.register("regal_wall",
             () -> ModBlocks.REGAL_WALL_PROPERTIES
     );

@@ -1,6 +1,7 @@
 package net.hydra.jojomod.block;
 
 import net.minecraft.world.flag.FeatureFlag;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -123,6 +124,7 @@ public class ModBlocks {
 
     public static Block EQUIPPABLE_STONE_MASK_BLOCK;
     public static Block BLOODY_STONE_MASK_BLOCK;
+    public static Block COFFIN_BLOCK;
 
     public static Block D4C_LIGHT_BLOCK;
 
@@ -662,6 +664,10 @@ public class ModBlocks {
             }));
     public static BloodyStoneMaskBlock BLOODY_STONE_MASK_PROPERTIES = new BloodyStoneMaskBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(0.35F).sound(SoundType.STONE).pushReaction(PushReaction.DESTROY).lightLevel((L) -> {
+                return 1;
+            }));
+    public static CoffinBlock COFFIN_BLOCK_PROPERTIES = new CoffinBlock(
+            DyeColor.BLACK, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(0.35F).sound(SoundType.STONE).pushReaction(PushReaction.DESTROY).lightLevel((L) -> {
                 return 1;
             }));
 

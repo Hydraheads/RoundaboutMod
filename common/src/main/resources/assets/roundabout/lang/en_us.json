@@ -1764,6 +1764,11 @@
   "text.roundabout.vampire.flesh_bud_fail": "The victim is not weakened, or is agitated",
   "text.roundabout.vampire.flesh_bud_fail_already": "A flesh bud is already planted",
 
+  "text.roundabout.vampire.coffin_occupied": "This coffin is already occupied",
+  "text.roundabout.vampire.coffin_cant_sleep": "You can sleep only at day or during thunderstorms",
+  "text.roundabout.vampire.coffin_too_far": "You may not rest now; the coffin is too far away",
+  "text.roundabout.vampire.coffin_obstructed": "This coffin is obstructed",
+
 
 
 

@@ -154,7 +154,7 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
             $$7.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 4.0F, 1.3F);
             $$7.setAmmoType(RoundaboutBulletEntity.SNUBNOSE);
             level.addFreshEntity($$7);
-            level.playSound(null, player, ModSounds.SNUBNOSE_FIRE_EVENT, SoundSource.PLAYERS, 100.0F, 1.0F);
+            level.playSound(null, player.blockPosition(), ModSounds.SNUBNOSE_FIRE_EVENT, SoundSource.PLAYERS, 100.0F, 1.0F);
             if (level instanceof ServerLevel serverLevel) {
                 Vec3 look = player.getLookAngle().normalize();
                 Vec3 up = new Vec3(0, 1, 0);

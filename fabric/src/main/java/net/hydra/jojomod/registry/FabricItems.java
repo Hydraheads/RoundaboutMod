@@ -194,6 +194,10 @@ public class FabricItems {
     public static Item RINGO_MASK = registerItem("ringo_mask", new MaskItem(new Item.Properties().stacksTo(1), new RingoVisage(null)));
     public static Item POCOLOCO_MASK = registerItem("pocoloco_mask", new MaskItem(new Item.Properties().stacksTo(1), new PocolocoVisage(null)));
 
+    public static Item COFFIN_BLOCK_ITEM = registerItem("coffin_block_item",
+            new CoffinBlockItem(DyeColor.BLACK, FabricBlocks.COFFIN_BLOCK, new Item.Properties().stacksTo(1)));
+
+
 
     public static Item AESTHETICIAN_MASK_1 = registerItem("aesthetician_mask_1", new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisage1(null)));
     public static Item AESTHETICIAN_MASK_2 = registerItem("aesthetician_mask_2", new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisage2(null)));
@@ -462,6 +466,7 @@ public class FabricItems {
                         //entries.accept(STAND_DISC_WALKING_HEART);
                         entries.accept(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK);
                         entries.accept(ModBlocks.BLOODY_STONE_MASK_BLOCK);
+                        entries.accept(COFFIN_BLOCK_ITEM);
 
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);

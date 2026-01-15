@@ -122,6 +122,12 @@ public class RoundaboutBulletEntity extends AbstractArrow {
         } else if (getAmmoType() == TOMMY_GUN) {
             itemStack = ModItems.TOMMY_AMMO.getDefaultInstance();
             return itemStack;
+        } else if (getAmmoType() == COLT) {
+            itemStack = ModItems.SNUBNOSE_AMMO.getDefaultInstance();
+            return itemStack;
+        } else if (getAmmoType() == SNIPER) {
+            itemStack = ModItems.SNIPER_AMMO.getDefaultInstance();
+            return itemStack;
         }
         return ItemStack.EMPTY;
     }

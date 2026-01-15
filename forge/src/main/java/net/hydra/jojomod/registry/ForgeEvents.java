@@ -124,6 +124,7 @@ public class ForgeEvents {
         ModBlocks.IMPACT_MOUND = ForgeBlocks.IMPACT_MOUND.get();
         ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK = ForgeBlocks.EQUIPPABLE_STONE_MASK_BLOCK.get();
         ModBlocks.BLOODY_STONE_MASK_BLOCK = ForgeBlocks.BLOODY_STONE_MASK_BLOCK.get();
+        ModBlocks.COFFIN_BLOCK = ForgeBlocks.COFFIN_BLOCK.get();
         ModBlocks.REGAL_FLOOR = ForgeBlocks.REGAL_FLOOR.get();
         ModBlocks.WOODEN_MANOR_TABLE = ForgeBlocks.WOODEN_MANOR_TABLE.get();
         ModBlocks.WOODEN_MANOR_CHAIR = ForgeBlocks.WOODEN_MANOR_CHAIR.get();

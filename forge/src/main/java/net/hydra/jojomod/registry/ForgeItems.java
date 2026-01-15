@@ -1,6 +1,7 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.block.CoffinBlock;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.visagedata.*;
@@ -92,6 +93,10 @@ public class ForgeItems {
             )));
     public static final RegistryObject<BlockItem> BLOODY_STONE_MASK_ITEM = addToWIPTab(ITEMS.register("bloody_stone_mask",
             () -> new BloodyStoneMaskBlockItem(ForgeBlocks.BLOODY_STONE_MASK_BLOCK.get(),
+                    new Item.Properties().stacksTo(1)
+            )));
+    public static final RegistryObject<BlockItem> COFFIN_BLOCK_ITEM = addToWIPTab(ITEMS.register("coffin_block",
+            () -> new CoffinBlockItem(DyeColor.BLACK, ForgeBlocks.COFFIN_BLOCK.get(),
                     new Item.Properties().stacksTo(1)
             )));
     public static final RegistryObject<BlockItem> REGAL_WALL_ITEM = addToBuildingTab(ITEMS.register("regal_wall",

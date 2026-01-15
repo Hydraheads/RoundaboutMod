@@ -12,10 +12,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import static net.hydra.jojomod.block.ModBlocks.*;
@@ -169,6 +171,7 @@ public class FabricBlocks {
 
     public static final Block EQUIPPABLE_STONE_MASK = registerStoneMask("stone_mask", ModBlocks.EQUIPPABLE_STONE_MASK_PROPERTIES);
     public static final Block BLOODY_STONE_MASK = registerStoneMaskBloody("bloody_stone_mask", BLOODY_STONE_MASK_PROPERTIES);
+    public static final Block COFFIN_BLOCK = registerCoffinBlock("coffin_block", COFFIN_BLOCK_PROPERTIES);
 
 
     public static final BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY =
@@ -239,6 +242,9 @@ public class FabricBlocks {
     private static Item registerStoneMaskBloodyBlockItem(String name, Block block){
         return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID, name),
                 new BloodyStoneMaskBlockItem(block, new Item.Properties().stacksTo(1)));
+    }
+    private static Block registerCoffinBlock(String name, Block block){
+        return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
     }
 
     public static void register(){
@@ -337,6 +343,7 @@ public class FabricBlocks {
         ModBlocks.FOG_TRAP = FOG_TRAP;
         ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK = EQUIPPABLE_STONE_MASK;
         ModBlocks.BLOODY_STONE_MASK_BLOCK = BLOODY_STONE_MASK;
+        ModBlocks.COFFIN_BLOCK = COFFIN_BLOCK;
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
