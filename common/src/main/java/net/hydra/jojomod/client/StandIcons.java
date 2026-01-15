@@ -177,6 +177,16 @@ public class StandIcons {
             "textures/gui/icons/dodge.png");
     public static final ResourceLocation HAIR_SPIKE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/powers/vampire/hair_spike.png");
+    public static final ResourceLocation BLOOD_CLUTCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/vampire/blood_clutch.png");
+    public static final ResourceLocation ICE_CLUTCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/vampire/ice_clutch.png");
+    public static final ResourceLocation RIPPER_EYES = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/vampire/ripper_eyes.png");
+    public static final ResourceLocation AURA = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/vampire/aura.png");
+    public static final ResourceLocation DEFLECTION = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/vampire/deflection.png");
     public static final ResourceLocation HAIR_GRAB = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/powers/vampire/hair_grab.png");
     public static final ResourceLocation STAND_LEAP_WORLD = new ResourceLocation(Roundabout.MOD_ID,

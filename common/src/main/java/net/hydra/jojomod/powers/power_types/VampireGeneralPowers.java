@@ -1,6 +1,5 @@
 package net.hydra.jojomod.powers.power_types;
 
-import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -411,13 +410,23 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             } else {
                 setSkillIcon(context, x, y, 1, StandIcons.HAIR_SPIKE, PowerIndex.GENERAL_1);
             }
-            setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.GENERAL_2);
+            if (isHoldingSneak()) {
+                setSkillIcon(context, x, y, 2, StandIcons.ICE_CLUTCH, PowerIndex.GENERAL_2_SNEAK);
+            } else {
+                setSkillIcon(context, x, y, 2, StandIcons.BLOOD_CLUTCH, PowerIndex.GENERAL_2);
+            }
             if ((vp.canLatchOntoWall() || (vp.isPlantedInWall() && !isHoldingSneak())) && vp.canWallWalkConfig()) {
                 setSkillIcon(context, x, y, 3, StandIcons.WALL_WALK_VAMP, PowerIndex.FATE_3);
             } else if (isHoldingSneak()) {
-                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+                setSkillIcon(context, x, y, 3, StandIcons.AURA, PowerIndex.GENERAL_3);
             } else {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+            }
+
+            if (isHoldingSneak()) {
+                setSkillIcon(context, x, y, 4, StandIcons.DEFLECTION, PowerIndex.GENERAL_4_SNEAK);
+            } else {
+                setSkillIcon(context, x, y, 4, StandIcons.RIPPER_EYES, PowerIndex.GENERAL_4);
             }
         }
     }
