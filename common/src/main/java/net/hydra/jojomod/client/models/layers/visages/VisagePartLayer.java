@@ -66,6 +66,9 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 entity = (T)fcg.player;
             }
 
+            if (ClientUtil.getThrowFadePercent(entity,partialTicks) <= 0){
+                return;
+            }
             boolean $$18 = !entity.isInvisible();
             boolean $$19 = !$$18 && !entity.isInvisibleTo(minecraft.player);
             boolean $$20 = minecraft.shouldEntityAppearGlowing(entity);

@@ -3714,6 +3714,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     protected void roundabout$getArmorCoverPercentage(CallbackInfoReturnable<Float> cir) {
         if (roundabout$getTrueInvis() > -1 && ClientNetworking.getAppropriateConfig().achtungSettings.hidesArmor) {
             cir.setReturnValue(0f);
+        } else if (rdbt$this() instanceof Player pl && ((IPowersPlayer)pl).rdbt$getPowers().isFaded()){
+            cir.setReturnValue(0f);
         }
     }
     /**This code prevents you from swimming upwards while barrage clashing*/
