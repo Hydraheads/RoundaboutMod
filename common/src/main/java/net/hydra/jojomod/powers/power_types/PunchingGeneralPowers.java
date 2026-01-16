@@ -422,7 +422,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
                             barrageImpact2(entity, lastHit, knockbackStrength);
                         } else {
                             if (lastHit) {
-                                knockShield2(entity, 200);
+                                knockShield2(entity, 100);
                                 if (!sideHit) {
                                     playBarrageBlockEndNoise(0, entity);
                                 }
