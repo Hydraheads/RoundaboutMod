@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.ILevelAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -416,6 +417,10 @@ public abstract class EntityAndData implements IEntityAndData {
             }
             cir.setReturnValue(true);
             return;
+        } else if (((Entity)(Object)this) instanceof Player pl && ((IPowersPlayer)pl).rdbt$getPowers().isFaded()){
+            if (!this.level().isClientSide()){
+                cir.setReturnValue(true);
+            }
         }
 
         if (roundabout$getMetallicaInvisibility() > -1) {

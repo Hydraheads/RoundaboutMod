@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.achtung;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -53,6 +54,8 @@ public class AchtungItemInHandRenderer {
                     }
                 }
                  **/
+            } else if (((IPowersPlayer)localPlayer).rdbt$getPowers().isFaded()){
+                throwFadeToTheEther = throwFadeToTheEther*0.6F;
             }
             ClientUtil.setThrowFadeToTheEther(throwFadeToTheEther);
         }

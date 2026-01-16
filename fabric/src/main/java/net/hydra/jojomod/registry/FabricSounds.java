@@ -282,6 +282,8 @@ public class FabricSounds {
 
         addSound(ModSounds.BOWLER_HAT_AIM_ID, ModSounds.BOWLER_HAT_AIM_SOUND_EVENT);
         addSound(ModSounds.BOWLER_HAT_FLY_ID, ModSounds.BOWLER_HAT_FLY_SOUND_EVENT);
+        addSound(ModSounds.VAMPIRE_DASH_ID, ModSounds.VAMPIRE_DASH_EVENT);
+        addSound(ModSounds.VAMPIRE_GLEAM_ID, ModSounds.VAMPIRE_GLEAM_EVENT);
 
         addSound(ModSounds.GLAIVE_CHARGE_ID, ModSounds.GLAIVE_CHARGE_EVENT);
         addSound(ModSounds.GLAIVE_ATTACK_ID, ModSounds.GLAIVE_ATTACK_EVENT);

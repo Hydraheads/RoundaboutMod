@@ -1,16 +1,13 @@
 package net.hydra.jojomod.powers.power_types;
 
-import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.PlayerPosIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.PowerTypes;
-import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -83,16 +80,35 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 case SKILL_1_CROUCH -> {
                     clientHairGrab();
                 }
+                case SKILL_2_NORMAL -> {
+                    clientBloodDash();
+                }
                 case SKILL_3_NORMAL -> {
-                    vp.dashOrWallWalk();
+                    dashOrWallWalk(vp);
                 }
                 case SKILL_3_CROUCH -> {
-                    vp.dashOrWallWalk();
+                    dashOrWallWalk(vp);
                 }
             }
         }
     };
+    public void dashOrWallWalk(VampiricFate vp){
+        if (vp.canLatchOntoWall() && vp.canWallWalkConfig()) {
+            vp.doWallLatchClient();
+        } else if (!vp.isPlantedInWall()) {
+            if (self.onGround()){
+                dash();
+            } else {
+                airDash();
+            }
+        }
+    }
 
+    public void clientBloodDash(){
+        if (canAttack2() && !onCooldown(PowerIndex.GENERAL_1_SNEAK)){
+            this.tryPower(POWER_HAIR_GRAB);
+        }
+    }
     public void clientHairGrab(){
         if (canAttack2() && !onCooldown(PowerIndex.GENERAL_1_SNEAK)){
             this.tryPower(POWER_HAIR_GRAB);
@@ -101,15 +117,17 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
     @Override
     public void doDashMove(int backwards){
-        ((StandUser) this.getSelf()).roundabout$tryPower(AIR_DASH, true);
+        ((StandUser) this.getSelf()).roundabout$tryPowerP(AIR_DASH, true);
         tryIntPowerPacket(AIR_DASH, backwards);
     }
 
+
     public boolean setPowerMovementAir(int lastMove) {
-        if (this.getSelf() instanceof Player) {
+        if (this.getSelf() instanceof Player PE) {
             cancelConsumableItem(this.getSelf());
             this.setPowerNone();
             if (!this.getSelf().level().isClientSide()) {
+                sendIntPacketIfNearby(PacketDataIndex.S2C_INT_FADE, 20, 100);
                 ((IPlayerEntity)this.getSelf()).roundabout$setClientDodgeTime(0);
                 ((IPlayerEntity) this.getSelf()).roundabout$setDodgeTime(0);
                 if (storedInt < 0) {
@@ -350,10 +368,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             }
         }
 
-        if (this.canChangePower(move, forced)) {
-            if (move == AIR_DASH) {
-                this.storedInt = chargeTime;
-            }
+        if (move == AIR_DASH) {
+            this.storedInt = chargeTime;
         }
         return super.tryIntPower(move,forced,chargeTime);
     }
@@ -411,13 +427,23 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             } else {
                 setSkillIcon(context, x, y, 1, StandIcons.HAIR_SPIKE, PowerIndex.GENERAL_1);
             }
-            setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.GENERAL_2);
+            if (isHoldingSneak()) {
+                setSkillIcon(context, x, y, 2, StandIcons.ICE_CLUTCH, PowerIndex.GENERAL_2_SNEAK);
+            } else {
+                setSkillIcon(context, x, y, 2, StandIcons.BLOOD_CLUTCH, PowerIndex.GENERAL_2);
+            }
             if ((vp.canLatchOntoWall() || (vp.isPlantedInWall() && !isHoldingSneak())) && vp.canWallWalkConfig()) {
                 setSkillIcon(context, x, y, 3, StandIcons.WALL_WALK_VAMP, PowerIndex.FATE_3);
             } else if (isHoldingSneak()) {
-                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+                setSkillIcon(context, x, y, 3, StandIcons.AURA, PowerIndex.GENERAL_3);
             } else {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+            }
+
+            if (isHoldingSneak()) {
+                setSkillIcon(context, x, y, 4, StandIcons.DEFLECTION, PowerIndex.GENERAL_4_SNEAK);
+            } else {
+                setSkillIcon(context, x, y, 4, StandIcons.RIPPER_EYES, PowerIndex.GENERAL_4);
             }
         }
     }

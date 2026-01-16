@@ -71,19 +71,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         }
     }
 
-    @ModifyArgs(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/EntityModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V"))
-    private void roundabout$modifyRenderAlpha(Args args, T entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
-        if (entity instanceof IEntityAndData data && data.roundabout$getMetallicaInvisibility() > -1) {
-            Minecraft mc = Minecraft.getInstance();
-            if (mc.cameraEntity != null) {
-                double dist = entity.distanceTo(mc.cameraEntity);
-                float alpha = PowersMetallica.getMetallicaInvisibilityAlpha(entity, dist, partialTicks);
 
-                args.set(7, alpha);
-            }
-        }
-    }
 
     @Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
     private void roundabout$forceTranslucent(T entity, boolean bodyVisible, boolean translucent, boolean glowing, CallbackInfoReturnable<RenderType> cir) {

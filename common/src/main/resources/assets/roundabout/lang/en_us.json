@@ -503,6 +503,8 @@
   "sounds.roundabout.vsong_damnable_ceremony": "Damnable Ceremony",
   "sounds.roundabout.vsong_gothic_organ": "Gothic Organ",
 
+  "sounds.roundabout.vampire_dash": "Fwoosh",
+  "sounds.roundabout.vampire_gleam": "Sparkle",
 
   "death.attack.stand": "%1$s died to a mysterious power whilst fighting %2$s",
   "death.attack.stand.item": "%1$s died to a mysterious power whilst fighting %2$s",

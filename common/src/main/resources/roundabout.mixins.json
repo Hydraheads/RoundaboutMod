@@ -308,6 +308,7 @@
     "items.RoadRollerPlayerRendererMixin",
     "items.StoneMaskCustomHeadLayerMixin",
     "items.visages.VisageHumanoidArmorLayer",
+    "justice.FogCloneHumanoidArmorLayer",
     "justice.JusticeAbstractZombieRenderer",
     "justice.JusticeFogRenderer",
     "justice.JusticeHumanoidArmorLayer",

@@ -491,6 +491,10 @@ public class ForgeSounds {
             register(ModSounds.HARPOON_RETURN, ModSounds.HARPOON_RETURN_ID);
     public static final RegistryObject<SoundEvent> BOWLER_HAT_AIM =
             register(ModSounds.BOWLER_HAT_AIM_SOUND, ModSounds.BOWLER_HAT_AIM_ID);
+    public static final RegistryObject<SoundEvent> VAMPIRE_DASH =
+            register(ModSounds.VAMPIRE_DASH, ModSounds.VAMPIRE_DASH_ID);
+    public static final RegistryObject<SoundEvent> VAMPIRE_GLEAM =
+            register(ModSounds.VAMPIRE_GLEAM, ModSounds.VAMPIRE_GLEAM_ID);
     public static final RegistryObject<SoundEvent> BOWLER_HAT_FLY =
             register(ModSounds.BOWLER_HAT_FLY_SOUND, ModSounds.BOWLER_HAT_FLY_ID);
     public static final RegistryObject<SoundEvent> GLAIVE_CHARGE =

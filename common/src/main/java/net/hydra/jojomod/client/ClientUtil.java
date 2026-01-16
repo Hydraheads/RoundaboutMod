@@ -29,7 +29,9 @@ import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
 import net.hydra.jojomod.networking.ClientToServerPackets;
+import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
+import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -718,6 +720,11 @@ public class ClientUtil {
             if (((IPowersPlayer) player).rdbt$getPowers() instanceof PunchingGeneralPowers pgp){
                 pgp.setComboExpireTicks(data);
             }
+        } else if (context == PacketDataIndex.S2C_INT_FADE){
+            ((IPowersPlayer) player).rdbt$getPowers().setFaded(data);
+        } else if (context == PacketDataIndex.S2C_INT_FADE_UPDATE){
+            ((IPowersPlayer) player).rdbt$getPowers().fadeOutInterpolation = 5;
+            ((IPowersPlayer) player).rdbt$getPowers().setFaded(data);
         }
     }
 
@@ -814,6 +821,34 @@ public class ClientUtil {
     public static boolean hideInvis = false;
     public static boolean getHideInvis(){
         return hideInvis;
+    }
+
+    public static float getThrowFadePercent(Entity ent, float delta){
+        float throwFade = 1f;
+        delta = delta % 1;
+        IEntityAndData entityAndData = ((IEntityAndData) ent);
+        if (entityAndData.roundabout$getTrueInvisibility() > -1) {
+            throwFade = throwFade * 0.4F;
+        }
+        if (ent instanceof Player pl){
+            GeneralPowers gp = ((IPowersPlayer)pl).rdbt$getPowers();
+            int interp = gp.fadeOutInterpolation;
+            if (gp.isFaded()){
+                throwFade = (float) (throwFade *
+                        (1.0-
+                                Math.min(((((float)interp)*0.2f) +(delta*(0.2f))),1)
+                ));
+            } else {
+                if (interp > 0) {
+                    throwFade = (float) (throwFade *
+                            (0.0 +
+                                    Math.max(((((float) interp) * 0.2f) + (delta*(0.2f))), 1)
+                            ));
+                }
+            }
+        }
+
+        return throwFade;
     }
 
     public static void setThrowFadeToTheEther(float ether){

@@ -11,6 +11,18 @@
       "roundabout:summon_diver_down"
     ]
   },
+  "vampire_dash": {
+    "subtitle": "sounds.roundabout.vampire_dash",
+    "sounds": [
+      "roundabout:vampire_dash"
+    ]
+  },
+  "vampire_gleam": {
+    "subtitle": "sounds.roundabout.vampire_gleam",
+    "sounds": [
+      "roundabout:vampire_dash"
+    ]
+  },
   "killer_queen_barrage": {
     "subtitle": "sounds.roundabout.killer_queen_barrage",
     "sounds": [
