@@ -457,12 +457,15 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     }
 
 
-    public float getSuckStrength(Entity entity){
-        if (this.getReducedDamage(entity)){
-            return 4F;
-        } else {
-            return 6F;
+    public float getSuckStrength(Entity entity) {
+        if (self instanceof Player pl && ((IFatePlayer) pl).rdbt$getFatePowers() instanceof VampireFate vp) {
+            if (this.getReducedDamage(entity)) {
+                return 2F;
+            } else {
+                return 6F;
+            }
         }
+        return 1;
     }
 
     @Override
@@ -556,7 +559,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 attackTargetId = 0;
                 float pow;
                 float knockbackStrength;
-                pow = getSuckStrength(entity)*1.2F;
+                pow = getSuckStrength(entity);
                 pow = applyComboDamage(pow);
                 knockbackStrength = 0.10F;
 
@@ -584,7 +587,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                                 0.25);
 
                         if (self instanceof Player pl) {
-                            if (MainUtil.canDrinkBloodCritAggro(entity,self)){
+                            if (MainUtil.canDrinkBloodCritAggro(entity,self) && !(entity instanceof Player)){
                                 ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CRIT,
                                         entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
                                         10,
