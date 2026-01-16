@@ -1,10 +1,7 @@
 package net.hydra.jojomod.powers.power_types;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IEntityAndData;
-import net.hydra.jojomod.access.IFatePlayer;
-import net.hydra.jojomod.access.IGravityEntity;
-import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
@@ -27,6 +24,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -61,6 +59,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
     public static final byte BLOOD_CLUTCH = PowerIndex.POWER_2;
     public static final byte BLOOD_CLUTCH_2 = PowerIndex.POWER_2_BONUS;
+    public static final byte BLOOD_CLUTCH_ATTACK = PowerIndex.POWER_2_EXTRA;
 
     public static final byte AIR_DASH = PowerIndex.POWER_3;
 
@@ -339,6 +338,12 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         } else {
                             self.setDeltaMovement(self.getLookAngle().scale(0.4f).add(grav));
                         }
+                        Entity TE2 = getTargetEntity(self, 1F, getPunchAngle());
+                        if (TE2 != null){
+                            tryIntPowerPacket(BLOOD_CLUTCH_ATTACK,TE2.getId());
+                            xTryPower(PowerIndex.NONE, false);
+                            tryPowerPacket(NONE);
+                        }
                     }
                 }
             }
@@ -394,7 +399,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 attackTargetId = chargeTime;
             } if (move == POWER_HAIR_GRAB) {
                 attackTargetId = chargeTime;
+            } if (move == BLOOD_CLUTCH_ATTACK) {
+                attackTargetId = chargeTime;
             }
+
         }
 
         if (move == AIR_DASH) {
@@ -444,6 +452,15 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             }
         } else {
             return super.getPunchStrength(entity);
+        }
+    }
+
+
+    public float getSuckStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return 4F;
+        } else {
+            return 6F;
         }
     }
 
@@ -525,9 +542,64 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             bloodClutch();
         } else if (move == BLOOD_CLUTCH_2){
             bloodClutch2();
+        } else if (move == BLOOD_CLUTCH_ATTACK){
+            doSuckHit();
         }
 
         return super.setPowerOther(move,lastMove);
+    }
+
+    public void suckImpact(Entity entity){
+        if (!this.self.level().isClientSide()) {
+            if (entity != null) {
+                attackTargetId = 0;
+                float pow;
+                float knockbackStrength;
+                pow = getSuckStrength(entity)*1.2F;
+                pow = applyComboDamage(pow);
+                knockbackStrength = 0.40F;
+
+                if (MainUtil.canDrinkBlood(entity)) {
+                    if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
+                        hitParticles(entity);
+                        takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
+                        this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.1f + Math.random() * 0.1f));
+                        self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SUCK_DRAIN_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
+                        addToCombo();
+                        if (self instanceof Player pl) {
+                            if (MainUtil.canDrinkBloodCritAggro(entity,self)){
+                                ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CRIT,
+                                        entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
+                                        10,
+                                        0.2,
+                                        0.2,
+                                        0.2,
+                                        0.01);
+                                if (pl.canEat(false)) {
+                                    pl.getFoodData().eat(6, 1.0F);
+                                } else {
+                                    if (((AccessFateFoodData) pl.getFoodData()).rdbt$getRealSaturation() < 7) {
+                                        pl.getFoodData().eat(6, 0.5F);
+                                    } else {
+                                        pl.getFoodData().eat(6, 0);
+                                    }
+                                }
+                            } else {
+                                pl.getFoodData().eat(2, 0.0F);
+                            }
+                        }
+                    } else {
+                        if (!this.self.level().isClientSide()) {
+                            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
+                        }
+                    }
+                } else {
+                    if (!this.self.level().isClientSide()) {
+                        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.VAMPIRE_GLEAM_EVENT, SoundSource.PLAYERS, 1F, (float) (0.65f + Math.random() * 0.1f));
+                    }
+                }
+            }
+        }
     }
 
     public void bloodClutch(){
@@ -535,6 +607,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         setActivePower(BLOOD_CLUTCH);
         if (!self.level().isClientSide()) {
 
+            setCooldown(PowerIndex.GENERAL_2,240);
+            S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
+                    PowerIndex.GENERAL_2, 240);
             if (getPlayerPos2() != PlayerPosIndex.CLUTCH_WINDUP) {
                 setPlayerPos2(PlayerPosIndex.CLUTCH_WINDUP);
             }
@@ -643,7 +718,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     }
 
     public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
-        if (num == PowerIndex.GENERAL_1 || num == PowerIndex.GENERAL_1_SNEAK) {
+        if (num == PowerIndex.GENERAL_1 || num == PowerIndex.GENERAL_1_SNEAK || num == PowerIndex.GENERAL_2) {
             return true;
         }
         return super.isServerControlledCooldown(ci, num);
@@ -704,6 +779,16 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             self.setDeltaMovement(lower.x(),-1.8,lower.z());
         }
     }
+
+    public void doSuckHit(){
+        if (!self.level().isClientSide()) {
+            Entity target = null;
+            if (attackTargetId > 0) {
+                target = self.level().getEntity(attackTargetId);
+            }
+            suckImpact(target);
+        }
+    }
     public void doDiveHit(){
         if (!self.level().isClientSide()) {
             Entity target = null;
@@ -725,8 +810,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
     @Override
     public boolean interceptDamageEvent(DamageSource $$0, float $$1) {
-        if (getActivePower() == POWER_DIVE && $$0.is(DamageTypes.MOB_ATTACK)){
+        if ((getActivePower() == POWER_DIVE || getActivePower() == BLOOD_CLUTCH_2) && $$0.is(DamageTypes.MOB_ATTACK)){
             return true;
+        } else if (getActivePower() == BLOOD_CLUTCH || getActivePower() == BLOOD_CLUTCH_2){
+            xTryPower(PowerIndex.NONE,true);
         }
         return false;
     }
