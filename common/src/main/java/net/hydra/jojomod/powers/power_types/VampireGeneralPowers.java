@@ -1,6 +1,7 @@
 package net.hydra.jojomod.powers.power_types;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -326,6 +327,19 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     if (attackTimeDuring > 7) {
                         xTryPower(BLOOD_CLUTCH_2, true);
                     }
+                } else if (getActivePower() == BLOOD_CLUTCH_2) {
+                    if (attackTimeDuring > 7) {
+                        xTryPower(PowerIndex.NONE, false);
+                        tryPowerPacket(NONE);
+                    } else {
+                        Vec3 grav = new Vec3(0,-0.1f,0);
+                        grav = RotationUtil.vecPlayerToWorld(grav,((IGravityEntity)self).roundabout$getGravityDirection());
+                        if (self.onGround()){
+                            self.setDeltaMovement(self.getLookAngle().scale(0.5f).add(grav));
+                        } else {
+                            self.setDeltaMovement(self.getLookAngle().scale(0.4f).add(grav));
+                        }
+                    }
                 }
             }
 
@@ -468,7 +482,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     }
 
     public boolean bigJumpBlocker(){
-        return isSpiking() || super.bigJumpBlocker();
+        return isSpiking() || getActivePower() == BLOOD_CLUTCH || super.bigJumpBlocker();
     }
 
     @Override
