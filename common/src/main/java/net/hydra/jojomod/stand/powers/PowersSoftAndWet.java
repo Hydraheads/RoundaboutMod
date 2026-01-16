@@ -674,8 +674,8 @@ public class PowersSoftAndWet extends NewPunchingStand {
         ItemStack stack2 = this.getSelf().getOffhandItem();
         return ((!stack.isEmpty() && stack.getItem() instanceof PotionItem PI && PotionUtils.getPotion(stack) == Potions.WATER)
         || (!stack2.isEmpty() && stack2.getItem() instanceof PotionItem PI2 && PotionUtils.getPotion(stack2) == Potions.WATER)
-        ||(!stack.isEmpty() && stack.getItem() instanceof BucketItem BI && ((IBucketItem)BI).roundabout$getContents().is(FluidTags.WATER))
-                || (!stack2.isEmpty() && stack2.getItem() instanceof BucketItem BI2 && ((IBucketItem)BI2).roundabout$getContents().is(FluidTags.WATER)));
+        ||(!stack.isEmpty() && stack.getItem() instanceof BucketItem BI && ((IBucketItem)BI).roundabout$getContents() != null && ((IBucketItem)BI).roundabout$getContents().is(FluidTags.WATER))
+                || (!stack2.isEmpty() && stack2.getItem() instanceof BucketItem BI2  && ((IBucketItem)BI2).roundabout$getContents() != null  && ((IBucketItem)BI2).roundabout$getContents().is(FluidTags.WATER)));
     }
 
     /**For mob ai, change the bubbleType before trypower to set what kind of plunder it has*/
@@ -1176,7 +1176,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
                 }
                 if (!PL.level().isClientSide())
                     splashWaterShield();
-            } else if ((!stack.isEmpty() && stack.getItem() instanceof BucketItem BI && ((IBucketItem)BI).roundabout$getContents().is(FluidTags.WATER))) {
+            } else if ((!stack.isEmpty() && stack.getItem() instanceof BucketItem BI && ((IBucketItem)BI).roundabout$getContents() != null && ((IBucketItem)BI).roundabout$getContents().is(FluidTags.WATER))) {
                 isBucketSpawned = true;
                 if (!PL.level().isClientSide())
                     splashWaterShield();
@@ -1187,7 +1187,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
                 }
                 if (!PL.level().isClientSide())
                     splashWaterShield();
-            } else if ((!stack2.isEmpty() && stack2.getItem() instanceof BucketItem BI && ((IBucketItem)BI).roundabout$getContents().is(FluidTags.WATER))) {
+            } else if ((!stack2.isEmpty() && stack2.getItem() instanceof BucketItem BI && ((IBucketItem)BI).roundabout$getContents() != null && ((IBucketItem)BI).roundabout$getContents().is(FluidTags.WATER))) {
 
                 isBucketSpawned = true;
                 if (!PL.level().isClientSide())
