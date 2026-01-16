@@ -4,6 +4,7 @@ import net.hydra.jojomod.block.CoffinBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -11,15 +12,29 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ServerPlayer.class)
 public abstract class CoffinPreventWakeupMixin {
 
+    @Unique
+    public boolean rdbt$ticking = false;
+    @Inject(method = "doTick", at = @At("HEAD"))
+    private void coffinTick(CallbackInfo ci) {
+        rdbt$ticking = true;
+    }
+    @Inject(method = "doTick", at = @At("TAIL"))
+    private void coffinTickEnd(CallbackInfo ci) {
+        rdbt$ticking = false;
+    }
     @Inject(method = "stopSleepInBed", at = @At("HEAD"), cancellable = true)
     private void preventCoffinWakeup(boolean wakeImmediately, boolean updateLevelForSleepingPlayers, CallbackInfo ci) {
-        ServerPlayer player = (ServerPlayer)(Object)this;
-        if (player.getSleepingPos().isEmpty()) return;
-        BlockPos pos = player.getSleepingPos().get();
+        if (rdbt$ticking) {
+            ServerPlayer player = (ServerPlayer) (Object) this;
+            if (player.getSleepingPos().isEmpty()) return;
+            BlockPos pos = player.getSleepingPos().get();
 
-        if (player.level().getBlockState(pos).getBlock() instanceof CoffinBlock && !wakeImmediately && player.level().isDay()
-                || player.level().getBlockState(pos).getBlock() instanceof CoffinBlock && !wakeImmediately && player.level().isNight() && player.level().isThundering()) {
-            ci.cancel();
+            if (player.level().getBlockState(pos).getBlock() instanceof CoffinBlock && !wakeImmediately && player.level().isDay()
+                    || player.level().getBlockState(pos).getBlock() instanceof CoffinBlock && !wakeImmediately && player.level().isNight() && player.level().isThundering()) {
+                ci.cancel();
+            }
         }
     }
+
+
 }
