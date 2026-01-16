@@ -5,6 +5,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IKeyMapping;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.index.AnubisMemory;
@@ -73,7 +74,8 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
         this.currentlyHovered = (byte)-1;
         if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
             List<AnubisMemory> memories = PA.memories;
-            for (int i = 0; i < memories.size(); ++i) {
+            final int count = pl.isCreative() ? 8 : ((IPlayerEntity)pl).roundabout$getStandLevel();
+            for (int i = 0; i < count; ++i) {
                 AnubisMemory memory = memories.get(i);
                 corpseIcon pIcon = new corpseIcon(memory.item,(byte)i,positions[i][0], positions[i][1]+31 );
                 this.slots.add(new PoseSlot(pIcon, this.width / 2 + pIcon.xoff - 13, this.height / 2 + pIcon.yoff - 44));

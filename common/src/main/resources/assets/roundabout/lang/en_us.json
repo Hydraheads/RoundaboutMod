@@ -1443,6 +1443,9 @@
   "leveling.roundabout.disc_wip": "Work in Progress, Not Obtainable",
   "leveling.roundabout.disc_wip_2": "Abilities are not complete or ready",
 
+  "leveling.roundabout.levelup.memory": "Stand Development: New Memory Slot!",
+  "leveling.roundabout.levelup.max.memory": "Max Development: New Memory Slot!",
+
   "leveling.roundabout.levelup.vampire": "You Became Stronger, Skill Point Unlocked!",
 
   "leveling.roundabout.max_levelup.vampire": "Greatest High, Final Skill Point Unlocked!",
