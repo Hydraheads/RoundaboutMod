@@ -190,30 +190,27 @@ public class GeneralPowers extends AbilityScapeBasis {
     public void tickPower() {
         tickFaded();
         if (!self.level().isClientSide()) {
-            if (getActivePower() != PowerIndex.GUARD && getPlayerPos2() == PlayerPosIndex.GUARD) {
+            byte activePower = getActivePower();
+            if (activePower != PowerIndex.GUARD && getPlayerPos2() == PlayerPosIndex.GUARD) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            } else if (activePower != PowerIndex.BARRAGE_CHARGE && getPlayerPos2() == PlayerPosIndex.BARRAGE_CHARGE) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            } else if (activePower != PowerIndex.BARRAGE && getPlayerPos2() == PlayerPosIndex.BARRAGE) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            } else if (activePower != PowerIndex.SNEAK_ATTACK && getPlayerPos2() == PlayerPosIndex.SWEEP_KICK) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            } else if (activePower != VampireGeneralPowers.POWER_SPIKE && getPlayerPos2() == PlayerPosIndex.HAIR_SPIKE) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            } else if (activePower != VampireGeneralPowers.POWER_SPIKE && getPlayerPos2() == PlayerPosIndex.HAIR_SPIKE_2) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            } else if (!(activePower == VampireGeneralPowers.BLOOD_CLUTCH || activePower == VampireGeneralPowers.ICE_CLUTCH)
+                    && getPlayerPos2() == PlayerPosIndex.CLUTCH_WINDUP) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            } else if (!(activePower == VampireGeneralPowers.BLOOD_CLUTCH_2 || activePower == VampireGeneralPowers.ICE_CLUTCH_2)
+                    && getPlayerPos2() == PlayerPosIndex.CLUTCH_DASH) {
                 setPlayerPos2(PlayerPosIndex.NONE);
             }
-            if (getActivePower() != PowerIndex.BARRAGE_CHARGE && getPlayerPos2() == PlayerPosIndex.BARRAGE_CHARGE) {
-                setPlayerPos2(PlayerPosIndex.NONE);
-            }
-            if (getActivePower() != PowerIndex.BARRAGE && getPlayerPos2() == PlayerPosIndex.BARRAGE) {
-                setPlayerPos2(PlayerPosIndex.NONE);
-            }
-            if (getActivePower() != PowerIndex.SNEAK_ATTACK && getPlayerPos2() == PlayerPosIndex.SWEEP_KICK) {
-                setPlayerPos2(PlayerPosIndex.NONE);
-            }
-            if (getActivePower() != VampireGeneralPowers.POWER_SPIKE && getPlayerPos2() == PlayerPosIndex.HAIR_SPIKE) {
-                setPlayerPos2(PlayerPosIndex.NONE);
-            }
-            if (getActivePower() != VampireGeneralPowers.POWER_SPIKE && getPlayerPos2() == PlayerPosIndex.HAIR_SPIKE_2) {
-                setPlayerPos2(PlayerPosIndex.NONE);
-            }
-            if (getActivePower() != VampireGeneralPowers.BLOOD_CLUTCH && getPlayerPos2() == PlayerPosIndex.CLUTCH_WINDUP) {
-                setPlayerPos2(PlayerPosIndex.NONE);
-            }
-            if (getActivePower() != VampireGeneralPowers.BLOOD_CLUTCH_2 && getPlayerPos2() == PlayerPosIndex.CLUTCH_DASH) {
-                setPlayerPos2(PlayerPosIndex.NONE);
-            }
+
             if (this.self instanceof Player PE && PE.isSpectator()) {
                 ((StandUser) this.getSelf()).roundabout$setActive(false);
             }
