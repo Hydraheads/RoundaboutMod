@@ -21,6 +21,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -557,15 +558,31 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 float knockbackStrength;
                 pow = getSuckStrength(entity)*1.2F;
                 pow = applyComboDamage(pow);
-                knockbackStrength = 0.40F;
+                knockbackStrength = 0.10F;
 
                 if (MainUtil.canDrinkBlood(entity)) {
                     if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
                         hitParticles(entity);
                         takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
+                        if (!(entity instanceof Player) && entity instanceof LivingEntity LE){
+                            ((StandUser)LE).roundabout$setDazed((byte) 4);
+                        }
                         this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.1f + Math.random() * 0.1f));
                         self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SUCK_DRAIN_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
                         addToCombo();
+
+                        SimpleParticleType spt = ModParticles.BLOOD;
+                        if (MainUtil.hasBlueBlood(entity)){
+                            spt = ModParticles.BLUE_BLOOD;
+                        } else if (MainUtil.hasEnderBlood(entity)){
+                            spt = ModParticles.ENDER_BLOOD;
+                        }
+                        ((ServerLevel) this.getSelf().level()).sendParticles(spt,
+                                entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
+                                30,
+                                0, 0, 0,
+                                0.25);
+
                         if (self instanceof Player pl) {
                             if (MainUtil.canDrinkBloodCritAggro(entity,self)){
                                 ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CRIT,
