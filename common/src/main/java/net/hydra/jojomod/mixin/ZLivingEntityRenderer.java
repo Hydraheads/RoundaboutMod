@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.ILivingEntityRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -146,20 +147,14 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
                 int backflip = Math.abs(PA.getAttackTimeDuring());
                 if (SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_MOVEMENT) {
                     if (backflip < 16) {
-                        $$1.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,360 * (backflip/15F)), 0, P.getEyeHeight()*0.6F, 0 );
+                        $$1.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,360 * ((backflip+$$4)/15F)), 0, P.getEyeHeight()*0.6F, 0 );
                     }
                 } else if (SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_ATTACK_CHARGE) {
-                    if (true) {
-                        float scale = Math.min( (backflip+$$4)/PowersAnubis.PogoDelay,1);
-                        $$1.translate(0,0.5*scale,0.5*scale);
-                        $$1.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,-100-P.getViewXRot(0F) * scale), 0, P.getEyeHeight()*0.4F, 0 );
-                    }
-                } /* else if (SU.roundabout$getStandAnimation() == PowerIndex.BARRAGE) {
-                    int backflip = PA.getAttackTime();
-
-                    $$1.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,360* 5 * (backflip/30F)), 0, P.getEyeHeight()*0.6F, 0 );
-
-                } */
+                    $$1.translate(0,0.5,0.5);
+                    float time =  Math.min(1,(backflip+$$4)/(PowersAnubis.PogoDelay-2) );
+                    float end = -100-P.getViewXRot(0F);
+                    $$1.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0, time*end  ), 0, P.getEyeHeight()*0.4F, 0 );
+                }
             }
 
             byte playerP = ((IPlayerEntity)$$0).roundabout$GetPos();

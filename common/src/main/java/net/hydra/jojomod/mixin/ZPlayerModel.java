@@ -128,7 +128,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
             }
 
-            if (SE.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+            if (SE.roundabout$getStandPowers() instanceof PowersAnubis) {
                 switch (SE.roundabout$getStandAnimation()) {
                     case PowerIndex.GUARD -> {
                         change = true;
@@ -260,6 +260,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                             this.leftLeg.resetPose();
                             this.rightLeg.resetPose();
                             this.head.resetPose();
+                            this.body.resetPose();
                         }
                     }
 
@@ -272,7 +273,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     AnimationDefinition anim = PowersAnubis.getAnimation(SU);
                     if (anim != null) {
                         SU.roundabout$getWornStandAnimation().startIfStopped($$0.tickCount);
-                        this.roundabout$animate(SU.roundabout$getWornStandAnimation(), AnubisAnimations.TEST, $$3, 1F);
+                        this.roundabout$animate(SU.roundabout$getWornStandAnimation(), anim, $$3, 1F);
                     } else {
                         SU.roundabout$getWornStandAnimation().stop();
                     }
