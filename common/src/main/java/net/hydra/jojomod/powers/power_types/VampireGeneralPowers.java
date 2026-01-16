@@ -57,6 +57,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public static final byte POWER_SPIKE_HIT = PowerIndex.POWER_1_BONUS;
 
     public static final byte POWER_HAIR_GRAB = PowerIndex.POWER_1_SNEAK;
+
+    public static final byte BLOOD_CLUTCH = PowerIndex.POWER_2;
+    public static final byte BLOOD_CLUTCH_2 = PowerIndex.POWER_2_BONUS;
+
     public static final byte AIR_DASH = PowerIndex.POWER_3;
 
     /**The text name of the fate*/
@@ -81,7 +85,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     clientHairGrab();
                 }
                 case SKILL_2_NORMAL -> {
-                    clientBloodDash();
+                    clientBloodClutch();
                 }
                 case SKILL_3_NORMAL -> {
                     dashOrWallWalk(vp);
@@ -104,9 +108,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         }
     }
 
-    public void clientBloodDash(){
-        if (canAttack2() && !onCooldown(PowerIndex.GENERAL_1_SNEAK)){
-            this.tryPower(POWER_HAIR_GRAB);
+    public void clientBloodClutch(){
+        if (canAttack2() && !onCooldown(PowerIndex.GENERAL_2)){
+            this.tryPower(BLOOD_CLUTCH);
         }
     }
     public void clientHairGrab(){
@@ -185,12 +189,15 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             basis*=0.2f;
         } else if (isSweeping() && !self.isCrouching()){
             basis*=0.1f;
+        } else if (getActivePower() == BLOOD_CLUTCH){
+            basis*=0.1f;
         }
         return super.inputSpeedModifiers(basis);
     }
     @Override
     public boolean cancelSprintJump(){
-        return getActivePower() == POWER_SPIKE || super.cancelSprintJump();
+        return getActivePower() == POWER_SPIKE || super.cancelSprintJump() ||
+                getActivePower() == BLOOD_CLUTCH;
     }
 
     public void clientSpikeAttack(){
@@ -223,6 +230,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             } else if (move != POWER_SPIKE && (pos2 == PlayerPosIndex.HAIR_SPIKE || pos2 == PlayerPosIndex.HAIR_SPIKE_2)) {
                 setPlayerPos2(PlayerPosIndex.NONE);
             } else if (move != POWER_HAIR_GRAB && (pos2 == PlayerPosIndex.HAIR_EXTENSION_2)) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            } else if (move != BLOOD_CLUTCH && (pos2 == PlayerPosIndex.CLUTCH_WINDUP)) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            } else if (move != BLOOD_CLUTCH_2 && (pos2 == PlayerPosIndex.CLUTCH_DASH)) {
                 setPlayerPos2(PlayerPosIndex.NONE);
             }
         }
@@ -310,6 +321,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     if (attackTimeDuring > 10) {
                         xTryPower(PowerIndex.NONE, false);
                         tryPowerPacket(NONE);
+                    }
+                } else if (getActivePower() == BLOOD_CLUTCH) {
+                    if (attackTimeDuring > 7) {
+                        xTryPower(BLOOD_CLUTCH_2, true);
                     }
                 }
             }
@@ -480,21 +495,59 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public boolean setPowerOther(int move, int lastMove) {
         if (move == POWER_DIVE) {
             doDive();
-        }else if (move == HIT) {
+        } else if (move == HIT) {
             doDiveHit();
-        }else if (move == POWER_SWEEP) {
+        } else if (move == POWER_SWEEP) {
             sweepAttack();
-        }else if (move == POWER_SPIKE) {
+        } else if (move == POWER_SPIKE) {
             spikeAttack();
-        }else if (move == POWER_SPIKE_HIT){
+        } else if (move == POWER_SPIKE_HIT){
             spikeHit();
-        }else if (move == POWER_HAIR_GRAB){
+        } else if (move == POWER_HAIR_GRAB){
             hairGrab();
         } else if (move == AIR_DASH){
             setPowerMovementAir(lastMove);
+        } else if (move == BLOOD_CLUTCH){
+            bloodClutch();
+        } else if (move == BLOOD_CLUTCH_2){
+            bloodClutch2();
         }
 
         return super.setPowerOther(move,lastMove);
+    }
+
+    public void bloodClutch(){
+        this.attackTimeDuring = 0;
+        setActivePower(BLOOD_CLUTCH);
+        if (!self.level().isClientSide()) {
+
+            if (getPlayerPos2() != PlayerPosIndex.CLUTCH_WINDUP) {
+                setPlayerPos2(PlayerPosIndex.CLUTCH_WINDUP);
+            }
+
+            Vec3 posPo = self.getEyePosition().add(self.getLookAngle().scale(0.75f));
+            ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.RED_SPARKLE,
+                    posPo.x, posPo.y, posPo.z,
+                    0, 0, 0, 0, 0.8);
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.VAMPIRE_GLEAM_EVENT, SoundSource.PLAYERS, 1F, (float) (1.00f + Math.random() * 0.03f));
+        } else {
+            tryPowerPacket(BLOOD_CLUTCH);
+        }
+    }
+
+    public void bloodClutch2(){
+        this.attackTimeDuring = 0;
+        setActivePower(BLOOD_CLUTCH_2);
+        if (!self.level().isClientSide()) {
+
+            if (getPlayerPos2() != PlayerPosIndex.CLUTCH_DASH) {
+                setPlayerPos2(PlayerPosIndex.CLUTCH_DASH);
+            }
+
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.VAMPIRE_DASH_EVENT, SoundSource.PLAYERS, 1F, (float) (1.00f + Math.random() * 0.03f));
+        } else {
+            tryPowerPacket(BLOOD_CLUTCH_2);
+        }
     }
 
     public void hairGrab(){

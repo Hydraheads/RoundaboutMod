@@ -95,6 +95,10 @@ public class ForgeParticles {
             "blue_sparkle",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> RED_SPARKLE = PARTICLES.register(
+            "red_sparkle",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> PUNCH_IMPACT_A = PARTICLES.register(
             "punch_impact_a",
             () -> new SimpleParticleType(true)

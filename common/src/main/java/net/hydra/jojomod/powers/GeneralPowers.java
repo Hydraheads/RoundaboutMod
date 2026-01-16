@@ -208,6 +208,12 @@ public class GeneralPowers extends AbilityScapeBasis {
             if (getActivePower() != VampireGeneralPowers.POWER_SPIKE && getPlayerPos2() == PlayerPosIndex.HAIR_SPIKE_2) {
                 setPlayerPos2(PlayerPosIndex.NONE);
             }
+            if (getActivePower() != VampireGeneralPowers.BLOOD_CLUTCH && getPlayerPos2() == PlayerPosIndex.CLUTCH_WINDUP) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            }
+            if (getActivePower() != VampireGeneralPowers.BLOOD_CLUTCH_2 && getPlayerPos2() == PlayerPosIndex.CLUTCH_DASH) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            }
             if (this.self instanceof Player PE && PE.isSpectator()) {
                 ((StandUser) this.getSelf()).roundabout$setActive(false);
             }

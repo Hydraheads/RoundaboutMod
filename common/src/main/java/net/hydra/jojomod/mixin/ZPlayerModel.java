@@ -348,6 +348,12 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         this.leftLeg.yRot = 0;
                         this.leftLeg.xRot = 0;
                         this.leftLeg.zRot = 0;
+                    } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.CLUTCH_WINDUP) {
+                        float curve = ((float) (-Math.PI / 2) + this.head.xRot) / 3;
+                        this.rightArm.yRot = 0.6F;
+                        this.rightArm.xRot = -0F + curve;
+                        this.leftArm.yRot = -0.6F;
+                        this.leftArm.xRot = -0F + curve;
                     }
                 } else if (MainUtil.isHoldingRoadRoller($$0)) {
                     boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;

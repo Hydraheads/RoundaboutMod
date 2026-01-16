@@ -20,7 +20,7 @@
   "vampire_gleam": {
     "subtitle": "sounds.roundabout.vampire_gleam",
     "sounds": [
-      "roundabout:vampire_dash"
+      "roundabout:vampire_gleam"
     ]
   },
   "killer_queen_barrage": {
