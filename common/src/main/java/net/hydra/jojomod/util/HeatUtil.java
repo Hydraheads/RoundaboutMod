@@ -90,4 +90,8 @@ public class HeatUtil {
             }
         }
     }
+
+    public void getSlowdown(){
+
+    }
 }

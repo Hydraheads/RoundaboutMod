@@ -175,7 +175,7 @@ public abstract class HudRendering implements IHudAccess {
                 //Vampire freeze overlay
                 if (HeatUtil.isCold(this.minecraft.player) && !(this.minecraft.player.getTicksFrozen() > 0)) {
                     this.renderTextureOverlay($$1, StandIcons.POWDER_SNOW_OUTLINE_LOCATION,
-                            Math.min((HeatUtil.getHeat(this.minecraft.player)*-1)*0.005f,1f));
+                            Math.min((HeatUtil.getHeat(this.minecraft.player)*-1)*0.003f,1f));
                 }
                 //Bubble Overlay
                 if (user.roundabout$isBubbleEncased()){
