@@ -147,4 +147,15 @@ public class AdvancedConfig implements Cloneable {
                     "mod_id:add_other_entry_here"
             )
     );
+    public Set<String> removeFreezableMobs = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:blaze",
+                    "minecraft:vex",
+                    "minecraft:magma_cube",
+                    "minecraft:snow_golem",
+                    "minecraft:iron_golem",
+                    "minecraft:copper_golem",
+                    "minecraft:allay"
+            )
+    );
 }

@@ -101,6 +101,11 @@ public abstract class ConfigManager {
             MainUtil.removeBloodFromThese.clear();
             MainUtil.removeBloodFromThese.addAll(getAdvancedConfig().removeBloodFromThese);
         }
+        if (getAdvancedConfig().removeFreezableMobs != null)
+        {
+            MainUtil.unfreezableMobs.clear();
+            MainUtil.unfreezableMobs.addAll(getAdvancedConfig().removeFreezableMobs);
+        }
         if (getAdvancedConfig().foodThatGivesBloodListV3 != null)
         {
             MainUtil.foodMap = MainUtil.parseFoodList(getAdvancedConfig().foodThatGivesBloodListV3);

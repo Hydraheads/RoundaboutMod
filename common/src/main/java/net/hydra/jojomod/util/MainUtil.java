@@ -156,6 +156,7 @@ public class MainUtil {
     public static ArrayList<String> addedMobsWithBlueBlood = Lists.newArrayList();
     public static ArrayList<String> addedMobsWithEnderBlood = Lists.newArrayList();
     public static ArrayList<String> removeBloodFromThese = Lists.newArrayList();
+    public static ArrayList<String> unfreezableMobs = Lists.newArrayList();
     public static Set<String> foodThatGivesBloodList = Set.of();
     Map<String, FoodBloodStats> foodThatGivesBloodMap;
 
@@ -238,6 +239,15 @@ public class MainUtil {
             return false;
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
         if (hypnotismMobBlackList != null && !hypnotismMobBlackList.isEmpty() && rl != null && hypnotismMobBlackList.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isFreezableMobBlacklisted(Entity ent){
+        if (ent == null)
+            return false;
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        if (unfreezableMobs != null && !unfreezableMobs.isEmpty() && rl != null && unfreezableMobs.contains(rl.toString())){
             return true;
         }
         return false;
@@ -875,6 +885,9 @@ public class MainUtil {
         return start.add(hitbox);
     }
 
+    public static boolean canFreeze(Entity mob){
+        return (!isFreezableMobBlacklisted(mob) && !(mob instanceof Mob mb && isBossMob(mb)));
+    }
     public static boolean canDrinkBlood(Entity mob){
         return (getMobBleed(mob) && !hasEnderBlood(mob) && mob.isAlive() && !mob.isRemoved() &&
                 !(mob instanceof Mob mb && ((IMob)mb).roundabout$isVampire()));
