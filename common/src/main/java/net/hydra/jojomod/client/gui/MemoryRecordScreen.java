@@ -9,6 +9,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.index.AnubisMemory;
+import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.minecraft.client.GameNarrator;
@@ -74,7 +75,8 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
         this.currentlyHovered = (byte)-1;
         if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
             List<AnubisMemory> memories = PA.memories;
-            final int count = pl.isCreative() ? 8 : ((IPlayerEntity)pl).roundabout$getStandLevel();
+            boolean bypass = pl.isCreative() || (!SU.roundabout$getStandDisc().isEmpty() && SU.roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem);
+            final int count = bypass ? 8 : ((IPlayerEntity)pl).roundabout$getStandLevel();
             for (int i = 0; i < count; ++i) {
                 AnubisMemory memory = memories.get(i);
                 corpseIcon pIcon = new corpseIcon(memory.item,(byte)i,positions[i][0], positions[i][1]+31 );
