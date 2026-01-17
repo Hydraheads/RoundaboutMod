@@ -26,10 +26,7 @@ import net.hydra.jojomod.item.WorthyArrowItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
-import net.hydra.jojomod.util.C2SPacketUtil;
-import net.hydra.jojomod.util.MainUtil;
-import net.hydra.jojomod.util.PlayerMaskSlots;
-import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Rotations;
@@ -776,6 +773,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 modifier = 0.6F;
             }
         }
+        if (HeatUtil.isArmsFrozen(this)){
+            modifier*=0.6f;
+        }
         boolean active = ((StandUser) this).roundabout$getActive();
         if (active && PowerTypes.hasStandActivelyEquipped(this)){
             modifier*= ((StandUser)this).roundabout$getStandPowers().getBonusAttackSpeed();
@@ -815,6 +815,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             if (curse > -1 && (curse == LocacacaCurseIndex.RIGHT_HAND && this.getMainArm() == HumanoidArm.RIGHT)
                     || (curse == LocacacaCurseIndex.LEFT_HAND && this.getMainArm() == HumanoidArm.LEFT)) {
                 dSpeed *= 0.6F;
+            }
+
+
+            if (HeatUtil.isArmsFrozen(this)){
+                dSpeed*=0.25f;
             }
 
             boolean active = ((StandUser) this).roundabout$getActive();
@@ -1718,7 +1723,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         } else {
             mspeed= powers.getPickMiningSpeed()*3;
         }
-
 
         if (this.isEyeInFluid(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(this)) {
             mspeed /= 5.0F;

@@ -9,6 +9,7 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.powers.GeneralPowers;
+import net.hydra.jojomod.util.HeatUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
@@ -70,6 +71,11 @@ public abstract class ForgePlayer extends LivingEntity {
                 }
             }
 
+
+
+        if (HeatUtil.isArmsFrozen(this)){
+            f*=0.25f;
+        }
 
 
         boolean standActive = PowerTypes.hasStandActive(this);

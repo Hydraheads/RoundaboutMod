@@ -886,7 +886,8 @@ public class MainUtil {
     }
 
     public static boolean canFreeze(Entity mob){
-        return (!isFreezableMobBlacklisted(mob) && !(mob instanceof Mob mb && isBossMob(mb)));
+        return (!isFreezableMobBlacklisted(mob) && !(mob instanceof Mob mb && isBossMob(mb))
+        &&  !(mob instanceof LivingEntity le && FateTypes.isVampire(le)));
     }
     public static boolean canDrinkBlood(Entity mob){
         return (getMobBleed(mob) && !hasEnderBlood(mob) && mob.isAlive() && !mob.isRemoved() &&

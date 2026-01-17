@@ -3825,7 +3825,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         float sd = HeatUtil.getSlowdown(rdbt$this());
         if (sd > 0){
-            basis = basis * (1-sd);
+            basis = basis * (1f-sd);
         }
 
         int zapped = roundabout$getZappedToID();
@@ -4920,6 +4920,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     boolean roundabout$cancelsprintJump(){
         byte curse = this.roundabout$getLocacacaCurse();
         if (curse > -1 && (curse == LocacacaCurseIndex.RIGHT_LEG || curse == LocacacaCurseIndex.LEFT_LEG))
+            return true;
+        if (HeatUtil.isLegsFrozen(rdbt$this()))
             return true;
 
         int zapped = roundabout$getZappedToID();
