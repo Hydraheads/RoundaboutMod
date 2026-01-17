@@ -14,6 +14,7 @@ import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
+import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -696,6 +697,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         if (!(entity instanceof Player) && entity instanceof LivingEntity LE){
                             ((StandUser)LE).roundabout$setDazed((byte) 4);
                         }
+                        HeatUtil.addHeat(self,-50);
                         this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.1f + Math.random() * 0.1f));
                         //self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.HIT_1_SOUND_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
                         addToCombo();

@@ -27,6 +27,7 @@ import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.event.powers.visagedata.JosukePartEightVisage;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.Util;
@@ -169,16 +170,25 @@ public abstract class HudRendering implements IHudAccess {
                         this.renderTextureOverlay($$1, StandIcons.SUN_TINGE_OVERLAY, rdbt$currentAlpha);
                     }
 
+
                 }
+                //Vampire freeze overlay
+                if (HeatUtil.isCold(this.minecraft.player) && !(this.minecraft.player.getTicksFrozen() > 0)) {
+                    this.renderTextureOverlay($$1, StandIcons.POWDER_SNOW_OUTLINE_LOCATION,
+                            Math.min((HeatUtil.getHeat(this.minecraft.player)*-1)*0.005f,1f));
+                }
+                //Bubble Overlay
                 if (user.roundabout$isBubbleEncased()){
                     RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.IN_BUBBLE_OVERLAY, 0.99F);
                 }
+                //Stone Mask Overlay
                 if (MainUtil.isWearingStoneMask(this.minecraft.player)){
                     RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.STONE_MASK_OVERLAY, 0.6F);
                 }
 
+                //Activated Stone Mask Overlay
                 if (MainUtil.isWearingBloodyStoneMask(this.minecraft.player)){
                     RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.BLOODY_MASK_OVERLAY, 0.55F);
@@ -360,14 +370,25 @@ public abstract class HudRendering implements IHudAccess {
     @Inject(method = "renderExperienceBar", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$RenderExperienceBar(GuiGraphics $$0, int $$1, CallbackInfo ci){
         if (roundabout$RenderBars($$0, $$1)){
+            roundabout$RenderHeatBars($$0, $$1);
             ci.cancel();
         }
     }
     @Inject(method = "renderJumpMeter", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$RenderMountJumpBar(PlayerRideableJumping $$0, GuiGraphics $$1, int $$2, CallbackInfo ci){
         if (roundabout$RenderBars($$1, $$2)){
+            roundabout$RenderHeatBars($$1, $$2);
             ci.cancel();
         }
+    }
+
+    @Inject(method = "renderExperienceBar", at = @At(value = "TAIL"), cancellable = true)
+    public void roundabout$RenderExperienceBar2(GuiGraphics $$0, int $$1, CallbackInfo ci){
+            roundabout$RenderHeatBars($$0, $$1);
+    }
+    @Inject(method = "renderJumpMeter", at = @At(value = "TAIL"), cancellable = true)
+    public void roundabout$RenderMountJumpBar2(PlayerRideableJumping $$0, GuiGraphics $$1, int $$2, CallbackInfo ci){
+            roundabout$RenderHeatBars($$1, $$2);
     }
 
 
@@ -538,6 +559,11 @@ public abstract class HudRendering implements IHudAccess {
     }
 
     @Unique
+    private void roundabout$RenderHeatBars(GuiGraphics context, int x){
+        StandHudRender.renderHeatHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, ((StandUserClientPlayer) minecraft.player).roundabout$getLastClashPower());
+
+    }
+    @Unique
     private boolean roundabout$RenderBars(GuiGraphics context, int x){
         if (minecraft.player != null && minecraft.level != null) {
 
@@ -657,6 +683,7 @@ public abstract class HudRendering implements IHudAccess {
                     }
                 } else if (showComboAmt){
                     if (((IPowersPlayer)minecraft.player).rdbt$getPowers() instanceof PunchingGeneralPowers pgp) {
+                        roundabout$RenderHeatBars(context, x);
                         StandHudRender.renderComboHudNumber(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, pgp);
                     }
                 }
@@ -665,6 +692,7 @@ public abstract class HudRendering implements IHudAccess {
         }
         return false;
     }
+
 
 
     @Inject(method = "renderExperienceBar", at = @At(value = "INVOKE",

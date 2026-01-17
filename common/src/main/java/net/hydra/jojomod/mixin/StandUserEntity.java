@@ -24,6 +24,7 @@ import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
@@ -307,6 +308,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$COMBAT_MODE = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.BOOLEAN);
+    @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$HEAT = SynchedEntityData.defineId(LivingEntity.class,
+            EntityDataSerializers.INT);
 
 
     @Unique
@@ -1133,6 +1137,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public boolean roundabout$isPossessed() {
         return this.level().getEntity(this.getEntityData().get(ROUNDABOUT$POSSESSOR)) != null;
     }
+    @Unique
+    @Override
+    public void roundabout$setHeat(int e) {
+        this.getEntityData().set(ROUNDABOUT$HEAT,e);
+    }
+    @Unique
+    @Override
+    public int roundabout$getHeat() {
+        return this.getEntityData().get(ROUNDABOUT$HEAT);
+    }
 
 
     @Unique
@@ -1272,6 +1286,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         roundabout$tickStandOrStandless();
         //if (StandID > -1) {
         if (!this.level().isClientSide()) {
+            HeatUtil.tickHeat(rdbt$this());
             if (roundabout$getZappedToID() > -1) {
                 roundabout$zappedTicks++;
                 if (roundabout$zappedTicks >= ClientNetworking.getAppropriateConfig().survivorSettings.durationOfAggressiveAngerSetting) {
@@ -3056,6 +3071,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GLOW, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BUBBLE_ENCASED, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$POSSESSOR, -1);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$HEAT, 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BOUND_TO, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_ZAPPED_TO_ATTACK, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$TRUE_INVISIBILITY, -1);

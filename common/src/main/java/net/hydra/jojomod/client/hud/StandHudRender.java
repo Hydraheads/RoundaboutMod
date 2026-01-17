@@ -28,6 +28,7 @@ import net.hydra.jojomod.stand.powers.PowersCream;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
+import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Minecraft;
@@ -904,4 +905,22 @@ public class StandHudRender {
         }
     }*/
 
+    public static void renderHeatHud(GuiGraphics context, Minecraft client, Player playerEntity,
+                                  int scaledWidth, int scaledHeight, int ticks, int x,
+                                  float flashAlpha, float otherFlashAlpha, float c) {
+
+        int l;
+        int k;
+        l = scaledHeight - 32 + 3;
+        StandUser standUser = ((StandUser) playerEntity);
+        if (HeatUtil.isCold(playerEntity)) {
+            int heat = Mth.clamp(HeatUtil.getHeat(playerEntity)*-1,0,100);
+            k = Math.min((int) Math.floor(182f/100F * (float)heat),182);
+            context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 50, k, 5);
+        } else if (HeatUtil.isHot(playerEntity)) {
+            int heat = Mth.clamp(HeatUtil.getHeat(playerEntity),0,100);
+            k = Math.min((int) Math.floor(182f/100F * (float)heat),182);
+            context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 55, k, 5);
+        }
+    }
 }
