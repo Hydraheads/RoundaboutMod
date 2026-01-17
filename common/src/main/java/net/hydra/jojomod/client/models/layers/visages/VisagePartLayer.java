@@ -2,6 +2,7 @@ package net.hydra.jojomod.client.models.layers.visages;
 
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerModel;
@@ -26,10 +27,12 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
@@ -215,8 +218,8 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     }
                 }
 
-
                 if (entity instanceof Player play) {
+                    ClientUtil.pushPoseAndCooperate(poseStack, 46);
                     IPlayerEntity pl = ((IPlayerEntity) play);
                     byte pos2 = pl.roundabout$GetPos2();
                     if (pos2 == PlayerPosIndex.BARRAGE) {
@@ -262,8 +265,63 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         renderBodySpike(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
                                 r, g, b);
                     }
+                    ClientUtil.popPoseAndCooperate(poseStack, 46);
                 }
 
+
+                if (ClientUtil.hasChangedArms(entity)) {
+                    if (getParentModel() instanceof PlayerModel<?> pm) {
+                        pm.rightArm.visible = true;
+                        pm.rightSleeve.visible = true;
+                        pm.leftArm.visible = true;
+                        pm.leftSleeve.visible = true;
+
+                        r = isHurt ? 1.0F : 1.0F;
+                        g = isHurt ? 0.6F : 1.0F;
+                        b = isHurt ? 0.6F : 1.0F;
+                        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(ClientUtil.getChangedArmTexture(entity)));
+                        ClientUtil.pushPoseAndCooperate(poseStack, 46);
+                        pm.rightArm.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY, r,
+                                g, b, 1);
+                        pm.rightSleeve.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY, r,
+                                g, b, 1);
+                        ClientUtil.popPoseAndCooperate(poseStack, 46);
+
+                        ClientUtil.pushPoseAndCooperate(poseStack, 46);
+                        pm.leftArm.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY, r,
+                                g, b, 1);
+                        pm.leftSleeve.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY, r,
+                                g, b, 1);
+                        ClientUtil.popPoseAndCooperate(poseStack, 46);
+                    }
+                }
+
+
+                if (ClientUtil.hasChangedLegs(entity)) {
+                    if (getParentModel() instanceof PlayerModel<?> pm) {
+                        pm.leftLeg.visible = true;
+                        pm.leftPants.visible = true;
+                        pm.rightPants.visible = true;
+                        pm.rightLeg.visible = true;
+
+                        r = isHurt ? 1.0F : 1.0F;
+                        g = isHurt ? 0.6F : 1.0F;
+                        b = isHurt ? 0.6F : 1.0F;
+                        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(ClientUtil.getChangedLegTexture(entity)));
+                        ClientUtil.pushPoseAndCooperate(poseStack, 46);
+                        pm.rightLeg.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY, r,
+                                g, b, 1);
+                        pm.rightPants.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY, r,
+                                g, b, 1);
+                        ClientUtil.popPoseAndCooperate(poseStack, 46);
+                        ClientUtil.pushPoseAndCooperate(poseStack, 46);
+                        pm.leftLeg.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY, r,
+                                g, b, 1);
+                        pm.leftPants.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY, r,
+                                g, b, 1);
+                        ClientUtil.popPoseAndCooperate(poseStack, 46);
+                    }
+                }
             }
         }
     }

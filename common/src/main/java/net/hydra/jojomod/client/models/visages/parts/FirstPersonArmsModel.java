@@ -9,6 +9,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.access.IPlayerRenderer;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
@@ -187,7 +188,12 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
                         leftSleeve = null;
                     }
                 } else if (player instanceof AbstractClientPlayer acp){
-                    consumer = bufferSource.getBuffer(RenderType.entityTranslucent(PR.getTextureLocation(acp)));
+
+                    RenderType tl = RenderType.entityTranslucent(PR.getTextureLocation(acp));
+                    if (ClientUtil.hasChangedArms(acp)){
+                        tl = RenderType.entityTranslucent(ClientUtil.getChangedArmTexture(acp));
+                    }
+                    consumer = bufferSource.getBuffer(tl);
 
                 }
 
