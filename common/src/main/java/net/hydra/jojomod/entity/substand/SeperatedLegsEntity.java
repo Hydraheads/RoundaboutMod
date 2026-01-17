@@ -4,6 +4,8 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -52,7 +54,7 @@ public class SeperatedLegsEntity extends StandEntity {
         LivingEntity user = this.getUser();
         if (!client) {
             if(StartupTicks==0){
-                if(!(this.getUser() == null)){
+                if((!(this.getUser() == null) && (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay))){
                     this.lookAt(EntityAnchorArgument.Anchor.EYES,User.getEyePosition());
                     this.setDeltaMovement(this.getLookAngle().multiply(0.2,0.2,0.2));
                 }else{

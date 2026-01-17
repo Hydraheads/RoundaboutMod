@@ -5190,7 +5190,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void rdbt$doMoldDetection(Vec3 movement){
         if(((IPermaCasting)this.level()).roundabout$inPermaCastRange(this.getOnPos(), PermanentZoneCastInstance.MOLD_FIELD)) {
             LivingEntity MoldFieldCaster = ((IPermaCasting)this.level()).roundabout$inPermaCastRangeEntity(this.getOnPos(),PermanentZoneCastInstance.MOLD_FIELD);
-            if (MoldFieldCaster != null && !(((PowersGreenDay)((StandUser)MoldFieldCaster).roundabout$getStandPowers()).allies.contains(this))) {
+            if (MoldFieldCaster != null && !(((PowersGreenDay)((StandUser)MoldFieldCaster).roundabout$getStandPowers()).allies.contains(this.getStringUUID()))) {
                 boolean isUser = this.equals(MoldFieldCaster);
                 boolean down = previousYpos > this.getY();
                 boolean isStand = (((LivingEntity) (Object) this) instanceof StandEntity);
