@@ -2119,6 +2119,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         compoundtag.putByte("bubbleEncased",roundabout$getBubbleEncased());
+        compoundtag.putInt("heat",roundabout$getHeat());
 
         if (rdbt$fleshBudPlanted !=null){
             compoundtag.putUUID("fleshBud", rdbt$fleshBudPlanted);
@@ -2166,6 +2167,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         roundabout$setBubbleEncased(compoundtag.getByte("bubbleEncased"));
+        roundabout$setHeat(compoundtag.getByte("heat"));
         if (compoundtag.contains("fleshBud")) {
             rdbt$fleshBudPlanted = compoundtag.getUUID("fleshBud");
         }
@@ -3819,6 +3821,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (!FateTypes.isVampireStrong(rdbt$this())) {
                 basis = (basis * 0.50F);
             }
+        }
+
+        float sd = HeatUtil.getSlowdown(rdbt$this());
+        if (sd > 0){
+            basis = basis * (1-sd);
         }
 
         int zapped = roundabout$getZappedToID();

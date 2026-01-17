@@ -913,7 +913,7 @@ public class StandHudRender {
         int k;
         l = scaledHeight - 32 + 3;
 
-        x-=6;
+        x-=7;
         l+=8;
         StandUser standUser = ((StandUser) playerEntity);
         if (HeatUtil.isCold(playerEntity) || HeatUtil.isHot(playerEntity)) {
