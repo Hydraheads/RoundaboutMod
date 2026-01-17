@@ -349,7 +349,6 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                     }
                     poseStack.popPose();
 
-
                     poseStack.pushPose();
                     this.LeftArmBAM3.translateAndRotate(poseStack);
 

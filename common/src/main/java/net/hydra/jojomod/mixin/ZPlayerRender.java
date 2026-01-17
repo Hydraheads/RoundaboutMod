@@ -314,7 +314,8 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             }
 
 
-            if (!(ClientUtil.checkIfFirstPerson() && $$0.is(ClientUtil.getPlayer()))){
+            if (!(ClientUtil.checkIfFirstPerson() && $$0.is(ClientUtil.getPlayer()))
+            || !((IEntityAndData)$$0).roundabout$getExclusiveLayers()){
                 if (ClientUtil.hasChangedArms($$0)){
                     playerModel.rightArm.visible = false;
                     playerModel.rightSleeve.visible = false;
@@ -385,6 +386,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderHandHEAD(PoseStack stack, MultiBufferSource buffer, int integer,
                                                                                                 AbstractClientPlayer acl, ModelPart $$4, ModelPart $$5,
                                                                                                 CallbackInfo ci) {
+        ((IEntityAndData)acl).roundabout$setExclusiveLayers(true);
         if (ClientUtil.getThrowFadeToTheEther() != 1 || ClientUtil.hasChangedArms(acl)){
             ci.cancel();
             PlayerModel<AbstractClientPlayer> $$6 = this.getModel();
@@ -408,6 +410,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             $$5.xRot = 0.0F;
             $$5.render(stack, buffer.getBuffer(tl), integer, OverlayTexture.NO_OVERLAY);
             roundabout$renderHandLayers2(stack,buffer,integer,acl,$$4,$$5);
+            ((IEntityAndData)acl).roundabout$setExclusiveLayers(false);
         }
     }
     
@@ -420,6 +423,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         //PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity,
         // float var5, float var6, float var7, float partialTicks, float var9, float var10)
         roundabout$renderHandLayers2(stack,buffer,integer,acl,$$4,$$5);
+        ((IEntityAndData)acl).roundabout$setExclusiveLayers(false);
     }
     @Unique
     public void rdbt$copyTo(ModelPart $$0, ModelPart $$1) {
