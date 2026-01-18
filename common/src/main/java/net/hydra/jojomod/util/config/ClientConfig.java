@@ -29,6 +29,10 @@ public class ClientConfig implements Cloneable {
     @Hidden
     @NestedOption(group = "modded")
     public ClientConfig.AnubisMemories anubisMemories;
+    @CommentedOption(comment = "FILE FORM OF GREEN DAY'S ALLY LIST, SCROLL DOWN")
+    @Hidden
+    @NestedOption(group = "modded")
+    public ClientConfig.GreenDayAllyList greenDayAllyList;
     @CommentedOption(comment = "THE ACTUAL SETTINGS")
     @NestedOption(group = "modded")
     public ClientConfig.GeneralSettings generalSettings;
@@ -214,7 +218,7 @@ public class ClientConfig implements Cloneable {
         @StringOption(group = "inherit", value = "")
         public String mem8;
 
-        public void saveToMemory(int index, String id) {
+        public void     saveToMemory(int index, String id) {
             switch (index) {
                 case 1 -> mem1 = id;
                 case 2 -> mem2 = id;
@@ -244,6 +248,16 @@ public class ClientConfig implements Cloneable {
                 Roundabout.LOGGER.warn("Invalid Memory Load Id " + index);
                 return "";
             }
+        }
+    }
+    public static class GreenDayAllyList {
+        @StringOption(group = "inherit", value = "")
+        public String AllyListUUIDS;
+        public void saveToMemory(String id) {
+            AllyListUUIDS  = id;
+        }
+        public String getFromMemory() {
+            return AllyListUUIDS;
         }
     }
 

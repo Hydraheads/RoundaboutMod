@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import com.ibm.icu.text.Normalizer2;
+import com.mojang.authlib.minecraft.client.MinecraftClient;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -27,13 +28,19 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -45,19 +52,26 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.EnderpearlItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerBlock;
+import net.minecraft.world.level.levelgen.WorldDimensions;
+import net.minecraft.world.level.storage.WorldData;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class PowersGreenDay extends NewPunchingStand {
     public PowersGreenDay(LivingEntity self) {super(self);}
@@ -232,6 +246,8 @@ public class PowersGreenDay extends NewPunchingStand {
         return super.setPowerOther(move,lastMove);
     }
 
+    public boolean hasCheckedAllies = false;
+
 
     @Override
     public void tickPower() {
@@ -287,7 +303,10 @@ public class PowersGreenDay extends NewPunchingStand {
 
             }
         }
-
+        if(!hasCheckedAllies) {
+            generateAllyList();
+            hasCheckedAllies=true;
+        }
         super.tickPower();
 
 
@@ -307,14 +326,14 @@ public class PowersGreenDay extends NewPunchingStand {
 
 
     public boolean selectAllyServer(){
-        //listInit();
+        listInit();
         if(!(((StandUser) this.self).roundabout$getTargetEntity(this.self,16)==null)) {
             Entity targetEnt = ((StandUser) this.self).roundabout$getTargetEntity(this.self, 16);
-            if(!allies.contains(targetEnt)) {
-                allies.add(targetEnt);
+            if(!allies.contains(targetEnt.getStringUUID())) {
+                allies.add(targetEnt.getStringUUID());
             }
             else{
-                allies.remove(targetEnt);
+                allies.remove(targetEnt.getStringUUID());
             }
 
 
@@ -324,22 +343,70 @@ public class PowersGreenDay extends NewPunchingStand {
     }
 
     public void selectAllyClient(){
-        //listInit();
+        listInit();
         if(!(((StandUser) this.self).roundabout$getTargetEntity(this.self,16)==null)) {
             Entity targetEnt = ((StandUser) this.self).roundabout$getTargetEntity(this.self, 16);
-            if(!allies.contains(targetEnt)) {
-                allies.add(targetEnt);
+            if(!allies.contains(targetEnt.getStringUUID())) {
+                allies.add(targetEnt.getStringUUID());
             }
             else{
-                allies.remove(targetEnt);
+                allies.remove(targetEnt.getStringUUID());
             }
 
             tryPowerPacket(PowerIndex.POWER_4_BLOCK);
+            Roundabout.LOGGER.info(listToString(allies));
         }
+        saveAllies();
 
     }
 
-    public List<Entity> allies = new ArrayList<>();
+    public List<String> allies = new ArrayList<>();
+
+    public static List<String> ConvertToString(){
+        String cf = ConfigManager.getClientConfig().greenDayAllyList.getFromMemory();
+        return allyListParser(cf);
+    }
+
+    public void generateAllyList(){
+        listInit();
+        allies = ConvertToString();
+    }
+
+    public void saveAllies(){
+        String cf = listToString(allies);
+        ConfigManager.getClientConfig().greenDayAllyList.saveToMemory(cf);
+        ConfigManager.saveClientConfig();
+    }
+
+    public static List<String> allyListParser(String string){
+        List<String> allies = new ArrayList<>();
+        String temporary = "";
+
+        for (int i = 0; i < string.length(); i++) {
+            char current = string.charAt(i);
+            if (!(current == ',')){
+                temporary += current;
+            }else{
+                allies.add(temporary);
+                temporary = "";
+            }
+        }
+
+        return allies;
+    }
+
+    public String listToString(List<String> allies){
+        String allyString = "";
+
+        for (int i = 0; i < allies.size(); i++) {
+            String current = allies.get(i);
+            allyString += current;
+            allyString += ",";
+        }
+
+        return allyString;
+    }
+
 
     public void listInit(){
         if (allies == null) {
@@ -347,24 +414,10 @@ public class PowersGreenDay extends NewPunchingStand {
         }
     }
 
-    public void addEntityToAllies(Entity entity){
-        listInit();
-        if(!allies.contains(entity)) {
-            allies.add(entity);
-        }
-    }
-
-    public void removeEntityfromAllies(Entity entity){
-        listInit();
-        if(allies.contains(entity)) {
-            allies.remove(entity);
-        }
-    }
-
     @Override
     public boolean highlightsEntity(Entity ent, Player player) {
         if(((StandUser)player).roundabout$isGuarding()) {
-            if (allies.contains(ent) && player.hasLineOfSight(ent)){
+            if (allies.contains(ent.getStringUUID()) && player.hasLineOfSight(ent)){
                 return true;
             } else if (!(((StandUser) player).roundabout$getTargetEntity(player, 16) == null)) {
                 if (((StandUser) player).roundabout$getTargetEntity(player, 16).equals(ent)) {
@@ -378,7 +431,7 @@ public class PowersGreenDay extends NewPunchingStand {
     @Override
     public int highlightsEntityColor(Entity ent, Player player) {
         listInit();
-        if(allies.contains(ent)){
+        if(allies.contains(ent.getStringUUID())){
             if(!(((StandUser) player).roundabout$getTargetEntity(player,16)== null)) {
                 if (((StandUser) player).roundabout$getTargetEntity(player, 16).equals(ent)) {
                     return 12379456;
@@ -580,6 +633,24 @@ public class PowersGreenDay extends NewPunchingStand {
     public boolean isMoldFieldOn() {
         return((IPermaCasting) this.getSelf().level()).roundabout$isPermaCastingEntity(this.self);
     };
+
+    @Override
+    public void playSummonEffects(boolean forced) {
+        if (!this.getSelf().level().isClientSide()) {
+            for(int i = 0; i < 23; i = i + 1) {
+                double randX = Roundabout.RANDOM.nextDouble(-1, 1);
+                double randY = Roundabout.RANDOM.nextDouble(-1, 2);
+                double randZ = Roundabout.RANDOM.nextDouble(-1, 1);
+                ((ServerLevel) this.getSelf().level()).sendParticles(new DustParticleOptions(new Vector3f(0.76F, 1.0F, 0.9F
+                ), 2f),
+                        this.getSelf().getX() + randX,
+                        this.getSelf().getY() + randY,
+                        this.getSelf().getZ() + randZ,
+                        0,0,0.2,0,0);
+
+            }
+        }
+    }
 
     @Override
     public float getPunchStrength(Entity entity){

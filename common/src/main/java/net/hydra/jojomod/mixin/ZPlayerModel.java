@@ -177,8 +177,17 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     ps.pushPose();
                     ps.translate(0.05,0,-0.1);
                     ps.mulPose(Axis.XP.rotationDegrees(90-(36*amt)-(ClientUtil.getFrameTime()*36)));
-                    rightLeg.render(ps, mb.getBuffer(RenderType.entityTranslucentCull($$0.getSkinTextureLocation())), packedLight, OverlayTexture.NO_OVERLAY);
-                    rightPants.render(ps, mb.getBuffer(RenderType.entityTranslucent($$0.getSkinTextureLocation())), packedLight, OverlayTexture.NO_OVERLAY);
+
+                    RenderType tl = RenderType.entityTranslucentCull($$0.getSkinTextureLocation());
+                    if (ClientUtil.hasChangedLegs($$0)){
+                        tl = RenderType.entityTranslucent(ClientUtil.getChangedLegTexture($$0));
+                    }
+                    rightLeg.render(ps, mb.getBuffer(tl), packedLight, OverlayTexture.NO_OVERLAY);
+                    tl = RenderType.entityTranslucent($$0.getSkinTextureLocation());
+                    if (ClientUtil.hasChangedLegs($$0)){
+                        tl = RenderType.entityTranslucent(ClientUtil.getChangedLegTexture($$0));
+                    }
+                    rightPants.render(ps, mb.getBuffer(tl), packedLight, OverlayTexture.NO_OVERLAY);
                     ps.popPose();
                 }
                 return true;
@@ -193,8 +202,16 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 }
                 this.rightSleeve.copyFrom(this.rightArm);
                 this.leftSleeve.copyFrom(this.leftArm);
-                one.render(ps, mb.getBuffer(RenderType.entityTranslucentCull($$0.getSkinTextureLocation())), packedLight, OverlayTexture.NO_OVERLAY);
-                two.render(ps, mb.getBuffer(RenderType.entityTranslucent($$0.getSkinTextureLocation())), packedLight, OverlayTexture.NO_OVERLAY);
+                RenderType tl = RenderType.entityTranslucentCull($$0.getSkinTextureLocation());
+                if (ClientUtil.hasChangedArms($$0)){
+                    tl = RenderType.entityTranslucent(ClientUtil.getChangedArmTexture($$0));
+                }
+                one.render(ps, mb.getBuffer(tl), packedLight, OverlayTexture.NO_OVERLAY);
+                tl = RenderType.entityTranslucent($$0.getSkinTextureLocation());
+                if (ClientUtil.hasChangedArms($$0)){
+                    tl = RenderType.entityTranslucent(ClientUtil.getChangedArmTexture($$0));
+                }
+                two.render(ps, mb.getBuffer(tl), packedLight, OverlayTexture.NO_OVERLAY);
                 return true;
             }
         }

@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.*;
@@ -17,6 +18,7 @@ import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ModificationMaskItem;
 import net.hydra.jojomod.stand.powers.*;
+import net.hydra.jojomod.util.HeatUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -293,8 +295,8 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     @Inject(method = "setModelProperties", at = @At(value = "TAIL"))
     private void roundabout$setModelProperties(AbstractClientPlayer $$0, CallbackInfo ci) {
         if ($$0 instanceof StandUser standUser) {
+            PlayerModel<AbstractClientPlayer> playerModel = this.getModel();
             if (standUser.roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
-                      PlayerModel<AbstractClientPlayer> playerModel = this.getModel();
 
                 if (PGD.legGoneTicks > 0) {
                     playerModel.leftLeg.visible = false;
@@ -303,6 +305,29 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                     playerModel.rightPants.visible = false;
                 }
 
+                if (ClientUtil.hasChangedLegs($$0)){
+                    playerModel.rightArm.visible = false;
+                    playerModel.rightSleeve.visible = false;
+                    playerModel.leftArm.visible = false;
+                    playerModel.leftSleeve.visible = false;
+                }
+            }
+
+
+            if (!(ClientUtil.checkIfFirstPerson() && $$0.is(ClientUtil.getPlayer()))
+            || !((IEntityAndData)$$0).roundabout$getExclusiveLayers()){
+                if (ClientUtil.hasChangedArms($$0)){
+                    playerModel.rightArm.visible = false;
+                    playerModel.rightSleeve.visible = false;
+                    playerModel.leftArm.visible = false;
+                    playerModel.leftSleeve.visible = false;
+                }
+                if (ClientUtil.hasChangedLegs($$0)){
+                    playerModel.rightLeg.visible = false;
+                    playerModel.rightPants.visible = false;
+                    playerModel.leftLeg.visible = false;
+                    playerModel.leftPants.visible = false;
+                }
             }
 
         }
@@ -361,7 +386,8 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderHandHEAD(PoseStack stack, MultiBufferSource buffer, int integer,
                                                                                                 AbstractClientPlayer acl, ModelPart $$4, ModelPart $$5,
                                                                                                 CallbackInfo ci) {
-        if (ClientUtil.getThrowFadeToTheEther() != 1){
+        ((IEntityAndData)acl).roundabout$setExclusiveLayers(true);
+        if (ClientUtil.getThrowFadeToTheEther() != 1 || ClientUtil.hasChangedArms(acl)){
             ci.cancel();
             PlayerModel<AbstractClientPlayer> $$6 = this.getModel();
             this.setModelProperties(acl);
@@ -376,10 +402,15 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                 return;
             }
             $$4.xRot = 0.0F;
-            $$4.render(stack, buffer.getBuffer(RenderType.entityTranslucentCull(acl.getSkinTextureLocation())), integer, OverlayTexture.NO_OVERLAY);
+            RenderType tl = RenderType.entityTranslucentCull(acl.getSkinTextureLocation());
+            if (ClientUtil.hasChangedArms(acl)){
+                tl = RenderType.entityTranslucent(ClientUtil.getChangedArmTexture(acl));
+            }
+            $$4.render(stack, buffer.getBuffer(tl), integer, OverlayTexture.NO_OVERLAY);
             $$5.xRot = 0.0F;
-            $$5.render(stack, buffer.getBuffer(RenderType.entityTranslucent(acl.getSkinTextureLocation())), integer, OverlayTexture.NO_OVERLAY);
+            $$5.render(stack, buffer.getBuffer(tl), integer, OverlayTexture.NO_OVERLAY);
             roundabout$renderHandLayers2(stack,buffer,integer,acl,$$4,$$5);
+            ((IEntityAndData)acl).roundabout$setExclusiveLayers(false);
         }
     }
     
@@ -392,6 +423,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         //PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity,
         // float var5, float var6, float var7, float partialTicks, float var9, float var10)
         roundabout$renderHandLayers2(stack,buffer,integer,acl,$$4,$$5);
+        ((IEntityAndData)acl).roundabout$setExclusiveLayers(false);
     }
     @Unique
     public void rdbt$copyTo(ModelPart $$0, ModelPart $$1) {
@@ -410,6 +442,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderHandAnimations(PoseStack stack, MultiBufferSource buffer, int integer,
                                                                                                 AbstractClientPlayer acl, ModelPart $$4, ModelPart $$5,
                                                                                                 CallbackInfo ci) {
+
         PlayerModel<AbstractClientPlayer> $$6 = this.getModel();
         if (((IPlayerModel)$$6).roundabout$setupFirstPersonAnimations(acl, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F,$$4,$$5,
                 buffer,integer,stack)){

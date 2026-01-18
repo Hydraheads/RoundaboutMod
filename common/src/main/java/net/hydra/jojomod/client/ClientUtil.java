@@ -33,6 +33,7 @@ import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.gui.GuiGraphics;
@@ -140,6 +141,31 @@ public class ClientUtil {
     }
 
 
+    public static boolean hasChangedArms(Entity ent){
+        if (HeatUtil.isArmsFrozen(ent)){
+            return true;
+        }
+        return false;
+    }
+    public static ResourceLocation getChangedArmTexture(Entity ent){
+        if (HeatUtil.isArmsFrozen(ent)){
+            return StandIcons.ICICLE_LAYER;
+        }
+        return StandIcons.ICICLE_LAYER;
+    }
+
+    public static boolean hasChangedLegs(Entity ent){
+        if (HeatUtil.isLegsFrozen(ent)){
+            return true;
+        }
+        return false;
+    }
+    public static ResourceLocation getChangedLegTexture(Entity ent){
+        if (HeatUtil.isArmsFrozen(ent)){
+            return StandIcons.ICICLE_LAYER;
+        }
+        return StandIcons.ICICLE_LAYER;
+    }
     public static int clientTicker;
     public static int getClientTicker(){
         return clientTicker;

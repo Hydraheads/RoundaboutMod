@@ -2119,6 +2119,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         compoundtag.putByte("bubbleEncased",roundabout$getBubbleEncased());
+        compoundtag.putInt("heat",roundabout$getHeat());
 
         if (rdbt$fleshBudPlanted !=null){
             compoundtag.putUUID("fleshBud", rdbt$fleshBudPlanted);
@@ -2166,6 +2167,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         roundabout$setBubbleEncased(compoundtag.getByte("bubbleEncased"));
+        roundabout$setHeat(compoundtag.getByte("heat"));
         if (compoundtag.contains("fleshBud")) {
             rdbt$fleshBudPlanted = compoundtag.getUUID("fleshBud");
         }
@@ -3821,6 +3823,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
 
+        float sd = HeatUtil.getSlowdown(rdbt$this());
+        if (sd > 0){
+            basis = basis * (1f-sd);
+        }
+
         int zapped = roundabout$getZappedToID();
         if (zapped > -1 && !(((LivingEntity)(Object)this) instanceof Drowned)){
             Entity ent = level().getEntity(zapped);
@@ -4914,6 +4921,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         byte curse = this.roundabout$getLocacacaCurse();
         if (curse > -1 && (curse == LocacacaCurseIndex.RIGHT_LEG || curse == LocacacaCurseIndex.LEFT_LEG))
             return true;
+        if (HeatUtil.isLegsFrozen(rdbt$this()))
+            return true;
 
         int zapped = roundabout$getZappedToID();
         if (zapped > -1){
@@ -5181,7 +5190,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void rdbt$doMoldDetection(Vec3 movement){
         if(((IPermaCasting)this.level()).roundabout$inPermaCastRange(this.getOnPos(), PermanentZoneCastInstance.MOLD_FIELD)) {
             LivingEntity MoldFieldCaster = ((IPermaCasting)this.level()).roundabout$inPermaCastRangeEntity(this.getOnPos(),PermanentZoneCastInstance.MOLD_FIELD);
-            if (MoldFieldCaster != null && !(((PowersGreenDay)((StandUser)MoldFieldCaster).roundabout$getStandPowers()).allies.contains(this))) {
+            if (MoldFieldCaster != null && !(((PowersGreenDay)((StandUser)MoldFieldCaster).roundabout$getStandPowers()).allies.contains(this.getStringUUID()))) {
                 boolean isUser = this.equals(MoldFieldCaster);
                 boolean down = previousYpos > this.getY();
                 boolean isStand = (((LivingEntity) (Object) this) instanceof StandEntity);

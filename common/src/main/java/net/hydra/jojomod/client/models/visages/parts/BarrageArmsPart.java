@@ -137,6 +137,7 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
     PartPose pp = PartPose.ZERO;
     public<T extends Entity> void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
                        int light, float r, float g, float b, float alph) {
+
         float barrageAlpha = alph;
         if (context instanceof LivingEntity LE) {
             this.root().getAllParts().forEach(ModelPart::resetPose);
@@ -149,6 +150,8 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
 
 
             if (context instanceof Player player) {
+
+
                 this.animate(((IPlayerEntity)player).roundabout$getBarrageArms(), BarrageArmAnimation.BARRAGE, (context.tickCount + (partialTicks % 1)), 1f);
                 float correction = (float) Math.toRadians(95);
                 RightArmBAM.xRot -= correction;
@@ -162,7 +165,24 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                 EntityRenderer<? super T> P = $$7.getRenderer(player);
                 if (P instanceof PlayerRenderer PR) {
                     PlayerModel plm = PR.getModel();
-
+                    float x = plm.leftArm.x;
+                    float y = plm.leftArm.y;
+                    float z = plm.leftArm.z;
+                    float xRot = plm.leftArm.xRot;
+                    float yRot = plm.leftArm.yRot;
+                    float zRot = plm.leftArm.zRot;
+                    float xScale = plm.leftArm.xScale;
+                    float yScale = plm.leftArm.yScale;
+                    float zScale = plm.leftArm.zScale;
+                    float x2 = plm.rightArm.x;
+                    float y2 = plm.rightArm.y;
+                    float z2 = plm.rightArm.z;
+                    float xRot2 = plm.rightArm.xRot;
+                    float yRot2 = plm.rightArm.yRot;
+                    float zRot2 = plm.rightArm.zRot;
+                    float xScale2 = plm.rightArm.xScale;
+                    float yScale2 = plm.rightArm.yScale;
+                    float zScale2 = plm.rightArm.zScale;
 
                     byte shift = ((IPlayerEntity) player).roundabout$getShapeShift();
                     ModelPart rightArm = plm.rightArm;
@@ -182,7 +202,11 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                             leftSleeve = null;
                         }
                     } else if (player instanceof AbstractClientPlayer acp) {
-                        consumer = bufferSource.getBuffer(RenderType.entityTranslucent(PR.getTextureLocation(acp)));
+                        RenderType tl = RenderType.entityTranslucent(PR.getTextureLocation(acp));
+                        if (ClientUtil.hasChangedArms(acp)){
+                            tl = RenderType.entityTranslucent(ClientUtil.getChangedArmTexture(acp));
+                        }
+                        consumer = bufferSource.getBuffer(tl);
 
                     }
 
@@ -325,7 +349,6 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                     }
                     poseStack.popPose();
 
-
                     poseStack.pushPose();
                     this.LeftArmBAM3.translateAndRotate(poseStack);
 
@@ -389,6 +412,27 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
 
 
                     poseStack.popPose();
+                    PR.getModel().rightArm.x = x2;
+                    PR.getModel().rightArm.y = y2;
+                    PR.getModel().rightArm.z = z2;
+                    PR.getModel().rightArm.xRot = xRot2;
+                    PR.getModel().rightArm.yRot = yRot2;
+                    PR.getModel().rightArm.zRot = zRot2;
+                    PR.getModel().rightArm.xScale = xScale2;
+                    PR.getModel().rightArm.yScale = yScale2;
+                    PR.getModel().rightArm.zScale = zScale2;
+                    PR.getModel().leftArm.x = x;
+                    PR.getModel().leftArm.y = y;
+                    PR.getModel().leftArm.z = z;
+                    PR.getModel().leftArm.xRot = xRot;
+                    PR.getModel().leftArm.yRot = yRot;
+                    PR.getModel().leftArm.zRot = zRot;
+                    PR.getModel().leftArm.xScale = xScale;
+                    PR.getModel().leftArm.yScale = yScale;
+                    PR.getModel().leftArm.zScale = zScale;
+
+                    PR.getModel().leftSleeve.copyFrom(leftArm);
+                    PR.getModel().rightSleeve.copyFrom(leftArm);
                 }
             }
         }

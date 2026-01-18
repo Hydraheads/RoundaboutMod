@@ -912,15 +912,21 @@ public class StandHudRender {
         int l;
         int k;
         l = scaledHeight - 32 + 3;
+
+        x-=7;
+        l+=8;
         StandUser standUser = ((StandUser) playerEntity);
-        if (HeatUtil.isCold(playerEntity)) {
-            int heat = Mth.clamp(HeatUtil.getHeat(playerEntity)*-1,0,100);
-            k = Math.min((int) Math.floor(182f/100F * (float)heat),182);
-            context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 50, k, 5);
-        } else if (HeatUtil.isHot(playerEntity)) {
-            int heat = Mth.clamp(HeatUtil.getHeat(playerEntity),0,100);
-            k = Math.min((int) Math.floor(182f/100F * (float)heat),182);
-            context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 55, k, 5);
+        if (HeatUtil.isCold(playerEntity) || HeatUtil.isHot(playerEntity)) {
+            context.blit(StandIcons.JOJO_ICONS_2, x, l, 217, 51, 7, 20);
+            if (HeatUtil.isCold(playerEntity)) {
+                int heat = Mth.clamp(HeatUtil.getHeat(playerEntity) * -1, 0, 100);
+                k = Math.min((int) Math.floor(((float)19 / 100F) * (float) heat), 19);
+                context.blit(StandIcons.JOJO_ICONS_2, x, l+(20-k), 205, 52+(19-k), 7, k);
+            } else if (HeatUtil.isHot(playerEntity)) {
+                int heat = Mth.clamp(HeatUtil.getHeat(playerEntity), 0, 100);
+                k = Math.min((int) Math.floor(((float)19 / 100F) * (float) heat), 19);
+                context.blit(StandIcons.JOJO_ICONS_2, x, l+(20-k), 211, 52+(19-k), 7, k);
+            }
         }
     }
 }

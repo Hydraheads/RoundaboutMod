@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
@@ -257,7 +258,11 @@ public class PunchingGeneralPowers extends GeneralPowers {
         return super.setPowerOther(move,lastMove);
     }
     public void setAttack(){
-        this.attackTimeMax= 7;
+        if (HeatUtil.isArmsFrozen(self)){
+            this.attackTimeMax= 12;
+        } else {
+            this.attackTimeMax= 7;
+        }
         this.attackTimeDuring = 0;
         this.setAttackTime(0);
         setActivePower(PowerIndex.NONE);

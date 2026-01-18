@@ -179,7 +179,11 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                         leftSleeve = null;
                     }
                 } else if (player instanceof AbstractClientPlayer acp){
-                    consumer = bufferSource.getBuffer(RenderType.entityTranslucent(PR.getTextureLocation(acp)));
+                    RenderType tl = RenderType.entityTranslucent(PR.getTextureLocation(acp));
+                    if (ClientUtil.hasChangedArms(acp)){
+                        tl = RenderType.entityTranslucent(ClientUtil.getChangedArmTexture(acp));
+                    }
+                    consumer = bufferSource.getBuffer(tl);
 
                 }
 

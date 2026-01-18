@@ -90,4 +90,13 @@ public class HeatUtil {
             }
         }
     }
+
+    public static float getSlowdown(Entity entity){
+        if (entity instanceof LivingEntity LE){
+            int heat = Mth.clamp(Math.abs(getHeat(entity)),0,100);
+            float maxSlowdown = 0.17f;
+            return (maxSlowdown*0.01f)*heat;
+        }
+        return 0;
+    }
 }

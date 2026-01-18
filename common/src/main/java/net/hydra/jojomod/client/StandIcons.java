@@ -112,6 +112,8 @@ public class StandIcons {
             "textures/misc/time_rewind.png");
     public static final ResourceLocation NO_FACE_LAYER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/other_layers/faceless.png");
+    public static final ResourceLocation ICICLE_LAYER = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/other_layers/mr_icicle.png");
     public static final ResourceLocation STONE_HEAD_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/stone_face.png");
     public static final ResourceLocation STONE_HEAD_OVERLAY_JOSUKE = new ResourceLocation(Roundabout.MOD_ID,
