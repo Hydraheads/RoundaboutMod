@@ -167,7 +167,7 @@ public class BodySpikePart extends PsuedoHierarchicalModel {
                 modifySpike2(spike10,partial,tier2);
                 modifySpike2(spike11,partial,tier2);
                 modifySpike2(spike12,partial,tier2);
-                root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
+                //root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
             }
 
         }
@@ -176,7 +176,7 @@ public class BodySpikePart extends PsuedoHierarchicalModel {
 
     public void modifySpike(ModelPart spike, float partial, boolean tier2){
         if (spike != null){
-            spike.xScale = 0.01F;
+            spike.xScale = 0.5F;
             spike.yScale = 0.5F;
             if (!tier2){
                 spike.zScale = (partial)/3;
