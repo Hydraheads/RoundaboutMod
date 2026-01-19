@@ -497,17 +497,6 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     float xRot = (float) Math.toRadians(MainUtil.getLookAtEntityPitch(P,poss.getTarget()));
                     this.head.xRot = xRot;
                     this.hat.xRot = xRot;
-                /*    this.bodyParts().forEach(
-                            part -> {
-                             float rot = (float) Math.toRadians(MainUtil.getLookAtEntityPitch(P,poss.getTarget()));
-                             part.yRot = rot;
-                             float dist = new Vec2(part.x,part.z).distanceToSqr(Vec2.ZERO);
-                             part.x = (float) ( dist*Math.cos(Math.toRadians(rot)) );
-                             part.z = (float) ( dist*Math.sin(Math.toRadians(rot)) );
-
-                            }
-                    ); */
-                   // $$0.setYRot(MainUtil.getLookAtEntityYaw(P,poss.getTarget()));
                 }
             }
 

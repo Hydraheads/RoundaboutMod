@@ -33,6 +33,7 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Quaternionf;
@@ -110,6 +111,16 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
     private void roundabout$renderX(T entity, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
 //        if (roundabout$isRenderingYellowLines)
 //            return;
+
+        StandUser SU = (StandUser) entity;
+        if ( SU.roundabout$isPossessed()  ) {
+            PathfinderMob poss = SU.roundabout$getPossessor();
+            if (poss != null && poss.getTarget() != null) {
+                float yRot = MainUtil.getLookAtEntityYaw(entity,poss.getTarget());
+                entity.setYHeadRot(yRot);
+                entity.setYBodyRot(yRot);
+            }
+        }
 
         ClientUtil.savedPose = $$3.last().pose();
     }
