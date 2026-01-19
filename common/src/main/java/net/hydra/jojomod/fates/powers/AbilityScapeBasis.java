@@ -1077,14 +1077,12 @@ public class AbilityScapeBasis {
 
     /**set an ability on cooldown*/
     public void setCooldown(byte power, int cooldown){
-        Roundabout.LOGGER.info("1");
         if (!getPowerCooldowns().isEmpty() && getPowerCooldowns().size() >= power){
-            Roundabout.LOGGER.info("2");
             getPowerCooldowns().get(power).time = cooldown;
             getPowerCooldowns().get(power).maxTime = cooldown;
 
             if (self instanceof ServerPlayer sp && getStandUserSelf().rdbt$isServerControlledCooldown(getPowerCooldowns().get(power),power)){
-                Roundabout.LOGGER.info("3");
+
                 S2CPacketUtil.sendMaxCooldownSyncPacket(sp, power, cooldown, cooldown);
             }
         }
