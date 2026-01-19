@@ -16,6 +16,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.powers.GeneralPowers;
+import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
@@ -1614,6 +1615,23 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     /**stand mining intercepts tools for drop so that it is hand level*/
     @Inject(method = "hasCorrectToolForDrops(Lnet/minecraft/world/level/block/state/BlockState;)Z", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$hasCorrectTool(BlockState $$0, CallbackInfoReturnable<Boolean> cir) {
+        if (PowerTypes.hasPowerActive(this) && ((IPowersPlayer) this).rdbt$getPowers().isMining()
+        ) {
+
+            int MiningTier = ((IPowersPlayer) this).rdbt$getPowers().getMiningLevel();
+            if (MiningTier >= 4){
+                cir.setReturnValue(Items.DIAMOND_PICKAXE.isCorrectToolForDrops($$0) || !$$0.requiresCorrectToolForDrops());
+            } else if (MiningTier == 3){
+                cir.setReturnValue(Items.IRON_PICKAXE.isCorrectToolForDrops($$0) || !$$0.requiresCorrectToolForDrops());
+            } else if (MiningTier == 2){
+                cir.setReturnValue(Items.STONE_PICKAXE.isCorrectToolForDrops($$0) || !$$0.requiresCorrectToolForDrops());
+            } else if (MiningTier == 1){
+                cir.setReturnValue(Items.WOODEN_PICKAXE.isCorrectToolForDrops($$0) || !$$0.requiresCorrectToolForDrops());
+            } else {
+                cir.setReturnValue(!$$0.requiresCorrectToolForDrops());
+            }
+            return;
+        }
         if (PowerTypes.hasStandActive(this) && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()
         ) {
             int MiningTier = ((StandUser) this).roundabout$getStandPowers().getMiningLevel();
