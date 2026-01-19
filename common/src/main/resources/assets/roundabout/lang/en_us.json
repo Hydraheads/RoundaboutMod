@@ -1338,7 +1338,7 @@
   "ability.roundabout.anubis_mouse": "Mouse Mode",
   "ability.roundabout.anubis_mouse.desc": "Using this while hovering on a memory slot will allow it to remember your mouse motions.",
   "ability.roundabout.anubis_exp": "Knowledge Accumulation",
-  "ability.roundabout.anubis_exp.desc": "Due to Anubis' learning ability, you passively gain 50% more exp, even while it is inactive",
+  "ability.roundabout.anubis_exp.desc": "Due to Anubis' learning ability, you passively gain up to 50% more exp, even while Anubis is inactive",
   "ability.roundabout.anubis_speed": "Extreme Speed",
   "ability.roundabout.anubis_speed.desc": "Anubis grants incredible athletic ability, allowing you to move much faster and jump higher than before",
 

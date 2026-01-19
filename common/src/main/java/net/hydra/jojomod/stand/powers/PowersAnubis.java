@@ -73,11 +73,11 @@ public class PowersAnubis extends NewDashPreset {
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.roundabout.anubis_attack",
-                "instruction.roundabout.press_attack", StandIcons.RED_LASH,0,level,bypas));
+                "instruction.roundabout.press_attack", StandIcons.ANUBIS_SLASH,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,0, "ability.roundabout.anubis_sneak_attack",
-                "instruction.roundabout.press_attack_crouch", StandIcons.STAR_PLATINUM_PUNCH,0,level,bypas));
+                "instruction.roundabout.press_attack_crouch", StandIcons.ANUBIS_WIDE_SLASH,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.roundabout.anubis_pogo",
-                "instruction.roundabout.press_skill_air_crouch", StandIcons.MAGICIANS_FLAME_KICK,1,level,bypas));
+                "instruction.roundabout.press_skill_air_crouch", StandIcons.ANUBIS_DIVE_ATTACK,1,level,bypas));
 
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.anubis_double_cut",
                 "instruction.roundabout.anubis_normal", StandIcons.STAR_PLATINUM_FINAL_PUNCH,0,level,bypas));
@@ -107,9 +107,9 @@ public class PowersAnubis extends NewDashPreset {
                 "instruction.roundabout.press_skill_memory", StandIcons.ANUBIS_DMOUSE,2,level,bypas));
 
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+80,0, "ability.roundabout.anubis_exp",
-                "instruction.roundabout.passive", StandIcons.FURNACE_ABILITY,3,level,bypas));
+                "instruction.roundabout.passive", StandIcons.ANUBIS_EXP,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99,2, "ability.roundabout.anubis_speed",
-                "instruction.roundabout.passive", StandIcons.FIRM_SWING,3,level,bypas));
+                "instruction.roundabout.passive", StandIcons.ANUBIS_SPEED,3,level,bypas));
 
         return $$1;
     }
@@ -541,7 +541,6 @@ public class PowersAnubis extends NewDashPreset {
     @Override
     public void tickPower() {
 
-        if(!isClient()) {Roundabout.LOGGER.info(""+this.getStandUserSelf().roundabout$getStandAnimation());}
 
       //  Roundabout.LOGGER.info(" CA: " + this.getActivePower() + " | " + this.getAttackTime() + " | "+ this.getAttackTimeDuring() + "/" + this.getAttackTimeMax());
         StandUser SU = this.getStandUserSelf();

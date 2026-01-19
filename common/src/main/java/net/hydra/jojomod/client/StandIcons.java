@@ -478,6 +478,11 @@ public class StandIcons {
     public static final ResourceLocation ANUBIS_SAVE = Roundabout.location("textures/gui/icons/anubis/save.png");
     public static final ResourceLocation ANUBIS_CANCEL = Roundabout.location("textures/gui/icons/anubis/cancel.png");
     public static final ResourceLocation ANUBIS_DMOUSE = Roundabout.location("textures/gui/icons/anubis/delta_mouse.png");
+    public static final ResourceLocation ANUBIS_EXP = Roundabout.location("textures/gui/icons/anubis/extra_xp.png");
+    public static final ResourceLocation ANUBIS_SPEED = Roundabout.location("textures/gui/icons/anubis/extreme_speed.png");
+    public static final ResourceLocation ANUBIS_SLASH = Roundabout.location("textures/gui/icons/anubis/slash.png");
+    public static final ResourceLocation ANUBIS_WIDE_SLASH = Roundabout.location("textures/gui/icons/anubis/wide_slash.png");
+    public static final ResourceLocation ANUBIS_DIVE_ATTACK = Roundabout.location("textures/gui/icons/anubis/dive_attack.png");
 
     public static final ResourceLocation ANUBIS_MEMORY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/anubis_memory.png");
