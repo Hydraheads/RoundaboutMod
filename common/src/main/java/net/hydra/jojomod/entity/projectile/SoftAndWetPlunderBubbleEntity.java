@@ -34,6 +34,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.Cow;
+import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Inventory;
@@ -51,9 +53,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.*;
 import org.spongepowered.asm.mixin.Unique;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     private static final EntityDataAccessor<Byte> PLUNDER_TYPE = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class, EntityDataSerializers.BYTE);
@@ -78,6 +78,10 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     public boolean isPickable() {
         if (isPopPlunderBubbble()) {
             return false;
+        }
+
+        if (this.getPlunderType() == PlunderTypes.MOISTURE.id && this.getLiquidStolen() == 7) {
+            return true;
         }
 
 
@@ -526,6 +530,16 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                             splashLava();
                         }
                     }
+                    if (this.getLiquidStolen() == 7) {
+                        List<Entity> entities = MainUtil.hitbox(MainUtil.genHitbox(this.level(), this.getX(), this.getY(),
+                                this.getZ(), 3, 3, 3));
+                        entities.forEach(entity -> {
+                            if (entity instanceof LivingEntity LE) {
+                                this.clearEffects(LE);
+                            }
+                        });
+
+                    }
                 }
             }
             this.discard();
@@ -633,7 +647,19 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     protected void onHitEntity(EntityHitResult $$0) {
         if (!this.level().isClientSide()) {
 
-            if ($$0.getEntity() instanceof AbstractArrow ac && this.getPlunderType() == PlunderTypes.ITEM.id) {
+            if ($$0.getEntity() instanceof Sheep S && !S.isSheared() && this.getPlunderType() == PlunderTypes.ITEM.id) {
+                this.level().playSound(null, this, SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1.0F, 1.0F);
+                S.setSheared(true);
+                this.setHeldItem(new ItemStack(MainUtil.SHEEP_DYE.get(S.getColor()), 1 + this.random.nextInt(3)));
+                this.startReturning();
+                return;
+
+            } else if ($$0.getEntity() instanceof Cow && this.getPlunderType() == PlunderTypes.MOISTURE.id && this.getLiquidStolen() == -1) {
+                this.setLiquidStolen(7);
+                this.setFloating();
+                this.level().playSound(null, this, SoundEvents.COW_MILK, SoundSource.NEUTRAL, 1.0F, 1.0F);
+                return;
+            } else if ($$0.getEntity() instanceof AbstractArrow ac && this.getPlunderType() == PlunderTypes.ITEM.id) {
                 this.setHeldItem(((IAbstractArrowAccess)ac).roundabout$GetPickupItem().copyAndClear());
                 startReturning();
                 ac.discard();
@@ -1097,6 +1123,8 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                             this.level().playSound(null, this.blockPosition(), ModSounds.AIR_BUBBLE_EVENT,
                                     SoundSource.PLAYERS, 2F, (float) (1.1 + (Math.random() * 0.04)));
                         }
+                    } else if (this.getPlunderType() == PlunderTypes.MOISTURE.id && this.getLiquidStolen() == 7) {
+                        this.clearEffects(this.standUser);
                     }
                     popBubble();
                 }
@@ -1224,6 +1252,10 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                             }
                         }
                     }
+                } else if (this.getLiquidStolen() == 7) {
+                    if ($$0.getEntity() instanceof LivingEntity LE) {
+                        this.clearEffects(LE);
+                    }
                 }
             } else if (this.getPlunderType() == PlunderTypes.POTION_EFFECTS.id) {
                 if ($$0.getEntity() instanceof LivingEntity LE) {
@@ -1341,5 +1373,18 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             addItemLight();
         }
         super.remove($$0);
+    }
+
+    public void clearEffects(LivingEntity target) {
+        List<MobEffectInstance> effects = new ArrayList<>();
+        for (MobEffectInstance effect : target.getActiveEffects()) {
+            if (MainUtil.isSpecialEffect(effect)) {
+                effects.add(effect);
+            }
+        }
+        target.removeAllEffects();
+        for(MobEffectInstance effect : effects) {
+            target.addEffect(effect);
+        }
     }
 }

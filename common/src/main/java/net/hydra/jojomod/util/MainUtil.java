@@ -2,6 +2,7 @@ package net.hydra.jojomod.util;
 
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.primitives.Floats;
 import net.hydra.jojomod.Roundabout;
@@ -38,6 +39,7 @@ import net.hydra.jojomod.stand.powers.PowersMetallica;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -86,10 +88,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.GameType;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -116,6 +115,29 @@ public class MainUtil {
         isClient = true;
     }
 
+
+
+    public static final Map<DyeColor, ItemLike> SHEEP_DYE;
+    static {
+        SHEEP_DYE = Util.make(Maps.newEnumMap(DyeColor.class), ($$0) -> {
+            $$0.put(DyeColor.WHITE, Blocks.WHITE_WOOL);
+            $$0.put(DyeColor.ORANGE, Blocks.ORANGE_WOOL);
+            $$0.put(DyeColor.MAGENTA, Blocks.MAGENTA_WOOL);
+            $$0.put(DyeColor.LIGHT_BLUE, Blocks.LIGHT_BLUE_WOOL);
+            $$0.put(DyeColor.YELLOW, Blocks.YELLOW_WOOL);
+            $$0.put(DyeColor.LIME, Blocks.LIME_WOOL);
+            $$0.put(DyeColor.PINK, Blocks.PINK_WOOL);
+            $$0.put(DyeColor.GRAY, Blocks.GRAY_WOOL);
+            $$0.put(DyeColor.LIGHT_GRAY, Blocks.LIGHT_GRAY_WOOL);
+            $$0.put(DyeColor.CYAN, Blocks.CYAN_WOOL);
+            $$0.put(DyeColor.PURPLE, Blocks.PURPLE_WOOL);
+            $$0.put(DyeColor.BLUE, Blocks.BLUE_WOOL);
+            $$0.put(DyeColor.BROWN, Blocks.BROWN_WOOL);
+            $$0.put(DyeColor.GREEN, Blocks.GREEN_WOOL);
+            $$0.put(DyeColor.RED, Blocks.RED_WOOL);
+            $$0.put(DyeColor.BLACK, Blocks.BLACK_WOOL);
+        });
+    }
 
     public static boolean isMeleeDamage(DamageSource di){
         if (di.is(DamageTypes.PLAYER_ATTACK) || di.is(DamageTypes.MOB_ATTACK))
