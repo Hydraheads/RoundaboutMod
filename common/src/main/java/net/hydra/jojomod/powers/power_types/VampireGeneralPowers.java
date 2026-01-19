@@ -698,6 +698,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                             ((StandUser)LE).roundabout$setDazed((byte) 4);
                         }
                         HeatUtil.addHeat(self,-44);
+                        HeatUtil.addHeat(entity,-44);
                         this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.1f + Math.random() * 0.1f));
                         //self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.HIT_1_SOUND_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
                         addToCombo();

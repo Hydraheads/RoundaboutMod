@@ -280,6 +280,7 @@
     "fates.FateDeathScreenMixin",
     "fates.FateMusicManager",
     "fates.FatesLocalPlayerMixin",
+    "freezing.FrozenSkeletonModel",
     "gravity.client.GravityBiomeAmbientSoundsHandlerMixin",
     "gravity.client.GravityCameraMixin",
     "gravity.client.GravityClientPacketListener",

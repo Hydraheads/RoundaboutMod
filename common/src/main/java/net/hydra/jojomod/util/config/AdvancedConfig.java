@@ -151,6 +151,7 @@ public class AdvancedConfig implements Cloneable {
             Arrays.asList(
                     "minecraft:blaze",
                     "minecraft:vex",
+                    "minecraft:stray",
                     "minecraft:magma_cube",
                     "minecraft:snow_golem",
                     "minecraft:iron_golem",
