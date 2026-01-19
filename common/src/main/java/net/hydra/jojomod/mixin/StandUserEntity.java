@@ -846,7 +846,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (!(((LivingEntity)(Object)this) instanceof Player)) {
             this.roundabout$getStandPowers().tickPowerEnd();
         }
-
+        if (isAlive())
+        {
+            if (rdbt$hideDeath){
+                rdbt$hideDeath = false;
+            }
+        }
         if (level().isClientSide()){
             ClientUtil.tickHeartbeat(this);
         }
@@ -3154,7 +3159,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
 
-
         if ($$0.getEntity() instanceof Player pe && !$$0.isIndirect()
         && !$$0.is(DamageTypes.THORNS)&& !$$0.is(ModDamageTypes.CORPSE) &&
                 !$$0.is(ModDamageTypes.CORPSE_EXPLOSION) &&
@@ -3494,6 +3498,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     // Cheat Death and negate the death event
     @Inject(method = "checkTotemDeathProtection(Lnet/minecraft/world/damagesource/DamageSource;)Z", at = @At(value = "HEAD"), cancellable = true)
     public void rdbt$checkTotemDeathProtection(DamageSource dsource, CallbackInfoReturnable<Boolean> cir) {
+
         if ( (rdbt$this() instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers().cheatDeath(dsource))
                 || roundabout$getStandPowers().cheatDeath(dsource)){
             cir.setReturnValue(true);
@@ -3793,8 +3798,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     }
                 }
             }
-
-
         }
         if (roundabout$mutualActuallyHurt($$0,$$1)){
             ci.cancel();
@@ -3972,6 +3975,30 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
 
 
+            //Frozen deaths from vampire freeze / ice sculptures / white album
+            if ($$0.getEntity() != null && !$$0.is(DamageTypes.THORNS) && !$$0.is(ModDamageTypes.STAND_FIRE)){
+                if (HeatUtil.isBodyFrozen(rdbt$this()) && !level().isClientSide()){
+                    ((ServerLevel) this.level()).sendParticles(
+                            new BlockParticleOption(ParticleTypes.BLOCK, Blocks.ICE.defaultBlockState()),
+                            this.getEyePosition().x,
+                            this.getEyePosition().y,
+                            this.getEyePosition().z,
+                            100, 0.0, 0, 0.0, 0.3);
+
+                    level().playSound(
+                            null,
+                            blockPosition(),
+                            Blocks.ICE.defaultBlockState().getSoundType().getBreakSound(),
+                            SoundSource.PLAYERS,
+                            1.0F,
+                            (float) ( 1.0F+Math.random()*0.01F));
+                    HeatUtil.resetHeat(rdbt$this());
+                    hurt(ModDamageTypes.of(level(), ModDamageTypes.ICE_SHATTER,this), 30F);
+                    S2CPacketUtil.shatterIce(getId());
+                    return true;
+                }
+            }
+
         }
         return false;
     }
@@ -4013,6 +4040,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             this.level().gameEvent(GameEvent.HIT_GROUND, this.getPosition(0F),
                     GameEvent.Context.of(this, this.mainSupportingBlockPos.map(blockPos -> this.level().getBlockState((BlockPos)blockPos)).orElse(this.level().getBlockState($$3))));
         }
+    }
+
+    //For Model to dissapear during death animation like vampire ice shatter
+    public boolean rdbt$hideDeath = false;
+    public void rdbt$setHideDeath(Boolean hide){
+        rdbt$hideDeath = hide;
+    }
+    public boolean rdbt$getHideDeath(){
+        return rdbt$hideDeath;
     }
 
     /**Reduced gravity changes fall damage calcs*/

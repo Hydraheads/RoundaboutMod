@@ -1,9 +1,14 @@
 package net.hydra.jojomod.util;
 
+import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 
 public class HeatUtil {
     public static boolean isHot(Entity entity){
@@ -43,12 +48,6 @@ public class HeatUtil {
         }
         return false;
     }
-    public static boolean isTotallyFrozen(Entity entity){
-        if (entity instanceof LivingEntity LE){
-            return ((StandUser)LE).roundabout$getHeat() <= -100;
-        }
-        return false;
-    }
 
     public static boolean isSweating(Entity entity){
         if (entity instanceof LivingEntity LE){
@@ -68,7 +67,12 @@ public class HeatUtil {
         }
         return false;
     }
-
+    public static void resetHeat(Entity entity) {
+        if (entity instanceof LivingEntity LE) {
+            StandUser su = ((StandUser) LE);
+            su.roundabout$setHeat(0);
+        }
+    }
 
     public static void addHeat(Entity entity, int amt){
         if (entity instanceof LivingEntity LE){
@@ -87,14 +91,24 @@ public class HeatUtil {
 
     public static void tickHeat(Entity entity){
         if (entity instanceof LivingEntity LE){
+            if (LE instanceof Player PE && PE.isCreative()){
+                if (getHeat(PE) != 0) {
+                    resetHeat(PE);
+                }
+                return;
+            }
             StandUser su = ((StandUser)LE);
             int heat = su.roundabout$getHeat();
             if (heat < 0){
                 if (entity.tickCount%15==0){
                     heat = Mth.clamp(heat+1,-110,110);
                     su.roundabout$setHeat(heat);
-                }if (heat < -110){
-
+                } if (heat <= -100){
+                    su.roundabout$setDazed((byte)3);
+                    LE.hurtMarked = true;
+                    LE.hasImpulse = true;
+                    LE.setDeltaMovement(RotationUtil.vecPlayerToWorld(new Vec3(0,-0.4,0),
+                            ((IGravityEntity)entity).roundabout$getGravityDirection()));
                 }
             } else if (heat > 0) {
                 if (entity.tickCount%15==0){

@@ -377,4 +377,11 @@ public class S2CPacketUtil {
             );
         }
     }
+
+    public static void shatterIce(int entityId) {
+            ModMessageEvents.sendToAll(
+                    ServerToClientPackets.S2CPackets.MESSAGES.ShatterIce.value,
+                    entityId
+            );
+    }
 }

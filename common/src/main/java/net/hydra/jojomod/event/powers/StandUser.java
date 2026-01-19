@@ -237,6 +237,8 @@ public interface StandUser {
     float roundaboutGetMaxStoredDamage();
 
     byte roundabout$getStoredDamageByte();
+    void rdbt$setHideDeath(Boolean hide);
+    boolean rdbt$getHideDeath();
 
     void roundabout$UniversalTick();
     void roundabout$startAutoSpinAttack(int p_204080_);

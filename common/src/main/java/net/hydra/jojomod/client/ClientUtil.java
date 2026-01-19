@@ -722,6 +722,15 @@ public class ClientUtil {
                     int i = (int) vargs[0];
                     ((StandUser)player).roundabout$getPossessor().setTarget((LivingEntity) player.level().getEntity(i));
                 }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ShatterIce.value)) {
+                    int i = (int) vargs[0];
+                    Entity target = player.level().getEntity(i);
+                    Roundabout.LOGGER.info("2");
+                    if (target instanceof LivingEntity LE) {
+                        Roundabout.LOGGER.info("3");
+                        ((StandUser)LE).rdbt$setHideDeath(true);
+                    }
+                }
                 // theoretical deregister dynamic worlds packet
                 // String name = buf.readUtf();
                 //        ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(name));

@@ -515,6 +515,8 @@
   "death.attack.sunlight.item": "%1$s is dust in the wind.",
   "death.attack.sunlight.player": "%1$s saw the light while fighting %2$s.",
   "death.attack.sunlight.player.item": "%1$s saw the light while fighting %2$s.",
+  "death.attack.ice_shatter": "%1$s was shattered by %2$s",
+  "death.attack.ice_shatter.item": "%1$s was shattered by %2$s",
   "death.attack.stand_fire": "%1$s was roasted",
   "death.attack.stand_fire.item": "%1$s was roasted",
   "death.attack.stand_fire.player": "%1$s was roasted by %2$s",
