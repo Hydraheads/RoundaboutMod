@@ -3,9 +3,11 @@ package net.hydra.jojomod.mixin.achtung;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.util.HeatUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -28,12 +30,29 @@ public class AchtungEntityRenderDispatcher {
         /**Insert code for other partially visible stands here, this is mirrored across visage
          * parts and armor rendering.*/
 
-
         ClientUtil.setThrowFadeToTheEther(throwFadeToTheEther);
+
+        //The thin ice rendering
+        int frozenLevel = 0;
+        if (HeatUtil.isArmsFrozen(entity) && entity instanceof LivingEntity LE){
+            boolean isHurt = LE.hurtTime > 0;
+            if (!ClientUtil.isHiddenIceEntity(entity) && !isHurt) {
+                frozenLevel = 1;
+                if (HeatUtil.isLegsFrozen(entity)) {
+                    frozenLevel = 2;
+                }
+                if (HeatUtil.isBodyFrozen(entity)) {
+                    frozenLevel = 3;
+                }
+            }
+        }
+        ClientUtil.frozenLevel = frozenLevel;
     }
     @Inject(method = "render(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "TAIL"))
     protected <E extends Entity>  void roundabout$renderTail(E entity, double $$1, double $$2, double $$3, float $$4, float $$5, PoseStack $$6, MultiBufferSource $$7, int light, CallbackInfo ci) {
 
+        //The thin ice rendering
         ClientUtil.setThrowFadeToTheEther(1);
+        ClientUtil.frozenLevel = 0;
     }
 }

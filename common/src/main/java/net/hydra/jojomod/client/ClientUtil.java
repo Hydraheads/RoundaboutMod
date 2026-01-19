@@ -65,7 +65,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.TooltipFlag;
 import net.zetalasis.client.shader.D4CShaderFX;
@@ -90,8 +92,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -203,16 +203,29 @@ public class ClientUtil {
         return false;
     }
     public static boolean hideArmor(Entity ent){
-        if (HeatUtil.isBodyFrozen(ent)){
+        if (HeatUtil.isBodyFrozen(ent) &&
+                isHiddenIceEntity(ent)){
             return true;
         }
         return false;
     }
+    public static boolean isHiddenIceEntity(Entity ent){
+        return (ent != null && (ent instanceof Player) || (ent instanceof Mob mb
+        && !mb.isBaby() && (ent.getType()==EntityType.ZOMBIE
+                ||ent.getType()==EntityType.HUSK
+                ||ent.getType()==EntityType.CREEPER
+                ||ent.getType()==EntityType.DROWNED
+                ||ent.getType()==EntityType.SKELETON)));
+    }
     public static boolean hideLegs(Entity ent){
-        if (HeatUtil.isLegsFrozen(ent)){
+        if (HeatUtil.isLegsFrozen(ent) &&
+                isHiddenIceEntity(ent)){
             return true;
         }
         return false;
+    }
+    public static int getFrozenLevel(){
+        return frozenLevel;
     }
     public static int clientTicker;
     public static int getClientTicker(){
@@ -934,7 +947,12 @@ public class ClientUtil {
     public static int getThrowFadeToTheEtherInt(){
         return Mth.floor(throwFadeToTheEther*255);
     }
+    //How visible the next rendered model part will be
     public static float throwFadeToTheEther = 1f;
+
+    //If this is the case, thin ice will be rendered over the next rendered model part
+    public static int frozenLevel = 0;
+
     public static int getOutlineColor(Entity entity) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {

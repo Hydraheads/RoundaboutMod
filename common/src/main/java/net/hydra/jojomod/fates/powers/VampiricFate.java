@@ -544,9 +544,9 @@ public int speedActivated = 0;
             setAttackTimeDuring(0);
             setActivePower(BLOOD_REGEN);
             playSoundsIfNearby(SoundIndex.BLOOD_REGEN, 100, true);
-            this.setCooldown(PowerIndex.FATE_2_SNEAK, 1200);
+            this.setCooldown(PowerIndex.FATE_2_SNEAK, 600);
             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.FATE_2_SNEAK,
-                    1200
+                    600
             );
 
         }
@@ -558,11 +558,11 @@ public int speedActivated = 0;
                 PE.getFoodData().setFoodLevel(foodLevel-10);
             }
 
-            this.setCooldown(PowerIndex.GLOBAL_DASH, 600);
+            this.setCooldown(PowerIndex.GLOBAL_DASH, 180);
             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.GLOBAL_DASH,
                     600
             );
-            this.setCooldown(PowerIndex.FATE_3_SNEAK, 600);
+            this.setCooldown(PowerIndex.FATE_3_SNEAK, 180);
             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.FATE_3_SNEAK,
                     600
             );

@@ -9,6 +9,7 @@ import net.hydra.jojomod.access.ILivingEntityRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.BigBubbleLayer;
+import net.hydra.jojomod.client.models.layers.FrozenLayer;
 import net.hydra.jojomod.client.models.stand.renderers.*;
 import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
 import net.hydra.jojomod.entity.visages.mobs.JosukePartEightNPC;
@@ -20,6 +21,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersMetallica;
+import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
@@ -128,6 +130,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
     @Inject(method= "<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Lnet/minecraft/client/model/EntityModel;F)V", at = @At(value = "RETURN"))
     private void roundabout$init(EntityRendererProvider.Context $$0, EntityModel $$1, float $$2, CallbackInfo ci) {
         this.addLayer(new BigBubbleLayer<>($$0, ((LivingEntityRenderer)(Object)this)));
+        this.addLayer(new FrozenLayer<>($$0, ((LivingEntityRenderer)(Object)this)));
     }
 
     @Nullable
@@ -224,6 +227,17 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
             ci.setReturnValue(roundabout$PackRed(
                     ((StandUser)$$0).roundabout$getStoredDamageByte(),
                     10));
+        } else if (ClientUtil.getFrozenLevel() > 1 && !ClientUtil.isHiddenIceEntity($$0)){
+            int flevel = ClientUtil.getFrozenLevel();
+            if (flevel == 2){
+                ci.setReturnValue(roundabout$PackRed(
+                        2,
+                        10));
+            } else {
+                ci.setReturnValue(roundabout$PackRed(
+                        6,
+                        10));
+            }
         }
     }
 }
