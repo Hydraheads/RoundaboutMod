@@ -725,9 +725,7 @@ public class ClientUtil {
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ShatterIce.value)) {
                     int i = (int) vargs[0];
                     Entity target = player.level().getEntity(i);
-                    Roundabout.LOGGER.info("2");
                     if (target instanceof LivingEntity LE) {
-                        Roundabout.LOGGER.info("3");
                         ((StandUser)LE).rdbt$setHideDeath(true);
                     }
                 }
@@ -805,7 +803,7 @@ public class ClientUtil {
             ((StandUser) player).roundabout$getStandPowers().clientIntUpdated(data);
         } else if (context == PacketDataIndex.S2C_INT_FLESH_BUD){
             Entity target = player.level().getEntity(data);
-            if (target != null && !target.isRemoved() && target.isAlive()) {
+            if (target != null && !target.isRemoved() && target.isAlive() && target.distanceTo(getPlayer()) < 30) {
                 playSound(ModSounds.FLESH_BUD_EVENT,target,1,1);
             }
         } else if (context == PacketDataIndex.S2C_INT_COMBO_AMT){
