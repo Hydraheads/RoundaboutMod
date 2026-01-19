@@ -20,6 +20,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -785,6 +786,8 @@ public class PowersWalkingHeart extends NewDashPreset {
             if (curse == LocacacaCurseIndex.LEFT_LEG && PE.getMainArm() == HumanoidArm.LEFT)
                 return true;
         }
+        if (HeatUtil.isLegsFrozen(self))
+            return true;
 
             return false;
     }
