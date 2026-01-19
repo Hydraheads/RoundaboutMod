@@ -1256,6 +1256,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                     if ($$0.getEntity() instanceof LivingEntity LE) {
                         this.clearEffects(LE);
                     }
+                    this.popBubble();
                 }
             } else if (this.getPlunderType() == PlunderTypes.POTION_EFFECTS.id) {
                 if ($$0.getEntity() instanceof LivingEntity LE) {
