@@ -123,7 +123,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         }
     }
     public void clientIceClutch(){
-        if (canAttack2() && !onCooldown(PowerIndex.GENERAL_2_SNEAK)){
+        if (canAttack2() && !onCooldown(PowerIndex.GENERAL_2)){
             this.tryPower(ICE_CLUTCH);
         }
     }
@@ -511,9 +511,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public float getIceStrength(Entity entity) {
         if (self instanceof Player pl && ((IFatePlayer) pl).rdbt$getFatePowers() instanceof VampireFate vp) {
             if (this.getReducedDamage(entity)) {
-                return 2F;
+                return 1F;
             } else {
-                return 5F;
+                return 2F;
             }
         }
         return 1;
@@ -530,7 +530,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 setSkillIcon(context, x, y, 1, StandIcons.HAIR_SPIKE, PowerIndex.GENERAL_1);
             }
             if (isHoldingSneak()) {
-                setSkillIcon(context, x, y, 2, StandIcons.ICE_CLUTCH, PowerIndex.GENERAL_2_SNEAK);
+                setSkillIcon(context, x, y, 2, StandIcons.ICE_CLUTCH, PowerIndex.GENERAL_2);
             } else {
                 setSkillIcon(context, x, y, 2, StandIcons.BLOOD_CLUTCH, PowerIndex.GENERAL_2);
             }
@@ -730,9 +730,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         setActivePower(ICE_CLUTCH);
         if (!self.level().isClientSide()) {
 
-            setCooldown(PowerIndex.GENERAL_2_SNEAK,200);
+            setCooldown(PowerIndex.GENERAL_2,70);
             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
-                    PowerIndex.GENERAL_2_SNEAK, 200);
+                    PowerIndex.GENERAL_2, 70);
             if (getPlayerPos2() != PlayerPosIndex.CLUTCH_WINDUP) {
                 setPlayerPos2(PlayerPosIndex.CLUTCH_WINDUP);
             }
@@ -768,9 +768,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         setActivePower(BLOOD_CLUTCH);
         if (!self.level().isClientSide()) {
 
-            setCooldown(PowerIndex.GENERAL_2,200);
+            setCooldown(PowerIndex.GENERAL_2,70);
             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
-                    PowerIndex.GENERAL_2, 200);
+                    PowerIndex.GENERAL_2, 70);
             if (getPlayerPos2() != PlayerPosIndex.CLUTCH_WINDUP) {
                 setPlayerPos2(PlayerPosIndex.CLUTCH_WINDUP);
             }
