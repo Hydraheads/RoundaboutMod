@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.model.geom.ModelPart;
@@ -62,11 +63,6 @@ public class PlayerChestPart extends PsuedoHierarchicalModel {
 
     /**Idle 1 (byte 0) = head straight, idle 2 (byte 1) = head follow*/
 
-
-    public ResourceLocation getTextureLocation(String path){
-        return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_breasts/"+path+".png");
-    }
-
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
                        int light, float r, float g, float b, float alpha) {
         if (context instanceof AbstractClientPlayer LE) {
@@ -75,6 +71,9 @@ public class PlayerChestPart extends PsuedoHierarchicalModel {
                 partialTicks = 0;
             }
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(LE.getSkinTextureLocation()));
+            if (ClientUtil.hasChangedBody(context)){
+                consumer = bufferSource.getBuffer(RenderType.entityTranslucent(ClientUtil.getChangedBodyTexture(context)));
+            }
             //The number at the end is inversely proportional so 2 is half speed
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
         }

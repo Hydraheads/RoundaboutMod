@@ -21,6 +21,7 @@ import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
+import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
@@ -118,7 +119,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     float oscillation = Math.abs(((entity.tickCount % 10) + (partialTicks % 1)) - 5) * 0.04F;
                     alpha += oscillation;
                     if (entity.getMainArm() == HumanoidArm.RIGHT) {
-                        if (curse != LocacacaCurseIndex.RIGHT_HAND) {
+                        if (curse != LocacacaCurseIndex.RIGHT_HAND && !HeatUtil.isArmsFrozen(entity)) {
                             if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
                                 renderRightArmSlim(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
                                         r, g, b, StandIcons.MUSCLE_SLIM, 0.01F, 0, 0, alpha);
@@ -127,12 +128,12 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                         r, g, b, StandIcons.MUSCLE, 0.01F, 0, 0, alpha);
                             }
                         }
-                        if (curse != LocacacaCurseIndex.RIGHT_LEG) {
+                        if (curse != LocacacaCurseIndex.RIGHT_LEG && !HeatUtil.isLegsFrozen(entity)) {
                             renderRightLeg(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
                                     r, g, b, StandIcons.MUSCLE, 0.01F, 0, 0, alpha);
                         }
                     } else {
-                        if (curse != LocacacaCurseIndex.LEFT_HAND) {
+                        if (curse != LocacacaCurseIndex.LEFT_HAND && !HeatUtil.isArmsFrozen(entity)) {
                             if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
                                 renderLeftArmSlim(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
                                         r, g, b, StandIcons.MUSCLE_SLIM, -0.01F, 0, 0, alpha);
@@ -141,7 +142,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                         r, g, b, StandIcons.MUSCLE, -0.01F, 0, 0, alpha);
                             }
                         }
-                        if (curse != LocacacaCurseIndex.LEFT_LEG) {
+                        if (curse != LocacacaCurseIndex.LEFT_LEG && !HeatUtil.isLegsFrozen(entity)) {
                             renderLeftLeg(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
                                     r, g, b, StandIcons.MUSCLE, -0.01F, 0, 0, alpha);
                         }
@@ -152,6 +153,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 ItemStack offHand = entity.getOffhandItem();
 
                 if (visage != null && !visage.isEmpty()) {
+                    boolean isBodyFrozen = HeatUtil.isBodyFrozen(entity);
                     if (visage.getItem() instanceof MaskItem MI) {
                         VisageData vd = MI.visageData.generateVisageData(entity);
                         String path = MI.visageData.getSkinPath();
@@ -163,47 +165,47 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             renderSmallBreast(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersPonytail()) {
+                        if (vd.rendersPonytail() && !isBodyFrozen) {
                             renderPonytail(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersBigHair() && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
+                        if (vd.rendersBigHair() && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem) && !isBodyFrozen) {
                             renderBigHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersKakyoinHair() && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
+                        if (vd.rendersKakyoinHair() && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem) && !isBodyFrozen) {
                             renderKakyoinHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersDiegoHat() && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
+                        if (vd.rendersDiegoHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
                             renderDiegoHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersSpeedwagonFoundationHat() && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
+                        if (vd.rendersSpeedwagonFoundationHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
                             renderSpeedwagonFoundationHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersBasicHat() && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
+                        if (vd.rendersBasicHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
                             renderBasicHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersSpikeyHair() && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
+                        if (vd.rendersSpikeyHair() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
                             renderSpikeyHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersJosukeDecals()) {
+                        if (vd.rendersJosukeDecals() && !isBodyFrozen) {
                             renderJosukeDecals(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersTasselHat() && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
+                        if (vd.rendersTasselHat() && !isBodyFrozen && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
                             renderTasselHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersLegCloakPart()) {
+                        if (vd.rendersLegCloakPart() && !isBodyFrozen) {
                             renderLegCloakPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersAvdolHairPart() && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
+                        if (vd.rendersAvdolHairPart() && !isBodyFrozen && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
                             renderAvdolHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
@@ -269,16 +271,16 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 }
 
 
+                r = isHurt ? 1.0F : 1.0F;
+                g = isHurt ? 0.6F : 1.0F;
+                b = isHurt ? 0.6F : 1.0F;
+
                 if (ClientUtil.hasChangedArms(entity)) {
                     if (getParentModel() instanceof PlayerModel<?> pm) {
                         pm.rightArm.visible = true;
                         pm.rightSleeve.visible = true;
                         pm.leftArm.visible = true;
                         pm.leftSleeve.visible = true;
-
-                        r = isHurt ? 1.0F : 1.0F;
-                        g = isHurt ? 0.6F : 1.0F;
-                        b = isHurt ? 0.6F : 1.0F;
                         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(ClientUtil.getChangedArmTexture(entity)));
                         ClientUtil.pushPoseAndCooperate(poseStack, 46);
                         pm.rightArm.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY, r,
@@ -303,10 +305,6 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         pm.leftPants.visible = true;
                         pm.rightPants.visible = true;
                         pm.rightLeg.visible = true;
-
-                        r = isHurt ? 1.0F : 1.0F;
-                        g = isHurt ? 0.6F : 1.0F;
-                        b = isHurt ? 0.6F : 1.0F;
                         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(ClientUtil.getChangedLegTexture(entity)));
                         ClientUtil.pushPoseAndCooperate(poseStack, 46);
                         pm.rightLeg.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY, r,
@@ -318,6 +316,32 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         pm.leftLeg.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY, r,
                                 g, b, 1);
                         pm.leftPants.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY, r,
+                                g, b, 1);
+                        ClientUtil.popPoseAndCooperate(poseStack, 46);
+                    }
+                }
+                if (ClientUtil.hasChangedBody(entity)) {
+                    if (getParentModel() instanceof PlayerModel<?> pm) {
+                        pm.body.visible = true;
+                        pm.jacket.visible = true;
+                        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(ClientUtil.getChangedBodyTexture(entity)));
+                        ClientUtil.pushPoseAndCooperate(poseStack, 46);
+                        pm.body.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY, r,
+                                g, b, 1);
+                        pm.jacket.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY, r,
+                                g, b, 1);
+                        ClientUtil.popPoseAndCooperate(poseStack, 46);
+                    }
+                }
+                if (ClientUtil.hasChangedHead(entity)) {
+                    if (getParentModel() instanceof PlayerModel<?> pm) {
+                        pm.head.visible = true;
+                        pm.hat.visible = true;
+                        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(ClientUtil.getChangedHeadTexture(entity)));
+                        ClientUtil.pushPoseAndCooperate(poseStack, 46);
+                        pm.head.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY, r,
+                                g, b, 1);
+                        pm.hat.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY, r,
                                 g, b, 1);
                         ClientUtil.popPoseAndCooperate(poseStack, 46);
                     }

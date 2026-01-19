@@ -74,6 +74,9 @@ public class SmallChestPart extends PsuedoHierarchicalModel {
                 partialTicks = 0;
             }
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(path)));
+            if (ClientUtil.hasChangedBody(context)){
+                consumer = bufferSource.getBuffer(RenderType.entityTranslucent(ClientUtil.getChangedBodyBreastTexture(context)));
+            }
             //The number at the end is inversely proportional so 2 is half speed
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
         }

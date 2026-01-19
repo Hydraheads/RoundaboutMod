@@ -37,6 +37,12 @@ public class HeatUtil {
         }
         return false;
     }
+    public static boolean isBodyFrozen(Entity entity){
+        if (entity instanceof LivingEntity LE){
+            return ((StandUser)LE).roundabout$getHeat() <= -100;
+        }
+        return false;
+    }
     public static boolean isTotallyFrozen(Entity entity){
         if (entity instanceof LivingEntity LE){
             return ((StandUser)LE).roundabout$getHeat() <= -100;

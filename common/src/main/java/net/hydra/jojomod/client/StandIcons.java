@@ -114,6 +114,8 @@ public class StandIcons {
             "textures/entity/other_layers/faceless.png");
     public static final ResourceLocation ICICLE_LAYER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/other_layers/mr_icicle.png");
+    public static final ResourceLocation ICE_CHEST_LAYER = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/other_layers/ice_breast.png");
     public static final ResourceLocation STONE_HEAD_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/stone_face.png");
     public static final ResourceLocation STONE_HEAD_OVERLAY_JOSUKE = new ResourceLocation(Roundabout.MOD_ID,
