@@ -100,7 +100,7 @@ public class HeatUtil {
             StandUser su = ((StandUser)LE);
             int heat = su.roundabout$getHeat();
             if (heat < 0){
-                if (entity.tickCount%15==0){
+                if (entity.tickCount%10==0){
                     heat = Mth.clamp(heat+1,-110,110);
                     su.roundabout$setHeat(heat);
                 } if (heat <= -100){
@@ -111,7 +111,7 @@ public class HeatUtil {
                             ((IGravityEntity)entity).roundabout$getGravityDirection()));
                 }
             } else if (heat > 0) {
-                if (entity.tickCount%15==0){
+                if (entity.tickCount%10==0){
                     heat = Mth.clamp(heat-1,-110,110);
                     su.roundabout$setHeat(heat);
                 }

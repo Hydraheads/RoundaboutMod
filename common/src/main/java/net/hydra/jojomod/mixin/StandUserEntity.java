@@ -1291,6 +1291,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         roundabout$tickStandOrStandless();
         //if (StandID > -1) {
         if (!this.level().isClientSide()) {
+            if (!onGround()){
+                roundabout$setIdleTime(0);
+            }
+
             HeatUtil.tickHeat(rdbt$this());
             if (roundabout$getZappedToID() > -1) {
                 roundabout$zappedTicks++;
@@ -3983,7 +3987,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             this.getEyePosition().x,
                             this.getEyePosition().y,
                             this.getEyePosition().z,
-                            100, 0.0, 0, 0.0, 0.3);
+                            110, 0.0, 0, 0.0, 0.5);
 
                     level().playSound(
                             null,

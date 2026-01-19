@@ -128,6 +128,10 @@ public class AbilityScapeBasis {
     /**If you stand still enough, abilities recharge faster. But this could be overpowered for some abilties, so
      * use discretion and override this to return false on abilities where this might be op.*/
     public boolean canUseStillStandingRecharge(byte bt){
+        CooldownInstance cdi = getCooldown(bt);
+        if (cdi != null && isServerControlledCooldown(cdi,bt)){
+            return false;
+        }
         return true;
     }
 
