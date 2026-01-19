@@ -5289,6 +5289,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**If the cooldown slot is to be controlled by the server, return true. Consider using this if
      * bad TPS makes a stand ability actually overpowered for the client to handle the recharging of.*/
     @Unique
+    @Override
     public boolean rdbt$isServerControlledCooldown(CooldownInstance ci, byte num){
         if (roundabout$getStandPowers().isServerControlledCooldown(ci,num)){
             return true;

@@ -34,6 +34,7 @@ public interface StandUser {
     void roundabout$deeplyRemoveAttackTarget();
     boolean roundabout$getQueForTargetDeletion();
     boolean rdbt$getJumping();
+    boolean rdbt$isServerControlledCooldown(CooldownInstance ci, byte num);
     void roundabout$removeQueForTargetDeletion();
     void roundabout$onStandOutLookAround(StandEntity passenger);
     boolean roundabout$getUniqueStandModeToggle();

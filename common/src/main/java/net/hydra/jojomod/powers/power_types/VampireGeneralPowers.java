@@ -832,6 +832,15 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         }
     }
 
+    public void sendClutchCooldowns(int time){
+        if (!onCooldown(PowerIndex.GENERAL_2) || getCooldown(PowerIndex.GENERAL_2).time < time){
+            setCooldown(PowerIndex.GENERAL_2,time);
+        }
+        if (!onCooldown(PowerIndex.GENERAL_2_SNEAK) || getCooldown(PowerIndex.GENERAL_2_SNEAK).time < time){
+            setCooldown(PowerIndex.GENERAL_2_SNEAK,time);
+        }
+    }
+
     public void spikeHit(){
         setAttackTimeDuring(-10);
         if (!self.level().isClientSide()){
@@ -857,8 +866,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                                 }
 
                                 if (value instanceof Player pl){
+                                    sendClutchCooldowns(16);
                                     ((StandUser)pl).roundabout$setDazed((byte) 16);
                                 } else if (value instanceof LivingEntity livingEntity && !MainUtil.isBossMob(livingEntity)){
+                                    sendClutchCooldowns(16);
                                     ((StandUser)livingEntity).roundabout$setDazed((byte) 16);
                                 }
                                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SPIKE_HIT_EVENT, SoundSource.PLAYERS, 1F, (float) (1.0f + Math.random() * 0.05f));
@@ -877,6 +888,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         }
     }
 
+    @Override
     public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
         if (num == PowerIndex.GENERAL_1 || num == PowerIndex.GENERAL_1_SNEAK || num == PowerIndex.GENERAL_2
                 || num == PowerIndex.GENERAL_2_SNEAK) {
@@ -1035,6 +1047,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
                 if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
                     if (entity instanceof LivingEntity livingEntity){
+                        sendClutchCooldowns(12);
                         ((StandUser)livingEntity).roundabout$setDazed((byte) 12);
                     }
                     ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CRIT,
