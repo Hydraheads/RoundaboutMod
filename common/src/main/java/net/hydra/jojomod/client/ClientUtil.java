@@ -213,6 +213,7 @@ public class ClientUtil {
         return (ent != null && (ent instanceof Player) || (ent instanceof Mob mb
         && !mb.isBaby() && (ent.getType()==EntityType.ZOMBIE
                 ||ent.getType()==EntityType.HUSK
+                ||ent.getType()==EntityType.CREEPER
                 ||ent.getType()==EntityType.DROWNED
                 ||ent.getType()==EntityType.SKELETON)));
     }

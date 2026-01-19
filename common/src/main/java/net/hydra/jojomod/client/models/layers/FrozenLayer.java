@@ -9,14 +9,12 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.mixin.access.AccessCreeperModel;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.Model;
-import net.minecraft.client.model.SkeletonModel;
-import net.minecraft.client.model.ZombieModel;
+import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -86,6 +84,20 @@ public class FrozenLayer<T extends LivingEntity, A extends EntityModel<T>> exten
                             renderPart(poseStack, sm.head, consumer, packedLight);
                         }
                     }
+                } else if (entity.getType() == EntityType.CREEPER) {
+                    if (getParentModel() instanceof CreeperModel<?> sm) {
+                        VertexConsumer consumer = buffer.getBuffer(RenderType.entityTranslucent(StandIcons.ICE_CREEPER_LAYER));
+                        renderPartCreeper(poseStack, ((AccessCreeperModel)sm).roundabout$getRightFrontLeg(), consumer, packedLight);
+                        renderPartCreeper(poseStack, ((AccessCreeperModel)sm).roundabout$getLeftFrontLeg(), consumer, packedLight);
+                        renderPartCreeper(poseStack, ((AccessCreeperModel)sm).roundabout$getRightHindLeg(), consumer, packedLight);
+                        renderPartCreeper(poseStack, ((AccessCreeperModel)sm).roundabout$getLeftHindLeg(), consumer, packedLight);
+                        if (legsFrozen) {
+                            renderPartCreeper(poseStack, ((AccessCreeperModel)sm).roundabout$getRoot().getChild("body"), consumer, packedLight);
+                        }
+                        if (bodyFrozen) {
+                            renderPartCreeper(poseStack, ((AccessCreeperModel)sm).roundabout$getHead(), consumer, packedLight);
+                        }
+                    }
                 }
             }
         }
@@ -109,6 +121,32 @@ public class FrozenLayer<T extends LivingEntity, A extends EntityModel<T>> exten
         part.zScale = zscale+0.01f;
         part.render(stack, consumer, packedLight, OverlayTexture.NO_OVERLAY, 1,
                 1, 1, 1);
+        part.xScale = xscale;
+        part.yScale = yscale;
+        part.zScale = zscale;
+        ClientUtil.popPoseAndCooperate(stack, 46);
+    }
+
+
+    public void renderPartCreeper(PoseStack stack, ModelPart part, VertexConsumer consumer, int packedLight){
+        ClientUtil.pushPoseAndCooperate(stack, 46);
+        part.visible = true;
+        float xscale = part.xScale;
+        float yscale = part.yScale;
+        float zscale = part.zScale;
+
+        part.xScale = xscale-0.05f;
+        part.yScale = yscale-0.05f;
+        part.zScale = zscale-0.05f;
+        part.y-=0.03f;
+        part.render(stack, consumer, packedLight, OverlayTexture.NO_OVERLAY, 1,
+                1, 1, 1);
+        part.xScale = xscale+0.05f;
+        part.yScale = yscale+0.05f;
+        part.zScale = zscale+0.05f;
+        part.render(stack, consumer, packedLight, OverlayTexture.NO_OVERLAY, 1,
+                1, 1, 1);
+        part.y+=0.03f;
         part.xScale = xscale;
         part.yScale = yscale;
         part.zScale = zscale;

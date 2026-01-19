@@ -118,6 +118,8 @@ public class StandIcons {
             "textures/entity/other_layers/ice_breast.png");
     public static final ResourceLocation ICE_SKELETON_LAYER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/other_layers/skeleton_layers.png");
+    public static final ResourceLocation ICE_CREEPER_LAYER = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/other_layers/creeper_layers.png");
     public static final ResourceLocation GENERIC_ICE_LAYER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/other_layers/thin_ice.png");
 

@@ -253,6 +253,7 @@
     "ZPlayerModel",
     "ZPlayerRender",
     "ZWorldRenderer",
+    "access.AccessCreeperModel",
     "access.AccessParticle",
     "access.AccessRenderSystem",
     "access.AccessViewArea",
