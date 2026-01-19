@@ -544,9 +544,9 @@ public int speedActivated = 0;
             setAttackTimeDuring(0);
             setActivePower(BLOOD_REGEN);
             playSoundsIfNearby(SoundIndex.BLOOD_REGEN, 100, true);
-            this.setCooldown(PowerIndex.FATE_2_SNEAK, 1200);
+            this.setCooldown(PowerIndex.FATE_2_SNEAK, 600);
             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.FATE_2_SNEAK,
-                    1200
+                    600
             );
 
         }
