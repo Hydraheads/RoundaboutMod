@@ -1592,10 +1592,20 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Inject(method = "hurtCurrentlyUsedShield", at = @At(value = "HEAD"), cancellable = true)
     protected void roundaboutDamageShield(float amount, CallbackInfo ci) {
         StandUser user = ((StandUser) this);
+        if (user.roundabout$getLogSource() != null){
+        if (PowerTypes.hasPowerActive(this)){
+            IPowersPlayer ipp = ((IPowersPlayer) this);
+            ipp.rdbt$getPowers().onHitGuard(amount,user.roundabout$getLogSource());
+        }
+        if (PowerTypes.hasStandActive(this)){
+            user.roundabout$getStandPowers().onHitGuard(amount,user.roundabout$getLogSource());
+        }
+        }
         if (user.roundabout$isGuarding()) {
             if (user.roundabout$getLogSource() != null && !user.roundabout$getLogSource().is(DamageTypeTags.BYPASSES_COOLDOWN) && user.roundabout$getGuardCooldown() > 0) {
                 return;
             }
+
 
             user.roundabout$damageGuard(amount);
             ci.cancel();

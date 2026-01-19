@@ -135,6 +135,10 @@ public class AbilityScapeBasis {
         return true;
     }
 
+    public void onHitGuard(float amt, DamageSource sauce){
+
+    }
+
     /**Similar to the above function, but prevents the additional velocity carried over from
      * sprint jumping if made to return true, override and call super*/
     public boolean cancelSprintJump(){
