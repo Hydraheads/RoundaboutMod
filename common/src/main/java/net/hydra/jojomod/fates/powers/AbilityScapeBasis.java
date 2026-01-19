@@ -1081,7 +1081,8 @@ public class AbilityScapeBasis {
             getPowerCooldowns().get(power).time = cooldown;
             getPowerCooldowns().get(power).maxTime = cooldown;
 
-            if (self instanceof ServerPlayer sp && isServerControlledCooldown(getPowerCooldowns().get(power),power)){
+            if (self instanceof ServerPlayer sp && getStandUserSelf().rdbt$isServerControlledCooldown(getPowerCooldowns().get(power),power)){
+
                 S2CPacketUtil.sendMaxCooldownSyncPacket(sp, power, cooldown, cooldown);
             }
         }
@@ -1092,7 +1093,7 @@ public class AbilityScapeBasis {
             getPowerCooldowns().get(power).time = cooldown;
             getPowerCooldowns().get(power).maxTime = maxCooldown;
 
-            if (self instanceof ServerPlayer sp && isServerControlledCooldown(getPowerCooldowns().get(power),power)){
+            if (self instanceof ServerPlayer sp && getStandUserSelf().rdbt$isServerControlledCooldown(getPowerCooldowns().get(power),power)){
                 S2CPacketUtil.sendMaxCooldownSyncPacket(sp, power, cooldown, maxCooldown);
             }
         }

@@ -166,6 +166,54 @@ public class ClientUtil {
         }
         return StandIcons.ICICLE_LAYER;
     }
+    public static boolean hasChangedHead(Entity ent){
+        if (HeatUtil.isBodyFrozen(ent)){
+            return true;
+        }
+        return false;
+    }
+    public static ResourceLocation getChangedHeadTexture(Entity ent){
+        if (HeatUtil.isArmsFrozen(ent)){
+            return StandIcons.ICICLE_LAYER;
+        }
+        return StandIcons.ICICLE_LAYER;
+    }
+    public static boolean hasChangedBody(Entity ent){
+        if (HeatUtil.isBodyFrozen(ent)){
+            return true;
+        }
+        return false;
+    }
+    public static ResourceLocation getChangedBodyTexture(Entity ent){
+        if (HeatUtil.isArmsFrozen(ent)){
+            return StandIcons.ICICLE_LAYER;
+        }
+        return StandIcons.ICICLE_LAYER;
+    }
+    public static ResourceLocation getChangedBodyBreastTexture(Entity ent){
+        if (HeatUtil.isArmsFrozen(ent)){
+            return StandIcons.ICE_CHEST_LAYER;
+        }
+        return StandIcons.ICE_CHEST_LAYER;
+    }
+    public static boolean hideCapeAndEars(Entity ent){
+        if (HeatUtil.isBodyFrozen(ent)){
+            return true;
+        }
+        return false;
+    }
+    public static boolean hideArmor(Entity ent){
+        if (HeatUtil.isBodyFrozen(ent)){
+            return true;
+        }
+        return false;
+    }
+    public static boolean hideLegs(Entity ent){
+        if (HeatUtil.isLegsFrozen(ent)){
+            return true;
+        }
+        return false;
+    }
     public static int clientTicker;
     public static int getClientTicker(){
         return clientTicker;

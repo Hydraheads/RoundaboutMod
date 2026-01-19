@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.HeyYaAnimations;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -78,6 +79,9 @@ public class ChestPart extends PsuedoHierarchicalModel {
                 partialTicks = 0;
             }
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(path)));
+            if (ClientUtil.hasChangedBody(context)){
+                consumer = bufferSource.getBuffer(RenderType.entityTranslucent(ClientUtil.getChangedBodyBreastTexture(context)));
+            }
             //The number at the end is inversely proportional so 2 is half speed
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
         }

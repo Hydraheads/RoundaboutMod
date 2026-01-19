@@ -4,6 +4,7 @@ package net.hydra.jojomod.mixin.items.visages;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaskItem;
@@ -36,6 +37,7 @@ public abstract class VisageHumanoidArmorLayer<T extends LivingEntity, M extends
                     !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)
             ){
                 ci.cancel();
+                return;
             }
         } else if ($$3 instanceof CloneEntity CE && CE.player != null) {
             if (!((IPlayerEntity)CE.player).roundabout$getMaskSlot().isEmpty()
@@ -44,13 +46,14 @@ public abstract class VisageHumanoidArmorLayer<T extends LivingEntity, M extends
                     !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)
             ){
                 ci.cancel();
+                return;
             }
         }
+        if ($$3 != null && ClientUtil.hideArmor($$3) && !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)){
+            ci.cancel();
+            return;
+        }
     }
-
-    /**Shadows, ignore
-     * -------------------------------------------------------------------------------------------------------------
-     * */
 
     @Inject(method= "renderArmorPiece",at = @At(value="HEAD"),cancellable = true)
     private void hidespecifcpieces(PoseStack $$0, MultiBufferSource $$1, T $$2, EquipmentSlot $$3, int $$4, A $$5, CallbackInfo ci) {
@@ -60,7 +63,15 @@ public abstract class VisageHumanoidArmorLayer<T extends LivingEntity, M extends
                 ci.cancel();
             }
         }
+
+        if (ClientUtil.hideLegs($$2) && (($$3 == EquipmentSlot.LEGS) || ($$3 == EquipmentSlot.FEET))){
+            ci.cancel();
+        }
     }
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
     public VisageHumanoidArmorLayer(RenderLayerParent<T, M> $$0) {
         super($$0);
     }

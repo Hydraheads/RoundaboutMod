@@ -328,6 +328,19 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                     playerModel.leftLeg.visible = false;
                     playerModel.leftPants.visible = false;
                 }
+                if (ClientUtil.hasChangedBody($$0)){
+                    playerModel.body.visible = false;
+                    playerModel.jacket.visible = false;
+                }
+                if (ClientUtil.hasChangedHead($$0)){
+                    playerModel.head.visible = false;
+                    playerModel.hat.visible = false;
+                }
+                if (ClientUtil.hideCapeAndEars($$0)){
+                    IPlayerModel iPlayerModel = ((IPlayerModel) playerModel);
+                    iPlayerModel.roundabout$getEar().visible = false;
+                    iPlayerModel.roundabout$getCloak().visible = false;
+                }
             }
 
         }

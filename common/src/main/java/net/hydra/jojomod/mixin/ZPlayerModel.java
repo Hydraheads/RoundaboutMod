@@ -65,6 +65,8 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
     @Shadow @Final public ModelPart leftPants;
 
+    @Shadow @Final private ModelPart ear;
+
     public ZPlayerModel(ModelPart $$0) {
         super($$0);
     }
@@ -73,6 +75,16 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
     @Unique
     public boolean roundabout$getSlim(){
         return this.slim;
+    }
+    @Override
+    @Unique
+    public ModelPart roundabout$getEar(){
+        return this.ear;
+    }
+    @Override
+    @Unique
+    public ModelPart roundabout$getCloak(){
+        return this.cloak;
     }
 
 
