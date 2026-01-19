@@ -730,9 +730,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         setActivePower(ICE_CLUTCH);
         if (!self.level().isClientSide()) {
 
-            setCooldown(PowerIndex.GENERAL_2,100);
+            setCooldown(PowerIndex.GENERAL_2,90);
             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
-                    PowerIndex.GENERAL_2, 100);
+                    PowerIndex.GENERAL_2, 90);
             if (getPlayerPos2() != PlayerPosIndex.CLUTCH_WINDUP) {
                 setPlayerPos2(PlayerPosIndex.CLUTCH_WINDUP);
             }
@@ -768,9 +768,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         setActivePower(BLOOD_CLUTCH);
         if (!self.level().isClientSide()) {
 
-            setCooldown(PowerIndex.GENERAL_2,100);
+            setCooldown(PowerIndex.GENERAL_2,90);
             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
-                    PowerIndex.GENERAL_2, 100);
+                    PowerIndex.GENERAL_2, 90);
             if (getPlayerPos2() != PlayerPosIndex.CLUTCH_WINDUP) {
                 setPlayerPos2(PlayerPosIndex.CLUTCH_WINDUP);
             }

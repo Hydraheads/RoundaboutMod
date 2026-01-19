@@ -75,6 +75,12 @@ public class HeatUtil {
             StandUser su = ((StandUser)LE);
             int heat = su.roundabout$getHeat();
             heat = Mth.clamp(heat+amt,-110,110);
+            if (heat < -100 && amt < 0){
+                heat = -110;
+            }
+            if (heat > 100 && amt > 0){
+                heat = 110;
+            }
             su.roundabout$setHeat(heat);
         }
     }
@@ -87,6 +93,8 @@ public class HeatUtil {
                 if (entity.tickCount%15==0){
                     heat = Mth.clamp(heat+1,-110,110);
                     su.roundabout$setHeat(heat);
+                }if (heat < -110){
+
                 }
             } else if (heat > 0) {
                 if (entity.tickCount%15==0){
