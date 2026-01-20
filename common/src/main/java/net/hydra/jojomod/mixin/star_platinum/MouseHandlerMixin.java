@@ -65,29 +65,27 @@ public abstract class MouseHandlerMixin {
     @Inject(method = "onScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Inventory;swapPaint(D)V",shift = At.Shift.AFTER))
     public void roundabout$anubisSaveScroll(long $$0, double $$1, double $$2, CallbackInfo ci) {
         Player p = this.minecraft.player;
-        if (p != null) {
-            StandUser SU = (StandUser) p;
-            int s = this.minecraft.player.getInventory().selected;
-            if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
-                if (PA.isRecording() && PA.getUsedMemory().memory_type != AnubisMemory.INPUTS) {
-                    List<AnubisMoment> moments = PA.getUsedMemory().moments;
+        StandUser SU = (StandUser) p;
+        int s = this.minecraft.player.getInventory().selected;
+        if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+            if (PA.isRecording() &&  PA.getUsedMemory().memory_type != AnubisMemory.INPUTS) {
+                List<AnubisMoment> moments = PA.getUsedMemory().moments;
 
-                    int lastTime = PowersAnubis.MaxPlayTime - PA.playTime;
+                int lastTime = PowersAnubis.MaxPlayTime-PA.playTime;
 
-                    moments.add(new AnubisMoment(AnubisMoment.HOTBAR[s], lastTime - 1, true));
-                    moments.add(new AnubisMoment(AnubisMoment.HOTBAR[s], lastTime, false));
-                    PA.getUsedMemory().moments = moments;
+                moments.add(new AnubisMoment(AnubisMoment.HOTBAR[s], lastTime-1,true ));
+                moments.add(new AnubisMoment(AnubisMoment.HOTBAR[s], lastTime,false ));
+                PA.getUsedMemory().moments = moments;
 
-                    Pair<List<Byte>, Integer> lastVisual = PA.visualValues.get(PA.visualValues.size() - 1);
-                    if (lastVisual != null) {
-                        Roundabout.LOGGER.info(lastVisual.toString());
-                        List<Byte> newList = new ArrayList<>();
-                        newList.addAll(lastVisual.getA());
-                        newList.add(AnubisMoment.HOTBAR[s]);
-                        PA.visualValues.add(new Pair<>(newList, 0));
-                    }
-
+                Pair<List<Byte>,Integer> lastVisual = PA.visualValues.get(PA.visualValues.size()-1);
+                if (lastVisual != null) {
+                    Roundabout.LOGGER.info(lastVisual.toString());
+                    List<Byte> newList = new ArrayList<>();
+                    newList.addAll(lastVisual.getA());
+                    newList.add(AnubisMoment.HOTBAR[s]);
+                    PA.visualValues.add(new Pair<>(newList,0) );
                 }
+
             }
         }
     }
@@ -103,6 +101,10 @@ public abstract class MouseHandlerMixin {
         Player player = Minecraft.getInstance().player;
         if (player != null){
             //You cannot look around while totally frozen
+            if (HeatUtil.isBodyFrozen(player)){
+                ci.cancel();
+                return;
+            }
 
             if (Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
                 int scopelvl = ((StandUser)player).roundabout$getStandPowers().scopeLevel;

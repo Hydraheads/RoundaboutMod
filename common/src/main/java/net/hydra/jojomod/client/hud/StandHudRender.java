@@ -762,7 +762,7 @@ public class StandHudRender {
 
 
 
-                int time = PowersAnubis.MaxPlayTime-PA.playTime-sTime;
+                int time = PA.getMaxPlayTime()-PA.playTime-sTime;
                 int maxTime = eTime-sTime;
             //    Roundabout.LOGGER.info("{}/{}",time,maxTime);
 

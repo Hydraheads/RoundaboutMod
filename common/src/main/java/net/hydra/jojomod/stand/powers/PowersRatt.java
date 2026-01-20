@@ -62,6 +62,7 @@ import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.locks.Lock;
 
 public class PowersRatt extends NewDashPreset {
     public PowersRatt(LivingEntity self) {
@@ -272,12 +273,12 @@ public class PowersRatt extends NewDashPreset {
 
         if (isPlaced()) {
             if (!isHoldingSneak()) {
-                setSkillIcon(context, x, y, 1, LockedOrNot(StandIcons.RATT_BURST,0), PowersRatt.PLACE_BURST);
+                LockedOrNot(context,x,y,1,StandIcons.RATT_BURST,0);
             } else {
                 if (isAuto()) {
-                    setSkillIcon(context, x, y, 1, LockedOrNot(StandIcons.RATT_AUTO, 1), PowersRatt.CHANGE_MODE);
+                    LockedOrNot(context,x,y,1,StandIcons.RATT_AUTO,1);
                 } else {
-                    setSkillIcon(context, x, y, 1, LockedOrNot(StandIcons.RATT_UNAUTO,1), PowersRatt.CHANGE_MODE);
+                    LockedOrNot(context,x,y,1,StandIcons.RATT_UNAUTO,1);
                 }
             }
             if (scopeLevel == 0) {
@@ -288,20 +289,20 @@ public class PowersRatt extends NewDashPreset {
             if (scopeLevel == 1) {
                 ScopeIcon = StandIcons.RATT_SCOPE_OUT;
             }
-            setSkillIcon(context, x, y, 1, LockedOrNot(ScopeIcon,2), PowersRatt.SCOPE);
+            LockedOrNot(context,x,y,1,ScopeIcon,2);
             if (scopeLevel == 0) {
                 setSkillIcon(context, x, y, 2, StandIcons.RATT_PLACE, PowersRatt.SETPLACE);
             } else {
                 if (!isAuto()) {
-                    setSkillIcon(context, x, y, 2, LockedOrNot(StandIcons.RATT_BURST,3), PowersRatt.CHANGE_MODE);
+                    LockedOrNot(context,x,y,2,StandIcons.RATT_BURST,3);
                 } else {
-                    setSkillIcon(context, x, y, 2, LockedOrNot(StandIcons.RATT_SINGLE,3), PowersRatt.CHANGE_MODE);
+                    LockedOrNot(context,x,y,2,StandIcons.RATT_SINGLE,3);
                 }
             }
         }
         setSkillIcon(context,x,y,3,StandIcons.DODGE,PowerIndex.GLOBAL_DASH);
 
-        setSkillIcon(context, x, y, 4, LockedOrNot(StandIcons.RATT_LEAP,4), PowersRatt.RATT_LEAP);
+        LockedOrNot(context,x,y,4,StandIcons.RATT_LEAP,4);
 
     }
 
@@ -402,6 +403,11 @@ public class PowersRatt extends NewDashPreset {
 
 
         if (isPlaced()) {
+
+            if (!this.getSelf().isAlive()) {
+                this.active = false;
+            }
+
             DimensionType t = this.getStandEntity(this.getSelf()).level().dimensionType();
             DimensionType T = this.getSelf().level().dimensionType();
             if (t != T) {
@@ -1168,9 +1174,7 @@ public class PowersRatt extends NewDashPreset {
     @Override
     public byte getMaxLevel() {return 4;}
 
-    public ResourceLocation LockedOrNot(ResourceLocation img, int level) {
-        return canExecuteMoveWithLevel(level) ? img : StandIcons.LOCKED;
-    }
+
 
     @Override
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){

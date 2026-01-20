@@ -23,6 +23,7 @@ import net.hydra.jojomod.item.KnifeItem;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
+import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
@@ -592,6 +593,11 @@ public class StandPowers extends AbilityScapeBasis {
     public boolean canCombatModeUse(Item item) {
         return item.isEdible() || item instanceof HarpoonItem || item instanceof TridentItem
                 || item instanceof KnifeItem;
+    }
+
+    /// helper function for drawing locked skill icons, use it or not idc
+    public void LockedOrNot(GuiGraphics context,int x, int y,int slot,ResourceLocation icon, int level) {
+        setSkillIcon(context, x, y, slot, canExecuteMoveWithLevel(level) ? icon : StandIcons.LOCKED, PowersRatt.PLACE_BURST,!canExecuteMoveWithLevel(level));
     }
 
 

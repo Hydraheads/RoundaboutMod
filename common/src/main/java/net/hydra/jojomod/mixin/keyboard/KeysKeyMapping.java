@@ -73,7 +73,7 @@ public abstract class KeysKeyMapping implements IKeyMapping {
             if (SU.roundabout$getStandPowers() != null) {
                 if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
                     if (SU.roundabout$getUniqueStandModeToggle()) {
-                        int time = PowersAnubis.MaxPlayTime - PA.playTime;
+                        int time = PA.getMaxPlayTime() - PA.playTime;
                         for (int i = 0; i < PA.playKeys.size(); i++) {
                             KeyMapping key = PA.playKeys.get(i);
 

@@ -88,6 +88,7 @@ public class AnubisModel extends PsuedoHierarchicalModel {
     public static ResourceLocation diamond = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/diamond.png");
     public static ResourceLocation chorus = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/ender.png");
     public static ResourceLocation ancient = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/ancient.png");
+    public static ResourceLocation khopesh = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/khopesh.png");
 
 
 
@@ -108,6 +109,7 @@ public class AnubisModel extends PsuedoHierarchicalModel {
             case 11 -> {return chorus;}
             case 12 -> {return raging;}
             case 13 -> {return alluring;}
+            case 14 -> {return khopesh;}
 
             default -> {return anime;}
         }
