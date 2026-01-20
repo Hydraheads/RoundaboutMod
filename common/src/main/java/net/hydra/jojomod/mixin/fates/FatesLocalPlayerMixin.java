@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.fates.powers.VampiricFate;
+import net.hydra.jojomod.util.HeatUtil;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
@@ -33,7 +34,8 @@ public abstract class FatesLocalPlayerMixin extends Entity {
         }
 
             if (FateTypes.isTransforming(((LocalPlayer)(Object)this))||
-                    ((IFatePlayer)this).rdbt$getFatePowers().cancelSprintParticles()) {
+                    ((IFatePlayer)this).rdbt$getFatePowers().cancelSprintParticles()
+    || HeatUtil.isBodyFrozen(this)) {
                 cir.setReturnValue(false);
             }
     }
