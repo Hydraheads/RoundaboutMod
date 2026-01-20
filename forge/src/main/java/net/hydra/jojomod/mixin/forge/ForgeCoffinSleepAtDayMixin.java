@@ -1,7 +1,5 @@
 package net.hydra.jojomod.mixin.forge;
 
-import com.mojang.datafixers.util.Either;
-import com.mojang.datafixers.util.Unit;
 import net.hydra.jojomod.block.CoffinBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
