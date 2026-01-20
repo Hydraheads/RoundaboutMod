@@ -19,6 +19,7 @@ import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.JackalRifleItem;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersCream;
@@ -52,8 +53,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Objects;
 
-@Mixin(Gui.class)
+
+@Mixin(value =Gui.class, priority = 99)
 public abstract class HudRendering implements IHudAccess {
 
     /** Code for when the client renders its huds*/
@@ -707,9 +710,12 @@ public abstract class HudRendering implements IHudAccess {
         }
     }
 
-    @Inject(method = "renderCrosshair", at = @At(value = "TAIL"))
+    @Inject(method = "renderCrosshair", at = @At(value = "HEAD"))
     private void renderCrosshairMixin(GuiGraphics $$0, CallbackInfo info) {
-        StandHudRender.renderAttackHud($$0, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), roundabout$flashAlpha, roundabout$otherFlashAlpha);
+        //See ForgeForgeGui
+        RenderSystem.defaultBlendFunc();
+            StandHudRender.renderAttackHud($$0, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), roundabout$flashAlpha, roundabout$otherFlashAlpha);
+
     }
 
     @Shadow

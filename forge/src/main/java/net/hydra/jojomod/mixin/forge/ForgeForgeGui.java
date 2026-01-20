@@ -1,8 +1,10 @@
 package net.hydra.jojomod.mixin.forge;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -101,11 +103,7 @@ public abstract class ForgeForgeGui extends Gui {
     @Inject(method = "pre",at = @At(value = "HEAD"),remap = false, cancellable = true )
     private void roundabout$stopGuiCancelling(NamedGuiOverlay overlay, GuiGraphics guiGraphics, CallbackInfoReturnable<Boolean> cir) {
         /// this should allow for specifically stopping cancellations, but it doesn't seem to want to cooperate
-        if (overlay.id().getNamespace().equals("epicfight")) {
-            cir.setReturnValue(false);
-            return;
-        }
-        cir.setReturnValue(false);
+
 
     }
 
