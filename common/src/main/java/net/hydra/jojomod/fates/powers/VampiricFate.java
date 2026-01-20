@@ -387,7 +387,7 @@ public int speedActivated = 0;
         if (!this.self.level().isClientSide()) {
 
 
-            if (self.isUsingItem()) {
+            if (self.isUsingItem() || PowerTypes.hasStandActive(self)  || PowerTypes.hasPowerActive(self)) {
                 if (bloodSuckingTarget != null || this.getActivePower() == BLOOD_SUCK) {
                     bloodSuckingTarget = null;
                     xTryPower(PowerIndex.NONE, true);

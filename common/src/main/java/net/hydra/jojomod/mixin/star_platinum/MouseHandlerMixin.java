@@ -10,6 +10,7 @@ import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.util.HeatUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.util.SmoothDouble;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -34,8 +35,11 @@ public abstract class MouseHandlerMixin {
         Player p = this.minecraft.player;
         if (p != null) {
             if (HeatUtil.isBodyFrozen(p)){
-                ci.cancel();
-                return;
+                Screen $$3 = this.minecraft.screen;
+                if (!($$3 != null && this.minecraft.getOverlay() == null)) {
+                    ci.cancel();
+                    return;
+                }
             }
             StandUser SU = (StandUser) p;
             if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
