@@ -37,7 +37,7 @@ public abstract class MouseHandlerMixin {
             if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
                 if (PA.isRecording()) {
                     AnubisMemory AM = PA.getUsedMemory();
-                    Vec3 rot = new Vec3(PowersAnubis.MaxPlayTime-PA.playTime,PA.getSelf().getXRot(),PA.getSelf().getYRot());
+                    Vec3 rot = new Vec3(PA.getMaxPlayTime()-PA.playTime,PA.getSelf().getXRot(),PA.getSelf().getYRot());
                     if (AM.rots.isEmpty()) {
                         AM.rots.add(AnubisMoment.convertVec(rot));
                     } else {
@@ -67,7 +67,7 @@ public abstract class MouseHandlerMixin {
             if (PA.isRecording() &&  PA.getUsedMemory().memory_type != AnubisMemory.INPUTS) {
                 List<AnubisMoment> moments = PA.getUsedMemory().moments;
 
-                int lastTime = PowersAnubis.MaxPlayTime-PA.playTime;
+                int lastTime = PA.getMaxPlayTime()-PA.playTime;
 
                 moments.add(new AnubisMoment(AnubisMoment.HOTBAR[s], lastTime-1,true ));
                 moments.add(new AnubisMoment(AnubisMoment.HOTBAR[s], lastTime,false ));

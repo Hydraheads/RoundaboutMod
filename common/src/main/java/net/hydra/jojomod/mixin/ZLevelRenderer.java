@@ -290,7 +290,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                     AnubisMemory memory = PA.getUsedMemory();
                     if (memory.memory_type != AnubisMemory.INPUTS) {
                         if (!memory.rots.isEmpty()) {
-                            int time = PowersAnubis.MaxPlayTime-PA.playTime;
+                            int time = PA.getMaxPlayTime()-PA.playTime;
                             for (int i=2;i<memory.rots.size();i++) {
                                 Vec3 rot = memory.rots.get(i);
                                 Vec3 pRot = memory.rots.get(i-1);

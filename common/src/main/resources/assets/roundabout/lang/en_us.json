@@ -1337,9 +1337,9 @@
   "ability.roundabout.anubis_raging_light": "Raging Light",
   "ability.roundabout.anubis_raging_light.desc": "Force all mobs nearby to target you.",
   "ability.roundabout.anubis_backflip": "Backflip",
-  "ability.roundabout.anubis_backflip.desc": "Backflip to safety. Can be done midair",
+  "ability.roundabout.anubis_backflip.desc": "Backflip to safety and can be done midair. Restores your pogo",
   "ability.roundabout.anubis_record": "Record Memories",
-  "ability.roundabout.anubis_record.desc": "Choose a slot and record a series of inputs. Pressing your hotbar keys lets you change the icon",
+  "ability.roundabout.anubis_record.desc": "Choose a slot and record a series of inputs. Pressing your hotbar keys lets you change the icon. The duration scales with your level",
   "ability.roundabout.anubis_replay": "Replay Memories",
   "ability.roundabout.anubis_replay.desc": "Choose a slot and replay the memories stored within.",
   "ability.roundabout.anubis_mouse": "Mouse Mode",
@@ -1452,6 +1452,7 @@
   "leveling.roundabout.disc_wip_2": "Abilities are not complete or ready",
 
   "leveling.roundabout.levelup.memory": "Stand Development: New Memory Slot!",
+  "leveling.roundabout.levelup.memory_and_ability": "Stand Development: New Ability and Memory Slot!",
   "leveling.roundabout.levelup.max.memory": "Max Development: New Memory Slot!",
 
   "leveling.roundabout.levelup.vampire": "You Became Stronger, Skill Point Unlocked!",
@@ -1733,6 +1734,7 @@
   "skins.roundabout.anubis.chorus": "Chorus",
   "skins.roundabout.anubis.alluring": "Raging",
   "skins.roundabout.anubis.raging": "Alluring",
+  "skins.roundabout.anubis.khopesh": "Khopesh",
 
   "roundabout.anubis.playback_title": "Replay Memories",
   "roundabout.anubis.memory_title": "Record Memories",
