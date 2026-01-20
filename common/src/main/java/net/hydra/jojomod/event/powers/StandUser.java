@@ -80,6 +80,7 @@ public interface StandUser {
     void roundabout$standMount(StandEntity StandSet);
     void roundabout$setStand(StandEntity StandSet);
     float roundabout$getGuardPoints();
+    void roundabout$setGuardPointsLoad(float GuardPoints);
     float roundabout$getMaxGuardPoints();
     void roundabout$setGuardPoints(float GuardPoints);
     boolean roundabout$getGuardBroken();

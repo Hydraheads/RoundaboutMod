@@ -23,6 +23,18 @@
       "roundabout:vampire_gleam"
     ]
   },
+  "full_freeze": {
+    "subtitle": "sounds.roundabout.full_freeze",
+    "sounds": [
+      "roundabout:full_freeze"
+    ]
+  },
+  "ice_breaker": {
+    "subtitle": "sounds.roundabout.ice_breaker",
+    "sounds": [
+      "roundabout:ice_breaker"
+    ]
+  },
   "killer_queen_barrage": {
     "subtitle": "sounds.roundabout.killer_queen_barrage",
     "sounds": [

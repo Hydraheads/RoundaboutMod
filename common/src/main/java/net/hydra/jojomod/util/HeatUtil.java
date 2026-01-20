@@ -3,7 +3,9 @@ package net.hydra.jojomod.util;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -73,16 +75,32 @@ public class HeatUtil {
             su.roundabout$setHeat(0);
         }
     }
+    public static void setHeat(Entity entity, int heat) {
+        if (entity instanceof LivingEntity LE) {
+            StandUser su = ((StandUser) LE);
+            su.roundabout$setHeat(Mth.clamp(heat,-110,110));
+        }
+    }
 
     public static void addHeat(Entity entity, int amt){
         if (entity instanceof LivingEntity LE){
             StandUser su = ((StandUser)LE);
             int heat = su.roundabout$getHeat();
+            int prevHeat = heat;
             heat = Mth.clamp(heat+amt,-110,110);
-            if (heat < -100 && amt < 0){
+            if (heat <= -100 && amt < 0){
                 heat = -110;
+                if (prevHeat > -100){
+                    entity.level().playSound(
+                            null,
+                            entity.blockPosition(),
+                            ModSounds.FULL_FREEZE_EVENT,
+                            SoundSource.PLAYERS,
+                            1.0F,
+                            (float) ( 1.0F+Math.random()*0.01F));
+                }
             }
-            if (heat > 100 && amt > 0){
+            if (heat >= 100 && amt > 0){
                 heat = 110;
             }
             su.roundabout$setHeat(heat);

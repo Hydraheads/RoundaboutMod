@@ -2371,8 +2371,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return this.roundabout$GuardPoints;
     }
     @Unique
+    @Override
+    public void roundabout$setGuardPointsLoad(float GuardPoints){
+        this.roundabout$GuardPoints = GuardPoints;
+    }
+    @Unique
     public void roundabout$setGuardPoints(float GuardPoints){
         this.roundabout$GuardPoints = GuardPoints;
+        if (!level().isClientSide()){
+            this.roundabout$syncGuard();
+        }
     }
     @Unique
     public boolean roundabout$getGuardBroken(){
@@ -2441,23 +2449,31 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     rdbt$ticksUntilGuardRegen--;
                 }
             }
-
+        if (!level().isClientSide()) {
+            if (this.roundabout$GuardPoints > this.roundabout$getMaxGuardPoints()) {
+                this.roundabout$setGuardPoints(this.roundabout$getMaxGuardPoints());
+            }
+        }
         if (this.roundabout$GuardPoints < this.roundabout$getMaxGuardPoints()) {
-            if (this.roundabout$GuardBroken){
-                float guardRegen = this.roundabout$getMaxGuardPoints() / 100;
-                this.roundabout$regenGuard(guardRegen);
-            } else if (!this.roundabout$isGuarding() && this.roundabout$shieldNotDisabled()){
-                if (rdbt$ticksUntilGuardRegen <= 0) {
-                    float guardRegen = this.roundabout$getMaxGuardPoints() / 220;
+            if (!level().isClientSide()) {
+                if (this.roundabout$GuardBroken) {
+                    float guardRegen = this.roundabout$getMaxGuardPoints() / 100;
                     this.roundabout$regenGuard(guardRegen);
+                } else if (!this.roundabout$isGuarding() && this.roundabout$shieldNotDisabled()) {
+                    if (rdbt$ticksUntilGuardRegen <= 0) {
+                        float guardRegen = this.roundabout$getMaxGuardPoints() / 220;
+                        this.roundabout$regenGuard(guardRegen);
+                    }
                 }
             }
             if (this.roundabout$isGuarding() && !roundabout$shieldNotDisabled()){
                 this.roundabout$setAttackTimeDuring(0);
             }
         } else {
-            if (this.roundabout$GuardBroken){
-                this.roundabout$regenGuard(1);
+            if (!level().isClientSide()) {
+                if (this.roundabout$GuardBroken) {
+                    this.roundabout$regenGuard(1);
+                }
             }
         }
         if (this.roundabout$GuardCooldown > 0){this.roundabout$GuardCooldown--;}
@@ -3992,7 +4008,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     level().playSound(
                             null,
                             blockPosition(),
-                            Blocks.ICE.defaultBlockState().getSoundType().getBreakSound(),
+                            ModSounds.ICE_BREAKER_EVENT,
                             SoundSource.PLAYERS,
                             1.0F,
                             (float) ( 1.0F+Math.random()*0.01F));

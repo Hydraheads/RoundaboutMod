@@ -32,6 +32,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -638,7 +639,9 @@ public class PowersMagiciansRed extends NewPunchingStand {
                     setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
                 }
 
-                if (canExecuteMoveWithLevel(7)) {
+                if (this.isGuarding() && HeatUtil.isCold(self)) {
+                    setSkillIcon(context, x, y, 4, StandIcons.SELF_BURN, PowerIndex.SKILL_1_SNEAK);
+                } else if (canExecuteMoveWithLevel(7)) {
                     if (isUsingFirestorm()) {
                         setSkillIcon(context, x, y, 4, StandIcons.CROSSFIRE_FIRESTORM_END, PowerIndex.NO_CD);
                     } else {
@@ -924,6 +927,25 @@ public class PowersMagiciansRed extends NewPunchingStand {
             }
             case SKILL_4_CROUCH -> {
                 cawFireSlamClientCaw();
+            }
+            case SKILL_4_GUARD, SKILL_4_CROUCH_GUARD -> {
+                selfBurnClient();
+            }
+        }
+    }
+
+    public void selfBurnClient(){
+        if (isChargingCrossfireSpecial() || this.activePower == PowerIndex.POWER_1_BLOCK)
+            return;
+        if (isBusy() || isLockedByWater())
+            return;
+        if (!isChargingCrossfire() && !hasHurricaneSingle() && HeatUtil.isCold(self)) {
+            if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
+
+                this.setCooldown(PowerIndex.SKILL_1_SNEAK,
+                        multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.igniteFireCooldown)
+                );
+                    tryPowerPacket(PowerIndex.POWER_4_BLOCK);
             }
         }
     }
@@ -1269,8 +1291,15 @@ public class PowersMagiciansRed extends NewPunchingStand {
             return this.redBindCharge();
         } else if (move == PowerIndex.EXTRA_2) {
             return this.doRedBindAttack();
+        } else if (move == PowerIndex.POWER_4_BLOCK) {
+            this.selfBurn();
         }
         return super.setPowerOther(move,lastMove);
+    }
+
+    public void selfBurn(){
+        getStandUserSelf().roundabout$setOnStandFire(this.getFireColor(), this.self);
+        getStandUserSelf().roundabout$setRemainingStandFireTicks(80);
     }
 
     public void offloadLead(){
@@ -3356,6 +3385,8 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 "instruction.roundabout.press_skill", StandIcons.CROSSFIRE_FIRESTORM,4,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+80,6, "ability.roundabout.fire_slam",
                 "instruction.roundabout.press_skill_crouch", StandIcons.FIRE_SLAM,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99,6, "ability.roundabout.self_burn",
+                "instruction.roundabout.press_skill_block", StandIcons.SELF_BURN,4,level,bypas));
         return $$1;
     }
     //Level 7 = Firestorm

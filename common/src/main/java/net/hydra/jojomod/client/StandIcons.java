@@ -283,6 +283,8 @@ public class StandIcons {
 
     public static final ResourceLocation SNAP_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/magicians_red/fire_clear.png");
+    public static final ResourceLocation SELF_BURN = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/magicians_red/self_burn.png");
     public static final ResourceLocation FURNACE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/magician_furnace.png");
     public static final ResourceLocation LIGHT_FIRE = new ResourceLocation(Roundabout.MOD_ID,

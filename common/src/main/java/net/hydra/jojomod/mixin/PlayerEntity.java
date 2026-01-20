@@ -1580,7 +1580,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
         PowerTypes.fixPowers(this);
         if (compoundtag2.contains("guard")){
-            ((StandUser)this).roundabout$setGuardPoints(compoundtag2.getFloat("guard"));
+            ((StandUser)this).roundabout$setGuardPointsLoad(compoundtag2.getFloat("guard"));
             if (compoundtag2.contains("guard_break")) {
                 ((StandUser) this).roundabout$setGuardBroken(compoundtag2.getBoolean("guard_break"));
             }

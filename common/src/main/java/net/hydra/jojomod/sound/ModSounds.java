@@ -1296,6 +1296,14 @@ public class ModSounds {
     public static final ResourceLocation HAIR_SHARPEN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HAIR_SHARPEN);
     public static SoundEvent HAIR_SHARPEN_EVENT = SoundEvent.createVariableRangeEvent(HAIR_SHARPEN_ID);
 
+    public static final String FULL_FREEZE = "full_freeze";
+    public static final ResourceLocation FULL_FREEZE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FULL_FREEZE);
+    public static SoundEvent FULL_FREEZE_EVENT = SoundEvent.createVariableRangeEvent(FULL_FREEZE_ID);
+
+    public static final String ICE_BREAKER = "ice_breaker";
+    public static final ResourceLocation ICE_BREAKER_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ICE_BREAKER);
+    public static SoundEvent ICE_BREAKER_EVENT = SoundEvent.createVariableRangeEvent(ICE_BREAKER_ID);
+
     public static final String COMBAT_PUNCH_1 = "combat_punch_1";
     public static final ResourceLocation COMBAT_PUNCH_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+COMBAT_PUNCH_1);
     public static SoundEvent COMBAT_PUNCH_1_EVENT = SoundEvent.createVariableRangeEvent(COMBAT_PUNCH_1_ID);
