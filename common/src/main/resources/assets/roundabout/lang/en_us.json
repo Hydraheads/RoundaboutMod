@@ -515,6 +515,8 @@
   "death.attack.sunlight.item": "%1$s is dust in the wind.",
   "death.attack.sunlight.player": "%1$s saw the light while fighting %2$s.",
   "death.attack.sunlight.player.item": "%1$s saw the light while fighting %2$s.",
+  "death.attack.ice_shatter": "%1$s was shattered by %2$s",
+  "death.attack.ice_shatter.item": "%1$s was shattered by %2$s",
   "death.attack.stand_fire": "%1$s was roasted",
   "death.attack.stand_fire.item": "%1$s was roasted",
   "death.attack.stand_fire.player": "%1$s was roasted by %2$s",
@@ -721,6 +723,8 @@
   "sounds.roundabout.survivor_shock":  "Shock",
   "sounds.roundabout.survivor_place":  "Crackle",
   "sounds.roundabout.survivor_remove":  "Pop",
+  "sounds.roundabout.full_freeze":  "Ice",
+  "sounds.roundabout.ice_breaker":  "Shatter",
 
   "sounds.roundabout.achtung_burst":  "Gone",
 
@@ -1191,6 +1195,9 @@
   "ability.roundabout.crossfire_firestorm.desc": "Creates a large ankh which scatters tiny flames everywhere, buffing your crossfire hurricane abilities and allowing you to use them in rain. The massive toll on stand energy, however, increases their cooldowns.",
   "ability.roundabout.fire_slam": "Maximum Flame Crash",
   "ability.roundabout.fire_slam.desc": "Launches Magician's Red forward, turning it into a ball of fire. It collides with extreme force and lots of flames, but in doing so your stand is sealed for a while. Only use as a last resort.",
+
+  "ability.roundabout.self_burn": "Self Ignition",
+  "ability.roundabout.self_burn.desc": "If you are cold because of certain abilities, you will gain the ability to light yourself on stand fire to counteract the cold. Normal stand fire damage applies.",
 
   "ability.roundabout.spike_attack_mode": "Attack Mode",
   "ability.roundabout.spike_attack_mode.desc": "Lets you press or hold the attack key to launch a spike attack, pulling mobs in with a damaging attack that inflicts bleed. If interact is held, it pushes them away instead. This mode runs on a meter that must be full to use the ability, and recharges when not using it. Goes through walls.",

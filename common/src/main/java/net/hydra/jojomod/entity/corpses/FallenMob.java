@@ -29,6 +29,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -432,6 +433,9 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     @Override
     public void tick(){
         if (!this.level().isClientSide()) {
+            if (hasEffect(MobEffects.DAMAGE_BOOST)){
+                removeEffect(MobEffects.DAMAGE_BOOST);
+            }
             if (controller != null){
                 controller = this.level().getEntity(getController());
             }

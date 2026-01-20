@@ -29,6 +29,7 @@ public class FabricParticles {
     public static final SimpleParticleType BLUE_SPARKLE = FabricParticleTypes.simple();
     public static final SimpleParticleType RED_SPARKLE = FabricParticleTypes.simple();
     public static final SimpleParticleType ICE_SPARKLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType VAMPIRE_AURA = FabricParticleTypes.simple();
     public static final SimpleParticleType MENACING = FabricParticleTypes.simple();
     public static final SimpleParticleType VACUUM = FabricParticleTypes.simple();
     public static final SimpleParticleType ZAP = FabricParticleTypes.simple();
@@ -99,6 +100,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("blue_sparkle"), BLUE_SPARKLE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("red_sparkle"), RED_SPARKLE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("ice_sparkle"), ICE_SPARKLE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("vampire_aura"), VAMPIRE_AURA);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("blue_blood"), BLUE_BLOOD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("ender_blood"), ENDER_BLOOD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("air_crackle"), AIR_CRACKLE);
@@ -176,6 +178,7 @@ public class FabricParticles {
         ModParticles.BLUE_SPARKLE = BLUE_SPARKLE;
         ModParticles.RED_SPARKLE = RED_SPARKLE;
         ModParticles.ICE_SPARKLE = ICE_SPARKLE;
+        ModParticles.VAMPIRE_AURA = VAMPIRE_AURA;
         ModParticles.FOG_CHAIN = FOG_CHAIN;
         ModParticles.BUBBLE_TRAIL = BUBBLE_TRAIL;
         ModParticles.WARDEN_CLOCK = WARDEN_CLOCK;

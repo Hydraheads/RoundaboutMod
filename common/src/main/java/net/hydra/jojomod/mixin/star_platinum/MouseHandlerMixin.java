@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.index.AnubisMoment;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.JackalRifleItem;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
+import net.hydra.jojomod.util.HeatUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.util.SmoothDouble;
@@ -93,9 +94,16 @@ public abstract class MouseHandlerMixin {
     @Inject(method = "turnPlayer()V",
             at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$turnPlayer(CallbackInfo ci) {
-        if (Minecraft.getInstance().player != null){
+        Player player = Minecraft.getInstance().player;
+        if (player != null){
+            //You cannot look around while totally frozen
+            if (HeatUtil.isBodyFrozen(player)){
+                ci.cancel();
+                return;
+            }
+
             if (Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
-                int scopelvl = ((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers().scopeLevel;
+                int scopelvl = ((StandUser)player).roundabout$getStandPowers().scopeLevel;
                 boolean isUsingRifle = Minecraft.getInstance().player.getUseItem().getItem() instanceof JackalRifleItem;
                 if (scopelvl > 0 || isUsingRifle) {
                     ci.cancel();

@@ -22,6 +22,7 @@ public class ModParticles {
     public static SimpleParticleType BLUE_SPARKLE;
     public static SimpleParticleType RED_SPARKLE;
     public static SimpleParticleType ICE_SPARKLE;
+    public static SimpleParticleType VAMPIRE_AURA;
 
     public static SimpleParticleType PUNCH_IMPACT_A;
     public static SimpleParticleType PUNCH_IMPACT_B;

@@ -13,6 +13,7 @@ import net.hydra.jojomod.stand.powers.PowersTheWorld;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
+import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.commands.CommandSourceStack;
@@ -60,6 +61,12 @@ public class RoundaboutCommands {
             source.sendSuccess(() -> Component.translatable(  "commands.roundabout.experience_specific.single", ((Entity)targets.iterator().next()).getDisplayName()), true);
         } else {
             source.sendSuccess(() -> Component.translatable(  "commands.roundabout.experience_specific.multiple", targets.size()), true);
+        }
+        return targets.size();
+    }
+    public static int roundaboutSetHeat(CommandSourceStack source, Collection<? extends Entity> targets, int level) {
+        for (Entity entity : targets) {
+            HeatUtil.setHeat(entity,level);
         }
         return targets.size();
     }

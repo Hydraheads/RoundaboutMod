@@ -427,5 +427,7 @@ public class FabricSounds {
         addSound(ModSounds.FLESH_BUD_REMOVAL_ID, ModSounds.FLESH_BUD_REMOVAL_EVENT);
         addSound(ModSounds.HAIR_TOGGLE_ID, ModSounds.HAIR_TOGGLE_EVENT);
         addSound(ModSounds.HAIR_SHARPEN_ID, ModSounds.HAIR_SHARPEN_EVENT);
+        addSound(ModSounds.FULL_FREEZE_ID, ModSounds.FULL_FREEZE_EVENT);
+        addSound(ModSounds.ICE_BREAKER_ID, ModSounds.ICE_BREAKER_EVENT);
     }
 }

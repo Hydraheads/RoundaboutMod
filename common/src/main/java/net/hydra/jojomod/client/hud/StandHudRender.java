@@ -705,7 +705,13 @@ public class StandHudRender {
         } else {
             v = 0;
         }
-        k = (int) Math.floor((182/standUser.roundabout$getMaxGuardPoints())*standUser.roundabout$getGuardPoints());
+
+        float maxP = standUser.roundabout$getMaxGuardPoints();
+        float gP = standUser.roundabout$getGuardPoints();
+        if (gP > maxP){
+            gP = maxP;
+        }
+        k = (int) Math.floor((182/maxP)*gP);
         context.blit(StandIcons.JOJO_ICONS, x, l, 0, v, 182, 5);
         if (k > 0) {
            context.blit(StandIcons.JOJO_ICONS, x, l, 0, v+5, k, 5);

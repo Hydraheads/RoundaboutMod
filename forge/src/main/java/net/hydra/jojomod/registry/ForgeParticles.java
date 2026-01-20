@@ -103,6 +103,10 @@ public class ForgeParticles {
             "ice_sparkle",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> VAMPIRE_AURA = PARTICLES.register(
+            "vampire_aura",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> PUNCH_IMPACT_A = PARTICLES.register(
             "punch_impact_a",
             () -> new SimpleParticleType(true)

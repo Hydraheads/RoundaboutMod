@@ -80,6 +80,7 @@ public interface StandUser {
     void roundabout$standMount(StandEntity StandSet);
     void roundabout$setStand(StandEntity StandSet);
     float roundabout$getGuardPoints();
+    void roundabout$setGuardPointsLoad(float GuardPoints);
     float roundabout$getMaxGuardPoints();
     void roundabout$setGuardPoints(float GuardPoints);
     boolean roundabout$getGuardBroken();
@@ -237,6 +238,8 @@ public interface StandUser {
     float roundaboutGetMaxStoredDamage();
 
     byte roundabout$getStoredDamageByte();
+    void rdbt$setHideDeath(Boolean hide);
+    boolean rdbt$getHideDeath();
 
     void roundabout$UniversalTick();
     void roundabout$startAutoSpinAttack(int p_204080_);

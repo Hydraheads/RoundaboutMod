@@ -176,6 +176,17 @@ public class RoundaboutCom {
                                         EntityArgument.getEntities(context, "targets"),IntegerArgumentType.getInteger(context,"experience")))
                         )
                 ));
+        dispatcher.register(Commands.literal("roundaboutSetHeat")
+                .requires(source
+                        -> source.hasPermission(2))
+                .executes(context -> net.hydra.jojomod.RoundaboutCommands.roundaboutSetHeat((CommandSourceStack)context.getSource(),
+                        ImmutableList.of(((CommandSourceStack)context.getSource()).getEntityOrException()),DEFAULT_LVL))
+                .then(Commands.argument("targets", EntityArgument.entities())
+                        .then(Commands.argument("heat", IntegerArgumentType.integer())
+                                .executes(context -> RoundaboutCommands.roundaboutSetHeat((CommandSourceStack)context.getSource(),
+                                        EntityArgument.getEntities(context, "targets"),IntegerArgumentType.getInteger(context,"heat")))
+                        )
+                ));
         dispatcher.register(Commands.literal("roundaboutReplenish")
                 .requires(source
                         -> source.hasPermission(2))

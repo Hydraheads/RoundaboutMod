@@ -64,6 +64,10 @@ public abstract class ZEntityRenderDispatcher {
             ci.cancel();
             return;
         }
+        if (entity instanceof LivingEntity LE && ((StandUser)LE).rdbt$getHideDeath() && !entity.isAlive()){
+            ci.cancel();
+            return;
+        }
 
         if (entity instanceof LivingEntity LE && !roundabout$recurse){
             byte bt =  ((StandUser)LE).roundabout$getGlow();

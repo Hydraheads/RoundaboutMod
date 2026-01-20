@@ -117,6 +117,26 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         }
     }
 
+    @Override
+    public void onHitGuard(float amt, DamageSource sauce){
+        if (getFreezeLevel() > 0) {
+            if (sauce != null && isGuarding() && sauce.getEntity() instanceof LivingEntity LE
+            && (sauce.is(DamageTypes.MOB_ATTACK) || sauce.is(DamageTypes.PLAYER_ATTACK))) {
+                if (!HeatUtil.isLegsFrozen(LE)) {
+                    HeatUtil.addHeat(LE, -5 + (-1*getFreezeLevel()));
+                }
+            }
+        }
+    }
+
+    public int getFreezeLevel(){
+        if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
+            return vp.getVampireData().freezeLevel;
+        }
+        return 0;
+    }
+
+
     public void clientBloodClutch(){
         if (canAttack2() && !onCooldown(PowerIndex.GENERAL_2)){
             this.tryPower(BLOOD_CLUTCH);
@@ -697,8 +717,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         if (!(entity instanceof Player) && entity instanceof LivingEntity LE){
                             ((StandUser)LE).roundabout$setDazed((byte) 4);
                         }
-                        HeatUtil.addHeat(self,-44);
-                        HeatUtil.addHeat(entity,-44);
+                        HeatUtil.addHeat(entity,-24 + (-4*getFreezeLevel()));
                         this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.1f + Math.random() * 0.1f));
                         //self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.HIT_1_SOUND_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
                         addToCombo();
@@ -730,9 +749,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         setActivePower(ICE_CLUTCH);
         if (!self.level().isClientSide()) {
 
-            setCooldown(PowerIndex.GENERAL_2,90);
+            setCooldown(PowerIndex.GENERAL_2,100);
             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
-                    PowerIndex.GENERAL_2, 90);
+                    PowerIndex.GENERAL_2, 100);
             if (getPlayerPos2() != PlayerPosIndex.CLUTCH_WINDUP) {
                 setPlayerPos2(PlayerPosIndex.CLUTCH_WINDUP);
             }
@@ -768,9 +787,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         setActivePower(BLOOD_CLUTCH);
         if (!self.level().isClientSide()) {
 
-            setCooldown(PowerIndex.GENERAL_2,90);
+            setCooldown(PowerIndex.GENERAL_2,100);
             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
-                    PowerIndex.GENERAL_2, 90);
+                    PowerIndex.GENERAL_2, 100);
             if (getPlayerPos2() != PlayerPosIndex.CLUTCH_WINDUP) {
                 setPlayerPos2(PlayerPosIndex.CLUTCH_WINDUP);
             }
