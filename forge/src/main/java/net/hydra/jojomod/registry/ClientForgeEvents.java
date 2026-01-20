@@ -124,7 +124,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.SHIZUKA.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STEVE_NPC.get(), PlayerNPCRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ALEX_NPC.get(), PlayerAlexRenderer::new);
-        //event.registerEntityRenderer(ForgeEntities.FOG_CLONE.get(), FogCloneRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.FOG_CLONE.get(), FogCloneRenderer::new);
         event.registerEntityRenderer(ForgeEntities.D4C_CLONE.get(), D4CCloneRenderer::new);
         event.registerEntityRenderer(ForgeEntities.MODIFIED_NPC.get(), PlayerModifiedRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FALLEN_ZOMBIE.get(), FallenZombieRenderer::new);
