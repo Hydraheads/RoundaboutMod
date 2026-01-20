@@ -4001,7 +4001,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     if (rdbt$this() instanceof Player) {
                         hurt(ModDamageTypes.of(level(), ModDamageTypes.ICE_SHATTER, this), 15F);
                     } else {
-                        hurt(ModDamageTypes.of(level(), ModDamageTypes.ICE_SHATTER, this), 25F);
+                        hurt(ModDamageTypes.of(level(), ModDamageTypes.ICE_SHATTER, this), 30F);
                     }
                     S2CPacketUtil.shatterIce(getId());
                     return true;
