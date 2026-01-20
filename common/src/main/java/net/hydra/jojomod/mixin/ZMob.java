@@ -48,7 +48,9 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.sensing.Sensing;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
@@ -556,9 +558,15 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
                 Optional<? extends ExpirableValue<?>> $$1 = brain.getMemories().get(MemoryModuleType.ATTACK_TARGET);
                 if ($$1 != null) {
-                    if (((LivingEntity)(Object)this) instanceof Piglin){
+                    if (((LivingEntity)(Object)this) instanceof Piglin) {
                         brain.eraseMemory(MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLIN);
                         brain.eraseMemory(MemoryModuleType.AVOID_TARGET);
+                        brain.eraseMemory(MemoryModuleType.HURT_BY_ENTITY);
+                        brain.eraseMemory(MemoryModuleType.ANGRY_AT);
+                        brain.eraseMemory(MemoryModuleType.ATTACK_TARGET);
+                    }
+                    if (((LivingEntity)(Object)this) instanceof PiglinBrute){
+                        brain.eraseMemory(MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLIN);
                         brain.eraseMemory(MemoryModuleType.HURT_BY_ENTITY);
                         brain.eraseMemory(MemoryModuleType.ANGRY_AT);
                         brain.eraseMemory(MemoryModuleType.ATTACK_TARGET);

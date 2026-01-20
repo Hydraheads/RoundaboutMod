@@ -321,7 +321,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             thrower.level().addFreshEntity(thrownBlockOrItem);
 
             if (playSounds) {
-                if (item.is(Items.IRON_NUGGET) || item.is(Items.GOLD_NUGGET) || item.is(Items.DIAMOND) || item.is(Items.FLINT) || item.is(ModItems.SNUBNOSE_AMMO) || item.is(ModItems.TOMMY_AMMO)) {
+                if (item.is(Items.IRON_NUGGET) || item.is(Items.GOLD_NUGGET) || item.is(Items.DIAMOND) || item.is(Items.FLINT) || item.is(ModItems.SNUBNOSE_AMMO) || item.is(ModItems.TOMMY_AMMO)
+                        || item.is(ModItems.SNIPER_AMMO)) {
                     thrower.level().playSound(null, thrownBlockOrItem, ModSounds.BALL_BEARING_SHOT_EVENT, SoundSource.PLAYERS, 1.0F, 1F);
                 } else {
                     thrower.level().playSound(null, thrownBlockOrItem, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
@@ -583,6 +584,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 enchant = true;
             } else if (this.getItem().is(Items.IRON_NUGGET)){
                 damage = 10;
+            } else if (this.getItem().is(ModItems.SNIPER_AMMO)){
+                damage = 7;
             } else if (this.getItem().is(ModItems.SNUBNOSE_AMMO)){
                 damage = 6;
             } else if (this.getItem().is(ModItems.TOMMY_AMMO)){

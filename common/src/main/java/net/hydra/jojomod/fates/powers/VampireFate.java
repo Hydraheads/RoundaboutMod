@@ -982,7 +982,7 @@ public class VampireFate extends VampiricFate {
             tring = "ability.roundabout.eye_manipulation";
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+129,topPos+99,
                 data.ripperEyesLevel, VampireData.ripperEyesMaxLevel, tring,
-                "instruction.roundabout.passive", StandIcons.GRAFTING,0, 0,
+                "instruction.roundabout.passive", StandIcons.RIPPER_EYES,0, 0,
                 0,ripperEyeLevel));
 
         tring = "ability.roundabout.unleash_the_cold.locked";
@@ -990,7 +990,7 @@ public class VampireFate extends VampiricFate {
             tring = "ability.roundabout.unleash_the_cold";
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+129,topPos+118,
                 data.freezeLevel, VampireData.freezeMaxLevel, tring,
-                "instruction.roundabout.passive", StandIcons.GRAFTING,0, 0,
+                "instruction.roundabout.passive", StandIcons.ICE_CLUTCH,0, 0,
                 0,19));
 
 
