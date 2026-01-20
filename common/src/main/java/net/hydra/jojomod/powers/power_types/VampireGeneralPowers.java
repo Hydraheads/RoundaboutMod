@@ -249,7 +249,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         if (!self.level().isClientSide()) {
             setCooldown(PowerIndex.GENERAL_1,80);
             if (getPlayerPos2() != PlayerPosIndex.HAIR_SPIKE) {
-                playSoundsIfNearby(SoundIndex.HAIR_SPIKE_CHARGE, 100, true);
+                playSoundsIfNearby(SoundIndex.HAIR_SPIKE_CHARGE, 25, false);
                 setPlayerPos2(PlayerPosIndex.HAIR_SPIKE);
             }
         }
