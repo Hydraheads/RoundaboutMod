@@ -880,6 +880,13 @@ public class ClientUtil {
         }
         return false;
     }
+
+    public static boolean sneakToggleHeld = false;
+    public static boolean isSneakToggleHeld(){
+        return sneakToggleHeld;
+    } public static void setSneakToggleHeld(boolean heldTime){
+        sneakToggleHeld = heldTime;
+    }
     public static boolean checkIfStandIsYoursAndFirstPerson(StandEntity stand) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {

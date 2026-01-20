@@ -6,6 +6,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
@@ -921,10 +922,10 @@ public class AbilityScapeBasis {
         if (!heldDownSwitch) {
             if (keyIsDown) {
                 heldDownSwitch = true;
-                if (isHoldingSneakToggle) {
-                    isHoldingSneakToggle = false;
+                if (ClientUtil.isSneakToggleHeld()) {
+                    ClientUtil.setSneakToggleHeld(false);
                 } else {
-                    isHoldingSneakToggle = true;
+                    ClientUtil.setSneakToggleHeld(true);
                 }
             }
         } else {
@@ -934,11 +935,10 @@ public class AbilityScapeBasis {
         }
     }
     /**Related code to the above*/
-    public boolean isHoldingSneakToggle = false;
     public boolean isHoldingSneak(){
         if (this.self.level().isClientSide) {
             Minecraft mc = Minecraft.getInstance();
-            return ((mc.options.keyShift.isDown() && !isHoldingSneakToggle) || (isHoldingSneakToggle && !mc.options.keyShift.isDown()));
+            return ((mc.options.keyShift.isDown() && !ClientUtil.isSneakToggleHeld()) || (ClientUtil.isSneakToggleHeld() && !mc.options.keyShift.isDown()));
         }
         return this.self.isCrouching();
     }
