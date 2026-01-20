@@ -29,10 +29,14 @@ import java.util.List;
 public abstract class MouseHandlerMixin {
 
 
-    @Inject(method = "onMove",at = @At(value = "HEAD"))
+    @Inject(method = "onMove",at = @At(value = "HEAD"),cancellable = true)
     public void roundabout$anubisRecordMouse(long $$0, double $$1, double $$2, CallbackInfo ci) {
         Player p = this.minecraft.player;
         if (p != null) {
+            if (HeatUtil.isBodyFrozen(p)){
+                ci.cancel();
+                return;
+            }
             StandUser SU = (StandUser) p;
             if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
                 if (PA.isRecording()) {
