@@ -143,7 +143,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         }
     }
     public void clientIceClutch(){
-        if (canAttack2() && !onCooldown(PowerIndex.GENERAL_2)){
+        if (canAttack2() && !onCooldown(PowerIndex.GENERAL_2) && getFreezeLevel() > 0){
             this.tryPower(ICE_CLUTCH);
         }
     }
@@ -550,7 +550,11 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 setSkillIcon(context, x, y, 1, StandIcons.HAIR_SPIKE, PowerIndex.GENERAL_1);
             }
             if (isHoldingSneak()) {
-                setSkillIcon(context, x, y, 2, StandIcons.ICE_CLUTCH, PowerIndex.GENERAL_2);
+                if (getFreezeLevel() > 0){
+                    setSkillIcon(context, x, y, 2, StandIcons.ICE_CLUTCH, PowerIndex.GENERAL_2);
+                } else {
+                    setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                }
             } else {
                 setSkillIcon(context, x, y, 2, StandIcons.BLOOD_CLUTCH, PowerIndex.GENERAL_2);
             }
