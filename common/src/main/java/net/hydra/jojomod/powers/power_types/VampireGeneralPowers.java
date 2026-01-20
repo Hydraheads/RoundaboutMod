@@ -317,7 +317,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if (isPacketPlayer()) {
                 if (getActivePower() == POWER_DIVE) {
                     if (attackTimeDuring > 20 || self.isInWater()) {
-                        xTryPower(PowerIndex.NONE, false);
+                        xTryPower(PowerIndex.NONE, true);
                         tryPowerPacket(NONE);
                     } else if (!self.onGround()) {
                         Entity hit = DamageHandler.damageMobBelow(self, 1.5, 1);
@@ -325,7 +325,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                             //set cooldown
 
                             tryIntPowerPacket(HIT, hit.getId());
-                            xTryPower(PowerIndex.NONE, false);
+                            xTryPower(PowerIndex.NONE, true);
                             tryPowerPacket(NONE);
                             Vec3 lower = self.getDeltaMovement();
                             self.setDeltaMovement(lower.x(), 0, lower.z());
@@ -334,14 +334,14 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                             self.setDeltaMovement(lower.x(), -1.8, lower.z());
                         }
                     } else {
-                        xTryPower(PowerIndex.NONE, false);
+                        xTryPower(PowerIndex.NONE, true);
                         tryPowerPacket(NONE);
                     }
                 } else if (getActivePower() == POWER_SWEEP) {
                     self.swingTime = 0;
                     self.swinging = false;
                     if (attackTimeDuring > 4) {
-                        xTryPower(PowerIndex.NONE, false);
+                        xTryPower(PowerIndex.NONE, true);
                         tryPowerPacket(NONE);
 
                         if (getPlayerPos2() != PlayerPosIndex.SWEEP_KICK) {
@@ -356,7 +356,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     }
                 } else if (getActivePower() == POWER_HAIR_GRAB) {
                     if (attackTimeDuring > 10) {
-                        xTryPower(PowerIndex.NONE, false);
+                        xTryPower(PowerIndex.NONE, true);
                         tryPowerPacket(NONE);
                     }
                 } else if (getActivePower() == BLOOD_CLUTCH) {
@@ -365,7 +365,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     }
                 } else if (getActivePower() == BLOOD_CLUTCH_2) {
                     if (attackTimeDuring > 7) {
-                        xTryPower(PowerIndex.NONE, false);
+                        xTryPower(PowerIndex.NONE, true);
                         tryPowerPacket(NONE);
                     } else {
                         Vec3 grav = new Vec3(0,-0.1f,0);
@@ -378,7 +378,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         Entity TE2 = getTargetEntity(self, 1.4F, 40);
                         if (TE2 != null){
                             tryIntPowerPacket(BLOOD_CLUTCH_ATTACK,TE2.getId());
-                            xTryPower(PowerIndex.NONE, false);
+                            xTryPower(PowerIndex.NONE, true);
                             tryPowerPacket(NONE);
                         }
                     }
@@ -388,7 +388,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     }
                 } else if (getActivePower() == ICE_CLUTCH_2) {
                     if (attackTimeDuring > 7) {
-                        xTryPower(PowerIndex.NONE, false);
+                        xTryPower(PowerIndex.NONE, true);
                         tryPowerPacket(NONE);
                     } else {
                         Vec3 grav = new Vec3(0,-0.1f,0);
@@ -401,7 +401,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         Entity TE2 = getTargetEntity(self, 1.4F, 40);
                         if (TE2 != null){
                             tryIntPowerPacket(ICE_CLUTCH_ATTACK,TE2.getId());
-                            xTryPower(PowerIndex.NONE, false);
+                            xTryPower(PowerIndex.NONE, true);
                             tryPowerPacket(NONE);
                         }
                     }
