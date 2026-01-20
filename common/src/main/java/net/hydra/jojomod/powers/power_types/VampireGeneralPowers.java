@@ -1057,36 +1057,38 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     }
 
     public void diveImpact(Entity entity) {
-        if (!this.self.level().isClientSide()) {
-            if (entity != null) {
-                attackTargetId = 0;
-                float pow;
-                float knockbackStrength;
-                pow = getPunchStrength(entity)*1.2F;
-                pow = applyComboDamage(pow);
-                knockbackStrength = 0.10F;
-                setCooldown(PowerIndex.GENERAL_1,60);
-                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
-                        PowerIndex.GENERAL_1, 60);
+        if (!onCooldown(PowerIndex.GENERAL_1)) {
+            if (!this.self.level().isClientSide()) {
+                if (entity != null) {
+                    attackTargetId = 0;
+                    float pow;
+                    float knockbackStrength;
+                    pow = getPunchStrength(entity) * 1.2F;
+                    pow = applyComboDamage(pow);
+                    knockbackStrength = 0.10F;
+                    setCooldown(PowerIndex.GENERAL_1, 60);
+                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
+                            PowerIndex.GENERAL_1, 60);
 
-                if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
-                    if (entity instanceof LivingEntity livingEntity){
-                        sendClutchCooldowns(12);
-                        ((StandUser)livingEntity).roundabout$setDazed((byte) 12);
-                    }
-                    ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CRIT,
-                            entity.getEyePosition().x,entity.getEyePosition().y,entity.getEyePosition().z,
-                            10,
-                            0.2,
-                            0.2,
-                            0.2,
-                            0.01);
-                    takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
-                    this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.7f + Math.random() * 0.1f));
-                    addToCombo();
-                } else {
-                    if (!this.self.level().isClientSide()) {
-                        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
+                    if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
+                        if (entity instanceof LivingEntity livingEntity) {
+                            sendClutchCooldowns(12);
+                            ((StandUser) livingEntity).roundabout$setDazed((byte) 12);
+                        }
+                        ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CRIT,
+                                entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
+                                10,
+                                0.2,
+                                0.2,
+                                0.2,
+                                0.01);
+                        takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
+                        this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.7f + Math.random() * 0.1f));
+                        addToCombo();
+                    } else {
+                        if (!this.self.level().isClientSide()) {
+                            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
+                        }
                     }
                 }
             }
