@@ -730,9 +730,11 @@ public class PowersAnubis extends NewDashPreset {
             /// basic attacks
             else if (SU.roundabout$getStandAnimation() == PowerIndex.ATTACK
                     || SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_ATTACK) {
-                AnimationDefinition AD = PowersAnubis.getAnimation(this.getStandUserSelf());
-                if (AD != null && AD.lengthInSeconds()*20 < this.attackTime) {
-                    SU.roundabout$setStandAnimation(PowerIndex.NONE);
+                if (isClient()) {
+                    AnimationDefinition AD = PowersAnubis.getAnimation(this.getStandUserSelf());
+                    if (AD != null && AD.lengthInSeconds() * 20 < this.attackTime) {
+                        SU.roundabout$setStandAnimation(PowerIndex.NONE);
+                    }
                 }
             }
 
