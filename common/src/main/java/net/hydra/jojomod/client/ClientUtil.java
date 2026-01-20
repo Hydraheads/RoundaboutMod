@@ -141,6 +141,10 @@ public class ClientUtil {
     }
 
 
+    public static double getCameradDistance(Entity ent){
+        return Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().distanceTo(ent.position());
+    }
+
     public static boolean hasChangedArms(Entity ent){
         if (HeatUtil.isArmsFrozen(ent)){
             return true;
