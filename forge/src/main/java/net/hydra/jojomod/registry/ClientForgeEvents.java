@@ -275,6 +275,7 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.BLUE_SPARKLE.get(), BlueSparkleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.RED_SPARKLE.get(), RedSparkleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.ICE_SPARKLE.get(), RedSparkleParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.VAMPIRE_AURA.get(), VampireAuraParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.BUBBLE_TRAIL.get(), BubbleTrailParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.WARDEN_CLOCK.get(), WardenClockParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.CLOCK.get(), MandomClockParticle.Provider::new);
