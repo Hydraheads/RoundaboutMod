@@ -3997,7 +3997,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             1.0F,
                             (float) ( 1.0F+Math.random()*0.01F));
                     HeatUtil.resetHeat(rdbt$this());
-                    hurt(ModDamageTypes.of(level(), ModDamageTypes.ICE_SHATTER,this), 30F);
+
+                    if (rdbt$this() instanceof Player) {
+                        hurt(ModDamageTypes.of(level(), ModDamageTypes.ICE_SHATTER, this), 15F);
+                    } else {
+                        hurt(ModDamageTypes.of(level(), ModDamageTypes.ICE_SHATTER, this), 25F);
+                    }
                     S2CPacketUtil.shatterIce(getId());
                     return true;
                 }
