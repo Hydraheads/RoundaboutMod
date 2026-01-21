@@ -870,46 +870,6 @@ public class StandHudRender {
         }
     }
 
-/**
-    public static void renderGuardHud(DrawContext context, MinecraftClient client, PlayerEntity playerEntity,
-                                       int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
-                                       float flashAlpha, float otherFlashAlpha) {
-        if (playerEntity != null){
-
-            int x = 0;
-            int y = 0;
-
-            int width = scaledWidth;
-            int height = scaledHeight;
-            int twidth = 51;
-            x = width/2;
-            y = height;
-            boolean standOn = MyComponents.STAND_USER.get(playerEntity).getActive();
-            NbtCompound pd = ((IEntityDataSaver) playerEntity).getPersistentData();
-            if (standOn){
-                int age = Math.toIntExact(pd.getLong("guard") - Math.round(playerEntity.getWorld().getTime()));
-                if (age <=0 || age > 201){age=0;}
-                //1000 -> 10
-                //1200
-                int twidth2 = (twidth*(200-age))/200;
-                //Draws the empty bar
-                context.drawTexture(GUARD_EMPTY,x-20,y-67,0, 0, twidth, 5, twidth, 5);
-                //Draws the full bar over it. Scales to age.
-                context.drawTexture(GUARD_FILLED,x-20,y-67,0, 0, twidth2, 5, twidth, 5);
-                //Draws the little shield icon
-                context.drawTexture(GUARD_ICON,x-30,y-68,0, 0, 7, 7, 7, 7);
-
-                //TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
-                //drawContext.drawText(renderer, DEBUG_TEXT_1,x-50,y-50,0xffffff,true);
-            } else {
-                //TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
-                //drawContext.drawText(renderer, ""+StandData.isActive((IEntityDataSaver) MinecraftClient.getInstance().player),x-50,y-50,0xffffff,true);
-            }
-
-
-
-        }
-    }*/
 
     public static void renderHeatHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                   int scaledWidth, int scaledHeight, int ticks, int x,

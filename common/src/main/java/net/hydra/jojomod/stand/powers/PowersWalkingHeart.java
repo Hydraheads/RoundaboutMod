@@ -11,6 +11,7 @@ import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -387,6 +388,29 @@ public class PowersWalkingHeart extends NewDashPreset {
         }
     }
 
+    public Direction getIntendedDirection(){
+        Direction rightAxis = Direction.DOWN;
+        MobEffectInstance mi = self.getEffect(ModEffects.GRAVITY_FLIP);
+        if (mi != null) {
+            if (mi.getAmplifier() == 0) {
+                rightAxis = Direction.NORTH;
+            }
+            if (mi.getAmplifier() == 1) {
+                rightAxis = Direction.SOUTH;
+            }
+            if (mi.getAmplifier() == 2) {
+                rightAxis = Direction.EAST;
+            }
+            if (mi.getAmplifier() == 3) {
+                rightAxis = Direction.WEST;
+            }
+            if (mi.getAmplifier() == 4) {
+                rightAxis = Direction.UP;
+            }
+        }
+        return rightAxis;
+    }
+
     public void toggleSpikes(boolean toggle){
         if (!this.self.level().isClientSide()) {
             boolean getTog = getStandUserSelf().roundabout$getUniqueStandModeToggle();
@@ -394,6 +418,15 @@ public class PowersWalkingHeart extends NewDashPreset {
                 if (toggle) {
                     this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXTEND_SPIKES_EVENT, SoundSource.PLAYERS, 1F, 1f);
                 } else {
+                    Direction gf = ((IGravityEntity)self).roundabout$getGravityDirection();
+                    if (gf != getIntendedDirection()) {
+                        Vec3 vec = new Vec3(0, 0.3f, 0);
+                        vec = RotationUtil.vecPlayerToWorld(vec, gf);
+                        self.teleportTo(
+                                self.getX() + vec.x,
+                                self.getY() + vec.y,
+                                self.getZ() + vec.z);
+                    }
                     setHeelAttachCooldown();
                     this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXTEND_SPIKES_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
                 }

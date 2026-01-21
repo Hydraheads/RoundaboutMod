@@ -13,7 +13,6 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -60,7 +59,6 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterials;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class PowersMetallica extends NewDashPreset {
@@ -113,7 +111,7 @@ public class PowersMetallica extends NewDashPreset {
             if (self.isInvisible()) {
                 self.setInvisible(false);
             }
-            if (self.level().isClientSide && self == Minecraft.getInstance().player) {
+            if (self.level().isClientSide() && self == ClientUtil.getPlayer()) {
                 ClientUtil.setThrowFadeToTheEther(1.0f);
             }
         }
@@ -124,54 +122,55 @@ public class PowersMetallica extends NewDashPreset {
     }
 
     public static float getMetallicaInvisibilityAlpha(LivingEntity entity, double distanceToCamera, float partialTicks) {
-        if (ClientUtil.getInvisibilityVision()) return 0.4f;
+        if (entity.level().isClientSide()) {
+            if (ClientUtil.getInvisibilityVision()) return 0.4f;
 
-        float activationAlpha = 0.0f;
-        float revealFactor = 0.0f;
+            float activationAlpha = 0.0f;
+            float revealFactor = 0.0f;
 
-        if (entity instanceof StandUser user && user.roundabout$getStandPowers() instanceof PowersMetallica metallica) {
-            activationAlpha = Mth.lerp(partialTicks, metallica.prevCamoAlpha, metallica.camoAlpha);
+            if (entity instanceof StandUser user && user.roundabout$getStandPowers() instanceof PowersMetallica metallica) {
+                activationAlpha = Mth.lerp(partialTicks, metallica.prevCamoAlpha, metallica.camoAlpha);
 
-            if (metallica.attackRevealTicks > 0) {
-                float progress = (metallica.attackRevealTicks - partialTicks) / 10.0f;
-                revealFactor = Mth.clamp(progress, 0.0f, 0.6f);
-            }
-        } else {
-            if (entity instanceof IEntityAndData data && data.roundabout$getMetallicaInvisibility() > -1) {
-                activationAlpha = 1.0f;
-            }
-        }
-
-        if (activationAlpha <= 0.01f) return 1.0f;
-
-        float distanceAlpha = 1.0f;
-
-        boolean isSelf = entity.level().isClientSide && entity == Minecraft.getInstance().player;
-
-        if (isSelf) {
-            distanceAlpha = 0.4f;
-        } else {
-
-            if (distanceToCamera <= 6.0) {
-                distanceAlpha = 1.0f - (float)(distanceToCamera / 6.0);
-            }
-            else if (distanceToCamera <= 12.0) {
-                distanceAlpha = 0.0f;
-            }
-            else {
-                if (distanceToCamera < 14.0) {
-                    float factor = (float) ((distanceToCamera - 12.0) / 2.0);
-                    distanceAlpha = Mth.lerp(factor, 0.0f, 0.3f);
-                } else {
-                    distanceAlpha = 0.3f;
+                if (metallica.attackRevealTicks > 0) {
+                    float progress = (metallica.attackRevealTicks - partialTicks) / 10.0f;
+                    revealFactor = Mth.clamp(progress, 0.0f, 0.6f);
+                }
+            } else {
+                if (entity instanceof IEntityAndData data && data.roundabout$getMetallicaInvisibility() > -1) {
+                    activationAlpha = 1.0f;
                 }
             }
+
+            if (activationAlpha <= 0.01f) return 1.0f;
+
+            float distanceAlpha = 1.0f;
+
+            boolean isSelf = entity.level().isClientSide && entity == ClientUtil.getPlayer();
+
+            if (isSelf) {
+                distanceAlpha = 0.4f;
+            } else {
+
+                if (distanceToCamera <= 6.0) {
+                    distanceAlpha = 1.0f - (float) (distanceToCamera / 6.0);
+                } else if (distanceToCamera <= 12.0) {
+                    distanceAlpha = 0.0f;
+                } else {
+                    if (distanceToCamera < 14.0) {
+                        float factor = (float) ((distanceToCamera - 12.0) / 2.0);
+                        distanceAlpha = Mth.lerp(factor, 0.0f, 0.3f);
+                    } else {
+                        distanceAlpha = 0.3f;
+                    }
+                }
+            }
+
+            float finalAlpha = Mth.lerp(activationAlpha, 1.0f, distanceAlpha);
+            finalAlpha += revealFactor;
+
+            return Mth.clamp(finalAlpha, 0.0f, 1.0f);
         }
-
-        float finalAlpha = Mth.lerp(activationAlpha, 1.0f, distanceAlpha);
-        finalAlpha += revealFactor;
-
-        return Mth.clamp(finalAlpha, 0.0f, 1.0f);
+        return 0;
     }
 
     public static void handleMobDrop(LivingEntity mob, Player player) {
@@ -483,7 +482,7 @@ public class PowersMetallica extends NewDashPreset {
             }
         }
 
-        if (self.level().isClientSide && self == Minecraft.getInstance().player) {
+        if (self.level().isClientSide() && self == ClientUtil.getPlayer()) {
             float handAlpha = 1.0f;
             if (wantsInvis || camoAlpha > 0) {
                 handAlpha = 1.0f - camoAlpha;
@@ -550,7 +549,7 @@ public class PowersMetallica extends NewDashPreset {
         }
 
         if (self.level().isClientSide()) {
-            Player clientPlayer = Minecraft.getInstance().player;
+            Player clientPlayer = ClientUtil.getPlayer();
             boolean canSeeStand = false;
             if (clientPlayer != null) {
                 if (clientPlayer == self) canSeeStand = true;

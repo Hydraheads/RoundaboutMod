@@ -387,7 +387,7 @@ public int speedActivated = 0;
         if (!this.self.level().isClientSide()) {
 
 
-            if (self.isUsingItem()) {
+            if (self.isUsingItem() || PowerTypes.hasStandActive(self)  || PowerTypes.hasPowerActive(self)) {
                 if (bloodSuckingTarget != null || this.getActivePower() == BLOOD_SUCK) {
                     bloodSuckingTarget = null;
                     xTryPower(PowerIndex.NONE, true);
@@ -543,7 +543,7 @@ public int speedActivated = 0;
             }
             setAttackTimeDuring(0);
             setActivePower(BLOOD_REGEN);
-            playSoundsIfNearby(SoundIndex.BLOOD_REGEN, 100, true);
+            playSoundsIfNearby(SoundIndex.BLOOD_REGEN, 27, false);
             this.setCooldown(PowerIndex.FATE_2_SNEAK, 600);
             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.FATE_2_SNEAK,
                     600

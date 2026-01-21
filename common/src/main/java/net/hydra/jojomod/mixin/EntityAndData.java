@@ -25,7 +25,6 @@ import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
 import net.hydra.jojomod.stand.powers.PowersMetallica;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -433,7 +432,7 @@ public abstract class EntityAndData implements IEntityAndData {
                         return;
                     }
                 }
-                double dist = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().distanceTo(((Entity)(Object)this).position());
+                double dist = ClientUtil.getCameradDistance((Entity)(Object)this);
                 float alpha = PowersMetallica.getMetallicaInvisibilityAlpha((LivingEntity)(Object)this, dist);
 
                 if (alpha > 0.05f) {
