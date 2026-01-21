@@ -596,8 +596,8 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
     /// helper function for drawing locked skill icons, use it or not idc
-    public void LockedOrNot(GuiGraphics context,int x, int y,int slot,ResourceLocation icon, int level) {
-        setSkillIcon(context, x, y, slot, canExecuteMoveWithLevel(level) ? icon : StandIcons.LOCKED, PowersRatt.PLACE_BURST,!canExecuteMoveWithLevel(level));
+    public void LockedOrNot(GuiGraphics context,int x, int y,int slot, ResourceLocation icon, byte cooldown, int level) {
+        setSkillIcon(context, x, y, slot, canExecuteMoveWithLevel(level) ? icon : StandIcons.LOCKED, cooldown,!canExecuteMoveWithLevel(level));
     }
 
 
