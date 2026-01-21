@@ -377,9 +377,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         }
                         Entity TE2 = getTargetEntity(self, 1.4F, 40);
                         if (TE2 != null){
-                            tryIntPowerPacket(BLOOD_CLUTCH_ATTACK,TE2.getId());
                             xTryPower(PowerIndex.NONE, true);
                             tryPowerPacket(NONE);
+                            tryIntPowerPacket(BLOOD_CLUTCH_ATTACK,TE2.getId());
                         }
                     }
                 } else if (getActivePower() == ICE_CLUTCH) {
@@ -400,9 +400,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         }
                         Entity TE2 = getTargetEntity(self, 1.4F, 40);
                         if (TE2 != null){
-                            tryIntPowerPacket(ICE_CLUTCH_ATTACK,TE2.getId());
                             xTryPower(PowerIndex.NONE, true);
                             tryPowerPacket(NONE);
+                            tryIntPowerPacket(ICE_CLUTCH_ATTACK,TE2.getId());
                         }
                     }
                 }
