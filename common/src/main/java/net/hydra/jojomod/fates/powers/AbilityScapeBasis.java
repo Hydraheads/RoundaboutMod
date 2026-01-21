@@ -123,14 +123,13 @@ public class AbilityScapeBasis {
 
     /**If the cooldown slot is to be controlled by the server, return true. Consider using this if
      * bad TPS makes a stand ability actually overpowered for the client to handle the recharging of.*/
-    public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
+    public boolean isServerControlledCooldown(byte num){
         return false;
     }
     /**If you stand still enough, abilities recharge faster. But this could be overpowered for some abilties, so
      * use discretion and override this to return false on abilities where this might be op.*/
     public boolean canUseStillStandingRecharge(byte bt){
-        CooldownInstance cdi = getCooldown(bt);
-        if (cdi != null && isServerControlledCooldown(cdi,bt)){
+        if (isServerControlledCooldown(bt)){
             return false;
         }
         return true;
@@ -1051,7 +1050,7 @@ public class AbilityScapeBasis {
     public boolean isDazed(LivingEntity entity){
         return this.getUserData(entity).roundabout$isDazed();
     }
-    public void setDazed(LivingEntity entity, byte dazeTime){
+    public static void setDazed(LivingEntity entity, byte dazeTime){
         if ((1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)) <= 0.0) {
             /*Warden, iron golems, and anything else knockback immmune can't be dazed**/
             return;
@@ -1061,7 +1060,7 @@ public class AbilityScapeBasis {
         }
 
         /**Stand Drops item when user is dazed*/
-        StandEntity stand = getStandEntity(entity);
+        StandEntity stand = getStandEntity2(entity);
         if (stand != null && !stand.getHeldItem().isEmpty()){
             double $$3 = stand.getEyeY() - 0.3F;
             ItemEntity $$4 = new ItemEntity(stand.level(), stand.getX(), $$3, stand.getZ(), stand.getHeldItem());
@@ -1076,7 +1075,7 @@ public class AbilityScapeBasis {
         } else {
             ((StandUser) entity).roundabout$getStandPowers().animateStand(StandEntity.IDLE);
         }
-        this.getUserData(entity).roundabout$setDazed(dazeTime);
+        ((StandUser) entity).roundabout$setDazed(dazeTime);
     }
     public void setDazedSafely(LivingEntity entity, byte dazeTime){
         if (dazeTime > 0){
@@ -1093,6 +1092,9 @@ public class AbilityScapeBasis {
     }
 
     /**If you have a stand entity summoned, get that*/
+    public static StandEntity getStandEntity2(LivingEntity User){
+        return ((StandUser) User).roundabout$getStand();
+    }
     public StandEntity getStandEntity(LivingEntity User){
         return this.getUserData(User).roundabout$getStand();
     } public boolean hasStandEntity(LivingEntity User){

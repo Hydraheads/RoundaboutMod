@@ -650,7 +650,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         hitParticles(entity);
                         takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
                         if (!(entity instanceof Player) && entity instanceof LivingEntity LE){
-                            ((StandUser)LE).roundabout$setDazed((byte) 4);
+                            setDazed(LE,(byte) 4);
                         }
                         this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.1f + Math.random() * 0.1f));
                         self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SUCK_DRAIN_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
@@ -719,7 +719,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         hitParticles(entity);
                         takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
                         if (!(entity instanceof Player) && entity instanceof LivingEntity LE){
-                            ((StandUser)LE).roundabout$setDazed((byte) 4);
+                            setDazed(LE,(byte) 4);
                         }
                         HeatUtil.addHeat(entity,-24 + (-4*getFreezeLevel()));
                         this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.1f + Math.random() * 0.1f));
@@ -891,10 +891,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
                                 if (value instanceof Player pl){
                                     sendClutchCooldowns(16);
-                                    ((StandUser)pl).roundabout$setDazed((byte) 16);
+                                    setDazed(pl,(byte) 16);
                                 } else if (value instanceof LivingEntity livingEntity && !MainUtil.isBossMob(livingEntity)){
                                     sendClutchCooldowns(16);
-                                    ((StandUser)livingEntity).roundabout$setDazed((byte) 16);
+                                    setDazed(livingEntity,(byte) 16);
                                 }
                                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SPIKE_HIT_EVENT, SoundSource.PLAYERS, 1F, (float) (1.0f + Math.random() * 0.05f));
                                 if (!combo){
@@ -913,12 +913,12 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     }
 
     @Override
-    public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
+    public boolean isServerControlledCooldown(byte num){
         if (num == PowerIndex.GENERAL_1 || num == PowerIndex.GENERAL_1_SNEAK || num == PowerIndex.GENERAL_2
                 || num == PowerIndex.GENERAL_2_SNEAK) {
             return true;
         }
-        return super.isServerControlledCooldown(ci, num);
+        return super.isServerControlledCooldown(num);
     }
 
     public void sweepAttack(){
@@ -1073,7 +1073,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
                         if (entity instanceof LivingEntity livingEntity) {
                             sendClutchCooldowns(12);
-                            ((StandUser) livingEntity).roundabout$setDazed((byte) 12);
+                            setDazed(livingEntity,(byte) 12);
                         }
                         ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CRIT,
                                 entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,

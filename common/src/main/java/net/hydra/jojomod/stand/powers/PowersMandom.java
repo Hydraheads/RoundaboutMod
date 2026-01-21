@@ -576,11 +576,11 @@ public class PowersMandom extends NewDashPreset {
     }
 
 
-    public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
+    public boolean isServerControlledCooldown(byte num){
         if (num == PowerIndex.SKILL_2 && ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownUsesServerLatency) {
             return true;
         }
-        return super.isServerControlledCooldown(ci, num);
+        return super.isServerControlledCooldown(num);
     }
 
     /**

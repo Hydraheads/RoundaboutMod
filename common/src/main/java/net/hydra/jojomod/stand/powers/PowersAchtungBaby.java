@@ -347,11 +347,11 @@ public class PowersAchtungBaby extends NewDashPreset {
     protected SoundEvent getPlaceSound(BlockState $$0) {
         return $$0.getSoundType().getPlaceSound();
     }
-    public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
+    public boolean isServerControlledCooldown(byte num){
         if (num == PowerIndex.SKILL_2 && ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstCooldownUsesServerLatency) {
             return true;
         }
-        return super.isServerControlledCooldown(ci, num);
+        return super.isServerControlledCooldown(num);
     }
 
 

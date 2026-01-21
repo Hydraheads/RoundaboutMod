@@ -5339,7 +5339,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
      * use discretion and override this to return false on abilities where this might be op.*/
     @Unique
     public boolean rdbt$canUseStillStandingRecharge(byte bt){
-        if (!roundabout$getStandPowers().canUseStillStandingRecharge(bt)){
+        if (!roundabout$getStandPowers().canUseStillStandingRecharge(bt)
+    || !(rdbt$this() instanceof Player pl &&
+                (((IPowersPlayer)pl).rdbt$getPowers().canUseStillStandingRecharge(bt) &&
+                        ((IFatePlayer)pl).rdbt$getFatePowers().canUseStillStandingRecharge(bt)))
+        ){
             return false;
         }
         return true;
@@ -5352,10 +5356,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     @Override
     public boolean rdbt$isServerControlledCooldown(CooldownInstance ci, byte num){
-        if (roundabout$getStandPowers().isServerControlledCooldown(ci,num)){
+        if (roundabout$getStandPowers().isServerControlledCooldown(num)){
             return true;
         }
-        if (rdbt$this() instanceof Player pl && ((IPowersPlayer)pl).rdbt$getPowers().isServerControlledCooldown(ci,num)){
+        if (rdbt$this() instanceof Player pl && ((IPowersPlayer)pl).rdbt$getPowers().isServerControlledCooldown(num)){
             return true;
         }
         return false;

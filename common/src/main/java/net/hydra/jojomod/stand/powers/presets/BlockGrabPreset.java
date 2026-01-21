@@ -754,11 +754,11 @@ public class BlockGrabPreset extends NewPunchingStand {
         }
         return false;
     }
-    public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
+    public boolean isServerControlledCooldown( byte num){
         if (num == PowerIndex.SKILL_2) {
             return true;
         }
-        return super.isServerControlledCooldown(ci, num);
+        return super.isServerControlledCooldown(num);
     }
     public void addItem(StandEntity standEntity){
         addItemLight(standEntity);

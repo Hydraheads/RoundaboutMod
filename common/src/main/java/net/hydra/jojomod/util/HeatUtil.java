@@ -3,6 +3,7 @@ package net.hydra.jojomod.util;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.sounds.SoundSource;
@@ -123,7 +124,7 @@ public class HeatUtil {
                     heat = Mth.clamp(heat+sub,-110,0);
                     su.roundabout$setHeat(heat);
                 } if (heat <= -100){
-                    su.roundabout$setDazed((byte)3);
+                    AbilityScapeBasis.setDazed(LE,(byte)3);
                     LE.hurtMarked = true;
                     LE.hasImpulse = true;
                     LE.setDeltaMovement(RotationUtil.vecPlayerToWorld(new Vec3(0,-0.4,0),
