@@ -576,6 +576,13 @@ public class ClientUtil {
                     int data = (int) vargs[1];
                     ClientUtil.handleIntPacketS2C(player,data,context);
                 }
+                /**Generic double int that is sent to the client*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.DoubleIntToClient.value)) {
+                    byte context = (byte) vargs[0];
+                    int data = (int) vargs[1];
+                    int data2 = (int) vargs[2];
+                    ClientUtil.handleDoubleIntPacketS2C(player,data,data2,context);
+                }
                 /**Generic byte that is sent to the client*/
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SimpleByteToClient.value)) {
                     byte context = (byte) vargs[0];
@@ -818,11 +825,20 @@ public class ClientUtil {
             if (((IPowersPlayer) player).rdbt$getPowers() instanceof PunchingGeneralPowers pgp){
                 pgp.setComboExpireTicks(data);
             }
-        } else if (context == PacketDataIndex.S2C_INT_FADE){
-            ((IPowersPlayer) player).rdbt$getPowers().setFaded(data);
+        }
+    }
+    public static void handleDoubleIntPacketS2C(Player player, int data, int data2, byte context) {
+        if (context == PacketDataIndex.S2C_INT_FADE){
+            Entity target = player.level().getEntity(data);
+            if (target instanceof Player pl) {
+                ((IPowersPlayer) pl).rdbt$getPowers().setFaded(data2);
+            }
         } else if (context == PacketDataIndex.S2C_INT_FADE_UPDATE){
-            ((IPowersPlayer) player).rdbt$getPowers().fadeOutInterpolation = 5;
-            ((IPowersPlayer) player).rdbt$getPowers().setFaded(data);
+            Entity target = player.level().getEntity(data);
+            if (target instanceof Player pl) {
+                ((IPowersPlayer) pl).rdbt$getPowers().fadeOutInterpolation = 5;
+                ((IPowersPlayer) pl).rdbt$getPowers().setFaded(data2);
+            }
         }
     }
 

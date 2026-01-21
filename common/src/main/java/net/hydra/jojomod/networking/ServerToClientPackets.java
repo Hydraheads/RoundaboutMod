@@ -29,6 +29,7 @@ public class ServerToClientPackets {
             SyncPowerInventory("sync_power_inventory"),
             IntPowerData("int_power_data"),
             IntToClient("generic_int_to_client"),
+            DoubleIntToClient("generic_double_int_to_client"),
             SimpleByteToClient("simple_byte_to_client"),
             ByteBundleToClient("byte_bundle_to_client"),
             AddTSEntity("add_ts_entity"),

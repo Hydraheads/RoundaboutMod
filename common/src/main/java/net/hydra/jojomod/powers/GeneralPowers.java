@@ -238,9 +238,9 @@ public class GeneralPowers extends AbilityScapeBasis {
         }
         if (!self.level().isClientSide()){
             if (fadeOutInterpolation >= 5) {
-                sendIntPacketIfNearby(PacketDataIndex.S2C_INT_FADE_UPDATE, fadeOutTicks, 100);
+                sendDoubleIntPacketIfNearby(PacketDataIndex.S2C_INT_FADE_UPDATE, fadeOutTicks, self.getId(), 100);
             } else {
-                sendIntPacketIfNearby(PacketDataIndex.S2C_INT_FADE, fadeOutTicks, 100);
+                sendDoubleIntPacketIfNearby(PacketDataIndex.S2C_INT_FADE, fadeOutTicks, self.getId(), 100);
             }
         }
     }

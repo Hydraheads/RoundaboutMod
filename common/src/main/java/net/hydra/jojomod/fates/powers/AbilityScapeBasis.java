@@ -586,6 +586,26 @@ public class AbilityScapeBasis {
         }
     }
 
+    public final void sendDoubleIntPacketIfNearby(byte context, int value, int value2, double range) {
+        if (!this.self.level().isClientSide) {
+
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, range) && !((StandUser)serverPlayerEntity).roundabout$getStandDisc().isEmpty()) {
+                    S2CPacketUtil.sendGenericIntIntToClientPacket(serverPlayerEntity, context, value, value2);
+                }
+            }
+        }
+    }
+
     public final void playStandUserOnlySoundsIfNearby(byte soundNo, double range, boolean onSelf, boolean isVoice) {
         if (isVoice && this.getSelf() instanceof Player PE &&
                 ((IPlayerEntity)PE).roundabout$getMaskInventory().getItem(1).is(ModItems.BLANK_MASK)){

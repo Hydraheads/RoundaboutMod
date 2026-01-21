@@ -242,6 +242,16 @@ public class S2CPacketUtil {
             );
         }
     }
+    public static void sendGenericIntIntToClientPacket(Player player, byte context, int data1, int data){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.DoubleIntToClient.value,
+                    context,
+                    data1,
+                    data
+            );
+        }
+    }
     public static void sendSimpleByteToClientPacket(Player player, byte context){
         if (player instanceof ServerPlayer SP) {
             ModMessageEvents.sendToPlayer(SP,

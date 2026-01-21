@@ -165,7 +165,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             cancelConsumableItem(this.getSelf());
             this.setPowerNone();
             if (!this.getSelf().level().isClientSide()) {
-                sendIntPacketIfNearby(PacketDataIndex.S2C_INT_FADE, 20, 100);
+                sendDoubleIntPacketIfNearby(PacketDataIndex.S2C_INT_FADE, self.getId(), 20, 100);
                 ((IPlayerEntity)this.getSelf()).roundabout$setClientDodgeTime(0);
                 ((IPlayerEntity) this.getSelf()).roundabout$setDodgeTime(0);
                 if (storedInt < 0) {
