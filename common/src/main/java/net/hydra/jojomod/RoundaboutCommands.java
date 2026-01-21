@@ -354,6 +354,7 @@ public class RoundaboutCommands {
                     ((StandUser) PE).roundabout$setLocacacaCurse((byte) -1);
                     PE.getFoodData().setFoodLevel(20);
                     PE.getFoodData().setSaturation(14.4F);
+                    ((StandUser) PE).roundabout$setHeat(0);
                     MainUtil.clearCooldowns(PE);
                 }
 
