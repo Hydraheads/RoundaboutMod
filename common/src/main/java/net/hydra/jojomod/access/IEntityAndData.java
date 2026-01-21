@@ -9,23 +9,12 @@ import java.util.ArrayDeque;
 
 public interface IEntityAndData {
 
-    void roundabout$setMagneticField(boolean active);
-    boolean roundabout$isMagneticField();
-
     int roundabout$getBleedLevel();
     void roundabout$setBleedLevel(int val);
 
-    void roundabout$setMetalMeter(float amount);
-    float roundabout$getMetalMeter();
 
     void roundabout$setLastDamageTaken(float amount);
     float roundabout$getLastDamageTaken();
-
-    void roundabout$setMetalMode(byte mode);
-    byte roundabout$getMetalMode();
-
-    void roundabout$setMetallicaInvisibility(int fade);
-    int roundabout$getMetallicaInvisibility();
 
     float roundabout$getPreTSTick();
     void roundabout$setExclusiveLayers(boolean exclusive);

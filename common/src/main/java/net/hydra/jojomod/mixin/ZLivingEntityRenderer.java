@@ -70,7 +70,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
     @Inject(method = "isBodyVisible", at = @At("HEAD"), cancellable = true)
     private void roundabout$forceBodyVisible(T entity, CallbackInfoReturnable<Boolean> cir) {
-        if (entity instanceof IEntityAndData data && data.roundabout$getMetallicaInvisibility() > -1) {
+        if (entity != null && ((StandUser)entity).roundabout$getMetallicaInvisibility() > -1) {
             cir.setReturnValue(true);
         }
     }
@@ -79,7 +79,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
     @Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
     private void roundabout$forceTranslucent(T entity, boolean bodyVisible, boolean translucent, boolean glowing, CallbackInfoReturnable<RenderType> cir) {
-        if (entity instanceof IEntityAndData data && data.roundabout$getMetallicaInvisibility() > -1) {
+        if (entity != null && ((StandUser)entity).roundabout$getMetallicaInvisibility() > -1) {
             ResourceLocation texture = this.getTextureLocation(entity);
             cir.setReturnValue(RenderType.itemEntityTranslucentCull(texture));
         }
