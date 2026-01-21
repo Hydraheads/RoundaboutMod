@@ -835,36 +835,41 @@ public class PowersRatt extends NewDashPreset {
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         switch (activeP) {
             case PowersRatt.AUTO -> {
-                return getShootTarget() == null && isHoldingSneak() && !isAuto() && isPlaced();
+                if (getShootTarget() == null && isHoldingSneak() && !isAuto() && isPlaced()) {
+                    return true;
+                }
             }
             case PowersRatt.SETPLACE -> {
-                if (isPlaced()) {
-                    return false;
-                } else {
+                if (!isPlaced()) {
                     if (scopeLevel == 0) {
-                        return getValidPlacement() == null && !isPlaced();
+                        if (getValidPlacement() == null && !isPlaced()) {
+                            return true;
+                        }
                     }
                 }
             }
             case PowersRatt.PLACE_BURST -> {
-                return shotcooldown != 0 || shieldDelay >= 20;
+                if (shotcooldown != 0 || shieldDelay >= 20) {
+                    return true;
+                }
             }
             case PowersRatt.CHANGE_MODE -> {
                 if (scopeLevel != 0) {
-                    return getChargeTime() <= MinThreshold || shotcooldown != 0;
+                    if (getChargeTime() <= MinThreshold || shotcooldown != 0) {
+                        return true;
+                    }
                 } else if (isPlaced()) {
-                    return !isAuto() && getShootTarget() == null;
+                    if (!isAuto() && getShootTarget() == null) {
+                        return true;
+                    }
                 }
             }
 
             case PowersRatt.RATT_LEAP -> {
                 if (!canExecuteMoveWithLevel(4)) {return true;}
-                if (isPlaced()) {
-                    if(this.getStandEntity(this.getSelf()).onGround()) {
-                        return false;
-                    }
+                if (!isPlaced() || (isPlaced() && !this.getStandEntity(this.getSelf()).onGround()) ) {
+                    return true;
                 }
-                return true;
             }
 
         }
