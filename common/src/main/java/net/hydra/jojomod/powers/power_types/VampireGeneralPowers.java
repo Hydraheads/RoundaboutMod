@@ -315,7 +315,6 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         //Client only
         if (self.level().isClientSide()) {
 
-            Roundabout.LOGGER.info(""+ClientUtil.getThrowFadePercent(this.getSelf(),0));
 
             if (isPacketPlayer()) {
                 if (getActivePower() == POWER_DIVE) {
