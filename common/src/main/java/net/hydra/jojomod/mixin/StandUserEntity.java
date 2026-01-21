@@ -4020,7 +4020,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         hurt(ModDamageTypes.of(level(), ModDamageTypes.ICE_SHATTER, $$0.getEntity()), 30F);
                     }
                     S2CPacketUtil.shatterIce(getId());
-                    return true;
+                    return false;
                 }
             }
 
