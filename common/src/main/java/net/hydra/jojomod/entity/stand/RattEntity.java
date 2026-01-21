@@ -150,18 +150,22 @@ public class RattEntity extends StandEntity {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         if (source.getEntity() != null && source.getEntity() != this.getUser()) {
-            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersRatt PR) {
-                if (!this.onGround()) {return false;}
-                PR.active = false;
-                this.forceDespawnSet = true;
-                PR.setCooldown(PowersRatt.SETPLACE,60);
-                if (this.getUser() instanceof Player P && !this.level().isClientSide()) {
-                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) P), PowersRatt.SETPLACE, 80);
+            if (this.getUser() != null ) {
+                if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersRatt PR) {
+                    if (!this.onGround()) {
+                        return false;
+                    }
+                    PR.active = false;
+                    this.forceDespawnSet = true;
+                    PR.setCooldown(PowersRatt.SETPLACE, 60);
+                    if (this.getUser() instanceof Player P && !this.level().isClientSide()) {
+                        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) P), PowersRatt.SETPLACE, 80);
 
+                    }
+                    PR.setCooldown(PowersRatt.SETPLACE, 80);
+                    this.level().playSound(null, this.blockPosition(), ModSounds.RATT_DEPLACE_EVENT, SoundSource.PLAYERS, 0.5F, 1F);
+                    return this.getUser().hurt(source, Mth.clamp(amount * 0.5F, 0, 6));
                 }
-                PR.setCooldown(PowersRatt.SETPLACE, 80);
-                this.level().playSound(null, this.blockPosition(), ModSounds.RATT_DEPLACE_EVENT, SoundSource.PLAYERS, 0.5F, 1F);
-                return this.getUser().hurt(source, Mth.clamp(amount*0.5F,0,6));
             }
 
 

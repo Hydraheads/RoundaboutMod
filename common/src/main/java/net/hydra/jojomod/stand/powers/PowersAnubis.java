@@ -25,6 +25,7 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
+import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -431,10 +432,14 @@ public class PowersAnubis extends NewDashPreset {
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         switch (activeP) {
             case PowerIndex.SKILL_4 -> {
-                return !Minecraft.getInstance().mouseHandler.isMouseGrabbed();
+                if (!Minecraft.getInstance().mouseHandler.isMouseGrabbed()) {
+                    return true;
+                }
             }
             case PowerIndex.SKILL_2 -> {
-                return (Minecraft.getInstance().screen instanceof MemoryRecordScreen MA && (MA.currentlyHovered == -1 || MA.currentlyHovered == 8) );
+                if ( !(Minecraft.getInstance().screen instanceof MemoryRecordScreen) || (Minecraft.getInstance().screen instanceof MemoryRecordScreen MA && (MA.currentlyHovered == -1 || MA.currentlyHovered == 8)  ) ) {
+                    return true;
+                }
             }
         }
         return super.isAttackIneptVisually(activeP, slot);
@@ -458,32 +463,36 @@ public class PowersAnubis extends NewDashPreset {
                 setPowerOther(PowerIndex.RANGED_BARRAGE,this.getActivePower());
             }
             case PowerIndex.SNEAK_MOVEMENT -> {
-                ///  gives you another pogo
-                enablePogo();
-                this.setAttackTimeDuring(0);
-                this.setActivePower(PowerIndex.SNEAK_MOVEMENT);
-                this.setCooldown(PowerIndex.GLOBAL_DASH,260);
-                this.getSelf().level().playSound(null,this.getSelf().blockPosition(), ModSounds.ANUBIS_BACKFLIP_EVENT, SoundSource.PLAYERS,1.0F,1.0F);
+                if (isPacketPlayer()) {
+                    ///  gives you another pogo
+                    enablePogo();
+                    this.setAttackTimeDuring(0);
+                    this.setActivePower(PowerIndex.SNEAK_MOVEMENT);
+                    this.setCooldown(PowerIndex.GLOBAL_DASH, 260);
+                    this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.ANUBIS_BACKFLIP_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
 
-                if (!isClient()) {setAnimation(PowerIndex.SNEAK_MOVEMENT);}
-
-                if (this.getSelf() instanceof Player P) {
-                    P.getAbilities().flying = false;
-                }
-
-                Vec3 look = getSelf().getLookAngle().multiply(1, 0, 1).normalize();
-                SU.roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
-                SU.roundabout$setLeapIntentionally(true);
-
-                float strength = 1.25F;
-                if (this.getSelf().onGround()) {
-                    MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), strength, look.x, -1, look.z);
-                } else {
-                    if (Math.abs(look.x) + Math.abs(look.z) == 0) {
-                        strength *= 0.7F;
+                    if (!isClient()) {
+                        setAnimation(PowerIndex.SNEAK_MOVEMENT);
                     }
+
+                    if (this.getSelf() instanceof Player P) {
+                        P.getAbilities().flying = false;
+                    }
+
+                    Vec3 look = getSelf().getLookAngle().multiply(1, 0, 1).normalize();
+                    SU.roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+                    SU.roundabout$setLeapIntentionally(true);
+
+                    float strength = 1.25F;
+                    if (this.getSelf().onGround()) {
+                        MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), strength, look.x, -1, look.z);
+                    } else {
+                        if (Math.abs(look.x) + Math.abs(look.z) == 0) {
+                            strength *= 0.7F;
+                        }
+                    }
+                    MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), strength, look.x * 1, -1 * (this.getSelf().onGround() ? 1 : 0.8), look.z * 1);
                 }
-                MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), strength, look.x * 1, -1 * (this.getSelf().onGround() ? 1 : 0.8), look.z * 1);
             }
         }
         return super.tryPower(move, forced);
@@ -539,6 +548,7 @@ public class PowersAnubis extends NewDashPreset {
     @Override
     public void tickPower() {
 
+        Roundabout.LOGGER.info(""+this.getStandUserSelf().roundabout$isDazed());
 
       //  Roundabout.LOGGER.info(" CA: " + this.getActivePower() + " | " + this.getAttackTime() + " | "+ this.getAttackTimeDuring() + "/" + this.getAttackTimeMax());
         StandUser SU = this.getStandUserSelf();
@@ -833,6 +843,7 @@ public class PowersAnubis extends NewDashPreset {
     public boolean interceptAttack(){return true;}
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
+        if (HeatUtil.isBodyFrozen(this.getSelf())) {return;}
         if (keyIsDown) {
             if (pogoChecks() && !this.isBarrageCharging()) {
                 this.tryPower(PowerIndex.SNEAK_ATTACK_CHARGE);
@@ -1440,7 +1451,11 @@ public class PowersAnubis extends NewDashPreset {
     public void updatePowerInt(byte activePower, int data) {
         switch (activePower) {
             ///  basic swing, will probably be vanished at some point
-            case PowersAnubis.SWING -> this.getSelf().swing(InteractionHand.MAIN_HAND);
+            case PowersAnubis.SWING ->{
+                if (isPacketPlayer()) {
+                    this.getSelf().swing(InteractionHand.MAIN_HAND);
+                }
+            }
             /// pogo counter syncing
             case PowerIndex.SNEAK_ATTACK_CHARGE -> {
                 setAnimation(PowerIndex.EXTRA);
