@@ -195,7 +195,8 @@ public class Aesthetician extends StandUsingNPC {
             List<Player> iteratable = new ArrayList<>(interactingWith);
             List<Player> iteratable2 = new ArrayList<>(interactingWith);
             for (Player value : iteratable) {
-                if (value == null || value.isRemoved() || !value.isAlive() || value.distanceTo(this) > 15){
+                if (value == null || value.isRemoved() || !value.isAlive() || value.distanceTo(this) > 15 ||
+                getTarget() != null){
                     if (!this.level().isClientSide() && value instanceof ServerPlayer PE && value.isAlive()){
                         S2CPacketUtil.sendSimpleByteToClientPacket(PE, PacketDataIndex.S2C_SIMPLE_CLOSE_THE_RELLA);
                     }

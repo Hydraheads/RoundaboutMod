@@ -122,14 +122,16 @@ public class ModNetworking {
     }
 
     public static <T extends AbstractBaseS2CPacket> void send(T packetType, ServerPlayer recipient, Object... args) {
-        Connection con = ((IClientNetworking)recipient.connection).roundabout$getServer();
-        if (con == null)
-            return;
+        if (recipient != null && recipient.connection != null && ((IClientNetworking) recipient.connection) != null) {
+            Connection con = ((IClientNetworking) recipient.connection).roundabout$getServer();
+            if (con == null)
+                return;
 
-        con.send(new ClientboundCustomPayloadPacket(
-                buildFromClassName(packetType.getClass()),
-                createBufferFromVArgs(args)
-        ));
+            con.send(new ClientboundCustomPayloadPacket(
+                    buildFromClassName(packetType.getClass()),
+                    createBufferFromVArgs(args)
+            ));
+        }
     }
 
     public static void encodeValue(FriendlyByteBuf buf, Object value) {

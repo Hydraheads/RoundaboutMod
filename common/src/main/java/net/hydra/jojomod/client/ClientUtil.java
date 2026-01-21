@@ -388,9 +388,12 @@ public class ClientUtil {
     public static @Nullable Connection getC2SConnection()
     {
         Minecraft client = Minecraft.getInstance();
-        if (client.player == null)
+        if (client == null || client.player == null)
             return null;
 
+        if (((IClientNetworking)client) == null){
+            return null;
+        }
         Connection integratedServerCon = ((IClientNetworking)client).roundabout$getServer();
 
         return (integratedServerCon != null ? integratedServerCon : client.player.connection.getConnection());
@@ -825,6 +828,8 @@ public class ClientUtil {
             if (((IPowersPlayer) player).rdbt$getPowers() instanceof PunchingGeneralPowers pgp){
                 pgp.setComboExpireTicks(data);
             }
+        } else if (context == PacketDataIndex.AESTHETICIAN_OPEN){
+            setCinderellaUI2(true,data);
         }
     }
     public static void handleDoubleIntPacketS2C(Player player, int data, int data2, byte context) {
@@ -1255,9 +1260,10 @@ public class ClientUtil {
 
     public static int isInCinderellaMobUI = -1;
     public static void setCinderellaUI(boolean costs, int entid) {
-        Minecraft mc = Minecraft.getInstance();
-
         C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_RELLA_START,entid);
+    }
+    public static void setCinderellaUI2(boolean costs, int entid) {
+        Minecraft mc = Minecraft.getInstance();
         isInCinderellaMobUI = entid;
         mc.setScreen(new VisageStoreScreen(costs));
     }

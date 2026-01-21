@@ -1031,6 +1031,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
     public void sweepImpact(Entity entity) {
         if (!this.self.level().isClientSide()) {
+            if (entity.distanceTo(self) > 3){
+                return;
+            }
             attackTargetId = 0;
             self.swing(InteractionHand.MAIN_HAND, true);
             if (entity != null) {
