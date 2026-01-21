@@ -273,12 +273,12 @@ public class PowersRatt extends NewDashPreset {
 
         if (isPlaced()) {
             if (!isHoldingSneak()) {
-                LockedOrNot(context,x,y,1,StandIcons.RATT_BURST,0);
+                LockedOrNot(context,x,y,1,StandIcons.RATT_BURST,PowersRatt.PLACE_BURST,0);
             } else {
                 if (isAuto()) {
-                    LockedOrNot(context,x,y,1,StandIcons.RATT_AUTO,1);
+                    LockedOrNot(context,x,y,1,StandIcons.RATT_AUTO,PowersRatt.CHANGE_MODE,1);
                 } else {
-                    LockedOrNot(context,x,y,1,StandIcons.RATT_UNAUTO,1);
+                    LockedOrNot(context,x,y,1,StandIcons.RATT_UNAUTO,PowersRatt.CHANGE_MODE,1);
                 }
             }
             if (scopeLevel == 0) {
@@ -289,20 +289,20 @@ public class PowersRatt extends NewDashPreset {
             if (scopeLevel == 1) {
                 ScopeIcon = StandIcons.RATT_SCOPE_OUT;
             }
-            LockedOrNot(context,x,y,1,ScopeIcon,2);
+            LockedOrNot(context,x,y,1,ScopeIcon,PowersRatt.SCOPE,2);
             if (scopeLevel == 0) {
                 setSkillIcon(context, x, y, 2, StandIcons.RATT_PLACE, PowersRatt.SETPLACE);
             } else {
                 if (!isAuto()) {
-                    LockedOrNot(context,x,y,2,StandIcons.RATT_BURST,3);
+                    LockedOrNot(context,x,y,2,StandIcons.RATT_BURST,PowersRatt.CHANGE_MODE,3);
                 } else {
-                    LockedOrNot(context,x,y,2,StandIcons.RATT_SINGLE,3);
+                    LockedOrNot(context,x,y,2,StandIcons.RATT_SINGLE,PowersRatt.CHANGE_MODE,3);
                 }
             }
         }
         setSkillIcon(context,x,y,3,StandIcons.DODGE,PowerIndex.GLOBAL_DASH);
 
-        LockedOrNot(context,x,y,4,StandIcons.RATT_LEAP,4);
+        LockedOrNot(context,x,y,4,StandIcons.RATT_LEAP,PowersRatt.RATT_LEAP,4);
 
     }
 
@@ -833,6 +833,7 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
+        Roundabout.LOGGER.info(""+isPlaced());
         switch (activeP) {
             case PowersRatt.AUTO -> {
                 if (getShootTarget() == null && isHoldingSneak() && !isAuto() && isPlaced()) {
@@ -867,7 +868,7 @@ public class PowersRatt extends NewDashPreset {
 
             case PowersRatt.RATT_LEAP -> {
                 if (!canExecuteMoveWithLevel(4)) {return true;}
-                if (!isPlaced() || (isPlaced() && !this.getStandEntity(this.getSelf()).onGround()) ) {
+                if (!isPlaced() ) {
                     return true;
                 }
             }
