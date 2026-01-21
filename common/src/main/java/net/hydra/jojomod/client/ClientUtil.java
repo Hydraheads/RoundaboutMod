@@ -388,9 +388,12 @@ public class ClientUtil {
     public static @Nullable Connection getC2SConnection()
     {
         Minecraft client = Minecraft.getInstance();
-        if (client.player == null)
+        if (client == null || client.player == null)
             return null;
 
+        if (((IClientNetworking)client) == null){
+            return null;
+        }
         Connection integratedServerCon = ((IClientNetworking)client).roundabout$getServer();
 
         return (integratedServerCon != null ? integratedServerCon : client.player.connection.getConnection());
