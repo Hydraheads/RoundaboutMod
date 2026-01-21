@@ -84,8 +84,12 @@ public class PowersMetallica extends NewDashPreset {
     public PowersMetallica(LivingEntity self) {
         super(self);
         if (self != null && !self.level().isClientSide) {
-            ((IEntityAndData)self).roundabout$setMagneticField(false);
+            setMagneticField(false);
         }
+    }
+
+    public void setMagneticField(boolean field){
+        getStandUserSelf().roundabout$setUniqueStandModeToggle(field);
     }
 
     public static boolean isImmuneToMetallica(LivingEntity entity) {
@@ -100,9 +104,9 @@ public class PowersMetallica extends NewDashPreset {
         super.onStandSummon(active);
 
         if (self != null) {
-            ((IEntityAndData)self).roundabout$setMagneticField(false);
+            setMagneticField(false);
 
-            ((IEntityAndData)self).roundabout$setMetallicaInvisibility(-1);
+            ((StandUser)self).roundabout$setMetallicaInvisibility(-1);
             self.removeEffect(MobEffects.INVISIBILITY);
             this.camoAlpha = 0.0f;
             this.prevCamoAlpha = 0.0f;
@@ -136,7 +140,7 @@ public class PowersMetallica extends NewDashPreset {
                     revealFactor = Mth.clamp(progress, 0.0f, 0.6f);
                 }
             } else {
-                if (entity instanceof IEntityAndData data && data.roundabout$getMetallicaInvisibility() > -1) {
+                if (((StandUser)entity).roundabout$getMetallicaInvisibility() > -1) {
                     activationAlpha = 1.0f;
                 }
             }
@@ -418,22 +422,26 @@ public class PowersMetallica extends NewDashPreset {
     }
     private boolean magneticFieldActive = false;
     private byte metalMode = NAILS;
-    public boolean isMagneticFieldActive() { return ((IEntityAndData)self).roundabout$isMagneticField(); }
-    public byte getMetalMode() { return ((IEntityAndData)self).roundabout$getMetalMode(); }
+    public boolean isMagneticFieldActive(){
+        return getStandUserSelf().roundabout$getUniqueStandModeToggle();
+    }
+
+    private byte roundabout$metalMode = 0;
+    public byte getMetalMode() { return roundabout$metalMode; }
     public boolean toggleMagneticField() {
         self.swing(InteractionHand.MAIN_HAND, true);
         boolean newState = !isMagneticFieldActive();
-        ((IEntityAndData)self).roundabout$setMagneticField(newState);
+        setMagneticField(newState);
         return true;
     }
     public boolean cycleMetalMode() {
         byte newMode = (byte) (getMetalMode() + 1);
         if (newMode > SCISSORS) newMode = NAILS;
-        ((IEntityAndData)self).roundabout$setMetalMode(newMode);
+        metalMode = newMode;
         if (!self.level().isClientSide) {
             List<Entity> nearby = self.level().getEntitiesOfClass(Entity.class, self.getBoundingBox().inflate(20));
             for (Entity e : nearby) {
-                if (e instanceof LivingEntity && e != self) ((IEntityAndData)e).roundabout$setMetalMeter(0);
+                if (e instanceof LivingEntity && e != self) ((StandUser)e).roundabout$setMetalMeter(0);
             }
             if (self instanceof Player p) {
                 String modeName = switch(newMode) {
@@ -451,7 +459,7 @@ public class PowersMetallica extends NewDashPreset {
         super.tickPower();
 
         this.prevCamoAlpha = this.camoAlpha;
-        boolean wantsInvis = ((IEntityAndData)self).roundabout$getMetallicaInvisibility() > -1;
+        boolean wantsInvis = ((StandUser)self).roundabout$getMetallicaInvisibility() > -1;
 
         if (wantsInvis) {
             if (camoAlpha < 1.0f) {
@@ -612,7 +620,7 @@ public class PowersMetallica extends NewDashPreset {
 
             for (Entity ent : targets) {
                 if (ent instanceof LivingEntity victim && !ent.is(self) && MainUtil.canActuallyHitInvolved(self, ent)) {
-                    IEntityAndData data = (IEntityAndData) victim;
+                    StandUser data = (StandUser) victim;
                     float dist = victim.distanceTo(self);
 
                     if (!active) {
@@ -645,7 +653,6 @@ public class PowersMetallica extends NewDashPreset {
                                 current = 0;
                             }
                             data.roundabout$setMetalMeter(current);
-                            data.roundabout$setMetalMode(this.getMetalMode());
                         }
                         else {
                             float current = data.roundabout$getMetalMeter();
@@ -661,7 +668,7 @@ public class PowersMetallica extends NewDashPreset {
     }
 
 
-    private void triggerMetalEffect(LivingEntity victim, IEntityAndData data) {
+    private void triggerMetalEffect(LivingEntity victim, StandUser data) {
         float dmg = (getMetalMode() == SCISSORS) ? 12.0f : (getMetalMode() == RAZORS) ? 6.0f : 3.0f;
 
         ResourceKey<DamageType> ironKey = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "iron_deprivation"));
@@ -735,8 +742,10 @@ public class PowersMetallica extends NewDashPreset {
         return true;
     }
 
+    public int roundabout$metallicaInvisibility = -1;
+
     public boolean toggleInvis() {
-        IEntityAndData data = (IEntityAndData) self;
+        StandUser data = (StandUser) self;
         if (data.roundabout$getMetallicaInvisibility() > -1) {
             data.roundabout$setMetallicaInvisibility(-1);
             self.removeEffect(net.minecraft.world.effect.MobEffects.INVISIBILITY);
@@ -752,5 +761,5 @@ public class PowersMetallica extends NewDashPreset {
         return true;
     }
 
-    public boolean isInvisible() { return ((IEntityAndData)self).roundabout$getMetallicaInvisibility() > -1; }
+    public boolean isInvisible() { return ((StandUser)self).roundabout$getMetallicaInvisibility() > -1; }
 }

@@ -312,6 +312,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private static final EntityDataAccessor<Integer> ROUNDABOUT$HEAT = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.INT);
 
+    @Unique
+    private static final EntityDataAccessor<Float> ROUNDABOUT$METAL_METER = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.FLOAT);
 
     @Unique
     private StandPowers roundabout$Powers;
@@ -3096,6 +3098,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BUBBLE_ENCASED, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$POSSESSOR, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$HEAT, 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$METAL_METER, 0F);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BOUND_TO, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_ZAPPED_TO_ATTACK, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$TRUE_INVISIBILITY, -1);
@@ -3111,6 +3114,39 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$UNIQUE_STAND_MODE_TOGGLE, false);
         }
     }
+
+
+    @Override
+    public void roundabout$setMetalMeter(float amount) {
+        this.entityData.set(ROUNDABOUT$METAL_METER, amount);
+    }
+
+    @Override
+    public float roundabout$getMetalMeter() {
+        if (this.entityData.hasItem(ROUNDABOUT$METAL_METER)) {
+            return this.entityData.get(ROUNDABOUT$METAL_METER);
+        }
+        return 0f;
+    }
+
+
+    @Unique
+    @Override
+    public int roundabout$getMetallicaInvisibility() {
+        if (roundabout$getStandPowers() instanceof PowersMetallica PM) {
+            return PM.roundabout$metallicaInvisibility;
+        }
+        return -1;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setMetallicaInvisibility(int invis) {
+        if (roundabout$getStandPowers() instanceof PowersMetallica PM) {
+            PM.roundabout$metallicaInvisibility = invis;
+        }
+    }
+
 
     @Inject(method = "handleEntityEvent", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$HandleStatus(byte $$0, CallbackInfo ci) {

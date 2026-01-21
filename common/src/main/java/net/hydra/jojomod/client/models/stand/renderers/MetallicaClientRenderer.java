@@ -27,10 +27,12 @@ public class MetallicaClientRenderer {
     };
 
     public static void renderMetalMeterBar(LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer) {
+
+        if (entity != null) {
         Minecraft mc = Minecraft.getInstance();
         if (entity == mc.player && mc.options.getCameraType().isFirstPerson()) return;
 
-        if (entity instanceof IEntityAndData data) {
+            StandUser data = ((StandUser) entity);
             float meter = data.roundabout$getMetalMeter();
             if (meter > 0.1f) {
                 if (mc.player == null) return;
@@ -80,7 +82,8 @@ public class MetallicaClientRenderer {
             }
         }
 
-        if (((IEntityAndData)entity).roundabout$isMagneticField()) {
+        if (((StandUser)entity).roundabout$getStandPowers() instanceof PowersMetallica pm &&
+        pm.isMagneticFieldActive()) {
             spawnMagneticFieldWave(entity, level, interpX, interpY, interpZ);
         }
     }

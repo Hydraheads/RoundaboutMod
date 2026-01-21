@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.player.LocalPlayer;
@@ -25,7 +26,7 @@ public class MetallicaItemInHandMixin {
 
         if (localPlayer != null) {
             if (MainUtil.isUsingMetallica(localPlayer)) {
-                if (((IEntityAndData)localPlayer).roundabout$getMetallicaInvisibility() > -1) {
+                if (((StandUser)localPlayer).roundabout$getMetallicaInvisibility() > -1) {
 
                     float alpha = 0.4F;
                     ClientUtil.setThrowFadeToTheEther(alpha);

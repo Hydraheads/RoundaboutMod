@@ -92,7 +92,10 @@ public interface StandUser {
     void roundabout$breakGuard();
     ItemStack roundabout$getStandDisc();
     void roundabout$setStandDisc(ItemStack stack);
-
+    void roundabout$setMetallicaInvisibility(int fade);
+    int roundabout$getMetallicaInvisibility();
+    void roundabout$setMetalMeter(float amount);
+    float roundabout$getMetalMeter();
     int roundabout$getAttackTimeMax();
     int roundabout$getAttackTime();
     DamageSource roundabout$getLogSource();

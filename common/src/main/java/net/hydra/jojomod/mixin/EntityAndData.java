@@ -109,38 +109,10 @@ public abstract class EntityAndData implements IEntityAndData {
     @Unique
     public boolean rdbt$canBePickedUp=true;
 
-
-    @Unique
-    private static final EntityDataAccessor<Boolean> ROUNDABOUT$MAGNETIC_FIELD = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.BOOLEAN);
-    @Unique
-    private static final EntityDataAccessor<Float> ROUNDABOUT$METAL_METER = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.FLOAT);
     @Unique
     private float roundabout$lastDirectDamage = 0;
-    @Unique
-    private byte roundabout$metalMode = 0;
 
-    @Inject(method = "<init>", at = @At("RETURN"))
-    private void roundabout$initData(EntityType<?> type, Level level, CallbackInfo ci) {
-        if (!this.entityData.hasItem(ROUNDABOUT$METAL_METER)) {
-            this.entityData.define(ROUNDABOUT$METAL_METER, 0f);
-        }
-        if (!this.entityData.hasItem(ROUNDABOUT$MAGNETIC_FIELD)) {
-            this.entityData.define(ROUNDABOUT$MAGNETIC_FIELD, false);
-        }
-    }
 
-    @Override
-    public void roundabout$setMetalMeter(float amount) {
-        this.entityData.set(ROUNDABOUT$METAL_METER, amount);
-    }
-
-    @Override
-    public float roundabout$getMetalMeter() {
-        if (this.entityData.hasItem(ROUNDABOUT$METAL_METER)) {
-            return this.entityData.get(ROUNDABOUT$METAL_METER);
-        }
-        return 0f;
-    }
 
     @Override
     public void roundabout$setLastDamageTaken(float amount) {
@@ -152,28 +124,6 @@ public abstract class EntityAndData implements IEntityAndData {
         return this.roundabout$lastDirectDamage;
     }
 
-    @Override
-    public void roundabout$setMetalMode(byte mode) {
-        this.roundabout$metalMode = mode;
-    }
-
-    @Override
-    public byte roundabout$getMetalMode() {
-        return this.roundabout$metalMode;
-    }
-
-    @Override
-    public void roundabout$setMagneticField(boolean active) {
-        this.entityData.set(ROUNDABOUT$MAGNETIC_FIELD, active);
-    }
-
-    @Override
-    public boolean roundabout$isMagneticField() {
-        if (this.entityData.hasItem(ROUNDABOUT$MAGNETIC_FIELD)) {
-            return this.entityData.get(ROUNDABOUT$MAGNETIC_FIELD);
-        }
-        return false;
-    }
 
     @Unique
     @Override
@@ -228,33 +178,6 @@ public abstract class EntityAndData implements IEntityAndData {
         }
     }
 
-    @Unique
-    public int roundabout$metallicaInvisibility = -1;
-
-    @Unique
-    @Override
-    public int roundabout$getMetallicaInvisibility() {
-        if (((Entity)(Object)this) instanceof LivingEntity LE) {
-            return ((StandUser)LE).roundabout$getMetallicaInvis();
-        }
-        return roundabout$metallicaInvisibility;
-    }
-
-    @Unique
-    @Override
-    public void roundabout$setMetallicaInvisibility(int invis) {
-        if (((Entity)(Object)this) instanceof LivingEntity LE) {
-            ((StandUser)LE).roundabout$setMetallicaInvis(invis);
-        } else {
-            roundabout$metallicaInvisibility = invis;
-            if (!this.level().isClientSide()) {
-                MainUtil.spreadRadialClientPacket(((Entity) (Object) this), 120, false,
-                        "METALLICA_INVISIBILITY",
-                        getId(), invis
-                );
-            }
-        }
-    }
 
 
     /**Mandom Time Queue, not sure if it will have any other use*/
@@ -422,7 +345,8 @@ public abstract class EntityAndData implements IEntityAndData {
             }
         }
 
-        if (roundabout$getMetallicaInvisibility() > -1) {
+        if (((Entity)(Object)this) instanceof LivingEntity LE
+                && ((StandUser)LE).roundabout$getMetallicaInvisibility() > -1) {
             if (this.level().isClientSide()){
 
                 if (ClientUtil.isPlayer((Entity)(Object)this)){
@@ -454,7 +378,8 @@ public abstract class EntityAndData implements IEntityAndData {
             }
             return;
         }
-        if (roundabout$getMetallicaInvisibility() > -1) {
+        if (((Entity)(Object)this) instanceof LivingEntity LE
+                && ((StandUser)LE).roundabout$getMetallicaInvisibility() > -1) {
             return;
         }
     }
