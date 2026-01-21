@@ -2378,9 +2378,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public void roundabout$setGuardPoints(float GuardPoints){
         this.roundabout$GuardPoints = GuardPoints;
-        if (!level().isClientSide()){
-            this.roundabout$syncGuard();
-        }
     }
     @Unique
     public boolean roundabout$getGuardBroken(){
