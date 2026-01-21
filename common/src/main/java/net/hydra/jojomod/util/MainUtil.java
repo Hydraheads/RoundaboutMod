@@ -2681,7 +2681,8 @@ public class MainUtil {
             }
         } else if (context == PacketDataIndex.INT_RELLA_START){
             Entity target = player.level().getEntity(data);
-            if (target instanceof Aesthetician aes){
+            if (target instanceof Aesthetician aes && aes.getTarget() == null){
+                S2CPacketUtil.sendGenericIntToClientPacket(player,PacketDataIndex.AESTHETICIAN_OPEN,data);
                 aes.addPlayerToList(player);
             }
         } else if (context == PacketDataIndex.INT_RELLA_CANCEL){

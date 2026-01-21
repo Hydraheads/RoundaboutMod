@@ -105,6 +105,7 @@ public class PacketDataIndex {
     public static final byte S2C_INT_COMBO_SEC_LEFT = 14;
     public static final byte S2C_INT_FADE = 15;
     public static final byte S2C_INT_FADE_UPDATE = 16;
+    public static final byte AESTHETICIAN_OPEN = 17;
 
     /**S2C BUNDLE packets*/
     public static final byte S2C_BUNDLE_POWER_INV = 1;
