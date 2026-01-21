@@ -2,6 +2,7 @@ package net.hydra.jojomod.powers.power_types;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
@@ -165,7 +166,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             cancelConsumableItem(this.getSelf());
             this.setPowerNone();
             if (!this.getSelf().level().isClientSide()) {
-                sendDoubleIntPacketIfNearby(PacketDataIndex.S2C_INT_FADE, self.getId(), 20, 100);
+                sendDoubleIntPacketIfNearby(PacketDataIndex.S2C_INT_FADE, self.getId(), 20, 100,false);
                 ((IPlayerEntity)this.getSelf()).roundabout$setClientDodgeTime(0);
                 ((IPlayerEntity) this.getSelf()).roundabout$setDodgeTime(0);
                 if (storedInt < 0) {
@@ -313,6 +314,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
         //Client only
         if (self.level().isClientSide()) {
+
+            Roundabout.LOGGER.info(""+ClientUtil.getThrowFadePercent(this.getSelf(),0));
 
             if (isPacketPlayer()) {
                 if (getActivePower() == POWER_DIVE) {

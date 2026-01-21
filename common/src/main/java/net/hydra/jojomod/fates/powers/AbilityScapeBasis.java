@@ -585,7 +585,11 @@ public class AbilityScapeBasis {
         }
     }
 
+
     public final void sendDoubleIntPacketIfNearby(byte context, int value, int value2, double range) {
+        sendDoubleIntPacketIfNearby(context,value,value2,range,true);
+    }
+    public final void sendDoubleIntPacketIfNearby(byte context, int value, int value2, double range,boolean standUsersOnly) {
         if (!this.self.level().isClientSide) {
 
             ServerLevel serverWorld = ((ServerLevel) this.self.level());
@@ -598,8 +602,10 @@ public class AbilityScapeBasis {
                 }
 
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
-                if (blockPos.closerToCenterThan(userLocation, range) && !((StandUser)serverPlayerEntity).roundabout$getStandDisc().isEmpty()) {
-                    S2CPacketUtil.sendGenericIntIntToClientPacket(serverPlayerEntity, context, value, value2);
+                if (blockPos.closerToCenterThan(userLocation, range)) {
+                    if (!((StandUser)serverPlayerEntity).roundabout$getStandDisc().isEmpty() || !standUsersOnly) {
+                        S2CPacketUtil.sendGenericIntIntToClientPacket(serverPlayerEntity, context, value, value2);
+                    }
                 }
             }
         }
