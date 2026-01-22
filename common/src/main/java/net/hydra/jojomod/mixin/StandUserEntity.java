@@ -3530,6 +3530,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+
     /**Update gravitational pull*/
     @Unique
     @Override

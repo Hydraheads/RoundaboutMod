@@ -118,6 +118,12 @@ public abstract class EntityAndData implements IEntityAndData {
         return this.roundabout$lastDirectDamage;
     }
 
+    @Override
+    @Unique
+    public void rdbt$forceDeltaMovement(Vec3 $$0) {
+        this.deltaMovement = $$0;
+    }
+
 
     @Unique
     @Override

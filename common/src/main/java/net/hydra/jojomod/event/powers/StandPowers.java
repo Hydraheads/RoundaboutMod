@@ -3,10 +3,7 @@ package net.hydra.jojomod.event.powers;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IGravityEntity;
-import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.access.IPowersPlayer;
-import net.hydra.jojomod.access.IProjectileAccess;
+import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
@@ -397,7 +394,7 @@ public class StandPowers extends AbilityScapeBasis {
                     PE.level().playSound(null, PE.blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
                 ipa.roundabout$setIsDeflected(true);
-                ent.setDeltaMovement(ent.getDeltaMovement().scale(-0.4));
+                ((IEntityAndData)ent).rdbt$forceDeltaMovement(ent.getDeltaMovement().scale(-0.4));
                 ent.setYRot(ent.getYRot() + 180.0F);
                 ent.yRotO += 180.0F;
             }
