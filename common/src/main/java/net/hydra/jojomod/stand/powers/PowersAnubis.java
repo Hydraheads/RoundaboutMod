@@ -50,6 +50,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.npc.Villager;
@@ -145,7 +146,6 @@ public class PowersAnubis extends NewDashPreset {
     public static final int MaxPossessionTime = 200;
     public static final int MaxPlayTime = 200;
     public int  getMaxPlayTime() {
-        if (true) {return MaxPlayTime;}
         if (this.getSelf() instanceof Player P) {
             boolean bypass = (P.isCreative()) || (this.getStandUserSelf().roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem);
             IPlayerEntity IPE = (IPlayerEntity) P;
@@ -314,10 +314,16 @@ public class PowersAnubis extends NewDashPreset {
         int radius = 13;
         AABB box = this.getSelf().getBoundingBox().inflate(radius,2,radius);
         List<Mob> entities = this.getSelf().level().getNearbyEntities(Mob.class, TargetingConditions.DEFAULT,this.getSelf(),box);
-        entities.removeIf(entity ->  (entity instanceof TamableAnimal TA && TA.isTame()) );
         entities.removeIf(entity -> entity instanceof Villager);
         entities.removeIf(entity -> entity instanceof NeutralMob && entity.getTarget() == null);
         entities.removeIf(entity -> entity instanceof Piglin && entity.getTarget() == null);
+        for (Mob M : entities) {
+            if (M instanceof Wolf W && W.getOwner().equals(this.getSelf()) ) {
+                W.setTarget(null);
+            }
+        }
+        entities.removeIf(entity ->  (entity instanceof TamableAnimal TA && TA.isTame()) );
+
         for (Mob M : entities) {
             addEXP(2);
             M.setTarget(this.getSelf());
@@ -372,7 +378,7 @@ public class PowersAnubis extends NewDashPreset {
 
         AnubisMemory memory = this.getUsedMemory();
         List<AnubisMoment> moments = memory.moments;
-        int time = (this.getMaxPlayTime()-this.playTime)+1;
+        int time = (PowersAnubis.MaxPlayTime-this.playTime)+1;
         for (Byte playByte : playBytes) {
             if (isPressed(playByte, time)) {
                 moments.add(new AnubisMoment(playByte, Math.min(this.getMaxPlayTime(), time), false));
@@ -437,7 +443,7 @@ public class PowersAnubis extends NewDashPreset {
                 }
             }
             case PowerIndex.SKILL_2 -> {
-                if ( !(Minecraft.getInstance().screen instanceof MemoryRecordScreen) || (Minecraft.getInstance().screen instanceof MemoryRecordScreen MA && (MA.currentlyHovered == -1 || MA.currentlyHovered == 8)  ) ) {
+                if ( (Minecraft.getInstance().screen instanceof MemoryRecordScreen MA && (MA.currentlyHovered == -1 || MA.currentlyHovered == 8)  ) ) {
                     return true;
                 }
             }
@@ -463,26 +469,27 @@ public class PowersAnubis extends NewDashPreset {
                 setPowerOther(PowerIndex.RANGED_BARRAGE,this.getActivePower());
             }
             case PowerIndex.SNEAK_MOVEMENT -> {
+                ///  gives you another pogo
+                enablePogo();
+                this.setAttackTimeDuring(0);
+                this.setActivePower(PowerIndex.SNEAK_MOVEMENT);
+                this.setCooldown(PowerIndex.GLOBAL_DASH, 260);
+                this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.ANUBIS_BACKFLIP_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+
+                if (!isClient()) {
+                    setAnimation(PowerIndex.SNEAK_MOVEMENT);
+                    sendDoubleIntPacketIfNearby(PacketDataIndex.S2C_SNYC_ACTIVE_POWER,self.getId(),PowerIndex.SNEAK_MOVEMENT,100,false);
+                }
+
+                if (this.getSelf() instanceof Player P) {
+                    P.getAbilities().flying = false;
+                }
+
+                Vec3 look = getSelf().getLookAngle().multiply(1, 0, 1).normalize();
+                SU.roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+                SU.roundabout$setLeapIntentionally(true);
+
                 if (isPacketPlayer()) {
-                    ///  gives you another pogo
-                    enablePogo();
-                    this.setAttackTimeDuring(0);
-                    this.setActivePower(PowerIndex.SNEAK_MOVEMENT);
-                    this.setCooldown(PowerIndex.GLOBAL_DASH, 260);
-                    this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.ANUBIS_BACKFLIP_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
-
-                    if (!isClient()) {
-                        setAnimation(PowerIndex.SNEAK_MOVEMENT);
-                    }
-
-                    if (this.getSelf() instanceof Player P) {
-                        P.getAbilities().flying = false;
-                    }
-
-                    Vec3 look = getSelf().getLookAngle().multiply(1, 0, 1).normalize();
-                    SU.roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
-                    SU.roundabout$setLeapIntentionally(true);
-
                     float strength = 1.25F;
                     if (this.getSelf().onGround()) {
                         MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), strength, look.x, -1, look.z);
@@ -493,6 +500,7 @@ public class PowersAnubis extends NewDashPreset {
                     }
                     MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), strength, look.x * 1, -1 * (this.getSelf().onGround() ? 1 : 0.8), look.z * 1);
                 }
+
             }
         }
         return super.tryPower(move, forced);
@@ -548,7 +556,6 @@ public class PowersAnubis extends NewDashPreset {
     @Override
     public void tickPower() {
 
-        Roundabout.LOGGER.info(""+this.getStandUserSelf().roundabout$isDazed());
 
       //  Roundabout.LOGGER.info(" CA: " + this.getActivePower() + " | " + this.getAttackTime() + " | "+ this.getAttackTimeDuring() + "/" + this.getAttackTimeMax());
         StandUser SU = this.getStandUserSelf();
@@ -561,7 +568,7 @@ public class PowersAnubis extends NewDashPreset {
             if (this.getActivePower() != PowerIndex.SNEAK_ATTACK_CHARGE || this.attackTime > PogoDelay + 3) {
                 if (pogoTime == -1) {
                     if (pogoCounter == 0) {
-                        setPogo(30);
+                        setPogo(40);
                     } else {
                         setPogo(0);
                     }
@@ -787,7 +794,7 @@ public class PowersAnubis extends NewDashPreset {
                 }
                 case PowerIndex.GUARD -> anim = AnubisAnimations.ThirdPersonBlock;
                 case PowerIndex.SNEAK_ATTACK_CHARGE -> anim = AnubisAnimations.ThirdPersonPogoReady;
-                case PowerIndex.ATTACK -> {
+          /*      case PowerIndex.ATTACK -> {
                     if (PA.activePowerPhase == 1) {
                         anim = AnubisAnimations.ATTACK_1;
                     } else {
@@ -800,7 +807,7 @@ public class PowersAnubis extends NewDashPreset {
                     } else {
                         anim = AnubisAnimations.SNEAK_ATTACK_2;
                     }
-                }
+                } */
             }
         }
         return anim;
@@ -836,14 +843,15 @@ public class PowersAnubis extends NewDashPreset {
                 && !this.getSelf().onGround()
                 && canPogo()
                 && this.getAttackTime() > 5
-                && (this.fallTime > 3 || Minecraft.getInstance().options.keyJump.isDown());
+                && (this.fallTime > 3 || Minecraft.getInstance().options.keyJump.isDown())
+                && this.getActivePower() != PowerIndex.SNEAK_ATTACK_CHARGE;
     }
 
     @Override
     public boolean interceptAttack(){return true;}
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
-        if (HeatUtil.isBodyFrozen(this.getSelf())) {return;}
+        if (this.getStandUserSelf().roundabout$isDazed()) {return;}
         if (keyIsDown) {
             if (pogoChecks() && !this.isBarrageCharging()) {
                 this.tryPower(PowerIndex.SNEAK_ATTACK_CHARGE);
@@ -1519,7 +1527,8 @@ public class PowersAnubis extends NewDashPreset {
     public void buttonInputBarrage(boolean keyIsDown, Options options) {
         if(keyIsDown) {
             if (isHoldingSneak() && (this.getAttackTime() >= this.getAttackTimeMax() ||
-                    (this.getActivePowerPhase() != this.getActivePowerPhaseMax()))) {
+                    (this.getActivePowerPhase() != this.getActivePowerPhaseMax()))
+                    && this.getActivePower() != PowerIndex.SNEAK_ATTACK_CHARGE) {
 
                 this.tryPower(PowerIndex.BARRAGE_CHARGE_2);
                 this.tryPowerPacket(PowerIndex.BARRAGE_CHARGE_2);
@@ -2117,9 +2126,20 @@ public class PowersAnubis extends NewDashPreset {
         this.memories.get(slot).rots.add(AnubisMoment.convertVec(new Vec3(0,this.getSelf().getXRot(),this.getSelf().getYRot())));
     }
     public void playbackMemory(byte slot) {
+        Roundabout.LOGGER.info(""+slot);
         if (memories.isEmpty()) {return;}
         if (slot == (byte) -1 || slot == 8) {return;}
         AnubisMemory memory = this.memories.get(slot);
+
+        int lastTime = memory.moments.get(memory.moments.size()-1).time;
+
+        if (lastTime > this.getMaxPlayTime()) {
+            if (this.getSelf() instanceof Player P) {
+                P.displayClientMessage(Component.translatable("roundabout.anubis.memory_fail").withStyle(ChatFormatting.RED),true);
+                return;
+            }
+        }
+
         if (memory != null && memory.canPlayback()) {
             int time = -1;
             if (memory.canPlayback()) {
@@ -2348,7 +2368,7 @@ public class PowersAnubis extends NewDashPreset {
         if (moments.isEmpty()) {return;}
         visualMouse = this.memories.get(slot).canMouse();
 
-        int maxTime = Math.min(this.getMaxPlayTime(),moments.get(moments.size()-1).time);
+        int maxTime = Math.min(PowersAnubis.MaxPlayTime,moments.get(moments.size()-1).time);
 
         for(int time = 0; time<maxTime; time++ ) {
             List<Byte> value = new ArrayList<>();

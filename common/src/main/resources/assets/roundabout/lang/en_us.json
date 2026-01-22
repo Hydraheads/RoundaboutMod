@@ -1350,7 +1350,6 @@
   "ability.roundabout.anubis_speed.desc": "Anubis grants incredible athletic ability, allowing you to move much faster and jump higher than before",
 
 
-
   "ability.roundabout.blood_drink": "Blood Suck",
   "ability.roundabout.blood_drink.desc": "Consume blood through your hands so long as you remain facing your target, damaging them to restore your blood. If a mob has drinkable blood, the indicator will appear in the middle of the screen. If a mob is not agitated, you can score a critical blood suck. Villagers and Illagers will zombify upon being killed by this skill, and can be controlled.",
   "ability.roundabout.vampire_passive": "Vampiric",
@@ -1738,6 +1737,7 @@
 
   "roundabout.anubis.playback_title": "Replay Memories",
   "roundabout.anubis.memory_title": "Record Memories",
+  "roundabout.anubis.memory_fail": "Memory is too long!",
 
 
 

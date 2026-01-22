@@ -844,6 +844,15 @@ public class ClientUtil {
                 ((IPowersPlayer) pl).rdbt$getPowers().fadeOutInterpolation = 5;
                 ((IPowersPlayer) pl).rdbt$getPowers().setFaded(data2);
             }
+        } else if (context == PacketDataIndex.S2C_SNYC_ACTIVE_POWER) {
+            Entity target = player.level().getEntity(data);
+            if (target instanceof LivingEntity LE) {
+                StandUser SU = (StandUser) LE;
+                if (SU.roundabout$getStandPowers() != null) {
+                    SU.roundabout$getStandPowers().setActivePower((byte) data2);
+                    SU.roundabout$getStandPowers().setAttackTimeDuring(0);
+                }
+            }
         }
     }
 

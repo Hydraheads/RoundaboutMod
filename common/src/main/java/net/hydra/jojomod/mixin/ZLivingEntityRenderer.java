@@ -158,14 +158,14 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
             StandUser SU = (StandUser) P;
             if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
-                int backflip = Math.abs(PA.getAttackTimeDuring());
+                float backflip = PA.getAttackTimeDuring()+$$4;
                 if (SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_MOVEMENT) {
                     if (backflip < 16) {
-                        $$1.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,360 * ((backflip+$$4)/15F)), 0, P.getEyeHeight()*0.6F, 0 );
+                        $$1.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,360 * ((backflip)/15F)), 0, P.getEyeHeight()*0.6F, 0 );
                     }
                 } else if (SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_ATTACK_CHARGE) {
                     $$1.translate(0,0.5,0.5);
-                    float time =  Math.min(1,(backflip+$$4)/(PowersAnubis.PogoDelay-2) );
+                    float time =  Math.min(1,(backflip)/(PowersAnubis.PogoDelay-2) );
                     float end = -100-P.getViewXRot(0F);
                     $$1.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0, time*end  ), 0, P.getEyeHeight()*0.4F, 0 );
                 }
