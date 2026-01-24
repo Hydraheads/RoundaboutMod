@@ -394,4 +394,13 @@ public class S2CPacketUtil {
                     entityId
             );
     }
+
+    public static void sync_allies(Player player,String allies) {
+        if(player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SyncAllies.value,
+                    allies
+            );
+        }
+    }
 }

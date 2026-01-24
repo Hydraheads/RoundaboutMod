@@ -60,15 +60,13 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerBlock;
 import net.minecraft.world.level.levelgen.WorldDimensions;
 import net.minecraft.world.level.storage.WorldData;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Unique;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class PowersGreenDay extends NewPunchingStand {
     public PowersGreenDay(LivingEntity self) {super(self);}
@@ -322,6 +320,7 @@ public class PowersGreenDay extends NewPunchingStand {
     }
 
 
+
     public boolean selectAllyServer(){
         listInit();
         if(!(((StandUser) this.self).roundabout$getTargetEntity(this.self,16)==null)) {
@@ -335,6 +334,8 @@ public class PowersGreenDay extends NewPunchingStand {
 
 
         }
+        allies = cleanseAllyList(allies);
+        S2CPacketUtil.sync_allies(((Player)this.self),listToString(allies));
         return true;
 
     }
@@ -353,13 +354,15 @@ public class PowersGreenDay extends NewPunchingStand {
             tryPowerPacket(PowerIndex.POWER_4_BLOCK);
             Roundabout.LOGGER.info(listToString(allies));
         }
+
         saveAllies();
+
 
     }
 
     public List<String> allies = new ArrayList<>();
 
-    public static List<String> ConvertToString(){
+    public  List<String> ConvertToString(){
         String cf = ConfigManager.getClientConfig().greenDayAllyList.getFromMemory();
         return allyListParser(cf);
     }
@@ -375,7 +378,27 @@ public class PowersGreenDay extends NewPunchingStand {
         ConfigManager.saveClientConfig();
     }
 
-    public static List<String> allyListParser(String string){
+    public List<String> cleanseAllyList(List<String>  allies){
+        List<String> newAllies = new ArrayList<>();
+        Iterable<ServerLevel> serverLevels = this.self.getServer().getAllLevels();
+        Iterator<ServerLevel> levels = serverLevels.iterator();
+        while (levels.hasNext()) {
+            ServerLevel level = levels.next();
+            for (int i = 0; i < allies.size(); i++) {
+                String current = allies.get(i);
+                if(level.getEntity(UUID.fromString(current)) != null){
+                    newAllies.add(current);
+                }
+            }
+
+        }
+        return newAllies;
+
+    }
+
+
+
+    public List<String> allyListParser(String string){
         List<String> allies = new ArrayList<>();
         String temporary = "";
 
@@ -391,6 +414,9 @@ public class PowersGreenDay extends NewPunchingStand {
 
         return allies;
     }
+
+
+
 
     public String listToString(List<String> allies){
         String allyString = "";
