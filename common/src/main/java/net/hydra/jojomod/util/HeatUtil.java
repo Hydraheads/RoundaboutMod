@@ -119,7 +119,8 @@ public class HeatUtil {
             StandUser su = ((StandUser)LE);
             int heat = su.roundabout$getHeat();
             if (heat < 0){
-                if (entity.tickCount%10==0 || entity.isOnFire() || su.roundabout$isOnStandFire()){
+                if (entity.tickCount%10==0 || entity.isOnFire() || su.roundabout$isOnStandFire()
+                        || entity.isInLava()){
                     int sub = 1;
                     heat = Mth.clamp(heat+sub,-110,0);
                     su.roundabout$setHeat(heat);

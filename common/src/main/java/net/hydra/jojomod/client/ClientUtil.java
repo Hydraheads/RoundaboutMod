@@ -743,6 +743,12 @@ public class ClientUtil {
                         ((StandUser)LE).rdbt$setHideDeath(true);
                     }
                 }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncAllies.value)) {;
+                    String data = (String) vargs[0];
+                    if(((StandUser) player).roundabout$getStandPowers() instanceof PowersGreenDay PGD){
+                        PGD.allies = PGD.allyListParser(data);
+                    }
+                }
                 // theoretical deregister dynamic worlds packet
                 // String name = buf.readUtf();
                 //        ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(name));

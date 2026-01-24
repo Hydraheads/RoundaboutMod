@@ -51,7 +51,8 @@ public class ServerToClientPackets {
             UpdateVampireData3("update_vampire_data_3"),
             GunRecoil("gun_recoil"),
             SyncPossessor("sync_possessor"),
-            ShatterIce("shatter_ice");
+            ShatterIce("shatter_ice"),
+            SyncAllies("sync_allies");
 
             public final String value;
 

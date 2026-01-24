@@ -15,7 +15,7 @@ public interface IEntityAndData {
 
     void roundabout$setLastDamageTaken(float amount);
     float roundabout$getLastDamageTaken();
-
+    void rdbt$forceDeltaMovement(Vec3 $$0);
     float roundabout$getPreTSTick();
     void roundabout$setExclusiveLayers(boolean exclusive);
     boolean roundabout$getExclusiveLayers();
