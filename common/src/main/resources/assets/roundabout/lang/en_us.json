@@ -281,6 +281,7 @@
   "item.roundabout.painting_venus": "Birth of Venus",
 
   "entity.roundabout.terrier": "Boston Terrier",
+  "entity.roundabout.anubis_guardian": "Anubis Guardian",
   "entity.roundabout.the_world": "The World",
   "entity.roundabout.the_world_ultimate": "The World",
   "entity.roundabout.survivor": "Survivor",
@@ -1060,9 +1061,9 @@
   "instruction.roundabout.shop_item": "Shop Item",
   "instruction.roundabout.use_item": "Item Interaction",
 
-  "instruction.roundabout.anubis_normal": "Press Attack Twice",
-  "instruction.roundabout.anubis_one": "Press Crouch Once",
-  "instruction.roundabout.anubis_two": "Press Crouch Twice",
+  "instruction.roundabout.anubis_normal": "Third Attack - Press Attack Twice",
+  "instruction.roundabout.anubis_one": "Third Attack - Press Crouch Once",
+  "instruction.roundabout.anubis_two": "Third Attack - Press Crouch Twice",
   "instruction.roundabout.press_skill_memory":"Press Skill %1$s While Selecting A Memory",
 
   "ability.roundabout.punch": "Punch",
@@ -1337,7 +1338,7 @@
   "ability.roundabout.anubis_raging_light": "Raging Light",
   "ability.roundabout.anubis_raging_light.desc": "Force all mobs nearby to target you.",
   "ability.roundabout.anubis_backflip": "Backflip",
-  "ability.roundabout.anubis_backflip.desc": "Backflip to safety and can be done midair. Restores your pogo",
+  "ability.roundabout.anubis_backflip.desc": "Backflip to safety and can be done midair, restoring your pogo. Hold sneak to fastfall.",
   "ability.roundabout.anubis_record": "Record Memories",
   "ability.roundabout.anubis_record.desc": "Choose a slot and record a series of inputs. Pressing your hotbar keys lets you change the icon. The duration scales with your level",
   "ability.roundabout.anubis_replay": "Replay Memories",

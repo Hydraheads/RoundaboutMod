@@ -5,6 +5,7 @@ import net.hydra.jojomod.client.models.stand.renderers.ChairRattRenderer;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
@@ -40,6 +41,12 @@ public class ForgeEntities {
                     EntityType.Builder.of(TerrierEntity::new, MobCategory.CREATURE).sized(0.6f, 0.55f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "terrier").toString())
+            );
+    public static final RegistryObject<EntityType<AnubisGuardian>> ANUBIS_GUARDIAN =
+            ENTITY_TYPES.register("anubis_guardian", () ->
+                    EntityType.Builder.of(AnubisGuardian::new, MobCategory.CREATURE).sized(0.6f, 0.55f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "anubis_guardian").toString())
             );
     public static final RegistryObject<EntityType<OVAEnyaNPC>> OVA_ENYA =
             ENTITY_TYPES.register("jojo_npc_ova_enya", () ->

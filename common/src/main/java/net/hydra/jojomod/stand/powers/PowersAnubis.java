@@ -290,8 +290,16 @@ public class PowersAnubis extends NewDashPreset {
         this.setCooldown(PowerIndex.SKILL_1,200);
         int radius = 8;
         AABB box = this.getSelf().getBoundingBox().inflate(radius,2,radius);
+
+        boolean bypass = this.getStandUserSelf().roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem || (this.getSelf() instanceof Player P && P.isCreative());
+        int time = 160;
+        if (!bypass && this.getSelf() instanceof Player P) {
+            IPlayerEntity IPE = (IPlayerEntity) P;
+            time =(int) ( time * Math.min(1,(double) IPE.roundabout$getStandLevel() / this.getMaxLevel()+0.2F) );
+        }
+
         for (Mob M : this.getSelf().level().getNearbyEntities(Mob.class, TargetingConditions.DEFAULT,this.getSelf(),box)) {
-            ((IMob)M).roundabout$setHypnotizedBy(this.getSelf(),200);
+            ((IMob)M).roundabout$setHypnotizedBy(this.getSelf(),time);
         }
 
         Vec3 pos = this.getSelf().getPosition(1);
@@ -557,7 +565,7 @@ public class PowersAnubis extends NewDashPreset {
     public void tickPower() {
 
 
-      //  Roundabout.LOGGER.info(" CA: " + this.getActivePower() + " | " + this.getAttackTime() + " | "+ this.getAttackTimeDuring() + "/" + this.getAttackTimeMax());
+        //  Roundabout.LOGGER.info(" CA: " + this.getActivePower() + " | " + this.getAttackTime() + " | "+ this.getAttackTimeDuring() + "/" + this.getAttackTimeMax());
         StandUser SU = this.getStandUserSelf();
 
         if (SU.roundabout$isSealed()) {MemoryCancelClient();}

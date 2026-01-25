@@ -395,7 +395,36 @@ public class PowersRatt extends NewDashPreset {
     }
 
 
-    Vec3 Placement = null;
+    @Override
+    public void onStandSummon(boolean desummon) {
+        super.onStandSummon(desummon);
+
+        if (!isClient()) {
+            if (desummon) {
+
+                Roundabout.LOGGER.info("{},{}",active,this.Placement);
+                if ( active ) {
+                    hasRattlocated = true;
+
+                    if (this.onCooldown(PowersRatt.SETPLACE)) {
+                        active = false;
+                        Placement = Vec3.ZERO;
+                    }
+                }
+
+            } else {
+                if (hasRattlocated) {
+                    this.setCooldown(PowersRatt.SETPLACE,70);
+                    if (this.getSelf() instanceof Player P) {
+                        S2CPacketUtil.sendCooldownSyncPacket(P,PowersRatt.SETPLACE,70);
+                    }
+                }
+            }
+        }
+    }
+
+    boolean hasRattlocated = false;
+    private Vec3 Placement = null;
     int shieldDelay = 0;
     @Override
     public void tickPower() {
@@ -417,6 +446,11 @@ public class PowersRatt extends NewDashPreset {
             if (this.getSelf().distanceTo(this.getStandEntity(this.getSelf())) > this.getMaxPilotRange() && !this.getStandEntity(this.getSelf()).forceDespawnSet) {
                 RecallClient(true);
             }
+        } else if (this.Placement != null && !Placement.equals(Vec3.ZERO) && !isClient()) {
+            ((ServerLevel)this.getSelf().level()).sendParticles(new DustParticleOptions(new Vector3f(0.86F, 0.28F, 0.48F
+                    ), 1f),
+                    Placement.x(), Placement.y()+0.5F, Placement.z(),
+                    0, 0, 0, 0, 0);
         }
 
 
