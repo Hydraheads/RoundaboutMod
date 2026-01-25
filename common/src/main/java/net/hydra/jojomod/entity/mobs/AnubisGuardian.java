@@ -248,7 +248,6 @@ static class FireCrossbow extends Goal {
     public void tick() {
         super.tick();
         if (this.mob.getTarget() != null) {
-            Roundabout.LOGGER.info("FIIIRE");
             this.mob.performRangedAttack(this.mob.getTarget(), 1.0f);
             ItemStack itemStack2 = this.mob.getItemInHand(ProjectileUtil.getWeaponHoldingHand(this.mob, Items.CROSSBOW));
             CrossbowItem.setCharged(itemStack2, false);

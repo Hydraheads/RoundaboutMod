@@ -2134,7 +2134,6 @@ public class PowersAnubis extends NewDashPreset {
         this.memories.get(slot).rots.add(AnubisMoment.convertVec(new Vec3(0,this.getSelf().getXRot(),this.getSelf().getYRot())));
     }
     public void playbackMemory(byte slot) {
-        Roundabout.LOGGER.info(""+slot);
         if (memories.isEmpty()) {return;}
         if (slot == (byte) -1 || slot == 8) {return;}
         AnubisMemory memory = this.memories.get(slot);

@@ -402,7 +402,6 @@ public class PowersRatt extends NewDashPreset {
         if (!isClient()) {
             if (desummon) {
 
-                Roundabout.LOGGER.info("{},{}",active,this.Placement);
                 if ( active ) {
                     hasRattlocated = true;
 
