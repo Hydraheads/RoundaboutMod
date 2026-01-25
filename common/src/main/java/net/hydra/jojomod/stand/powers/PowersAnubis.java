@@ -20,6 +20,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.AnubisItem;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
@@ -319,32 +320,7 @@ public class PowersAnubis extends NewDashPreset {
     }
     public void RagingLightServer() {
         this.setCooldown(PowerIndex.SKILL_1_SNEAK,200);
-        int radius = 13;
-        AABB box = this.getSelf().getBoundingBox().inflate(radius,2,radius);
-        List<Mob> entities = this.getSelf().level().getNearbyEntities(Mob.class, TargetingConditions.DEFAULT,this.getSelf(),box);
-        entities.removeIf(entity -> entity instanceof Villager);
-        entities.removeIf(entity -> entity instanceof NeutralMob && entity.getTarget() == null);
-        entities.removeIf(entity -> entity instanceof Piglin && entity.getTarget() == null);
-        for (Mob M : entities) {
-            if (M instanceof Wolf W && W.getOwner().equals(this.getSelf()) ) {
-                W.setTarget(null);
-            }
-        }
-        entities.removeIf(entity ->  (entity instanceof TamableAnimal TA && TA.isTame()) );
-
-        for (Mob M : entities) {
-            addEXP(2);
-            M.setTarget(this.getSelf());
-            M.setLastHurtByMob(this.getSelf());
-        }
-
-        Vec3 pos = this.getSelf().getPosition(1);
-
-        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.RAGING_LIGHT,
-                pos.x,
-                pos.y + this.getSelf().getEyeHeight(),
-                pos.z,
-                30, 0, 0, 0, 0.4);
+        this.addEXP(AnubisItem.aggroOnto(this.getSelf()) );
     }
 
 
@@ -2138,7 +2114,15 @@ public class PowersAnubis extends NewDashPreset {
         if (slot == (byte) -1 || slot == 8) {return;}
         AnubisMemory memory = this.memories.get(slot);
 
-        int lastTime = memory.moments.get(memory.moments.size()-1).time;
+        int lastTime = 0;
+        if ( !memory.moments.isEmpty() ){
+            lastTime = memory.moments.get(memory.moments.size()-1).time;
+        }
+        if (memory.canMouse()) {
+            if (!memory.rots.isEmpty()) {
+                lastTime = Math.max(lastTime, (int)memory.rots.get(memory.rots.size()-1).x );
+            }
+        }
 
         if (lastTime > this.getMaxPlayTime()) {
             if (this.getSelf() instanceof Player P) {
