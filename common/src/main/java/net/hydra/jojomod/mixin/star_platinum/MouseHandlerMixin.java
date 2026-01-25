@@ -83,7 +83,6 @@ public abstract class MouseHandlerMixin {
 
                 Pair<List<Byte>,Integer> lastVisual = PA.visualValues.get(PA.visualValues.size()-1);
                 if (lastVisual != null) {
-                    Roundabout.LOGGER.info(lastVisual.toString());
                     List<Byte> newList = new ArrayList<>();
                     newList.addAll(lastVisual.getA());
                     newList.add(AnubisMoment.HOTBAR[s]);

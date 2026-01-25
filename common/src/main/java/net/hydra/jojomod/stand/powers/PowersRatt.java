@@ -833,7 +833,6 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
-        Roundabout.LOGGER.info(""+isPlaced());
         switch (activeP) {
             case PowersRatt.AUTO -> {
                 if (getShootTarget() == null && isHoldingSneak() && !isAuto() && isPlaced()) {
