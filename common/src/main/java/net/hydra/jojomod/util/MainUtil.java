@@ -909,14 +909,17 @@ public class MainUtil {
 
     public static boolean canFreeze(Entity mob){
         return (!isFreezableMobBlacklisted(mob) && !(mob instanceof Mob mb && isBossMob(mb))
+                && !(mob != null && ((TimeStop)mob.level()).CanTimeStopEntity(mob))
         &&  !(mob instanceof LivingEntity le && FateTypes.isVampire(le)));
     }
     public static boolean canDrinkBlood(Entity mob){
-        return (getMobBleed(mob) && !hasEnderBlood(mob) && mob.isAlive() && !mob.isRemoved() &&
+        return (getMobBleed(mob) && !hasEnderBlood(mob) && mob.isAlive() && !mob.isRemoved()
+                && !(mob != null && ((TimeStop)mob.level()).CanTimeStopEntity(mob)) &&
                 !(mob instanceof Mob mb && ((IMob)mb).roundabout$isVampire()));
     }
     public static boolean canDrinkBlood2(Entity mob){
-        return (getMobBleed(mob) && !hasEnderBlood(mob) && mob.isAlive() && !mob.isRemoved());
+        return (getMobBleed(mob) && !hasEnderBlood(mob) && mob.isAlive() && !mob.isRemoved()
+                && !(mob != null && ((TimeStop)mob.level()).CanTimeStopEntity(mob)));
     }
 
     public static boolean canDrinkBloodFair(Entity ent,Entity drinker){
