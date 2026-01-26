@@ -1497,8 +1497,9 @@
   "idle.roundabout.ratt_1": "Head",
   "idle.roundabout.ratt_2": "Shoulder",
 
-  "idle.roundabout.anubis_1": "Sword Only",
-  "idle.roundabout.anubis_2": "Humanoid",
+  "idle.roundabout.anubis_1": "Left",
+  "idle.roundabout.anubis_2": "Right",
+  "idle.roundabout.anubis_3": "Back",
 
 
   "skins.roundabout.star_platinum.base": "Part 3",

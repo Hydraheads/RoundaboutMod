@@ -59,11 +59,11 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
         if (((IEntityAndData) entity).roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
             return;
         if (!entity.isInvisible()) {
+            StandUser SU = (StandUser) entity;
             if (AnubisLayer.shouldRender(entity) != null) {
 
                 ClientUtil.pushPoseAndCooperate(poseStack,25);
 
-                StandUser SU = (StandUser) entity;
 
                 if (AnubisLayer.shouldRender(entity) == HumanoidArm.RIGHT ) {
                     getParentModel().rightArm.translateAndRotate(poseStack);
@@ -80,13 +80,31 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                 }
                 poseStack.translate(-0.25,0.5,0.05);
 
-
-
-
                 renderAnubis(poseStack, bufferSource, packedLight, entity, partialTicks);
                 ClientUtil.popPoseAndCooperate(poseStack,25);
 
 
+            }
+            if (SU.roundabout$getStandPowers() instanceof PowersAnubis && !PowerTypes.hasStandActive(entity) ) {
+                ClientUtil.pushPoseAndCooperate(poseStack, 60);
+
+                getParentModel().body.translateAndRotate(poseStack);
+
+                if (SU.roundabout$getIdlePos() == 2) {
+                    poseStack.translate(0.2,0.3,0.2);
+                    poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,0,1,45),0.2F,0.2F,0.3F);
+                    renderSheathedAnubis(poseStack, bufferSource, packedLight, entity, partialTicks, 0.8F);
+                } else {
+                    poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0, 1, 0, 90), 0, 0, 0);
+                    if (SU.roundabout$getIdlePos() == 1) {
+                        poseStack.translate(0.18, 0.7, -0.21);
+                    } else {
+                        poseStack.translate(0.18, 0.7, 0.32);
+                    }
+                    poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0, 0, 1, 35), 0, 0, 0);
+                    renderSheathedAnubis(poseStack, bufferSource, packedLight, entity, partialTicks, 0.75F);
+                }
+                ClientUtil.popPoseAndCooperate(poseStack,60);
 
             }
         }
@@ -128,6 +146,29 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
 
             }
         }
+    }
+
+    public static void renderSheathedAnubis(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float partialTicks, float scale) {
+
+        StandUser user = ((StandUser)entity );
+        boolean hasHeyYaOut = (PowerTypes.hasStandActive(entity) && user.roundabout$getStandPowers() instanceof PowersAnubis);
+        int heyTicks = user.roundabout$getAnubisVanishTicks();
+        float heyFull = 0;
+        float fixedPartial = partialTicks - (int) partialTicks;
+        if (((TimeStop)entity.level()).CanTimeStopEntity(entity)){
+            fixedPartial = 0;
+        }
+        if (hasHeyYaOut){
+            heyFull = heyTicks+fixedPartial;
+            heyFull = Math.min(heyFull/10,1f);
+        } else {
+            heyFull = heyTicks-fixedPartial;
+            heyFull = Math.max(heyFull/10,0);
+        }
+
+        poseStack.scale(scale,scale,scale);
+        ModStrayModels.ANUBIS.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                1, 1, 1, 1-heyFull, user.roundabout$getStandSkin());
     }
 
     public static void renderAnubis(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float partialTicks) {

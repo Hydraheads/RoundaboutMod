@@ -53,14 +53,14 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
 
 
     public final int[][] positions = {
-            {0,31},
-            {31,31},
-            {31,0},
-            {31,-31},
-            {0,-31},
             {-31,-31},
+            {0,-31},
+            {31,-31},
+            {31,0},
+            {31,31},
+            {0,31},
+            {-31,31},
             {-31,0},
-            {-31,31}
     };
 
 

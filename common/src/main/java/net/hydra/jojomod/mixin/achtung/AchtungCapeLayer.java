@@ -4,6 +4,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -27,6 +30,19 @@ public abstract class AchtungCapeLayer extends RenderLayer<AbstractClientPlayer,
 
     public AchtungCapeLayer(RenderLayerParent<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> $$0) {
         super($$0);
+    }
+
+
+    @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/player/AbstractClientPlayer;FFFFFF)V",at = @At(value = "HEAD"),cancellable = true)
+    private void roundabout$cancelCape(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
+        StandUser SU = (StandUser) $$3;
+        if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+            if (!PowerTypes.hasStandActive($$3)) {
+                if (SU.roundabout$getIdlePos() == (byte)2) {
+                    ci.cancel();
+                }
+            }
+        }
     }
 
     /**Fade out cape*/
