@@ -26,7 +26,6 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
-import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -51,10 +50,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.decoration.ArmorStand;
-import net.minecraft.world.entity.monster.piglin.Piglin;
-import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -145,13 +141,12 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     public static final int MaxPossessionTime = 200;
-    public static final int MaxPlayTime = 200;
     public int  getMaxPlayTime() {
         if (this.getSelf() instanceof Player P) {
             boolean bypass = (P.isCreative()) || (this.getStandUserSelf().roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem);
             IPlayerEntity IPE = (IPlayerEntity) P;
             
-            return (int) (MaxPlayTime * (bypass ? 1 : 0.5 + (0.5 * ((float) IPE.roundabout$getStandLevel() / this.getMaxLevel()  )) ) );
+            return (int) (ConfigManager.getConfig().anubisSettings.anubisMaxMemory * (bypass ? 1 : 0.5 + (0.5 * ((float) IPE.roundabout$getStandLevel() / this.getMaxLevel()  )) ) );
         }
         return -1;
     }
@@ -362,7 +357,7 @@ public class PowersAnubis extends NewDashPreset {
 
         AnubisMemory memory = this.getUsedMemory();
         List<AnubisMoment> moments = memory.moments;
-        int time = (PowersAnubis.MaxPlayTime-this.playTime)+1;
+        int time = (ConfigManager.getConfig().anubisSettings.anubisMaxMemory-this.playTime)+1;
         for (Byte playByte : playBytes) {
             if (isPressed(playByte, time)) {
                 moments.add(new AnubisMoment(playByte, Math.min(this.getMaxPlayTime(), time), false));
@@ -457,7 +452,7 @@ public class PowersAnubis extends NewDashPreset {
                 enablePogo();
                 this.setAttackTimeDuring(0);
                 this.setActivePower(PowerIndex.SNEAK_MOVEMENT);
-                this.setCooldown(PowerIndex.GLOBAL_DASH, 260);
+                this.setCooldown(PowerIndex.GLOBAL_DASH, ConfigManager.getConfig().anubisSettings.anubisBackflipCooldown);
                 this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.ANUBIS_BACKFLIP_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
 
                 if (!isClient()) {
@@ -1926,6 +1921,22 @@ public class PowersAnubis extends NewDashPreset {
         }
     }
 
+    @Override
+    public float multiplyPowerByStandConfigPlayers(float power){
+        return (float) (power*(ClientNetworking.getAppropriateConfig().
+                anubisSettings.anubisAttackMultOnPlayers*0.01));
+    }
+    @Override
+    public float multiplyPowerByStandConfigMobs(float power){
+        return (float) (power*(ClientNetworking.getAppropriateConfig().
+                anubisSettings.anubisAttackMultOnMobs*0.01));
+    }
+
+    @Override
+    public int getMaxGuardPoints() {
+        return ConfigManager.getConfig().anubisSettings.anubisGuardPoints;
+    }
+
     public boolean visualMouse = false;
     public List<Pair<List<Byte>,Integer>> visualValues = new ArrayList<>();
     AnubisMemory lastMemory = null;
@@ -2364,7 +2375,7 @@ public class PowersAnubis extends NewDashPreset {
         if (moments.isEmpty()) {return;}
         visualMouse = this.memories.get(slot).canMouse();
 
-        int maxTime = Math.min(PowersAnubis.MaxPlayTime,moments.get(moments.size()-1).time);
+        int maxTime = Math.min(ConfigManager.getConfig().anubisSettings.anubisMaxMemory,moments.get(moments.size()-1).time);
 
         for(int time = 0; time<maxTime; time++ ) {
             List<Byte> value = new ArrayList<>();
@@ -2386,6 +2397,12 @@ public class PowersAnubis extends NewDashPreset {
             }
             visualDuration = 40;
         }
+    }
+
+
+    @Override
+    public boolean isStandEnabled() {
+        return ClientNetworking.getAppropriateConfig().anubisSettings.enableAnubis;
     }
 
 }

@@ -8,6 +8,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.JackalRifleItem;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.util.HeatUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.screens.Screen;
@@ -45,7 +46,7 @@ public abstract class MouseHandlerMixin {
             if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
                 if (PA.isRecording()) {
                     AnubisMemory AM = PA.getUsedMemory();
-                    Vec3 rot = new Vec3(PowersAnubis.MaxPlayTime-PA.playTime,PA.getSelf().getXRot(),PA.getSelf().getYRot());
+                    Vec3 rot = new Vec3(ConfigManager.getConfig().anubisSettings.anubisMaxMemory -PA.playTime,PA.getSelf().getXRot(),PA.getSelf().getYRot());
                     if (AM.rots.isEmpty()) {
                         AM.rots.add(AnubisMoment.convertVec(rot));
                     } else {
@@ -75,7 +76,7 @@ public abstract class MouseHandlerMixin {
             if (PA.isRecording() &&  PA.getUsedMemory().memory_type != AnubisMemory.INPUTS) {
                 List<AnubisMoment> moments = PA.getUsedMemory().moments;
 
-                int lastTime = PowersAnubis.MaxPlayTime-PA.playTime;
+                int lastTime = ConfigManager.getConfig().anubisSettings.anubisMaxMemory-PA.playTime;
 
                 moments.add(new AnubisMoment(AnubisMoment.HOTBAR[s], lastTime-1,true ));
                 moments.add(new AnubisMoment(AnubisMoment.HOTBAR[s], lastTime,false ));

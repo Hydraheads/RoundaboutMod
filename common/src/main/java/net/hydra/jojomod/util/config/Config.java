@@ -86,6 +86,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public CreamSettings creamSettings;
     @NestedOption(group = "modded")
+    public AnubisSettings anubisSettings;
+    @NestedOption(group = "modded")
     public TheWorldSettings theWorldSettings;
     @NestedOption(group = "modded")
     public StarPlatinumSettings starPlatinumSettings;
@@ -702,6 +704,21 @@ public class Config implements Cloneable {
         public Integer getMiningTierCream;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer creamVoidTime;
+    }
+
+    public static class AnubisSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableAnubis;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer anubisAttackMultOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer anubisAttackMultOnPlayers;
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer anubisGuardPoints;
+        @IntOption(group = "inherit", value = 260, min = 0, max = 72000)
+        public Integer anubisBackflipCooldown;
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer anubisMaxMemory;
     }
 
     public static class TheWorldSettings {

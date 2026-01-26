@@ -1256,17 +1256,4 @@ public class PowersRatt extends NewDashPreset {
     public boolean isStandEnabled() {
         return ClientNetworking.getAppropriateConfig().rattSettings.enableRatt;
     }
-
-
-    //public boolean isWip(){
-    //    return true;
-    //}
-
-    //public Component ifWipListDevStatus(){
-    //    return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
-    //}
-
-    //public Component ifWipListDev(){
-    //    return Component.literal(  "Prisma").withStyle(ChatFormatting.YELLOW);
-    //}
 }
