@@ -1069,7 +1069,7 @@ public class PowersAnubis extends NewDashPreset {
                 this.attackTime += 5;
             }
 
-            if (this.attackTimeDuring > this.attackTimeMax) {
+            if (this.attackTimeDuring > this.attackTimeMax && this.isPacketPlayer()) {
                 this.attackTime = -1;
                 this.attackTimeMax = 0;
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
