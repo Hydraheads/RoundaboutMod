@@ -381,9 +381,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         }
                         Entity TE2 = getTargetEntity(self, 1.4F, 40);
                         if (TE2 != null){
+                            tryIntPowerPacket(BLOOD_CLUTCH_ATTACK,TE2.getId());
                             xTryPower(PowerIndex.NONE, true);
                             tryPowerPacket(NONE);
-                            tryIntPowerPacket(BLOOD_CLUTCH_ATTACK,TE2.getId());
                         }
                     }
                 } else if (getActivePower() == ICE_CLUTCH) {
@@ -407,6 +407,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                             xTryPower(PowerIndex.NONE, true);
                             tryPowerPacket(NONE);
                             tryIntPowerPacket(ICE_CLUTCH_ATTACK, TE2.getId());
+                            xTryPower(PowerIndex.NONE, true);
+                            tryPowerPacket(NONE);
                         }
                     }
                 }
@@ -640,7 +642,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     }
 
     public void suckImpact(Entity entity){
-        if (!this.self.level().isClientSide()) {
+        if (!this.self.level().isClientSide() && getActivePower() == BLOOD_CLUTCH_ATTACK) {
             if (entity != null) {
                 attackTargetId = 0;
                 float pow;
@@ -709,7 +711,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     }
 
     public void iceImpact(Entity entity){
-        if (!this.self.level().isClientSide()) {
+        if (!this.self.level().isClientSide() && getActivePower() == ICE_CLUTCH_ATTACK) {
             if (entity != null) {
                 attackTargetId = 0;
                 float pow;
@@ -991,20 +993,24 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
     public void doSuckHit(){
         if (!self.level().isClientSide()) {
+            setActivePower(BLOOD_CLUTCH_ATTACK);
             Entity target = null;
             if (attackTargetId > 0) {
                 target = self.level().getEntity(attackTargetId);
             }
             suckImpact(target);
+            setActivePower(PowerIndex.NONE);
         }
     }
     public void doIceHit(){
         if (!self.level().isClientSide()) {
+            setActivePower(ICE_CLUTCH_ATTACK);
             Entity target = null;
             if (attackTargetId > 0) {
                 target = self.level().getEntity(attackTargetId);
             }
             iceImpact(target);
+            setActivePower(PowerIndex.NONE);
         }
     }
     public void doDiveHit(){
