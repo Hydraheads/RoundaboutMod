@@ -56,8 +56,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
-        if (((IEntityAndData) entity).roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
-            return;
+        if (((IEntityAndData) entity).roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung()) return;
         if (!entity.isInvisible()) {
             StandUser SU = (StandUser) entity;
             if (AnubisLayer.shouldRender(entity) != null) {
@@ -91,7 +90,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                 getParentModel().body.translateAndRotate(poseStack);
 
                 if (SU.roundabout$getIdlePos() == 2) {
-                    poseStack.translate(0.2,0.3,0.2);
+                    poseStack.translate(0.2,0.3,0.22);
                     poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,0,1,45),0.2F,0.2F,0.3F);
                     renderSheathedAnubis(poseStack, bufferSource, packedLight, entity, partialTicks, 0.8F);
                 } else {

@@ -1265,10 +1265,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 if (check) {
                     if ((this.getActivePower() != PowerIndex.NONE)
                             || dist <= 5) {
-                        this.getSelf().setXRot(getLookAtEntityPitch(this.getSelf(), attackTarget));
-                        float yrot = getLookAtEntityYaw(this.getSelf(), attackTarget);
-                        this.getSelf().setYRot(yrot);
-                        this.getSelf().setYHeadRot(yrot);
+                        rotateMobHead(attackTarget);
                     }
 
                     if (this.attackTimeDuring == -1 || (this.attackTimeDuring < -1 && this.activePower == PowerIndex.ATTACK)) {

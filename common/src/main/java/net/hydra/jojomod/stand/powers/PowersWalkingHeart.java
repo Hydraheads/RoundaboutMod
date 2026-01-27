@@ -1107,7 +1107,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                                 }
                             }
                         }
-                        if (self.isSleeping() || ((!self.onGround()) && mercyTicks <= 0) || self.getRootVehicle() != this.self) {
+                        if (self.isSleeping() || (( ( !self.onGround() && !this.getStandUserSelf().roundabout$isPossessed() ) ) && mercyTicks <= 0) || self.getRootVehicle() != this.self) {
                             heelDirection = Direction.DOWN;
                             if (((IGravityEntity) this.self).roundabout$getGravityDirection() != heelDirection) {
                                 grantFallImmunity();
