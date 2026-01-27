@@ -66,8 +66,8 @@ public class FrozenLayer<T extends LivingEntity, A extends EntityModel<T>> exten
                             renderPart(poseStack, sm.rightLeg, consumer, packedLight);
                         }
                         if (bodyFrozen) {
-                            renderPart(poseStack, sm.body, consumer, packedLight);
-                            renderPart(poseStack, sm.head, consumer, packedLight);
+                            renderPartBody(poseStack, sm.body, consumer, packedLight);
+                            renderPartHead(poseStack, sm.head, consumer, packedLight);
                         }
                     }
                 } else if (entity.getType() == EntityType.SKELETON) {
@@ -81,7 +81,7 @@ public class FrozenLayer<T extends LivingEntity, A extends EntityModel<T>> exten
                         }
                         if (bodyFrozen) {
                             renderPart(poseStack, sm.body, consumer, packedLight);
-                            renderPart(poseStack, sm.head, consumer, packedLight);
+                            renderPartHead(poseStack, sm.head, consumer, packedLight);
                         }
                     }
                 } else if (entity.getType() == EntityType.CREEPER) {
@@ -147,6 +147,54 @@ public class FrozenLayer<T extends LivingEntity, A extends EntityModel<T>> exten
         part.render(stack, consumer, packedLight, OverlayTexture.NO_OVERLAY, 1,
                 1, 1, 1);
         part.y+=0.03f;
+        part.xScale = xscale;
+        part.yScale = yscale;
+        part.zScale = zscale;
+        ClientUtil.popPoseAndCooperate(stack, 46);
+    }
+    public void renderPartBody(PoseStack stack, ModelPart part, VertexConsumer consumer, int packedLight){
+        ClientUtil.pushPoseAndCooperate(stack, 46);
+        part.visible = true;
+        float xscale = part.xScale;
+        float yscale = part.yScale;
+        float zscale = part.zScale;
+
+        part.xScale = xscale-0.02f;
+        part.yScale = yscale-0.02f;
+        part.zScale = zscale-0.02f;
+        part.y-=0.01f;
+        part.render(stack, consumer, packedLight, OverlayTexture.NO_OVERLAY, 1,
+                1, 1, 1);
+        part.xScale = xscale+0.02f;
+        part.yScale = yscale+0.02f;
+        part.zScale = zscale+0.02f;
+        part.render(stack, consumer, packedLight, OverlayTexture.NO_OVERLAY, 1,
+                1, 1, 1);
+        part.y+=0.01f;
+        part.xScale = xscale;
+        part.yScale = yscale;
+        part.zScale = zscale;
+        ClientUtil.popPoseAndCooperate(stack, 46);
+    }
+    public void renderPartHead(PoseStack stack, ModelPart part, VertexConsumer consumer, int packedLight){
+        ClientUtil.pushPoseAndCooperate(stack, 46);
+        part.visible = true;
+        float xscale = part.xScale;
+        float yscale = part.yScale;
+        float zscale = part.zScale;
+
+        part.xScale = xscale-0.02f;
+        part.yScale = yscale-0.02f;
+        part.zScale = zscale-0.02f;
+        part.y+=0.01f;
+        part.render(stack, consumer, packedLight, OverlayTexture.NO_OVERLAY, 1,
+                1, 1, 1);
+        part.xScale = xscale+0.02f;
+        part.yScale = yscale+0.02f;
+        part.zScale = zscale+0.02f;
+        part.render(stack, consumer, packedLight, OverlayTexture.NO_OVERLAY, 1,
+                1, 1, 1);
+        part.y-=0.01f;
         part.xScale = xscale;
         part.yScale = yscale;
         part.zScale = zscale;
