@@ -87,6 +87,14 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.METEOR_BLOCK.get(),
                     new Item.Properties()
             )));
+    public static final RegistryObject<BlockItem> SHINY_QUARTZ_ITEM = addToBuildingTab(ITEMS.register("shiny_quartz",
+            () -> new BlockItem(ForgeBlocks.SHINY_QUARTZ.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> SHINY_QUARTZ_TILES_ITEM = addToBuildingTab(ITEMS.register("shiny_quartz_tiles",
+            () -> new BlockItem(ForgeBlocks.SHINY_QUARTZ_TILES.get(),
+                    new Item.Properties()
+            )));
     public static final RegistryObject<BlockItem> EQUIPPABLE_STONE_MASK_ITEM = addToWIPTab(ITEMS.register("stone_mask",
             () -> new StoneMaskBlockItem(ForgeBlocks.EQUIPPABLE_STONE_MASK_BLOCK.get(),
                     new Item.Properties().stacksTo(1)

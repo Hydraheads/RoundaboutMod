@@ -385,6 +385,8 @@ public class FabricItems {
                         entries.accept(ModBlocks.WOOL_STAIRS_YELLOW);
                         entries.accept(ModBlocks.METEOR_BLOCK);
                         entries.accept(ModBlocks.IMPACT_MOUND);
+                        entries.accept(ModBlocks.SHINY_QUARTZ);
+                        entries.accept(ModBlocks.SHINY_QUARTZ_TILES);
                         entries.accept(ModBlocks.REGAL_FLOOR);
                         entries.accept(ModBlocks.REGAL_WALL);
                         entries.accept(ModBlocks.GODDESS_STATUE_BLOCK);

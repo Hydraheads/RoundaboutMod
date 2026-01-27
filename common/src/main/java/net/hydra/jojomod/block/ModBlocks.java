@@ -122,6 +122,9 @@ public class ModBlocks {
     public static Block FOG_DIRT_COATING;
     public static Block FOG_TRAP;
 
+    public static Block SHINY_QUARTZ;
+    public static Block SHINY_QUARTZ_TILES;
+
     public static Block EQUIPPABLE_STONE_MASK_BLOCK;
     public static Block BLOODY_STONE_MASK_BLOCK;
     public static Block COFFIN_BLOCK;
@@ -145,6 +148,14 @@ public class ModBlocks {
                     .requiresCorrectToolForDrops()
                     .strength(5.0F, 6.0F)
                     .sound(SoundType.METAL)
+    );
+    public static Block SHINY_QUARTZ_PROPERTIES = new Block(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.QUARTZ).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.8F)
+    );
+    public static Block SHINY_QUARTZ_TILES_PROPERTIES = new Block(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.QUARTZ).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.8F)
     );
     public static Block IMPACT_MOUND_PROPERTIES = new SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DIRT).speedFactor(0.7f).strength(0.5F).sound(SoundType.GRAVEL));
 

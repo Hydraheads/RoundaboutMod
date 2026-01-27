@@ -2,18 +2,17 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "W": {
-      "item": "minecraft:pink_wool"
+    "#": {
+      "item": "roundabout:shiny_quartz"
     }
   },
   "pattern": [
-    "  W",
-    " WW",
-    "WWW"
+    "##",
+    "##"
   ],
   "result": {
-    "count": 4,
-    "item": "roundabout:wool_stairs_pink"
+    "count": 1,
+    "item": "roundabout:shiny_quartz_tiles"
   },
   "show_notification": true
 }

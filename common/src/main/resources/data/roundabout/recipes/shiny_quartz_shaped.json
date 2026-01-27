@@ -3,20 +3,20 @@
   "category": "building",
   "key": {
     "#": {
-      "item": "minecraft:blue_dye"
+      "item": "minecraft:quartz_block"
     },
-    "C": {
-      "item": "minecraft:iron_ingot"
+    "D": {
+      "item": "minecraft:diamond"
     }
   },
   "pattern": [
-    " # ",
-    "C##",
-    " # "
+    "###",
+    "#D#",
+    "###"
   ],
   "result": {
     "count": 1,
-    "item": "roundabout:wall_street_sign_dio"
+    "item": "roundabout:shiny_quartz"
   },
   "show_notification": true
 }

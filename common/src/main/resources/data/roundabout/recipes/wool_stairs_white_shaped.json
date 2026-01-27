@@ -1,6 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "equipment",
+  "category": "building",
   "key": {
     "W": {
       "item": "minecraft:white_wool"

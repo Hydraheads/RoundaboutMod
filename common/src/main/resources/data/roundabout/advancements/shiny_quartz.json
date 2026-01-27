@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_quartz_block": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:quartz_block"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "roundabout:shiny_quartz_shaped"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_quartz_block",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "roundabout:shiny_quartz_shaped"
+    ]
+  },
+  "sends_telemetry_event": false
+}
