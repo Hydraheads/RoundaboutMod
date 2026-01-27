@@ -1,7 +1,5 @@
 package net.hydra.jojomod.mixin;
 
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.ITargetGoal;
@@ -39,16 +37,13 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
-import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.memory.ExpirableValue;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.sensing.Sensing;
-import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Enemy;
-import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.AbstractVillager;
@@ -187,6 +182,13 @@ public abstract class ZMob extends LivingEntity implements IMob {
             if (((Mob)(Object)this) instanceof PathfinderMob pm){
                 this.goalSelector.addGoal(2, new RoundaboutFollowGoal(pm, 1));
             }
+        }
+    }
+
+    @Inject(method = "playAmbientSound()V", at = @At(value = "HEAD"), cancellable = true)
+    private void rdbt$playAmbientSound(CallbackInfo ci) {
+        if (((StandUser)this).roundabout$isDazed()){
+            ci.cancel();
         }
     }
 
