@@ -718,7 +718,7 @@ public class AbilityScapeBasis {
     /**Override this if you want to add or remove conditions that prevent moves from updating and shut
      * them down*/
     public boolean isAttackInept(byte activeP){
-        return this.self.isUsingItem() || this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) || this.getStandUserSelf().roundabout$isPossessed();
+        return this.self.isUsingItem() || this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()));
     }
 
     /**If doing something like eating, cancels attack state*/

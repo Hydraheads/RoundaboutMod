@@ -90,10 +90,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (attackTarget != null && attackTarget.isAlive()){
             if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.BARRAGE)
                     || attackTarget.distanceTo(this.getSelf()) <= 5){
-                this.getSelf().setXRot(getLookAtEntityPitch(this.getSelf(), attackTarget));
-                float yrot = getLookAtEntityYaw(this.getSelf(), attackTarget);
-                this.getSelf().setYRot(yrot);
-                this.getSelf().setYHeadRot(yrot);
+                rotateMobHead(attackTarget);
             }
 
             Entity targetEntity = getTargetEntity(this.self, -1);

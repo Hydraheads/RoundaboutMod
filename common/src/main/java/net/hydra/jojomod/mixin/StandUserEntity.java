@@ -17,7 +17,6 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.*;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
-import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
@@ -64,7 +63,6 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.npc.AbstractVillager;
@@ -476,6 +474,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (this.roundabout$isPossessed()) {
             LivingEntity poss = (LivingEntity) this.roundabout$getPossessor();
             if (poss != null) {
+                if (this.roundabout$getStandPowers() instanceof PowersWalkingHeart PWH && PWH.hasExtendedHeelsForWalking()) {return;}
                 poss.knockback($$0,$$1,$$2);
             }
 
@@ -1322,19 +1321,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     APE.discard();
                 }
 
-                if (this.roundabout$getActive()) {
-                    this.roundabout$setActive(false);
-                }
-
                 if (rdbt$this() instanceof Player P) {
 
                     if (APE.getLifeSpan() == 1) {
-                        if (this.roundabout$getPossessor() != null) {
-                            this.roundabout$getPossessor().discard();
-                            this.roundabout$setPossessor(null);
-                        }
-                     //   P.getCooldowns().addCooldown(ModItems.ANUBIS_ITEM,10);
-                        P.displayClientMessage(Component.translatable("item.roundabout.anubis_item.message1").withStyle(ChatFormatting.RED), true);
+                        this.roundabout$onPossessionFinish();
                     }
                 }
             }
@@ -1482,6 +1472,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         //}
+    }
+
+    /// consider adding a tracked byte of some kind to possession to allow it to be used by several stands
+    @Unique
+    private void roundabout$onPossessionFinish() {
+        if (this.roundabout$getPossessor() != null) {
+            this.roundabout$getPossessor().discard();
+            this.roundabout$setPossessor(null);
+        }
+        //   P.getCooldowns().addCooldown(ModItems.ANUBIS_ITEM,10);
+        if (this.rdbt$this() instanceof Player P) {
+            P.displayClientMessage(Component.translatable("item.roundabout.anubis_item.message1").withStyle(ChatFormatting.RED), true);
+        }
+
     }
 
     @Override
@@ -4663,13 +4667,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (rdbt$this() instanceof Player && this.roundabout$isPossessed()) {
 
             PathfinderMob poss = roundabout$getPossessor();
-           // Roundabout.LOGGER.info(level.isClientSide() + " | " + this.entityData.get(ROUNDABOUT$POSSESSOR) + " | " + poss);
             if (poss != null) {
-             //   Roundabout.LOGGER.info("HO");
                 if (poss.getTarget() != null) {
                     float f = (float)Mth.length(poss.getX() - poss.xo, 0.0, poss.getZ() - poss.zo);
                     float g = Math.min(f * 4.0f, 1.0f);
                     this.walkAnimation.update(g, 0.4f);
+                    if (this.roundabout$getStandPowers() != null) {
+                        this.roundabout$getStandPowers().tickMobAI(poss.getTarget());
+                    }
                 }
             }
         }
@@ -4693,14 +4698,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         rdbt$this().teleportTo(pos.x,pos.y,pos.z);
 
                         LivingEntity target = poss.getTarget();
-                        if (target!= null) {
-
-                            float $$1 = (float)Mth.length(this.getX() - this.xo, this.getY() - this.yo, this.getZ() - this.zo);
-
+                        if (target != null) {
                             if (target.hurtTime == 0 && !this.roundabout$isDazed() && roundabout$anubisAttackDelay >= 0) {
                                 if (P.getPosition(0.5F).distanceTo(target.getPosition(1)) < 2) {
                                     P.swing(InteractionHand.MAIN_HAND,true);
-                                    if (target.hurt(ModDamageTypes.of(P.level(), ModDamageTypes.ANUBIS_POSSESS,this), 7.5F)) {
+                                    if (target.hurt(ModDamageTypes.of(P.level(), ModDamageTypes.ANUBIS_POSSESS,this),7.5F)) {
                                         roundabout$anubisAttackDelay = 12;
                                     } else {
                                         if (target.isBlocking()) {
@@ -4712,7 +4714,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                                     target.teleportRelative(0,0.4,0);
                                     target.setDeltaMovement(delta.x*0.4,0.2,delta.z*0.4);
                                 }
-                            } else if (roundabout$anubisAttackDelay >= 0) {
+                            } else if (roundabout$anubisAttackDelay > 0) {
                                 roundabout$anubisAttackDelay--;
                             }
                         }

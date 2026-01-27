@@ -4,9 +4,11 @@ package net.hydra.jojomod.item;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
+import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -60,6 +62,15 @@ public class AnubisItem extends Item {
                 p.setPos($$2.getPosition(1));
                 $$1.addFreshEntity(p);
                 SU.roundabout$setPossessor(p);
+
+                if (SU.roundabout$getStandPowers() != null) {
+                    if (!PowerTypes.hasStandActive($$2)) {
+                        SU.roundabout$summonStand($$2.level(), false, true);
+                    }
+                    if (SU.roundabout$getStandPowers() instanceof PowersWalkingHeart PWH) {
+                        PWH.extendHeels();
+                    }
+                }
 
                 AnubisItem.aggroOnto($$2);
             }

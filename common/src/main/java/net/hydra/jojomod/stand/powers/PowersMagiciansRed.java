@@ -3124,10 +3124,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
                     if (this.getActivePower() != PowerIndex.NONE
                             || attackTarget.distanceTo(this.getSelf()) <= 7 || hasHurricane()){
-                        this.getSelf().setXRot(getLookAtEntityPitch(this.getSelf(), attackTarget));
-                        float yrot = getLookAtEntityYaw(this.getSelf(), attackTarget);
-                        this.getSelf().setYRot(yrot);
-                        this.getSelf().setYHeadRot(yrot);
+                        rotateMobHead(attackTarget);
                     }
 
                     boolean isBasicMob = (this.self instanceof Zombie || this.self instanceof Spider || this.self instanceof Skeleton);

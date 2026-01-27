@@ -140,6 +140,16 @@ public class StandPowers extends AbilityScapeBasis {
     public void tickPowerEnd(){
     }
 
+
+    /// used to make mobs look at you during tickMobAi
+    public void rotateMobHead(LivingEntity attackTarget) {
+        if (!(this.getSelf() instanceof Player)) {
+            float yrot = getLookAtEntityYaw(this.getSelf(), attackTarget);
+            this.getSelf().setXRot(getLookAtEntityPitch(this.getSelf(), attackTarget));
+            this.getSelf().setYRot(yrot);
+            this.getSelf().setYHeadRot(yrot);
+        }
+    }
     /**The AI for a stand User Mob, runs every tick. AttackTarget may be null*/
     public void tickMobAI(LivingEntity attackTarget){
     }

@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.mixin.WorldTickClient;
 import net.hydra.jojomod.mixin.WorldTickServer;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.Direction;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -207,6 +208,15 @@ public class FollowingStandEntity extends StandEntity{
             r = 0.5;
         }
         double yawfix = standUser.getYRot();
+        /// makes stand face the target of a possession
+        if (this.getUser() != null) {
+            StandUser SU = (StandUser) this.getUser();
+            if (SU.roundabout$getPossessor() != null) {
+                if (SU.roundabout$getPossessor().getTarget() != null) {
+                    yawfix = MainUtil.getLookAtEntityYaw(this.getUser(), SU.roundabout$getPossessor().getTarget());
+                }
+            }
+        }
         yawfix += this.getAnchorPlace();
         if (yawfix > 360) {
             yawfix -= 360;
