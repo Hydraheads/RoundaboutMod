@@ -430,6 +430,7 @@ public class PowersRatt extends NewDashPreset {
         super.tickPower();
 
 
+        if (!active) {this.Placement = Vec3.ZERO;}
         if (isPlaced()) {
 
             if (!this.getSelf().isAlive()) {
@@ -568,7 +569,6 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public void updateUniqueMoves() {
-        Roundabout.LOGGER.info("TIIICK");
         if (this.getActivePower() == PowersRatt.PLAYER_BURST) {
             if (isClient()) {
                 if (this.attackTimeDuring%2 == 1) {
@@ -1015,7 +1015,6 @@ public class PowersRatt extends NewDashPreset {
             if (isPlaced()) {
                 if (this.shotcooldown == 0) {
                     this.shotcooldown = PlaceShootCooldown;
-                    Roundabout.LOGGER.info("FIIRE");
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowersRatt.START_PLACE_BURST, true);
                 }
             } else {

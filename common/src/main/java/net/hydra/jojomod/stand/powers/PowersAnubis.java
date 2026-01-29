@@ -435,6 +435,7 @@ public class PowersAnubis extends NewDashPreset {
 
         if (!isClient() && this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
             this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP,100,false);
+            this.stopSoundsIfNearby(SoundIndex.ALT_CHARGE_SOUND_1,100,false);
         }
 
         StandUser SU = (StandUser) this.getSelf();
@@ -495,9 +496,7 @@ public class PowersAnubis extends NewDashPreset {
             case PowerIndex.SNEAK_ATTACK_CHARGE -> tryPogoAttack();
             case PowerIndex.BARRAGE_CHARGE_2 -> {
                 this.attackTimeDuring = 0;
-                if (!isClient()) {
-                    this.playBarrageChargeSound();
-                }
+                this.playSneakBarrageCharge();
                 this.setActivePower(PowerIndex.BARRAGE_CHARGE_2);
             }
             case PowerIndex.RANGED_BARRAGE -> {
@@ -511,6 +510,12 @@ public class PowersAnubis extends NewDashPreset {
             this.tryBasicAttack((byte)move);
         }
         return super.setPowerOther(move, lastMove);
+    }
+
+    public void playSneakBarrageCharge() {
+        if (!this.self.level().isClientSide()) {
+            playSoundsIfNearby(SoundIndex.ALT_CHARGE_SOUND_1, 27, false);
+        }
     }
 
     @Override
@@ -1900,6 +1905,8 @@ public class PowersAnubis extends NewDashPreset {
     public SoundEvent getSoundFromByte(byte soundChoice) {
         if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND) {
             return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
+        } else if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
+            return ModSounds.ANUBIS_SHIELDBREAK_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }

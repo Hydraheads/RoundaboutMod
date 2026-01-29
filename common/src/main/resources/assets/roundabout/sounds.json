@@ -1334,6 +1334,12 @@
       "roundabout:anubis_uppercut"
     ]
   },
+  "anubis_shieldbreak": {
+    "subtitle": "sounds.roundabout.anubis_shieldbreak",
+    "sounds": [
+      "roundabout:anubis_shieldbreak"
+    ]
+  },
 
 
 
