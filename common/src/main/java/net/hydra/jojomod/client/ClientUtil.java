@@ -39,6 +39,7 @@ import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -126,6 +127,20 @@ public class ClientUtil {
      * Not a perfect solution but it should help.*/
     public static int skipInterpolationFixAccidentTicks = -1;
 
+
+    public static void animateZombieArmsNoBob(ModelPart $$0, ModelPart $$1, boolean $$2, float $$3, float $$4) {
+        float $$5 = Mth.sin($$3 * (float) Math.PI);
+        float $$6 = Mth.sin((1.0F - (1.0F - $$3) * (1.0F - $$3)) * (float) Math.PI);
+        $$1.zRot = 0.0F;
+        $$0.zRot = 0.0F;
+        $$1.yRot = -(0.1F - $$5 * 0.6F);
+        $$0.yRot = 0.1F - $$5 * 0.6F;
+        float $$7 = (float) -Math.PI / ($$2 ? 1.5F : 2.25F);
+        $$1.xRot = $$7;
+        $$0.xRot = $$7;
+        $$1.xRot += $$5 * 1.2F - $$6 * 0.4F;
+        $$0.xRot += $$5 * 1.2F - $$6 * 0.4F;
+    }
 
     public static void setCheck(){
         //Right-clicking a visage opens the power inventory (see inputevents mixin for another use case)

@@ -39,6 +39,12 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> METEOR_BLOCK = BLOCKS.register("meteor_block",
             () -> ModBlocks.METEOR_BLOCK_PROPERTIES
             );
+    public static final RegistryObject<Block> SHINY_QUARTZ = BLOCKS.register("shiny_quartz",
+            () -> SHINY_QUARTZ_PROPERTIES
+    );
+    public static final RegistryObject<Block> SHINY_QUARTZ_TILES = BLOCKS.register("shiny_quartz_tiles",
+            () -> SHINY_QUARTZ_TILES_PROPERTIES
+    );
     public static final RegistryObject<Block> IMPACT_MOUND = BLOCKS.register("impact_mound",
             () -> IMPACT_MOUND_PROPERTIES
     );

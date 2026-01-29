@@ -1,6 +1,6 @@
 {
   "type": "minecraft:smelting",
-  "category": "misc",
+  "category": "building",
   "cookingtime": 200,
   "experience": 7.0,
   "group": "roundabout:meteorite",
