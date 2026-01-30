@@ -1033,20 +1033,8 @@ public class ClientUtil {
                 return 10978493;
             }
 
-            if (powers instanceof PowersRatt PR) {
-                if (PR.getShootTarget() != null) {
-                    if (PR.getShootTarget().equals(entity)) {
-                        return 15230850;
-                    }
-                }
-            }
-            if (entity instanceof RattEntity RE) {
-                if(powers.getSelf() == RE.getUser()) {
-                    if(powers.isHoldingSneak()) {
-                        return 6714709;
-                    }
-                }
-            }
+
+
 
             if (powers.highlightsEntity(entity, player))
                 return powers.highlightsEntityColor(entity,player);
