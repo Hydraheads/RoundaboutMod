@@ -38,6 +38,7 @@ import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -1755,20 +1756,6 @@ public class PowersAnubis extends NewDashPreset {
 
     @Override
     public List<Byte> getSkinList() {
-
-        /*
-                ALLURING,
-                RAGING,
-                WOODEN,
-                STONE,
-                GRASS,
-                AQUAMARINE,
-                GRAY_WAGON,
-                TIMEKEEPER,
-                DIAMOND,
-                CHORUS,
-                ANCIENT */
-
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add(ANIME);
         $$1.add(EVIL);
@@ -1829,8 +1816,27 @@ public class PowersAnubis extends NewDashPreset {
         return SoundIndex.SUMMON_SOUND;
     }
 
-    public byte worthinessType(){
-        return HUMANOID_WORTHY;
+    @Override
+    public void onStandSummon(boolean desummon) {
+        if (!desummon && this.getSelf() instanceof Player PE && !isClient()) {
+            Level lv = PE.level();
+            ItemStack disc = this.getStandUserSelf().roundabout$getStandDisc();
+            CompoundTag tag = disc.getTagElement("Memory");
+            if (tag.contains("AnubisSkin")) {
+
+                this.getStandUserSelf().roundabout$setStandSkin(tag.getByte("AnubisSkin"));
+                lv.playSound(null, PE.getX(), PE.getY(),
+                        PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
+                ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
+                        PE.getY()+PE.getEyeHeight(), PE.getZ(),
+                        10, 0.5, 0.5, 0.5, 0.2);
+                PE.displayClientMessage(
+                        Component.translatable("unlock_skin.roundabout.anubis.traitor"), true);
+
+                tag.remove("AnubisSkin");
+            }
+        }
+        super.onStandSummon(desummon);
     }
 
     @Override

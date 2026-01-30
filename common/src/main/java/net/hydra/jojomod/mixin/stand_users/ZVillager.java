@@ -174,6 +174,7 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
         if (roundabout$getAnubisType() != (byte)-1) {
             CompoundTag $$4 = stack.getOrCreateTagElement("Memory");
             $$4.putBoolean("BonusSkin",true);
+            $$4.putByte("AnubisSkin",roundabout$getAnubisType());
         }
         roundabout$setAnubisType((byte)-1);
 
