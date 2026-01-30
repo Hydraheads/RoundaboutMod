@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.ITargetGoal;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.models.layers.AnubisLayer;
 import net.hydra.jojomod.entity.goals.RoundaboutFollowGoal;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
@@ -988,6 +989,40 @@ public abstract class ZMob extends LivingEntity implements IMob {
                     ticks = -1;
                     ((StandUser) this).roundabout$setRestrainedTicks(ticks);
                 }
+            }
+        }
+    }
+
+    @Unique
+    private int roundabout$anubisLeap = 0;
+    @Inject(method = "tick",at = @At(value = "HEAD"))
+    private void roundabout$anubisLeap(CallbackInfo ci) {
+        if (AnubisLayer.shouldDash(((Mob)(Object)this ))) {
+            if (this.roundabout$anubisLeap == 0) {
+                if (this.getTarget() != null) {
+                    float dist = this.getTarget().distanceTo(this);
+                    if (dist < 15) {
+                        Vec3 dir =this.getTarget().getPosition(0).subtract(this.getPosition(0));
+                        dir = new Vec3(dir.x,0,dir.z).normalize().reverse();
+
+                        if (dir.length() == 1) {
+                            double yOff = this.getTarget().getY()-this.getY();
+                            if (yOff > 2.4) {
+                                MainUtil.takeUnresistableKnockbackWithY(this,1,dir.x,-2F,dir.z);
+                            } else if (dist > 3.5) {
+                                float strength = 1;
+                                if (dist > 7) {
+                                    strength = 1.4F;
+                                }
+                                MainUtil.takeUnresistableKnockbackWithY(this,strength,dir.x,-0.3F,dir.z);
+                            }
+                        }
+                        roundabout$anubisLeap = 40;
+                    }
+                }
+            } else if (this.roundabout$anubisLeap > 0) {
+                this.roundabout$anubisLeap -= 1;
+
             }
         }
     }

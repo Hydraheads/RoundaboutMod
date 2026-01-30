@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import org.joml.Quaternionf;
 
 
@@ -29,6 +30,10 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
         this.dispatcher = context.getEntityRenderDispatcher();
     }
 
+
+    public static boolean shouldDash(Mob M) {
+        return false;
+    }
 
     public static HumanoidArm shouldRender(LivingEntity entity) {
         StandUser user = ((StandUser)entity);

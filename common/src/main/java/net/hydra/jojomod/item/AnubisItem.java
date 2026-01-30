@@ -15,10 +15,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.NeutralMob;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.monster.piglin.Piglin;
@@ -54,7 +51,7 @@ public class AnubisItem extends Item {
 
                 List<LivingEntity> targets = new ArrayList<>();
                 for (LivingEntity target : $$2.level().getNearbyEntities(LivingEntity.class, TargetingConditions.forCombat(),$$2,$$2.getBoundingBox().inflate(20))) {
-                    if (!target.equals($$2) && target.isAlive() && target.attackable()) {
+                    if (!target.equals($$2) && target.isAlive() && target.attackable() && !(target instanceof FlyingMob) ) {
                         targets.add(target);
                     }
                 }
@@ -63,12 +60,14 @@ public class AnubisItem extends Item {
                 $$1.addFreshEntity(p);
                 SU.roundabout$setPossessor(p);
 
-                if (SU.roundabout$getStandPowers() != null) {
-                    if (!PowerTypes.hasStandActive($$2)) {
-                        SU.roundabout$summonStand($$2.level(), false, true);
-                    }
-                    if (SU.roundabout$getStandPowers() instanceof PowersWalkingHeart PWH) {
-                        PWH.extendHeels();
+                if (!targets.isEmpty()) {
+                    if (SU.roundabout$getStandPowers() != null) {
+                        if (!PowerTypes.hasStandActive($$2)) {
+                            SU.roundabout$summonStand($$2.level(), false, true);
+                        }
+                        if (SU.roundabout$getStandPowers() instanceof PowersWalkingHeart PWH) {
+                            PWH.extendHeels();
+                        }
                     }
                 }
 

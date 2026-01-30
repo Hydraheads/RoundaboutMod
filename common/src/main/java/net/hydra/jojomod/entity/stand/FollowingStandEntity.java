@@ -208,15 +208,15 @@ public class FollowingStandEntity extends StandEntity{
             r = 0.5;
         }
         double yawfix = standUser.getYRot();
-        /// makes stand face the target of a possession
-        if (this.getUser() != null) {
+        /// makes stand face the target of a possession, SAVE FOR LATER
+       /* if (this.getUser() != null) {
             StandUser SU = (StandUser) this.getUser();
             if (SU.roundabout$getPossessor() != null) {
                 if (SU.roundabout$getPossessor().getTarget() != null) {
                     yawfix = MainUtil.getLookAtEntityYaw(this.getUser(), SU.roundabout$getPossessor().getTarget());
                 }
             }
-        }
+        } */
         yawfix += this.getAnchorPlace();
         if (yawfix > 360) {
             yawfix -= 360;

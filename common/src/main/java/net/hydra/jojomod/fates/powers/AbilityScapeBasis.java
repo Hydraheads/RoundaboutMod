@@ -2017,6 +2017,22 @@ public class AbilityScapeBasis {
         if (!(distMax >= 0)) {
             distMax = this.getDistanceOut(User, this.getReach(), false);
         }
+
+
+        /// SAVING THIS FOR LATER
+   /*     StandUser SU = (StandUser) User;
+        if (SU.roundabout$isPossessed() && SU.roundabout$getPossessor() != null) {
+            LivingEntity target = SU.roundabout$getPossessor().getTarget();
+            if (target != null) {
+                if (target.distanceTo(User) < distMax ) {
+                    return target;
+                }
+            }
+
+        }*/
+
+
+
         Entity targetEntity = this.rayCastEntity(User,distMax);
 
         if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))

@@ -33,6 +33,8 @@
     "achtung.AchtungItemEntity",
     "achtung.AchtungPortalShapeMixin",
     "achtung.AchtungProjectile",
+    "anubis.AnubisAbstractIllagerMixin",
+    "anubis.AnubisDropsMixin",
     "anubis.BonusExperienceMixin",
     "barrage.DazeBlazeAttackGoal",
     "barrage.DazeCreeper",

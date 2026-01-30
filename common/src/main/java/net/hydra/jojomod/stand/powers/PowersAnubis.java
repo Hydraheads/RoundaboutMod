@@ -13,6 +13,7 @@ import net.hydra.jojomod.client.gui.MemoryRecordScreen;
 import net.hydra.jojomod.client.models.layers.animations.AnubisAnimations;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.AnubisSlipstreamEntity;
+import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -1747,7 +1748,9 @@ public class PowersAnubis extends NewDashPreset {
             CHORUS = 11,
             RAGING = 12,
             ALLURING = 13,
-            KHOPESPH = 14;
+            KHOPESPH = 14,
+            CLEAVER = 15,
+            ILLUSORY = 16;
 
 
     @Override
@@ -1792,6 +1795,8 @@ public class PowersAnubis extends NewDashPreset {
             } if (Level > 6 || bypass){
                 $$1.add(ANCIENT);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
+                $$1.add(CLEAVER);
+                $$1.add(ILLUSORY);
             }
         }
         return $$1;
@@ -1814,6 +1819,8 @@ public class PowersAnubis extends NewDashPreset {
             case PowersAnubis.DIAMOND -> Component.translatable("skins.roundabout.anubis.diamond");
             case PowersAnubis.CHORUS -> Component.translatable("skins.roundabout.anubis.chorus");
             case PowersAnubis.ANCIENT -> Component.translatable("skins.roundabout.anubis.ancient");
+            case PowersAnubis.CLEAVER -> Component.translatable("skins.roundabout.anubis.cleaver");
+            case PowersAnubis.ILLUSORY -> Component.translatable("skins.roundabout.anubis.illusory");
             default -> Component.translatable("skins.roundabout.anubis.anime");
         };
     }
@@ -2412,5 +2419,30 @@ public class PowersAnubis extends NewDashPreset {
         return ClientNetworking.getAppropriateConfig().anubisSettings.enableAnubis;
     }
 
+
+    public void unlockSkin(byte b){
+        Level lv = this.getSelf().level();
+        if ((this.getSelf()) instanceof Player PE){
+            StandUser user = ((StandUser)PE);
+            ItemStack stack = user.roundabout$getStandDisc();
+            if (!stack.isEmpty() && stack.is(ModItems.STAND_DISC_ANUBIS)){
+                IPlayerEntity ipe = ((IPlayerEntity) PE);
+                if (!ipe.roundabout$getUnlockedBonusSkin()){
+                    if (!lv.isClientSide()) {
+                        ipe.roundabout$setUnlockedBonusSkin(true);
+                        lv.playSound(null, PE.getX(), PE.getY(),
+                                PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
+                        ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
+                                PE.getY()+PE.getEyeHeight(), PE.getZ(),
+                                10, 0.5, 0.5, 0.5, 0.2);
+                        user.roundabout$setStandSkin(b);
+                        user.roundabout$summonStand(this.getSelf().level(), true, false);
+                        ((ServerPlayer) ipe).displayClientMessage(
+                                Component.translatable("unlock_skin.roundabout.anubis.traitor"), true);
+                    }
+                }
+            }
+        }
+    }
 }
 

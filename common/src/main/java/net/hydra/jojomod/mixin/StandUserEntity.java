@@ -3057,6 +3057,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 positionUpdater.accept(stand, grabPos.x, grabPos.y, grabPos.z);
 
                 if (!this.level().isClientSide() || ((LivingEntity) (Object) this) instanceof Player) {
+
+                    // SAVING THIS FOR LATER
+               /*     if (this.roundabout$getPossessor() != null && this.roundabout$getPossessor().getTarget() != null) {
+                        float ry = MainUtil.getLookAtEntityYaw(rdbt$this(),this.roundabout$getPossessor().getTarget()) % 360;
+                        stand.setYRot(ry);
+                        stand.setYBodyRot(ry);
+                        stand.setYHeadRot(ry);
+                        return;
+                    }*/
+
                     stand.setYRot(roundabout$User.getYHeadRot() % 360);
                     stand.setXRot(roundabout$User.getXRot());
                     stand.setYBodyRot(roundabout$User.getYHeadRot() % 360);
@@ -4121,6 +4131,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "calculateFallDamage", at = @At(value = "HEAD"), cancellable = true)
     protected void rooundabout$calculateFallDamage(float $$0, float $$1, CallbackInfoReturnable<Integer> cir) {
 
+
+        if (this.roundabout$getStandPowers() instanceof PowersAnubis && !(this.rdbt$this() instanceof Player)) {
+            cir.setReturnValue(0);
+            return;
+        }
+
         if (this.roundabout$leapTicks > -1 || roundabout$isBubbleEncased()) {
             cir.setReturnValue(0);
             return;
@@ -4672,8 +4688,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     float f = (float)Mth.length(poss.getX() - poss.xo, 0.0, poss.getZ() - poss.zo);
                     float g = Math.min(f * 4.0f, 1.0f);
                     this.walkAnimation.update(g, 0.4f);
-                    if (this.roundabout$getStandPowers() != null) {
-                        this.roundabout$getStandPowers().tickMobAI(poss.getTarget());
+                    if (this.roundabout$getStandPowers() != null && !this.level().isClientSide) {
+                   //     this.roundabout$getStandPowers().tickMobAI(poss.getTarget());
                     }
                 }
             }
@@ -5086,6 +5102,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         // Vampire mobs (not players) are faster
         if (FateTypes.isVampire(rdbt$this())){
             basis *= 1.3F;
+        }
+
+
+
+        if (this.roundabout$getStandPowers() instanceof PowersAnubis && !(rdbt$this() instanceof Player)) {
+            basis = Math.min(basis*2.5F,0.85F);
         }
 
         if (basis != this.speed){

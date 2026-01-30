@@ -3035,4 +3035,17 @@ public class MainUtil {
         return closest; // null if no valid hit
     }
 
+    public static boolean isUnremovableDisc(ItemStack itemStack) {
+        CompoundTag tag = itemStack.getTagElement("Special");
+        return tag != null;
+    }
+
+    public static boolean isTraitorDisc(ItemStack itemStack) {
+        CompoundTag tag = itemStack.getTagElement("Special");
+        if (tag != null) {
+            return tag.getByte("Type") == (byte) 1;
+        }
+        return false;
+    }
+
 }
