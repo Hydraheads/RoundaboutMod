@@ -18,6 +18,6 @@ public abstract class AnubisHorseRendererMixin<T extends AbstractHorse, M extend
 
     @Inject(method = "<init>",at = @At(value = "RETURN"))
     private void roundabout$anubisHorseLayer(EntityRendererProvider.Context $$0, HorseModel $$1, float $$2, CallbackInfo ci) {
-        this.addLayer(new AnubisHorseLayer<>((AbstractHorseRenderer)(Object)this) );
+        this.addLayer(new AnubisHorseLayer<>(this));
     }
 }

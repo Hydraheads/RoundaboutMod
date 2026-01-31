@@ -5106,7 +5106,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
         if (this.roundabout$getStandPowers() instanceof PowersAnubis && !(rdbt$this() instanceof Player)) {
-            Roundabout.LOGGER.info(""+basis);
             float cap  = 0.35F;
             if (rdbt$this() instanceof AbstractHorse) {
                 cap = 0.3F;
