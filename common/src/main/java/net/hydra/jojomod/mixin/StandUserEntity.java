@@ -63,6 +63,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.npc.AbstractVillager;
@@ -5104,11 +5105,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             basis *= 1.3F;
         }
 
-
-
         if (this.roundabout$getStandPowers() instanceof PowersAnubis && !(rdbt$this() instanceof Player)) {
-            basis = Math.min(basis*2.5F,0.85F);
+            Roundabout.LOGGER.info(""+basis);
+            float cap  = 0.35F;
+            if (rdbt$this() instanceof AbstractHorse) {
+                cap = 0.3F;
+            }
+            if (basis < cap) {
+                basis = Math.min(basis * 2.5F, cap);
+            }
         }
+
+
 
         if (basis != this.speed){
             cir.setReturnValue(basis);

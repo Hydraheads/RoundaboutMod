@@ -4,10 +4,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.AnubisItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandArrowItem;
-import net.hydra.jojomod.stand.powers.PowersAnubis;
-import net.minecraft.nbt.ByteArrayTag;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -42,11 +39,7 @@ public abstract class AnubisAbstractIllagerMixin {
 
                         StandArrowItem.grantStand(itemStack, AI);
                         AI.setTarget($$0);
-                        if (AI instanceof Illusioner || AI instanceof Evoker) {
-                            ((StandUser) AI).roundabout$setStandSkin(PowersAnubis.ILLUSORY);
-                        } else if (AI instanceof Pillager || AI instanceof Vindicator) {
-                            ((StandUser) AI).roundabout$setStandSkin(PowersAnubis.CLEAVER);
-                        }
+
                     }
                 }
             }

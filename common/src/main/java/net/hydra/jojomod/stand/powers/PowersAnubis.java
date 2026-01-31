@@ -11,6 +11,7 @@ import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.gui.MemoryRecordScreen;
 import net.hydra.jojomod.client.models.layers.animations.AnubisAnimations;
+import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.AnubisSlipstreamEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
@@ -216,7 +217,9 @@ public class PowersAnubis extends NewDashPreset {
         if ( PowerTypes.hasStandActive(self)
                 && this.getActivePower() != PowerIndex.GUARD
                 && this.getActivePower() != PowerIndex.BARRAGE_CHARGE) {
-            basis *= this.getSelf().isSprinting() ? 1.6F : 1F;
+            if (!(this.getSelf() instanceof Mob)) {
+                basis *= this.getSelf().isSprinting() ? 1.6F : 1F;
+            }
         }
         if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE && this.getAttackTimeDuring() > this.getBarrageMinimum()) {
             int v = this.getBarrageWindup()-this.getBarrageMinimum();
@@ -1724,6 +1727,7 @@ public class PowersAnubis extends NewDashPreset {
         return switch (posID) {
             case (byte) 1 -> Component.translatable("idle.roundabout.anubis_2");
             case (byte) 2 -> Component.translatable("idle.roundabout.anubis_3");
+            case (byte) 3 -> Component.translatable("idle.roundabout.anubis_4");
             default -> Component.translatable("idle.roundabout.anubis_1");
         };
     }
@@ -1732,6 +1736,7 @@ public class PowersAnubis extends NewDashPreset {
         $$1.add((byte)0);
         $$1.add((byte)1);
         $$1.add((byte)2);
+        $$1.add((byte)3);
         return $$1;
     }
 
@@ -1822,18 +1827,20 @@ public class PowersAnubis extends NewDashPreset {
             Level lv = PE.level();
             ItemStack disc = this.getStandUserSelf().roundabout$getStandDisc();
             CompoundTag tag = disc.getTagElement("Memory");
-            if (tag.contains("AnubisSkin")) {
+            if (tag != null) {
+                if (tag.contains("AnubisSkin")) {
 
-                this.getStandUserSelf().roundabout$setStandSkin(tag.getByte("AnubisSkin"));
-                lv.playSound(null, PE.getX(), PE.getY(),
-                        PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
-                ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
-                        PE.getY()+PE.getEyeHeight(), PE.getZ(),
-                        10, 0.5, 0.5, 0.5, 0.2);
-                PE.displayClientMessage(
-                        Component.translatable("unlock_skin.roundabout.anubis.traitor"), true);
+                    this.getStandUserSelf().roundabout$setStandSkin(tag.getByte("AnubisSkin"));
+                    lv.playSound(null, PE.getX(), PE.getY(),
+                            PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
+                    ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
+                            PE.getY() + PE.getEyeHeight(), PE.getZ(),
+                            10, 0.5, 0.5, 0.5, 0.2);
+                    PE.displayClientMessage(
+                            Component.translatable("unlock_skin.roundabout.anubis.traitor"), true);
 
-                tag.remove("AnubisSkin");
+                    tag.remove("AnubisSkin");
+                }
             }
         }
         super.onStandSummon(desummon);
@@ -2419,6 +2426,27 @@ public class PowersAnubis extends NewDashPreset {
         }
     }
 
+
+    @Override
+    public void tickMobAI(LivingEntity attackTarget) {
+        if (attackTarget != null) {
+            if (this.getSelf().distanceTo(attackTarget) < 4 && !AnubisLayer.shouldDash((Mob)this.getSelf())) { // warning: will crash
+                if (this.attackTimeDuring == -1) {
+                    if ( (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax)) {
+                        StandUser SU = (StandUser) this.getSelf();
+                        if (activePowerPhase == 3) {
+                            SU.roundabout$tryPower(PowersAnubis.DOUBLE, true);
+                        } else{
+                            SU.roundabout$tryPower(PowerIndex.ATTACK, true);
+                        }
+                        this.getSelf().swing(InteractionHand.MAIN_HAND);
+                        this.setAttackTimeDuring(0);
+                    }
+                }
+            }
+        }
+        super.tickMobAI(attackTarget);
+    }
 
     @Override
     public boolean isStandEnabled() {

@@ -1,4 +1,4 @@
-package net.hydra.jojomod.client.models.layers;
+package net.hydra.jojomod.client.models.layers.anubis;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
@@ -89,7 +89,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
 
 
             }
-            if (SU.roundabout$getStandPowers() instanceof PowersAnubis && !PowerTypes.hasStandActive(entity) ) {
+            if (SU.roundabout$getStandPowers() instanceof PowersAnubis && !PowerTypes.hasStandActive(entity) && SU.roundabout$getIdlePos() != 3 ) {
                 ClientUtil.pushPoseAndCooperate(poseStack, 60);
 
                 getParentModel().body.translateAndRotate(poseStack);

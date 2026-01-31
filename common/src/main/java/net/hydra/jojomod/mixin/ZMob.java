@@ -4,7 +4,8 @@ import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.ITargetGoal;
 import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.client.models.layers.AnubisLayer;
+import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
+import net.hydra.jojomod.entity.goals.AnubisAttackGoal;
 import net.hydra.jojomod.entity.goals.RoundaboutFollowGoal;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
@@ -44,6 +45,7 @@ import net.minecraft.world.entity.ai.memory.ExpirableValue;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.sensing.Sensing;
+import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
@@ -182,6 +184,10 @@ public abstract class ZMob extends LivingEntity implements IMob {
         if (level != null && !level.isClientSide) {
             if (((Mob)(Object)this) instanceof PathfinderMob pm){
                 this.goalSelector.addGoal(2, new RoundaboutFollowGoal(pm, 1));
+            }
+
+            if (((Mob)(Object)this) instanceof AbstractIllager AI) {
+                this.goalSelector.addGoal(0, new AnubisAttackGoal(AI,1,true) );
             }
         }
     }
