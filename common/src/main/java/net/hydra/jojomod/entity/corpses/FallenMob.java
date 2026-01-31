@@ -472,12 +472,16 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                 controller = this.level().getEntity(getController());
             }
 
-            if (this.getTarget() != null && !(this.getTarget().isAlive() || this.getTarget().isRemoved())){
+            if (this.getTarget() != null && (!this.getTarget().isAlive() || this.getTarget().isRemoved() ||
+                    (controller != null && controller.is(getTarget()))
+            )
+            ){
                 this.setTarget(null);
                 this.setLastHurtByMob(null);
                 this.setPersistentAngerTarget(null);
                 this.setLastHurtByPlayer(null);
                 this.setAggressive(false);
+                ((StandUser)this).roundabout$deeplyRemoveAttackTarget();
             }
 
             IPermaCasting icast = ((IPermaCasting) this.level());
@@ -531,18 +535,22 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                             if (check1 && check2) {
                                 if (autoTarget2 != null && (LE.tickCount - LE.getLastHurtMobTimestamp()) < 200 &&
                                         !(autoTarget2 instanceof Player PE && PE.isCreative())) {
-                                    if (autoTarget2 instanceof Player PL) {
-                                        setLastHurtByPlayer(PL);
+                                    if (!(controller != null && autoTarget2.is(controller))) {
+                                        if (autoTarget2 instanceof Player PL) {
+                                            setLastHurtByPlayer(PL);
+                                        }
+                                        setLastHurtByMob(autoTarget2);
+                                        setTarget(autoTarget2);
                                     }
-                                    setLastHurtByMob(autoTarget2);
-                                    setTarget(autoTarget2);
                                 } else if (autoTarget != null && (LE.tickCount - LE.getLastHurtByMobTimestamp()) < 200 &&
                                         !(autoTarget instanceof Player PE && PE.isCreative())) {
-                                    if (autoTarget instanceof Player PL) {
-                                        setLastHurtByPlayer(PL);
+                                    if (!(controller != null && autoTarget2.is(controller))) {
+                                        if (autoTarget instanceof Player PL) {
+                                            setLastHurtByPlayer(PL);
+                                        }
+                                        setLastHurtByMob(autoTarget);
+                                        setTarget(autoTarget);
                                     }
-                                    setLastHurtByMob(autoTarget);
-                                    setTarget(autoTarget);
                                 }
                             }
                         }
