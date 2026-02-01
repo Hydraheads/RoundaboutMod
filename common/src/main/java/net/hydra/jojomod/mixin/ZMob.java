@@ -189,7 +189,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
             }
 
             if (((Mob)(Object)this) instanceof AbstractIllager AI) {
-                this.goalSelector.addGoal(0, new AnubisAttackGoal(AI,1,true) );
+                this.goalSelector.addGoal(0, new AnubisAttackGoal(AI,3,true) );
             }
         }
     }

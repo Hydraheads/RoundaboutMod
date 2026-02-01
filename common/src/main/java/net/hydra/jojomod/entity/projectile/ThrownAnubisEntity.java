@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.sound.ModSounds;
@@ -23,7 +24,7 @@ public class ThrownAnubisEntity extends ThrownObjectEntity {
 
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
-        if ($$0.getEntity() instanceof Cow C) {
+        if ($$0.getEntity() instanceof Cow C && !((StandUser)C).roundabout$hasAStand() ) {
 
             if (this.level().isClientSide()) {
                 this.level().playSound(null,this.blockPosition(), ModSounds.ANUBIS_EXTRA_EVENT, SoundSource.PLAYERS,10F,1F);
