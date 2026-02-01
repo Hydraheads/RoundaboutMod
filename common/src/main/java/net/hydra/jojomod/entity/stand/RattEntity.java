@@ -1,12 +1,15 @@
 package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -15,6 +18,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -181,6 +185,18 @@ public class RattEntity extends StandEntity {
         }
         return false;
     }
+
+    @Override
+    public @Nullable Entity changeDimension(ServerLevel $$0) {
+        if (this.getUser() != null) {
+            StandUser SU = (StandUser) this.getUser();
+            if (SU.roundabout$getStandPowers() instanceof PowersRatt PR) {
+                PR.RecallClient(true);
+            }
+        }
+        return super.changeDimension($$0);
+    }
+
 
     @Override
     public void knockback(double $$0, double $$1, double $$2) {}

@@ -795,7 +795,6 @@ public class PowersRatt extends NewDashPreset {
                 this.setShootTarget(null);
             }
             case PowersRatt.NET_RECALL -> {
-                Roundabout.LOGGER.info("STOP");
 
                 active = false;
                 Placement = Vec3.ZERO;
