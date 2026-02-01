@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.RattDartEntity;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
+import net.hydra.jojomod.entity.projectile.ThrownAnubisEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
@@ -802,6 +803,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                                 ItemStack bulletItem = BE.getBulletItemStack();
                                 SE.setHeldItem(bulletItem);
                             }
+                        } else if (ent instanceof ThrownAnubisEntity TAE) {
+                            success = true;
+                            SE.canAcquireHeldItem = true;
+                            ItemStack anubisItem = TAE.getItem();
+                            SE.setHeldItem(anubisItem);
                         } else if (ent instanceof ThrownObjectEntity TO) {
                             ItemStack ii = TO.getItem();
                             if (!ii.isEmpty()) {

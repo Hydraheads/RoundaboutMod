@@ -307,6 +307,15 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     thrower.level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                 }
             }
+        } else if (item.getItem() instanceof AnubisItem) {
+            ThrownAnubisEntity anubis = new ThrownAnubisEntity(thrower, thrower.level(),item);
+            anubis.setPos(pos);
+            anubis.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.0F*mult, getShotAccuracy);
+            thrower.level().addFreshEntity(anubis);
+
+            if (playSounds){
+                thrower.level().playSound(null, anubis, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+            }
         } else {
             boolean canPlace = getCanPlace;
             ThrownObjectEntity thrownBlockOrItem = new ThrownObjectEntity(thrower, thrower.level(), item, canPlace);

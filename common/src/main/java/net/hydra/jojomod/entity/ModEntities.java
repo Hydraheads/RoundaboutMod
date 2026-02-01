@@ -82,6 +82,7 @@ public class ModEntities {
 
     public static EntityType<StandArrowEntity> STAND_ARROW;
     public static EntityType<ThrownObjectEntity> THROWN_OBJECT;
+    public static EntityType<ThrownAnubisEntity> THROWN_ANUBIS;
     public static EntityType<CinderellaVisageDisplayEntity> CINDERELLA_VISAGE_DISPLAY;
     public static EntityType<ConcealedFlameObjectEntity> CONCEALED_FLAME_OBJECT;
     public static EntityType<GroundHurricaneEntity> GROUND_HURRICANE;

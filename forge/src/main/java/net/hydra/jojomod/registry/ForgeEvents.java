@@ -530,6 +530,7 @@ public class ForgeEvents {
         ModEntities.SEPERATED_LEGS = ForgeEntities.SEPERATED_LEGS.get();
 
         ModEntities.THROWN_OBJECT = ForgeEntities.THROWN_OBJECT.get();
+        ModEntities.THROWN_ANUBIS = ForgeEntities.THROWN_ANUBIS.get();
         ModEntities.CONCEALED_FLAME_OBJECT = ForgeEntities.CONCEALED_FLAME_OBJECT.get();
         ModEntities.GROUND_HURRICANE = ForgeEntities.GROUND_HURRICANE.get();
         ModEntities.GROUND_BUBBLE = ForgeEntities.GROUND_BUBBLE.get();

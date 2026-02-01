@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.anubis;
 
-import net.hydra.jojomod.client.models.layers.anubis.AnubisHorseLayer;
+import net.hydra.jojomod.client.models.layers.anubis.AnubisMobLayer;
 import net.minecraft.client.model.HorseModel;
 import net.minecraft.client.renderer.entity.AbstractHorseRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -18,6 +18,6 @@ public abstract class AnubisHorseRendererMixin<T extends AbstractHorse, M extend
 
     @Inject(method = "<init>",at = @At(value = "RETURN"))
     private void roundabout$anubisHorseLayer(EntityRendererProvider.Context $$0, HorseModel $$1, float $$2, CallbackInfo ci) {
-        this.addLayer(new AnubisHorseLayer<>(this));
+        this.addLayer(new AnubisMobLayer<>(this));
     }
 }

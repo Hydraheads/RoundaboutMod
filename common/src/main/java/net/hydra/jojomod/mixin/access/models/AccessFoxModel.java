@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin.access;
+package net.hydra.jojomod.mixin.access.models;
 
 import net.minecraft.client.model.FoxModel;
 import net.minecraft.client.model.geom.ModelPart;

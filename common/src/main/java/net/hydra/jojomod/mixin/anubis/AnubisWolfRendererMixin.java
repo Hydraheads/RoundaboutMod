@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.anubis;
 
-import net.hydra.jojomod.client.models.layers.anubis.AnubisWolfLayer;
+import net.hydra.jojomod.client.models.layers.anubis.AnubisMobLayer;
 import net.minecraft.client.model.WolfModel;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -18,6 +18,6 @@ public abstract class AnubisWolfRendererMixin extends MobRenderer<Wolf, WolfMode
 
     @Inject(method = "<init>",at = @At(value = "RETURN"))
     private void roundabout$anubisWolfLayer(EntityRendererProvider.Context $$0, CallbackInfo ci) {
-        this.addLayer(new AnubisWolfLayer(this));
+        this.addLayer(new AnubisMobLayer(this));
     }
 }

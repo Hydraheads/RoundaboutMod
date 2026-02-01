@@ -534,6 +534,13 @@ public class FabricEntities {
                         EntityType.Builder.<ThrownObjectEntity>of(ThrownObjectEntity::new, MobCategory.MISC).
                                 sized(1f, 1f).clientTrackingRange(10).build(Roundabout.MOD_ID+":thrown_object")
                 );
+    public static final EntityType<ThrownAnubisEntity> THROWN_ANUBIS =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "thrown_anubis"),
+                    EntityType.Builder.<ThrownAnubisEntity>of(ThrownAnubisEntity::new, MobCategory.MISC).
+                            sized(1f, 1f).clientTrackingRange(10).build(Roundabout.MOD_ID+":thrown_anubis")
+            );
         public static final EntityType<ConcealedFlameObjectEntity> CONCEALED_FLAME_OBJECT =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -713,6 +720,7 @@ public class FabricEntities {
                 ModEntities.STAND_ARROW = STAND_ARROW;
 
                 ModEntities.THROWN_OBJECT = THROWN_OBJECT;
+                ModEntities.THROWN_ANUBIS = THROWN_ANUBIS;
                 ModEntities.CONCEALED_FLAME_OBJECT = CONCEALED_FLAME_OBJECT;
                 ModEntities.GROUND_HURRICANE = GROUND_HURRICANE;
                 ModEntities.GROUND_BUBBLE = GROUND_BUBBLE;

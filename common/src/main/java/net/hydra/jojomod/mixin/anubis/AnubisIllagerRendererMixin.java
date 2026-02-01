@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.anubis;
 
-import net.hydra.jojomod.client.models.layers.anubis.AnubisIllagerLayer;
+import net.hydra.jojomod.client.models.layers.anubis.AnubisMobLayer;
 import net.minecraft.client.model.IllagerModel;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.IllagerRenderer;
@@ -20,7 +20,7 @@ public abstract class AnubisIllagerRendererMixin<T extends AbstractIllager> exte
 
     @Inject(method= "<init>", at = @At(value = "RETURN"))
     private void roundabout$addIllagerLayers(EntityRendererProvider.Context $$0, IllagerModel $$1, float $$2, CallbackInfo ci) {
-        this.addLayer(new AnubisIllagerLayer<>($$0,((IllagerRenderer)(Object)this) ));
+        this.addLayer(new AnubisMobLayer<>(this));
     }
 
 

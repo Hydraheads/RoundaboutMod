@@ -2429,7 +2429,7 @@ public class PowersAnubis extends NewDashPreset {
 
     @Override
     public void tickMobAI(LivingEntity attackTarget) {
-        if (attackTarget != null) {
+        if (attackTarget != null && !this.getStandUserSelf().roundabout$isDazed()) {
             if (this.getSelf().distanceTo(attackTarget) < 4 && !AnubisLayer.shouldDash((Mob)this.getSelf())) { // warning: will crash
                 if (this.attackTimeDuring == -1) {
                     if ( (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax)) {
