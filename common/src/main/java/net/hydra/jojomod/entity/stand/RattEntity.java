@@ -1,6 +1,6 @@
 package net.hydra.jojomod.entity.stand;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.S2CPacketUtil;
@@ -83,7 +83,7 @@ public class RattEntity extends StandEntity {
             return this.Target;
         }
     }
-    public void setTarget(LivingEntity StandSet){
+    public void setRattTarget(LivingEntity StandSet){
         this.Target = StandSet;
         int standSetId = -1;
         if (StandSet != null){
@@ -151,6 +151,15 @@ public class RattEntity extends StandEntity {
     public boolean hurt(DamageSource source, float amount) {
         if (source.getEntity() != null && source.getEntity() != this.getUser()) {
             if (this.getUser() != null ) {
+
+                if (source.getEntity() instanceof LivingEntity LE){
+                    if (PowerTypes.hasStandActivelyEquipped(LE)){
+                        if (!PowerTypes.hasStandActive(LE)){
+                            return false;
+                        }
+                    }
+                }
+
                 if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersRatt PR) {
                     if (!this.onGround()) {
                         return false;
@@ -173,6 +182,8 @@ public class RattEntity extends StandEntity {
         return false;
     }
 
+    @Override
+    public void knockback(double $$0, double $$1, double $$2) {}
     @Override
     public boolean isAttackable() {return true;}
     @Override

@@ -5,6 +5,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.mixin.access.AccessFoxModel;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.minecraft.client.model.FoxModel;
@@ -24,7 +25,7 @@ public class AnubisFoxLayer<T extends Fox, M extends FoxModel<T>> extends Render
 
         if ( entity instanceof Fox F ) {
             StandUser SU = (StandUser) F;
-            if (SU.roundabout$getStandPowers() instanceof PowersAnubis && SU.roundabout$hasAStand() && PowerTypes.hasStandActive(entity)) {
+            if (SU.roundabout$getStandPowers() instanceof PowersAnubis && SU.roundabout$hasAStand()) {
                 ClientUtil.pushPoseAndCooperate(poseStack,50);
 
                 ((AccessFoxModel)this.getParentModel()).roundabout$getHead().translateAndRotate(poseStack);
@@ -34,8 +35,24 @@ public class AnubisFoxLayer<T extends Fox, M extends FoxModel<T>> extends Render
 
                 poseStack.translate(0.75,0,-0.1);
 
+
+                boolean hasHeyYaOut = (PowerTypes.hasStandActive(entity) && SU.roundabout$getStandPowers() instanceof PowersAnubis);
+                int heyTicks = SU.roundabout$getAnubisVanishTicks();
+                float heyFull = 0;
+                float fixedPartial = partialTicks - (int) partialTicks;
+                if (((TimeStop)entity.level()).CanTimeStopEntity(entity)){
+                    fixedPartial = 0;
+                }
+                if (hasHeyYaOut){
+                    heyFull = heyTicks+fixedPartial;
+                    heyFull = Math.min(heyFull/10,1f);
+                } else {
+                    heyFull = heyTicks-fixedPartial;
+                    heyFull = Math.max(heyFull/10,0);
+                }
+
                 ModStrayModels.ANUBIS.render(entity, partialTicks, poseStack, bufferSource, packedLight,
-                        1, 1, 1, 1.0F, SU.roundabout$getStandSkin());
+                        1, 1, 1, heyFull, SU.roundabout$getStandSkin());
 
                 ClientUtil.popPoseAndCooperate(poseStack,50);
             }

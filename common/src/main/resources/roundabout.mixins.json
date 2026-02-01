@@ -278,6 +278,7 @@
     "achtung.AchtungModelPart",
     "animations.AnimationsElytraModel",
     "animations.AnimationsHumanoidModel",
+    "anubis.AnubisFoxItemMixin",
     "anubis.AnubisFoxRendererMixin",
     "anubis.AnubisHorseRendererMixin",
     "anubis.AnubisIllagerRendererMixin",

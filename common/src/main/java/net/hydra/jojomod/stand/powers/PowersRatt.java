@@ -140,7 +140,7 @@ public class PowersRatt extends NewDashPreset {
     }
     public void setShootTarget(LivingEntity l) {
         if (this.getStandEntity(this.getSelf()) instanceof RattEntity RE) {
-            RE.setTarget(l);
+            RE.setRattTarget(l);
         }
     }
 
@@ -185,7 +185,6 @@ public class PowersRatt extends NewDashPreset {
     public void changeFireMode() {
         ConfigManager.getClientConfig().dynamicSettings.rattFiringMode = !ConfigManager.getClientConfig().dynamicSettings.rattFiringMode;
         ConfigManager.saveClientConfig();
-        Roundabout.LOGGER.info(""+isSingleFire());
     }
 
 
@@ -446,9 +445,7 @@ public class PowersRatt extends NewDashPreset {
         if (!active) {this.Placement = Vec3.ZERO;}
         if (isPlaced()) {
 
-            if (!this.getSelf().isAlive()) {
-                this.active = false;
-            }
+
 
             DimensionType t = this.getStandEntity(this.getSelf()).level().dimensionType();
             DimensionType T = this.getSelf().level().dimensionType();
@@ -565,7 +562,7 @@ public class PowersRatt extends NewDashPreset {
                     }
                 }
             }
-        } else if (active) {
+        } else if (active && this.getSelf().isAlive()) {
             if (PowerTypes.hasStandActive(self)) {
                 if (!isClient()) {
                     if (Placement != null) {
@@ -649,9 +646,7 @@ public class PowersRatt extends NewDashPreset {
             case SKILL_1_CROUCH -> {
                 if (isPlaced()) {
                     if (!isAttackIneptVisually(PowersRatt.AUTO, 1)) {
-                        if (canExecuteMoveWithLevel(1)) {
-                            ToggleAuto();
-                        }
+                        ToggleAuto();
                     }
                 } else {
                     if (canExecuteMoveWithLevel(2)) {
@@ -824,7 +819,8 @@ public class PowersRatt extends NewDashPreset {
             }
             case PowersRatt.TOGGLE_BURSTING -> {
                 if (isPlaced()) {
-                    // I might add an auto noise idk I think it's obvious enough
+                    StandUser SU = this.getStandUserSelf();
+                    SU.roundabout$setUniqueStandModeToggle(!SU.roundabout$getUniqueStandModeToggle());
                 } else {
                     this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.RATT_MODE_CHANGE_EVENT,SoundSource.PLAYERS,1F,(float)(0.9+Math.random()*0.2));
                     if (isClient()) {
