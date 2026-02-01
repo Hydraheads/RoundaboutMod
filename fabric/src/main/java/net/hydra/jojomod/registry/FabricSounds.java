@@ -258,6 +258,7 @@ public class FabricSounds {
         addSound(ModSounds.ANUBIS_THRUST_MISS_ID, ModSounds.ANUBIS_THRUST_MISS_EVENT);
         addSound(ModSounds.ANUBIS_UPPERCUT_ID, ModSounds.ANUBIS_UPPERCUT_EVENT);
         addSound(ModSounds.ANUBIS_SHIELDBREAK_ID, ModSounds.ANUBIS_SHIELDBREAK_EVENT);
+        addSound(ModSounds.ANUBIS_EXTRA_ID, ModSounds.ANUBIS_EXTRA_EVENT);
 
 
 

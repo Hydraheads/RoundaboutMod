@@ -1340,6 +1340,12 @@
       "roundabout:anubis_shieldbreak"
     ]
   },
+  "anubis_extra": {
+    "subtitle": "sounds.roundabout.anubis_extra",
+    "sounds": [
+      "roundabout:anubis_extra"
+    ]
+  },
 
 
 

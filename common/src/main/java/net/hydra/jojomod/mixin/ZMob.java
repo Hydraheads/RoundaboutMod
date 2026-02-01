@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.ITargetGoal;
@@ -19,6 +20,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -997,6 +999,16 @@ public abstract class ZMob extends LivingEntity implements IMob {
                 }
             }
         }
+
+        StandUser SU = (StandUser) this;
+        if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
+            if (AnubisLayer.shouldDash((Mob)(Object)this)) {
+                if (this.roundabout$ticksUntilNextAttack < 10 && this.roundabout$ticksUntilNextAttack > 1) {
+                    this.roundabout$ticksUntilNextAttack = 1;
+                }
+            }
+        }
+
     }
 
     @Unique
@@ -1005,7 +1017,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
     private void roundabout$anubisLeap(CallbackInfo ci) {
         if (AnubisLayer.shouldDash(((Mob)(Object)this ))) {
             if (this.roundabout$anubisLeap == 0) {
-                if (this.getTarget() != null) {
+                if (this.getTarget() != null && this.onGround()) {
                     float dist = this.getTarget().distanceTo(this);
                     if (dist < 15) {
                         Vec3 dir =this.getTarget().getPosition(0).subtract(this.getPosition(0));
@@ -1020,8 +1032,23 @@ public abstract class ZMob extends LivingEntity implements IMob {
                                 if (dist > 7) {
                                     strength = 1.4F;
                                 }
-                                MainUtil.takeUnresistableKnockbackWithY(this,strength,dir.x,-0.3F,dir.z);
+                                MainUtil.takeUnresistableKnockbackWithY(this,strength,dir.x,-0.33F,dir.z);
                             }
+
+                            Vec3 cvec = new Vec3(0,0.1,0);
+                            Vec3 rDir = dir.scale(0.2F);
+
+                            ((ServerLevel) this.level()).sendParticles(ParticleTypes.CLOUD,
+                                    this.getX()+cvec.x, this.getY()+cvec.y, this.getZ()+cvec.z,
+                                    0,
+                                    rDir.x,
+                                    rDir.y,
+                                    rDir.z,
+                                    0.8);
+                            this.level().playSound(null, this.blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.98 + (Math.random() * 0.04)));
+
+                            this.setYHeadRot(MainUtil.getLookAtEntityYaw(this,this.getTarget()));
+                            this.setYRot(MainUtil.getLookAtEntityYaw(this,this.getTarget()));
                         }
                         roundabout$anubisLeap = 40;
                     }

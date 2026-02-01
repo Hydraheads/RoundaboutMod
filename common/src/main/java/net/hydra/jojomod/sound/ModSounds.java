@@ -775,6 +775,9 @@ public class ModSounds {
     public static final String ANUBIS_SHIELDBREAK = "anubis_shieldbreak";
     public static final ResourceLocation ANUBIS_SHIELDBREAK_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_SHIELDBREAK);
     public static SoundEvent ANUBIS_SHIELDBREAK_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_SHIELDBREAK_ID);
+    public static final String ANUBIS_EXTRA = "anubis_extra";
+    public static final ResourceLocation ANUBIS_EXTRA_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_EXTRA);
+    public static SoundEvent ANUBIS_EXTRA_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_EXTRA_ID);
 
 
 

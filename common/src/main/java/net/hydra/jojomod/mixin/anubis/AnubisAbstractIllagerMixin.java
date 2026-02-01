@@ -4,6 +4,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.AnubisItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandArrowItem;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -30,7 +31,7 @@ public abstract class AnubisAbstractIllagerMixin {
                 if (((Mob) (Object) this) instanceof AbstractIllager AI) {
                     if (!((StandUser) AI).roundabout$hasAStand()) {
                         $$0.setItemInHand($$1,new ItemStack(Items.AIR));
-                        $$0.level().playSound(null,$$0.blockPosition(), SoundEvents.ELDER_GUARDIAN_CURSE, SoundSource.PLAYERS,1F,1F);
+                        $$0.level().playSound(null,$$0.blockPosition(), ModSounds.ANUBIS_EXTRA_EVENT, SoundSource.PLAYERS,3F,1F);
 
                         ItemStack itemStack = new ItemStack(ModItems.STAND_DISC_ANUBIS);
                         CompoundTag tag = itemStack.getOrCreateTagElement("Special");

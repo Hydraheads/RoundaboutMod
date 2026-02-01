@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.AnubisItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -20,6 +21,7 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.AbstractIllager;
 import org.joml.Quaternionf;
 
 
@@ -32,7 +34,8 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
 
 
     public static boolean shouldDash(Mob M) {
-        return false;
+        if (M == null) {return false;}
+        return ( M.isBaby() || !(MainUtil.isHumanoid(M)) ) && !(M instanceof AbstractIllager) ;
     }
 
     public static HumanoidArm shouldRender(LivingEntity entity) {
@@ -62,6 +65,9 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
         if (((IEntityAndData) entity).roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung()) return;
+
+        if (entity.isBaby()) {return;}
+
         if (!entity.isInvisible()) {
             StandUser SU = (StandUser) entity;
             if (AnubisLayer.shouldRender(entity) != null) {

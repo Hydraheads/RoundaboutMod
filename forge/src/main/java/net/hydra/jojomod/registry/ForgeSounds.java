@@ -415,6 +415,8 @@ public class ForgeSounds {
             register(ModSounds.ANUBIS_UPPERCUT, ModSounds.ANUBIS_UPPERCUT_ID);
     public static final RegistryObject<SoundEvent> ANUBIS_SHIELDBREAK =
             register(ModSounds.ANUBIS_SHIELDBREAK, ModSounds.ANUBIS_SHIELDBREAK_ID);
+    public static final RegistryObject<SoundEvent> ANUBIS_EXTRA =
+            register(ModSounds.ANUBIS_EXTRA, ModSounds.ANUBIS_EXTRA_ID);
 
 
 

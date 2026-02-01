@@ -3,6 +3,8 @@ package net.hydra.jojomod.entity.projectile;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandArrowItem;
+import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Cow;
@@ -23,10 +25,14 @@ public class ThrownAnubisEntity extends ThrownObjectEntity {
     protected void onHitEntity(EntityHitResult $$0) {
         if ($$0.getEntity() instanceof Cow C) {
 
-            StandArrowItem.grantStand(ModItems.STAND_DISC_ANUBIS.getDefaultInstance(),C);
-            C.hurt(ModDamageTypes.of(C.level(),ModDamageTypes.STAND),1);
-            this.discard();
-            return;
+            if (this.level().isClientSide()) {
+                this.level().playSound(null,this.blockPosition(), ModSounds.ANUBIS_EXTRA_EVENT, SoundSource.PLAYERS,10F,1F);
+
+                StandArrowItem.grantStand(ModItems.STAND_DISC_ANUBIS.getDefaultInstance(), C);
+                C.hurt(ModDamageTypes.of(C.level(), ModDamageTypes.STAND), 1);
+                this.discard();
+                return;
+            }
         } else {
             $$0.getEntity().hurt(ModDamageTypes.of($$0.getEntity().level(),ModDamageTypes.ANUBIS_SPIN,this.getOwner()),10);
         }
