@@ -451,6 +451,7 @@ public class PowersRatt extends NewDashPreset {
             DimensionType T = this.getSelf().level().dimensionType();
             if (t != T) {
                 RecallClient(true);
+                this.setCooldown(PowersRatt.SETPLACE,20);
             }
 
             if (this.getSelf().distanceTo(this.getStandEntity(this.getSelf())) > this.getMaxPilotRange() && !this.getStandEntity(this.getSelf()).forceDespawnSet) {
@@ -794,7 +795,10 @@ public class PowersRatt extends NewDashPreset {
                 this.setShootTarget(null);
             }
             case PowersRatt.NET_RECALL -> {
+                Roundabout.LOGGER.info("STOP");
+
                 active = false;
+                Placement = Vec3.ZERO;
                 if (!this.getStandEntity(this.getSelf()).forceDespawnSet) {
                     this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.RATT_DEPLACE_EVENT, SoundSource.PLAYERS, 0.5F, 1F);
                 }

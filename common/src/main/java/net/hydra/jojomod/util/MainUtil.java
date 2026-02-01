@@ -31,6 +31,7 @@ import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.powers.GeneralPowers;
+import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -2197,7 +2198,7 @@ public class MainUtil {
     public static boolean forceAggression(LivingEntity LE){
         if (LE != null){
             StandUser user = ((StandUser) LE);
-            return (user.roundabout$hasAStand() || user.roundabout$getZappedToID() > -1
+            return ( (user.roundabout$hasAStand() && !(user.roundabout$getStandPowers() instanceof PowersAnubis && LE instanceof Cow)   )  || user.roundabout$getZappedToID() > -1
                     || user.rdbt$getFleshBud() != null ||
                     (LE instanceof Mob mb && ((IMob)mb).roundabout$isVampire()));
         }

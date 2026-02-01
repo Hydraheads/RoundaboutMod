@@ -18,5 +18,13 @@
         0
       ]
     }
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "custom_model_data": 1
+      },
+      "model": "roundabout:item/anubis_unsheathed"
+    }
+  ]
 }

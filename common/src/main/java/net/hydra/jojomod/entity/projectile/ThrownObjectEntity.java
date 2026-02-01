@@ -310,7 +310,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         } else if (item.getItem() instanceof AnubisItem) {
             ThrownAnubisEntity anubis = new ThrownAnubisEntity(thrower, thrower.level(),item);
             anubis.setPos(pos);
-            anubis.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.0F*mult, getShotAccuracy);
+            anubis.shootFromRotation(thrower, xRot, yRot, 0.0F, 2F*mult, getShotAccuracy);
             thrower.level().addFreshEntity(anubis);
 
             if (playSounds){
