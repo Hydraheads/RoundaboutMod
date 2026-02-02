@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
@@ -3571,6 +3572,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "checkTotemDeathProtection(Lnet/minecraft/world/damagesource/DamageSource;)Z", at = @At(value = "HEAD"), cancellable = true)
     public void rdbt$checkTotemDeathProtection(DamageSource dsource, CallbackInfoReturnable<Boolean> cir) {
 
+        if (rdbt$this() instanceof AnubisGuardian AG && AG.hasTotem()) {
+            AG.setPopped(true);
+            AG.setHealth(AG.getMaxHealth());
+            AG.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED,1,200));
+            StandArrowItem.grantStand(ModItems.ANUBIS_ITEM.getDefaultInstance(),AG);
+            this.level().broadcastEntityEvent(this, (byte)35);
+            cir.setReturnValue(true);
+        }
+
         if ( (rdbt$this() instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers().cheatDeath(dsource))
                 || roundabout$getStandPowers().cheatDeath(dsource)){
             cir.setReturnValue(true);
@@ -5105,7 +5115,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             basis *= 1.3F;
         }
 
-        if (this.roundabout$getStandPowers() instanceof PowersAnubis && !(rdbt$this() instanceof Player)) {
+        if (this.roundabout$getStandPowers() instanceof PowersAnubis && !(rdbt$this() instanceof Player) && !(rdbt$this() instanceof AnubisGuardian) ) {
             float cap  = 0.4F;
             if (rdbt$this() instanceof AbstractHorse) {
                 cap = 0.3F;

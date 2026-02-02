@@ -170,6 +170,10 @@ public class Config implements Cloneable {
         public Float beetleArrowTradeChance;
         @IntOption(group = "inherit", value = 10, min = 0, max = 64)
         public Integer beetleArrowCost;
+        @FloatOption(group = "inherit", value = 0F, min = 0, max = 100) // ADD FOR ANUBIS
+        public Float anubisTradeChance;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 64)
+        public Integer anubisTradeCost;
         @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)
         public Float brokenArrowTradeChance;
         @IntOption(group = "inherit", value = 7, min = 0, max = 64)

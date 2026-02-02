@@ -61,6 +61,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import oshi.util.tuples.Pair;
 
 import java.util.*;
@@ -2430,7 +2431,10 @@ public class PowersAnubis extends NewDashPreset {
     @Override
     public void tickMobAI(LivingEntity attackTarget) {
         if (attackTarget != null && !this.getStandUserSelf().roundabout$isDazed()) {
-            if (this.getSelf().distanceTo(attackTarget) < 4 && !AnubisLayer.shouldDash((Mob)this.getSelf())) { // warning: will crash
+
+            tickDashing(attackTarget);
+
+            if (this.getSelf().distanceTo(attackTarget) < 3.3 && !AnubisLayer.shouldDash((Mob)this.getSelf()) ) {
                 if (this.attackTimeDuring == -1) {
                     if ( (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax)) {
                         StandUser SU = (StandUser) this.getSelf();
@@ -2446,6 +2450,49 @@ public class PowersAnubis extends NewDashPreset {
             }
         }
         super.tickMobAI(attackTarget);
+    }
+
+    private void tickDashing(LivingEntity attackTarget) {
+        if (AnubisLayer.shouldDash((Mob) this.getSelf())) {
+            if (!onCooldown(PowerIndex.GLOBAL_DASH)) {
+                if (attackTarget != null && this.getSelf().onGround()) {
+                    float dist = attackTarget.distanceTo(this.getSelf());
+                    if (dist < 15) {
+                        Vec3 dir = attackTarget.getPosition(0).subtract(this.getSelf().getPosition(0));
+                        dir = new Vec3(dir.x, 0, dir.z).normalize().reverse();
+
+                        if (dir.length() == 1) {
+                            double yOff = attackTarget.getY() - this.getSelf().getY();
+                            if (yOff > 2.4) {
+                                MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 1, dir.x, -2F, dir.z);
+                            } else if (dist > 3.5) {
+                                float strength = 1;
+                                if (dist > 7) {
+                                    strength = 1.4F;
+                                }
+                                MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), strength, dir.x, -0.33F, dir.z);
+                            }
+
+                            Vec3 cvec = new Vec3(0, 0.1, 0);
+                            Vec3 rDir = dir.scale(0.2F);
+
+                            ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
+                                    this.getSelf().getX() + cvec.x, this.getSelf().getY() + cvec.y, this.getSelf().getZ() + cvec.z,
+                                    0,
+                                    rDir.x,
+                                    rDir.y,
+                                    rDir.z,
+                                    0.8);
+                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.98 + (Math.random() * 0.04)));
+
+                            this.getSelf().setYHeadRot(MainUtil.getLookAtEntityYaw(this.getSelf(), attackTarget));
+                            this.getSelf().setYRot(MainUtil.getLookAtEntityYaw(this.getSelf(), attackTarget));
+                        }
+                        this.setCooldown(PowerIndex.GLOBAL_DASH,40);
+                    }
+                }
+            }
+        }
     }
 
     @Override

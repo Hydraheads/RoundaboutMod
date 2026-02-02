@@ -37,6 +37,11 @@ public abstract class WanderingTraderMixin
     public WanderingTraderMixin(EntityType<? extends AbstractVillager> $$0, Level $$1) {super($$0, $$1);}
 
 
+    @Inject(method = "<init>",at = @At(value = "RETURN"))
+    private void roundabout$updateTrades(EntityType $$0, Level $$1, CallbackInfo ci) {
+        WanderingTrades.updateTrades(Config.getServerInstance());
+    }
+
     @Inject(method = "aiStep",at = @At(value = "HEAD"))
     public void roundabout$makeTraderStand(CallbackInfo ci) {
 
@@ -47,11 +52,6 @@ public abstract class WanderingTraderMixin
         /// the main thing is that the trades don't generate until you first click on them
         WanderingTrader This = (WanderingTrader) (Object) this;
         if (!This.level().isClientSide() && (offers == null) ) {
-            ///  I'm not particularly proud of this, it's inefficient and should be moved to a class that only runs once, but it isn't expensive
-            ///  also it only runs once per wandering T
-            WanderingTrades.updateTrades(Config.getServerInstance());
-
-
             float WTS = VillagerTrades.WANDERING_TRADER_TRADES.get(2).length;
             float maxChance = WTS;
             for (Pair<Float, MerchantOffer> f : WanderingTrades.TRADES) {maxChance += f.getA();}
@@ -74,7 +74,7 @@ public abstract class WanderingTraderMixin
                     }
                 }
             }
-            /// this has the potential to cause an issue by running getOffers before the gui opens, but I doubt it will matter
+            /// this has the potential to cause an issue by running getOffers before a player is to interact with them, but I doubt it will matter
             this.getOffers();
 
         }

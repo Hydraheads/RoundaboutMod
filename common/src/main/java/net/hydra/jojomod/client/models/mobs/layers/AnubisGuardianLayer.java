@@ -90,7 +90,8 @@ public class AnubisGuardianLayer <T extends LivingEntity, M extends EntityModel<
         if (t instanceof AnubisGuardian AG) {
             return AG.getArmPose().equals(AbstractIllager.IllagerArmPose.ATTACKING)
                     || AG.getArmPose().equals(AbstractIllager.IllagerArmPose.CROSSBOW_CHARGE)
-                    || AG.getArmPose().equals(AbstractIllager.IllagerArmPose.CROSSBOW_HOLD) ;
+                    || AG.getArmPose().equals(AbstractIllager.IllagerArmPose.CROSSBOW_HOLD)
+                    || AG.getArmPose().equals(AbstractIllager.IllagerArmPose.BOW_AND_ARROW);
         }
         return false;
     }

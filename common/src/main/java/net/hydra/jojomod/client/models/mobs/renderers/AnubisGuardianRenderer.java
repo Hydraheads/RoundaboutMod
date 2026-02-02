@@ -23,7 +23,6 @@ public class AnubisGuardianRenderer<T extends AnubisGuardian>
     public AnubisGuardianRenderer(EntityRendererProvider.Context context) {
         super(context,new AnubisGuardianModel<>(context.bakeLayer(ModEntityRendererClient.ANUBIS_GUARDIAN_LAYER)),0.5F);
         this.addLayer(new AnubisGuardianLayer<>(this,context.getItemInHandRenderer()));
-        this.addLayer(new CustomHeadLayer<>(this, context.getModelSet(), context.getItemInHandRenderer()));
     }
 
     @Override
