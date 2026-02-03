@@ -996,6 +996,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                             standEntity.setHeldItem(state.getBlock().asItem().getDefaultInstance());
                             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                             this.setActivePower(PowerIndex.POWER_2_SNEAK);
+
                             this.setAttackTimeDuring(0);
                             poseStand(OffsetIndex.FOLLOW_NOLEAN);
                             animateStand(StandEntity.BLOCK_GRAB);
