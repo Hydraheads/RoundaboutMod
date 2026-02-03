@@ -3,6 +3,8 @@ package net.hydra.jojomod.client.models.layers;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -104,8 +106,9 @@ public class FirearmLayer<T extends LivingEntity, A extends HumanoidModel<T>> ex
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
 
-        if (entity instanceof Player player) {
-            if (entity.isInvisible() || entity.isInvisibleTo(player)) return;
+        if (entity != null) {
+            if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
+                return;
         }
 
         LivingEntity livent = entity;
