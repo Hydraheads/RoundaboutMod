@@ -1020,10 +1020,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public void doAuraBlast(){
         this.attackTimeDuring = 0;
         setActivePower(NONE);
-        setCooldown(PowerIndex.GENERAL_3_SNEAK, 80);
+        setCooldown(PowerIndex.GENERAL_3_SNEAK, 100);
         if (!self.level().isClientSide()) {
             self.swing(InteractionHand.MAIN_HAND, true);
-            this.self.level().playSound(null, this.self.blockPosition(),ModSounds.VAMPIRE_DIVE_EVENT, SoundSource.PLAYERS, 1F, (float) (0.96f + Math.random() * 0.08f));
+            this.self.level().playSound(null, this.self.blockPosition(),ModSounds.EVIL_AURA_BLAST_EVENT, SoundSource.PLAYERS, 3F, (float) (0.96f + Math.random() * 0.08f));
         } else {
             tryPowerPacket(EVIL_AURA);
         }

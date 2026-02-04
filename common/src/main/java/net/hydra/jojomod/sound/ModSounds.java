@@ -872,6 +872,10 @@ public class ModSounds {
     public static SoundEvent BALL_BEARING_SHOT_EVENT = SoundEvent.createVariableRangeEvent(BALL_BEARING_SHOT_ID);
 
 
+    public static final String EVIL_AURA_BLAST = "evil_aura_blast";
+    public static final ResourceLocation EVIL_AURA_BLAST_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EVIL_AURA_BLAST);
+    public static SoundEvent EVIL_AURA_BLAST_EVENT = SoundEvent.createVariableRangeEvent(EVIL_AURA_BLAST_ID);
+
 
     public static final String HEY_YA_1 = "hey_ya_1";
     public static final ResourceLocation HEY_YA_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HEY_YA_1);
