@@ -1,13 +1,10 @@
 package net.hydra.jojomod.powers.power_types;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
-import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
-import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampireFate;
@@ -27,8 +24,6 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -68,6 +63,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public static final byte ICE_CLUTCH_2 = PowerIndex.POWER_2_SNEAK_EXTRA;
     public static final byte ICE_CLUTCH_ATTACK = PowerIndex.POWER_3_SNEAK_EXTRA;
 
+    public static final byte EVIL_AURA = PowerIndex.POWER_3_SNEAK;
+
     public static final byte AIR_DASH = PowerIndex.POWER_3;
 
     /**The text name of the fate*/
@@ -101,7 +98,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     dashOrWallWalk(vp);
                 }
                 case SKILL_3_CROUCH -> {
-                    dashOrWallWalk(vp);
+                    evilAuraClient();
                 }
             }
         }
@@ -115,6 +112,11 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             } else {
                 airDash();
             }
+        }
+    }
+    public void evilAuraClient(){
+        if (!onCooldown(PowerIndex.GENERAL_3_SNEAK)){
+            this.tryPower(EVIL_AURA);
         }
     }
 
@@ -567,7 +569,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if ((vp.canLatchOntoWall() || (vp.isPlantedInWall() && !isHoldingSneak())) && vp.canWallWalkConfig()) {
                 setSkillIcon(context, x, y, 3, StandIcons.WALL_WALK_VAMP, PowerIndex.FATE_3);
             } else if (isHoldingSneak()) {
-                setSkillIcon(context, x, y, 3, StandIcons.AURA, PowerIndex.GENERAL_3);
+                setSkillIcon(context, x, y, 3, StandIcons.AURA, PowerIndex.GENERAL_3_SNEAK);
             } else {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
             }
@@ -636,6 +638,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             doSuckHit();
         } else if (move == ICE_CLUTCH_ATTACK){
             doIceHit();
+        } else if (move == EVIL_AURA){
+            doAuraBlast();
         }
 
         return super.setPowerOther(move,lastMove);
@@ -1011,6 +1015,17 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             }
             iceImpact(target);
             setActivePower(PowerIndex.NONE);
+        }
+    }
+    public void doAuraBlast(){
+        this.attackTimeDuring = 0;
+        setActivePower(NONE);
+        setCooldown(PowerIndex.GENERAL_3_SNEAK, 80);
+        if (!self.level().isClientSide()) {
+            self.swing(InteractionHand.MAIN_HAND, true);
+            this.self.level().playSound(null, this.self.blockPosition(),ModSounds.VAMPIRE_DIVE_EVENT, SoundSource.PLAYERS, 1F, (float) (0.96f + Math.random() * 0.08f));
+        } else {
+            tryPowerPacket(EVIL_AURA);
         }
     }
     public void doDiveHit(){
