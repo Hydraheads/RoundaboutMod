@@ -1,7 +1,11 @@
 package net.hydra.jojomod.powers.power_types;
 
 import net.hydra.jojomod.access.*;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.projectile.EvilAuraProjectile;
+import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
+import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
@@ -9,6 +13,7 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
+import net.hydra.jojomod.particles.VampireAuraParticle;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -1017,13 +1022,34 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             setActivePower(PowerIndex.NONE);
         }
     }
+    public EvilAuraProjectile getAuraProjectile(){
+        EvilAuraProjectile bubble = new EvilAuraProjectile(this.self,this.self.level());
+        bubble.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
+        bubble.setUser(this.self);
+        bubble.setOwner(this.self);
+        return bubble;
+    }
+    public void shootAuraBlast(EvilAuraProjectile ankh){
+        Vec3 addToPosition = new Vec3(0,this.self.getEyeHeight()*0.71,0);
+        Direction direction = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+        if (direction != Direction.DOWN){
+            addToPosition = RotationUtil.vecPlayerToWorld(addToPosition,direction);
+        }
+        ankh.setPos(this.self.getX()+addToPosition.x, this.self.getY()+addToPosition.y, this.self.getZ()+addToPosition.z);
+        ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, 1, 0);
+    }
     public void doAuraBlast(){
         this.attackTimeDuring = 0;
         setActivePower(NONE);
         setCooldown(PowerIndex.GENERAL_3_SNEAK, 100);
         if (!self.level().isClientSide()) {
-            self.swing(InteractionHand.MAIN_HAND, true);
-            this.self.level().playSound(null, this.self.blockPosition(),ModSounds.EVIL_AURA_BLAST_EVENT, SoundSource.PLAYERS, 3F, (float) (0.96f + Math.random() * 0.08f));
+            EvilAuraProjectile bubble = getAuraProjectile();
+            if (bubble != null) {
+                shootAuraBlast(bubble);
+                this.getSelf().level().addFreshEntity(bubble);
+                self.swing(InteractionHand.MAIN_HAND, true);
+                this.self.level().playSound(null, this.self.blockPosition(),ModSounds.EVIL_AURA_BLAST_EVENT, SoundSource.PLAYERS, 3F, (float) (0.96f + Math.random() * 0.08f));
+            }
         } else {
             tryPowerPacket(EVIL_AURA);
         }
