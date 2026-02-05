@@ -504,7 +504,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "evil_aura_projectile"),
                     EntityType.Builder.<EvilAuraProjectile>of(EvilAuraProjectile::new, MobCategory.MISC).
-                            sized(0.3F, 0.3F).clientTrackingRange(15).build(Roundabout.MOD_ID+":evil_aura_projectile")
+                            sized(1F, 1F).clientTrackingRange(15).build(Roundabout.MOD_ID+":evil_aura_projectile")
             );
         public static final EntityType<GasolineSplatterEntity> GASOLINE_SPLATTER =
                 Registry.register(

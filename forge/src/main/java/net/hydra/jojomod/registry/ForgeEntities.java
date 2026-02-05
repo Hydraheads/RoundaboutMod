@@ -451,7 +451,7 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<EvilAuraProjectile>> EVIL_AURA_PROJECTILE =
             ENTITY_TYPES.register("evil_aura_projectile", () ->
-                    EntityType.Builder.<EvilAuraProjectile>of(EvilAuraProjectile::new, MobCategory.MISC).sized(0.3F, 0.3F).
+                    EntityType.Builder.<EvilAuraProjectile>of(EvilAuraProjectile::new, MobCategory.MISC).sized(1F, 1F).
                             clientTrackingRange(15).
                             build(new ResourceLocation(Roundabout.MOD_ID, "evil_aura_projectile").toString())
             );
