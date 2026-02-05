@@ -17,6 +17,18 @@
       "roundabout:vampire_dash"
     ]
   },
+  "evil_aura_blast": {
+    "subtitle": "sounds.roundabout.evil_aura_blast",
+    "sounds": [
+      "roundabout:evil_aura_blast"
+    ]
+  },
+  "aura_impact": {
+    "subtitle": "sounds.roundabout.aura_impact",
+    "sounds": [
+      "roundabout:aura_impact"
+    ]
+  },
   "vampire_gleam": {
     "subtitle": "sounds.roundabout.vampire_gleam",
     "sounds": [

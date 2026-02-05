@@ -68,7 +68,6 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
 
         if (entity.isBaby()) {return;}
 
-        if (!entity.isInvisible()) {
             StandUser SU = (StandUser) entity;
             if (AnubisLayer.shouldRender(entity) != null) {
 
@@ -117,11 +116,11 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                 ClientUtil.popPoseAndCooperate(poseStack,60);
 
             }
-        }
     }
 
     public static void renderOutOfContext(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float partialTicks, ModelPart handarm) {
-        if (!entity.isInvisible()) {
+        if (((IEntityAndData) entity).roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung()) return;
+
             if (entity != null && AnubisLayer.shouldRender(entity) != null) {
                 StandUser user = ((StandUser) entity);
 
@@ -155,7 +154,6 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                 ClientUtil.popPoseAndCooperate(poseStack, 48);
 
             }
-        }
     }
 
     public static void renderSheathedAnubis(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float partialTicks, float scale) {

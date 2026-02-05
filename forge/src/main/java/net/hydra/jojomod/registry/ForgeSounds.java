@@ -518,6 +518,10 @@ public class ForgeSounds {
             register(ModSounds.ITEM_CATCH, ModSounds.ITEM_CATCH_ID);
     public static final RegistryObject<SoundEvent> BALL_BEARING_SHOT =
             register(ModSounds.BALL_BEARING_SHOT, ModSounds.BALL_BEARING_SHOT_ID);
+    public static final RegistryObject<SoundEvent> EVIL_AURA_BLAST =
+            register(ModSounds.EVIL_AURA_BLAST, ModSounds.EVIL_AURA_BLAST_ID);
+    public static final RegistryObject<SoundEvent> AURA_IMPACT =
+            register(ModSounds.AURA_IMPACT, ModSounds.AURA_IMPACT_ID);
     public static final RegistryObject<SoundEvent> HEY_YA_1 =
             register(ModSounds.HEY_YA_1, ModSounds.HEY_YA_1_ID);
     public static final RegistryObject<SoundEvent> HEY_YA_2 =

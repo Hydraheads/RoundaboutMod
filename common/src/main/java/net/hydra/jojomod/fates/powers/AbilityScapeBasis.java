@@ -1513,6 +1513,7 @@ public class AbilityScapeBasis {
         }
     }
 
+    //Ledge Grab
     @SuppressWarnings("deprecation")
     public boolean doVault(){
         if (!this.self.onGround()) {

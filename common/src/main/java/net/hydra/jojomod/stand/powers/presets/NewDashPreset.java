@@ -128,13 +128,13 @@ public class NewDashPreset extends StandPowerRewrite {
 
     @Override
     public boolean vault() {
-        animateStand(StandEntity.BROKEN_GUARD);
-        this.poseStand(OffsetIndex.GUARD);
         cancelConsumableItem(this.getSelf());
         this.setAttackTimeDuring(-7);
         this.setActivePower(PowerIndex.VAULT);
         this.getSelf().resetFallDistance();
         if (!this.getSelf().level().isClientSide()) {
+            animateStand(StandEntity.BROKEN_GUARD);
+            this.poseStand(OffsetIndex.GUARD);
             if (Math.random() > 0.85){
                 addEXP(1);
             }

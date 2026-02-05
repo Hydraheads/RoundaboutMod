@@ -68,6 +68,23 @@ public class RoundaboutGeneralProjectile extends AbstractHurtingProjectile imple
         }
     }
 
+
+    public int lifespan = 0;
+    public int getLifeSpan(){
+        return lifespan;
+    }
+    public int getMaxLifeSpan(){
+        return 200;
+    }
+    public boolean tickLifeSpan(){
+        lifespan++;
+        if (lifespan >= getMaxLifeSpan()){
+            this.discard();
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public boolean isInWater() {
         return false;
@@ -144,6 +161,10 @@ public class RoundaboutGeneralProjectile extends AbstractHurtingProjectile imple
     public void tick() {
         boolean client = this.level().isClientSide();
         if (!client){
+            if (tickLifeSpan()){
+                return;
+            }
+
             if (isEffectivelyInWater()){
                 tickWater();
             }
@@ -270,6 +291,7 @@ public class RoundaboutGeneralProjectile extends AbstractHurtingProjectile imple
         super.addAdditionalSaveData($$0);
         if (standUser != null) {
             $$0.putUUID("standUser", standUser.getUUID());
+            $$0.putInt("lifeSpan", lifespan);
         }
     }
     @Override
@@ -277,6 +299,7 @@ public class RoundaboutGeneralProjectile extends AbstractHurtingProjectile imple
         super.readAdditionalSaveData($$0);
         if ($$0.hasUUID("standUser")) {
             standUserUUID = $$0.getUUID("standUser");
+            lifespan = $$0.getInt("lifeSpan");
             if (!this.level().isClientSide()) {
                 Entity ett = ((ServerLevel) this.level()).getEntity(standUserUUID);
                 if (ett instanceof LivingEntity lett) {
