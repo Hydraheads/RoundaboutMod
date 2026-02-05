@@ -34,6 +34,9 @@ public abstract class SurvivorThrownPotion extends ThrowableItemProjectile imple
                     ci.cancel();
                     this.discard();
                     return;
+                } else if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectileNoDiscard(this,$$0)){
+                    ci.cancel();
+                    return;
                 }
             }
         }

@@ -3,6 +3,7 @@ package net.hydra.jojomod.powers.power_types;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.projectile.EvilAuraProjectile;
+import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
@@ -34,6 +35,8 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -1086,13 +1089,47 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         }
     }
 
+
+    @Override
+    public boolean dealWithProjectileNoDiscard(Entity ent, HitResult res){
+        if (getActivePower() == DEFLECTION){
+            if (ent instanceof Projectile pr && pr.getOwner() instanceof LivingEntity LE){
+
+                Vec3 $$4 = pr.getDeltaMovement().reverse().add(self.getPosition(1f));
+                if ($$4 != null) {
+                    Vec3 $$5 = self.getViewVector(1.0F);
+                    Vec3 $$6 = $$4.vectorTo(self.position()).normalize();
+                    $$6 = new Vec3($$6.x, 0.0, $$6.z);
+                    if ($$6.dot($$5) < 0.0) {
+                        IProjectileAccess ipa = (IProjectileAccess) pr;
+                        if (!ipa.roundabout$getIsDeflected()){
+                            if (pr instanceof RoundaboutBulletEntity) {
+                                return false;
+                            }
+
+
+                            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.HIT_1_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (1.05f + Math.random() * 0.1f));
+                            self.swing(InteractionHand.MAIN_HAND, true);
+                            ipa.roundabout$setIsDeflected(true);
+                            ((IEntityAndData)ent).rdbt$forceDeltaMovement(ent.getDeltaMovement().scale(-0.4));
+                            ent.setYRot(ent.getYRot() + 180.0F);
+                            ent.yRotO += 180.0F;
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return super.dealWithProjectileNoDiscard(ent,res);
+    }
+
     public void doDeflection(){
         if (!self.level().isClientSide()) {
             if (!onCooldown(PowerIndex.GENERAL_4_SNEAK)) {
                 this.attackTimeDuring = 0;
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.IMPALE_CHARGE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.7f + Math.random() * 0.1f));
                 setActivePower(DEFLECTION);
-                setCooldown(PowerIndex.GENERAL_4_SNEAK, 200);
+                setCooldown(PowerIndex.GENERAL_4_SNEAK, 160);
             }
         } else {
             tryPowerPacket(DEFLECTION);

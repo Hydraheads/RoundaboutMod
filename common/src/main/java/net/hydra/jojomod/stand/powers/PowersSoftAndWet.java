@@ -2477,7 +2477,7 @@ public void unlockSkin(){
                 }
             }
         }
-        return false;
+        return super.dealWithProjectile(ent,res);
     }
 
     public boolean waterShieldBlockProjectile(Projectile projectile)

@@ -660,6 +660,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectile(this,$$0)){
                 this.discard();
                 return;
+            } else if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectileNoDiscard(this,$$0)){
+                return;
             }
         } else if ($$1 instanceof SoftAndWetPlunderBubbleEntity){
             return;
