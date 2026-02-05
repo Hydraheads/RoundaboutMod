@@ -1,50 +1,38 @@
 package net.hydra.jojomod.mixin.anubis;
 
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.item.AnubisItem;
-import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.item.StandArrowItem;
-import net.hydra.jojomod.sound.ModSounds;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Mob;
+import net.hydra.jojomod.stand.powers.PowersAnubis;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.*;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(Mob.class)
-public abstract class AnubisAbstractIllagerMixin {
-
-    @Inject(method = "mobInteract",at=@At(value = "HEAD"))
-    private void roundabout$giveAnubis(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
-        if (!$$0.level().isClientSide) {
-            ItemStack stack = $$0.getItemInHand($$1);
-            if ($$0.isCrouching() && stack.getItem() instanceof AnubisItem) {
-                if (((Mob) (Object) this) instanceof AbstractIllager AI) {
-                    if (!((StandUser) AI).roundabout$hasAStand()) {
-                        $$0.setItemInHand($$1,new ItemStack(Items.AIR));
-                        $$0.level().playSound(null,$$0.blockPosition(), ModSounds.ANUBIS_EXTRA_EVENT, SoundSource.PLAYERS,3F,1F);
-
-                        ItemStack itemStack = new ItemStack(ModItems.STAND_DISC_ANUBIS);
-                        CompoundTag tag = itemStack.getOrCreateTagElement("Special");
-                        tag.putByte("Type",(byte)1);
+@Mixin(AbstractIllager.class)
+public abstract class AnubisAbstractIllagerMixin extends Raider {
 
 
-                        StandArrowItem.grantStand(itemStack, AI);
-                        AI.setTarget($$0);
+    protected AnubisAbstractIllagerMixin(EntityType<? extends Raider> $$0, Level $$1) {
+        super($$0, $$1);
+    }
 
-                    }
+    @Inject(method = "getArmPose",at = @At(value = "RETURN"),cancellable = true)
+    private void roundabout$cancelIllagerArmPose(CallbackInfoReturnable<AbstractIllager.IllagerArmPose> cir) {
+        Roundabout.LOGGER.info(cir.getReturnValue().toString());
+        if (cir.getReturnValue() == AbstractIllager.IllagerArmPose.CROSSBOW_CHARGE || cir.getReturnValue() == AbstractIllager.IllagerArmPose.CROSSED) {
+            StandUser SU = (StandUser) this;
+            if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
+                if (PowerTypes.hasStandActive(this)) {
+                    cir.setReturnValue(AbstractIllager.IllagerArmPose.ATTACKING);
                 }
             }
         }
     }
+
 
 }

@@ -10,7 +10,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Cow;
-import net.minecraft.world.entity.monster.AbstractIllager;
+import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -45,6 +45,14 @@ public abstract class AnubisDropsMixin {
                         ItemStack stack = new ItemStack(ModItems.ANUBIS_ITEM);
                         CompoundTag tag = stack.getOrCreateTagElement("SkinType");
                         tag.putByte("SkinType", SU.roundabout$getStandSkin());
+
+                        float skin = 0;
+                        if (This instanceof Evoker || This instanceof Pillager || This instanceof Illusioner) {
+                            skin = 2F;
+                        } else if (This instanceof Vindicator) {
+                            skin = 3F;
+                        }
+                        stack.getTag().putFloat("CustomModelData",skin);
 
                         This.spawnAtLocation(stack);
 

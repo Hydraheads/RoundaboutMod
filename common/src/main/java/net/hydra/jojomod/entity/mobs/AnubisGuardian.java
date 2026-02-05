@@ -8,6 +8,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -22,6 +24,8 @@ import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 
@@ -58,6 +62,7 @@ public class AnubisGuardian extends Raider implements RangedAttackMob {
                 this.setItemInHand(InteractionHand.MAIN_HAND,a);
             }
             case BOW_ATTACK -> this.setItemInHand(InteractionHand.MAIN_HAND,Items.BOW.getDefaultInstance());
+            case FIRE_POT -> this.setItemInHand(InteractionHand.MAIN_HAND,PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.FIRE_RESISTANCE) );
         }
     }
     public AnubisAttacks getAction() {return AnubisAttacks.getFromByte(this.entityData.get(CHOSEN_ACTION));}
@@ -90,6 +95,9 @@ public class AnubisGuardian extends Raider implements RangedAttackMob {
     protected void registerGoals() {
 
         this.goalSelector.addGoal(0, new FloatGoal(this));
+
+        this.goalSelector.addGoal(1, new FirePotGoal(this));
+
         this.goalSelector.addGoal(2, new ChooseNormalAttack(this));
         this.goalSelector.addGoal(2, new RageGoal(this));
 
@@ -149,7 +157,8 @@ public enum AnubisAttacks {
     NONE((byte) 0),
     AXE_RUSH((byte) 1),
     SWORD_RUSH((byte) 2),
-    BOW_ATTACK((byte)3);
+    BOW_ATTACK((byte)3),
+    FIRE_POT((byte)4);
 
     public final byte id;
     AnubisAttacks(byte $$0) {
@@ -165,6 +174,8 @@ public enum AnubisAttacks {
             return SWORD_RUSH;
         } else if (b == BOW_ATTACK.id) {
             return BOW_ATTACK;
+        } else if (b == FIRE_POT.id) {
+            return FIRE_POT;
         }
         return NONE;
     }
@@ -348,6 +359,32 @@ static class RageGoal extends MeleeAttackGoal {
     @Override
     public boolean canUse() {
         return super.canUse() && !mob.hasTotem();
+    }
+}
+
+static class FirePotGoal extends Goal {
+
+    private AnubisGuardian mob;
+    public FirePotGoal(AnubisGuardian mob) {
+        this.mob = mob;
+    }
+
+    @Override
+    public void start() {
+        super.start();
+        this.mob.setAction(AnubisAttacks.FIRE_POT);
+        this.mob.startUsingItem(InteractionHand.MAIN_HAND);
+    }
+
+    @Override
+    public void stop() {
+        super.stop();
+        this.mob.setAction(AnubisAttacks.NONE);
+    }
+
+    @Override
+    public boolean canUse() {
+        return this.mob.isOnFire() && !this.mob.hasEffect(MobEffects.FIRE_RESISTANCE);
     }
 }
 

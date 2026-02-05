@@ -547,6 +547,16 @@ public class PowersAnubis extends NewDashPreset {
     public void tickPower() {
 
 
+     /*   if (!this.level().isClientSide()) {
+            if (rdbt$this() instanceof Player P) {
+                S2CPacketUtil.sendByteBundleToClientPacket(P,
+                        PacketDataIndex.S2C_BUNDLE_POWER_INV,
+                        this.roundabout$getStandSkin(),
+                        ( ((IPlayerEntity)P).roundabout$getUnlockedBonusSkin() || this.roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem ) ? (byte) 1 : 0
+                );
+            }
+        } */
+
  //  Roundabout.LOGGER.info(" CA: " + this.getActivePower() + " | " + this.getAttackTime() + " | "+ this.getAttackTimeDuring() + "/" + this.getAttackTimeMax());
         StandUser SU = this.getStandUserSelf();
 
@@ -585,7 +595,7 @@ public class PowersAnubis extends NewDashPreset {
 
         tickExtras();
 
-/// WARNING: THIS WILL BREAK AT SOME POINT
+/// This will probably(?) break idk
         this.getSelf().setNoGravity(this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE && this.attackTimeDuring < PogoDelay);
 
         super.tickPower();

@@ -35,6 +35,7 @@
     "achtung.AchtungProjectile",
     "anubis.AnubisAbstractIllagerMixin",
     "anubis.AnubisCowMixin",
+    "anubis.AnubisCrossbowCancelMixin",
     "anubis.AnubisDropsMixin",
     "anubis.BonusExperienceMixin",
     "barrage.DazeBlazeAttackGoal",

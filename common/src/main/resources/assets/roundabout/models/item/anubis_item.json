@@ -25,6 +25,18 @@
         "custom_model_data": 1
       },
       "model": "roundabout:item/anubis_unsheathed"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 2
+      },
+      "model": "roundabout:item/anubis_cleaver"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 3
+      },
+      "model": "roundabout:item/anubis_illusory"
     }
   ]
 }

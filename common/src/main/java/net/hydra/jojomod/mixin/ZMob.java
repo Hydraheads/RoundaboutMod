@@ -17,7 +17,9 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.AnubisItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
@@ -35,6 +37,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -56,6 +59,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -189,7 +193,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
             }
 
             if (((Mob)(Object)this) instanceof AbstractIllager AI) {
-                this.goalSelector.addGoal(0, new AnubisAttackGoal(AI,3,true) );
+                this.goalSelector.addGoal(0, new AnubisAttackGoal(AI,1.3,true) );
             }
         }
     }
@@ -1009,5 +1013,30 @@ public abstract class ZMob extends LivingEntity implements IMob {
             }
         }
 
+    }
+
+
+    @Inject(method = "mobInteract",at=@At(value = "HEAD"))
+    private void roundabout$giveAnubis(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
+        if (!$$0.level().isClientSide) {
+            ItemStack stack = $$0.getItemInHand($$1);
+            if ($$0.isCrouching() && stack.getItem() instanceof AnubisItem) {
+                if (((Mob) (Object) this) instanceof AbstractIllager AI) {
+                    if (!((StandUser) AI).roundabout$hasAStand()) {
+                        $$0.setItemInHand($$1,new ItemStack(Items.AIR));
+                        $$0.level().playSound(null,$$0.blockPosition(), ModSounds.ANUBIS_EXTRA_EVENT, SoundSource.PLAYERS,3F,1F);
+
+                        ItemStack itemStack = new ItemStack(ModItems.STAND_DISC_ANUBIS);
+                        CompoundTag tag = itemStack.getOrCreateTagElement("Special");
+                        tag.putByte("Type",(byte)1);
+
+
+                        StandArrowItem.grantStand(itemStack, AI);
+                        AI.setTarget($$0);
+
+                    }
+                }
+            }
+        }
     }
 }

@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -42,7 +43,6 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
         StandUser user = ((StandUser)entity);
         if (entity.isUsingItem() && !entity.getUseItem().is(ModItems.ANUBIS_ITEM)) {return null;}
         if (entity.getMainHandItem().getItem() instanceof AnubisItem
-                || entity.getOffhandItem().getItem() instanceof AnubisItem
                 || user.roundabout$isPossessed()
                 || (user.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(entity))
                 || user.roundabout$getAnubisVanishTicks() > 0 ) {
@@ -111,7 +111,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                     } else {
                         poseStack.translate(0.18, 0.7, 0.32);
                     }
-                    poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0, 0, 1, 35), 0, 0, 0);
+                    poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0, 0, 1, 50), 0, 0, 0);
                     renderSheathedAnubis(poseStack, bufferSource, packedLight, entity, partialTicks, 0.75F);
                 }
                 ClientUtil.popPoseAndCooperate(poseStack,60);
@@ -208,8 +208,16 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
             ModStrayModels.ANUBIS.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                     1, 1, 1, heyFull, user.roundabout$getStandSkin() );
         } else if (entity.getMainHandItem().getItem() instanceof AnubisItem && !user.roundabout$getEffectiveCombatMode()) {
+            CompoundTag tag = entity.getMainHandItem().getTag();
+            if (tag != null) {
+                if (tag.getFloat("CustomModelData") == 2F) {
+                    skin = (byte) 17;
+                } else if (tag.getFloat("CustomModelData") == 3F) {
+                    skin = (byte) 18;
+                }
+            }
             ModStrayModels.ANUBIS.render(entity, partialTicks, poseStack, bufferSource, packedLight,
-                    1, 1, 1, 1F, (byte) 0);
+                    1, 1, 1, 1F, skin);
         }
 
 

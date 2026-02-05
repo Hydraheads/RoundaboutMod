@@ -285,7 +285,6 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         }
     }
 
-    ///  hides the arms if you're holding anubis
     @Inject(method = "setModelProperties", at = @At(value = "TAIL"))
     private void roundabout$setModelProperties(AbstractClientPlayer $$0, CallbackInfo ci) {
         if ($$0 instanceof StandUser standUser) {
