@@ -510,6 +510,7 @@
   "sounds.roundabout.vampire_dash": "Fwoosh",
   "sounds.roundabout.vampire_gleam": "Sparkle",
   "sounds.roundabout.evil_aura_blast": "Chilling Breeze",
+  "sounds.roundabout.aura_impact": "Aura Impact",
 
   "death.attack.stand": "%1$s died to a mysterious power whilst fighting %2$s",
   "death.attack.stand.item": "%1$s died to a mysterious power whilst fighting %2$s",

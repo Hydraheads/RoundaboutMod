@@ -3,9 +3,11 @@ package net.hydra.jojomod.entity.projectile;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -47,6 +49,8 @@ public class EvilAuraProjectile extends RoundaboutGeneralProjectile{
         entity.hasImpulse = true;
         entity.hurtMarked = true;
 
+
+        level().playSound(null,entity.blockPosition(), ModSounds.AURA_IMPACT_EVENT, SoundSource.PLAYERS, 2F, (float) (0.96f + Math.random() * 0.08f));
         //Roundabout.LOGGER.info("1");
         ((ServerLevel) level()).sendParticles(ModParticles.VAMPIRE_AURA,
                 entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
@@ -74,7 +78,7 @@ public class EvilAuraProjectile extends RoundaboutGeneralProjectile{
             Vec3 windDir = getDeltaMovement().normalize();
             ((ServerLevel) level()).sendParticles(ParticleTypes.CLOUD,
                     getX(), getY()+0.2F, getZ(),
-                    0, windDir.x, windDir.y, windDir.z, 0.05);
+                    0, windDir.x, windDir.y, windDir.z, 0.5);
         }
         super.tick();
     }

@@ -1027,13 +1027,13 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         return bubble;
     }
     public void shootAuraBlast(EvilAuraProjectile ankh){
-        Vec3 addToPosition = new Vec3(0,this.self.getEyeHeight()*0.71,0);
+        Vec3 addToPosition = new Vec3(0,this.self.getEyeHeight(),0);
         Direction direction = ((IGravityEntity)this.self).roundabout$getGravityDirection();
         if (direction != Direction.DOWN){
             addToPosition = RotationUtil.vecPlayerToWorld(addToPosition,direction);
         }
         ankh.setPos(this.self.getX()+addToPosition.x, this.self.getY()+addToPosition.y, this.self.getZ()+addToPosition.z);
-        ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, 1, 0);
+        ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, 1.6f, 0);
     }
     public void doAuraBlast(){
         this.attackTimeDuring = 0;
