@@ -597,7 +597,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
     }
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return 0.75F;
+            return 0.5F;
         } else {
             return 2.0F;
         }

@@ -1,8 +1,11 @@
 package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.particles.ParticleTypes;
@@ -11,6 +14,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -55,6 +59,10 @@ public class EvilAuraProjectile extends RoundaboutGeneralProjectile{
         ((ServerLevel) level()).sendParticles(ModParticles.VAMPIRE_AURA,
                 entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
                 0, 0, 0, 0, 0.8);
+
+        if (getOwner() instanceof Player pl && ((IPowersPlayer)pl).rdbt$getPowers() instanceof VampireGeneralPowers vgp){
+            vgp.addToCombo();
+        }
         alreadyHitEntities.add(entity);
     }
     public boolean alreadyHitEntity(Entity entity){
