@@ -24,4 +24,8 @@ public class EvilAuraProjectile extends RoundaboutGeneralProjectile{
         this.setOwner($$1);
     }
 
+    @Override
+    public int getMaxLifeSpan(){
+        return 20;
+    }
 }
