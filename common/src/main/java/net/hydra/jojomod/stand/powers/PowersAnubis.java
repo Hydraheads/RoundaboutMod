@@ -552,7 +552,6 @@ public class PowersAnubis extends NewDashPreset {
     public void tickPower() {
 
 
-        Roundabout.LOGGER.info(""+this.getStandUserSelf().roundabout$getStandAnimation());
 
      /*   if (!this.level().isClientSide()) {
             if (rdbt$this() instanceof Player P) {

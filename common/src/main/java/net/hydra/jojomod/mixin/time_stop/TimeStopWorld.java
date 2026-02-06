@@ -6,6 +6,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IBlockEntityAccess;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.projectile.GoBeyondEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
@@ -337,6 +338,9 @@ public class TimeStopWorld implements TimeStop {
     /**Code this to check if they are able to use powers mid TS*/
     @Override
     public boolean CanTimeStopEntity(Entity entity){
+        if (entity instanceof AnubisPossessorEntity APE && APE.getUser() != null && !this.CanTimeStopEntity(APE.getUser()) ) {
+            return false;
+        }
         if (entity instanceof Player && ((Player) entity).isCreative() || entity.isSpectator()) {
             return false;
         } else if (entity instanceof Warden && ClientNetworking.getAppropriateConfig().timeStopSettings.wardenMovesInStoppedTime) {
