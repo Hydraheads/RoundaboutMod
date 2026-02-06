@@ -286,6 +286,7 @@
     "anubis.AnubisFoxItemMixin",
     "anubis.AnubisFoxRendererMixin",
     "anubis.AnubisHorseRendererMixin",
+    "anubis.AnubisIllagerModelMixin",
     "anubis.AnubisIllagerRendererMixin",
     "anubis.AnubisVillagerRendererMixin",
     "anubis.AnubisWolfRendererMixin",

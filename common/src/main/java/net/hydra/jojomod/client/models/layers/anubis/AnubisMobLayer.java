@@ -54,7 +54,7 @@ public class AnubisMobLayer<T extends LivingEntity, M extends HierarchicalModel<
     }
 
     private void renderIllager(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, AbstractIllager AI, float v, float v1, float v2, float partialTicks, float v4, float v5) {
-        if (AI.getArmPose() == AbstractIllager.IllagerArmPose.ATTACKING) {
+        if (AI.getArmPose() == AbstractIllager.IllagerArmPose.ATTACKING || (PowerTypes.isUsingStand(AI)) ) {
             ((AccessIllagerModel) this.getParentModel()).roundabout$getRightArm().translateAndRotate(poseStack);
 
             poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0, 1, 0, -90), 0, 0, 0);

@@ -298,7 +298,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     ipe.roundabout$getAnubisUnsheath().stop();
                 }
                 this.roundabout$animate(ipe.roundabout$getThirdPersonAnubisUnsheath(), AnubisAnimations.ThirdPersonUnsheathe,$$3,1F);
-                if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA && PowerTypes.hasStandActive(P)) {
+                if (SU.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(P)) {
                     AnimationDefinition anim = PowersAnubis.getAnimation(SU);
                     if (anim != null) {
                         SU.roundabout$getWornStandAnimation().startIfStopped($$0.tickCount);

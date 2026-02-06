@@ -454,6 +454,11 @@ public class PowersAnubis extends NewDashPreset {
                 this.setActivePower(PowerIndex.RANGED_BARRAGE);
                 setPowerOther(PowerIndex.RANGED_BARRAGE,this.getActivePower());
             }
+
+            case PowerIndex.BARRAGE_CHARGE_2 -> {
+                this.setAnimation(PowerIndex.BARRAGE_CHARGE_2);
+            }
+
             case PowerIndex.SNEAK_MOVEMENT -> {
                 ///  gives you another pogo
                 enablePogo();
@@ -546,6 +551,8 @@ public class PowersAnubis extends NewDashPreset {
     @Override
     public void tickPower() {
 
+
+        Roundabout.LOGGER.info(""+this.getStandUserSelf().roundabout$getStandAnimation());
 
      /*   if (!this.level().isClientSide()) {
             if (rdbt$this() instanceof Player P) {
@@ -741,24 +748,14 @@ public class PowersAnubis extends NewDashPreset {
                     this.getStandUserSelf().roundabout$getWornStandAnimation().stop();
                }
             }
-            /// basic attacks
-            else if (SU.roundabout$getStandAnimation() == PowerIndex.ATTACK
-                    || SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_ATTACK) {
-                if (isClient()) {
-                    AnimationDefinition AD = PowersAnubis.getAnimation(this.getStandUserSelf());
-                    if (AD != null && AD.lengthInSeconds() * 20 < this.attackTime) {
-                        SU.roundabout$setStandAnimation(PowerIndex.NONE);
-                    }
-                }
-            }
-
-            else if (SU.roundabout$getStandAnimation() == PowerIndex.EXTRA) {
-                if (this.getAttackTime() > 5) {
-                    this.getStandUserSelf().roundabout$setStandAnimation(PowerIndex.NONE);
-                }
-            }
-
         }
+
+        if (this.getActivePower() == PowerIndex.NONE && SU.roundabout$getStandAnimation() == PowerIndex.BARRAGE_2 && this.getAttackTime() > 20) {
+            setAnimation(PowerIndex.NONE);
+        }
+
+
+
         /// fastfalling
         if (this.getActivePower() == PowerIndex.SNEAK_MOVEMENT) {
             if (this.getAttackTimeDuring() > 8 && this.getAttackTimeDuring() < 20) {
@@ -794,7 +791,9 @@ public class PowersAnubis extends NewDashPreset {
                 }
                 case PowerIndex.GUARD -> anim = AnubisAnimations.ThirdPersonBlock;
                 case PowerIndex.SNEAK_ATTACK_CHARGE -> anim = AnubisAnimations.ThirdPersonPogoReady;
-          /*      case PowerIndex.ATTACK -> {
+                case PowerIndex.BARRAGE_CHARGE_2 -> anim = AnubisAnimations.ThirdPersonShieldbreakCharge;
+                case PowerIndex.BARRAGE_2 -> anim = AnubisAnimations.ThirdPersonShieldbreakHit;
+          /*      case PowerIndex.ATTACK ->
                     if (PA.activePowerPhase == 1) {
                         anim = AnubisAnimations.ATTACK_1;
                     } else {
@@ -815,6 +814,7 @@ public class PowersAnubis extends NewDashPreset {
 
     public void setAnimation(byte b) {
         this.getStandUserSelf().roundabout$setStandAnimation(b);
+        this.getStandUserSelf().roundabout$getWornStandAnimation().stop();
     }
 
     @Override
@@ -1667,14 +1667,13 @@ public class PowersAnubis extends NewDashPreset {
 
     public void BarrageSlash() {
         ((StandUser)this.getSelf()).roundabout$setBubbleEncased((byte)(0));
-        if (this.getSelf() instanceof Player P) {
-            S2CPacketUtil.sendIntPowerDataPacket(P,PowersAnubis.SWING,0);
-        }
+
         this.setAttackTimeMax(ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown);
         this.setAttackTime(0);
         this.setAttackTimeDuring(0);
         this.setActivePowerPhase(this.getActivePowerPhaseMax());
         this.setPowerNone();
+        this.setAnimation(PowerIndex.BARRAGE_2);
         float knockbackStrength = 1.25F + (this.getSelf().isSprinting() ? 0.1F : 0F);
 
         List<Entity> entities = defaultSwordHitbox(this.getSelf(),4, 45,0.05);
