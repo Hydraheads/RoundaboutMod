@@ -584,7 +584,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     @Inject(
             method = "makeBoundingBox()Lnet/minecraft/world/phys/AABB;",
             at = @At("RETURN"),
-            cancellable = true
+            cancellable = true, require = 0
     )
     private void inject_calculateBoundingBox(CallbackInfoReturnable<AABB> cir) {
         Entity entity = ((Entity) (Object) this);
@@ -603,7 +603,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     @Inject(
             method = "calculateViewVector(FF)Lnet/minecraft/world/phys/Vec3;",
             at = @At("RETURN"),
-            cancellable = true
+            cancellable = true, require = 0
     )
     private void inject_getRotationVector(CallbackInfoReturnable<Vec3> cir) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
@@ -615,7 +615,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     @Inject(
             method = "getBlockPosBelowThatAffectsMyMovement()Lnet/minecraft/core/BlockPos;",
             at = @At("HEAD"),
-            cancellable = true
+            cancellable = true, require = 0
     )
     private void inject_getVelocityAffectingPos(CallbackInfoReturnable<BlockPos> cir) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
@@ -627,7 +627,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     @Inject(
             method = "getEyePosition()Lnet/minecraft/world/phys/Vec3;",
             at = @At("HEAD"),
-            cancellable = true
+            cancellable = true, require = 0
     )
     private void inject_getEyePos(CallbackInfoReturnable<Vec3> cir) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
@@ -639,7 +639,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     @Inject(
             method = "getEyePosition(F)Lnet/minecraft/world/phys/Vec3;",
             at = @At("HEAD"),
-            cancellable = true
+            cancellable = true, require = 0
     )
     private void inject_getCameraPosVec(float tickDelta, CallbackInfoReturnable<Vec3> cir) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
@@ -656,7 +656,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     @Inject(
             method = "getLightLevelDependentMagicValue()F",
             at = @At("HEAD"),
-            cancellable = true
+            cancellable = true, require = 0
     )
     private void inject_getBrightnessAtFEyes(CallbackInfoReturnable<Float> cir) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
@@ -816,7 +816,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     @Inject(
             method = "positionRider(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity$MoveFunction;)V",
             at = @At("HEAD"),
-            cancellable = true
+            cancellable = true, require = 0
     )
     private void rdbt$positionRider(Entity $$0, Entity.MoveFunction $$1, CallbackInfo ci) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
@@ -835,7 +835,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     @Inject(
             method = "getOnPosLegacy()Lnet/minecraft/core/BlockPos;",
             at = @At("HEAD"),
-            cancellable = true
+            cancellable = true, require = 0
     )
     private void inject_getLandingPos(CallbackInfoReturnable<BlockPos> cir) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
@@ -853,7 +853,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     @Inject(
             method = "collide",
             at = @At("HEAD"),
-            cancellable = true
+            cancellable = true, require = 0
     )
     private void rdbt$collide(Vec3 $$0, CallbackInfoReturnable<Vec3> cir) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
@@ -899,7 +899,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     @Inject(
             method = "collideBoundingBox(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/AABB;Lnet/minecraft/world/level/Level;Ljava/util/List;)Lnet/minecraft/world/phys/Vec3;",
             at = @At("HEAD"),
-            cancellable = true
+            cancellable = true, require = 0
     )
     private static void roundabout$collideBoundingBox(@Nullable Entity entity, Vec3 movement, AABB entityBoundingBox, Level $$3, List<VoxelShape> collisions, CallbackInfoReturnable<Vec3> cir) {
         if (entity == null)
@@ -973,7 +973,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     @Inject(
             method = "isInWall",
             at = @At("HEAD"),
-            cancellable = true
+            cancellable = true, require = 0
     )
     private void roundabout$isInWall(CallbackInfoReturnable<Boolean> cir) {
 
@@ -1009,7 +1009,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     @Inject(
             method = "getForward",
             at = @At("HEAD"),
-            cancellable = true
+            cancellable = true, require = 0
     )
     private void roundabout$getForward(CallbackInfoReturnable<Vec3> cir) {
 
@@ -1027,7 +1027,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     @Inject(
             method = "getDirection",
             at = @At("HEAD"),
-            cancellable = true
+            cancellable = true, require = 0
     )
     private void roundabout$getDirection(CallbackInfoReturnable<Direction> cir) {
 
@@ -1040,7 +1040,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     @Inject(
             method = "getBoundingBoxForPose(Lnet/minecraft/world/entity/Pose;)Lnet/minecraft/world/phys/AABB;",
             at = @At("RETURN"),
-            cancellable = true
+            cancellable = true, require = 0
     )
     private void inject_calculateBoundsForPose(Pose pos, CallbackInfoReturnable<AABB> cir) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
@@ -1057,7 +1057,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     @Inject(
             method = "spawnSprintParticle()V",
             at = @At("HEAD"),
-            cancellable = true
+            cancellable = true, require = 0
     )
     private void inject_spawnSprintingParticles(CallbackInfo ci) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
@@ -1080,7 +1080,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     @Inject(
             method = "onAboveBubbleCol(Z)V",
             at = @At("HEAD"),
-            cancellable = true
+            cancellable = true, require = 0
     )
     private void roundabout$onAboveBubbleCol(boolean $$0, CallbackInfo ci) {
         if (rdbt$this() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW
@@ -1091,7 +1091,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     @Inject(
             method = "onInsideBubbleColumn(Z)V",
             at = @At("HEAD"),
-            cancellable = true
+            cancellable = true, require = 0
     )
     private void roundabout$onInsideBubbleColumn(boolean $$0, CallbackInfo ci) {
         if (rdbt$this() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW
@@ -1103,7 +1103,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         @Inject(
             method = "updateFluidHeightAndDoFluidPushing(Lnet/minecraft/tags/TagKey;D)Z",
             at = @At("HEAD"),
-            cancellable = true
+            cancellable = true, require = 0
     )
     private void roundabout$updateFluidHeightAndDoFluidPushing(TagKey<Fluid> $$0, double $$1, CallbackInfoReturnable<Boolean> cir) {
         if (Objects.equals(ModPacketHandler.PLATFORM_ACCESS.getPlatformName(), "Forge")) {
@@ -1195,7 +1195,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     @Inject(
             method = "push(Lnet/minecraft/world/entity/Entity;)V",
             at = @At("HEAD"),
-            cancellable = true
+            cancellable = true, require = 0
     )
     private void inject_pushAwayFrom(Entity entity, CallbackInfo ci) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
@@ -1263,7 +1263,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     @Inject(
             method = "isFree(DDD)Z",
             at = @At("HEAD"),
-            cancellable = true
+            cancellable = true, require = 0
     )
     private void roundabout$isFree(double $$0, double $$1, double $$2, CallbackInfoReturnable<Boolean> cir) {
 
