@@ -376,6 +376,19 @@ public class StandPowers extends AbilityScapeBasis {
     /**When you are about to be hit by a projectile, intercept or run code based off of it, or potentially cancel it
      * Currently it supports abstract arrows but this can be expanded*/
     public boolean dealWithProjectile(Entity ent, HitResult res){
+        if (self instanceof Player pl){
+            if (((IPowersPlayer)pl).rdbt$getPowers().dealWithProjectile(ent,res)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean dealWithProjectileNoDiscard(Entity ent, HitResult res){
+        if (self instanceof Player pl){
+            if (((IPowersPlayer)pl).rdbt$getPowers().dealWithProjectileNoDiscard(ent,res)){
+                return true;
+            }
+        }
         return false;
     }
 

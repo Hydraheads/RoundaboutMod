@@ -38,8 +38,4 @@ public abstract class AnubisCrossbowCancelMixin<T extends Monster & RangedAttack
         }
     }
 
-    @Override
-    public boolean canUse() {
-        return false;
-    }
 }

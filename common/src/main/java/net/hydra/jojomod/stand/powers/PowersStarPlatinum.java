@@ -868,7 +868,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 }
             }
         }
-        return false;
+        return super.dealWithProjectile(ent,res);
     }
 
     @Override

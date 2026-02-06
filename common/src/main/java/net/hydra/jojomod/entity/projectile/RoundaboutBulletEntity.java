@@ -177,6 +177,9 @@ public class RoundaboutBulletEntity extends AbstractArrow {
             StandPowers entityPowers = ((StandUser) $$3).roundabout$getStandPowers();
             if (entityPowers != null ) {
                 if (entityPowers.dealWithProjectile(this, result)) {
+                    discard();
+                    return;
+                } else if (entityPowers.dealWithProjectileNoDiscard(this, result)) {
                     return;
                 }
             }
