@@ -271,6 +271,7 @@
     "achtung.AchtungEntityRenderDispatcher",
     "achtung.AchtungEyesLayer",
     "achtung.AchtungGameRenderer",
+    "achtung.AchtungHorseArmorLayer",
     "achtung.AchtungHumanoidArmorLayer",
     "achtung.AchtungItemBlockRenderTypes",
     "achtung.AchtungItemInHandRenderer",
