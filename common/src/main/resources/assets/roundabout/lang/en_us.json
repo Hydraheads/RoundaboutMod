@@ -2623,6 +2623,10 @@
   "config.roundabout.postTSSoften.desc": "Whether or not players take reduced damage from things beyond your control (gasoline, stand attacks) after a time stop ends. The duration is proportionate to how long they are stopped, and only applies for stops that last more than a second.",
   "config.roundabout.postTSCancel.name": "Post Stop Cancel",
   "config.roundabout.postTSCancel.desc": "Whether or not certain moves get canceled when time resumes. Disable for legacy version.",
+  "config.roundabout.timestopLeapCooldown.name": "Time Stop Leaping Cooldown",
+  "config.roundabout.timestopLeapCooldown.desc": "Timestop is disabled for a short time after a leap",
+  "config.roundabout.timestopCancelsFood.name": "Time Stop Cancels Food",
+  "config.roundabout.timestopCancelsFood.desc": "While in Timestop, you cannot gain healing from food",
 
 
   "config.roundabout.starPlatinumAttackMultOnPlayers.name": "Player Damage Multiplier",

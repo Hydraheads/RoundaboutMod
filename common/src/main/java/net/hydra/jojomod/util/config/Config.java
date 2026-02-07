@@ -795,7 +795,7 @@ public class Config implements Cloneable {
         public Integer additionalCooldownPerSecondsUsed;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer timeStopBonusActionsCooldown;
-        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer timeStopInterruptedCooldownv2;
         @BooleanOption(group = "inherit", value = true)
         public Boolean timeStopIsAlwaysInterruptable;
@@ -823,5 +823,9 @@ public class Config implements Cloneable {
         public Boolean postTSSoften;
         @BooleanOption(group = "inherit", value = true)
         public Boolean postTSCancel;
+        @IntOption(group = "inherit", value = 28, min = 0, max = 100)
+        public Integer timestopLeapCooldown;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean timestopCancelsFood;
     }
 }

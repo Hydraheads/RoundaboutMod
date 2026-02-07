@@ -23,6 +23,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -666,6 +667,10 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     @Override
     public boolean setPowerSneakMovement(int lastMove) {
+
+        if (!onCooldown(PowerIndex.SKILL_4)) { // leaping puts timestop on a cooldown
+            this.setCooldown(PowerIndex.SKILL_4, ConfigManager.getConfig().timeStopSettings.timestopLeapCooldown);
+        }
 
         this.setAttackTimeDuring(-1);
         this.setActivePower(PowerIndex.NONE);
@@ -1959,6 +1964,15 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
         return super.tryPower(move,forced);
     }
+
+    @Override
+    public boolean setPowerGuard() {
+        if (this.getIsTsCharging()) {
+            this.setCooldown(PowerIndex.SKILL_4,ConfigManager.getConfig().timeStopSettings.timeStopInterruptedCooldownv2);
+        }
+        return super.setPowerGuard();
+    }
+
     @Override
     public float getSoundPitchFromByte(byte soundChoice){
         if (soundChoice == TIME_STOP_NOISE_3) {

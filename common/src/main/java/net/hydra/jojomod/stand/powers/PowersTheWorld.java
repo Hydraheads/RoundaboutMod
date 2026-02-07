@@ -761,7 +761,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.75F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.67F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(5));
         }
@@ -769,7 +769,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.5F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.4F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(6F));
         }
