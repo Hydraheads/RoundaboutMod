@@ -3572,11 +3572,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "checkTotemDeathProtection(Lnet/minecraft/world/damagesource/DamageSource;)Z", at = @At(value = "HEAD"), cancellable = true, require = 0)
     public void rdbt$checkTotemDeathProtection(DamageSource dsource, CallbackInfoReturnable<Boolean> cir) {
 
-        if (rdbt$this() instanceof AnubisGuardian AG && AG.hasTotem()) {
+        if (rdbt$this() instanceof AnubisGuardian AG && AG.hasTotem()) { // Anubis Guardians have a totem effect, but only once
             AG.setPopped(true);
             AG.setHealth(AG.getMaxHealth());
             AG.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED,1,200));
-            StandArrowItem.grantStand(ModItems.ANUBIS_ITEM.getDefaultInstance(),AG);
             this.level().broadcastEntityEvent(this, (byte)35);
             cir.setReturnValue(true);
         }

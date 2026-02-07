@@ -84,8 +84,23 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
 
 
 
+    @Inject(method = "addAdditionalSaveData",at = @At("HEAD"))
+    private void roundabout$saveAdditionalData(CompoundTag $$0, CallbackInfo ci) {
+        if (this.roundabout$getAnubisTicks() != -1) {
+            $$0.putByte("roundabout.heldAnubis",this.roundabout$getAnubisType());
+        }
+    }
+
+    @Inject(method = "readAdditionalSaveData",at = @At("HEAD"))
+    private void roundabout$readAddtionalData(CompoundTag $$0, CallbackInfo ci) {
+        if ($$0.contains("roundabout.heldAnubis")) {
+            this.roundabout$setAnubisTicks(30);
+            this.roundabout$setAnubisType($$0.getByte("roundabout.heldAnubis"));
+        }
+    }
+
     @Inject(method = "defineSynchedData",at=@At(value = "TAIL"))
-    public void roundabout$addVillagerSynched(CallbackInfo ci) {
+    private void roundabout$addVillagerSynched(CallbackInfo ci) {
         if (!((Villager)(Object)this).getEntityData().hasItem(ROUNDABOUT$ANUBIS_TICKS) ) {
             ((Villager)(Object)this).getEntityData().define(ROUNDABOUT$ANUBIS_TICKS, -1);
             ((Villager)(Object)this).getEntityData().define(ROUNDABOUT$ANUBIS_TYPE, (byte)-1);
@@ -101,7 +116,10 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
             if (at >= 0) {
                 at--;
 
-                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.ANUBIS_ITEM));
+                ItemStack stack = new ItemStack(ModItems.ANUBIS_ITEM);
+                stack.getOrCreateTag().putFloat("CustomModelData",this.roundabout$getAnubisType()+1);
+
+                this.setItemSlot(EquipmentSlot.MAINHAND,stack);
                 this.setDropChance(EquipmentSlot.MAINHAND, 1.0F);
 
                 ((ServerLevel) this.level()).sendParticles(ParticleTypes.FIREWORK, this.getX(),

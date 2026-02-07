@@ -2,6 +2,8 @@ package net.hydra.jojomod.mixin.anubis;
 
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
+import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.StandArrowItem;
 import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -78,6 +80,7 @@ public abstract class AnubisSummoningMixin {
         BlockPos blockPos3 = this.roundabout$findSpawnPositionNear(serverLevel, blockPos22, 20);
         if (blockPos3 != null && this.roundabout$hasEnoughSpace(serverLevel, blockPos3)) {
             AnubisGuardian anubisGuardian = ModEntities.ANUBIS_GUARDIAN.spawn(serverLevel,blockPos3,MobSpawnType.TRIGGERED);
+            StandArrowItem.grantStand(ModItems.STAND_DISC_ANUBIS.getDefaultInstance(),anubisGuardian);
             anubisGuardian.addEffect(new MobEffectInstance(MobEffects.GLOWING,200));
             return true;
         }

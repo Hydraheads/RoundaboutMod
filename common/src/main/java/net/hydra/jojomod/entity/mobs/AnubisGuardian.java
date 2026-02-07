@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.mobs;
 
 import net.hydra.jojomod.item.ModItems;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -50,11 +51,26 @@ public class AnubisGuardian extends Raider implements RangedAttackMob {
         this.entityData.define(HAS_POPPED, false);
     }
 
+    @Override
+    public void addAdditionalSaveData(CompoundTag $$0) {
+        $$0.putBoolean("roundabout.popped_totem",!this.hasTotem());
+        super.addAdditionalSaveData($$0);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag $$0) {
+        if ($$0.contains("roundabout.popped_totem")) {
+            boolean hasPopped = $$0.getBoolean("roundabout.popped_totem");
+            this.setPopped(hasPopped);
+        }
+        super.readAdditionalSaveData($$0);
+    }
+
     public void setAction(AnubisAttacks AA) {
         this.entityData.set(CHOSEN_ACTION,AA.id);
 
         switch (this.getAction()) {
-            case NONE -> this.setItemInHand(InteractionHand.MAIN_HAND,Items.AIR.getDefaultInstance());
+            case NONE, ANUBIS_RAGE -> this.setItemInHand(InteractionHand.MAIN_HAND,Items.AIR.getDefaultInstance());
             case AXE_RUSH -> this.setItemInHand(InteractionHand.MAIN_HAND,Items.IRON_AXE.getDefaultInstance());
             case SWORD_RUSH -> {
                 ItemStack a = new ItemStack(Items.IRON_SWORD);
@@ -117,7 +133,7 @@ public class AnubisGuardian extends Raider implements RangedAttackMob {
 
     public AbstractIllager.IllagerArmPose getArmPose() {
         return switch (this.getAction()) {
-            case AXE_RUSH,SWORD_RUSH -> AbstractIllager.IllagerArmPose.ATTACKING;
+            case AXE_RUSH,SWORD_RUSH, ANUBIS_RAGE -> AbstractIllager.IllagerArmPose.ATTACKING;
             case BOW_ATTACK -> AbstractIllager.IllagerArmPose.BOW_AND_ARROW;
             default -> AbstractIllager.IllagerArmPose.CROSSED;
         };
@@ -158,7 +174,8 @@ public enum AnubisAttacks {
     AXE_RUSH((byte) 1),
     SWORD_RUSH((byte) 2),
     BOW_ATTACK((byte)3),
-    FIRE_POT((byte)4);
+    FIRE_POT((byte)4),
+    ANUBIS_RAGE((byte)5);
 
     public final byte id;
     AnubisAttacks(byte $$0) {
@@ -176,6 +193,8 @@ public enum AnubisAttacks {
             return BOW_ATTACK;
         } else if (b == FIRE_POT.id) {
             return FIRE_POT;
+        } else if (b == ANUBIS_RAGE.id) {
+            return ANUBIS_RAGE;
         }
         return NONE;
     }
@@ -352,8 +371,20 @@ static class RageGoal extends MeleeAttackGoal {
 
     private AnubisGuardian mob;
     public RageGoal(AnubisGuardian $$0) {
-        super($$0, 0.35, true);
+        super($$0, 0.55, true);
         this.mob = $$0;
+    }
+
+    @Override
+    public void start() {
+        super.start();
+        this.mob.setAction(AnubisAttacks.ANUBIS_RAGE);
+    }
+
+    @Override
+    public void stop() {
+        super.stop();
+        this.mob.setAction(AnubisAttacks.NONE);
     }
 
     @Override

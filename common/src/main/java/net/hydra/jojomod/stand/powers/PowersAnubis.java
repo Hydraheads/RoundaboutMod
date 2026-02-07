@@ -13,6 +13,7 @@ import net.hydra.jojomod.client.gui.MemoryRecordScreen;
 import net.hydra.jojomod.client.models.layers.animations.AnubisAnimations;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.projectile.AnubisSlipstreamEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -511,6 +512,7 @@ public class PowersAnubis extends NewDashPreset {
                 this.setActivePower(PowerIndex.BARRAGE_CHARGE_2);
             }
             case PowerIndex.RANGED_BARRAGE -> {
+                this.setAnimation(PowerIndex.BARRAGE);
                 this.setActivePower(PowerIndex.RANGED_BARRAGE);
                 this.setAttackTime(0);
             }
@@ -792,6 +794,8 @@ public class PowersAnubis extends NewDashPreset {
                 case PowerIndex.SNEAK_ATTACK_CHARGE -> anim = AnubisAnimations.ThirdPersonPogoReady;
                 case PowerIndex.BARRAGE_CHARGE_2 -> anim = AnubisAnimations.ThirdPersonShieldbreakCharge;
                 case PowerIndex.BARRAGE_2 -> anim = AnubisAnimations.ThirdPersonShieldbreakHit;
+                case PowerIndex.BARRAGE_CHARGE-> anim = AnubisAnimations.ThirdPersonBarrageCharge;
+                case PowerIndex.BARRAGE -> anim = AnubisAnimations.ThirdPersonBarrageDash;
           /*      case PowerIndex.ATTACK ->
                     if (PA.activePowerPhase == 1) {
                         anim = AnubisAnimations.ATTACK_1;
@@ -887,7 +891,7 @@ public class PowersAnubis extends NewDashPreset {
         } else {
             this.activePowerPhase++;
             if (this.activePowerPhase == 3) {
-                this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown-6;
+                this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown-10;
             } else {
                 this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchCooldown;
             }
@@ -1440,6 +1444,7 @@ public class PowersAnubis extends NewDashPreset {
     public boolean setPowerBarrageCharge() {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE_CHARGE);
+        this.setAnimation(PowerIndex.BARRAGE_CHARGE);
         playBarrageChargeSound();
         return true;
     }
@@ -2438,6 +2443,9 @@ public class PowersAnubis extends NewDashPreset {
 
     @Override
     public void tickMobAI(LivingEntity attackTarget) {
+
+        if (this.getSelf() instanceof AnubisGuardian AG && AG.hasTotem() ) {return;}
+
         if (attackTarget != null && !this.getStandUserSelf().roundabout$isDazed()) {
 
             tickDashing(attackTarget);

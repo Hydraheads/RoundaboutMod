@@ -36,6 +36,7 @@
     "anubis.AnubisCowMixin",
     "anubis.AnubisCrossbowCancelMixin",
     "anubis.AnubisDropsMixin",
+    "anubis.AnubisSpellcasterMixin",
     "anubis.BonusExperienceMixin",
     "barrage.DazeBlazeAttackGoal",
     "barrage.DazeCreeper",
