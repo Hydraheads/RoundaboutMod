@@ -1,6 +1,7 @@
 package net.hydra.jojomod.client.models.layers.anubis;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
@@ -23,6 +24,7 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.AbstractIllager;
+import net.minecraft.world.entity.player.Player;
 import org.joml.Quaternionf;
 
 
@@ -41,7 +43,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
 
     public static HumanoidArm shouldRender(LivingEntity entity) {
         StandUser user = ((StandUser)entity);
-        if (entity.isUsingItem() && !entity.getUseItem().is(ModItems.ANUBIS_ITEM)) {return null;}
+        if (entity.isUsingItem() && !(entity.getUseItem().getItem() instanceof AnubisItem) )  {return null;}
         if (entity.getMainHandItem().getItem() instanceof AnubisItem
                 || user.roundabout$isPossessed()
                 || (user.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(entity))
@@ -176,7 +178,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
 
         poseStack.scale(scale,scale,scale);
         ModStrayModels.ANUBIS.render(entity, partialTicks, poseStack, bufferSource, packedLight,
-                1, 1, 1, 1-heyFull, user.roundabout$getStandSkin());
+                1, 1, 1, 1-heyFull, user.roundabout$getStandSkin(),false);
     }
 
     public static void renderAnubis(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float partialTicks) {

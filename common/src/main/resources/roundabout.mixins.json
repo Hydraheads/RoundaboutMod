@@ -33,7 +33,6 @@
     "achtung.AchtungItemEntity",
     "achtung.AchtungPortalShapeMixin",
     "achtung.AchtungProjectile",
-    "anubis.AnubisAbstractIllagerMixin",
     "anubis.AnubisCowMixin",
     "anubis.AnubisCrossbowCancelMixin",
     "anubis.AnubisDropsMixin",

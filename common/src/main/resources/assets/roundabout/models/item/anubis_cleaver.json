@@ -2,5 +2,13 @@
   "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "roundabout:item/anubis_item_cleaver"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "scale": [0,0,0]
+    },
+    "thirdperson_lefthand": {
+      "scale": [0,0,0]
+    }
   }
 }
