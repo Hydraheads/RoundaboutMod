@@ -544,7 +544,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                                     }
                                 } else if (autoTarget != null && (LE.tickCount - LE.getLastHurtByMobTimestamp()) < 200 &&
                                         !(autoTarget instanceof Player PE && PE.isCreative())) {
-                                    if (!(controller != null && autoTarget2.is(controller))) {
+                                    if (!(controller != null && autoTarget.is(controller))) {
                                         if (autoTarget instanceof Player PL) {
                                             setLastHurtByPlayer(PL);
                                         }
