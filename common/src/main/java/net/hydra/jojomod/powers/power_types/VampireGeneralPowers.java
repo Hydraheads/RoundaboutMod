@@ -2,6 +2,7 @@ package net.hydra.jojomod.powers.power_types;
 
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.projectile.EvilAuraProjectile;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -73,6 +74,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public static final byte DEFLECTION = PowerIndex.POWER_4_SNEAK;
 
     public static final byte AIR_DASH = PowerIndex.POWER_3;
+    public static final byte RIPPER_EYES = PowerIndex.POWER_4;
 
     /**The text name of the fate*/
     public Component getPowerName(){
@@ -107,12 +109,22 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 case SKILL_3_CROUCH -> {
                     evilAuraClient();
                 }
+                case SKILL_4_NORMAL -> {
+                    ripperEyesClient();
+                }
                 case SKILL_4_CROUCH -> {
                     deflectClient();
                 }
             }
         }
     };
+
+
+    public void ripperEyesClient(){
+        if (!onCooldown(PowerIndex.GENERAL_4)){
+            this.tryPower(RIPPER_EYES);
+        }
+    }
 
     public void deflectClient(){
         if (!onCooldown(PowerIndex.GENERAL_4_SNEAK)){
@@ -249,6 +261,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             basis*=0.1f;
         } else if (getActivePower() == DEFLECTION){
             basis*=0.1f;
+        } else if (getActivePower() == RIPPER_EYES){
+            basis*=0.1f;
         }
         return super.inputSpeedModifiers(basis);
     }
@@ -257,7 +271,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         return getActivePower() == POWER_SPIKE || super.cancelSprintJump() ||
                 getActivePower() == BLOOD_CLUTCH ||
                 getActivePower() == ICE_CLUTCH ||
-                getActivePower() == DEFLECTION;
+                getActivePower() == DEFLECTION ||
+                getActivePower() == RIPPER_EYES;
     }
 
     public void clientSpikeAttack(){
@@ -645,9 +660,32 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         return getActivePower() == POWER_SPIKE;
     }
 
+    public int getRipperEyesCharge(){
+        if (attackTimeDuring <= getMaxRipperEyesWait()){
+            return attackTimeDuring;
+        }
+        return Mth.clamp(getMaxRipperEyesWait()-((attackTimeDuring-getMaxRipperEyesWait())*4),0,getMaxRipperEyesWait());
+    }
+    public int getMaxRipperEyesWait(){
+        return 80;
+    }
+    /**An easy way to replace the EXP bar with a stand bar, see the function below this one*/
+    public boolean replaceHudActively(){
+        return getActivePower()==RIPPER_EYES;
+    }
+    /**If the above function is set to true, this will be the code called instead of the exp bar one. Make
+     * a call to another class so too much client code doesn't unnecessarily exist in the standpowers class.*/
+    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
+                                  boolean removeNum){
+        StandHudRender.renderRipperHud(context,cameraPlayer,screenWidth,screenHeight,x,removeNum);
+    }
+
+
+
     public boolean bigJumpBlocker(){
         return isSpiking() || getActivePower() == BLOOD_CLUTCH || getActivePower() == ICE_CLUTCH
-                || getActivePower() == DEFLECTION || super.bigJumpBlocker();
+                || getActivePower() == DEFLECTION
+                || getActivePower() == RIPPER_EYES || super.bigJumpBlocker();
     }
 
     @Override
@@ -702,6 +740,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             doAuraBlast();
         } else if (move == DEFLECTION){
             doDeflection();
+        } else if (move == RIPPER_EYES){
+            doRipperEyes();
         }
 
         return super.setPowerOther(move,lastMove);
@@ -1151,6 +1191,15 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         return super.dealWithProjectileNoDiscard(ent,res);
     }
 
+    public void doRipperEyes(){
+        if (!self.level().isClientSide()) {
+            this.attackTimeDuring = 0;
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.IMPALE_CHARGE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.7f + Math.random() * 0.1f));
+            setActivePower(RIPPER_EYES);
+        } else {
+            tryPowerPacket(RIPPER_EYES);
+        }
+    }
     public void doDeflection(){
         if (!self.level().isClientSide()) {
             if (!onCooldown(PowerIndex.GENERAL_4_SNEAK)) {

@@ -117,7 +117,8 @@ public class AbilityScapeBasis {
     }
     /**If the above function is set to true, this will be the code called instead of the exp bar one. Make
      * a call to another class so too much client code doesn't unnecessarily exist in the standpowers class.*/
-    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x){
+    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
+                                  boolean removeNum){
     }
 
 

@@ -22,7 +22,9 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.VampireFate;
+import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
+import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersCream;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
@@ -606,6 +608,31 @@ public class StandHudRender {
             context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
             context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
             context.drawString(renderer, $$6, $$7, $$8, y, false);
+        }
+    }
+
+
+    public static void renderRipperHud(GuiGraphics context, Player playerEntity,
+                                    int scaledWidth, int scaledHeight, int x,
+                                    boolean removeNum) {
+        if (((IPowersPlayer)playerEntity).rdbt$getPowers() instanceof VampireGeneralPowers vgp) {
+            int l;
+            StandUser standUser = ((StandUser) playerEntity);
+            int ripper = vgp.getRipperEyesCharge();
+            int maxXP = vgp.getMaxRipperEyesWait();
+            int blt = (int) Math.floor(((double) 182 / maxXP) * (ripper));
+            l = scaledHeight - 32 + 3;
+            context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 61, 182, 5);
+            if (blt > 0) {
+                context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 66, blt, 5);
+            }
+
+            if (!removeNum) {
+                int u = 183;
+                int k = scaledWidth / 2 - 5;
+                l = scaledHeight - 31 - 5;
+                context.blit(StandIcons.JOJO_ICONS_2, k, l, u, 62, 9, 9);
+            }
         }
     }
 

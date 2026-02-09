@@ -1,18 +1,9 @@
 package net.hydra.jojomod.entity.projectile;
 
-import net.hydra.jojomod.entity.FireProjectile;
-import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.UnburnableProjectile;
-import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
-import net.hydra.jojomod.event.powers.DamageHandler;
-import net.hydra.jojomod.event.powers.ModDamageTypes;
-import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -99,13 +90,6 @@ public class RoundaboutGeneralProjectile extends AbstractHurtingProjectile imple
     }
     @Override
     public boolean isControlledByLocalInstance() {
-        /**
-         if (this.getStandUser() != null && ((StandUser)this.getStandUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
-         if (this.getCrossNumber() > 0) {
-         return true;
-         }
-         }
-         **/
         return super.isControlledByLocalInstance();
     }
 
@@ -228,51 +212,12 @@ public class RoundaboutGeneralProjectile extends AbstractHurtingProjectile imple
     public Vec3 forcedDeltaMovement = null;
 
 
-    public void getEntity(Entity gotten, PowersMagiciansRed PMR, LivingEntity user){
-        if (gotten !=null && gotten.getId() != getUserID()) {
-            float dmg = PMR.getFireballDamage(gotten);
-            float strength = 0.85F;
-            if (!(user instanceof Player) && !(user instanceof Monster)){
-                if (!(gotten instanceof Monster)){
-                    if (!(user instanceof Mob mb && mb.getTarget() !=null && mb.getTarget().is(gotten))){
-                        return;
-                    }
-                }
-            }
-
-            if (gotten.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.CROSSFIRE, this.standUser),
-                    dmg)) {
-                float degrees = MainUtil.getLookAtEntityYaw(this, gotten);
-                MainUtil.takeUnresistableKnockbackWithY(gotten, strength,
-                        Mth.sin(degrees * ((float) Math.PI / 180)),
-                        Mth.sin(-17 * ((float) Math.PI / 180)),
-                        -Mth.cos(degrees * ((float) Math.PI / 180)));
-                if (gotten instanceof LivingEntity LE) {
-                    PMR.addEXP(3,LE);
-                    StandUser userLE = ((StandUser) LE);
-                    int ticks = 20;
-                    if (userLE.roundabout$getRemainingFireTicks() > -1){
-                        ticks+=userLE.roundabout$getRemainingFireTicks();
-                    } else {
-                        ticks += 80;
-                    }
-                    userLE.roundabout$setOnStandFire(PMR.getFireColor(), standUser);
-                    userLE.roundabout$setRemainingStandFireTicks(ticks);
-                }
-            }
-        }
-    }
-
     @Override
     public boolean fireImmune() {
         return true;
     }
     @Override
     protected ParticleOptions getTrailParticle() {
-        LivingEntity user = this.getStandUser();
-        if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
-            return PMR.getFlameParticle();
-        }
         return new BlockParticleOption(ParticleTypes.BLOCK, Blocks.AIR.defaultBlockState());
     }
 
