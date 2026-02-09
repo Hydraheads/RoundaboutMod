@@ -1974,6 +1974,15 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
 
     @Override
+    public void onStandSummon(boolean desummon) {
+        if (desummon && this.getIsTsCharging() ) {
+            this.setCooldown(PowerIndex.SKILL_4,ConfigManager.getConfig().timeStopSettings.timeStopInterruptedCooldownv2);
+        }
+        super.onStandSummon(desummon);
+    }
+
+
+    @Override
     public float getSoundPitchFromByte(byte soundChoice){
         if (soundChoice == TIME_STOP_NOISE_3) {
             return 1F;
