@@ -2000,6 +2000,8 @@
   "config.roundabout.enableCream.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableRatt.name": "Enable Stand",
   "config.roundabout.enableRatt.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+  "config.roundabout.enableAnubis.name": "Enable Stand",
+  "config.roundabout.enableAnubis.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableMandom.name": "Enable Stand",
   "config.roundabout.enableMandom.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableAchtungBaby.name": "Enable Stand",
@@ -2212,24 +2214,34 @@
   "config.roundabout.rattAttackBonusOnMobs.desc": "How much bonus damage Ratt darts deal to a mob.",
   "config.roundabout.rattAttackBonusOnBosses.name": "Bonus Boss Damage",
   "config.roundabout.rattAttackBonusOnBosses.desc": "Since Boss mobs cannot receive melt, they instead take a flat bonus damage ",
-
-  "config.roundabout.rattMaxDespawnRange.name": "Ratt Despawn Range",
+  "config.roundabout.rattMaxDespawnRange.name": "Despawn Range",
   "config.roundabout.rattMaxDespawnRange.desc": "How far you can go from Ratt until they despawn.",
-
   "config.roundabout.rattChargePerHit.name": "Manual Charge Per Hit",
   "config.roundabout.rattChargePerHit.desc": "How much manual charge Ratt gets from hitting a placed shot successfully. Default is 30, which means 3 hits to fully charge ",
-  "config.roundabout.rattManualChargeRate.name": "Manual Ratt Charge Speed",
+  "config.roundabout.rattManualChargeRate.name": "Manual Charge Speed",
   "config.roundabout.rattManualChargeRate.desc": "How quickly manually charging Ratt takes. default is 2 per tick which equals about 2.5 seconds to reach full charge.",
-
-  "config.roundabout.rattLeapCooldown.name": "Ratt Leap Cooldown",
+  "config.roundabout.rattLeapCooldown.name": "Leap Cooldown",
   "config.roundabout.rattLeapCooldown.desc": "The cooldown for Ratt's 4th move, Ratt Leap",
-  "config.roundabout.rattLeapStrength.name": "Ratt Leap Strength",
+  "config.roundabout.rattLeapStrength.name": "Leap Strength",
   "config.roundabout.rattLeapStrength.desc": "How strong Ratt's leap is",
 
   "config.roundabout.anubisMemoryOpen.name": "Anubis Memories",
   "config.roundabout.anubisMemories.name": "Anubis Client Settings",
   "config.roundabout.anubisPogoCounter.name": "Anubis Pogo Indicator",
   "config.roundabout.anubisPogoCounter.desc": "Displays a counter showing how many pogos you have done.",
+
+  "config.roundabout.anubisAttackMultOnPlayers.name": "Player Damage Multiplier",
+  "config.roundabout.anubisAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
+  "config.roundabout.anubisAttackMultOnMobs.name": "Mob Damage Multiplier",
+  "config.roundabout.anubisAttackMultOnMobs.desc": "How much damage the stand deals to every other mob, same math as above.",
+  "config.roundabout.anubisGuardPoints.name": "Guard Points",
+  "config.roundabout.anubisGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
+  "config.roundabout.anubisBackflipCooldown.name": "Backflip",
+  "config.roundabout.anubisBackflipCooldown.desc": "How long Backflip should go on cooldown",
+  "config.roundabout.anubisMaxMemory.name": "Max Memory Length",
+  "config.roundabout.anubisMaxMemory.desc": "The time, in ticks, that Anubis can record for at max level",
+
+
 
   "config.roundabout.mem1.name": "Memory 1",
   "config.roundabout.mem1.desc": "Memory 1",

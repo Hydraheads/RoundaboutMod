@@ -714,14 +714,14 @@ public class Config implements Cloneable {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableAnubis;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer anubisAttackMultOnMobs;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer anubisAttackMultOnPlayers;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer anubisAttackMultOnMobs;
         @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
         public Integer anubisGuardPoints;
         @IntOption(group = "inherit", value = 260, min = 0, max = 72000)
         public Integer anubisBackflipCooldown;
-        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer anubisMaxMemory;
     }
 

@@ -828,8 +828,7 @@ public class PowersAnubis extends NewDashPreset {
 
             return this.getActivePower() == PowersAnubis.UPPERCUT && this.attackTimeDuring < 8
                     || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE && this.attackTimeDuring > PowersAnubis.PogoDelay && this.attackTimeDuring < PowersAnubis.PogoDelay + 9
-                    || this.getActivePower() == PowersAnubis.SPIN & this.getAttackTimeDuring() < 8
-                    || this.getActivePower() == PowerIndex.RANGED_BARRAGE;
+                    || this.getActivePower() == PowersAnubis.SPIN & this.getAttackTimeDuring() < 8;
         }
         return false;
     }
@@ -1037,7 +1036,7 @@ public class PowersAnubis extends NewDashPreset {
                         }
                         case PowersAnubis.UPPERCUT -> {
                             if (this.getAttackTimeDuring() < 3) {
-                                if (this.getTargetEntity(this.getSelf(),2) == null && this.getSelf().onGround()) {
+                                if (this.getTargetEntity(this.getSelf(),2) == null && this.fallTime == 0) {
                                     Vec3 look = this.getSelf().getLookAngle();
                                     look = new Vec3(look.x,0, look.z).normalize().reverse();
                                     MainUtil.takeUnresistableKnockbackWithY(this.getSelf(),1F,look.x,look.y,look.z);
@@ -1176,9 +1175,9 @@ public class PowersAnubis extends NewDashPreset {
         Entity target = this.getSelf().level().getEntity(id);
         this.setAttackTimeDuring(this.getAttackTimeDuring()+15);
 
-        if (StandDamageEntityAttack(target,this.getPunchStrength(target),1,this.getSelf())) {
+        if (!StandDamageEntityAttack(target,this.getPunchStrength(target),1,this.getSelf())) {
             if (target instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers().interceptGuard()
-                    && LE.isBlocking() && !((StandUser) LE).roundabout$isGuarding()){
+                    && ( LE.isBlocking() || ((StandUser) LE).roundabout$isGuarding() )   ){
                 knockShield2(target, 30);
             }
         }
@@ -1206,7 +1205,7 @@ public class PowersAnubis extends NewDashPreset {
         List<Entity> entities = getBasicSwordHitBox(this.getActivePower() == PowerIndex.SNEAK_ATTACK);
         for (Entity e : entities ) {
             if (e != null) {
-                float pow = getPunchStrength(e) * (this.getActivePower() == PowerIndex.SNEAK_ATTACK ? 1.2F : 1F);
+                float pow = getPunchStrength(e) * (this.getActivePower() == PowerIndex.SNEAK_ATTACK ? 1.5F : 1F);
                 if (StandDamageEntityAttack(e, pow, 0, this.self)) {
                     if (e instanceof LivingEntity) {
                         addEXP(1);
@@ -1365,7 +1364,7 @@ public class PowersAnubis extends NewDashPreset {
                 }
                 Vec3 v = entity.getPosition(1F).subtract(this.getSelf().getPosition(1F));
                 v = v.normalize();
-                MainUtil.takeUnresistableKnockbackWithY(entity,0.4,v.x,v.y+0.22,v.z);
+                MainUtil.takeUnresistableKnockbackWithY(entity,0.6,v.x,v.y-0.22,v.z);
 
                 if (entity instanceof LivingEntity LE) {LE.addEffect(new MobEffectInstance(ModEffects.BLEED,dur,amp));}
 
