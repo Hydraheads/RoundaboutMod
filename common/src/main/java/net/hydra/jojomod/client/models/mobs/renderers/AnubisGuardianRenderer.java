@@ -6,6 +6,7 @@ package net.hydra.jojomod.client.models.mobs.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
+import net.hydra.jojomod.client.models.layers.anubis.AnubisMobLayer;
 import net.hydra.jojomod.client.models.mobs.AnubisGuardianModel;
 import net.hydra.jojomod.client.models.mobs.layers.AnubisGuardianLayer;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
@@ -23,6 +24,7 @@ public class AnubisGuardianRenderer<T extends AnubisGuardian>
     public AnubisGuardianRenderer(EntityRendererProvider.Context context) {
         super(context,new AnubisGuardianModel<>(context.bakeLayer(ModEntityRendererClient.ANUBIS_GUARDIAN_LAYER)),0.5F);
         this.addLayer(new AnubisGuardianLayer<>(this,context.getItemInHandRenderer()));
+        this.addLayer(new AnubisMobLayer<>(this));
     }
 
     @Override

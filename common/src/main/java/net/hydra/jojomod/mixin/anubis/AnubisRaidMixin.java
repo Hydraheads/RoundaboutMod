@@ -35,9 +35,6 @@ public abstract class AnubisRaidMixin {
 
 
     @Shadow
-    protected abstract boolean isFinalWave();
-
-    @Shadow
     private BlockPos center;
 
     @Shadow
@@ -59,8 +56,6 @@ public abstract class AnubisRaidMixin {
     @Shadow
     protected abstract void setDirty();
 
-    @Shadow
-    public abstract boolean addWaveMob(int i, Raider raider, boolean bl);
 
     @Shadow
     @Final

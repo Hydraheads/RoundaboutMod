@@ -18,7 +18,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Quaternionf;
 
-public class AnubisGuardianLayer <T extends LivingEntity, M extends EntityModel<T> & ArmedModel> extends RenderLayer<T, M> {
+public class AnubisGuardianLayer <T extends AnubisGuardian, M extends EntityModel<T> & ArmedModel> extends RenderLayer<T, M> {
     private final ItemInHandRenderer itemInHandRenderer;
     public AnubisGuardianLayer(RenderLayerParent<T, M> $$0, ItemInHandRenderer ihr) {
         super($$0);
@@ -69,7 +69,7 @@ public class AnubisGuardianLayer <T extends LivingEntity, M extends EntityModel<
     protected void renderArmWithItem(LivingEntity $$0, ItemStack $$1, ItemDisplayContext $$2, HumanoidArm $$3, PoseStack $$4, MultiBufferSource $$5, int $$6) {
         if (!$$1.isEmpty()) {
             $$4.pushPose();
-            ((ArmedModel)this.getParentModel()).translateToHand($$3, $$4);
+            this.getParentModel().translateToHand($$3, $$4);
             $$4.mulPose(Axis.XP.rotationDegrees(-90.0F));
             $$4.mulPose(Axis.YP.rotationDegrees(180.0F));
             boolean $$7 = $$3 == HumanoidArm.LEFT;
@@ -81,18 +81,12 @@ public class AnubisGuardianLayer <T extends LivingEntity, M extends EntityModel<
 
 
     public boolean shouldRenderCrossed(T t) {
-        if (t instanceof AnubisGuardian AG) {
-            return AG.getArmPose().equals(AbstractIllager.IllagerArmPose.CROSSED);
-        }
-        return false;
+        return t.getArmPose().equals(AbstractIllager.IllagerArmPose.CROSSED);
     }
     public boolean shouldRenderArms(T t) {
-        if (t instanceof AnubisGuardian AG) {
-            return AG.getArmPose().equals(AbstractIllager.IllagerArmPose.ATTACKING)
-                    || AG.getArmPose().equals(AbstractIllager.IllagerArmPose.CROSSBOW_CHARGE)
-                    || AG.getArmPose().equals(AbstractIllager.IllagerArmPose.CROSSBOW_HOLD)
-                    || AG.getArmPose().equals(AbstractIllager.IllagerArmPose.BOW_AND_ARROW);
-        }
-        return false;
+        return t.getArmPose().equals(AbstractIllager.IllagerArmPose.ATTACKING)
+                || t.getArmPose().equals(AbstractIllager.IllagerArmPose.CROSSBOW_CHARGE)
+                || t.getArmPose().equals(AbstractIllager.IllagerArmPose.CROSSBOW_HOLD)
+                || t.getArmPose().equals(AbstractIllager.IllagerArmPose.BOW_AND_ARROW);
     }
 }

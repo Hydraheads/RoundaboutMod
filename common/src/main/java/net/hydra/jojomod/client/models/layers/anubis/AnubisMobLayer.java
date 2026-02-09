@@ -3,6 +3,8 @@ package net.hydra.jojomod.client.models.layers.anubis;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.client.models.mobs.AnubisGuardianModel;
+import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -14,6 +16,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.entity.animal.Fox;
@@ -55,7 +58,15 @@ public class AnubisMobLayer<T extends LivingEntity, M extends HierarchicalModel<
 
     private void renderIllager(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, AbstractIllager AI, float v, float v1, float v2, float partialTicks, float v4, float v5) {
         if (AI.getArmPose() == AbstractIllager.IllagerArmPose.ATTACKING || (PowerTypes.isUsingStand(AI)) ) {
-            ((AccessIllagerModel) this.getParentModel()).roundabout$getRightArm().translateAndRotate(poseStack);
+            if (AI instanceof AnubisGuardian AG) {
+                if (!AG.hasTotem() && AG.getArmPose().equals(AbstractIllager.IllagerArmPose.ATTACKING)){
+                    ((AnubisGuardianModel) this.getParentModel()).getArm(HumanoidArm.RIGHT).translateAndRotate(poseStack);
+                } else {
+                    return;
+                }
+            } else {
+                ((AccessIllagerModel) this.getParentModel()).roundabout$getRightArm().translateAndRotate(poseStack);
+            }
 
             poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0, 1, 0, -90), 0, 0, 0);
             poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0, 0, 1, 90), 0, 0, 0);

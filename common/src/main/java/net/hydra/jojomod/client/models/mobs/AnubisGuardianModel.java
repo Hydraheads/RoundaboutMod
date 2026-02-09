@@ -138,7 +138,7 @@ public class AnubisGuardianModel<T extends AnubisGuardian> extends HierarchicalM
         this.rightArm.visible = !flag;
     }
 
-    private ModelPart getArm(HumanoidArm p_102923_) {
+    public ModelPart getArm(HumanoidArm p_102923_) {
         return p_102923_ == HumanoidArm.LEFT ? this.leftArm : this.rightArm;
     }
 

@@ -26,7 +26,7 @@ public class ThrownAnubisEntity extends ThrownObjectEntity {
     protected void onHitEntity(EntityHitResult $$0) {
         if ($$0.getEntity() instanceof Cow C && !((StandUser)C).roundabout$hasAStand() ) {
 
-            if (this.level().isClientSide()) {
+            if (!this.level().isClientSide()) {
                 this.level().playSound(null,this.blockPosition(), ModSounds.ANUBIS_EXTRA_EVENT, SoundSource.PLAYERS,10F,1F);
 
                 StandArrowItem.grantStand(ModItems.STAND_DISC_ANUBIS.getDefaultInstance(), C);

@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.mobs;
 
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.StandArrowItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -30,7 +31,7 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 
-public class AnubisGuardian extends Raider implements RangedAttackMob {
+public class AnubisGuardian extends AbstractIllager implements RangedAttackMob {
 
 
     @Override
@@ -100,8 +101,9 @@ public class AnubisGuardian extends Raider implements RangedAttackMob {
         super.tick();
     }
 
-    public AnubisGuardian(EntityType<? extends Raider> $$0, Level $$1) {
+    public AnubisGuardian(EntityType<? extends AbstractIllager> $$0, Level $$1) {
         super($$0, $$1);
+        StandArrowItem.grantStand(ModItems.STAND_DISC_ANUBIS.getDefaultInstance(),this);
         this.setMaxUpStep(1.5F);
     }
     public static AttributeSupplier.Builder createAttributes() {return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 50.0).add(Attributes.ARMOR,6).add(Attributes.ATTACK_DAMAGE, 5.0);}

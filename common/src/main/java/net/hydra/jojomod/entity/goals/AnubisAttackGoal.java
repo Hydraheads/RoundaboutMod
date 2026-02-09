@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.goals;
 
+import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
@@ -26,6 +27,11 @@ public class AnubisAttackGoal extends MeleeAttackGoal {
 
     @Override
     public boolean canUse() {
+
+        if (this.mob instanceof AnubisGuardian) {
+            return false;
+        }
+
         boolean bl = true;
         if (this.mob instanceof Pillager P) {
             bl = !P.isChargingCrossbow();

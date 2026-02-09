@@ -4727,13 +4727,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         LivingEntity target = poss.getTarget();
                         if (target != null) {
                             if (target.hurtTime == 0 && !this.roundabout$isDazed() && roundabout$anubisAttackDelay >= 0) {
-                                if (P.getPosition(0.5F).distanceTo(target.getPosition(1)) < 2) {
+                                if (P.getPosition(0.5F).distanceTo(target.getPosition(1)) < 1.4) {
                                     P.swing(InteractionHand.MAIN_HAND,true);
                                     if (target.hurt(ModDamageTypes.of(P.level(), ModDamageTypes.ANUBIS_POSSESS,this),7.5F)) {
                                         roundabout$anubisAttackDelay = 12;
                                     } else {
                                         if (target.isBlocking()) {
-                                            roundabout$anubisAttackDelay = 40;
+                                            roundabout$anubisAttackDelay = 50;
                                         }
                                     }
                                     P.crit(target);

@@ -61,14 +61,7 @@ public class AnubisItem extends Item {
                 SU.roundabout$setPossessor(p);
 
                 if (!targets.isEmpty()) {
-                    if (SU.roundabout$getStandPowers() != null) {
-                        if (!PowerTypes.hasStandActive($$2)) {
-                            SU.roundabout$summonStand($$2.level(), false, true);
-                        }
-                        if (SU.roundabout$getStandPowers() instanceof PowersWalkingHeart PWH) {
-                            PWH.extendHeels();
-                        }
-                    }
+                    ((StandUser)$$2).roundabout$setActive(false);
                 }
 
                 AnubisItem.aggroOnto($$2);
