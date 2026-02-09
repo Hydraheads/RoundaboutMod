@@ -153,6 +153,9 @@ public class ClientUtil {
     public static boolean rendersRipperEyes(Entity ent){
         return false;
     }
+    public static boolean disableBobbing(Entity ent){
+        return rendersRipperEyes(ent);
+    }
 
     public static boolean hasChangedArms(Entity ent){
         if (HeatUtil.isArmsFrozen(ent)){
@@ -1702,7 +1705,8 @@ public class ClientUtil {
                     }
                     //gtranslation = RotationUtil.vecPlayerToWorld(gtranslation,gravityDirection);
 
-                    ModStrayModels.ripperEyesPart.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light,
+                    ModStrayModels.ripperEyesPart.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source,
+                            LightTexture.FULL_BRIGHT,
                             1, 1, 1, opacity);
                     yes = !yes;
                     stack.popPose();

@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.star_platinum;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IFatePlayer;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.FatePowers;
@@ -85,6 +86,10 @@ public class ScopeGameRenderer {
     private void RoundaboutBobView(PoseStack $$0, float $$1, CallbackInfo ci) {
         LivingEntity player = Minecraft.getInstance().player;
         if (player != null) {
+            if (ClientUtil.disableBobbing(player)){
+                ci.cancel();
+                return;
+            }
             StandPowers SP = ((StandUser) player).roundabout$getStandPowers();
             if (SP.scopeLevel > 0 && (!((StandUser)player).roundabout$isParallelRunning())) {
                 ci.cancel();

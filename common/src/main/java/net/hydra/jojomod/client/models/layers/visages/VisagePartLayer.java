@@ -26,6 +26,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -485,8 +486,8 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
             if (yes) {
                 poseStack.scale(1.01F, 1.01F, 1.01F);
             }
-            ModStrayModels.ripperEyesPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
-                    r, g, b, 1);
+            ModStrayModels.ripperEyesPart.render(entity, partialTicks, poseStack, bufferSource, LightTexture.FULL_BRIGHT,
+                    r, g, b, 0.7F);
             ClientUtil.popPoseAndCooperate(poseStack,36);
             poseStack.translate(0,0,-0.5);
             yes = !yes;
