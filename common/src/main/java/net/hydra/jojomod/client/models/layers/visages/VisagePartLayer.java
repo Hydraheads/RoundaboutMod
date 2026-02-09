@@ -9,7 +9,6 @@ import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.StandIcons;
-import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
@@ -40,7 +39,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.hydra.jojomod.item.BowlerHatItem;
-import org.spongepowered.asm.mixin.Unique;
 
 import java.util.Map;
 
@@ -275,6 +273,12 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 g = isHurt ? 0.6F : 1.0F;
                 b = isHurt ? 0.6F : 1.0F;
 
+                if (ClientUtil.rendersRipperEyes(entity)) {
+                    renderRipperEyes(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
+                            1, 1, 1);
+                }
+
+
                 if (ClientUtil.hasChangedArms(entity)) {
                     if (getParentModel() instanceof PlayerModel<?> pm) {
                         pm.rightArm.visible = true;
@@ -467,6 +471,26 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.DiegoHatPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderRipperEyes(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                               float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().head.translateAndRotate(poseStack);
+        poseStack.translate(0,0,0.1);
+        boolean yes = false;
+        for (var i = 0; i< 20; i++) {
+            ClientUtil.pushPoseAndCooperate(poseStack,36);
+            if (yes) {
+                poseStack.scale(1.01F, 1.01F, 1.01F);
+            }
+            ModStrayModels.ripperEyesPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                    r, g, b, 1);
+            ClientUtil.popPoseAndCooperate(poseStack,36);
+            poseStack.translate(0,0,-0.5);
+            yes = !yes;
+        }
         ClientUtil.popPoseAndCooperate(poseStack,36);
     }
     public void renderSpeedwagonFoundationHat(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,

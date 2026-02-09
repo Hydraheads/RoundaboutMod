@@ -31,7 +31,6 @@ import net.hydra.jojomod.client.models.npcs.ZombieAestheticianModel;
 import net.hydra.jojomod.client.models.npcs.renderers.ZombieAestheticianRenderer;
 import net.hydra.jojomod.client.models.projectile.renderers.NoRenderer;
 import net.hydra.jojomod.client.models.substand.LifeTrackerModel;
-import net.hydra.jojomod.entity.projectile.EvilAuraProjectile;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.core.Registry;
@@ -216,6 +215,7 @@ public class FabricEntityClient {
         ModStrayModels.BigHairPart = new BigHairPart();
         ModStrayModels.KakyoinHairPart = new KakyoinHairPart();
         ModStrayModels.DiegoHatPart = new DiegoHatPart();
+        ModStrayModels.ripperEyesPart = new RipperEyesPart();
         ModStrayModels.SpeedwagonFoundationHatPart = new SpeedwagonFoundationHatPart();
         ModStrayModels.BasicHatPart = new BasicHatPart();
         ModStrayModels.SpikeyHairPart = new SpikeyHairPart();

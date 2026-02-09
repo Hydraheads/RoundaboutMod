@@ -15,7 +15,6 @@ import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerMixingSound;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
-import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -28,20 +27,15 @@ import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
-import net.hydra.jojomod.networking.ClientToServerPackets;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
-import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
-import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
@@ -51,7 +45,6 @@ import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.networking.ServerToClientPackets;
@@ -67,8 +60,6 @@ import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.monster.Skeleton;
-import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.TooltipFlag;
 import net.zetalasis.client.shader.D4CShaderFX;
@@ -107,7 +98,6 @@ import net.zetalasis.networking.packet.api.IClientNetworking;
 import net.zetalasis.world.DynamicWorld;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
-import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Unique;
 
@@ -158,6 +148,10 @@ public class ClientUtil {
 
     public static double getCameradDistance(Entity ent){
         return Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().distanceTo(ent.position());
+    }
+
+    public static boolean rendersRipperEyes(Entity ent){
+        return false;
     }
 
     public static boolean hasChangedArms(Entity ent){
@@ -1694,7 +1688,28 @@ public class ClientUtil {
         }
         if (cameraEnt instanceof Player play){
             byte bt = ((IPlayerEntity)play).roundabout$GetPos2();
-            if (bt == PlayerPosIndex.BARRAGE) {
+            if (ClientUtil.rendersRipperEyes(play)) {
+                stack.pushPose();
+                Vec3 gtranslation = new Vec3(0, -0.1, 0);
+                stack.translate(gtranslation.x, gtranslation.y, gtranslation.z);
+                float opacity = 0.5F;
+                stack.mulPose(Axis.ZP.rotationDegrees(180f));
+                boolean yes = false;
+                for (var i = 0; i< 20; i++) {
+                    stack.pushPose();
+                    if (yes) {
+                        stack.scale(1.01F, 1.01F, 1.01F);
+                    }
+                    //gtranslation = RotationUtil.vecPlayerToWorld(gtranslation,gravityDirection);
+
+                    ModStrayModels.ripperEyesPart.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light,
+                            1, 1, 1, opacity);
+                    yes = !yes;
+                    stack.popPose();
+                    stack.translate(0,0,-0.5);
+                }
+                stack.popPose();
+            } else if (bt == PlayerPosIndex.BARRAGE) {
                 stack.pushPose();
 
                 boolean isHurt = play.hurtTime > 0;

@@ -36,6 +36,7 @@ public class ModStrayModels {
     public static BigHairPart BigHairPart;
     public static KakyoinHairPart KakyoinHairPart;
     public static DiegoHatPart DiegoHatPart;
+    public static RipperEyesPart ripperEyesPart;
     public static SpeedwagonFoundationHatPart SpeedwagonFoundationHatPart;
     public static BasicHatPart BasicHatPart;
     public static SpikeyHairPart SpikeyHairPart;
