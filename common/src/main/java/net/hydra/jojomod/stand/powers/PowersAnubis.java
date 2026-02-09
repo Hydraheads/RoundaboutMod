@@ -818,6 +818,7 @@ public class PowersAnubis extends NewDashPreset {
     public void setAnimation(byte b) {
         this.getStandUserSelf().roundabout$setStandAnimation(b);
         this.getStandUserSelf().roundabout$getWornStandAnimation().stop();
+        this.getStandUserSelf().roundabout$getWornStandAnimation().startIfStopped(this.getSelf().tickCount);
     }
 
     @Override
