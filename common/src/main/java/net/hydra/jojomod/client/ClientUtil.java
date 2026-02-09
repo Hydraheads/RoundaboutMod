@@ -151,6 +151,9 @@ public class ClientUtil {
     }
 
     public static boolean rendersRipperEyes(Entity ent){
+        if (ent instanceof Player pl && ((IPlayerEntity)pl).roundabout$GetPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE){
+            return true;
+        }
         return false;
     }
     public static boolean disableBobbing(Entity ent){

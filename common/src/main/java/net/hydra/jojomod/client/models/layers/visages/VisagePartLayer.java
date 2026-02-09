@@ -481,13 +481,13 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         getParentModel().head.translateAndRotate(poseStack);
         poseStack.translate(0,0,0.1);
         boolean yes = false;
-        for (var i = 0; i< 20; i++) {
+        for (var i = 0; i < 80; i++) {
             ClientUtil.pushPoseAndCooperate(poseStack,36);
             if (yes) {
                 poseStack.scale(1.01F, 1.01F, 1.01F);
             }
             ModStrayModels.ripperEyesPart.render(entity, partialTicks, poseStack, bufferSource, LightTexture.FULL_BRIGHT,
-                    r, g, b, 0.7F);
+                    r, g, b, 0.8F);
             ClientUtil.popPoseAndCooperate(poseStack,36);
             poseStack.translate(0,0,-0.5);
             yes = !yes;

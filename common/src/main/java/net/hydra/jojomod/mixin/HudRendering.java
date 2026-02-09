@@ -651,7 +651,6 @@ public abstract class HudRendering implements IHudAccess {
             } else if (powers.replaceHudActively()){
                 powers.getReplacementHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x,removeNum);
                 if (removeNum){
-                    StandHudRender.renderExperienceBar(minecraft,screenWidth, screenHeight,context);
                     if (displayCombatTicks){
                         if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
                             StandHudRender.renderShootModeLightSoftAndWet(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PW);

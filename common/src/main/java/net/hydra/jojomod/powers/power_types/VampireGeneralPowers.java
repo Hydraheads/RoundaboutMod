@@ -75,6 +75,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
     public static final byte AIR_DASH = PowerIndex.POWER_3;
     public static final byte RIPPER_EYES = PowerIndex.POWER_4;
+    public static final byte RIPPER_EYES_ACTIVATED = PowerIndex.POWER_4_BONUS;
 
     /**The text name of the fate*/
     public Component getPowerName(){
@@ -130,6 +131,14 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         if (!onCooldown(PowerIndex.GENERAL_4_SNEAK)){
             this.tryPower(DEFLECTION);
         }
+    }
+
+    @Override
+    public boolean canInterruptPower(){
+        if (activePower == RIPPER_EYES_ACTIVATED || activePower == RIPPER_EYES){
+            return true;
+        }
+        return super.canInterruptPower();
     }
 
     public void dashOrWallWalk(VampiricFate vp){
@@ -263,6 +272,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             basis*=0.1f;
         } else if (getActivePower() == RIPPER_EYES){
             basis*=0.1f;
+        } else if (getActivePower() == RIPPER_EYES_ACTIVATED){
+            basis*=0.1f;
         }
         return super.inputSpeedModifiers(basis);
     }
@@ -272,7 +283,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 getActivePower() == BLOOD_CLUTCH ||
                 getActivePower() == ICE_CLUTCH ||
                 getActivePower() == DEFLECTION ||
-                getActivePower() == RIPPER_EYES;
+                getActivePower() == RIPPER_EYES ||
+                getActivePower() == RIPPER_EYES_ACTIVATED;
     }
 
     public void clientSpikeAttack(){
@@ -309,6 +321,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             } else if (!(move == BLOOD_CLUTCH || move == ICE_CLUTCH) && (pos2 == PlayerPosIndex.CLUTCH_WINDUP)) {
                 setPlayerPos2(PlayerPosIndex.NONE);
             } else if (!(move == BLOOD_CLUTCH_2 || move == ICE_CLUTCH_2) && (pos2 == PlayerPosIndex.CLUTCH_DASH)) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            }else if (!(move == RIPPER_EYES_ACTIVATED) && (pos2 == PlayerPosIndex.RIPPER_EYES_ACTIVE)) {
                 setPlayerPos2(PlayerPosIndex.NONE);
             }
         }
@@ -447,6 +461,11 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                             xTryPower(PowerIndex.NONE, true);
                             tryPowerPacket(NONE);
                         }
+                    }
+                } else if (getActivePower() == RIPPER_EYES) {
+                    if (attackTimeDuring == getMaxRipperEyesWait()) {
+                        tryPowerPacket(RIPPER_EYES_ACTIVATED);
+                        ripperEyesLeft = ripperBeamTime;
                     }
                 }
             }
@@ -660,18 +679,24 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         return getActivePower() == POWER_SPIKE;
     }
 
+    public static final int ripperBeamTime = 30;
+    public int ripperEyesLeft = 0;
+
     public int getRipperEyesCharge(){
-        if (attackTimeDuring <= getMaxRipperEyesWait()){
-            return attackTimeDuring;
+        if (activePower == RIPPER_EYES_ACTIVATED){
+            return ripperEyesLeft;
         }
-        return Mth.clamp(getMaxRipperEyesWait()-((attackTimeDuring-getMaxRipperEyesWait())*4),0,getMaxRipperEyesWait());
+        return Mth.clamp(attackTimeDuring,0,getMaxRipperEyesWait());
     }
     public int getMaxRipperEyesWait(){
+        if (activePower == RIPPER_EYES_ACTIVATED){
+            return ripperBeamTime;
+        }
         return 80;
     }
     /**An easy way to replace the EXP bar with a stand bar, see the function below this one*/
     public boolean replaceHudActively(){
-        return getActivePower()==RIPPER_EYES;
+        return getActivePower()==RIPPER_EYES || getActivePower()==RIPPER_EYES_ACTIVATED;
     }
     /**If the above function is set to true, this will be the code called instead of the exp bar one. Make
      * a call to another class so too much client code doesn't unnecessarily exist in the standpowers class.*/
@@ -685,7 +710,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public boolean bigJumpBlocker(){
         return isSpiking() || getActivePower() == BLOOD_CLUTCH || getActivePower() == ICE_CLUTCH
                 || getActivePower() == DEFLECTION
-                || getActivePower() == RIPPER_EYES || super.bigJumpBlocker();
+                || getActivePower() == RIPPER_EYES
+                || getActivePower() == RIPPER_EYES_ACTIVATED
+                || super.bigJumpBlocker();
     }
 
     @Override
@@ -742,6 +769,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             doDeflection();
         } else if (move == RIPPER_EYES){
             doRipperEyes();
+        } else if (move == RIPPER_EYES_ACTIVATED){
+            doRipperEyesActivated();
         }
 
         return super.setPowerOther(move,lastMove);
@@ -1198,6 +1227,20 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             setActivePower(RIPPER_EYES);
         } else {
             tryPowerPacket(RIPPER_EYES);
+        }
+    }
+    public void doRipperEyesActivated(){
+        if (!self.level().isClientSide()) {
+            if (getActivePower() == RIPPER_EYES) {
+                this.attackTimeDuring = 0;
+                //this.self.level().playSound(null, this.self.blockPosition(), ModSounds.IMPALE_CHARGE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.7f + Math.random() * 0.1f));
+                setActivePower(RIPPER_EYES_ACTIVATED);
+                if (getPlayerPos2() != PlayerPosIndex.RIPPER_EYES_ACTIVE) {
+                    setPlayerPos2(PlayerPosIndex.RIPPER_EYES_ACTIVE);
+                }
+            }
+        } else {
+            tryPowerPacket(RIPPER_EYES_ACTIVATED);
         }
     }
     public void doDeflection(){
