@@ -526,7 +526,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     }
 
     public void setEyeLeft(int left){
-        int left2 = Mth.clamp(left, 0, 30);
+        int left2 = Mth.clamp(left, 0, ripperBeamTime);
         if (!self.level().isClientSide()){
             if (self instanceof Player pl){
                 S2CPacketUtil.sendGenericIntToClientPacket(pl,PacketDataIndex.S2C_INT_RIPPER_EYES,left2);
@@ -708,7 +708,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         if (activePower == RIPPER_EYES_ACTIVATED){
             return ripperBeamTime;
         }
-        return 70;
+        return 65;
     }
     /**An easy way to replace the EXP bar with a stand bar, see the function below this one*/
     public boolean replaceHudActively(){
