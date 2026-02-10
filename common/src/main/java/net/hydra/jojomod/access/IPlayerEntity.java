@@ -149,17 +149,6 @@ public interface IPlayerEntity {
 
     AnimationState roundabout$getBubbleShotAim();
     AnimationState roundabout$getOffsetCorrect();
-    AnimationState getWry();
-    AnimationState getGiorno();
-    AnimationState getKoichi();
-    AnimationState getOhNo();
-    AnimationState getSitting();
-    AnimationState getJoseph();
-    AnimationState getTortureDance();
-    AnimationState getWamuu();
-    AnimationState getJonathan();
-    AnimationState getJotaro();
-    AnimationState getWatch();
-    AnimationState getVampire();
+    AnimationState getStyleAnimation();
 
 }

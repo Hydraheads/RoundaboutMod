@@ -899,13 +899,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     public Poses roundabout$standPos = null;
     @Unique
-    public final AnimationState roundabout$WRYYY = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState getWry(){
-        return roundabout$WRYYY;
-    }
-    @Unique
     public final AnimationState roundabout$BubbleAim = new AnimationState();
     @Unique
     @Override
@@ -1134,157 +1127,28 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public void roundabout$setBubbleShotAimPoints(int shotPoints){
         roundabout$BubbleShotAimPoints = shotPoints;
     }
-    @Unique
-    public final AnimationState roundabout$GIORNO = new AnimationState();
 
     @Unique
+    public final AnimationState roundabout$styleAnimation = new AnimationState();
+    @Unique
     @Override
-    public AnimationState getGiorno(){
-        return roundabout$GIORNO;
+    public AnimationState getStyleAnimation() {
+        return roundabout$styleAnimation;
     }
-    @Unique
-    public final AnimationState roundabout$JOSEPH = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState getJoseph(){
-        return roundabout$JOSEPH;
-    }
-    @Unique
-    public final AnimationState roundabout$KOICHI = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState getKoichi(){
-        return roundabout$KOICHI;
-    }
-    @Unique
-    public final AnimationState roundabout$OH_NO = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState getOhNo(){return roundabout$OH_NO;}
-    @Unique
-    public final AnimationState roundabout$SITTING = new AnimationState();
-    @Unique
-    public final AnimationState roundabout$VAMPIRE = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState getSitting(){return roundabout$SITTING;}
-    @Unique
-    @Override
-    public AnimationState getVampire(){return roundabout$VAMPIRE;}
-    @Unique
-    public final AnimationState roundabout$TORTURE_DANCE = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState getTortureDance(){
-        return roundabout$TORTURE_DANCE;
-    }
-    @Unique
-    @Override
-    public AnimationState getWamuu(){
-        return roundabout$WAMUU;
-    }
-    @Unique
-    @Override
-    public AnimationState getWatch(){
-        return roundabout$WATCH;
-    }
-    @Unique
-    @Override
-    public AnimationState getJotaro(){
-        return roundabout$JOTARO;
-    }
-    @Unique
-    @Override
-    public AnimationState getJonathan(){
-        return roundabout$JONATHAN;
-    }
-    @Unique
-    public final AnimationState roundabout$WAMUU = new AnimationState();
-    @Unique
-    public final AnimationState roundabout$WATCH = new AnimationState();
-
-    @Unique
-    public final AnimationState roundabout$JOTARO = new AnimationState();
-    @Unique
-    public final AnimationState roundabout$JONATHAN = new AnimationState();
-
 
     @Unique
     public void roundabout$setupAnimationStates() {
-        if (roundabout$GetPoseEmote() == Poses.JONATHAN.id) {
-            this.roundabout$JONATHAN.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$JONATHAN.stop();
-        }
         if (roundabout$GetPos2() == PlayerPosIndex.BARRAGE) {
             this.roundabout$barrageArms.startIfStopped(this.tickCount);
         } else {
             this.roundabout$barrageArms.stop();
         }
-        if (roundabout$GetPoseEmote() == Poses.JOTARO.id) {
-            this.roundabout$JOTARO.startIfStopped(this.tickCount);
+
+
+        if (this.roundabout$GetPoseEmote() != Poses.NONE.id) {
+            this.getStyleAnimation().startIfStopped(this.tickCount);
         } else {
-            this.roundabout$JOTARO.stop();
-        }
-        if (roundabout$GetPoseEmote() == Poses.WAMUU.id) {
-            this.roundabout$WAMUU.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$WAMUU.stop();
-        }
-        if (roundabout$GetPoseEmote() == Poses.TORTURE_DANCE.id) {
-            this.roundabout$TORTURE_DANCE.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$TORTURE_DANCE.stop();
-        }
-        if (roundabout$GetPoseEmote() == Poses.OH_NO.id) {
-            this.roundabout$OH_NO.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$OH_NO.stop();
-        }
-        if (roundabout$GetPoseEmote() == Poses.WRY.id) {
-            this.roundabout$WRYYY.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$WRYYY.stop();
-        }
-        if (roundabout$GetPoseEmote() == Poses.GIORNO.id) {
-            this.roundabout$GIORNO.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$GIORNO.stop();
-        }
-        if (roundabout$GetPoseEmote() == Poses.KOICHI.id) {
-            this.roundabout$KOICHI.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$KOICHI.stop();
-        }
-        if (roundabout$GetPoseEmote() == Poses.JOSEPH.id) {
-            this.roundabout$JOSEPH.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$JOSEPH.stop();
-        }
-        if (roundabout$GetPoseEmote() == Poses.WATCH.id) {
-            this.roundabout$WATCH.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$WATCH.stop();
-        }
-        if (roundabout$GetPoseEmote() == Poses.SITTING.id) {
-            this.roundabout$SITTING.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$SITTING.stop();
-        }
-        if (roundabout$GetPoseEmote() == Poses.VAMPIRE_TRANSFORMATION.id) {
-            this.roundabout$VAMPIRE.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$VAMPIRE.stop();
-        }
-        if (roundabout$GetPoseEmote() == Poses.VAMPIRE_TRANSFORMATION.id) {
-            this.roundabout$VAMPIRE.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$VAMPIRE.stop();
-        }
-        if (roundabout$GetPoseEmote() == Poses.VAMPIRE_TRANSFORMATION.id) {
-            this.roundabout$VAMPIRE.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$VAMPIRE.stop();
+            this.getStyleAnimation().stop();
         }
     }
 
@@ -1850,6 +1714,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             }
 
             roundabout$setupAnimationStates();
+
+
             if (!rdbt$getCooldownQuery()){
                 if (!rdbt$attemptedQuery){
                     rdbt$attemptedQuery = true;
