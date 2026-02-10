@@ -29,6 +29,7 @@ import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
+import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
@@ -44,6 +45,7 @@ import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -851,6 +853,10 @@ public class ClientUtil {
             }
         } else if (context == PacketDataIndex.AESTHETICIAN_OPEN){
             setCinderellaUI2(true,data);
+        } else if (context == PacketDataIndex.S2C_INT_RIPPER_EYES) {
+            if (((IPowersPlayer)player).rdbt$getPowers() instanceof VampireGeneralPowers vgp){
+                vgp.ripperEyesLeft = data;
+            }
         }
     }
     public static void handleDoubleIntPacketS2C(Player player, int data, int data2, byte context) {
@@ -2110,6 +2116,17 @@ public static void coltRenderCleanupHelper(Entity cameraEnt) {
         }
     }
 
+    public static boolean forceEntityRendering(Entity entity){
+        if (entity instanceof Player pl){
+            if (((StandUser)pl).roundabout$hasStandOut()){
+                return true;
+            }
+            if (((IPlayerEntity)pl).roundabout$GetPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE){
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**Simulating Blood Bar and whatnot*/
     public static void renderHungerStuff(GuiGraphics graphics, Player player, int width, int height, int rand,

@@ -246,6 +246,7 @@
     "StandUserClientOnly",
     "WorldTickClient",
     "ZEntityRenderDispatcher",
+    "ZEntityRenderer",
     "ZItemInHandLayer",
     "ZItemInHandRenderer",
     "ZLevelRenderer",

@@ -404,7 +404,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         }
                     }
                 } else if (getActivePower() == POWER_SPIKE) {
-                    if (attackTimeDuring >= 22) {
+                    if (attackTimeDuring >= 30) {
                         setAttackTimeDuring(-10);
                         xTryPower(POWER_SPIKE_HIT, false);
                         tryPowerPacket(POWER_SPIKE_HIT);
@@ -515,8 +515,24 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                             gravVec.x, gravVec.y, gravVec.z,
                             1, 0.2, 0.2, 0.2, 0.05);
                 }
+            } else if (getActivePower() == RIPPER_EYES_ACTIVATED){
+                setEyeLeft((ripperBeamTime - attackTimeDuring));
+
+                if (ripperEyesLeft < 0){
+                    xTryPower(PowerIndex.NONE, true);
+                }
             }
         }
+    }
+
+    public void setEyeLeft(int left){
+        int left2 = Mth.clamp(left, 0, ripperBeamTime);
+        if (!self.level().isClientSide()){
+            if (self instanceof Player pl){
+                S2CPacketUtil.sendGenericIntToClientPacket(pl,PacketDataIndex.S2C_INT_RIPPER_EYES,left2);
+            }
+        }
+        ripperEyesLeft = left2;
     }
     public boolean retract = false;
     public boolean extended = false;
@@ -679,7 +695,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         return getActivePower() == POWER_SPIKE;
     }
 
-    public static final int ripperBeamTime = 30;
+    public static final int ripperBeamTime = 35;
     public int ripperEyesLeft = 0;
 
     public int getRipperEyesCharge(){
@@ -692,7 +708,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         if (activePower == RIPPER_EYES_ACTIVATED){
             return ripperBeamTime;
         }
-        return 80;
+        return 65;
     }
     /**An easy way to replace the EXP bar with a stand bar, see the function below this one*/
     public boolean replaceHudActively(){
@@ -1232,6 +1248,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public void doRipperEyesActivated(){
         if (!self.level().isClientSide()) {
             if (getActivePower() == RIPPER_EYES) {
+                ripperEyesLeft = ripperBeamTime;
                 this.attackTimeDuring = 0;
                 //this.self.level().playSound(null, this.self.blockPosition(), ModSounds.IMPALE_CHARGE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.7f + Math.random() * 0.1f));
                 setActivePower(RIPPER_EYES_ACTIVATED);
