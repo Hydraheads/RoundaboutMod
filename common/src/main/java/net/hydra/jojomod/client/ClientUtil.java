@@ -2116,6 +2116,17 @@ public static void coltRenderCleanupHelper(Entity cameraEnt) {
         }
     }
 
+    public static boolean forceEntityRendering(Entity entity){
+        if (entity instanceof Player pl){
+            if (((StandUser)pl).roundabout$hasStandOut()){
+                return true;
+            }
+            if (((IPlayerEntity)pl).roundabout$GetPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE){
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**Simulating Blood Bar and whatnot*/
     public static void renderHungerStuff(GuiGraphics graphics, Player player, int width, int height, int rand,
