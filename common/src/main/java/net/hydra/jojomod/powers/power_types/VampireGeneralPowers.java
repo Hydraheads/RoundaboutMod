@@ -404,7 +404,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         }
                     }
                 } else if (getActivePower() == POWER_SPIKE) {
-                    if (attackTimeDuring >= 22) {
+                    if (attackTimeDuring >= 30) {
                         setAttackTimeDuring(-10);
                         xTryPower(POWER_SPIKE_HIT, false);
                         tryPowerPacket(POWER_SPIKE_HIT);
