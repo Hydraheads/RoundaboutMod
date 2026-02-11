@@ -153,7 +153,10 @@ public abstract class FateFoodDataMixin implements AccessFateFoodData {
                         this.rdbt$alternateSaturation = Math.max(this.rdbt$alternateSaturation - 0.1F, 0.0F);
                     }
                 } else if ($$1 != Difficulty.PEACEFUL) {
-                    this.foodLevel = Math.max(this.foodLevel - 1, 0);
+                    //Added isHurt so they don't lose blood out of combat
+                    if ($$0.isHurt()) {
+                        this.foodLevel = Math.max(this.foodLevel - 1, 0);
+                    }
                 }
             }
 
