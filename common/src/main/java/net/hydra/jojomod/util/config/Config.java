@@ -188,6 +188,8 @@ public class Config implements Cloneable {
         public Boolean generalDetectionGoThroughDoorsAndCorners;
         @BooleanOption(group = "inherit", value = true)
         public Boolean wallPassingHitboxes;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean wallPassingHitboxesOnBosses;
 
         @BooleanOption(group = "inherit", value = false)
         public Boolean disableBleedingAndBloodSplatters;

@@ -845,6 +845,10 @@ public class StandPowers extends AbilityScapeBasis {
             return ModSounds.BLOOD_REGEN_EVENT;
         } else if (soundChoice == SoundIndex.HAIR_SPIKE_CHARGE) {
             return ModSounds.HAIR_SHARPEN_EVENT;
+        } else if (soundChoice == SoundIndex.RIPPER_EYES_BEAM) {
+            return ModSounds.RIPPER_EYES_BEAM_EVENT;
+        } else if (soundChoice == SoundIndex.RIPPER_EYES_CHARGE) {
+            return ModSounds.RIPPER_EYES_CHARGE_EVENT;
         }
         return null;
     }

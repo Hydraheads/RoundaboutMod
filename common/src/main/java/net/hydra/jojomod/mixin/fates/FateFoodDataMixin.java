@@ -125,6 +125,9 @@ public abstract class FateFoodDataMixin implements AccessFateFoodData {
             }
         }
     }
+
+    @Unique
+    public int rdbt$cycle = 0;
     /**Vampires do not starve, remove the starve code here*/
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$tickVamp(Player $$0, CallbackInfo ci) {
@@ -146,10 +149,30 @@ public abstract class FateFoodDataMixin implements AccessFateFoodData {
             if (this.exhaustionLevel > 4.0F) {
                 this.exhaustionLevel -= 4.0F;
                 if (this.rdbt$alternateSaturation > 0.0F) {
-                    this.rdbt$alternateSaturation = Math.max(this.rdbt$alternateSaturation - 1.0F, 0.0F);
+                    if ($$0.isHurt()){
+                        this.rdbt$alternateSaturation = Math.max(this.rdbt$alternateSaturation - 1F, 0.0F);
+                    } else {
+                        this.rdbt$alternateSaturation = Math.max(this.rdbt$alternateSaturation - 0.1F, 0.0F);
+                    }
                 } else if ($$1 != Difficulty.PEACEFUL) {
-                    this.foodLevel = Math.max(this.foodLevel - 1, 0);
+                    //Added isHurt so they don't lose blood out of combat
+                    rdbt$cycle++;
+                    if ($$0.isHurt() || rdbt$cycle > 3) {
+                        rdbt$cycle = 0;
+                        this.foodLevel = Math.max(this.foodLevel - 1, 0);
+                    }
                 }
+            }
+
+
+            if (this.foodLevel > 0 && $$0.isHurt() && $$0.isAlive()) {
+                //Added +0.01F as a passive vampire healing at full health
+                float buffer = 0.01F;
+                if ($$0.isOnFire()){
+                    //Burning vampires have a slight regen edge
+                    buffer = 0.015F;
+                }
+                $$0.heal(buffer * multiplier);
             }
 
             boolean $$2 = $$0.level().getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION);
@@ -158,7 +181,9 @@ public abstract class FateFoodDataMixin implements AccessFateFoodData {
                 if (this.tickTimer >= 10) {
                     float $$3 = Math.min(this.rdbt$alternateSaturation, 6.0F);
                     if (amp < 2) {
-                        $$0.heal(($$3 / 6.0F)*multiplier);
+                        //Added additional multiplier to make healing better
+                        $$0.heal(($$3 / 6.0F)*multiplier
+                                *1.25F);
                     }
                     this.addExhaustion($$3);
                     this.tickTimer = 0;
@@ -185,6 +210,7 @@ public abstract class FateFoodDataMixin implements AccessFateFoodData {
             } else {
                 this.tickTimer = 0;
             }
+
         }
     }
 }

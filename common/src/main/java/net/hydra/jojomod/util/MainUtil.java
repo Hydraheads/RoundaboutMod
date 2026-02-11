@@ -30,6 +30,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampiricFate;
+import net.hydra.jojomod.platform.services.IPlatformHelper;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersJustice;
@@ -1742,6 +1743,7 @@ public class MainUtil {
 
     public static boolean isArmorBypassingButNotShieldBypassing(DamageSource sauce, Entity target){
         if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.CORPSE)
+                || sauce.is(ModDamageTypes.RIPPER_EYES)
                 || sauce.is(ModDamageTypes.VAMPIRE) || sauce.is(ModDamageTypes.HAMON) ||
                 (sauce.is(ModDamageTypes.MARTIAL_ARTS) && getReducedDamage(target))
                 || sauce.is(ModDamageTypes.EXPLOSIVE_STAND)  || sauce.is(ModDamageTypes.HEEL_SPIKE)  ||
@@ -2096,8 +2098,9 @@ public class MainUtil {
 
         return $$8 == null ? null : new EntityHitResult($$8, $$9);
     }
-    public static boolean isBossMob(LivingEntity LE){
-        if (LE instanceof Warden || LE instanceof EnderDragon || LE instanceof WitherBoss){
+    public static boolean isBossMob(Entity LE){
+        if (LE instanceof Warden || LE instanceof EnderDragon || LE instanceof WitherBoss ||
+                (LE instanceof LivingEntity ll && (ModPacketHandler.PLATFORM_ACCESS.getBoss(ll)))){
             return true;
         }
         return false;

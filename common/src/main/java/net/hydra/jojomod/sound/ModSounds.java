@@ -931,6 +931,17 @@ public class ModSounds {
     public static SoundEvent ACHTUNG_BURST_EVENT = SoundEvent.createVariableRangeEvent(ACHTUNG_BURST_ID);
 
 
+    public static final String RIPPER_EYES_CHARGE = "ripper_eyes_charge";
+    public static final ResourceLocation RIPPER_EYES_CHARGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RIPPER_EYES_CHARGE);
+    public static SoundEvent RIPPER_EYES_CHARGE_EVENT = SoundEvent.createVariableRangeEvent(RIPPER_EYES_CHARGE_ID);
+    public static final String RIPPER_EYES_SHORT = "ripper_eyes_short";
+    public static final ResourceLocation RIPPER_EYES_SHORT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RIPPER_EYES_SHORT);
+    public static SoundEvent RIPPER_EYES_SHORT_EVENT = SoundEvent.createVariableRangeEvent(RIPPER_EYES_SHORT_ID);
+    public static final String RIPPER_EYES_BEAM = "ripper_eyes_beam";
+    public static final ResourceLocation RIPPER_EYES_BEAM_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RIPPER_EYES_BEAM);
+    public static SoundEvent RIPPER_EYES_BEAM_EVENT = SoundEvent.createVariableRangeEvent(RIPPER_EYES_BEAM_ID);
+
+
     public static final String SUMMON_DIVER_DOWN = "summon_diver_down";
     public static final ResourceLocation SUMMON_DIVER_DOWN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_DIVER_DOWN);
     public static SoundEvent SUMMON_DIVER_DOWN_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_DIVER_DOWN_ID);
