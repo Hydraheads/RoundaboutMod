@@ -1,6 +1,7 @@
 package net.hydra.jojomod.powers.power_types;
 
 import net.hydra.jojomod.access.*;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.projectile.EvilAuraProjectile;
@@ -37,11 +38,15 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class VampireGeneralPowers extends PunchingGeneralPowers {
     public VampireGeneralPowers(LivingEntity self) {
@@ -517,6 +522,65 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 }
             } else if (getActivePower() == RIPPER_EYES_ACTIVATED){
                 setEyeLeft((ripperBeamTime - attackTimeDuring));
+
+                Vec3 start = self.getEyePosition();
+                Vec3 look = self.getLookAngle();
+                Vec3 end = start.add(look.scale(40.0D));
+                AABB beamBox = new AABB(start, end).inflate(1.5D);
+                List<LivingEntity> targets = self.level().getEntitiesOfClass(
+                        LivingEntity.class,
+                        beamBox,
+                        entity -> entity != self && entity.isAlive()
+                );
+                for (LivingEntity target : targets) {
+
+                    AABB targetBox = target.getBoundingBox().inflate(0.3D);
+
+                    Optional<Vec3> hit = targetBox.clip(start, end);
+
+                    if (hit.isPresent()) {
+                        if (
+                                (ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxes && !MainUtil.isBossMob(target))
+                                        ||
+                                (ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxesOnBosses && MainUtil.isBossMob(target))
+                        || MainUtil.canActuallyHitInvolved(target,self)) {
+                            target.hurt(self.level().damageSources().playerAttack((Player) self), 8.0F);
+                        }
+                    }
+                }
+
+                ClipContext context = new ClipContext(
+                        start,
+                        end,
+                        ClipContext.Block.OUTLINE,
+                        ClipContext.Fluid.NONE,
+                        self
+                );
+
+                BlockHitResult blockHit = self.level().clip(context);
+                if (blockHit.getType() == HitResult.Type.BLOCK) {
+
+                    Vec3 hitPos = blockHit.getLocation();
+
+                    ((ServerLevel) self.level()).sendParticles(
+                            ParticleTypes.FLAME,
+                            hitPos.x,
+                            hitPos.y,
+                            hitPos.z,
+                            0,
+                            0, 0, 0,
+                            0.01
+                    );
+                    ((ServerLevel) self.level()).sendParticles(
+                            ParticleTypes.SMOKE,
+                            hitPos.x,
+                            hitPos.y,
+                            hitPos.z,
+                            3,
+                            0.1, 0.1, 0.1,
+                            0.01
+                    );
+                }
 
                 if (ripperEyesLeft <= 0){
                     xTryPower(PowerIndex.NONE, true);

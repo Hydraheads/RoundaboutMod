@@ -2841,6 +2841,9 @@
   "config.roundabout.wallPassingHitboxes.name": "Some Abilities Pass Walls",
   "config.roundabout.wallPassingHitboxes.desc": "Some abilities in the mod like Walking Heart's heel spikes go through walls. If this poses a cheesing problem in your pack, turn this off.",
 
+  "config.roundabout.wallPassingHitboxesOnBosses.name": "Wall Pass On Bosses",
+  "config.roundabout.wallPassingHitboxesOnBosses.desc": "Some abilities in the mod like Walking Heart's heel spikes go through walls. This is a boss anti-cheese and is the above setting just purely for bosses.",
+
   "config.roundabout.namedSBRHorseSkins.name": "Named SBR Horses",
   "config.roundabout.namedSBRHorseSkins.desc": "Naming horses after select SBR ones changes their skins.",
 
