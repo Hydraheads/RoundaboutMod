@@ -520,7 +520,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                             gravVec.x, gravVec.y, gravVec.z,
                             1, 0.2, 0.2, 0.2, 0.05);
                 }
-            } else if (getActivePower() == RIPPER_EYES_ACTIVATED){
+            }
+
+            if (getActivePower() == RIPPER_EYES_ACTIVATED){
                 setEyeLeft((ripperBeamTime - attackTimeDuring));
 
                 Vec3 start = self.getEyePosition();
@@ -538,12 +540,13 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
                     Optional<Vec3> hit = targetBox.clip(start, end);
 
-                    if (hit.isPresent()) {
+                    if (hit.isPresent() && !alreadyBeamed.contains(target)) {
                         if (
                                 (ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxes && !MainUtil.isBossMob(target))
                                         ||
                                 (ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxesOnBosses && MainUtil.isBossMob(target))
                         || MainUtil.canActuallyHitInvolved(target,self)) {
+                            alreadyBeamed.add(target);
                             target.hurt(self.level().damageSources().playerAttack((Player) self), 8.0F);
                         }
                     }
@@ -585,9 +588,14 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 if (ripperEyesLeft <= 0){
                     xTryPower(PowerIndex.NONE, true);
                 }
+            } else {
+                if (!alreadyBeamed.isEmpty()){
+                    alreadyBeamed = new ArrayList<>();
+                }
             }
         }
     }
+    public List<LivingEntity> alreadyBeamed = new ArrayList<>();
 
     public void setEyeLeft(int left){
         int left2 = Mth.clamp(left, 0, ripperBeamTime);
