@@ -99,10 +99,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampiricFate vp) {
             switch (context) {
                 case SKILL_1_NORMAL -> {
-                    clientSpikeAttack();
+                    clientHairGrab();
                 }
                 case SKILL_1_CROUCH -> {
-                    clientHairGrab();
+                    clientSpikeAttack();
                 }
                 case SKILL_2_NORMAL -> {
                     clientBloodClutch();
@@ -793,9 +793,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampiricFate vp) {
 
             if (isHoldingSneak()) {
-                setSkillIcon(context, x, y, 1, StandIcons.HAIR_GRAB, PowerIndex.GENERAL_1_SNEAK);
-            } else {
                 setSkillIcon(context, x, y, 1, StandIcons.HAIR_SPIKE, PowerIndex.GENERAL_1);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.HAIR_GRAB, PowerIndex.GENERAL_1_SNEAK);
             }
             if (isHoldingSneak()) {
                 if (getFreezeLevel() > 0){
