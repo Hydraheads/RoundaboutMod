@@ -92,6 +92,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.LIFE_TRACKER, LifeTrackerRenderer::new);
         EntityRendererRegistry.register(FabricEntities.STAND_FIREBALL, StandFireballRenderer::new);
         EntityRendererRegistry.register(FabricEntities.EVIL_AURA_PROJECTILE, NoRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.RIPPER_EYES_PROJECTILE, RipperEyesRenderer::new);
         EntityRendererRegistry.register(FabricEntities.STAND_ARROW, StandArrowRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_OBJECT, ThrownObjectRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_ANUBIS, ThrownObjectRenderer::new);
