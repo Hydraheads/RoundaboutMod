@@ -125,6 +125,9 @@ public abstract class FateFoodDataMixin implements AccessFateFoodData {
             }
         }
     }
+
+    @Unique
+    public int rdbt$cycle = 0;
     /**Vampires do not starve, remove the starve code here*/
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$tickVamp(Player $$0, CallbackInfo ci) {
@@ -149,12 +152,13 @@ public abstract class FateFoodDataMixin implements AccessFateFoodData {
                     if ($$0.isHurt()){
                         this.rdbt$alternateSaturation = Math.max(this.rdbt$alternateSaturation - 1F, 0.0F);
                     } else {
-                        //Vampires barely use any blood unless hurt
                         this.rdbt$alternateSaturation = Math.max(this.rdbt$alternateSaturation - 0.1F, 0.0F);
                     }
                 } else if ($$1 != Difficulty.PEACEFUL) {
                     //Added isHurt so they don't lose blood out of combat
-                    if ($$0.isHurt()) {
+                    rdbt$cycle++;
+                    if ($$0.isHurt() || rdbt$cycle > 3) {
+                        rdbt$cycle = 0;
                         this.foodLevel = Math.max(this.foodLevel - 1, 0);
                     }
                 }
