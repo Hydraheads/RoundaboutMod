@@ -274,12 +274,6 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 g = isHurt ? 0.6F : 1.0F;
                 b = isHurt ? 0.6F : 1.0F;
 
-                if (ClientUtil.rendersRipperEyes(entity)) {
-                    renderRipperEyes(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
-                            1, 1, 1);
-                }
-
-
                 if (ClientUtil.hasChangedArms(entity)) {
                     if (getParentModel() instanceof PlayerModel<?> pm) {
                         pm.rightArm.visible = true;
@@ -352,6 +346,14 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     }
                 }
             }
+
+
+            if (ClientUtil.rendersRipperEyes(entity)) {
+                boolean isHurt = entity.hurtTime > 0;
+                renderRipperEyes(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
+                        1, 1, 1);
+            }
+
         }
     }
 

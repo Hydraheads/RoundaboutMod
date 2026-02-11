@@ -518,7 +518,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             } else if (getActivePower() == RIPPER_EYES_ACTIVATED){
                 setEyeLeft((ripperBeamTime - attackTimeDuring));
 
-                if (ripperEyesLeft < 0){
+                if (ripperEyesLeft <= 0){
                     xTryPower(PowerIndex.NONE, true);
                 }
             }
