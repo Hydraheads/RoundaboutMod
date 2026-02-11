@@ -546,6 +546,12 @@ public class ForgeSounds {
             register(ModSounds.SURVIVOR_PLACE, ModSounds.SURVIVOR_PLACE_ID);
     public static final RegistryObject<SoundEvent> ACHTUNG_BURST =
             register(ModSounds.ACHTUNG_BURST, ModSounds.ACHTUNG_BURST_ID);
+    public static final RegistryObject<SoundEvent> RIPPER_EYES_BEAM =
+            register(ModSounds.RIPPER_EYES_BEAM, ModSounds.RIPPER_EYES_BEAM_ID);
+    public static final RegistryObject<SoundEvent> RIPPER_EYES_CHARGE =
+            register(ModSounds.RIPPER_EYES_CHARGE, ModSounds.RIPPER_EYES_CHARGE_ID);
+    public static final RegistryObject<SoundEvent> RIPPER_EYES_SHORT =
+            register(ModSounds.RIPPER_EYES_SHORT, ModSounds.RIPPER_EYES_SHORT_ID);
     public static final RegistryObject<SoundEvent> EXTEND_SPIKES =
             register(ModSounds.EXTEND_SPIKES, ModSounds.EXTEND_SPIKES_ID);
     public static final RegistryObject<SoundEvent> WALL_LATCH =

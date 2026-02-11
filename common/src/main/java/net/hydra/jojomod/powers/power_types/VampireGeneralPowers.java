@@ -314,9 +314,22 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     @Override
     public boolean tryPower(int move, boolean forced) {
         if (!self.level().isClientSide()) {
-            if (move != POWER_SPIKE && move != POWER_SPIKE_HIT){
-                this.stopSoundsIfNearby(SoundIndex.HAIR_SPIKE_CHARGE, 100,false);
+            if (this.getActivePower() == POWER_SPIKE || this.getActivePower() == POWER_SPIKE_HIT) {
+                if (move != POWER_SPIKE && move != POWER_SPIKE_HIT) {
+                    this.stopSoundsIfNearby(SoundIndex.HAIR_SPIKE_CHARGE, 100, false);
+                }
             }
+            if (this.getActivePower() == RIPPER_EYES){
+                if (move != RIPPER_EYES) {
+                    this.stopSoundsIfNearby(SoundIndex.RIPPER_EYES_CHARGE, 100, false);
+                }
+            }
+            if (this.getActivePower() == RIPPER_EYES_ACTIVATED){
+                if (move != RIPPER_EYES_ACTIVATED) {
+                    this.stopSoundsIfNearby(SoundIndex.RIPPER_EYES_BEAM, 100, false);
+                }
+            }
+
             byte pos2 = getPlayerPos2();
             if (move != POWER_SWEEP && pos2 == PlayerPosIndex.SWEEP_KICK) {
                 setPlayerPos2(PlayerPosIndex.NONE);
@@ -521,6 +534,15 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                             gravVec.x, gravVec.y, gravVec.z,
                             1, 0.2, 0.2, 0.2, 0.05);
                 }
+            } else if (getActivePower() == RIPPER_EYES){
+                if(this.attackTimeDuring%4==0) {
+                    Vec3 gravVec = this.getSelf().getPosition(1f).add(RotationUtil.vecPlayerToWorld(
+                            new Vec3(0,self.getEyeHeight(),0),
+                            ((IGravityEntity)self).roundabout$getGravityDirection()));
+                    ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.FALLING_WATER,
+                            gravVec.x, gravVec.y, gravVec.z,
+                            2, 0.2, 0.2, 0.2, 0.05);
+                }
             }
 
             if (getActivePower() == RIPPER_EYES_ACTIVATED){
@@ -546,7 +568,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                                 (ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxes && !MainUtil.isBossMob(target))
                                         ||
                                 (ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxesOnBosses && MainUtil.isBossMob(target))
-                        || MainUtil.canActuallyHitInvolved(target,self)) {
+                                    || MainUtil.canActuallyHitInvolved(target,self)
+                        ) {
                             alreadyBeamed.add(target);
 
                             float pow = getRipperEyeStrength(target);
@@ -608,6 +631,11 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean cancelSprintParticles(){
+        return cancelSprintJump();
     }
 
     public void bleedEnt(Entity entity){
@@ -1341,9 +1369,16 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
     public void doRipperEyes(){
         if (!self.level().isClientSide()) {
-            this.attackTimeDuring = 0;
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.IMPALE_CHARGE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.7f + Math.random() * 0.1f));
-            setActivePower(RIPPER_EYES);
+            if (getActivePower() != RIPPER_EYES) {
+                playSoundsIfNearby(SoundIndex.RIPPER_EYES_CHARGE, 45, false, false);
+                this.attackTimeDuring = 0;
+                setActivePower(RIPPER_EYES);
+            } else {
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.RIPPER_EYES_SHORT_EVENT, SoundSource.PLAYERS, 1F, (float) (1f + Math.random() * 0.05f));
+
+                this.stopSoundsIfNearby(SoundIndex.RIPPER_EYES_CHARGE, 100, false);
+                setActivePower(NONE);
+            }
         } else {
             tryPowerPacket(RIPPER_EYES);
         }
@@ -1351,6 +1386,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public void doRipperEyesActivated(){
         if (!self.level().isClientSide()) {
             if (getActivePower() == RIPPER_EYES) {
+                playSoundsIfNearby(SoundIndex.RIPPER_EYES_BEAM, 45, false,false);
                 ripperEyesLeft = ripperBeamTime;
                 this.attackTimeDuring = 0;
                 //this.self.level().playSound(null, this.self.blockPosition(), ModSounds.IMPALE_CHARGE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.7f + Math.random() * 0.1f));

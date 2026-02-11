@@ -512,6 +512,10 @@
   "sounds.roundabout.evil_aura_blast": "Chilling Breeze",
   "sounds.roundabout.aura_impact": "Aura Impact",
 
+  "sounds.roundabout.ripper_eyes_charge": "Fluid Buildup",
+  "sounds.roundabout.ripper_eyes_beam": "Ripper Eyes",
+  "sounds.roundabout.ripper_eyes_short": "Ripper Eyes",
+
   "death.attack.stand": "%1$s died to a mysterious power whilst fighting %2$s",
   "death.attack.stand.item": "%1$s died to a mysterious power whilst fighting %2$s",
   "death.attack.stand_rush": "%1$s was beaten down by %2$s",
