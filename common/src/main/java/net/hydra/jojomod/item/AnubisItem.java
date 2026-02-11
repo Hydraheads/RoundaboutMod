@@ -98,7 +98,7 @@ public class AnubisItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
 
-        ((IPlayerEntity)$$1).roundabout$getThirdPersonAnubisUnsheath().startIfStopped($$1.tickCount);
+    //    ((IPlayerEntity)$$1).roundabout$getThirdPersonAnubisUnsheath().startIfStopped($$1.tickCount);
 
         ItemStack $$3 = $$1.getItemInHand($$2);
         $$1.startUsingItem($$2);

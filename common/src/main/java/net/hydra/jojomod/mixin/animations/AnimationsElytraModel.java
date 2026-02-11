@@ -43,8 +43,8 @@ public abstract class AnimationsElytraModel<T extends LivingEntity> extends Agea
         if ($$0 instanceof Player P) {
             IPlayerEntity ipe = ((IPlayerEntity) $$0);
             if (!P.isPassenger() && !$$0.isVisuallySwimming() && !$$0.isFallFlying()) {
-                if (Poses.getAnimation(ipe) != null) {
-                    this.roundabout$animate(ipe.getStyleAnimation(), Poses.getAnimation(ipe), $$3, 1f);
+                if (Poses.getAnimation(P) != null) {
+                    this.roundabout$animate(ipe.getStyleAnimation(), Poses.getAnimation(P), $$3, 1f);
                 }
             }
         }

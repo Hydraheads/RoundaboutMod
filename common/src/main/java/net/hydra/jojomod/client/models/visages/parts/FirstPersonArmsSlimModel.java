@@ -18,7 +18,6 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ColtRevolverItem;
-import net.hydra.jojomod.item.JackalRifleItem;
 import net.hydra.jojomod.item.SnubnoseRevolverItem;
 import net.hydra.jojomod.item.TommyGunItem;
 import net.hydra.jojomod.stand.powers.PowersMandom;
@@ -126,27 +125,27 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
             }
             if (player.getUseItem().getItem() instanceof SnubnoseRevolverItem) {
                 if (mainHandRight) {
-                    this.animate(ipe.roundabout$getSnubnoseAim(), Poses.SNUBNOSE_AIM.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getSnubnoseRecoil(), Poses.SNUBNOSE_RECOIL.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimation(), Poses.SNUBNOSE_AIM.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.SNUBNOSE_RECOIL.ad, partialTicks, 1f);
                 } else {
-                    this.animate(ipe.roundabout$getSnubnoseAimLeft(), Poses.SNUBNOSE_AIM_LEFT.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getSnubnoseRecoilLeft(), Poses.SNUBNOSE_RECOIL_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimation(), Poses.SNUBNOSE_AIM_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.SNUBNOSE_RECOIL_LEFT.ad, partialTicks, 1f);
                 }
             } else if (player.getUseItem().getItem() instanceof TommyGunItem) {
                 if (mainHandRight) {
-                    this.animate(ipe.roundabout$getTommyAim(), Poses.TOMMY_AIM.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getTommyRecoil(), Poses.TOMMY_RECOIL.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimation(), Poses.TOMMY_AIM.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.TOMMY_RECOIL.ad, partialTicks, 1f);
                 } else {
-                    this.animate(ipe.roundabout$getTommyAimLeft(), Poses.TOMMY_AIM_LEFT.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getTommyRecoilLeft(), Poses.TOMMY_RECOIL_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimation(), Poses.TOMMY_AIM_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.TOMMY_RECOIL_LEFT.ad, partialTicks, 1f);
                 }
             } else if (player.getUseItem().getItem() instanceof ColtRevolverItem) {
                 if (mainHandRight) {
-                    this.animate(ipe.roundabout$getColtAim(), Poses.SNUBNOSE_AIM.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getColtRecoil(), Poses.SNUBNOSE_RECOIL.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimation(), Poses.SNUBNOSE_AIM.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.SNUBNOSE_RECOIL.ad, partialTicks, 1f);
                 } else {
-                    this.animate(ipe.roundabout$getColtAimLeft(), Poses.SNUBNOSE_AIM_LEFT.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getColtRecoilLeft(), Poses.SNUBNOSE_RECOIL_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimation(), Poses.SNUBNOSE_AIM_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.SNUBNOSE_RECOIL_LEFT.ad, partialTicks, 1f);
                 }
             }
             EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
@@ -409,8 +408,6 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                 }
 
             }
-//            Roundabout.LOGGER.info("Is Aiming:"+ipe.roundabout$getSnubnoseAim().isStarted());
-//            Roundabout.LOGGER.info("is Recoiling"+ipe.roundabout$getSnubnoseRecoil().isStarted());
         }
     }
 }

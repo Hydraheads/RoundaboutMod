@@ -3,24 +3,26 @@ package net.hydra.jojomod.event.index;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.models.layers.animations.FirearmFirstPersonAnimations;
 import net.minecraft.client.animation.AnimationDefinition;
+import net.minecraft.world.entity.player.Player;
 
 public enum Poses {
     NONE((byte) 0,null),
     GIORNO((byte) 1, PoseAnimations.Giorno),
     JOSEPH((byte) 2, PoseAnimations.Joseph),
     KOICHI((byte) 3,PoseAnimations.Koichi),
-
     WRY((byte) 4, PoseAnimations.WRRRYYY),
     OH_NO((byte) 5, PoseAnimations.OH_NO),
-
     TORTURE_DANCE((byte) 6,PoseAnimations.TORTURE_DANCE),
     WAMUU((byte) 7,PoseAnimations.Wamuu),
-
     JOTARO((byte) 8, PoseAnimations.JOTARO),
     JONATHAN((byte) 9, PoseAnimations.Jonathan),
+
     WATCH((byte) 10, PoseAnimations.watch),
+
     SITTING((byte) 11, PoseAnimations.SITTING),
+
     VAMPIRE_TRANSFORMATION((byte) 12, PoseAnimations.VAMPIRE),
+
     SITTING_CHAIR((byte) 12, PoseAnimations.SITTING),
 
     SNUBNOSE_AIM((byte) 13, FirearmFirstPersonAnimations.snubnose_aim),
@@ -31,6 +33,7 @@ public enum Poses {
     SNUBNOSE_RECOIL_LEFT((byte) 18, FirearmFirstPersonAnimations.snubnose_fire_recoil_left),
     SNUBNOSE_MODEL_AIM_LEFT((byte) 19, FirearmFirstPersonAnimations.snubnose_model_aim_left),
     SNUBNOSE_MODEL_RECOIL_LEFT((byte) 20, FirearmFirstPersonAnimations.snubnose_model_recoil_left),
+
     TOMMY_AIM((byte) 23, FirearmFirstPersonAnimations.tommy_aim),
     TOMMY_MODEL_AIM((byte) 24, FirearmFirstPersonAnimations.tommy_model_aim),
     TOMMY_AIM_LEFT((byte) 25, FirearmFirstPersonAnimations.tommy_aim_left),
@@ -39,6 +42,7 @@ public enum Poses {
     TOMMY_MODEL_RECOIL((byte) 28, FirearmFirstPersonAnimations.tommy_model_recoil),
     TOMMY_RECOIL_LEFT((byte) 29, FirearmFirstPersonAnimations.tommy_recoil_left),
     TOMMY_MODEL_RECOIL_LEFT((byte) 30, FirearmFirstPersonAnimations.tommy_model_recoil_left),
+
     COLT_MODEL_AIM((byte) 31, FirearmFirstPersonAnimations.colt_model_aim),
     COLT_MODEL_RECOIL((byte) 32, FirearmFirstPersonAnimations.colt_model_recoil),
     COLT_MODEL_AIM_LEFT((byte) 33, FirearmFirstPersonAnimations.colt_model_aim_left),
@@ -123,8 +127,9 @@ public enum Poses {
         return NONE;
     }
 
-    public static AnimationDefinition getAnimation(IPlayerEntity ipe) {
+    public static AnimationDefinition getAnimation(Player player) {
 
+        IPlayerEntity ipe = (IPlayerEntity) player;
 
         AnimationDefinition emote = null;
         if (Poses.WRY.id == ipe.roundabout$GetPoseEmote()) {

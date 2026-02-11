@@ -102,11 +102,11 @@ public class JackalRifleModel<T extends Entity> extends HierarchicalModel<T> {
             if (LE instanceof Player player) {
                 mainHandRight = player.getMainArm() == HumanoidArm.RIGHT;
                 if (mainHandRight) {
-                    this.animate(ipe.roundabout$getTommyModelAim(), Poses.TOMMY_MODEL_AIM.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getTommyModelRecoil(), Poses.TOMMY_MODEL_RECOIL.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.TOMMY_MODEL_AIM.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.TOMMY_MODEL_RECOIL.ad, partialTicks, 1f);
                 } else if (!mainHandRight) {
-                    this.animate(ipe.roundabout$getTommyModelAimLeft(), Poses.TOMMY_MODEL_AIM_LEFT.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getTommyModelRecoilLeft(), Poses.TOMMY_MODEL_RECOIL_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.TOMMY_MODEL_AIM_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.TOMMY_MODEL_RECOIL_LEFT.ad, partialTicks, 1f);
                 }
             }
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);

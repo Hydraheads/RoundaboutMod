@@ -1177,9 +1177,10 @@ public class PowersAnubis extends NewDashPreset {
         this.setAttackTimeDuring(this.getAttackTimeDuring()+15);
 
         if (!StandDamageEntityAttack(target,this.getPunchStrength(target),1,this.getSelf())) {
-            if (target instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers().interceptGuard()
-                    && ( LE.isBlocking() || ((StandUser) LE).roundabout$isGuarding() )   ){
-                knockShield2(target, 30);
+            if (target instanceof LivingEntity LE) {
+                if (LE.isBlocking()) {
+                    MainUtil.knockShieldPlusStand(LE, 40);
+                }
             }
         }
         this.setPowerNone();

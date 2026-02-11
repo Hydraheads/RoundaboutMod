@@ -920,192 +920,22 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         return roundabout$barrageArms;
     }
 
-
     @Unique
-    public final AnimationState roundabout$anubishUnsheath = new AnimationState();
+    public final AnimationState roundabout$itemAnimation = new AnimationState();
     @Unique
     @Override
-    public AnimationState roundabout$getAnubisUnsheath(){
-        return roundabout$anubishUnsheath;
+    public AnimationState roundabout$getItemAnimation(){
+        return roundabout$itemAnimation;
     }
     @Unique
-    public final AnimationState roundabout$thirdPersonAnubishUnsheath = new AnimationState();
+    public final AnimationState roundabout$itemAnimationActive = new AnimationState();
     @Unique
     @Override
-    public AnimationState roundabout$getThirdPersonAnubisUnsheath(){
-        return roundabout$thirdPersonAnubishUnsheath;
-    }
-
-    @Unique
-    public final AnimationState roundabout$snubnoseAim = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getSnubnoseAim(){
-        return roundabout$snubnoseAim;
-    }
-    @Unique
-    public final AnimationState roundabout$snubnoseRecoil = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getSnubnoseRecoil(){
-        return roundabout$snubnoseRecoil;
-    }
-    @Unique
-    public final AnimationState roundabout$snubnoseModelAim = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getSnubnoseModelAim(){
-        return roundabout$snubnoseModelAim;
-    }
-    @Unique
-    public final AnimationState roundabout$snubnoseModelRecoil = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getSnubnoseModelRecoil(){
-        return roundabout$snubnoseModelRecoil;
-    }
-    @Unique
-    public final AnimationState roundabout$snubnoseAimLeft = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getSnubnoseAimLeft(){
-        return roundabout$snubnoseAimLeft;
-    }
-    @Unique
-    public final AnimationState roundabout$snubnoseRecoilLeft = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getSnubnoseRecoilLeft(){
-        return roundabout$snubnoseRecoilLeft;
-    }
-    @Unique
-    public final AnimationState roundabout$snubnoseModelAimLeft = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getSnubnoseModelAimLeft(){
-        return roundabout$snubnoseModelAimLeft;
-    }
-    @Unique
-    public final AnimationState roundabout$snubnoseModelRecoilLeft = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getSnubnoseModelRecoilLeft(){
-        return roundabout$snubnoseModelRecoilLeft;
+    public AnimationState roundabout$getItemAnimationActive(){
+        return roundabout$itemAnimationActive;
     }
 
-    @Unique
-    public final AnimationState roundabout$tommyAim = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getTommyAim(){
-        return roundabout$tommyAim;
-    }
-    @Unique
-    public final AnimationState roundabout$tommyModelAim = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getTommyModelAim(){
-        return roundabout$tommyModelAim;
-    }
-    @Unique
-    public final AnimationState roundabout$tommyAimLeft = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getTommyAimLeft(){
-        return roundabout$tommyAimLeft;
-    }
-    @Unique
-    public final AnimationState roundabout$tommyModelAimLeft = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getTommyModelAimLeft(){
-        return roundabout$tommyModelAimLeft;
-    }
-    @Unique
-    public final AnimationState roundabout$tommyRecoil = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getTommyRecoil(){
-        return roundabout$tommyRecoil;
-    }
-    @Unique
-    public final AnimationState roundabout$tommyModelRecoil = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getTommyModelRecoil(){
-        return roundabout$tommyModelRecoil;
-    }
-    @Unique
-    public final AnimationState roundabout$tommyRecoilLeft = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getTommyRecoilLeft(){
-        return roundabout$tommyRecoilLeft;
-    }
-    @Unique
-    public final AnimationState roundabout$tommyModelRecoilLeft = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getTommyModelRecoilLeft(){
-        return roundabout$tommyModelRecoilLeft;
-    }
 
-    @Unique
-    public final AnimationState roundabout$coltAim = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getColtAim(){
-        return roundabout$coltAim;
-    }
-    @Unique
-    public final AnimationState roundabout$coltModelAim = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getColtModelAim(){
-        return roundabout$coltModelAim;
-    }
-    @Unique
-    public final AnimationState roundabout$coltAimLeft = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getColtAimLeft(){
-        return roundabout$coltAimLeft;
-    }
-    @Unique
-    public final AnimationState roundabout$coltModelAimLeft = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getColtModelAimLeft(){
-        return roundabout$coltModelAimLeft;
-    }
-    @Unique
-    public final AnimationState roundabout$coltRecoil = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getColtRecoil(){
-        return roundabout$coltRecoil;
-    }
-    @Unique
-    public final AnimationState roundabout$coltModelRecoil = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getColtModelRecoil(){
-        return roundabout$coltModelRecoil;
-    }
-    @Unique
-    public final AnimationState roundabout$coltRecoilLeft = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getColtRecoilLeft(){
-        return roundabout$coltRecoilLeft;
-    }
-    @Unique
-    public final AnimationState roundabout$coltModelRecoilLeft = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getColtModelRecoilLeft(){
-        return roundabout$coltModelRecoilLeft;
-    }
 
 
     @Unique
