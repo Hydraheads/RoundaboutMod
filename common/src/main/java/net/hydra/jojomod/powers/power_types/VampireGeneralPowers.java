@@ -541,7 +541,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
                     Optional<Vec3> hit = targetBox.clip(start, end);
 
-                    if (hit.isPresent() && !alreadyBeamed.contains(target)) {
+                    if (hit.isPresent() && !alreadyBeamed.contains(target) && !(target instanceof StandEntity)) {
                         if (
                                 (ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxes && !MainUtil.isBossMob(target))
                                         ||
