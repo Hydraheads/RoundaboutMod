@@ -1743,6 +1743,7 @@ public class MainUtil {
 
     public static boolean isArmorBypassingButNotShieldBypassing(DamageSource sauce, Entity target){
         if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.CORPSE)
+                || sauce.is(ModDamageTypes.RIPPER_EYES)
                 || sauce.is(ModDamageTypes.VAMPIRE) || sauce.is(ModDamageTypes.HAMON) ||
                 (sauce.is(ModDamageTypes.MARTIAL_ARTS) && getReducedDamage(target))
                 || sauce.is(ModDamageTypes.EXPLOSIVE_STAND)  || sauce.is(ModDamageTypes.HEEL_SPIKE)  ||

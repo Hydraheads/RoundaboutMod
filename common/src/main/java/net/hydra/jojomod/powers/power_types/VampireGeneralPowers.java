@@ -26,6 +26,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.Main;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -547,6 +548,19 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                                 (ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxesOnBosses && MainUtil.isBossMob(target))
                         || MainUtil.canActuallyHitInvolved(target,self)) {
                             alreadyBeamed.add(target);
+
+                            float pow = getRipperEyeStrength(target);
+                            pow = applyComboDamage(pow);
+                            if (DamageHandler.VampireDamageEntity(target, pow, this.self)){
+                                addToCombo();
+                                bleedEnt(target);
+                            } else if (target.isBlocking()) {
+                                MainUtil.knockShieldPlusStand(target,200);
+                                if (DamageHandler.VampireDamageEntity(target, pow, this.self)){
+                                    addToCombo();
+                                    bleedEnt(target);
+                                }
+                            }
                             target.hurt(self.level().damageSources().playerAttack((Player) self), 8.0F);
                         }
                     }
@@ -595,6 +609,15 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             }
         }
     }
+
+    public void bleedEnt(Entity entity){
+        if (entity instanceof LivingEntity LE && MainUtil.getMobBleed(LE)){
+            MainUtil.makeBleed(LE,1,200,self);
+            MainUtil.makeMobBleed(LE);
+        }
+    }
+
+
     public List<LivingEntity> alreadyBeamed = new ArrayList<>();
 
     public void setEyeLeft(int left){
@@ -688,6 +711,14 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             }
         } else {
             return super.getPunchStrength(entity);
+        }
+    }
+
+    public float getRipperEyeStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return 5F;
+        } else {
+            return 17F;
         }
     }
 
