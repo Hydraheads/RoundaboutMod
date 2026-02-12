@@ -34,6 +34,7 @@
 
 
   "item.roundabout.stand_arrow": "Stand Arrow",
+  "item.roundabout.coffin_block_item": "Coffin",
   "item.roundabout.stand_beetle_arrow": "Stand Arrow",
   "item.roundabout.worthy_arrow": "Worthiness Arrow",
   "item.roundabout.luck_sword": "Luck Sword",
@@ -103,6 +104,8 @@
   "item.roundabout.max_star_platinum_disc": "Stand Disc+",
   "item.roundabout.magicians_red_disc": "Stand Disc",
   "item.roundabout.killer_queen_disc": "Stand Disc",
+  "item.roundabout.metallica_disc": "Stand Disc",
+  "item.roundabout.max_metallica_disc": "Stand Disc+",
   "item.roundabout.max_the_world_disc": "Stand Disc+",
   "item.roundabout.max_justice_disc": "Stand Disc+",
   "item.roundabout.max_d4c_disc": "Stand Disc+",
@@ -117,6 +120,7 @@
   "item.roundabout.soft_and_wet_disc.desc": "Soft And Wet",
   "item.roundabout.killer_queen_disc.desc": "Killer Queen",
   "item.roundabout.magicians_red_disc.desc": "Magician's Red",
+  "item.roundabout.metallica_disc.desc": "Metallica",
   "item.roundabout.star_platinum_disc.desc": "Star Platinum",
   "item.roundabout.the_world_disc.desc": "The World",
   "item.roundabout.justice_disc.desc": "Justice",
@@ -369,6 +373,7 @@
 
 
   "block.roundabout.meteor_block": "Meteorite Block",
+  "block.roundabout.coffin_block": "Coffin",
   "block.roundabout.shiny_quartz": "Shiny Quartz",
   "block.roundabout.shiny_quartz_tiles": "Shiny Quartz Tiles",
   "block.roundabout.regal_wall": "Regal Wall",

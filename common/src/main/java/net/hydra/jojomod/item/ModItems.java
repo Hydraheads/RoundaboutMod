@@ -54,6 +54,7 @@ public class ModItems {
     public static Item STAND_DISC_DIVER_DOWN;
     public static Item MAX_STAND_DISC_DIVER_DOWN;
     public static Item STAND_DISC_METALLICA;
+    public static Item MAX_STAND_DISC_METALLICA;
     public static Item STAND_DISC_CREAM;
     public static Item MAX_STAND_DISC_CREAM;
     public static Item STAND_DISC;
