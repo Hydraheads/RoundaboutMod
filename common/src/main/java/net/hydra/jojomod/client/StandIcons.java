@@ -195,6 +195,8 @@ public class StandIcons {
             "textures/gui/icons/powers/vampire/ice_clutch.png");
     public static final ResourceLocation RIPPER_EYES = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/powers/vampire/ripper_eyes.png");
+    public static final ResourceLocation RIPPER_SHOT = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/vampire/ripper_shot.png");
     public static final ResourceLocation AURA = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/powers/vampire/aura.png");
     public static final ResourceLocation DEFLECTION = new ResourceLocation(Roundabout.MOD_ID,

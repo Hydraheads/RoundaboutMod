@@ -480,6 +480,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     }
                 } else if (getActivePower() == RIPPER_EYES) {
                     if (attackTimeDuring == getMaxRipperEyesWait()) {
+
+                        setCooldown(PowerIndex.GENERAL_4,getRipperCooldown());
                         tryPowerPacket(RIPPER_EYES_ACTIVATED);
                         ripperEyesLeft = ripperBeamTime;
                     }
@@ -716,6 +718,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     }
 
 
+    public int getRipperCooldown(){
+        return 240;
+    }
+
 
     public float getPunchStrength(Entity entity){
         if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
@@ -830,7 +836,11 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if (isHoldingSneak()) {
                 setSkillIcon(context, x, y, 4, StandIcons.DEFLECTION, PowerIndex.GENERAL_4_SNEAK);
             } else {
-                setSkillIcon(context, x, y, 4, StandIcons.RIPPER_EYES, PowerIndex.GENERAL_4);
+                if (getActivePower() == RIPPER_EYES){
+                    setSkillIcon(context, x, y, 4, StandIcons.RIPPER_SHOT, PowerIndex.GENERAL_4);
+                } else {
+                    setSkillIcon(context, x, y, 4, StandIcons.RIPPER_EYES, PowerIndex.GENERAL_4);
+                }
             }
         }
     }
@@ -1422,6 +1432,12 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 setActivePower(NONE);
             }
         } else {
+            if (getActivePower() == RIPPER_EYES){
+                setCooldown(PowerIndex.GENERAL_4,getRipperCooldown());
+            } else {
+                setActivePower(RIPPER_EYES);
+                setAttackTimeDuring(0);
+            }
             tryIntPowerPacket(RIPPER_EYES,attackTimeDuring);
         }
     }
