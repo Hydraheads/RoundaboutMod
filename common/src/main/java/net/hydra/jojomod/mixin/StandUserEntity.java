@@ -3929,7 +3929,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         MobEffectInstance melting = this.rdbt$this().getEffect(ModEffects.MELTING);
         if (melting != null) {
-            if (melting.getAmplifier() >= 8) {
+            if (melting.getAmplifier() >= 15) {
                 basis *= 0.7F;
             }
         }

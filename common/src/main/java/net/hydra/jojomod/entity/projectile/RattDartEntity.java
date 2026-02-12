@@ -315,10 +315,13 @@ public class RattDartEntity extends AbstractArrow {
             if (P.isCreative()) {
                 force = 0;
             }
+            if (P.isBlocking()) {
+                force *= 0.75F;
+            }
         }
         MainUtil.takeUnresistableKnockbackWithY($$1, force,
                 Mth.sin(degrees * ((float) Math.PI / 180)),
-                Mth.sin(-25 * ((float) Math.PI / 180)),
+                Mth.sin(-23 * ((float) Math.PI / 180)),
                 -Mth.cos(degrees * ((float) Math.PI / 180)));
 
         this.discard();
