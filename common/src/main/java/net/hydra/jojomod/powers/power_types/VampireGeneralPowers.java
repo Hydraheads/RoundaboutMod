@@ -27,10 +27,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.Main;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -476,9 +474,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         Entity TE2 = getTargetEntity(self, 1.4F, 40);
                         if (TE2 != null) {
                             xTryPower(PowerIndex.NONE, true);
-                            tryPowerPacket(NONE);
                             tryIntPowerPacket(ICE_CLUTCH_ATTACK, TE2.getId());
-                            xTryPower(PowerIndex.NONE, true);
                             tryPowerPacket(NONE);
                         }
                     }
@@ -663,6 +659,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public static int maxSpike= 20;
     public static int maxSpike2= 56;
 
+    public int chargeAmtRipper = 0;
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime) {
         if (!self.level().isClientSide()) {
@@ -676,6 +673,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 attackTargetId = chargeTime;
             } if (move == ICE_CLUTCH_ATTACK) {
                 attackTargetId = chargeTime;
+            } if (move == RIPPER_EYES){
+                chargeAmtRipper = chargeTime;
             }
 
         }
@@ -744,11 +743,24 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     }
 
     public float getRipperEyeStrength(Entity entity){
-        if (this.getReducedDamage(entity)){
-            return 5F;
-        } else {
-            return 17F;
+        if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
+            if (this.getReducedDamage(entity)) {
+                return 5F  * (0.8F+ (vp.getVampireData().ripperEyesLevel * 0.05F));
+            } else {
+                return 17F  * (0.8F+ (vp.getVampireData().ripperEyesLevel * 0.05F));
+            }
         }
+        return 0;
+    }
+    public float getRipperEyeStrayStrength(Entity entity, int chargeAmt){
+        if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
+            if (this.getReducedDamage(entity)) {
+                return 0.5F + 0.02F * (1 +chargeAmt) * (0.8F + (vp.getVampireData().ripperEyesLevel * 0.05F));
+            } else {
+                return 1F + 0.15F * (1+chargeAmt) * (0.8F + (vp.getVampireData().ripperEyesLevel * 0.05F));
+            }
+        }
+        return 0;
     }
 
 
@@ -1325,6 +1337,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         if (direction != Direction.DOWN){
             addToPosition = RotationUtil.vecPlayerToWorld(addToPosition,direction);
         }
+        ankh.charge = chargeAmtRipper;
         ankh.setPos(this.self.getX()+addToPosition.x, this.self.getY()+addToPosition.y, this.self.getZ()+addToPosition.z);
         ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, 1.8f, 0);
         ankh.setYRot(this.getSelf().getYRot());
@@ -1409,7 +1422,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 setActivePower(NONE);
             }
         } else {
-            tryPowerPacket(RIPPER_EYES);
+            tryIntPowerPacket(RIPPER_EYES,attackTimeDuring);
         }
     }
     public void doRipperEyesActivated(){
