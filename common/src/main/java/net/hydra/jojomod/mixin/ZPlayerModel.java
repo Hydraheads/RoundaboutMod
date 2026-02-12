@@ -140,11 +140,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
             if (SE.roundabout$getStandPowers() instanceof PowersAnubis) {
                 switch (SE.roundabout$getStandAnimation()) {
-                    case PowerIndex.GUARD -> {
-                        change = true;
-                        SE.roundabout$getHandLayerAnimation().startIfStopped($$0.tickCount);
-                        this.roundabout$animate(SE.roundabout$getHandLayerAnimation(), AnubisAnimations.UP,yes,1F);
-                    }
+
                     default -> {
                         change = false;
                         SE.roundabout$getHandLayerAnimation().stop();

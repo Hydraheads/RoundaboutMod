@@ -7,6 +7,7 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.gui.*;
+import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsModel;
 import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsSlimModel;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerAmbientSound;
@@ -1666,6 +1667,7 @@ public class ClientUtil {
 
         if (cameraEnt instanceof Player play) {
 
+            // vampire
             if (((IFatePlayer)cameraEnt).rdbt$getFatePowers() instanceof VampireFate vf){
                 int poggers = vf.getProgressIntoAnimation();
                 if (poggers >= 16 && poggers <= 22) {
@@ -1701,6 +1703,7 @@ public class ClientUtil {
                 }
             }
             byte bt = ((IPlayerEntity) play).roundabout$GetPos2();
+            // vampire again
             if (ClientUtil.rendersRipperEyes(play)) {
                 stack.pushPose();
                 Vec3 gtranslation = new Vec3(0, -0.1, 0);
@@ -1824,6 +1827,11 @@ public class ClientUtil {
                 pl.roundabout$getItemAnimation().stop();
                 pl.roundabout$getItemAnimationActive().stop();
             }
+
+            if (AnubisLayer.shouldRender(play) != null) {
+                  ModStrayModels.ANUBIS.renderFirstPerson(stack,source,light,play,$$4);
+            }
+
         }
 
     }

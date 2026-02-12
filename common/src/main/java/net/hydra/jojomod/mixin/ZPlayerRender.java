@@ -274,7 +274,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     }
 
 
-    @Inject(method = "renderHand",at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/player/PlayerRenderer;setModelProperties(Lnet/minecraft/client/player/AbstractClientPlayer;)V",shift = At.Shift.AFTER))
+   @Inject(method = "renderHand",at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/player/PlayerRenderer;setModelProperties(Lnet/minecraft/client/player/AbstractClientPlayer;)V",shift = At.Shift.AFTER))
     private void roundabout$hideAnubisArm(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, ModelPart $$4, ModelPart $$5, CallbackInfo ci) {
         if ( AnubisLayer.shouldRender($$3) == HumanoidArm.RIGHT) {
             this.getModel().rightArm.visible = false;
@@ -545,7 +545,6 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         }
         ShootingArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,yes,
                 0,0,$$4);
-        AnubisLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,yes,$$4);
         if ($$4 != null && $$4.equals(this.model.rightArm)) {
             MandomLayer.renderWatchFirstPerson(stack, buffer, getPackedLightCoords(acl, 1F), acl, 1, 1, 1, yes,
                     0, 0, $$4, ((IPlayerModel) this.model).roundabout$getSlim()
@@ -905,7 +904,6 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
             ShootingArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,yes,
                     0,0,$$5);
-            AnubisLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,yes,$$4);
         }
 
     @Unique

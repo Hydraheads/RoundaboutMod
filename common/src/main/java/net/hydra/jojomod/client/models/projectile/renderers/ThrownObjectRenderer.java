@@ -3,6 +3,7 @@ package net.hydra.jojomod.client.models.projectile.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.AnubisItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.util.MainUtil;
@@ -16,6 +17,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -57,6 +59,9 @@ public class ThrownObjectRenderer<T extends Entity>
         ThrownObjectEntity thrownObjectEntity = (ThrownObjectEntity)entity;
         if ( thrownObjectEntity.getItem().getItem() instanceof AnubisItem ) {
 
+            if ( ((TimeStop)entity.level()).inTimeStopRange(entity)) {
+                f = 0;
+            }
 
             Vec3 dir = entity.getDeltaMovement().normalize();
             float rot =(float) (Math.atan2(dir.x,dir.z) * Mth.RAD_TO_DEG + 90);
