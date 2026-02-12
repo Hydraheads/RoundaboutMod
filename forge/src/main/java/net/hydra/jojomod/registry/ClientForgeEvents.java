@@ -185,6 +185,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.LIFE_DETECTOR, LifeTrackerModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.SEPERATED_LEGS_LAYER, SeperatedLegsModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.STAND_FIREBALL_LAYER, StandFireballModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.RIPPER_EYES_LAYER, RipperEyesModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.GASOLINE_LAYER, GasolineCanModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.ZOMBIE_AESTHETICIAN_LAYER, ZombieAestheticianModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STEVE_LAYER, PlayerSteveModel::getTexturedModelData);

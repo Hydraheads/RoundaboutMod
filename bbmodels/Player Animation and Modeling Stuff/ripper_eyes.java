@@ -24,15 +24,15 @@ public class ripper_eyes<T extends Entity> extends EntityModel<T> {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition laser = partdefinition.addOrReplaceChild("laser", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition laser = partdefinition.addOrReplaceChild("laser", CubeListBuilder.create(), PartPose.offset(0.0F, -23.0F, -1.0F));
 
-		PartDefinition right_laser = laser.addOrReplaceChild("right_laser", CubeListBuilder.create().texOffs(0, 0).addBox(-1.0F, -1.0F, -8.0F, 2.0F, 2.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.0F, -4.0F, -4.0F));
+		PartDefinition right_laser = laser.addOrReplaceChild("right_laser", CubeListBuilder.create().texOffs(0, 0).addBox(-1.0F, -1.0F, -8.0F, 2.0F, 2.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.0F, 0.0F, 0.0F));
 
-		PartDefinition left_laser = laser.addOrReplaceChild("left_laser", CubeListBuilder.create().texOffs(0, 0).addBox(-1.0F, -1.0F, -8.0F, 2.0F, 2.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, -4.0F, -4.0F));
+		PartDefinition left_laser = laser.addOrReplaceChild("left_laser", CubeListBuilder.create().texOffs(0, 0).addBox(-1.0F, -1.0F, -8.0F, 2.0F, 2.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, 0.0F, 0.0F));
 
-		PartDefinition right_laser2 = laser.addOrReplaceChild("right_laser2", CubeListBuilder.create().texOffs(0, 10).addBox(-1.0F, -1.0F, -8.0F, 2.0F, 2.0F, 8.0F, new CubeDeformation(0.2F)), PartPose.offset(-2.0F, -4.0F, -4.0F));
+		PartDefinition right_laser2 = laser.addOrReplaceChild("right_laser2", CubeListBuilder.create().texOffs(0, 10).addBox(-1.0F, -1.0F, -8.0F, 2.0F, 2.0F, 8.0F, new CubeDeformation(0.2F)), PartPose.offset(-2.0F, 0.0F, 0.0F));
 
-		PartDefinition left_laser2 = laser.addOrReplaceChild("left_laser2", CubeListBuilder.create().texOffs(0, 10).addBox(-1.0F, -1.0F, -8.0F, 2.0F, 2.0F, 8.0F, new CubeDeformation(0.2F)), PartPose.offset(2.0F, -4.0F, -4.0F));
+		PartDefinition left_laser2 = laser.addOrReplaceChild("left_laser2", CubeListBuilder.create().texOffs(0, 10).addBox(-1.0F, -1.0F, -8.0F, 2.0F, 2.0F, 8.0F, new CubeDeformation(0.2F)), PartPose.offset(2.0F, 0.0F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 32, 32);
 	}

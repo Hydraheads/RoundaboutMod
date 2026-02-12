@@ -5,6 +5,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.projectile.EvilAuraProjectile;
+import net.hydra.jojomod.entity.projectile.RipperEyesProjectile;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
@@ -1302,6 +1303,13 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         bubble.setOwner(this.self);
         return bubble;
     }
+    public RipperEyesProjectile getRipperEyesProjectile(){
+        RipperEyesProjectile bubble = new RipperEyesProjectile(this.self,this.self.level());
+        bubble.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
+        bubble.setUser(this.self);
+        bubble.setOwner(this.self);
+        return bubble;
+    }
     public void shootAuraBlast(EvilAuraProjectile ankh){
         Vec3 addToPosition = new Vec3(0,this.self.getEyeHeight(),0);
         Direction direction = ((IGravityEntity)this.self).roundabout$getGravityDirection();
@@ -1310,6 +1318,17 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         }
         ankh.setPos(this.self.getX()+addToPosition.x, this.self.getY()+addToPosition.y, this.self.getZ()+addToPosition.z);
         ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, 1.6f, 0);
+    }
+    public void shootRipperEyes(RipperEyesProjectile ankh){
+        Vec3 addToPosition = new Vec3(0,this.self.getBbHeight()*0.7F,0);
+        Direction direction = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+        if (direction != Direction.DOWN){
+            addToPosition = RotationUtil.vecPlayerToWorld(addToPosition,direction);
+        }
+        ankh.setPos(this.self.getX()+addToPosition.x, this.self.getY()+addToPosition.y, this.self.getZ()+addToPosition.z);
+        ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, 1.8f, 0);
+        ankh.setYRot(this.getSelf().getYRot());
+        ankh.setXRot(this.getSelf().getXRot());
     }
     public void doAuraBlast(){
         this.attackTimeDuring = 0;
@@ -1330,6 +1349,16 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             }
         } else {
             tryPowerPacket(EVIL_AURA);
+        }
+    }
+
+    public void ripperEyeShot(){
+        if (!self.level().isClientSide()) {
+            RipperEyesProjectile auraProjectile = getRipperEyesProjectile();
+            if (auraProjectile != null) {
+                shootRipperEyes(auraProjectile);
+                this.getSelf().level().addFreshEntity(auraProjectile);
+            }
         }
     }
 
@@ -1375,7 +1404,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 setActivePower(RIPPER_EYES);
             } else {
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.RIPPER_EYES_SHORT_EVENT, SoundSource.PLAYERS, 1F, (float) (1f + Math.random() * 0.05f));
-
+                ripperEyeShot();
                 this.stopSoundsIfNearby(SoundIndex.RIPPER_EYES_CHARGE, 100, false);
                 setActivePower(NONE);
             }

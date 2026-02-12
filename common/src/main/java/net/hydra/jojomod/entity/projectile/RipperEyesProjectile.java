@@ -8,6 +8,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,6 +27,7 @@ public class RipperEyesProjectile extends RoundaboutGeneralProjectile{
         super($$0, $$1);
     }
 
+    public final AnimationState ripperEyes = new AnimationState();
     protected RipperEyesProjectile(EntityType<? extends RoundaboutGeneralProjectile> $$0, double $$1, double $$2, double $$3, Level $$4) {
         this($$0, $$4);
         this.setPos($$1, $$2, $$3);
