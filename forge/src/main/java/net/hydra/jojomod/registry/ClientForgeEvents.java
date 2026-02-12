@@ -94,6 +94,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.LIFE_TRACKER.get(), LifeTrackerRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STAND_FIREBALL.get(), StandFireballRenderer::new);
         event.registerEntityRenderer(ForgeEntities.EVIL_AURA_PROJECTILE.get(), NoRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.RIPPER_EYES_PROJECTILE.get(), RipperEyesRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BLOOD_SPLATTER.get(), BloodSplatterRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GASOLINE_CAN.get(), GasolineCanRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_OBJECT.get(), ThrownObjectRenderer::new);

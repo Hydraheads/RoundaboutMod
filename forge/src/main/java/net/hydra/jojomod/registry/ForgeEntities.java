@@ -455,6 +455,12 @@ public class ForgeEntities {
                             clientTrackingRange(15).
                             build(new ResourceLocation(Roundabout.MOD_ID, "evil_aura_projectile").toString())
             );
+    public static final RegistryObject<EntityType<RipperEyesProjectile>> RIPPER_EYES_PROJECTILE =
+            ENTITY_TYPES.register("ripper_eyes", () ->
+                    EntityType.Builder.<RipperEyesProjectile>of(RipperEyesProjectile::new, MobCategory.MISC).sized(1F, 1F).
+                            clientTrackingRange(15).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "ripper_eyes").toString())
+            );
     public static final RegistryObject<EntityType<GasolineSplatterEntity>> GASOLINE_SPLATTER =
             ENTITY_TYPES.register("gasoline_splatter", () ->
                     EntityType.Builder.<GasolineSplatterEntity>of(GasolineSplatterEntity::new, MobCategory.MISC).sized(0.8f, 0.8f).
