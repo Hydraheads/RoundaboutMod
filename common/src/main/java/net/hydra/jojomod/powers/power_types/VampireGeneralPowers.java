@@ -579,20 +579,21 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                                 }
                             }
 
-                            if (!alreadyBeamed.contains(target)) {
-                                if (DamageHandler.VampireDamageEntity(target, pow, this.self)) {
+                            if (target.hurtTime == 0) {
+                                if (DamageHandler.RipperEyesDamage(target, pow, this.self) && !alreadyBeamed.contains(target)) {
                                     addToCombo();
                                     bleedEnt(target);
                                 } else if (target.isBlocking()) {
                                     MainUtil.knockShieldPlusStand(target, 200);
-                                    if (DamageHandler.VampireDamageEntity(target, pow, this.self)) {
+                                    if (DamageHandler.RipperEyesDamage(target, pow, this.self) && !alreadyBeamed.contains(target)) {
                                         addToCombo();
                                         bleedEnt(target);
                                     }
                                 }
-                                alreadyBeamed.add(target);
+                                if (!alreadyBeamed.contains(target)) {
+                                    alreadyBeamed.add(target);
+                                }
                             }
-                            target.hurt(self.level().damageSources().playerAttack((Player) self), 8.0F);
 
                         }
                     }
