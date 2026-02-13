@@ -460,8 +460,9 @@ public class VampireFate extends VampiricFate {
             return 0;
 
 
-        if (self instanceof Player pl && PowerTypes.hasPowerActivelyEquipped(self) &&
-                ((IPowersPlayer)pl).rdbt$getPowers() instanceof VampireGeneralPowers vgp &&
+
+        if (self instanceof Player pl && ((StandUser)pl).roundabout$getActive() &&
+                PowerTypes.getPowerType(pl) == PowerTypes.VAMPIRE.ordinal() &&
         getVampireData().jumpLevel > 0){
             if (self.isCrouching() && rechargeJump){
                 return 7;
