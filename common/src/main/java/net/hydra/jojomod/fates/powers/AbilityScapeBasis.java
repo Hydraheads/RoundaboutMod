@@ -2589,6 +2589,11 @@ public class AbilityScapeBasis {
         }
 
         boolean interrupt = false;
+
+        if (sauce.getEntity() != null) {
+            interrupter = sauce.getEntity();
+        }
+
         if (interrupter != null){
             if (this.isBarraging() && ClientNetworking.getAppropriateConfig().generalStandSettings.barragesAreAlwaysInterruptable) {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
