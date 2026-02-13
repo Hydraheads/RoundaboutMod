@@ -562,28 +562,38 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
                     Optional<Vec3> hit = targetBox.clip(start, end);
 
-                    if (hit.isPresent() && !alreadyBeamed.contains(target) && !(target instanceof StandEntity)) {
+                    if (hit.isPresent()&& !(target instanceof StandEntity)) {
                         if (
                                 (ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxes && !MainUtil.isBossMob(target))
                                         ||
                                 (ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxesOnBosses && MainUtil.isBossMob(target))
                                     || MainUtil.canActuallyHitInvolved(target,self)
                         ) {
-                            alreadyBeamed.add(target);
 
                             float pow = getRipperEyeStrength(target);
                             pow = applyComboDamage(pow);
-                            if (DamageHandler.VampireDamageEntity(target, pow, this.self)){
-                                addToCombo();
-                                bleedEnt(target);
-                            } else if (target.isBlocking()) {
-                                MainUtil.knockShieldPlusStand(target,200);
-                                if (DamageHandler.VampireDamageEntity(target, pow, this.self)){
-                                    addToCombo();
-                                    bleedEnt(target);
+                            if (alreadyBeamed.contains(target)) {
+                                pow *= 0.1F;
+                                if (MainUtil.getReducedDamage(target)) {
+                                    pow *= 0.2F;
                                 }
                             }
+
+                            if (!alreadyBeamed.contains(target)) {
+                                if (DamageHandler.VampireDamageEntity(target, pow, this.self)) {
+                                    addToCombo();
+                                    bleedEnt(target);
+                                } else if (target.isBlocking()) {
+                                    MainUtil.knockShieldPlusStand(target, 200);
+                                    if (DamageHandler.VampireDamageEntity(target, pow, this.self)) {
+                                        addToCombo();
+                                        bleedEnt(target);
+                                    }
+                                }
+                                alreadyBeamed.add(target);
+                            }
                             target.hurt(self.level().damageSources().playerAttack((Player) self), 8.0F);
+
                         }
                     }
                 }
