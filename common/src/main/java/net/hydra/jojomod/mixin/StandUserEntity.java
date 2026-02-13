@@ -1291,6 +1291,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void roundabout$tick(CallbackInfo ci) {
 
+        // this is needed to ensure that your jump doesn't get a random boost the middle of it if you're to activate your stand etc.
+        // it recalculates when it finds a block .5 below you, this number is arbitrary and technically you can still boost within that tiny distance
+        // this could maybe be done by directly injecting into Entity.setOnGround and Entity.setOnGroundWithKnownMovement but probably isn't necessary
+        AABB box = this.getBoundingBox();
+        box = new AABB(box.minX,box.minY-0.5,box.minZ,box.maxX,box.maxY,box.maxZ);
+        if (this.level().findSupportingBlock(this,box).isPresent()) {
+            roundabout$jumpHeight = roundabout$calculateBonusJumpHeight();
+        }
+
         roundabout$tickStandOrStandless();
         //if (StandID > -1) {
         if (!this.level().isClientSide()) {
@@ -1707,6 +1716,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Tall Jumping Code*/
 
     @Unique
+    private float roundabout$jumpHeight;
+    @Unique
     boolean roundabout$bigJump = false;
     @Unique
     public boolean roundabout$getBigJump(){
@@ -1718,7 +1729,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.roundabout$bigJump = bigJump;
     }
     @Unique
-    public float roundabout$getBonusJumpHeight(){
+    public float roundabout$getBonusJumpHeight() {
+        return roundabout$jumpHeight;
+    }
+    @Unique
+    public float roundabout$calculateBonusJumpHeight() {
         float TOT = 0;
 
         if (roundabout$isDazed())
