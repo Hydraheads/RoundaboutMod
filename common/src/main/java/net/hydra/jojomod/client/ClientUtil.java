@@ -1009,6 +1009,15 @@ public class ClientUtil {
                             ));
                 }
             }
+
+            byte posX = ((IPlayerEntity)pl).roundabout$GetPos2();
+            if (posX == PlayerPosIndex.VANISH_PERSIST){
+                throwFade = 0;
+            } else if (posX == PlayerPosIndex.VANISH_START){
+                if (pl.tickCount % 4 > 1){
+                    throwFade = 0;
+                }
+            }
         }
 
         return throwFade;

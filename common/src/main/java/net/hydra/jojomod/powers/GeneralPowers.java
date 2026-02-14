@@ -213,6 +213,9 @@ public class GeneralPowers extends AbilityScapeBasis {
             } else if (!(activePower == VampireGeneralPowers.RIPPER_EYES_ACTIVATED)
                     && getPlayerPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE) {
                 setPlayerPos2(PlayerPosIndex.NONE);
+            } else if (!(activePower == VampireGeneralPowers.CAMO)
+                    && (getPlayerPos2() == PlayerPosIndex.VANISH_PERSIST || getPlayerPos2() == PlayerPosIndex.VANISH_START)) {
+                setPlayerPos2(PlayerPosIndex.NONE);
             }
 
             if (this.self instanceof Player PE && PE.isSpectator()) {

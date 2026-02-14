@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.SavedSecond;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -342,8 +343,20 @@ public abstract class EntityAndData implements IEntityAndData {
         } else if (((Entity)(Object)this) instanceof Player pl && ((IPowersPlayer)pl).rdbt$getPowers().isFaded()){
             if (!this.level().isClientSide()){
                 cir.setReturnValue(true);
+                return;
             }
         }
+
+        if (((Entity)(Object)this) instanceof Player pl){
+            if (!this.level().isClientSide()){
+                byte posX = ((IPlayerEntity)pl).roundabout$GetPos2();
+                if (posX == PlayerPosIndex.VANISH_PERSIST || posX == PlayerPosIndex.VANISH_START) {
+                    cir.setReturnValue(true);
+                    return;
+                }
+            }
+        }
+
 
         if (((Entity)(Object)this) instanceof LivingEntity LE
                 && ((StandUser)LE).roundabout$getMetallicaInvisibility() > -1) {

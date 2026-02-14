@@ -2,8 +2,10 @@ package net.hydra.jojomod.mixin.achtung;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
@@ -56,6 +58,11 @@ public class AchtungItemInHandRenderer {
                  **/
             } else if (((IPowersPlayer)localPlayer).rdbt$getPowers().isFaded()){
                 throwFadeToTheEther = throwFadeToTheEther*0.6F;
+            }
+
+            byte posX = ((IPlayerEntity)localPlayer).roundabout$GetPos2();
+            if (posX == PlayerPosIndex.VANISH_PERSIST || posX == PlayerPosIndex.VANISH_START) {
+                throwFadeToTheEther = throwFadeToTheEther*0.5F;
             }
             ClientUtil.setThrowFadeToTheEther(throwFadeToTheEther);
         }

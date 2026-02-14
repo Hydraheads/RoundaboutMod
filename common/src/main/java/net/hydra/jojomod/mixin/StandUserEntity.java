@@ -3837,6 +3837,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         } else if (rdbt$this() instanceof Player pl && ((IPowersPlayer)pl).rdbt$getPowers().isFaded()){
             cir.setReturnValue(0f);
         }
+
+        if (rdbt$this() instanceof Player pl){
+            byte posX = ((IPlayerEntity)pl).roundabout$GetPos2();
+            if (posX == PlayerPosIndex.VANISH_PERSIST || posX == PlayerPosIndex.VANISH_START) {
+                cir.setReturnValue(0f);
+            }
+        }
     }
     /**This code prevents you from swimming upwards while barrage clashing*/
     @Inject(method = "jumpInLiquid", at = @At(value = "HEAD"), cancellable = true, require = 0)
