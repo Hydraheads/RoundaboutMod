@@ -18,6 +18,8 @@ import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.item.HarpoonItem;
+import net.hydra.jojomod.item.KnifeItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -2699,5 +2701,14 @@ public class AbilityScapeBasis {
 
     public boolean isBarraging(){
         return (this.activePower == PowerIndex.BARRAGE || this.activePower == PowerIndex.BARRAGE_CHARGE);
+    }
+
+     //Note that this doesn't necessarily apply to  rendering items.
+    public boolean canCombatModeUse(ItemStack stack) {
+        return canCombatModeUse(stack.getItem());
+    }
+    public boolean canCombatModeUse(Item item) {
+        return item.isEdible() || item instanceof HarpoonItem || item instanceof TridentItem
+                || item instanceof KnifeItem;
     }
 }

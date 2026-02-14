@@ -1829,10 +1829,12 @@ public class ClientUtil {
                 }
 
 
-                if (slimBoolean) {
-                    ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
-                } else {
-                    ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+                if (!(item instanceof JackalRifleItem)) {
+                    if (slimBoolean) {
+                        ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
+                    } else {
+                        ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
+                    }
                 }
 
                 if (item instanceof SnubnoseRevolverItem) {
