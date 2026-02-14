@@ -297,6 +297,7 @@ public class FabricSounds {
         addSound(ModSounds.BALL_BEARING_SHOT_ID, ModSounds.BALL_BEARING_SHOT_EVENT);
         addSound(ModSounds.EVIL_AURA_BLAST_ID, ModSounds.EVIL_AURA_BLAST_EVENT);
         addSound(ModSounds.AURA_IMPACT_ID, ModSounds.AURA_IMPACT_EVENT);
+        addSound(ModSounds.VAMPIRE_CAMO_ID, ModSounds.VAMPIRE_CAMO_EVENT);
         addSound(ModSounds.ITEM_CATCH_ID, ModSounds.ITEM_CATCH_EVENT);
 
         addSound(ModSounds.HEY_YA_1_ID, ModSounds.HEY_YA_1_EVENT);

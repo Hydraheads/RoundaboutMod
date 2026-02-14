@@ -879,6 +879,11 @@ public class ModSounds {
     public static final ResourceLocation AURA_IMPACT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+AURA_IMPACT);
     public static SoundEvent AURA_IMPACT_EVENT = SoundEvent.createVariableRangeEvent(AURA_IMPACT_ID);
 
+    public static final String VAMPIRE_CAMO = "vampire_camo";
+    public static final ResourceLocation VAMPIRE_CAMO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VAMPIRE_CAMO);
+    public static SoundEvent VAMPIRE_CAMO_EVENT = SoundEvent.createVariableRangeEvent(VAMPIRE_CAMO_ID);
+
+
 
     public static final String HEY_YA_1 = "hey_ya_1";
     public static final ResourceLocation HEY_YA_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HEY_YA_1);

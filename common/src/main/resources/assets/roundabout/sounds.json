@@ -17,6 +17,12 @@
       "roundabout:vampire_dash"
     ]
   },
+  "vampire_camo": {
+    "subtitle": "sounds.roundabout.vampire_camo",
+    "sounds": [
+      "roundabout:vampire_camo"
+    ]
+  },
   "ripper_eyes_beam": {
     "subtitle": "sounds.roundabout.ripper_eyes_beam",
     "sounds": [

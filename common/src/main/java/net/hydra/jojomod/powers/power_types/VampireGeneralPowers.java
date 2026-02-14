@@ -82,6 +82,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public static final byte RIPPER_EYES = PowerIndex.POWER_4;
     public static final byte RIPPER_EYES_ACTIVATED = PowerIndex.POWER_4_BONUS;
 
+    public static final byte CAMO = PowerIndex.POWER_3_BLOCK;
+
     /**The text name of the fate*/
     public Component getPowerName(){
         return Component.translatable("text.roundabout.powers.vampire");
@@ -115,6 +117,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 case SKILL_3_CROUCH -> {
                     evilAuraClient();
                 }
+                case SKILL_3_GUARD, SKILL_3_CROUCH_GUARD -> {
+                    clientCamo();
+                }
                 case SKILL_4_NORMAL -> {
                     ripperEyesClient();
                 }
@@ -124,6 +129,12 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             }
         }
     };
+
+    public void clientCamo(){
+        if (!onCooldown(PowerIndex.GENERAL_EXTRA)){
+            this.tryPower(CAMO);
+        }
+    }
 
 
     public void ripperEyesClient(){
@@ -836,7 +847,12 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             } else {
                 setSkillIcon(context, x, y, 2, StandIcons.BLOOD_CLUTCH, PowerIndex.GENERAL_2);
             }
-            if ((vp.canLatchOntoWall() || (vp.isPlantedInWall() && !isHoldingSneak())) && vp.canWallWalkConfig()) {
+
+
+
+            if (isGuarding()){
+                setSkillIcon(context, x, y, 3, StandIcons.CAMO, PowerIndex.GENERAL_EXTRA);
+            } else if ((vp.canLatchOntoWall() || (vp.isPlantedInWall() && !isHoldingSneak())) && vp.canWallWalkConfig()) {
                 setSkillIcon(context, x, y, 3, StandIcons.WALL_WALK_VAMP, PowerIndex.FATE_3);
             } else if (isHoldingSneak()) {
                 setSkillIcon(context, x, y, 3, StandIcons.AURA, PowerIndex.GENERAL_3_SNEAK);
@@ -952,6 +968,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             doRipperEyes();
         } else if (move == RIPPER_EYES_ACTIVATED){
             doRipperEyesActivated();
+        } else if (move == CAMO){
+            doCamo();
         }
 
         return super.setPowerOther(move,lastMove);
@@ -1383,6 +1401,18 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             }
         } else {
             tryPowerPacket(EVIL_AURA);
+        }
+    }
+
+    public void doCamo(){
+        this.attackTimeDuring = 0;
+        setActivePower(NONE);
+        setCooldown(PowerIndex.GENERAL_EXTRA, 100);
+        if (!self.level().isClientSide()) {
+            this.self.level().playSound(null, this.self.blockPosition(),ModSounds.VAMPIRE_CAMO_EVENT, SoundSource.PLAYERS, 1F, (float) (0.98f + Math.random() * 0.04f));
+
+        } else {
+            tryPowerPacket(CAMO);
         }
     }
 
