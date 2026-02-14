@@ -2027,6 +2027,10 @@
   "config.roundabout.enableSurvivor.name": "Enable Stand",
   "config.roundabout.enableSurvivor.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
 
+  "config.roundabout.blinkWithCamo.name": "Blink With Camo",
+  "config.roundabout.blinkWithCamo.desc": "Turn off to make the vampire camo move not blink if it somehow makes you uncomfortable in some way.",
+
+
   "config.roundabout.mountingHorsesInCreativeTamesThem.name": "Creative Mount To Tame",
   "config.roundabout.mountingHorsesInCreativeTamesThem.desc": "If you mount a horse in creative mode, you instantly tame it.",
 

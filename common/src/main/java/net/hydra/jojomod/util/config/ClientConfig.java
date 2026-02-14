@@ -57,6 +57,8 @@ public class ClientConfig implements Cloneable {
     @BooleanOption(group = "inherit", value = true)
     public Boolean renderArmorOnPlayerCloneAbilities;
     @BooleanOption(group = "inherit", value = true)
+    public Boolean blinkWithCamo;
+    @BooleanOption(group = "inherit", value = true)
     public Boolean magiciansRedTexturesMakeItEmmissive;
     @BooleanOption(group = "inherit", value = false)
     public Boolean magiciansRedLashesMakeItEmmissive;

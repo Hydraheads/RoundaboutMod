@@ -1009,6 +1009,28 @@ public class ClientUtil {
                             ));
                 }
             }
+
+            byte posX = ((IPlayerEntity)pl).roundabout$GetPos2();
+            if (posX == PlayerPosIndex.VANISH_PERSIST){
+                throwFade = 0;
+            } else if (posX == PlayerPosIndex.VANISH_START){
+                if (!ConfigManager.getClientConfig().blinkWithCamo){
+                    throwFade = 0;
+                } else {
+                    int tc = pl.tickCount % 8;
+                    if (tc  == 0){
+                        throwFade = 1 - (delta*0.5F);
+                    }else if (tc  == 1){
+                        throwFade = 0.5F - (delta*0.5F);
+                    }else if (tc  == 2 || tc == 3){
+                        throwFade = 0;
+                    }else if (tc  == 4){
+                        throwFade = 0 + (delta*0.5F);
+                    }else if (tc  == 5){
+                        throwFade = 0.5F +  (delta*0.5F);
+                    }
+                }
+            }
         }
 
         return throwFade;

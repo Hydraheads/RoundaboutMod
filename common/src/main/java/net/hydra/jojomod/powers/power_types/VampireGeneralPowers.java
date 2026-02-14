@@ -357,6 +357,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 setPlayerPos2(PlayerPosIndex.NONE);
             }else if (!(move == RIPPER_EYES_ACTIVATED) && (pos2 == PlayerPosIndex.RIPPER_EYES_ACTIVE)) {
                 setPlayerPos2(PlayerPosIndex.NONE);
+            }else if (!(move == CAMO) && (pos2 == PlayerPosIndex.VANISH_PERSIST || pos2 == PlayerPosIndex.VANISH_START)) {
+                setPlayerPos2(PlayerPosIndex.NONE);
             }
         }
         return super.tryPower(move,forced);
@@ -561,6 +563,12 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             } else if (getActivePower() == CAMO){
                 if (self.position().distanceTo(camoVec) > 0.2F){
                     xTryPower(PowerIndex.NONE, true);
+                } else {
+                    if (attackTimeDuring > 8){
+                        if (getPlayerPos2() != PlayerPosIndex.VANISH_PERSIST) {
+                            setPlayerPos2(PlayerPosIndex.VANISH_PERSIST);
+                        }
+                    }
                 }
             }
 
@@ -1420,6 +1428,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         if (!self.level().isClientSide()) {
             this.self.level().playSound(null, this.self.blockPosition(),ModSounds.VAMPIRE_CAMO_EVENT, SoundSource.PLAYERS, 1F, (float) (0.98f + Math.random() * 0.04f));
             camoVec = self.getPosition(1f);
+            if (getPlayerPos2() != PlayerPosIndex.VANISH_START) {
+                setPlayerPos2(PlayerPosIndex.VANISH_START);
+            }
         } else {
             tryPowerPacket(CAMO);
         }
