@@ -18,6 +18,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.*;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
@@ -2123,7 +2124,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             } else if ($$0 == InteractionHand.OFF_HAND) {
                 stack = this.getItemBySlot(EquipmentSlot.OFFHAND);
             }
-            StandPowers SP = this.roundabout$getStandPowers();
+            AbilityScapeBasis SP = this.roundabout$getStandPowers();
+            if (rdbt$this() instanceof Player P) {
+                if (PowerTypes.isBrawling(P)) {
+                    SP = ((IPowersPlayer)P).rdbt$getPowers();
+                }
+            }
             if (SP != null) {
                 if (SP.canCombatModeUse(stack)) {
                     cir.setReturnValue(stack);

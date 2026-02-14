@@ -1,59 +1,40 @@
 package net.hydra.jojomod.event.powers;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.*;
-import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
-import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModGamerules;
-import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
-import net.hydra.jojomod.item.HarpoonItem;
-import net.hydra.jojomod.item.KnifeItem;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
-import net.hydra.jojomod.stand.powers.PowersRatt;
-import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
-import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.boss.EnderDragonPart;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
@@ -605,15 +586,7 @@ public class StandPowers extends AbilityScapeBasis {
                 !(this.getActivePower() == PowerIndex.BARRAGE_CLASH)) || this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())));
     }
 
-    /** Items that combat mode can use. NOTE: maybe move to AbilityScapeBasis if needed
-        Note that this doesn't necessarily apply to  rendering items. */
-    public boolean canCombatModeUse(ItemStack stack) {
-        return canCombatModeUse(stack.getItem());
-    }
-    public boolean canCombatModeUse(Item item) {
-        return item.isEdible() || item instanceof HarpoonItem || item instanceof TridentItem
-                || item instanceof KnifeItem;
-    }
+
 
     /// helper function for drawing locked skill icons, use it or not idc
     public void LockedOrNot(GuiGraphics context,int x, int y,int slot, ResourceLocation icon, byte cooldown, int level) {
