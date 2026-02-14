@@ -416,8 +416,8 @@ public class VampireFate extends VampiricFate {
 
     public void drinkPlantServer(){
         if (!self.level().isClientSide()) {
-            if (!onCooldown(PowerIndex.GENERAL_EXTRA)) {
-                if (isHoldingPlant()) {
+            if (!onCooldown(PowerIndex.FATE_EXTRA)) {
+                if (negateDrink()) {
                     if (isPlant(self.getMainHandItem())){
                         ItemStack stack = self.getMainHandItem();
                         stack.shrink(1);
@@ -426,7 +426,7 @@ public class VampireFate extends VampiricFate {
                         stack.shrink(1);
                     }
                     self.heal(1f);
-                    setCooldown(PowerIndex.GENERAL_EXTRA, 200);
+                    setCooldown(PowerIndex.FATE_EXTRA, 200);
                     self.level().playSound(null, self.blockPosition(), ModSounds.VAMPIRE_CAMO_EVENT,
                             SoundSource.PLAYERS, 1F, 1.8F);
                     setPowerNone();
@@ -463,7 +463,7 @@ public class VampireFate extends VampiricFate {
 
     @Override
     public boolean negateDrink(){
-        return isHoldingPlant();
+        return isHoldingPlant() && self.getHealth() < self.getMaxHealth();
     }
 
     public boolean isAttackIneptVisually(byte activeP, int slot){
@@ -839,7 +839,7 @@ public class VampireFate extends VampiricFate {
         if (isHoldingSneak()) {
             setSkillIcon(context, x, y, 2, StandIcons.REGENERATE, PowerIndex.FATE_2_SNEAK);
         } else {
-            if (isHoldingPlant()){
+            if (negateDrink()){
                 setSkillIcon(context, x, y, 2, StandIcons.FLOWER_DRINK, PowerIndex.FATE_EXTRA);
             } else {
                 setSkillIcon(context, x, y, 2, StandIcons.BLOOD_DRINK, PowerIndex.FATE_2);

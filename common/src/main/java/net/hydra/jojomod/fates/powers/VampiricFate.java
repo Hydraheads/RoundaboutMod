@@ -714,7 +714,7 @@ public int speedActivated = 0;
 
     public static final byte FLOWER_DRINK = 52;
     public void suckBlood(){
-        if (isHoldingPlant() && getActivePower() == NONE) {
+        if (negateDrink() && getActivePower() == NONE && !onCooldown(PowerIndex.FATE_EXTRA)) {
             tryPowerPacket(FLOWER_DRINK);
             return;
         }
