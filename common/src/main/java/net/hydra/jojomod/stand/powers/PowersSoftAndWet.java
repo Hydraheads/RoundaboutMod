@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.BubbleScaffoldBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
@@ -483,7 +484,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
             return true;
         }
         if (slot == 3 && (!canVault() && !canFallBrace() && isGuarding() && !canBigBubble())){
-            return false;
+            return true;
         }
 
         return super.isAttackIneptVisually(activeP,slot);
