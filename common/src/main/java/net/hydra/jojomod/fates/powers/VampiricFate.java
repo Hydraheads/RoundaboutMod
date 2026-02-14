@@ -99,7 +99,6 @@ public class VampiricFate extends FatePowers {
         setActivePower(SUPER_HEARING);
     }
 
-
     public void blockBreakParticles(Block block, Vec3 pos){
         if (!this.self.level().isClientSide()) {
             ((ServerLevel) this.self.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
@@ -709,7 +708,17 @@ public int speedActivated = 0;
         tryPower(PowerIndex.NONE,true);
         tryPowerPacket(PowerIndex.NONE);
     }
+    public boolean isHoldingPlant(){
+        return false;
+    }
+
+    public static final byte FLOWER_DRINK = 52;
     public void suckBlood(){
+        if (isHoldingPlant() && getActivePower() == NONE) {
+            tryPowerPacket(FLOWER_DRINK);
+            return;
+        }
+
         if (!onCooldown(PowerIndex.FATE_2)) {
             Entity TE = getTargetEntity(self, 3, 15);
             if (TE != null && MainUtil.canDrinkBloodFair(TE, self) && getActivePower() != BLOOD_REGEN) {
@@ -881,9 +890,14 @@ public int speedActivated = 0;
      * activeP is your currently active power*/
     public boolean isAttackIneptVisually(byte activeP, int slot){
         Entity TE = getUserData(self).roundabout$getStandPowers().getTargetEntity(this.self, 3, 15);
-        if (slot == 2 && !MainUtil.canDrinkBloodFair(TE, self) && !isHoldingSneak())
+        if (slot == 2 && !MainUtil.canDrinkBloodFair(TE, self) && !isHoldingSneak() &&
+        !negateDrink())
             return true;
         return super.isAttackIneptVisually(activeP,slot);
+    }
+
+    public boolean negateDrink(){
+        return false;
     }
 
     public boolean isHearing(){

@@ -57,6 +57,8 @@ public class StandIcons {
             "textures/gui/icons/powers/stand/disc_imprint.png");
     public static final ResourceLocation BLOOD_DRINK = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/fates/vampire/drink.png");
+    public static final ResourceLocation FLOWER_DRINK = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/fates/vampire/flower.png");
     public static final ResourceLocation VAMPIRE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/fates/vampire/vampire.png");
     public static final ResourceLocation CHEETAH_SPEED = new ResourceLocation(Roundabout.MOD_ID,
