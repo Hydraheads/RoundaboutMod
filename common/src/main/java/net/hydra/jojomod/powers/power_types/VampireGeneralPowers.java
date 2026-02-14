@@ -564,7 +564,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 if (self.position().distanceTo(camoVec) > 0.2F){
                     xTryPower(PowerIndex.NONE, true);
                 } else {
-                    if (attackTimeDuring > 13){
+                    if (attackTimeDuring > 8){
                         if (getPlayerPos2() != PlayerPosIndex.VANISH_PERSIST) {
                             setPlayerPos2(PlayerPosIndex.VANISH_PERSIST);
                         }
