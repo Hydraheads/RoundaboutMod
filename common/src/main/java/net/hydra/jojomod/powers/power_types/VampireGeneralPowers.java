@@ -96,6 +96,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     }
 
     @Override
+    public boolean canGuard(){
+        return super.canGuard() && !(getActivePower() == CAMO);
+    }
+    @Override
     public void powerActivate(PowerContext context) {
         if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampiricFate vp) {
             switch (context) {
@@ -131,7 +135,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     };
 
     public void clientCamo(){
-        if (!onCooldown(PowerIndex.GENERAL_EXTRA)){
+        if (!onCooldown(PowerIndex.GENERAL_EXTRA) && self.onGround()){
             this.tryPower(CAMO);
         }
     }
@@ -387,6 +391,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     }
 
     public int spikeTimeDuring = 0;
+    public Vec3 camoVec = Vec3.ZERO;
 
     @Override
     public void tickPower() {
@@ -552,6 +557,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.FALLING_WATER,
                             gravVec.x, gravVec.y, gravVec.z,
                             2, 0.2, 0.2, 0.2, 0.05);
+                }
+            } else if (getActivePower() == CAMO){
+                if (self.position().distanceTo(camoVec) > 0.2F){
+                    xTryPower(PowerIndex.NONE, true);
                 }
             }
 
@@ -850,7 +859,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
 
 
-            if (isGuarding()){
+            if (isGuarding() && self.onGround()){
                 setSkillIcon(context, x, y, 3, StandIcons.CAMO, PowerIndex.GENERAL_EXTRA);
             } else if ((vp.canLatchOntoWall() || (vp.isPlantedInWall() && !isHoldingSneak())) && vp.canWallWalkConfig()) {
                 setSkillIcon(context, x, y, 3, StandIcons.WALL_WALK_VAMP, PowerIndex.FATE_3);
@@ -1406,11 +1415,11 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
     public void doCamo(){
         this.attackTimeDuring = 0;
-        setActivePower(NONE);
+        setActivePower(CAMO);
         setCooldown(PowerIndex.GENERAL_EXTRA, 100);
         if (!self.level().isClientSide()) {
             this.self.level().playSound(null, this.self.blockPosition(),ModSounds.VAMPIRE_CAMO_EVENT, SoundSource.PLAYERS, 1F, (float) (0.98f + Math.random() * 0.04f));
-
+            camoVec = self.getPosition(1f);
         } else {
             tryPowerPacket(CAMO);
         }
