@@ -151,9 +151,9 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
             ipe.roundabout$setTeamColor(teamColor);
             ipe.roundabout$setAnchorPlaceAttack(anchorPlaceAttack);
 
-            ipe.rdbt$setHairColorX(ipe.rdbt$getHairColorX());
-            ipe.rdbt$setHairColorY(ipe.rdbt$getHairColorY());
-            ipe.rdbt$setHairColorZ(ipe.rdbt$getHairColorZ());
+            ipe.rdbt$setHairColorX(((IPlayerEntity) $$0).rdbt$getHairColorX());
+            ipe.rdbt$setHairColorY(((IPlayerEntity) $$0).rdbt$getHairColorY());
+            ipe.rdbt$setHairColorZ(((IPlayerEntity) $$0).rdbt$getHairColorZ());
 
             S2CPacketUtil.sendPowerInventorySettings(
                         ((ServerPlayer)((Player)(Object)this)), anchorPlace,distanceOut,

@@ -135,7 +135,9 @@ public enum FateTypes {
     }
     public static boolean isVampireStrong(LivingEntity entity){
         if (entity instanceof Player PE){
-            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal();
+            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal()
+                    ||
+                    ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.ordinal();
         }
         return false;
     }
