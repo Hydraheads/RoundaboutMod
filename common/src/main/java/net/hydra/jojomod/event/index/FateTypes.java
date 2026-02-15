@@ -9,6 +9,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
+import net.hydra.jojomod.fates.powers.ZombieFate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -20,7 +21,7 @@ import net.minecraft.world.phys.Vec3;
 public enum FateTypes {
     HUMAN(new FatePowers()),
     VAMPIRE(new VampireFate()),
-    ZOMBIE(new FatePowers()),
+    ZOMBIE(new ZombieFate()),
     SHADOW_CREATURE(new FatePowers()),
     PILLAR_MAN(new FatePowers()),
     ULTIMATE_LIFEFORM(new FatePowers()),
@@ -39,6 +40,8 @@ public enum FateTypes {
     public static FateTypes getFateFromByte(byte bt){
         if (bt == VAMPIRE.ordinal())
             return VAMPIRE;
+        if (bt == ZOMBIE.ordinal())
+            return ZOMBIE;
         if (bt == SHADOW_CREATURE.ordinal())
             return SHADOW_CREATURE;
         if (bt == PILLAR_MAN.ordinal())
@@ -71,6 +74,12 @@ public enum FateTypes {
         }
         if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire())
             return true;
+        return false;
+    }
+    public static boolean isZombie(LivingEntity entity){
+        if (entity instanceof Player PE){
+            return ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.ordinal();
+        }
         return false;
     }
     public static float getDamageResist(LivingEntity entity, DamageSource source, float amt){
@@ -132,7 +141,8 @@ public enum FateTypes {
     }
     public static boolean hasBloodHunger(LivingEntity entity){
         if (entity instanceof Player PE){
-            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal();
+            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal() ||
+                    ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.ordinal();
         }
         if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire())
             return true;
@@ -140,14 +150,15 @@ public enum FateTypes {
     }
     public static boolean canSeeInTheDark(LivingEntity entity){
         if (entity instanceof Player PE){
-            return ((IFatePlayer)PE).rdbt$getFatePowers() instanceof VampiricFate VP &&
-                    VP.isVisionOn();
+            return (((IFatePlayer)PE).rdbt$getFatePowers() instanceof ZombieFate VP &&
+                    VP.isVisionOn()) || (((IFatePlayer)PE).rdbt$getFatePowers() instanceof ZombieFate ZP);
         }
         return false;
     }
     public static boolean takesSunlightDamage(LivingEntity entity){
         if (entity instanceof Player PE){
-            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal();
+            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal() ||
+                    ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.ordinal();
         }
         if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire())
             return true;
@@ -162,6 +173,11 @@ public enum FateTypes {
     public static void setVampire(LivingEntity entity){
         if (entity instanceof Player PE){
             ((IPlayerEntity)PE).roundabout$setFate((byte) VAMPIRE.ordinal());
+        }
+    }
+    public static void setZombie(LivingEntity entity){
+        if (entity instanceof Player PE){
+            ((IPlayerEntity)PE).roundabout$setFate((byte) ZOMBIE.ordinal());
         }
     }
     public static void setHuman(LivingEntity entity){

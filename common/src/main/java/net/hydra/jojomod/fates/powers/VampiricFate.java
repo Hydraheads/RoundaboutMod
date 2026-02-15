@@ -909,15 +909,7 @@ public int speedActivated = 0;
         return ClientNetworking.getAppropriateConfig().walkingHeartSettings.enableWallWalking;
     }
 
-    @Override
-    public ResourceLocation getIconYes(int slot){
-        if (slot == 2 && isHoldingSneak()){
-            return StandIcons.SQUARE_ICON_BLOOD;
-        } else if (slot == 3 && isHoldingSneak() && !canLatchOntoWall()){
-            return StandIcons.SQUARE_ICON_BLOOD;
-        }
-        return StandIcons.SQUARE_ICON;
-    }
+
 
     public float hearingDistance(){
         return 10;

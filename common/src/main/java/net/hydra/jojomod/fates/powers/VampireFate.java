@@ -113,7 +113,15 @@ public class VampireFate extends VampiricFate {
     };
     public static final byte HYPNOSIS = 50;
     public static final byte HAIR_EXTENDED = 51;
-
+    @Override
+    public ResourceLocation getIconYes(int slot){
+        if (slot == 2 && isHoldingSneak()){
+            return StandIcons.SQUARE_ICON_BLOOD;
+        } else if (slot == 3 && isHoldingSneak() && !canLatchOntoWall()){
+            return StandIcons.SQUARE_ICON_BLOOD;
+        }
+        return StandIcons.SQUARE_ICON;
+    }
 
     public boolean isServerControlledCooldown(byte num){
         if (num == PowerIndex.FATE_EXTRA){
