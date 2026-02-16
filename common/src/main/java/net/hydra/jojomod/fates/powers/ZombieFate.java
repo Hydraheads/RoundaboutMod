@@ -154,9 +154,9 @@ public class ZombieFate extends VampiricFate {
     public float getDamageAdd(DamageSource source, float amt, Entity target){
         if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)){
             if (target instanceof Player pl){
-                return 0.05F;
+                return 0.08F;
             } else {
-                return 0.1F;
+                return 0.17F;
             }
         }
         return super.getDamageAdd(source,amt,target);
