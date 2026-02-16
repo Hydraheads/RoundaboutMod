@@ -2,10 +2,12 @@ package net.hydra.jojomod.fates.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -119,6 +121,16 @@ public class ZombieFate extends VampiricFate {
 
     @Override
     public void tickPower(){
+        if (!self.level().isClientSide()){
+            if (self instanceof Player player){
+                IPlayerEntity ple = ((IPlayerEntity) player);
+                byte shape = ple.roundabout$getShapeShift();
+                ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
+                if (shift != ShapeShifts.PLAYER){
+
+                }
+            }
+        }
         if (self.onGround()){
             rechargeJump = true;
         } else if (!self.isCrouching()){
@@ -182,6 +194,10 @@ public class ZombieFate extends VampiricFate {
     }
 
     public boolean isDisguised(){
+        if (self instanceof Player PE && ((IPlayerEntity)PE).roundabout$getShapeShiftExtraData() == (byte)1
+        && ((IPlayerEntity)PE).roundabout$getShapeShiftExtraData() == ShapeShifts.PLAYER.ordinal()){
+            return true;
+        }
         return false;
     }
 
