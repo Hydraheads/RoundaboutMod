@@ -13,6 +13,7 @@ import net.hydra.jojomod.fates.powers.ZombieFate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
@@ -164,6 +165,16 @@ public enum FateTypes {
         }
         if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire())
             return true;
+        return false;
+    }
+    public static boolean isUndisguisedZombie(Entity entity){
+        if (entity instanceof Player player){
+            if (((IPlayerEntity)player).roundabout$getFate() == ZOMBIE.ordinal()){
+                if (((IFatePlayer)player).rdbt$getFatePowers() instanceof ZombieFate zf && !zf.isDisguised()){
+                    return true;
+                }
+            }
+        }
         return false;
     }
     public static boolean isTransforming(LivingEntity entity){

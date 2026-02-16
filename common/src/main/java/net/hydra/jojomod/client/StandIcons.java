@@ -576,6 +576,10 @@ public class StandIcons {
             "textures/entity/visage/player_skins/enya_ova.png");
 
 
+    public static final ResourceLocation ZOMBIE_SKIN = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/zombie/zombie.png");
+    public static final ResourceLocation ZOMBIE_SKIN_SLIM = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/zombie/zombie_slim.png");
 
 
     public static final ResourceLocation FALLEN_ZOMBIE = new ResourceLocation(Roundabout.MOD_ID,
