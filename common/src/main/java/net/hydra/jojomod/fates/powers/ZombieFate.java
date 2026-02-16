@@ -87,7 +87,7 @@ public class ZombieFate extends VampiricFate {
         //} else {
         //    return super.getJumpHeightAddon();
         //}
-        if (self.level().isClientSide() && !self.isCrouching()){
+        if (isDisguised()){
             return super.getJumpHeightAddon();
         }
         return super.getJumpHeightAddon()+getAddon();
