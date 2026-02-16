@@ -120,7 +120,13 @@ public abstract class PlayerEntityAbstractClient extends Player implements IPlay
             if (visage != null && !visage.isEmpty()) {
                 if (visage.getItem() instanceof MaskItem MI) {
                     if (MI.visageData.isCharacterVisage()) {
-                        cir.setReturnValue(new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/"+MI.visageData.getSkinPath()+".png"));
+                        if (FateTypes.isUndisguisedZombie(this)) {
+                            // 37 67 -34
+                            cir.setReturnValue(new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/zombie_skins/" + MI.visageData.getSkinPath() + ".png"));
+                        } else {
+                            cir.setReturnValue(new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/" + MI.visageData.getSkinPath() + ".png"));
+
+                        }
                         return;
                     }
                 }
