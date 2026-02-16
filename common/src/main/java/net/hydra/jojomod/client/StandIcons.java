@@ -90,6 +90,17 @@ public class StandIcons {
     public static final ResourceLocation VAMPIRE_DEXTERITY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui//icons/fates/vampire/dexterity.png");
 
+    public static final ResourceLocation ZOMBIE_DISGUISE_OFF = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/zombie/disguise_off.png");
+    public static final ResourceLocation ZOMBIE_DISGUISE_ON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/zombie/disguise_on.png");
+    public static final ResourceLocation ZOMBIE_DRINK = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/zombie/drink.png");
+    public static final ResourceLocation ZOMBIE_PROJECTILES = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/zombie/projectiles.png");
+    public static final ResourceLocation ZOMBIE_WORM = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/zombie/worm.png");
+
     public static final ResourceLocation SURVIVOR_ANGER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/survivor_anger.png");
     public static final ResourceLocation CREAM_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,

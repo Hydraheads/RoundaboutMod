@@ -9,6 +9,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -76,9 +77,6 @@ public class ZombieFate extends VampiricFate {
         return super.setPowerOther(move,lastMove);
     }
 
-    public boolean isAttackIneptVisually(byte activeP, int slot){
-        return super.isAttackIneptVisually(activeP, slot);
-    }
     @Override
     public float getJumpHeightAddon(){
         if (getStandUserSelf().roundabout$getStandPowers().bigJumpBlocker() ||
@@ -99,6 +97,15 @@ public class ZombieFate extends VampiricFate {
         return 5;
     }
 
+    /**This function grays out icons for moves you can't currently use. Slot is the icon slot from 1-4,
+     * activeP is your currently active power*/
+    public boolean isAttackIneptVisually(byte activeP, int slot){
+        Entity TE = getUserData(self).roundabout$getStandPowers().getTargetEntity(this.self, 3, 15);
+        if (slot == 2 && !MainUtil.canDrinkBloodFair(TE, self) &&
+                !negateDrink())
+            return true;
+        return super.isAttackIneptVisually(activeP,slot);
+    }
 
     public float getAddon(){
         if (self.isCrouching() && rechargeJump){
@@ -160,7 +167,22 @@ public class ZombieFate extends VampiricFate {
     private final TargetingConditions hypnosisTargeting = TargetingConditions.forCombat().range(11);
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        if (isHoldingSneak()) {
+            setSkillIcon(context, x, y, 1, StandIcons.ZOMBIE_WORM, PowerIndex.FATE_1);
+        } else {
+            setSkillIcon(context, x, y, 1, StandIcons.ZOMBIE_PROJECTILES, PowerIndex.FATE_1_SNEAK);
+        }
+        setSkillIcon(context, x, y, 2, StandIcons.ZOMBIE_DRINK, PowerIndex.FATE_2);
+        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        if (isDisguised()){
+            setSkillIcon(context, x, y, 4, StandIcons.ZOMBIE_DISGUISE_ON, PowerIndex.FATE_4);
+        } else {
+            setSkillIcon(context, x, y, 4, StandIcons.ZOMBIE_DISGUISE_OFF, PowerIndex.FATE_4);
+        }
+    }
+
+    public boolean isDisguised(){
+        return false;
     }
 
     @Override

@@ -886,15 +886,7 @@ public int speedActivated = 0;
         return getActivePower() == BLOOD_REGEN;
     }
 
-    /**This function grays out icons for moves you can't currently use. Slot is the icon slot from 1-4,
-     * activeP is your currently active power*/
-    public boolean isAttackIneptVisually(byte activeP, int slot){
-        Entity TE = getUserData(self).roundabout$getStandPowers().getTargetEntity(this.self, 3, 15);
-        if (slot == 2 && !MainUtil.canDrinkBloodFair(TE, self) && !isHoldingSneak() &&
-        !negateDrink())
-            return true;
-        return super.isAttackIneptVisually(activeP,slot);
-    }
+
 
     public boolean negateDrink(){
         return false;

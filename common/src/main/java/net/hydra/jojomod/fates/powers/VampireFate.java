@@ -482,6 +482,11 @@ public class VampireFate extends VampiricFate {
             return true;
         if (slot == 2 && isHoldingSneak() && !canUseRegen())
             return true;
+        Entity TE = getUserData(self).roundabout$getStandPowers().getTargetEntity(this.self, 3, 15);
+        if (slot == 2 && !MainUtil.canDrinkBloodFair(TE, self) && !isHoldingSneak() &&
+                !negateDrink()) {
+            return true;
+        }
         return super.isAttackIneptVisually(activeP,slot);
     }
     @Override
