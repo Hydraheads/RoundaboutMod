@@ -4,18 +4,26 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.Position;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
@@ -36,9 +44,9 @@ public class ZombieFate extends VampiricFate {
     }
 
     public FatePowers generateFatePowers(LivingEntity entity){
-        Roundabout.LOGGER.info("test");
         return new ZombieFate(entity);
     }
+    public static final byte DISGUISE = 50;
     @Override
     /**The text name of the fate*/
     public Component getFateName(){
@@ -59,9 +67,40 @@ public class ZombieFate extends VampiricFate {
                 dash();
             }
             case SKILL_4_NORMAL,SKILL_4_CROUCH -> {
+                switchDisguiseClient();
             }
         }
     };
+
+    public void switchDisguiseClient(){
+        tryPowerPacket(DISGUISE);
+    }
+
+    public void switchDisguiseServer(){
+        if (!self.level().isClientSide()) {
+            if (self instanceof Player pl) {
+                if (!onCooldown(PowerIndex.FATE_4)) {
+                    IPlayerEntity ipe = ((IPlayerEntity) pl);
+                    boolean isMorphed = ipe.roundabout$getShapeShift() != ShapeShifts.PLAYER.ordinal();
+                    setCooldown(PowerIndex.FATE_4,10);
+                    if (!isMorphed) {
+                        boolean isDisguised = isDisguised();
+                        Position pn = self.getEyePosition();
+                        ((ServerLevel) self.level()).sendParticles(ParticleTypes.CLOUD,
+                                pn.x(), pn.y(), pn.z(),
+                                4, 0.2, 0.2, 0.2, 0.01);
+                        if (isDisguised) {
+                            ipe.roundabout$setShapeShiftExtraData((byte) 0);
+                            ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.zombie_disguise_off").withStyle(ChatFormatting.DARK_PURPLE), true);
+                        } else {
+                            ipe.roundabout$setShapeShiftExtraData((byte) 1);
+                            ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.zombie_disguise_on").withStyle(ChatFormatting.DARK_PURPLE), true);
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 
     @Override
@@ -76,6 +115,9 @@ public class ZombieFate extends VampiricFate {
     }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
+        if (move == DISGUISE) {
+            switchDisguiseServer();
+        }
         return super.setPowerOther(move,lastMove);
     }
 
@@ -152,6 +194,10 @@ public class ZombieFate extends VampiricFate {
     }
     @Override
     public float getDamageAdd(DamageSource source, float amt, Entity target){
+        if (isDisguised()){
+            return super.getDamageAdd(source,amt,target);
+        }
+
         if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)){
             if (target instanceof Player pl){
                 return 0.08F;
@@ -195,7 +241,7 @@ public class ZombieFate extends VampiricFate {
 
     public boolean isDisguised(){
         if (self instanceof Player PE && ((IPlayerEntity)PE).roundabout$getShapeShiftExtraData() == (byte)1
-        && ((IPlayerEntity)PE).roundabout$getShapeShiftExtraData() == ShapeShifts.PLAYER.ordinal()){
+        && ((IPlayerEntity)PE).roundabout$getShapeShift() == ShapeShifts.PLAYER.ordinal()){
             return true;
         }
         return false;

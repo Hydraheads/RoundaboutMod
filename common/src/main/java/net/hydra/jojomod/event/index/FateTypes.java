@@ -113,7 +113,10 @@ public enum FateTypes {
     public static boolean isEvil(LivingEntity entity){
         if (entity instanceof Player PE){
             Byte fate = ((IPlayerEntity)PE).roundabout$getFate();
-            return fate == VAMPIRE.ordinal() || fate == ZOMBIE.ordinal() || fate == PILLAR_MAN.ordinal() || fate == ULTIMATE_LIFEFORM.ordinal();
+            if (fate == ZOMBIE.ordinal()){
+                return isUndisguisedZombie(entity);
+            }
+            return fate == VAMPIRE.ordinal() || fate == PILLAR_MAN.ordinal() || fate == ULTIMATE_LIFEFORM.ordinal();
         }
         return false;
     }
@@ -130,7 +133,7 @@ public enum FateTypes {
     }
     public static boolean isScary(LivingEntity entity){
         if (entity instanceof Player PE){
-            return ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.ordinal();
+            return isUndisguisedZombie(entity);
         }
         return false;
     }

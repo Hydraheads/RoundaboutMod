@@ -1895,6 +1895,9 @@
   "advancements.roundabout.dimension_hop.title": "Don't Fence Me In",
   "advancements.roundabout.dimension_hop.description": "Dimension hop with D4C for the first time",
 
+  "text.roundabout.zombie_disguise_off": "Disguise Removed",
+  "text.roundabout.zombie_disguise_on": "Disguise Created",
+
   "text.roundabout.hey_ya_messaging.no_1": "There is no such thing as loss, just learning!",
   "text.roundabout.hey_ya_messaging.no_2": "Your luck is one in five billion, you can do anything!",
   "text.roundabout.hey_ya_messaging.no_3": "Believe in yourself like I believe in you!",
