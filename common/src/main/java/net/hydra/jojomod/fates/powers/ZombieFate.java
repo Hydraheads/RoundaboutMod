@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -35,6 +36,7 @@ import java.util.List;
 
 public class ZombieFate extends VampiricFate {
 
+    public int spikeTimeDuring = 0;
 
     public ZombieFate() {
         super();
@@ -160,6 +162,10 @@ public class ZombieFate extends VampiricFate {
     }
     public boolean rechargeJump = false;
 
+    public static int maxSpike= 50;
+    public static int maxSpike2= 56;
+    public boolean retract = false;
+    public boolean extended = false;
 
     @Override
     public void tickPower(){
@@ -171,6 +177,17 @@ public class ZombieFate extends VampiricFate {
                 if (shift != ShapeShifts.PLAYER){
 
                 }
+            }
+        } else {
+            byte pos2 = getPlayerPos2();
+            if (pos2 == PlayerPosIndex.BLOOD_SUCK) {
+                if (spikeTimeDuring < maxSpike) {
+                    spikeTimeDuring++;
+                }
+            } else {
+                spikeTimeDuring=0;
+                retract = false;
+                extended = false;
             }
         }
         if (self.onGround()){
