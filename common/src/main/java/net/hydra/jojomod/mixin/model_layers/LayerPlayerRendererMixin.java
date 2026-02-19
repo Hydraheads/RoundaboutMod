@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.model_layers;
 
 import net.hydra.jojomod.client.FacelessLayer;
 import net.hydra.jojomod.client.models.layers.*;
+import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;

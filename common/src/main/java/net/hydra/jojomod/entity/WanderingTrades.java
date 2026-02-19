@@ -15,6 +15,7 @@ public class WanderingTrades {
     public static List<Pair<Float, MerchantOffer>> TRADES = new ArrayList<>();
     public static  MerchantOffer BEETLE_ARROW_TRADE;
     public static MerchantOffer BROKEN_ARROW_TRADE;
+    public static MerchantOffer ANUBIS_TRADE;
 
     public static void updateTrades(Config cf) {
             TRADES = new ArrayList<>();
@@ -26,9 +27,13 @@ public class WanderingTrades {
                     new ItemStack(Items.EMERALD,cf.wanderingTraderSettings.brokenArrowCost),
                     new ItemStack(ModItems.STAND_BEETLE_ARROW)
                     ,1,1,1);
+            ANUBIS_TRADE = new MerchantOffer(
+                new ItemStack(Items.EMERALD,cf.wanderingTraderSettings.anubisTradeCost),
+                new ItemStack(ModItems.ANUBIS_ITEM)
+                ,1,1,1);
 
             TRADES.add(new Pair<>(cf.wanderingTraderSettings.beetleArrowTradeChance, BEETLE_ARROW_TRADE) );
             TRADES.add(new Pair<>(cf.wanderingTraderSettings.brokenArrowTradeChance, BROKEN_ARROW_TRADE) );
-
+            TRADES.add(new Pair<>(cf.wanderingTraderSettings.anubisTradeChance, ANUBIS_TRADE) );
     }
 }

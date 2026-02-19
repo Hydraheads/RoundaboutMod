@@ -48,6 +48,17 @@ public class GlobalLootModProvider extends GlobalLootModifierProvider {
                 new LootTableIdCondition.Builder(new ResourceLocation("archaeology/trail_ruins_rare")).build()
         }, ForgeItems.STAND_ARROW.get()));
 
+      /*  add("anubis_from_trail_ruins", new ForgeSusGravelItemModifier(new LootItemCondition[]{
+                new LootTableIdCondition.Builder(new ResourceLocation("archaeology/trail_ruins_common")).build()
+        }, ForgeItems.ANUBIS_ITEM.get()));
+        add("anubis_from_trail_ruins_rare", new ForgeSusGravelItemModifier(new LootItemCondition[]{
+                new LootTableIdCondition.Builder(new ResourceLocation("archaeology/trail_ruins_rare")).build()
+        }, ForgeItems.ANUBIS_ITEM.get()));
+        add("stand_arrow_from_pyramid", new ForgeSusSandItemModifier(new LootItemCondition[]{
+                new LootTableIdCondition.Builder(new ResourceLocation("archaeology/desert_pyramid")).build()
+        }, ForgeItems.ANUBIS_ITEM.get())); */ // ADD FOR ANUBIS
+
+
         add("shipwreck_locacaca_pit", new ForgeItemModifiers(new LootItemCondition[] {
                 new LootTableIdCondition.Builder(new ResourceLocation("chests/shipwreck_treasure")).build(),
                 LootItemRandomChanceCondition.randomChance(0.15F).build()

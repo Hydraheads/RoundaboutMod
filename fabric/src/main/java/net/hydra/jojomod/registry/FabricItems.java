@@ -385,6 +385,8 @@ public class FabricItems {
                         entries.accept(ModBlocks.WOOL_STAIRS_YELLOW);
                         entries.accept(ModBlocks.METEOR_BLOCK);
                         entries.accept(ModBlocks.IMPACT_MOUND);
+                        entries.accept(ModBlocks.SHINY_QUARTZ);
+                        entries.accept(ModBlocks.SHINY_QUARTZ_TILES);
                         entries.accept(ModBlocks.REGAL_FLOOR);
                         entries.accept(ModBlocks.REGAL_WALL);
                         entries.accept(ModBlocks.GODDESS_STATUE_BLOCK);
@@ -544,10 +546,11 @@ public class FabricItems {
         ModItems.STAND_DISC_MANDOM = STAND_DISC_MANDOM;
         ModItems.STAND_DISC_SURVIVOR = STAND_DISC_SURVIVOR;
         ModItems.STAND_DISC_ACHTUNG = STAND_DISC_ACHTUNG;
+        ModItems.STAND_DISC_METALLICA = STAND_DISC_METALLICA;
+        ModItems.MAX_STAND_DISC_METALLICA = MAX_STAND_DISC_METALLICA;
+        ((MaxStandDiscItem)MAX_STAND_DISC_METALLICA).baseDisc = ((StandDiscItem)STAND_DISC_METALLICA);
         ModItems.STAND_DISC_WALKING_HEART = STAND_DISC_WALKING_HEART;
         ModItems.MAX_STAND_DISC_WALKING_HEART = MAX_STAND_DISC_WALKING_HEART;
-        ModItems.STAND_DISC_METALLICA = STAND_DISC_METALLICA;
-        ((MaxStandDiscItem)MAX_STAND_DISC_METALLICA).baseDisc = ((StandDiscItem)STAND_DISC_METALLICA);
         ((MaxStandDiscItem)MAX_STAND_DISC_WALKING_HEART).baseDisc = ((StandDiscItem)STAND_DISC_WALKING_HEART);
         ModItems.STAND_DISC_DIVER_DOWN = STAND_DISC_DIVER_DOWN;
         ((MaxStandDiscItem)MAX_STAND_DISC_DIVER_DOWN).baseDisc = ((StandDiscItem)STAND_DISC_DIVER_DOWN);

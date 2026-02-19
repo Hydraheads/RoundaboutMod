@@ -57,6 +57,8 @@ public class StandIcons {
             "textures/gui/icons/powers/stand/disc_imprint.png");
     public static final ResourceLocation BLOOD_DRINK = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/fates/vampire/drink.png");
+    public static final ResourceLocation FLOWER_DRINK = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/fates/vampire/flower.png");
     public static final ResourceLocation VAMPIRE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/fates/vampire/vampire.png");
     public static final ResourceLocation CHEETAH_SPEED = new ResourceLocation(Roundabout.MOD_ID,
@@ -87,6 +89,17 @@ public class StandIcons {
             "textures/gui//icons/fates/vampire/resilience.png");
     public static final ResourceLocation VAMPIRE_DEXTERITY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui//icons/fates/vampire/dexterity.png");
+
+    public static final ResourceLocation ZOMBIE_DISGUISE_OFF = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/zombie/disguise_off.png");
+    public static final ResourceLocation ZOMBIE_DISGUISE_ON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/zombie/disguise_on.png");
+    public static final ResourceLocation ZOMBIE_DRINK = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/zombie/drink.png");
+    public static final ResourceLocation ZOMBIE_PROJECTILES = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/zombie/projectiles.png");
+    public static final ResourceLocation ZOMBIE_WORM = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/zombie/worm.png");
 
     public static final ResourceLocation SURVIVOR_ANGER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/survivor_anger.png");
@@ -195,8 +208,12 @@ public class StandIcons {
             "textures/gui/icons/powers/vampire/ice_clutch.png");
     public static final ResourceLocation RIPPER_EYES = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/powers/vampire/ripper_eyes.png");
+    public static final ResourceLocation RIPPER_SHOT = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/vampire/ripper_shot.png");
     public static final ResourceLocation AURA = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/powers/vampire/aura.png");
+    public static final ResourceLocation CAMO = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/vampire/camo.png");
     public static final ResourceLocation DEFLECTION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/powers/vampire/deflection.png");
     public static final ResourceLocation HAIR_GRAB = new ResourceLocation(Roundabout.MOD_ID,
@@ -486,6 +503,14 @@ public class StandIcons {
     public static final ResourceLocation ANUBIS_WIDE_SLASH = Roundabout.location("textures/gui/icons/anubis/wide_slash.png");
     public static final ResourceLocation ANUBIS_DIVE_ATTACK = Roundabout.location("textures/gui/icons/anubis/dive_attack.png");
 
+    public static final ResourceLocation ANUBIS_DOUBLE_CUT = Roundabout.location("textures/gui/icons/anubis/double_cut.png");
+    public static final ResourceLocation ANUBIS_UPPERCUT = Roundabout.location("textures/gui/icons/anubis/uppercut.png");
+    public static final ResourceLocation ANUBIS_THRUST_CUT = Roundabout.location("textures/gui/icons/anubis/thrust_cut.png");
+    public static final ResourceLocation ANUBIS_BARRAGE = Roundabout.location("textures/gui/icons/anubis/barrage.png");
+    public static final ResourceLocation ANUBIS_SHIELDBREAK = Roundabout.location("textures/gui/icons/anubis/maybe_shieldbreak.png");
+
+
+
     public static final ResourceLocation ANUBIS_MEMORY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/anubis_memory.png");
 
@@ -551,6 +576,10 @@ public class StandIcons {
             "textures/entity/visage/player_skins/enya_ova.png");
 
 
+    public static final ResourceLocation ZOMBIE_SKIN = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/zombie/zombie.png");
+    public static final ResourceLocation ZOMBIE_SKIN_SLIM = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/zombie/zombie_slim.png");
 
 
     public static final ResourceLocation FALLEN_ZOMBIE = new ResourceLocation(Roundabout.MOD_ID,

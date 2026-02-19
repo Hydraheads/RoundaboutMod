@@ -121,6 +121,10 @@ public class FabricLootTables {
                     entries.add(LootItem.lootTableItem(FabricItems.STAND_BEETLE_ARROW).build());
                 }
 
+                if ( (PYRAMID_ID.equals(id) || TRAIL_COMMON_ID.equals(id) || TRAIL_RARE_ID.equals(id) ) && false ) {// ADD FOR ANUBIS
+                    entries.add(LootItem.lootTableItem(FabricItems.ANUBIS_ITEM).build());
+                }
+
                 LootPool.Builder pool = LootPool.lootPool().with(entries);
                 return LootTable.lootTable().withPool(pool).build();
             }

@@ -86,6 +86,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public CreamSettings creamSettings;
     @NestedOption(group = "modded")
+    public AnubisSettings anubisSettings;
+    @NestedOption(group = "modded")
     public TheWorldSettings theWorldSettings;
     @NestedOption(group = "modded")
     public StarPlatinumSettings starPlatinumSettings;
@@ -168,6 +170,10 @@ public class Config implements Cloneable {
         public Float beetleArrowTradeChance;
         @IntOption(group = "inherit", value = 10, min = 0, max = 64)
         public Integer beetleArrowCost;
+        @FloatOption(group = "inherit", value = 0F, min = 0, max = 100) // ADD FOR ANUBIS
+        public Float anubisTradeChance;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 64)
+        public Integer anubisTradeCost;
         @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)
         public Float brokenArrowTradeChance;
         @IntOption(group = "inherit", value = 7, min = 0, max = 64)
@@ -182,6 +188,8 @@ public class Config implements Cloneable {
         public Boolean generalDetectionGoThroughDoorsAndCorners;
         @BooleanOption(group = "inherit", value = true)
         public Boolean wallPassingHitboxes;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean wallPassingHitboxesOnBosses;
 
         @BooleanOption(group = "inherit", value = false)
         public Boolean disableBleedingAndBloodSplatters;
@@ -704,6 +712,21 @@ public class Config implements Cloneable {
         public Integer creamVoidTime;
     }
 
+    public static class AnubisSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableAnubis;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer anubisAttackMultOnPlayers;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer anubisAttackMultOnMobs;
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer anubisGuardPoints;
+        @IntOption(group = "inherit", value = 260, min = 0, max = 72000)
+        public Integer anubisBackflipCooldown;
+        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        public Integer anubisMaxMemory;
+    }
+
     public static class TheWorldSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableTheWorld;
@@ -774,7 +797,7 @@ public class Config implements Cloneable {
         public Integer additionalCooldownPerSecondsUsed;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer timeStopBonusActionsCooldown;
-        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer timeStopInterruptedCooldownv2;
         @BooleanOption(group = "inherit", value = true)
         public Boolean timeStopIsAlwaysInterruptable;
@@ -802,5 +825,9 @@ public class Config implements Cloneable {
         public Boolean postTSSoften;
         @BooleanOption(group = "inherit", value = true)
         public Boolean postTSCancel;
+        @IntOption(group = "inherit", value = 28, min = 0, max = 100)
+        public Integer timestopLeapCooldown;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean timestopCancelsFood;
     }
 }

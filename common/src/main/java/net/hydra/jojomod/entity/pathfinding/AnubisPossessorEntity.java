@@ -5,6 +5,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.FlyingMob;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -24,7 +25,7 @@ public class AnubisPossessorEntity extends GroundPathfindingStandAttackEntity {
 
     static class KillAllTargets extends NearestAttackableTargetGoal<LivingEntity> {
         public KillAllTargets(AnubisPossessorEntity e) {
-            super(e, LivingEntity.class, 0, true, true, livingEntity -> !((StandUser)livingEntity).roundabout$isPossessed() );
+            super(e, LivingEntity.class, 0, true, true, livingEntity -> !((StandUser)livingEntity).roundabout$isPossessed() && !(livingEntity instanceof FlyingMob) );
         }
 
         @Override

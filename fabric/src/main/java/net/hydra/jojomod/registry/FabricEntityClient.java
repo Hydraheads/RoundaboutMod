@@ -8,6 +8,8 @@ import net.hydra.jojomod.client.models.RoadRollerStrayModel;
 import net.hydra.jojomod.client.models.WornBloodyStoneMaskModel;
 import net.hydra.jojomod.client.models.WornStoneMaskModel;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
+import net.hydra.jojomod.client.models.mobs.AnubisGuardianModel;
+import net.hydra.jojomod.client.models.mobs.renderers.AnubisGuardianRenderer;
 import net.hydra.jojomod.client.models.paintings.MonaLisaPaintingRenderer;
 import net.hydra.jojomod.client.models.paintings.VanGoghPaintingRenderer;
 import net.hydra.jojomod.client.models.paintings.VenusPaintingRenderer;
@@ -49,6 +51,7 @@ public class FabricEntityClient {
     public static void register() {
         /*Renderers*/
         EntityRendererRegistry.register(FabricEntities.TERRIER_DOG, TerrierEntityRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.ANUBIS_GUARDIAN, AnubisGuardianRenderer::new);
         EntityRendererRegistry.register(FabricEntities.STAR_PLATINUM, StarPlatinumRenderer::new);
         EntityRendererRegistry.register(FabricEntities.STAR_PLATINUM_BASEBALL, StarPlatinumBaseballRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THE_WORLD, TheWorldRenderer::new);
@@ -88,8 +91,11 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.CROSSFIRE_HURRICANE, CrossfireHurricaneRenderer::new);
         EntityRendererRegistry.register(FabricEntities.LIFE_TRACKER, LifeTrackerRenderer::new);
         EntityRendererRegistry.register(FabricEntities.STAND_FIREBALL, StandFireballRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.EVIL_AURA_PROJECTILE, NoRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.RIPPER_EYES_PROJECTILE, RipperEyesRenderer::new);
         EntityRendererRegistry.register(FabricEntities.STAND_ARROW, StandArrowRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_OBJECT, ThrownObjectRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.THROWN_ANUBIS, ThrownObjectRenderer::new);
         EntityRendererRegistry.register(FabricEntities.CONCEALED_FLAME_OBJECT, ConcealedFlameObjectRenderer::new);
         EntityRendererRegistry.register(FabricEntities.CINDERELLA_VISAGE_DISPLAY, CinderellaVisageDisplayRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GROUND_HURRICANE, NoRenderer::new);
@@ -138,6 +144,7 @@ public class FabricEntityClient {
 
         /*Models*/
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.WOLF_LAYER, TerrierEntityModel::createBodyLayerTerrier);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ANUBIS_GUARDIAN_LAYER, AnubisGuardianModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.THE_WORLD_LAYER, TheWorldModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.THE_WORLD_ULTIMATE_LAYER, TheWorldUltimateModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STAR_PLATINUM_LAYER, StarPlatinumModel::getTexturedModelData);
@@ -174,6 +181,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.LIFE_DETECTOR, LifeTrackerModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SEPERATED_LEGS_LAYER, SeperatedLegsModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STAND_FIREBALL_LAYER, StandFireballModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.RIPPER_EYES_LAYER, RipperEyesModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GASOLINE_LAYER, GasolineCanModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ZOMBIE_AESTHETICIAN_LAYER, ZombieAestheticianModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STEVE_LAYER, PlayerSteveModel::getTexturedModelData);
@@ -205,10 +213,12 @@ public class FabricEntityClient {
         ModStrayModels.ChestPart = new ChestPart();
         ModStrayModels.SmallChestPart = new SmallChestPart();
         ModStrayModels.bodySpikePart = new BodySpikePart();
+        ModStrayModels.hairVeinPart = new HairVeinPart();
         ModStrayModels.PonytailPart = new PonytailPart();
         ModStrayModels.BigHairPart = new BigHairPart();
         ModStrayModels.KakyoinHairPart = new KakyoinHairPart();
         ModStrayModels.DiegoHatPart = new DiegoHatPart();
+        ModStrayModels.ripperEyesPart = new RipperEyesPart();
         ModStrayModels.SpeedwagonFoundationHatPart = new SpeedwagonFoundationHatPart();
         ModStrayModels.BasicHatPart = new BasicHatPart();
         ModStrayModels.SpikeyHairPart = new SpikeyHairPart();

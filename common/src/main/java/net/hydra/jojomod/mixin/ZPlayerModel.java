@@ -2,7 +2,6 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.access.IPowersPlayer;
@@ -10,7 +9,6 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.animations.AnubisAnimations;
 import net.hydra.jojomod.client.models.layers.animations.FirstPersonLayerAnimations;
 import net.hydra.jojomod.event.index.*;
-import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.*;
@@ -142,11 +140,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
             if (SE.roundabout$getStandPowers() instanceof PowersAnubis) {
                 switch (SE.roundabout$getStandAnimation()) {
-                    case PowerIndex.GUARD -> {
-                        change = true;
-                        SE.roundabout$getHandLayerAnimation().startIfStopped($$0.tickCount);
-                        this.roundabout$animate(SE.roundabout$getHandLayerAnimation(), AnubisAnimations.UP,yes,1F);
-                    }
+
                     default -> {
                         change = false;
                         SE.roundabout$getHandLayerAnimation().stop();
@@ -154,12 +148,12 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 }
             }
 
-            if ( $$0.getUseItem().is(ModItems.ANUBIS_ITEM)  ) {
+        /*    if ( $$0.getUseItem().is(ModItems.ANUBIS_ITEM)  ) {
                 ipe.roundabout$getAnubisUnsheath().startIfStopped($$0.tickCount); change = true;
                 this.roundabout$animate(ipe.roundabout$getAnubisUnsheath(), AnubisAnimations.Unsheathe, yes, 1f);
             } else {
                 ipe.roundabout$getAnubisUnsheath().stop();
-            }
+            } */
 
             byte posByte = ((IPlayerEntity) $$0).roundabout$GetPos2();
             if (posByte == PlayerPosIndex.GUARD) {
@@ -263,18 +257,9 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             Player mainP = ClientUtil.getPlayer();
             if (!firstPerson || !(mainP != null && $$0.is(mainP))){
                 if (!P.isPassenger() && !P.isVisuallySwimming() && !P.isFallFlying()) {
-                    this.roundabout$animate(ipe.getWry(), Poses.WRY.ad, $$3, 1f);
-                    this.roundabout$animate(ipe.getGiorno(), Poses.GIORNO.ad, $$3, 1f);
-                    this.roundabout$animate(ipe.getJoseph(), Poses.JOSEPH.ad, $$3, 1f);
-                    this.roundabout$animate(ipe.getKoichi(), Poses.KOICHI.ad, $$3, 1f);
-                    this.roundabout$animate(ipe.getOhNo(), Poses.OH_NO.ad, $$3, 1f);
-                    this.roundabout$animate(ipe.getTortureDance(), Poses.TORTURE_DANCE.ad, $$3, 1f);
-                    this.roundabout$animate(ipe.getWamuu(), Poses.WAMUU.ad, $$3, 1f);
-                    this.roundabout$animate(ipe.getJotaro(), Poses.JOTARO.ad, $$3, 1f);
-                    this.roundabout$animate(ipe.getJonathan(), Poses.JONATHAN.ad, $$3, 1f);
-                    this.roundabout$animate(ipe.getWatch(), Poses.WATCH.ad, $$3, 1f);
-                    this.roundabout$animate(ipe.getSitting(), Poses.SITTING.ad, $$3, 1f);
-                    this.roundabout$animate(ipe.getVampire(), Poses.VAMPIRE_TRANSFORMATION.ad, $$3, 1f);
+                    if (Poses.getAnimation(P) != null) {
+                        this.roundabout$animate(ipe.getStyleAnimation(),Poses.getAnimation(P),$$3,1f);
+                    }
                 }
 
                 if ($$0.getUseItem().is(ModItems.ANUBIS_ITEM)
@@ -294,11 +279,12 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     }
 
                 } else {
-                    ipe.roundabout$getThirdPersonAnubisUnsheath().stop();
-                    ipe.roundabout$getAnubisUnsheath().stop();
+                //    ipe.roundabout$getThirdPersonAnubisUnsheath().stop();
+                //    ipe.roundabout$getAnubisUnsheath().stop();
                 }
-                this.roundabout$animate(ipe.roundabout$getThirdPersonAnubisUnsheath(), AnubisAnimations.ThirdPersonUnsheathe,$$3,1F);
-                if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA && PowerTypes.hasStandActive(P)) {
+            //    this.roundabout$animate(ipe.roundabout$getThirdPersonAnubisUnsheath(), AnubisAnimations.ThirdPersonUnsheathe,$$3,1F);
+
+                if (SU.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(P)) {
                     AnimationDefinition anim = PowersAnubis.getAnimation(SU);
                     if (anim != null) {
                         SU.roundabout$getWornStandAnimation().startIfStopped($$0.tickCount);
@@ -428,21 +414,12 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
                 this.cloak.resetPose();
                 if (!P.isPassenger() && !P.isVisuallySwimming() && !P.isFallFlying()) {
-                    this.roundabout$animate2(ipe.getWry(), Poses.WRY.ad, $$3, 1f);
-                    this.roundabout$animate2(ipe.getGiorno(), Poses.GIORNO.ad, $$3, 1f);
-                    this.roundabout$animate2(ipe.getJoseph(), Poses.JOSEPH.ad, $$3, 1f);
-                    this.roundabout$animate2(ipe.getKoichi(), Poses.KOICHI.ad, $$3, 1f);
-                    this.roundabout$animate2(ipe.getOhNo(), Poses.OH_NO.ad, $$3, 1f);
-                    this.roundabout$animate2(ipe.getTortureDance(), Poses.TORTURE_DANCE.ad, $$3, 1f);
-                    this.roundabout$animate2(ipe.getWamuu(), Poses.WAMUU.ad, $$3, 1f);
-                    this.roundabout$animate2(ipe.getJotaro(), Poses.JOTARO.ad, $$3, 1f);
-                    this.roundabout$animate2(ipe.getJonathan(), Poses.JONATHAN.ad, $$3, 1f);
-                    this.roundabout$animate2(ipe.getWatch(), Poses.WATCH.ad, $$3, 1f);
-                    this.roundabout$animate2(ipe.getSitting(), Poses.SITTING.ad, $$3, 1f);
-                    this.roundabout$animate2(ipe.getVampire(), Poses.VAMPIRE_TRANSFORMATION.ad, $$3, 1f);
+                    if (Poses.getAnimation(P) != null) {
+                        this.roundabout$animate2(ipe.getStyleAnimation(), Poses.getAnimation(P), $$3, 1f);
+                    }
                 }
 
-                this.roundabout$animate(ipe.roundabout$getThirdPersonAnubisUnsheath(), AnubisAnimations.ThirdPersonUnsheathe,$$3,1F);
+        //        this.roundabout$animate(ipe.roundabout$getThirdPersonAnubisUnsheath(), AnubisAnimations.ThirdPersonUnsheathe,$$3,1F);
 
                 AnimationDefinition anim = PowersAnubis.getAnimation(SU);
                 if (anim != null) {

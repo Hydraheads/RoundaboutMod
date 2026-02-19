@@ -3,14 +3,19 @@ package net.hydra.jojomod.client.models.stand;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModItemModels;
+import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.AnubisAnimations;
+import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.item.AnubisItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.minecraft.client.animation.AnimationDefinition;
@@ -20,9 +25,12 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import org.joml.Quaternionf;
 
 public class AnubisModel extends PsuedoHierarchicalModel {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
@@ -89,6 +97,10 @@ public class AnubisModel extends PsuedoHierarchicalModel {
     public static ResourceLocation chorus = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/ender.png");
     public static ResourceLocation ancient = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/ancient.png");
     public static ResourceLocation khopesh = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/khopesh.png");
+    public static ResourceLocation cleaver = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/cleaver.png");
+    public static ResourceLocation cleaver_sheathed = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/cleaver_sheathed.png");
+    public static ResourceLocation illusory = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/illusory.png");
+    public static ResourceLocation illusory_sheathed = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/illusory_sheathed.png");
 
 
 
@@ -111,6 +123,11 @@ public class AnubisModel extends PsuedoHierarchicalModel {
             case 13 -> {return alluring;}
             case 14 -> {return khopesh;}
 
+            case 15 -> {return cleaver;}
+            case 16 -> {return illusory;}
+            case 17 -> {return cleaver_sheathed;}
+            case 18 -> {return illusory_sheathed;}
+
             default -> {return anime;}
         }
     }
@@ -121,39 +138,121 @@ public class AnubisModel extends PsuedoHierarchicalModel {
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(context, (byte)0)));
         root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
     }
+
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
                        int light, float r, float g, float b, float alpha, byte skin) {
+        render(context,partialTicks,poseStack,bufferSource,light,r,g,b,alpha,skin,true);
+    }
+
+    public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
+                       int light, float r, float g, float b, float alpha, byte skin, boolean anims) {
         if (context instanceof LivingEntity LE) {
             this.root().getAllParts().forEach(ModelPart::resetPose);
             if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
                 partialTicks = 0;
             }
             StandUser user = ((StandUser) LE);
-            if (LE.getUseItem().is(ModItems.ANUBIS_ITEM)) {
-                user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
-                this.animate(user.roundabout$getWornStandIdleAnimation(), AnubisAnimations.ItemUnsheathe, partialTicks, 1f);
-            } else {
-                user.roundabout$getWornStandIdleAnimation().stop();
-            }
-            if (user.roundabout$getStandPowers() instanceof PowersAnubis PA && PowerTypes.hasStandActive(LE)) {
-                boolean start = false;
-                AnimationDefinition anim = null;
-                switch (user.roundabout$getStandAnimation()) {
-                    case PowerIndex.GUARD -> {
-                        start = true;
-                        anim = AnubisAnimations.ItemBlock;
+
+            if (anims) {
+
+                if (LE.getUseItem().is(ModItems.ANUBIS_ITEM)) {
+                    user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
+                    this.animate(user.roundabout$getWornStandIdleAnimation(), AnubisAnimations.ItemUnsheathe, partialTicks, 1f);
+                } else {
+                    user.roundabout$getWornStandIdleAnimation().stop();
+                }
+                if (user.roundabout$getStandPowers() instanceof PowersAnubis PA && PowerTypes.hasStandActive(LE)) {
+                    boolean start = false;
+                    AnimationDefinition anim = null;
+                    switch (user.roundabout$getStandAnimation()) {
+                        case PowerIndex.GUARD -> {
+                            start = true;
+                            anim = AnubisAnimations.ItemBlock;
+                        }
+                    }
+                    if (start) {
+                        this.animate(user.roundabout$getWornStandAnimation(), anim, partialTicks, 1F);
                     }
                 }
-                if (start) {
-                    this.animate(user.roundabout$getWornStandAnimation(),anim,partialTicks,1F);
-                }
-            }
 
+
+            }
+            this.root().getAllParts().forEach(ModelPart::resetPose);
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
             //The number at the end is inversely proportional so 2 is half speed
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
         }
     }
 
+    public void renderFirstPerson(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float partialTicks) {
+        if (((IEntityAndData) entity).roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung()) return;
+        this.root().getAllParts().forEach(ModelPart::resetPose);
+
+        if (((TimeStop)entity.level()).CanTimeStopEntity(entity) || ClientUtil.checkIfGamePaused()){
+            partialTicks = 0;
+        }
+
+
+        float alpha = 1F;
+        byte skin = (byte) 0;
+
+        StandUser user = (StandUser) entity;
+        float ticks = user.roundabout$getAnubisVanishTicks();
+        float alphaTicks = AnubisLayer.getTicks(entity,partialTicks);
+
+
+        if (user.roundabout$isPossessed()) {
+            skin = (byte)1;
+           /* CompoundTag tag = entity.getMainHandItem().getTag();
+            if (tag != null) {
+                if (tag.getFloat("CustomModelData") == 2F) {
+                    skin = (byte) 17;
+                } else if (tag.getFloat("CustomModelData") == 3F) {
+                    skin = (byte) 18;
+                }
+            } */
+        } else if ( (user.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(entity) ) || (ticks != 0 && !entity.getMainHandItem().is(ModItems.ANUBIS_ITEM)   ) ) {
+            alpha = alphaTicks;
+            skin = user.roundabout$getStandSkin();
+        } else if (entity.getMainHandItem().getItem() instanceof AnubisItem && !user.roundabout$getEffectiveCombatMode()) {
+            CompoundTag tag = entity.getMainHandItem().getTag();
+            if (tag != null) {
+                if (tag.getFloat("CustomModelData") == 2F) {
+                    skin = (byte) 17;
+                } else if (tag.getFloat("CustomModelData") == 3F) {
+                    skin = (byte) 18;
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+        poseStack.translate(0,0,-1.27); // +forward
+        poseStack.translate(0.85,0,0); // +left
+        poseStack.translate(0,-0.3,0); //  +up
+        poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,-15),0,0,0); // positive towards camera
+        poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,100),0,0,0); // around Y axis
+        if (skin == (byte) 0 || skin == (byte)17 || skin == (byte)18 ) {
+            poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,180),0,0,0);
+            poseStack.translate(0,0.35,0);
+            poseStack.translate(0.1,0,0);
+        }
+        poseStack.scale(0.8F,0.8F,0.8F);
+
+
+        if (entity.getUseItem().getItem() instanceof AnubisItem) {
+            if (entity instanceof Player P) {
+                this.animate( ((IPlayerEntity)P).roundabout$getItemAnimation(),AnubisAnimations.Unsheathe,partialTicks,1F);
+            }
+        }
+
+        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity, skin )));
+        root().render(poseStack,consumer,packedLight,OverlayTexture.NO_OVERLAY,1,1,1,alpha);
+    }
 }
 

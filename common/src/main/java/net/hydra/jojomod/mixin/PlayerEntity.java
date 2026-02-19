@@ -653,7 +653,12 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Override
     @Unique
     public void roundabout$setShapeShift(byte level){
-        ((Player) (Object) this).getEntityData().set(ROUNDABOUT$SHAPE_SHIFT, level);
+        if (((Player) (Object) this).getEntityData().get(ROUNDABOUT$SHAPE_SHIFT) != level){
+            if (level != ShapeShifts.VILLAGER.ordinal()) {
+                ((Player) (Object) this).getEntityData().set(ROUNDABOUT$SHAPE_SHIFT_EXTRA, (byte) 0);
+            }
+            ((Player) (Object) this).getEntityData().set(ROUNDABOUT$SHAPE_SHIFT, level);
+        }
     }
     @Override
     @Unique
@@ -899,13 +904,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     public Poses roundabout$standPos = null;
     @Unique
-    public final AnimationState roundabout$WRYYY = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState getWry(){
-        return roundabout$WRYYY;
-    }
-    @Unique
     public final AnimationState roundabout$BubbleAim = new AnimationState();
     @Unique
     @Override
@@ -927,192 +925,22 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         return roundabout$barrageArms;
     }
 
-
     @Unique
-    public final AnimationState roundabout$anubishUnsheath = new AnimationState();
+    public final AnimationState roundabout$itemAnimation = new AnimationState();
     @Unique
     @Override
-    public AnimationState roundabout$getAnubisUnsheath(){
-        return roundabout$anubishUnsheath;
+    public AnimationState roundabout$getItemAnimation(){
+        return roundabout$itemAnimation;
     }
     @Unique
-    public final AnimationState roundabout$thirdPersonAnubishUnsheath = new AnimationState();
+    public final AnimationState roundabout$itemAnimationActive = new AnimationState();
     @Unique
     @Override
-    public AnimationState roundabout$getThirdPersonAnubisUnsheath(){
-        return roundabout$thirdPersonAnubishUnsheath;
-    }
-
-    @Unique
-    public final AnimationState roundabout$snubnoseAim = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getSnubnoseAim(){
-        return roundabout$snubnoseAim;
-    }
-    @Unique
-    public final AnimationState roundabout$snubnoseRecoil = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getSnubnoseRecoil(){
-        return roundabout$snubnoseRecoil;
-    }
-    @Unique
-    public final AnimationState roundabout$snubnoseModelAim = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getSnubnoseModelAim(){
-        return roundabout$snubnoseModelAim;
-    }
-    @Unique
-    public final AnimationState roundabout$snubnoseModelRecoil = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getSnubnoseModelRecoil(){
-        return roundabout$snubnoseModelRecoil;
-    }
-    @Unique
-    public final AnimationState roundabout$snubnoseAimLeft = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getSnubnoseAimLeft(){
-        return roundabout$snubnoseAimLeft;
-    }
-    @Unique
-    public final AnimationState roundabout$snubnoseRecoilLeft = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getSnubnoseRecoilLeft(){
-        return roundabout$snubnoseRecoilLeft;
-    }
-    @Unique
-    public final AnimationState roundabout$snubnoseModelAimLeft = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getSnubnoseModelAimLeft(){
-        return roundabout$snubnoseModelAimLeft;
-    }
-    @Unique
-    public final AnimationState roundabout$snubnoseModelRecoilLeft = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getSnubnoseModelRecoilLeft(){
-        return roundabout$snubnoseModelRecoilLeft;
+    public AnimationState roundabout$getItemAnimationActive(){
+        return roundabout$itemAnimationActive;
     }
 
-    @Unique
-    public final AnimationState roundabout$tommyAim = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getTommyAim(){
-        return roundabout$tommyAim;
-    }
-    @Unique
-    public final AnimationState roundabout$tommyModelAim = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getTommyModelAim(){
-        return roundabout$tommyModelAim;
-    }
-    @Unique
-    public final AnimationState roundabout$tommyAimLeft = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getTommyAimLeft(){
-        return roundabout$tommyAimLeft;
-    }
-    @Unique
-    public final AnimationState roundabout$tommyModelAimLeft = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getTommyModelAimLeft(){
-        return roundabout$tommyModelAimLeft;
-    }
-    @Unique
-    public final AnimationState roundabout$tommyRecoil = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getTommyRecoil(){
-        return roundabout$tommyRecoil;
-    }
-    @Unique
-    public final AnimationState roundabout$tommyModelRecoil = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getTommyModelRecoil(){
-        return roundabout$tommyModelRecoil;
-    }
-    @Unique
-    public final AnimationState roundabout$tommyRecoilLeft = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getTommyRecoilLeft(){
-        return roundabout$tommyRecoilLeft;
-    }
-    @Unique
-    public final AnimationState roundabout$tommyModelRecoilLeft = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getTommyModelRecoilLeft(){
-        return roundabout$tommyModelRecoilLeft;
-    }
 
-    @Unique
-    public final AnimationState roundabout$coltAim = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getColtAim(){
-        return roundabout$coltAim;
-    }
-    @Unique
-    public final AnimationState roundabout$coltModelAim = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getColtModelAim(){
-        return roundabout$coltModelAim;
-    }
-    @Unique
-    public final AnimationState roundabout$coltAimLeft = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getColtAimLeft(){
-        return roundabout$coltAimLeft;
-    }
-    @Unique
-    public final AnimationState roundabout$coltModelAimLeft = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getColtModelAimLeft(){
-        return roundabout$coltModelAimLeft;
-    }
-    @Unique
-    public final AnimationState roundabout$coltRecoil = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getColtRecoil(){
-        return roundabout$coltRecoil;
-    }
-    @Unique
-    public final AnimationState roundabout$coltModelRecoil = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getColtModelRecoil(){
-        return roundabout$coltModelRecoil;
-    }
-    @Unique
-    public final AnimationState roundabout$coltRecoilLeft = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getColtRecoilLeft(){
-        return roundabout$coltRecoilLeft;
-    }
-    @Unique
-    public final AnimationState roundabout$coltModelRecoilLeft = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState roundabout$getColtModelRecoilLeft(){
-        return roundabout$coltModelRecoilLeft;
-    }
 
 
     @Unique
@@ -1134,157 +962,28 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public void roundabout$setBubbleShotAimPoints(int shotPoints){
         roundabout$BubbleShotAimPoints = shotPoints;
     }
-    @Unique
-    public final AnimationState roundabout$GIORNO = new AnimationState();
 
     @Unique
+    public final AnimationState roundabout$styleAnimation = new AnimationState();
+    @Unique
     @Override
-    public AnimationState getGiorno(){
-        return roundabout$GIORNO;
+    public AnimationState getStyleAnimation() {
+        return roundabout$styleAnimation;
     }
-    @Unique
-    public final AnimationState roundabout$JOSEPH = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState getJoseph(){
-        return roundabout$JOSEPH;
-    }
-    @Unique
-    public final AnimationState roundabout$KOICHI = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState getKoichi(){
-        return roundabout$KOICHI;
-    }
-    @Unique
-    public final AnimationState roundabout$OH_NO = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState getOhNo(){return roundabout$OH_NO;}
-    @Unique
-    public final AnimationState roundabout$SITTING = new AnimationState();
-    @Unique
-    public final AnimationState roundabout$VAMPIRE = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState getSitting(){return roundabout$SITTING;}
-    @Unique
-    @Override
-    public AnimationState getVampire(){return roundabout$VAMPIRE;}
-    @Unique
-    public final AnimationState roundabout$TORTURE_DANCE = new AnimationState();
-    @Unique
-    @Override
-    public AnimationState getTortureDance(){
-        return roundabout$TORTURE_DANCE;
-    }
-    @Unique
-    @Override
-    public AnimationState getWamuu(){
-        return roundabout$WAMUU;
-    }
-    @Unique
-    @Override
-    public AnimationState getWatch(){
-        return roundabout$WATCH;
-    }
-    @Unique
-    @Override
-    public AnimationState getJotaro(){
-        return roundabout$JOTARO;
-    }
-    @Unique
-    @Override
-    public AnimationState getJonathan(){
-        return roundabout$JONATHAN;
-    }
-    @Unique
-    public final AnimationState roundabout$WAMUU = new AnimationState();
-    @Unique
-    public final AnimationState roundabout$WATCH = new AnimationState();
-
-    @Unique
-    public final AnimationState roundabout$JOTARO = new AnimationState();
-    @Unique
-    public final AnimationState roundabout$JONATHAN = new AnimationState();
-
 
     @Unique
     public void roundabout$setupAnimationStates() {
-        if (roundabout$GetPoseEmote() == Poses.JONATHAN.id) {
-            this.roundabout$JONATHAN.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$JONATHAN.stop();
-        }
         if (roundabout$GetPos2() == PlayerPosIndex.BARRAGE) {
             this.roundabout$barrageArms.startIfStopped(this.tickCount);
         } else {
             this.roundabout$barrageArms.stop();
         }
-        if (roundabout$GetPoseEmote() == Poses.JOTARO.id) {
-            this.roundabout$JOTARO.startIfStopped(this.tickCount);
+
+
+        if (this.roundabout$GetPoseEmote() != Poses.NONE.id) {
+            this.getStyleAnimation().startIfStopped(this.tickCount);
         } else {
-            this.roundabout$JOTARO.stop();
-        }
-        if (roundabout$GetPoseEmote() == Poses.WAMUU.id) {
-            this.roundabout$WAMUU.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$WAMUU.stop();
-        }
-        if (roundabout$GetPoseEmote() == Poses.TORTURE_DANCE.id) {
-            this.roundabout$TORTURE_DANCE.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$TORTURE_DANCE.stop();
-        }
-        if (roundabout$GetPoseEmote() == Poses.OH_NO.id) {
-            this.roundabout$OH_NO.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$OH_NO.stop();
-        }
-        if (roundabout$GetPoseEmote() == Poses.WRY.id) {
-            this.roundabout$WRYYY.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$WRYYY.stop();
-        }
-        if (roundabout$GetPoseEmote() == Poses.GIORNO.id) {
-            this.roundabout$GIORNO.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$GIORNO.stop();
-        }
-        if (roundabout$GetPoseEmote() == Poses.KOICHI.id) {
-            this.roundabout$KOICHI.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$KOICHI.stop();
-        }
-        if (roundabout$GetPoseEmote() == Poses.JOSEPH.id) {
-            this.roundabout$JOSEPH.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$JOSEPH.stop();
-        }
-        if (roundabout$GetPoseEmote() == Poses.WATCH.id) {
-            this.roundabout$WATCH.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$WATCH.stop();
-        }
-        if (roundabout$GetPoseEmote() == Poses.SITTING.id) {
-            this.roundabout$SITTING.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$SITTING.stop();
-        }
-        if (roundabout$GetPoseEmote() == Poses.VAMPIRE_TRANSFORMATION.id) {
-            this.roundabout$VAMPIRE.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$VAMPIRE.stop();
-        }
-        if (roundabout$GetPoseEmote() == Poses.VAMPIRE_TRANSFORMATION.id) {
-            this.roundabout$VAMPIRE.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$VAMPIRE.stop();
-        }
-        if (roundabout$GetPoseEmote() == Poses.VAMPIRE_TRANSFORMATION.id) {
-            this.roundabout$VAMPIRE.startIfStopped(this.tickCount);
-        } else {
-            this.roundabout$VAMPIRE.stop();
+            this.getStyleAnimation().stop();
         }
     }
 
@@ -1406,6 +1105,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         compoundtag.putFloat("hairColorX",rdbt$getHairColorX());
         compoundtag.putFloat("hairColorY",rdbt$getHairColorY());
         compoundtag.putFloat("hairColorZ",rdbt$getHairColorZ());
+        compoundtag.putByte("shapeShift",roundabout$getShapeShift());
+        compoundtag.putByte("shapeShiftExtra",roundabout$getShapeShiftExtraData());
 
 
         compoundtag.putFloat("guard",((StandUser)this).roundabout$getGuardPoints());
@@ -1508,6 +1209,14 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
         if (compoundtag2.contains("hairColorZ")) {
             rdbt$setHairColorZ(compoundtag2.getFloat("hairColorZ"));
+        }
+
+
+        if (compoundtag2.contains("shapeShift")) {
+            roundabout$setShapeShift(compoundtag2.getByte("shapeShift"));
+        }
+        if (compoundtag2.contains("shapeShiftExtra")) {
+            roundabout$setShapeShiftExtraData(compoundtag2.getByte("shapeShiftExtra"));
         }
 
 
@@ -1850,6 +1559,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             }
 
             roundabout$setupAnimationStates();
+
+
             if (!rdbt$getCooldownQuery()){
                 if (!rdbt$attemptedQuery){
                     rdbt$attemptedQuery = true;

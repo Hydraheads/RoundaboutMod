@@ -58,6 +58,9 @@ public class DamageHandler {
     public static boolean VampireDamageEntity(Entity entity, float power, Entity attacker){
         return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.VAMPIRE, attacker), power);
     }
+    public static boolean RipperEyesDamage(Entity entity, float power, Entity attacker){
+        return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.RIPPER_EYES, attacker), power);
+    }
     public static boolean StandRushDamageEntity(Entity entity, float power, Entity attacker){
         return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.STAND_RUSH, attacker), power);
     }

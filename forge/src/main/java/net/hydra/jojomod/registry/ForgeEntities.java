@@ -5,6 +5,7 @@ import net.hydra.jojomod.client.models.stand.renderers.ChairRattRenderer;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
@@ -40,6 +41,12 @@ public class ForgeEntities {
                     EntityType.Builder.of(TerrierEntity::new, MobCategory.CREATURE).sized(0.6f, 0.55f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "terrier").toString())
+            );
+    public static final RegistryObject<EntityType<AnubisGuardian>> ANUBIS_GUARDIAN =
+            ENTITY_TYPES.register("anubis_guardian", () ->
+                    EntityType.Builder.of(AnubisGuardian::new, MobCategory.CREATURE).sized(0.6f, 0.55f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "anubis_guardian").toString())
             );
     public static final RegistryObject<EntityType<OVAEnyaNPC>> OVA_ENYA =
             ENTITY_TYPES.register("jojo_npc_ova_enya", () ->
@@ -442,6 +449,18 @@ public class ForgeEntities {
                             clientTrackingRange(15).
                             build(new ResourceLocation(Roundabout.MOD_ID, "stand_fireball").toString())
             );
+    public static final RegistryObject<EntityType<EvilAuraProjectile>> EVIL_AURA_PROJECTILE =
+            ENTITY_TYPES.register("evil_aura_projectile", () ->
+                    EntityType.Builder.<EvilAuraProjectile>of(EvilAuraProjectile::new, MobCategory.MISC).sized(1F, 1F).
+                            clientTrackingRange(15).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "evil_aura_projectile").toString())
+            );
+    public static final RegistryObject<EntityType<RipperEyesProjectile>> RIPPER_EYES_PROJECTILE =
+            ENTITY_TYPES.register("ripper_eyes", () ->
+                    EntityType.Builder.<RipperEyesProjectile>of(RipperEyesProjectile::new, MobCategory.MISC).sized(1F, 1F).
+                            clientTrackingRange(15).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "ripper_eyes").toString())
+            );
     public static final RegistryObject<EntityType<GasolineSplatterEntity>> GASOLINE_SPLATTER =
             ENTITY_TYPES.register("gasoline_splatter", () ->
                     EntityType.Builder.<GasolineSplatterEntity>of(GasolineSplatterEntity::new, MobCategory.MISC).sized(0.8f, 0.8f).
@@ -465,6 +484,12 @@ public class ForgeEntities {
                     EntityType.Builder.<ThrownObjectEntity>of(ThrownObjectEntity::new, MobCategory.MISC).sized(1f, 1f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "thrown_object").toString())
+            );
+    public static final RegistryObject<EntityType<ThrownAnubisEntity>> THROWN_ANUBIS =
+            ENTITY_TYPES.register("thrown_anubis", () ->
+                    EntityType.Builder.<ThrownAnubisEntity>of(ThrownAnubisEntity::new, MobCategory.MISC).sized(1f, 1f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "thrown_anubis").toString())
             );
     public static final RegistryObject<EntityType<ConcealedFlameObjectEntity>> CONCEALED_FLAME_OBJECT =
             ENTITY_TYPES.register("concealed_flame_object", () ->

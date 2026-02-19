@@ -1,6 +1,6 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "category": "equipment",
+  "category": "building",
   "ingredients": [
     {
       "item": "minecraft:flower_pot"

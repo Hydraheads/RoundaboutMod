@@ -21,6 +21,9 @@ public class PlayerPosIndex {
     public static final byte HAIR_EXTENSION_2 = 10;
     public static final byte CLUTCH_WINDUP = 11;
     public static final byte CLUTCH_DASH = 12;
+    public static final byte RIPPER_EYES_ACTIVE = 13;
+    public static final byte VANISH_START = 14;
+    public static final byte VANISH_PERSIST = 15;
 
     public static final byte SNUBNOSE_AIM = 3;
 

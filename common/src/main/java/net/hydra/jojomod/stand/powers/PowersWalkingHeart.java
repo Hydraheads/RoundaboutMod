@@ -776,7 +776,8 @@ public class PowersWalkingHeart extends NewDashPreset {
     public boolean replaceHudActively(){
         return (inCombatMode() || getShootTicks() > 0) && PowerTypes.hasStandActivelyEquipped(self);
     }
-    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x){
+    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
+                                  boolean removeNum){
         StandHudRender.renderWalkingHeartHud(context,cameraPlayer,screenWidth,screenHeight,x);
     }
 
@@ -791,6 +792,21 @@ public class PowersWalkingHeart extends NewDashPreset {
                 TE = this.getTargetEntityList(self, 7F,10);
             } else {
                 TE = this.getTargetEntityListThroughWalls(self, 7F,10);
+                if (!TE.isEmpty()){
+                    List<Entity> TE2 = new ArrayList<>();
+                    for (Entity value : TE) {
+                        if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxesOnBosses){
+                            TE2.add(value);
+                        } else if (MainUtil.isBossMob(value)){
+                            if (MainUtil.canActuallyHitInvolved(value,self)){
+                                TE2.add(value);
+                            }
+                        } else {
+                            TE2.add(value);
+                        }
+                    }
+                    TE = TE2;
+                }
             }
             if (TE == null || TE.isEmpty()){
                 tryPowerPacket(PowerIndex.POWER_1_BONUS);
@@ -1107,7 +1123,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                                 }
                             }
                         }
-                        if (self.isSleeping() || ((!self.onGround()) && mercyTicks <= 0) || self.getRootVehicle() != this.self) {
+                        if (self.isSleeping() || (( ( !self.onGround() && !this.getStandUserSelf().roundabout$isPossessed() ) ) && mercyTicks <= 0) || self.getRootVehicle() != this.self) {
                             heelDirection = Direction.DOWN;
                             if (((IGravityEntity) this.self).roundabout$getGravityDirection() != heelDirection) {
                                 grantFallImmunity();

@@ -18,7 +18,7 @@ public class VampireAuraParticle extends SimpleAnimatedParticle {
         this.quadSize *= 1f;
         this.sprites = $$7;
         this.gravity = 0;
-        this.scale(3.3F);
+        this.scale(4.6F);
         //this.setFadeColor(15916745);
         this.setSpriteFromAge($$7);
     }

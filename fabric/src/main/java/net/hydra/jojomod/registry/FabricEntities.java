@@ -7,6 +7,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
@@ -42,6 +43,13 @@ public class FabricEntities {
                         EntityType.Builder.of(TerrierEntity::new, MobCategory.CREATURE).
                                 sized(0.6f, 0.55f).clientTrackingRange(10).build(Roundabout.MOD_ID+":terrier")
                 );
+    public static final EntityType<AnubisGuardian> ANUBIS_GUARDIAN =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "anubis_guardian"),
+                    EntityType.Builder.of(AnubisGuardian::new, MobCategory.CREATURE).
+                            sized(0.6f, 1.95f).clientTrackingRange(50).build(Roundabout.MOD_ID+":anubis_guardian")
+            );
         public static final EntityType<OVAEnyaNPC> OVA_ENYA =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -491,6 +499,20 @@ public class FabricEntities {
                         EntityType.Builder.<StandFireballEntity>of(StandFireballEntity::new, MobCategory.MISC).
                                 sized(0.9F, 0.9F).clientTrackingRange(15).build(Roundabout.MOD_ID+":stand_fireball")
                 );
+    public static final EntityType<EvilAuraProjectile> EVIL_AURA_PROJECTILE =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "evil_aura_projectile"),
+                    EntityType.Builder.<EvilAuraProjectile>of(EvilAuraProjectile::new, MobCategory.MISC).
+                            sized(1F, 1F).clientTrackingRange(15).build(Roundabout.MOD_ID+":evil_aura_projectile")
+            );
+    public static final EntityType<RipperEyesProjectile> RIPPER_EYES_PROJECTILE =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "ripper_eyes"),
+                    EntityType.Builder.<RipperEyesProjectile>of(RipperEyesProjectile::new, MobCategory.MISC).
+                            sized(1F, 1F).clientTrackingRange(15).build(Roundabout.MOD_ID+":ripper_eyes")
+            );
         public static final EntityType<GasolineSplatterEntity> GASOLINE_SPLATTER =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -519,6 +541,13 @@ public class FabricEntities {
                         EntityType.Builder.<ThrownObjectEntity>of(ThrownObjectEntity::new, MobCategory.MISC).
                                 sized(1f, 1f).clientTrackingRange(10).build(Roundabout.MOD_ID+":thrown_object")
                 );
+    public static final EntityType<ThrownAnubisEntity> THROWN_ANUBIS =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "thrown_anubis"),
+                    EntityType.Builder.<ThrownAnubisEntity>of(ThrownAnubisEntity::new, MobCategory.MISC).
+                            sized(1f, 1f).clientTrackingRange(10).build(Roundabout.MOD_ID+":thrown_anubis")
+            );
         public static final EntityType<ConcealedFlameObjectEntity> CONCEALED_FLAME_OBJECT =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -654,6 +683,7 @@ public class FabricEntities {
                 ModEntities.THE_WORLD = THE_WORLD;
                 ModEntities.THE_WORLD_ULTIMATE = THE_WORLD_ULTIMATE;
                 ModEntities.TERRIER_DOG = TERRIER_DOG;
+                ModEntities.ANUBIS_GUARDIAN = ANUBIS_GUARDIAN;
                 ModEntities.STAR_PLATINUM = STAR_PLATINUM;
                 ModEntities.STAR_PLATINUM_BASEBALL = STAR_PLATINUM_BASEBALL;
                 ModEntities.JUSTICE = JUSTICE;
@@ -690,12 +720,15 @@ public class FabricEntities {
                 ModEntities.LIFE_TRACKER = LIFE_TRACKER;
                 ModEntities.SEPERATED_LEGS = SEPERATED_LEGS;
                 ModEntities.STAND_FIREBALL = STAND_FIREBALL;
+                ModEntities.EVIL_AURA_PROJECTILE = EVIL_AURA_PROJECTILE;
+                ModEntities.RIPPER_EYES_PROJECTILE = RIPPER_EYES_PROJECTILE;
                 ModEntities.GASOLINE_CAN = GASOLINE_CAN;
                 ModEntities.GASOLINE_SPLATTER = GASOLINE_SPLATTER;
                 ModEntities.BLOOD_SPLATTER = BLOOD_SPLATTER;
                 ModEntities.STAND_ARROW = STAND_ARROW;
 
                 ModEntities.THROWN_OBJECT = THROWN_OBJECT;
+                ModEntities.THROWN_ANUBIS = THROWN_ANUBIS;
                 ModEntities.CONCEALED_FLAME_OBJECT = CONCEALED_FLAME_OBJECT;
                 ModEntities.GROUND_HURRICANE = GROUND_HURRICANE;
                 ModEntities.GROUND_BUBBLE = GROUND_BUBBLE;
@@ -745,7 +778,7 @@ public class FabricEntities {
 
                 /*Attributes*/
                 FabricDefaultAttributeRegistry.register(TERRIER_DOG, Wolf.createAttributes());
-
+                FabricDefaultAttributeRegistry.register(ANUBIS_GUARDIAN, AnubisGuardian.createAttributes());
                 FabricDefaultAttributeRegistry.register(OVA_ENYA, OVAEnyaNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(ENYA, OVAEnyaNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(JOTARO, JotaroNPC.createAttributes());

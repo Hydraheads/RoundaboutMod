@@ -761,7 +761,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.75F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.67F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(5));
         }
@@ -769,7 +769,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.5F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.4F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(6F));
         }
@@ -1265,10 +1265,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 if (check) {
                     if ((this.getActivePower() != PowerIndex.NONE)
                             || dist <= 5) {
-                        this.getSelf().setXRot(getLookAtEntityPitch(this.getSelf(), attackTarget));
-                        float yrot = getLookAtEntityYaw(this.getSelf(), attackTarget);
-                        this.getSelf().setYRot(yrot);
-                        this.getSelf().setYHeadRot(yrot);
+                        rotateMobHead(attackTarget);
                     }
 
                     if (this.attackTimeDuring == -1 || (this.attackTimeDuring < -1 && this.activePower == PowerIndex.ATTACK)) {

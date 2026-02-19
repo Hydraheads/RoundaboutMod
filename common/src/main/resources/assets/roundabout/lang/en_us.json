@@ -21,6 +21,7 @@
 
   "text.roundabout.fate.vampire": "Vampire",
   "text.roundabout.fate.vampire_hair": "Change Hair Color",
+  "text.roundabout.fate.zombie": "Zombie",
 
   "text.roundabout.bullets.revolver": "Compatible with Snubnosed Revolvers and Colt Revolvers.",
   "text.roundabout.bullets.tommy": "Compatible with Tommy Guns.",
@@ -34,6 +35,7 @@
 
 
   "item.roundabout.stand_arrow": "Stand Arrow",
+  "item.roundabout.coffin_block_item": "Coffin",
   "item.roundabout.stand_beetle_arrow": "Stand Arrow",
   "item.roundabout.worthy_arrow": "Worthiness Arrow",
   "item.roundabout.luck_sword": "Luck Sword",
@@ -103,6 +105,8 @@
   "item.roundabout.max_star_platinum_disc": "Stand Disc+",
   "item.roundabout.magicians_red_disc": "Stand Disc",
   "item.roundabout.killer_queen_disc": "Stand Disc",
+  "item.roundabout.metallica_disc": "Stand Disc",
+  "item.roundabout.max_metallica_disc": "Stand Disc+",
   "item.roundabout.max_the_world_disc": "Stand Disc+",
   "item.roundabout.max_justice_disc": "Stand Disc+",
   "item.roundabout.max_d4c_disc": "Stand Disc+",
@@ -117,6 +121,7 @@
   "item.roundabout.soft_and_wet_disc.desc": "Soft And Wet",
   "item.roundabout.killer_queen_disc.desc": "Killer Queen",
   "item.roundabout.magicians_red_disc.desc": "Magician's Red",
+  "item.roundabout.metallica_disc.desc": "Metallica",
   "item.roundabout.star_platinum_disc.desc": "Star Platinum",
   "item.roundabout.the_world_disc.desc": "The World",
   "item.roundabout.justice_disc.desc": "Justice",
@@ -281,6 +286,7 @@
   "item.roundabout.painting_venus": "Birth of Venus",
 
   "entity.roundabout.terrier": "Boston Terrier",
+  "entity.roundabout.anubis_guardian": "Anubis Guardian",
   "entity.roundabout.the_world": "The World",
   "entity.roundabout.the_world_ultimate": "The World",
   "entity.roundabout.survivor": "Survivor",
@@ -355,6 +361,8 @@
   "entity.roundabout.crossfire_hurricane": "Crossfire Hurricane",
   "entity.roundabout.life_tracker": "Life Tracker",
   "entity.roundabout.stand_fireball": "Stand Fireball",
+  "entity.roundabout.evil_aura_projectile": "Evil Aura",
+  "entity.roundabout.ripper_eyes": "Ripper Eyes",
   "entity.roundabout.thrown_object": "Thrown Object",
   "entity.roundabout.ratt_dart": "Ratt Dart",
   "entity.roundabout.painting_van_gough": "VG Painting",
@@ -366,6 +374,9 @@
 
 
   "block.roundabout.meteor_block": "Meteorite Block",
+  "block.roundabout.coffin_block": "Coffin",
+  "block.roundabout.shiny_quartz": "Shiny Quartz",
+  "block.roundabout.shiny_quartz_tiles": "Shiny Quartz Tiles",
   "block.roundabout.regal_wall": "Regal Wall",
   "block.roundabout.regal_floor": "Regal Floor",
   "block.roundabout.glass_door": "Glass Door",
@@ -498,6 +509,7 @@
   "hud.roundabout.standout": "Stand Summoned",
   "sounds.roundabout.dsp_summon": "Explosive Stand Summon",
   "sounds.roundabout.vampire_message": "-serrated-",
+  "sounds.roundabout.vampire_camo": "Whoosh",
   "sounds.roundabout.vsong_silent_reveries": "Silent Reveries",
   "sounds.roundabout.vsong_twisted": "Twisted",
   "sounds.roundabout.vsong_bloodcurdling_moments": "Bloodcurdling Moments",
@@ -506,6 +518,12 @@
 
   "sounds.roundabout.vampire_dash": "Fwoosh",
   "sounds.roundabout.vampire_gleam": "Sparkle",
+  "sounds.roundabout.evil_aura_blast": "Chilling Breeze",
+  "sounds.roundabout.aura_impact": "Aura Impact",
+
+  "sounds.roundabout.ripper_eyes_charge": "Fluid Buildup",
+  "sounds.roundabout.ripper_eyes_beam": "Ripper Eyes",
+  "sounds.roundabout.ripper_eyes_short": "Ripper Eyes",
 
   "death.attack.stand": "%1$s died to a mysterious power whilst fighting %2$s",
   "death.attack.stand.item": "%1$s died to a mysterious power whilst fighting %2$s",
@@ -587,24 +605,26 @@
   "death.attack.dagger.item": "%1$s became a human sacrifice",
   "death.attack.dagger.player": "%1$s became a human sacrifice",
   "death.attack.dagger.player.item": "%1$s became a human sacrifice",
-  "death.attack.road_roller_entity": "%1$s's grave was paved.",
-  "death.attack.road_roller_entity.item": "%1$s's grave was paved.",
-  "death.attack.road_roller.player": "%1$s's grave was paved.",
-  "death.attack.road_roller.player.item": "%1$s's grave was paved.",
-  "death.attack.blood_drain": "%1$s lost all color.",
-  "death.attack.blood_drain.item": "%1$s lost all color.",
-  "death.attack.blood_drain.player": "%1$s lost all color.",
-  "death.attack.blood_drain.player.item": "%1$s lost all color.",
-  "death.attack.bullet": "%1$s was shot through the heart.",
-  "death.attack.bullet.item": "%1$s was shot through the heart.",
-  "death.attack.bullet.player": "%1$s was shot through the heart.",
-  "death.attack.bullet.player.item": "%1$s was shot through the heart.",
-  "death.attack.vampire": "%1$s was pulverized by %2$s.",
-  "death.attack.vampire.item": "%1$s was pulverized by %2$s.",
-  "death.attack.hamon": "%1$s saw the light while fighting %2$s.",
-  "death.attack.hamon.item": "%1$s saw the light while fighting %2$s.",
-  "death.attack.martial_arts": "%1$s was shown no mercy by %2$s.",
-  "death.attack.martial_arts.item": "%1$s was shown no mercy by %2$s.",
+  "death.attack.road_roller_entity": "%1$s's grave was paved",
+  "death.attack.road_roller_entity.item": "%1$s's grave was paved",
+  "death.attack.road_roller.player": "%1$s's grave was paved",
+  "death.attack.road_roller.player.item": "%1$s's grave was paved",
+  "death.attack.blood_drain": "%1$s lost all color",
+  "death.attack.blood_drain.item": "%1$s lost all color",
+  "death.attack.blood_drain.player": "%1$s lost all color",
+  "death.attack.blood_drain.player.item": "%1$s lost all color",
+  "death.attack.bullet": "%1$s was shot through the heart",
+  "death.attack.bullet.item": "%1$s was shot through the heart",
+  "death.attack.bullet.player": "%1$s was shot through the heart",
+  "death.attack.bullet.player.item": "%1$s was shot through the heart",
+  "death.attack.vampire": "%1$s was pulverized by %2$s",
+  "death.attack.vampire.item": "%1$s was pulverized by %2$s",
+  "death.attack.hamon": "%1$s saw the light while fighting %2$s",
+  "death.attack.hamon.item": "%1$s saw the light while fighting %2$s",
+  "death.attack.martial_arts": "%1$s was shown no mercy by %2$s",
+  "death.attack.martial_arts.item": "%1$s was shown no mercy by %2$s",
+  "death.attack.ripper_eyes": "%1$s was ripped apart by %2$s",
+  "death.attack.ripper_eyes.item": "%1$s was ripped apart by %2$s",
 
   "item.glaive.charge_power": "Charge Attack",
 
@@ -803,7 +823,7 @@
   "sounds.roundabout.stand_barrage_end":  "Heavy Hit",
   "sounds.roundabout.stand_barrage_end_block":  "Heavy Hit",
   "sounds.roundabout.melee_guard":  "Blocked",
-  "sounds.roundabout.hit_sfx1":  "Heavy Hit",
+  "sounds.roundabout.hit_sfx1":  "Deflect",
   "sounds.roundabout.terrier_pass": "Terrier fart",
   "sounds.roundabout.the_world_assault":  "Drifting force",
   "sounds.roundabout.the_world_wry":  "WRY!",
@@ -879,6 +899,9 @@
   "sounds.roundabout.anubis_thrust_cut": "Sword Crit",
   "sounds.roundabout.anubis_thrust_miss": "Sword Whiff",
   "sounds.roundabout.anubis_uppercut": "Sword Swing",
+  "sounds.roundabout.anubis_shieldbreak": "Shieldbreak Charging",
+  "sounds.roundabout.anubis_extra": "Sword Clang",
+
 
 
 
@@ -1060,9 +1083,9 @@
   "instruction.roundabout.shop_item": "Shop Item",
   "instruction.roundabout.use_item": "Item Interaction",
 
-  "instruction.roundabout.anubis_normal": "Press Attack Twice",
-  "instruction.roundabout.anubis_one": "Press Crouch Once",
-  "instruction.roundabout.anubis_two": "Press Crouch Twice",
+  "instruction.roundabout.anubis_normal": "Third Attack - Press Attack Twice",
+  "instruction.roundabout.anubis_one": "Third Attack - Press Crouch Once",
+  "instruction.roundabout.anubis_two": "Third Attack - Press Crouch Twice",
   "instruction.roundabout.press_skill_memory":"Press Skill %1$s While Selecting A Memory",
 
   "ability.roundabout.punch": "Punch",
@@ -1337,7 +1360,7 @@
   "ability.roundabout.anubis_raging_light": "Raging Light",
   "ability.roundabout.anubis_raging_light.desc": "Force all mobs nearby to target you.",
   "ability.roundabout.anubis_backflip": "Backflip",
-  "ability.roundabout.anubis_backflip.desc": "Backflip to safety and can be done midair. Restores your pogo",
+  "ability.roundabout.anubis_backflip.desc": "Backflip to safety and can be done midair, restoring your pogo. Hold sneak to fastfall.",
   "ability.roundabout.anubis_record": "Record Memories",
   "ability.roundabout.anubis_record.desc": "Choose a slot and record a series of inputs. Pressing your hotbar keys lets you change the icon. The duration scales with your level",
   "ability.roundabout.anubis_replay": "Replay Memories",
@@ -1351,7 +1374,7 @@
 
 
   "ability.roundabout.blood_drink": "Blood Suck",
-  "ability.roundabout.blood_drink.desc": "Consume blood through your hands so long as you remain facing your target, damaging them to restore your blood. If a mob has drinkable blood, the indicator will appear in the middle of the screen. If a mob is not agitated, you can score a critical blood suck. Villagers and Illagers will zombify upon being killed by this skill, and can be controlled.",
+  "ability.roundabout.blood_drink.desc": "Consume blood through your hands so long as you remain facing your target, damaging them to restore your blood. If a mob has drinkable blood, the indicator will appear in the middle of the screen. If a mob is not agitated, you can score a critical blood suck. Villagers and Illagers will zombify upon being killed by this skill, and can be controlled. You can also absorb held plants for direct health.",
   "ability.roundabout.vampire_passive": "Vampiric",
   "ability.roundabout.vampire_passive.desc": "You evaporate in sunlight. You run on blood instead of hunger, and eating raw foods and monster drops provide blood with no penalties. You cannot die of starvation. Drowning only lowers your speed. Iron Golems detest you, while zombies are neutral with your presence.",
   "ability.roundabout.mass_heal": "Blood Healing",
@@ -1496,8 +1519,10 @@
   "idle.roundabout.ratt_1": "Head",
   "idle.roundabout.ratt_2": "Shoulder",
 
-  "idle.roundabout.anubis_1": "Sword Only",
-  "idle.roundabout.anubis_2": "Humanoid",
+  "idle.roundabout.anubis_1": "Left",
+  "idle.roundabout.anubis_2": "Right",
+  "idle.roundabout.anubis_3": "Back",
+  "idle.roundabout.anubis_4": "None",
 
 
   "skins.roundabout.star_platinum.base": "Part 3",
@@ -1734,6 +1759,8 @@
   "skins.roundabout.anubis.alluring": "Raging",
   "skins.roundabout.anubis.raging": "Alluring",
   "skins.roundabout.anubis.khopesh": "Khopesh",
+  "skins.roundabout.anubis.cleaver": "Cleaver",
+  "skins.roundabout.anubis.illusory": "Illusory",
 
   "roundabout.anubis.playback_title": "Replay Memories",
   "roundabout.anubis.memory_title": "Record Memories",
@@ -1750,6 +1777,7 @@
   "unlock_skin.roundabout.soft_and_wet.kira": "Killer Queen 8 Skin Unlocked!",
   "unlock_skin.roundabout.ratt.rat": "Rat? Unlocked!",
   "unlock_skin.roundabout.walking_heart.spider": "Webbing Heart Skin Unlocked!",
+  "unlock_skin.roundabout.anubis.traitor": "Traitor Skins Unlocked!",
 
   "justice.morph.player": "Player",
   "justice.morph.villager": "Villager",
@@ -1866,6 +1894,9 @@
   "advancements.roundabout.stand_arrow.description": "Acquire a stand arrow",
   "advancements.roundabout.dimension_hop.title": "Don't Fence Me In",
   "advancements.roundabout.dimension_hop.description": "Dimension hop with D4C for the first time",
+
+  "text.roundabout.zombie_disguise_off": "Disguise Removed",
+  "text.roundabout.zombie_disguise_on": "Disguise Created",
 
   "text.roundabout.hey_ya_messaging.no_1": "There is no such thing as loss, just learning!",
   "text.roundabout.hey_ya_messaging.no_2": "Your luck is one in five billion, you can do anything!",
@@ -1987,6 +2018,8 @@
   "config.roundabout.enableCream.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableRatt.name": "Enable Stand",
   "config.roundabout.enableRatt.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+  "config.roundabout.enableAnubis.name": "Enable Stand",
+  "config.roundabout.enableAnubis.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableMandom.name": "Enable Stand",
   "config.roundabout.enableMandom.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableAchtungBaby.name": "Enable Stand",
@@ -1997,6 +2030,10 @@
   "config.roundabout.enableCinderella.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableSurvivor.name": "Enable Stand",
   "config.roundabout.enableSurvivor.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+
+  "config.roundabout.blinkWithCamo.name": "Blink With Camo",
+  "config.roundabout.blinkWithCamo.desc": "Turn off to make the vampire camo move not blink if it somehow makes you uncomfortable in some way.",
+
 
   "config.roundabout.mountingHorsesInCreativeTamesThem.name": "Creative Mount To Tame",
   "config.roundabout.mountingHorsesInCreativeTamesThem.desc": "If you mount a horse in creative mode, you instantly tame it.",
@@ -2199,24 +2236,34 @@
   "config.roundabout.rattAttackBonusOnMobs.desc": "How much bonus damage Ratt darts deal to a mob.",
   "config.roundabout.rattAttackBonusOnBosses.name": "Bonus Boss Damage",
   "config.roundabout.rattAttackBonusOnBosses.desc": "Since Boss mobs cannot receive melt, they instead take a flat bonus damage ",
-
-  "config.roundabout.rattMaxDespawnRange.name": "Ratt Despawn Range",
+  "config.roundabout.rattMaxDespawnRange.name": "Despawn Range",
   "config.roundabout.rattMaxDespawnRange.desc": "How far you can go from Ratt until they despawn.",
-
   "config.roundabout.rattChargePerHit.name": "Manual Charge Per Hit",
   "config.roundabout.rattChargePerHit.desc": "How much manual charge Ratt gets from hitting a placed shot successfully. Default is 30, which means 3 hits to fully charge ",
-  "config.roundabout.rattManualChargeRate.name": "Manual Ratt Charge Speed",
+  "config.roundabout.rattManualChargeRate.name": "Manual Charge Speed",
   "config.roundabout.rattManualChargeRate.desc": "How quickly manually charging Ratt takes. default is 2 per tick which equals about 2.5 seconds to reach full charge.",
-
-  "config.roundabout.rattLeapCooldown.name": "Ratt Leap Cooldown",
+  "config.roundabout.rattLeapCooldown.name": "Leap Cooldown",
   "config.roundabout.rattLeapCooldown.desc": "The cooldown for Ratt's 4th move, Ratt Leap",
-  "config.roundabout.rattLeapStrength.name": "Ratt Leap Strength",
+  "config.roundabout.rattLeapStrength.name": "Leap Strength",
   "config.roundabout.rattLeapStrength.desc": "How strong Ratt's leap is",
 
   "config.roundabout.anubisMemoryOpen.name": "Anubis Memories",
   "config.roundabout.anubisMemories.name": "Anubis Client Settings",
   "config.roundabout.anubisPogoCounter.name": "Anubis Pogo Indicator",
   "config.roundabout.anubisPogoCounter.desc": "Displays a counter showing how many pogos you have done.",
+
+  "config.roundabout.anubisAttackMultOnPlayers.name": "Player Damage Multiplier",
+  "config.roundabout.anubisAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
+  "config.roundabout.anubisAttackMultOnMobs.name": "Mob Damage Multiplier",
+  "config.roundabout.anubisAttackMultOnMobs.desc": "How much damage the stand deals to every other mob, same math as above.",
+  "config.roundabout.anubisGuardPoints.name": "Guard Points",
+  "config.roundabout.anubisGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
+  "config.roundabout.anubisBackflipCooldown.name": "Backflip",
+  "config.roundabout.anubisBackflipCooldown.desc": "How long Backflip should go on cooldown",
+  "config.roundabout.anubisMaxMemory.name": "Max Memory Length",
+  "config.roundabout.anubisMaxMemory.desc": "The time, in ticks, that Anubis can record for at max level",
+
+
 
   "config.roundabout.mem1.name": "Memory 1",
   "config.roundabout.mem1.desc": "Memory 1",
@@ -2610,6 +2657,10 @@
   "config.roundabout.postTSSoften.desc": "Whether or not players take reduced damage from things beyond your control (gasoline, stand attacks) after a time stop ends. The duration is proportionate to how long they are stopped, and only applies for stops that last more than a second.",
   "config.roundabout.postTSCancel.name": "Post Stop Cancel",
   "config.roundabout.postTSCancel.desc": "Whether or not certain moves get canceled when time resumes. Disable for legacy version.",
+  "config.roundabout.timestopLeapCooldown.name": "Time Stop Leaping Cooldown",
+  "config.roundabout.timestopLeapCooldown.desc": "Time stop is disabled for a short time after a leap",
+  "config.roundabout.timestopCancelsFood.name": "Time Stop Cancels Food",
+  "config.roundabout.timestopCancelsFood.desc": "While in stopped time, you cannot gain healing from food",
 
 
   "config.roundabout.starPlatinumAttackMultOnPlayers.name": "Player Damage Multiplier",
@@ -2811,6 +2862,9 @@
 
   "config.roundabout.wallPassingHitboxes.name": "Some Abilities Pass Walls",
   "config.roundabout.wallPassingHitboxes.desc": "Some abilities in the mod like Walking Heart's heel spikes go through walls. If this poses a cheesing problem in your pack, turn this off.",
+
+  "config.roundabout.wallPassingHitboxesOnBosses.name": "Wall Pass On Bosses",
+  "config.roundabout.wallPassingHitboxesOnBosses.desc": "Some abilities in the mod like Walking Heart's heel spikes go through walls. This is a boss anti-cheese and is the above setting just purely for bosses.",
 
   "config.roundabout.namedSBRHorseSkins.name": "Named SBR Horses",
   "config.roundabout.namedSBRHorseSkins.desc": "Naming horses after select SBR ones changes their skins.",

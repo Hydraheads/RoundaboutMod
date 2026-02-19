@@ -9,6 +9,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.event.index.Poses;
+import net.hydra.jojomod.item.SnubnoseRevolverItem;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -86,16 +87,20 @@ public class FirstPersonSnubnoseModel<T extends Entity> extends PsuedoHierarchic
             IPlayerEntity ipe = ((IPlayerEntity) LE);
             this.root().getAllParts().forEach(ModelPart::resetPose);
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
-            boolean mainHandRight = true;
             if (LE instanceof Player player) {
-                mainHandRight = player.getMainArm() == HumanoidArm.RIGHT;
-                if (mainHandRight) {
-                    this.animate(ipe.roundabout$getSnubnoseModelAim(), Poses.SNUBNOSE_MODEL_AIM.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getSnubnoseModelRecoil(), Poses.SNUBNOSE_MODEL_RECOIL.ad, partialTicks, 1f);
-                } else if (!mainHandRight) {
-                    this.animate(ipe.roundabout$getSnubnoseModelAimLeft(), Poses.SNUBNOSE_MODEL_AIM_LEFT.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getSnubnoseModelRecoilLeft(), Poses.SNUBNOSE_MODEL_RECOIL_LEFT.ad, partialTicks, 1f);
+                boolean mainHandRight = player.getMainArm() == HumanoidArm.RIGHT;
+
+                if (LE.getUseItem().getItem() instanceof SnubnoseRevolverItem) {;
+                    if (mainHandRight) {
+                        this.animate(ipe.roundabout$getItemAnimation(), Poses.SNUBNOSE_MODEL_AIM.ad, partialTicks, 1f);
+                        this.animate(ipe.roundabout$getItemAnimationActive(), Poses.SNUBNOSE_MODEL_RECOIL.ad, partialTicks, 1f);
+                    } else {
+                        this.animate(ipe.roundabout$getItemAnimation(), Poses.SNUBNOSE_MODEL_AIM_LEFT.ad, partialTicks, 1f);
+                        this.animate(ipe.roundabout$getItemAnimationActive(), Poses.SNUBNOSE_MODEL_RECOIL_LEFT.ad, partialTicks, 1f);
+                    }
                 }
+
+
             }
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
         }

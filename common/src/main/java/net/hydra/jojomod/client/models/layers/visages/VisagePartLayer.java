@@ -9,7 +9,6 @@ import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.StandIcons;
-import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
@@ -27,6 +26,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -40,7 +40,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.hydra.jojomod.item.BowlerHatItem;
-import org.spongepowered.asm.mixin.Unique;
 
 import java.util.Map;
 
@@ -227,6 +226,9 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     if (pos2 == PlayerPosIndex.BARRAGE) {
                         renderBarrageArmsPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
                                 r, g, b);
+                    } else if (pos2 == PlayerPosIndex.BLOOD_SUCK){
+                        renderHairVein(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
+                                r, g, b);
                     } else if (pos2 == PlayerPosIndex.HAIR_EXTENSION || pos2 == PlayerPosIndex.HAIR_EXTENSION_2){
                         if (!isHurt){
                             r = pl.rdbt$getHairColorX();
@@ -347,6 +349,14 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     }
                 }
             }
+
+
+            if (ClientUtil.rendersRipperEyes(entity)) {
+                boolean isHurt = entity.hurtTime > 0;
+                renderRipperEyes(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
+                        1, 1, 1);
+            }
+
         }
     }
 
@@ -435,6 +445,14 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 r, g, b, 1);
         ClientUtil.popPoseAndCooperate(poseStack,33);
     }
+    public void renderHairVein(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                                float r, float g, float b) {
+        ClientUtil.pushPoseAndCooperate(poseStack,33);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.hairVeinPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1);
+        ClientUtil.popPoseAndCooperate(poseStack,33);
+    }
     public void renderPonytail(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                                    float r, float g, float b) {
 
@@ -467,6 +485,26 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.DiegoHatPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderRipperEyes(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                               float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().head.translateAndRotate(poseStack);
+        poseStack.translate(0,0,0.1);
+        boolean yes = false;
+        for (var i = 0; i < 80; i++) {
+            ClientUtil.pushPoseAndCooperate(poseStack,36);
+            if (yes) {
+                poseStack.scale(1.01F, 1.01F, 1.01F);
+            }
+            ModStrayModels.ripperEyesPart.render(entity, partialTicks, poseStack, bufferSource, LightTexture.FULL_BRIGHT,
+                    r, g, b, 0.8F);
+            ClientUtil.popPoseAndCooperate(poseStack,36);
+            poseStack.translate(0,0,-0.5);
+            yes = !yes;
+        }
         ClientUtil.popPoseAndCooperate(poseStack,36);
     }
     public void renderSpeedwagonFoundationHat(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,

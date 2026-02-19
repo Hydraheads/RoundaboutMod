@@ -7,6 +7,7 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.gui.*;
+import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsModel;
 import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsSlimModel;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerAmbientSound;
@@ -15,7 +16,6 @@ import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerMixingSound;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
-import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -28,20 +28,19 @@ import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
-import net.hydra.jojomod.networking.ClientToServerPackets;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
-import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;
-import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -50,7 +49,6 @@ import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.networking.ServerToClientPackets;
@@ -66,8 +64,7 @@ import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.monster.Skeleton;
-import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.TooltipFlag;
 import net.zetalasis.client.shader.D4CShaderFX;
@@ -106,7 +103,6 @@ import net.zetalasis.networking.packet.api.IClientNetworking;
 import net.zetalasis.world.DynamicWorld;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
-import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Unique;
 
@@ -127,6 +123,20 @@ public class ClientUtil {
     public static int skipInterpolationFixAccidentTicks = -1;
 
 
+    public static void animateZombieArmsNoBob(ModelPart $$0, ModelPart $$1, boolean $$2, float $$3, float $$4) {
+        float $$5 = Mth.sin($$3 * (float) Math.PI);
+        float $$6 = Mth.sin((1.0F - (1.0F - $$3) * (1.0F - $$3)) * (float) Math.PI);
+        $$1.zRot = 0.0F;
+        $$0.zRot = 0.0F;
+        $$1.yRot = -(0.1F - $$5 * 0.6F);
+        $$0.yRot = 0.1F - $$5 * 0.6F;
+        float $$7 = (float) -Math.PI / ($$2 ? 1.5F : 2.25F);
+        $$1.xRot = $$7;
+        $$0.xRot = $$7;
+        $$1.xRot += $$5 * 1.2F - $$6 * 0.4F;
+        $$0.xRot += $$5 * 1.2F - $$6 * 0.4F;
+    }
+
     public static void setCheck(){
         //Right-clicking a visage opens the power inventory (see inputevents mixin for another use case)
         KeyInputs.menuKey(Minecraft.getInstance().player, Minecraft.getInstance());
@@ -143,6 +153,16 @@ public class ClientUtil {
 
     public static double getCameradDistance(Entity ent){
         return Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().distanceTo(ent.position());
+    }
+
+    public static boolean rendersRipperEyes(Entity ent){
+        if (ent instanceof Player pl && ((IPlayerEntity)pl).roundabout$GetPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE){
+            return true;
+        }
+        return false;
+    }
+    public static boolean disableBobbing(Entity ent){
+        return rendersRipperEyes(ent);
     }
 
     public static boolean hasChangedArms(Entity ent){
@@ -836,6 +856,10 @@ public class ClientUtil {
             }
         } else if (context == PacketDataIndex.AESTHETICIAN_OPEN){
             setCinderellaUI2(true,data);
+        } else if (context == PacketDataIndex.S2C_INT_RIPPER_EYES) {
+            if (((IPowersPlayer)player).rdbt$getPowers() instanceof VampireGeneralPowers vgp){
+                vgp.ripperEyesLeft = data;
+            }
         }
     }
     public static void handleDoubleIntPacketS2C(Player player, int data, int data2, byte context) {
@@ -987,9 +1011,42 @@ public class ClientUtil {
                             ));
                 }
             }
+
+            byte posX = ((IPlayerEntity)pl).roundabout$GetPos2();
+            if (posX == PlayerPosIndex.VANISH_PERSIST){
+                throwFade = 0;
+            } else if (posX == PlayerPosIndex.VANISH_START){
+                if (!ConfigManager.getClientConfig().blinkWithCamo){
+                    throwFade = 0;
+                } else {
+                    int tc = pl.tickCount % 8;
+                    if (tc  == 0){
+                        throwFade = 1 - (delta*0.5F);
+                    }else if (tc  == 1){
+                        throwFade = 0.5F - (delta*0.5F);
+                    }else if (tc  == 2 || tc == 3){
+                        throwFade = 0;
+                    }else if (tc  == 4){
+                        throwFade = 0 + (delta*0.5F);
+                    }else if (tc  == 5){
+                        throwFade = 0.5F +  (delta*0.5F);
+                    }
+                }
+            }
         }
 
         return throwFade;
+    }
+
+    public static PlayerModel getPlayerModel(Entity entity){
+        if (entity instanceof Player player){
+            EntityRenderDispatcher dispatch = Minecraft.getInstance().getEntityRenderDispatcher();
+            EntityRenderer<?> ER = dispatch.getRenderer(player);
+            if (ER instanceof LivingEntityRenderer PR && PR.getModel() instanceof PlayerModel<?> pm) {
+                return pm;
+            }
+        }
+        return null;
     }
 
     public static void setThrowFadeToTheEther(float ether){
@@ -1018,20 +1075,8 @@ public class ClientUtil {
                 return 10978493;
             }
 
-            if (powers instanceof PowersRatt PR) {
-                if (PR.getShootTarget() != null) {
-                    if (PR.getShootTarget().equals(entity)) {
-                        return 15230850;
-                    }
-                }
-            }
-            if (entity instanceof RattEntity RE) {
-                if(powers.getSelf() == RE.getUser()) {
-                    if(powers.isHoldingSneak()) {
-                        return 6714709;
-                    }
-                }
-            }
+
+
 
             if (powers.highlightsEntity(entity, player))
                 return powers.highlightsEntityColor(entity,player);
@@ -1655,43 +1700,68 @@ public class ClientUtil {
 
     public static<T extends LivingEntity, M extends EntityModel<T>> void renderFirstPersonModelParts(Entity cameraEnt, float $$4, PoseStack stack, MultiBufferSource source, int light){
 
-        if (cameraEnt instanceof Player play && ((IFatePlayer)cameraEnt).rdbt$getFatePowers() instanceof VampireFate vf){
-            int poggers = vf.getProgressIntoAnimation();
-            if (poggers >= 16 && poggers <= 22) {
-                stack.pushPose();
-                poggers -= 16;
-                Vec3 vec = cameraEnt.getEyePosition();
+        if (cameraEnt instanceof Player play) {
 
-                IPlayerEntity pl = ((IPlayerEntity) cameraEnt);
-                float r = pl.rdbt$getHairColorX();
-                float g = pl.rdbt$getHairColorY();
-                float b = pl.rdbt$getHairColorZ();
+            // vampire
+            if (((IFatePlayer)cameraEnt).rdbt$getFatePowers() instanceof VampireFate vf){
+                int poggers = vf.getProgressIntoAnimation();
+                if (poggers >= 16 && poggers <= 22) {
+                    stack.pushPose();
+                    poggers -= 16;
+                    Vec3 vec = cameraEnt.getEyePosition();
+
+                    IPlayerEntity pl = ((IPlayerEntity) cameraEnt);
+                    float r = pl.rdbt$getHairColorX();
+                    float g = pl.rdbt$getHairColorY();
+                    float b = pl.rdbt$getHairColorZ();
 
 
-                ItemStack visage = pl.roundabout$getMaskSlot();
-                if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
-                    VisageData vd = ME.visageData;
-                    if (vd != null && vd.isCharacterVisage()) {
-                        r = ((float) vd.getHairColor().getX()) / 255;
-                        g = ((float) vd.getHairColor().getY()) / 255;
-                        b = ((float) vd.getHairColor().getZ()) / 255;
+                    ItemStack visage = pl.roundabout$getMaskSlot();
+                    if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
+                        VisageData vd = ME.visageData;
+                        if (vd != null && vd.isCharacterVisage()) {
+                            r = ((float) vd.getHairColor().getX()) / 255;
+                            g = ((float) vd.getHairColor().getY()) / 255;
+                            b = ((float) vd.getHairColor().getZ()) / 255;
+                        }
                     }
+
+
+                    Vec3 gtranslation = new Vec3(0, -0.5, 0);
+                    stack.translate(gtranslation.x, gtranslation.y, gtranslation.z);
+                    stack.mulPose(Axis.ZP.rotationDegrees(180f));
+                    stack.mulPose(Axis.XP.rotationDegrees(1));
+
+                    ModStrayModels.VampireHairFlesh.render(cameraEnt, $$4, stack, source, light, r, g, b, 1);
+
+                    stack.popPose();
                 }
-
-
-                Vec3 gtranslation = new Vec3(0, -0.5, 0);
-                stack.translate(gtranslation.x, gtranslation.y, gtranslation.z);
-                stack.mulPose(Axis.ZP.rotationDegrees(180f));
-                stack.mulPose(Axis.XP.rotationDegrees(1));
-
-                ModStrayModels.VampireHairFlesh.render(cameraEnt, $$4, stack, source, light, r, g, b, 1);
-
-                stack.popPose();
             }
-        }
-        if (cameraEnt instanceof Player play){
-            byte bt = ((IPlayerEntity)play).roundabout$GetPos2();
-            if (bt == PlayerPosIndex.BARRAGE) {
+            byte bt = ((IPlayerEntity) play).roundabout$GetPos2();
+            // vampire again
+            if (ClientUtil.rendersRipperEyes(play)) {
+                stack.pushPose();
+                Vec3 gtranslation = new Vec3(0, -0.1, 0);
+                stack.translate(gtranslation.x, gtranslation.y, gtranslation.z);
+                float opacity = 0.5F;
+                stack.mulPose(Axis.ZP.rotationDegrees(180f));
+                boolean yes = false;
+                for (var i = 0; i< 20; i++) {
+                    stack.pushPose();
+                    if (yes) {
+                        stack.scale(1.01F, 1.01F, 1.01F);
+                    }
+                    //gtranslation = RotationUtil.vecPlayerToWorld(gtranslation,gravityDirection);
+
+                    ModStrayModels.ripperEyesPart.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source,
+                            LightTexture.FULL_BRIGHT,
+                            1, 1, 1, opacity);
+                    yes = !yes;
+                    stack.popPose();
+                    stack.translate(0,0,-0.5);
+                }
+                stack.popPose();
+            } else if (bt == PlayerPosIndex.BARRAGE) {
                 stack.pushPose();
 
                 boolean isHurt = play.hurtTime > 0;
@@ -1724,14 +1794,14 @@ public class ClientUtil {
 
 
                 ItemStack visage = pl.roundabout$getMaskSlot();
-                    if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
-                        VisageData vd = ME.visageData;
-                        if (vd != null && vd.isCharacterVisage()) {
-                            r = ((float) vd.getHairColor().getX()) / 255;
-                            g = ((float) vd.getHairColor().getY()) / 255;
-                            b = ((float) vd.getHairColor().getZ()) / 255;
-                        }
+                if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
+                    VisageData vd = ME.visageData;
+                    if (vd != null && vd.isCharacterVisage()) {
+                        r = ((float) vd.getHairColor().getX()) / 255;
+                        g = ((float) vd.getHairColor().getY()) / 255;
+                        b = ((float) vd.getHairColor().getZ()) / 255;
                     }
+                }
                 Vec3 gtranslation = new Vec3(0, 0.1, 0);
                 stack.translate(gtranslation.x, gtranslation.y, gtranslation.z);
 
@@ -1741,9 +1811,7 @@ public class ClientUtil {
                         r, g, b, 1);
                 stack.popPose();
             }
-        }
 
-        if (cameraEnt instanceof Player play) {
             IPlayerEntity pl = ((IPlayerEntity) cameraEnt);
 
             boolean slimBoolean = false;
@@ -1756,194 +1824,55 @@ public class ClientUtil {
                 slimBoolean = ipm.roundabout$getSlim();
             }
 
-            if (play.getUseItem().getItem() instanceof SnubnoseRevolverItem &&
-                    !play.getCooldowns().isOnCooldown(play.getUseItem().getItem())) {
+            Item item = play.getUseItem().getItem();
+            if (item instanceof FirearmItem) {
                 stack.pushPose();
 
                 FirstPersonArmsModel.player = play;
                 FirstPersonArmsSlimModel.player = play;
-                if (play.getMainArm() == HumanoidArm.RIGHT) {
-                    pl.roundabout$getSnubnoseModelRecoil().stop();
-                    pl.roundabout$getSnubnoseModelAim().startIfStopped(cameraEnt.tickCount);
-                    pl.roundabout$getSnubnoseRecoil().stop();
-                    pl.roundabout$getSnubnoseAim().startIfStopped(cameraEnt.tickCount);
-                } else if (play.getMainArm() == HumanoidArm.LEFT) {
-                    pl.roundabout$getSnubnoseModelRecoilLeft().stop();
-                    pl.roundabout$getSnubnoseModelAimLeft().startIfStopped(cameraEnt.tickCount);
-                    pl.roundabout$getSnubnoseRecoilLeft().stop();
-                    pl.roundabout$getSnubnoseAimLeft().startIfStopped(cameraEnt.tickCount);
+
+
+
+                if (play.getCooldowns().isOnCooldown(play.getUseItem().getItem())) {
+                    pl.roundabout$getItemAnimationActive().startIfStopped(cameraEnt.tickCount);
+                    pl.roundabout$getItemAnimation().stop();
+                } else {
+                    pl.roundabout$getItemAnimationActive().stop();
+                    pl.roundabout$getItemAnimation().startIfStopped(cameraEnt.tickCount);
                 }
-                if (!slimBoolean) {
-                    ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
-                } else if (slimBoolean) {
-                    ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+
+
+                if (!(item instanceof JackalRifleItem)) {
+                    if (slimBoolean) {
+                        ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
+                    } else {
+                        ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
+                    }
                 }
-                ModStrayModels.FirstPersonSnubnoseModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+
+                if (item instanceof SnubnoseRevolverItem) {
+                    ModStrayModels.FirstPersonSnubnoseModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+                } else if (item instanceof ColtRevolverItem) {
+                    ModStrayModels.FirstPersonColtRevolverModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+                } else if (item instanceof TommyGunItem) {
+                    ModStrayModels.FirstPersonTommyGunModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+                }
+
 
                 stack.popPose();
-            } else if (play.getUseItem().getItem() instanceof SnubnoseRevolverItem && play.getCooldowns().isOnCooldown(play.getUseItem().getItem())) {
-                stack.pushPose();
-
-                FirstPersonArmsModel.player = play;
-                FirstPersonArmsSlimModel.player = play;
-                if (play.getMainArm() == HumanoidArm.RIGHT) {
-                    pl.roundabout$getSnubnoseModelAim().stop();
-                    pl.roundabout$getSnubnoseModelRecoil().startIfStopped(cameraEnt.tickCount);
-                    pl.roundabout$getSnubnoseAim().stop();
-                    pl.roundabout$getSnubnoseRecoil().startIfStopped(cameraEnt.tickCount);
-                } else if (play.getMainArm() == HumanoidArm.LEFT) {
-                    pl.roundabout$getSnubnoseModelAimLeft().stop();
-                    pl.roundabout$getSnubnoseModelRecoilLeft().startIfStopped(cameraEnt.tickCount);
-                    pl.roundabout$getSnubnoseAimLeft().stop();
-                    pl.roundabout$getSnubnoseRecoilLeft().startIfStopped(cameraEnt.tickCount);
-                }
-                if (!slimBoolean) {
-                    ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
-                } else if (slimBoolean) {
-                    ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
-                }
-                ModStrayModels.FirstPersonSnubnoseModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
-
-                stack.popPose();
-            } else if (play.getUseItem().getItem() instanceof TommyGunItem && !play.getCooldowns().isOnCooldown(play.getUseItem().getItem())) {
-                stack.pushPose();
-
-                FirstPersonArmsModel.player = play;
-                FirstPersonArmsSlimModel.player = play;
-                if (play.getMainArm() == HumanoidArm.RIGHT) {
-                    pl.roundabout$getTommyModelRecoil().stop();
-                    pl.roundabout$getTommyRecoil().stop();
-                    pl.roundabout$getTommyModelAim().startIfStopped(cameraEnt.tickCount);
-                    pl.roundabout$getTommyAim().startIfStopped(cameraEnt.tickCount);
-                } else if (play.getMainArm() == HumanoidArm.LEFT) {
-                    pl.roundabout$getTommyModelRecoilLeft().stop();
-                    pl.roundabout$getTommyRecoilLeft().stop();
-                    pl.roundabout$getTommyModelAimLeft().startIfStopped(cameraEnt.tickCount);
-                    pl.roundabout$getTommyAimLeft().startIfStopped(cameraEnt.tickCount);
-                }
-                if (!slimBoolean) {
-                    ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
-                } else if (slimBoolean) {
-                    ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
-                }
-                ModStrayModels.FirstPersonTommyGunModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
-
-                stack.popPose();
-            } else if (play.getUseItem().getItem() instanceof TommyGunItem && play.getCooldowns().isOnCooldown(play.getUseItem().getItem())) {
-                stack.pushPose();
-
-                FirstPersonArmsModel.player = play;
-                FirstPersonArmsSlimModel.player = play;
-                if (play.getMainArm() == HumanoidArm.RIGHT) {
-                    pl.roundabout$getTommyModelAim().stop();
-                    pl.roundabout$getTommyAim().stop();
-                    pl.roundabout$getTommyModelRecoil().startIfStopped(cameraEnt.tickCount);
-                    pl.roundabout$getTommyRecoil().startIfStopped(cameraEnt.tickCount);
-                } else if (play.getMainArm() == HumanoidArm.LEFT) {
-                    pl.roundabout$getTommyModelAimLeft().stop();
-                    pl.roundabout$getTommyAimLeft().stop();
-                    pl.roundabout$getTommyModelRecoilLeft().startIfStopped(cameraEnt.tickCount);
-                    pl.roundabout$getTommyRecoilLeft().startIfStopped(cameraEnt.tickCount);
-                }
-                if (!slimBoolean) {
-                    ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
-                } else if (slimBoolean) {
-                    ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
-                }
-                ModStrayModels.FirstPersonTommyGunModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
-
-                stack.popPose();
-            } else if (play.getUseItem().getItem() instanceof ColtRevolverItem && !play.getCooldowns().isOnCooldown(play.getUseItem().getItem())) {
-                stack.pushPose();
-
-                FirstPersonArmsModel.player = play;
-                FirstPersonArmsSlimModel.player = play;
-                if (play.getMainArm() == HumanoidArm.RIGHT) {
-                    pl.roundabout$getColtModelRecoil().stop();
-                    pl.roundabout$getColtModelAim().startIfStopped(cameraEnt.tickCount);
-                    pl.roundabout$getColtRecoil().stop();
-                    pl.roundabout$getColtAim().startIfStopped(cameraEnt.tickCount);
-                } else if (play.getMainArm() == HumanoidArm.LEFT) {
-                    pl.roundabout$getColtModelRecoilLeft().stop();
-                    pl.roundabout$getColtModelAimLeft().startIfStopped(cameraEnt.tickCount);
-                    pl.roundabout$getColtRecoilLeft().stop();
-                    pl.roundabout$getColtAimLeft().startIfStopped(cameraEnt.tickCount);
-                }
-                if (!slimBoolean) {
-                    ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
-                } else if (slimBoolean) {
-                    ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
-                }
-                ModStrayModels.FirstPersonColtRevolverModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
-
-                stack.popPose();
-            } else if (play.getUseItem().getItem() instanceof ColtRevolverItem && play.getCooldowns().isOnCooldown(play.getUseItem().getItem())) {
-                stack.pushPose();
-
-                FirstPersonArmsModel.player = play;
-                FirstPersonArmsSlimModel.player = play;
-                if (play.getMainArm() == HumanoidArm.RIGHT) {
-                    pl.roundabout$getColtModelAim().stop();
-                    pl.roundabout$getColtModelRecoil().startIfStopped(cameraEnt.tickCount);
-                    pl.roundabout$getColtAim().stop();
-                    pl.roundabout$getColtRecoil().startIfStopped(cameraEnt.tickCount);
-                } else if (play.getMainArm() == HumanoidArm.LEFT) {
-                    pl.roundabout$getColtModelAimLeft().stop();
-                    pl.roundabout$getColtModelRecoilLeft().startIfStopped(cameraEnt.tickCount);
-                    pl.roundabout$getColtAimLeft().stop();
-                    pl.roundabout$getColtRecoilLeft().startIfStopped(cameraEnt.tickCount);
-                }
-                if (!slimBoolean) {
-                    ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
-                } else if (slimBoolean) {
-                    ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
-                }
-                ModStrayModels.FirstPersonColtRevolverModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
-
-        stack.popPose();
             } else {
-                snubnoseRenderCleanupHelper(cameraEnt);
-                tommyRenderCleanupHelper(cameraEnt);
-                coltRenderCleanupHelper(cameraEnt);
+                pl.roundabout$getItemAnimation().stop();
+                pl.roundabout$getItemAnimationActive().stop();
             }
+
+            if (AnubisLayer.shouldRender(play) != null) {
+                  ModStrayModels.ANUBIS.renderFirstPerson(stack,source,light,play,$$4);
+            }
+
         }
+
     }
-    public static void snubnoseRenderCleanupHelper(Entity cameraEnt) {
-        IPlayerEntity pl = ((IPlayerEntity) cameraEnt);
-        pl.roundabout$getSnubnoseModelAim().stop();
-        pl.roundabout$getSnubnoseModelRecoil().stop();
-        pl.roundabout$getSnubnoseAim().stop();
-        pl.roundabout$getSnubnoseRecoil().stop();
-        pl.roundabout$getSnubnoseModelAimLeft().stop();
-        pl.roundabout$getSnubnoseModelRecoilLeft().stop();
-        pl.roundabout$getSnubnoseAimLeft().stop();
-        pl.roundabout$getSnubnoseRecoilLeft().stop();
-    }
-    public static boolean isJumpKeyHeld(){
-        return Minecraft.getInstance().options.keyJump.isDown();
-    }
-    public static void tommyRenderCleanupHelper(Entity cameraEnt) {
-        IPlayerEntity pl = ((IPlayerEntity) cameraEnt);
-        pl.roundabout$getTommyModelAim().stop();
-        pl.roundabout$getTommyModelRecoil().stop();
-        pl.roundabout$getTommyAim().stop();
-        pl.roundabout$getTommyRecoil().stop();
-        pl.roundabout$getTommyModelAimLeft().stop();
-        pl.roundabout$getTommyModelRecoilLeft().stop();
-        pl.roundabout$getTommyAimLeft().stop();
-        pl.roundabout$getTommyRecoilLeft().stop();
-    }
-public static void coltRenderCleanupHelper(Entity cameraEnt) {
-        IPlayerEntity pl = ((IPlayerEntity) cameraEnt);
-        pl.roundabout$getColtModelAim().stop();
-        pl.roundabout$getColtModelRecoil().stop();
-        pl.roundabout$getColtAim().stop();
-        pl.roundabout$getColtRecoil().stop();
-        pl.roundabout$getColtModelAimLeft().stop();
-        pl.roundabout$getColtModelRecoilLeft().stop();
-        pl.roundabout$getColtAimLeft().stop();
-        pl.roundabout$getColtRecoilLeft().stop();
-}
+
     @Unique
     public static void roundabout$renderBound(LivingEntity victim, float delta, PoseStack poseStack, MultiBufferSource mb, Entity binder, float focus) {
         poseStack.pushPose();
@@ -2085,6 +2014,17 @@ public static void coltRenderCleanupHelper(Entity cameraEnt) {
         }
     }
 
+    public static boolean forceEntityRendering(Entity entity){
+        if (entity instanceof Player pl){
+            if (((StandUser)pl).roundabout$hasStandOut()){
+                return true;
+            }
+            if (((IPlayerEntity)pl).roundabout$GetPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE){
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**Simulating Blood Bar and whatnot*/
     public static void renderHungerStuff(GuiGraphics graphics, Player player, int width, int height, int rand,

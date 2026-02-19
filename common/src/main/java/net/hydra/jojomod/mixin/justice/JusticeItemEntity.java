@@ -2,7 +2,7 @@ package net.hydra.jojomod.mixin.justice;
 
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.item.FogBlockItem;
+import net.hydra.jojomod.item.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ItemEntity.class)
 public abstract class JusticeItemEntity extends Entity {
 
+
     /**This mixin makes fog blocks as items disappear fast and be foggy*/
     @Inject(method = "tick", at = @At(value = "HEAD"))
     protected void roundabout$tick(CallbackInfo ci) {
@@ -32,6 +33,16 @@ public abstract class JusticeItemEntity extends Entity {
                             this.getRandomY(), this.getRandomZ(3),
                             0, 0.0, 0.5, 0.0, 0.35);
                 }
+            }
+        } else if (getItem().getItem() instanceof FirearmItem fa){
+            if (fa instanceof SnubnoseRevolverItem sri){
+                sri.cancelReload(getItem(),null);
+            } else if (fa instanceof ColtRevolverItem sri){
+                sri.cancelReload(getItem(),null);
+            } else if (fa instanceof TommyGunItem sri){
+                sri.cancelReload(getItem(),null);
+            } else if (fa instanceof JackalRifleItem sri){
+                sri.cancelReload(getItem(),null);
             }
         }
     }

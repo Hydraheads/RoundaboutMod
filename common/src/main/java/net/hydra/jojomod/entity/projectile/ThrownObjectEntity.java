@@ -307,6 +307,15 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     thrower.level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                 }
             }
+        } else if (item.getItem() instanceof AnubisItem) {
+            ThrownAnubisEntity anubis = new ThrownAnubisEntity(thrower, thrower.level(),item);
+            anubis.setPos(pos);
+            anubis.shootFromRotation(thrower, xRot, yRot, 0.0F, 2F*mult, getShotAccuracy);
+            thrower.level().addFreshEntity(anubis);
+
+            if (playSounds){
+                thrower.level().playSound(null, anubis, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+            }
         } else {
             boolean canPlace = getCanPlace;
             ThrownObjectEntity thrownBlockOrItem = new ThrownObjectEntity(thrower, thrower.level(), item, canPlace);
@@ -650,6 +659,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         if ($$1 instanceof LivingEntity LE){
             if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectile(this,$$0)){
                 this.discard();
+                return;
+            } else if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectileNoDiscard(this,$$0)){
                 return;
             }
         } else if ($$1 instanceof SoftAndWetPlunderBubbleEntity){

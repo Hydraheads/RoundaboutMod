@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity;
 
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
@@ -32,6 +33,7 @@ public class ModEntities {
     public static float justiceHeight = 0.65f;
     public static float justiceWidth = 0.65F;
     public static EntityType<TerrierEntity> TERRIER_DOG;
+    public static EntityType<AnubisGuardian> ANUBIS_GUARDIAN;
     public static EntityType<TheWorldEntity> THE_WORLD;
     public static EntityType<TheWorldEntity> THE_WORLD_ULTIMATE;
     public static EntityType<StarPlatinumEntity> STAR_PLATINUM;
@@ -70,6 +72,8 @@ public class ModEntities {
     public static EntityType<CrossfireHurricaneEntity> CROSSFIRE_HURRICANE;
     public static EntityType<LifeTrackerEntity> LIFE_TRACKER;
     public static EntityType<StandFireballEntity> STAND_FIREBALL;
+    public static EntityType<EvilAuraProjectile> EVIL_AURA_PROJECTILE;
+    public static EntityType<RipperEyesProjectile> RIPPER_EYES_PROJECTILE;
 
     public static EntityType<GasolineCanEntity> GASOLINE_CAN;
     public static EntityType<RoadRollerEntity> ROAD_ROLLER_ENTITY;
@@ -79,6 +83,7 @@ public class ModEntities {
 
     public static EntityType<StandArrowEntity> STAND_ARROW;
     public static EntityType<ThrownObjectEntity> THROWN_OBJECT;
+    public static EntityType<ThrownAnubisEntity> THROWN_ANUBIS;
     public static EntityType<CinderellaVisageDisplayEntity> CINDERELLA_VISAGE_DISPLAY;
     public static EntityType<ConcealedFlameObjectEntity> CONCEALED_FLAME_OBJECT;
     public static EntityType<GroundHurricaneEntity> GROUND_HURRICANE;

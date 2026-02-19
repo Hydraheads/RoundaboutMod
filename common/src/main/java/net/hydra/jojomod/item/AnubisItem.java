@@ -4,20 +4,27 @@ package net.hydra.jojomod.item;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
+import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -44,7 +51,7 @@ public class AnubisItem extends Item {
 
                 List<LivingEntity> targets = new ArrayList<>();
                 for (LivingEntity target : $$2.level().getNearbyEntities(LivingEntity.class, TargetingConditions.forCombat(),$$2,$$2.getBoundingBox().inflate(20))) {
-                    if (!target.equals($$2) && target.isAlive() && target.attackable()) {
+                    if (!target.equals($$2) && target.isAlive() && target.attackable() && !(target instanceof FlyingMob) ) {
                         targets.add(target);
                     }
                 }
@@ -52,6 +59,12 @@ public class AnubisItem extends Item {
                 p.setPos($$2.getPosition(1));
                 $$1.addFreshEntity(p);
                 SU.roundabout$setPossessor(p);
+
+                if (!targets.isEmpty()) {
+                    ((StandUser)$$2).roundabout$setActive(false);
+                }
+
+                AnubisItem.aggroOnto($$2);
             }
         }
         return $$0;
@@ -85,7 +98,7 @@ public class AnubisItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
 
-        ((IPlayerEntity)$$1).roundabout$getThirdPersonAnubisUnsheath().startIfStopped($$1.tickCount);
+    //    ((IPlayerEntity)$$1).roundabout$getThirdPersonAnubisUnsheath().startIfStopped($$1.tickCount);
 
         ItemStack $$3 = $$1.getItemInHand($$2);
         $$1.startUsingItem($$2);
@@ -103,4 +116,32 @@ public class AnubisItem extends Item {
     }
 
 
+    public static int aggroOnto(LivingEntity LE) {
+        int radius = 13;
+        AABB box = LE.getBoundingBox().inflate(radius,2,radius);
+        List<Mob> entities = LE.level().getNearbyEntities(Mob.class, TargetingConditions.DEFAULT,LE,box);
+        entities.removeIf(entity -> entity instanceof Villager);
+        entities.removeIf(entity -> entity instanceof NeutralMob && entity.getTarget() == null);
+        entities.removeIf(entity -> entity instanceof Piglin && entity.getTarget() == null);
+        for (Mob M : entities) {
+            if (M instanceof Wolf W && W.getOwner().equals(LE) ) {
+                W.setTarget(null);
+            }
+        }
+        entities.removeIf(entity ->  (entity instanceof TamableAnimal TA && TA.isTame()) );
+
+        for (Mob M : entities) {
+            M.setTarget(LE);
+            M.setLastHurtByMob(LE);
+        }
+
+        Vec3 pos = LE.getPosition(1);
+
+        ((ServerLevel) LE.level()).sendParticles(ModParticles.RAGING_LIGHT,
+                pos.x,
+                pos.y + LE.getEyeHeight(),
+                pos.z,
+                30, 0, 0, 0, 0.4);
+        return entities.size();
+    }
 }

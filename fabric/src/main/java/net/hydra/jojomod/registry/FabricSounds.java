@@ -257,6 +257,8 @@ public class FabricSounds {
         addSound(ModSounds.ANUBIS_THRUST_CUT_ID, ModSounds.ANUBIS_THRUST_CUT_EVENT);
         addSound(ModSounds.ANUBIS_THRUST_MISS_ID, ModSounds.ANUBIS_THRUST_MISS_EVENT);
         addSound(ModSounds.ANUBIS_UPPERCUT_ID, ModSounds.ANUBIS_UPPERCUT_EVENT);
+        addSound(ModSounds.ANUBIS_SHIELDBREAK_ID, ModSounds.ANUBIS_SHIELDBREAK_EVENT);
+        addSound(ModSounds.ANUBIS_EXTRA_ID, ModSounds.ANUBIS_EXTRA_EVENT);
 
 
 
@@ -293,6 +295,9 @@ public class FabricSounds {
         addSound(ModSounds.BLOCK_GRAB_ID, ModSounds.BLOCK_GRAB_EVENT);
         addSound(ModSounds.BLOCK_THROW_ID, ModSounds.BLOCK_THROW_EVENT);
         addSound(ModSounds.BALL_BEARING_SHOT_ID, ModSounds.BALL_BEARING_SHOT_EVENT);
+        addSound(ModSounds.EVIL_AURA_BLAST_ID, ModSounds.EVIL_AURA_BLAST_EVENT);
+        addSound(ModSounds.AURA_IMPACT_ID, ModSounds.AURA_IMPACT_EVENT);
+        addSound(ModSounds.VAMPIRE_CAMO_ID, ModSounds.VAMPIRE_CAMO_EVENT);
         addSound(ModSounds.ITEM_CATCH_ID, ModSounds.ITEM_CATCH_EVENT);
 
         addSound(ModSounds.HEY_YA_1_ID, ModSounds.HEY_YA_1_EVENT);
@@ -308,6 +313,9 @@ public class FabricSounds {
         addSound(ModSounds.SURVIVOR_PLACE_ID, ModSounds.SURVIVOR_PLACE_EVENT);
         addSound(ModSounds.SURVIVOR_REMOVE_ID, ModSounds.SURVIVOR_REMOVE_EVENT);
         addSound(ModSounds.ACHTUNG_BURST_ID, ModSounds.ACHTUNG_BURST_EVENT);
+        addSound(ModSounds.RIPPER_EYES_BEAM_ID, ModSounds.RIPPER_EYES_BEAM_EVENT);
+        addSound(ModSounds.RIPPER_EYES_CHARGE_ID, ModSounds.RIPPER_EYES_CHARGE_EVENT);
+        addSound(ModSounds.RIPPER_EYES_SHORT_ID, ModSounds.RIPPER_EYES_SHORT_EVENT);
         addSound(ModSounds.SUMMON_ACHTUNG_ID, ModSounds.SUMMON_ACHTUNG_EVENT);
         addSound(ModSounds.SUMMON_DIVER_DOWN_ID, ModSounds.SUMMON_DIVER_DOWN_EVENT);
         addSound(ModSounds.SUMMON_WALKING_ID, ModSounds.SUMMON_WALKING_EVENT);

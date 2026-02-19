@@ -13,6 +13,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -56,26 +57,53 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
     public abstract boolean isClientSide();
 
 
-
-
+    @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$ANUBIS_TICKS = SynchedEntityData.defineId(Villager.class,
+            EntityDataSerializers.INT);
+    @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$ANUBIS_TYPE = SynchedEntityData.defineId(Villager.class,
+            EntityDataSerializers.BYTE);
 
     @Unique
-    @Override
     public int roundabout$getAnubisTicks() {
         return this.getEntityData().get(ROUNDABOUT$ANUBIS_TICKS);
     }
     @Unique
-    @Override
     public void roundabout$setAnubisTicks(int i) {
         this.getEntityData().set(ROUNDABOUT$ANUBIS_TICKS,i);
     }
     @Unique
-    private static final EntityDataAccessor<Integer> ROUNDABOUT$ANUBIS_TICKS = SynchedEntityData.defineId(Villager.class,
-            EntityDataSerializers.INT);
+    public byte roundabout$getAnubisType() {
+        return this.getEntityData().get(ROUNDABOUT$ANUBIS_TYPE);
+    }
+    @Unique
+    public void roundabout$setAnubisType(byte i) {
+        this.getEntityData().set(ROUNDABOUT$ANUBIS_TYPE,i);
+    }
+
+
+
+
+    @Inject(method = "addAdditionalSaveData",at = @At("HEAD"))
+    private void roundabout$saveAdditionalData(CompoundTag $$0, CallbackInfo ci) {
+        if (this.roundabout$getAnubisTicks() != -1) {
+            $$0.putByte("roundabout.heldAnubis",this.roundabout$getAnubisType());
+        }
+    }
+
+    @Inject(method = "readAdditionalSaveData",at = @At("HEAD"))
+    private void roundabout$readAddtionalData(CompoundTag $$0, CallbackInfo ci) {
+        if ($$0.contains("roundabout.heldAnubis")) {
+            this.roundabout$setAnubisTicks(30);
+            this.roundabout$setAnubisType($$0.getByte("roundabout.heldAnubis"));
+        }
+    }
+
     @Inject(method = "defineSynchedData",at=@At(value = "TAIL"))
-    public void roundabout$addVillagerSynched(CallbackInfo ci) {
+    private void roundabout$addVillagerSynched(CallbackInfo ci) {
         if (!((Villager)(Object)this).getEntityData().hasItem(ROUNDABOUT$ANUBIS_TICKS) ) {
             ((Villager)(Object)this).getEntityData().define(ROUNDABOUT$ANUBIS_TICKS, -1);
+            ((Villager)(Object)this).getEntityData().define(ROUNDABOUT$ANUBIS_TYPE, (byte)-1);
         }
     }
     /// currently broken, unsure why
@@ -88,7 +116,10 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
             if (at >= 0) {
                 at--;
 
-                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.ANUBIS_ITEM));
+                ItemStack stack = new ItemStack(ModItems.ANUBIS_ITEM);
+                stack.getOrCreateTag().putFloat("CustomModelData",this.roundabout$getAnubisType()+1);
+
+                this.setItemSlot(EquipmentSlot.MAINHAND,stack);
                 this.setDropChance(EquipmentSlot.MAINHAND, 1.0F);
 
                 ((ServerLevel) this.level()).sendParticles(ParticleTypes.FIREWORK, this.getX(),
@@ -110,8 +141,9 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
     private void villagerAnubisInteraction(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
         if (!isClientSide() &&  this.entityData.get(ROUNDABOUT$ANUBIS_TICKS) <= 0  ) {
             Villager This = (Villager) (Object) this;
+            ItemStack stack = $$0.getItemInHand($$1);
             if (This.getVillagerData().getProfession() == VillagerProfession.CLERIC) {
-                if($$0.getMainHandItem().getItem() instanceof AnubisItem ) {
+                if(stack.getItem() instanceof AnubisItem ) {
 
                     int get = ClientNetworking.getAppropriateConfig().itemSettings.levelsToGetStand;
                     if ($$0.experienceLevel >= get || $$0.isCreative()) {
@@ -119,14 +151,21 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
                       //  This.setGuaranteedDrop(EquipmentSlot.MAINHAND);
                         This.addEffect(new MobEffectInstance(MobEffects.REGENERATION,100));
 
-                        $$0.setItemInHand(InteractionHand.MAIN_HAND,new ItemStack(Items.AIR));
-                        $$0.giveExperienceLevels(-get);
 
                         This.level().playSound(null,This.blockPosition(), SoundEvents.EVOKER_PREPARE_SUMMON,SoundSource.NEUTRAL,1F,1F);
                         This.setVillagerXp(This.getVillagerXp()+2);
 
                         roundabout$setAnubisTicks(60);
+                        CompoundTag tag = stack.getTagElement("SkinType");
+                        if (tag != null) {
+                            roundabout$setAnubisType(tag.getByte("SkinType"));
+                        }
+
+                        $$0.setItemInHand(InteractionHand.MAIN_HAND,new ItemStack(Items.AIR));
+                        $$0.giveExperienceLevels(-get);
+
                         cir.setReturnValue(InteractionResult.SUCCESS);
+
                         return;
                     } else {
                         $$0.displayClientMessage(Component.translatable("container.enchant.level.requirement", get).withStyle(ChatFormatting.RED), true);
@@ -149,7 +188,15 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
         ((ServerLevel) This.level()).sendParticles(ParticleTypes.FIREWORK, This.getX(),
                 This.getY() + This.getEyeHeight(), This.getZ(),
                 20, 0, 0, 0, 0.4);
-        This.spawnAtLocation(ModItems.STAND_DISC_ANUBIS);
+        ItemStack stack = new ItemStack(ModItems.STAND_DISC_ANUBIS,1);
+        if (roundabout$getAnubisType() != (byte)-1) {
+            CompoundTag $$4 = stack.getOrCreateTagElement("Memory");
+            $$4.putBoolean("BonusSkin",true);
+            $$4.putByte("AnubisSkin",roundabout$getAnubisType());
+        }
+        roundabout$setAnubisType((byte)-1);
+
+        this.spawnAtLocation(stack);
 
         Player player = This.level().getNearestPlayer(This,10);
         if (player != null) {

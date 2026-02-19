@@ -2,12 +2,10 @@ package net.hydra.jojomod.access;
 
 import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.util.PlayerMaskSlots;
 import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -117,49 +115,12 @@ public interface IPlayerEntity {
     int roundabout$getBubbleShotAimPoints();
     void roundabout$setBubbleShotAimPoints(int shotPoints);
 
-    AnimationState roundabout$getAnubisUnsheath();
-    AnimationState roundabout$getThirdPersonAnubisUnsheath();
 
-    AnimationState roundabout$getSnubnoseAim();
-    AnimationState roundabout$getSnubnoseRecoil();
-    AnimationState roundabout$getSnubnoseModelAim();
-    AnimationState roundabout$getSnubnoseModelRecoil();
-    AnimationState roundabout$getSnubnoseAimLeft();
-    AnimationState roundabout$getSnubnoseRecoilLeft();
-    AnimationState roundabout$getSnubnoseModelAimLeft();
-    AnimationState roundabout$getSnubnoseModelRecoilLeft();
-
-    AnimationState roundabout$getTommyAim();
-    AnimationState roundabout$getTommyModelAim();
-    AnimationState roundabout$getTommyAimLeft();
-    AnimationState roundabout$getTommyModelAimLeft();
-    AnimationState roundabout$getTommyRecoil();
-    AnimationState roundabout$getTommyModelRecoil();
-    AnimationState roundabout$getTommyRecoilLeft();
-    AnimationState roundabout$getTommyModelRecoilLeft();
-
-    AnimationState roundabout$getColtAim();
-    AnimationState roundabout$getColtModelAim();
-    AnimationState roundabout$getColtAimLeft();
-    AnimationState roundabout$getColtModelAimLeft();
-    AnimationState roundabout$getColtRecoil();
-    AnimationState roundabout$getColtModelRecoil();
-    AnimationState roundabout$getColtRecoilLeft();
-    AnimationState roundabout$getColtModelRecoilLeft();
+    AnimationState roundabout$getItemAnimationActive();
+    AnimationState roundabout$getItemAnimation();
 
     AnimationState roundabout$getBubbleShotAim();
     AnimationState roundabout$getOffsetCorrect();
-    AnimationState getWry();
-    AnimationState getGiorno();
-    AnimationState getKoichi();
-    AnimationState getOhNo();
-    AnimationState getSitting();
-    AnimationState getJoseph();
-    AnimationState getTortureDance();
-    AnimationState getWamuu();
-    AnimationState getJonathan();
-    AnimationState getJotaro();
-    AnimationState getWatch();
-    AnimationState getVampire();
+    AnimationState getStyleAnimation();
 
 }

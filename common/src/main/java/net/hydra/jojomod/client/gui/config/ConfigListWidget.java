@@ -94,7 +94,9 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                 throw new RuntimeException("Failed to parse configFields", e);
             }
         }
-        this.addEntry(new AnubisEntry(ConfigManager.getClientConfigPath()));
+        if (selectedType == ConfigType.CLIENT) {
+            this.addEntry(new AnubisEntry(ConfigManager.getClientConfigPath()));
+        }
 
     }
 

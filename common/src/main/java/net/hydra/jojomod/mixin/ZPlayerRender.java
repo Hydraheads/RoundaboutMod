@@ -1,13 +1,10 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.*;
-import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.client.models.layers.*;
-import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer;
+import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.mobs.*;
@@ -18,14 +15,12 @@ import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ModificationMaskItem;
 import net.hydra.jojomod.stand.powers.*;
-import net.hydra.jojomod.util.HeatUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.*;
@@ -43,7 +38,6 @@ import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
@@ -253,7 +247,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         // ratt scope spyglass hand position
         StandUser SU = ((StandUser) $$0);
         if ($$1.equals(InteractionHand.MAIN_HAND)) {
-            if (SU.roundabout$getStandPowers() instanceof PowersRatt) {
+            if (SU.roundabout$getStandPowers() instanceof PowersRatt && PowerTypes.hasStandActive($$0)) {
                 if (SU.roundabout$getStandPowers().getStandUserSelf().roundabout$getCombatMode()) {
                     ci.setReturnValue(HumanoidModel.ArmPose.SPYGLASS);
                     return;
@@ -280,7 +274,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     }
 
 
-    @Inject(method = "renderHand",at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/player/PlayerRenderer;setModelProperties(Lnet/minecraft/client/player/AbstractClientPlayer;)V",shift = At.Shift.AFTER))
+   @Inject(method = "renderHand",at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/player/PlayerRenderer;setModelProperties(Lnet/minecraft/client/player/AbstractClientPlayer;)V",shift = At.Shift.AFTER))
     private void roundabout$hideAnubisArm(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, ModelPart $$4, ModelPart $$5, CallbackInfo ci) {
         if ( AnubisLayer.shouldRender($$3) == HumanoidArm.RIGHT) {
             this.getModel().rightArm.visible = false;
@@ -291,7 +285,6 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         }
     }
 
-    ///  hides the arms if you're holding anubis
     @Inject(method = "setModelProperties", at = @At(value = "TAIL"))
     private void roundabout$setModelProperties(AbstractClientPlayer $$0, CallbackInfo ci) {
         if ($$0 instanceof StandUser standUser) {
@@ -552,7 +545,6 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         }
         ShootingArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,yes,
                 0,0,$$4);
-        AnubisLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,yes,$$4);
         if ($$4 != null && $$4.equals(this.model.rightArm)) {
             MandomLayer.renderWatchFirstPerson(stack, buffer, getPackedLightCoords(acl, 1F), acl, 1, 1, 1, yes,
                     0, 0, $$4, ((IPlayerModel) this.model).roundabout$getSlim()
@@ -912,7 +904,6 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
             ShootingArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,yes,
                     0,0,$$5);
-            AnubisLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,yes,$$4);
         }
 
     @Unique

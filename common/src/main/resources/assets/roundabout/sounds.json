@@ -17,6 +17,42 @@
       "roundabout:vampire_dash"
     ]
   },
+  "vampire_camo": {
+    "subtitle": "sounds.roundabout.vampire_camo",
+    "sounds": [
+      "roundabout:vampire_camo"
+    ]
+  },
+  "ripper_eyes_beam": {
+    "subtitle": "sounds.roundabout.ripper_eyes_beam",
+    "sounds": [
+      "roundabout:ripper_eyes_beam"
+    ]
+  },
+  "ripper_eyes_charge": {
+    "subtitle": "sounds.roundabout.ripper_eyes_charge",
+    "sounds": [
+      "roundabout:ripper_eyes_charge"
+    ]
+  },
+  "ripper_eyes_short": {
+    "subtitle": "sounds.roundabout.ripper_eyes_short",
+    "sounds": [
+      "roundabout:ripper_eyes_short"
+    ]
+  },
+  "evil_aura_blast": {
+    "subtitle": "sounds.roundabout.evil_aura_blast",
+    "sounds": [
+      "roundabout:evil_aura_blast"
+    ]
+  },
+  "aura_impact": {
+    "subtitle": "sounds.roundabout.aura_impact",
+    "sounds": [
+      "roundabout:aura_impact"
+    ]
+  },
   "vampire_gleam": {
     "subtitle": "sounds.roundabout.vampire_gleam",
     "sounds": [
@@ -1332,6 +1368,18 @@
     "subtitle": "sounds.roundabout.anubis_uppercut",
     "sounds": [
       "roundabout:anubis_uppercut"
+    ]
+  },
+  "anubis_shieldbreak": {
+    "subtitle": "sounds.roundabout.anubis_shieldbreak",
+    "sounds": [
+      "roundabout:anubis_shieldbreak"
+    ]
+  },
+  "anubis_extra": {
+    "subtitle": "sounds.roundabout.anubis_extra",
+    "sounds": [
+      "roundabout:anubis_extra"
     ]
   },
 

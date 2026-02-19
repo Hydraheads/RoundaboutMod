@@ -7,6 +7,8 @@ import net.hydra.jojomod.client.models.RoadRollerStrayModel;
 import net.hydra.jojomod.client.models.WornBloodyStoneMaskModel;
 import net.hydra.jojomod.client.models.WornStoneMaskModel;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
+import net.hydra.jojomod.client.models.mobs.AnubisGuardianModel;
+import net.hydra.jojomod.client.models.mobs.renderers.AnubisGuardianRenderer;
 import net.hydra.jojomod.client.models.paintings.MonaLisaPaintingRenderer;
 import net.hydra.jojomod.client.models.paintings.VanGoghPaintingRenderer;
 import net.hydra.jojomod.client.models.paintings.VenusPaintingRenderer;
@@ -50,6 +52,7 @@ public class ClientForgeEvents {
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ForgeEntities.TERRIER_DOG.get(), TerrierEntityRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.ANUBIS_GUARDIAN.get(), AnubisGuardianRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STAR_PLATINUM.get(), StarPlatinumRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STAR_PLATINUM_BASEBALL.get(), StarPlatinumBaseballRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THE_WORLD.get(), TheWorldRenderer::new);
@@ -90,9 +93,12 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.CROSSFIRE_HURRICANE.get(), CrossfireHurricaneRenderer::new);
         event.registerEntityRenderer(ForgeEntities.LIFE_TRACKER.get(), LifeTrackerRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STAND_FIREBALL.get(), StandFireballRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.EVIL_AURA_PROJECTILE.get(), NoRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.RIPPER_EYES_PROJECTILE.get(), RipperEyesRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BLOOD_SPLATTER.get(), BloodSplatterRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GASOLINE_CAN.get(), GasolineCanRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_OBJECT.get(), ThrownObjectRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.THROWN_ANUBIS.get(), ThrownObjectRenderer::new);
         event.registerEntityRenderer(ForgeEntities.CONCEALED_FLAME_OBJECT.get(), ConcealedFlameObjectRenderer::new);
         event.registerEntityRenderer(ForgeEntities.CINDERELLA_VISAGE_DISPLAY.get(), CinderellaVisageDisplayRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GROUND_HURRICANE.get(), NoRenderer::new);
@@ -147,6 +153,7 @@ public class ClientForgeEvents {
     @SubscribeEvent
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(ModEntityRendererClient.WOLF_LAYER, TerrierEntityModel::createBodyLayerTerrier);
+        event.registerLayerDefinition(ModEntityRendererClient.ANUBIS_GUARDIAN_LAYER, AnubisGuardianModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.THE_WORLD_LAYER, TheWorldModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.THE_WORLD_ULTIMATE_LAYER, TheWorldUltimateModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STAR_PLATINUM_LAYER, StarPlatinumModel::getTexturedModelData);
@@ -178,6 +185,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.LIFE_DETECTOR, LifeTrackerModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.SEPERATED_LEGS_LAYER, SeperatedLegsModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.STAND_FIREBALL_LAYER, StandFireballModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.RIPPER_EYES_LAYER, RipperEyesModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.GASOLINE_LAYER, GasolineCanModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.ZOMBIE_AESTHETICIAN_LAYER, ZombieAestheticianModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STEVE_LAYER, PlayerSteveModel::getTexturedModelData);
@@ -207,10 +215,12 @@ public class ClientForgeEvents {
         ModStrayModels.ChestPart = new ChestPart();
         ModStrayModels.SmallChestPart = new SmallChestPart();
         ModStrayModels.bodySpikePart = new BodySpikePart();
+        ModStrayModels.hairVeinPart = new HairVeinPart();
         ModStrayModels.PonytailPart = new PonytailPart();
         ModStrayModels.BigHairPart = new BigHairPart();
         ModStrayModels.KakyoinHairPart = new KakyoinHairPart();
         ModStrayModels.DiegoHatPart = new DiegoHatPart();
+        ModStrayModels.ripperEyesPart = new RipperEyesPart();
         ModStrayModels.SpeedwagonFoundationHatPart = new SpeedwagonFoundationHatPart();
         ModStrayModels.BasicHatPart = new BasicHatPart();
         ModStrayModels.SpikeyHairPart = new SpikeyHairPart();

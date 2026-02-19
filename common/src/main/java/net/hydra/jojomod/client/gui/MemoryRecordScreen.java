@@ -53,14 +53,14 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
 
 
     public final int[][] positions = {
-            {0,31},
-            {31,31},
-            {31,0},
-            {31,-31},
-            {0,-31},
             {-31,-31},
+            {0,-31},
+            {31,-31},
+            {31,0},
+            {31,31},
+            {0,31},
+            {-31,31},
             {-31,0},
-            {-31,31}
     };
 
 
@@ -112,6 +112,7 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
         guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
 
+
         Component str = Component.translatable("roundabout.anubis.playback_title");
         if (this.recording) {str = Component.translatable("roundabout.anubis.memory_title");}
         guiGraphics.drawCenteredString(this.font, str , this.width / 2, this.height / 2 - 31 - 32, -1);
@@ -122,6 +123,13 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
             this.setFirstMousePos = true;
         }
         boolean bl = this.firstMouseX == i && this.firstMouseY == j;
+
+        for (int[] pos : this.positions) {
+            int x = this.width/2 - 5 + pos[0];
+            int y = this.height/2 - 5 + pos[1];
+            guiGraphics.blit(MEMORY_LOCATION,x,y,196,0,12,12,256,256);
+        }
+
         for (PoseSlot MobSlot : this.slots) {
             MobSlot.render(guiGraphics, i, j, f);
             MobSlot.setSelected(this.currentlyHovered == MobSlot.icon.id);

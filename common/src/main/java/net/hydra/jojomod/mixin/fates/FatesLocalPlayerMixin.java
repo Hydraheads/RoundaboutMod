@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.fates;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
+import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.util.HeatUtil;
@@ -31,6 +32,10 @@ public abstract class FatesLocalPlayerMixin extends Entity {
             cir.setReturnValue(this.walkDist > VP.walkDistLast && !this.isInWater() && !this.isSpectator() && !this.isCrouching() && !this.isInLava() && this.isAlive() && !this.isInWater());
             VP.walkDistLast = walkDist;
             return;
+        }
+
+        if (((IPowersPlayer)this).rdbt$getPowers().cancelSprintParticles()){
+            cir.setReturnValue(false);
         }
 
             if (FateTypes.isTransforming(((LocalPlayer)(Object)this))||

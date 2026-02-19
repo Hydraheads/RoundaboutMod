@@ -145,6 +145,8 @@ public class KnifeEntity extends AbstractArrow {
             if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectile(this,$$0)){
                 this.discard();
                 return;
+            } else if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectileNoDiscard(this,$$0)){
+                return;
             }
         }
         float $$2;

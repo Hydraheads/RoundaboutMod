@@ -98,6 +98,9 @@ public abstract class ZEntityRenderDispatcher {
         }
     }
 
+
+
+
     /**Cancel hitbox rendering for stuff like go beyond*/
     @Inject(method = "renderHitbox(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraft/world/entity/Entity;F)V", at = @At(value = "HEAD"), cancellable = true)
     private static <E extends Entity>  void roundabout$renderHitbox(PoseStack $$0, VertexConsumer $$1, Entity $$2, float $$3, CallbackInfo ci) {

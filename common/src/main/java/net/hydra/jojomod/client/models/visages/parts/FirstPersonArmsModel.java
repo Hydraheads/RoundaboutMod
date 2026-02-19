@@ -13,29 +13,22 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
-import net.hydra.jojomod.client.models.layers.StoneLayer;
-import net.hydra.jojomod.client.models.layers.animations.FirearmFirstPersonAnimations;
-import net.hydra.jojomod.client.models.layers.animations.HeyYaAnimations;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ColtRevolverItem;
-import net.hydra.jojomod.item.JackalRifleItem;
 import net.hydra.jojomod.item.SnubnoseRevolverItem;
 import net.hydra.jojomod.item.TommyGunItem;
 import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
-import net.minecraft.client.model.ZombieModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -50,7 +43,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 
 public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalModel {
@@ -135,27 +127,27 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
             }
             if (player.getUseItem().getItem() instanceof SnubnoseRevolverItem) {
                 if (mainHandRight) {
-                    this.animate(ipe.roundabout$getSnubnoseAim(), Poses.SNUBNOSE_AIM.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getSnubnoseRecoil(), Poses.SNUBNOSE_RECOIL.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimation(), Poses.SNUBNOSE_AIM.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.SNUBNOSE_RECOIL.ad, partialTicks, 1f);
                 } else {
-                    this.animate(ipe.roundabout$getSnubnoseAimLeft(), Poses.SNUBNOSE_AIM_LEFT.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getSnubnoseRecoilLeft(), Poses.SNUBNOSE_RECOIL_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimation(), Poses.SNUBNOSE_AIM_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.SNUBNOSE_RECOIL_LEFT.ad, partialTicks, 1f);
                 }
             } else if (player.getUseItem().getItem() instanceof TommyGunItem) {
                 if (mainHandRight) {
-                    this.animate(ipe.roundabout$getTommyAim(), Poses.TOMMY_AIM.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getTommyRecoil(), Poses.TOMMY_RECOIL.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimation(), Poses.TOMMY_AIM.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.TOMMY_RECOIL.ad, partialTicks, 1f);
                 } else {
-                    this.animate(ipe.roundabout$getTommyAimLeft(), Poses.TOMMY_AIM_LEFT.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getTommyRecoilLeft(), Poses.TOMMY_RECOIL_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimation(), Poses.TOMMY_AIM_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.TOMMY_RECOIL_LEFT.ad, partialTicks, 1f);
                 }
             } else if (player.getUseItem().getItem() instanceof ColtRevolverItem) {
                 if (mainHandRight) {
-                    this.animate(ipe.roundabout$getColtAim(), Poses.SNUBNOSE_AIM.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getColtRecoil(), Poses.SNUBNOSE_RECOIL.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimation(), Poses.SNUBNOSE_AIM.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.SNUBNOSE_RECOIL.ad, partialTicks, 1f);
                 } else {
-                    this.animate(ipe.roundabout$getColtAimLeft(), Poses.SNUBNOSE_AIM_LEFT.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getColtRecoilLeft(), Poses.SNUBNOSE_RECOIL_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimation(), Poses.SNUBNOSE_AIM_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.SNUBNOSE_RECOIL_LEFT.ad, partialTicks, 1f);
                 }
             }
             EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
@@ -419,8 +411,6 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
                 }
 
             }
-//            Roundabout.LOGGER.info("Is Aiming:"+ipe.roundabout$getSnubnoseAim().isStarted());
-//            Roundabout.LOGGER.info("is Recoiling"+ipe.roundabout$getSnubnoseRecoil().isStarted());
         }
     }
 }

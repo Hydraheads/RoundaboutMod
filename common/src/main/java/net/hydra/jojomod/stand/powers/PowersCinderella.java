@@ -460,10 +460,7 @@ public class PowersCinderella extends NewDashPreset {
         if (attackTarget != null && attackTarget.isAlive()){
             if ((this.getActivePower() != PowerIndex.NONE
                     || attackTarget.distanceTo(this.getSelf()) <= 5)){
-                this.getSelf().setXRot(getLookAtEntityPitch(this.getSelf(), attackTarget));
-                float yrot = getLookAtEntityYaw(this.getSelf(), attackTarget);
-                this.getSelf().setYRot(yrot);
-                this.getSelf().setYHeadRot(yrot);
+                rotateMobHead(attackTarget);
             }
 
             Entity targetEntity = getTargetEntity(this.self, 5);

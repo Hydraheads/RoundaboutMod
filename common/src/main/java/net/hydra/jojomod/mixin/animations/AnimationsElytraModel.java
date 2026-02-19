@@ -43,18 +43,9 @@ public abstract class AnimationsElytraModel<T extends LivingEntity> extends Agea
         if ($$0 instanceof Player P) {
             IPlayerEntity ipe = ((IPlayerEntity) $$0);
             if (!P.isPassenger() && !$$0.isVisuallySwimming() && !$$0.isFallFlying()) {
-                this.roundabout$animate(ipe.getWry(), Poses.WRY.ad, $$3, 1f);
-                this.roundabout$animate(ipe.getGiorno(), Poses.GIORNO.ad, $$3, 1f);
-                this.roundabout$animate(ipe.getJoseph(), Poses.JOSEPH.ad, $$3, 1f);
-                this.roundabout$animate(ipe.getKoichi(), Poses.KOICHI.ad, $$3, 1f);
-                this.roundabout$animate(ipe.getOhNo(), Poses.OH_NO.ad, $$3, 1f);
-                this.roundabout$animate(ipe.getTortureDance(), Poses.TORTURE_DANCE.ad, $$3, 1f);
-                this.roundabout$animate(ipe.getWamuu(), Poses.WAMUU.ad, $$3, 1f);
-                this.roundabout$animate(ipe.getJotaro(), Poses.JOTARO.ad, $$3, 1f);
-                this.roundabout$animate(ipe.getJonathan(), Poses.JONATHAN.ad, $$3, 1f);
-                this.roundabout$animate(ipe.getWatch(), Poses.WATCH.ad, $$3, 1f);
-                this.roundabout$animate(ipe.getSitting(), Poses.SITTING.ad, $$3, 1f);
-                this.roundabout$animate(ipe.getVampire(), Poses.VAMPIRE_TRANSFORMATION.ad, $$3, 1f);
+                if (Poses.getAnimation(P) != null) {
+                    this.roundabout$animate(ipe.getStyleAnimation(), Poses.getAnimation(P), $$3, 1f);
+                }
             }
         }
     }

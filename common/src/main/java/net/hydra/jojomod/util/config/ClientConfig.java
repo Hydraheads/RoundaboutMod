@@ -57,6 +57,8 @@ public class ClientConfig implements Cloneable {
     @BooleanOption(group = "inherit", value = true)
     public Boolean renderArmorOnPlayerCloneAbilities;
     @BooleanOption(group = "inherit", value = true)
+    public Boolean blinkWithCamo;
+    @BooleanOption(group = "inherit", value = true)
     public Boolean magiciansRedTexturesMakeItEmmissive;
     @BooleanOption(group = "inherit", value = false)
     public Boolean magiciansRedLashesMakeItEmmissive;
@@ -171,6 +173,8 @@ public class ClientConfig implements Cloneable {
     public static class DynamicSettings {
         @IntOption(group = "inherit", value = 1, min = 1, max = 8)
         public Integer SoftAndWetCurrentlySelectedBubble;
+        @BooleanOption(group = "inherit",value = false)
+        public Boolean rattFiringMode;
         @BooleanOption(group = "inherit", value = false)
         public Boolean hideGUI;
         @BooleanOption(group = "inherit", value = true)

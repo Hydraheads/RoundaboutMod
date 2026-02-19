@@ -452,13 +452,16 @@ public abstract class InputEvents implements IInputEvents {
                     fireArmCancel =  true;
                 }
             }
-            if (!fireArmCancel && PowerTypes.hasStandActive(player) && standComp.roundabout$getStandPowers().interceptGuard()) {
 
-                return standComp.roundabout$getStandPowers().preCheckButtonInputGuard(this.options.keyUse.isDown(), this.options);
-            }
-            if (PowerTypes.hasPowerActive(player) && ((IPowersPlayer)player).rdbt$getPowers().interceptGuard()) {
+            if (!((StandUser)player).roundabout$isDazed()) {
+                if (!fireArmCancel && PowerTypes.hasStandActive(player) && standComp.roundabout$getStandPowers().interceptGuard()) {
 
-                return ((IPowersPlayer)player).rdbt$getPowers().preCheckButtonInputGuard(this.options.keyUse.isDown(), this.options);
+                    return standComp.roundabout$getStandPowers().preCheckButtonInputGuard(this.options.keyUse.isDown(), this.options);
+                }
+                if (PowerTypes.hasPowerActive(player) && ((IPowersPlayer) player).rdbt$getPowers().interceptGuard()) {
+
+                    return ((IPowersPlayer) player).rdbt$getPowers().preCheckButtonInputGuard(this.options.keyUse.isDown(), this.options);
+                }
             }
 
             return false;
@@ -1051,7 +1054,7 @@ public abstract class InputEvents implements IInputEvents {
 
                 ((StandUser)player).roundabout$getStandPowers().visualFrameTick();
 
-                if (rdbt$isInitialized(player)) {
+                if (rdbt$isInitialized(player) && !((StandUser)player).roundabout$isDazed()) {
                     KeyInputs.MoveKey1(player, ((Minecraft) (Object) this), roundabout$sameKeyOne(KeyInputRegistry.abilityOneKey),
                             this.options);
 
@@ -1216,7 +1219,7 @@ public abstract class InputEvents implements IInputEvents {
                 }
                 if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
                     if (!isMining && !roundabout$activeMining && standComp.roundabout$getInterruptCD()) {
-                        if (rdbt$isInitialized(player)) {
+                        if (rdbt$isInitialized(player) && !((StandUser)player).roundabout$isDazed()) {
                             powers.preCheckButtonInputAttack(this.options.keyAttack.isDown(), this.options);
                         }
                     }
@@ -1235,7 +1238,7 @@ public abstract class InputEvents implements IInputEvents {
             if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
                 if (!isMining && !roundabout$activeMining && generalPowers.getInterruptCD()) {
                     if (rdbt$isInitialized(player)) {
-                        if (!generalPowers.isBarraging()) {
+                        if (!generalPowers.isBarraging() && !((StandUser)player).roundabout$isDazed()) {
                             ((IFatePlayer) player).rdbt$getFatePowers().buttonInputAttack(this.options.keyAttack.isDown(), this.options);
                             generalPowers.preCheckButtonInputAttack(this.options.keyAttack.isDown(), this.options);
                         }

@@ -3,6 +3,8 @@ package net.hydra.jojomod.mixin.effects.bleed;
 import net.hydra.jojomod.access.IFoodData;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
@@ -35,6 +37,13 @@ public class BleedFoodData implements IFoodData {
     }
     @Inject(method = "tick", at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$foodData(Player $$0, CallbackInfo ci) {
+
+        TimeStop timeStop = (TimeStop) $$0.level();
+        if (timeStop.inTimeStopRange($$0) && ConfigManager.getConfig().timeStopSettings.timestopCancelsFood) {
+            ci.cancel();
+            return;
+        }
+
         if (!FateTypes.hasBloodHunger($$0)) {
             if ($$0.hasEffect(ModEffects.BLEED)) {
                 int amp = $$0.getEffect(ModEffects.BLEED).getAmplifier();
@@ -48,7 +57,7 @@ public class BleedFoodData implements IFoodData {
                     this.tickTimer++;
                     if (this.tickTimer >= 10) {
                         float $$3 = Math.min(this.saturationLevel, 6.0F);
-                        if (amp < 2) {
+                        if (amp < 2 ) {
                             $$0.heal(($$3 / 6.0F) * multiplier);
                             this.addExhaustion($$3);
                         }

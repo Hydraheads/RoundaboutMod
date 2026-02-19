@@ -97,7 +97,7 @@ public class FallenCreeper extends FallenMob implements PowerableMob {
     @Override
     protected InteractionResult mobInteract(Player $$0, InteractionHand $$1) {
         ItemStack $$2 = $$0.getItemInHand($$1);
-        if ($$2.is(ItemTags.CREEPER_IGNITERS)) {
+        if ($$2.is(ItemTags.CREEPER_IGNITERS) && getActivated()) {
             SoundEvent $$3 = $$2.is(Items.FIRE_CHARGE) ? SoundEvents.FIRECHARGE_USE : SoundEvents.FLINTANDSTEEL_USE;
             this.level().playSound($$0, this.getX(), this.getY(), this.getZ(), $$3, this.getSoundSource(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
             if (!this.level().isClientSide) {

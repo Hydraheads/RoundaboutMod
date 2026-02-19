@@ -9,6 +9,7 @@ public class ModEntityRendererClient {
      * Note: Renderers render models, but models are different files.
      * Forge and Fabric need to actually register this info into the game individually.*/
     public static final ModelLayerLocation WOLF_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "wolf"), "main");
+    public static final ModelLayerLocation ANUBIS_GUARDIAN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "anubis_guardian"), "main");
     public static final ModelLayerLocation THE_WORLD_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "the_world"), "main");
     public static final ModelLayerLocation THE_WORLD_ULTIMATE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "the_world_ultimate"), "main");
     public static final ModelLayerLocation STAR_PLATINUM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "star_platinum"), "main");
@@ -42,6 +43,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation CROSSFIRE_FIRESTORM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "crossfire_firestorm"), "main");
     public static final ModelLayerLocation LIFE_DETECTOR = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "life_detector"), "main");
     public static final ModelLayerLocation STAND_FIREBALL_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "stand_fireball"), "main");
+    public static final ModelLayerLocation RIPPER_EYES_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "ripper_eyes"), "main");
     public static final ModelLayerLocation GASOLINE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "gasoline_can"), "main");
     public static final ModelLayerLocation ZOMBIE_AESTHETICIAN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "zombie_aesthetician"), "main");
     public static final ModelLayerLocation STEVE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_steve"), "main");

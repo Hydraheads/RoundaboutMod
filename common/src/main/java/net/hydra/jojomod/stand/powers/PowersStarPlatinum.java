@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.RattDartEntity;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
+import net.hydra.jojomod.entity.projectile.ThrownAnubisEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
@@ -802,6 +803,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                                 ItemStack bulletItem = BE.getBulletItemStack();
                                 SE.setHeldItem(bulletItem);
                             }
+                        } else if (ent instanceof ThrownAnubisEntity TAE) {
+                            success = true;
+                            SE.canAcquireHeldItem = true;
+                            ItemStack anubisItem = TAE.getItem();
+                            SE.setHeldItem(anubisItem);
                         } else if (ent instanceof ThrownObjectEntity TO) {
                             ItemStack ii = TO.getItem();
                             if (!ii.isEmpty()) {
@@ -862,7 +868,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 }
             }
         }
-        return false;
+        return super.dealWithProjectile(ent,res);
     }
 
     @Override
@@ -976,7 +982,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 1.75* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod((float) ((float) 1.67* (ClientNetworking.getAppropriateConfig().
                     starPlatinumSettings.starPlatinumAttackMultOnPlayers*0.01)));
         } else {
             return levelupDamageMod((float) ((float) 5* (ClientNetworking.getAppropriateConfig().
@@ -984,7 +990,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         }
     } public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 2.5* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod((float) ((float) 2.4* (ClientNetworking.getAppropriateConfig().
                     starPlatinumSettings.starPlatinumAttackMultOnPlayers*0.01)));
         } else {
             return levelupDamageMod((float) ((float) 6* (ClientNetworking.getAppropriateConfig().
@@ -1226,10 +1232,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
                 if ((this.getActivePower() != PowerIndex.NONE)
                         || dist <= 5){
-                    this.getSelf().setXRot(getLookAtEntityPitch(this.getSelf(), attackTarget));
-                    float yrot = getLookAtEntityYaw(this.getSelf(), attackTarget);
-                    this.getSelf().setYRot(yrot);
-                    this.getSelf().setYHeadRot(yrot);
+                    rotateMobHead(attackTarget);
                 }
 
                 if (this.attackTimeDuring == -1 || (this.attackTimeDuring < -1 && this.activePower == PowerIndex.ATTACK)) {

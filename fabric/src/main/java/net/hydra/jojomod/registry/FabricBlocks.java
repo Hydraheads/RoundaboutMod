@@ -29,6 +29,10 @@ public class FabricBlocks {
     );
     public static final Block METEOR_BLOCK = registerBlock("meteor_block", ModBlocks.METEOR_BLOCK_PROPERTIES
     );
+    public static final Block SHINY_QUARTZ = registerBlock("shiny_quartz", SHINY_QUARTZ_PROPERTIES
+    );
+    public static final Block SHINY_QUARTZ_TILES = registerBlock("shiny_quartz_tiles", SHINY_QUARTZ_TILES_PROPERTIES
+    );
     public static final Block REGAL_FLOOR = registerBlock("regal_floor", ModBlocks.REGAL_FLOOR_PROPERTIES
     );
     public static final Block REGAL_WALL = registerBlock("regal_wall", ModBlocks.REGAL_WALL_PROPERTIES
@@ -251,6 +255,8 @@ public class FabricBlocks {
         ModBlocks.ANCIENT_METEOR = ANCIENT_METEOR;
         ModBlocks.IMPACT_MOUND = IMPACT_MOUND;
         ModBlocks.METEOR_BLOCK = METEOR_BLOCK;
+        ModBlocks.SHINY_QUARTZ = SHINY_QUARTZ;
+        ModBlocks.SHINY_QUARTZ_TILES = SHINY_QUARTZ_TILES;
         ModBlocks.REGAL_FLOOR = REGAL_FLOOR;
         ModBlocks.REGAL_WALL = REGAL_WALL;
         ModBlocks.WOODEN_MANOR_TABLE = WOODEN_MANOR_TABLE;

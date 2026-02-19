@@ -93,20 +93,20 @@ public class RoundaboutCommands {
                 if (disc != ItemStack.EMPTY && disc.getItem() instanceof StandDiscItem SD) {
                     SD.generateStandPowers(LE);
 
+                    user.roundabout$setStandSkin(skin);
+                    user.roundabout$setIdlePosX(pose);
                     if (entity instanceof Player PE) {
                         ItemStack standDisc = user.roundabout$getStandDisc();
                         IPlayerEntity ipe = ((IPlayerEntity)PE);
                         int standLevel = ipe.roundabout$getStandLevel();
+                        ipe.roundabout$setUnlockedBonusSkin(hiddenUnlocked);
                         if (!standDisc.isEmpty() && !(standDisc.getItem() instanceof MaxStandDiscItem)){
                             ipe.roundabout$setStandExp(0);
                             level = (byte) Mth.clamp(level, 1, SD.standPowers.getMaxLevel());
                             ipe.roundabout$setStandLevel((byte) level);
+                            user.roundabout$setStandDisc(MainUtil.saveToDiscData(PE,((StandUser)PE).roundabout$getStandDisc()));
                         }
-                        ipe.roundabout$setUnlockedBonusSkin(hiddenUnlocked);
                     }
-
-                    user.roundabout$setStandSkin(skin);
-                    user.roundabout$setIdlePosX(pose);
 
                     if (PowerTypes.hasStandActive(entity)){
                         ((StandUser) entity).roundabout$summonStand(entity.level(), true,false);
@@ -142,6 +142,10 @@ public class RoundaboutCommands {
                         S2CPacketUtil.beamVampireData(PL);
                     } else if (LE instanceof Mob mb){
                         ((IMob)mb).roundabout$setVampire(true);
+                    }
+                } else if (fate.equalsIgnoreCase("zombie")){
+                    if (LE instanceof Player PL){
+                        ((IPlayerEntity)PL).roundabout$setFate((byte) FateTypes.ZOMBIE.ordinal());
                     }
                 } else if (fate.equalsIgnoreCase("human") || fate.equalsIgnoreCase("none")){
                     if (LE instanceof Player PL){
@@ -334,6 +338,7 @@ public class RoundaboutCommands {
                     if (!standDisc.isEmpty() && !(standDisc.getItem() instanceof MaxStandDiscItem)){
                         ipe.roundabout$setStandExp(0);
                         ipe.roundabout$setStandLevel((byte) Math.min(user.roundabout$getStandPowers().getMaxLevel(),level));
+                        user.roundabout$setStandDisc(MainUtil.saveToDiscData(PE,standDisc).copy());
                     }
                 }
             }

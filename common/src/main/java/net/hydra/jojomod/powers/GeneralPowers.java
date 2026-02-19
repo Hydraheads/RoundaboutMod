@@ -17,6 +17,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.HitResult;
@@ -209,6 +210,12 @@ public class GeneralPowers extends AbilityScapeBasis {
             } else if (!(activePower == VampireGeneralPowers.BLOOD_CLUTCH_2 || activePower == VampireGeneralPowers.ICE_CLUTCH_2)
                     && getPlayerPos2() == PlayerPosIndex.CLUTCH_DASH) {
                 setPlayerPos2(PlayerPosIndex.NONE);
+            } else if (!(activePower == VampireGeneralPowers.RIPPER_EYES_ACTIVATED)
+                    && getPlayerPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            } else if (!(activePower == VampireGeneralPowers.CAMO)
+                    && (getPlayerPos2() == PlayerPosIndex.VANISH_PERSIST || getPlayerPos2() == PlayerPosIndex.VANISH_START)) {
+                setPlayerPos2(PlayerPosIndex.NONE);
             }
 
             if (this.self instanceof Player PE && PE.isSpectator()) {
@@ -262,6 +269,13 @@ public class GeneralPowers extends AbilityScapeBasis {
         }
     }
 
+    /**When you are about to be hit by a projectile, intercept or run code based off of it, or potentially cancel it
+     * Currently it supports abstract arrows but this can be expanded*/
+    public boolean dealWithProjectile(Entity ent, HitResult res){
+        return false;
+    }     public boolean dealWithProjectileNoDiscard(Entity ent, HitResult res){
+        return false;
+    }
 
     /**Releasing right click normally stops guarding but that's something you can adjust*/
     public boolean clickRelease(){

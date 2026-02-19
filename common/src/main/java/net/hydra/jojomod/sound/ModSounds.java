@@ -772,6 +772,12 @@ public class ModSounds {
     public static final String ANUBIS_UPPERCUT = "anubis_uppercut";
     public static final ResourceLocation ANUBIS_UPPERCUT_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_UPPERCUT);
     public static SoundEvent ANUBIS_UPPERCUT_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_UPPERCUT_ID);
+    public static final String ANUBIS_SHIELDBREAK = "anubis_shieldbreak";
+    public static final ResourceLocation ANUBIS_SHIELDBREAK_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_SHIELDBREAK);
+    public static SoundEvent ANUBIS_SHIELDBREAK_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_SHIELDBREAK_ID);
+    public static final String ANUBIS_EXTRA = "anubis_extra";
+    public static final ResourceLocation ANUBIS_EXTRA_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_EXTRA);
+    public static SoundEvent ANUBIS_EXTRA_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_EXTRA_ID);
 
 
 
@@ -866,6 +872,18 @@ public class ModSounds {
     public static SoundEvent BALL_BEARING_SHOT_EVENT = SoundEvent.createVariableRangeEvent(BALL_BEARING_SHOT_ID);
 
 
+    public static final String EVIL_AURA_BLAST = "evil_aura_blast";
+    public static final ResourceLocation EVIL_AURA_BLAST_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EVIL_AURA_BLAST);
+    public static SoundEvent EVIL_AURA_BLAST_EVENT = SoundEvent.createVariableRangeEvent(EVIL_AURA_BLAST_ID);
+    public static final String AURA_IMPACT = "aura_impact";
+    public static final ResourceLocation AURA_IMPACT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+AURA_IMPACT);
+    public static SoundEvent AURA_IMPACT_EVENT = SoundEvent.createVariableRangeEvent(AURA_IMPACT_ID);
+
+    public static final String VAMPIRE_CAMO = "vampire_camo";
+    public static final ResourceLocation VAMPIRE_CAMO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VAMPIRE_CAMO);
+    public static SoundEvent VAMPIRE_CAMO_EVENT = SoundEvent.createVariableRangeEvent(VAMPIRE_CAMO_ID);
+
+
 
     public static final String HEY_YA_1 = "hey_ya_1";
     public static final ResourceLocation HEY_YA_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HEY_YA_1);
@@ -916,6 +934,17 @@ public class ModSounds {
     public static final String ACHTUNG_BURST = "achtung_burst";
     public static final ResourceLocation ACHTUNG_BURST_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ACHTUNG_BURST);
     public static SoundEvent ACHTUNG_BURST_EVENT = SoundEvent.createVariableRangeEvent(ACHTUNG_BURST_ID);
+
+
+    public static final String RIPPER_EYES_CHARGE = "ripper_eyes_charge";
+    public static final ResourceLocation RIPPER_EYES_CHARGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RIPPER_EYES_CHARGE);
+    public static SoundEvent RIPPER_EYES_CHARGE_EVENT = SoundEvent.createVariableRangeEvent(RIPPER_EYES_CHARGE_ID);
+    public static final String RIPPER_EYES_SHORT = "ripper_eyes_short";
+    public static final ResourceLocation RIPPER_EYES_SHORT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RIPPER_EYES_SHORT);
+    public static SoundEvent RIPPER_EYES_SHORT_EVENT = SoundEvent.createVariableRangeEvent(RIPPER_EYES_SHORT_ID);
+    public static final String RIPPER_EYES_BEAM = "ripper_eyes_beam";
+    public static final ResourceLocation RIPPER_EYES_BEAM_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RIPPER_EYES_BEAM);
+    public static SoundEvent RIPPER_EYES_BEAM_EVENT = SoundEvent.createVariableRangeEvent(RIPPER_EYES_BEAM_ID);
 
 
     public static final String SUMMON_DIVER_DOWN = "summon_diver_down";

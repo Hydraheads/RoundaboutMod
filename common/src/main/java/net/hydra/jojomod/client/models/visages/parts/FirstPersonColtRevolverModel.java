@@ -85,11 +85,11 @@ public class FirstPersonColtRevolverModel<T extends Entity> extends Hierarchical
             if (LE instanceof Player player) {
                 mainHandRight = player.getMainArm() == HumanoidArm.RIGHT;
                 if (mainHandRight) {
-                    this.animate(ipe.roundabout$getColtModelAim(), Poses.COLT_MODEL_AIM.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getColtModelRecoil(), Poses.COLT_MODEL_RECOIL.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimation(), Poses.COLT_MODEL_AIM.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.COLT_MODEL_RECOIL.ad, partialTicks, 1f);
                 } else if (!mainHandRight) {
-                    this.animate(ipe.roundabout$getColtModelAimLeft(), Poses.COLT_MODEL_AIM_LEFT.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getColtModelRecoilLeft(), Poses.COLT_MODEL_RECOIL_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimation(), Poses.COLT_MODEL_AIM_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.COLT_MODEL_RECOIL_LEFT.ad, partialTicks, 1f);
                 }
             }
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);

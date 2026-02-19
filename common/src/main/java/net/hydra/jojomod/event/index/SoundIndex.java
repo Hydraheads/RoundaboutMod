@@ -12,10 +12,12 @@ public class SoundIndex {
     public static final byte COLT_RELOAD = -25;
     public static final byte TOMMY_RELOAD = -26;
     public static final byte BOWLER_HAT_AIM_SOUND = -22;
+    public static final byte CACKLE = -4;
     public static final byte BLOOD_REGEN = -6;
     public static final byte HAIR_SPIKE_CHARGE = -7;
+    public static final byte RIPPER_EYES_CHARGE = -8;
+    public static final byte RIPPER_EYES_BEAM = -9;
     public static final byte STAND_ARROW_CHARGE = -21;
-    public static final byte CACKLE = -4;
     public static final byte BARRAGE_CHARGE_SOUND = 1;
     public static final byte ALT_CHARGE_SOUND_1 = 2;
     public static final byte ALT_CHARGE_SOUND_2 = 3;

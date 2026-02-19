@@ -18,6 +18,8 @@ import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.item.HarpoonItem;
+import net.hydra.jojomod.item.KnifeItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -117,7 +119,8 @@ public class AbilityScapeBasis {
     }
     /**If the above function is set to true, this will be the code called instead of the exp bar one. Make
      * a call to another class so too much client code doesn't unnecessarily exist in the standpowers class.*/
-    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x){
+    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
+                                  boolean removeNum){
     }
 
 
@@ -718,7 +721,7 @@ public class AbilityScapeBasis {
     /**Override this if you want to add or remove conditions that prevent moves from updating and shut
      * them down*/
     public boolean isAttackInept(byte activeP){
-        return this.self.isUsingItem() || this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) || this.getStandUserSelf().roundabout$isPossessed();
+        return this.self.isUsingItem() || this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()));
     }
 
     /**If doing something like eating, cancels attack state*/
@@ -1513,6 +1516,7 @@ public class AbilityScapeBasis {
         }
     }
 
+    //Ledge Grab
     @SuppressWarnings("deprecation")
     public boolean doVault(){
         if (!this.self.onGround()) {
@@ -2017,6 +2021,22 @@ public class AbilityScapeBasis {
         if (!(distMax >= 0)) {
             distMax = this.getDistanceOut(User, this.getReach(), false);
         }
+
+
+        /// SAVING THIS FOR LATER
+   /*     StandUser SU = (StandUser) User;
+        if (SU.roundabout$isPossessed() && SU.roundabout$getPossessor() != null) {
+            LivingEntity target = SU.roundabout$getPossessor().getTarget();
+            if (target != null) {
+                if (target.distanceTo(User) < distMax ) {
+                    return target;
+                }
+            }
+
+        }*/
+
+
+
         Entity targetEntity = this.rayCastEntity(User,distMax);
 
         if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
@@ -2571,6 +2591,11 @@ public class AbilityScapeBasis {
         }
 
         boolean interrupt = false;
+
+        if (sauce.getEntity() != null) {
+            interrupter = sauce.getEntity();
+        }
+
         if (interrupter != null){
             if (this.isBarraging() && ClientNetworking.getAppropriateConfig().generalStandSettings.barragesAreAlwaysInterruptable) {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
@@ -2676,5 +2701,14 @@ public class AbilityScapeBasis {
 
     public boolean isBarraging(){
         return (this.activePower == PowerIndex.BARRAGE || this.activePower == PowerIndex.BARRAGE_CHARGE);
+    }
+
+     //Note that this doesn't necessarily apply to  rendering items.
+    public boolean canCombatModeUse(ItemStack stack) {
+        return canCombatModeUse(stack.getItem());
+    }
+    public boolean canCombatModeUse(Item item) {
+        return item.isEdible() || item instanceof HarpoonItem || item instanceof TridentItem
+                || item instanceof KnifeItem;
     }
 }

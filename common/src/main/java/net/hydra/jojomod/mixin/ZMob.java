@@ -1,11 +1,12 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.ITargetGoal;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
+import net.hydra.jojomod.entity.goals.AnubisAttackGoal;
 import net.hydra.jojomod.entity.goals.RoundaboutFollowGoal;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
@@ -16,9 +17,12 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.AnubisItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -33,22 +37,21 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
-import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.memory.ExpirableValue;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.sensing.Sensing;
-import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.monster.Enemy;
-import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.AbstractVillager;
@@ -56,6 +59,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -187,6 +191,17 @@ public abstract class ZMob extends LivingEntity implements IMob {
             if (((Mob)(Object)this) instanceof PathfinderMob pm){
                 this.goalSelector.addGoal(2, new RoundaboutFollowGoal(pm, 1));
             }
+
+            if (((Mob)(Object)this) instanceof AbstractIllager AI) {
+                this.goalSelector.addGoal(0, new AnubisAttackGoal(AI,1.3,true) );
+            }
+        }
+    }
+
+    @Inject(method = "playAmbientSound()V", at = @At(value = "HEAD"), cancellable = true)
+    private void rdbt$playAmbientSound(CallbackInfo ci) {
+        if (((StandUser)this).roundabout$isDazed()){
+            ci.cancel();
         }
     }
 
@@ -988,6 +1003,40 @@ public abstract class ZMob extends LivingEntity implements IMob {
                 }
             }
         }
+
+        StandUser SU = (StandUser) this;
+        if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
+            if (AnubisLayer.shouldDash((Mob)(Object)this)) {
+                if (this.roundabout$ticksUntilNextAttack < 10 && this.roundabout$ticksUntilNextAttack > 1) {
+                    this.roundabout$ticksUntilNextAttack = 1;
+                }
+            }
+        }
+
     }
 
+
+    @Inject(method = "mobInteract",at=@At(value = "HEAD"))
+    private void roundabout$giveAnubis(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
+        if (!$$0.level().isClientSide) {
+            ItemStack stack = $$0.getItemInHand($$1);
+            if ($$0.isCrouching() && stack.getItem() instanceof AnubisItem) {
+                if (((Mob) (Object) this) instanceof AbstractIllager AI) {
+                    if (!((StandUser) AI).roundabout$hasAStand()) {
+                        $$0.setItemInHand($$1,new ItemStack(Items.AIR));
+                        $$0.level().playSound(null,$$0.blockPosition(), ModSounds.ANUBIS_EXTRA_EVENT, SoundSource.PLAYERS,3F,1F);
+
+                        ItemStack itemStack = new ItemStack(ModItems.STAND_DISC_ANUBIS);
+                        CompoundTag tag = itemStack.getOrCreateTagElement("Special");
+                        tag.putByte("Type",(byte)1);
+
+
+                        StandArrowItem.grantStand(itemStack, AI);
+                        AI.setTarget($$0);
+
+                    }
+                }
+            }
+        }
+    }
 }

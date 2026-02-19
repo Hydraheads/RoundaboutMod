@@ -186,7 +186,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
             if (tag2 != null) {
                 itemstack = ItemStack.of(tag2);
             }
-            if (!itemstack.isEmpty() && itemstack.getItem() instanceof StandDiscItem de) {
+            if (itemstack != null && !itemstack.isEmpty() && itemstack.getItem() instanceof StandDiscItem de) {
                 ((StandUser)live).roundabout$setRejectionStandDisc(itemstack.copy());
                 de.generateStandPowerRejection(live);
                 $$0.removeTagKey("StandDisc");

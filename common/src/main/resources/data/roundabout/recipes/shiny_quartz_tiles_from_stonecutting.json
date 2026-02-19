@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "roundabout:shiny_quartz"
+  },
+  "result": "roundabout:shiny_quartz_tiles"
+}
