@@ -9,7 +9,9 @@ public class GreenDayEntity extends FollowingStandEntity{
 
     public GreenDayEntity(EntityType<? extends Mob> entityType, Level world) { super(entityType, world); }
     public static final byte
-            PART_FIVE_GREEN_DAY = 0;
+            PART_FIVE_GREEN_DAY = 1,
+            RED_DAY = 2,
+            TEAL_DAY = 3;
 
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState hideLeg = new AnimationState();
