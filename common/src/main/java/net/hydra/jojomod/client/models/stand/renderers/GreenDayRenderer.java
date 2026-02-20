@@ -16,6 +16,8 @@ import org.jetbrains.annotations.Nullable;
 public class GreenDayRenderer extends StandRenderer<GreenDayEntity> {
 
     private static final ResourceLocation PART_FIVE_GREEN_DAY = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/part_four_green_day.png");
+    private static final ResourceLocation RED_DAY = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/red_day.png");
+    private static final ResourceLocation TEAL_DAY= new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/blue_day.png");
 
 
     public GreenDayRenderer(EntityRendererProvider.Context context) {
@@ -25,6 +27,8 @@ public class GreenDayRenderer extends StandRenderer<GreenDayEntity> {
     @Override public ResourceLocation getTextureLocation(GreenDayEntity entity) {
         return switch (entity.getSkin()) {
             case (GreenDayEntity.PART_FIVE_GREEN_DAY) -> PART_FIVE_GREEN_DAY;
+            case(GreenDayEntity.RED_DAY) -> RED_DAY;
+            case(GreenDayEntity.TEAL_DAY) -> TEAL_DAY;
             default -> PART_FIVE_GREEN_DAY;
 
         };

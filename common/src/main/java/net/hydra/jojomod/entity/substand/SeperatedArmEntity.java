@@ -58,7 +58,7 @@ public class SeperatedArmEntity extends StandEntity {
                 0.1);
         //this.setDeltaMovement(jumpT0Pos);
         this.lookAt(EntityAnchorArgument.Anchor.EYES,jumpT0Pos);
-        this.setDeltaMovement(this.getLookAngle().multiply(1.5,1.5,1.5));
+        this.setDeltaMovement((this.getLookAngle().multiply(1.5,1.5,1.5)).add(0,0.5,0));
     }
 
 
