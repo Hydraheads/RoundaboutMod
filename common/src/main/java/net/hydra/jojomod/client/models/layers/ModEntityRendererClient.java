@@ -53,6 +53,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation MR_SPIN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "magiicans_red_spin"), "main");
     public static final ModelLayerLocation GREEN_DAY_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "green_day"), "main");
     public static final ModelLayerLocation SEPERATED_LEGS_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "seperated_legs"), "main");
+    public static final ModelLayerLocation SEPERATED_ARM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "seperated_arm"), "main");
     public static final ModelLayerLocation ROAD_ROLLER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "road_roller"), "main");
 
     public static final ModelLayerLocation PAINTING_VAN_GOUGH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "van_gough"), "main");

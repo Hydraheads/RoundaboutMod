@@ -8,7 +8,9 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 
+import net.hydra.jojomod.entity.projectile.StandFireballEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
 import net.hydra.jojomod.entity.substand.SeperatedLegsEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
@@ -38,6 +40,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.Main;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -192,6 +195,13 @@ public class PowersGreenDay extends NewPunchingStand {
         /**Making dash usable on both key presses*/
         switch (context)
         {
+            case SKILL_1_NORMAL -> {
+                MainArmThrow();
+            }
+
+            case SKILL_1_CROUCH -> {
+                MainArmReturn();
+            }
             case SKILL_3_NORMAL -> {
                 Roundabout.LOGGER.info("dash");
                 dash();
@@ -212,9 +222,7 @@ public class PowersGreenDay extends NewPunchingStand {
             case SKILL_4_GUARD -> {
                 selectAllyClient();
             }
-            case SKILL_1_NORMAL -> {
-              setcrawlserver(this.self);
-            }
+
         }
     }
     public boolean IsMoldFieldActive = false;
@@ -225,7 +233,6 @@ public class PowersGreenDay extends NewPunchingStand {
         {
             case PowerIndex.POWER_4_SNEAK -> {
                 return StitchHeal(1.0f, this.self);
-                //return this.setcrawlserver(this.self);
                 
             }
             case PowerIndex.POWER_4 -> {
@@ -236,6 +243,13 @@ public class PowersGreenDay extends NewPunchingStand {
             }
             case PowerIndex.POWER_3_EXTRA -> {
                 return moldLeapServer();
+            }
+            case PowerIndex.POWER_1 -> {
+                return MainArmThrowServer();
+            }
+
+            case PowerIndex.POWER_1_SNEAK -> {
+                return MainArmReturnServer();
             }
         }
         return super.setPowerOther(move,lastMove);
@@ -319,6 +333,83 @@ public class PowersGreenDay extends NewPunchingStand {
         super.updatePowerInt(activePower,data);
     }
 
+    public SeperatedArmEntity Main_arm = null;
+
+    public boolean MainArmThrowServer(){
+        if (Main_arm == null) {
+            SeperatedArmEntity SAE = ModEntities.SEPERATED_ARM.create(this.self.level());
+            if (SAE != null) {
+                SAE.setUser(this.self);
+                SAE.setXRot(this.self.getXRot());
+                SAE.setYRot(this.self.getYRot());
+                SAE.setPos(getRayBlock(this.self,0.5f).add(0,-0.3,0));
+                SAE.setDeltaMovement((this.self.getLookAngle().multiply(2, 2, 2)));
+                this.self.level().addFreshEntity(SAE);
+                Main_arm = SAE;
+            }
+            Vec3 location = getRayBlock(this.self, 1f);
+            ((ServerLevel) this.self.level()).sendParticles(ModParticles.MOLD_DUST, location.x,
+                    location.y, location.z,
+                    24,
+                    0.005, 0.005, 0.005,
+                    0.1);
+        }else{
+            Double distance = MainUtil.cheapDistanceTo(
+                    this.self.getX(),
+                    this.self.getY(),
+                    this.self.getZ(),
+                    Main_arm.getX(),
+                    Main_arm.getY(),
+                    Main_arm.getZ()
+            );
+            Float distanceF = distance.floatValue() + 2f;
+            Main_arm.jump(this.getRayBlock(this.self,distanceF));
+        }
+        return true;
+    }
+
+    public boolean HasMainArmCharge = true;
+
+    public void MainArmThrow(){
+        if (!this.onCooldown(PowerIndex.SKILL_1)) {
+            if (HasMainArmCharge) {
+                HasMainArmCharge=false;
+            }else {
+                this.setCooldown(PowerIndex.SKILL_1, 120);
+                HasMainArmCharge=true;
+            }
+            tryPowerPacket(PowerIndex.POWER_1);
+            HasMainArm = false;
+        }
+
+    }
+    boolean HasMainArm = true;
+    public void MainArmReturn(){
+        if(!HasMainArm){
+            this.setCooldown(PowerIndex.SKILL_1, 200);
+            HasMainArm = true;
+            tryPowerPacket(PowerIndex.POWER_1_SNEAK);
+        }
+    }
+
+    public boolean MainArmReturnServer(){
+        Main_arm.setUser(null);
+        Main_arm.discard();
+        Main_arm = null;
+        double Xangle = Math.toRadians(this.self.getLookAngle().x);
+        double Pitch = Math.toRadians(this.self.getLookAngle().y);
+        double Zangle = Math.toRadians(this.self.getLookAngle().z);
+        double diameter = 0.6d;
+        for(int i = 0; i < 11; i = i + 1) {
+            ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.STITCH,
+                    this.getSelf().getX() + (diameter * Math.sin(i*4)) * Math.cos(Xangle),
+                    this.getSelf().getY() + (this.getSelf().getEyeHeight()*0.7),
+                    this.getSelf().getZ() + (diameter * Math.cos(i*4)) * Math.cos(Zangle),
+                    0,0,0,0,0);
+        }
+        return true;
+    }
+
 
 
     public boolean selectAllyServer(){
@@ -352,7 +443,6 @@ public class PowersGreenDay extends NewPunchingStand {
             }
 
             tryPowerPacket(PowerIndex.POWER_4_BLOCK);
-            Roundabout.LOGGER.info(listToString(allies));
         }
 
         saveAllies();
