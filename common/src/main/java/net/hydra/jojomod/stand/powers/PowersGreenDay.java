@@ -383,7 +383,7 @@ public class PowersGreenDay extends NewPunchingStand {
         }
 
     }
-    boolean HasMainArm = true;
+    public boolean HasMainArm = true;
     public void MainArmReturn(){
         if(!HasMainArm){
             this.setCooldown(PowerIndex.SKILL_1, 200);
