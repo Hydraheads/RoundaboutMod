@@ -796,20 +796,23 @@ public class PowersAnubis extends NewDashPreset {
                 case PowerIndex.BARRAGE_2 -> anim = AnubisAnimations.ThirdPersonShieldbreakHit;
                 case PowerIndex.BARRAGE_CHARGE-> anim = AnubisAnimations.ThirdPersonBarrageCharge;
                 case PowerIndex.BARRAGE -> anim = AnubisAnimations.ThirdPersonBarrageDash;
-          /*      case PowerIndex.ATTACK ->
+                case PowerIndex.ATTACK -> {
                     if (PA.activePowerPhase == 1) {
-                        anim = AnubisAnimations.ATTACK_1;
+                        anim = AnubisAnimations.ThirdPersonAttack;
                     } else {
-                        anim = AnubisAnimations.ATTACK_2;
+                        anim = AnubisAnimations.ThirdPersonAttack2;
                     }
                 }
                 case PowerIndex.SNEAK_ATTACK -> {
                     if (PA.activePowerPhase == 1) {
-                        anim = AnubisAnimations.SNEAK_ATTACK_1;
+                        anim = AnubisAnimations.ThirdPersonSneakAttack;
                     } else {
-                        anim = AnubisAnimations.SNEAK_ATTACK_2;
+                        anim = AnubisAnimations.ThirdPersonSneakAttack2;
                     }
-                } */
+                }
+                case PowersAnubis.DOUBLE -> anim = AnubisAnimations.ThirdPersonDoubleSlash;
+                case PowersAnubis.UPPERCUT -> anim = AnubisAnimations.ThirdPersonUppercut;
+                case PowersAnubis.SPIN -> anim = AnubisAnimations.ThirdPersonThrustCut;
             }
         }
         return anim;
@@ -904,6 +907,8 @@ public class PowersAnubis extends NewDashPreset {
         this.attackTimeDuring = 0;
         this.setAttackTime(0);
 
+        this.setAnimation(move);
+        Roundabout.LOGGER.info(""+move);
         setActivePower(move);
     }
 
