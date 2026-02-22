@@ -1,14 +1,10 @@
 package net.hydra.jojomod.item;
 
 
-import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.stand.powers.PowersAnubis;
-import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -80,6 +76,8 @@ public class AnubisItem extends Item {
         $$2.add(Component.translatable("roundabout.dev_status.dev_name").withStyle(ChatFormatting.WHITE)
                 .append(" ")
                 .append("Prisma").withStyle(ChatFormatting.YELLOW));
+
+        $$2.add(Component.translatable("roundabout.anubis_item.requires_mainhand").withStyle(ChatFormatting.GRAY));
     }
 
     @Override
@@ -98,7 +96,6 @@ public class AnubisItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
 
-    //    ((IPlayerEntity)$$1).roundabout$getThirdPersonAnubisUnsheath().startIfStopped($$1.tickCount);
 
         ItemStack $$3 = $$1.getItemInHand($$2);
         $$1.startUsingItem($$2);

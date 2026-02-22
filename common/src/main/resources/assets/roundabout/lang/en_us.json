@@ -1740,6 +1740,7 @@
   "death.attack.anubis_spin": "%1$s was shredded by %2$s",
 
   "item.roundabout.anubis_item": "Mysterious Sword",
+  "roundabout.anubis_item.requires_mainhand": "Must be in main hand to use",
   "item.roundabout.anubis_item.message1" : "The sword is cursed! Seek out a cleric!",
   "item.roundabout.anubis_item.sword_cleansed": "Anubis Cleansed!",
 

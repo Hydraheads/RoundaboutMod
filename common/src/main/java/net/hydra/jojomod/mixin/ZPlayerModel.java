@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.access.IPowersPlayer;
@@ -262,6 +263,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     }
                 }
 
+                this.roundabout$animate(ipe.roundabout$getItemAnimation(), AnubisAnimations.ThirdPersonUnsheathe,$$3,1F);
                 if ($$0.getUseItem().is(ModItems.ANUBIS_ITEM)
                         || (SU.roundabout$getStandPowers() instanceof PowersAnubis
                         && PowerTypes.hasStandActive(P)
@@ -278,11 +280,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         }
                     }
 
-                } else {
-                //    ipe.roundabout$getThirdPersonAnubisUnsheath().stop();
-                //    ipe.roundabout$getAnubisUnsheath().stop();
                 }
-            //    this.roundabout$animate(ipe.roundabout$getThirdPersonAnubisUnsheath(), AnubisAnimations.ThirdPersonUnsheathe,$$3,1F);
 
                 if (SU.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(P)) {
                     AnimationDefinition anim = PowersAnubis.getAnimation(SU);
@@ -419,7 +417,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     }
                 }
 
-        //        this.roundabout$animate(ipe.roundabout$getThirdPersonAnubisUnsheath(), AnubisAnimations.ThirdPersonUnsheathe,$$3,1F);
+                this.roundabout$animate(ipe.roundabout$getItemAnimation(), AnubisAnimations.ThirdPersonUnsheathe,$$3,1F);
 
                 AnimationDefinition anim = PowersAnubis.getAnimation(SU);
                 if (anim != null) {

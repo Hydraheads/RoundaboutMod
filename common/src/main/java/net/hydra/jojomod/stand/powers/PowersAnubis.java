@@ -573,7 +573,7 @@ public class PowersAnubis extends NewDashPreset {
 
         if (pogoTime > 0) {pogoTime -= 1;}
         if (this.getSelf().onGround()) {
-            if (this.getActivePower() != PowerIndex.SNEAK_ATTACK_CHARGE || this.attackTime > PogoDelay + 3) {
+            if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE  && this.attackTime <= PogoDelay) {
                 if (pogoTime == -1) {
                     if (pogoCounter == 0) {
                         setPogo(40);
@@ -826,6 +826,10 @@ public class PowersAnubis extends NewDashPreset {
         if ( ($$0.is(DamageTypes.MOB_ATTACK)
                 || $$0.is(DamageTypes.PLAYER_ATTACK)
                 || $$0.is(ModDamageTypes.STAND)) && $$0.getEntity() != null ) {
+
+            if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE && this.attackTimeDuring <= PowersAnubis.PogoDelay) {
+                this.setPowerNone();
+            }
 
             return this.getActivePower() == PowersAnubis.UPPERCUT && this.attackTimeDuring < 8
                     || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE && this.attackTimeDuring > PowersAnubis.PogoDelay && this.attackTimeDuring < PowersAnubis.PogoDelay + 9
@@ -1357,18 +1361,12 @@ public class PowersAnubis extends NewDashPreset {
             }
             if (range) {bl = true;}
             if (StandDamageEntityAttack(entity,pow,0.0F,this.getSelf())) {
-                int dur = 200;
-                int amp = 0;
-                if (range) {
-                    dur = 180;
-                    amp = 1;
 
-                }
                 Vec3 v = entity.getPosition(1F).subtract(this.getSelf().getPosition(1F));
                 v = v.normalize();
                 MainUtil.takeUnresistableKnockbackWithY(entity,0.6,v.x,v.y-0.22,v.z);
 
-                if (entity instanceof LivingEntity LE) {LE.addEffect(new MobEffectInstance(ModEffects.BLEED,dur,amp));}
+                if (entity instanceof LivingEntity LE) {LE.addEffect(new MobEffectInstance(ModEffects.BLEED,200,1));}
 
 
             }
@@ -1612,7 +1610,7 @@ public class PowersAnubis extends NewDashPreset {
             Vec3 dpos = npos.subtract(pos);
             List<Entity> entities = new ArrayList<>();
             int intervals = 5;
-            for(int i=0;i<intervals-1;i++) {
+            for(int i=0;i<intervals;i++) {
                 float d = 1F/intervals*i;
                 Vec3 spos = pos.add(dpos.scale(d));
                 List<Entity> targets = MainUtil.genHitbox(level,spos.x,spos.y,spos.z,2,1.5,2);

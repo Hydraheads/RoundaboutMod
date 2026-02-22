@@ -4,10 +4,11 @@ import net.minecraft.client.animation.AnimationChannel;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.animation.Keyframe;
 import net.minecraft.client.animation.KeyframeAnimations;
+import net.minecraft.util.Mth;
 
 public class AnubisAnimations {
 
-    public static final AnimationDefinition ThirdPersonUnsheathe = AnimationDefinition.Builder.withLength(2.5F).looping()
+    public static final AnimationDefinition ThirdPersonUnsheathe = AnimationDefinition.Builder.withLength(2.5F)
             .addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.25F, KeyframeAnimations.degreeVec(-74.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
@@ -20,23 +21,20 @@ public class AnubisAnimations {
             ))
             .build();
 
-    public static final AnimationDefinition Unsheathe = AnimationDefinition.Builder.withLength(2.5F)
-            .addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(0.25F, KeyframeAnimations.degreeVec(-50.0F, 20.0F, -30.0F), AnimationChannel.Interpolations.LINEAR)
+    public static final AnimationDefinition Unsheath = AnimationDefinition.Builder.withLength(2.0F)
+            .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.POSITION,// +x forward, +y up, +z left, has to be large
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(-0.2F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(1, KeyframeAnimations.posVec(0, 0.75F, 20), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(2.5F, KeyframeAnimations.posVec(0, 0.75F, 20), AnimationChannel.Interpolations.LINEAR)
             ))
-            .build();
+            .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(1, KeyframeAnimations.posVec(-75*Mth.DEG_TO_RAD, 0,50*Mth.DEG_TO_RAD), AnimationChannel.Interpolations.LINEAR)
+            ))
 
-    public static final AnimationDefinition ItemUnsheathe = AnimationDefinition.Builder.withLength(2.5F)
-            .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.POSITION,
-                    new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(0.250F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(2.5F, KeyframeAnimations.posVec(0.0F, 5.5F, 0.0F), AnimationChannel.Interpolations.LINEAR)
-            ))
             .addAnimation("sheath", new AnimationChannel(AnimationChannel.Targets.POSITION,
-                    new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(0.25F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(2.5F, KeyframeAnimations.posVec(0.0F, 0.0F, -5.5F), AnimationChannel.Interpolations.LINEAR)
+                    new Keyframe(1F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(2.5F, KeyframeAnimations.posVec(0,0.0F, -6.5F), AnimationChannel.Interpolations.LINEAR)
             ))
             .build();
 
@@ -47,13 +45,13 @@ public class AnubisAnimations {
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(-42.3977F, -50.3315F, 26.0334F), AnimationChannel.Interpolations.LINEAR)
             ))
             .build();
-    // X, Y, Z axis is up/down
-    public static final AnimationDefinition ItemBlock = AnimationDefinition.Builder.withLength(0.0F)
-            .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0, 30.0F), AnimationChannel.Interpolations.LINEAR)
+
+    public static final AnimationDefinition Block = AnimationDefinition.Builder.withLength(0F)
+        .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+            new Keyframe(0F, KeyframeAnimations.degreeVec(-72.5926F, 43.6575F, -77.7873F), AnimationChannel.Interpolations.LINEAR)
             ))
             .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.POSITION,
-                    new Keyframe(0.0F, KeyframeAnimations.posVec(-2.5F, -2.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+                    new Keyframe(0F, KeyframeAnimations.posVec(-4.0F, 2.0F, -1.0F), AnimationChannel.Interpolations.LINEAR)
             ))
             .build();
 
@@ -175,7 +173,7 @@ public class AnubisAnimations {
 
 
 
-    public static final AnimationDefinition ATTACK_1 = AnimationDefinition.Builder.withLength(0.5F)
+    public static final AnimationDefinition ATTACK_1 = AnimationDefinition.Builder.withLength(6F)
             .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.5F, KeyframeAnimations.degreeVec(0.0F, -720.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
@@ -189,6 +187,7 @@ public class AnubisAnimations {
                     new Keyframe(0.5F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 162.5F), AnimationChannel.Interpolations.LINEAR)
             ))
             .build();
+
 
     public static final AnimationDefinition ATTACK_2 = AnimationDefinition.Builder.withLength(0.5F)
             .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -235,18 +234,24 @@ public class AnubisAnimations {
             ))
             .build();
 
-    public static final AnimationDefinition TEST = AnimationDefinition.Builder.withLength(0.5F)
-            .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(0.5F, KeyframeAnimations.degreeVec(0.0F, -720.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+    public static final AnimationDefinition TEST = AnimationDefinition.Builder.withLength(6F)
+            .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(3.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(3.5F, KeyframeAnimations.degreeVec(-180.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(4.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(4.5F, KeyframeAnimations.degreeVec(0.0F, -180.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(5.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(5.5F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 180.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(6.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
-            .addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(0.5F, KeyframeAnimations.degreeVec(-150.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
-            ))
-            .addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(0.5F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 162.5F), AnimationChannel.Interpolations.LINEAR)
+            .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.POSITION,
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.5F, KeyframeAnimations.posVec(-5.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(1.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(1.5F, KeyframeAnimations.posVec(0.0F, 5.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(2.5F, KeyframeAnimations.posVec(0.0F, 0.0F, 5.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(3.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
             .build();
 
