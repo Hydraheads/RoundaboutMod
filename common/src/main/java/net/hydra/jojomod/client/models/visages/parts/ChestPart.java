@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.HeyYaAnimations;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersHeyYa;
@@ -63,12 +64,16 @@ public class ChestPart extends PsuedoHierarchicalModel {
     /**Idle 1 (byte 0) = head straight, idle 2 (byte 1) = head follow*/
 
 
-    public ResourceLocation getTextureLocation(String path){
-        return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_breasts/"+path+".png");
+    public ResourceLocation getTextureLocation(String path, Entity context){
+        if (FateTypes.isUndisguisedZombie(context)) {
+            return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/zombie_breasts/" + path + ".png");
+        } else {
+            return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_breasts/" + path + ".png");
+        }
     }
 
     public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light, String path) {
-        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(path)));
+        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(path,context)));
         root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
     }
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
@@ -78,7 +83,7 @@ public class ChestPart extends PsuedoHierarchicalModel {
             if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
                 partialTicks = 0;
             }
-            VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(path)));
+            VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(path,LE)));
             if (ClientUtil.hasChangedBody(context)){
                 consumer = bufferSource.getBuffer(RenderType.entityTranslucent(ClientUtil.getChangedBodyBreastTexture(context)));
             }

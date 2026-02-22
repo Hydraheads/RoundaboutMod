@@ -653,7 +653,12 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Override
     @Unique
     public void roundabout$setShapeShift(byte level){
-        ((Player) (Object) this).getEntityData().set(ROUNDABOUT$SHAPE_SHIFT, level);
+        if (((Player) (Object) this).getEntityData().get(ROUNDABOUT$SHAPE_SHIFT) != level){
+            if (level != ShapeShifts.VILLAGER.ordinal()) {
+                ((Player) (Object) this).getEntityData().set(ROUNDABOUT$SHAPE_SHIFT_EXTRA, (byte) 0);
+            }
+            ((Player) (Object) this).getEntityData().set(ROUNDABOUT$SHAPE_SHIFT, level);
+        }
     }
     @Override
     @Unique
@@ -1100,6 +1105,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         compoundtag.putFloat("hairColorX",rdbt$getHairColorX());
         compoundtag.putFloat("hairColorY",rdbt$getHairColorY());
         compoundtag.putFloat("hairColorZ",rdbt$getHairColorZ());
+        compoundtag.putByte("shapeShift",roundabout$getShapeShift());
+        compoundtag.putByte("shapeShiftExtra",roundabout$getShapeShiftExtraData());
 
 
         compoundtag.putFloat("guard",((StandUser)this).roundabout$getGuardPoints());
@@ -1202,6 +1209,14 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
         if (compoundtag2.contains("hairColorZ")) {
             rdbt$setHairColorZ(compoundtag2.getFloat("hairColorZ"));
+        }
+
+
+        if (compoundtag2.contains("shapeShift")) {
+            roundabout$setShapeShift(compoundtag2.getByte("shapeShift"));
+        }
+        if (compoundtag2.contains("shapeShiftExtra")) {
+            roundabout$setShapeShiftExtraData(compoundtag2.getByte("shapeShiftExtra"));
         }
 
 

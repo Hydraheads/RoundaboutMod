@@ -37,7 +37,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -1031,6 +1033,17 @@ public class ClientUtil {
         }
 
         return throwFade;
+    }
+
+    public static PlayerModel getPlayerModel(Entity entity){
+        if (entity instanceof Player player){
+            EntityRenderDispatcher dispatch = Minecraft.getInstance().getEntityRenderDispatcher();
+            EntityRenderer<?> ER = dispatch.getRenderer(player);
+            if (ER instanceof LivingEntityRenderer PR && PR.getModel() instanceof PlayerModel<?> pm) {
+                return pm;
+            }
+        }
+        return null;
     }
 
     public static void setThrowFadeToTheEther(float ether){

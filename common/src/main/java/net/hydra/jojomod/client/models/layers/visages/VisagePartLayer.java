@@ -226,6 +226,9 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     if (pos2 == PlayerPosIndex.BARRAGE) {
                         renderBarrageArmsPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
                                 r, g, b);
+                    } else if (pos2 == PlayerPosIndex.BLOOD_SUCK){
+                        renderHairVein(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
+                                r, g, b);
                     } else if (pos2 == PlayerPosIndex.HAIR_EXTENSION || pos2 == PlayerPosIndex.HAIR_EXTENSION_2){
                         if (!isHurt){
                             r = pl.rdbt$getHairColorX();
@@ -439,6 +442,14 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ClientUtil.pushPoseAndCooperate(poseStack,33);
         getParentModel().body.translateAndRotate(poseStack);
         ModStrayModels.bodySpikePart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1);
+        ClientUtil.popPoseAndCooperate(poseStack,33);
+    }
+    public void renderHairVein(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                                float r, float g, float b) {
+        ClientUtil.pushPoseAndCooperate(poseStack,33);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.hairVeinPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1);
         ClientUtil.popPoseAndCooperate(poseStack,33);
     }

@@ -53,6 +53,9 @@ import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.Npc;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.FlowerBlock;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -110,6 +113,22 @@ public class VampireFate extends VampiricFate {
     };
     public static final byte HYPNOSIS = 50;
     public static final byte HAIR_EXTENDED = 51;
+    @Override
+    public ResourceLocation getIconYes(int slot){
+        if (slot == 2 && isHoldingSneak()){
+            return StandIcons.SQUARE_ICON_BLOOD;
+        } else if (slot == 3 && isHoldingSneak() && !canLatchOntoWall()){
+            return StandIcons.SQUARE_ICON_BLOOD;
+        }
+        return StandIcons.SQUARE_ICON;
+    }
+
+    public boolean isServerControlledCooldown(byte num){
+        if (num == PowerIndex.FATE_EXTRA){
+            return true;
+        }
+        return super.isServerControlledCooldown(num);
+    }
 
     public static String formatTicks(int ticks) {
         int totalSeconds = ticks / 20;
@@ -397,8 +416,31 @@ public class VampireFate extends VampiricFate {
     public boolean setPowerOther(int move, int lastMove) {
         if (move == HYPNOSIS) {
             hypnosisServer();
+        }if (move == FLOWER_DRINK) {
+            drinkPlantServer();
         }
         return super.setPowerOther(move,lastMove);
+    }
+
+    public void drinkPlantServer(){
+        if (!self.level().isClientSide()) {
+            if (!onCooldown(PowerIndex.FATE_EXTRA)) {
+                if (negateDrink()) {
+                    if (isPlant(self.getMainHandItem())){
+                        ItemStack stack = self.getMainHandItem();
+                        stack.shrink(1);
+                    } else if (isPlant(self.getOffhandItem())){
+                        ItemStack stack = self.getOffhandItem();
+                        stack.shrink(1);
+                    }
+                    self.heal(1f);
+                    setCooldown(PowerIndex.FATE_EXTRA, 200);
+                    self.level().playSound(null, self.blockPosition(), ModSounds.VAMPIRE_CAMO_EVENT,
+                            SoundSource.PLAYERS, 1F, 1.8F);
+                    setPowerNone();
+                }
+            }
+        }
     }
     public void hypnosisServer(){
         if (isHypnotizing){
@@ -427,13 +469,24 @@ public class VampireFate extends VampiricFate {
     public boolean isHypnotizing = false;
     public int hypnoTicks = 0;
 
+    @Override
+    public boolean negateDrink(){
+        return isHoldingPlant() && self.getHealth() < self.getMaxHealth();
+    }
+
     public boolean isAttackIneptVisually(byte activeP, int slot){
+
         if (slot == 3 && isPlantedInWall() && !isHoldingSneak() && !canLatchOntoWall())
             return true;
         if (slot == 3 && isHoldingSneak() && !canUseBloodSpeed() && !canLatchOntoWall() && canUseBloodSpeedUnlock())
             return true;
         if (slot == 2 && isHoldingSneak() && !canUseRegen())
             return true;
+        Entity TE = getUserData(self).roundabout$getStandPowers().getTargetEntity(this.self, 3, 15);
+        if (slot == 2 && !MainUtil.canDrinkBloodFair(TE, self) && !isHoldingSneak() &&
+                !negateDrink()) {
+            return true;
+        }
         return super.isAttackIneptVisually(activeP,slot);
     }
     @Override
@@ -765,6 +818,20 @@ public class VampireFate extends VampiricFate {
         return getVampireData().bloodSpeedLevel > 0;
     }
 
+    public boolean isPlant(ItemStack stack){
+        if (stack != null && !stack.isEmpty()){
+            return (stack.getItem() instanceof BlockItem bi && bi.getBlock() instanceof FlowerBlock);
+        }
+        return false;
+    }
+    @Override
+    public boolean isHoldingPlant(){
+        if (isPlant(self.getMainHandItem()) || isPlant(self.getOffhandItem())){
+            return true;
+        }
+        return false;
+    }
+
     private final TargetingConditions hypnosisTargeting = TargetingConditions.forCombat().range(11);
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
@@ -785,7 +852,11 @@ public class VampireFate extends VampiricFate {
         if (isHoldingSneak()) {
             setSkillIcon(context, x, y, 2, StandIcons.REGENERATE, PowerIndex.FATE_2_SNEAK);
         } else {
-            setSkillIcon(context, x, y, 2, StandIcons.BLOOD_DRINK, PowerIndex.FATE_2);
+            if (negateDrink()){
+                setSkillIcon(context, x, y, 2, StandIcons.FLOWER_DRINK, PowerIndex.FATE_EXTRA);
+            } else {
+                setSkillIcon(context, x, y, 2, StandIcons.BLOOD_DRINK, PowerIndex.FATE_2);
+            }
         }
 
         if ((canLatchOntoWall() || (isPlantedInWall() && !isHoldingSneak())) && canWallWalkConfig()) {

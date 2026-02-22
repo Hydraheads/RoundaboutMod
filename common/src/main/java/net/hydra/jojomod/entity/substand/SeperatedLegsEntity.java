@@ -12,6 +12,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -42,7 +43,6 @@ public class SeperatedLegsEntity extends StandEntity {
     public SeperatedLegsEntity(EntityType<SeperatedLegsEntity> $$0, Level $$1) {
         super($$0, $$1);
     }
-    public LivingEntity lastcontact;
     public int StartupTicks = 10;
 
 

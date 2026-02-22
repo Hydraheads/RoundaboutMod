@@ -143,6 +143,10 @@ public class RoundaboutCommands {
                     } else if (LE instanceof Mob mb){
                         ((IMob)mb).roundabout$setVampire(true);
                     }
+                } else if (fate.equalsIgnoreCase("zombie")){
+                    if (LE instanceof Player PL){
+                        ((IPlayerEntity)PL).roundabout$setFate((byte) FateTypes.ZOMBIE.ordinal());
+                    }
                 } else if (fate.equalsIgnoreCase("human") || fate.equalsIgnoreCase("none")){
                     if (LE instanceof Player PL){
                         ((IPlayerEntity)PL).roundabout$setFate((byte) FateTypes.HUMAN.ordinal());

@@ -304,6 +304,11 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                     playerModel.leftArm.visible = false;
                     playerModel.leftSleeve.visible = false;
                 }
+
+                if(!PGD.HasMainArm){
+                    playerModel.rightArm.visible=false;
+                    playerModel.rightSleeve.visible=false;
+                }
             }
 
 

@@ -5462,10 +5462,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     @Override
     public boolean rdbt$isServerControlledCooldown(CooldownInstance ci, byte num){
+
         if (roundabout$getStandPowers().isServerControlledCooldown(num)){
             return true;
         }
         if (rdbt$this() instanceof Player pl && ((IPowersPlayer)pl).rdbt$getPowers().isServerControlledCooldown(num)){
+            return true;
+        }
+        if (rdbt$this() instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers().isServerControlledCooldown(num)){
             return true;
         }
         return false;

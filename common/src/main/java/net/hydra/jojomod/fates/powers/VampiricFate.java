@@ -99,7 +99,6 @@ public class VampiricFate extends FatePowers {
         setActivePower(SUPER_HEARING);
     }
 
-
     public void blockBreakParticles(Block block, Vec3 pos){
         if (!this.self.level().isClientSide()) {
             ((ServerLevel) this.self.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
@@ -709,7 +708,17 @@ public int speedActivated = 0;
         tryPower(PowerIndex.NONE,true);
         tryPowerPacket(PowerIndex.NONE);
     }
+    public boolean isHoldingPlant(){
+        return false;
+    }
+
+    public static final byte FLOWER_DRINK = 52;
     public void suckBlood(){
+        if (negateDrink() && getActivePower() == NONE && !onCooldown(PowerIndex.FATE_EXTRA)) {
+            tryPowerPacket(FLOWER_DRINK);
+            return;
+        }
+
         if (!onCooldown(PowerIndex.FATE_2)) {
             Entity TE = getTargetEntity(self, 3, 15);
             if (TE != null && MainUtil.canDrinkBloodFair(TE, self) && getActivePower() != BLOOD_REGEN) {
@@ -877,13 +886,10 @@ public int speedActivated = 0;
         return getActivePower() == BLOOD_REGEN;
     }
 
-    /**This function grays out icons for moves you can't currently use. Slot is the icon slot from 1-4,
-     * activeP is your currently active power*/
-    public boolean isAttackIneptVisually(byte activeP, int slot){
-        Entity TE = getUserData(self).roundabout$getStandPowers().getTargetEntity(this.self, 3, 15);
-        if (slot == 2 && !MainUtil.canDrinkBloodFair(TE, self) && !isHoldingSneak())
-            return true;
-        return super.isAttackIneptVisually(activeP,slot);
+
+
+    public boolean negateDrink(){
+        return false;
     }
 
     public boolean isHearing(){
@@ -895,15 +901,7 @@ public int speedActivated = 0;
         return ClientNetworking.getAppropriateConfig().walkingHeartSettings.enableWallWalking;
     }
 
-    @Override
-    public ResourceLocation getIconYes(int slot){
-        if (slot == 2 && isHoldingSneak()){
-            return StandIcons.SQUARE_ICON_BLOOD;
-        } else if (slot == 3 && isHoldingSneak() && !canLatchOntoWall()){
-            return StandIcons.SQUARE_ICON_BLOOD;
-        }
-        return StandIcons.SQUARE_ICON;
-    }
+
 
     public float hearingDistance(){
         return 10;

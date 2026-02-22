@@ -21,6 +21,7 @@
 
   "text.roundabout.fate.vampire": "Vampire",
   "text.roundabout.fate.vampire_hair": "Change Hair Color",
+  "text.roundabout.fate.zombie": "Zombie",
 
   "text.roundabout.bullets.revolver": "Compatible with Snubnosed Revolvers and Colt Revolvers.",
   "text.roundabout.bullets.tommy": "Compatible with Tommy Guns.",
@@ -508,7 +509,7 @@
   "hud.roundabout.standout": "Stand Summoned",
   "sounds.roundabout.dsp_summon": "Explosive Stand Summon",
   "sounds.roundabout.vampire_message": "-serrated-",
-  "sounds.roundabout.vampire_camo": "Vanish",
+  "sounds.roundabout.vampire_camo": "Whoosh",
   "sounds.roundabout.vsong_silent_reveries": "Silent Reveries",
   "sounds.roundabout.vsong_twisted": "Twisted",
   "sounds.roundabout.vsong_bloodcurdling_moments": "Bloodcurdling Moments",
@@ -1373,7 +1374,7 @@
 
 
   "ability.roundabout.blood_drink": "Blood Suck",
-  "ability.roundabout.blood_drink.desc": "Consume blood through your hands so long as you remain facing your target, damaging them to restore your blood. If a mob has drinkable blood, the indicator will appear in the middle of the screen. If a mob is not agitated, you can score a critical blood suck. Villagers and Illagers will zombify upon being killed by this skill, and can be controlled.",
+  "ability.roundabout.blood_drink.desc": "Consume blood through your hands so long as you remain facing your target, damaging them to restore your blood. If a mob has drinkable blood, the indicator will appear in the middle of the screen. If a mob is not agitated, you can score a critical blood suck. Villagers and Illagers will zombify upon being killed by this skill, and can be controlled. You can also absorb held plants for direct health.",
   "ability.roundabout.vampire_passive": "Vampiric",
   "ability.roundabout.vampire_passive.desc": "You evaporate in sunlight. You run on blood instead of hunger, and eating raw foods and monster drops provide blood with no penalties. You cannot die of starvation. Drowning only lowers your speed. Iron Golems detest you, while zombies are neutral with your presence.",
   "ability.roundabout.mass_heal": "Blood Healing",
@@ -1766,6 +1767,10 @@
   "roundabout.anubis.memory_title": "Record Memories",
   "roundabout.anubis.memory_fail": "Memory is too long!",
 
+  "skins.roundabout.green_day.part_five_green_day": "Part 5",
+  "skins.roundabout.green_day.red_day": "Red Day",
+  "skins.roundabout.green_day.teal_day": "Teal Day",
+
 
 
   "skins.roundabout.achtung_baby.base": "Has No Form",
@@ -1894,6 +1899,9 @@
   "advancements.roundabout.stand_arrow.description": "Acquire a stand arrow",
   "advancements.roundabout.dimension_hop.title": "Don't Fence Me In",
   "advancements.roundabout.dimension_hop.description": "Dimension hop with D4C for the first time",
+
+  "text.roundabout.zombie_disguise_off": "Disguise Removed",
+  "text.roundabout.zombie_disguise_on": "Disguise Created",
 
   "text.roundabout.hey_ya_messaging.no_1": "There is no such thing as loss, just learning!",
   "text.roundabout.hey_ya_messaging.no_2": "Your luck is one in five billion, you can do anything!",
