@@ -25,6 +25,7 @@ import net.hydra.jojomod.item.FirearmItem;
 import net.hydra.jojomod.item.SnubnoseRevolverItem;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersCream;
+import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.item.FogBlockItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -252,6 +253,13 @@ public abstract class InputEvents implements IInputEvents {
                 return;
             }
 
+            if(powers instanceof PowersGreenDay PGD) {
+                if ((!PGD.HasMainArm)&& !(standComp.roundabout$hasStandOut())) {
+                    ci.setReturnValue(false);
+                    return;
+                }
+            }
+
             if (standComp.roundabout$getCombatMode()){
                 if (PowerTypes.isBrawling(player)){
                     ci.setReturnValue(rdbt$stopBreakingBlock());
@@ -345,13 +353,20 @@ public abstract class InputEvents implements IInputEvents {
         public void roundaboutBlockBreak(boolean $$0, CallbackInfo ci) {
             if (player != null) {
                 StandUser standComp = ((StandUser) player);
+                StandPowers powers = standComp.roundabout$getStandPowers();
 
                 if (standComp.roundabout$isPossessed()) {
                     ci.cancel();
                     return;
                 }
 
-                StandPowers powers = standComp.roundabout$getStandPowers();
+                if(powers instanceof PowersGreenDay PGD) {
+                    if ((!PGD.HasMainArm) && !(standComp.roundabout$hasStandOut())) {
+                        ci.cancel();
+                        return;
+                    }
+                }
+
                 if (powers.isPiloting()){
                     ci.cancel();
                     if (powers instanceof PowersJustice){
@@ -629,6 +644,14 @@ public abstract class InputEvents implements IInputEvents {
                 ci.cancel();
                 return;
             }
+
+            if(powers instanceof PowersGreenDay PGD) {
+                if ((!PGD.HasMainArm)&& !(standComp.roundabout$hasStandOut())) {
+                    ci.cancel();
+                    return;
+                }
+            }
+
             if (powers.interceptAllInteractions()) {
                 roundabout$TryGuard();
                 ci.cancel();

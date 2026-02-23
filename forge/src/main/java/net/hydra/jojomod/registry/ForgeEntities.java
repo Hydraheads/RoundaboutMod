@@ -20,6 +20,7 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
+import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
 import net.hydra.jojomod.entity.substand.SeperatedLegsEntity;
 import net.hydra.jojomod.entity.visages.mobs.*;
 import net.minecraft.core.Registry;
@@ -572,5 +573,12 @@ public class ForgeEntities {
             ENTITY_TYPES.register("seperated_legs", () ->
                     EntityType.Builder.<SeperatedLegsEntity>of(SeperatedLegsEntity::new, MobCategory.MISC).
                             sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":seperated_legs")
+
+            );
+
+    public static final RegistryObject<EntityType<SeperatedArmEntity>> SEPERATED_ARM =
+            ENTITY_TYPES.register("seperated_arm", () ->
+                    EntityType.Builder.<SeperatedArmEntity>of(SeperatedArmEntity::new, MobCategory.MISC).
+                            sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":seperated_arm")
             );
 }

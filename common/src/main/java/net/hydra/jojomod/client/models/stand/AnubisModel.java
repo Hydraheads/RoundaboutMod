@@ -141,45 +141,10 @@ public class AnubisModel extends PsuedoHierarchicalModel {
 
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
                        int light, float r, float g, float b, float alpha, byte skin) {
-        render(context,partialTicks,poseStack,bufferSource,light,r,g,b,alpha,skin,true);
-    }
-
-    public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
-                       int light, float r, float g, float b, float alpha, byte skin, boolean anims) {
         if (context instanceof LivingEntity LE) {
             this.root().getAllParts().forEach(ModelPart::resetPose);
-            if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
-                partialTicks = 0;
-            }
-            StandUser user = ((StandUser) LE);
 
-            if (anims) {
-
-                if (LE.getUseItem().is(ModItems.ANUBIS_ITEM)) {
-                    user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
-                    this.animate(user.roundabout$getWornStandIdleAnimation(), AnubisAnimations.ItemUnsheathe, partialTicks, 1f);
-                } else {
-                    user.roundabout$getWornStandIdleAnimation().stop();
-                }
-                if (user.roundabout$getStandPowers() instanceof PowersAnubis PA && PowerTypes.hasStandActive(LE)) {
-                    boolean start = false;
-                    AnimationDefinition anim = null;
-                    switch (user.roundabout$getStandAnimation()) {
-                        case PowerIndex.GUARD -> {
-                            start = true;
-                            anim = AnubisAnimations.ItemBlock;
-                        }
-                    }
-                    if (start) {
-                        this.animate(user.roundabout$getWornStandAnimation(), anim, partialTicks, 1F);
-                    }
-                }
-
-
-            }
-            this.root().getAllParts().forEach(ModelPart::resetPose);
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
-            //The number at the end is inversely proportional so 2 is half speed
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
         }
     }
@@ -227,27 +192,40 @@ public class AnubisModel extends PsuedoHierarchicalModel {
 
 
 
-
-
-
-
-
-        poseStack.translate(0,0,-1.27); // +forward
+        poseStack.translate(0,0,-1.27); // -forward
         poseStack.translate(0.85,0,0); // +left
         poseStack.translate(0,-0.3,0); //  +up
         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,-15),0,0,0); // positive towards camera
         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,100),0,0,0); // around Y axis
-        if (skin == (byte) 0 || skin == (byte)17 || skin == (byte)18 ) {
+        if (skin == (byte) 0 || skin == (byte)17 || skin == (byte)18) {
             poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,180),0,0,0);
             poseStack.translate(0,0.35,0);
             poseStack.translate(0.1,0,0);
         }
-        poseStack.scale(0.8F,0.8F,0.8F);
+        if (entity.getUseItem().getItem().equals(ModItems.ANUBIS_ITEM)) {
+            poseStack.translate(0.1,0,0);
+        } else {
+            poseStack.scale(0.8F,0.8F,0.8F);
+        }
 
 
         if (entity.getUseItem().getItem() instanceof AnubisItem) {
             if (entity instanceof Player P) {
-                this.animate( ((IPlayerEntity)P).roundabout$getItemAnimation(),AnubisAnimations.Unsheathe,partialTicks,1F);
+                this.animate( ((IPlayerEntity)P).roundabout$getItemAnimation(),AnubisAnimations.Unsheath,partialTicks,1F);
+            }
+        } else {
+            AnimationDefinition anim = null;
+            anim = switch (user.roundabout$getStandAnimation()) {
+                case PowerIndex.GUARD -> AnubisAnimations.Block;
+                case PowerIndex.BARRAGE_CHARGE_2 -> AnubisAnimations.Shieldbreak;
+                case PowerIndex.BARRAGE_2 -> AnubisAnimations.ShieldbreakHit;
+                default -> null;
+            };
+            if (anim != null) {
+                user.roundabout$getWornStandAnimation().startIfStopped(entity.tickCount);
+                this.animate(user.roundabout$getWornStandAnimation(),anim,partialTicks,1F);
+            } else {
+                user.roundabout$getWornStandAnimation().stop();
             }
         }
 

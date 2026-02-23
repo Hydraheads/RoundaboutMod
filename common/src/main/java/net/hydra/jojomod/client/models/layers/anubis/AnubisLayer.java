@@ -145,7 +145,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
 
         poseStack.scale(scale,scale,scale);
         ModStrayModels.ANUBIS.render(entity, partialTicks, poseStack, bufferSource, packedLight,
-                1, 1, 1, 1-heyFull, user.roundabout$getStandSkin(),false);
+                1, 1, 1, 1-heyFull, user.roundabout$getStandSkin());
     }
 
     public static float getTicks(LivingEntity livingEntity, float partialTicks) {
@@ -195,6 +195,47 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
         }
 
 
+    }
+
+
+    ///  used for in-hand rendering
+    public static void renderOutOfContext(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float partialTicks, ModelPart handarm) {
+        if (((IEntityAndData) entity).roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung()) return;
+
+        if (entity != null && AnubisLayer.shouldRender(entity) != null
+                && entity.getMainHandItem().getItem().equals(ModItems.ANUBIS_ITEM) && !entity.getUseItem().getItem().equals(ModItems.ANUBIS_ITEM) ) {
+            StandUser user = ((StandUser) entity);
+
+
+            ClientUtil.pushPoseAndCooperate(poseStack, 48);
+
+            handarm.translateAndRotate(poseStack);
+
+            poseStack.translate(0, 0.9, 0);
+            if (AnubisLayer.shouldRender(entity) == HumanoidArm.RIGHT) {
+                poseStack.translate(0,0,0);
+                if (isSheathed(entity)) {
+                    poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0F, 0F, 1F, 200), 0, 0, 0);
+                    poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1, 0, 0, 30), 0, 0, 0);
+                    poseStack.translate(0.5,0.35,0);
+                } else {
+                    poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0, 0, 1,  20), 0, 0, 0);
+                    poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1, 0, 0, -20), 0, 0, 0);
+                }
+
+                //     if (isSheathed(entity)) {poseStack.translate(0,0.5,0.8);}
+            } else {
+                poseStack.translate(0.2,0,0);
+                poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0, 1, 0, 180), 0, 0, 0);
+                poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0, 0, 1, 45), 0, 0, 0);
+                poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1, 0, 0, isSheathed(entity) ? 225 :45), 0, 0, 0);
+                if (isSheathed(entity)) {poseStack.translate(0,0.1,0);} else {poseStack.translate(0.3, -0.4, -0.05);}
+            }
+
+            renderAnubis(poseStack,bufferSource,packedLight,entity,partialTicks);
+            ClientUtil.popPoseAndCooperate(poseStack, 48);
+
+        }
     }
 
 

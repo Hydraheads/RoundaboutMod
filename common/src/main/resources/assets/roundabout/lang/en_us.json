@@ -1743,6 +1743,7 @@
   "death.attack.anubis_spin": "%1$s was shredded by %2$s",
 
   "item.roundabout.anubis_item": "Mysterious Sword",
+  "roundabout.anubis_item.requires_mainhand": "Must be in main hand to use",
   "item.roundabout.anubis_item.message1" : "The sword is cursed! Seek out a cleric!",
   "item.roundabout.anubis_item.sword_cleansed": "Anubis Cleansed!",
 
@@ -1767,6 +1768,10 @@
   "roundabout.anubis.playback_title": "Replay Memories",
   "roundabout.anubis.memory_title": "Record Memories",
   "roundabout.anubis.memory_fail": "Memory is too long!",
+
+  "skins.roundabout.green_day.part_five_green_day": "Part 5",
+  "skins.roundabout.green_day.red_day": "Red Day",
+  "skins.roundabout.green_day.teal_day": "Teal Day",
 
 
 

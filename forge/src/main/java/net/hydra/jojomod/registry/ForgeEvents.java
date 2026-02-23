@@ -19,6 +19,7 @@ import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.CreamEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
+import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
 import net.hydra.jojomod.entity.substand.SeperatedLegsEntity;
 import net.hydra.jojomod.entity.visages.mobs.*;
 import net.hydra.jojomod.event.ModEffects;
@@ -105,7 +106,8 @@ public class ForgeEvents {
         event.put(ForgeEntities.D4C_CLONE.get(), D4CCloneEntity.createAttributes().build());
         event.put(ForgeEntities.ROAD_ROLLER_ENTITY.get(), RoadRollerEntity.createAttributes().build());
         event.put(ForgeEntities.SEPERATED_LEGS.get(), SeperatedLegsEntity.createStandAttributes().build());
-    }
+        event.put(ForgeEntities.SEPERATED_ARM.get(), SeperatedArmEntity.createStandAttributes().build());
+;    }
 
     @SubscribeEvent
     public static void registerSpawnPlacements(SpawnPlacementRegisterEvent event) {
@@ -529,6 +531,7 @@ public class ForgeEvents {
         ModEntities.STAND_ARROW = ForgeEntities.STAND_ARROW.get();
         ModEntities.ROAD_ROLLER_ENTITY = ForgeEntities.ROAD_ROLLER_ENTITY.get();
         ModEntities.SEPERATED_LEGS = ForgeEntities.SEPERATED_LEGS.get();
+        ModEntities.SEPERATED_ARM = ForgeEntities.SEPERATED_ARM.get();
 
         ModEntities.THROWN_OBJECT = ForgeEntities.THROWN_OBJECT.get();
         ModEntities.THROWN_ANUBIS = ForgeEntities.THROWN_ANUBIS.get();

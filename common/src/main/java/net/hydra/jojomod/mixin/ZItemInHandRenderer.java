@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
@@ -78,6 +79,13 @@ public abstract class ZItemInHandRenderer {
             }
             if (user.roundabout$getStandPowers() instanceof PowersRatt) {
                 if (user.roundabout$getStandPowers().scopeLevel != 0) {
+                    ci.cancel();
+                    return;
+                }
+            }
+
+            if (user.roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+                if (!PGD.HasMainArm) {
                     ci.cancel();
                     return;
                 }
@@ -177,7 +185,7 @@ public abstract class ZItemInHandRenderer {
         }
 
         if (abstractClientPlayer != null && ((StandUser)abstractClientPlayer).roundabout$getEffectiveCombatMode() && !abstractClientPlayer.isUsingItem() ||
-                AnubisLayer.shouldRender(abstractClientPlayer) != null) {
+                AnubisLayer.shouldRender(abstractClientPlayer) != null || abstractClientPlayer.getItemInHand(interactionHand).is(ModItems.ANUBIS_ITEM)) {
 
             if (PowerTypes.isBrawling(abstractClientPlayer)){
                 boolean $$10 = interactionHand == InteractionHand.MAIN_HAND;

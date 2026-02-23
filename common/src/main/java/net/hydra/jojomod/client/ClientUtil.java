@@ -20,8 +20,7 @@ import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.VampireData;
-import net.hydra.jojomod.event.index.FateTypes;
-import net.hydra.jojomod.event.index.PlayerPosIndex;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampireFate;
@@ -74,8 +73,6 @@ import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
@@ -1860,13 +1857,18 @@ public class ClientUtil {
 
 
                 stack.popPose();
+            } else if (item instanceof AnubisItem) {
+
+                pl.roundabout$getItemAnimation().startIfStopped(cameraEnt.tickCount);
+                ModStrayModels.ANUBIS.renderFirstPerson(stack,source,light,play,cameraEnt.tickCount + $$4);
+
             } else {
                 pl.roundabout$getItemAnimation().stop();
                 pl.roundabout$getItemAnimationActive().stop();
             }
 
-            if (AnubisLayer.shouldRender(play) != null) {
-                  ModStrayModels.ANUBIS.renderFirstPerson(stack,source,light,play,$$4);
+            if (PowerTypes.hasStandActive(cameraEnt) && ((StandUser)cameraEnt).roundabout$getStandPowers() instanceof PowersAnubis) {
+                ModStrayModels.ANUBIS.renderFirstPerson(stack,source,light,play,cameraEnt.tickCount + $$4);
             }
 
         }
