@@ -573,7 +573,7 @@ public class PowersAnubis extends NewDashPreset {
 
         if (pogoTime > 0) {pogoTime -= 1;}
         if (this.getSelf().onGround()) {
-            if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE  && this.attackTime <= PogoDelay) {
+            if (this.getActivePower() != PowerIndex.SNEAK_ATTACK_CHARGE || this.attackTime <= PogoDelay) {
                 if (pogoTime == -1) {
                     if (pogoCounter == 0) {
                         setPogo(40);
@@ -1994,23 +1994,19 @@ public class PowersAnubis extends NewDashPreset {
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
 
-        boolean renderingSomething = false;
 
         float attackTimeDuring = this.getAttackTimeDuring();
         if (standOn && this.isClashing()) {
-            renderingSomething = true;
             int ClashTime = 15 - Math.round((attackTimeDuring / 60) * 15);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
 
         } else if (standOn && this.isBarrageAttacking() && attackTimeDuring > -1) {
-            renderingSomething = true;
             int ClashTime = 15 - Math.round((attackTimeDuring / this.getBarrageLength()) * 15);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
 
         } else if (standOn && this.isBarrageCharging()) {
-            renderingSomething = true;
             int windup = this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 ? this.getKickBarrageWindup() : this.getBarrageWindup();
             int ClashTime = Math.round(( Math.min(attackTimeDuring,windup) / windup) * 15);
             int height = 30;
@@ -2047,7 +2043,6 @@ public class PowersAnubis extends NewDashPreset {
                     }
 
 
-                    renderingSomething = true;
                     context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
                     int finalATimeInt = Math.round(finalATime * 15);
                     context.blit(StandIcons.JOJO_ICONS, k, j, 193, barTexture, finalATimeInt, 6);
@@ -2058,14 +2053,12 @@ public class PowersAnubis extends NewDashPreset {
             if (standOn)  {
                 if (!TE.isEmpty()) {
                     if (barTexture == 0) {
-                        renderingSomething = true;
                         context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
                     }
                 }
             }
         }
-        if (this.getAttackTimeDuring() == -1 && renderingSomething && canPogo()) {
-          //  int h = 7 - ((int) (7 * ( (float)pogoTime/30.0F )) );
+        if (canPogo()) {
             context.blit(StandIcons.JOJO_ICONS,k,j,193,60,15,7);
         }
 

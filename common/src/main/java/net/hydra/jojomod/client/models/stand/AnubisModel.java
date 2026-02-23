@@ -215,9 +215,12 @@ public class AnubisModel extends PsuedoHierarchicalModel {
             }
         } else {
             AnimationDefinition anim = null;
-            if (user.roundabout$getStandAnimation() == PowerIndex.GUARD) {
-                anim = AnubisAnimations.Block;
-            }
+            anim = switch (user.roundabout$getStandAnimation()) {
+                case PowerIndex.GUARD -> AnubisAnimations.Block;
+                case PowerIndex.BARRAGE_CHARGE_2 -> AnubisAnimations.Shieldbreak;
+                case PowerIndex.BARRAGE_2 -> AnubisAnimations.ShieldbreakHit;
+                default -> null;
+            };
             if (anim != null) {
                 user.roundabout$getWornStandAnimation().startIfStopped(entity.tickCount);
                 this.animate(user.roundabout$getWornStandAnimation(),anim,partialTicks,1F);
