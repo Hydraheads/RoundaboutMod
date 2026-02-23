@@ -900,7 +900,7 @@ public class PowersAnubis extends NewDashPreset {
             if (this.activePowerPhase == 3) {
                 this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown-10;
             } else {
-                this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchCooldown;
+                this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchCooldown-2;
             }
 
         }
@@ -2058,7 +2058,7 @@ public class PowersAnubis extends NewDashPreset {
                 }
             }
         }
-        if (canPogo()) {
+        if (canPogo() && PowerTypes.isUsingStand(this.getSelf())) {
             context.blit(StandIcons.JOJO_ICONS,k,j,193,60,15,7);
         }
 

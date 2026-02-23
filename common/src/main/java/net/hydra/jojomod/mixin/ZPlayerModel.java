@@ -263,7 +263,12 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     }
                 }
 
-                this.roundabout$animate(ipe.roundabout$getItemAnimation(), AnubisAnimations.ThirdPersonUnsheathe,$$3,1F);
+                if ($$0.getUseItem().is(ModItems.ANUBIS_ITEM)) {
+                    ipe.roundabout$getItemAnimation().startIfStopped($$0.tickCount);
+                    this.roundabout$animate(ipe.roundabout$getItemAnimation(), AnubisAnimations.ThirdPersonUnsheathe, $$3, 1F);
+                } else {
+                    ipe.roundabout$getItemAnimation().stop();
+                }
                 if ($$0.getUseItem().is(ModItems.ANUBIS_ITEM)
                         || (SU.roundabout$getStandPowers() instanceof PowersAnubis
                         && PowerTypes.hasStandActive(P)
@@ -407,6 +412,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             IPlayerEntity ipe = ((IPlayerEntity) $$0);
             StandUser SU = (StandUser) P;
 
+         //   Roundabout.LOGGER.info(""+ipe.roundabout$getItemAnimation().getAccumulatedTime());
 
             if (ipe.roundabout$GetPoseEmote() != Poses.NONE.id) {
 
@@ -417,8 +423,13 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     }
                 }
 
-                this.roundabout$animate(ipe.roundabout$getItemAnimation(), AnubisAnimations.ThirdPersonUnsheathe,$$3,1F);
-
+                Roundabout.LOGGER.info(""+ipe.roundabout$getItemAnimation().getAccumulatedTime());
+                if ($$0.getUseItem().is(ModItems.ANUBIS_ITEM)) {
+                    ipe.roundabout$getItemAnimation().startIfStopped($$0.tickCount);
+                    this.roundabout$animate(ipe.roundabout$getItemAnimation(), AnubisAnimations.ThirdPersonUnsheathe, $$3, 1F);
+                } else {
+                    ipe.roundabout$getItemAnimation().stop();
+                }
                 AnimationDefinition anim = PowersAnubis.getAnimation(SU);
                 if (anim != null) {
                     SU.roundabout$getWornStandAnimation().startIfStopped($$0.tickCount);

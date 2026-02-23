@@ -185,7 +185,7 @@ public abstract class ZItemInHandRenderer {
         }
 
         if (abstractClientPlayer != null && ((StandUser)abstractClientPlayer).roundabout$getEffectiveCombatMode() && !abstractClientPlayer.isUsingItem() ||
-                AnubisLayer.shouldRender(abstractClientPlayer) != null) {
+                AnubisLayer.shouldRender(abstractClientPlayer) != null || abstractClientPlayer.getItemInHand(interactionHand).is(ModItems.ANUBIS_ITEM)) {
 
             if (PowerTypes.isBrawling(abstractClientPlayer)){
                 boolean $$10 = interactionHand == InteractionHand.MAIN_HAND;
