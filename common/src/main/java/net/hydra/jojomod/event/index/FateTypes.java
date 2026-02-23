@@ -156,8 +156,9 @@ public enum FateTypes {
     }
     public static boolean canSeeInTheDark(LivingEntity entity){
         if (entity instanceof Player PE){
-            return (((IFatePlayer)PE).rdbt$getFatePowers() instanceof ZombieFate VP &&
-                    VP.isVisionOn()) || (((IFatePlayer)PE).rdbt$getFatePowers() instanceof ZombieFate ZP);
+            return (((IFatePlayer)PE).rdbt$getFatePowers() instanceof VampireFate VP &&
+                    VP.isVisionOn()) || ((((IFatePlayer)PE).rdbt$getFatePowers() instanceof ZombieFate ZP &&
+                    !ZP.isDisguised()));
         }
         return false;
     }
