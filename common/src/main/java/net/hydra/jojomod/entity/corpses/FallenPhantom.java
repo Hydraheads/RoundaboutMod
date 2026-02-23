@@ -440,8 +440,10 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
 
     @Override
     public boolean hurt(DamageSource $$0, float $$1) {
-        for(Entity ent : this.getPassengers()){
-            ent.unRide();
+        if (!level().isClientSide()) {
+            for (Entity ent : this.getPassengers()) {
+                ent.unRide();
+            }
         }
         return super.hurt($$0, $$1);
     }
