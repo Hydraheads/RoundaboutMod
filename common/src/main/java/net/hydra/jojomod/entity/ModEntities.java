@@ -120,6 +120,7 @@ public class ModEntities {
     public static EntityType<RingoNPC> RINGO;
     public static EntityType<HatoNPC> HATO;
     public static EntityType<ShizukaNPC> SHIZUKA;
+    public static EntityType<ChakaNPC> CHAKA;
     public static EntityType<PlayerSteveNPC> STEVE_NPC;
     public static EntityType<PlayerAlexNPC> ALEX_NPC;
     public static EntityType<PlayerModifiedNPC> MODIFIED_NPC;

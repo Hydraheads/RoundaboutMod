@@ -134,6 +134,7 @@ public class ModItems {
     public static Item GUCCIO_MASK;
     public static Item HATO_MASK;
     public static Item SHIZUKA_MASK;
+    public static Item CHAKA_MASK;
     public static Item INTERDIMENSIONAL_KEY;
 
     public static Item ANUBIS_ITEM;

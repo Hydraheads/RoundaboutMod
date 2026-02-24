@@ -193,6 +193,7 @@ public class FabricItems {
     public static Item GUCCIO_MASK = registerItem("guccio_mask", new MaskItem(new Item.Properties().stacksTo(1), new GuccioVisage(null)));
     public static Item HATO_MASK = registerItem("hato_mask", new MaskItem(new Item.Properties().stacksTo(1), new HatoVisage(null)));
     public static Item SHIZUKA_MASK = registerItem("shizuka_mask", new MaskItem(new Item.Properties().stacksTo(1), new ShizukaVisage(null)));
+    public static Item CHAKA_MASK = registerItem("chaka_mask", new MaskItem(new Item.Properties().stacksTo(1), new ChakaVisage(null)));
     public static Item ENYA_MASK = registerItem("enya_mask", new MaskItem(new Item.Properties().stacksTo(1), new EnyaVisage(null)));
     public static Item ENYA_OVA_MASK = registerItem("enya_ova_mask", new MaskItem(new Item.Properties().stacksTo(1), new EnyaOVAVisage(null)));
     public static Item AYA_MASK = registerItem("aya_mask", new MaskItem(new Item.Properties().stacksTo(1), new AyaVisage(null)));
@@ -631,6 +632,7 @@ public class FabricItems {
         ModItems.GUCCIO_MASK = GUCCIO_MASK;
         ModItems.HATO_MASK = HATO_MASK;
         ModItems.SHIZUKA_MASK = SHIZUKA_MASK;
+        ModItems.CHAKA_MASK = CHAKA_MASK;
         ModItems.ENYA_MASK = ENYA_MASK;
         ModItems.ENYA_OVA_MASK = ENYA_OVA_MASK;
         ModItems.AYA_MASK = AYA_MASK;

@@ -130,6 +130,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.POCOLOCO.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GUCCIO.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SHIZUKA.get(), VisageBasisRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.CHAKA.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STEVE_NPC.get(), PlayerNPCRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ALEX_NPC.get(), PlayerAlexRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FOG_CLONE.get(), FogCloneRenderer::new);

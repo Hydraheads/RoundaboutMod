@@ -124,6 +124,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.RINGO, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.HATO, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SHIZUKA, VisageBasisRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.CHAKA, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.STEVE_NPC, PlayerNPCRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ALEX_NPC, PlayerAlexRenderer::new);
         EntityRendererRegistry.register(FabricEntities.MODIFIED_NPC, PlayerModifiedRenderer::new);

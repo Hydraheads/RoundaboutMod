@@ -238,6 +238,9 @@
   "item.roundabout.shizuka_mask": "Shizuka Visage",
   "item.roundabout.shizuka_mask.desc": "Shizuka (JoJovein / JoJo Stars)",
   "item.roundabout.shizuka_mask.tag": "Shizuka",
+  "item.roundabout.chaka_mask": "Chaka Visage",
+  "item.roundabout.chaka_mask.desc": "Chaka",
+  "item.roundabout.chaka_mask.tag": "Chaka",
 
   "item.roundabout.stand_arrow.fail": "Need more experience!",
 
@@ -340,6 +343,7 @@
   "entity.roundabout.jojo_npc_shizuka": "Shizuka",
   "entity.roundabout.jojo_npc_pocoloco": "Pocoloco",
   "entity.roundabout.aesthetician": "Aesthetician",
+  "entity.roundabout.jojo_npc_chaka": "Chaka",
   "entity.roundabout.zombie_aesthetician": "Zombie Aesthetician",
   "entity.roundabout.jojo_npc_steve": "Steve",
   "entity.roundabout.jojo_npc_alex": "Alex",

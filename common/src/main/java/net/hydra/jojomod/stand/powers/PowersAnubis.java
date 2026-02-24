@@ -572,8 +572,11 @@ public class PowersAnubis extends NewDashPreset {
 
 
         if (pogoTime > 0) {pogoTime -= 1;}
-        if (this.getSelf().onGround()) {
+        if (this.getSelf().onGround() && this.isClient()) {
             if (this.getActivePower() != PowerIndex.SNEAK_ATTACK_CHARGE || this.attackTime <= PogoDelay) {
+                if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+                    this.setPowerNone();
+                }
                 if (pogoTime == -1) {
                     if (pogoCounter == 0) {
                         setPogo(40);

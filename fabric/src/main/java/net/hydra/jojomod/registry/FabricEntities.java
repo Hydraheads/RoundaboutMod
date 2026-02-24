@@ -163,6 +163,13 @@ public class FabricEntities {
                         EntityType.Builder.of(ShizukaNPC::new, MobCategory.MISC).
                                 sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_shizuka")
                 );
+    public static final EntityType<ChakaNPC> CHAKA =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_chaka"),
+                    EntityType.Builder.of(ChakaNPC::new, MobCategory.MISC).
+                            sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_chaka")
+            );
         public static final EntityType<PlayerSteveNPC> STEVE_NPC =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -775,6 +782,7 @@ public class FabricEntities {
                 ModEntities.RINGO = RINGO;
                 ModEntities.HATO = HATO;
                 ModEntities.SHIZUKA = SHIZUKA;
+                ModEntities.CHAKA = CHAKA;
                 ModEntities.STEVE_NPC = STEVE_NPC;
                 ModEntities.ALEX_NPC = ALEX_NPC;
                 ModEntities.MODIFIED_NPC = MODIFIED_NPC;
@@ -802,6 +810,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(RINGO, RingoNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(HATO, HatoNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(SHIZUKA, ShizukaNPC.createAttributes());
+                FabricDefaultAttributeRegistry.register(CHAKA, ChakaNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(POCOLOCO, PocolocoNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(GUCCIO, GuccioNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(ZOMBIE_AESTHETICIAN, ZombieAesthetician.createAttributes());

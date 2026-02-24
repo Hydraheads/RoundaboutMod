@@ -86,6 +86,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.RINGO.get(), RingoNPC.createAttributes().build());
         event.put(ForgeEntities.HATO.get(), HatoNPC.createAttributes().build());
         event.put(ForgeEntities.SHIZUKA.get(), ShizukaNPC.createAttributes().build());
+        event.put(ForgeEntities.CHAKA.get(), ChakaNPC.createAttributes().build());
         event.put(ForgeEntities.POCOLOCO.get(), PocolocoNPC.createAttributes().build());
         event.put(ForgeEntities.GUCCIO.get(), GuccioNPC.createAttributes().build());
         event.put(ForgeEntities.VALENTINE.get(), ValentineNPC.createAttributes().build());
@@ -373,6 +374,7 @@ public class ForgeEvents {
         ModItems.RINGO_MASK = ForgeItems.RINGO_MASK.get();
         ModItems.HATO_MASK = ForgeItems.HATO_MASK.get();
         ModItems.SHIZUKA_MASK = ForgeItems.SHIZUKA_MASK.get();
+        ModItems.CHAKA_MASK = ForgeItems.CHAKA_MASK.get();
         ModItems.PAINTING_VAN_GOUGH = ForgeItems.PAINTING_VAN_GOUGH.get();
         ModItems.PAINTING_MONA_LISA = ForgeItems.PAINTING_MONA_LISA.get();
         ModItems.PAINTING_BIRTH_OF_VENUS = ForgeItems.PAINTING_BIRTH_OF_VENUS.get();
@@ -570,6 +572,7 @@ public class ForgeEvents {
         ModEntities.RINGO = ForgeEntities.RINGO.get();
         ModEntities.HATO = ForgeEntities.HATO.get();
         ModEntities.SHIZUKA = ForgeEntities.SHIZUKA.get();
+        ModEntities.CHAKA = ForgeEntities.CHAKA.get();
         ModEntities.VALENTINE = ForgeEntities.VALENTINE.get();
         ModEntities.STEVE_NPC = ForgeEntities.STEVE_NPC.get();
         ModEntities.ALEX_NPC = ForgeEntities.ALEX_NPC.get();
