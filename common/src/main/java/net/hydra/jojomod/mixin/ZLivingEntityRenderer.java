@@ -96,7 +96,11 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
     {
         if (((StandUser)entity).roundabout$isParallelRunning()) {
             cir.setReturnValue(false);
-            cir.cancel();
+            return;
+        }
+
+        if (ClientUtil.shouldHideName(entity)){
+            cir.setReturnValue(false);
             return;
         }
 

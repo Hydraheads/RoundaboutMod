@@ -23,6 +23,12 @@
       "roundabout:vampire_camo"
     ]
   },
+  "zombie_charge": {
+    "subtitle": "sounds.roundabout.zombie_charge",
+    "sounds": [
+      "roundabout:zombie_charge"
+    ]
+  },
   "ripper_eyes_beam": {
     "subtitle": "sounds.roundabout.ripper_eyes_beam",
     "sounds": [

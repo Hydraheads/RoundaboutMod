@@ -566,6 +566,8 @@ public class ForgeSounds {
             register(ModSounds.SURVIVOR_REMOVE, ModSounds.SURVIVOR_REMOVE_ID);
     public static final RegistryObject<SoundEvent> SUMMON_DIVER_DOWN =
             register(ModSounds.SUMMON_DIVER_DOWN, ModSounds.SUMMON_DIVER_DOWN_ID);
+    public static final RegistryObject<SoundEvent> ZOMBIE_CHARGE =
+            register(ModSounds.ZOMBIE_CHARGE, ModSounds.ZOMBIE_CHARGE_ID);
     public static final RegistryObject<SoundEvent> SUMMON_WALKING =
             register(ModSounds.SUMMON_WALKING, ModSounds.SUMMON_WALKING_ID);
     public static final RegistryObject<SoundEvent> HEEL_RAISE =

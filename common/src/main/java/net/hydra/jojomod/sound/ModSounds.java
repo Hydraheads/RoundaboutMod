@@ -931,6 +931,11 @@ public class ModSounds {
     public static SoundEvent SURVIVOR_REMOVE_EVENT = SoundEvent.createVariableRangeEvent(SURVIVOR_REMOVE_ID);
 
 
+    public static final String ZOMBIE_CHARGE = "zombie_charge";
+    public static final ResourceLocation ZOMBIE_CHARGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ZOMBIE_CHARGE);
+    public static SoundEvent ZOMBIE_CHARGE_EVENT = SoundEvent.createVariableRangeEvent(ZOMBIE_CHARGE_ID);
+
+
     public static final String ACHTUNG_BURST = "achtung_burst";
     public static final ResourceLocation ACHTUNG_BURST_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ACHTUNG_BURST);
     public static SoundEvent ACHTUNG_BURST_EVENT = SoundEvent.createVariableRangeEvent(ACHTUNG_BURST_ID);

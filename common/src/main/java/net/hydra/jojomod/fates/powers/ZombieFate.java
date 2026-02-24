@@ -13,6 +13,8 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.fates.FatePowers;
+import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
@@ -24,6 +26,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -31,11 +34,15 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArrowItem;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
 public class ZombieFate extends VampiricFate {
 
+    public static final byte DISGUISE = 50;
+    public static final byte ZOMBIE_SHOT = 51;
     public int spikeTimeDuring = 0;
 
     public ZombieFate() {
@@ -48,7 +55,6 @@ public class ZombieFate extends VampiricFate {
     public FatePowers generateFatePowers(LivingEntity entity){
         return new ZombieFate(entity);
     }
-    public static final byte DISGUISE = 50;
     @Override
     /**The text name of the fate*/
     public Component getFateName(){
@@ -58,9 +64,8 @@ public class ZombieFate extends VampiricFate {
     public void powerActivate(PowerContext context) {
         switch (context)
         {
-            case SKILL_1_NORMAL -> {
-            }
-            case SKILL_1_CROUCH -> {
+            case SKILL_1_NORMAL,SKILL_1_CROUCH -> {
+                zombieShotClient();
             }
             case SKILL_2_NORMAL,SKILL_2_CROUCH -> {
                 suckBlood();
@@ -74,12 +79,63 @@ public class ZombieFate extends VampiricFate {
         }
     };
 
+    public boolean isArrow(ItemStack stack){
+        if (stack != null && !stack.isEmpty() && stack.getItem() instanceof ArrowItem){
+            return true;
+        }
+        return false;
+    }
+    public boolean isKnife(ItemStack stack){
+        if (stack != null && !stack.isEmpty() && stack.is(ModItems.KNIFE)){
+            return true;
+        }
+        return false;
+    }
+    public boolean isKnifeBundle(ItemStack stack){
+        if (stack != null && !stack.isEmpty() && stack.is(ModItems.KNIFE_BUNDLE)){
+            return true;
+        }
+        return false;
+    }
+    public boolean canUseZombieShot(){
+        ItemStack hand = self.getMainHandItem();
+        ItemStack offHand = self.getOffhandItem();
+        if (isKnife(hand) || isKnifeBundle(hand) || isArrow(hand)){
+            return true;
+        }
+        if (isKnife(offHand) || isKnifeBundle(offHand) || isArrow(offHand)){
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean isServerControlledCooldown(byte num){
+        if (num == PowerIndex.FATE_1_SNEAK || num == PowerIndex.FATE_4){
+            return true;
+        }
+        return super.isServerControlledCooldown(num);
+    }
+
+    public void zombieShotClient(){
+        if (getActivePower() == ZOMBIE_SHOT){
+            tryPowerPacket(NONE);
+            return;
+        }
+        if (canUseZombieShot()){
+            if (!onCooldown(PowerIndex.FATE_1_SNEAK)) {
+                tryPowerPacket(ZOMBIE_SHOT);
+            }
+        }
+    }
+
     public void switchDisguiseClient(){
         tryPowerPacket(DISGUISE);
     }
 
     public void switchDisguiseServer(){
         if (!self.level().isClientSide()) {
+            setActivePower(PowerIndex.NONE);
             if (self instanceof Player pl) {
                 if (!onCooldown(PowerIndex.FATE_4)) {
                     IPlayerEntity ipe = ((IPlayerEntity) pl);
@@ -110,6 +166,18 @@ public class ZombieFate extends VampiricFate {
 
     }
 
+    public void zombieShotStart(){
+        if (!self.level().isClientSide()) {
+            if (canUseZombieShot() && !onCooldown(PowerIndex.FATE_1_SNEAK)){
+                setActivePower(ZOMBIE_SHOT);
+                setCooldown(PowerIndex.FATE_1_SNEAK,60);
+                self.level().playSound(null, self.blockPosition(), ModSounds.ZOMBIE_CHARGE_EVENT,
+                        SoundSource.PLAYERS, 1F, 1F);
+            } else {
+                setActivePower(PowerIndex.NONE);
+            }
+        }
+    }
 
     @Override
     public boolean tryPower(int move, boolean forced) {
@@ -119,6 +187,8 @@ public class ZombieFate extends VampiricFate {
     public boolean setPowerOther(int move, int lastMove) {
         if (move == DISGUISE) {
             switchDisguiseServer();
+        } else if (move == ZOMBIE_SHOT) {
+            zombieShotStart();
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -235,17 +305,34 @@ public class ZombieFate extends VampiricFate {
     }
 
     public float inputSpeedModifiers(float basis){
+        if (activePower == ZOMBIE_SHOT){
+            basis*=0.2F;
+        }
         return super.inputSpeedModifiers(basis);
+    }
+
+    @Override
+    public boolean cancelSprintJump(){
+        return getActivePower() == ZOMBIE_SHOT || super.cancelSprintJump();
+    }
+    @Override
+    /**Cancel all sprinting*/
+    public boolean cancelSprint(){
+        return getActivePower() == ZOMBIE_SHOT || super.cancelSprint();
+    }
+    @Override
+    public boolean cancelSprintParticles(){
+        return getActivePower() == ZOMBIE_SHOT || super.cancelSprintJump();
     }
 
 
     private final TargetingConditions hypnosisTargeting = TargetingConditions.forCombat().range(11);
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        if (isHoldingSneak()) {
-            setSkillIcon(context, x, y, 1, StandIcons.ZOMBIE_WORM, PowerIndex.FATE_1);
-        } else {
+        if (canUseZombieShot()) {
             setSkillIcon(context, x, y, 1, StandIcons.ZOMBIE_PROJECTILES, PowerIndex.FATE_1_SNEAK);
+        } else {
+            setSkillIcon(context, x, y, 1, StandIcons.ZOMBIE_WORM, PowerIndex.FATE_1);
         }
         setSkillIcon(context, x, y, 2, StandIcons.ZOMBIE_DRINK, PowerIndex.FATE_2);
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);

@@ -1143,6 +1143,15 @@ public class ClientUtil {
         }
     }
 
+    public static boolean shouldHideName(Entity ent){
+        if (ent != null) {
+            if (getThrowFadePercent(ent,1) <= 0){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean hasATimeStopSeeingStand(){
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
