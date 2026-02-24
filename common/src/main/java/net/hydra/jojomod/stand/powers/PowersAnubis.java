@@ -164,9 +164,8 @@ public class PowersAnubis extends NewDashPreset {
     public final List<Byte> playBytes = new ArrayList<>();
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
-        PowersAnubis PA = new PowersAnubis(entity);
-        ((StandUser)entity).roundabout$setStandSkin((byte) 1);
-        return PA;}
+        return new PowersAnubis(entity);
+    }
 
 
     public boolean canSummonStandAsEntity(){
@@ -553,18 +552,6 @@ public class PowersAnubis extends NewDashPreset {
     @Override
     public void tickPower() {
 
-
-
-     /*   if (!this.level().isClientSide()) {
-            if (rdbt$this() instanceof Player P) {
-                S2CPacketUtil.sendByteBundleToClientPacket(P,
-                        PacketDataIndex.S2C_BUNDLE_POWER_INV,
-                        this.roundabout$getStandSkin(),
-                        ( ((IPlayerEntity)P).roundabout$getUnlockedBonusSkin() || this.roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem ) ? (byte) 1 : 0
-                );
-            }
-        } */
-
  //  Roundabout.LOGGER.info(" CA: " + this.getActivePower() + " | " + this.getAttackTime() + " | "+ this.getAttackTimeDuring() + "/" + this.getAttackTimeMax());
         StandUser SU = this.getStandUserSelf();
 
@@ -612,6 +599,7 @@ public class PowersAnubis extends NewDashPreset {
         super.tickPower();
     }
 
+    AnubisSlipstreamEntity lastSlipstream = null;
     float slipstreamTimer = 3;
     public void tickSlipStream() {
         if (!this.isClient()) {
@@ -625,9 +613,10 @@ public class PowersAnubis extends NewDashPreset {
 
                 if (slipstreamTimer <= 0) {
                     slipstreamTimer = 3;
-                    AnubisSlipstreamEntity ASE = new AnubisSlipstreamEntity(ModEntities.ANUBIS_SLIPSTREAM,this.getSelf().level(),60);
+                    AnubisSlipstreamEntity ASE = new AnubisSlipstreamEntity(ModEntities.ANUBIS_SLIPSTREAM,this.getSelf().level(),60,lastSlipstream);
                     ASE.setPos(this.getSelf().getPosition(1F));
                     this.getSelf().level().addFreshEntity(ASE);
+                    lastSlipstream = ASE;
                 }
             }
         }
