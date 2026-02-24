@@ -2,6 +2,7 @@ package net.hydra.jojomod.fates.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -17,6 +18,9 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.config.ClientConfig;
+import net.hydra.jojomod.util.config.ConfigManager;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -36,6 +40,7 @@ import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
@@ -161,6 +166,10 @@ public class ZombieFate extends VampiricFate {
     }
 
 
+    public void doZombieShot(){
+
+    }
+
     @Override
     public void drawOtherGUIElements(Font font, GuiGraphics context, float delta, int mouseX, int mouseY, int i, int j, ResourceLocation rl){
 
@@ -170,6 +179,7 @@ public class ZombieFate extends VampiricFate {
         if (!self.level().isClientSide()) {
             if (canUseZombieShot() && !onCooldown(PowerIndex.FATE_1_SNEAK)){
                 setActivePower(ZOMBIE_SHOT);
+                setAttackTimeDuring(0);
                 setCooldown(PowerIndex.FATE_1_SNEAK,60);
                 self.level().playSound(null, self.blockPosition(), ModSounds.ZOMBIE_CHARGE_EVENT,
                         SoundSource.PLAYERS, 1F, 1F);
@@ -248,6 +258,25 @@ public class ZombieFate extends VampiricFate {
 
                 }
             }
+
+            if (activePower == ZOMBIE_SHOT){
+                if (!canUseZombieShot()) {
+                    xTryPower(NONE,true);
+                } else if (attackTimeDuring >= 24){
+                    doZombieShot();
+                    xTryPower(NONE,true);
+                } else {
+                    if(this.attackTimeDuring%4==0) {
+                        Vec3 gravVec = this.getSelf().getPosition(1f).add(RotationUtil.vecPlayerToWorld(
+                                new Vec3(0,0.3*self.getEyeHeight(),0),
+                                ((IGravityEntity)self).roundabout$getGravityDirection()));
+                        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MENACING,
+                                gravVec.x, gravVec.y, gravVec.z,
+                                1, 0.2, 0.2, 0.2, 0.05);
+                    }
+                }
+            }
+
         } else {
             byte pos2 = getPlayerPos2();
             if (pos2 == PlayerPosIndex.BLOOD_SUCK) {
@@ -341,6 +370,12 @@ public class ZombieFate extends VampiricFate {
         } else {
             setSkillIcon(context, x, y, 4, StandIcons.ZOMBIE_DISGUISE_OFF, PowerIndex.FATE_4);
         }
+    }
+
+
+    @Override
+    public boolean isVisionOn(){
+        return !isDisguised();
     }
 
     public boolean isDisguised(){
