@@ -5,8 +5,10 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
+import net.hydra.jojomod.access.ISuperThrownAbstractArrow;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
@@ -30,7 +32,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -38,8 +42,12 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -167,7 +175,36 @@ public class ZombieFate extends VampiricFate {
 
 
     public void doZombieShot(){
-
+        MainUtil.playPop(self);
+        ItemStack hand = self.getMainHandItem();
+        ItemStack offHand = self.getOffhandItem();
+        ItemStack stack = hand;
+        int firstCount = 0;
+        int secondCount = 0;
+        if (hand != null && !hand.isEmpty()){
+            firstCount = hand.getCount();
+        }
+        if (offHand != null && !offHand.isEmpty()){
+            secondCount = offHand.getCount();
+        }
+        firstCount = Mth.clamp(firstCount,0,6);
+        secondCount = Mth.clamp(secondCount,0,6);
+        boolean firstHand = isKnife(hand);
+        boolean secondhand = !firstHand && isKnife(offHand);
+        if (firstHand || secondhand){
+            int loops = firstCount;
+            if (!firstHand){
+                loops = secondCount;
+                stack = offHand;
+            }
+            for (var i = 0; i < loops; i++) {
+                KnifeEntity $$7 = new KnifeEntity(self.level(), self, stack);
+                $$7.setPos(self.getEyePosition());
+                $$7.shootFromRotation(self, this.self.getXRot(),this.self.getYRot(),
+                        -3F, 2.4F * 1, 0.5f);
+                self.level().addFreshEntity($$7);
+            }
+        }
     }
 
     @Override
