@@ -210,6 +210,11 @@ public class C2SPacketUtil {
                 ClientToServerPackets.StandPowerPackets.MESSAGES.StandSummon.value
         );
     }
+    public static void requestZombieFish(){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.RequestZombieFish.value
+        );
+    }
 
     public static void updatePilot(LivingEntity pilotStand){
         ModMessageEvents.sendToServer(

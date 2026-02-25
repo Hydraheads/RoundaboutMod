@@ -1236,6 +1236,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if (getPlayerPos2() != PlayerPosIndex.HAIR_SPIKE_2) {
                 setPlayerPos2(PlayerPosIndex.HAIR_SPIKE_2);
             }
+            MainUtil.playPop(self);
             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXTEND_SPIKES_EVENT, SoundSource.PLAYERS, 1F, (float) (1.05f + Math.random() * 0.05f));
             List<Entity> hitbox = StandGrabHitbox(self,DamageHandler.genHitbox(self, self.getX(), self.getY(),
                     self.getZ(), 4, 4, 4), 4, 360);
@@ -1438,6 +1439,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
     public void ripperEyeShot(){
         if (!self.level().isClientSide()) {
+            MainUtil.playPop(self);
             RipperEyesProjectile auraProjectile = getRipperEyesProjectile();
             if (auraProjectile != null) {
                 shootRipperEyes(auraProjectile);
@@ -1505,6 +1507,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public void doRipperEyesActivated(){
         if (!self.level().isClientSide()) {
             if (getActivePower() == RIPPER_EYES) {
+                MainUtil.playPop(self);
                 playSoundsIfNearby(SoundIndex.RIPPER_EYES_BEAM, 45, false,false);
                 ripperEyesLeft = ripperBeamTime;
                 this.attackTimeDuring = 0;

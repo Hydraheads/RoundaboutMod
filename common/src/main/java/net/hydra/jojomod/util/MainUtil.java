@@ -25,6 +25,7 @@ import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModGamerules;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
@@ -117,6 +118,20 @@ public class MainUtil {
         isClient = true;
     }
 
+
+    public static void playPop(Entity entity){
+        if (entity instanceof LivingEntity LE && !LE.level().isClientSide()){
+            StandUser SE = ((StandUser) LE);
+            if (SE.roundabout$isBubbleEncased()) {
+                SE.roundabout$setBubbleEncased((byte) 0);
+                LE.level().playSound(null, LE.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
+                        SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+                ((ServerLevel) LE.level()).sendParticles(ModParticles.BUBBLE_POP,
+                        LE.getX(), LE.getY() + LE.getBbHeight() * 0.5, LE.getZ(),
+                        5, 0.25, 0.25, 0.25, 0.025);
+            }
+        }
+    }
 
 
     public static final Map<DyeColor, ItemLike> SHEEP_DYE;

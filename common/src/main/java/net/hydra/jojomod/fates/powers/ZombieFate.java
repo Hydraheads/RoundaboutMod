@@ -1,22 +1,27 @@
 package net.hydra.jojomod.fates.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
-import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.RoundaboutArrowItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -34,8 +39,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
@@ -44,6 +51,7 @@ public class ZombieFate extends VampiricFate {
     public static final byte DISGUISE = 50;
     public static final byte ZOMBIE_SHOT = 51;
     public int spikeTimeDuring = 0;
+    public int zombieFishCount = -1;
 
     public ZombieFate() {
         super();
@@ -79,8 +87,35 @@ public class ZombieFate extends VampiricFate {
         }
     };
 
+    public int getZombieFishCount(){
+        if (zombieFishCount == -1){
+            if (self instanceof Player pl){
+                if (self.level().isClientSide()){
+                    zombieFishCount = 0;
+                    //send packet to server asking for fish
+                    C2SPacketUtil.requestZombieFish();
+                } else {
+                    zombieFishCount = ((IPlayerEntity)pl).rdbt$getZombieFish();
+                }
+            }
+        }
+        return zombieFishCount;
+    }
+
+    public void setZombieFishCount(int num){
+        if (self instanceof Player pl){
+            zombieFishCount = num;
+            if (!self.level().isClientSide()){
+                //send packet to client giving fish
+                S2CPacketUtil.updateZombieFish(
+                        pl, num);
+            }
+        }
+    }
+
+
     public boolean isArrow(ItemStack stack){
-        if (stack != null && !stack.isEmpty() && stack.getItem() instanceof ArrowItem){
+        if (stack != null && !stack.isEmpty() && stack.getItem() instanceof ArrowItem && !(stack.getItem() instanceof RoundaboutArrowItem)){
             return true;
         }
         return false;
@@ -161,6 +196,87 @@ public class ZombieFate extends VampiricFate {
     }
 
 
+    public void doZombieShot(){
+        MainUtil.playPop(self);
+        ItemStack hand = self.getMainHandItem();
+        ItemStack offHand = self.getOffhandItem();
+        ItemStack stack = hand;
+        int firstCount = 0;
+        int secondCount = 0;
+        if (hand != null && !hand.isEmpty()){
+            firstCount = hand.getCount();
+        }
+        if (offHand != null && !offHand.isEmpty()){
+            secondCount = offHand.getCount();
+        }
+        firstCount = Mth.clamp(firstCount,0,8);
+        secondCount = Mth.clamp(secondCount,0,8);
+        boolean firstHand = isKnife(hand);
+        boolean secondhand = !firstHand && isKnife(offHand);
+        if (firstHand || secondhand){
+            int loops = firstCount;
+            if (!firstHand){
+                loops = secondCount;
+                stack = offHand;
+            }
+            for (var i = 0; i < loops; i++) {
+                KnifeEntity $$7 = new KnifeEntity(self.level(), self, stack);
+                $$7.setPos(MainUtil.getMobCenter(self,0.5F));
+                $$7.shootFromRotation(self, this.self.getXRot(),this.self.getYRot(),
+                        -3F, 2.4F * 1, 13f);
+                self.level().addFreshEntity($$7);
+            }
+            if (!(self instanceof Player pl && pl.isCreative())){
+                stack.shrink(loops);
+            }
+        }
+
+        firstHand = isArrow(hand);
+        secondhand = !firstHand && isArrow(offHand);
+        if (firstHand || secondhand){
+            int loops = firstCount;
+            if (!firstHand){
+                loops = secondCount;
+                stack = offHand;
+            }
+            for (var i = 0; i < loops; i++) {
+                ArrowItem $$10 = (ArrowItem) stack.getItem();
+                AbstractArrow $$11 = $$10.createArrow(self.level(), stack, self);
+                $$11.setPos(MainUtil.getMobCenter(self,0.5F));
+                $$11.shootFromRotation(self, this.self.getXRot(),this.self.getYRot(),
+                        -3F, 3F * 1, 13f);
+                $$11.setCritArrow(true);
+                self.level().addFreshEntity($$11);
+            }
+            if (!(self instanceof Player pl && pl.isCreative())){
+                stack.shrink(loops);
+            }
+        }
+
+
+        firstHand = isKnifeBundle(hand);
+        secondhand = !firstHand && isKnifeBundle(offHand);
+        firstCount = Mth.clamp(firstCount,0,4);
+        secondCount = Mth.clamp(secondCount,0,4);
+        if (firstHand || secondhand){
+            int loops = firstCount;
+            if (!firstHand){
+                loops = secondCount;
+                stack = offHand;
+            }
+            for (var i = 0; i < loops*4; i++) {
+                KnifeEntity $$7 = new KnifeEntity(self.level(), self, stack);
+                $$7.setPos(MainUtil.getMobCenter(self,0.5F));
+                $$7.shootFromRotation(self, this.self.getXRot(),this.self.getYRot(),
+                        -3F, 2.4F * 1, 20f);
+                self.level().addFreshEntity($$7);
+            }
+            if (!(self instanceof Player pl && pl.isCreative())){
+                stack.shrink(loops);
+            }
+        }
+    }
+
     @Override
     public void drawOtherGUIElements(Font font, GuiGraphics context, float delta, int mouseX, int mouseY, int i, int j, ResourceLocation rl){
 
@@ -170,6 +286,7 @@ public class ZombieFate extends VampiricFate {
         if (!self.level().isClientSide()) {
             if (canUseZombieShot() && !onCooldown(PowerIndex.FATE_1_SNEAK)){
                 setActivePower(ZOMBIE_SHOT);
+                setAttackTimeDuring(0);
                 setCooldown(PowerIndex.FATE_1_SNEAK,60);
                 self.level().playSound(null, self.blockPosition(), ModSounds.ZOMBIE_CHARGE_EVENT,
                         SoundSource.PLAYERS, 1F, 1F);
@@ -248,6 +365,25 @@ public class ZombieFate extends VampiricFate {
 
                 }
             }
+
+            if (activePower == ZOMBIE_SHOT){
+                if (!canUseZombieShot()) {
+                    xTryPower(NONE,true);
+                } else if (attackTimeDuring >= 24){
+                    doZombieShot();
+                    xTryPower(NONE,true);
+                } else {
+                    if(this.attackTimeDuring%4==0) {
+                        Vec3 gravVec = this.getSelf().getPosition(1f).add(RotationUtil.vecPlayerToWorld(
+                                new Vec3(0,0.3*self.getEyeHeight(),0),
+                                ((IGravityEntity)self).roundabout$getGravityDirection()));
+                        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MENACING,
+                                gravVec.x, gravVec.y, gravVec.z,
+                                1, 0.2, 0.2, 0.2, 0.05);
+                    }
+                }
+            }
+
         } else {
             byte pos2 = getPlayerPos2();
             if (pos2 == PlayerPosIndex.BLOOD_SUCK) {
@@ -341,6 +477,12 @@ public class ZombieFate extends VampiricFate {
         } else {
             setSkillIcon(context, x, y, 4, StandIcons.ZOMBIE_DISGUISE_OFF, PowerIndex.FATE_4);
         }
+    }
+
+
+    @Override
+    public boolean isVisionOn(){
+        return !isDisguised();
     }
 
     public boolean isDisguised(){
