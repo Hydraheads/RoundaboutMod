@@ -745,6 +745,9 @@ public class ClientUtil {
                     vdata.timeSinceMonster = (int) vargs[1];
                     vdata.timeSinceNpc = (int) vargs[2];
                 }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ZombieFish.value)) {
+                    ((IPlayerEntity)player).rdbt$setZombieFish((int) vargs[0]);
+                }
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.GunRecoil.value)) {
                     String sigmaString = (String) vargs[0];
                     ClientUtil.applyClientRecoil(player, sigmaString);

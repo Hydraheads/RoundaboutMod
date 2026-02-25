@@ -1,30 +1,26 @@
 package net.hydra.jojomod.fates.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
-import net.hydra.jojomod.access.ISuperThrownAbstractArrow;
-import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
-import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.RoundaboutArrowItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
-import net.hydra.jojomod.util.config.ClientConfig;
-import net.hydra.jojomod.util.config.ConfigManager;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
@@ -35,9 +31,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -46,13 +40,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.ArrowItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -62,6 +51,7 @@ public class ZombieFate extends VampiricFate {
     public static final byte DISGUISE = 50;
     public static final byte ZOMBIE_SHOT = 51;
     public int spikeTimeDuring = 0;
+    public int zombieFishCount = -1;
 
     public ZombieFate() {
         super();
@@ -96,6 +86,33 @@ public class ZombieFate extends VampiricFate {
             }
         }
     };
+
+    public int getZombieFishCount(){
+        if (zombieFishCount == -1){
+            if (self instanceof Player pl){
+                if (self.level().isClientSide()){
+                    zombieFishCount = 0;
+                    //send packet to server asking for fish
+                    C2SPacketUtil.requestZombieFish();
+                } else {
+                    zombieFishCount = ((IPlayerEntity)pl).rdbt$getZombieFish();
+                }
+            }
+        }
+        return zombieFishCount;
+    }
+
+    public void setZombieFishCount(int num){
+        if (self instanceof Player pl){
+            zombieFishCount = num;
+            if (!self.level().isClientSide()){
+                //send packet to client giving fish
+                S2CPacketUtil.updateZombieFish(
+                        pl, num);
+            }
+        }
+    }
+
 
     public boolean isArrow(ItemStack stack){
         if (stack != null && !stack.isEmpty() && stack.getItem() instanceof ArrowItem && !(stack.getItem() instanceof RoundaboutArrowItem)){

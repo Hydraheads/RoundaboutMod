@@ -169,6 +169,20 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     private float roundabout$idleYOffset = 0.1F;
 
+    /// Zombie Fate's zombie silverfish count
+    @Unique
+    private int rdbt$zombieFish = 0;
+    @Unique
+    @Override
+    public void rdbt$setZombieFish(int fish){
+        rdbt$zombieFish = fish;
+    }
+    @Unique
+    @Override
+    public int rdbt$getZombieFish(){
+        return rdbt$zombieFish;
+    }
+
     //0.00392156862
     @Unique
     private static final float rdbt$hairColorX =245f/255f;
@@ -1107,6 +1121,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         compoundtag.putFloat("hairColorZ",rdbt$getHairColorZ());
         compoundtag.putByte("shapeShift",roundabout$getShapeShift());
         compoundtag.putByte("shapeShiftExtra",roundabout$getShapeShiftExtraData());
+        compoundtag.putInt("zombieFish",rdbt$getZombieFish());
 
 
         compoundtag.putFloat("guard",((StandUser)this).roundabout$getGuardPoints());
@@ -1217,6 +1232,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
         if (compoundtag2.contains("shapeShiftExtra")) {
             roundabout$setShapeShiftExtraData(compoundtag2.getByte("shapeShiftExtra"));
+        }
+        if (compoundtag2.contains("zombieFish")) {
+            rdbt$setZombieFish(compoundtag2.getInt("zombieFish"));
         }
 
 

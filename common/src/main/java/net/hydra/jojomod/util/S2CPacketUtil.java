@@ -122,6 +122,14 @@ public class S2CPacketUtil {
             );
         }
     }
+    public static void updateZombieFish(Player player, int amt){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.ZombieFish.value,
+                    amt
+            );
+        }
+    }
     public static void affirmCooldownsS2C(Player player){
         if (player instanceof ServerPlayer SP) {
             ModMessageEvents.sendToPlayer(SP,

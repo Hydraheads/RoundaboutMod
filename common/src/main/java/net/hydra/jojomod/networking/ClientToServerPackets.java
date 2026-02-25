@@ -2,6 +2,7 @@ package net.hydra.jojomod.networking;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.advancement.criteria.ModCriteria;
 import net.hydra.jojomod.client.ClientUtil;
@@ -17,6 +18,7 @@ import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
@@ -66,6 +68,7 @@ public class ClientToServerPackets {
             TimeStopHovering("thread_hop_time_stop_hovering"),
             GlaiveHit("glaive_hit"),
             StandSummon("stand_summon"),
+            RequestZombieFish("request_zombie_fish"),
             UpdatePilot("thread_hop_update_pilot"),
             MoveSync("thread_hop_moving_sync"),
             StandPunch("stand_punch"),
@@ -451,6 +454,10 @@ public class ClientToServerPackets {
                 if (message.equals(MESSAGES.StandSummon.value)) {
                     ServerLevel world = (ServerLevel) sender.level();
                     ((StandUser) sender).roundabout$summonStand(world, false, true);
+                }
+                /**Updating Zombie Fish*/
+                if (message.equals(MESSAGES.RequestZombieFish.value)) {
+                    S2CPacketUtil.updateZombieFish(sender,((IPlayerEntity)sender).rdbt$getZombieFish());
                 }
                 /**Change Hair Color*/
                 if (message.equals(MESSAGES.HairColor.value)) {
