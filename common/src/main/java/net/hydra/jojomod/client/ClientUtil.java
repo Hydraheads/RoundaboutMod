@@ -1876,7 +1876,8 @@ public class ClientUtil {
                 pl.roundabout$getItemAnimationActive().stop();
             }
 
-            if ( ((StandUser)cameraEnt).roundabout$getStandPowers() instanceof PowersAnubis && (PowerTypes.hasStandActive(cameraEnt)  || ((StandUser)cameraEnt).roundabout$getAnubisVanishTicks() != 0) ) {
+            StandUser standUser = (StandUser) cameraEnt;
+            if ( standUser.roundabout$getStandPowers() instanceof PowersAnubis && (PowerTypes.hasStandActive(cameraEnt)  || standUser.roundabout$getAnubisVanishTicks() != 0) || standUser.roundabout$isPossessed() ) {
                 ModStrayModels.ANUBIS.renderFirstPerson(stack,source,light,play,cameraEnt.tickCount + $$4);
             }
 
