@@ -329,6 +329,7 @@ public class FabricItems {
                         entries.accept(SPEEDWAGON_FOUNDATION_MASK);
                         entries.accept(DIO_MASK);
                         entries.accept(ENYA_MASK);
+                        entries.accept(CHAKA_MASK);
                         entries.accept(JOTARO_4_MASK);
                         entries.accept(AYA_MASK);
                         entries.accept(JOTARO_6_MASK);
