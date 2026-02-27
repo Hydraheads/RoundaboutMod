@@ -50,6 +50,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public WanderingTraderSettings wanderingTraderSettings;
     @NestedOption(group = "modded")
+    public BrushingLootSettings brushingLootSettings;
+    @NestedOption(group = "modded")
     public ItemSettings itemSettings;
     @NestedOption(group = "modded")
     public NameTagSettings nameTagSettings;
@@ -180,6 +182,16 @@ public class Config implements Cloneable {
         public Integer brokenArrowCost;
         @BooleanOption(group = "inherit",value = true)
         public Boolean brokenArrowsHaveStands;
+    }
+
+    public static class BrushingLootSettings {
+        @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)
+        public Float standArrowChance;
+        @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)
+        public Float beetleArrowChance;
+        @FloatOption(group = "inherit", value = 2F, min = 0, max = 100)
+        public Float dryLootMultiplier;
+
     }
 
 

@@ -108,7 +108,7 @@ public class FabricLootTables {
 
 
 
-        LootTableEvents.REPLACE.register((resourceManager, lootManager, id, original, source) -> {
+      /*  LootTableEvents.REPLACE.register((resourceManager, lootManager, id, original, source) -> {
             if(PYRAMID_ID.equals(id) || WELL_ID.equals(id) || OCEAN_WARM_ID.equals(id)
                     || TRAIL_COMMON_ID.equals(id) || TRAIL_RARE_ID.equals(id)
                     || OCEAN_COLD_ID.equals(id)) {
@@ -130,7 +130,7 @@ public class FabricLootTables {
             }
 
             return null;
-        } );
+        } ); REMOVE THIS WITH FURTHER TESTING */
         }
 
 

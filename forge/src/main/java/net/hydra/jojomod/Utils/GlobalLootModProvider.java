@@ -24,7 +24,7 @@ public class GlobalLootModProvider extends GlobalLootModifierProvider {
 
     @Override
     protected void start(){
-        add("stand_arrow_from_pyramid", new ForgeSusSandItemModifier(new LootItemCondition[]{
+  /*      add("stand_arrow_from_pyramid", new ForgeSusSandItemModifier(new LootItemCondition[]{
                 new LootTableIdCondition.Builder(new ResourceLocation("archaeology/desert_pyramid")).build()
         }, ForgeItems.STAND_ARROW.get()));
 
@@ -46,7 +46,7 @@ public class GlobalLootModProvider extends GlobalLootModifierProvider {
 
         add("stand_arrow_from_trail_ruins_rare", new ForgeSusGravelItemModifier(new LootItemCondition[]{
                 new LootTableIdCondition.Builder(new ResourceLocation("archaeology/trail_ruins_rare")).build()
-        }, ForgeItems.STAND_ARROW.get()));
+        }, ForgeItems.STAND_ARROW.get())); REMOVE THIS WITH FURTHER TESTING */
 
       /*  add("anubis_from_trail_ruins", new ForgeSusGravelItemModifier(new LootItemCondition[]{
                 new LootTableIdCondition.Builder(new ResourceLocation("archaeology/trail_ruins_common")).build()

@@ -1,4 +1,4 @@
-package net.hydra.jojomod.entity;
+package net.hydra.jojomod.util.loot;
 
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.util.config.Config;
@@ -13,7 +13,7 @@ import java.util.List;
 public class WanderingTrades {
 
     public static List<Pair<Float, MerchantOffer>> TRADES = new ArrayList<>();
-    public static  MerchantOffer BEETLE_ARROW_TRADE;
+    public static MerchantOffer BEETLE_ARROW_TRADE;
     public static MerchantOffer BROKEN_ARROW_TRADE;
     public static MerchantOffer ANUBIS_TRADE;
 
