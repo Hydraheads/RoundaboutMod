@@ -71,7 +71,6 @@
     "data_and_structures.DataRandomSpreadStructurePlacement",
     "data_and_structures.DataStructureTemplatePool",
     "data_and_structures.LootPoolMixin",
-    "data_and_structures.LootTableMixin",
     "effects.bleed.BleedFoodData",
     "effects.hex.HexItem",
     "effects.warding.WardingArrowMixin",

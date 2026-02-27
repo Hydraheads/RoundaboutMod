@@ -8,6 +8,7 @@
     "ExperimentalFixD4CForge",
     "ForgeCoffinSleepAtDayMixin",
     "ForgeEatingMixin",
+    "ForgeLootTableMixin",
     "ForgeMilkBucketMixin",
     "ForgePlayer",
     "ForgeServerPlayer"
