@@ -916,6 +916,26 @@ public class MainUtil {
         return false;
     }
 
+    public static void onDeath(Entity entity, DamageSource source){
+        StandPowers powers = ((StandUser)entity).roundabout$getStandPowers();
+        if (powers != null && powers.isClashing()){
+            powers.endClash();
+        }
+
+        if (entity instanceof ServerPlayer pl) {
+            if ((((IPlayerEntity) entity).roundabout$getVoiceData()) != null) {
+                ((IPlayerEntity) entity).roundabout$getVoiceData().playIfDying(source);
+            }
+        }
+        if (source.getEntity() instanceof Player pl) {
+            ((IPowersPlayer) pl).rdbt$getPowers().onKill(entity,source);
+            ((IFatePlayer) pl).rdbt$getFatePowers().onKill(entity,source);
+        }
+        if (source.getEntity() instanceof LivingEntity le) {
+            ((StandUser) le).roundabout$getStandPowers().onKill(entity,source);
+        }
+    }
+
     public static Vec3 getMobCenter(Entity entity, float centerpercent){
         Vec3 start = entity.getPosition(1f);
         Vec3 hitbox = new Vec3(0,entity.getBbHeight()*centerpercent,0);

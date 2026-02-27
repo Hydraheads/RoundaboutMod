@@ -1,6 +1,7 @@
 package net.hydra.jojomod.fates.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
@@ -105,6 +106,7 @@ public class ZombieFate extends VampiricFate {
     public void setZombieFishCount(int num){
         if (self instanceof Player pl){
             zombieFishCount = num;
+            ((IPlayerEntity)pl).rdbt$setZombieFish(num);
             if (!self.level().isClientSide()){
                 //send packet to client giving fish
                 S2CPacketUtil.updateZombieFish(
@@ -113,6 +115,14 @@ public class ZombieFate extends VampiricFate {
         }
     }
 
+    @Override
+    public void onKill(Entity target, DamageSource source){
+        if (!self.level().isClientSide()){
+            if (source.is(ModDamageTypes.BLOOD_DRAIN)){
+                setZombieFishCount(Mth.clamp(getZombieFishCount()+1, 0, 5));
+            }
+        }
+    }
 
     public boolean isArrow(ItemStack stack){
         if (stack != null && !stack.isEmpty() && stack.getItem() instanceof ArrowItem && !(stack.getItem() instanceof RoundaboutArrowItem)){
@@ -334,6 +344,8 @@ public class ZombieFate extends VampiricFate {
      * activeP is your currently active power*/
     public boolean isAttackIneptVisually(byte activeP, int slot){
         Entity TE = getUserData(self).roundabout$getStandPowers().getTargetEntity(this.self, 3, 15);
+        if (slot == 1 && !canUseZombieShot() && getZombieFishCount() <= 0)
+            return true;
         if (slot == 2 && !MainUtil.canDrinkBloodFair(TE, self) &&
                 !negateDrink())
             return true;
@@ -468,7 +480,20 @@ public class ZombieFate extends VampiricFate {
         if (canUseZombieShot()) {
             setSkillIcon(context, x, y, 1, StandIcons.ZOMBIE_PROJECTILES, PowerIndex.FATE_1_SNEAK);
         } else {
-            setSkillIcon(context, x, y, 1, StandIcons.ZOMBIE_WORM, PowerIndex.FATE_1);
+            int zombieFish = getZombieFishCount();
+            if (zombieFish <= 0){
+                setSkillIcon(context, x, y, 1, StandIcons.ZOMBIE_WORM, PowerIndex.FATE_1);
+            } else if (zombieFish == 1){
+                setSkillIcon(context, x, y, 1, StandIcons.ZOMBIE_WORM_1, PowerIndex.FATE_1);
+            } else if (zombieFish == 2){
+                setSkillIcon(context, x, y, 1, StandIcons.ZOMBIE_WORM_2, PowerIndex.FATE_1);
+            } else if (zombieFish == 3){
+                setSkillIcon(context, x, y, 1, StandIcons.ZOMBIE_WORM_3, PowerIndex.FATE_1);
+            } else if (zombieFish == 4){
+                setSkillIcon(context, x, y, 1, StandIcons.ZOMBIE_WORM_4, PowerIndex.FATE_1);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.ZOMBIE_WORM_5, PowerIndex.FATE_1);
+            }
         }
         setSkillIcon(context, x, y, 2, StandIcons.ZOMBIE_DRINK, PowerIndex.FATE_2);
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);

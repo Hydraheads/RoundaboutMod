@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.fates.powers.ZombieFate;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
@@ -176,6 +177,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Override
     public void rdbt$setZombieFish(int fish){
         rdbt$zombieFish = fish;
+        if (((IFatePlayer)this).rdbt$getFatePowers() instanceof ZombieFate zf){
+            zf.zombieFishCount = fish;
+        }
     }
     @Unique
     @Override

@@ -100,6 +100,16 @@ public class StandIcons {
             "textures/gui//icons/fates/zombie/projectiles.png");
     public static final ResourceLocation ZOMBIE_WORM = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui//icons/fates/zombie/worm.png");
+    public static final ResourceLocation ZOMBIE_WORM_1 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/zombie/worm_1.png");
+    public static final ResourceLocation ZOMBIE_WORM_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/zombie/worm_2.png");
+    public static final ResourceLocation ZOMBIE_WORM_3 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/zombie/worm_3.png");
+    public static final ResourceLocation ZOMBIE_WORM_4 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/zombie/worm_4.png");
+    public static final ResourceLocation ZOMBIE_WORM_5 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/zombie/worm_5.png");
 
     public static final ResourceLocation SURVIVOR_ANGER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/survivor_anger.png");

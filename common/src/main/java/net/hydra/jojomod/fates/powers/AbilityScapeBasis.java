@@ -167,6 +167,10 @@ public class AbilityScapeBasis {
         return 0;
     }
 
+    public void onKill(Entity target, DamageSource source){
+
+    }
+
     /**For enhancement stands that adjust your normal player attack speed*/
     public float getBonusAttackSpeed() {
         return 1F;
