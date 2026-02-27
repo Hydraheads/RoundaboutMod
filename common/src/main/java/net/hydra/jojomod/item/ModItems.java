@@ -199,6 +199,7 @@ public class ModItems {
         addToVisageStore(SPEEDWAGON_FOUNDATION_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(DIO_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(ENYA_MASK,1, characterCostExp, characterCostEmerald);
+        addToVisageStore(CHAKA_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(JOTARO_4_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(AYA_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(JOTARO_6_MASK,1, characterCostExp, characterCostEmerald);
