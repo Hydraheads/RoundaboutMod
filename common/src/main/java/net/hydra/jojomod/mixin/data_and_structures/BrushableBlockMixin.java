@@ -87,9 +87,11 @@ public abstract class BrushableBlockMixin extends BlockEntity {
             Random random = new Random();
             random.setSeed(this.lootTableSeed);
             double pull = random.nextDouble(0, maxChance); // this method is similar to what I did in WanderingTraderMixin
-            Roundabout.LOGGER.info("PULL:" + pull);
-            Roundabout.LOGGER.info("Base Size:" + size);
-            Roundabout.LOGGER.info("Modded Size:" + maxChance); // if the number is greater than the base size, that means it's going to be a modded item
+            //Roundabout.LOGGER.info("PULL:" + pull);
+            //Roundabout.LOGGER.info("Base Size:" + size);
+
+            //Roundabout.LOGGER.info("Modded Size:" + maxChance);
+            // if the number is greater than the base size, that means it's going to be a modded item
             if (pull > size) {
                 pull -= size;
                 for (Pair<Float, ItemStack> pair : moddedLoot) {
