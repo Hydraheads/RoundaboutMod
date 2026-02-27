@@ -959,6 +959,14 @@ public class MainUtil {
                 && !(mob != null && ((TimeStop)mob.level()).CanTimeStopEntity(mob)));
     }
 
+    public static boolean resistsKnockBack(Entity ent){
+        if (ent instanceof LivingEntity LE &&
+                ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW &&
+                PW.hasExtendedHeelsForWalking()){
+            return true;
+        }
+        return false;
+    }
     public static boolean canDrinkBloodFair(Entity ent,Entity drinker){
         return canDrinkBlood(ent) && !(ent instanceof Player);
     }

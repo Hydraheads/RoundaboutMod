@@ -745,11 +745,13 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public void hairPullEntity(Entity entity) {
         if (!this.self.level().isClientSide()) {
             if (entity != null) {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.LASSO_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5f + Math.random() * 0.05f));
+                if (!(MainUtil.resistsKnockBack(entity))) {
+                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.LASSO_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5f + Math.random() * 0.05f));
 
-                entity.hurtMarked = true;
-                entity.hasImpulse = true;
-                entity.setDeltaMovement(self.getEyePosition().subtract(entity.position()).normalize().scale(1));
+                    entity.hurtMarked = true;
+                    entity.hasImpulse = true;
+                    entity.setDeltaMovement(self.getEyePosition().subtract(entity.position()).normalize().scale(1));
+                }
             } else {
                 this.self.level().playSound(null, this.self.blockPosition(),ModSounds.VAMPIRE_DIVE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5f + Math.random() * 0.08f));
             }

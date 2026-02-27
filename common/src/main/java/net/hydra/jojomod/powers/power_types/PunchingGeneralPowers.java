@@ -171,8 +171,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
     int airTime = 0;
     public boolean canUseAirAttack() {
         if (self.level().isClientSide()) {
-            return this.isHoldingSneak()
-                    && !this.getSelf().onGround()
+            return !this.getSelf().onGround()
                     && !self.isInWater()
                     && (this.fallTime > 0)
                     && (this.airTime > 6);
