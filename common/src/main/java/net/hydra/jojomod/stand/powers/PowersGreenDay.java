@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 
 import net.hydra.jojomod.entity.projectile.StandFireballEntity;
+import net.hydra.jojomod.entity.stand.GreenDayEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
 import net.hydra.jojomod.entity.substand.SeperatedLegsEntity;
@@ -344,6 +345,7 @@ public class PowersGreenDay extends NewPunchingStand {
                 SAE.setYRot(this.self.getYRot());
                 SAE.setPos(getRayBlock(this.self,0.5f).add(0,-0.3,0));
                 SAE.setDeltaMovement((this.self.getLookAngle().multiply(2, 2, 2)));
+                SAE.setItemInHand(InteractionHand.MAIN_HAND,this.self.getMainHandItem());
                 this.self.level().addFreshEntity(SAE);
                 Main_arm = SAE;
             }
@@ -787,17 +789,40 @@ public class PowersGreenDay extends NewPunchingStand {
         return Component.literal(  "Fish").withStyle(ChatFormatting.YELLOW);
     }
 
+
     public static final byte
-            PART_FOUR = 1;
+            PART_FIVE_GREEN_DAY = 1,
+            RED_DAY = 2,
+            TEAL_DAY = 3;
 
 
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
-                PART_FOUR
+                PART_FIVE_GREEN_DAY,
+                RED_DAY,
+                TEAL_DAY
 
         );
     }
+
+    @Override
+    public Component getSkinName(byte skinId) {
+        return getSkinNameT(skinId);
+    }
+
+    public static Component getSkinNameT(byte skinId) {
+        if (skinId == GreenDayEntity.PART_FIVE_GREEN_DAY) {
+            return Component.translatable("skins.roundabout.green_day.part_five_green_day");
+        } else if (skinId == GreenDayEntity.RED_DAY) {
+            return Component.translatable("skins.roundabout.green_day.red_day");
+        } else if (skinId == GreenDayEntity.TEAL_DAY) {
+            return Component.translatable("skins.roundabout.green_day.teal_day");
+        }
+        return Component.translatable(  "skins.roundabout.green_day.part_five_green_day");
+    }
+
+
 
 
 
