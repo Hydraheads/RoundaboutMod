@@ -24,10 +24,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.AxeItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PickaxeItem;
-import net.minecraft.world.item.ShovelItem;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.Block;
@@ -117,9 +114,28 @@ public class SeperatedArmEntity extends StandEntity {
                 }
                 if(Can_activate && !(this.IsArmContactingBlock() == null) && flyingTicks > 2){
                     BlockState block = (this.level().getBlockState(this.IsArmContactingBlock()));
-                    boolean pickaxeable =  block.is(BlockTags.MINEABLE_WITH_PICKAXE);
-                    boolean axeable =  block.is(BlockTags.MINEABLE_WITH_AXE);
-                    boolean shovelable =  block.is(BlockTags.MINEABLE_WITH_SHOVEL);
+
+
+                    ItemStack item = (this.getMainHandItem());
+
+                    boolean RightTier = false;
+
+                    if(item.getItem() instanceof DiggerItem DI) {
+                        RightTier = (
+                                (block.is(BlockTags.NEEDS_STONE_TOOL) && !(DI.getTier().equals(Tiers.WOOD)))
+                                ||
+                                        (block.is(BlockTags.NEEDS_IRON_TOOL) && (DI.getTier().equals(Tiers.IRON) || DI.getTier().equals(Tiers.DIAMOND)|| DI.getTier().equals(Tiers.NETHERITE)))
+                                ||
+                                        (block.is(BlockTags.NEEDS_DIAMOND_TOOL) && DI.getTier().equals(Tiers.NETHERITE)|| DI.getTier().equals(Tiers.DIAMOND))
+                                ||
+                                        !(block.is(BlockTags.NEEDS_DIAMOND_TOOL) || block.is(BlockTags.NEEDS_STONE_TOOL) || block.is(BlockTags.NEEDS_IRON_TOOL))
+                        );
+                    }
+
+                    boolean pickaxeable =  block.is(BlockTags.MINEABLE_WITH_PICKAXE) && RightTier;
+                    boolean axeable =  block.is(BlockTags.MINEABLE_WITH_AXE) && RightTier;
+                    boolean shovelable =  block.is(BlockTags.MINEABLE_WITH_SHOVEL ) && RightTier;
+
 
 
                     if(this.getMainHandItem().getItem() instanceof PickaxeItem){
