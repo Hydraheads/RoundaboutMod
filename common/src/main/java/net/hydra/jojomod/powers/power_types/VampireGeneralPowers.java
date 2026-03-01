@@ -177,6 +177,11 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     @Override
     public boolean canInterruptPower(){
         if (activePower == RIPPER_EYES_ACTIVATED || activePower == RIPPER_EYES){
+            setCooldown(PowerIndex.GENERAL_4,getRipperInterruptCooldown());
+            if (self instanceof ServerPlayer sp){
+                S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.GENERAL_4, getRipperInterruptCooldown());
+            }
+
             return true;
         }
         return super.canInterruptPower();
@@ -784,6 +789,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
     public int getRipperCooldown(){
         return 240;
+    }
+    public int getRipperInterruptCooldown(){
+        return 120;
     }
 
 
