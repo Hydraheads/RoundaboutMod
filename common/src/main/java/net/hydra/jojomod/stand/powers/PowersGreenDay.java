@@ -21,6 +21,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.mixin.PlayerEntity;
 import net.hydra.jojomod.mixin.StandUserEntity;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
@@ -53,12 +54,10 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.EnderpearlItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerBlock;
@@ -344,11 +343,12 @@ public class PowersGreenDay extends NewPunchingStand {
                 SAE.setXRot(this.self.getXRot());
                 SAE.setYRot(this.self.getYRot());
                 SAE.setPos(getRayBlock(this.self,0.5f).add(0,-0.3,0));
-                SAE.setItemInHand(InteractionHand.MAIN_HAND,this.self.getMainHandItem());
+                SAE.setItemInHand(InteractionHand.MAIN_HAND,this.self.getItemInHand(InteractionHand.MAIN_HAND).copy());
                 this.self.level().addFreshEntity(SAE);
                 SAE.jump(this.getRayBlock(this.self,20F));
                 Main_arm = SAE;
             }
+            this.self.getMainHandItem().setCount(0);
             Vec3 location = getRayBlock(this.self, 1f);
            // ((ServerLevel) this.self.level()).sendParticles(ModParticles.MOLD_DUST, location.x,
              //       location.y, location.z,
@@ -394,7 +394,11 @@ public class PowersGreenDay extends NewPunchingStand {
         }
     }
 
-    public boolean MainArmReturnServer(){
+    public boolean MainArmReturnServer() {
+        ItemEntity $$2 = new ItemEntity(this.self.level(), this.self.getX(), this.self.getY() + 1, this.self.getZ(),Main_arm.getMainHandItem());
+        $$2.setDefaultPickUpDelay();
+        this.self.level().addFreshEntity($$2);
+        //this.self.spawnAtLocation(Main_arm.getMainHandItem());
         Main_arm.setUser(null);
         Main_arm.discard();
         Main_arm = null;
@@ -402,12 +406,12 @@ public class PowersGreenDay extends NewPunchingStand {
         double Pitch = Math.toRadians(this.self.getLookAngle().y);
         double Zangle = Math.toRadians(this.self.getLookAngle().z);
         double diameter = 0.6d;
-        for(int i = 0; i < 11; i = i + 1) {
+        for (int i = 0; i < 11; i = i + 1) {
             ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.STITCH,
-                    this.getSelf().getX() + (diameter * Math.sin(i*4)) * Math.cos(Xangle),
-                    this.getSelf().getY() + (this.getSelf().getEyeHeight()*0.7),
-                    this.getSelf().getZ() + (diameter * Math.cos(i*4)) * Math.cos(Zangle),
-                    0,0,0,0,0);
+                    this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
+                    this.getSelf().getY() + (this.getSelf().getEyeHeight() * 0.7),
+                    this.getSelf().getZ() + (diameter * Math.cos(i * 4)) * Math.cos(Zangle),
+                    0, 0, 0, 0, 0);
         }
         return true;
     }

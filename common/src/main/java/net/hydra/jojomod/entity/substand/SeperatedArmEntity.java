@@ -46,6 +46,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.spongepowered.asm.mixin.injection.Inject;
 
 import java.util.List;
 
@@ -120,6 +121,7 @@ public class SeperatedArmEntity extends StandEntity {
         LivingEntity user = this.getUser();
         if (!client) {
             if(user == null){
+                spawnAtLocation(this.getMainHandItem());
                 this.discard();
             }else{
                 if(!onGround()){
@@ -265,7 +267,7 @@ public class SeperatedArmEntity extends StandEntity {
                 ((ServerLevel) this.level()).sendParticles(ParticleTypes.CRIT, location.x,
                         location.y, location.z,
                         10,
-                        0.005, 0.005, 0.005,
+                        0.05, 0.05, 0.05,
                         0.1);
                 if(item instanceof KnifeItem){
 
@@ -273,8 +275,6 @@ public class SeperatedArmEntity extends StandEntity {
             }
         }
     }
-
-
 
 
     @Override
