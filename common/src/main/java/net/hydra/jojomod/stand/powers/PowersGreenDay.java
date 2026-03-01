@@ -344,17 +344,17 @@ public class PowersGreenDay extends NewPunchingStand {
                 SAE.setXRot(this.self.getXRot());
                 SAE.setYRot(this.self.getYRot());
                 SAE.setPos(getRayBlock(this.self,0.5f).add(0,-0.3,0));
-                SAE.setDeltaMovement((this.self.getLookAngle().multiply(2, 2, 2)));
                 SAE.setItemInHand(InteractionHand.MAIN_HAND,this.self.getMainHandItem());
                 this.self.level().addFreshEntity(SAE);
+                SAE.jump(this.getRayBlock(this.self,20F));
                 Main_arm = SAE;
             }
             Vec3 location = getRayBlock(this.self, 1f);
-            ((ServerLevel) this.self.level()).sendParticles(ModParticles.MOLD_DUST, location.x,
-                    location.y, location.z,
-                    24,
-                    0.005, 0.005, 0.005,
-                    0.1);
+           // ((ServerLevel) this.self.level()).sendParticles(ModParticles.MOLD_DUST, location.x,
+             //       location.y, location.z,
+               //     24,
+                 //   0.005, 0.005, 0.005,
+                   // 0.1);
         }else{
             Double distance = MainUtil.cheapDistanceTo(
                     this.self.getX(),
