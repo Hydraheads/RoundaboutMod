@@ -791,7 +791,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         return 240;
     }
     public int getRipperInterruptCooldown(){
-        return 120;
+        return 60;
     }
 
 
