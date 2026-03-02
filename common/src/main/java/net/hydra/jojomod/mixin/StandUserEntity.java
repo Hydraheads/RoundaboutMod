@@ -4278,7 +4278,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             || MainUtil.isStandDamage(source)
                             || source.is(DamageTypes.PLAYER_EXPLOSION)
                             || source.is(DamageTypes.EXPLOSION)){
-                        damageAmount*=0.5F;
+                        damageAmount*=0.37F;
                         modified = true;
                     }
                 }
