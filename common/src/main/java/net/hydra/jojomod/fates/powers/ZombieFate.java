@@ -54,6 +54,7 @@ public class ZombieFate extends VampiricFate {
     public static final byte DISGUISE = 50;
     public static final byte ZOMBIE_SHOT = 51;
     public static final byte ZOMBIE_FISH = 52;
+    public static final byte ENTER = 53;
     public int spikeTimeDuring = 0;
     public int zombieFishCount = -1;
 
@@ -83,13 +84,21 @@ public class ZombieFate extends VampiricFate {
                 suckBlood();
             }
             case SKILL_3_NORMAL,SKILL_3_CROUCH -> {
-                dash();
+                dashOrEnter();
             }
             case SKILL_4_NORMAL,SKILL_4_CROUCH -> {
                 switchDisguiseClient();
             }
         }
     };
+
+    public void dashOrEnter(){
+        if (canTargetEnter()){
+            tryPowerPacket(ENTER);
+        } else {
+            dash();
+        }
+    }
 
     public int getZombieFishCount(){
         if (zombieFishCount == -1){
@@ -180,6 +189,15 @@ public class ZombieFate extends VampiricFate {
         } else {
             if (!onCooldown(PowerIndex.FATE_1) && getZombieFishCount() > 0){
                 tryPowerPacket(ZOMBIE_FISH);
+            }
+        }
+    }
+
+    public void enterTarget(){
+        if (canTargetEnter()){
+            Entity getTarget = getTargetEnter();
+            if (getTarget != null && !getTarget.isRemoved() && getTarget.isAlive()){
+                self.startRiding(getTarget);
             }
         }
     }
@@ -347,6 +365,8 @@ public class ZombieFate extends VampiricFate {
             zombieShotStart();
         } else if (move == ZOMBIE_FISH){
             spawnZombieFish();
+        } else if (move == ENTER){
+            enterTarget();
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -504,9 +524,16 @@ public class ZombieFate extends VampiricFate {
         return getActivePower() == ZOMBIE_SHOT || super.cancelSprintJump();
     }
 
+    public Entity getTargetEnter(){
+        Entity TE = getUserData(self).roundabout$getStandPowers().getTargetEntity(this.self, 2, 15);
+        if (TE instanceof Animal al && al.getPassengers().isEmpty()){
+            return al;
+        }
+        return null;
+    }
     public boolean canTargetEnter(){
         Entity TE = getUserData(self).roundabout$getStandPowers().getTargetEntity(this.self, 2, 15);
-        if (TE instanceof Animal al){
+        if (TE instanceof Animal al && al.getPassengers().isEmpty()){
             return true;
         }
         return false;
