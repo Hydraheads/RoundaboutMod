@@ -2112,7 +2112,7 @@ public void unlockSkin(){
         return (((float)this.chargedFinal/(float)maxSuperHitTime)*2.2F);
     }
     public float getKickAttackStrength(Entity entity){
-        float punchD = this.getPunchStrength(entity)*1.8F+this.getHeavyPunchStrength(entity);
+        float punchD = this.getPunchStrength(entity)*1.9F+this.getHeavyPunchStrength(entity);
         /**Full charge does much less damage because it's more for moving mobs*/
 
         if (this.chargedFinal >= maxSuperHitTime){
