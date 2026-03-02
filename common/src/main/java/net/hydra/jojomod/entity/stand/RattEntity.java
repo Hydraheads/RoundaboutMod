@@ -156,13 +156,6 @@ public class RattEntity extends StandEntity {
         if (source.getEntity() != null && source.getEntity() != this.getUser()) {
             if (this.getUser() != null ) {
 
-                if (source.getEntity() instanceof LivingEntity LE){
-                    if (PowerTypes.hasStandActivelyEquipped(LE)){
-                        if (!PowerTypes.hasStandActive(LE)){
-                            return false;
-                        }
-                    }
-                }
 
                 if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersRatt PR) {
                     if (!this.onGround()) {
