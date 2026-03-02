@@ -423,7 +423,6 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     }
                 }
 
-                Roundabout.LOGGER.info(""+ipe.roundabout$getItemAnimation().getAccumulatedTime());
                 if ($$0.getUseItem().is(ModItems.ANUBIS_ITEM)) {
                     ipe.roundabout$getItemAnimation().startIfStopped($$0.tickCount);
                     this.roundabout$animate(ipe.roundabout$getItemAnimation(), AnubisAnimations.ThirdPersonUnsheathe, $$3, 1F);

@@ -5,6 +5,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -75,39 +76,27 @@ public class RattEntity extends StandEntity {
         return this.getPosition(d).add(0,0.15,0);
     }
 
-
-    public LivingEntity Target;
-    public LivingEntity getTarget() {
-        if (this.level().isClientSide){
-            return (LivingEntity) this.level().getEntity(this.entityData.get(TARGET_ID));
-        } else {
-            if (this.Target != null && this.Target.isRemoved()){
-                this.setFollowing(null);
-            }
-            return this.Target;
-        }
-    }
-    public void setRattTarget(LivingEntity StandSet){
-        this.Target = StandSet;
-        int standSetId = -1;
-        if (StandSet != null){
-            standSetId = StandSet.getId();
-        }
-        this.entityData.set(TARGET_ID, standSetId);
-    }
     public void setSavedSkin(byte skin) {this.entityData.set(SAVED_SKIN,skin);}
     public byte getSavedSkin() {return this.entityData.get(SAVED_SKIN);}
 
-    protected static final EntityDataAccessor<Integer> TARGET_ID = SynchedEntityData.defineId(RattEntity.class,
-            EntityDataSerializers.INT);
+    public boolean isSafe() {
+        return this.entityData.get(SAFE_TICKS) > 0;
+    }
+    public void changeSafeTicks(int d) {
+        this.entityData.set(SAFE_TICKS,this.entityData.get(SAFE_TICKS)+d);
+    }
+
     protected static final EntityDataAccessor<Byte> SAVED_SKIN = SynchedEntityData.defineId(RattEntity.class,
             EntityDataSerializers.BYTE);
+    protected static final EntityDataAccessor<Integer> SAFE_TICKS = SynchedEntityData.defineId(RattEntity.class,
+            EntityDataSerializers.INT);
+
     @Override
     protected void defineSynchedData() {
-        if (!this.entityData.hasItem(TARGET_ID)) {
+        if (!this.entityData.hasItem(SAVED_SKIN)) {
             super.defineSynchedData();
-            this.entityData.define(TARGET_ID, -1);
             this.entityData.define(SAVED_SKIN,(byte)0);
+            this.entityData.define(SAFE_TICKS, ConfigManager.getConfig().rattSettings.rattSafetyTicks);
         }
     }
 
@@ -152,7 +141,18 @@ public class RattEntity extends StandEntity {
     }
 
     @Override
+    public void tick() {
+        super.tick();
+        if (isSafe()) {
+            this.changeSafeTicks(-1);
+        }
+    }
+    @Override
     public boolean hurt(DamageSource source, float amount) {
+        if (isSafe()) {
+            this.changeSafeTicks(-5);
+            return false;
+        }
         if (source.getEntity() != null && source.getEntity() != this.getUser()) {
             if (this.getUser() != null ) {
 

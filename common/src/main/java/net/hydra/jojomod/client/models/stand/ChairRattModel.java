@@ -168,7 +168,7 @@ public class ChairRattModel<T extends ChairRattEntity> extends StandModel<T> {
 
         super.setupAnim(pEntity,pLimbSwing,pLimbSwingAmount,pAgeInTicks,pNetHeadYaw,pHeadPitch);
 
-        StandUser SU = (StandUser) ((RattEntity)pEntity).getUser();
+        StandUser SU = (StandUser) pEntity.getUser();
         if (SU != null) {
             if (SU.roundabout$getStandPowers() instanceof PowersRatt PR) {
                 if (!mc.isPaused() && !(((TimeStop) pEntity.level()).CanTimeStopEntity(pEntity.getUser()))) {
@@ -191,5 +191,10 @@ public class ChairRattModel<T extends ChairRattEntity> extends StandModel<T> {
 
 
         this.animate(pEntity.fire, RattAnimations.Fire, pAgeInTicks, 1f);
-        this.animate(pEntity.loading, RattAnimations.Loading, pAgeInTicks, 1f);}
+        this.animate(pEntity.loading, RattAnimations.Loading, pAgeInTicks, 1f);
+
+        if (pEntity.isSafe()) {
+            this.setAlpha(0.5F);
+        }
+    }
 }

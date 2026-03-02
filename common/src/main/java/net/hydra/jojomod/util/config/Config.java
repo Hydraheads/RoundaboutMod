@@ -656,6 +656,8 @@ public class Config implements Cloneable {
     public static class RattSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableRatt;
+        @IntOption(group = "inherit", value = 30, min = 0, max = 100)
+        public Integer rattSafetyTicks;
         @FloatOption(group = "inherit", value = 1F, min = 0F, max = 100F)
         public Float rattAttackBonusOnMobs;
         @FloatOption(group = "inherit", value = 2.5F, min = 0F, max = 100F)
@@ -664,7 +666,7 @@ public class Config implements Cloneable {
         public Integer rattMaxDespawnRange;
         @IntOption(group = "inherit", value = 30, min = 0, max = 100)
         public Integer rattChargePerHit;
-        @IntOption(group = "inherit", value = 4, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 2, min = 0, max = 72000)
         public Integer rattManualChargeRate;
         @IntOption(group = "inherit", value = 150, min = 0, max = 72000)
         public Integer rattLeapCooldown;

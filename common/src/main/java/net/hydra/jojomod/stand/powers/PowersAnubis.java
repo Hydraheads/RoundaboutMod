@@ -15,7 +15,6 @@ import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.projectile.AnubisSlipstreamEntity;
-import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -24,6 +23,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.AnubisItem;
+import net.hydra.jojomod.item.FirearmItem;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
@@ -58,6 +58,7 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -156,7 +157,6 @@ public class PowersAnubis extends NewDashPreset {
         return -1;
     }
     public static final int PogoDelay = 8;
-    public static final byte SWING = 50;
 
 
     public List<AnubisMemory> memories = new ArrayList<>();
@@ -164,6 +164,9 @@ public class PowersAnubis extends NewDashPreset {
     public final List<Byte> playBytes = new ArrayList<>();
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
+        if ( ((StandUser)entity).roundabout$getStandSkin() == (byte)0 ) {
+            ((StandUser)entity).roundabout$setStandSkin((byte)1);
+        }
         return new PowersAnubis(entity);
     }
 
@@ -869,9 +872,7 @@ public class PowersAnubis extends NewDashPreset {
                     index = determineThird(lasthits);
                 }
 
-                if (index != PowersAnubis.DOUBLE && index != PowersAnubis.UPPERCUT) {
-                    this.getSelf().swing(InteractionHand.MAIN_HAND);
-                }
+
                 this.tryPower(index);
                 tryPowerPacket(index);
             }
@@ -900,7 +901,6 @@ public class PowersAnubis extends NewDashPreset {
         this.setAttackTime(0);
 
         this.setAnimation(move);
-        Roundabout.LOGGER.info(""+move);
         setActivePower(move);
     }
 
@@ -991,10 +991,6 @@ public class PowersAnubis extends NewDashPreset {
                             this.getActivePower() == PowerIndex.ATTACK) {
 
                         ((StandUser)this.getSelf()).roundabout$setBubbleEncased((byte)(0));
-                        this.getSelf().swing(InteractionHand.MAIN_HAND);
-                        if (this.getSelf() instanceof Player P) {
-                            S2CPacketUtil.sendIntPowerDataPacket(P,PowersAnubis.SWING,0);
-                        }
                         if (getActivePower() == PowerIndex.SNEAK_ATTACK) {
                             SAttack();
                         } else {
@@ -1131,9 +1127,6 @@ public class PowersAnubis extends NewDashPreset {
 
     public void PogoLaunch() {
         this.getSelf().resetFallDistance();
-        if (this.getSelf() instanceof Player P) {
-            S2CPacketUtil.sendIntPowerDataPacket(P,PowersAnubis.SWING,0);
-        }
         float power = 1.2F;
         Vec3 lookAngle = this.getSelf().getLookAngle().reverse();
         this.getSelf().resetFallDistance();
@@ -1267,9 +1260,6 @@ public class PowersAnubis extends NewDashPreset {
     public void DoubleCut(boolean first) {
         addEXP(1);
         ((StandUser)this.getSelf()).roundabout$setBubbleEncased((byte)(0));
-        if (this.getSelf() instanceof Player P) {
-            S2CPacketUtil.sendIntPowerDataPacket(P,PowersAnubis.SWING,0);
-        }
         if (!canPogo()) {
             this.setAttackTime(0);
             this.setAttackTimeMax(this.getAttackTimeMax()+10);
@@ -1389,9 +1379,6 @@ public class PowersAnubis extends NewDashPreset {
         addEXP(2);
         ((StandUser)this.getSelf()).roundabout$setBubbleEncased((byte)(0));
         this.getSelf().resetFallDistance();
-        if (this.getSelf() instanceof Player P) {
-            S2CPacketUtil.sendIntPowerDataPacket(P,PowersAnubis.SWING,0);
-        }
         this.setAttackTimeDuring(-10);
 
 
@@ -1461,12 +1448,7 @@ public class PowersAnubis extends NewDashPreset {
     @Override
     public void updatePowerInt(byte activePower, int data) {
         switch (activePower) {
-            ///  basic swing, will probably be vanished at some point
-            case PowersAnubis.SWING ->{
-                if (isPacketPlayer()) {
-                    this.getSelf().swing(InteractionHand.MAIN_HAND);
-                }
-            }
+
             /// pogo counter syncing
             case PowerIndex.SNEAK_ATTACK_CHARGE -> {
                 setAnimation(PowerIndex.EXTRA);
@@ -1543,7 +1525,12 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     @Override
-    public boolean canCombatModeUse(Item item) {return !item.equals(ModItems.ANUBIS_ITEM);}
+    public boolean canCombatModeUse(Item item) {
+        return !item.equals(ModItems.ANUBIS_ITEM)
+                && !item.equals(Items.SHIELD)
+                && !(item instanceof FirearmItem)
+                && !item.equals(Items.FISHING_ROD);
+    }
 
     List<Entity> targets = new ArrayList<>();
     @Override
@@ -2448,7 +2435,6 @@ public class PowersAnubis extends NewDashPreset {
                         } else{
                             SU.roundabout$tryPower(PowerIndex.ATTACK, true);
                         }
-                        this.getSelf().swing(InteractionHand.MAIN_HAND);
                         this.setAttackTimeDuring(0);
                     }
                 }

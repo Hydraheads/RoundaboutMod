@@ -1333,7 +1333,7 @@
   "ability.roundabout.ratt_burst": "Mode Change",
   "ability.roundabout.ratt_burst.desc": "Changes your manual firing mode between Single Fire and Burst Fire",
   "ability.roundabout.ratt_place": "Ratt Place",
-  "ability.roundabout.ratt_place.desc": "Place Ratt down, allowing Ratt to fire alongside you. Sneaking highlights ratt and displays the distance to you.",
+  "ability.roundabout.ratt_place.desc": "Place Ratt down, allowing Ratt to fire alongside you. Sneaking highlights ratt and displays the distance to you. Ratt is immune to being hit for a brief period upon being placed.",
   "ability.roundabout.ratt_place_burst": "Placed Burst Fire",
   "ability.roundabout.ratt_place_burst.desc": "Shoot a burst of 3 darts from Ratt's position to your cursor",
   "ability.roundabout.ratt_auto": "Automatic Mode",
@@ -2257,6 +2257,8 @@
 
   "config.roundabout.rattAttackBonusOnMobs.name": "Bonus Mob Damage",
   "config.roundabout.rattAttackBonusOnMobs.desc": "How much bonus damage Ratt darts deal to a mob.",
+  "config.roundabout.rattSafetyTicks.name": "Ratt Safety Ticks",
+  "config.roundabout.rattSafetyTicks.desc": "The amount of ticks until a placed Ratt can be attacked",
   "config.roundabout.rattAttackBonusOnBosses.name": "Bonus Boss Damage",
   "config.roundabout.rattAttackBonusOnBosses.desc": "Since Boss mobs cannot receive melt, they instead take a flat bonus damage ",
   "config.roundabout.rattMaxDespawnRange.name": "Despawn Range",
