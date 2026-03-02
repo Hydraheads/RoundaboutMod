@@ -2898,7 +2898,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     }
     public float getFireballDamage(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.5F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.25F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(4));
         }
