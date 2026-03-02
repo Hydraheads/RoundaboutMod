@@ -5,14 +5,15 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
+import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.index.PlayerPosIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.ModItems;
@@ -51,6 +52,7 @@ public class ZombieFate extends VampiricFate {
 
     public static final byte DISGUISE = 50;
     public static final byte ZOMBIE_SHOT = 51;
+    public static final byte ZOMBIE_FISH = 52;
     public int spikeTimeDuring = 0;
     public int zombieFishCount = -1;
 
@@ -111,6 +113,8 @@ public class ZombieFate extends VampiricFate {
                 //send packet to client giving fish
                 S2CPacketUtil.updateZombieFish(
                         pl, num);
+
+
             }
         }
     }
@@ -156,7 +160,8 @@ public class ZombieFate extends VampiricFate {
     }
 
     public boolean isServerControlledCooldown(byte num){
-        if (num == PowerIndex.FATE_1_SNEAK || num == PowerIndex.FATE_4){
+        if (num == PowerIndex.FATE_1_SNEAK || num == PowerIndex.FATE_4
+                || num == PowerIndex.FATE_1){
             return true;
         }
         return super.isServerControlledCooldown(num);
@@ -170,6 +175,27 @@ public class ZombieFate extends VampiricFate {
         if (canUseZombieShot()){
             if (!onCooldown(PowerIndex.FATE_1_SNEAK)) {
                 tryPowerPacket(ZOMBIE_SHOT);
+            }
+        } else {
+            if (!onCooldown(PowerIndex.FATE_1) && getZombieFishCount() > 0){
+                tryPowerPacket(ZOMBIE_FISH);
+            }
+        }
+    }
+
+    public void spawnZombieFish(){
+        if (!self.level().isClientSide()) {
+            if (getZombieFishCount() > 0 && !onCooldown(PowerIndex.FATE_1)){
+                setCooldown(PowerIndex.FATE_1,10);
+                setActivePower(PowerIndex.NONE);
+                Zombiefish zombiefish = ModEntities.ZOMBIEFISH.create(this.getSelf().level());
+                zombiefish.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
+                zombiefish.setController(this.self);
+                setZombieFishCount(Mth.clamp(getZombieFishCount()-1,0,5));
+                if (zombiefish != null) {
+                    this.getSelf().level().addFreshEntity(zombiefish);
+                    //this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+                }
             }
         }
     }
@@ -316,6 +342,8 @@ public class ZombieFate extends VampiricFate {
             switchDisguiseServer();
         } else if (move == ZOMBIE_SHOT) {
             zombieShotStart();
+        } else if (move == ZOMBIE_FISH){
+            spawnZombieFish();
         }
         return super.setPowerOther(move,lastMove);
     }
