@@ -247,7 +247,7 @@ public class Config implements Cloneable {
         public Boolean standsInterruptSomeStandAttacks;
         @BooleanOption(group = "inherit", value = true)
         public Boolean playersInterruptSomeStandAttacks;
-        @BooleanOption(group = "inherit", value = true)
+        @BooleanOption(group = "inherit", value = false)
         public Boolean spiritOutInterruption;
         @BooleanOption(group = "inherit", value = true)
         public Boolean barragesAreAlwaysInterruptable;
