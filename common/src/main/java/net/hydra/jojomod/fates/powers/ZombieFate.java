@@ -5,14 +5,15 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
+import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.index.PlayerPosIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.ModItems;
@@ -39,6 +40,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ArrowItem;
@@ -51,6 +53,8 @@ public class ZombieFate extends VampiricFate {
 
     public static final byte DISGUISE = 50;
     public static final byte ZOMBIE_SHOT = 51;
+    public static final byte ZOMBIE_FISH = 52;
+    public static final byte ENTER = 53;
     public int spikeTimeDuring = 0;
     public int zombieFishCount = -1;
 
@@ -80,13 +84,21 @@ public class ZombieFate extends VampiricFate {
                 suckBlood();
             }
             case SKILL_3_NORMAL,SKILL_3_CROUCH -> {
-                dash();
+                dashOrEnter();
             }
             case SKILL_4_NORMAL,SKILL_4_CROUCH -> {
                 switchDisguiseClient();
             }
         }
     };
+
+    public void dashOrEnter(){
+        if (canTargetEnter()){
+            tryPowerPacket(ENTER);
+        } else {
+            dash();
+        }
+    }
 
     public int getZombieFishCount(){
         if (zombieFishCount == -1){
@@ -111,6 +123,8 @@ public class ZombieFate extends VampiricFate {
                 //send packet to client giving fish
                 S2CPacketUtil.updateZombieFish(
                         pl, num);
+
+
             }
         }
     }
@@ -156,7 +170,8 @@ public class ZombieFate extends VampiricFate {
     }
 
     public boolean isServerControlledCooldown(byte num){
-        if (num == PowerIndex.FATE_1_SNEAK || num == PowerIndex.FATE_4){
+        if (num == PowerIndex.FATE_1_SNEAK || num == PowerIndex.FATE_4
+                || num == PowerIndex.FATE_1){
             return true;
         }
         return super.isServerControlledCooldown(num);
@@ -170,6 +185,38 @@ public class ZombieFate extends VampiricFate {
         if (canUseZombieShot()){
             if (!onCooldown(PowerIndex.FATE_1_SNEAK)) {
                 tryPowerPacket(ZOMBIE_SHOT);
+            }
+        } else {
+            if (!onCooldown(PowerIndex.FATE_1) && getZombieFishCount() > 0){
+                tryPowerPacket(ZOMBIE_FISH);
+            }
+        }
+    }
+
+    public void enterTarget(){
+        if (canTargetEnter()){
+            Entity getTarget = getTargetEnter();
+            if (getTarget != null && !getTarget.isRemoved() && getTarget.isAlive()){
+                self.startRiding(getTarget);
+            }
+        }
+    }
+
+    public void spawnZombieFish(){
+        if (!self.level().isClientSide()) {
+            if (getZombieFishCount() > 0 && !onCooldown(PowerIndex.FATE_1)){
+                setCooldown(PowerIndex.FATE_1,10);
+                setActivePower(PowerIndex.NONE);
+                Zombiefish zombiefish = ModEntities.ZOMBIEFISH.create(this.getSelf().level());
+                zombiefish.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
+                zombiefish.setController(this.self);
+                if (!(self instanceof Player pl && pl.isCreative())) {
+                    setZombieFishCount(Mth.clamp(getZombieFishCount() - 1, 0, 5));
+                }
+                if (zombiefish != null) {
+                    this.getSelf().level().addFreshEntity(zombiefish);
+                    //this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+                }
             }
         }
     }
@@ -316,6 +363,10 @@ public class ZombieFate extends VampiricFate {
             switchDisguiseServer();
         } else if (move == ZOMBIE_SHOT) {
             zombieShotStart();
+        } else if (move == ZOMBIE_FISH){
+            spawnZombieFish();
+        } else if (move == ENTER){
+            enterTarget();
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -473,6 +524,20 @@ public class ZombieFate extends VampiricFate {
         return getActivePower() == ZOMBIE_SHOT || super.cancelSprintJump();
     }
 
+    public Entity getTargetEnter(){
+        Entity TE = getUserData(self).roundabout$getStandPowers().getTargetEntity(this.self, 2, 15);
+        if (TE instanceof Animal al && al.getPassengers().isEmpty()){
+            return al;
+        }
+        return null;
+    }
+    public boolean canTargetEnter(){
+        Entity TE = getUserData(self).roundabout$getStandPowers().getTargetEntity(this.self, 2, 15);
+        if (TE instanceof Animal al && al.getPassengers().isEmpty()){
+            return true;
+        }
+        return false;
+    }
 
     private final TargetingConditions hypnosisTargeting = TargetingConditions.forCombat().range(11);
     @Override
@@ -496,7 +561,11 @@ public class ZombieFate extends VampiricFate {
             }
         }
         setSkillIcon(context, x, y, 2, StandIcons.ZOMBIE_DRINK, PowerIndex.FATE_2);
-        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        if (canTargetEnter()){
+            setSkillIcon(context, x, y, 3, StandIcons.ZOMBIE_ENTER, PowerIndex.FATE_3);
+        } else {
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        }
         if (isDisguised()){
             setSkillIcon(context, x, y, 4, StandIcons.ZOMBIE_DISGUISE_ON, PowerIndex.FATE_4);
         } else {

@@ -154,6 +154,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
             ipe.rdbt$setHairColorX(((IPlayerEntity) $$0).rdbt$getHairColorX());
             ipe.rdbt$setHairColorY(((IPlayerEntity) $$0).rdbt$getHairColorY());
             ipe.rdbt$setHairColorZ(((IPlayerEntity) $$0).rdbt$getHairColorZ());
+            ipe.rdbt$setZombieFish(((IPlayerEntity) $$0).rdbt$getZombieFish());
 
             S2CPacketUtil.sendPowerInventorySettings(
                         ((ServerPlayer)((Player)(Object)this)), anchorPlace,distanceOut,
