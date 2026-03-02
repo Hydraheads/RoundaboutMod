@@ -61,7 +61,13 @@ public abstract class AchtungItemRenderer {
 
     @Inject(method = "render(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IILnet/minecraft/client/resources/model/BakedModel;)V", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$renderHead(ItemStack $$0, ItemDisplayContext $$1, boolean $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, int $$6, BakedModel $$7, CallbackInfo ci) {
-        if (ClientUtil.getThrowFadeToTheEther() != 1 && !ClientUtil.isFabulous()){
+
+        float fade = ClientUtil.getThrowFadeToTheEther();
+        if (fade <= 0){
+            ci.cancel();
+            return;
+        }
+        if (fade != 1 && !ClientUtil.isFabulous()){
             /**Sodium removes this function sometimes sooo*/
             if (!$$0.isEmpty()) {
                 ClientUtil.pushPoseAndCooperate($$3,21);
@@ -137,7 +143,12 @@ public abstract class AchtungItemRenderer {
     @Inject(method = "renderModelLists", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$renderModelLists(BakedModel $$0, ItemStack $$1, int $$2, int $$3, PoseStack $$4, VertexConsumer $$5, CallbackInfo ci) {
         /**Copy the original because sodium deletes it*/
-        if (ClientUtil.getThrowFadeToTheEther() != 1 && !ClientUtil.isFabulous()){
+        float fade = ClientUtil.getThrowFadeToTheEther();
+        if (fade <= 0){
+            ci.cancel();
+            return;
+        }
+        if (fade != 1 && !ClientUtil.isFabulous()){
             RandomSource $$6 = RandomSource.create();
             long $$7 = 42L;
 
@@ -153,7 +164,12 @@ public abstract class AchtungItemRenderer {
     }
     @Inject(method = "renderQuadList", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$renderQuadList(PoseStack $$0, VertexConsumer $$1, List<BakedQuad> $$2, ItemStack $$3, int $$4, int $$5, CallbackInfo ci) {
-        if (ClientUtil.getThrowFadeToTheEther() != 1 && !ClientUtil.isFabulous()){
+        float fade = ClientUtil.getThrowFadeToTheEther();
+        if (fade <= 0){
+            ci.cancel();
+            return;
+        }
+        if (fade != 1 && !ClientUtil.isFabulous()){
             boolean $$6 = !$$3.isEmpty();
             PoseStack.Pose $$7 = $$0.last();
 

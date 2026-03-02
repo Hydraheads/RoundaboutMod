@@ -1,5 +1,6 @@
 package net.hydra.jojomod.powers.power_types;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
