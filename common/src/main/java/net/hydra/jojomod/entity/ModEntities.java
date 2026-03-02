@@ -34,6 +34,7 @@ public class ModEntities {
     public static float justiceHeight = 0.65f;
     public static float justiceWidth = 0.65F;
     public static EntityType<TerrierEntity> TERRIER_DOG;
+    public static EntityType<Zombiefish> ZOMBIEFISH;
     public static EntityType<AnubisGuardian> ANUBIS_GUARDIAN;
     public static EntityType<TheWorldEntity> THE_WORLD;
     public static EntityType<TheWorldEntity> THE_WORLD_ULTIMATE;

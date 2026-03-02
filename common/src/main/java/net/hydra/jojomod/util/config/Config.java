@@ -247,7 +247,7 @@ public class Config implements Cloneable {
         public Boolean standsInterruptSomeStandAttacks;
         @BooleanOption(group = "inherit", value = true)
         public Boolean playersInterruptSomeStandAttacks;
-        @BooleanOption(group = "inherit", value = true)
+        @BooleanOption(group = "inherit", value = false)
         public Boolean spiritOutInterruption;
         @BooleanOption(group = "inherit", value = true)
         public Boolean barragesAreAlwaysInterruptable;
@@ -647,7 +647,7 @@ public class Config implements Cloneable {
         public Integer walkingHeartAttackMultOnPlayers;
         @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
         public Integer walkingHeartCooldownPerHit;
-        @IntOption(group = "inherit", value = 5, min = -1, max = 72000)
+        @IntOption(group = "inherit", value = 4, min = -1, max = 72000)
         public Integer walkingHeartMaxHits;
         @BooleanOption(group = "inherit", value = false)
         public Boolean fallProtectionOnRelease;

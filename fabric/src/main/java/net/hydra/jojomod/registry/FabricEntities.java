@@ -7,6 +7,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
@@ -44,6 +45,13 @@ public class FabricEntities {
                         EntityType.Builder.of(TerrierEntity::new, MobCategory.CREATURE).
                                 sized(0.6f, 0.55f).clientTrackingRange(10).build(Roundabout.MOD_ID+":terrier")
                 );
+    public static final EntityType<Zombiefish> ZOMBIEFISH =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "zombiefish"),
+                    EntityType.Builder.of(Zombiefish::new, MobCategory.MISC).
+                            sized(0.44F, 0.33F).clientTrackingRange(10).build(Roundabout.MOD_ID+":zombiefish")
+            );
     public static final EntityType<AnubisGuardian> ANUBIS_GUARDIAN =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -699,6 +707,7 @@ public class FabricEntities {
                 ModEntities.THE_WORLD = THE_WORLD;
                 ModEntities.THE_WORLD_ULTIMATE = THE_WORLD_ULTIMATE;
                 ModEntities.TERRIER_DOG = TERRIER_DOG;
+                ModEntities.ZOMBIEFISH = ZOMBIEFISH;
                 ModEntities.ANUBIS_GUARDIAN = ANUBIS_GUARDIAN;
                 ModEntities.STAR_PLATINUM = STAR_PLATINUM;
                 ModEntities.STAR_PLATINUM_BASEBALL = STAR_PLATINUM_BASEBALL;
@@ -796,6 +805,7 @@ public class FabricEntities {
 
                 /*Attributes*/
                 FabricDefaultAttributeRegistry.register(TERRIER_DOG, Wolf.createAttributes());
+                FabricDefaultAttributeRegistry.register(ZOMBIEFISH, Zombiefish.createAttributes());
                 FabricDefaultAttributeRegistry.register(ANUBIS_GUARDIAN, AnubisGuardian.createAttributes());
                 FabricDefaultAttributeRegistry.register(OVA_ENYA, OVAEnyaNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(ENYA, OVAEnyaNPC.createAttributes());

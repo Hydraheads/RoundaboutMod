@@ -321,7 +321,6 @@ public class PowersSurvivor extends NewDashPreset {
         return 11283968;
     }
 
-    public StandEntity displayStand = null;
     @Override
     public boolean returnFakeStandForHud(){
         return true;

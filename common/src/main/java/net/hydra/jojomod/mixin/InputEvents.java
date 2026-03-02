@@ -24,12 +24,14 @@ import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.FirearmItem;
 import net.hydra.jojomod.item.SnubnoseRevolverItem;
 import net.hydra.jojomod.powers.GeneralPowers;
+import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersCream;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.item.FogBlockItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -646,7 +648,7 @@ public abstract class InputEvents implements IInputEvents {
             }
 
             if(powers instanceof PowersGreenDay PGD) {
-                if ((!PGD.HasMainArm)&& !(standComp.roundabout$hasStandOut())) {
+                if ((!PGD.HasMainArm) && (!(standComp.roundabout$hasStandOut()) || powers.canCombatModeUse(player.getMainHandItem()))) {
                     ci.cancel();
                     return;
                 }

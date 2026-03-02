@@ -820,7 +820,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Inject(method = "tick",
             at = @At(value = "TAIL"))
     private void roundabout$tickMob(CallbackInfo ci) {
-        if (!level().isClientSide() && FateTypes.hasBloodHunger(this)) {
+        if (!level().isClientSide() && FateTypes.takesSunlightDamage(this)) {
             if (FateTypes.isInSunlight(this)) {
                 this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth() * ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick);
             }

@@ -5,6 +5,7 @@ import net.hydra.jojomod.client.models.stand.renderers.ChairRattRenderer;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
@@ -42,6 +43,12 @@ public class ForgeEntities {
                     EntityType.Builder.of(TerrierEntity::new, MobCategory.CREATURE).sized(0.6f, 0.55f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "terrier").toString())
+            );
+    public static final RegistryObject<EntityType<Zombiefish>> ZOMBIEFISH =
+            ENTITY_TYPES.register("zombiefish", () ->
+                    EntityType.Builder.of(Zombiefish::new, MobCategory.MISC).sized(0.44F, 0.33F).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "zombiefish").toString())
             );
     public static final RegistryObject<EntityType<AnubisGuardian>> ANUBIS_GUARDIAN =
             ENTITY_TYPES.register("anubis_guardian", () ->

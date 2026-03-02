@@ -1,5 +1,6 @@
 package net.hydra.jojomod.powers.power_types;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
@@ -153,9 +154,35 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         }
     }
 
+    public boolean isFallingFar(){
+        return self.fallDistance > 7;
+    }
+
+
+    public boolean isAttackIneptVisually(byte activeP, int slot){
+        if (slot == 3){
+            if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampiricFate vp) {
+                if (isGuarding() && self.onGround()) {
+                } else if ((vp.canLatchOntoWall() || (vp.isPlantedInWall() && !isHoldingSneak())) && vp.canWallWalkConfig()) {
+                } else if (isHoldingSneak()) {
+                    if (isFallingFar())
+                        return true;
+                } else {
+                    if (isFallingFar())
+                        return true;
+                }
+            }
+        }
+        return super.isAttackIneptVisually(activeP,slot);
+    }
     @Override
     public boolean canInterruptPower(){
         if (activePower == RIPPER_EYES_ACTIVATED || activePower == RIPPER_EYES){
+            setCooldown(PowerIndex.GENERAL_4,getRipperInterruptCooldown());
+            if (self instanceof ServerPlayer sp){
+                S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.GENERAL_4, getRipperInterruptCooldown());
+            }
+
             return true;
         }
         return super.canInterruptPower();
@@ -168,12 +195,14 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if (self.onGround()){
                 dash();
             } else {
-                airDash();
+                if (!isFallingFar()) {
+                    airDash();
+                }
             }
         }
     }
     public void evilAuraClient(){
-        if (!onCooldown(PowerIndex.GENERAL_3_SNEAK)){
+        if (!onCooldown(PowerIndex.GENERAL_3_SNEAK) && !isFallingFar()){
             this.tryPower(EVIL_AURA);
         }
     }
@@ -761,6 +790,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
     public int getRipperCooldown(){
         return 240;
+    }
+    public int getRipperInterruptCooldown(){
+        return 60;
     }
 
 
