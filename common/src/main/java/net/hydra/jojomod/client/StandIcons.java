@@ -90,6 +90,10 @@ public class StandIcons {
     public static final ResourceLocation VAMPIRE_DEXTERITY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui//icons/fates/vampire/dexterity.png");
 
+
+    public static final ResourceLocation ZOMBIE_ENTER = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/zombie/enter.png");
+
     public static final ResourceLocation ZOMBIE_DISGUISE_OFF = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui//icons/fates/zombie/disguise_off.png");
     public static final ResourceLocation ZOMBIE_DISGUISE_ON = new ResourceLocation(Roundabout.MOD_ID,

@@ -40,6 +40,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ArrowItem;
@@ -503,6 +504,13 @@ public class ZombieFate extends VampiricFate {
         return getActivePower() == ZOMBIE_SHOT || super.cancelSprintJump();
     }
 
+    public boolean canTargetEnter(){
+        Entity TE = getUserData(self).roundabout$getStandPowers().getTargetEntity(this.self, 2, 15);
+        if (TE instanceof Animal al){
+            return true;
+        }
+        return false;
+    }
 
     private final TargetingConditions hypnosisTargeting = TargetingConditions.forCombat().range(11);
     @Override
@@ -526,7 +534,11 @@ public class ZombieFate extends VampiricFate {
             }
         }
         setSkillIcon(context, x, y, 2, StandIcons.ZOMBIE_DRINK, PowerIndex.FATE_2);
-        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        if (canTargetEnter()){
+            setSkillIcon(context, x, y, 3, StandIcons.ZOMBIE_ENTER, PowerIndex.FATE_3);
+        } else {
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        }
         if (isDisguised()){
             setSkillIcon(context, x, y, 4, StandIcons.ZOMBIE_DISGUISE_ON, PowerIndex.FATE_4);
         } else {
