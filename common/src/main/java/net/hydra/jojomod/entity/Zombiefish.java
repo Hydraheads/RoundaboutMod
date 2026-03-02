@@ -72,7 +72,7 @@ public class Zombiefish extends Monster {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 10.0).add(Attributes.MOVEMENT_SPEED, 0.25).add(Attributes.ATTACK_DAMAGE, 2.0);
+        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 10.0).add(Attributes.MOVEMENT_SPEED, 0.33).add(Attributes.ATTACK_DAMAGE, 2.0);
     }
 
     @Override
@@ -202,6 +202,7 @@ public class Zombiefish extends Monster {
         if (this.controller != null) {
             $$0.putUUID("Controller", this.controller.getUUID());
         }
+        $$0.putInt("Lifespan",lifespan);
         super.addAdditionalSaveData($$0);
     }
     @Override
@@ -212,13 +213,20 @@ public class Zombiefish extends Monster {
             if (this.level() instanceof ServerLevel SE){
                 this.setController(SE.getEntity($$2));
             }
-            }
+        }
+        lifespan = $$0.getInt("Lifespan");
     }
+
+    public int lifespan = 0;
 
     @Override
     public void tick(){
         this.yBodyRot = this.getYRot();
         if (!this.level().isClientSide()) {
+            lifespan++;
+            if (lifespan > 1200){
+                discard();
+            }
             if (controller != null){
                 controller = this.level().getEntity(getController());
             }

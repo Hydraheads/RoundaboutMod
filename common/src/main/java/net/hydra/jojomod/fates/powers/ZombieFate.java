@@ -191,7 +191,9 @@ public class ZombieFate extends VampiricFate {
                 Zombiefish zombiefish = ModEntities.ZOMBIEFISH.create(this.getSelf().level());
                 zombiefish.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
                 zombiefish.setController(this.self);
-                setZombieFishCount(Mth.clamp(getZombieFishCount()-1,0,5));
+                if (!(self instanceof Player pl && pl.isCreative())) {
+                    setZombieFishCount(Mth.clamp(getZombieFishCount() - 1, 0, 5));
+                }
                 if (zombiefish != null) {
                     this.getSelf().level().addFreshEntity(zombiefish);
                     //this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
