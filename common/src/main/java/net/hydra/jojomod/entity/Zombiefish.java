@@ -45,6 +45,7 @@ import java.util.UUID;
 
 public class Zombiefish extends Monster {
     public Entity controller;
+    public UUID controller2;
     private static final EntityDataAccessor<Integer> CONTROLLER =
             SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.INT);
 
@@ -191,6 +192,7 @@ public class Zombiefish extends Monster {
     public void setController(Entity controller){
         this.controller = controller;
         if (controller !=null){
+            controller2 = controller.getUUID();
             this.entityData.set(CONTROLLER, controller.getId());
         } else {
             this.entityData.set(CONTROLLER, 0);
@@ -211,6 +213,7 @@ public class Zombiefish extends Monster {
         if ($$0.hasUUID("Controller")) {
             $$2 = $$0.getUUID("Controller");
             if (this.level() instanceof ServerLevel SE){
+                controller2 = $$2;
                 this.setController(SE.getEntity($$2));
             }
         }
@@ -229,6 +232,10 @@ public class Zombiefish extends Monster {
             }
             if (controller != null){
                 controller = this.level().getEntity(getController());
+            } else {
+                if (controller2 != null){
+                    setController(((ServerLevel)this.level()).getEntity(controller2));
+                }
             }
 
             if (this.getTarget() != null && (!this.getTarget().isAlive() || this.getTarget().isRemoved() ||
@@ -251,10 +258,10 @@ public class Zombiefish extends Monster {
                 if (controller instanceof LivingEntity LE) {
                     autoTarget = LE.getLastHurtByMob();
                     autoTarget2 = LE.getLastHurtMob();
-                    if (autoTarget instanceof FallenMob fm && fm.getController() == this.getController()){
+                    if (autoTarget instanceof Zombiefish fm && fm.getController() == this.getController()){
                         autoTarget = null;
                     }
-                    if (autoTarget2 instanceof FallenMob fm && fm.getController() == this.getController()){
+                    if (autoTarget2 instanceof Zombiefish fm && fm.getController() == this.getController()){
                         autoTarget2 = null;
                     }
                     boolean check1 = (this.getTarget() != autoTarget) || autoTarget == null;
