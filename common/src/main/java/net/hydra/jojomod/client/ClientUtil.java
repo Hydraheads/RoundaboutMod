@@ -1886,7 +1886,8 @@ public class ClientUtil {
             }
 
             StandUser standUser = (StandUser) cameraEnt;
-            if (AnubisLayer.shouldRender(play) != null ) {
+            boolean isUsingAnubis = play.isUsingItem() && play.getUseItem().is(ModItems.ANUBIS_ITEM);
+            if (AnubisLayer.shouldRender(play) != null && !isUsingAnubis && !play.getMainHandItem().is(ModItems.ANUBIS_ITEM) ) {
                 ModStrayModels.ANUBIS.renderFirstPerson(stack,source,light,play,cameraEnt.tickCount + $$4);
             }
 
