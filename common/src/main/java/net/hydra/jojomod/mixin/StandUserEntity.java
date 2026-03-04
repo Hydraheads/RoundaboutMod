@@ -3636,7 +3636,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "setSprinting", at = @At(value = "HEAD"), cancellable = true, require = 0)
     public void roundabout$canSprintPlayer(boolean $$0, CallbackInfo ci) {
         if (roundabout$getStandPowers().cancelSprint() || FateTypes.isTransforming(rdbt$this()) ||
-                (FateTypes.takesSunlightDamage(rdbt$this()) && FateTypes.isInSunlight(rdbt$this()))
+                (FateTypes.takesSunlightDamage(rdbt$this()) && FateTypes.isInSunlight(rdbt$this()) && !FateTypes.isHidden(rdbt$this()))
         || (rdbt$this() instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers().cancelSprint())){
             ci.cancel();
         }
@@ -3962,7 +3962,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         if (FateTypes.takesSunlightDamage(rdbt$this()) && FateTypes.isInSunlight(rdbt$this())){
-            basis *= 0.15F;
+            if (!FateTypes.isHidden(rdbt$this())) {
+                basis *= 0.15F;
+            }
         }
 
         if (FateTypes.hasBloodHunger((LivingEntity) (Object) this)) {

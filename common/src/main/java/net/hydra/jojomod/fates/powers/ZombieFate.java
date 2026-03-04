@@ -57,6 +57,7 @@ public class ZombieFate extends VampiricFate {
     public static final byte ENTER = 53;
     public int spikeTimeDuring = 0;
     public int zombieFishCount = -1;
+    public boolean isTuckedAway = false;
 
     public ZombieFate() {
         super();

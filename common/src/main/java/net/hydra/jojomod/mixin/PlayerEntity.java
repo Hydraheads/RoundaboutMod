@@ -1349,7 +1349,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 || ((IFatePlayer)this).rdbt$getFatePowers().cancelJump()
         || FateTypes.isTransforming(this) ||
         FateTypes.takesSunlightDamage(this) && FateTypes.isInSunlight(this)) {
-            ci.cancel();
+            if (!FateTypes.isHidden(this)) {
+                ci.cancel();
+            }
         }
     }
 

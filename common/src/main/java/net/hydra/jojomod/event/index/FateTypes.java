@@ -174,6 +174,22 @@ public enum FateTypes {
             return true;
         return false;
     }
+
+    public static boolean isHidden(Entity entity){
+        if (entity instanceof Player pl){
+            if (((IFatePlayer)pl).rdbt$getFatePowers() instanceof ZombieFate zp) {
+                if (pl.isPassenger() && !zp.isDisguised()) {
+                    if (pl.getVehicle() instanceof LivingEntity le) {
+                        if (!(le.hurtTime > 0 || pl.hurtTime > 0) &&
+                                !(pl.isUsingItem()) && !(pl.swinging)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
     public static boolean isUndisguisedZombie(Entity entity){
         if (entity instanceof Player player){
             if (((IPlayerEntity)player).roundabout$getFate() == ZOMBIE.ordinal()){
