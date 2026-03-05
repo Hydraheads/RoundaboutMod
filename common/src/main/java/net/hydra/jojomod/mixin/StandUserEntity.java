@@ -3687,7 +3687,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void rdbt$adjGravTrav(){
         roundabout$adjustGravity();
 
-        if (this.isControlledByLocalInstance()) {
             if (MainUtil.isPlayerBonkingHead(((LivingEntity)(Object)this)) || isUsingItem()){
                 roundabout$setBigJumpCurrentProgress(0);
                 roundabout$setBigJump(false);
@@ -3739,7 +3738,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
                 }
             }
-        }
     }
 
     @Inject(method = "travel", at = @At(value = "HEAD"))
