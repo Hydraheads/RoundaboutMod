@@ -3616,9 +3616,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             AG.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED,1,200));
             this.level().broadcastEntityEvent(this, (byte)35);
             cir.setReturnValue(true);
+            return;
         }
 
-        if ( (rdbt$this() instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers().cheatDeath(dsource))
+        if (rdbt$this() instanceof Player pl && (dsource.is(ModDamageTypes.BLOOD_DRAIN)
+        ) && FateTypes.isHuman(pl)){
+            pl.setHealth(pl.getMaxHealth()/2);
+            cir.setReturnValue(true);
+            FateTypes.setZombie(pl);
+            pl.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireZombie1").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD), true);
+
+            if (level() instanceof ServerLevel SL) {
+                SL.sendParticles(ModParticles.BLOOD_MIST,
+                        this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
+                        10, 0.4, 0.4, 0.4, 0.025);
+            }
+        } else if ( (rdbt$this() instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers().cheatDeath(dsource))
                 || roundabout$getStandPowers().cheatDeath(dsource)){
             cir.setReturnValue(true);
         } else if (hasEffect(ModEffects.VAMPIRE_BLOOD)){

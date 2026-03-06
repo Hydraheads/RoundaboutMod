@@ -235,8 +235,6 @@ public enum FateTypes {
     }
 
 
-
-
     public static boolean isInSunlight(LivingEntity ent) {
         //You don't take sun damage in stopped time (like the ova)
         if (!((TimeStop) ent.level()).inTimeStopRange(ent)) {

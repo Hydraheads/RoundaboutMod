@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
@@ -1037,7 +1038,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 knockbackStrength = 0.10F;
 
                 if (MainUtil.canDrinkBlood(entity)) {
-                    if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
+                    DamageSource sauce = ModDamageTypes.of(self.level(),
+                            ModDamageTypes.BLOOD_DRAIN,self);
+                    if (entity.hurt(sauce,pow)) {
                         hitParticles(entity);
                         takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
                         if (!(entity instanceof Player) && entity instanceof LivingEntity LE){
