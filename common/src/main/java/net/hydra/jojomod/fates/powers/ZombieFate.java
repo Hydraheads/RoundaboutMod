@@ -82,7 +82,7 @@ public class ZombieFate extends VampiricFate {
                 zombieShotClient();
             }
             case SKILL_2_NORMAL,SKILL_2_CROUCH -> {
-                suckBlood();
+                preSuckBlood();
             }
             case SKILL_3_NORMAL,SKILL_3_CROUCH -> {
                 dashOrEnter();
@@ -93,7 +93,17 @@ public class ZombieFate extends VampiricFate {
         }
     };
 
+    public void preSuckBlood(){
+        if (isDisguised()){
+            return;
+        }
+        suckBlood();
+    }
+
     public void dashOrEnter(){
+        if (isDisguised()){
+            return;
+        }
         if (canTargetEnter()){
             tryPowerPacket(ENTER);
         } else {
@@ -181,6 +191,10 @@ public class ZombieFate extends VampiricFate {
     public void zombieShotClient(){
         if (getActivePower() == ZOMBIE_SHOT){
             tryPowerPacket(NONE);
+            return;
+        }
+
+        if (isDisguised()){
             return;
         }
         if (canUseZombieShot()){
@@ -395,6 +409,9 @@ public class ZombieFate extends VampiricFate {
     /**This function grays out icons for moves you can't currently use. Slot is the icon slot from 1-4,
      * activeP is your currently active power*/
     public boolean isAttackIneptVisually(byte activeP, int slot){
+        if (slot != 4 && isDisguised()){
+            return true;
+        }
         Entity TE = getUserData(self).roundabout$getStandPowers().getTargetEntity(this.self, 3, 15);
         if (slot == 1 && !canUseZombieShot() && getZombieFishCount() <= 0)
             return true;
