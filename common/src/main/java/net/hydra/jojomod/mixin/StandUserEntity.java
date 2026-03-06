@@ -5251,6 +5251,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Shadow protected abstract int getCurrentSwingDuration();
 
     @Shadow public InteractionHand swingingArm;
+
+    @Shadow public abstract void setItemInHand(InteractionHand interactionHand, ItemStack itemStack);
+
     @Unique private boolean roundabout$isPRunning = false;
 
     @Override
