@@ -2096,6 +2096,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    //Zombies are undead
+    @Inject(method = "getMobType",at = @At(value = "HEAD"),cancellable = true, require = 0)
+    public void roundabout$getMobType(CallbackInfoReturnable<MobType> cir) {
+        if (FateTypes.isZombie(rdbt$this())){
+            cir.setReturnValue(MobType.UNDEAD);
+        }
+    }
+
+    //Zombies still should have the limited underwater penalty
+    @Inject(method = "canBreatheUnderwater",at = @At(value = "HEAD"),cancellable = true, require = 0)
+    public void roundabout$canBreatheUnderwater(CallbackInfoReturnable<Boolean> cir) {
+        if (FateTypes.isZombie(rdbt$this())){
+            cir.setReturnValue(false);
+        }
+    }
+
     @Unique
     public ItemStack roundabout$XHandCancelItem(EquipmentSlot ES) {
         if (this.roundabout$isPossessed()) {return ItemStack.EMPTY;}
