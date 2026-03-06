@@ -196,6 +196,7 @@ public class MainUtil {
     public static ArrayList<String> addedMobsWithEnderBlood = Lists.newArrayList();
     public static ArrayList<String> removeBloodFromThese = Lists.newArrayList();
     public static ArrayList<String> unfreezableMobs = Lists.newArrayList();
+    public static ArrayList<String> foodThatHasEffectsForVampires = Lists.newArrayList();
     public static Set<String> foodThatGivesBloodList = Set.of();
     Map<String, FoodBloodStats> foodThatGivesBloodMap;
 
@@ -278,6 +279,16 @@ public class MainUtil {
             return false;
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
         if (hypnotismMobBlackList != null && !hypnotismMobBlackList.isEmpty() && rl != null && hypnotismMobBlackList.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isEdibleToVampires(ItemStack stack){
+        if (stack == null || stack.isEmpty())
+            return false;
+        ResourceLocation rl = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        if (foodThatHasEffectsForVampires != null && !foodThatHasEffectsForVampires.isEmpty() && rl != null && foodThatHasEffectsForVampires.contains(rl.toString())){
             return true;
         }
         return false;
