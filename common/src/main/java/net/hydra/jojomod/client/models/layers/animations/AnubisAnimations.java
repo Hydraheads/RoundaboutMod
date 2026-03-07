@@ -8,16 +8,16 @@ import net.minecraft.util.Mth;
 
 public class AnubisAnimations {
 
-    public static final AnimationDefinition ThirdPersonUnsheathe = AnimationDefinition.Builder.withLength(2.5F)
+    public static final AnimationDefinition ThirdPersonUnsheathe = AnimationDefinition.Builder.withLength(2.0F).looping()
             .addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.25F, KeyframeAnimations.degreeVec(-74.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(2.5F, KeyframeAnimations.degreeVec(-68.7477F, -40.4978F, -14.175F), AnimationChannel.Interpolations.LINEAR)
+                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(-68.7477F, -40.4978F, -14.175F), AnimationChannel.Interpolations.LINEAR)
             ))
             .addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(0.25F, KeyframeAnimations.degreeVec(-74.0F, -39.0F, 82.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(2.5F, KeyframeAnimations.degreeVec(-101.6365F, -22.0586F, 87.1309F), AnimationChannel.Interpolations.LINEAR)
+                    new Keyframe(0.25F, KeyframeAnimations.degreeVec(-89.0F, -39.0F, 82.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(-91.9306F, -30.1237F, 84.6883F), AnimationChannel.Interpolations.LINEAR)
             ))
             .build();
 

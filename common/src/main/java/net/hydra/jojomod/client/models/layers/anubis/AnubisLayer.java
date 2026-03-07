@@ -1,8 +1,7 @@
 package net.hydra.jojomod.client.models.layers.anubis;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import com.mojang.math.Axis;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
@@ -17,7 +16,6 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
@@ -27,7 +25,6 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.AbstractIllager;
-import net.minecraft.world.entity.player.Player;
 import org.joml.Quaternionf;
 
 
@@ -230,6 +227,14 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                 poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0, 0, 1, 45), 0, 0, 0);
                 poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1, 0, 0, isSheathed(entity) ? 225 :45), 0, 0, 0);
                 if (isSheathed(entity)) {poseStack.translate(0,0.1,0);} else {poseStack.translate(0.3, -0.4, -0.05);}
+            }
+
+            if (entity.getMainHandItem().getItem() instanceof AnubisItem) {
+                LivingEntity target = MainUtil.findClosestEntity(entity.level(),entity.position(),5F, livingEntity -> livingEntity instanceof AbstractIllager);
+                if (target != null) {
+                    float shakeMod = (5F-Math.min(5F,target.distanceTo(entity)))/5F;
+                    poseStack.mulPose(Axis.ZP.rotationDegrees(-Math.abs(10*shakeMod)-(7*shakeMod) + (float)Math.random()*3F ));
+                }
             }
 
             renderAnubis(poseStack,bufferSource,packedLight,entity,partialTicks);

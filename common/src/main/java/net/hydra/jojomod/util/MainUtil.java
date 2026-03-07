@@ -31,7 +31,6 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampiricFate;
-import net.hydra.jojomod.platform.services.IPlatformHelper;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersJustice;
@@ -40,7 +39,6 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersMetallica;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
-import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -96,8 +94,6 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -608,22 +604,27 @@ public class MainUtil {
                 || LE instanceof JojoNPC);
 
     }
-    public static LivingEntity homeOnWorthy(Level level, Vec3 vec3, double range) {
-        List<Entity> EntitiesInRange = genHitbox(level, vec3.x, vec3.y,
-                vec3.z, range, range, range);
+
+    public static LivingEntity findClosestEntity(Level level, Vec3 pos, double range, Predicate<LivingEntity> condition) {
+        List<Entity> EntitiesInRange = genHitbox(level, pos.x, pos.y,
+                pos.z, range, range, range);
         List<Entity> hitEntities = new ArrayList<>(EntitiesInRange) {
         };
         LivingEntity mm = null;
         double distance = -1;
         for (Entity value : hitEntities) {
             if (value instanceof LivingEntity mb){
-                if (canGrantStand(mb) && (distance == -1 || mb.distanceToSqr(vec3) < distance)){
+                if (condition.test(mb) && (distance == -1 || mb.distanceToSqr(pos) < distance)){
                     mm = mb;
-                    distance = mb.distanceToSqr(vec3);
+                    distance = mb.distanceToSqr(pos);
                 }
             }
         }
         return mm;
+    }
+
+    public static LivingEntity homeOnWorthy(Level level, Vec3 vec3, double range) {
+        return findClosestEntity(level,vec3,range, MainUtil::canGrantStand);
     }
 
     public static ItemStack saveToDiscData(LivingEntity ent, ItemStack stack){

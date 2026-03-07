@@ -32,6 +32,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.item.*;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -237,6 +238,7 @@ public abstract class ZItemInHandRenderer {
 
 
         if (!itemStack.isEmpty()) {
+            float shakeMod = 0F;
             if (abstractClientPlayer.isUsingItem() && abstractClientPlayer.getUseItemRemainingTicks() > 0 && abstractClientPlayer.getUsedItemHand() == interactionHand) {
 
                 boolean bl = interactionHand == InteractionHand.MAIN_HAND;
@@ -357,27 +359,30 @@ public abstract class ZItemInHandRenderer {
                 if (itemStack.getItem() instanceof StandArrowItem SI){
                     LivingEntity ME =  MainUtil.homeOnWorthy(abstractClientPlayer.level(),abstractClientPlayer.position(),5);
                     if (ME != null && SI.isWorthinessType(itemStack,ME)) {
-                        float homingMod = (5-Math.min(5,ME.distanceTo(abstractClientPlayer)))/5;
-                        boolean bl = interactionHand == InteractionHand.MAIN_HAND;
-                        HumanoidArm humanoidArm = bl ? abstractClientPlayer.getMainArm() : abstractClientPlayer.getMainArm().getOpposite();
-                        boolean bl2;
-                        boolean bl3 = bl2 = humanoidArm == HumanoidArm.RIGHT;
-                        int q = bl2 ? 1 : -1;
-                        ci.cancel();
-                        ClientUtil.pushPoseAndCooperate(poseStack,12);
+                        shakeMod = (5-Math.min(5,ME.distanceTo(abstractClientPlayer)))/5;
 
-                        this.applyItemArmTransform(poseStack, humanoidArm, attackProg);
-                        poseStack.translate((float) q * -0.28f, 0.15, 0.1);
-                        float knifeTime = 5f;
-                        float kT2 = (float) (knifeTime * 0.1);
-                        float r = (-partialTick + kT2);
-                        poseStack.scale(1.0f, 1.0f, 1.0f);
-                        poseStack.mulPose(Axis.XP.rotationDegrees(-30.0f-Math.abs(20F*(r*homingMod))-(14F*homingMod)));
-                        this.renderItem(abstractClientPlayer, itemStack, bl2 ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND :
-                                ItemDisplayContext.FIRST_PERSON_LEFT_HAND, !bl2, poseStack, multiBufferSource, j);
-                        ClientUtil.popPoseAndCooperate(poseStack,12);
                     }
                 }
+            }
+
+            if (shakeMod != 0.0F) {
+                boolean bl = interactionHand == InteractionHand.MAIN_HAND;
+                HumanoidArm humanoidArm = bl ? abstractClientPlayer.getMainArm() : abstractClientPlayer.getMainArm().getOpposite();
+                boolean bl2 = humanoidArm == HumanoidArm.RIGHT;
+                int q = bl2 ? 1 : -1;
+                ci.cancel();
+                ClientUtil.pushPoseAndCooperate(poseStack,12);
+
+                this.applyItemArmTransform(poseStack, humanoidArm, attackProg);
+                poseStack.translate((float) q * -0.28f, 0.15, 0.1);
+                float knifeTime = 5f;
+                float kT2 = (float) (knifeTime * 0.1);
+                float r = (-partialTick + kT2);
+                poseStack.scale(1.0f, 1.0f, 1.0f);
+                poseStack.mulPose(Axis.XP.rotationDegrees(-30.0f-Math.abs(20F*(r*shakeMod))-(14F*shakeMod)));
+                this.renderItem(abstractClientPlayer, itemStack, bl2 ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND :
+                        ItemDisplayContext.FIRST_PERSON_LEFT_HAND, !bl2, poseStack, multiBufferSource, j);
+                ClientUtil.popPoseAndCooperate(poseStack,12);
             }
         }
     }
