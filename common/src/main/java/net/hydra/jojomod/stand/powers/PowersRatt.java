@@ -971,13 +971,15 @@ public class PowersRatt extends NewDashPreset {
     @Override
     public void onActuallyHurt(DamageSource $$0, float $$1) {
         if ($$0.is(DamageTypes.PLAYER_ATTACK) || $$0.is(DamageTypes.MOB_ATTACK) || $$0.is(ModDamageTypes.STAND) || $$0.is(ModDamageTypes.STAND_RUSH) || $$0.is(ModDamageTypes.PENETRATING_STAND)) {
-            if ($$0.getEntity().getPosition(1).distanceTo(this.getSelf().getPosition(1)) < 6.0 ) {
-                if (this.getSelf() instanceof Player P ) {
-                    if (this.getStandUserSelf().roundabout$getCombatMode()) {
-                        int nc = Math.max(this.getChargeTime()-30,0);
-                        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1F, 1F);
-                        this.updatePowerInt(PowersRatt.UPDATE_CHARGE,nc);
-                        S2CPacketUtil.sendIntPowerDataPacket(P,PowersRatt.UPDATE_CHARGE,nc);
+            if ($$0.getEntity() != null) {
+                if ($$0.getEntity().getPosition(1).distanceTo(this.getSelf().getPosition(1)) < 6.0) {
+                    if (this.getSelf() instanceof Player P) {
+                        if (this.getStandUserSelf().roundabout$getCombatMode()) {
+                            int nc = Math.max(this.getChargeTime() - 30, 0);
+                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1F, 1F);
+                            this.updatePowerInt(PowersRatt.UPDATE_CHARGE, nc);
+                            S2CPacketUtil.sendIntPowerDataPacket(P, PowersRatt.UPDATE_CHARGE, nc);
+                        }
                     }
                 }
             }

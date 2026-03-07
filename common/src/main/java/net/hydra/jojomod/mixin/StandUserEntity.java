@@ -4751,9 +4751,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     float f = (float)Mth.length(poss.getX() - poss.xo, 0.0, poss.getZ() - poss.zo);
                     float g = Math.min(f * 4.0f, 1.0f);
                     this.walkAnimation.update(g, 0.4f);
-                    if (this.roundabout$getStandPowers() != null && !this.level().isClientSide) {
-                   //     this.roundabout$getStandPowers().tickMobAI(poss.getTarget());
-                    }
                 }
             }
         }
@@ -4773,20 +4770,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         rdbt$this().setDeltaMovement(Vec3.ZERO);
                         Vec3 pos = P.getPosition(0.5F);
 
-                        pos = pos.lerp(poss.getPosition(0.5F),0.5).add(0,0.05,0);
+                        pos = pos.lerp(poss.getPosition(0.5F),0.5).add(0,0.01,0);
                         rdbt$this().teleportTo(pos.x,pos.y,pos.z);
 
                         LivingEntity target = poss.getTarget();
                         if (target != null) {
-                            if (target.hurtTime == 0 && !this.roundabout$isDazed() && roundabout$anubisAttackDelay >= 0) {
+                            if (target.hurtTime == 0 && !this.roundabout$isDazed() && roundabout$anubisAttackDelay <= 0) {
                                 if (P.getPosition(0.5F).distanceTo(target.getPosition(1)) < 1.4) {
                                     P.swing(InteractionHand.MAIN_HAND,true);
 
-                                    if (target.hurt(ModDamageTypes.of(P.level(), ModDamageTypes.ANUBIS_POSSESS,this),7.5F) && !target.isBlocking()) {
-                                        roundabout$anubisAttackDelay = 12;
-                                        P.crit(target);
-                                    } else {
+                                    if (target.isBlocking()) {
                                         roundabout$anubisAttackDelay = 50;
+                                        this.level().playSound(null,this.blockPosition(),SoundEvents.SHIELD_BLOCK,SoundSource.PLAYERS,1F,1F);
+                                    } else if (target.hurt(ModDamageTypes.of(P.level(), ModDamageTypes.ANUBIS_POSSESS,this),7.5F) ) {
+                                        roundabout$anubisAttackDelay = 15;
+                                        P.crit(target);
                                     }
 
                                     Vec3 delta = target.getPosition(1).subtract(P.getPosition(1)).multiply(0.3,0.3,0.3);

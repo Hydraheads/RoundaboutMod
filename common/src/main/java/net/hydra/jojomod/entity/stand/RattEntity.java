@@ -1,6 +1,8 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersRatt;
@@ -15,6 +17,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -170,7 +173,8 @@ public class RattEntity extends StandEntity {
                     }
                     PR.setCooldown(PowersRatt.SETPLACE, 80);
                     this.level().playSound(null, this.blockPosition(), ModSounds.RATT_DEPLACE_EVENT, SoundSource.PLAYERS, 0.5F, 1F);
-                    return this.getUser().hurt(source, Mth.clamp(amount * 0.5F, 0, 6));
+                    this.getUser().hurt(ModDamageTypes.of(this.level(),ModDamageTypes.STAND),(float)Mth.clamp(amount*0.5,0,4));
+                    return true;
                 }
             }
 

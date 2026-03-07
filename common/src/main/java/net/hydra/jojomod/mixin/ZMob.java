@@ -1020,7 +1020,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
     private void roundabout$giveAnubis(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
         if (!$$0.level().isClientSide) {
             ItemStack stack = $$0.getItemInHand($$1);
-            if ($$0.isCrouching() && stack.getItem() instanceof AnubisItem) {
+            if (stack.getItem() instanceof AnubisItem) {
                 if (((Mob) (Object) this) instanceof AbstractIllager AI) {
                     if (!((StandUser) AI).roundabout$hasAStand()) {
                         $$0.setItemInHand($$1,new ItemStack(Items.AIR));
