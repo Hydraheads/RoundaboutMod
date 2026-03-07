@@ -7,6 +7,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.item.RoadRollerItem;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.model.HumanoidModel;
@@ -33,38 +34,40 @@ public class RoadRollerLayer<T extends LivingEntity, A extends HumanoidModel<T>>
     float scale = 1;
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
-        if (entity instanceof Player player) {
-            boolean $$18 = !entity.isInvisible();
-            boolean $$19 = !$$18 && !entity.isInvisibleTo(player);
-            if (!$$18) {
+        if (FateTypes.isVampireStrong(entity)) {
+            if (entity instanceof Player player) {
+                boolean $$18 = !entity.isInvisible();
+                boolean $$19 = !$$18 && !entity.isInvisibleTo(player);
+                if (!$$18) {
+                    return;
+                }
+            }
+            LivingEntity livent = entity;
+            float heyFull = 1;
+
+            ItemStack held = entity.getMainHandItem();
+            ItemStack offHeld = entity.getOffhandItem();
+
+            boolean isHoldingRoadRoller = (held.getItem() instanceof RoadRollerItem) || (offHeld.getItem() instanceof RoadRollerItem);
+
+            if (!isHoldingRoadRoller || !(ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().enableRoadRollerRender) ||
+                    !((IEntityAndData) entity).roundabout$getExclusiveLayers()) {
                 return;
             }
+
+            poseStack.pushPose();
+            getParentModel().body.translateAndRotate(poseStack);
+            poseStack.translate(0.33F, -3.2F, 0F);
+            poseStack.mulPose(Axis.YP.rotationDegrees(-90));
+            poseStack.scale(2F, 2F, 2F);
+            boolean isHurt = livent.hurtTime > 0;
+            float r = isHurt ? 1.0F : 1.0F;
+            float g = isHurt ? 0.0F : 1.0F;
+            float b = isHurt ? 0.0F : 1.0F;
+            ModStrayModels.ROAD_ROLLER.render(livent, partialTicks, poseStack, bufferSource, packedLight,
+                    r, g, b, heyFull);
+            poseStack.popPose();
         }
-        LivingEntity livent = entity;
-        float heyFull = 1;
-
-        ItemStack held = entity.getMainHandItem();
-        ItemStack offHeld = entity.getOffhandItem();
-
-        boolean isHoldingRoadRoller = (held.getItem() instanceof RoadRollerItem) || (offHeld.getItem() instanceof RoadRollerItem);
-
-        if (!isHoldingRoadRoller || !(ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().enableRoadRollerRender) ||
-        !((IEntityAndData)entity).roundabout$getExclusiveLayers()) {
-            return;
-        }
-
-        poseStack.pushPose();
-        getParentModel().body.translateAndRotate(poseStack);
-        poseStack.translate(0.33F,-3.2F,0F);
-        poseStack.mulPose(Axis.YP.rotationDegrees(-90));
-        poseStack.scale(2F, 2F, 2F);
-        boolean isHurt = livent.hurtTime > 0;
-        float r = isHurt ? 1.0F : 1.0F;
-        float g = isHurt ? 0.0F : 1.0F;
-        float b = isHurt ? 0.0F : 1.0F;
-        ModStrayModels.ROAD_ROLLER.render(livent, partialTicks, poseStack, bufferSource, packedLight,
-                r, g, b, heyFull);
-        poseStack.popPose();
     }
 }
 

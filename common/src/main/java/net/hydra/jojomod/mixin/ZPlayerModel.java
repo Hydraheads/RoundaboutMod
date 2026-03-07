@@ -380,7 +380,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         this.leftArm.yRot = 0.2F;
                         this.leftArm.xRot = -1.4F + curve;
                     }
-                } else if (MainUtil.isHoldingRoadRoller($$0)) {
+                } else if (MainUtil.isHoldingRoadRoller($$0) && FateTypes.isVampireStrong($$0)) {
                     boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
                     if ($$9) {
                         this.rightArm.zRot = -0.175F + this.body.yRot;

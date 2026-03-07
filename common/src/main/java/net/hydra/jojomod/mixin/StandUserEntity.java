@@ -3957,12 +3957,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
 
-        if (hand.getItem() instanceof RoadRollerItem || offHand.getItem() instanceof RoadRollerItem) {
-            if (!FateTypes.isVampireStrong(rdbt$this())) {
-                basis = (basis * 0.50F);
-            }
-        }
-
         float sd = HeatUtil.getSlowdown(rdbt$this());
         if (sd > 0){
             basis = basis * (1f-sd);
