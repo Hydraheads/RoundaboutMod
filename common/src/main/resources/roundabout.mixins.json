@@ -72,6 +72,7 @@
     "data_and_structures.DataStructureTemplatePool",
     "data_and_structures.LootPoolMixin",
     "effects.bleed.BleedFoodData",
+    "effects.bleed.BleedPotionItem",
     "effects.hex.HexItem",
     "effects.warding.WardingArrowMixin",
     "effects.warding.WardingEntityMixin",

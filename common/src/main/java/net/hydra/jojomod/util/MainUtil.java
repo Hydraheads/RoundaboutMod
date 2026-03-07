@@ -1167,6 +1167,12 @@ public class MainUtil {
             return;
         }
         if (getMobBleed(entity)){
+
+            //Bleed now removes strength but only on apply
+            if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.bleedRemovesStrength) {
+                ((LivingEntity) entity).removeEffect(MobEffects.DAMAGE_BOOST);
+            }
+
             if (!hasEnderBlood(entity) && !hasBlueBlood(entity)) {
                 if (source != null && isWearingEitherStoneMask(source) && source.distanceTo(entity) < 5) {
                     activateStoneMask(source);

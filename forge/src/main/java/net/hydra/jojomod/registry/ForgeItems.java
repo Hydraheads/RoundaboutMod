@@ -37,7 +37,7 @@ public class ForgeItems {
     public static final RegistryObject<Item> CHERRIES = addToTab(ITEMS.register("cherries",
             () -> new Item(new Item.Properties()
                     .food(new FoodProperties.Builder().nutrition(1).saturationMod(0.0F).alwaysEat()
-                            .effect(new MobEffectInstance(ForgeEffects.WARDING.get(), 1200, 0), 1.0F)
+                            .effect(new MobEffectInstance(ForgeEffects.WARDING.get(), 2400, 0), 1.0F)
                             .build())
             )));
 

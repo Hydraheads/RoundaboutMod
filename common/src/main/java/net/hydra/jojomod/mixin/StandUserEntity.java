@@ -3900,6 +3900,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    @Inject(method = "isAffectedByPotions", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    protected void rooundabout$isAffectedByPotions(CallbackInfoReturnable<Boolean> cir) {
+        if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.hexTwoSealsPotions) {
+            MobEffectInstance mi = getEffect(ModEffects.HEX);
+            if (mi != null && mi.getAmplifier() > 0) {
+                cir.setReturnValue(false);
+            }
+        }
+    }
+
     public LivingEntity rdbt$this(){
         return ((LivingEntity) (Object)this);
     }

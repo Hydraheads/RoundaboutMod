@@ -2071,6 +2071,12 @@
   "config.roundabout.mountingHorsesInCreativeTamesThem.name": "Creative Mount To Tame",
   "config.roundabout.mountingHorsesInCreativeTamesThem.desc": "If you mount a horse in creative mode, you instantly tame it.",
 
+  "config.roundabout.bleedRemovesStrength.name": "Bleed Removes Strength",
+  "config.roundabout.bleedRemovesStrength.desc": "Whether bleed removes the strength potion effect initially upon being applied.",
+
+  "config.roundabout.hexTwoSealsPotions.name": "Hex II Blocks Potions",
+  "config.roundabout.hexTwoSealsPotions.desc": "Whether hex 2 or higher prevents drinking and splashing potions while applied",
+
 
   "config.roundabout.bonusStandDmgByMaxLevel.name": "Bonus Levelup Damage",
   "config.roundabout.bonusStandDmgByMaxLevel.desc": "By default stands don't get any bonus damage, because JoJo is not an RPG series. But if you want to turn the game into an RPG, this option is on the table. A percentage of damage increase for all stands, distributed across their levelups. If you set it to 100, you will do double damage by the max level.",
