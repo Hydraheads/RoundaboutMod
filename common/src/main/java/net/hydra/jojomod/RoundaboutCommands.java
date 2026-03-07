@@ -1,5 +1,6 @@
 package net.hydra.jojomod;
 
+import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.VampireData;
@@ -8,6 +9,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.fates.powers.ZombieFate;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.stand.powers.PowersTheWorld;
 import net.hydra.jojomod.item.MaxStandDiscItem;
@@ -359,7 +361,9 @@ public class RoundaboutCommands {
                     ((StandUser) PE).roundabout$setLocacacaCurse((byte) -1);
                     PE.getFoodData().setFoodLevel(20);
                     PE.getFoodData().setSaturation(14.4F);
-                    ((IPlayerEntity)PE).rdbt$setZombieFish(5);
+                    if (((IFatePlayer)PE).rdbt$getFatePowers() instanceof ZombieFate zf){
+                        zf.setZombieFishCount(5);
+                    }
                     ((StandUser) PE).roundabout$setHeat(0);
                     MainUtil.clearCooldowns(PE);
                 }
