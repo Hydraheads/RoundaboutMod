@@ -481,14 +481,14 @@ public class StandIcons {
     public static final ResourceLocation GREEN_DAY_BARRAGE = Roundabout.location("textures/gui/icons/green_day/punch_barrage.png");
     public static final ResourceLocation GREEN_DAY_STITCH = Roundabout.location("textures/gui/icons/green_day/stitch.png");
     public static final ResourceLocation GREEN_DAY_PARDON = Roundabout.location("textures/gui/icons/green_day/secco_peace.png");
-    public static final ResourceLocation GREEN_DAY_ARM_RETURN_RIGHT = Roundabout.location("textures/gui/icons/green_day/arm_return_right.png");
-    public static final ResourceLocation GREEN_DAY_ARM_RETURN_LEFT = Roundabout.location("textures/gui/icons/green_day/arm_return_left.png");
+    public static final ResourceLocation GREEN_DAY_ARM_RETURN_RIGHT = Roundabout.location("textures/gui/icons/green_day/main_arm_return.png");
+    public static final ResourceLocation GREEN_DAY_ARM_RETURN_LEFT = Roundabout.location("textures/gui/icons/green_day/off_hand_return.png");
     public static final ResourceLocation GREEN_DAY_MOLD_FIELD = Roundabout.location("textures/gui/icons/green_day/mold_field.png");
     public static final ResourceLocation GREEN_DAY_MOLD_LEAP = Roundabout.location("textures/gui/icons/green_day/mold_leap.png");
-    public static final ResourceLocation GREEN_DAY_MOLD_PUNCH_LEFT = Roundabout.location("textures/gui/icons/green_day/mold_punch_left.png");
-    public static final ResourceLocation GREEN_DAY_MOLD_PUNCH_RIGHT = Roundabout.location("textures/gui/icons/green_day/mold_punch_right.png");
-    public static final ResourceLocation GREEN_DAY_MOLD_SPIN_LEFT = Roundabout.location("textures/gui/icons/green_day/mold_spin_left.png");
-    public static final ResourceLocation GREEN_DAY_MOLD_SPIN_RIGHT = Roundabout.location("textures/gui/icons/green_day/mold_spin_right.png");
+    public static final ResourceLocation GREEN_DAY_MOLD_PUNCH_LEFT = Roundabout.location("textures/gui/icons/green_day/off_hand_throw.png");
+    public static final ResourceLocation GREEN_DAY_MOLD_PUNCH_RIGHT = Roundabout.location("textures/gui/icons/green_day/man_arm_throw.png");
+    public static final ResourceLocation GREEN_DAY_MOLD_SPIN_LEFT = Roundabout.location("textures/gui/icons/green_day/off_hand_spin.png");
+    public static final ResourceLocation GREEN_DAY_MOLD_SPIN_RIGHT = Roundabout.location("textures/gui/icons/green_day/main_arm_spin.png");
     public static final ResourceLocation GREEN_DAY_MOLD_FIELD_OFF = Roundabout.location("textures/gui/icons/green_day/mold_field_off.png");
 
     public static final ResourceLocation RATT_PLACE = Roundabout.location("textures/gui/icons/ratt/ratt_place.png");
