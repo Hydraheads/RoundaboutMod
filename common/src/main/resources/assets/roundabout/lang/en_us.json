@@ -251,6 +251,7 @@
   "item.roundabout.stand_arrow.haveStand": "You already have a stand, to remove it use stand disc",
   "item.roundabout.stand_arrow.acquireStand": "Stand Acquired! Press the summon key!",
   "item.roundabout.stand_arrow.acquireStand_2": "Press the power inventory key to see skills!",
+  "item.roundabout.stand_arrow.acquireZombie1": "You have been zombified!",
   "item.roundabout.stand_arrow.acquireVampire1": "You are now a Vampire",
   "item.roundabout.stand_arrow.acquireVampire2": "The Summon Key switches Attack Modes",
   "item.roundabout.stand_arrow.acquireVampire3": "Avoid Sunlight",
@@ -1381,6 +1382,8 @@
 
   "ability.roundabout.blood_drink": "Blood Suck",
   "ability.roundabout.blood_drink.desc": "Consume blood through your hands so long as you remain facing your target, damaging them to restore your blood. If a mob has drinkable blood, the indicator will appear in the middle of the screen. If a mob is not agitated, you can score a critical blood suck. Villagers and Illagers will zombify upon being killed by this skill, and can be controlled. You can also absorb held plants for direct health.",
+  "ability.roundabout.blood_drink_simple": "Blood Suck",
+  "ability.roundabout.blood_drink_simple.desc": "Consume blood so long as you remain facing your target, damaging them to restore your blood. If a mob has drinkable blood, the indicator will appear in the middle of the screen. If a mob is not agitated, you can score a critical blood suck.",
   "ability.roundabout.vampire_passive": "Vampiric",
   "ability.roundabout.vampire_passive.desc": "You evaporate in sunlight. You run on blood instead of hunger, and eating raw foods and monster drops provide blood with no penalties. You cannot die of starvation. Drowning only lowers your speed. Iron Golems detest you, while zombies are neutral with your presence.",
   "ability.roundabout.mass_heal": "Blood Healing",
@@ -1389,6 +1392,25 @@
   "ability.roundabout.wall_walk_vamp.desc": "Latches onto walls, allowing you to walk slowly on them. Trigger by facing a wall in the air. Press again while wall walking and facing another wall to switch walls, or to step onto ceilings.",
   "ability.roundabout.vampire_vision": "Vampire Perspective",
   "ability.roundabout.vampire_vision.desc": "While enabled, allows for passive dark vision as well as a longer jump height while jump is held.",
+
+  "ability.roundabout.zombie_passive": "True Undead",
+  "ability.roundabout.zombie_passive.desc": "You are harmed by smite. Some potion effects are nullified or reversed: you are classified as undead.",
+
+  "ability.roundabout.zombie_passive_2": "Zombie Power",
+  "ability.roundabout.zombie_passive_2.desc": "Your strength, defense, and held jump height are increased. You can see in the dark.",
+
+  "ability.roundabout.zombie_disguise": "Zombie Disguise",
+  "ability.roundabout.zombie_disguise.desc": "Activate or de-activate freely. If your disguise is on, you are treated normally by golems and targeted by zombies. However, many of your zombie abilities and properties are sealed to make the disguise convincing.",
+
+  "ability.roundabout.zombie_worm": "Zombiefish",
+  "ability.roundabout.zombie_worm.desc": "Killing enemies with blood suck gives you a zombiefish which you can then summon. Maxes at 5. Zombiefish target your attack target.",
+
+  "ability.roundabout.zombie_projectiles": "Zombie Projectiles",
+  "ability.roundabout.zombie_projectiles.desc": "If you are holding knives, arrows, or knife bundles, you can sift them through your body and fire them off shotgun style.",
+
+  "ability.roundabout.zombie_enter": "Zombie Enter",
+  "ability.roundabout.zombie_enter.desc": "Lets you mount just about any animal. Passively, so long as you are not disguised, you hide inside of animals you are mounted to and this lets you drive them past the sun so long as you do not attack/use items.",
+
 
   "ability.roundabout.vamp_jump_boost": "Ultra Athleticism",
   "ability.roundabout.vamp_jump_boost.desc": "Grants 3 meter jump height and 5 meters while sneaking. Hold down for the longer jumps, and tap for shorter ones. With the powers moveset active, grants %1$s meter jump height and %2$s meters while sneaking.",

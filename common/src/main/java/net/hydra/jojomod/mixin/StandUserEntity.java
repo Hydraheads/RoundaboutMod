@@ -2096,6 +2096,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    //Zombies are undead
+    @Inject(method = "getMobType",at = @At(value = "HEAD"),cancellable = true, require = 0)
+    public void roundabout$getMobType(CallbackInfoReturnable<MobType> cir) {
+        if (FateTypes.isZombie(rdbt$this())){
+            cir.setReturnValue(MobType.UNDEAD);
+        }
+    }
+
+    //Zombies still should have the limited underwater penalty
+    @Inject(method = "canBreatheUnderwater",at = @At(value = "HEAD"),cancellable = true, require = 0)
+    public void roundabout$canBreatheUnderwater(CallbackInfoReturnable<Boolean> cir) {
+        if (FateTypes.isZombie(rdbt$this())){
+            cir.setReturnValue(false);
+        }
+    }
+
     @Unique
     public ItemStack roundabout$XHandCancelItem(EquipmentSlot ES) {
         if (this.roundabout$isPossessed()) {return ItemStack.EMPTY;}
@@ -3600,9 +3616,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             AG.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED,1,200));
             this.level().broadcastEntityEvent(this, (byte)35);
             cir.setReturnValue(true);
+            return;
         }
 
-        if ( (rdbt$this() instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers().cheatDeath(dsource))
+        if (rdbt$this() instanceof Player pl && (dsource.is(ModDamageTypes.BLOOD_DRAIN)
+        ) && FateTypes.isHuman(pl)){
+            pl.setHealth(pl.getMaxHealth()/2);
+            cir.setReturnValue(true);
+            FateTypes.setZombie(pl);
+            pl.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireZombie1").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD), true);
+
+            if (level() instanceof ServerLevel SL) {
+                SL.sendParticles(ModParticles.BLOOD_MIST,
+                        this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
+                        10, 0.4, 0.4, 0.4, 0.025);
+            }
+        } else if ( (rdbt$this() instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers().cheatDeath(dsource))
                 || roundabout$getStandPowers().cheatDeath(dsource)){
             cir.setReturnValue(true);
         } else if (hasEffect(ModEffects.VAMPIRE_BLOOD)){
@@ -3636,7 +3665,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "setSprinting", at = @At(value = "HEAD"), cancellable = true, require = 0)
     public void roundabout$canSprintPlayer(boolean $$0, CallbackInfo ci) {
         if (roundabout$getStandPowers().cancelSprint() || FateTypes.isTransforming(rdbt$this()) ||
-                (FateTypes.takesSunlightDamage(rdbt$this()) && FateTypes.isInSunlight(rdbt$this()))
+                (FateTypes.takesSunlightDamage(rdbt$this()) && FateTypes.isInSunlight(rdbt$this()) && !FateTypes.isHidden(rdbt$this()))
         || (rdbt$this() instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers().cancelSprint())){
             ci.cancel();
         }
@@ -3687,7 +3716,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void rdbt$adjGravTrav(){
         roundabout$adjustGravity();
 
-        if (this.isControlledByLocalInstance()) {
             if (MainUtil.isPlayerBonkingHead(((LivingEntity)(Object)this)) || isUsingItem()){
                 roundabout$setBigJumpCurrentProgress(0);
                 roundabout$setBigJump(false);
@@ -3739,7 +3767,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
                 }
             }
-        }
     }
 
     @Inject(method = "travel", at = @At(value = "HEAD"))
@@ -3962,7 +3989,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         if (FateTypes.takesSunlightDamage(rdbt$this()) && FateTypes.isInSunlight(rdbt$this())){
-            basis *= 0.15F;
+            if (!FateTypes.isHidden(rdbt$this())) {
+                basis *= 0.15F;
+            }
         }
 
         if (FateTypes.hasBloodHunger((LivingEntity) (Object) this)) {
@@ -5220,6 +5249,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Shadow protected abstract int getCurrentSwingDuration();
 
     @Shadow public InteractionHand swingingArm;
+
+    @Shadow public abstract void setItemInHand(InteractionHand interactionHand, ItemStack itemStack);
+
     @Unique private boolean roundabout$isPRunning = false;
 
     @Override

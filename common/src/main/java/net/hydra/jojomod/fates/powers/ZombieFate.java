@@ -57,6 +57,7 @@ public class ZombieFate extends VampiricFate {
     public static final byte ENTER = 53;
     public int spikeTimeDuring = 0;
     public int zombieFishCount = -1;
+    public boolean isTuckedAway = false;
 
     public ZombieFate() {
         super();
@@ -81,7 +82,7 @@ public class ZombieFate extends VampiricFate {
                 zombieShotClient();
             }
             case SKILL_2_NORMAL,SKILL_2_CROUCH -> {
-                suckBlood();
+                preSuckBlood();
             }
             case SKILL_3_NORMAL,SKILL_3_CROUCH -> {
                 dashOrEnter();
@@ -92,7 +93,17 @@ public class ZombieFate extends VampiricFate {
         }
     };
 
+    public void preSuckBlood(){
+        if (isDisguised()){
+            return;
+        }
+        suckBlood();
+    }
+
     public void dashOrEnter(){
+        if (isDisguised()){
+            return;
+        }
         if (canTargetEnter()){
             tryPowerPacket(ENTER);
         } else {
@@ -180,6 +191,10 @@ public class ZombieFate extends VampiricFate {
     public void zombieShotClient(){
         if (getActivePower() == ZOMBIE_SHOT){
             tryPowerPacket(NONE);
+            return;
+        }
+
+        if (isDisguised()){
             return;
         }
         if (canUseZombieShot()){
@@ -394,6 +409,9 @@ public class ZombieFate extends VampiricFate {
     /**This function grays out icons for moves you can't currently use. Slot is the icon slot from 1-4,
      * activeP is your currently active power*/
     public boolean isAttackIneptVisually(byte activeP, int slot){
+        if (slot != 4 && isDisguised()){
+            return true;
+        }
         Entity TE = getUserData(self).roundabout$getStandPowers().getTargetEntity(this.self, 3, 15);
         if (slot == 1 && !canUseZombieShot() && getZombieFishCount() <= 0)
             return true;
@@ -597,6 +615,24 @@ public class ZombieFate extends VampiricFate {
     @Override
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.roundabout.vampire_passive",
+                "instruction.roundabout.passive", StandIcons.VAMPIRE,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,0, "ability.roundabout.zombie_worm",
+                "instruction.roundabout.press_skill", StandIcons.ZOMBIE_WORM_5,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.roundabout.zombie_projectiles",
+                "instruction.roundabout.press_skill", StandIcons.ZOMBIE_PROJECTILES,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.blood_drink_simple",
+                "instruction.roundabout.press_skill", StandIcons.ZOMBIE_DRINK,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.dodge",
+                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.zombie_enter",
+                "instruction.roundabout.press_skill", StandIcons.ZOMBIE_ENTER,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.zombie_disguise",
+                "instruction.roundabout.press_skill", StandIcons.ZOMBIE_DISGUISE_ON,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.zombie_passive",
+                "instruction.roundabout.passive", StandIcons.ZOMBIE_DISGUISE_OFF,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.zombie_passive_2",
+                "instruction.roundabout.passive", StandIcons.VAMPIRE_STRENGTH,0,level,bypas));
 
 
         return $$1;

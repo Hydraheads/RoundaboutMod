@@ -341,7 +341,9 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                 this.setLastHurtMob($$0);
             }
 
-            getMainHandItem().hurtAndBreak(1, this, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+            if (!level().isClientSide() && !getMainHandItem().isEmpty() && getMainHandItem().getCount() > 0) {
+                getMainHandItem().hurtAndBreak(2, this, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+            }
             return $$4;
         } else {
             /**Otherwise it does stand damage of sorts*/

@@ -133,7 +133,7 @@ public abstract class HudRendering implements IHudAccess {
                 roundabout$renderTextureOverlay($$1, StandIcons.ANUBIS_POSSESSION_OVERLAY, 0.8F,1F,1F,1F);
             }
             if (this.minecraft.options.getCameraType().isFirstPerson()) {
-                if (FateTypes.hasBloodHunger(this.minecraft.player)){
+                if (FateTypes.takesSunlightDamage(this.minecraft.player)){
                     // Fade speed per tick — lower = slower fade
                     float fadeStep = 1.0F / 30.0F; // same as before: full fade over ~30 ticks
 
@@ -154,7 +154,11 @@ public abstract class HudRendering implements IHudAccess {
                                 }
                             }
                         }
+                        if (FateTypes.isInSunlight(this.minecraft.player)){
+                            checksOut = true;
+                        }
                     }
+
 
                     if (checksOut) {
                         rdbt$fadingIn = true;

@@ -25,6 +25,7 @@ import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
+import net.hydra.jojomod.fates.powers.ZombieFate;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
 import net.hydra.jojomod.powers.GeneralPowers;
@@ -1033,6 +1034,11 @@ public class ClientUtil {
                     }
                 }
             }
+
+            if (FateTypes.isHidden(ent)){
+                throwFade = 0;
+            }
+
         }
 
         return throwFade;

@@ -397,7 +397,9 @@ public class PowersGreenDay extends NewPunchingStand {
     public boolean MainArmReturnServer() {
         ItemEntity $$2 = new ItemEntity(this.self.level(), this.self.getX(), this.self.getY() + 1, this.self.getZ(),Main_arm.getMainHandItem());
         $$2.setDefaultPickUpDelay();
-        this.self.level().addFreshEntity($$2);
+        //this.self.level().addFreshEntity($$2);
+        Player player = (Player)this.self;
+        player.getInventory().add(Main_arm.getMainHandItem());
         //this.self.spawnAtLocation(Main_arm.getMainHandItem());
         Main_arm.setUser(null);
         Main_arm.discard();
@@ -613,7 +615,7 @@ public class PowersGreenDay extends NewPunchingStand {
                             this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
                         } else {
                             this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
-                            this.setCooldown(PowerIndex.SNEAK_MOVEMENT, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
+                            //this.setCooldown(PowerIndex.SNEAK_MOVEMENT, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
                         }
 
                         legGoneTicks = 240;

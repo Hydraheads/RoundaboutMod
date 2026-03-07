@@ -133,7 +133,9 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
     public void rdbt$tickThroughVampire(){
         if (FateTypes.takesSunlightDamage(this)){
             if (FateTypes.isInSunlight(this)){
-                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth()*ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick);
+                if (!FateTypes.isHidden(this)) {
+                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth() * ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick);
+                }
             }
         } else if (FateTypes.isHuman(this)){
             if (MainUtil.isWearingBloodyStoneMask(this) && rdbt$vampireTransformation < 0){

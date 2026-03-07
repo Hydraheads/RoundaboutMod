@@ -27,6 +27,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -34,6 +35,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -179,8 +181,8 @@ public class SeperatedArmEntity extends StandEntity {
                         }
                     }
                     doAttack();
-
                 }
+                pickUpItems();
             }
 
             for(int i = 0; i < 2; i = i + 1) {
@@ -204,6 +206,38 @@ public class SeperatedArmEntity extends StandEntity {
         }
 
         super.tick();
+    }
+
+    public void pickUpItems(){
+
+        Item item = (this.getMainHandItem().getItem());
+        ItemStack itemStack = (this.getMainHandItem());
+        List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),3,3,3);
+
+        for(int j = 0;j<damages.size();j++) {
+            Entity entity = damages.get(j);
+
+            if(entity instanceof ItemEntity IE){
+                if (IE.getItem().getItem().equals(item) || item instanceof AirItem){
+
+                    for(int i = 0; i < IE.getItem().getCount(); i++){
+
+                        if(itemStack.getCount() < itemStack.getMaxStackSize()){
+
+                            if(item instanceof AirItem){
+                                this.setItemInHand(InteractionHand.MAIN_HAND,IE.getItem());
+                                IE.discard();
+                            }else{
+                                itemStack.setCount(itemStack.getCount() + IE.getItem().getCount());
+                                IE.discard();
+                            }
+                        }
+
+                    }
+
+                }
+            }
+        }
     }
 
     public void doAttack() {
