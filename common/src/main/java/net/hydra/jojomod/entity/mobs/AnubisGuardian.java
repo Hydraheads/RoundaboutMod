@@ -24,8 +24,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -72,13 +74,18 @@ public class AnubisGuardian extends AbstractIllager implements RangedAttackMob {
 
         switch (this.getAction()) {
             case NONE, ANUBIS_RAGE -> this.setItemInHand(InteractionHand.MAIN_HAND,Items.AIR.getDefaultInstance());
-            case AXE_RUSH -> this.setItemInHand(InteractionHand.MAIN_HAND,Items.IRON_AXE.getDefaultInstance());
+            case AXE_RUSH -> this.setItemInHand(InteractionHand.MAIN_HAND,Items.DIAMOND_AXE.getDefaultInstance());
             case SWORD_RUSH -> {
                 ItemStack a = new ItemStack(Items.IRON_SWORD);
                 a.enchant(Enchantments.KNOCKBACK,2);
                 this.setItemInHand(InteractionHand.MAIN_HAND,a);
             }
-            case BOW_ATTACK -> this.setItemInHand(InteractionHand.MAIN_HAND,Items.BOW.getDefaultInstance());
+            case BOW_ATTACK ->{
+                ItemStack a = new ItemStack(Items.BOW);
+                a.enchant(Enchantments.POWER_ARROWS,2);
+                a.enchant(Enchantments.PUNCH_ARROWS,1);
+                this.setItemInHand(InteractionHand.MAIN_HAND,a);
+            }
             case FIRE_POT -> this.setItemInHand(InteractionHand.MAIN_HAND,PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.FIRE_RESISTANCE) );
         }
     }
@@ -142,6 +149,19 @@ public class AnubisGuardian extends AbstractIllager implements RangedAttackMob {
     }
 
 
+    @Override
+    public boolean doHurtTarget(Entity $$0) {
+        boolean didHurt = super.doHurtTarget($$0);
+        if (!didHurt && this.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof AxeItem) {
+            if ($$0 instanceof Player P) {
+                if (P.isUsingItem() && P.getUseItem().getItem() instanceof ShieldItem) {
+                    P.getCooldowns().addCooldown(Items.SHIELD,100);
+                    this.level().broadcastEntityEvent($$0, (byte)30);
+                }
+            }
+        }
+        return didHurt;
+    }
 
     @Override
     public boolean hurt(DamageSource $$0, float $$1) {
@@ -238,7 +258,7 @@ static class AxeRush extends MeleeAttackGoal {
 
     private int tick = 100;
     public AxeRush(AnubisGuardian $$0) {
-        super($$0, 0.43F, true);
+        super($$0, 0.6F, true);
         this.mob = $$0;
     }
 
@@ -280,7 +300,7 @@ static class SwordRush extends MeleeAttackGoal {
     private int tick = 100;
     private int stunTicks = 0;
     public SwordRush(AnubisGuardian $$0) {
-        super($$0, 0.45F, true);
+        super($$0, 0.6F, true);
         this.mob = $$0;
     }
 

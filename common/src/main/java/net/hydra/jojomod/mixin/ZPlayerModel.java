@@ -265,6 +265,10 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
                 if ($$0.getUseItem().is(ModItems.ANUBIS_ITEM)) {
                     ipe.roundabout$getItemAnimation().startIfStopped($$0.tickCount);
+                    this.leftArm.xRot = 0;
+                    this.leftArm.yRot = 0;
+                    this.rightArm.xRot = 0;
+                    this.rightArm.yRot = 0;
                     this.roundabout$animate(ipe.roundabout$getItemAnimation(), AnubisAnimations.ThirdPersonUnsheathe, $$3, 1F);
                 } else {
                     ipe.roundabout$getItemAnimation().stop();
@@ -274,8 +278,6 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         && PowerTypes.hasStandActive(P)
                         && SU.roundabout$getStandAnimation() != PowerIndex.NONE) ) {
 
-                    this.rightArm.xRot = 0;this.rightArm.yRot = 0;
-                    this.leftArm.xRot = 0;this.leftArm.yRot = 0;
                     if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
                         if (SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_ATTACK_CHARGE) {
                             this.leftLeg.resetPose();
@@ -425,6 +427,10 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
                 if ($$0.getUseItem().is(ModItems.ANUBIS_ITEM)) {
                     ipe.roundabout$getItemAnimation().startIfStopped($$0.tickCount);
+                    this.leftArm.xRot = 0;
+                    this.leftArm.yRot = 0;
+                    this.rightArm.xRot = 0;
+                    this.rightArm.yRot = 0;
                     this.roundabout$animate(ipe.roundabout$getItemAnimation(), AnubisAnimations.ThirdPersonUnsheathe, $$3, 1F);
                 } else {
                     ipe.roundabout$getItemAnimation().stop();
