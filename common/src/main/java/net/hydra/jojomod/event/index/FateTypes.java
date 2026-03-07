@@ -165,6 +165,9 @@ public enum FateTypes {
     }
     public static boolean takesSunlightDamage(LivingEntity entity){
         if (entity instanceof Player PE){
+            if (PE.isCreative()){
+                return false;
+            }
             return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal() ||
                     ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.ordinal();
         }
