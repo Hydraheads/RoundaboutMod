@@ -181,10 +181,10 @@ public class CorpseBuildBreakGoal extends Goal {
                         if(this.fallenMob.getMainHandItem().isDamageableItem()) {
                             if(getEnchLevel("minecraft:unbreaking") != -1){
                                 if(this.fallenMob.getRandom().nextIntBetweenInclusive(1,100) <= 100/(getEnchLevel("minecraft:unbreaking")+1)){
-                                    this.fallenMob.getMainHandItem().hurtAndBreak(1,  this.fallenMob, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                                    this.fallenMob.getMainHandItem().hurtAndBreak(2,  this.fallenMob, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 
                                 }
-                            } else{this.fallenMob.getMainHandItem().hurtAndBreak(1,  this.fallenMob, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));}
+                            } else{this.fallenMob.getMainHandItem().hurtAndBreak(2,  this.fallenMob, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));}
 
                         }
                         this.stop();
@@ -237,10 +237,10 @@ public class CorpseBuildBreakGoal extends Goal {
                             if(this.fallenMob.getMainHandItem().isDamageableItem()) {
                                 if(getEnchLevel("minecraft:unbreaking") != -1){
                                     if(this.fallenMob.getRandom().nextIntBetweenInclusive(1,100) <= 100/(getEnchLevel("minecraft:unbreaking")+1)){
-                                        this.fallenMob.getMainHandItem().hurtAndBreak(1,  this.fallenMob, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                                        this.fallenMob.getMainHandItem().hurtAndBreak(2,  this.fallenMob, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 
                                     }
-                                } else{this.fallenMob.getMainHandItem().hurtAndBreak(1,  this.fallenMob, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));}
+                                } else{this.fallenMob.getMainHandItem().hurtAndBreak(2,  this.fallenMob, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));}
 
                             }
                             this.stop();
