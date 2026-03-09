@@ -7,9 +7,8 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModItemModels;
-import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
-import net.hydra.jojomod.client.models.layers.animations.AnubisAnimations;
+import net.hydra.jojomod.client.models.layers.anubis.AnubisFirstPersonAnimations;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
@@ -18,6 +17,8 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.AnubisItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
+import net.hydra.jojomod.util.config.ClientConfig;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -144,6 +145,10 @@ public class AnubisModel extends PsuedoHierarchicalModel {
         if (context instanceof LivingEntity LE) {
             this.root().getAllParts().forEach(ModelPart::resetPose);
 
+            if (LE.getUseItem().getItem() instanceof AnubisItem && LE instanceof Player P) {
+                this.animate(((IPlayerEntity)P).roundabout$getItemAnimation(),AnubisFirstPersonAnimations.ItemUnsheath,partialTicks,1F  );
+            }
+
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
         }
@@ -211,22 +216,53 @@ public class AnubisModel extends PsuedoHierarchicalModel {
 
         if (entity.getUseItem().getItem() instanceof AnubisItem) {
             if (entity instanceof Player P) {
-                this.animate( ((IPlayerEntity)P).roundabout$getItemAnimation(),AnubisAnimations.Unsheath,partialTicks,1F);
+                this.animate( ((IPlayerEntity)P).roundabout$getItemAnimation(),AnubisFirstPersonAnimations.Unsheath,partialTicks,1F);
             }
-        } else {
-            AnimationDefinition anim = null;
-            anim = switch (user.roundabout$getStandAnimation()) {
-                case PowerIndex.GUARD -> AnubisAnimations.Block;
-                case PowerIndex.BARRAGE_CHARGE_2 -> AnubisAnimations.Shieldbreak;
-                case PowerIndex.BARRAGE_2 -> AnubisAnimations.ShieldbreakHit;
+        } else if (((StandUser)entity).roundabout$getStandPowers() instanceof PowersAnubis PA) {
+            AnimationDefinition anim = switch (user.roundabout$getStandAnimation()) {
+                case PowerIndex.GUARD -> AnubisFirstPersonAnimations.Block;
+                case PowerIndex.BARRAGE -> AnubisFirstPersonAnimations.BarrageDash;
+                case PowerIndex.BARRAGE_CHARGE -> AnubisFirstPersonAnimations.BarrageCharge;
+                case PowerIndex.BARRAGE_CHARGE_2 -> AnubisFirstPersonAnimations.Shieldbreak;
+                case PowerIndex.BARRAGE_2 -> AnubisFirstPersonAnimations.ShieldbreakHit;
+                case PowersAnubis.DOUBLE -> AnubisFirstPersonAnimations.DoubleCut;
+                case PowersAnubis.UPPERCUT -> AnubisFirstPersonAnimations.Uppercut;
+                case PowersAnubis.THRUST -> AnubisFirstPersonAnimations.Thrust;
+                case PowerIndex.SNEAK_ATTACK_CHARGE -> AnubisFirstPersonAnimations.Pogo;
+
                 default -> null;
             };
+            if (anim == null) {
+                switch (user.roundabout$getStandAnimation()) {
+                    case PowerIndex.ATTACK -> {
+                        if (PA.activePowerPhase == 1) {
+                            anim = AnubisFirstPersonAnimations.Attack;
+                        } else {
+                            anim = AnubisFirstPersonAnimations.Attack2;
+                        }
+                    }
+                    case PowerIndex.SNEAK_ATTACK -> {
+                        if (PA.activePowerPhase == 1) {
+                            anim = AnubisFirstPersonAnimations.SneakAttack;
+                        } else {
+                            anim = AnubisFirstPersonAnimations.SneakAttack2;
+                        }
+                    }
+                }
+            }
+
             if (anim != null) {
                 user.roundabout$getWornStandAnimation().startIfStopped(entity.tickCount);
                 this.animate(user.roundabout$getWornStandAnimation(),anim,partialTicks,1F);
             } else {
                 user.roundabout$getWornStandAnimation().stop();
             }
+        }
+
+        if (PowerTypes.hasStandActive(entity) && ((StandUser)entity).roundabout$getStandPowers() instanceof PowersAnubis PA) {
+            ClientConfig.OpacitySettings opacitySettings = ConfigManager.getClientConfig().opacitySettings;
+            alpha *= (PA.getActivePower() == PowerIndex.NONE ? opacitySettings.opacityOfStand : opacitySettings.opacityWhileAttacking)/100;
+
         }
 
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity, skin )));

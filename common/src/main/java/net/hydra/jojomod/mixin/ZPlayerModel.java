@@ -2,12 +2,11 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.client.models.layers.animations.AnubisAnimations;
+import net.hydra.jojomod.client.models.layers.anubis.AnubisAnimations;
 import net.hydra.jojomod.client.models.layers.animations.FirstPersonLayerAnimations;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -139,22 +138,6 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
             }
 
-            if (SE.roundabout$getStandPowers() instanceof PowersAnubis) {
-                switch (SE.roundabout$getStandAnimation()) {
-
-                    default -> {
-                        change = false;
-                        SE.roundabout$getHandLayerAnimation().stop();
-                    }
-                }
-            }
-
-        /*    if ( $$0.getUseItem().is(ModItems.ANUBIS_ITEM)  ) {
-                ipe.roundabout$getAnubisUnsheath().startIfStopped($$0.tickCount); change = true;
-                this.roundabout$animate(ipe.roundabout$getAnubisUnsheath(), AnubisAnimations.Unsheathe, yes, 1f);
-            } else {
-                ipe.roundabout$getAnubisUnsheath().stop();
-            } */
 
             byte posByte = ((IPlayerEntity) $$0).roundabout$GetPos2();
             if (posByte == PlayerPosIndex.GUARD) {
@@ -269,7 +252,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     this.leftArm.yRot = 0;
                     this.rightArm.xRot = 0;
                     this.rightArm.yRot = 0;
-                    this.roundabout$animate(ipe.roundabout$getItemAnimation(), AnubisAnimations.ThirdPersonUnsheathe, $$3, 1F);
+                    this.roundabout$animate(ipe.roundabout$getItemAnimation(), AnubisAnimations.Unsheathe, $$3, 1F);
                 } else {
                     ipe.roundabout$getItemAnimation().stop();
                 }
@@ -292,6 +275,10 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 if (SU.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(P)) {
                     AnimationDefinition anim = PowersAnubis.getAnimation(SU);
                     if (anim != null) {
+                        this.leftArm.xRot = 0;
+                        this.leftArm.yRot = 0;
+                        this.rightArm.xRot = 0;
+                        this.rightArm.yRot = 0;
                         SU.roundabout$getWornStandAnimation().startIfStopped($$0.tickCount);
                         this.roundabout$animate(SU.roundabout$getWornStandAnimation(), anim, $$3, 1F);
                     } else {
@@ -431,12 +418,16 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     this.leftArm.yRot = 0;
                     this.rightArm.xRot = 0;
                     this.rightArm.yRot = 0;
-                    this.roundabout$animate(ipe.roundabout$getItemAnimation(), AnubisAnimations.ThirdPersonUnsheathe, $$3, 1F);
+                    this.roundabout$animate(ipe.roundabout$getItemAnimation(), AnubisAnimations.Unsheathe, $$3, 1F);
                 } else {
                     ipe.roundabout$getItemAnimation().stop();
                 }
                 AnimationDefinition anim = PowersAnubis.getAnimation(SU);
                 if (anim != null) {
+                    this.leftArm.xRot = 0;
+                    this.leftArm.yRot = 0;
+                    this.rightArm.xRot = 0;
+                    this.rightArm.yRot = 0;
                     SU.roundabout$getWornStandAnimation().startIfStopped($$0.tickCount);
                     this.roundabout$animate(SU.roundabout$getWornStandIdleAnimation(),anim,$$3,1F);
                 } else {

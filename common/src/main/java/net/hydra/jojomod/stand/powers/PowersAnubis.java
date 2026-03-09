@@ -10,7 +10,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.gui.MemoryRecordScreen;
-import net.hydra.jojomod.client.models.layers.animations.AnubisAnimations;
+import net.hydra.jojomod.client.models.layers.anubis.AnubisAnimations;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
@@ -55,6 +55,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -63,7 +64,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import oshi.util.tuples.Pair;
 
 import java.util.*;
@@ -72,6 +72,12 @@ import java.util.List;
 public class PowersAnubis extends NewDashPreset {
     public PowersAnubis(LivingEntity self) {
         super(self);
+    }
+
+    public static boolean shouldDash(Mob M) {
+        if (M == null) {return false;}
+        if (M instanceof AnubisGuardian AG && !AG.hasTotem() ) {return false;}
+        return ( M.isBaby() || !(MainUtil.isHumanoid(M)) ) && !(M instanceof AbstractIllager) ;
     }
 
 
@@ -739,7 +745,7 @@ public class PowersAnubis extends NewDashPreset {
             }
             /// pogo
             else if(SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_ATTACK_CHARGE ) {
-                if (this.getActivePower() == PowerIndex.NONE || this.getSelf().onGround()) {
+                if (this.getSelf().onGround()) {
                     setAnimation(PowerIndex.NONE);
                     this.getStandUserSelf().roundabout$getWornStandAnimation().stop();
                }
@@ -756,7 +762,7 @@ public class PowersAnubis extends NewDashPreset {
         if (this.getActivePower() == PowerIndex.SNEAK_MOVEMENT) {
             if (this.getAttackTimeDuring() > 8 && this.getAttackTimeDuring() < 20) {
                 if(this.getSelf().isCrouching()) {
-                    this.addMomentum(0,-0.075F,0);
+                    this.addMomentum(0,-0.045F,0);
                 }
             } else if (this.getAttackTimeDuring() > 20) {
                 this.setPowerNone();
@@ -785,29 +791,29 @@ public class PowersAnubis extends NewDashPreset {
                         anim = AnubisAnimations.Backflip;
                     }
                 }
-                case PowerIndex.GUARD -> anim = AnubisAnimations.ThirdPersonBlock;
-                case PowerIndex.SNEAK_ATTACK_CHARGE -> anim = AnubisAnimations.ThirdPersonPogoReady;
-                case PowerIndex.BARRAGE_CHARGE_2 -> anim = AnubisAnimations.ThirdPersonShieldbreakCharge;
-                case PowerIndex.BARRAGE_2 -> anim = AnubisAnimations.ThirdPersonShieldbreakHit;
-                case PowerIndex.BARRAGE_CHARGE-> anim = AnubisAnimations.ThirdPersonBarrageCharge;
-                case PowerIndex.BARRAGE -> anim = AnubisAnimations.ThirdPersonBarrageDash;
+                case PowerIndex.GUARD -> anim = AnubisAnimations.Block;
+                case PowerIndex.SNEAK_ATTACK_CHARGE -> anim = AnubisAnimations.PogoReady;
+                case PowerIndex.BARRAGE_CHARGE_2 -> anim = AnubisAnimations.ShieldbreakCharge;
+                case PowerIndex.BARRAGE_2 -> anim = AnubisAnimations.ShieldbreakHit;
+                case PowerIndex.BARRAGE_CHARGE-> anim = AnubisAnimations.BarrageCharge;
+                case PowerIndex.BARRAGE -> anim = AnubisAnimations.BarrageDash;
                 case PowerIndex.ATTACK -> {
                     if (PA.activePowerPhase == 1) {
-                        anim = AnubisAnimations.ThirdPersonAttack;
+                        anim = AnubisAnimations.Attack;
                     } else {
-                        anim = AnubisAnimations.ThirdPersonAttack2;
+                        anim = AnubisAnimations.Attack2;
                     }
                 }
                 case PowerIndex.SNEAK_ATTACK -> {
                     if (PA.activePowerPhase == 1) {
-                        anim = AnubisAnimations.ThirdPersonSneakAttack;
+                        anim = AnubisAnimations.SneakAttack;
                     } else {
-                        anim = AnubisAnimations.ThirdPersonSneakAttack2;
+                        anim = AnubisAnimations.SneakAttack2;
                     }
                 }
-                case PowersAnubis.DOUBLE -> anim = AnubisAnimations.ThirdPersonDoubleSlash;
-                case PowersAnubis.UPPERCUT -> anim = AnubisAnimations.ThirdPersonUppercut;
-                case PowersAnubis.SPIN -> anim = AnubisAnimations.ThirdPersonThrustCut;
+                case PowersAnubis.DOUBLE -> anim = AnubisAnimations.DoubleSlash;
+                case PowersAnubis.UPPERCUT -> anim = AnubisAnimations.Uppercut;
+                case PowersAnubis.THRUST -> anim = AnubisAnimations.Thrust;
             }
         }
         return anim;
@@ -831,7 +837,7 @@ public class PowersAnubis extends NewDashPreset {
 
             return this.getActivePower() == PowersAnubis.UPPERCUT && this.attackTimeDuring < 8
                     || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE && this.attackTimeDuring > PowersAnubis.PogoDelay && this.attackTimeDuring < PowersAnubis.PogoDelay + 9
-                    || this.getActivePower() == PowersAnubis.SPIN & this.getAttackTimeDuring() < 8;
+                    || this.getActivePower() == PowersAnubis.THRUST & this.getAttackTimeDuring() < 8;
         }
         return false;
     }
@@ -978,7 +984,7 @@ public class PowersAnubis extends NewDashPreset {
                             }
                         }
 
-                        case PowersAnubis.SPIN -> {
+                        case PowersAnubis.THRUST -> {
                             if (this.getAttackTimeDuring() > 3) {
                                 ThrustCut();
                             }
@@ -1015,7 +1021,7 @@ public class PowersAnubis extends NewDashPreset {
             if (this.attackTimeDuring > -1) {
                 if (this.attackTimeDuring <= this.attackTimeMax) {
                     switch (this.getActivePower()) {
-                        case PowersAnubis.SPIN -> {
+                        case PowersAnubis.THRUST -> {
                             if (getAttackTimeDuring() == 1) {
                                 Vec3 look = this.getSelf().getLookAngle().reverse();
                                 look = new Vec3(look.x,-0.2,look.z);
@@ -1170,10 +1176,12 @@ public class PowersAnubis extends NewDashPreset {
         Entity target = this.getSelf().level().getEntity(id);
         this.setAttackTimeDuring(this.getAttackTimeDuring()+15);
 
-        if (!StandDamageEntityAttack(target,this.getPunchStrength(target),1,this.getSelf())) {
-            if (target instanceof LivingEntity LE) {
-                if (LE.isBlocking()) {
-                    MainUtil.knockShieldPlusStand(LE, 40);
+        if (target != null) {
+            if (!StandDamageEntityAttack(target, this.getPunchStrength(target), 1, this.getSelf())) {
+                if (target instanceof LivingEntity LE) {
+                    if (LE.isBlocking()) {
+                        MainUtil.knockShieldPlusStand(LE, 40);
+                    }
                 }
             }
         }
@@ -1232,12 +1240,12 @@ public class PowersAnubis extends NewDashPreset {
     /// ---------------------------------
 
     public static boolean isVariant(byte b) {
-        return b >= PowersAnubis.DOUBLE && b <= PowersAnubis.SPIN;
+        return b >= PowersAnubis.DOUBLE && b <= PowersAnubis.THRUST;
     }
     public static final byte
             DOUBLE = 52,
             UPPERCUT = 54,
-            SPIN = 55;
+            THRUST = 55;
 
 
 
@@ -1248,7 +1256,7 @@ public class PowersAnubis extends NewDashPreset {
         return switch (id) {
             case "11" -> DOUBLE;
             case "1-1", "-11" -> UPPERCUT;
-            case "-1-1" -> SPIN;
+            case "-1-1" -> THRUST;
             default -> throw new IllegalStateException("How did you do this: " + id);
         };
 
@@ -1338,7 +1346,7 @@ public class PowersAnubis extends NewDashPreset {
         this.setAttackTimeDuring(-10);
 
         boolean bl = false;
-        List<Entity> entities =  defaultSwordHitbox(this.getSelf(),4, 40,0.15);
+        List<Entity> entities =  defaultSwordHitbox(this.getSelf(),4.5, 40,0.10);
         for (Entity entity : entities) {
             float dist = entity.distanceTo(this.getSelf());
             boolean range = dist > 3.1;
@@ -2425,7 +2433,7 @@ public class PowersAnubis extends NewDashPreset {
         if (attackTarget != null && !this.getStandUserSelf().roundabout$isDazed()) {
 
 
-            if (this.getSelf().distanceTo(attackTarget) < 3.3 && !AnubisLayer.shouldDash((Mob)this.getSelf()) ) {
+            if (this.getSelf().distanceTo(attackTarget) < 3.3 && !PowersAnubis.shouldDash((Mob)this.getSelf()) ) {
                 if (this.attackTimeDuring == -1) {
                     if ( (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax)) {
                         StandUser SU = (StandUser) this.getSelf();
@@ -2438,7 +2446,7 @@ public class PowersAnubis extends NewDashPreset {
                         this.setAttackTimeDuring(0);
                     }
                 }
-            } else if (AnubisLayer.shouldDash((Mob)this.getSelf())) {
+            } else if (PowersAnubis.shouldDash((Mob)this.getSelf())) {
                 tickDashing(attackTarget);
             }
         }

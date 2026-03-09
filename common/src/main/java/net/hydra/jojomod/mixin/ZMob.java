@@ -1006,7 +1006,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
         StandUser SU = (StandUser) this;
         if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
-            if (AnubisLayer.shouldDash((Mob)(Object)this)) {
+            if (PowersAnubis.shouldDash((Mob)(Object)this)) {
                 if (this.roundabout$ticksUntilNextAttack < 10 && this.roundabout$ticksUntilNextAttack > 1) {
                     this.roundabout$ticksUntilNextAttack = 1;
                 }

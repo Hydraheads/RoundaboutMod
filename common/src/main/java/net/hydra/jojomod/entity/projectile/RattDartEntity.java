@@ -283,7 +283,7 @@ public class RattDartEntity extends AbstractArrow {
         }
 
         if (this.getOwner() != null) {
-            if (this.getOwner() instanceof Creeper C) {
+            if (this.getOwner() instanceof Creeper) {
                 $$1.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN,30,4));
             }
         }
@@ -297,7 +297,7 @@ public class RattDartEntity extends AbstractArrow {
         if (stack != -1) {
             int duration =(int)  (600 * (this.getShotType() == CHARGED ? 1.5 : 1));
             int originalDuration = effect != null ? effect.getDuration() : 0;
-            ((LivingEntity) $$1).addEffect(new MobEffectInstance(ModEffects.MELTING, Math.max(duration,originalDuration) , stack), this);
+            $$1.addEffect(new MobEffectInstance(ModEffects.MELTING, Math.max(duration,originalDuration) , stack), this);
         }
     }
 

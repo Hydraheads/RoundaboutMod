@@ -1,14 +1,13 @@
-package net.hydra.jojomod.client.models.layers.animations;
+package net.hydra.jojomod.client.models.layers.anubis;
 
 import net.minecraft.client.animation.AnimationChannel;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.animation.Keyframe;
 import net.minecraft.client.animation.KeyframeAnimations;
-import net.minecraft.util.Mth;
 
 public class AnubisAnimations {
 
-    public static final AnimationDefinition ThirdPersonUnsheathe = AnimationDefinition.Builder.withLength(2.0F).looping()
+    public static final AnimationDefinition Unsheathe = AnimationDefinition.Builder.withLength(2.0F).looping()
             .addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.25F, KeyframeAnimations.degreeVec(-74.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
@@ -21,39 +20,15 @@ public class AnubisAnimations {
             ))
             .build();
 
-    public static final AnimationDefinition Unsheath = AnimationDefinition.Builder.withLength(2.0F)
-            .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.POSITION,// +x forward, +y up, +z left, has to be large
-                    new Keyframe(0.0F, KeyframeAnimations.posVec(-0.2F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(1, KeyframeAnimations.posVec(0, 0.75F, 20), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(2.5F, KeyframeAnimations.posVec(0, 0.75F, 20), AnimationChannel.Interpolations.LINEAR)
-            ))
-            .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(1, KeyframeAnimations.posVec(-75*Mth.DEG_TO_RAD, 0,50*Mth.DEG_TO_RAD), AnimationChannel.Interpolations.LINEAR)
-            ))
-
-            .addAnimation("sheath", new AnimationChannel(AnimationChannel.Targets.POSITION,
-                    new Keyframe(1F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(2.5F, KeyframeAnimations.posVec(0,0.0F, -6.5F), AnimationChannel.Interpolations.LINEAR)
-            ))
-            .build();
 
 
-
-    public static final AnimationDefinition ThirdPersonBlock = AnimationDefinition.Builder.withLength(0.0F)
+    public static final AnimationDefinition Block = AnimationDefinition.Builder.withLength(0.0F)
             .addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(-42.3977F, -50.3315F, 26.0334F), AnimationChannel.Interpolations.LINEAR)
             ))
             .build();
 
-    public static final AnimationDefinition Block = AnimationDefinition.Builder.withLength(0F)
-        .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-            new Keyframe(0F, KeyframeAnimations.degreeVec(-72.5926F, 43.6575F, -77.7873F), AnimationChannel.Interpolations.LINEAR)
-            ))
-            .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.POSITION,
-                    new Keyframe(0F, KeyframeAnimations.posVec(-4.0F, 2.0F, -1.0F), AnimationChannel.Interpolations.LINEAR)
-            ))
-            .build();
+
 
     public static final AnimationDefinition Backflip = AnimationDefinition.Builder.withLength(1.5F/2)
             .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -118,7 +93,7 @@ public class AnubisAnimations {
             .build();
 
 
-    public static final AnimationDefinition ThirdPersonPogoReady = AnimationDefinition.Builder.withLength(0.7917F)
+    public static final AnimationDefinition PogoReady = AnimationDefinition.Builder.withLength(0.7917F)
             .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(-50.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.2917F, KeyframeAnimations.degreeVec(-47.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
@@ -172,29 +147,8 @@ public class AnubisAnimations {
             .build();
 
 
-    public static final AnimationDefinition TEST = AnimationDefinition.Builder.withLength(6F)
-            .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(3.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(3.5F, KeyframeAnimations.degreeVec(-180.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(4.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(4.5F, KeyframeAnimations.degreeVec(0.0F, -180.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(5.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(5.5F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 180.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(6.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
-            ))
-            .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.POSITION,
-                    new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(0.5F, KeyframeAnimations.posVec(-5.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(1.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(1.5F, KeyframeAnimations.posVec(0.0F, 5.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(2.5F, KeyframeAnimations.posVec(0.0F, 0.0F, 5.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(3.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
-            ))
-            .build();
 
-
-    public static final AnimationDefinition ThirdPersonShieldbreakCharge = AnimationDefinition.Builder.withLength(1.625F)
+    public static final AnimationDefinition ShieldbreakCharge = AnimationDefinition.Builder.withLength(1.625F)
             .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(1.0833F, KeyframeAnimations.degreeVec(-17.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
@@ -233,7 +187,7 @@ public class AnubisAnimations {
             ))
             .build();
 
-    public static final AnimationDefinition ThirdPersonShieldbreakHit = AnimationDefinition.Builder.withLength(1.625F)
+    public static final AnimationDefinition ShieldbreakHit = AnimationDefinition.Builder.withLength(1.625F)
             .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(-17.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.0833F, KeyframeAnimations.degreeVec(7.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
@@ -294,7 +248,7 @@ public class AnubisAnimations {
             .build();
 
 
-    public static final AnimationDefinition ThirdPersonBarrageCharge = AnimationDefinition.Builder.withLength(2.0F)
+    public static final AnimationDefinition BarrageCharge = AnimationDefinition.Builder.withLength(2.0F)
             .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(1.875F, KeyframeAnimations.degreeVec(7.7577F, -21.7831F, 1.9057F), AnimationChannel.Interpolations.LINEAR)
@@ -322,7 +276,7 @@ public class AnubisAnimations {
             ))
             .build();
 
-    public static final AnimationDefinition ThirdPersonBarrageDash = AnimationDefinition.Builder.withLength(1.375F)
+    public static final AnimationDefinition BarrageDash = AnimationDefinition.Builder.withLength(1.375F)
             .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(7.2342F, -15.2437F, 4.0504F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.1667F, KeyframeAnimations.degreeVec(7.23F, -15.24F, 4.05F), AnimationChannel.Interpolations.LINEAR),
@@ -373,7 +327,7 @@ public class AnubisAnimations {
             .build();
 
 
-    public static final AnimationDefinition ThirdPersonAttack = AnimationDefinition.Builder.withLength(0.75F)
+    public static final AnimationDefinition Attack = AnimationDefinition.Builder.withLength(0.75F)
             .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0833F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.1667F, KeyframeAnimations.degreeVec(7.5547F, 7.4593F, 0.7667F), AnimationChannel.Interpolations.LINEAR),
@@ -424,7 +378,7 @@ public class AnubisAnimations {
             ))
             .build();
 
-    public static final AnimationDefinition ThirdPersonAttack2 = AnimationDefinition.Builder.withLength(0.75F)
+    public static final AnimationDefinition Attack2 = AnimationDefinition.Builder.withLength(0.75F)
             .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0833F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.1667F, KeyframeAnimations.degreeVec(8.8665F, -13.5524F, 5.3767F), AnimationChannel.Interpolations.LINEAR),
@@ -475,7 +429,8 @@ public class AnubisAnimations {
             ))
             .build();
 
-    public static final AnimationDefinition ThirdPersonSneakAttack = AnimationDefinition.Builder.withLength(0.75F)
+
+    public static final AnimationDefinition SneakAttack = AnimationDefinition.Builder.withLength(0.75F)
             .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.0417F, KeyframeAnimations.degreeVec(-5.0F, 5.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
@@ -520,7 +475,7 @@ public class AnubisAnimations {
             ))
             .build();
 
-    public static final AnimationDefinition ThirdPersonSneakAttack2 = AnimationDefinition.Builder.withLength(0.75F)
+    public static final AnimationDefinition SneakAttack2 = AnimationDefinition.Builder.withLength(0.75F)
             .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.0417F, KeyframeAnimations.degreeVec(-5.0429F, 7.4713F, -0.6574F), AnimationChannel.Interpolations.LINEAR),
@@ -565,7 +520,7 @@ public class AnubisAnimations {
             ))
             .build();
 
-    public static final AnimationDefinition ThirdPersonDoubleSlash = AnimationDefinition.Builder.withLength(1.25F)
+    public static final AnimationDefinition DoubleSlash = AnimationDefinition.Builder.withLength(1.25F)
         .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 			new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
             new Keyframe(0.0417F, KeyframeAnimations.degreeVec(-7.5F, 10.0F, -10.0F), AnimationChannel.Interpolations.LINEAR),
@@ -622,7 +577,7 @@ public class AnubisAnimations {
             ))
             .build();
 
-    public static final AnimationDefinition ThirdPersonUppercut = AnimationDefinition.Builder.withLength(0.75F)
+    public static final AnimationDefinition Uppercut = AnimationDefinition.Builder.withLength(0.75F)
             .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.0417F, KeyframeAnimations.degreeVec(-5.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
@@ -669,7 +624,7 @@ public class AnubisAnimations {
             ))
             .build();
 
-    public static final AnimationDefinition ThirdPersonThrustCut = AnimationDefinition.Builder.withLength(0.625F)
+    public static final AnimationDefinition Thrust = AnimationDefinition.Builder.withLength(0.625F)
             .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.125F, KeyframeAnimations.degreeVec(0.0F, -15.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
@@ -716,30 +671,5 @@ public class AnubisAnimations {
             .build();
 
 
-    public static final AnimationDefinition Shieldbreak = AnimationDefinition.Builder.withLength(1.0F)
-            .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 32.5F), AnimationChannel.Interpolations.LINEAR)
-            ))
-            .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.POSITION,
-                    new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(1.0F, KeyframeAnimations.posVec(-0.5F, -9.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
-            ))
-            .build();
-
-    public static final AnimationDefinition ShieldbreakHit = AnimationDefinition.Builder.withLength(0.6667F)
-            .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-			new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 32.5F), AnimationChannel.Interpolations.LINEAR),
-            new Keyframe(0.125F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -42.5F), AnimationChannel.Interpolations.LINEAR),
-            new Keyframe(0.2917F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -42.5F), AnimationChannel.Interpolations.LINEAR),
-            new Keyframe(0.6667F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
-            ))
-            .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.POSITION,
-			new Keyframe(0.0F, KeyframeAnimations.posVec(3.0F, -9.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-            new Keyframe(0.125F, KeyframeAnimations.posVec(3.0F, 2.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-            new Keyframe(0.2917F, KeyframeAnimations.posVec(3.0F, 2.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-            new Keyframe(0.6667F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
-            ))
-            .build();
 
 }

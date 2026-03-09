@@ -36,12 +36,6 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
     }
 
 
-    public static boolean shouldDash(Mob M) {
-        if (M == null) {return false;}
-        if (M instanceof AnubisGuardian AG && !AG.hasTotem() ) {return false;}
-        return ( M.isBaby() || !(MainUtil.isHumanoid(M)) ) && !(M instanceof AbstractIllager) ;
-    }
-
     public static HumanoidArm shouldRender(LivingEntity entity) {
         StandUser user = ((StandUser)entity);
         if (entity.isUsingItem() && !(entity.getUseItem().getItem() instanceof AnubisItem) )  {return null;}
@@ -125,14 +119,14 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
     public static void renderSheathedAnubis(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float partialTicks, float scale) {
 
         StandUser user = ((StandUser)entity );
-        boolean hasHeyYaOut = (PowerTypes.hasStandActive(entity) && user.roundabout$getStandPowers() instanceof PowersAnubis);
+        boolean hasAnubisOut = (PowerTypes.hasStandActive(entity) && user.roundabout$getStandPowers() instanceof PowersAnubis);
         int heyTicks = user.roundabout$getAnubisVanishTicks();
         float heyFull = 0;
         float fixedPartial = partialTicks - (int) partialTicks;
         if (((TimeStop)entity.level()).CanTimeStopEntity(entity)){
             fixedPartial = 0;
         }
-        if (hasHeyYaOut){
+        if (hasAnubisOut){
             heyFull = heyTicks+fixedPartial;
             heyFull = Math.min(heyFull/10,1f);
         } else {
