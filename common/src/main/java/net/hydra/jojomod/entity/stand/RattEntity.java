@@ -86,6 +86,9 @@ public class RattEntity extends StandEntity {
         return this.entityData.get(SAFE_TICKS) > 0;
     }
     public void changeSafeTicks(int d) {
+        if (d == 0) {
+            this.entityData.set(SAFE_TICKS,0);
+        }
         this.entityData.set(SAFE_TICKS,this.entityData.get(SAFE_TICKS)+d);
     }
 
@@ -147,6 +150,11 @@ public class RattEntity extends StandEntity {
     public void tick() {
         super.tick();
         if (isSafe()) {
+            if (this.getUser() != null) {
+                if (this.getUser() instanceof Mob) {
+                    this.changeSafeTicks(0);
+                }
+            }
             this.changeSafeTicks(-1);
         }
     }
