@@ -29,6 +29,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import org.joml.Quaternionf;
@@ -162,7 +163,6 @@ public class AnubisModel extends PsuedoHierarchicalModel {
             partialTicks = 0;
         }
 
-
         float alpha = 1F;
         byte skin = (byte) 0;
 
@@ -210,7 +210,7 @@ public class AnubisModel extends PsuedoHierarchicalModel {
         if (entity.getUseItem().getItem().equals(ModItems.ANUBIS_ITEM)) {
             poseStack.translate(0.1,0,0);
         } else {
-            poseStack.scale(0.8F,0.8F,0.8F);
+            poseStack.scale(0.765F,0.765F,0.765F);
         }
 
 
@@ -263,6 +263,11 @@ public class AnubisModel extends PsuedoHierarchicalModel {
             ClientConfig.OpacitySettings opacitySettings = ConfigManager.getClientConfig().opacitySettings;
             alpha *= (PA.getActivePower() == PowerIndex.NONE ? opacitySettings.opacityOfStand : opacitySettings.opacityWhileAttacking)/100;
 
+        }
+
+        if (entity.getMainArm() == HumanoidArm.LEFT) {
+            poseStack.scale(1,1,-1);
+            poseStack.translate(0,0,2);
         }
 
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity, skin )));
