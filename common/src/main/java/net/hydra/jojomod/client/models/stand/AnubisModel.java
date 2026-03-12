@@ -265,9 +265,12 @@ public class AnubisModel extends PsuedoHierarchicalModel {
 
         }
 
-        if (entity.getMainArm() == HumanoidArm.LEFT) {
+        if (entity.getMainArm() == HumanoidArm.LEFT) { // I need to rotate it slightly inwards in order to make it better
             poseStack.scale(1,1,-1);
-            poseStack.translate(0,0,2);
+            poseStack.translate(0.1,0,2);
+            if (entity.getUseItem().getItem() instanceof AnubisItem) { // don't ask me why I need to do this
+                poseStack.translate(0,0,-3.7);
+            }
         }
 
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity, skin )));
