@@ -1032,7 +1032,9 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
 
                         StandArrowItem.grantStand(itemStack, AI);
-                        AI.setTarget($$0);
+                        if (!$$0.isCreative()) {
+                            AI.setTarget($$0);
+                        }
 
                     }
                 }

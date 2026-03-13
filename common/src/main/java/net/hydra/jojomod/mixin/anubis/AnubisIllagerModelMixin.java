@@ -42,14 +42,23 @@ public abstract class AnubisIllagerModelMixin<T extends AbstractIllager>
     @Final
     private ModelPart leftLeg;
 
-    @Inject(method = "setupAnim(Lnet/minecraft/world/entity/monster/AbstractIllager;FFFFF)V",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/AbstractIllager;getArmPose()Lnet/minecraft/world/entity/monster/AbstractIllager$IllagerArmPose;",shift = At.Shift.BEFORE), cancellable = true)
+    @Shadow
+    @Final
+    private ModelPart arms;
+
+    @Inject(method = "setupAnim(Lnet/minecraft/world/entity/monster/AbstractIllager;FFFFF)V",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/AbstractIllager;getArmPose()Lnet/minecraft/world/entity/monster/AbstractIllager$IllagerArmPose;"), cancellable = true)
     private void roundabout$cancelIllagerPose(T abstractIllager, float f, float g, float h, float i, float j, CallbackInfo ci) {
         if ( ((StandUser)abstractIllager).roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.isUsingStand(abstractIllager) ) {
-            if (((LivingEntity)abstractIllager).getMainHandItem().isEmpty()) {
+            if (abstractIllager.getMainHandItem().isEmpty()) {
                 AnimationUtils.animateZombieArms(this.leftArm, this.rightArm, true, this.attackTime, h);
             } else {
                 AnimationUtils.swingWeaponDown(this.rightArm, this.leftArm, abstractIllager, this.attackTime, h);
             }
+            boolean bl = abstractIllager.getArmPose() == AbstractIllager.IllagerArmPose.CROSSED;
+            this.arms.visible = bl;
+            this.leftArm.visible = !bl;
+            this.rightArm.visible = !bl;
+
             ci.cancel();
         }
     }

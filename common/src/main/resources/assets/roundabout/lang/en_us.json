@@ -1771,6 +1771,7 @@
   "item.roundabout.anubis_item": "Mysterious Sword",
   "roundabout.anubis_item.requires_mainhand": "Must be in Main Hand to use",
   "item.roundabout.anubis_item.message1" : "The sword is cursed! Seek out a cleric!",
+  "item.roundabout.anubis_item.failure" : "Nobody to kill...",
   "item.roundabout.anubis_item.sword_cleansed": "Anubis Cleansed!",
 
   "skins.roundabout.anubis.anime" : "Anime",

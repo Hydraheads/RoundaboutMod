@@ -41,7 +41,7 @@ public class AnubisItem extends Item {
         if ($$2 instanceof Player P) {
             StandUser SU = (StandUser)P;
             if (!$$1.isClientSide) {
-                P.getCooldowns().addCooldown($$0.getItem(),10/*2400*/);
+                P.getCooldowns().addCooldown($$0.getItem(),P.isCreative() ? 20 : 2400);
                 P.level().playSound(null,P.blockPosition(), ModSounds.ANUBIS_POSSESSION_EVENT,SoundSource.PLAYERS,1.0F,1.3F);
 
 
@@ -58,6 +58,8 @@ public class AnubisItem extends Item {
 
                 if (!targets.isEmpty()) {
                     ((StandUser)$$2).roundabout$setActive(false);
+                } else {
+                    P.displayClientMessage(Component.translatable("item.roundabout.anubis_item.failure").withStyle(ChatFormatting.RED),true);
                 }
 
                 AnubisItem.aggroOnto($$2);
