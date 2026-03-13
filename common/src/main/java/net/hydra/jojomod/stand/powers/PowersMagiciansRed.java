@@ -413,6 +413,10 @@ public class PowersMagiciansRed extends NewPunchingStand {
         return super.inputSpeedModifiers(basis);
     }
 
+    public boolean isFlameCrashing(){
+        return this.getActivePower()==PowerIndex.POWER_4;
+    }
+
     public SoundEvent getKickAttackSound(){
         return ModSounds.FINAL_KICK_EVENT;
     }
@@ -894,6 +898,10 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
     @Override
     public void powerActivate(PowerContext context) {
+        if (isFlameCrashing()){
+            return;
+        }
+
         switch (context) {
             case SKILL_1_NORMAL -> {
                 tryRedBindClient();
@@ -990,6 +998,8 @@ public class PowersMagiciansRed extends NewPunchingStand {
         }
     }
     public void hurricaneClient(){
+        if (isFlameCrashing())
+            return;
         if (this.isChargingCrossfireSpecial())
             return;
         if (isLockedByWater())
