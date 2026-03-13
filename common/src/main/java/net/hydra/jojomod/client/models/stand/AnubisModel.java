@@ -259,11 +259,6 @@ public class AnubisModel extends PsuedoHierarchicalModel {
             }
         }
 
-        if (PowerTypes.hasStandActive(entity) && ((StandUser)entity).roundabout$getStandPowers() instanceof PowersAnubis PA) {
-            ClientConfig.OpacitySettings opacitySettings = ConfigManager.getClientConfig().opacitySettings;
-            alpha *= (PA.getActivePower() == PowerIndex.NONE ? opacitySettings.opacityOfStand : opacitySettings.opacityWhileAttacking)/100;
-
-        }
 
         if (entity.getMainArm() == HumanoidArm.LEFT) { // I need to rotate it slightly inwards in order to make it better
             poseStack.scale(1,1,-1);
@@ -273,6 +268,11 @@ public class AnubisModel extends PsuedoHierarchicalModel {
             }
         }
 
+        if (PowerTypes.hasStandActive(entity) && ((StandUser)entity).roundabout$getStandPowers() instanceof PowersAnubis PA) {
+            ClientConfig.OpacitySettings opacitySettings = ConfigManager.getClientConfig().opacitySettings;
+            alpha *= (PA.getActivePower() == PowerIndex.NONE ? opacitySettings.opacityOfStand : opacitySettings.opacityWhileAttacking)/100;
+
+        }
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity, skin )));
         root().render(poseStack,consumer,packedLight,OverlayTexture.NO_OVERLAY,1,1,1,alpha);
     }

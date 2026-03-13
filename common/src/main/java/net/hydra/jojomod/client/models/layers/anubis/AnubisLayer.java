@@ -46,7 +46,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
             return entity.getMainArm();
         }
         return null;
-    }
+    } // this renders AnubisLayer.renderOutOfContext() but also unrenders interferences such as held items/arms
 
     public static boolean isSheathed(LivingEntity entity) {
         StandUser user = ((StandUser)entity);
@@ -57,7 +57,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
             }
         }
         return false;
-    }
+    } // self-explanatory
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
@@ -80,9 +80,13 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                     if (isSheathed(entity)) {poseStack.translate(1,-0.6,-0.025);}
                 } else {
                     getParentModel().leftArm.translateAndRotate(poseStack);
-                    poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,isSheathed(entity) ? -90 : 90),0,0,0);
-                    poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,0,1,-90),0,0,0);
-                    if (isSheathed(entity)) {poseStack.translate(0.1,-0.7,-0.025);}
+                    poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,0,1,90),0,0,0);
+                    poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,-90),0,0,0);
+                    poseStack.translate(1,0,0);
+                    if (AnubisLayer.isSheathed(entity)) {
+                        poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,180),0,0,0);
+                        poseStack.translate(0,-0.5,0.075);
+                    }
                 }
                 poseStack.translate(-0.25,0.5,0.05);
 
@@ -91,6 +95,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
 
 
             }
+            // unsummoned, sheathed anubis
             if (SU.roundabout$getStandPowers() instanceof PowersAnubis && !PowerTypes.hasStandActive(entity) && SU.roundabout$getIdlePos() != 3 ) {
                 ClientUtil.pushPoseAndCooperate(poseStack, 60);
 

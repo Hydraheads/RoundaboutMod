@@ -86,14 +86,14 @@ public class AnubisFirstPersonAnimations {
             ))
             .build();
 
-    public static final AnimationDefinition ItemUnsheath = AnimationDefinition.Builder.withLength(1.5F)
+    public static final AnimationDefinition ItemUnsheath = AnimationDefinition.Builder.withLength(2.0F)
             .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.POSITION,
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(1.5F, KeyframeAnimations.posVec(0.0F, 5, 0.0F), AnimationChannel.Interpolations.LINEAR)
+                    new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, 5, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
             .addAnimation("sheath", new AnimationChannel(AnimationChannel.Targets.POSITION,
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(1.5F, KeyframeAnimations.posVec(0.0F, 0.0F, -5.0F), AnimationChannel.Interpolations.LINEAR)
+                    new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, 0.0F, -5.0F), AnimationChannel.Interpolations.LINEAR)
             ))
             .build();
 

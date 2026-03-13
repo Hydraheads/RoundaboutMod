@@ -785,35 +785,36 @@ public class PowersAnubis extends NewDashPreset {
     public static AnimationDefinition getAnimation(StandUser SU) {
         AnimationDefinition anim = null;
         if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+            boolean leftArm = ((LivingEntity)SU).getMainArm() == HumanoidArm.LEFT;
             switch (SU.roundabout$getStandAnimation()) {
                 case PowerIndex.SNEAK_MOVEMENT -> {
                     if (PA.getAttackTime() < 16) {
                         anim = AnubisAnimations.Backflip;
                     }
                 }
-                case PowerIndex.GUARD -> anim = AnubisAnimations.Block;
+                case PowerIndex.GUARD -> anim = leftArm ? AnubisAnimations.L_Block : AnubisAnimations.Block;
                 case PowerIndex.SNEAK_ATTACK_CHARGE -> anim = AnubisAnimations.PogoReady;
-                case PowerIndex.BARRAGE_CHARGE_2 -> anim = AnubisAnimations.ShieldbreakCharge;
-                case PowerIndex.BARRAGE_2 -> anim = AnubisAnimations.ShieldbreakHit;
-                case PowerIndex.BARRAGE_CHARGE-> anim = AnubisAnimations.BarrageCharge;
-                case PowerIndex.BARRAGE -> anim = AnubisAnimations.BarrageDash;
+                case PowerIndex.BARRAGE_CHARGE_2 -> anim = leftArm ? AnubisAnimations.L_ShieldbreakCharge : AnubisAnimations.ShieldbreakCharge;
+                case PowerIndex.BARRAGE_2 -> anim = leftArm ? AnubisAnimations.L_ShieldbreakHit : AnubisAnimations.ShieldbreakHit;
+                case PowerIndex.BARRAGE_CHARGE-> anim = leftArm ? AnubisAnimations.L_BarrageCharge : AnubisAnimations.BarrageCharge;
+                case PowerIndex.BARRAGE -> anim = leftArm ? AnubisAnimations.L_BarrageDash : AnubisAnimations.BarrageDash;
                 case PowerIndex.ATTACK -> {
                     if (PA.activePowerPhase == 1) {
-                        anim = AnubisAnimations.Attack;
+                        anim = leftArm ? AnubisAnimations.L_Attack : AnubisAnimations.Attack;
                     } else {
-                        anim = AnubisAnimations.Attack2;
+                        anim = leftArm ? AnubisAnimations.L_Attack2 : AnubisAnimations.Attack2;
                     }
                 }
                 case PowerIndex.SNEAK_ATTACK -> {
                     if (PA.activePowerPhase == 1) {
-                        anim = AnubisAnimations.SneakAttack;
+                        anim = leftArm ? AnubisAnimations.L_SneakAttack : AnubisAnimations.SneakAttack;
                     } else {
-                        anim = AnubisAnimations.SneakAttack2;
+                        anim = leftArm ? AnubisAnimations.L_SneakAttack2 : AnubisAnimations.SneakAttack2;
                     }
                 }
-                case PowersAnubis.DOUBLE -> anim = AnubisAnimations.DoubleSlash;
-                case PowersAnubis.UPPERCUT -> anim = AnubisAnimations.Uppercut;
-                case PowersAnubis.THRUST -> anim = AnubisAnimations.Thrust;
+                case PowersAnubis.DOUBLE -> anim = leftArm ? AnubisAnimations.L_DoubleSlash : AnubisAnimations.DoubleSlash;
+                case PowersAnubis.UPPERCUT -> anim = leftArm ? AnubisAnimations.L_Uppercut : AnubisAnimations.Uppercut;
+                case PowersAnubis.THRUST -> anim = leftArm ? AnubisAnimations.L_Thrust : AnubisAnimations.Thrust;
             }
         }
         return anim;

@@ -252,7 +252,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     this.leftArm.yRot = 0;
                     this.rightArm.xRot = 0;
                     this.rightArm.yRot = 0;
-                    this.roundabout$animate(ipe.roundabout$getItemAnimation(), AnubisAnimations.Unsheathe, $$3, 1F);
+                    this.roundabout$animate(ipe.roundabout$getItemAnimation(), $$0.getMainArm() == HumanoidArm.LEFT ? AnubisAnimations.L_Unsheathe : AnubisAnimations.Unsheathe, $$3, 1F);
                 } else {
                     ipe.roundabout$getItemAnimation().stop();
                 }
@@ -418,7 +418,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     this.leftArm.yRot = 0;
                     this.rightArm.xRot = 0;
                     this.rightArm.yRot = 0;
-                    this.roundabout$animate(ipe.roundabout$getItemAnimation(), AnubisAnimations.Unsheathe, $$3, 1F);
+                    this.roundabout$animate(ipe.roundabout$getItemAnimation(), $$0.getMainArm() == HumanoidArm.LEFT ? AnubisAnimations.L_Unsheathe : AnubisAnimations.Unsheathe, $$3, 1F);
                 } else {
                     ipe.roundabout$getItemAnimation().stop();
                 }
