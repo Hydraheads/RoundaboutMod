@@ -2846,6 +2846,11 @@
   "config.roundabout.timeStopSettings.name": "Time Stop",
 
 
+  "config.roundabout.powersSettings.name": "Powers",
+  "config.roundabout.powerSwitchingPenalty.name": "Switching Penalty",
+  "config.roundabout.powerSwitchingPenalty.desc": "A penalty incurred by switching between powers (example: vampire powers -> stand). By default it is designed to make you focus on one or the other to make pvp less sweaty.",
+
+
 
 
   "config.roundabout.onlyStandUsersCanSeeStands.name": "Standless = Invisible Stands",

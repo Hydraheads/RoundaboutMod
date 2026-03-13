@@ -153,6 +153,8 @@ public class StandPowers extends AbilityScapeBasis {
     public void onStandSwitch(){
         getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
     }
+    public void onPowerSwitch(){
+    }
     /**Runs this code while pressing R to activate powers*/
     public void onStandSummon(boolean desummon){
 

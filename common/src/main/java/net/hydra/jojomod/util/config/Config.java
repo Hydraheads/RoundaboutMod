@@ -62,6 +62,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public VampireSettings vampireSettings;
     @NestedOption(group = "modded")
+    public PowersSettings powersSettings;
+    @NestedOption(group = "modded")
     public StandLevelingSettings standLevelingSettings;
     @NestedOption(group = "modded")
     public GeneralStandSettings generalStandSettings;
@@ -239,6 +241,10 @@ public class Config implements Cloneable {
         public Integer standExperienceNeededForLevelupMultiplier;
         @IntOption(group = "inherit", value = 0, min = 0, max = 72000)
         public Integer bonusStandDmgByMaxLevel;
+    }
+    public static class PowersSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean powerSwitchingPenalty;
     }
     public static class GeneralStandSettings {
         @BooleanOption(group = "inherit", value = true)
