@@ -3306,9 +3306,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 $$1 = FM.getDamageMod($$1);
             }
             Entity ent2 = FM;
-            if (FM.getController() > 0 && FM.getController() != this.getId()){
-                ent2 = FM.controller;
-            }
             ci.setReturnValue(hurt(ModDamageTypes.of(this.level(), ModDamageTypes.CORPSE_EXPLOSION, ent2, $$0.getDirectEntity()),
                     $$1));
             return;
