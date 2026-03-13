@@ -1232,6 +1232,8 @@ public class PowersAnubis extends NewDashPreset {
                 }
                 this.getSelf().level().playSound(null,this.getSelf().blockPosition(), event,SoundSource.PLAYERS,1F,pitch);
             }
+        } else {
+            playMissSound(this.getSelf().level());
         }
 
     }
@@ -1291,6 +1293,8 @@ public class PowersAnubis extends NewDashPreset {
 
         if (!entities.isEmpty()) {
             this.getSelf().level().playSound(null,this.getSelf().blockPosition(),SoundEvents.PLAYER_ATTACK_SWEEP,SoundSource.PLAYERS,1F,0.4F + (float)(Math.random()*0.2) + (first ? 0.0F : 0.3F) );
+        } else {
+            playMissSound(this.getSelf().level());
         }
 
         for (Entity e : entities ) {
@@ -1381,6 +1385,8 @@ public class PowersAnubis extends NewDashPreset {
 
             }
 
+        } else {
+            playMissSound(this.getSelf().level());
         }
     }
 
@@ -1394,6 +1400,8 @@ public class PowersAnubis extends NewDashPreset {
         List<Entity> entities = defaultSwordHitbox(this.getSelf(),3, 55,0.015);
         if (!entities.isEmpty()) {
             this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.ANUBIS_UPPERCUT_EVENT,SoundSource.PLAYERS,1F,0.9F + (float)(Math.random()*0.2));
+        } else {
+            playMissSound(this.getSelf().level());
         }
         for (Entity e : entities ) {
             if (e != null) {
@@ -1675,6 +1683,8 @@ public class PowersAnubis extends NewDashPreset {
         List<Entity> entities = defaultSwordHitbox(this.getSelf(),4, 45,0.05);
         if (!entities.isEmpty()) {
             this.getSelf().level().playSound(null,this.getSelf().blockPosition(),SoundEvents.PLAYER_ATTACK_KNOCKBACK,SoundSource.PLAYERS,1F,0.4F + (float)(Math.random()*0.2));
+        } else {
+            playMissSound(this.getSelf().level());
         }
         for (Entity e : entities ) {
             if (e != null) {
@@ -1825,6 +1835,10 @@ public class PowersAnubis extends NewDashPreset {
 
     protected Byte getSummonSound() {
         return SoundIndex.SUMMON_SOUND;
+    }
+
+    public void playMissSound(Level l) {
+        l.playSound(null,this.getSelf().blockPosition(),ModSounds.ANUBIS_POGO_LAUNCH_EVENT,SoundSource.PLAYERS,1F,(float)(1.0F+Math.random()*0.2F));
     }
 
     @Override
