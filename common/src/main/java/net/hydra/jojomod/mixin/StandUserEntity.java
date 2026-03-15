@@ -472,19 +472,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
-    @Inject(method = "knockback",at = @At(value = "HEAD"))
-    public void roundabout$transferKnockback(double $$0, double $$1, double $$2, CallbackInfo ci) {
-        if (this.roundabout$isPossessed()) {
-            LivingEntity poss = (LivingEntity) this.roundabout$getPossessor();
-            if (poss != null) {
-                if (this.roundabout$getStandPowers() instanceof PowersWalkingHeart PWH && PWH.hasExtendedHeelsForWalking()) {return;}
-                poss.knockback($$0,$$1,$$2);
-            }
-
-
-        }
-    }
-
     @Override
     @Unique
     public boolean rdbt$tickEffectsBleedEdition(boolean grav){
@@ -3098,14 +3085,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
                 if (!this.level().isClientSide() || ((LivingEntity) (Object) this) instanceof Player) {
 
-                    // SAVING THIS FOR LATER
-               /*     if (this.roundabout$getPossessor() != null && this.roundabout$getPossessor().getTarget() != null) {
-                        float ry = MainUtil.getLookAtEntityYaw(rdbt$this(),this.roundabout$getPossessor().getTarget()) % 360;
-                        stand.setYRot(ry);
-                        stand.setYBodyRot(ry);
-                        stand.setYHeadRot(ry);
-                        return;
-                    }*/
+
 
                     stand.setYRot(roundabout$User.getYHeadRot() % 360);
                     stand.setXRot(roundabout$User.getXRot());
@@ -3384,15 +3364,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
-    @Inject(method = "addEffect(Lnet/minecraft/world/effect/MobEffectInstance;)Z", at = @At(value = "HEAD"))
-    public void roundabout$carryEffects(MobEffectInstance $$0, CallbackInfoReturnable<Boolean> cir) {
-        if (this.roundabout$isPossessed()) {
-            LivingEntity poss = this.roundabout$getPossessor();
-            if (poss != null) {
-                poss.addEffect($$0);
-            }
-        }
-    }
 
     /**Hex prevents eating effects from golden apples. Once you reach level 3 (commands only), all foods lose them*/
     @Inject(method = "addEatEffect", at = @At(value = "HEAD"), cancellable = true, require = 0)
@@ -4777,12 +4748,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 if (rdbt$this() instanceof Player P) {
                     if (poss != null) {
 
-                        rdbt$this().setDeltaMovement(Vec3.ZERO);
-                        Vec3 pos = P.getPosition(0.5F);
-
-                        pos = pos.lerp(poss.getPosition(0.5F),0.5).add(0,0.01,0);
-                        rdbt$this().teleportTo(pos.x,pos.y,pos.z);
-
                         LivingEntity target = poss.getTarget();
                         if (target != null) {
                             if (target.hurtTime == 0 && !this.roundabout$isDazed() && roundabout$anubisAttackDelay <= 0) {
@@ -4804,10 +4769,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             } else if (roundabout$anubisAttackDelay > 0) {
                                 roundabout$anubisAttackDelay--;
                             }
+
                         }
                     }
+
                 }
             }
+
         }
 
     }

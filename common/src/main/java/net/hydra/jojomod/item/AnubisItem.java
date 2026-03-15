@@ -41,7 +41,7 @@ public class AnubisItem extends Item {
         if ($$2 instanceof Player P) {
             StandUser SU = (StandUser)P;
             if (!$$1.isClientSide) {
-                P.getCooldowns().addCooldown($$0.getItem(),P.isCreative() ? 20 : 2400);
+                P.getCooldowns().addCooldown($$0.getItem(),20);
                 P.level().playSound(null,P.blockPosition(), ModSounds.ANUBIS_POSSESSION_EVENT,SoundSource.PLAYERS,1.0F,1.3F);
 
 
@@ -51,10 +51,11 @@ public class AnubisItem extends Item {
                         targets.add(target);
                     }
                 }
-                AnubisPossessorEntity p = new AnubisPossessorEntity($$2.level(), $$2, targets );
-                p.setPos($$2.getPosition(1));
-                $$1.addFreshEntity(p);
-                SU.roundabout$setPossessor(p);
+                AnubisPossessorEntity anubisPossessorEntity = new AnubisPossessorEntity($$2.level(), $$2, targets );
+                anubisPossessorEntity.setPos($$2.getPosition(1));
+                $$1.addFreshEntity(anubisPossessorEntity);
+                SU.roundabout$setPossessor(anubisPossessorEntity);
+                P.startRiding(anubisPossessorEntity);
 
                 if (!targets.isEmpty()) {
                     ((StandUser)$$2).roundabout$setActive(false);

@@ -2,12 +2,14 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisAnimations;
 import net.hydra.jojomod.client.models.layers.animations.FirstPersonLayerAnimations;
+import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -479,11 +481,26 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     float xRot = (float) Math.toRadians(MainUtil.getLookAtEntityPitch(P,poss.getTarget()));
                     this.head.xRot = xRot;
                     this.hat.xRot = xRot;
+                    float yRot = (float) Math.toRadians(MainUtil.getLookAtEntityPitch(P,poss.getTarget()));
+                    this.head.yRot = yRot;
+                    this.hat.yRot = yRot;
+
                 }
             }
 
         }
     }
+
+    @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V",at = @At(value = "HEAD"))
+    private void roundabout$modelRidingCancel(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
+        if ($$0.isPassenger()) {
+            Entity mount = $$0.getVehicle();
+            if (mount instanceof AnubisPossessorEntity) {
+                this.riding = false;
+            }
+        }
+    }
+
     @Unique
     protected void roundabout$animate(AnimationState $$0, AnimationDefinition $$1, float $$2, float $$3) {
         $$0.updateTime($$2, $$3);

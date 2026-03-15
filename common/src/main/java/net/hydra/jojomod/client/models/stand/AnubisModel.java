@@ -143,10 +143,15 @@ public class AnubisModel extends PsuedoHierarchicalModel {
 
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
                        int light, float r, float g, float b, float alpha, byte skin) {
+        render(context,partialTicks,poseStack,bufferSource,light,r,g,b,alpha,skin,true);
+    }
+
+    public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
+                       int light, float r, float g, float b, float alpha, byte skin,boolean animations) {
         if (context instanceof LivingEntity LE) {
             this.root().getAllParts().forEach(ModelPart::resetPose);
 
-            if (LE.getUseItem().getItem() instanceof AnubisItem && LE instanceof Player P) {
+            if (LE.getUseItem().getItem() instanceof AnubisItem && animations && LE instanceof Player P) {
                 this.animate(((IPlayerEntity)P).roundabout$getItemAnimation(),AnubisFirstPersonAnimations.ItemUnsheath,partialTicks,1F  );
             }
 

@@ -4,10 +4,8 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.util.S2CPacketUtil;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.FlyingMob;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -85,6 +83,15 @@ public class AnubisPossessorEntity extends GroundPathfindingStandAttackEntity {
     protected void addBehaviourGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 0.8, false));
+    }
+
+    @Override
+    protected void positionRider(Entity $$0, MoveFunction $$1) {
+        if ($$0 instanceof Player) {
+            $$1.accept($$0,this.getX(),this.getY(),this.getZ());
+        } else {
+            super.positionRider($$0,$$1);
+        }
     }
 
     public List<LivingEntity> targets = new ArrayList<>();

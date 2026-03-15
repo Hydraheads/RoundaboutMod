@@ -141,7 +141,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
 
         poseStack.scale(scale,scale,scale);
         ModStrayModels.ANUBIS.render(entity, partialTicks, poseStack, bufferSource, packedLight,
-                1, 1, 1, 1-heyFull, user.roundabout$getStandSkin());
+                1, 1, 1, 1-heyFull, user.roundabout$getStandSkin(),false);
     }
 
     public static float getTicks(LivingEntity livingEntity, float partialTicks) {

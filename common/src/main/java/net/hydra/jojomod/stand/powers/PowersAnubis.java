@@ -13,6 +13,7 @@ import net.hydra.jojomod.client.gui.MemoryRecordScreen;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisAnimations;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.projectile.AnubisSlipstreamEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -310,7 +311,9 @@ public class PowersAnubis extends NewDashPreset {
         }
 
         for (Mob M : this.getSelf().level().getNearbyEntities(Mob.class, TargetingConditions.DEFAULT,this.getSelf(),box)) {
-            ((IMob)M).roundabout$setHypnotizedBy(this.getSelf(),time);
+            if (!(M instanceof FallenMob)) {
+                ((IMob) M).roundabout$setHypnotizedBy(this.getSelf(), time);
+            }
         }
 
         Vec3 pos = this.getSelf().getPosition(1);
@@ -1315,9 +1318,6 @@ public class PowersAnubis extends NewDashPreset {
 
                     if (e instanceof LivingEntity L) {
                         addEXP(1);
-                        if (first) {
-                            ((StandUser)L).roundabout$setDazed((byte)3);
-                        }
                     }
 
                     takeDeterminedKnockback(this.getSelf(), e, knockbackStrength);
@@ -1325,7 +1325,7 @@ public class PowersAnubis extends NewDashPreset {
                 } else if (!first) {
                     if (e instanceof LivingEntity LE) {
                         if (LE.isBlocking()) {
-                            MainUtil.knockShieldPlusStand(e,40);
+                            MainUtil.knockShieldPlusStand(e,20);
                         }
                     }
                 }
@@ -1954,7 +1954,7 @@ public class PowersAnubis extends NewDashPreset {
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.7F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.5F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(5F));
         }
@@ -1962,7 +1962,7 @@ public class PowersAnubis extends NewDashPreset {
     @Override
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.35F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.2F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(6F));
         }
