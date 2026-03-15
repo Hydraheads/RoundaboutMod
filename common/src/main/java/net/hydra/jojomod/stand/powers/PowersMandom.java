@@ -232,6 +232,10 @@ public class PowersMandom extends NewDashPreset {
         return true;
     }
 
+    public void onPowerSwitch(){
+        onStandSwitchInto();
+        super.onPowerSwitch();
+    }
     @Override
     public void onStandSwitchInto(){
         if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative()))) {

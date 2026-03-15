@@ -200,7 +200,7 @@ public class FabricItems {
     public static Item RINGO_MASK = registerItem("ringo_mask", new MaskItem(new Item.Properties().stacksTo(1), new RingoVisage(null)));
     public static Item POCOLOCO_MASK = registerItem("pocoloco_mask", new MaskItem(new Item.Properties().stacksTo(1), new PocolocoVisage(null)));
 
-    public static Item COFFIN_BLOCK_ITEM = registerItem("coffin_block_item",
+    public static Item COFFIN_BLOCK_ITEM = registerItem("coffin_block",
             new CoffinBlockItem(DyeColor.BLACK, FabricBlocks.COFFIN_BLOCK, new Item.Properties().stacksTo(1)));
 
 

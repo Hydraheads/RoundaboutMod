@@ -9,6 +9,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.entity.BedBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
@@ -20,6 +22,11 @@ public class CoffinBlock extends BedBlock {
     private static final Map<Player.BedSleepingProblem, Component> sleepResults = ImmutableMap.of(Player.BedSleepingProblem.TOO_FAR_AWAY, Component.translatable("text.roundabout.vampire.coffin_too_far"), Player.BedSleepingProblem.OBSTRUCTED, Component.translatable("text.roundabout.vampire.coffin_obstructed"));
     public CoffinBlock(DyeColor $$0, Properties $$1) {
         super($$0, $$1);
+    }
+
+    @Override
+    public BlockEntity newBlockEntity(BlockPos $$0, BlockState $$1) {
+        return new CoffinBlockEntity($$0, $$1, DyeColor.BLACK);
     }
 
     @Override

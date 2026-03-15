@@ -2,12 +2,9 @@ package net.hydra.jojomod.entity.goals;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.corpses.FallenMob;
-import net.hydra.jojomod.event.index.Tactics;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.nbt.Tag;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffects;
@@ -19,16 +16,14 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.LeavesBlock;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
-import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
@@ -137,7 +132,7 @@ public class CorpseBuildBreakGoal extends Goal {
         //Get distance
         try {
             double distance = Math.sqrt(Math.pow(this.fallenMob.getBlockX() - useOn.getX(),2) + Math.pow(this.fallenMob.getBlockY() - useOn.getY(),2) + Math.pow(this.fallenMob.getBlockZ() - useOn.getZ(),2));
-            if (distance <= 5 && fallenMob.hasPlaced <= -1) {
+            if (distance <= 5 && fallenMob.hasPlaced <= -1 && hasLineOfSight(this.fallenMob, useOn)) {
                 this.fallenMob.getNavigation().stop();
                 //HACK ALERT
                 this.fallenMob.getNavigation().moveTo(this.fallenMob,1);
@@ -272,7 +267,26 @@ public class CorpseBuildBreakGoal extends Goal {
         }
     }
 
+    public static boolean hasLineOfSight(LivingEntity mob, BlockPos targetHit) {
+        Level level = mob.level();
 
+        Vec3 start = mob.getEyePosition();
+        Vec3 end = targetHit.getCenter();
+
+        ClipContext context = new ClipContext(
+                start,
+                end,
+                ClipContext.Block.COLLIDER, // blocks that have collision
+                ClipContext.Fluid.NONE,
+                mob
+        );
+
+        BlockHitResult result = level.clip(context);
+
+        // If the ray hits nothing or the same block, there is line of sight
+        return result.getType() == HitResult.Type.MISS ||
+                result.getBlockPos().equals(targetHit.getCenter());
+    }
 
 
 }

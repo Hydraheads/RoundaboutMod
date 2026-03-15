@@ -335,6 +335,12 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public void roundabout$setPower(byte style){
         if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$POWERS)) {
             roundabout$SetPos2(PlayerPosIndex.NONE);
+            if (style != this.getEntityData().get(ROUNDABOUT$POWERS)){
+                if (ClientNetworking.getAppropriateConfig().powersSettings.powerSwitchingPenalty) {
+                    ((StandUser) this).roundabout$getStandPowers().onStandSwitch();
+                    ((StandUser) this).roundabout$getStandPowers().onPowerSwitch();
+                }
+            }
             this.getEntityData().set(ROUNDABOUT$POWERS, style);
         }
     }

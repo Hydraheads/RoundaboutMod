@@ -776,6 +776,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         if (!this.self.level().isClientSide()) {
             if (entity != null) {
                 if (!(MainUtil.resistsKnockBack(entity))) {
+                    if (entity.isPassenger() && !(entity instanceof Player pl && pl.isCreative()))
+                        entity.removeVehicle();
                     this.self.level().playSound(null, this.self.blockPosition(), ModSounds.LASSO_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5f + Math.random() * 0.05f));
 
                     entity.hurtMarked = true;
@@ -800,7 +802,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public float getPunchStrength(Entity entity){
         if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
             if (this.getReducedDamage(entity)){
-                return 0.55F * (1+ (vp.getVampireData().strengthLevel * 0.1F));
+                return 0.55F * (1+ (vp.getVampireData().strengthLevel * 0.05F));
             } else {
                 return 2.1F * (1+ (vp.getVampireData().strengthLevel * 0.1F));
             }

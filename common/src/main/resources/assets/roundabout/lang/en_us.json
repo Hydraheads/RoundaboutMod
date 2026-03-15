@@ -35,7 +35,6 @@
 
 
   "item.roundabout.stand_arrow": "Stand Arrow",
-  "item.roundabout.coffin_block_item": "Coffin",
   "item.roundabout.stand_beetle_arrow": "Stand Arrow",
   "item.roundabout.worthy_arrow": "Worthiness Arrow",
   "item.roundabout.luck_sword": "Luck Sword",
@@ -2844,6 +2843,11 @@
   "config.roundabout.theWorldSettings.name": "The World",
   "config.roundabout.starPlatinumSettings.name": "Star Platinum",
   "config.roundabout.timeStopSettings.name": "Time Stop",
+
+
+  "config.roundabout.powersSettings.name": "Powers",
+  "config.roundabout.powerSwitchingPenalty.name": "Switching Penalty",
+  "config.roundabout.powerSwitchingPenalty.desc": "A penalty incurred by switching between powers (example: vampire powers -> stand). By default it is designed to make you focus on one or the other to make pvp less sweaty.",
 
 
 
