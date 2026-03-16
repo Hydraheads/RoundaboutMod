@@ -15,8 +15,8 @@ public class CoffinBlockEntity extends BlockEntity {
     public CoffinBlockEntity(BlockPos $$0, BlockState $$1, DyeColor $$2) {
         super(ModBlocks.COFFIN_BLOCK_ENTITY, $$0, $$1);
     }
-    public float closed = 0;
-    public float oClosed = 0;
+    public float closed = 1;
+    public float oClosed = 1;
     public boolean closing = false;
     public static void lidAnimateTick(Level $$0, BlockPos $$1, BlockState $$2, CoffinBlockEntity $$3) {
         $$3.oClosed = $$3.closed;

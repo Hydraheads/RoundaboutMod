@@ -353,6 +353,7 @@ public class FabricItems {
                     .icon(() -> new ItemStack(ModBlocks.GODDESS_STATUE_BLOCK)).displayItems((displayContext, entries) -> {
                         entries.accept(ModBlocks.WOODEN_MANOR_TABLE);
                         entries.accept(ModBlocks.WOODEN_MANOR_CHAIR);
+                        entries.accept(ModBlocks.COFFIN_BLOCK);
                         entries.accept(ModBlocks.WOOL_SLAB_WHITE);
                         entries.accept(ModBlocks.WOOL_SLAB_BLACK);
                         entries.accept(ModBlocks.WOOL_SLAB_BLUE);
