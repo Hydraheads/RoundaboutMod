@@ -17,6 +17,7 @@ public class ErrorFixUtil {
                 || $$1.contains("invisible_block")
                 || $$1.contains("d4c")
                 || $$1.contains("fog_trap")
+                || $$1.contains("coffin")
                 || $$1.contains("bubble_scaffold")){
             cir.setReturnValue(null);
         }
