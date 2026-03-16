@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.CoffinBlock;
+import net.hydra.jojomod.block.CoffinBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -23,7 +24,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.DoubleBlockCombiner;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.ChestType;
@@ -90,7 +93,7 @@ public class CoffinRenderer <T extends BlockEntity> implements BlockEntityRender
         Level $$6 = $$0.getLevel();
         boolean $$7 = $$6 != null;
         BlockState $$8 = $$7 ? $$0.getBlockState() : ModBlocks.COFFIN_BLOCK.defaultBlockState().setValue(ChestBlock.FACING, Direction.SOUTH);
-        if ($$8.getBlock() instanceof CoffinBlock $$11) {
+        if ($$8.getBlock() instanceof CoffinBlock $$11 && $$0 instanceof CoffinBlockEntity cbe) {
             BedPart $$9 = $$8.hasProperty(CoffinBlock.PART) ? $$8.getValue(CoffinBlock.PART) : BedPart.HEAD;
 
 
@@ -103,7 +106,17 @@ public class CoffinRenderer <T extends BlockEntity> implements BlockEntityRender
             $$2.translate(-0.5F, 0F, 0.5F);
             VertexConsumer vertexConsumer = $$3.getBuffer(RenderType.entityCutout(COFFIN));
 
-            float openness = 0.4f;
+            float openness = cbe.closed;
+            if (cbe.closing){
+                openness = Math.max(0,openness-($$1*0.1F));
+            } else {
+                openness = Math.min(1f,openness+($$1*0.1F));
+            }
+            openness = 1.0f - openness;
+            openness = 1.0f - openness * openness * openness;
+
+            openness *= 0.4F;
+
             if ($$9 == BedPart.HEAD) {
                 this.render($$2, vertexConsumer, this.right_lid, this.right_bottom, openness, $$4, $$5);
             } else {
