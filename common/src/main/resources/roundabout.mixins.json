@@ -297,6 +297,7 @@
     "anubis.AnubisWolfRendererMixin",
     "barrage.BarrageBossBar",
     "barrage.DazeGameRenderer",
+    "blocks.CoffinInBedChatScreenMixin",
     "cream.CreamCancelPlayerRendererMixin",
     "d4c.D4CDisableBlockInteraction",
     "fates.FateDeathScreenMixin",
