@@ -6,8 +6,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.DoubleBlockCombiner;
@@ -81,5 +83,16 @@ public class CoffinBlock extends BedBlock {
             return InteractionResult.CONSUME;
         }
         return InteractionResult.CONSUME;
+    }
+
+
+    @Override
+    public void fallOn(Level $$0, BlockState $$1, BlockPos $$2, Entity $$3, float $$4) {
+        super.fallOn($$0, $$1, $$2, $$3, $$4 * 2F);
+    }
+
+    @Override
+    public void updateEntityAfterFallOn(BlockGetter $$0, Entity $$1) {
+        $$1.setDeltaMovement($$1.getDeltaMovement().multiply(1.0, 0.0, 1.0));
     }
 }
