@@ -103,6 +103,15 @@ public class AnubisModel extends PsuedoHierarchicalModel {
     public static ResourceLocation cleaver_sheathed = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/cleaver_sheathed.png");
     public static ResourceLocation illusory = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/illusory.png");
     public static ResourceLocation illusory_sheathed = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/illusory_sheathed.png");
+    public static ResourceLocation bloodstained = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/bloodstained.png");
+    public static ResourceLocation brilliance = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/brilliance.png");
+    public static ResourceLocation chainblade_1 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/chainblade_1.png");
+    public static ResourceLocation chainblade_2 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/chainblade_2.png");
+    public static ResourceLocation chef = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/chef.png");
+    public static ResourceLocation serpent = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/serpent.png");
+    public static ResourceLocation[] soul = {new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/soul.png"),
+                                            new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/soul_2.png"),
+                                            new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/soul_3.png")};
 
 
 
@@ -124,6 +133,12 @@ public class AnubisModel extends PsuedoHierarchicalModel {
             case 12 -> {return raging;}
             case 13 -> {return alluring;}
             case 14 -> {return khopesh;}
+            case 19 -> {return bloodstained;}
+            case 20 -> {return brilliance;}
+            case 21 -> {return context.tickCount % 6 < 3 && PowerTypes.isUsingStand(context) ? chainblade_1 : chainblade_2;}
+            case 22 -> {return chef;}
+            case 23 -> {return serpent;}
+            case 24 -> {return soul[context.tickCount/3 % 3 ];}
 
             case 15 -> {return cleaver;}
             case 16 -> {return illusory;}

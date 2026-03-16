@@ -11,7 +11,6 @@ import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.gui.MemoryRecordScreen;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisAnimations;
-import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
@@ -245,7 +244,9 @@ public class PowersAnubis extends NewDashPreset {
 
     @Override
     public int getJumpHeightAddon() {
-        if (PowerTypes.hasStandActive(self) && !(this.getActivePower() == PowerIndex.BARRAGE_CHARGE)) {
+        if (PowerTypes.hasStandActive(self)
+                && this.getActivePower() != PowerIndex.BARRAGE_CHARGE
+                && this.getActivePower() != PowerIndex.BARRAGE_2) {
             return 1;
         }
         return super.getJumpHeightAddon();
@@ -1772,7 +1773,15 @@ public class PowersAnubis extends NewDashPreset {
             ALLURING = 13,
             KHOPESPH = 14,
             CLEAVER = 15,
-            ILLUSORY = 16;
+            ILLUSORY = 16,
+            // illusory_sheathed -> 17
+            // cleaver_sheathed -> 18
+            BLOODSTAINED = 19,
+            BRILLIANCE = 20,
+            CHAINBLADE = 21,
+            CHEF = 22,
+            SERPENT = 23,
+            SOULBORN = 24;
 
 
     @Override
@@ -1785,21 +1794,27 @@ public class PowersAnubis extends NewDashPreset {
             ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass){
-                $$1.add(ALLURING);
-                $$1.add(RAGING);
-            } if (Level > 2 || bypass){
                 $$1.add(WOODEN);
                 $$1.add(STONE);
+        //        $$1.add(CHEF);
+            } if (Level > 2 || bypass){
+                $$1.add(ALLURING);
+                $$1.add(RAGING);
+                $$1.add(SERPENT);
+           //     $$1.add(SOULBORN);
             } if (Level > 3 || bypass){
                 $$1.add(GRASS);
                 $$1.add(AQUAMARINE);
                 $$1.add(KHOPESPH);
+                $$1.add(CHAINBLADE);
             } if (Level > 4 || bypass){
                 $$1.add(GRAY_WAGON);
                 $$1.add(TIMEKEEPER);
+                $$1.add(BLOODSTAINED);
             } if (Level > 5 || bypass){
                 $$1.add(DIAMOND);
                 $$1.add(CHORUS);
+                $$1.add(BRILLIANCE);
             } if (Level > 6 || bypass){
                 $$1.add(ANCIENT);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
@@ -1829,6 +1844,13 @@ public class PowersAnubis extends NewDashPreset {
             case PowersAnubis.ANCIENT -> Component.translatable("skins.roundabout.anubis.ancient");
             case PowersAnubis.CLEAVER -> Component.translatable("skins.roundabout.anubis.cleaver");
             case PowersAnubis.ILLUSORY -> Component.translatable("skins.roundabout.anubis.illusory");
+            case PowersAnubis.BLOODSTAINED -> Component.translatable("skins.roundabout.anubis.bloodstained");
+            case PowersAnubis.BRILLIANCE -> Component.translatable("skins.roundabout.anubis.brilliance");
+            case PowersAnubis.CHAINBLADE -> Component.translatable("skins.roundabout.anubis.chainblade");
+            case PowersAnubis.CHEF -> Component.translatable("skins.roundabout.anubis.chef");
+            case PowersAnubis.SERPENT -> Component.translatable("skins.roundabout.anubis.serpent");
+            case PowersAnubis.SOULBORN -> Component.translatable("skins.roundabout.anubis.soulborn");
+
             default -> Component.translatable("skins.roundabout.anubis.anime");
         };
     }

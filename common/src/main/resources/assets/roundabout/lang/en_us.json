@@ -1775,7 +1775,7 @@
 
   "skins.roundabout.anubis.anime" : "Anime",
   "skins.roundabout.anubis.evil" : "Evil",
-  "skins.roundabout.anubis.wooden" : "Wooden",
+  "skins.roundabout.anubis.wooden" : "Sacrifical",
   "skins.roundabout.anubis.stone" : "Stone",
   "skins.roundabout.anubis.aquamarine" : "Aquamarine",
   "skins.roundabout.anubis.golden" : "Gilded",
@@ -1790,6 +1790,13 @@
   "skins.roundabout.anubis.khopesh": "Khopesh",
   "skins.roundabout.anubis.cleaver": "Cleaver",
   "skins.roundabout.anubis.illusory": "Illusory",
+  "skins.roundabout.anubis.bloodstained": "Bloodstained",
+  "skins.roundabout.anubis.brilliance": "Brilliance",
+  "skins.roundabout.anubis.chainblade": "Chainblade",
+  "skins.roundabout.anubis.chef": "Chef",
+  "skins.roundabout.anubis.serpent": "Serpent",
+  "skins.roundabout.anubis.soulborn": "Soulborn",
+
 
   "roundabout.anubis.playback_title": "Replay Memories",
   "roundabout.anubis.memory_title": "Record Memories",
