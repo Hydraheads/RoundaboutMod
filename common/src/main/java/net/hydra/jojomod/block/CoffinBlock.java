@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.DoubleBlockCombiner;
 import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
@@ -52,6 +53,13 @@ public class CoffinBlock extends BedBlock {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
+            if (state.getValue(PART) != BedPart.HEAD) {
+                pos = pos.relative(state.getValue(FACING));
+                state = level.getBlockState(pos);
+                if (!state.is(this)) {
+                    return InteractionResult.CONSUME;
+                }
+            }
             if (!state.is(this)) {
                 return InteractionResult.CONSUME;
             } else if (state.getValue(BedBlock.OCCUPIED)) {
