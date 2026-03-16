@@ -1814,7 +1814,7 @@ public class PowersAnubis extends NewDashPreset {
             } if (Level > 5 || bypass){
                 $$1.add(DIAMOND);
                 $$1.add(CHORUS);
-                $$1.add(BRILLIANCE);
+            //    $$1.add(BRILLIANCE);
             } if (Level > 6 || bypass){
                 $$1.add(ANCIENT);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
