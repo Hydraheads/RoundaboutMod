@@ -3,6 +3,7 @@ package net.hydra.jojomod.event.index;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -188,6 +189,13 @@ public enum FateTypes {
                             return true;
                         }
                     }
+                }
+
+            }
+
+            if (pl.isSleeping() && pl.getSleepingPos().isPresent()){
+                if (pl.level().getBlockState(pl.getSleepingPos().get()).is(ModBlocks.COFFIN_BLOCK)){
+                    return true;
                 }
             }
         }

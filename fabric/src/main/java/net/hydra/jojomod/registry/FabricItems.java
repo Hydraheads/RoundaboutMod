@@ -353,6 +353,7 @@ public class FabricItems {
                     .icon(() -> new ItemStack(ModBlocks.GODDESS_STATUE_BLOCK)).displayItems((displayContext, entries) -> {
                         entries.accept(ModBlocks.WOODEN_MANOR_TABLE);
                         entries.accept(ModBlocks.WOODEN_MANOR_CHAIR);
+                        entries.accept(ModBlocks.COFFIN_BLOCK);
                         entries.accept(ModBlocks.WOOL_SLAB_WHITE);
                         entries.accept(ModBlocks.WOOL_SLAB_BLACK);
                         entries.accept(ModBlocks.WOOL_SLAB_BLUE);
@@ -475,7 +476,6 @@ public class FabricItems {
                         //entries.accept(STAND_DISC_WALKING_HEART);
                         entries.accept(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK);
                         entries.accept(ModBlocks.BLOODY_STONE_MASK_BLOCK);
-                        entries.accept(COFFIN_BLOCK_ITEM);
 
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);

@@ -103,7 +103,7 @@ public class ForgeItems {
             () -> new BloodyStoneMaskBlockItem(ForgeBlocks.BLOODY_STONE_MASK_BLOCK.get(),
                     new Item.Properties().stacksTo(1)
             )));
-    public static final RegistryObject<BlockItem> COFFIN_BLOCK_ITEM = addToWIPTab(ITEMS.register("coffin_block",
+    public static final RegistryObject<BlockItem> COFFIN_BLOCK_ITEM = addToBuildingTab(ITEMS.register("coffin_block",
             () -> new CoffinBlockItem(DyeColor.BLACK, ForgeBlocks.COFFIN_BLOCK.get(),
                     new Item.Properties().stacksTo(1)
             )));

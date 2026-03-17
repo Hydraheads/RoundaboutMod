@@ -273,6 +273,8 @@ public class MainUtil {
     public static boolean isHypnotismTargetBlacklisted(Entity ent){
         if (ent == null)
             return false;
+        if (ent instanceof FallenMob)
+            return true;
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
         if (hypnotismMobBlackList != null && !hypnotismMobBlackList.isEmpty() && rl != null && hypnotismMobBlackList.contains(rl.toString())){
             return true;
