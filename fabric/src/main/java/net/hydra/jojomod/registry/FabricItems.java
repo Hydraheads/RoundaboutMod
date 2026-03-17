@@ -53,10 +53,10 @@ public class FabricItems {
     public static Item MAX_STAND_DISC_JUSTICE= registerItem("max_justice_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersJustice(null)));
 
-    public static Item STAND_DISC_D4C = registerItem("d4c_disc",
+    /*public static Item STAND_DISC_D4C = registerItem("d4c_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
     public static Item MAX_STAND_DISC_D4C = registerItem("max_d4c_disc",
-            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null))); */
 
     public static Item STAND_DISC_GREEN_DAY = registerItem("green_day_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersGreenDay(null)));
@@ -88,10 +88,10 @@ public class FabricItems {
     public static Item MAX_STAND_DISC_WALKING_HEART = registerItem("max_walking_heart_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersWalkingHeart(null)));
 
-    public static Item STAND_DISC_KILLER_QUEEN = registerItem("killer_queen_disc",
+   /* public static Item STAND_DISC_KILLER_QUEEN = registerItem("killer_queen_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null)));
     public static Item MAX_STAND_DISC_KILLER_QUEEN = registerItem("max_killer_queen_disc",
-            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null)));
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null))); */
 
     public static Item STAND_DISC_CINDERELLA = registerItem("cinderella_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null)));
@@ -104,10 +104,10 @@ public class FabricItems {
     public static Item STAND_DISC_ACHTUNG = registerItem("achtung_baby_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAchtungBaby(null)));
 
-    public static Item STAND_DISC_DIVER_DOWN = registerItem("diver_down_disc",
+   /* public static Item STAND_DISC_DIVER_DOWN = registerItem("diver_down_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
     public static Item MAX_STAND_DISC_DIVER_DOWN = registerItem("max_diver_down_disc",
-            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null))); */
 
     public static Item STAND_DISC_CREAM = registerItem("cream_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCream(null)));
@@ -525,9 +525,9 @@ public class FabricItems {
         ModItems.STAND_DISC_JUSTICE = STAND_DISC_JUSTICE;
         ((MaxStandDiscItem)MAX_STAND_DISC_JUSTICE).baseDisc = ((StandDiscItem)STAND_DISC_JUSTICE);
         ModItems.MAX_STAND_DISC_JUSTICE = MAX_STAND_DISC_JUSTICE;
-        ((MaxStandDiscItem)MAX_STAND_DISC_D4C).baseDisc = ((StandDiscItem)STAND_DISC_D4C);
+      /*  ((MaxStandDiscItem)MAX_STAND_DISC_D4C).baseDisc = ((StandDiscItem)STAND_DISC_D4C);
         ModItems.MAX_STAND_DISC_D4C = MAX_STAND_DISC_D4C;
-        ModItems.STAND_DISC_D4C = STAND_DISC_D4C;
+        ModItems.STAND_DISC_D4C = STAND_DISC_D4C; */
         ModItems.MAX_STAND_DISC_GREEN_DAY = MAX_STAND_DISC_GREEN_DAY;
         ModItems.STAND_DISC_GREEN_DAY = STAND_DISC_GREEN_DAY;
         ((MaxStandDiscItem)MAX_STAND_DISC_GREEN_DAY).baseDisc = ((StandDiscItem)STAND_DISC_GREEN_DAY);
@@ -540,9 +540,9 @@ public class FabricItems {
         ModItems.STAND_DISC_SOFT_AND_WET = STAND_DISC_SOFT_AND_WET;
         ModItems.MAX_STAND_DISC_SOFT_AND_WET = MAX_STAND_DISC_SOFT_AND_WET;
         ((MaxStandDiscItem)MAX_STAND_DISC_SOFT_AND_WET).baseDisc = ((StandDiscItem)STAND_DISC_SOFT_AND_WET);
-        ModItems.STAND_DISC_KILLER_QUEEN = STAND_DISC_KILLER_QUEEN;
+   /*     ModItems.STAND_DISC_KILLER_QUEEN = STAND_DISC_KILLER_QUEEN;
         ((MaxStandDiscItem)MAX_STAND_DISC_KILLER_QUEEN).baseDisc = ((StandDiscItem)STAND_DISC_KILLER_QUEEN);
-        ModItems.MAX_STAND_DISC_KILLER_QUEEN = MAX_STAND_DISC_KILLER_QUEEN;
+        ModItems.MAX_STAND_DISC_KILLER_QUEEN = MAX_STAND_DISC_KILLER_QUEEN; */
         ModItems.STAND_DISC_CINDERELLA = STAND_DISC_CINDERELLA;
         ModItems.STAND_DISC_HEY_YA = STAND_DISC_HEY_YA;
         ModItems.STAND_DISC_MANDOM = STAND_DISC_MANDOM;
@@ -554,9 +554,9 @@ public class FabricItems {
         ModItems.STAND_DISC_WALKING_HEART = STAND_DISC_WALKING_HEART;
         ModItems.MAX_STAND_DISC_WALKING_HEART = MAX_STAND_DISC_WALKING_HEART;
         ((MaxStandDiscItem)MAX_STAND_DISC_WALKING_HEART).baseDisc = ((StandDiscItem)STAND_DISC_WALKING_HEART);
-        ModItems.STAND_DISC_DIVER_DOWN = STAND_DISC_DIVER_DOWN;
+      /*  ModItems.STAND_DISC_DIVER_DOWN = STAND_DISC_DIVER_DOWN;
         ((MaxStandDiscItem)MAX_STAND_DISC_DIVER_DOWN).baseDisc = ((StandDiscItem)STAND_DISC_DIVER_DOWN);
-        ModItems.MAX_STAND_DISC_DIVER_DOWN = MAX_STAND_DISC_DIVER_DOWN;
+        ModItems.MAX_STAND_DISC_DIVER_DOWN = MAX_STAND_DISC_DIVER_DOWN; */
         ModItems.STAND_DISC_CREAM = STAND_DISC_CREAM;
         ((MaxStandDiscItem)MAX_STAND_DISC_CREAM).baseDisc = ((StandDiscItem)STAND_DISC_CREAM);
         ModItems.MAX_STAND_DISC_CREAM = MAX_STAND_DISC_CREAM;
