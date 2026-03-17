@@ -109,10 +109,10 @@ public class FabricItems {
     public static Item MAX_STAND_DISC_DIVER_DOWN = registerItem("max_diver_down_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null))); */
 
-    public static Item STAND_DISC_CREAM = registerItem("cream_disc",
+ /*   public static Item STAND_DISC_CREAM = registerItem("cream_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCream(null)));
     public static Item MAX_STAND_DISC_CREAM = registerItem("max_cream_disc",
-            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersCream(null)));
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersCream(null))); */
 
     public static Item LUCK_UPGRADE = registerItem("luck_upgrade",
         new SmithingTemplateItem(SmithingTemplates.LUCK_UPGRADE_APPLIES_TO, SmithingTemplates.LUCK_UPGRADE_INGREDIENTS, SmithingTemplates.LUCK_UPGRADE, SmithingTemplates.LUCK_UPGRADE_BASE_SLOT_DESCRIPTION, SmithingTemplates.LUCK_UPGRADE_ADDITIONS_SLOT_DESCRIPTION, SmithingTemplates.createLuckUpgradeIconList(), SmithingTemplates.createLuckMatIconList())
@@ -215,7 +215,7 @@ public class FabricItems {
     public static Item FOG_DIRT_COATING = registerItem("fog_dirt_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_DIRT_COATING, new Item.Properties(), Blocks.DIRT));
     public static Item FOG_TRAP = registerItem("fog_trap", (Item) new FogBlockItem(ModBlocks.FOG_TRAP, new Item.Properties(), Blocks.TRIPWIRE));
 
-    public static Item INTERDIMENSIONAL_KEY = registerItem("interdimensional_key", new InterdimensionalKeyItem(new Item.Properties().stacksTo(1)));
+   // public static Item INTERDIMENSIONAL_KEY = registerItem("interdimensional_key", new InterdimensionalKeyItem(new Item.Properties().stacksTo(1)));
 
     public static Item FLESH_BUCKET = registerItem("flesh_bucket", new FleshBucketItem(new Item.Properties().stacksTo(1).durability(16)));
     public static final FoodProperties CHERRY =new FoodProperties.Builder().nutrition(1).saturationMod(0.0F).alwaysEat()
@@ -484,8 +484,8 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_ANUBIS);
                         //entries.accept(STAND_DISC_DIVER_DOWN);
                         //entries.accept(MAX_STAND_DISC_DIVER_DOWN);
-                        entries.accept(STAND_DISC_CREAM);
-                        entries.accept(MAX_STAND_DISC_CREAM);
+                   //     entries.accept(STAND_DISC_CREAM);
+                   //     entries.accept(MAX_STAND_DISC_CREAM);
                         entries.accept(STAND_DISC_METALLICA);
                         entries.accept(MAX_STAND_DISC_METALLICA);
 
@@ -525,7 +525,7 @@ public class FabricItems {
         ModItems.STAND_DISC_JUSTICE = STAND_DISC_JUSTICE;
         ((MaxStandDiscItem)MAX_STAND_DISC_JUSTICE).baseDisc = ((StandDiscItem)STAND_DISC_JUSTICE);
         ModItems.MAX_STAND_DISC_JUSTICE = MAX_STAND_DISC_JUSTICE;
-      /*  ((MaxStandDiscItem)MAX_STAND_DISC_D4C).baseDisc = ((StandDiscItem)STAND_DISC_D4C);
+   /*     ((MaxStandDiscItem)MAX_STAND_DISC_D4C).baseDisc = ((StandDiscItem)STAND_DISC_D4C);
         ModItems.MAX_STAND_DISC_D4C = MAX_STAND_DISC_D4C;
         ModItems.STAND_DISC_D4C = STAND_DISC_D4C; */
         ModItems.MAX_STAND_DISC_GREEN_DAY = MAX_STAND_DISC_GREEN_DAY;
@@ -557,9 +557,9 @@ public class FabricItems {
       /*  ModItems.STAND_DISC_DIVER_DOWN = STAND_DISC_DIVER_DOWN;
         ((MaxStandDiscItem)MAX_STAND_DISC_DIVER_DOWN).baseDisc = ((StandDiscItem)STAND_DISC_DIVER_DOWN);
         ModItems.MAX_STAND_DISC_DIVER_DOWN = MAX_STAND_DISC_DIVER_DOWN; */
-        ModItems.STAND_DISC_CREAM = STAND_DISC_CREAM;
+       /* ModItems.STAND_DISC_CREAM = STAND_DISC_CREAM;
         ((MaxStandDiscItem)MAX_STAND_DISC_CREAM).baseDisc = ((StandDiscItem)STAND_DISC_CREAM);
-        ModItems.MAX_STAND_DISC_CREAM = MAX_STAND_DISC_CREAM;
+        ModItems.MAX_STAND_DISC_CREAM = MAX_STAND_DISC_CREAM;*/
         ModItems.LUCK_UPGRADE = LUCK_UPGRADE;
         ModItems.EXECUTION_UPGRADE = EXECUTION_UPGRADE;
         ModItems.LUCK_SWORD = LUCK_SWORD;
@@ -649,7 +649,7 @@ public class FabricItems {
         ModItems.MUSIC_DISC_TORTURE_DANCE = MUSIC_DISC_TORTURE_DANCE;
         ModItems.MUSIC_DISC_HALLELUJAH = MUSIC_DISC_HALLELUJAH;
         ModItems.FOG_BLOCK_ITEMS = FOG_BLOCK_ITEMS;
-        ModItems.INTERDIMENSIONAL_KEY = INTERDIMENSIONAL_KEY;
+     //   ModItems.INTERDIMENSIONAL_KEY = INTERDIMENSIONAL_KEY;
         ModItems.FLESH_BUCKET = FLESH_BUCKET;
         ModItems.CHERRIES = CHERRIES;
 
