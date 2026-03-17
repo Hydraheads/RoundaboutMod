@@ -4,7 +4,6 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.util.S2CPacketUtil;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -37,7 +36,7 @@ public class AnubisPossessorEntity extends GroundPathfindingStandAttackEntity {
                     dist = tDist;
                     this.target = target;
                     if (((AnubisPossessorEntity) this.mob).getUser() instanceof Player P) {
-                        S2CPacketUtil.syncPossessor(P,this.target.getId());
+                        S2CPacketUtil.syncPossessorTarget(P,this.target.getId());
                     }
                 } else if (!this.mob.getSensing().hasLineOfSight(target) || !target.isAlive()) {
                     Mob.targets.remove(target);

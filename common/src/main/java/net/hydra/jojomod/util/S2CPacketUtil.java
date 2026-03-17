@@ -3,14 +3,11 @@ package net.hydra.jojomod.util;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.networking.ServerToClientPackets;
-import net.hydra.jojomod.stand.powers.PowersCream;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.core.Vec3i;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.zetalasis.networking.message.api.ModMessageEvents;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 /**it is NOT okay to have client only classes here
@@ -387,11 +384,12 @@ public class S2CPacketUtil {
         }
     }
 
-    public static void syncPossessor(Player player, int i) {
-        if (player instanceof ServerPlayer SP) {
-            ModMessageEvents.sendToPlayer(SP,
+    public static void syncPossessorTarget(Player player, int target) {
+        if (player instanceof ServerPlayer) {
+            ModMessageEvents.sendToAll(
                     ServerToClientPackets.S2CPackets.MESSAGES.SyncPossessor.value,
-                    i
+                    player.getId(),
+                    target
             );
         }
     }

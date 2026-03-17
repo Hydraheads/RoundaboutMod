@@ -104,6 +104,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Unique;
 
+import java.nio.file.Path;
 import java.util.*;
 
 
@@ -754,8 +755,9 @@ public class ClientUtil {
                     ClientUtil.applyClientRecoil(player, sigmaString);
                 }
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPossessor.value)) {
-                    int i = (int) vargs[0];
-                    ((StandUser)player).roundabout$getPossessor().setTarget((LivingEntity) player.level().getEntity(i));
+                    Player possessed = (Player) player.level().getEntity((int)vargs[0]);
+                    LivingEntity target = (LivingEntity) player.level().getEntity((int)vargs[1]);
+                    ((StandUser)possessed).roundabout$getPossessor().setTarget(target);
                 }
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ShatterIce.value)) {
                     int i = (int) vargs[0];
