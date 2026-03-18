@@ -1330,7 +1330,7 @@
   "ability.roundabout.ratt_scope": "Scoped Mode",
   "ability.roundabout.ratt_scope.desc": "Hold Ratt and scope in, allowing you to shoot while moving. Interacting builds charge, and punching releases it as a flurry of darts.",
   "ability.roundabout.ratt_fire": "Fire Darts",
-  "ability.roundabout.ratt_fire.desc": "Shoots a volley of three darts, inflicting melt.",
+  "ability.roundabout.ratt_fire.desc": "Shoots a volley of three darts, inflicting melt and breaking block on the final hit",
   "ability.roundabout.ratt_mode_change": "Mode Change",
   "ability.roundabout.ratt_mode_change.desc": "Changes your manual firing mode between Single Fire and Burst Fire. Single Fire shoots one, stronger dart with greater knockback, damage, and melt duration.",
   "ability.roundabout.ratt_place": "Ratt Place",
