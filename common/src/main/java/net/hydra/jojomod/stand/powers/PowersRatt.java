@@ -1240,11 +1240,11 @@ public class PowersRatt extends NewDashPreset {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,2, "ability.roundabout.ratt_scope",
                 "instruction.roundabout.press_skill", StandIcons.RATT_SCOPE_IN,1,level,bypas));
         // charge fire
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+118,3, "ability.roundabout.ratt_single",
-                "instruction.roundabout.hold_block", StandIcons.RATT_SINGLE,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+118,2, "ability.roundabout.ratt_fire",
+                "instruction.roundabout.hold_block", StandIcons.RATT_BURST,0,level,bypas));
         // burst fire
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+99,2, "ability.roundabout.ratt_burst",
-                "instruction.roundabout.press_skill", StandIcons.RATT_BURST,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+99,3, "ability.roundabout.ratt_mode_change",
+                "instruction.roundabout.press_skill", StandIcons.RATT_SINGLE,2,level,bypas));
         // place ratt
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.ratt_place",
                 "instruction.roundabout.press_skill", StandIcons.RATT_PLACE,2,level,bypas));

@@ -327,7 +327,7 @@ public class RattDartEntity extends AbstractArrow {
         Entity $$4 = this.getOwner();
         DamageSource $$5 = ModDamageTypes.of($$1.level(),ModDamageTypes.STAND);
         if (this.getOwner() != null) {
-            $$5 = ModDamageTypes.of($$1.level(),ModDamageTypes.STAND,this.getOwner());
+            $$5 = ModDamageTypes.of($$1.level(),ModDamageTypes.STAND,this,this.getOwner());
         }
 
 
