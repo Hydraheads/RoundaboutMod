@@ -359,6 +359,10 @@
   "entity.roundabout.item_launching_bubble": "Item Launching Bubble",
   "entity.roundabout.go_beyond": "Go Beyond",
   "entity.roundabout.ground_bubble": "Underground Bubble",
+  "entity.roundabout.separated_legs": "Separated legs",
+  "entity.roundabout.separated_arm": "Seperated Arm",
+  "entity.roundabout.separated_arm_slim": "Seperated Arm Slim",
+
 
   "entity.roundabout.water_bottle": "Water Bottle",
   "entity.roundabout.bowler_hat": "Bowler Hat",
