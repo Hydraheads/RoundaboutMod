@@ -21,10 +21,7 @@ import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
-import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
-import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
-import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
-import net.hydra.jojomod.entity.substand.SeperatedLegsEntity;
+import net.hydra.jojomod.entity.substand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -693,6 +690,14 @@ public class FabricEntities {
                             sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":seperated_arm")
             );
 
+    public static final EntityType<SeperatedArmSlimEntity> SEPERATED_ARM_SLIM =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "seperated_arm_slim"),
+                    EntityType.Builder.<SeperatedArmSlimEntity>of(SeperatedArmSlimEntity::new, MobCategory.MISC).
+                            sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":seperated_arm_slim")
+            );
+
 
     public static final EntityType<MetallicaKnifeEntity> METALLICA_KNIFE =
             Registry.register(
@@ -745,6 +750,7 @@ public class FabricEntities {
                 ModEntities.LIFE_TRACKER = LIFE_TRACKER;
                 ModEntities.SEPERATED_LEGS = SEPERATED_LEGS;
                 ModEntities.SEPERATED_ARM = SEPERATED_ARM;
+                ModEntities.SEPERATED_ARM_SLIM = SEPERATED_ARM_SLIM;
                 ModEntities.STAND_FIREBALL = STAND_FIREBALL;
                 ModEntities.EVIL_AURA_PROJECTILE = EVIL_AURA_PROJECTILE;
                 ModEntities.RIPPER_EYES_PROJECTILE = RIPPER_EYES_PROJECTILE;
@@ -871,6 +877,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(LIFE_TRACKER, LifeTrackerEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SEPERATED_LEGS, SeperatedLegsEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SEPERATED_ARM, SeperatedArmEntity.createStandAttributes());
+            FabricDefaultAttributeRegistry.register(SEPERATED_ARM_SLIM, SeperatedArmEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(D4C_CLONE, D4CCloneEntity.createAttributes());
 
                 /*Spawn Weights and Biomes*/

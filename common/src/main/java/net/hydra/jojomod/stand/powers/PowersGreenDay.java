@@ -8,7 +8,6 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 
-import net.hydra.jojomod.entity.projectile.StandFireballEntity;
 import net.hydra.jojomod.entity.stand.GreenDayEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
@@ -21,53 +20,29 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.mixin.PlayerEntity;
-import net.hydra.jojomod.mixin.StandUserEntity;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 
-import net.minecraft.core.UUIDUtil;
-import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.Main;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.AirBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.FlowerBlock;
-import net.minecraft.world.level.levelgen.WorldDimensions;
-import net.minecraft.world.level.storage.WorldData;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
-import org.spongepowered.asm.mixin.Unique;
 
 import java.util.*;
 
@@ -226,6 +201,7 @@ public class PowersGreenDay extends NewPunchingStand {
         }
     }
     public boolean IsMoldFieldActive = false;
+    public static final byte MAIN_ARM_THROW_SLIM = 52;
 
     @Override
     public boolean setPowerOther(int move, int lastMove) {
@@ -245,11 +221,15 @@ public class PowersGreenDay extends NewPunchingStand {
                 return moldLeapServer();
             }
             case PowerIndex.POWER_1 -> {
-                return MainArmThrowServer();
+                return MainArmThrowServer(ModEntities.SEPERATED_ARM.create(this.self.level()));
             }
 
             case PowerIndex.POWER_1_SNEAK -> {
                 return MainArmReturnServer();
+            }
+
+            case MAIN_ARM_THROW_SLIM -> {
+                return MainArmThrowServer(ModEntities.SEPERATED_ARM_SLIM.create(this.self.level()));
             }
         }
         return super.setPowerOther(move,lastMove);
@@ -260,6 +240,7 @@ public class PowersGreenDay extends NewPunchingStand {
 
     @Override
     public void tickPower() {
+
         moldShenanigans();
         if(legGoneTicks>0) {
             if (!this.self.level().isClientSide()) {
@@ -335,9 +316,14 @@ public class PowersGreenDay extends NewPunchingStand {
 
     public SeperatedArmEntity Main_arm = null;
 
-    public boolean MainArmThrowServer(){
+    public boolean slimSkin = false;
+    public boolean toggleSlimSkin(){
+        slimSkin = true;
+        return true;
+    }
+
+    public boolean MainArmThrowServer(SeperatedArmEntity SAE){
         if (Main_arm == null) {
-            SeperatedArmEntity SAE = ModEntities.SEPERATED_ARM.create(this.self.level());
             if (SAE != null) {
                 SAE.setUser(this.self);
                 SAE.setXRot(this.self.getXRot());
@@ -350,6 +336,7 @@ public class PowersGreenDay extends NewPunchingStand {
             }
             this.self.getMainHandItem().setCount(0);
             Vec3 location = getRayBlock(this.self, 1f);
+
            // ((ServerLevel) this.self.level()).sendParticles(ModParticles.MOLD_DUST, location.x,
              //       location.y, location.z,
                //     24,
@@ -380,7 +367,16 @@ public class PowersGreenDay extends NewPunchingStand {
                 this.setCooldown(PowerIndex.SKILL_1, 120);
                 HasMainArmCharge=true;
             }
-            tryPowerPacket(PowerIndex.POWER_1);
+            if(isClient()){
+                AbstractClientPlayer abstractClientPlayer = (AbstractClientPlayer) this.self;
+                if ((abstractClientPlayer).getModelName().equals("default")) {
+                    tryPowerPacket(PowerIndex.POWER_1);
+                }
+                else{
+                    tryPowerPacket(MAIN_ARM_THROW_SLIM);
+                }
+
+            }
             HasMainArm = false;
         }
 
@@ -620,6 +616,9 @@ public class PowersGreenDay extends NewPunchingStand {
 
                         legGoneTicks = 240;
                         ((StandUser)this.self).rdbt$SetCrawlTicks(240);
+                        getBarrageWindup();
+
+
                         tryPowerPacket(PowerIndex.POWER_3_EXTRA);
 
                         bonusLeapCount = 3;

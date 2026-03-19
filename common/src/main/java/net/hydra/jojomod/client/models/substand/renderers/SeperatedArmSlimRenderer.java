@@ -5,10 +5,9 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
-import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.client.models.stand.renderers.StandRenderer;
-import net.hydra.jojomod.client.models.substand.SeperatedArmModel;
-import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
+import net.hydra.jojomod.client.models.substand.SeperatedArmSlimModel;
+import net.hydra.jojomod.entity.substand.SeperatedArmSlimEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -19,24 +18,24 @@ import net.minecraft.world.entity.player.Player;
 
 import java.util.Map;
 
-public class SeperatedArmRenderer extends StandRenderer<SeperatedArmEntity> {
+public class SeperatedArmSlimRenderer extends StandRenderer<SeperatedArmSlimEntity> {
     private static final ResourceLocation PART_FIVE_GREEN_DAY = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/part_four_green_day.png");
 
 
-    public SeperatedArmRenderer(EntityRendererProvider.Context context) {
-        super(context, new SeperatedArmModel<>(context.bakeLayer(ModEntityRendererClient.SEPERATED_ARM_LAYER)), 0f);
+    public SeperatedArmSlimRenderer(EntityRendererProvider.Context context) {
+        super(context, new SeperatedArmSlimModel<>(context.bakeLayer(ModEntityRendererClient.SEPERATED_ARM_SLIM_LAYER)), 0f);
     }
 
 
     @Override
-    public ResourceLocation getTextureLocation(SeperatedArmEntity seperatedArmEntity) {
+    public ResourceLocation getTextureLocation(SeperatedArmSlimEntity seperatedArmSlimEntity) {
 
         //Player user = (Player)seperatedLegsEntity.getUser();
         //GameProfile profile = user.getGameProfile();
-        Player P =((Player)seperatedArmEntity.getUser());
+        Player P =((Player)seperatedArmSlimEntity.getUser());
         if( P != null || false) {
             if (P.getGameProfile() != null) {
-                return getSkin(((Player) seperatedArmEntity.getUser()).getGameProfile());
+                return getSkin(((Player) seperatedArmSlimEntity.getUser()).getGameProfile());
             } else {
                 return PART_FIVE_GREEN_DAY;
             }
@@ -61,7 +60,7 @@ public class SeperatedArmRenderer extends StandRenderer<SeperatedArmEntity> {
     }
 
     @Override
-    public void render(SeperatedArmEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
+    public void render(SeperatedArmSlimEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
 }

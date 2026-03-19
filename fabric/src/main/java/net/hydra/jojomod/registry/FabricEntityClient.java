@@ -20,6 +20,7 @@ import net.hydra.jojomod.client.models.projectile.renderers.*;
 import net.hydra.jojomod.client.models.stand.*;
 import net.hydra.jojomod.client.models.stand.renderers.*;
 import net.hydra.jojomod.client.models.substand.SeperatedArmModel;
+import net.hydra.jojomod.client.models.substand.SeperatedArmSlimModel;
 import net.hydra.jojomod.client.models.substand.SeperatedLegsModel;
 import net.hydra.jojomod.client.models.substand.renderers.*;
 import net.hydra.jojomod.client.models.visages.*;
@@ -146,6 +147,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.ROAD_ROLLER_ENTITY, RoadRollerEntityRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SEPERATED_LEGS, SeperatedLegsRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SEPERATED_ARM, SeperatedArmRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.SEPERATED_ARM_SLIM, SeperatedArmSlimRenderer::new);
 
         EntityRendererRegistry.register(FabricEntities.METALLICA_KNIFE, KnifeRenderer::new);
 
@@ -189,6 +191,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.LIFE_DETECTOR, LifeTrackerModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SEPERATED_LEGS_LAYER, SeperatedLegsModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SEPERATED_ARM_LAYER, SeperatedArmModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SEPERATED_ARM_SLIM_LAYER, SeperatedArmSlimModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STAND_FIREBALL_LAYER, StandFireballModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.RIPPER_EYES_LAYER, RipperEyesModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GASOLINE_LAYER, GasolineCanModel::createBodyLayer);

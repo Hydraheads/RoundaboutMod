@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StandFireBlock;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -14,6 +15,7 @@ import net.hydra.jojomod.item.KnifeItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -74,7 +76,7 @@ public class SeperatedArmEntity extends StandEntity {
         }
     }
 
-    public SeperatedArmEntity(EntityType<SeperatedArmEntity> $$0, Level $$1) {
+    public SeperatedArmEntity(EntityType<? extends StandEntity> $$0, Level $$1) {
         super($$0, $$1);
     }
 
@@ -116,8 +118,15 @@ public class SeperatedArmEntity extends StandEntity {
     }
     public int flyingTicks=0;
 
+
     @Override
     public void tick() {
+
+
+        tickeffects();
+    }
+
+    public void tickeffects() {
         this.setFadeOut((byte)1);
         boolean client = this.level().isClientSide();
         LivingEntity user = this.getUser();
