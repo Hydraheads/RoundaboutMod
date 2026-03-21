@@ -138,7 +138,11 @@ public class SeperatedArmEntity extends StandEntity {
             if(user == null){
                 spawnAtLocation(this.getMainHandItem());
                 this.discard();
-            }else{
+            }else if(!(((StandUser)user).roundabout$getStandPowers() instanceof PowersGreenDay)){
+                spawnAtLocation(this.getMainHandItem());
+                this.discard();
+            }
+            else{
                 if(!onGround()){
                     flyingTicks +=1;
                 }
