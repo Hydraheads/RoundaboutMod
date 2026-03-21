@@ -1,5 +1,7 @@
 package net.hydra.jojomod.entity.substand;
 
+import com.mojang.datafixers.util.Pair;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StandFireBlock;
@@ -48,6 +50,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -163,26 +167,31 @@ public class SeperatedArmEntity extends StandEntity {
                         boolean axeable = block.is(BlockTags.MINEABLE_WITH_AXE) && RightTier;
                         boolean shovelable = block.is(BlockTags.MINEABLE_WITH_SHOVEL) && RightTier;
 
+                        BlockState state = this.level().getBlockState(IsArmContactingBlock());
+                        ServerLevel level = (ServerLevel) this.level();
 
+                        BlockPos targetpos = IsArmContactingBlock();
+                        
                         if (this.getMainHandItem().getItem() instanceof PickaxeItem) {
                             if (pickaxeable) {
-                                this.level().destroyBlock(IsArmContactingBlock(), true);
+                                level.destroyBlock(targetpos, true,this);
                                 this.setDeltaMovement(0, 0, 0);
                                 Can_activate = false;
                             }
 
                         }
-                        if (this.getMainHandItem().getItem() instanceof ShovelItem) {
+                        else if (this.getMainHandItem().getItem() instanceof ShovelItem) {
                             if (shovelable) {
-                                this.level().destroyBlock(IsArmContactingBlock(), true);
+                                level.destroyBlock(targetpos, true, this);
                                 this.setDeltaMovement(0, 0, 0);
                                 Can_activate = false;
                             }
 
                         }
-                        if (this.getMainHandItem().getItem() instanceof AxeItem) {
+                        else if (this.getMainHandItem().getItem() instanceof AxeItem) {
                             if (axeable) {
-                                this.level().destroyBlock(IsArmContactingBlock(), true);
+                                level.destroyBlock(targetpos, true,this);
+
                                 this.setDeltaMovement(0, 0, 0);
                                 Can_activate = false;
                             }
@@ -257,7 +266,7 @@ public class SeperatedArmEntity extends StandEntity {
 
             Entity entity = damages.get(j);
 
-            if(!((entity.equals((Object)this) ||entity.equals((Object)user)) || entity instanceof StandEntity)) {
+            if(!((entity.equals((Object)this) ||entity.equals((Object)user)) || entity instanceof StandEntity || entity instanceof ItemEntity)) {
                 if(item instanceof KnifeItem){
                     float $$2;
                     Entity $$1 = entity;
@@ -318,7 +327,6 @@ public class SeperatedArmEntity extends StandEntity {
             }
         }
     }
-
 
     @Override
     public boolean isInvulnerableTo(DamageSource $$0) {
