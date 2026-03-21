@@ -593,7 +593,7 @@ public class ForgeEntities {
             );
 
     public static final RegistryObject<EntityType<SeperatedArmSlimEntity>> SEPERATED_ARM_SLIM =
-            ENTITY_TYPES.register("seperated_arm", () ->
+            ENTITY_TYPES.register("seperated_arm_slim", () ->
                     EntityType.Builder.<SeperatedArmSlimEntity>of(SeperatedArmSlimEntity::new, MobCategory.MISC).
                             sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":seperated_arm_slim")
             );
