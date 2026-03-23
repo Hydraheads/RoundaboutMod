@@ -420,7 +420,7 @@ public class PowersGreenDay extends NewPunchingStand {
         listInit();
         if(!(((StandUser) this.self).roundabout$getTargetEntity(this.self,16)==null)) {
             Entity targetEnt = ((StandUser) this.self).roundabout$getTargetEntity(this.self, 16);
-            if(!allies.contains(targetEnt.getStringUUID())) {
+                        if(!allies.contains(targetEnt.getStringUUID())) {
                 allies.add(targetEnt.getStringUUID());
             }
             else{
