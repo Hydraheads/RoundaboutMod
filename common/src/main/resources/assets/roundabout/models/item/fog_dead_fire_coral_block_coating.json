@@ -1,0 +1,6 @@
+{
+  "parent": "roundabout:item/fog_coating",
+  "textures": {
+    "layer0": "minecraft:block/dead_fire_coral_block"
+  }
+}
