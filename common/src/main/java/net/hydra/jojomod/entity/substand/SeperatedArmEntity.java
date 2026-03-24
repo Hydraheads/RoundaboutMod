@@ -7,6 +7,7 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StandFireBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.projectile.GoBeyondEntity;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -28,6 +29,8 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
@@ -39,23 +42,33 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.GoalSelector;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.animal.*;
+import net.minecraft.world.entity.animal.goat.Goat;
+import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
+import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.injection.Inject;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class SeperatedArmEntity extends StandEntity {
@@ -63,6 +76,8 @@ public class SeperatedArmEntity extends StandEntity {
     String context = "left_hand";
     public final AnimationState floating = new AnimationState();
     public boolean Can_activate = true;
+    public int FireworkLaunchTicks = 0;
+    public Vec3 LaunchAngle = null;
 
     public static final byte
             IDLE=11;
@@ -93,7 +108,20 @@ public class SeperatedArmEntity extends StandEntity {
                 0.1);
         //this.setDeltaMovement(jumpT0Pos);
         this.lookAt(EntityAnchorArgument.Anchor.EYES,jumpT0Pos);
-        this.setDeltaMovement((this.getLookAngle().multiply(1.5,1.5,1.5)).add(0,0.5,0));
+        if(this.getMainHandItem().getItem() instanceof FireworkRocketItem FRE){
+
+            level().playSound(null, this.blockPosition(), SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.PLAYERS, 1.0F, 1.0F);
+            this.getMainHandItem().setCount(this.getMainHandItem().getCount() - 1);
+            CompoundTag fireworks = getMainHandItem().getTag().getCompound("Fireworks");
+            if(fireworks.contains("Flight")){
+                FireworkLaunchTicks = (fireworks.getByte("Flight")) * 20;
+            }
+            this.setDeltaMovement((this.getLookAngle().multiply(1.5,1.5,1.5)).add(0,0,0));
+        }else{
+            this.setDeltaMovement((this.getLookAngle().multiply(1.5,1.5,1.5)).add(0,0.5,0));
+        }
+
+        LaunchAngle = this.getDeltaMovement();
         Can_activate = true;
         flyingTicks=0;
     }
@@ -204,7 +232,19 @@ public class SeperatedArmEntity extends StandEntity {
                     }
                     doAttack();
                 }
+                attractMobs();
                 pickUpItems();
+            }
+
+            if(FireworkLaunchTicks > 0){
+                FireworkLaunchTicks --;
+                this.setDeltaMovement(LaunchAngle);
+                ((ServerLevel) this.level()).sendParticles(ParticleTypes.FIREWORK,
+                        this.getX(),
+                        this.getY() + 0.15 ,
+                        this.getZ(),
+                        1,0,0,0,0);
+
             }
 
             for(int i = 0; i < 2; i = i + 1) {
@@ -228,6 +268,26 @@ public class SeperatedArmEntity extends StandEntity {
         }
 
         super.tick();
+    }
+
+    public void attractMobs(){
+        List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),16,16,16);
+        for(int j = 0;j<damages.size();j++) {
+            Entity entity = damages.get(j);
+            if(entity instanceof Mob mob){
+                if(((entity instanceof Sheep || entity instanceof Cow || entity instanceof Goat) && (Ingredient.of(new ItemLike[]{Items.WHEAT})).test(getMainHandItem()))
+                        ||(((entity instanceof Chicken || entity instanceof Parrot) && (Ingredient.of(new ItemLike[]{Items.WHEAT_SEEDS, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, Items.BEETROOT_SEEDS, Items.TORCHFLOWER_SEEDS, Items.PITCHER_POD})).test(getMainHandItem())))
+                        ||(entity instanceof Pig && (Ingredient.of(new ItemLike[]{Items.CARROT, Items.POTATO, Items.BEETROOT})).test(getMainHandItem()))
+                ) {
+                    PathNavigation nav = mob.getNavigation();
+                    Path path = nav.createPath(this.getX(), this.getY(), this.getZ(), 1);
+                    if (path != null) {
+                        nav.moveTo(path, 1);
+                    }
+                }
+            }
+        }
+
     }
 
     public void pickUpItems(){
@@ -262,6 +322,8 @@ public class SeperatedArmEntity extends StandEntity {
         }
     }
 
+
+
     public void doAttack() {
         LivingEntity user = this.getUser();
         Item item = (this.getMainHandItem().getItem());
@@ -272,6 +334,8 @@ public class SeperatedArmEntity extends StandEntity {
 
             if(!((entity.equals((Object)this) ||entity.equals((Object)user)) || entity instanceof StandEntity || entity instanceof ItemEntity)) {
                 if(item instanceof KnifeItem){
+                    Can_activate = false;
+                    this.setDeltaMovement(0,0,0);
                     float $$2;
                     Entity $$1 = entity;
 
@@ -314,17 +378,43 @@ public class SeperatedArmEntity extends StandEntity {
                         this.playSound($$6, 1.0F, (this.random.nextFloat() * 0.2F + 0.9F));
                         this.getMainHandItem().setCount(this.getMainHandItem().getCount() - 1);
                     }
-                }else{
+                    Vec3 location = new Vec3(this.getX(),this.getY(),this.getZ());
+                    ((ServerLevel) this.level()).sendParticles(ParticleTypes.CRIT, location.x,
+                            location.y, location.z,
+                            16,
+                            0.45, 0.45, 0.45,
+                            0.1);
+
+                }else if(this.getMainHandItem().getItem() instanceof ShieldItem){
+                    Can_activate = true;
+                    if(entity instanceof Projectile && !(entity instanceof GoBeyondEntity)){
+                        entity.discard();
+
+                        Vec3 location = new Vec3(this.getX(),this.getY(),this.getZ());
+                        ((ServerLevel) this.level()).sendParticles(ModParticles.PUNCH_MISS, location.x,
+                                location.y, location.z,
+                                1,
+                                0, 0, 0,
+                                0.1);
+
+
+                    }
+                }
+
+                else {
+                    Can_activate = false;
+                    this.setDeltaMovement(0,0,0);
+                    Vec3 location = new Vec3(this.getX(),this.getY(),this.getZ());
+                    ((ServerLevel) this.level()).sendParticles(ParticleTypes.CRIT, location.x,
+                            location.y, location.z,
+                            16,
+                            0.45, 0.45, 0.45,
+                            0.1);
                     entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user),(Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue())*1.5f);
                 }
-                Can_activate = false;
-                this.setDeltaMovement(0,0,0);
-                Vec3 location = new Vec3(this.getX(),this.getY(),this.getZ());
-                ((ServerLevel) this.level()).sendParticles(ParticleTypes.CRIT, location.x,
-                        location.y, location.z,
-                        10,
-                        0.05, 0.05, 0.05,
-                        0.1);
+
+
+
                 if(item instanceof KnifeItem){
 
                 }
