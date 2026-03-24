@@ -21,6 +21,8 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.nbt.CompoundTag;
@@ -54,6 +56,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AirBlock;
@@ -66,6 +69,7 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.injection.Inject;
 
 import java.util.Arrays;
@@ -76,8 +80,13 @@ public class SeperatedArmEntity extends StandEntity {
     String context = "left_hand";
     public final AnimationState floating = new AnimationState();
     public boolean Can_activate = true;
+    public boolean Can_activate_special = false;
     public int FireworkLaunchTicks = 0;
     public Vec3 LaunchAngle = null;
+    public int SpinTicks = 0;
+
+    public void setSpinTicks(int val){SpinTicks = val;};
+
 
     public static final byte
             IDLE=11;
@@ -172,11 +181,14 @@ public class SeperatedArmEntity extends StandEntity {
             }
             else{
                 if(!onGround()){
+                    Roundabout.LOGGER.info(Integer.toString(flyingTicks));
                     flyingTicks +=1;
+                }else{
+                    flyingTicks = 0;
                 }
-                if(Can_activate  && flyingTicks > 2) {
+                if(Can_activate_special || (Can_activate  && flyingTicks > 2)) {
                     ItemStack item = (this.getMainHandItem());
-                    if (!(this.IsArmContactingBlock() == null)) {
+                    if (!(this.IsArmContactingBlock() == null) && Can_activate) {
                         BlockState block = (this.level().getBlockState(this.IsArmContactingBlock()));
 
 
@@ -231,9 +243,11 @@ public class SeperatedArmEntity extends StandEntity {
                         }
                     }
                     doAttack();
+                    Can_activate_special = false;
                 }
                 attractMobs();
                 pickUpItems();
+                doSpin();
             }
 
             if(FireworkLaunchTicks > 0){
@@ -268,6 +282,28 @@ public class SeperatedArmEntity extends StandEntity {
         }
 
         super.tick();
+    }
+
+    public void doSpin(){
+        if(SpinTicks > 0){
+            for(int i = 0; i < 1; i = i + 1) {
+                double randX = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
+                double randY = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
+                double randZ = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
+                ((ServerLevel) level()).sendParticles(new DustParticleOptions(new Vector3f(0.76F, 1.0F, 0.9F
+                        ), 2f),
+                        this.getX() + randX,
+                        this.getY() + randY,
+                        this.getZ() + randZ,
+                        0,0,0.2,0,0);
+
+            }
+            SpinTicks --;
+            Can_activate_special = true;
+            this.setYRot(this.getYRot() + 25);
+            this.setYHeadRot(this.getYHeadRot() + 45);
+
+        }
     }
 
     public void attractMobs(){
@@ -328,11 +364,24 @@ public class SeperatedArmEntity extends StandEntity {
         LivingEntity user = this.getUser();
         Item item = (this.getMainHandItem().getItem());
         List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),1,1,1);
+        if(SpinTicks >0){
+            damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),2,2,2);
+        }
+
+
         for(int j = 0;j<damages.size();j++){
 
             Entity entity = damages.get(j);
 
-            if(!((entity.equals((Object)this) ||entity.equals((Object)user)) || entity instanceof StandEntity || entity instanceof ItemEntity)) {
+
+            if(!((entity.equals(this) ||entity.equals((Object)user)) || entity instanceof StandEntity || entity instanceof ItemEntity)) {
+                if (flyingTicks > 2 && SpinTicks >0) {
+                    BlockPos pos = new BlockPos(new Vec3i((int) this.getX(), (int) (this.getY() - 0.2), (int) this.getZ()));
+                    if ((level().getBlockState(new BlockPos(pos)).isAir())) {
+                        entity.addDeltaMovement(new Vec3(0, 0.2, 0));
+                    }
+                }
+
                 if(item instanceof KnifeItem){
                     Can_activate = false;
                     this.setDeltaMovement(0,0,0);
@@ -412,12 +461,6 @@ public class SeperatedArmEntity extends StandEntity {
                             0.1);
                     entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user),(Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue())*1.5f);
                 }
-
-
-
-                if(item instanceof KnifeItem){
-
-                }
             }
         }
     }
@@ -426,6 +469,7 @@ public class SeperatedArmEntity extends StandEntity {
     public boolean isInvulnerableTo(DamageSource $$0) {
         return true;
     }
+
 
     @Override
     public boolean fireImmune() {

@@ -30,8 +30,10 @@ import net.minecraft.client.gui.GuiGraphics;
 
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 
+import net.minecraft.server.Main;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -177,6 +179,10 @@ public class PowersGreenDay extends NewPunchingStand {
             case SKILL_1_CROUCH -> {
                 MainArmReturn();
             }
+
+            case SKILL_1_GUARD -> {
+                MainArmSpin();
+            }
             case SKILL_3_NORMAL -> {
                 Roundabout.LOGGER.info("dash");
                 dash();
@@ -226,6 +232,10 @@ public class PowersGreenDay extends NewPunchingStand {
 
             case PowerIndex.POWER_1_SNEAK -> {
                 return MainArmReturnServer();
+            }
+
+            case PowerIndex.POWER_1_BLOCK -> {
+                return MainArmSpinServer();
             }
 
             case MAIN_ARM_THROW_SLIM -> {
@@ -322,9 +332,25 @@ public class PowersGreenDay extends NewPunchingStand {
         return true;
     }
 
+    public void MainArmSpin(){
+        if(isClient()) {
+                tryPowerPacket(PowerIndex.POWER_1_BLOCK);
+
+        }
+
+    }
+
+    public boolean MainArmSpinServer(){
+
+            Main_arm.setSpinTicks(30);
+            Main_arm.flyingTicks = 0;
+        return true;
+    }
+
     public boolean MainArmThrowServer(SeperatedArmEntity SAE){
         if (Main_arm == null) {
             if (SAE != null) {
+                Main_arm = SAE;
                 SAE.setUser(this.self);
                 SAE.setXRot(this.self.getXRot());
                 SAE.setYRot(this.self.getYRot());
@@ -420,7 +446,7 @@ public class PowersGreenDay extends NewPunchingStand {
         listInit();
         if(!(((StandUser) this.self).roundabout$getTargetEntity(this.self,16)==null)) {
             Entity targetEnt = ((StandUser) this.self).roundabout$getTargetEntity(this.self, 16);
-                        if(!allies.contains(targetEnt.getStringUUID())) {
+            if(!allies.contains(targetEnt.getStringUUID())) {
                 allies.add(targetEnt.getStringUUID());
             }
             else{
