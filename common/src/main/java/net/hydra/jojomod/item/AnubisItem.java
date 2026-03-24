@@ -71,15 +71,6 @@ public class AnubisItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack $$0, @Nullable Level $$1, List<Component> $$2, TooltipFlag $$3) {
-        $$2.add(Component.translatable("leveling.roundabout.disc_wip").withStyle(ChatFormatting.RED));
-        $$2.add(Component.translatable("leveling.roundabout.disc_wip_2").withStyle(ChatFormatting.RED));
-        $$2.add(Component.translatable("roundabout.dev_status.dev_status").withStyle(ChatFormatting.WHITE)
-                .append(" ")
-                .append(Component.translatable("roundabout.dev_status.active")).withStyle(ChatFormatting.YELLOW));
-        $$2.add(Component.translatable("roundabout.dev_status.dev_name").withStyle(ChatFormatting.WHITE)
-                .append(" ")
-                .append("Prisma").withStyle(ChatFormatting.YELLOW));
-
         $$2.add(Component.translatable("roundabout.anubis_item.requires_mainhand").withStyle(ChatFormatting.GRAY));
     }
 

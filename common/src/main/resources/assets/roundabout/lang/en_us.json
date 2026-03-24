@@ -2150,9 +2150,9 @@
   "config.roundabout.beetleArrowCost.desc": "Number of emeralds that the single trade costs, up to 64",
   "config.roundabout.brokenArrowTradeChance.name": "Broken Stand Arrow Trade Chance",
   "config.roundabout.brokenArrowTradeChance.desc": "Changes the weighting of the trade. Think of it like adding an extra, identical, trade to the possible options",
-  "config.roundabout.anubisTradeChance.name": "Anubis Trade Chance WIP, UNIMPLEMENTED",
+  "config.roundabout.anubisTradeChance.name": "Anubis Trade Chance",
   "config.roundabout.anubisTradeChance.desc": "Changes the weighting of the trade. Think of it like adding an extra, identical, trade to the possible options",
-  "config.roundabout.anubisTradeCost.name": "Anubis Trade Cost WIP, UNIMPLEMENTED",
+  "config.roundabout.anubisTradeCost.name": "Anubis Trade Cost",
   "config.roundabout.anubisTradeCost.desc": "Number of emeralds that a single trade costs, up to 64",
   "config.roundabout.brokenArrowCost.name": "Broken Stand Arrow Trade Cost",
   "config.roundabout.brokenArrowCost.desc": "Number of emeralds that a single trade costs, up to 64",
@@ -2160,6 +2160,8 @@
   "config.roundabout.brokenArrowsHaveStands.desc": "Whether or not Wandering Traders with a Broken Stand Arrow trade will spawn with a Stand or not",
 
 
+  "config.roundabout.anubisChance.name": "Mysterious Sword Chance",
+  "config.roundabout.anubisChance.desc": "Changes the weighting of the loot. Think of it like adding an extra, identical, item to the possible options ",
   "config.roundabout.standArrowChance.name": "Stand Arrow Chance",
   "config.roundabout.standArrowChance.desc": "Changes the weighting of the loot. Think of it like adding an extra, identical, item to the possible options ",
   "config.roundabout.beetleArrowChance.name": "Beetle Arrow Chance",

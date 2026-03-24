@@ -345,10 +345,7 @@ public class ForgeItems {
     public static final RegistryObject<Item> ANUBIS_ITEM = addToWIPTab(ITEMS.register("anubis_item",
             () -> new AnubisItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC))
     ));
-    public static final RegistryObject<Item> STAND_DISC_ANUBIS = addToWIPTab(ITEMS.register("anubis_disc",
-            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null))));
-    public static final RegistryObject<Item> MAX_STAND_DISC_ANUBIS = addToWIPTab(ITEMS.register("max_anubis_disc",
-            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null))));
+
 
     public static final RegistryObject<Item> STAND_DISC_TUSK = addToWIPTab(ITEMS.register("tusk_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersTusk(null))));
@@ -527,6 +524,11 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersWalkingHeart(null))));
     public static final RegistryObject<Item> MAX_STAND_DISC_WALKING_HEART = addToDiscTab(ITEMS.register("max_walking_heart_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersWalkingHeart(null))));
+
+    public static final RegistryObject<Item> STAND_DISC_ANUBIS = addToDiscTab(ITEMS.register("anubis_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null))));
+    public static final RegistryObject<Item> MAX_STAND_DISC_ANUBIS = addToDiscTab(ITEMS.register("max_anubis_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null))));
 
     public static final RegistryObject<Item> STAND_DISC_CINDERELLA = addToDiscTab(ITEMS.register("cinderella_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null))));

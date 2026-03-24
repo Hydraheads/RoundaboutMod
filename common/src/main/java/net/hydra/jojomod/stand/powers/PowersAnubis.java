@@ -1814,7 +1814,7 @@ public class PowersAnubis extends NewDashPreset {
             } if (Level > 5 || bypass){
                 $$1.add(DIAMOND);
                 $$1.add(CHORUS);
-            //    $$1.add(BRILLIANCE);
+                $$1.add(BRILLIANCE);
             } if (Level > 6 || bypass){
                 $$1.add(ANCIENT);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
@@ -1886,19 +1886,6 @@ public class PowersAnubis extends NewDashPreset {
             }
         }
         super.onStandSummon(desummon);
-    }
-
-    @Override
-    public boolean isWip(){
-        return true;
-    }
-    @Override
-    public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
-    }
-    @Override
-    public Component ifWipListDev(){
-        return Component.literal(  "Prisma").withStyle(ChatFormatting.YELLOW);
     }
 
     public List<Entity> getBasicSwordHitBox(boolean crouching) {

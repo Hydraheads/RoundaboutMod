@@ -174,7 +174,7 @@ public class Config implements Cloneable {
         public Float beetleArrowTradeChance;
         @IntOption(group = "inherit", value = 10, min = 0, max = 64)
         public Integer beetleArrowCost;
-        @FloatOption(group = "inherit", value = 0F, min = 0, max = 100) // ADD FOR ANUBIS
+        @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)
         public Float anubisTradeChance;
         @IntOption(group = "inherit", value = 20, min = 0, max = 64)
         public Integer anubisTradeCost;
@@ -187,6 +187,8 @@ public class Config implements Cloneable {
     }
 
     public static class BrushingLootSettings {
+        @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)
+        public Float anubisChance;
         @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)
         public Float standArrowChance;
         @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)

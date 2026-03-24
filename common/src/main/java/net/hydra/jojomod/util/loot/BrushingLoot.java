@@ -19,6 +19,9 @@ public class BrushingLoot {
         DRY_LOOT = new ArrayList<>();
 
         Config.BrushingLootSettings cf = ConfigManager.getConfig().brushingLootSettings;
+
+        LOOT.add(new Pair<>(cf.anubisChance, ModItems.ANUBIS_ITEM.getDefaultInstance()));
+
         LOOT.add(new Pair<>(cf.standArrowChance, ModItems.STAND_ARROW.getDefaultInstance()));
         LOOT.add(new Pair<>(cf.beetleArrowChance, ModItems.STAND_BEETLE_ARROW.getDefaultInstance()));
 

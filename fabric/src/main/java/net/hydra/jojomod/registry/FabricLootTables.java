@@ -106,31 +106,6 @@ public class FabricLootTables {
             }
                 });
 
-
-
-      /*  LootTableEvents.REPLACE.register((resourceManager, lootManager, id, original, source) -> {
-            if(PYRAMID_ID.equals(id) || WELL_ID.equals(id) || OCEAN_WARM_ID.equals(id)
-                    || TRAIL_COMMON_ID.equals(id) || TRAIL_RARE_ID.equals(id)
-                    || OCEAN_COLD_ID.equals(id)) {
-                List<LootPoolEntryContainer> entries = new ArrayList<>(Arrays.asList(original.pools[0].entries));
-                entries.add(LootItem.lootTableItem(FabricItems.STAND_ARROW).build());
-
-                //Add thrice if desert structure / sand
-                if(PYRAMID_ID.equals(id) || WELL_ID.equals(id) || OCEAN_WARM_ID.equals(id)){
-                    entries.add(LootItem.lootTableItem(FabricItems.STAND_ARROW).build());
-                    entries.add(LootItem.lootTableItem(FabricItems.STAND_BEETLE_ARROW).build());
-                }
-
-                if ( (PYRAMID_ID.equals(id) || TRAIL_COMMON_ID.equals(id) || TRAIL_RARE_ID.equals(id) ) && false ) {// ADD FOR ANUBIS
-                    entries.add(LootItem.lootTableItem(FabricItems.ANUBIS_ITEM).build());
-                }
-
-                LootPool.Builder pool = LootPool.lootPool().with(entries);
-                return LootTable.lootTable().withPool(pool).build();
-            }
-
-            return null;
-        } ); REMOVE THIS WITH FURTHER TESTING */
         }
 
 
