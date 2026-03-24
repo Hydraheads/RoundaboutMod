@@ -1,0 +1,23 @@
+{
+  "variants": {
+    "in_fog=false": {
+      "model": "roundabout:block/fog_block_invisible"
+    },
+    "in_fog=true": [
+      {
+        "model": "minecraft:block/stone"
+      },
+      {
+        "model": "minecraft:block/stone_mirrored"
+      },
+      {
+        "model": "minecraft:block/stone",
+        "y": 180
+      },
+      {
+        "model": "minecraft:block/stone_mirrored",
+        "y": 180
+      }
+    ]
+  }
+}
