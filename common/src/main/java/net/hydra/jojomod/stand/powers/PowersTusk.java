@@ -922,12 +922,14 @@ public class PowersTusk extends NewDashPreset {
     public static void buildSkins() {
         for(int i=0;i<4;i++) {
             MANGA_SKIN[i] = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/tusk/act_"+(i+1)+ "/manga.png");
+            BLUE_SKIN[i] = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/tusk/act_"+(i+1)+ "/blue.png");
         }
     }
     public static ResourceLocation getSkin(byte skin, int act) {
         if (MANGA_SKIN[0] == null) {buildSkins();}
         ResourceLocation[] skins = switch (skin) {
             case MANGA -> MANGA_SKIN;
+            case BLUE -> BLUE_SKIN;
             default -> MANGA_SKIN;
         };
         return skins[act-1];
@@ -940,18 +942,23 @@ public class PowersTusk extends NewDashPreset {
     }
 
     private static ResourceLocation[] MANGA_SKIN = new ResourceLocation[4];
+    private static ResourceLocation[] BLUE_SKIN = new ResourceLocation[4];
+
 
     public static final byte
-            MANGA = 1;
+            MANGA = 1,
+            BLUE = 2;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
-                MANGA
+                MANGA,
+                BLUE
         );
     }
     @Override public Component getSkinName(byte skinId) {
         return switch (skinId)
         {
+            case BLUE -> Component.translatable("skins.roundabout.tusk.blue");
             default -> Component.translatable("skins.roundabout.tusk.manga");
         };
     }
