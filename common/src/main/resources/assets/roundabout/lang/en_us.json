@@ -96,9 +96,11 @@
   "item.roundabout.cream_disc": "Stand Disc",
   "item.roundabout.max_cream_disc": "Stand Disc+",
   "item.roundabout.anubis_disc": "Stand Disc",
+  "item.roundabout.tusk_disc": "Stand Disc",
   "item.roundabout.achtung_baby_disc": "Stand Disc",
   "item.roundabout.max_ratt_disc": "Stand Disc+",
   "item.roundabout.max_anubis_disc": "Stand Disc+",
+  "item.roundabout.max_tusk_disc": "Stand Disc+",
   "item.roundabout.mandom_disc": "Stand Disc",
   "item.roundabout.walking_heart_disc": "Stand Disc",
   "item.roundabout.max_walking_heart_disc": "Stand Disc+",
@@ -132,6 +134,8 @@
   "item.roundabout.cream_disc.desc": "Cream",
   "item.roundabout.anubis_disc.desc": "Anubis",
   "item.roundabout.max_anubis_disc.desc": "Anubis",
+  "item.roundabout.tusk_disc.desc": "Tusk",
+  "item.roundabout.max_tusk_disc.desc": "Tusk",
   "item.roundabout.achtung_baby_disc.desc": "Achtung Baby",
   "item.roundabout.survivor_disc.desc": "Survivor",
   "item.roundabout.hey_ya_disc.desc": "Hey Ya!",
@@ -1803,6 +1807,13 @@
   "skins.roundabout.anubis.serpent": "Serpent",
   "skins.roundabout.anubis.soulborn": "Soulborn",
 
+  "skins.roundabout.tusk.manga" : "Manga",
+
+  "roundabout.tusk.act_1": "Act 1",
+  "roundabout.tusk.act_2" : "Act 2",
+  "roundabout.tusk.act_3" : "Act 3",
+  "roundabout.tusk.act_4": "Act 4",
+  "roundabout.tusk.change_acts" : "Change Acts",
 
   "roundabout.anubis.playback_title": "Replay Memories",
   "roundabout.anubis.memory_title": "Record Memories",
@@ -2922,6 +2933,10 @@
 
   "config.roundabout.SoftAndWetCurrentlySelectedBubble.name": "Selected Bubble Type",
   "config.roundabout.SoftAndWetCurrentlySelectedBubble.desc": "For Soft and Wet, your client remembers what bubble is presently selected.",
+
+  "config.roundabout.TuskAct.name": "Tusk Act",
+  "config.roundabout.TuskAct.desc": "Saves your Tusk Act after you log out.",
+
 
   "config.roundabout.vampireVisionMode.name": "Selected Vision Type",
   "config.roundabout.vampireVisionMode.desc": "Toggle on and off vampiric night vision. V is the hotkey for vampiric fates.",

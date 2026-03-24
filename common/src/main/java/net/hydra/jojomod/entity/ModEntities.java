@@ -60,6 +60,11 @@ public class ModEntities {
     public static EntityType<WalkingHeartEntity> WALKING_HEART;
     public static EntityType<JusticePirateEntity> JUSTICE_PIRATE;
     public static EntityType<DarkMirageEntity> DARK_MIRAGE;
+    public static EntityType<TuskEntity> TUSK_A1;
+    public static EntityType<TuskEntity> TUSK_A2;
+    public static EntityType<TuskEntity> TUSK_A3;
+    public static EntityType<TuskEntity> TUSK_A4;
+
     public static EntityType<StarPlatinumBaseballEntity> STAR_PLATINUM_BASEBALL;
     public static EntityType<DiverDownEntity> DIVER_DOWN;
     public static EntityType<HarpoonEntity> THROWN_HARPOON;
@@ -94,6 +99,7 @@ public class ModEntities {
     public static EntityType<SoftAndWetItemLaunchingBubbleEntity> ITEM_LAUNCHING_BUBBLE_ENTITY;
     public static EntityType<AnubisPossessorEntity> ANUBIS_POSSESSOR;
     public static EntityType<AnubisSlipstreamEntity> ANUBIS_SLIPSTREAM;
+    public static EntityType<TuskNailEntity> TUSK_NAIL;
 
     public static EntityType<GoBeyondEntity> GO_BEYOND;
     public static EntityType<EncasementBubbleEntity> ENCASEMENT_BUBBLE;

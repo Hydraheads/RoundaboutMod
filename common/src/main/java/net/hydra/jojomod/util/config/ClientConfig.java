@@ -173,6 +173,8 @@ public class ClientConfig implements Cloneable {
     public static class DynamicSettings {
         @IntOption(group = "inherit", value = 1, min = 1, max = 8)
         public Integer SoftAndWetCurrentlySelectedBubble;
+        @IntOption(group = "inherit", value = 1, min = 1, max = 4)
+        public Integer TuskAct;
         @BooleanOption(group = "inherit",value = false)
         public Boolean rattFiringMode;
         @BooleanOption(group = "inherit", value = false)

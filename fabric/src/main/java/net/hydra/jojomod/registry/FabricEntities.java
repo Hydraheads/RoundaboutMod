@@ -428,6 +428,34 @@ public class FabricEntities {
                         EntityType.Builder.of(DarkMirageEntity::new, MobCategory.MISC).
                                 sized(ModEntities.justiceWidth, ModEntities.justiceHeight).clientTrackingRange(14).build(Roundabout.MOD_ID+":dark_mirage")
                 );
+    public static final EntityType<TuskEntity> TUSK_A1 =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "tusk_a1"),
+                    EntityType.Builder.of(TuskEntity::new, MobCategory.MISC).
+                            sized(0.5F, 0.5F).clientTrackingRange(14).build(Roundabout.MOD_ID+":tusk_a1")
+            );
+    public static final EntityType<TuskEntity> TUSK_A2 =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "tusk_a2"),
+                    EntityType.Builder.of(TuskEntity::new, MobCategory.MISC).
+                            sized(0.55F, 1.0F).clientTrackingRange(14).build(Roundabout.MOD_ID+":tusk_a2")
+            );
+    public static final EntityType<TuskEntity> TUSK_A3 =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "tusk_a3"),
+                    EntityType.Builder.of(TuskEntity::new, MobCategory.MISC).
+                            sized(0.75F, 1.7F).clientTrackingRange(14).build(Roundabout.MOD_ID+":tusk_a3")
+            );
+    public static final EntityType<TuskEntity> TUSK_A4 =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "tusk_a4"),
+                    EntityType.Builder.of(TuskEntity::new, MobCategory.MISC).
+                            sized(1.3F, 2F).clientTrackingRange(14).build(Roundabout.MOD_ID+":tusk_a4")
+            );
         public static final EntityType<DiverDownEntity> DIVER_DOWN =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -589,6 +617,13 @@ public class FabricEntities {
                     EntityType.Builder.<AnubisSlipstreamEntity>of(AnubisSlipstreamEntity::new, MobCategory.MISC).
                             sized(0.1F, 0.1F).clientTrackingRange(10).build(Roundabout.MOD_ID+":anubis_slipstream")
             );
+    public static final EntityType<TuskNailEntity> TUSK_NAIL =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "tusk_nail"),
+                    EntityType.Builder.<TuskNailEntity>of(TuskNailEntity::new, MobCategory.MISC).
+                            sized(0.5F, 0.5F).clientTrackingRange(10).build(Roundabout.MOD_ID+":tusk_nail")
+            );
         public static final EntityType<GroundHurricaneEntity> GROUND_HURRICANE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -738,6 +773,10 @@ public class FabricEntities {
                 ModEntities.WALKING_HEART = WALKING_HEART;
                 ModEntities.JUSTICE_PIRATE = JUSTICE_PIRATE;
                 ModEntities.DARK_MIRAGE = DARK_MIRAGE;
+                ModEntities.TUSK_A1 = TUSK_A1;
+                ModEntities.TUSK_A2 = TUSK_A2;
+                ModEntities.TUSK_A3 = TUSK_A3;
+                ModEntities.TUSK_A4 = TUSK_A4;
                 ModEntities.DIVER_DOWN = DIVER_DOWN;
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
                 ModEntities.BLADED_BOWLER_HAT = BLADED_BOWLER_HAT;
@@ -772,6 +811,7 @@ public class FabricEntities {
                 ModEntities.CINDERELLA_VISAGE_DISPLAY = CINDERELLA_VISAGE_DISPLAY;
                 ModEntities.ANUBIS_POSSESSOR = ANUBIS_POSSESSOR;
                 ModEntities.ANUBIS_SLIPSTREAM = ANUBIS_SLIPSTREAM;
+                ModEntities.TUSK_NAIL = TUSK_NAIL;
 
 
                 ModEntities.FALLEN_ZOMBIE = FALLEN_ZOMBIE;
@@ -866,6 +906,10 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(JUSTICE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(JUSTICE_PIRATE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DARK_MIRAGE, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(TUSK_A1, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(TUSK_A2, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(TUSK_A3, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(TUSK_A4, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(CINDERELLA, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(WALKING_HEART, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DIVER_DOWN, StandEntity.createStandAttributes());

@@ -74,6 +74,10 @@ public class ForgeEvents {
         event.put(ForgeEntities.MAGICIANS_RED_OVA.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SURVIVOR.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.DARK_MIRAGE.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.TUSK_A1.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.TUSK_A2.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.TUSK_A3.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.TUSK_A4.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.DIVER_DOWN.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.OVA_ENYA.get(), OVAEnyaNPC.createAttributes().build());
         event.put(ForgeEntities.ENYA.get(), OVAEnyaNPC.createAttributes().build());
@@ -315,6 +319,11 @@ public class ForgeEvents {
         ModItems.MAX_STAND_DISC_ANUBIS = ForgeItems.MAX_STAND_DISC_ANUBIS.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_ANUBIS.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_ANUBIS.get());
 
+        ModItems.STAND_DISC_TUSK = ForgeItems.STAND_DISC_TUSK.get();
+        ModItems.MAX_STAND_DISC_TUSK = ForgeItems.MAX_STAND_DISC_TUSK.get();
+        ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_TUSK.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_TUSK.get());
+
+
         ModItems.COFFEE_GUM = ForgeItems.COFFEE_GUM.get();
         ModItems.CHERRIES = ForgeItems.CHERRIES.get();
 
@@ -516,6 +525,10 @@ public class ForgeEvents {
         ModEntities.WALKING_HEART = ForgeEntities.WALKING_HEART.get();
         ModEntities.JUSTICE_PIRATE = ForgeEntities.JUSTICE_PIRATE.get();
         ModEntities.DARK_MIRAGE = ForgeEntities.DARK_MIRAGE.get();
+        ModEntities.TUSK_A1 = ForgeEntities.TUSK_A1.get();
+        ModEntities.TUSK_A2 = ForgeEntities.TUSK_A2.get();
+        ModEntities.TUSK_A3 = ForgeEntities.TUSK_A3.get();
+        ModEntities.TUSK_A4 = ForgeEntities.TUSK_A4.get();
         ModEntities.STAR_PLATINUM_BASEBALL = ForgeEntities.STAR_PLATINUM_BASEBALL.get();
         ModEntities.DIVER_DOWN = ForgeEntities.DIVER_DOWN.get();
         ModEntities.THROWN_HARPOON = ForgeEntities.THROWN_HARPOON.get();
@@ -553,6 +566,7 @@ public class ForgeEvents {
         ModEntities.CINDERELLA_VISAGE_DISPLAY = ForgeEntities.CINDERELLA_VISAGE_DISPLAY.get();
         ModEntities.ANUBIS_POSSESSOR = ForgeEntities.ANUBIS_POSSESSOR.get();
         ModEntities.ANUBIS_SLIPSTREAM = ForgeEntities.ANUBIS_SLIPSTREAM.get();
+        ModEntities.TUSK_NAIL = ForgeEntities.TUSK_NAIL.get();
 
         ModEntities.FALLEN_ZOMBIE = ForgeEntities.FALLEN_ZOMBIE.get();
         ModEntities.FALLEN_SKELETON = ForgeEntities.FALLEN_SKELETON.get();

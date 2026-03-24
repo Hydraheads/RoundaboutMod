@@ -276,10 +276,19 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
    @Inject(method = "renderHand",at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/player/PlayerRenderer;setModelProperties(Lnet/minecraft/client/player/AbstractClientPlayer;)V",shift = At.Shift.AFTER))
     private void roundabout$hideAnubisArm(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, ModelPart $$4, ModelPart $$5, CallbackInfo ci) {
-        if ( AnubisLayer.shouldRender($$3) == HumanoidArm.RIGHT) {
+        HumanoidArm arm = null;
+        if (AnubisLayer.shouldRender($$3) != null) {
+            arm = AnubisLayer.shouldRender($$3);
+        }
+        StandUser SU = (StandUser) $$3;
+        if (SU.roundabout$getStandPowers() instanceof PowersTusk && PowerTypes.isUsingStand($$3)) {
+            arm = $$3.getMainArm();
+        }
+
+        if (arm == HumanoidArm.RIGHT) {
             this.getModel().rightArm.visible = false;
             this.getModel().rightSleeve.visible = false;
-        } else if (AnubisLayer.shouldRender($$3) == HumanoidArm.LEFT)  {
+        } else if (arm == HumanoidArm.LEFT)  {
             this.getModel().leftArm.visible = false;
             this.getModel().leftSleeve.visible = false;
         }
@@ -400,9 +409,9 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         ((IEntityAndData)acl).roundabout$setExclusiveLayers(true);
         boolean shouldRenderArms = true; // make this an AbilityScapeBasis thing at some point idk
         StandUser standUser = (StandUser) acl;
-        if (AnubisLayer.shouldRender(acl) != null) {
-            shouldRenderArms = false;
-        }
+        if (AnubisLayer.shouldRender(acl) != null) {shouldRenderArms = false;}
+        if (standUser.roundabout$getStandPowers() instanceof PowersTusk && PowerTypes.isUsingStand(acl)) {shouldRenderArms = false;}
+
         if ( (ClientUtil.getThrowFadeToTheEther() != 1 || ClientUtil.hasChangedArms(acl)) && shouldRenderArms ){
             ci.cancel();
             PlayerModel<AbstractClientPlayer> $$6 = this.getModel();

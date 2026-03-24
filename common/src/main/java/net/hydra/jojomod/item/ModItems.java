@@ -44,6 +44,8 @@ public class ModItems {
     public static Item MAX_STAND_DISC_GREEN_DAY;
     public static Item STAND_DISC_SOFT_AND_WET;
     public static Item MAX_STAND_DISC_SOFT_AND_WET;
+    public static Item STAND_DISC_TUSK;
+    public static Item MAX_STAND_DISC_TUSK;
     public static Item STAND_DISC_KILLER_QUEEN;
     public static Item MAX_STAND_DISC_KILLER_QUEEN;
     public static Item STAND_DISC_CINDERELLA;

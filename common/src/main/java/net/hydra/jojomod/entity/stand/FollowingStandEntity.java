@@ -200,15 +200,20 @@ public class FollowingStandEntity extends StandEntity{
 
 
 
+    ///  lets you modify the values, since they're otherwise final functions
+    public float getDistanceOutModified() {return getDistanceOut();}
+    public float getIdleYOffsetModified() {return getIdleYOffset();}
+    public float getAnchorPlaceModified() {return getAnchorPlace();}
+
     /**This is the way a stand looks when it is passively floating by you*/
     public Vec3 getIdleOffset(LivingEntity standUser) {
         int vis = this.getFadeOut();
-        double r = (((double) vis / MaxFade) * ((standUser.getBbWidth()/2)+this.getDistanceOut()));
+        double r = (((double) vis / MaxFade) * ((standUser.getBbWidth()/2)+this.getDistanceOutModified()));
         if (r < 0.5) {
             r = 0.5;
         }
         double yawfix = standUser.getYRot();
-        yawfix += this.getAnchorPlace();
+        yawfix += this.getAnchorPlaceModified();
         if (yawfix > 360) {
             yawfix -= 360;
         } else if (yawfix < 0) {
@@ -232,7 +237,7 @@ public class FollowingStandEntity extends StandEntity{
         Direction dir = ((IGravityEntity)standUser).roundabout$getGravityDirection();
         Vec3 offset = new Vec3(
                 (- (-1 * (r * (Math.sin(ang / 180))))),
-                (getIdleYOffset() - yy),
+                (getIdleYOffsetModified() - yy),
                 (-(r * (Math.cos(ang / 180))))
         );
         if (dir != Direction.DOWN){

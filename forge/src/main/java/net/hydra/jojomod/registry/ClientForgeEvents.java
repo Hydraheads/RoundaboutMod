@@ -84,6 +84,10 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.WALKING_HEART.get(), WalkingHeartRenderer::new);
         event.registerEntityRenderer(ForgeEntities.JUSTICE_PIRATE.get(), JusticePirateRenderer::new);
         event.registerEntityRenderer(ForgeEntities.DARK_MIRAGE.get(), DarkMirageRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.TUSK_A1.get(), TuskAct1Renderer::new);
+        event.registerEntityRenderer(ForgeEntities.TUSK_A2.get(), TuskAct2Renderer::new);
+        event.registerEntityRenderer(ForgeEntities.TUSK_A3.get(), TuskAct3Renderer::new);
+        event.registerEntityRenderer(ForgeEntities.TUSK_A4.get(), TuskAct4Renderer::new);
         event.registerEntityRenderer(ForgeEntities.DIVER_DOWN.get(), DiverDownRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_HARPOON.get(), HarpoonRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BLADED_BOWLER_HAT.get(), BladedBowlerHatRenderer::new);
@@ -116,6 +120,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.ENCASEMENT_BUBBLE.get(), EncasementBubbleRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ANUBIS_POSSESSOR.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ANUBIS_SLIPSTREAM.get(), NoRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.TUSK_NAIL.get(), TuskNailRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ROAD_ROLLER_ENTITY.get(), RoadRollerEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SEPERATED_LEGS.get(), SeperatedLegsRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SEPERATED_ARM.get(), SeperatedArmRenderer::new);
@@ -188,6 +193,10 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.SOFT_AND_WET_KILLER_QUEEN_LAYER, SoftAndWetKillerQueenModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.CINDERELLA_LAYER, CinderellaModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.DARK_MIRAGE_LAYER, DarkMirageModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.TUSK_A1_LAYER, TuskAct1Model::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.TUSK_A2_LAYER, TuskAct2Model::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.TUSK_A3_LAYER, TuskAct3Model::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.TUSK_A4_LAYER, TuskAct4Model::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.DIVER_DOWN_LAYER, DiverDownModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.KNIFE_LAYER, KnifeModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.RATT_DART_LAYER, RattDartModel::getTexturedModelData);

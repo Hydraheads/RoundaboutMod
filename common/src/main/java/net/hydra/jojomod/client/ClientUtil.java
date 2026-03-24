@@ -1237,9 +1237,8 @@ public class ClientUtil {
     public static void openHairspryUI(){
         Minecraft.getInstance().setScreen(new HairColorChangeScreen());
     }
-    public static void openMemoryRecordScreen(boolean recording){
-        Minecraft.getInstance().setScreen(new MemoryRecordScreen(recording));
-    }
+    public static void openMemoryRecordScreen(boolean recording){Minecraft.getInstance().setScreen(new MemoryRecordScreen(recording));}
+    public static void openTuskActScreen(){Minecraft.getInstance().setScreen(new TuskActScreen());}
     public static void strikePose(Player player, Minecraft C, boolean keyIsDown, Options option) {
         if (keyIsDown){
             if (!poseHeld){
@@ -1848,8 +1847,6 @@ public class ClientUtil {
                 FirstPersonArmsModel.player = play;
                 FirstPersonArmsSlimModel.player = play;
 
-
-
                 if (play.getCooldowns().isOnCooldown(play.getUseItem().getItem())) {
                     pl.roundabout$getItemAnimationActive().startIfStopped(cameraEnt.tickCount);
                     pl.roundabout$getItemAnimation().stop();
@@ -1857,7 +1854,6 @@ public class ClientUtil {
                     pl.roundabout$getItemAnimationActive().stop();
                     pl.roundabout$getItemAnimation().startIfStopped(cameraEnt.tickCount);
                 }
-
 
                 if (!(item instanceof JackalRifleItem)) {
                     if (slimBoolean) {
@@ -1875,7 +1871,6 @@ public class ClientUtil {
                     ModStrayModels.FirstPersonTommyGunModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
                 }
 
-
                 stack.popPose();
             } else if (item instanceof AnubisItem) {
 
@@ -1891,7 +1886,20 @@ public class ClientUtil {
             boolean isUsingAnubis = play.isUsingItem() && play.getUseItem().is(ModItems.ANUBIS_ITEM);
             if (AnubisLayer.shouldRender(play) != null && !isUsingAnubis && !play.getMainHandItem().is(ModItems.ANUBIS_ITEM) ) {
                 ModStrayModels.ANUBIS.renderFirstPerson(stack,source,light,play,cameraEnt.tickCount + $$4);
+            } else if (standUser.roundabout$getStandPowers() instanceof PowersTusk && PowerTypes.isUsingStand(play)) {
+                stack.pushPose();
+                FirstPersonArmsModel.player = play;
+                FirstPersonArmsSlimModel.player = play;
+
+                if (slimBoolean) {
+                    ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
+                } else {
+                    ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
+                }
+                stack.popPose();
             }
+
+
 
         }
 

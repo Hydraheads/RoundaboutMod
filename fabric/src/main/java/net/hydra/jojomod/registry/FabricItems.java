@@ -73,6 +73,11 @@ public class FabricItems {
     public static Item MAX_STAND_DISC_ANUBIS = registerItem("max_anubis_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null)));
 
+    public static Item STAND_DISC_TUSK = registerItem("tusk_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersTusk(null)));
+    public static Item MAX_STAND_DISC_TUSK = registerItem("max_tusk_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersTusk(null)));
+
     public static Item STAND_DISC_METALLICA = registerItem("metallica_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMetallica(null)));
     public static Item MAX_STAND_DISC_METALLICA = registerItem("max_metallica_disc",
@@ -482,6 +487,8 @@ public class FabricItems {
                         entries.accept(ANUBIS_ITEM);
                         entries.accept(STAND_DISC_ANUBIS);
                         entries.accept(MAX_STAND_DISC_ANUBIS);
+                        entries.accept(STAND_DISC_TUSK);
+                        entries.accept(MAX_STAND_DISC_TUSK);
                         //entries.accept(STAND_DISC_DIVER_DOWN);
                         //entries.accept(MAX_STAND_DISC_DIVER_DOWN);
                    //     entries.accept(STAND_DISC_CREAM);
@@ -537,6 +544,9 @@ public class FabricItems {
         ModItems.MAX_STAND_DISC_ANUBIS = MAX_STAND_DISC_ANUBIS;
         ModItems.STAND_DISC_ANUBIS = STAND_DISC_ANUBIS;
         ((MaxStandDiscItem)MAX_STAND_DISC_ANUBIS).baseDisc = ((StandDiscItem)STAND_DISC_ANUBIS);
+        ModItems.MAX_STAND_DISC_TUSK = MAX_STAND_DISC_TUSK;
+        ModItems.STAND_DISC_TUSK = STAND_DISC_TUSK;
+        ((MaxStandDiscItem)MAX_STAND_DISC_TUSK).baseDisc = ((StandDiscItem)STAND_DISC_TUSK);
         ModItems.STAND_DISC_SOFT_AND_WET = STAND_DISC_SOFT_AND_WET;
         ModItems.MAX_STAND_DISC_SOFT_AND_WET = MAX_STAND_DISC_SOFT_AND_WET;
         ((MaxStandDiscItem)MAX_STAND_DISC_SOFT_AND_WET).baseDisc = ((StandDiscItem)STAND_DISC_SOFT_AND_WET);

@@ -375,6 +375,30 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "dark_mirage").toString())
             );
+    public static final RegistryObject<EntityType<TuskEntity>> TUSK_A1 =
+            ENTITY_TYPES.register("tusk_a1", () ->
+                    EntityType.Builder.of(TuskEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "tusk_a1").toString())
+            );
+    public static final RegistryObject<EntityType<TuskEntity>> TUSK_A2 =
+            ENTITY_TYPES.register("tusk_a2", () ->
+                    EntityType.Builder.of(TuskEntity::new, MobCategory.MISC).sized(0.5F, 1.0F).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "tusk_a2").toString())
+            );
+    public static final RegistryObject<EntityType<TuskEntity>> TUSK_A3 =
+            ENTITY_TYPES.register("tusk_a3", () ->
+                    EntityType.Builder.of(TuskEntity::new, MobCategory.MISC).sized(0.75F, 1.7F).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "tusk_a3").toString())
+            );
+    public static final RegistryObject<EntityType<TuskEntity>> TUSK_A4 =
+            ENTITY_TYPES.register("tusk_a4", () ->
+                    EntityType.Builder.of(TuskEntity::new, MobCategory.MISC).sized(1.3F, 2.0F).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "tusk_a4").toString())
+            );
     public static final RegistryObject<EntityType<StarPlatinumBaseballEntity>> STAR_PLATINUM_BASEBALL =
             ENTITY_TYPES.register("star_platinum_baseball", () ->
                     EntityType.Builder.of(StarPlatinumBaseballEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
@@ -572,6 +596,12 @@ public class ForgeEntities {
                     EntityType.Builder.<AnubisSlipstreamEntity>of(AnubisSlipstreamEntity::new, MobCategory.MISC).sized(0.1F, 0.1f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "anubis_slipstream").toString())
+            );
+    public static final RegistryObject<EntityType<TuskNailEntity>> TUSK_NAIL =
+            ENTITY_TYPES.register("tusk_nail", () ->
+                    EntityType.Builder.<TuskNailEntity>of(TuskNailEntity::new, MobCategory.MISC).sized(0.1F, 0.1f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "tusk_nail").toString())
             );
     public static final RegistryObject<EntityType<RoadRollerEntity>> ROAD_ROLLER_ENTITY =
             ENTITY_TYPES.register("road_roller_entity", () ->

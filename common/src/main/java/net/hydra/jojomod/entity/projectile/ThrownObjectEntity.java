@@ -126,7 +126,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
     public static final byte
             SPTHROW = 1,
             TWTHROW = 2,
-            SOFTTHROW = 3;
+            SOFTTHROW = 3,
+            SPINTHROW = 4;
     public static boolean throwAnObject(LivingEntity thrower, boolean canSnipe, ItemStack item, float getShotAccuracy,
                                      float getBundleAccuracy,
                                      float getThrowAngle1, float getThrowAngle2, float getThrowAngle3,
@@ -637,7 +638,10 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         } else if (getStyle() == TWTHROW){
             damage*= (float) (ClientNetworking.getAppropriateConfig().generalStandSettings.standThrownObjectMultiplier *0.01);
             damage*= 0.9F;
-        } else {
+        } else if (getStyle() == SPINTHROW) {
+            damage*= (float) (ClientNetworking.getAppropriateConfig().generalStandSettings.standThrownObjectMultiplier *0.01);// make this spinThrowObjectMultiplier
+            damage*= 0.75F;
+        }else {
             damage*= (float) (ClientNetworking.getAppropriateConfig().generalStandSettings.standThrownObjectMultiplier *0.01);
         }
         return damage;

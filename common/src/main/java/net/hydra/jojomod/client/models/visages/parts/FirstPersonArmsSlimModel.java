@@ -12,6 +12,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
+import net.hydra.jojomod.client.models.layers.animations.TuskAnimations;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.PowerTypes;
@@ -21,7 +22,9 @@ import net.hydra.jojomod.item.ColtRevolverItem;
 import net.hydra.jojomod.item.SnubnoseRevolverItem;
 import net.hydra.jojomod.item.TommyGunItem;
 import net.hydra.jojomod.stand.powers.PowersMandom;
+import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -117,6 +120,7 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                        int light) {
         if (context instanceof LivingEntity LE) {
             IPlayerEntity ipe = ((IPlayerEntity) LE);
+            StandUser standUser = (StandUser) LE;
             this.root().getAllParts().forEach(ModelPart::resetPose);
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
             boolean mainHandRight = true;
@@ -167,6 +171,23 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                 byte bt = ((StandUser)LE).roundabout$getLocacacaCurse();
                 int muscle = ((StandUser)LE).roundabout$getZappedToID();
 
+                boolean renderLeft = true;
+                boolean renderRight = true;
+
+                if (standUser.roundabout$getStandPowers() instanceof PowersTusk PT && PowerTypes.isUsingStand(player)) {
+                    if (!PT.renderBothArms()) {
+                        renderLeft = player.getMainArm() == HumanoidArm.LEFT;
+                        renderRight = player.getMainArm() == HumanoidArm.RIGHT;
+                    }
+
+
+                    AnimationDefinition anim = PT.getFirstPersonAnimation();
+                    if (anim == TuskAnimations.Default) {
+                        standUser.roundabout$getWornStandAnimation().startIfStopped(player.tickCount);
+                    }
+                    this.animate(standUser.roundabout$getWornStandAnimation(),anim,partialTicks,1F);
+                }
+
                 Mob shapeShift = ((IPlayerRenderer)PR).roundabout$getShapeShift(player);
                 if (shapeShift != null && (ShapeShifts.isSkeleton(ShapeShifts.getShiftFromByte(shift)) ||
                         ShapeShifts.isZombie(ShapeShifts.getShiftFromByte(shift))) && $$7.getRenderer(shapeShift) instanceof HumanoidMobRenderer hr){
@@ -198,9 +219,9 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                     rightSleeve.loadPose(pp);
                 }
 
-                rightArm.visible = true;
+                rightArm.visible = renderRight;
                 if (rightSleeve != null) {
-                    rightSleeve.visible = true;
+                    rightSleeve.visible = renderRight;
                 }
                 rightArm.render(
                         poseStack,
@@ -232,9 +253,9 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                     leftSleeve.loadPose(pp);
                 }
 
-                leftArm.visible = true;
+                leftArm.visible = renderLeft;
                 if (leftSleeve != null) {
-                    leftSleeve.visible = true;
+                    leftSleeve.visible = renderLeft;
                 }
                 leftArm.render(
                         poseStack,

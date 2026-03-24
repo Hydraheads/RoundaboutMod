@@ -5,13 +5,11 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IKeyMapping;
-import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.index.AnubisMemory;
-import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.stand.powers.PowersAnubis;
+import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -22,46 +20,38 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
-public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
-    //Check out GamemodeSwitcherScreen
+public class TuskActScreen extends Screen implements NoCancelInputScreen {
     static final ResourceLocation MEMORY_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/anubis_memory.png");
+            "textures/gui/tusk_acts.png");
 
-    public byte currentlyHovered;
+    public int currentlyHovered;
     private int firstMouseX;
     private int firstMouseY;
     private boolean setFirstMousePos;
     public boolean zHeld;
 
-    public final ItemStack stack;
 
     private final List<PoseSlot> slots = Lists.newArrayList();
 
-    public boolean recording = false;
-    public MemoryRecordScreen(boolean recording) {
+    public TuskActScreen() {
         super(GameNarrator.NO_TITLE);
         this.currentlyHovered = (byte)-1;
-        stack = null;
-        this.recording = recording;
     }
 
 
     public final int[][] positions = {
-            {-31,-31},
+            {-1,0},
             {0,-31},
-            {31,-31},
             {31,0},
-            {31,31},
-            {0,31},
-            {-31,31},
             {-31,0},
+            {0,31},
     };
+
 
 
 
@@ -72,18 +62,13 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
         Player pl = Minecraft.getInstance().player;
         StandUser SU = (StandUser) pl;
 
-        this.currentlyHovered = (byte)-1;
-        if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
-            List<AnubisMemory> memories = PA.memories;
-            boolean bypass = pl.isCreative() || (!SU.roundabout$getStandDisc().isEmpty() && SU.roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem);
-            final int count = bypass ? 8 : ((IPlayerEntity)pl).roundabout$getStandLevel();
-            for (int i = 0; i < count; ++i) {
-                AnubisMemory memory = memories.get(i);
-                memoryIcon pIcon = new memoryIcon(memory.item,(byte)i,positions[i][0], positions[i][1]+31 );
+        this.currentlyHovered = 0;
+        if (SU.roundabout$getStandPowers() instanceof PowersTusk PT ) {
+            this.currentlyHovered = PT.getAct();
+            for (int i = 0; i < 5; ++i) {
+                actIcon pIcon = new actIcon(i == 0 ? PT.getAct() : i,positions[i][0], positions[i][1]+31 );
                 this.slots.add(new PoseSlot(pIcon, this.width / 2 + pIcon.xoff - 13, this.height / 2 + pIcon.yoff - 44));
             }
-            memoryIcon pIcon = new memoryIcon(ModItems.ANUBIS_ITEM,(byte)8,0, 31 );
-            this.slots.add(new PoseSlot(pIcon, this.width / 2 + pIcon.xoff - 13, this.height / 2 + pIcon.yoff - 44));
 
         }
 
@@ -113,8 +98,13 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
         super.render(guiGraphics, i, j, f);
 
 
-        Component str = Component.translatable("roundabout.anubis.playback_title");
-        if (this.recording) {str = Component.translatable("roundabout.anubis.memory_title");}
+        Component str = switch(this.currentlyHovered) {
+            case 1 -> Component.translatable("roundabout.tusk.act_1");
+            case 2 -> Component.translatable("roundabout.tusk.act_2");
+            case 3 -> Component.translatable("roundabout.tusk.act_3");
+            case 4 -> Component.translatable("roundabout.tusk.act_4");
+            default -> Component.translatable("roundabout.tusk.change_acts");
+        };
         guiGraphics.drawCenteredString(this.font, str , this.width / 2, this.height / 2 - 31 - 32, -1);
 
         if (!this.setFirstMousePos) {
@@ -124,49 +114,31 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
         }
         boolean bl = this.firstMouseX == i && this.firstMouseY == j;
 
-        for (int[] pos : this.positions) {
-            int x = this.width/2 - 5 + pos[0];
-            int y = this.height/2 - 5 + pos[1];
-            guiGraphics.blit(MEMORY_LOCATION,x,y,196,0,12,12,256,256);
-        }
-
         for (PoseSlot MobSlot : this.slots) {
-            MobSlot.render(guiGraphics, i, j, f);
+            if (true) {MobSlot.render(guiGraphics, i, j, f);}
             MobSlot.setSelected(this.currentlyHovered == MobSlot.icon.id);
-            if (bl || !MobSlot.isHoveredOrFocused()) continue;
-            this.currentlyHovered = MobSlot.icon.id;
-
-            Player player = Minecraft.getInstance().player;
-            StandUser SU = (StandUser) player;
-            if (SU.roundabout$getStandPowers() != null) {
-                if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
-                    PA.convertToVisual(currentlyHovered == 8 ? -1 : currentlyHovered,    PA.memories.get( (currentlyHovered == 8 || currentlyHovered == -1) ? 0 : currentlyHovered).moments);
-                }
+            if (!bl && MobSlot.isHoveredOrFocused()) {
+                this.currentlyHovered = MobSlot.icon.id;
             }
-
-
         }
 
     }
 
     private void switchToHoveredGameMode() {
-        if (this.currentlyHovered != -1 && this.currentlyHovered != 8) {
+        if (this.currentlyHovered > 0) {
             switchToHoveredGameMode(this.minecraft,slots.get(this.currentlyHovered).icon);
         }
     }
 
-    private void switchToHoveredGameMode(Minecraft minecraft, memoryIcon pIcon) {
+    private void switchToHoveredGameMode(Minecraft minecraft, actIcon pIcon) {
         if (minecraft.gameMode == null || minecraft.player == null) {
             return;
         }
         Player pl = Minecraft.getInstance().player;
         StandUser SU = (StandUser) pl;
-        if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
-            if (this.recording) {
-                PA.recordMemory(pIcon.id);
-            } else {
-                PA.playbackMemory(pIcon.id);
-            }
+        if (SU.roundabout$getStandPowers() instanceof PowersTusk PT) {
+            PT.tryIntPower(PowerIndex.POWER_4,true,pIcon.id);
+            PT.tryIntPowerPacket(PowerIndex.POWER_4,pIcon.id);
         }
 
 
@@ -184,22 +156,19 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
     }
     private boolean checkToClose() {
         if (minecraft != null) {
-            KeyMapping key = KeyInputRegistry.abilityTwoKey;
-            if (this.recording) {key = KeyInputRegistry.abilityFourKey;}
+            KeyMapping key = KeyInputRegistry.abilityFourKey;
             if (!sameKeyOneX(key, this.minecraft.options)) {
                 this.switchToHoveredGameMode();
                 this.minecraft.setScreen(null);
                 return true;
             }
         }
-        Options options = Minecraft.getInstance().options;
         return false;
     }
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         Minecraft mc = Minecraft.getInstance();
         Player pl = mc.player;
-        StandUser SU = ((StandUser) pl);
         // Prevent the screen from handling WASD, space, shift, etc.
         if (mc.options.keyUp.matches(keyCode, scanCode) ||
                 mc.options.keyDown.matches(keyCode, scanCode) ||
@@ -208,23 +177,6 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
                 mc.options.keyJump.matches(keyCode, scanCode) ||
                 mc.options.keyShift.matches(keyCode, scanCode)) {
             return false; // Let these go through to the player
-        }
-
-        if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA && this.recording) {
-            List<AnubisMemory> memories = PA.memories;
-            if (this.currentlyHovered == -1 || this.currentlyHovered == 8) {return false;}
-            for (int i=0;i<mc.options.keyHotbarSlots.length;i++) {
-                KeyMapping key = mc.options.keyHotbarSlots[i];
-                if (key.isDown()) {
-                    ItemStack item = pl.getInventory().getItem(i);
-                    if (!item.equals(ItemStack.EMPTY)) {
-                        memories.get(currentlyHovered).item = item.getItem();
-                        this.slots.get(currentlyHovered).icon.item = memories.get(currentlyHovered).item;
-                        PA.SaveMemories();
-                        return true;
-                    }
-                }
-            }
         }
 
         return super.keyPressed(keyCode, scanCode, modifiers);
@@ -236,38 +188,23 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
     }
 
 
-    class memoryIcon {
-        public Item item;
-        public byte id;
+    class actIcon {
+        public int id;
         public int xoff;
         public int yoff;
-        public memoryIcon(Item item, byte id, int xoff, int yoff) {
-            this.item = item;
+        public actIcon(int id, int xoff, int yoff) {
             this.id = id;
             this.xoff = xoff;
             this.yoff = yoff;
-        }
-        public int getMode() {
-            Player p = Minecraft.getInstance().player;
-            StandUser SU = (StandUser) p;
-            if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
-                if(!PA.memories.isEmpty()) {
-                    AnubisMemory memory = PA.memories.get(this.id);
-                    if (memory != null) {
-                        return memory.memory_type;
-                    }
-                }
-            }
-            return 0;
         }
     }
 
     public class PoseSlot
             extends AbstractWidget {
-        final memoryIcon icon;
+        final actIcon icon;
         private boolean isSelected;
 
-        public PoseSlot(memoryIcon icon, int i, int j) {
+        public PoseSlot(actIcon icon, int i, int j) {
             super(i, j, 26, 26, Component.literal(""));
             this.icon = icon;
         }
@@ -275,14 +212,13 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
 
         @Override
         public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
-            if (!(this.icon.id == (byte)8) ) {
+            if (this.icon.xoff != -1) { // hides the middle icon
                 guiGraphics.setColor(1f, 1f, 1f, 1f);
 
-                this.drawSlot(guiGraphics,this.icon.getMode());
+                this.drawSlot(guiGraphics);
                 guiGraphics.setColor(1f, 1f, 1f, 1f);
-                guiGraphics.renderItem(this.icon.item.getDefaultInstance(),this.getX() + 5, this.getY() + 5);
                 if (this.isSelected) {
-                    this.drawSelection(guiGraphics,this.icon.getMode());
+                    this.drawSelection(guiGraphics);
                 }
             }
         }
@@ -301,12 +237,12 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
             this.isSelected = bl;
         }
 
-        private void drawSlot(GuiGraphics guiGraphics, int i) {
-            guiGraphics.blit(MEMORY_LOCATION, this.getX(), this.getY(), 144, i*26, 26, 26, 256, 256);
+        private void drawSlot(GuiGraphics guiGraphics) {
+            guiGraphics.blit(MEMORY_LOCATION, this.getX(), this.getY(), 144, 26, 26, 26, 256, 256);
         }
 
-        private void drawSelection(GuiGraphics guiGraphics, int i) {
-            guiGraphics.blit(MEMORY_LOCATION, this.getX(), this.getY(), 170, i*26, 26, 26, 256, 256);
+        private void drawSelection(GuiGraphics guiGraphics) {
+            guiGraphics.blit(MEMORY_LOCATION, this.getX(), this.getY(), 170, 26, 26, 26, 256, 256);
         }
     }
 }

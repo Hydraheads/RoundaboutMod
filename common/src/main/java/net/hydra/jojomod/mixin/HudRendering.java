@@ -22,13 +22,10 @@ import net.hydra.jojomod.item.JackalRifleItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
-import net.hydra.jojomod.stand.powers.PowersAnubis;
-import net.hydra.jojomod.stand.powers.PowersCream;
+import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.fates.powers.VampiricFate;
-import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.event.powers.visagedata.JosukePartEightVisage;
 import net.hydra.jojomod.item.MaskItem;
-import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -648,6 +645,9 @@ public abstract class HudRendering implements IHudAccess {
                 return true;
             } else if (user.roundabout$getStandPowers() instanceof PowersCream PC && PC.insideVoidInt > 0){
                 StandHudRender.renderCreamVoidTimerHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PC);
+                return true;
+            } else if (user.roundabout$getStandPowers() instanceof PowersTusk PT && PowerTypes.isUsingStand(minecraft.player) && (PT.getMaxActiveNails() != 10 || PT.getNailCharge() > 0 ) ){
+                StandHudRender.renderTuskHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x,this.getFont());
                 return true;
             } else if (user.roundabout$getStandPowers() instanceof PowersCream PC && PC.transformTimer > 0){
                 StandHudRender.renderCreamTransformTimerHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PC);

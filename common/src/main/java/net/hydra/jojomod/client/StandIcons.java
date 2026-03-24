@@ -503,6 +503,8 @@ public class StandIcons {
     public static final ResourceLocation RATT_BUCKET = Roundabout.location("textures/item/flesh_bucket.png");
     public static final ResourceLocation RATT_LEAP = Roundabout.location("textures/gui/icons/ratt/ratt_leap.png");
 
+    public static final ResourceLocation ANUBIS_MEMORY = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/anubis_memory.png");
     public static final ResourceLocation ANUBIS_ALLURING_LIGHT = Roundabout.location("textures/gui/icons/anubis/alluring_light.png");
     public static final ResourceLocation ANUBIS_RAGING_LIGHT = Roundabout.location("textures/gui/icons/anubis/raging_light.png");
     public static final ResourceLocation ANUBIS_BACKFLIP = Roundabout.location("textures/gui/icons/anubis/backflip.png");
@@ -516,18 +518,14 @@ public class StandIcons {
     public static final ResourceLocation ANUBIS_SLASH = Roundabout.location("textures/gui/icons/anubis/slash.png");
     public static final ResourceLocation ANUBIS_WIDE_SLASH = Roundabout.location("textures/gui/icons/anubis/wide_slash.png");
     public static final ResourceLocation ANUBIS_DIVE_ATTACK = Roundabout.location("textures/gui/icons/anubis/dive_attack.png");
-
     public static final ResourceLocation ANUBIS_DOUBLE_CUT = Roundabout.location("textures/gui/icons/anubis/double_cut.png");
     public static final ResourceLocation ANUBIS_UPPERCUT = Roundabout.location("textures/gui/icons/anubis/uppercut.png");
     public static final ResourceLocation ANUBIS_THRUST_CUT = Roundabout.location("textures/gui/icons/anubis/thrust_cut.png");
     public static final ResourceLocation ANUBIS_BARRAGE = Roundabout.location("textures/gui/icons/anubis/barrage.png");
     public static final ResourceLocation ANUBIS_SHIELDBREAK = Roundabout.location("textures/gui/icons/anubis/maybe_shieldbreak.png");
 
-
-
-    public static final ResourceLocation ANUBIS_MEMORY = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/anubis_memory.png");
-
+    public static final ResourceLocation TUSK_BULLETS = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/tusk_acts.png");
 
 
     public static final ResourceLocation SOFT_AND_WET_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,

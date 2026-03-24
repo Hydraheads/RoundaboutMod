@@ -82,6 +82,10 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.CINDERELLA, CinderellaRenderer::new);
         EntityRendererRegistry.register(FabricEntities.WALKING_HEART, WalkingHeartRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DARK_MIRAGE, DarkMirageRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.TUSK_A1, TuskAct1Renderer::new);
+        EntityRendererRegistry.register(FabricEntities.TUSK_A2, TuskAct2Renderer::new);
+        EntityRendererRegistry.register(FabricEntities.TUSK_A3, TuskAct3Renderer::new);
+        EntityRendererRegistry.register(FabricEntities.TUSK_A4, TuskAct4Renderer::new);
         EntityRendererRegistry.register(FabricEntities.DIVER_DOWN, DiverDownRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_HARPOON, HarpoonRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_KNIFE, KnifeRenderer::new);
@@ -108,6 +112,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.GROUND_BUBBLE, NoRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ANUBIS_POSSESSOR, NoRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ANUBIS_SLIPSTREAM, NoRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.TUSK_NAIL, TuskNailRenderer::new);
         EntityRendererRegistry.register(FabricEntities.PLUNDER_BUBBLE, SoftAndWetBubbleRenderer::new);
         EntityRendererRegistry.register(FabricEntities.EXPLOSIVE_BUBBLE, SoftAndWetBubbleRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ITEM_LAUNCHING_BUBBLE_ENTITY, SoftAndWetBubbleRenderer::new);
@@ -180,6 +185,10 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SOFT_AND_WET_KILLER_QUEEN_LAYER, SoftAndWetKillerQueenModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.CINDERELLA_LAYER, CinderellaModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DARK_MIRAGE_LAYER, DarkMirageModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_A1_LAYER, TuskAct1Model::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_A2_LAYER, TuskAct2Model::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_A3_LAYER, TuskAct3Model::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_A4_LAYER, TuskAct4Model::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DIVER_DOWN_LAYER, DiverDownModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.HARPOON_LAYER, HarpoonModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.BLADED_BOWLER_HAT_LAYER, BladedBowlerHatModel::createBodyLayer);
