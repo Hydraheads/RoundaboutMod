@@ -2449,6 +2449,12 @@ public class PowersAnubis extends NewDashPreset {
     }
 
 
+    public float getRange(){
+        if (self instanceof AnubisGuardian)
+            return 1.4f;
+        return 3.3F;
+    }
+
     @Override
     public void tickMobAI(LivingEntity attackTarget) {
 
@@ -2457,7 +2463,7 @@ public class PowersAnubis extends NewDashPreset {
         if (attackTarget != null && !this.getStandUserSelf().roundabout$isDazed()) {
 
 
-            if (this.getSelf().distanceTo(attackTarget) < 3 && !PowersAnubis.shouldDash((Mob)this.getSelf()) ) {
+            if (this.getSelf().distanceTo(attackTarget) < getRange() && !PowersAnubis.shouldDash((Mob)this.getSelf()) ) {
                 if (this.attackTimeDuring == -1) {
                     if ( (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax)) {
                         StandUser SU = (StandUser) this.getSelf();
