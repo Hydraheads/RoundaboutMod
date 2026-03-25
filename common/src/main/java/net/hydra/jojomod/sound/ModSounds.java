@@ -239,6 +239,14 @@ public class ModSounds {
     public static final ResourceLocation ROAD_ROLLER_MIXING_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ROAD_ROLLER_MIXING);
     public static SoundEvent ROAD_ROLLER_MIXING_EVENT = SoundEvent.createVariableRangeEvent(ROAD_ROLLER_MIXING_ID);
 
+    public static final String SUMMON_ANUBIS = "summon_anubis";
+    public static final ResourceLocation SUMMON_ANUBIS_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_ANUBIS);
+    public static SoundEvent SUMMON_ANUBIS_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_ANUBIS_ID);
+
+
+    public static final String ANUBIS_UNSHEATHE = "anubis_unsheathe";
+    public static final ResourceLocation ANUBIS_UNSHEATHE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ANUBIS_UNSHEATHE);
+    public static SoundEvent ANUBIS_UNSHEATHE_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_UNSHEATHE_ID);
 
     public static final String BLOOD_SUCK = "blood_suck";
     public static final ResourceLocation BLOOD_SUCK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLOOD_SUCK);
