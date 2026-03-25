@@ -1,14 +1,8 @@
 package net.hydra.jojomod.entity.substand;
 
-import com.mojang.datafixers.util.Pair;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.block.ModBlocks;
-import net.hydra.jojomod.block.StandFireBlock;
 import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.GoBeyondEntity;
-import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -18,13 +12,11 @@ import net.hydra.jojomod.item.KnifeItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -33,46 +25,36 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.GoalSelector;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.animal.goat.Goat;
-import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.WebBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
-import org.spongepowered.asm.mixin.injection.Inject;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class SeperatedArmEntity extends StandEntity {
@@ -284,6 +266,8 @@ public class SeperatedArmEntity extends StandEntity {
         super.tick();
     }
 
+    public boolean hasUsedItem = false;
+
     public void doSpin(){
         if(SpinTicks > 0){
             for(int i = 0; i < 1; i = i + 1) {
@@ -303,6 +287,41 @@ public class SeperatedArmEntity extends StandEntity {
             this.setYRot(this.getYRot() + 25);
             this.setYHeadRot(this.getYHeadRot() + 45);
 
+            if(getMainHandItem().getItem() instanceof SplashPotionItem SPI || getMainHandItem().getItem() instanceof LingeringPotionItem){
+                ThrownPotion pot = new ThrownPotion(level(),this.getX(),this.getY(),this.getZ());
+                pot.setDeltaMovement(0,-1,0);
+                pot.setItem(getMainHandItem());
+                level().addFreshEntity(pot);
+                this.getMainHandItem().setCount(0);
+
+            }else if(getMainHandItem().getItem() instanceof BlockItem){
+                Block block = ((BlockItem) getMainHandItem().getItem()).getBlock();
+                if(block instanceof WebBlock && !hasUsedItem && level().getBlockState(this.getOnPos()).isAir()){
+                    this.setDeltaMovement(0,0,0);
+                    level().setBlockAndUpdate(this.getOnPos(),block.defaultBlockState());
+                    this.getMainHandItem().setCount(this.getMainHandItem().getCount() - 1);
+                    hasUsedItem = true;
+                }
+
+            }
+            if (getMainHandItem().getItem() instanceof EnderpearlItem EPI && !hasUsedItem){
+                for(int i =1; i<44; i++) {
+                    ((ServerLevel) this.level()).sendParticles(ParticleTypes.PORTAL, this.getX() + Roundabout.RANDOM.nextDouble(-1, 1),
+                            this.getY() + Roundabout.RANDOM.nextDouble(-1, 1), this.getZ() + Roundabout.RANDOM.nextDouble(-1, 1),
+                            1,
+                            0, 0, 0,
+                            3);
+                }
+                if(!level().isClientSide()) {
+                    User.teleportTo(this.getX(), this.getY(), this.getZ());
+                }
+                hasUsedItem = true;
+               // this.getUser().moveTo(new Vec3(getX(),getY(),getZ()));
+                this.getMainHandItem().setCount(this.getMainHandItem().getCount() - 1);
+            }
+
+        }else{
+            hasUsedItem = false;
         }
     }
 
