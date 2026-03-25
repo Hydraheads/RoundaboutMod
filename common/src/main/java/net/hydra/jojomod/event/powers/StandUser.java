@@ -322,6 +322,7 @@ public interface StandUser {
     boolean roundabout$isPossessed();
     PathfinderMob roundabout$getPossessor();
     void roundabout$setPossessor(PathfinderMob e);
+    void roundabout$onPossessionFinish();
 
     /**Play around with falling gravity*/
     void roundabout$setAdjustedGravity(int adj);

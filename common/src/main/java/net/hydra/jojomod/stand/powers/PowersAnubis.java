@@ -2457,7 +2457,7 @@ public class PowersAnubis extends NewDashPreset {
         if (attackTarget != null && !this.getStandUserSelf().roundabout$isDazed()) {
 
 
-            if (this.getSelf().distanceTo(attackTarget) < 3.3 && !PowersAnubis.shouldDash((Mob)this.getSelf()) ) {
+            if (this.getSelf().distanceTo(attackTarget) < 3 && !PowersAnubis.shouldDash((Mob)this.getSelf()) ) {
                 if (this.attackTimeDuring == -1) {
                     if ( (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax)) {
                         StandUser SU = (StandUser) this.getSelf();

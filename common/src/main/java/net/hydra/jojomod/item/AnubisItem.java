@@ -41,7 +41,7 @@ public class AnubisItem extends Item {
         if ($$2 instanceof Player P) {
             StandUser SU = (StandUser)P;
             if (!$$1.isClientSide) {
-                P.getCooldowns().addCooldown($$0.getItem(),20);
+                P.getCooldowns().addCooldown($$0.getItem(),1200);
                 P.level().playSound(null,P.blockPosition(), ModSounds.ANUBIS_POSSESSION_EVENT,SoundSource.PLAYERS,1.0F,1.3F);
 
 

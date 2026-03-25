@@ -65,7 +65,7 @@ public class AnubisPossessorEntity extends GroundPathfindingStandAttackEntity {
         if (this.getUser() != null) {
             StandUser SU = (StandUser) this.getUser();
             if (this.targets.isEmpty() && !this.level().isClientSide()) {
-                SU.roundabout$setPossessor(null);
+                SU.roundabout$onPossessionFinish();
                 discard();
             }
         }

@@ -79,8 +79,10 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
             final int count = bypass ? 8 : ((IPlayerEntity)pl).roundabout$getStandLevel();
             for (int i = 0; i < count; ++i) {
                 AnubisMemory memory = memories.get(i);
-                memoryIcon pIcon = new memoryIcon(memory.item,(byte)i,positions[i][0], positions[i][1]+31 );
-                this.slots.add(new PoseSlot(pIcon, this.width / 2 + pIcon.xoff - 13, this.height / 2 + pIcon.yoff - 44));
+                if (memory != null) {
+                    memoryIcon pIcon = new memoryIcon(memory.item, (byte) i, positions[i][0], positions[i][1] + 31);
+                    this.slots.add(new PoseSlot(pIcon, this.width / 2 + pIcon.xoff - 13, this.height / 2 + pIcon.yoff - 44));
+                }
             }
             memoryIcon pIcon = new memoryIcon(ModItems.ANUBIS_ITEM,(byte)8,0, 31 );
             this.slots.add(new PoseSlot(pIcon, this.width / 2 + pIcon.xoff - 13, this.height / 2 + pIcon.yoff - 44));

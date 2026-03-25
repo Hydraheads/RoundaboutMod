@@ -294,6 +294,7 @@
     "anubis.AnubisHorseRendererMixin",
     "anubis.AnubisIllagerModelMixin",
     "anubis.AnubisIllagerRendererMixin",
+    "anubis.AnubisMountMessageMixin",
     "anubis.AnubisVillagerRendererMixin",
     "anubis.AnubisWolfRendererMixin",
     "barrage.BarrageBossBar",
