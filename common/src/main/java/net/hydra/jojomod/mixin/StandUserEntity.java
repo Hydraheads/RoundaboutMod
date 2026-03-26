@@ -2109,6 +2109,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
         }
+        if(roundabout$getStandPowers() instanceof PowersGreenDay  PGD && ES == EquipmentSlot.MAINHAND) {
+            if (!PGD.HasMainArm) {
+                return ItemStack.EMPTY;
+            }
+        }
         return getItemBySlot(ES);
     }
 
