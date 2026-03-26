@@ -317,6 +317,7 @@ public class FabricItems {
                         entries.accept(CHERRIES);
                         entries.accept(METEORITE);
                         entries.accept(METEORITE_INGOT);
+                        entries.accept(ANUBIS_ITEM);
 
                         entries.accept(MUSIC_DISC_TORTURE_DANCE);
                         entries.accept(MUSIC_DISC_HALLELUJAH);
@@ -486,7 +487,6 @@ public class FabricItems {
 
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
-                        entries.accept(ANUBIS_ITEM);
                         entries.accept(STAND_DISC_TUSK);
                         entries.accept(MAX_STAND_DISC_TUSK);
                         //entries.accept(STAND_DISC_DIVER_DOWN);

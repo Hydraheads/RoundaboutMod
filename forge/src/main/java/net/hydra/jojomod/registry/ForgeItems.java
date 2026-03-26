@@ -342,7 +342,7 @@ public class ForgeItems {
             () -> new BowlerHatItem(Tiers.IRON, 0F, -1.6F, new Item.Properties())
     ));
 
-    public static final RegistryObject<Item> ANUBIS_ITEM = addToWIPTab(ITEMS.register("anubis_item",
+    public static final RegistryObject<Item> ANUBIS_ITEM = addToTab(ITEMS.register("anubis_item",
             () -> new AnubisItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC))
     ));
 
