@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -137,6 +138,7 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
             this.getEntityData().set(ROUNDABOUT$SUPER_THROWN,false);
         }
         if (bounces < 0 || !$$0.getDirection().equals(Direction.UP)) {
+            bounces = 0;
             super.onHitBlock($$0);
 
             if (!done){
@@ -246,47 +248,96 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
 
     public void scatterGoo(BlockPos pos){
         if (!this.level().isClientSide) {
-            int splashRadius = 2;
-            if (bounces == 2 || bounces == 1) {
+            if (ClientNetworking.getAppropriateConfig().itemSettings.classicGasoline) {
+                int splashRadius = 2;
+                if (bounces == 2 || bounces == 1) {
 
-                ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
-                        20, 0.8, 0.6, 0.8, 0.4);
-                setGoo(pos, 0, 0, 0);
+                    ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
+                            20, 0.8, 0.6, 0.8, 0.4);
+                    setGoo(pos, 0, 0, 0);
 
-                setGoo(pos, 1, 0, 1);
-                setGoo(pos, -1, 0, 1);
-                setGoo(pos, 0, 1, 1);
-                setGoo(pos, 0, -1, 1);
+                    setGoo(pos, 1, 0, 1);
+                    setGoo(pos, -1, 0, 1);
+                    setGoo(pos, 0, 1, 1);
+                    setGoo(pos, 0, -1, 1);
 
-                setGoo(pos, 2, 0, 2);
-                setGoo(pos, -2, 0, 2);
-                setGoo(pos, 0, 2, 2);
-                setGoo(pos, 0, -2, 2);
+                    setGoo(pos, 2, 0, 2);
+                    setGoo(pos, -2, 0, 2);
+                    setGoo(pos, 0, 2, 2);
+                    setGoo(pos, 0, -2, 2);
 
-                setGoo(pos, 1, 1, 2);
-                setGoo(pos, -1, 1, 2);
-                setGoo(pos, 1, -1, 2);
-                setGoo(pos, -1, -1, 2);
-            } else if (bounces == 0) {
+                    setGoo(pos, 1, 1, 2);
+                    setGoo(pos, -1, 1, 2);
+                    setGoo(pos, 1, -1, 2);
+                    setGoo(pos, -1, -1, 2);
+                } else if (bounces == 0) {
 
-                ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
-                        10, 0.4, 0.3, 0.4, 0.4);
-                setGoo(pos, 0, 0, 1);
+                    ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
+                            10, 0.4, 0.3, 0.4, 0.4);
+                    setGoo(pos, 0, 0, 1);
 
-                setGoo(pos, 1, 0, 2);
-                setGoo(pos, -1, 0, 2);
-                setGoo(pos, 0, 1, 2);
-                setGoo(pos, 0, -1, 2);
-                splashRadius = 1;
-            }
+                    setGoo(pos, 1, 0, 2);
+                    setGoo(pos, -1, 0, 2);
+                    setGoo(pos, 0, 1, 2);
+                    setGoo(pos, 0, -1, 2);
+                    splashRadius = 1;
+                }
 
 
-            List<Entity> entities = MainUtil.hitbox(MainUtil.genHitbox(this.level(), pos.getX(), pos.getY(),
-                    pos.getZ(), splashRadius, splashRadius, splashRadius));
-            if (!entities.isEmpty()) {
-                for (Entity value : entities) {
-                    if (value instanceof LivingEntity){
-                       ((StandUser) value).roundabout$setGasolineTime(((StandUser) value).roundabout$getMaxGasolineTime());
+                List<Entity> entities = MainUtil.hitbox(MainUtil.genHitbox(this.level(), pos.getX(), pos.getY(),
+                        pos.getZ(), splashRadius, splashRadius, splashRadius));
+                if (!entities.isEmpty()) {
+                    for (Entity value : entities) {
+                        if (value instanceof LivingEntity) {
+                            ((StandUser) value).roundabout$setGasolineTime(((StandUser) value).roundabout$getMaxGasolineTime());
+                        }
+                    }
+                }
+            } else {
+                int splashRadius = 2;
+                if (bounces == 0) {
+
+                    ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
+                            20, 0.8, 0.6, 0.8, 0.4);
+                    setGoo(pos, 0, 0, 0);
+
+                    setGoo(pos, 1, 0, 1);
+                    setGoo(pos, -1, 0, 1);
+                    setGoo(pos, 0, 1, 1);
+                    setGoo(pos, 0, -1, 1);
+
+                    setGoo(pos, 2, 0, 2);
+                    setGoo(pos, -2, 0, 2);
+                    setGoo(pos, 0, 2, 2);
+                    setGoo(pos, 0, -2, 2);
+
+                    setGoo(pos, 1, 1, 2);
+                    setGoo(pos, -1, 1, 2);
+                    setGoo(pos, 1, -1, 2);
+                    setGoo(pos, -1, -1, 2);
+                } else if (bounces == 1) {
+
+                    ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
+                            10, 0.4, 0.3, 0.4, 0.4);
+                    setGoo(pos, 0, 0, 1);
+
+                    setGoo(pos, 1, 0, 2);
+                    setGoo(pos, -1, 0, 2);
+                    setGoo(pos, 0, 1, 2);
+                    setGoo(pos, 0, -1, 2);
+                    splashRadius = 1;
+                }
+
+
+                if (bounces != 2) {
+                    List<Entity> entities = MainUtil.hitbox(MainUtil.genHitbox(this.level(), pos.getX(), pos.getY(),
+                            pos.getZ(), splashRadius, splashRadius, splashRadius));
+                    if (!entities.isEmpty()) {
+                        for (Entity value : entities) {
+                            if (value instanceof LivingEntity) {
+                                ((StandUser) value).roundabout$setGasolineTime(((StandUser) value).roundabout$getMaxGasolineTime());
+                            }
+                        }
                     }
                 }
             }

@@ -2792,6 +2792,11 @@
   "config.roundabout.levelsToRerollStandWithArrow.desc": "By default, it costs 1 level to change the stand charged on a stand arrow. Keep in mind using the arrow on a mob also rerolls it (and uses 1 durability).",
   "config.roundabout.canAwakenOtherPlayersWithArrows.name": "Arrows Vs Other Players",
   "config.roundabout.canAwakenOtherPlayersWithArrows.desc": "By default, shooting another player with a stand arrow does not awaken their stand to prevent forcing someone to be stuck with something bad.",
+
+  "config.roundabout.classicGasoline.name": "Classic Gasoline",
+  "config.roundabout.classicGasoline.desc": "Turn on for gasoline to be super oppressive in pvp like it used to be.",
+
+
   "config.roundabout.canThrowVisagesOntoOtherPlayers.name": "Visages Vs Other Players",
   "config.roundabout.canThrowVisagesOntoOtherPlayers.desc": "Whether or not stand item throws with visages can apply the visages on players. Mostly exists for debug testing.",
   "config.roundabout.standDiscsDropWithKeepGameRuleOff.name": "Stand Disc Drop Rule",
