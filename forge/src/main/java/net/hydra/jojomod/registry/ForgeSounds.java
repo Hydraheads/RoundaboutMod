@@ -132,6 +132,10 @@ public class ForgeSounds {
             register(ModSounds.ROAD_ROLLER_EXPLOSION, ModSounds.ROAD_ROLLER_EXPLOSION_ID);
     public static final RegistryObject<SoundEvent> ROAD_ROLLER_MIXING_EVENT =
             register(ModSounds.ROAD_ROLLER_MIXING, ModSounds.ROAD_ROLLER_MIXING_ID);
+    public static final RegistryObject<SoundEvent> ANUBIS_UNSHEATHE_EVENT =
+            register(ModSounds.ANUBIS_UNSHEATHE, ModSounds.ANUBIS_UNSHEATHE_ID);
+    public static final RegistryObject<SoundEvent> SUMMON_ANUBIS_EVENT =
+            register(ModSounds.SUMMON_ANUBIS, ModSounds.ANUBIS_SUMMON_ID);
 
     public static final RegistryObject<SoundEvent> BLOOD_SUCK_EVENT =
             register(ModSounds.BLOOD_SUCK, ModSounds.BLOOD_SUCK_ID);

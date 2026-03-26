@@ -3,12 +3,17 @@ package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.*;
@@ -83,6 +88,10 @@ public class AnubisItem extends Item {
                             $$1.getX(), $$1.getY() + 0.3, $$1.getZ(),
                             1, 0.2, 0.2, 0.2, 0.05);
                 }
+
+                if (getUseDuration($$2)-$$3+1 == 20){
+                    ((StandUser) $$1).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.SWORD_UNSHEATHE, 12, false);
+                }
             }
         }
     }
@@ -106,6 +115,12 @@ public class AnubisItem extends Item {
         return 50;
     }
 
+    @Override
+    public void releaseUsing(ItemStack $$0, Level $$1, LivingEntity $$2, int $$3) {
+        if ($$2 instanceof Player $$4) {
+            ((StandUser) $$2).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 30,false);
+        }
+    }
 
     public static int aggroOnto(LivingEntity LE) {
         int radius = 13;

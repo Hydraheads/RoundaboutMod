@@ -11,6 +11,7 @@ public class SoundIndex {
     public static final byte SNIPER_RELOAD = -24;
     public static final byte COLT_RELOAD = -25;
     public static final byte TOMMY_RELOAD = -26;
+    public static final byte SWORD_UNSHEATHE = -27;
     public static final byte BOWLER_HAT_AIM_SOUND = -22;
     public static final byte CACKLE = -4;
     public static final byte BLOOD_REGEN = -6;

@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.projectile.AnubisSlipstreamEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -1956,6 +1957,8 @@ public class PowersAnubis extends NewDashPreset {
             return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
         } else if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
             return ModSounds.ANUBIS_SHIELDBREAK_EVENT;
+        } else if (soundChoice == SoundIndex.SUMMON_SOUND) {
+            return ModSounds.SUMMON_ANUBIS_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -2449,6 +2452,12 @@ public class PowersAnubis extends NewDashPreset {
     }
 
 
+    public float getRange(){
+        if (self instanceof AnubisGuardian)
+            return 1.4f;
+        return 3.3F;
+    }
+
     @Override
     public void tickMobAI(LivingEntity attackTarget) {
 
@@ -2457,7 +2466,7 @@ public class PowersAnubis extends NewDashPreset {
         if (attackTarget != null && !this.getStandUserSelf().roundabout$isDazed()) {
 
 
-            if (this.getSelf().distanceTo(attackTarget) < 3 && !PowersAnubis.shouldDash((Mob)this.getSelf()) ) {
+            if (this.getSelf().distanceTo(attackTarget) < getRange() && !PowersAnubis.shouldDash((Mob)this.getSelf()) ) {
                 if (this.attackTimeDuring == -1) {
                     if ( (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax)) {
                         StandUser SU = (StandUser) this.getSelf();

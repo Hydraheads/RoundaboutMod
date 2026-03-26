@@ -135,6 +135,8 @@ public class Config implements Cloneable {
         @BooleanOption(group = "inherit", value = false)
         public Boolean canAwakenOtherPlayersWithArrows;
         @BooleanOption(group = "inherit", value = false)
+        public Boolean classicGasoline;
+        @BooleanOption(group = "inherit", value = false)
         public Boolean canThrowVisagesOntoOtherPlayers;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer switchStandDiscLength;

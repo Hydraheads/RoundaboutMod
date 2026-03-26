@@ -11,6 +11,18 @@
       "roundabout:summon_diver_down"
     ]
   },
+  "summon_anubis": {
+    "subtitle": "sounds.roundabout.summon_anubis",
+    "sounds": [
+      "roundabout:summon_anubis"
+    ]
+  },
+  "anubis_unsheathe": {
+    "subtitle": "sounds.roundabout.anubis_unsheathe",
+    "sounds": [
+      "roundabout:anubis_unsheathe"
+    ]
+  },
   "vampire_dash": {
     "subtitle": "sounds.roundabout.vampire_dash",
     "sounds": [

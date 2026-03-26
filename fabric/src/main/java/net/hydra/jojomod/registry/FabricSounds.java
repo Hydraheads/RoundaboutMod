@@ -121,6 +121,8 @@ public class FabricSounds {
         addSound(ModSounds.ROAD_ROLLER_AMBIENT_ID, ModSounds.ROAD_ROLLER_AMBIENT_EVENT);
         addSound(ModSounds.ROAD_ROLLER_EXPLOSION_ID, ModSounds.ROAD_ROLLER_EXPLOSION_EVENT);
         addSound(ModSounds.ROAD_ROLLER_MIXING_ID, ModSounds.ROAD_ROLLER_MIXING_EVENT);
+        addSound(ModSounds.ANUBIS_UNSHEATHE_ID, ModSounds.ANUBIS_UNSHEATHE_EVENT);
+        addSound(ModSounds.SUMMON_ANUBIS_ID, ModSounds.SUMMON_ANUBIS_EVENT);
 
         addSound(ModSounds.BUBBLE_CREATE_ID, ModSounds.BUBBLE_CREATE_EVENT);
         addSound(ModSounds.BLOOD_SUCK_ID, ModSounds.BLOOD_SUCK_EVENT);
