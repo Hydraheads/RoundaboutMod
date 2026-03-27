@@ -57,6 +57,8 @@ public class ModEntities {
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET_KILLER_QUEEN;
     public static EntityType<KillerQueenEntity> KILLER_QUEEN;
     public static EntityType<CinderellaEntity> CINDERELLA;
+    public static EntityType<ManhattanTransferEntity> MANHATTAN_TRANSFER;
+    public static EntityType<PollinationTransferEntity> POLLINATION_TRANSFER;
     public static EntityType<WalkingHeartEntity> WALKING_HEART;
     public static EntityType<JusticePirateEntity> JUSTICE_PIRATE;
     public static EntityType<DarkMirageEntity> DARK_MIRAGE;

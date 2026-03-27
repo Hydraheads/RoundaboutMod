@@ -117,6 +117,7 @@
   "item.roundabout.max_magicians_red_disc": "Stand Disc+",
   "item.roundabout.max_killer_queen_disc": "Stand Disc+",
   "item.roundabout.diver_down_disc": "Stand Disc",
+  "item.roundabout.manhattan_transfer_disc": "Stand Disc",
   "item.roundabout.max_diver_down_disc": "Stand Disc+",
   "item.roundabout.d4c_disc.desc": "D4C",
   "item.roundabout.green_day_disc.desc": "Green Day",
@@ -143,6 +144,7 @@
   "item.roundabout.walking_heart_disc.desc": "Walking Heart",
   "item.roundabout.diver_down_disc.desc": "Diver Down",
   "item.roundabout.max_diver_down_disc.desc": "Diver Down",
+  "item.roundabout.manhattan_transfer_disc.desc": "Manhattan Transfer",
   "item.roundabout.none_disc.desc": "None",
 
   "item.roundabout.road_roller": "Road Roller",
@@ -1106,6 +1108,8 @@
   "instruction.roundabout.anubis_two": "Third Attack - Press Crouch Twice",
   "instruction.roundabout.press_skill_memory":"Press Skill %1$s While Selecting A Memory",
 
+  "instruction.roundabout.passive_manhattan": "Enter Control Mode or Activate Wind Vision",
+
   "ability.roundabout.punch": "Punch",
   "ability.roundabout.punch.desc": "Throws a punch directly in front of you. Hold it down for a 3 hit-combo!",
   "ability.roundabout.guard": "Guard",
@@ -1488,6 +1492,18 @@
   "ability.roundabout.gd_pardon": "Ally Selection",
   "ability.roundabout.gd_pardon.desc": "Select entities as allies, making them unaffected by your mold field",
 
+  "ability.roundabout.manual_shooting": "Shooting Mode",
+  "ability.roundabout.manual_shooting.desc": "Allows you to press left click with your mouse shoot where you want if you are controlling the stand and it contains a projectile. If you decide to keep automatic shooting, it will redirect istantly any bullet torwards the nearest moving entity.",
+  "ability.roundabout.control_mode": "Control Mode",
+  "ability.roundabout.control_mode.desc": "Lets you control the stand, moving it where you need to have it. if in manual shooting mode, press left click with your mouse if the stand contains a bullet to shoot it into the direction you are watching or the mob you are pointing to. If you don't enter control mode, the stand will slowly float forwards and wander a little bit near moving mobs. The same counts if you dont give any input to the stand's movement.",
+  "ability.roundabout.wind_vision": "Wind Vision",
+  "ability.roundabout.wind_vision.desc": "Lets you read wind movements just as your stand, giving you the same visuals as your stand.",
+  "ability.roundabout.bonus_damage": "Bonus Stand Damage",
+  "ability.roundabout.bonus_damage.desc": "When the stand redirects a bullet, a little stand damage is added to the projectile. It affects all projectiles",
+  "ability.roundabout.wind_reading": "Wind Reading",
+  "ability.roundabout.wind_reading.desc": " The stand read the wind instead of seeing, and the screen will appear greenish and only entities that move or that have moved render completely green with a glowing outline. It's also useful for scouting nearby areas",
+
+
   "ability.roundabout.diver_selection": "Diver Selection",
   "ability.roundabout.diver_selection.desc": "Opens an impairment wheel which you can apply effects onto yourself",
   "ability.roundabout.diver_zip": "Diver Zip",
@@ -1776,6 +1792,12 @@
   "skins.roundabout.diver_down.treasurediver": "Treasurer",
   "skins.roundabout.diver_down.birthdaydiver": "Birthday!",
   "skins.roundabout.diver_down.firediver": "Fire Down",
+
+  "skins.roundabout.manhattan_transfer.manhattan_part_6": "Anime",
+  "skins.roundabout.manhattan_transfer.manhattan_manga_part_6": "Manga",
+  "skins.roundabout.manhattan_transfer.brazilian_transfer": "Brazilian",
+  "skins.roundabout.manhattan_transfer.radioactive_transfer": "Radioactive",
+  "skins.roundabout.manhattan_transfer.pollination_transfer": "Pollination",
 
   "death.attack.anubis_possess": "%1$s couldn't challenge %2$s",
   "death.attack.anubis_spin": "%1$s was shredded by %2$s",

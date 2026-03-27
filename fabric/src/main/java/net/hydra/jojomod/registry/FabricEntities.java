@@ -407,6 +407,23 @@ public class FabricEntities {
                         EntityType.Builder.of(CinderellaEntity::new, MobCategory.MISC).
                                 sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":cinderella")
                 );
+
+    public static final EntityType<ManhattanTransferEntity> MANHATTAN_TRANSFER =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    Roundabout.location("manhattan_transfer"),
+                    EntityType.Builder.of(ManhattanTransferEntity::new, MobCategory.MISC).
+                            sized(0.85f, 0.50f).clientTrackingRange(14).build(Roundabout.MOD_ID+":manhattan_transfer")
+            );
+
+    public static final EntityType<PollinationTransferEntity> POLLINATION_TRANSFER =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "pollination_transfer"),
+                    EntityType.Builder.of(PollinationTransferEntity::new, MobCategory.MISC).
+                            sized(0.85f, 0.50f).clientTrackingRange(14).build(Roundabout.MOD_ID+":pollination_transfer")
+            );
+
         public static final EntityType<WalkingHeartEntity> WALKING_HEART =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -770,6 +787,8 @@ public class FabricEntities {
                 ModEntities.SOFT_AND_WET_KILLER_QUEEN = SOFT_AND_WET_KILLER_QUEEN;
                 ModEntities.KILLER_QUEEN = KILLER_QUEEN;
                 ModEntities.CINDERELLA = CINDERELLA;
+                ModEntities.MANHATTAN_TRANSFER = MANHATTAN_TRANSFER;
+                ModEntities.POLLINATION_TRANSFER = POLLINATION_TRANSFER;
                 ModEntities.WALKING_HEART = WALKING_HEART;
                 ModEntities.JUSTICE_PIRATE = JUSTICE_PIRATE;
                 ModEntities.DARK_MIRAGE = DARK_MIRAGE;
@@ -911,6 +930,8 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(TUSK_A3, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(TUSK_A4, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(CINDERELLA, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(MANHATTAN_TRANSFER, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(POLLINATION_TRANSFER, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(WALKING_HEART, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DIVER_DOWN, StandEntity.createStandAttributes());
 

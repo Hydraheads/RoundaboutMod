@@ -464,6 +464,24 @@ public class StandIcons {
             "textures/gui/icons/cinderella/lipstick.png");
     public static final ResourceLocation CINDERELLA_VISAGES = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/cinderella/visages.png");
+
+    public static final ResourceLocation MANUAL_SHOOTING_OFF = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/manhattan_transfer/auto_shooting_off.png");
+    public static final ResourceLocation MANUAL_SHOOTING_ON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/manhattan_transfer/auto_shooting_on.png");
+    public static final ResourceLocation CONTROL_MODE_OFF = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/manhattan_transfer/control_mode_off.png");
+    public static final ResourceLocation CONTROL_MODE_ON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/manhattan_transfer/control_mode_on.png");
+    public static final ResourceLocation WIND_VISION_OFF = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/manhattan_transfer/wind_vision_off.png");
+    public static final ResourceLocation WIND_VISION_ON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/manhattan_transfer/wind_vision_on.png");
+    public static final ResourceLocation WIND_READING = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/manhattan_transfer/wind_vision_universal.png");
+    public static final ResourceLocation MANHATTAN_DAMAGE_BOOST = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/manhattan_transfer/manhattan_damage_boost.png");
+
     public static final ResourceLocation D4C_BETWEEN_VISION = Roundabout.location("textures/gui/icons/d4c/between_vision.png");
     public static final ResourceLocation D4C_DIMENSION_KIDNAP = Roundabout.location("textures/gui/icons/d4c/dimension_kidnap.png");
     public static final ResourceLocation D4C_CLONE_SUMMON = Roundabout.location("textures/gui/icons/d4c/clone_summon.png");

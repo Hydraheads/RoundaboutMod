@@ -76,6 +76,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public CinderellaSettings cinderellaSettings;
     @NestedOption(group = "modded")
+    public ManhattanTransferSettings manhattanTransferSettings;
+    @NestedOption(group = "modded")
     public HeyYaSettings heyYaSettings;
     @NestedOption(group = "modded")
     public MandomSettings mandomSettings;
@@ -646,6 +648,15 @@ public class Config implements Cloneable {
         public Integer survivorCupidCreativeRange;
         @BooleanOption(group = "inherit", value = false)
         public Boolean canUseSurvivorOnBossesInSurvival;
+    }
+
+    public static class ManhattanTransferSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableManhattanTransfer;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer manhattanTransferMaxRange;
+        @IntOption(group = "inherit", value = 4, min = 1, max = 5)
+        public Integer getAutoSpeed;
     }
 
     public static class WalkingHeartSettings {

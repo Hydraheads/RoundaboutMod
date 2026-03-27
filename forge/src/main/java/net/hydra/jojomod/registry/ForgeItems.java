@@ -535,6 +535,10 @@ public class ForgeItems {
 
     public static final RegistryObject<Item> STAND_DISC_CINDERELLA = addToDiscTab(ITEMS.register("cinderella_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null))));
+
+    public static final RegistryObject<Item> STAND_DISC_MANHATTAN_TRANSFER = addToWIPTab(ITEMS.register("manhattan_transfer_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersManhattanTransfer(null))));
+
     public static final RegistryObject<Item> STAND_DISC_ACHTUNG = addToDiscTab(ITEMS.register("achtung_baby_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAchtungBaby(null))));
     public static final RegistryObject<Item> STAND_DISC_SURVIVOR = addToDiscTab(ITEMS.register("survivor_disc",
