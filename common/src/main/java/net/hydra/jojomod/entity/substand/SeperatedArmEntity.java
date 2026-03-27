@@ -314,6 +314,8 @@ public class SeperatedArmEntity extends StandEntity {
                 }
                 if(!level().isClientSide()) {
                     User.teleportTo(this.getX(), this.getY(), this.getZ());
+                    level().playSound(null, this.blockPosition(), SoundEvents.GLASS_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    level().playSound(null, this.blockPosition(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
                 hasUsedItem = true;
                // this.getUser().moveTo(new Vec3(getX(),getY(),getZ()));

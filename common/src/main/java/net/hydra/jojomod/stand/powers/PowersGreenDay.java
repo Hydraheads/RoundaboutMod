@@ -41,6 +41,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -147,7 +148,7 @@ public class PowersGreenDay extends NewPunchingStand {
             setSkillIcon(context, x, y, 2, StandIcons.GREEN_DAY_MOLD_PUNCH_LEFT, PowerIndex.SKILL_2);
 
         if (isHoldingSneak())
-            setSkillIcon(context, x, y, 3, StandIcons.GREEN_DAY_MOLD_LEAP, PowerIndex.SNEAK_MOVEMENT);
+            setSkillIcon(context, x, y, 3, StandIcons.GREEN_DAY_MOLD_LEAP, PowerIndex.GLOBAL_DASH);
         else
         if(isGuarding())
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
@@ -333,10 +334,11 @@ public class PowersGreenDay extends NewPunchingStand {
     }
 
     public void MainArmSpin(){
-        if(isClient()) {
-                tryPowerPacket(PowerIndex.POWER_1_BLOCK);
-
+        if(!this.onCooldown(PowerIndex.SKILL_1)) {
+            tryPowerPacket(PowerIndex.POWER_1_BLOCK);
+            setCooldown(PowerIndex.SKILL_1, 250);
         }
+
 
     }
 
