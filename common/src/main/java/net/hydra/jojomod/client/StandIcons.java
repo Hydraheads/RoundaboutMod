@@ -214,6 +214,18 @@ public class StandIcons {
 
     public static final ResourceLocation DODGE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/dodge.png");
+
+    public static final ResourceLocation VAMP_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/vampire/punch.png");
+    public static final ResourceLocation VAMP_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/vampire/barrage.png");
+    public static final ResourceLocation VAMP_GUARD = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/vampire/guard.png");
+    public static final ResourceLocation SWEEP_KICK = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/vampire/sweep.png");
+    public static final ResourceLocation COMBO = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/vampire/combo.png");
+
     public static final ResourceLocation HAIR_SPIKE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/powers/vampire/hair_spike.png");
     public static final ResourceLocation BLOOD_CLUTCH = new ResourceLocation(Roundabout.MOD_ID,
