@@ -1105,6 +1105,20 @@
   "instruction.roundabout.anubis_one": "Third Attack - Press Crouch Once",
   "instruction.roundabout.anubis_two": "Third Attack - Press Crouch Twice",
   "instruction.roundabout.press_skill_memory":"Press Skill %1$s While Selecting A Memory",
+  "ability.roundabout.ice_guard": "Guard",
+  "ability.roundabout.ice_guard.desc": "Block in front of you, just like a shield. When the purple shield meter takes enough damage, your guard drops. If freezing is unlocked in the vampire fate, also can make opponents colder.",
+
+  "ability.roundabout.aura_push": "Evil Aura Blast",
+  "ability.roundabout.aura_push.desc": "Fires vampiric aura in front of you, pushing mobs it hits slightly. Also pushes you backwards if you are in the air when you shoot it.",
+
+  "ability.roundabout.invis_vamp": "Camoflauge",
+  "ability.roundabout.invis_vamp.desc": "If you stand still, lets you blend into your surroundings and appear completely invisible.",
+
+  "ability.roundabout.deflection": "Deflection",
+  "ability.roundabout.deflection.desc": "Enter a temporary state of deflecting most incoming projectiles.",
+
+  "ability.roundabout.ripper_eyes": "Space Ripper Stingy Eyes",
+  "ability.roundabout.ripper_eyes.desc": "Charges up a continuous beam that does massive damage and bleed, traveling through even blocks. Can be interrupted. If you press it again, you can fire it off early as a weaker projectile.",
 
   "ability.roundabout.punch": "Punch",
   "ability.roundabout.punch.desc": "Throws a punch directly in front of you. Hold it down for a 3 hit-combo!",
@@ -1114,6 +1128,31 @@
   "ability.roundabout.barrage.desc": "Trap your enemy in a flurry of blows, sending them flying at the end.",
   "ability.roundabout.kick_barrage": "Barrage of Kicks",
   "ability.roundabout.kick_barrage.desc": "A faster charging barrage that does not disable enemy attacks.",
+
+  "ability.roundabout.punch_fate": "Punch",
+  "ability.roundabout.punch_fate.desc": "Throws a punch directly in front of you. Hold it down for nonstop attacks!",
+
+  "ability.roundabout.sweep_kick": "Sweep/Stomp",
+  "ability.roundabout.sweep_kick.desc": "Throws a kick in a short range directly in front of you. The knockback is quite high. If used in the air, it instead makes you slam into the ground, briefly dazing mobs it hits.",
+
+  "ability.roundabout.hair_grab": "Hair Grab",
+  "ability.roundabout.hair_grab.desc": "Pulls a mob in towards you.",
+  "ability.roundabout.hair_spikes": "Hair Spikes",
+  "ability.roundabout.hair_spikes.desc": "After a while, extends hair spikes around you damaging mobs in a radius.",
+
+
+  "ability.roundabout.blood_clutch": "Blood Clutch",
+  "ability.roundabout.blood_clutch.desc": "After a brief delay, dashes forwards. Damages a mob on contact. If the mob that is hit can bleed, drinks their blood, potentially zombifying them on death.",
+
+  "ability.roundabout.ice_clutch": "Ice Clutch",
+  "ability.roundabout.ice_clutch.desc": "After a brief delay, dashes forwards. Damages a mob on contact. If the mob can be frozen, begins the process off freezing them, potentially slowing and weakening them. When fully frozen, mobs shatter on hit. Must be unlocked in vampire fate.",
+
+  "ability.roundabout.dodge_air": "Dash / Fade Dash",
+  "ability.roundabout.dodge_air.desc": "A quick burst of speed, useful for dodging. If you time it with a jump, it travels further, but takes longer to recharge. Can be used in the air, making you turn invisible briefly in the process.",
+
+
+  "ability.roundabout.combo": "Combo",
+  "ability.roundabout.combo.desc": "Abilities build up combo points displayed above the exp bar when used consecutively. Combo points make your attacks deal more damage.",
 
   "ability.roundabout.forward_barrage": "Forward Barrage",
   "ability.roundabout.forward_barrage.desc": "While barraging, your stand starts to float forward slowly.",
