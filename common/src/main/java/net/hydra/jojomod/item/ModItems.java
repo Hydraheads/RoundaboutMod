@@ -76,6 +76,7 @@ public class ModItems {
     public static Item TERRIER_SPAWN_EGG;
     public static Item AESTHETICIAN_SPAWN_EGG;
     public static Item ZOMBIE_AESTHETICIAN_SPAWN_EGG;
+    public static Item ANUBIS_GUARDIAN_SPAWN_EGG;
     public static Item ROAD_ROLLER;
 
     public static Item KNIFE;

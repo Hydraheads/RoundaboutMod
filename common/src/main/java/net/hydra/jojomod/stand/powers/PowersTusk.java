@@ -962,4 +962,20 @@ public class PowersTusk extends NewDashPreset {
             default -> Component.translatable("skins.roundabout.tusk.manga");
         };
     }
+
+    @Override
+    public boolean isWip() {
+        return true;
+    }
+
+    @Override
+    public Component ifWipListDev() {
+        return Component.literal("Prisma");
+    }
+
+    @Override
+    public Component ifWipListDevStatus() {
+        return Component.translatable("roundabout.dev_status.active");
+    }
+
 }
