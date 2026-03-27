@@ -69,6 +69,8 @@ public class ForgeEvents {
         event.put(ForgeEntities.SOFT_AND_WET_KILLER_QUEEN.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.KILLER_QUEEN.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.CINDERELLA.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.MANHATTAN_TRANSFER.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.POLLINATION_TRANSFER.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.WALKING_HEART.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.CREAM.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.MAGICIANS_RED.get(), StandEntity.createStandAttributes().build());
@@ -525,6 +527,8 @@ public class ForgeEvents {
         ModEntities.SOFT_AND_WET_KILLER_QUEEN = ForgeEntities.SOFT_AND_WET_KILLER_QUEEN.get();
         ModEntities.KILLER_QUEEN = ForgeEntities.KILLER_QUEEN.get();
         ModEntities.CINDERELLA = ForgeEntities.CINDERELLA.get();
+        ModEntities.MANHATTAN_TRANSFER = ForgeEntities.MANHATTAN_TRANSFER.get();
+        ModEntities.POLLINATION_TRANSFER = ForgeEntities.POLLINATION_TRANSFER.get();
         ModEntities.WALKING_HEART = ForgeEntities.WALKING_HEART.get();
         ModEntities.JUSTICE_PIRATE = ForgeEntities.JUSTICE_PIRATE.get();
         ModEntities.DARK_MIRAGE = ForgeEntities.DARK_MIRAGE.get();

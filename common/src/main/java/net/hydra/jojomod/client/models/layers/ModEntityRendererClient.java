@@ -33,6 +33,8 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation KILLER_QUEEN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "soft_and_wet_killer_queen"), "main");
     public static final ModelLayerLocation SOFT_AND_WET_KILLER_QUEEN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "killer_queen"), "main");
     public static final ModelLayerLocation CINDERELLA_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "cinderella"), "main");
+    public static final ModelLayerLocation MANHATTAN_TRANSFER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "manhattan_transfer"), "main");
+    public static final ModelLayerLocation POLLINATION_TRANSFER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "pollination_transfer"), "main");
     public static final ModelLayerLocation JUSTICE_PIRATE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "justice_pirate"), "main");
     public static final ModelLayerLocation DARK_MIRAGE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "dark_mirage"), "main");
     public static final ModelLayerLocation TUSK_A1_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk_a1"), "main");

@@ -100,6 +100,10 @@ public class FabricItems {
 
     public static Item STAND_DISC_CINDERELLA = registerItem("cinderella_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null)));
+
+    public static Item STAND_DISC_MANHATTAN_TRANSFER = registerItem("manhattan_transfer_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersManhattanTransfer(null)));
+
     public static Item STAND_DISC_HEY_YA = registerItem("hey_ya_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersHeyYa(null)));
     public static Item STAND_DISC_MANDOM = registerItem("mandom_disc",
@@ -488,6 +492,7 @@ public class FabricItems {
                         entries.accept(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK);
                         entries.accept(ModBlocks.BLOODY_STONE_MASK_BLOCK);
 
+                        entries.accept(STAND_DISC_MANHATTAN_TRANSFER);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_TUSK);
@@ -557,6 +562,7 @@ public class FabricItems {
         ((MaxStandDiscItem)MAX_STAND_DISC_KILLER_QUEEN).baseDisc = ((StandDiscItem)STAND_DISC_KILLER_QUEEN);
         ModItems.MAX_STAND_DISC_KILLER_QUEEN = MAX_STAND_DISC_KILLER_QUEEN; */
         ModItems.STAND_DISC_CINDERELLA = STAND_DISC_CINDERELLA;
+        ModItems.STAND_DISC_MANHATTAN_TRANSFER = STAND_DISC_MANHATTAN_TRANSFER;
         ModItems.STAND_DISC_HEY_YA = STAND_DISC_HEY_YA;
         ModItems.STAND_DISC_MANDOM = STAND_DISC_MANDOM;
         ModItems.STAND_DISC_SURVIVOR = STAND_DISC_SURVIVOR;

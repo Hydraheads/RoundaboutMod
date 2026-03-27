@@ -357,6 +357,21 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "cinderella").toString())
             );
+
+    public static final RegistryObject<EntityType<ManhattanTransferEntity>> MANHATTAN_TRANSFER =
+            ENTITY_TYPES.register("manhattan_transfer", () ->
+                    EntityType.Builder.of(ManhattanTransferEntity::new, MobCategory.MISC).sized(0.85F, 0.50f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "manhattan_transfer").toString())
+            );
+
+    public static final RegistryObject<EntityType<PollinationTransferEntity>> POLLINATION_TRANSFER =
+            ENTITY_TYPES.register("pollination_transfer", () ->
+                    EntityType.Builder.of(PollinationTransferEntity::new, MobCategory.MISC).sized(0.85F, 0.50f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "pollination_transfer").toString())
+            );
+
     public static final RegistryObject<EntityType<WalkingHeartEntity>> WALKING_HEART =
             ENTITY_TYPES.register("walking_heart", () ->
                     EntityType.Builder.of(WalkingHeartEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).

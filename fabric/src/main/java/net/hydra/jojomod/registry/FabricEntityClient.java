@@ -80,6 +80,8 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.SOFT_AND_WET_DEBUT, SoftAndWetDebutRenderer::new);
         EntityRendererRegistry.register(FabricEntities.KILLER_QUEEN, KillerQueenRenderer::new);
         EntityRendererRegistry.register(FabricEntities.CINDERELLA, CinderellaRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.MANHATTAN_TRANSFER, ManhattanTransferRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.POLLINATION_TRANSFER, PollinationTransferRenderer::new);
         EntityRendererRegistry.register(FabricEntities.WALKING_HEART, WalkingHeartRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DARK_MIRAGE, DarkMirageRenderer::new);
         EntityRendererRegistry.register(FabricEntities.TUSK_A1, TuskAct1Renderer::new);
@@ -184,6 +186,8 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KILLER_QUEEN_LAYER, KillerQueenModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SOFT_AND_WET_KILLER_QUEEN_LAYER, SoftAndWetKillerQueenModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.CINDERELLA_LAYER, CinderellaModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.MANHATTAN_TRANSFER_LAYER, ManhattanTransferModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.POLLINATION_TRANSFER_LAYER, PollinationTransferModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DARK_MIRAGE_LAYER, DarkMirageModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_A1_LAYER, TuskAct1Model::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_A2_LAYER, TuskAct2Model::createBodyLayer);
