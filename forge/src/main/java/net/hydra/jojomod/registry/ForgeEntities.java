@@ -49,7 +49,7 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<AnubisGuardian>> ANUBIS_GUARDIAN =
             ENTITY_TYPES.register("anubis_guardian", () ->
-                    EntityType.Builder.of(AnubisGuardian::new, MobCategory.CREATURE).sized(0.6f, 0.55f).
+                    EntityType.Builder.of(AnubisGuardian::new, MobCategory.CREATURE).sized(0.6f, 1.95f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "anubis_guardian").toString())
             );
