@@ -1995,6 +1995,8 @@
   "config.roundabout.enableHeyYa.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableCinderella.name": "Enable Stand",
   "config.roundabout.enableCinderella.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+  "config.roundabout.enableManhattanTransfer.name": "Enable Stand",
+  "config.roundabout.enableManhattanTransfer.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableSurvivor.name": "Enable Stand",
   "config.roundabout.enableSurvivor.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
 
@@ -2176,6 +2178,8 @@
   "config.roundabout.emeraldCostCharacterVisage.desc": "Any character themed visage in the Cinderella shop, default 10.",
   "config.roundabout.enableJojoveinVisagesInShop.name": "JoJovein Visages",
   "config.roundabout.enableJojoveinVisagesInShop.desc": "Whether or not visages for designs used in JoJovein (the precursor mod/server/modpack to Roundabout). For example, Shizuka from JoJo Stars, which uses an adapted fan design. This config requires a restart to load.",
+
+
 
   "config.roundabout.walkingHeartAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.walkingHeartAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",

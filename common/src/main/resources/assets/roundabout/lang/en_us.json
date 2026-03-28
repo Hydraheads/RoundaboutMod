@@ -2153,6 +2153,8 @@
   "config.roundabout.enableHeyYa.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableCinderella.name": "Enable Stand",
   "config.roundabout.enableCinderella.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+  "config.roundabout.enableManhattanTransfer.name": "Enable Stand",
+  "config.roundabout.enableManhattanTransfer.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableSurvivor.name": "Enable Stand",
   "config.roundabout.enableSurvivor.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
 
@@ -2358,6 +2360,11 @@
   "config.roundabout.emeraldCostCharacterVisage.desc": "Any character themed visage in the Cinderella shop, default 10.",
   "config.roundabout.enableJojoveinVisagesInShop.name": "JoJovein Visages",
   "config.roundabout.enableJojoveinVisagesInShop.desc": "Whether or not visages for designs used in JoJovein (the precursor mod/server/modpack to Roundabout). For example, Shizuka from JoJo Stars, which uses an adapted fan design. This config requires a restart to load.",
+
+  "config.roundabout.manhattanTransferMaxRange.name": "Manhattan Transfer Max Range",
+  "config.roundabout.manhattanTransferMaxRange.desc": "How far you and Manhattan Transfer can distance until it despawns. The default is 200.",
+  "config.roundabout.getAutoSpeed.name":"Automatic Speed Modifier",
+  "config.roundabout.getAutoSpeed.desc": "WIP, select the velocity of the stand's automatic movement from 1 to 5. The lowest is easier to shoot to the stand, the highest ones are optimal by who has mastered the stand and wants it to move faster.",
 
   "config.roundabout.walkingHeartAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.walkingHeartAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
@@ -2935,6 +2942,7 @@
   "config.roundabout.standTweak.name": "Ratt",
   "config.roundabout.justiceSettings.name": "Justice",
   "config.roundabout.cinderellaSettings.name": "Cinderella",
+  "config.roundabout.manhattanTransferSettings.name": "Manhattan Transfer",
   "config.roundabout.heyYaSettings.name": "Hey Ya",
   "config.roundabout.mandomSettings.name": "Mandom",
   "config.roundabout.survivorSettings.name": "Survivor",
