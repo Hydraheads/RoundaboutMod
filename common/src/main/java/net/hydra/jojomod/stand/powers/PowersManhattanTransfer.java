@@ -39,6 +39,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -56,6 +57,8 @@ import net.minecraft.world.phys.*;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.minecraft.world.phys.shapes.VoxelShape;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -114,7 +117,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
         return (posList != null && !posList.isEmpty() && posList.size() == 1);
     }
     public boolean switchShootingMode() {
-        getStandUserSelf().roundabout$setUniqueStandModeToggle(isAutomaticShootingOn());
+        getStandUserSelf().roundabout$setUniqueStandModeToggle(!isAutomaticShootingOn());
         return true;
     }
     @Override
