@@ -30,8 +30,10 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -56,6 +58,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class PowersManhattanTransfer extends NewDashPreset {
     public PowersManhattanTransfer(LivingEntity self) {
@@ -118,6 +121,11 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public int getMaxPilotRange() {
         return ClientNetworking.getAppropriateConfig().manhattanTransferSettings.manhattanTransferMaxRange;
     }
+
+    public int configSpeed(){
+        return ClientNetworking.getAppropriateConfig().manhattanTransferSettings.getAutoSpeed;
+    }
+
     @Override
     public void powerActivate(PowerContext context) {
         /**Making dash usable on both key presses*/
@@ -177,7 +185,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
         }
     }
     private float flyingSpeed = 0.055F;
-    private float walkingSpeed = 0.02F;
+    private float walkingSpeed = 0.005F;
     public void toggleManualShootingClient() {
         this.tryPower(PowerIndex.POWER_1, true);
         tryPowerPacket(PowerIndex.POWER_1);
@@ -232,12 +240,14 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public boolean isActive() {
         return this.getStandEntity(this.getSelf()) != null;
     }
+
+    @Override
     public void tickPower() {
         super.tickPower();
         if (this.getStandEntity(this.getSelf()) != null) {
             Vec3 vec3 = new Vec3(walkingSpeed, 0, walkingSpeed);
             if (!isPiloting()) {
-                this.getStandEntity(this.getSelf()).setDeltaMovement(this.getStandEntity(this.getSelf()).getForward().scale(0.04));
+                this.getStandEntity(this.getSelf()).setDeltaMovement(this.getStandEntity(this.getSelf()).getForward().scale(0.022 * configSpeed()));
             }
             if (isActive()) {
                 DimensionType t = this.getStandEntity(this.getSelf()).level().dimensionType();
@@ -277,6 +287,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 } else {
                     ClientUtil.setCameraEntity(null);
                 }
+
             }
         }
         /*forceDespawnSet*/
@@ -285,7 +296,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 setPowerNone();
             }
         }
-
         StandEntity SE = this.getStandEntity(this.getSelf());
     }
     public void synchToCamera(){
@@ -366,7 +376,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                     {
                         if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
                             entity.setDeltaMovement(entity.getForward());
-                            entity.setDeltaMovement(entity.getForward().scale(0.12));
+                            entity.setDeltaMovement(entity.getForward().scale(0.06  * configSpeed()));
                         } else {
                             if ($$13 != 0) {
                                 entity.setDeltaMovement(delta.x / 1.1, $$13 * flyingSpeed * 3F, delta.z / 1.1);
@@ -380,7 +390,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 else{
                     if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
                         entity.setDeltaMovement(entity.getForward());
-                        entity.setDeltaMovement(entity.getForward().scale(0.06));
+                        entity.setDeltaMovement(entity.getForward().scale(0.022  * configSpeed()));
                     } else {
                         if ($$13 != 0) {
                             entity.setDeltaMovement(delta.x / 1.6, $$13 * flyingSpeed * 2.7F, delta.z / 1.6);
@@ -469,5 +479,4 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
     //COMMAND TO QUICKLY PUT MANHATTAN TRANSFER INTO MOBS: /roundaboutSetStand @p manhattan_transfer 1 "from 1 to 5" 0 false
 
-//ALSO, I STILL HAVE TO PUT THE LANG TO THE CONFING'S
 }

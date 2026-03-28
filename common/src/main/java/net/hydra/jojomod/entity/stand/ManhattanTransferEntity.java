@@ -194,28 +194,6 @@ public class ManhattanTransferEntity extends StandEntity {
 
     }
 
-    protected void onHitBlock(BlockHitResult $$0) {
-        if (!this.level().isClientSide()) {
-
-            // yoinked from BladedBowlerHatEntity
-           /* Vec3 velocity = this.getDeltaMovement();
-            Direction hitDir = $$0.getDirection();
-            Vec3 normal = Vec3.atLowerCornerOf(hitDir.getNormal());
-
-            // Makes it bounce
-            Vec3 reflected = velocity.subtract(normal.scale(2 * velocity.dot(normal)));
-
-            this.setDeltaMovement(reflected);
-
-            Vec3 hitLoc = $$0.getLocation();
-            Vec3 pushOut = normal.scale(0.2);
-            this.setPos(hitLoc.x + pushOut.x, hitLoc.y + pushOut.y, hitLoc.z + pushOut.z);*/
-
-        }
-    }
-
-
-
     @Override
     public boolean isControlledByLocalInstance() {
         LivingEntity user = this.getUser();
@@ -297,10 +275,8 @@ public class ManhattanTransferEntity extends StandEntity {
 
     public void doBasicPathfind() {
 
-        // int range = 15;
         Vec3 vec3d = this.getEyePosition(0);
         Vec3 vec3d2 = this.getViewVector(0);
-        // Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
         Vec3 vec3d3 = vec3d.add(vec3d2.x, vec3d2.y, vec3d2.z);
         BlockHitResult blockHit = this.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
         BlockPos pos = blockHit.getBlockPos();
