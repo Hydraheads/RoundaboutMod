@@ -2364,7 +2364,7 @@
   "config.roundabout.manhattanTransferMaxRange.name": "Manhattan Transfer Max Range",
   "config.roundabout.manhattanTransferMaxRange.desc": "How far you and Manhattan Transfer can distance until it despawns. The default is 200.",
   "config.roundabout.getAutoSpeed.name":"Automatic Speed Modifier",
-  "config.roundabout.getAutoSpeed.desc": "WIP, select the velocity of the stand's automatic movement from 1 to 5. The lowest is easier to shoot to the stand, the highest ones are optimal by who has mastered the stand and wants it to move faster.",
+  "config.roundabout.getAutoSpeed.desc": "Select the velocity of the stand's automatic movement from 1 to 5. The lowest is easier to shoot to the stand, the highest ones are optimal by who has mastered the stand and wants it to move faster.",
 
   "config.roundabout.walkingHeartAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.walkingHeartAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
