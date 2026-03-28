@@ -85,4 +85,6 @@ public class ModParticles {
     public static SimpleParticleType METALLICA_RAZOR;
     public static SimpleParticleType METALLICA_SCISSORS;
 
+    public static SimpleParticleType TUSK_HOLE;
+
 }

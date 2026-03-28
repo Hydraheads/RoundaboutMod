@@ -678,7 +678,7 @@ public class PowersTusk extends NewDashPreset {
         if (this.getActivePower() != PowerIndex.NONE) {
             return false;
         }
-        return super.canCombatModeUse(item);
+        return false;
     }
 
     public boolean isGunMode() {

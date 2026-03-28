@@ -8,7 +8,9 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -35,6 +37,17 @@ class TuskHoleAttackGoal extends MeleeAttackGoal {
         }
         return false;
     }
+
+    @Override
+    protected void checkAndPerformAttack(LivingEntity $$0, double $$1) {
+        double $$2 = 1;
+        if ($$1 <= $$2) {
+            this.mob.doHurtTarget($$0);
+        }
+
+
+    }
+
     @Override
     public boolean canUse() {
         if (isAct3()) {return false;}
@@ -120,22 +133,29 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
             }
         }
 
-        if (!client && this.tickCount %2 == 0) {
-            if ($$0 != null && ((StandUser) $$0).roundabout$getStandPowers() instanceof PowersTusk PT) {
-                Vec3 $$2 = this.getDeltaMovement();
-                double $$3 = this.getX() + $$2.x;
-                double $$4 = this.getY() + $$2.y;
-                double $$5 = this.getZ() + $$2.z;
-                float xrand = (float) (Math.random()*1 - 0.5);
-                float zrand = (float) (Math.random()*1 - 0.5);
-                this.level().addParticle(ModParticles.BUBBLE_TRAIL, $$3, $$4 + 0.5, $$5, 0.0, 0.0, 0.0);
+        if (!client) {
+            if ($$0 != null && ((StandUser) $$0).roundabout$getStandPowers() instanceof PowersTusk) {
+                Vec3 vec3 = this.getDeltaMovement();
+                double x = this.getX() + vec3.x;
+                double y = this.getY();
+                double z = this.getZ() + vec3.z;
 
-                ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_TRAIL, $$3,
-                        $$4 + 0.1, $$5,
+                BlockPos check = this.blockPosition();
+                int n = 0;
+                while (this.level().getBlockState(check).isSolid() || n < 3) {
+                    check.below();
+                    n++;
+                }
+
+                this.level().addParticle(ModParticles.TUSK_HOLE, x, check.getY() + 0.02, z, 0.0, 0.0, 0.0);
+
+
+                ((ServerLevel) this.level()).sendParticles(ModParticles.TUSK_HOLE, x,
+                        check.getY() + 0.02, z,
                         0,
-                        xrand,
-                        0.5,
-                        zrand,
+                        0,
+                        0,
+                        0,
                         0.1);
             }
         }
