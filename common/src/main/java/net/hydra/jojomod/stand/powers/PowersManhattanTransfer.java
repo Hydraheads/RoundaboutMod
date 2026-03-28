@@ -30,8 +30,10 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -56,6 +58,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class PowersManhattanTransfer extends NewDashPreset {
     public PowersManhattanTransfer(LivingEntity self) {
@@ -237,6 +240,8 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public boolean isActive() {
         return this.getStandEntity(this.getSelf()) != null;
     }
+
+    @Override
     public void tickPower() {
         super.tickPower();
         if (this.getStandEntity(this.getSelf()) != null) {
@@ -282,6 +287,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 } else {
                     ClientUtil.setCameraEntity(null);
                 }
+
             }
         }
         /*forceDespawnSet*/
@@ -290,7 +296,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 setPowerNone();
             }
         }
-
         StandEntity SE = this.getStandEntity(this.getSelf());
     }
     public void synchToCamera(){
