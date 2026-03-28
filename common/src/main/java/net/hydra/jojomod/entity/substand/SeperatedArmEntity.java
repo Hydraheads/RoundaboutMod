@@ -421,6 +421,9 @@ public class SeperatedArmEntity extends StandEntity {
                         $$2 = (float) ($$2 * (1-(f*0.03)));
 
                     }
+                    if(SpinTicks > 1){
+                        $$2 = $$2 / 6;
+                    }
 
                     Entity $$4 = this.getUser();
                     DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.KNIFE, $$4);
