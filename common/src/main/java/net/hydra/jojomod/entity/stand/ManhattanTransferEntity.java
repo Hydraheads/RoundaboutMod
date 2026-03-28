@@ -97,9 +97,9 @@ public class ManhattanTransferEntity extends StandEntity {
         return this.entityData.get(SAVED_SKIN);
     }
 
-    protected static final EntityDataAccessor<Integer> TARGET_ID = SynchedEntityData.defineId(RattEntity.class,
+    protected static final EntityDataAccessor<Integer> TARGET_ID = SynchedEntityData.defineId(ManhattanTransferEntity.class,
             EntityDataSerializers.INT);
-    protected static final EntityDataAccessor<Byte> SAVED_SKIN = SynchedEntityData.defineId(RattEntity.class,
+    protected static final EntityDataAccessor<Byte> SAVED_SKIN = SynchedEntityData.defineId(ManhattanTransferEntity.class,
             EntityDataSerializers.BYTE);
 
     @Override

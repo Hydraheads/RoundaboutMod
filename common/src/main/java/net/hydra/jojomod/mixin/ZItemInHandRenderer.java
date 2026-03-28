@@ -85,12 +85,12 @@ public abstract class ZItemInHandRenderer {
                 }
             }
 
-            if (user.roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
-                if (!PGD.HasMainArm || !(PGD.Main_arm == null)) {
-                    ci.cancel();
-                    return;
-                }
-            }
+           // if (user.roundabout$getStandPowers() instanceof PowersGreenDay PGD ) {
+           //     if (!PGD.HasMainArm || !(PGD.Main_arm == null)) {
+           //         ci.cancel();
+           //         return;
+           //     }
+           // }
 
 
             if (powers.isPiloting()){
