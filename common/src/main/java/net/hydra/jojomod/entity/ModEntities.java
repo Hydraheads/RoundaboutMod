@@ -13,6 +13,7 @@ import net.hydra.jojomod.entity.paintings.VanGoughPainting;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
+import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.*;
@@ -102,6 +103,7 @@ public class ModEntities {
     public static EntityType<AnubisPossessorEntity> ANUBIS_POSSESSOR;
     public static EntityType<AnubisSlipstreamEntity> ANUBIS_SLIPSTREAM;
     public static EntityType<TuskNailEntity> TUSK_NAIL;
+    public static EntityType<TuskHoleEntity> TUSK_HOLE;
 
     public static EntityType<GoBeyondEntity> GO_BEYOND;
     public static EntityType<EncasementBubbleEntity> ENCASEMENT_BUBBLE;

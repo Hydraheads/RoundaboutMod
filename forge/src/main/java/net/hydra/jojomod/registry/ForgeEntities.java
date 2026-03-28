@@ -17,6 +17,7 @@ import net.hydra.jojomod.entity.paintings.VanGoughPainting;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
+import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.*;
@@ -617,6 +618,12 @@ public class ForgeEntities {
                     EntityType.Builder.<TuskNailEntity>of(TuskNailEntity::new, MobCategory.MISC).sized(0.1F, 0.1f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "tusk_nail").toString())
+            );
+    public static final RegistryObject<EntityType<TuskHoleEntity>> TUSK_HOLE =
+            ENTITY_TYPES.register("tusk_hole", () ->
+                    EntityType.Builder.<TuskHoleEntity>of(TuskHoleEntity::new, MobCategory.MISC).sized(0.1F, 0.1f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "tusk_hole").toString())
             );
     public static final RegistryObject<EntityType<RoadRollerEntity>> ROAD_ROLLER_ENTITY =
             ENTITY_TYPES.register("road_roller_entity", () ->

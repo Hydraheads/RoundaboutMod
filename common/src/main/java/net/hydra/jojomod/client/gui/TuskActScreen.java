@@ -6,6 +6,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.client.KeyInputRegistry;
+import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
@@ -220,6 +221,8 @@ public class TuskActScreen extends Screen implements NoCancelInputScreen {
                 if (this.isSelected) {
                     this.drawSelection(guiGraphics);
                 }
+
+                guiGraphics.blit(StandIcons.TUSK_ICONS[this.icon.id],this.getX()+4,this.getY()+4,0,0,18,18,18,18);
             }
         }
 

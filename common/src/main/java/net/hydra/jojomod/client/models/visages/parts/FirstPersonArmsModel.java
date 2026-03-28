@@ -181,7 +181,7 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
 
 
                     AnimationDefinition anim = PT.getFirstPersonAnimation();
-                    if (anim == TuskAnimations.Default) {
+                    if (standUser.roundabout$getStandAnimation() == PowerIndex.NONE) {
                         standUser.roundabout$getWornStandAnimation().startIfStopped(player.tickCount);
                     }
                     this.animate(standUser.roundabout$getWornStandAnimation(),anim,partialTicks,1F);
@@ -275,6 +275,44 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
                 }
                 poseStack.popPose();
 
+                StandUser user = ((StandUser) player);
+
+                if (user.roundabout$getStandPowers() instanceof PowersTusk PT && PT.getAct() > 1 && PT.hasNail() && PowerTypes.isUsingStand(player)) {
+                    if (renderRight) {
+                        poseStack.pushPose();
+                        this.transform.translateAndRotate(poseStack);
+                        this.rform.translateAndRotate(poseStack);
+                        this.right_arm.translateAndRotate(poseStack);
+                        poseStack.translate(-0.2, -0.8, 0);
+                        poseStack.scale(0.9F,0.9F,0.9F);
+                        ModStrayModels.TUSK_DRILL.render(
+                                player, partialTicks,
+                                poseStack,
+                                bufferSource,
+                                light,
+                                r, g, b, 1
+                        );
+                        poseStack.popPose();
+                    }
+
+                    if (renderLeft) {
+                        poseStack.pushPose();
+                        this.transform.translateAndRotate(poseStack);
+                        this.lform.translateAndRotate(poseStack);
+                        this.left_arm.translateAndRotate(poseStack);
+                        poseStack.translate(0, -0.8, 0);
+                        poseStack.scale(0.9F,0.9F,0.9F);
+                        ModStrayModels.TUSK_DRILL.render(
+                                player, partialTicks,
+                                poseStack,
+                                bufferSource,
+                                light,
+                                r, g, b, 1
+                        );
+                        poseStack.popPose();
+                    }
+                }
+
                 if (rightSleeve != null) {
                     if (bt == LocacacaCurseIndex.RIGHT_HAND) {
                         poseStack.pushPose();
@@ -332,7 +370,6 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
                             }
                         }
 
-                        StandUser user = ((StandUser) player);
                         boolean hasMandom = (user.roundabout$getStandPowers() instanceof PowersMandom);
                         boolean hasMandomOut = (PowerTypes.hasStandActive(player) && hasMandom);
                         if (hasMandom) {

@@ -68,6 +68,8 @@ public class ClientConfig implements Cloneable {
     public Boolean mandomRewindShowsVisualEffectsToNonMandomUsers;
     @BooleanOption(group = "inherit", value = true)
     public Boolean mandomRewindAttemptsToSkipInterpolation;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean tuskUsesShootMode;
 
     @FloatOption(group = "inherit", value = 0.44F, min = 0, max = 1)
     public Float invisibleBlockDepthF;

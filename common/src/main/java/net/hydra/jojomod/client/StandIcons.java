@@ -554,8 +554,20 @@ public class StandIcons {
     public static final ResourceLocation ANUBIS_BARRAGE = Roundabout.location("textures/gui/icons/anubis/barrage.png");
     public static final ResourceLocation ANUBIS_SHIELDBREAK = Roundabout.location("textures/gui/icons/anubis/maybe_shieldbreak.png");
 
-    public static final ResourceLocation TUSK_BULLETS = new ResourceLocation(Roundabout.MOD_ID,
+    public static final ResourceLocation TUSK_ACTS = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/tusk_acts.png");
+    public static final ResourceLocation[] TUSK_ICONS = {
+            null,
+            new ResourceLocation(Roundabout.MOD_ID,"textures/gui/icons/tusk/act_11.png"),
+            new ResourceLocation(Roundabout.MOD_ID,"textures/gui/icons/tusk/act_2.png"),
+            new ResourceLocation(Roundabout.MOD_ID,"textures/gui/icons/tusk/act_3.png"),
+            new ResourceLocation(Roundabout.MOD_ID,"textures/gui/icons/tusk/act_4.png")
+    };
+    public static final ResourceLocation TUSK_SPINTHROW = Roundabout.location("textures/gui/icons/tusk/spin_throw.png");
+    public static final ResourceLocation TUSK_SHOCKWAVE = Roundabout.location("textures/gui/icons/tusk/shockwave.png");
+    public static final ResourceLocation TUSK_NAILLEAP = Roundabout.location("textures/gui/icons/tusk/spin_leap.png");
+    public static final ResourceLocation TUSK_BALL_BRIDGE = Roundabout.location("textures/gui/icons/tusk/ball_bridge.png");
+    public static final ResourceLocation TUSK_DRILL_BRUSH = Roundabout.location("textures/gui/icons/tusk/drill_brush.png");
 
 
     public static final ResourceLocation SOFT_AND_WET_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,

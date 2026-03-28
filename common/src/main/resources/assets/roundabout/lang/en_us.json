@@ -282,6 +282,7 @@
   "effect.roundabout.gravity_flip": "Gravity",
   "effect.roundabout.warding": "Warding",
   "effect.roundabout.vampire_blood": "Vampire Blood",
+  "effect.roundabout.unbalanced": "Unbalanced",
 
   "item.roundabout.creative_only.info": "Creative Only",
 
@@ -2991,6 +2992,8 @@
   "config.roundabout.mandomRewindShowsVisualEffectsToNonMandomUsers.desc": "Whether or not the visual effect of rewinding time appears on other players' screens. The ability is meant to be subtle and confusing canonically, but in the mod we didn't want people to mistake being rewound for lag or rubberbanding.",
   "config.roundabout.mandomRewindAttemptsToSkipInterpolation.name": "Rewind Blipping",
   "config.roundabout.mandomRewindAttemptsToSkipInterpolation.desc": "Turn this off if you have a mod that makes mobs invisible after using mandom. Whether or not time rewind attempts to skip interpolation, so mobs instantly blip into their new locations instead of visually sliding really fast like endermen teleports.",
+  "config.roundabout.tuskUsesShootMode.name": "Tusk Gun Mode",
+  "config.roundabout.tuskUsesShootMode.desc": "Whether you  need to hold right click and then press left click, or just right click",
 
   "config.roundabout.renderJusticeParticlesWhilePilotingInFirstPerson.name": "1st Person Fog",
   "config.roundabout.renderJusticeParticlesWhilePilotingInFirstPerson.desc": "Fog particles can be disabled for first person rendering of justice control mode.",
@@ -3019,6 +3022,9 @@
 
   "config.roundabout.TuskAct.name": "Tusk Act",
   "config.roundabout.TuskAct.desc": "Saves your Tusk Act after you log out.",
+
+  "config.roundabout.rattFiringMode.name": "Ratt Firing Mode",
+  "config.roundabout.rattFiringMode.desc": "Ratt's Manual Firing mode. See the Power Menu for more details",
 
 
   "config.roundabout.vampireVisionMode.name": "Selected Vision Type",

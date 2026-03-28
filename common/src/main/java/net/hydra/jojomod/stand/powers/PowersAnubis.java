@@ -135,7 +135,9 @@ public class PowersAnubis extends NewDashPreset {
 
     @Override
     public void levelUp() {
-        this.MemoryCancelClient();
+        if (this.getSelf() instanceof Player P) {
+            S2CPacketUtil.sendIntPowerDataPacket(P,PowerIndex.EXTRA_2,0);
+        }
         if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE){
             IPlayerEntity ipe = ((IPlayerEntity) PE);
             byte level = ipe.roundabout$getStandLevel();
@@ -372,7 +374,6 @@ public class PowersAnubis extends NewDashPreset {
 
 
     public void MemorySaveClient(boolean rotSave) {
-       // Roundabout.LOGGER.info(this.memories.get(playSlot).moments.toString());
         this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
 
         AnubisMemory memory = this.getUsedMemory();
@@ -1274,7 +1275,6 @@ public class PowersAnubis extends NewDashPreset {
 
 
     public void DoubleCut(boolean first) {
-        addEXP(1);
         ((StandUser)this.getSelf()).roundabout$setBubbleEncased((byte)(0));
         if (!canPogo()) {
             this.setAttackTime(0);
@@ -1347,7 +1347,6 @@ public class PowersAnubis extends NewDashPreset {
 
 
     public void ThrustCut() {
-        addEXP(2);
         ((StandUser)this.getSelf()).roundabout$setBubbleEncased((byte)(0));
 
         this.setAttackTimeDuring(-10);
@@ -1368,7 +1367,12 @@ public class PowersAnubis extends NewDashPreset {
                 v = v.normalize();
                 MainUtil.takeUnresistableKnockbackWithY(entity,0.6,v.x,v.y-0.22,v.z);
 
-                if (entity instanceof LivingEntity LE) {LE.addEffect(new MobEffectInstance(ModEffects.BLEED,200,1));}
+                if (entity instanceof LivingEntity LE) {
+                    addEXP(range ? 2 : 1);
+                    if (MainUtil.getMobBleed(LE)) {
+                    LE.addEffect(new MobEffectInstance(ModEffects.BLEED,200,1));
+                    }
+                }
 
 
             }
@@ -1393,7 +1397,6 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     public void Uppercut() {
-        addEXP(2);
         ((StandUser)this.getSelf()).roundabout$setBubbleEncased((byte)(0));
         this.getSelf().resetFallDistance();
         this.setAttackTimeDuring(-10);
@@ -1496,6 +1499,9 @@ public class PowersAnubis extends NewDashPreset {
                     this.setActivePowerPhase(this.getActivePowerPhaseMax());
                     this.setAttackTimeMax(data);
                 }
+            }
+            case PowerIndex.EXTRA_2 ->  { // s2c memory cance
+                MemoryCancelClient();
             }
 
         }
@@ -2395,16 +2401,24 @@ public class PowersAnubis extends NewDashPreset {
         return null;
     }
     public int getLastMoment(int slot,byte type,int time) {
-        AnubisMemory mem = this.memories.get(slot);
-        List<AnubisMoment> moments = mem.moments;
-        if (moments.isEmpty()) {return -1;}
+        if (slot != -1) {
+            AnubisMemory mem = this.memories.get(slot);
+            if (mem != null) {
 
-        for(int i=moments.size()-1;i>=0;i--) {
-            AnubisMoment moment = moments.get(i);
-            if (moment.type == type) {
-                if (time >= moment.time) {
-                    return i;
+                List<AnubisMoment> moments = mem.moments;
+                if (moments.isEmpty()) {
+                    return -1;
                 }
+
+                for (int i = moments.size() - 1; i >= 0; i--) {
+                    AnubisMoment moment = moments.get(i);
+                    if (moment.type == type) {
+                        if (time >= moment.time) {
+                            return i;
+                        }
+                    }
+                }
+
             }
         }
 
