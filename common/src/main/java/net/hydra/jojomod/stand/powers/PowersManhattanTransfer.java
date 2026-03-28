@@ -118,6 +118,11 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public int getMaxPilotRange() {
         return ClientNetworking.getAppropriateConfig().manhattanTransferSettings.manhattanTransferMaxRange;
     }
+
+    public int configSpeed(){
+        return ClientNetworking.getAppropriateConfig().manhattanTransferSettings.getAutoSpeed;
+    }
+
     @Override
     public void powerActivate(PowerContext context) {
         /**Making dash usable on both key presses*/
@@ -177,7 +182,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
         }
     }
     private float flyingSpeed = 0.055F;
-    private float walkingSpeed = 0.02F;
+    private float walkingSpeed = 0.005F;
     public void toggleManualShootingClient() {
         this.tryPower(PowerIndex.POWER_1, true);
         tryPowerPacket(PowerIndex.POWER_1);
@@ -237,7 +242,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
         if (this.getStandEntity(this.getSelf()) != null) {
             Vec3 vec3 = new Vec3(walkingSpeed, 0, walkingSpeed);
             if (!isPiloting()) {
-                this.getStandEntity(this.getSelf()).setDeltaMovement(this.getStandEntity(this.getSelf()).getForward().scale(0.04));
+                this.getStandEntity(this.getSelf()).setDeltaMovement(this.getStandEntity(this.getSelf()).getForward().scale(0.022 * configSpeed()));
             }
             if (isActive()) {
                 DimensionType t = this.getStandEntity(this.getSelf()).level().dimensionType();
@@ -366,7 +371,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                     {
                         if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
                             entity.setDeltaMovement(entity.getForward());
-                            entity.setDeltaMovement(entity.getForward().scale(0.12));
+                            entity.setDeltaMovement(entity.getForward().scale(0.06  * configSpeed()));
                         } else {
                             if ($$13 != 0) {
                                 entity.setDeltaMovement(delta.x / 1.1, $$13 * flyingSpeed * 3F, delta.z / 1.1);
@@ -380,7 +385,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 else{
                     if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
                         entity.setDeltaMovement(entity.getForward());
-                        entity.setDeltaMovement(entity.getForward().scale(0.06));
+                        entity.setDeltaMovement(entity.getForward().scale(0.022  * configSpeed()));
                     } else {
                         if ($$13 != 0) {
                             entity.setDeltaMovement(delta.x / 1.6, $$13 * flyingSpeed * 2.7F, delta.z / 1.6);
@@ -469,5 +474,4 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
     //COMMAND TO QUICKLY PUT MANHATTAN TRANSFER INTO MOBS: /roundaboutSetStand @p manhattan_transfer 1 "from 1 to 5" 0 false
 
-//ALSO, I STILL HAVE TO PUT THE LANG TO THE CONFING'S
 }

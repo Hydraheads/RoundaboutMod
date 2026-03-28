@@ -297,10 +297,8 @@ public class ManhattanTransferEntity extends StandEntity {
 
     public void doBasicPathfind() {
 
-        // int range = 15;
         Vec3 vec3d = this.getEyePosition(0);
         Vec3 vec3d2 = this.getViewVector(0);
-        // Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
         Vec3 vec3d3 = vec3d.add(vec3d2.x, vec3d2.y, vec3d2.z);
         BlockHitResult blockHit = this.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
         BlockPos pos = blockHit.getBlockPos();
