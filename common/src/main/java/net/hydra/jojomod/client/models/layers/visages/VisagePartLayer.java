@@ -196,6 +196,16 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             renderJosukeDecals(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
+                        if (visage.is(ModItems.RAT_MASK) && !isBodyFrozen) {
+                            renderRatHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                            renderRatTail(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                            renderRatLeftLeg(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                            renderRatRightLeg(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
                         if (vd.rendersTasselHat() && !isBodyFrozen && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
                             renderTasselHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
@@ -578,6 +588,42 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ModStrayModels.JosukeDecalsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,40);
+    }
+    public void renderRatTail(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                   float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,40);
+        getParentModel().body.translateAndRotate(poseStack);
+        ModStrayModels.ratTailPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,40);
+    }
+    public void renderRatRightLeg(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                              float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,40);
+        getParentModel().rightLeg.translateAndRotate(poseStack);
+        ModStrayModels.ratRightLegPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,40);
+    }
+    public void renderRatLeftLeg(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                  float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,40);
+        getParentModel().leftLeg.translateAndRotate(poseStack);
+        ModStrayModels.ratLeftLegPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,40);
+    }
+    public void renderRatHat(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,41);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.ratHatPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,41);
     }
     public void renderTasselHat(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                                  float r, float g, float b) {
