@@ -36,7 +36,11 @@ public abstract class AchtungModelPart {
     public void roundabout$modifyAlpha(PoseStack $$0, VertexConsumer $$1, int $$2, int $$3, float $$4, float $$5, float $$6, float originalAlpha, CallbackInfo ci) {
         float ether = ClientUtil.getThrowFadeToTheEther();
         int frozenLevel =  ClientUtil.frozenLevel;
-        if (ClientUtil.getThrowFadeToTheEther() != 1f || frozenLevel > 0){
+        if (ether <= 0){
+            ci.cancel();
+            return;
+        }
+        if (ether != 1f || frozenLevel > 0){
             VertexConsumer newConsumer = $$1;
             ResourceLocation rl = ClientUtil.saveBufferTexture;
             MultiBufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();

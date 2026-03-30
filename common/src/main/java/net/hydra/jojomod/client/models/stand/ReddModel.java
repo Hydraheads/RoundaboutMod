@@ -21,19 +21,15 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 
-public class ReddModel<T extends ReddEntity> extends StandModel<T> {
+public class ReddModel<T extends ReddEntity> extends RattModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 //	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "ratt"), "main");
 
-	private final ModelPart stand2;
     private final ModelPart torch;
 
 
 	public ReddModel(ModelPart root) {
-		this.stand = root.getChild("stand");
-		this.stand2 = this.stand.getChild("stand2");
-		this.head = this.stand2.getChild("head");
-		this.body = this.stand2.getChild("body");
+        super(root);
 
         this.torch = this.head.getChild("redstonetorhc");
 	}
@@ -153,34 +149,7 @@ public class ReddModel<T extends ReddEntity> extends StandModel<T> {
 
 	@Override
 	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
-		Minecraft mc = Minecraft.getInstance();
-
-		Vec3 rots = new Vec3(this.head.xRot,this.stand.yRot,0);
-
-		super.setupAnim(pEntity,pLimbSwing,pLimbSwingAmount,pAgeInTicks,pNetHeadYaw,pHeadPitch);
-
-		StandUser SU = (StandUser) ((RattEntity)pEntity).getUser();
-		if (SU != null) {
-			if (SU.roundabout$getStandPowers() instanceof PowersRatt PR) {
-				if (!mc.isPaused() && !(((TimeStop) pEntity.level()).CanTimeStopEntity(pEntity.getUser()))) {
-                    Entity target = PR.getShootTarget();
-					Vec3 v = PR.getRotations(target);
-					this.head.xRot = Mth.lerp(this.head.xRot, (float) v.x, 0.85F);
-					this.stand.yRot = Mth.lerp(this.stand.yRot, (float) v.y, 0.85F);
-				} else {
-					this.head.xRot = (float)rots.x;
-					this.stand.yRot =(float)rots.y;
-				}
-				pEntity.setHeadRotationX(this.head.xRot);
-				pEntity.setStandRotationY(this.stand.yRot);
-
-			}
-		}
-
+        super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
         torch.xRot = -this.head.xRot;
-
-
-
-		this.animate(pEntity.fire, RattAnimations.Fire, pAgeInTicks, 1f);
-		this.animate(pEntity.loading, RattAnimations.Loading, pAgeInTicks, 1f);}
+    }
 }

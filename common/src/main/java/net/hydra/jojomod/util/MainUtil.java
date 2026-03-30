@@ -25,12 +25,12 @@ import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModGamerules;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampiricFate;
-import net.hydra.jojomod.platform.services.IPlatformHelper;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersJustice;
@@ -39,7 +39,6 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersMetallica;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
-import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -95,8 +94,6 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -117,6 +114,20 @@ public class MainUtil {
         isClient = true;
     }
 
+
+    public static void playPop(Entity entity){
+        if (entity instanceof LivingEntity LE && !LE.level().isClientSide()){
+            StandUser SE = ((StandUser) LE);
+            if (SE.roundabout$isBubbleEncased()) {
+                SE.roundabout$setBubbleEncased((byte) 0);
+                LE.level().playSound(null, LE.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
+                        SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+                ((ServerLevel) LE.level()).sendParticles(ModParticles.BUBBLE_POP,
+                        LE.getX(), LE.getY() + LE.getBbHeight() * 0.5, LE.getZ(),
+                        5, 0.25, 0.25, 0.25, 0.025);
+            }
+        }
+    }
 
 
     public static final Map<DyeColor, ItemLike> SHEEP_DYE;
@@ -181,6 +192,7 @@ public class MainUtil {
     public static ArrayList<String> addedMobsWithEnderBlood = Lists.newArrayList();
     public static ArrayList<String> removeBloodFromThese = Lists.newArrayList();
     public static ArrayList<String> unfreezableMobs = Lists.newArrayList();
+    public static ArrayList<String> foodThatHasEffectsForVampires = Lists.newArrayList();
     public static Set<String> foodThatGivesBloodList = Set.of();
     Map<String, FoodBloodStats> foodThatGivesBloodMap;
 
@@ -261,8 +273,20 @@ public class MainUtil {
     public static boolean isHypnotismTargetBlacklisted(Entity ent){
         if (ent == null)
             return false;
+        if (ent instanceof FallenMob)
+            return true;
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
         if (hypnotismMobBlackList != null && !hypnotismMobBlackList.isEmpty() && rl != null && hypnotismMobBlackList.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isEdibleToVampires(ItemStack stack){
+        if (stack == null || stack.isEmpty())
+            return false;
+        ResourceLocation rl = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        if (foodThatHasEffectsForVampires != null && !foodThatHasEffectsForVampires.isEmpty() && rl != null && foodThatHasEffectsForVampires.contains(rl.toString())){
             return true;
         }
         return false;
@@ -582,22 +606,27 @@ public class MainUtil {
                 || LE instanceof JojoNPC);
 
     }
-    public static LivingEntity homeOnWorthy(Level level, Vec3 vec3, double range) {
-        List<Entity> EntitiesInRange = genHitbox(level, vec3.x, vec3.y,
-                vec3.z, range, range, range);
+
+    public static LivingEntity findClosestEntity(Level level, Vec3 pos, double range, Predicate<LivingEntity> condition) {
+        List<Entity> EntitiesInRange = genHitbox(level, pos.x, pos.y,
+                pos.z, range, range, range);
         List<Entity> hitEntities = new ArrayList<>(EntitiesInRange) {
         };
         LivingEntity mm = null;
         double distance = -1;
         for (Entity value : hitEntities) {
             if (value instanceof LivingEntity mb){
-                if (canGrantStand(mb) && (distance == -1 || mb.distanceToSqr(vec3) < distance)){
+                if (condition.test(mb) && (distance == -1 || mb.distanceToSqr(pos) < distance)){
                     mm = mb;
-                    distance = mb.distanceToSqr(vec3);
+                    distance = mb.distanceToSqr(pos);
                 }
             }
         }
         return mm;
+    }
+
+    public static LivingEntity homeOnWorthy(Level level, Vec3 vec3, double range) {
+        return findClosestEntity(level,vec3,range, MainUtil::canGrantStand);
     }
 
     public static ItemStack saveToDiscData(LivingEntity ent, ItemStack stack){
@@ -901,6 +930,26 @@ public class MainUtil {
         return false;
     }
 
+    public static void onDeath(Entity entity, DamageSource source){
+        StandPowers powers = ((StandUser)entity).roundabout$getStandPowers();
+        if (powers != null && powers.isClashing()){
+            powers.endClash();
+        }
+
+        if (entity instanceof ServerPlayer pl) {
+            if ((((IPlayerEntity) entity).roundabout$getVoiceData()) != null) {
+                ((IPlayerEntity) entity).roundabout$getVoiceData().playIfDying(source);
+            }
+        }
+        if (source.getEntity() instanceof Player pl) {
+            ((IPowersPlayer) pl).rdbt$getPowers().onKill(entity,source);
+            ((IFatePlayer) pl).rdbt$getFatePowers().onKill(entity,source);
+        }
+        if (source.getEntity() instanceof LivingEntity le) {
+            ((StandUser) le).roundabout$getStandPowers().onKill(entity,source);
+        }
+    }
+
     public static Vec3 getMobCenter(Entity entity, float centerpercent){
         Vec3 start = entity.getPosition(1f);
         Vec3 hitbox = new Vec3(0,entity.getBbHeight()*centerpercent,0);
@@ -924,6 +973,14 @@ public class MainUtil {
                 && !(mob != null && ((TimeStop)mob.level()).CanTimeStopEntity(mob)));
     }
 
+    public static boolean resistsKnockBack(Entity ent){
+        if (ent instanceof LivingEntity LE &&
+                ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW &&
+                PW.hasExtendedHeelsForWalking()){
+            return true;
+        }
+        return false;
+    }
     public static boolean canDrinkBloodFair(Entity ent,Entity drinker){
         return canDrinkBlood(ent) && !(ent instanceof Player);
     }
@@ -1112,6 +1169,12 @@ public class MainUtil {
             return;
         }
         if (getMobBleed(entity)){
+
+            //Bleed now removes strength but only on apply
+            if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.bleedRemovesStrength) {
+                ((LivingEntity) entity).removeEffect(MobEffects.DAMAGE_BOOST);
+            }
+
             if (!hasEnderBlood(entity) && !hasBlueBlood(entity)) {
                 if (source != null && isWearingEitherStoneMask(source) && source.distanceTo(entity) < 5) {
                     activateStoneMask(source);

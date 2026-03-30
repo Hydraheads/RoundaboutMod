@@ -1,18 +1,19 @@
 package net.hydra.jojomod.item;
 
 
-import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.stand.powers.PowersAnubis;
-import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
+import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.*;
@@ -45,7 +46,7 @@ public class AnubisItem extends Item {
         if ($$2 instanceof Player P) {
             StandUser SU = (StandUser)P;
             if (!$$1.isClientSide) {
-                P.getCooldowns().addCooldown($$0.getItem(),10/*2400*/);
+                P.getCooldowns().addCooldown($$0.getItem(),1200);
                 P.level().playSound(null,P.blockPosition(), ModSounds.ANUBIS_POSSESSION_EVENT,SoundSource.PLAYERS,1.0F,1.3F);
 
 
@@ -55,13 +56,16 @@ public class AnubisItem extends Item {
                         targets.add(target);
                     }
                 }
-                AnubisPossessorEntity p = new AnubisPossessorEntity($$2.level(), $$2, targets );
-                p.setPos($$2.getPosition(1));
-                $$1.addFreshEntity(p);
-                SU.roundabout$setPossessor(p);
+                AnubisPossessorEntity anubisPossessorEntity = new AnubisPossessorEntity($$2.level(), $$2, targets );
+                anubisPossessorEntity.setPos($$2.getPosition(1));
+                $$1.addFreshEntity(anubisPossessorEntity);
+                SU.roundabout$setPossessor(anubisPossessorEntity);
+                P.startRiding(anubisPossessorEntity);
 
                 if (!targets.isEmpty()) {
                     ((StandUser)$$2).roundabout$setActive(false);
+                } else {
+                    P.displayClientMessage(Component.translatable("item.roundabout.anubis_item.failure").withStyle(ChatFormatting.RED),true);
                 }
 
                 AnubisItem.aggroOnto($$2);
@@ -72,14 +76,7 @@ public class AnubisItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack $$0, @Nullable Level $$1, List<Component> $$2, TooltipFlag $$3) {
-        $$2.add(Component.translatable("leveling.roundabout.disc_wip").withStyle(ChatFormatting.RED));
-        $$2.add(Component.translatable("leveling.roundabout.disc_wip_2").withStyle(ChatFormatting.RED));
-        $$2.add(Component.translatable("roundabout.dev_status.dev_status").withStyle(ChatFormatting.WHITE)
-                .append(" ")
-                .append(Component.translatable("roundabout.dev_status.active")).withStyle(ChatFormatting.YELLOW));
-        $$2.add(Component.translatable("roundabout.dev_status.dev_name").withStyle(ChatFormatting.WHITE)
-                .append(" ")
-                .append("Prisma").withStyle(ChatFormatting.YELLOW));
+        $$2.add(Component.translatable("roundabout.anubis_item.requires_mainhand").withStyle(ChatFormatting.GRAY));
     }
 
     @Override
@@ -91,6 +88,10 @@ public class AnubisItem extends Item {
                             $$1.getX(), $$1.getY() + 0.3, $$1.getZ(),
                             1, 0.2, 0.2, 0.2, 0.05);
                 }
+
+                if (getUseDuration($$2)-$$3+1 == 20){
+                    ((StandUser) $$1).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.SWORD_UNSHEATHE, 12, false);
+                }
             }
         }
     }
@@ -98,7 +99,6 @@ public class AnubisItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
 
-    //    ((IPlayerEntity)$$1).roundabout$getThirdPersonAnubisUnsheath().startIfStopped($$1.tickCount);
 
         ItemStack $$3 = $$1.getItemInHand($$2);
         $$1.startUsingItem($$2);
@@ -115,6 +115,12 @@ public class AnubisItem extends Item {
         return 50;
     }
 
+    @Override
+    public void releaseUsing(ItemStack $$0, Level $$1, LivingEntity $$2, int $$3) {
+        if ($$2 instanceof Player $$4) {
+            ((StandUser) $$2).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 30,false);
+        }
+    }
 
     public static int aggroOnto(LivingEntity LE) {
         int radius = 13;

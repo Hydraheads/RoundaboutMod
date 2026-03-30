@@ -8,7 +8,9 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 
+import net.hydra.jojomod.entity.stand.GreenDayEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
 import net.hydra.jojomod.entity.substand.SeperatedLegsEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
@@ -18,53 +20,29 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.mixin.StandUserEntity;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 
-import net.minecraft.core.UUIDUtil;
-import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.EnderpearlItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.FlowerBlock;
-import net.minecraft.world.level.levelgen.WorldDimensions;
-import net.minecraft.world.level.storage.WorldData;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
-import org.spongepowered.asm.mixin.Unique;
 
 import java.util.*;
 
@@ -109,22 +87,22 @@ public class PowersGreenDay extends NewPunchingStand {
                 "instruction.roundabout.barrage", StandIcons.GREEN_DAY_BARRAGE,2,level,bypas));
         // manual scope
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.gd_punch_left",
-                "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_PUNCH_LEFT,1,level,bypas));
+            "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_PUNCH_RIGHT,1,level,bypas));
         // charge fire
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39, topPos+118,0, "ability.roundabout.gd_return_left",
-                "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_ARM_RETURN_LEFT,0,level,bypas));
+                "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_ARM_RETURN_RIGHT,0,level,bypas));
         // burst fire
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.gd_spin_left",
-                "instruction.roundabout.press_skill_block", StandIcons.GREEN_DAY_MOLD_SPIN_LEFT,2,level,bypas));
+                "instruction.roundabout.press_skill_block", StandIcons.GREEN_DAY_MOLD_SPIN_RIGHT,2,level,bypas));
         // place ratt
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.gd_punch_right",
-                "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_PUNCH_RIGHT,2,level,bypas));
+                "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_PUNCH_LEFT,2,level,bypas));
         // place burst
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.gd_spin_right",
-                "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_ARM_RETURN_RIGHT,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.gd_return_right",
+                "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_ARM_RETURN_LEFT,1,level,bypas));
         // place auto
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.gd_return_right",
-                "instruction.roundabout.press_skill_block", StandIcons.GREEN_DAY_MOLD_SPIN_RIGHT,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.gd_spin_right",
+                "instruction.roundabout.press_skill_block", StandIcons.GREEN_DAY_MOLD_SPIN_LEFT,1,level,bypas));
         // dodge
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
@@ -159,15 +137,15 @@ public class PowersGreenDay extends NewPunchingStand {
                 setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_MOLD_FIELD, PowerIndex.SKILL_4);
 
         if (isHoldingSneak())
-            setSkillIcon(context, x, y, 2, StandIcons.GREEN_DAY_ARM_RETURN_RIGHT, PowerIndex.SKILL_2_SNEAK);
+            setSkillIcon(context, x, y, 2, StandIcons.GREEN_DAY_ARM_RETURN_LEFT, PowerIndex.SKILL_2_SNEAK);
         else
         if(isGuarding())
-            setSkillIcon(context, x, y, 2, StandIcons.GREEN_DAY_MOLD_SPIN_RIGHT, PowerIndex.SKILL_2_GUARD);
+            setSkillIcon(context, x, y, 2, StandIcons.GREEN_DAY_MOLD_SPIN_LEFT, PowerIndex.SKILL_2_GUARD);
         else
-            setSkillIcon(context, x, y, 2, StandIcons.GREEN_DAY_MOLD_PUNCH_RIGHT, PowerIndex.SKILL_2);
+            setSkillIcon(context, x, y, 2, StandIcons.GREEN_DAY_MOLD_PUNCH_LEFT, PowerIndex.SKILL_2);
 
         if (isHoldingSneak())
-            setSkillIcon(context, x, y, 3, StandIcons.GREEN_DAY_MOLD_LEAP, PowerIndex.SNEAK_MOVEMENT);
+            setSkillIcon(context, x, y, 3, StandIcons.GREEN_DAY_MOLD_LEAP, PowerIndex.GLOBAL_DASH);
         else
         if(isGuarding())
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
@@ -175,12 +153,12 @@ public class PowersGreenDay extends NewPunchingStand {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
 
         if (isHoldingSneak())
-            setSkillIcon(context, x, y, 1, StandIcons.GREEN_DAY_ARM_RETURN_LEFT, PowerIndex.SKILL_1);
+            setSkillIcon(context, x, y, 1, StandIcons.GREEN_DAY_ARM_RETURN_RIGHT, PowerIndex.SKILL_1);
         else
-        if(isGuarding())
-            setSkillIcon(context, x, y, 1, StandIcons.GREEN_DAY_MOLD_SPIN_LEFT, PowerIndex.SKILL_1);
+        if(isGuarding() || isBarrageAttacking())
+            setSkillIcon(context, x, y, 1, StandIcons.GREEN_DAY_MOLD_SPIN_RIGHT, PowerIndex.SKILL_1);
         else
-            setSkillIcon(context, x, y, 1, StandIcons.GREEN_DAY_MOLD_PUNCH_LEFT, PowerIndex.SKILL_1);
+            setSkillIcon(context, x, y, 1, StandIcons.GREEN_DAY_MOLD_PUNCH_RIGHT, PowerIndex.SKILL_1);
 
 
 
@@ -192,6 +170,17 @@ public class PowersGreenDay extends NewPunchingStand {
         /**Making dash usable on both key presses*/
         switch (context)
         {
+            case SKILL_1_NORMAL -> {
+                MainArmThrow();
+            }
+
+            case SKILL_1_CROUCH -> {
+                MainArmReturn();
+            }
+
+            case SKILL_1_GUARD -> {
+                MainArmSpin();
+            }
             case SKILL_3_NORMAL -> {
                 Roundabout.LOGGER.info("dash");
                 dash();
@@ -212,12 +201,11 @@ public class PowersGreenDay extends NewPunchingStand {
             case SKILL_4_GUARD -> {
                 selectAllyClient();
             }
-            case SKILL_1_NORMAL -> {
-              setcrawlserver(this.self);
-            }
+
         }
     }
     public boolean IsMoldFieldActive = false;
+    public static final byte MAIN_ARM_THROW_SLIM = 52;
 
     @Override
     public boolean setPowerOther(int move, int lastMove) {
@@ -225,7 +213,6 @@ public class PowersGreenDay extends NewPunchingStand {
         {
             case PowerIndex.POWER_4_SNEAK -> {
                 return StitchHeal(1.0f, this.self);
-                //return this.setcrawlserver(this.self);
                 
             }
             case PowerIndex.POWER_4 -> {
@@ -237,6 +224,21 @@ public class PowersGreenDay extends NewPunchingStand {
             case PowerIndex.POWER_3_EXTRA -> {
                 return moldLeapServer();
             }
+            case PowerIndex.POWER_1 -> {
+                return MainArmThrowServer(ModEntities.SEPERATED_ARM.create(this.self.level()));
+            }
+
+            case PowerIndex.POWER_1_SNEAK -> {
+                return MainArmReturnServer();
+            }
+
+            case PowerIndex.POWER_1_BLOCK -> {
+                return MainArmSpinServer();
+            }
+
+            case MAIN_ARM_THROW_SLIM -> {
+                return MainArmThrowServer(ModEntities.SEPERATED_ARM_SLIM.create(this.self.level()));
+            }
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -246,6 +248,7 @@ public class PowersGreenDay extends NewPunchingStand {
 
     @Override
     public void tickPower() {
+
         moldShenanigans();
         if(legGoneTicks>0) {
             if (!this.self.level().isClientSide()) {
@@ -264,6 +267,7 @@ public class PowersGreenDay extends NewPunchingStand {
             legGoneTicks = legGoneTicks - 1;
         }
         if(!(currentlegs == null)) {
+
             if(!(legGoneTicks>0)) {
                 if (!this.self.level().isClientSide()) {
                     currentlegs.discard();
@@ -297,6 +301,7 @@ public class PowersGreenDay extends NewPunchingStand {
                 }
 
             }
+        }else{
         }
         if(!hasCheckedAllies) {
             generateAllyList();
@@ -317,6 +322,129 @@ public class PowersGreenDay extends NewPunchingStand {
 
         }
         super.updatePowerInt(activePower,data);
+    }
+
+    public SeperatedArmEntity Main_arm = null;
+
+    public boolean slimSkin = false;
+    public boolean toggleSlimSkin(){
+        slimSkin = true;
+        return true;
+    }
+
+    public void MainArmSpin(){
+        if(!this.onCooldown(PowerIndex.SKILL_1)) {
+            if(HasMainArm){
+                MainArmThrow();
+            }
+            tryPowerPacket(PowerIndex.POWER_1_BLOCK);
+            setCooldown(PowerIndex.SKILL_1, 250);
+        }
+
+
+    }
+
+    public boolean MainArmSpinServer(){
+
+            Main_arm.setSpinTicks(30);
+            Main_arm.flyingTicks = 0;
+        return true;
+    }
+
+    public boolean MainArmThrowServer(SeperatedArmEntity SAE){
+        if (Main_arm == null) {
+            if (SAE != null) {
+                Main_arm = SAE;
+                SAE.setUser(this.self);
+                SAE.setXRot(this.self.getXRot());
+                SAE.setYRot(this.self.getYRot());
+                SAE.setPos(getRayBlock(this.self,0.5f).add(0,-0.3,0));
+                SAE.setItemInHand(InteractionHand.MAIN_HAND,this.self.getItemInHand(InteractionHand.MAIN_HAND).copy());
+                this.self.level().addFreshEntity(SAE);
+                SAE.jump(this.getRayBlock(this.self,20F));
+                Main_arm = SAE;
+            }
+            this.self.getMainHandItem().setCount(0);
+            Vec3 location = getRayBlock(this.self, 1f);
+
+           // ((ServerLevel) this.self.level()).sendParticles(ModParticles.MOLD_DUST, location.x,
+             //       location.y, location.z,
+               //     24,
+                 //   0.005, 0.005, 0.005,
+                   // 0.1);
+        }else{
+            Double distance = MainUtil.cheapDistanceTo(
+                    this.self.getX(),
+                    this.self.getY(),
+                    this.self.getZ(),
+                    Main_arm.getX(),
+                    Main_arm.getY(),
+                    Main_arm.getZ()
+            );
+            Float distanceF = distance.floatValue() + 2f;
+            Main_arm.jump(this.getRayBlock(this.self,distanceF));
+        }
+        return true;
+    }
+
+    public boolean HasMainArmCharge = true;
+
+    public void MainArmThrow(){
+        if (!this.onCooldown(PowerIndex.SKILL_1)) {
+            if(isBarrageAttacking()){
+                MainArmSpin();
+            }else {
+                if (HasMainArmCharge) {
+                    HasMainArmCharge = false;
+                } else {
+                    this.setCooldown(PowerIndex.SKILL_1, 120);
+                    HasMainArmCharge = true;
+                }
+                if (isClient()) {
+                    AbstractClientPlayer abstractClientPlayer = (AbstractClientPlayer) this.self;
+                    if ((abstractClientPlayer).getModelName().equals("default")) {
+                        tryPowerPacket(PowerIndex.POWER_1);
+                    } else {
+                        tryPowerPacket(MAIN_ARM_THROW_SLIM);
+                    }
+
+                }
+                HasMainArm = false;
+            }
+        }
+
+    }
+    public boolean HasMainArm = true;
+    public void MainArmReturn(){
+        if(!HasMainArm){
+            this.setCooldown(PowerIndex.SKILL_1, 200);
+            HasMainArm = true;
+            tryPowerPacket(PowerIndex.POWER_1_SNEAK);
+        }
+    }
+
+    public boolean MainArmReturnServer() {
+        ItemEntity $$2 = new ItemEntity(this.self.level(), this.self.getX(), this.self.getY() + 1, this.self.getZ(),Main_arm.getMainHandItem());
+        $$2.setDefaultPickUpDelay();
+        //this.self.level().addFreshEntity($$2);
+        Player player = (Player)this.self;
+        player.getInventory().add(Main_arm.getMainHandItem());
+        //this.self.spawnAtLocation(Main_arm.getMainHandItem());
+        Main_arm.setUser(null);
+        Main_arm.discard();
+        Main_arm = null;
+        double Xangle = Math.toRadians(this.self.getLookAngle().x);
+        double Pitch = Math.toRadians(this.self.getLookAngle().y);
+        double Zangle = Math.toRadians(this.self.getLookAngle().z);
+        double diameter = 0.6d;
+        for (int i = 0; i < 11; i = i + 1) {
+            ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.STITCH,
+                    this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
+                    this.getSelf().getY() + (this.getSelf().getEyeHeight() * 0.7),
+                    this.getSelf().getZ() + (diameter * Math.cos(i * 4)) * Math.cos(Zangle),
+                    0, 0, 0, 0, 0);
+        }
+        return true;
     }
 
 
@@ -352,7 +480,6 @@ public class PowersGreenDay extends NewPunchingStand {
             }
 
             tryPowerPacket(PowerIndex.POWER_4_BLOCK);
-            Roundabout.LOGGER.info(listToString(allies));
         }
 
         saveAllies();
@@ -517,11 +644,14 @@ public class PowersGreenDay extends NewPunchingStand {
                             this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
                         } else {
                             this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
-                            this.setCooldown(PowerIndex.SNEAK_MOVEMENT, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
+                            //this.setCooldown(PowerIndex.SNEAK_MOVEMENT, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
                         }
 
                         legGoneTicks = 240;
                         ((StandUser)this.self).rdbt$SetCrawlTicks(240);
+                        getBarrageWindup();
+
+
                         tryPowerPacket(PowerIndex.POWER_3_EXTRA);
 
                         bonusLeapCount = 3;
@@ -697,17 +827,45 @@ public class PowersGreenDay extends NewPunchingStand {
         return Component.literal(  "Fish").withStyle(ChatFormatting.YELLOW);
     }
 
+
     public static final byte
-            PART_FOUR = 1;
+            PART_FIVE_GREEN_DAY = 1,
+            RED_DAY = 2,
+            TEAL_DAY = 3,
+            BROCCOLLI = 4;
 
 
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
-                PART_FOUR
+                PART_FIVE_GREEN_DAY,
+                RED_DAY,
+                TEAL_DAY
+                //BROCCOLLI
 
         );
     }
+
+    @Override
+    public Component getSkinName(byte skinId) {
+        return getSkinNameT(skinId);
+    }
+
+    public static Component getSkinNameT(byte skinId) {
+        if (skinId == GreenDayEntity.PART_FIVE_GREEN_DAY) {
+            return Component.translatable("skins.roundabout.green_day.part_five_green_day");
+        } else if (skinId == GreenDayEntity.RED_DAY) {
+            return Component.translatable("skins.roundabout.green_day.red_day");
+        } else if (skinId == GreenDayEntity.TEAL_DAY) {
+            return Component.translatable("skins.roundabout.green_day.teal_day");
+        }
+        else if (skinId == GreenDayEntity.BROCOLLI) {
+            return Component.translatable("skins.roundabout.green_day.broccoli");
+        }
+        return Component.translatable(  "skins.roundabout.green_day.part_five_green_day");
+    }
+
+
 
 
 

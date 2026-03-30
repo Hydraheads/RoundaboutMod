@@ -121,6 +121,8 @@ public class FabricSounds {
         addSound(ModSounds.ROAD_ROLLER_AMBIENT_ID, ModSounds.ROAD_ROLLER_AMBIENT_EVENT);
         addSound(ModSounds.ROAD_ROLLER_EXPLOSION_ID, ModSounds.ROAD_ROLLER_EXPLOSION_EVENT);
         addSound(ModSounds.ROAD_ROLLER_MIXING_ID, ModSounds.ROAD_ROLLER_MIXING_EVENT);
+        addSound(ModSounds.ANUBIS_UNSHEATHE_ID, ModSounds.ANUBIS_UNSHEATHE_EVENT);
+        addSound(ModSounds.SUMMON_ANUBIS_ID, ModSounds.SUMMON_ANUBIS_EVENT);
 
         addSound(ModSounds.BUBBLE_CREATE_ID, ModSounds.BUBBLE_CREATE_EVENT);
         addSound(ModSounds.BLOOD_SUCK_ID, ModSounds.BLOOD_SUCK_EVENT);
@@ -312,6 +314,7 @@ public class FabricSounds {
         addSound(ModSounds.SURVIVOR_SHOCK_ID, ModSounds.SURVIVOR_SHOCK_EVENT);
         addSound(ModSounds.SURVIVOR_PLACE_ID, ModSounds.SURVIVOR_PLACE_EVENT);
         addSound(ModSounds.SURVIVOR_REMOVE_ID, ModSounds.SURVIVOR_REMOVE_EVENT);
+        addSound(ModSounds.ZOMBIE_CHARGE_ID, ModSounds.ZOMBIE_CHARGE_EVENT);
         addSound(ModSounds.ACHTUNG_BURST_ID, ModSounds.ACHTUNG_BURST_EVENT);
         addSound(ModSounds.RIPPER_EYES_BEAM_ID, ModSounds.RIPPER_EYES_BEAM_EVENT);
         addSound(ModSounds.RIPPER_EYES_CHARGE_ID, ModSounds.RIPPER_EYES_CHARGE_EVENT);

@@ -820,7 +820,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Inject(method = "tick",
             at = @At(value = "TAIL"))
     private void roundabout$tickMob(CallbackInfo ci) {
-        if (!level().isClientSide() && FateTypes.hasBloodHunger(this)) {
+        if (!level().isClientSide() && FateTypes.takesSunlightDamage(this)) {
             if (FateTypes.isInSunlight(this)) {
                 this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth() * ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick);
             }
@@ -833,8 +833,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
         if ($$0 != null) {
             /**Flesh buds prevent aggro on the planter*/
             UUID fleshPlanter = (((StandUser)this).rdbt$getFleshBud());
-            if (fleshPlanter != null && ($$0.getUUID() ==fleshPlanter ||
-                    ((StandUser)$$0).rdbt$getFleshBud() == fleshPlanter)){
+            if (fleshPlanter != null && ($$0.getUUID().equals(fleshPlanter) ||
+                    (((StandUser)$$0).rdbt$getFleshBud() != null && ((StandUser)$$0).rdbt$getFleshBud().equals(fleshPlanter)))){
                 ci.cancel();
                 return;
             }
@@ -1006,7 +1006,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
         StandUser SU = (StandUser) this;
         if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
-            if (AnubisLayer.shouldDash((Mob)(Object)this)) {
+            if (PowersAnubis.shouldDash((Mob)(Object)this)) {
                 if (this.roundabout$ticksUntilNextAttack < 10 && this.roundabout$ticksUntilNextAttack > 1) {
                     this.roundabout$ticksUntilNextAttack = 1;
                 }
@@ -1020,7 +1020,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
     private void roundabout$giveAnubis(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
         if (!$$0.level().isClientSide) {
             ItemStack stack = $$0.getItemInHand($$1);
-            if ($$0.isCrouching() && stack.getItem() instanceof AnubisItem) {
+            if (stack.getItem() instanceof AnubisItem) {
                 if (((Mob) (Object) this) instanceof AbstractIllager AI) {
                     if (!((StandUser) AI).roundabout$hasAStand()) {
                         $$0.setItemInHand($$1,new ItemStack(Items.AIR));
@@ -1032,7 +1032,9 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
 
                         StandArrowItem.grantStand(itemStack, AI);
-                        AI.setTarget($$0);
+                        if (!$$0.isCreative()) {
+                            AI.setTarget($$0);
+                        }
 
                     }
                 }

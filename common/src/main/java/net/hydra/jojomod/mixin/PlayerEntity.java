@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.fates.powers.ZombieFate;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
@@ -169,6 +170,23 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     private float roundabout$idleYOffset = 0.1F;
 
+    /// Zombie Fate's zombie silverfish count
+    @Unique
+    private int rdbt$zombieFish = 0;
+    @Unique
+    @Override
+    public void rdbt$setZombieFish(int fish){
+        rdbt$zombieFish = fish;
+        if (((IFatePlayer)this).rdbt$getFatePowers() instanceof ZombieFate zf){
+            zf.zombieFishCount = fish;
+        }
+    }
+    @Unique
+    @Override
+    public int rdbt$getZombieFish(){
+        return rdbt$zombieFish;
+    }
+
     //0.00392156862
     @Unique
     private static final float rdbt$hairColorX =245f/255f;
@@ -317,6 +335,12 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public void roundabout$setPower(byte style){
         if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$POWERS)) {
             roundabout$SetPos2(PlayerPosIndex.NONE);
+            if (style != this.getEntityData().get(ROUNDABOUT$POWERS)){
+                if (ClientNetworking.getAppropriateConfig().powersSettings.powerSwitchingPenalty) {
+                    ((StandUser) this).roundabout$getStandPowers().onStandSwitch();
+                    ((StandUser) this).roundabout$getStandPowers().onPowerSwitch();
+                }
+            }
             this.getEntityData().set(ROUNDABOUT$POWERS, style);
         }
     }
@@ -1107,6 +1131,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         compoundtag.putFloat("hairColorZ",rdbt$getHairColorZ());
         compoundtag.putByte("shapeShift",roundabout$getShapeShift());
         compoundtag.putByte("shapeShiftExtra",roundabout$getShapeShiftExtraData());
+        compoundtag.putInt("zombieFish",rdbt$getZombieFish());
 
 
         compoundtag.putFloat("guard",((StandUser)this).roundabout$getGuardPoints());
@@ -1218,6 +1243,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         if (compoundtag2.contains("shapeShiftExtra")) {
             roundabout$setShapeShiftExtraData(compoundtag2.getByte("shapeShiftExtra"));
         }
+        if (compoundtag2.contains("zombieFish")) {
+            rdbt$setZombieFish(compoundtag2.getInt("zombieFish"));
+        }
 
 
         if (ClientNetworking.getAppropriateConfig().vampireSettings.vampireLeveling) {
@@ -1327,7 +1355,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 || ((IFatePlayer)this).rdbt$getFatePowers().cancelJump()
         || FateTypes.isTransforming(this) ||
         FateTypes.takesSunlightDamage(this) && FateTypes.isInSunlight(this)) {
-            ci.cancel();
+            if (!FateTypes.isHidden(this)) {
+                ci.cancel();
+            }
         }
     }
 

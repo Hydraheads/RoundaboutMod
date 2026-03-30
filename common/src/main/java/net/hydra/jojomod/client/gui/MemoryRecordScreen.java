@@ -79,10 +79,12 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
             final int count = bypass ? 8 : ((IPlayerEntity)pl).roundabout$getStandLevel();
             for (int i = 0; i < count; ++i) {
                 AnubisMemory memory = memories.get(i);
-                corpseIcon pIcon = new corpseIcon(memory.item,(byte)i,positions[i][0], positions[i][1]+31 );
-                this.slots.add(new PoseSlot(pIcon, this.width / 2 + pIcon.xoff - 13, this.height / 2 + pIcon.yoff - 44));
+                if (memory != null) {
+                    memoryIcon pIcon = new memoryIcon(memory.item, (byte) i, positions[i][0], positions[i][1] + 31);
+                    this.slots.add(new PoseSlot(pIcon, this.width / 2 + pIcon.xoff - 13, this.height / 2 + pIcon.yoff - 44));
+                }
             }
-            corpseIcon pIcon = new corpseIcon(ModItems.ANUBIS_ITEM,(byte)8,0, 31 );
+            memoryIcon pIcon = new memoryIcon(ModItems.ANUBIS_ITEM,(byte)8,0, 31 );
             this.slots.add(new PoseSlot(pIcon, this.width / 2 + pIcon.xoff - 13, this.height / 2 + pIcon.yoff - 44));
 
         }
@@ -155,7 +157,7 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
         }
     }
 
-    private void switchToHoveredGameMode(Minecraft minecraft, corpseIcon pIcon) {
+    private void switchToHoveredGameMode(Minecraft minecraft, memoryIcon pIcon) {
         if (minecraft.gameMode == null || minecraft.player == null) {
             return;
         }
@@ -236,12 +238,12 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
     }
 
 
-    class corpseIcon {
+    class memoryIcon {
         public Item item;
         public byte id;
         public int xoff;
         public int yoff;
-        public corpseIcon(Item item, byte id, int xoff, int yoff) {
+        public memoryIcon(Item item, byte id, int xoff, int yoff) {
             this.item = item;
             this.id = id;
             this.xoff = xoff;
@@ -264,10 +266,10 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
 
     public class PoseSlot
             extends AbstractWidget {
-        final corpseIcon icon;
+        final memoryIcon icon;
         private boolean isSelected;
 
-        public PoseSlot(corpseIcon icon, int i, int j) {
+        public PoseSlot(memoryIcon icon, int i, int j) {
             super(i, j, 26, 26, Component.literal(""));
             this.icon = icon;
         }

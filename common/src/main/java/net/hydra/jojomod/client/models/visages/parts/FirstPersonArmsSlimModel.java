@@ -12,16 +12,16 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
-import net.hydra.jojomod.event.index.LocacacaCurseIndex;
-import net.hydra.jojomod.event.index.Poses;
-import net.hydra.jojomod.event.index.PowerTypes;
-import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.client.models.layers.animations.TuskAnimations;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ColtRevolverItem;
 import net.hydra.jojomod.item.SnubnoseRevolverItem;
 import net.hydra.jojomod.item.TommyGunItem;
 import net.hydra.jojomod.stand.powers.PowersMandom;
+import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -117,6 +117,7 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                        int light) {
         if (context instanceof LivingEntity LE) {
             IPlayerEntity ipe = ((IPlayerEntity) LE);
+            StandUser standUser = (StandUser) LE;
             this.root().getAllParts().forEach(ModelPart::resetPose);
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
             boolean mainHandRight = true;
@@ -167,6 +168,23 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                 byte bt = ((StandUser)LE).roundabout$getLocacacaCurse();
                 int muscle = ((StandUser)LE).roundabout$getZappedToID();
 
+                boolean renderLeft = true;
+                boolean renderRight = true;
+
+                if (standUser.roundabout$getStandPowers() instanceof PowersTusk PT && PowerTypes.isUsingStand(player)) {
+                    if (!PT.renderBothArms()) {
+                        renderLeft = player.getMainArm() == HumanoidArm.LEFT;
+                        renderRight = player.getMainArm() == HumanoidArm.RIGHT;
+                    }
+
+
+                    AnimationDefinition anim = PT.getFirstPersonAnimation();
+                    if (standUser.roundabout$getStandAnimation() == PowerIndex.NONE) {
+                        standUser.roundabout$getWornStandAnimation().startIfStopped(player.tickCount);
+                    }
+                    this.animate(standUser.roundabout$getWornStandAnimation(),anim,partialTicks,1F);
+                }
+
                 Mob shapeShift = ((IPlayerRenderer)PR).roundabout$getShapeShift(player);
                 if (shapeShift != null && (ShapeShifts.isSkeleton(ShapeShifts.getShiftFromByte(shift)) ||
                         ShapeShifts.isZombie(ShapeShifts.getShiftFromByte(shift))) && $$7.getRenderer(shapeShift) instanceof HumanoidMobRenderer hr){
@@ -198,9 +216,9 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                     rightSleeve.loadPose(pp);
                 }
 
-                rightArm.visible = true;
+                rightArm.visible = renderRight;
                 if (rightSleeve != null) {
-                    rightSleeve.visible = true;
+                    rightSleeve.visible = renderRight;
                 }
                 rightArm.render(
                         poseStack,
@@ -232,9 +250,9 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                     leftSleeve.loadPose(pp);
                 }
 
-                leftArm.visible = true;
+                leftArm.visible = renderLeft;
                 if (leftSleeve != null) {
-                    leftSleeve.visible = true;
+                    leftSleeve.visible = renderLeft;
                 }
                 leftArm.render(
                         poseStack,
@@ -253,6 +271,44 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                     );
                 }
                 poseStack.popPose();
+
+                StandUser user = ((StandUser) player);
+
+                if (user.roundabout$getStandPowers() instanceof PowersTusk PT && PT.getAct() > 1 && PT.hasNail() && PowerTypes.isUsingStand(player)) {
+                    if (renderRight) {
+                        poseStack.pushPose();
+                        this.transform.translateAndRotate(poseStack);
+                        this.rform.translateAndRotate(poseStack);
+                        this.right_arm.translateAndRotate(poseStack);
+                        poseStack.translate(-0.2, -0.8, 0);
+                        poseStack.scale(0.9F,0.9F,0.9F);
+                        ModStrayModels.TUSK_DRILL.render(
+                                player, partialTicks,
+                                poseStack,
+                                bufferSource,
+                                light,
+                                r, g, b, 1
+                        );
+                        poseStack.popPose();
+                    }
+
+                    if (renderLeft) {
+                        poseStack.pushPose();
+                        this.transform.translateAndRotate(poseStack);
+                        this.lform.translateAndRotate(poseStack);
+                        this.left_arm.translateAndRotate(poseStack);
+                        poseStack.translate(0, -0.8, 0);
+                        poseStack.scale(0.9F,0.9F,0.9F);
+                        ModStrayModels.TUSK_DRILL.render(
+                                player, partialTicks,
+                                poseStack,
+                                bufferSource,
+                                light,
+                                r, g, b, 1
+                        );
+                        poseStack.popPose();
+                    }
+                }
 
                 if (rightSleeve != null) {
                     if (bt == LocacacaCurseIndex.RIGHT_HAND) {
@@ -311,7 +367,6 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                             }
                         }
 
-                        StandUser user = ((StandUser) player);
                         boolean hasMandom = (user.roundabout$getStandPowers() instanceof PowersMandom);
                         boolean hasMandomOut = (PowerTypes.hasStandActive(player)  && hasMandom);
                         if (hasMandom) {

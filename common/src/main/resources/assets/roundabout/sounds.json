@@ -11,6 +11,18 @@
       "roundabout:summon_diver_down"
     ]
   },
+  "summon_anubis": {
+    "subtitle": "sounds.roundabout.summon_anubis",
+    "sounds": [
+      "roundabout:summon_anubis"
+    ]
+  },
+  "anubis_unsheathe": {
+    "subtitle": "sounds.roundabout.anubis_unsheathe",
+    "sounds": [
+      "roundabout:anubis_unsheathe"
+    ]
+  },
   "vampire_dash": {
     "subtitle": "sounds.roundabout.vampire_dash",
     "sounds": [
@@ -21,6 +33,12 @@
     "subtitle": "sounds.roundabout.vampire_camo",
     "sounds": [
       "roundabout:vampire_camo"
+    ]
+  },
+  "zombie_charge": {
+    "subtitle": "sounds.roundabout.zombie_charge",
+    "sounds": [
+      "roundabout:zombie_charge"
     ]
   },
   "ripper_eyes_beam": {

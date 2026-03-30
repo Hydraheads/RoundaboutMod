@@ -44,9 +44,12 @@ public class ModItems {
     public static Item MAX_STAND_DISC_GREEN_DAY;
     public static Item STAND_DISC_SOFT_AND_WET;
     public static Item MAX_STAND_DISC_SOFT_AND_WET;
+    public static Item STAND_DISC_TUSK;
+    public static Item MAX_STAND_DISC_TUSK;
     public static Item STAND_DISC_KILLER_QUEEN;
     public static Item MAX_STAND_DISC_KILLER_QUEEN;
     public static Item STAND_DISC_CINDERELLA;
+    public static Item STAND_DISC_MANHATTAN_TRANSFER;
     public static Item STAND_DISC_HEY_YA;
     public static Item STAND_DISC_MANDOM;
     public static Item STAND_DISC_SURVIVOR;
@@ -74,6 +77,7 @@ public class ModItems {
     public static Item TERRIER_SPAWN_EGG;
     public static Item AESTHETICIAN_SPAWN_EGG;
     public static Item ZOMBIE_AESTHETICIAN_SPAWN_EGG;
+    public static Item ANUBIS_GUARDIAN_SPAWN_EGG;
     public static Item ROAD_ROLLER;
 
     public static Item KNIFE;
@@ -134,6 +138,7 @@ public class ModItems {
     public static Item GUCCIO_MASK;
     public static Item HATO_MASK;
     public static Item SHIZUKA_MASK;
+    public static Item CHAKA_MASK;
     public static Item INTERDIMENSIONAL_KEY;
 
     public static Item ANUBIS_ITEM;
@@ -198,6 +203,7 @@ public class ModItems {
         addToVisageStore(SPEEDWAGON_FOUNDATION_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(DIO_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(ENYA_MASK,1, characterCostExp, characterCostEmerald);
+        addToVisageStore(CHAKA_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(JOTARO_4_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(AYA_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(JOTARO_6_MASK,1, characterCostExp, characterCostEmerald);

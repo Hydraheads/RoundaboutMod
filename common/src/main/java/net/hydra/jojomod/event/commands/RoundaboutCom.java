@@ -197,23 +197,6 @@ public class RoundaboutCom {
                                         EntityArgument.getEntities(context, "targets")))
                         )
                 );
-        dispatcher.register(Commands.literal("roundaboutGenerateD4CWorld")
-                .requires(commandSourceStack ->
-                        commandSourceStack.hasPermission(2))
-                .executes(context->{
-                    DynamicWorld w = DynamicWorld.generateD4CWorld(context.getSource().getServer());
-                    w.broadcastPacketsToPlayers(context.getSource().getServer());
-                    Component worldText = ComponentUtils.wrapInSquareBrackets(
-                            Component.literal(w.getName())
-                    ).withStyle(
-                            style->style.withColor(ChatFormatting.GREEN)
-                                    .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/execute in roundabout:" + w.getName() + " run tp @s ~ ~ ~"))
-                                    .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("commands.roundabout.d4c_world.tooltip")))
-                    );
-
-                    context.getSource().sendSuccess(()->Component.translatable("commands.roundabaout.d4c_world", worldText), false);
-                    return 0;
-                }));
         dispatcher.register(Commands.literal("roundaboutFogTrapRange")
                         .then(Commands.argument("radius",IntegerArgumentType.integer())
                             .executes(context -> RoundaboutCommands.roundaboutFogTrapRange(context.getSource(), context.getSource().getPlayerOrException() ,IntegerArgumentType.getInteger(context,"radius")))

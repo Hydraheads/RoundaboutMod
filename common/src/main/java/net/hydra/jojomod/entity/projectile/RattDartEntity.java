@@ -17,6 +17,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -50,28 +51,114 @@ import org.joml.Vector3f;
 
 public class RattDartEntity extends AbstractArrow {
 
-    private static final EntityDataAccessor<Boolean> ROUNDABOUT$SUPER_THROWN = SynchedEntityData.defineId(RattDartEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> PARTICLE_TRAILS = SynchedEntityData.defineId(RattDartEntity.class, EntityDataSerializers.BOOLEAN);
-    private int superThrowTicks = -1;
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$SUPER_THROWN = SynchedEntityData.defineId(RattDartEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$BOUNCES = SynchedEntityData.defineId(RattDartEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$TYPE = SynchedEntityData.defineId(RattDartEntity.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$PARTICLES = SynchedEntityData.defineId(RattDartEntity.class, EntityDataSerializers.BOOLEAN);
+
+    public byte getShotType() {
+        if (this.getEntityData().hasItem(ROUNDABOUT$TYPE)) {
+            return this.getEntityData().get(ROUNDABOUT$TYPE);
+        }
+        return BASIC;
+    }
+    public void setShotType(byte b) {
+        if (this.getEntityData().hasItem(ROUNDABOUT$TYPE)) {
+            this.getEntityData().set(ROUNDABOUT$TYPE,b);
+        }
+    }
+
+
+    public int getBounces() {
+        if (this.getEntityData().hasItem(ROUNDABOUT$BOUNCES)) {
+            return this.getEntityData().get(ROUNDABOUT$BOUNCES);
+        }
+        return 0;
+    }
+    public void setBounces(int i) {
+        if (this.getEntityData().hasItem(ROUNDABOUT$BOUNCES)) {
+            this.getEntityData().set(ROUNDABOUT$BOUNCES,i);
+        }
+    }
+
+    public int getSuperthrowTicks() {
+        if (this.getEntityData().hasItem(ROUNDABOUT$SUPER_THROWN)) {
+            return this.getEntityData().get(ROUNDABOUT$SUPER_THROWN);
+        }
+        return 0;
+    }
+    public void setSuperthrowTicks(int i) {
+        if (this.getEntityData().hasItem(ROUNDABOUT$SUPER_THROWN)) {
+            this.getEntityData().set(ROUNDABOUT$SUPER_THROWN,i);
+        }
+    }
+
+    public boolean shouldParticle() {
+        if (this.getEntityData().hasItem(ROUNDABOUT$PARTICLES)) {
+            return this.getEntityData().get(ROUNDABOUT$PARTICLES);
+        }
+        return false;
+    }
+    public void setParticle(boolean b) {
+        if (this.getEntityData().hasItem(ROUNDABOUT$PARTICLES)) {
+            this.getEntityData().set(ROUNDABOUT$PARTICLES,b);
+        }
+    }
+
+
+
+
+
+    public static byte
+                BASIC = (byte) 1,
+                BURST = (byte) 2,
+                BURST_CHARGED = (byte) 3,
+                CHARGED = (byte) 4;
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         if (!this.getEntityData().hasItem(ROUNDABOUT$SUPER_THROWN)) {
-            this.getEntityData().define(ROUNDABOUT$SUPER_THROWN, false);
-            this.getEntityData().define(PARTICLE_TRAILS, false);
+            this.getEntityData().define(ROUNDABOUT$SUPER_THROWN, 0);
+            this.getEntityData().define(ROUNDABOUT$BOUNCES, 0);
+            this.getEntityData().define(ROUNDABOUT$TYPE, RattDartEntity.BASIC);
+            this.getEntityData().define(ROUNDABOUT$PARTICLES, true);
+
         }
     }
 
-    public void setParticleTrails(boolean b) {this.entityData.set(PARTICLE_TRAILS,b);}
-    public boolean getParticleTrails() {return this.entityData.get(PARTICLE_TRAILS);}
+    @Override
+    public void readAdditionalSaveData(CompoundTag $$0) {
+        super.readAdditionalSaveData($$0);
+        if ($$0.contains("superthrow_ticks")) {
+            this.entityData.set(ROUNDABOUT$SUPER_THROWN,$$0.getInt("superthrow_ticks"));
+        }
+        if ($$0.contains("bounces")) {
+            this.entityData.set(ROUNDABOUT$BOUNCES,$$0.getInt("bounces"));
+        }
+        if ($$0.contains("type")) {
+            this.entityData.set(ROUNDABOUT$TYPE,$$0.getByte("type"));
+        }
+        if ($$0.contains("particles")) {
+            this.entityData.set(ROUNDABOUT$PARTICLES,$$0.getBoolean("particles"));
+        }
+    }
 
-    int melting = 0;
-    float damage = 0;
-    int charged = 0;
-    int bounces = 0;
-
-    public RattDartEntity(EntityType<? extends RattDartEntity> entity,  Level world) {
-        super(entity, world);
+    @Override
+    public void addAdditionalSaveData(CompoundTag $$0) {
+        super.addAdditionalSaveData($$0);
+        if (this.getEntityData().hasItem(ROUNDABOUT$SUPER_THROWN)) {
+            $$0.putInt("superthrow_ticks",this.getEntityData().get(ROUNDABOUT$SUPER_THROWN));
+        }
+        if (this.getEntityData().hasItem(ROUNDABOUT$BOUNCES)) {
+            $$0.putInt("bounces",this.getEntityData().get(ROUNDABOUT$BOUNCES));
+        }
+        if (this.getEntityData().hasItem(ROUNDABOUT$TYPE)) {
+            $$0.putByte("type",this.getEntityData().get(ROUNDABOUT$TYPE));
+        }
+        if (this.getEntityData().hasItem(ROUNDABOUT$PARTICLES)) {
+            $$0.putBoolean("particles",this.getEntityData().get(ROUNDABOUT$PARTICLES));
+        }
     }
 
     double ding() {
@@ -92,27 +179,29 @@ public class RattDartEntity extends AbstractArrow {
         }
     }
 
-    public RattDartEntity(Level world, LivingEntity player,int m, float d) {
+    public RattDartEntity(Level world, LivingEntity player,byte type) {
         super(ModEntities.RATT_DART, player, world);
-        alignDart(player);
-        this.melting = m;
-        this.damage = d;
-        this.charged = 51;
+        this.setShotType(type);
+        if (type != BASIC) {
+            this.setBounces(1);
+        }
     }
 
-    public RattDartEntity(Level world, LivingEntity player, int i) {
+    public RattDartEntity(Level world, LivingEntity player) {
         super(ModEntities.RATT_DART, player, world);
-        this.melting = i > 90 || i == -1 ? 0 : 1;
-        this.damage = i < 90 ? 0.1F : 3.2F;
-        this.charged = i;
-        this.bounces = 1;
+        alignDart(player);
     }
+
+    public RattDartEntity(EntityType<? extends RattDartEntity> entity, Level world) {
+        super(entity, world);
+    }
+
 
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
         if (!this.level().isClientSide()) {
-            if (bounces > 0) {
-                bounces--;
+            if (getBounces() > 0) {
+                this.setBounces(getBounces()-1);
 
                 // yoinked from BladedBowlerHatEntity
                 Vec3 velocity = this.getDeltaMovement();
@@ -132,10 +221,10 @@ public class RattDartEntity extends AbstractArrow {
                 this.setPos(hitLoc.x + pushOut.x, hitLoc.y + pushOut.y, hitLoc.z + pushOut.z);
 
             } else {
-                setParticleTrails(false);
                 onHitBlock2($$0);
+                this.setParticle(false);
             }
-            this.DisableSuperThrow();
+            this.setSuperthrowTicks(0);
 
         }
     }
@@ -169,21 +258,6 @@ public class RattDartEntity extends AbstractArrow {
         return ItemStack.EMPTY;
     }
 
-    public void EnableSuperThrow() {
-        this.entityData.set(ROUNDABOUT$SUPER_THROWN, true);
-        int ticks = 0;
-        for (int b=PowersRatt.ShotThresholds.length-1;b>=0;b--) {
-            if (this.charged >= PowersRatt.ShotThresholds[b]) {
-                ticks = PowersRatt.ShotSuperthrowTicks[b];
-                break;
-            }
-        }
-        superThrowTicks = ticks;
-    }
-    public void DisableSuperThrow() {
-        this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
-        superThrowTicks = 0;
-    }
     protected void onHitBlock2(BlockHitResult $$0) {
         ((IAbstractArrowAccess)this).roundabout$setLastState(this.level().getBlockState($$0.getBlockPos()));
         BlockState BSS = this.level().getBlockState($$0.getBlockPos());
@@ -209,7 +283,7 @@ public class RattDartEntity extends AbstractArrow {
         }
 
         if (this.getOwner() != null) {
-            if (this.getOwner() instanceof Creeper C) {
+            if (this.getOwner() instanceof Creeper) {
                 $$1.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN,30,4));
             }
         }
@@ -217,13 +291,13 @@ public class RattDartEntity extends AbstractArrow {
         MobEffectInstance effect = $$1.getEffect(ModEffects.MELTING);
 
         int stack = effect != null ? effect.getAmplifier() : -1;
-        stack += this.melting;
+        stack += this.getShotType() == CHARGED ? 2 : 1;
 
 
         if (stack != -1) {
-            int duration =(int)  (600 * (this.charged > PowersRatt.MaxThreshold ? 1.5 : 1));
+            int duration =(int)  (600 * (this.getShotType() == CHARGED ? 1.5 : 1));
             int originalDuration = effect != null ? effect.getDuration() : 0;
-            ((LivingEntity) $$1).addEffect(new MobEffectInstance(ModEffects.MELTING, Math.max(duration,originalDuration) , stack), this);
+            $$1.addEffect(new MobEffectInstance(ModEffects.MELTING, Math.max(duration,originalDuration) , stack), this);
         }
     }
 
@@ -236,8 +310,6 @@ public class RattDartEntity extends AbstractArrow {
 
         if (!level().isClientSide && $$0.getEntity() instanceof EnderMan em) {
 
-            if (((IEnderMan) em).roundabout$teleport()) return;
-
             for (int i = 0; i < 64; i++) {
                 if (((IEnderMan) em).roundabout$teleport()) {
                     return;
@@ -245,31 +317,28 @@ public class RattDartEntity extends AbstractArrow {
             }
         }
 
-
-
         float degrees = MainUtil.getLookAtEntityYaw(this, $$1);
-        float force = 0.45F;
-        if (this.charged >= 61) {
-            force *= 1.2;
-            if (this.charged >= PowersRatt.MaxThreshold) {
-                force *= 2F;
-            }
+        float force = 0.8F;
+        if (this.getShotType() == CHARGED) {
+            force = 1;
         }
-        float blockDamp = 1.1F;
-        force /= blockDamp;
 
 
         Entity $$4 = this.getOwner();
         DamageSource $$5 = ModDamageTypes.of($$1.level(),ModDamageTypes.STAND);
         if (this.getOwner() != null) {
-            $$5 = ModDamageTypes.of($$1.level(),ModDamageTypes.STAND,$$4);
+            $$5 = ModDamageTypes.of($$1.level(),ModDamageTypes.STAND,this,this.getOwner());
         }
-        SoundEvent $$6 = ModSounds.RATT_DART_IMPACT_EVENT;
-        if ($$1.hurt($$5,this.damage + (($$1 instanceof Mob) ? ClientNetworking.getAppropriateConfig().rattSettings.rattAttackBonusOnMobs : 0) * (this.charged > 90 ? 3 : 1) )) {
-            force *= blockDamp;
 
 
-            if (charged == 51 && $$4 != null) {
+        float damage =  1;
+        damage += (($$1 instanceof Mob) ? ClientNetworking.getAppropriateConfig().rattSettings.rattAttackBonusOnMobs : 0);
+        damage *= this.getShotType() == CHARGED ? 3 : 1;
+
+        if ($$1.hurt($$5,damage)) {
+
+
+            if (this.getShotType() == BASIC && $$4 != null) {
                 if ( ((StandUser)$$4).roundabout$getStandPowers() instanceof PowersRatt PR ) {
                     if ($$4 instanceof Player P) {
                         S2CPacketUtil.sendIntPowerDataPacket(P, PowersRatt.UPDATE_CHARGE, Math.min(PR.getChargeTime()+ClientNetworking.getAppropriateConfig().rattSettings.rattChargePerHit,100));
@@ -306,7 +375,17 @@ public class RattDartEntity extends AbstractArrow {
 
                 this.doPostHurtEffects($$7);
             }
-            this.playSound($$6, 1.0F, (this.random.nextFloat() * 0.2F + 0.9F));
+            this.playSound(ModSounds.RATT_DART_IMPACT_EVENT, 1.0F, (this.random.nextFloat() * 0.2F + 0.9F));
+        } else {
+            force *= 0.5F;
+            if ($$1 instanceof Player P) {
+                if (P.isBlocking()) {
+                    if (this.getShotType() == CHARGED || getShotType() == BURST_CHARGED) {
+                        MainUtil.knockShieldPlusStand(P,50);
+                    }
+                }
+            }
+
         }
 
         if ($$1 instanceof Mob) {
@@ -314,9 +393,6 @@ public class RattDartEntity extends AbstractArrow {
         } else if ($$1 instanceof Player P) {
             if (P.isCreative()) {
                 force = 0;
-            }
-            if (P.isBlocking()) {
-                force *= 0.75F;
             }
         }
         MainUtil.takeUnresistableKnockbackWithY($$1, force,
@@ -335,14 +411,14 @@ public class RattDartEntity extends AbstractArrow {
             this.remove(RemovalReason.DISCARDED);
         }
         if(this.isInWater()) {
-            this.entityData.set(ROUNDABOUT$SUPER_THROWN,false);
+            this.setSuperthrowTicks(0);
         }
         super.tick();
-        if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
+        if (this.getSuperthrowTicks() > 0) {
             this.setDeltaMovement(delta);
         }
         if (!this.level().isClientSide()) {
-            if (this.getParticleTrails()) {
+            if (this.shouldParticle()) {
                 ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0.86F, 0.28F, 0.48F
                         ), 1f),
                         this.getX(), this.getY(), this.getZ(),

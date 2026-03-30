@@ -1,9 +1,7 @@
 package net.hydra.jojomod.mixin;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.ILivingEntityRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -11,6 +9,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.BigBubbleLayer;
 import net.hydra.jojomod.client.models.layers.FrozenLayer;
 import net.hydra.jojomod.client.models.stand.renderers.*;
+import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
 import net.hydra.jojomod.entity.visages.mobs.JosukePartEightNPC;
 import net.hydra.jojomod.entity.visages.mobs.PlayerAlexNPC;
@@ -20,10 +19,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
-import net.hydra.jojomod.stand.powers.PowersMetallica;
-import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -43,10 +39,7 @@ import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArgs; // Importante
-import org.spongepowered.asm.mixin.injection.invoke.arg.Args; // Importante
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -96,7 +89,11 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
     {
         if (((StandUser)entity).roundabout$isParallelRunning()) {
             cir.setReturnValue(false);
-            cir.cancel();
+            return;
+        }
+
+        if (ClientUtil.shouldHideName(entity)){
+            cir.setReturnValue(false);
             return;
         }
 
@@ -119,7 +116,6 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
             PathfinderMob poss = SU.roundabout$getPossessor();
             if (poss != null && poss.getTarget() != null) {
                 float yRot = MainUtil.getLookAtEntityYaw(entity,poss.getTarget());
-                entity.setYHeadRot(yRot);
                 entity.setYBodyRot(yRot);
             }
         }
@@ -240,4 +236,10 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
             }
         }
     }
+
+    // risky because it's brittle, but it honestly might just work
+   @Redirect(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isPassenger()Z"))
+    private boolean roundabout$allowWalkingAnimation(LivingEntity instance) {
+       return instance.isPassenger() && !(instance.getVehicle() instanceof AnubisPossessorEntity);
+   }
 }

@@ -171,8 +171,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
     int airTime = 0;
     public boolean canUseAirAttack() {
         if (self.level().isClientSide()) {
-            return this.isHoldingSneak()
-                    && !this.getSelf().onGround()
+            return !this.getSelf().onGround()
                     && !self.isInWater()
                     && (this.fallTime > 0)
                     && (this.airTime > 6);
@@ -593,7 +592,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
     public void addToCombo(){
         int comboAmt = getComboAmt();
         setComboAmt(comboAmt+1);
-        setComboExpireTicks(70);
+        setComboExpireTicks(100);
     }
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){

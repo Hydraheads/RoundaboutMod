@@ -11,6 +11,7 @@ import net.hydra.jojomod.client.models.worn_stand.*;
 
 public class ModStrayModels {
     public static SoftAndWetShootingArmModel SHOOTING_ARM;
+    public static TuskDrillModel TUSK_DRILL;
     public static FirstPersonArmsModel FirstPersonArmsModel;
     public static FirstPersonArmsSlimModel FirstPersonArmsSlimModel;
     public static FirstPersonSnubnoseModel FirstPersonSnubnoseModel;
@@ -65,6 +66,7 @@ public class ModStrayModels {
     public static VampireHairFleshBudLayer VampireHairFlesh;
 
     public static MoldSpineModel MoldSpine;
+    public static MoldRightArm MoldRightArm;
 
     public static RoadRollerStrayModel ROAD_ROLLER;
 

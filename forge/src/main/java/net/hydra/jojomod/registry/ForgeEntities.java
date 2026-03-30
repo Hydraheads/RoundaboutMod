@@ -5,6 +5,7 @@ import net.hydra.jojomod.client.models.stand.renderers.ChairRattRenderer;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
@@ -16,11 +17,10 @@ import net.hydra.jojomod.entity.paintings.VanGoughPainting;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
+import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
-import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
-import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
-import net.hydra.jojomod.entity.substand.SeperatedLegsEntity;
+import net.hydra.jojomod.entity.substand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -42,9 +42,15 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "terrier").toString())
             );
+    public static final RegistryObject<EntityType<Zombiefish>> ZOMBIEFISH =
+            ENTITY_TYPES.register("zombiefish", () ->
+                    EntityType.Builder.of(Zombiefish::new, MobCategory.MISC).sized(0.44F, 0.33F).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "zombiefish").toString())
+            );
     public static final RegistryObject<EntityType<AnubisGuardian>> ANUBIS_GUARDIAN =
             ENTITY_TYPES.register("anubis_guardian", () ->
-                    EntityType.Builder.of(AnubisGuardian::new, MobCategory.CREATURE).sized(0.6f, 0.55f).
+                    EntityType.Builder.of(AnubisGuardian::new, MobCategory.CREATURE).sized(0.6f, 1.95f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "anubis_guardian").toString())
             );
@@ -137,6 +143,12 @@ public class ForgeEntities {
                     EntityType.Builder.of(ShizukaNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_shizuka").toString())
+            );
+    public static final RegistryObject<EntityType<ChakaNPC>> CHAKA =
+            ENTITY_TYPES.register("jojo_npc_chaka", () ->
+                    EntityType.Builder.of(ChakaNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_chaka").toString())
             );
     public static final RegistryObject<EntityType<ValentineNPC>> VALENTINE =
             ENTITY_TYPES.register("jojo_npc_valentine", () ->
@@ -346,6 +358,21 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "cinderella").toString())
             );
+
+    public static final RegistryObject<EntityType<ManhattanTransferEntity>> MANHATTAN_TRANSFER =
+            ENTITY_TYPES.register("manhattan_transfer", () ->
+                    EntityType.Builder.of(ManhattanTransferEntity::new, MobCategory.MISC).sized(0.85F, 0.50f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "manhattan_transfer").toString())
+            );
+
+    public static final RegistryObject<EntityType<PollinationTransferEntity>> POLLINATION_TRANSFER =
+            ENTITY_TYPES.register("pollination_transfer", () ->
+                    EntityType.Builder.of(PollinationTransferEntity::new, MobCategory.MISC).sized(0.85F, 0.50f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "pollination_transfer").toString())
+            );
+
     public static final RegistryObject<EntityType<WalkingHeartEntity>> WALKING_HEART =
             ENTITY_TYPES.register("walking_heart", () ->
                     EntityType.Builder.of(WalkingHeartEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
@@ -363,6 +390,30 @@ public class ForgeEntities {
                     EntityType.Builder.of(DarkMirageEntity::new, MobCategory.MISC).sized(ModEntities.justiceWidth, ModEntities.justiceHeight).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "dark_mirage").toString())
+            );
+    public static final RegistryObject<EntityType<TuskEntity>> TUSK_A1 =
+            ENTITY_TYPES.register("tusk_a1", () ->
+                    EntityType.Builder.of(TuskEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "tusk_a1").toString())
+            );
+    public static final RegistryObject<EntityType<TuskEntity>> TUSK_A2 =
+            ENTITY_TYPES.register("tusk_a2", () ->
+                    EntityType.Builder.of(TuskEntity::new, MobCategory.MISC).sized(0.5F, 1.0F).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "tusk_a2").toString())
+            );
+    public static final RegistryObject<EntityType<TuskEntity>> TUSK_A3 =
+            ENTITY_TYPES.register("tusk_a3", () ->
+                    EntityType.Builder.of(TuskEntity::new, MobCategory.MISC).sized(0.75F, 1.7F).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "tusk_a3").toString())
+            );
+    public static final RegistryObject<EntityType<TuskEntity>> TUSK_A4 =
+            ENTITY_TYPES.register("tusk_a4", () ->
+                    EntityType.Builder.of(TuskEntity::new, MobCategory.MISC).sized(1.3F, 2.0F).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "tusk_a4").toString())
             );
     public static final RegistryObject<EntityType<StarPlatinumBaseballEntity>> STAR_PLATINUM_BASEBALL =
             ENTITY_TYPES.register("star_platinum_baseball", () ->
@@ -562,6 +613,18 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "anubis_slipstream").toString())
             );
+    public static final RegistryObject<EntityType<TuskNailEntity>> TUSK_NAIL =
+            ENTITY_TYPES.register("tusk_nail", () ->
+                    EntityType.Builder.<TuskNailEntity>of(TuskNailEntity::new, MobCategory.MISC).sized(0.1F, 0.1f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "tusk_nail").toString())
+            );
+    public static final RegistryObject<EntityType<TuskHoleEntity>> TUSK_HOLE =
+            ENTITY_TYPES.register("tusk_hole", () ->
+                    EntityType.Builder.<TuskHoleEntity>of(TuskHoleEntity::new, MobCategory.MISC).sized(0.1F, 0.1f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "tusk_hole").toString())
+            );
     public static final RegistryObject<EntityType<RoadRollerEntity>> ROAD_ROLLER_ENTITY =
             ENTITY_TYPES.register("road_roller_entity", () ->
                     EntityType.Builder.<RoadRollerEntity>of(RoadRollerEntity::new, MobCategory.MISC).
@@ -572,5 +635,18 @@ public class ForgeEntities {
             ENTITY_TYPES.register("seperated_legs", () ->
                     EntityType.Builder.<SeperatedLegsEntity>of(SeperatedLegsEntity::new, MobCategory.MISC).
                             sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":seperated_legs")
+
+            );
+
+    public static final RegistryObject<EntityType<SeperatedArmEntity>> SEPERATED_ARM =
+            ENTITY_TYPES.register("seperated_arm", () ->
+                    EntityType.Builder.<SeperatedArmEntity>of(SeperatedArmEntity::new, MobCategory.MISC).
+                            sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":seperated_arm")
+            );
+
+    public static final RegistryObject<EntityType<SeperatedArmSlimEntity>> SEPERATED_ARM_SLIM =
+            ENTITY_TYPES.register("seperated_arm_slim", () ->
+                    EntityType.Builder.<SeperatedArmSlimEntity>of(SeperatedArmSlimEntity::new, MobCategory.MISC).
+                            sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":seperated_arm_slim")
             );
 }

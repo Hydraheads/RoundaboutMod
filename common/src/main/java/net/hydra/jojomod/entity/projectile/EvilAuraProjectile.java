@@ -7,6 +7,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -51,9 +52,11 @@ public class EvilAuraProjectile extends RoundaboutGeneralProjectile{
     public List<Entity> alreadyHitEntities = new ArrayList<>();
 
     public void blastEntity(Entity entity){
-        entity.setDeltaMovement(entity.getDeltaMovement().add(getDeltaMovement().normalize().scale(1.4F)));
-        entity.hasImpulse = true;
-        entity.hurtMarked = true;
+        if (!(MainUtil.resistsKnockBack(entity))) {
+            entity.setDeltaMovement(entity.getDeltaMovement().add(getDeltaMovement().normalize().scale(1.4F)));
+            entity.hasImpulse = true;
+            entity.hurtMarked = true;
+        }
 
 
         level().playSound(null,entity.blockPosition(), ModSounds.AURA_IMPACT_EVENT, SoundSource.PLAYERS, 2F, (float) (0.96f + Math.random() * 0.08f));

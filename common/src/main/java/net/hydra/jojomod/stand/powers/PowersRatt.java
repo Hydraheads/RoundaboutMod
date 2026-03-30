@@ -61,7 +61,6 @@ import net.minecraft.world.phys.*;
 import org.joml.Vector3f;
 
 import java.util.List;
-import java.util.Optional;
 
 public class PowersRatt extends NewDashPreset {
     public PowersRatt(LivingEntity self) {
@@ -76,7 +75,6 @@ public class PowersRatt extends NewDashPreset {
     public static final int MaxShootCooldown = 20;
     public static final int[] ShotThresholds = {MinThreshold,50,MaxThreshold};
     public static final float[] ShotPowerFloats = {3.55F,3.5F,4F};
-    public static final int[] ShotSuperthrowTicks = {4,10,15};
 
 
 
@@ -98,8 +96,9 @@ public class PowersRatt extends NewDashPreset {
             UPDATE_CHARGE = 66,
             START_CHARGE = 67,
             CHECK_AUTO = 68,
+            PLACE_BURST = 69,
+            SET_TARGET = 70,
 
-    PLACE_BURST = 69,
             CHANGE_MODE = 7,
             SETPLACE = 8,
             SCOPE = 9,
@@ -132,15 +131,27 @@ public class PowersRatt extends NewDashPreset {
 
 
 
+    private int rattTarget = 0;
+
     public LivingEntity getShootTarget() {
-        if (this.getStandEntity(this.getSelf()) instanceof RattEntity RE) {
-            return RE.getTarget();
+        if (this.getStandEntity(this.getSelf()) instanceof RattEntity) {
+            Entity e = this.getSelf().level().getEntity(rattTarget);
+            if (e instanceof LivingEntity LE) {
+                return LE;
+            }
         }
         return null;
     }
     public void setShootTarget(LivingEntity l) {
-        if (this.getStandEntity(this.getSelf()) instanceof RattEntity RE) {
-            RE.setRattTarget(l);
+        if (l != null) {
+            this.rattTarget = l.getId();
+            if (!this.isClient()) {
+                if (this.getSelf() instanceof Player P) {
+                    S2CPacketUtil.sendIntPowerDataPacket(P, PowersRatt.SET_TARGET, l.getId());
+                }
+            }
+        } else {
+            this.rattTarget = 0;
         }
     }
 
@@ -172,6 +183,9 @@ public class PowersRatt extends NewDashPreset {
         if (activePower == PowersRatt.NET_PLACE) {
             this.setCooldown(activePower,data);
         }
+        if (activePower == PowersRatt.SET_TARGET) {
+            this.rattTarget = data;
+        }
     }
 
 
@@ -196,56 +210,6 @@ public class PowersRatt extends NewDashPreset {
         return this.getSelf().level().clip(new ClipContext(vec3d, vec3d3,
                 ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
 
-    }
-    public Entity CoolerrayCastEntity(Level world, LivingEntity ratt, double maxDistance) {
-
-        // yoinked from mainutil
-
-
-        Vec3 vars = this.getRotations(this.getShootTarget());
-
-        Vec3 eyePos = ratt.getEyePosition(1.0F);
-        Vec3 lookVec = new Vec3(
-                Math.cos(vars.y+Math.PI/2),
-                Math.sin(vars.x),
-                Math.sin(vars.y+Math.PI/2)
-        );
-        Vec3 reachVec = eyePos.add(lookVec.scale(maxDistance));
-
-        ClipContext blockContext = new ClipContext(
-                eyePos,
-                reachVec,
-                ClipContext.Block.OUTLINE,
-                ClipContext.Fluid.NONE,
-                ratt
-        );
-
-        BlockHitResult blockHit = world.clip(blockContext);
-        double blockHitDistance = blockHit.getLocation().distanceTo(eyePos);
-
-        // Search for potential target entities in bounding box
-        AABB box = ratt.getBoundingBox().expandTowards(lookVec.scale(maxDistance)).inflate(1.0);
-        List<Entity> candidates = world.getEntities(ratt, box,
-                (e) -> e instanceof Entity && e.isPickable() && e.isAlive());
-
-        Entity closest = null;
-        double closestDistance = blockHitDistance;
-
-        for (Entity entity : candidates) {
-            AABB aabb = entity.getBoundingBox().inflate(0.3); // widen the target hit box a bit
-            Optional<Vec3> hitOptional = aabb.clip(eyePos, reachVec);
-
-            if (hitOptional.isPresent()) {
-                double hitDistance = eyePos.distanceTo(hitOptional.get());
-                if (hitDistance < closestDistance && !entity.isSpectator() && MainUtil.isStandPickable(entity) && !entity.isInvulnerable()
-                        && !entity.hasPassenger(ratt)) {
-                    closestDistance = hitDistance;
-                    closest = entity;
-                }
-            }
-        }
-
-        return closest; // null if no valid hit
     }
 
     private Vec3 getValidPlacement(){
@@ -341,6 +305,8 @@ public class PowersRatt extends NewDashPreset {
         this.setCooldown(PowersRatt.SETPLACE, cooldown);
         if (!isClient()) {
             blipStand(pos);
+        } else {
+            this.tryIntPowerPacket(PowersRatt.SET_TARGET,rattTarget);
         }
     }
 
@@ -385,16 +351,10 @@ public class PowersRatt extends NewDashPreset {
 
             double hy = (targetPos.y() - (RE.getEyeP(0).y() ));
             double hd = Math.sqrt(Math.pow(x, 2) + Math.pow(z, 2));
-            double bonus = Math.PI/2;
 
             float hrot = (float) (Math.atan2(hd, hy) + Math.PI/2); // flip the sign if you want it to be not armed
 
 
-
-            double percent = (double) RE.getFadeOut() / RE.getMaxFade();
-            if (percent != 1 && RE.getSavedSkin() < RattEntity.CHAIR_RAT_SKIN) {
-                hrot = (float) (Mth.lerp(percent, 0, hrot));
-            }
 
             // HEAD ROTATION X = VERTICAL ROTATION OF HEAD
             // STAND ROTATION Y = HORIZONTAL ROTATION OF WHOLE
@@ -423,6 +383,7 @@ public class PowersRatt extends NewDashPreset {
 
             } else {
                 if (hasRattlocated) {
+                    hasRattlocated = false;
                     this.setCooldown(PowersRatt.SCOPE,50);
                     this.setCooldown(PowersRatt.SETPLACE,70);
                     if (this.getSelf() instanceof Player P) {
@@ -494,7 +455,6 @@ public class PowersRatt extends NewDashPreset {
         if (isPlaced() && !(this.getSelf() instanceof Mob)) {
 
 
-            Entity f = MainUtil.getTargetEntity(this.getSelf(),40);
 
             if (!this.isClient()) {
 
@@ -525,11 +485,13 @@ public class PowersRatt extends NewDashPreset {
                         }
                     }
 
-                    if (e.distanceTo(this.getStandEntity(this.getSelf())) >= 40 ) {
-                        setShootTarget(null);
+                    if (this.getStandEntity(this.getSelf()) != null) {
+                        if (e.distanceTo(this.getStandEntity(this.getSelf())) >= 40) {
+                            setShootTarget(null);
+                        }
                     }
                     if (getShootTarget() != null) {
-                        if (MainUtil.getEntityIsTrulyInvisible(getShootTarget()) || ((LivingEntity)getShootTarget()).getEffect(MobEffects.INVISIBILITY) != null) {
+                        if (MainUtil.getEntityIsTrulyInvisible(getShootTarget()) || getShootTarget().getEffect(MobEffects.INVISIBILITY) != null) {
                             setShootTarget(null);
                         }
                     }
@@ -550,9 +512,7 @@ public class PowersRatt extends NewDashPreset {
             if (isPacketPlayer()) {
                 if (isAuto()) {
                     if (isClient()) {
-                        if (true) {
-                            BurstFire();
-                        }
+                        BurstFire();
                     }
                     if (getShootTarget() != null) {
                         if (getShootTarget().getHealth() == 0) {
@@ -619,11 +579,10 @@ public class PowersRatt extends NewDashPreset {
         this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.RATT_FIRING_EVENT, SoundSource.PLAYERS, 1.7F, 0.9F+(float)Math.random()*0.2F);
         for (int i = 0; i < 3; i++) {
             if (this.getStandEntity(this.getSelf()) instanceof RattEntity RE) {
-                RattDartEntity e = new RattDartEntity(RE.level(), this.getSelf(), 1, 0.1F);
+                RattDartEntity e = new RattDartEntity(RE.level(), this.getSelf());
                 Vec3 v = this.getRotations(this.getShootTarget());
                 e.shootFromRotation(RE, (float) v.x * 180 / (float) Math.PI + 180, (float) v.y * 180 / (float) Math.PI, -0.5F, ShotPowerFloats[1], 0.84F);
-                e.EnableSuperThrow();
-                e.setParticleTrails(true);
+                e.setSuperthrowTicks(50);
                 RE.level().addFreshEntity(e);
             }
         }
@@ -696,6 +655,11 @@ public class PowersRatt extends NewDashPreset {
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime) {
         switch (move) {
+
+            case PowersRatt.SET_TARGET -> {
+                this.rattTarget = chargeTime;
+            }
+
             case PowersRatt.NET_SCOPE -> {
                 this.setCooldown(PowersRatt.SCOPE,5);
                 this.setAttackTime(-1);
@@ -746,9 +710,14 @@ public class PowersRatt extends NewDashPreset {
     }
 
 
+    public void FireDart(byte type, float accuracy) {
+        RattDartEntity e = new RattDartEntity(this.getSelf().level(),this.getSelf(), type );
+        e.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0.5F, ShotPowerFloats[1], accuracy);
+        e.setSuperthrowTicks(50);
+        this.getSelf().level().addFreshEntity(e);
+    }
 
-    // -1 == 51 but with no melt
-    public void FireDart(int i, float acuracy) {
+    public void FireDart(int i, float accuracy) {
         float power = 0;
         for (int b=ShotThresholds.length-1;b>=0;b--) {
             if ( (i == -1 ? 51 : i) >= ShotThresholds[b]) {
@@ -756,10 +725,9 @@ public class PowersRatt extends NewDashPreset {
                 break;
             }
         }
-        RattDartEntity e = new RattDartEntity(this.getSelf().level(),this.getSelf(),i);
-        e.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0.5F, power, acuracy);
-        e.EnableSuperThrow();
-        e.setParticleTrails(true);
+        RattDartEntity e = new RattDartEntity(this.getSelf().level(),this.getSelf(),i >PowersRatt.MaxThreshold ? RattDartEntity.CHARGED : RattDartEntity.BASIC );
+        e.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0.5F, power, accuracy);
+        e.setSuperthrowTicks(50);
         this.getSelf().level().addFreshEntity(e);
 
     }
@@ -791,9 +759,7 @@ public class PowersRatt extends NewDashPreset {
     @Override
     public boolean tryPower(int move, boolean forced) {
         switch (move) {
-            case PowersRatt.CHECK_AUTO -> {
-                this.setShootTarget(null);
-            }
+            case PowersRatt.CHECK_AUTO -> this.setShootTarget(null);
             case PowersRatt.NET_RECALL -> {
 
                 active = false;
@@ -817,7 +783,11 @@ public class PowersRatt extends NewDashPreset {
                 this.setActivePower(PowersRatt.PLAYER_BURST);
                 chargeTime -= 30;
                 if (!isClient()) {
-                    FireDart(61,0.4F);
+                    if (this.chargeTime < 30) {
+                        FireDart(RattDartEntity.BURST_CHARGED, 0.2F);
+                    } else {
+                        FireDart(RattDartEntity.BURST, 0.4F);
+                    }
                 }
             }
             case PowersRatt.TOGGLE_BURSTING -> {
@@ -1001,24 +971,21 @@ public class PowersRatt extends NewDashPreset {
     @Override
     public void onActuallyHurt(DamageSource $$0, float $$1) {
         if ($$0.is(DamageTypes.PLAYER_ATTACK) || $$0.is(DamageTypes.MOB_ATTACK) || $$0.is(ModDamageTypes.STAND) || $$0.is(ModDamageTypes.STAND_RUSH) || $$0.is(ModDamageTypes.PENETRATING_STAND)) {
-            if ($$0.getEntity().getPosition(1).distanceTo(this.getSelf().getPosition(1)) < 6.0 ) {
-                if (this.getSelf() instanceof Player P ) {
-                    if (this.getStandUserSelf().roundabout$getCombatMode()) {
-                        int nc = Math.max(this.getChargeTime()-30,0);
-                        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1F, 1F);
-                        this.updatePowerInt(PowersRatt.UPDATE_CHARGE,nc);
-                        S2CPacketUtil.sendIntPowerDataPacket(P,PowersRatt.UPDATE_CHARGE,nc);
+            if ($$0.getEntity() != null) {
+                if ($$0.getEntity().getPosition(1).distanceTo(this.getSelf().getPosition(1)) < 6.0) {
+                    if (this.getSelf() instanceof Player P) {
+                        if (this.getStandUserSelf().roundabout$getCombatMode() && PowerTypes.isUsingStand(this.getSelf())) {
+                            int nc = Math.max(this.getChargeTime() - 30, 0);
+                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1F, 1F);
+                            this.updatePowerInt(PowersRatt.UPDATE_CHARGE, nc);
+                            S2CPacketUtil.sendIntPowerDataPacket(P, PowersRatt.UPDATE_CHARGE, nc);
+                        }
                     }
                 }
             }
         }
     }
 
-    @Override
-    public boolean shouldReset(byte activeP) {
-        //    if (this.getSelf().isUsingItem()) {Roundabout.LOGGER.info("CANCELLED");return false;}
-        return super.shouldReset(activeP);
-    }
 
     @Override
     public void tickMobAI(LivingEntity attackTarget) {
@@ -1082,7 +1049,7 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
-                                  boolean removeNum) {
+                                  boolean removeNum, Minecraft minecraft) {
         double distance = getStandEntity(getSelf()).distanceTo(getSelf());
         StandHudRender.renderNumberHUD(context, Minecraft.getInstance(), screenWidth, screenHeight, x, distance, getMaxPilotRange(), StandIcons.JOJO_ICONS, 0,100,6141070);
     }
@@ -1273,11 +1240,11 @@ public class PowersRatt extends NewDashPreset {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,2, "ability.roundabout.ratt_scope",
                 "instruction.roundabout.press_skill", StandIcons.RATT_SCOPE_IN,1,level,bypas));
         // charge fire
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+118,3, "ability.roundabout.ratt_single",
-                "instruction.roundabout.hold_block", StandIcons.RATT_SINGLE,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+118,2, "ability.roundabout.ratt_fire",
+                "instruction.roundabout.hold_block", StandIcons.RATT_BURST,0,level,bypas));
         // burst fire
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+99,2, "ability.roundabout.ratt_burst",
-                "instruction.roundabout.press_skill", StandIcons.RATT_BURST,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+99,3, "ability.roundabout.ratt_mode_change",
+                "instruction.roundabout.press_skill", StandIcons.RATT_SINGLE,2,level,bypas));
         // place ratt
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.ratt_place",
                 "instruction.roundabout.press_skill", StandIcons.RATT_PLACE,2,level,bypas));

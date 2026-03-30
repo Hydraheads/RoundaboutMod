@@ -22,13 +22,10 @@ import net.hydra.jojomod.item.JackalRifleItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
-import net.hydra.jojomod.stand.powers.PowersAnubis;
-import net.hydra.jojomod.stand.powers.PowersCream;
+import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.fates.powers.VampiricFate;
-import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.event.powers.visagedata.JosukePartEightVisage;
 import net.hydra.jojomod.item.MaskItem;
-import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -133,7 +130,7 @@ public abstract class HudRendering implements IHudAccess {
                 roundabout$renderTextureOverlay($$1, StandIcons.ANUBIS_POSSESSION_OVERLAY, 0.8F,1F,1F,1F);
             }
             if (this.minecraft.options.getCameraType().isFirstPerson()) {
-                if (FateTypes.hasBloodHunger(this.minecraft.player)){
+                if (FateTypes.takesSunlightDamage(this.minecraft.player)){
                     // Fade speed per tick — lower = slower fade
                     float fadeStep = 1.0F / 30.0F; // same as before: full fade over ~30 ticks
 
@@ -154,7 +151,11 @@ public abstract class HudRendering implements IHudAccess {
                                 }
                             }
                         }
+                        if (FateTypes.isInSunlight(this.minecraft.player)){
+                            checksOut = true;
+                        }
                     }
+
 
                     if (checksOut) {
                         rdbt$fadingIn = true;
@@ -649,7 +650,7 @@ public abstract class HudRendering implements IHudAccess {
                 StandHudRender.renderCreamTransformTimerHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PC);
                 return true;
             } else if (powers.replaceHudActively()){
-                powers.getReplacementHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x,removeNum);
+                powers.getReplacementHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x,removeNum,minecraft);
                 if (removeNum){
                     if (displayCombatTicks){
                         if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
@@ -663,10 +664,10 @@ public abstract class HudRendering implements IHudAccess {
                 }
                 return true;
             } else if (fate.replaceHudActively()){
-                fate.getReplacementHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x,removeNum);
+                fate.getReplacementHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x,removeNum,minecraft);
                 return true;
             } else if (user.roundabout$getStandPowers().replaceHudActively()){
-                user.roundabout$getStandPowers().getReplacementHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x,removeNum);
+                user.roundabout$getStandPowers().getReplacementHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x,removeNum,minecraft);
                 return true;
             } else if (((IEntityAndData)minecraft.player).roundabout$getTrueInvisibility() > -1){
                 StandHudRender.renderInvisibilityHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x);

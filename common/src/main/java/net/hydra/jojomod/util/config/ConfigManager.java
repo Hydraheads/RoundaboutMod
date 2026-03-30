@@ -106,9 +106,14 @@ public abstract class ConfigManager {
             MainUtil.unfreezableMobs.clear();
             MainUtil.unfreezableMobs.addAll(getAdvancedConfig().removeFreezableMobs);
         }
-        if (getAdvancedConfig().foodThatGivesBloodListV3 != null)
+        if (getAdvancedConfig().foodThatGivesBloodListV4 != null)
         {
-            MainUtil.foodMap = MainUtil.parseFoodList(getAdvancedConfig().foodThatGivesBloodListV3);
+            MainUtil.foodMap = MainUtil.parseFoodList(getAdvancedConfig().foodThatGivesBloodListV4);
+        }
+        if (getAdvancedConfig().foodThatHasEffectsForVampiresV1 != null)
+        {
+            MainUtil.foodThatHasEffectsForVampires.clear();
+            MainUtil.foodThatHasEffectsForVampires.addAll(getAdvancedConfig().foodThatHasEffectsForVampiresV1);
         }
     }
 

@@ -413,6 +413,10 @@ public class PowersMagiciansRed extends NewPunchingStand {
         return super.inputSpeedModifiers(basis);
     }
 
+    public boolean isFlameCrashing(){
+        return this.getActivePower()==PowerIndex.POWER_4;
+    }
+
     public SoundEvent getKickAttackSound(){
         return ModSounds.FINAL_KICK_EVENT;
     }
@@ -894,6 +898,10 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
     @Override
     public void powerActivate(PowerContext context) {
+        if (isFlameCrashing()){
+            return;
+        }
+
         switch (context) {
             case SKILL_1_NORMAL -> {
                 tryRedBindClient();
@@ -990,6 +998,8 @@ public class PowersMagiciansRed extends NewPunchingStand {
         }
     }
     public void hurricaneClient(){
+        if (isFlameCrashing())
+            return;
         if (this.isChargingCrossfireSpecial())
             return;
         if (isLockedByWater())
@@ -2883,7 +2893,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
     public float getHurricaneDirectDamage(Entity entity, float size, boolean fireStorm){
         if (this.getReducedDamage(entity)){
-            return bumpDamage(levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (0.5+((size/60)* 5.5)))),fireStorm);
+            return bumpDamage(levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (0.5+((size/60)* 5.7)))),fireStorm);
         } else {
             return bumpDamage(levelupDamageMod(multiplyPowerByStandConfigMobs(1+((size/60)* 16))),fireStorm);
         }
@@ -2891,14 +2901,14 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public float getHurricaneDamage(Entity entity,  float size, boolean fireStorm){
         if (size >=52){size=60;}
         if (this.getReducedDamage(entity)){
-            return bumpDamage(levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (0.5+((size/60)* 2.5)))),fireStorm);
+            return bumpDamage(levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (0.5+((size/60)* 3.3)))),fireStorm);
         } else {
             return bumpDamage(levelupDamageMod(multiplyPowerByStandConfigMobs(1+((size/60)* 9))),fireStorm);
         }
     }
     public float getFireballDamage(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.5F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.25F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(4));
         }

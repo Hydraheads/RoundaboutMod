@@ -21,6 +21,10 @@ public class AchtungModel {
     @Inject(method = "renderType", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$renderType(ResourceLocation $$0, CallbackInfoReturnable<RenderType> cir) {
         float throwfade = ClientUtil.getThrowFadeToTheEther();
+        if (throwfade <= 0){
+            cir.setReturnValue(RenderType.entityCutoutNoCull($$0));
+            return;
+        }
         if (throwfade != 1 && !ClientUtil.isFabulous()) {
             cir.setReturnValue(RenderType.entityTranslucentCull($$0));
         }

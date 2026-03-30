@@ -49,6 +49,7 @@ public class ServerToClientPackets {
             UpdateVampireData("update_vampire_data"),
             UpdateVampireData2("update_vampire_data_2"),
             UpdateVampireData3("update_vampire_data_3"),
+            ZombieFish("zombie_fish"),
             GunRecoil("gun_recoil"),
             SyncPossessor("sync_possessor"),
             ShatterIce("shatter_ice"),

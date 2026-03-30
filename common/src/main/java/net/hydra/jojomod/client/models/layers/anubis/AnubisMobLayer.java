@@ -11,7 +11,6 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.mixin.access.models.*;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.minecraft.client.model.HierarchicalModel;
-import net.minecraft.client.model.QuadrupedModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
@@ -20,7 +19,6 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.entity.animal.Fox;
-import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.monster.*;
@@ -37,27 +35,29 @@ public class AnubisMobLayer<T extends LivingEntity, M extends HierarchicalModel<
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, Entity entity, float v, float v1, float v2, float partialTicks, float v4, float v5) {
 
-        StandUser SU = (StandUser) entity;
-        if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
-            if (entity instanceof AbstractIllager AI) {
-                renderIllager(poseStack,bufferSource,packedLight,AI,v,v1,v2,partialTicks,v4,v5);
-            } else if (entity instanceof Wolf W) {
-                renderWolf(poseStack,bufferSource,packedLight,W,v,v1,v2,partialTicks,v4,v5);
-            } else if (entity instanceof Fox F) {
-                renderFox(poseStack,bufferSource,packedLight,F,v,v1,v2,partialTicks,v4,v5);
-            } else if (entity instanceof Horse H) {
-                renderHorse(poseStack,bufferSource,packedLight,H,v,v1,v2,partialTicks,v4,v5);
-            } else if (entity instanceof AbstractVillager AV) {
-                renderAbstractVillager(poseStack,bufferSource,packedLight,AV,v,v1,v2,partialTicks,v4,v5);
-            } else if (entity instanceof LivingEntity LE && getParentModel() instanceof QuadrupedModel<?>) {
-                renderQuadModel(poseStack,bufferSource,packedLight,LE,v,v1,v2,partialTicks,v4,v5);
-            }
+        if (entity.level().isClientSide()) {
+            StandUser SU = (StandUser) entity;
+            if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
+                if (entity instanceof AbstractIllager AI) {
+                    renderIllager(poseStack, bufferSource, packedLight, AI, v, v1, v2, partialTicks, v4, v5);
+                } else if (entity instanceof Wolf W) {
+                    renderWolf(poseStack, bufferSource, packedLight, W, v, v1, v2, partialTicks, v4, v5);
+                } else if (entity instanceof Fox F) {
+                    renderFox(poseStack, bufferSource, packedLight, F, v, v1, v2, partialTicks, v4, v5);
+                } else if (entity instanceof Horse H) {
+                    renderHorse(poseStack, bufferSource, packedLight, H, v, v1, v2, partialTicks, v4, v5);
+                } else if (entity instanceof AbstractVillager AV) {
+                    renderAbstractVillager(poseStack, bufferSource, packedLight, AV, v, v1, v2, partialTicks, v4, v5);
+                } else if (entity instanceof Cow C) {
+                    renderCow(poseStack, bufferSource, packedLight, C, v, v1, v2, partialTicks, v4, v5);
+                }
 
+            }
         }
     }
 
     private void renderIllager(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, AbstractIllager AI, float v, float v1, float v2, float partialTicks, float v4, float v5) {
-        if (AI.getArmPose() == AbstractIllager.IllagerArmPose.ATTACKING || (PowerTypes.isUsingStand(AI)) ) {
+        if (AI.getArmPose() == AbstractIllager.IllagerArmPose.ATTACKING) {
             if (AI instanceof AnubisGuardian AG) {
                 if (!AG.hasTotem() && AG.getArmPose().equals(AbstractIllager.IllagerArmPose.ATTACKING)){
                     ((AnubisGuardianModel) this.getParentModel()).getArm(HumanoidArm.RIGHT).translateAndRotate(poseStack);
@@ -190,8 +190,8 @@ public class AnubisMobLayer<T extends LivingEntity, M extends HierarchicalModel<
 
     }
 
-    private void renderQuadModel(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float v, float v1, float v2, float partialTicks, float v4, float v5) {
-        StandUser SU = (StandUser) entity;
+    private void renderCow(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, Cow c, float v, float v1, float v2, float partialTicks, float v4, float v5) {
+        StandUser SU = (StandUser) c;
         ClientUtil.pushPoseAndCooperate(poseStack, 50);
 
         ((AccessQuadrupedModel) this.getParentModel()).roundabout$getBody().translateAndRotate(poseStack);
@@ -200,7 +200,7 @@ public class AnubisMobLayer<T extends LivingEntity, M extends HierarchicalModel<
         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,0,1,60),0,0,0);
         poseStack.translate(0.6,-0.35,0);
 
-        ModStrayModels.ANUBIS.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+        ModStrayModels.ANUBIS.render(c, partialTicks, poseStack, bufferSource, packedLight,
                 1, 1, 1, 1.0F, SU.roundabout$getStandSkin());
 
         ClientUtil.popPoseAndCooperate(poseStack, 50);

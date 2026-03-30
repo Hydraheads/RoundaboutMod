@@ -3,12 +3,14 @@ package net.hydra.jojomod.registry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.client.models.CoffinRenderer;
 import net.hydra.jojomod.client.models.RoadRollerStrayModel;
 import net.hydra.jojomod.client.models.WornBloodyStoneMaskModel;
 import net.hydra.jojomod.client.models.WornStoneMaskModel;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
 import net.hydra.jojomod.client.models.mobs.AnubisGuardianModel;
 import net.hydra.jojomod.client.models.mobs.renderers.AnubisGuardianRenderer;
+import net.hydra.jojomod.client.models.mobs.renderers.ZombiefishRenderer;
 import net.hydra.jojomod.client.models.paintings.MonaLisaPaintingRenderer;
 import net.hydra.jojomod.client.models.paintings.VanGoghPaintingRenderer;
 import net.hydra.jojomod.client.models.paintings.VenusPaintingRenderer;
@@ -16,6 +18,8 @@ import net.hydra.jojomod.client.models.projectile.*;
 import net.hydra.jojomod.client.models.projectile.renderers.*;
 import net.hydra.jojomod.client.models.stand.*;
 import net.hydra.jojomod.client.models.stand.renderers.*;
+import net.hydra.jojomod.client.models.substand.SeperatedArmModel;
+import net.hydra.jojomod.client.models.substand.SeperatedArmSlimModel;
 import net.hydra.jojomod.client.models.substand.SeperatedLegsModel;
 import net.hydra.jojomod.client.models.substand.renderers.*;
 import net.hydra.jojomod.client.models.visages.*;
@@ -32,6 +36,7 @@ import net.hydra.jojomod.client.models.projectile.renderers.NoRenderer;
 import net.hydra.jojomod.client.models.substand.LifeTrackerModel;
 import net.hydra.jojomod.particles.*;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.model.SilverfishModel;
 import net.minecraft.client.particle.ExplodeParticle;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -52,6 +57,7 @@ public class ClientForgeEvents {
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ForgeEntities.TERRIER_DOG.get(), TerrierEntityRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.ZOMBIEFISH.get(), ZombiefishRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ANUBIS_GUARDIAN.get(), AnubisGuardianRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STAR_PLATINUM.get(), StarPlatinumRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STAR_PLATINUM_BASEBALL.get(), StarPlatinumBaseballRenderer::new);
@@ -75,9 +81,15 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.SOFT_AND_WET_KING.get(), SoftAndWetKingRenderer::new);
         event.registerEntityRenderer(ForgeEntities.KILLER_QUEEN.get(), KillerQueenRenderer::new);
         event.registerEntityRenderer(ForgeEntities.CINDERELLA.get(), CinderellaRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.MANHATTAN_TRANSFER.get(), ManhattanTransferRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.POLLINATION_TRANSFER.get(), PollinationTransferRenderer::new);
         event.registerEntityRenderer(ForgeEntities.WALKING_HEART.get(), WalkingHeartRenderer::new);
         event.registerEntityRenderer(ForgeEntities.JUSTICE_PIRATE.get(), JusticePirateRenderer::new);
         event.registerEntityRenderer(ForgeEntities.DARK_MIRAGE.get(), DarkMirageRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.TUSK_A1.get(), TuskAct1Renderer::new);
+        event.registerEntityRenderer(ForgeEntities.TUSK_A2.get(), TuskAct2Renderer::new);
+        event.registerEntityRenderer(ForgeEntities.TUSK_A3.get(), TuskAct3Renderer::new);
+        event.registerEntityRenderer(ForgeEntities.TUSK_A4.get(), TuskAct4Renderer::new);
         event.registerEntityRenderer(ForgeEntities.DIVER_DOWN.get(), DiverDownRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_HARPOON.get(), HarpoonRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BLADED_BOWLER_HAT.get(), BladedBowlerHatRenderer::new);
@@ -110,8 +122,12 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.ENCASEMENT_BUBBLE.get(), EncasementBubbleRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ANUBIS_POSSESSOR.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ANUBIS_SLIPSTREAM.get(), NoRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.TUSK_NAIL.get(), TuskNailRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.TUSK_HOLE.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ROAD_ROLLER_ENTITY.get(), RoadRollerEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SEPERATED_LEGS.get(), SeperatedLegsRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.SEPERATED_ARM.get(), SeperatedArmRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.SEPERATED_ARM_SLIM.get(), SeperatedArmSlimRenderer::new);
         event.registerEntityRenderer(ForgeEntities.OVA_ENYA.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ENYA.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.JOTARO.get(), VisageBasisRenderer::new);
@@ -128,6 +144,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.POCOLOCO.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GUCCIO.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SHIZUKA.get(), VisageBasisRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.CHAKA.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STEVE_NPC.get(), PlayerNPCRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ALEX_NPC.get(), PlayerAlexRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FOG_CLONE.get(), FogCloneRenderer::new);
@@ -145,6 +162,7 @@ public class ClientForgeEvents {
 
         event.registerBlockEntityRenderer(ForgeBlocks.STAND_FIRE_BLOCK_ENTITY.get(), StandFireRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.MIRROR_BLOCK_ENTITY.get(), MirrorBlockEntityRenderer::new);
+        event.registerBlockEntityRenderer(ForgeBlocks.COFFIN_BLOCK_ENTITY.get(), CoffinRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY.get(), BubbleScaffoldBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.INVISIBLE_BLOCK_ENTITY.get(), InvisiBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.D4C_LIGHT_BLOCK_ENTITY.get(), D4CLightBlockEntityRenderer::new);
@@ -153,10 +171,14 @@ public class ClientForgeEvents {
     @SubscribeEvent
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(ModEntityRendererClient.WOLF_LAYER, TerrierEntityModel::createBodyLayerTerrier);
+        event.registerLayerDefinition(ModEntityRendererClient.ZOMBIEFISH_LAYER, SilverfishModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.ANUBIS_GUARDIAN_LAYER, AnubisGuardianModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.THE_WORLD_LAYER, TheWorldModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.THE_WORLD_ULTIMATE_LAYER, TheWorldUltimateModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STAR_PLATINUM_LAYER, StarPlatinumModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.COFFIN_LEFT_LAYER, CoffinRenderer::createDoubleBodyLeftLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.COFFIN_RIGHT_LAYER, CoffinRenderer::createDoubleBodyRightLayer);
+
         event.registerLayerDefinition(ModEntityRendererClient.SURVIVOR_LAYER, SurvivorModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STAR_PLATINUM_BASEBALL_LAYER, StarPlatinumBaseballModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.JUSTICE_LAYER, JusticeModel::getTexturedModelData);
@@ -173,7 +195,13 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.KILLER_QUEEN_LAYER, KillerQueenModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.SOFT_AND_WET_KILLER_QUEEN_LAYER, SoftAndWetKillerQueenModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.CINDERELLA_LAYER, CinderellaModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.MANHATTAN_TRANSFER_LAYER, ManhattanTransferModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.POLLINATION_TRANSFER_LAYER, PollinationTransferModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.DARK_MIRAGE_LAYER, DarkMirageModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.TUSK_A1_LAYER, TuskAct1Model::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.TUSK_A2_LAYER, TuskAct2Model::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.TUSK_A3_LAYER, TuskAct3Model::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.TUSK_A4_LAYER, TuskAct4Model::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.DIVER_DOWN_LAYER, DiverDownModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.KNIFE_LAYER, KnifeModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.RATT_DART_LAYER, RattDartModel::getTexturedModelData);
@@ -184,6 +212,8 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.CROSSFIRE_FIRESTORM_LAYER, CrossfireFirestormModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.LIFE_DETECTOR, LifeTrackerModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.SEPERATED_LEGS_LAYER, SeperatedLegsModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.SEPERATED_ARM_LAYER, SeperatedArmModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.SEPERATED_ARM_SLIM_LAYER, SeperatedArmSlimModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.STAND_FIREBALL_LAYER, StandFireballModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.RIPPER_EYES_LAYER, RipperEyesModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.GASOLINE_LAYER, GasolineCanModel::createBodyLayer);
@@ -199,6 +229,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.REDD_LAYER, ReddModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.CHAIR_RATT_LAYER, ChairRattModel::getTexturedModelData);
         ModStrayModels.SHOOTING_ARM = new SoftAndWetShootingArmModel();
+        ModStrayModels.TUSK_DRILL = new TuskDrillModel();
         ModStrayModels.HEY_YA = new HeyYaModel();
         ModStrayModels.BOWLER_HAT = new BowlerHatModel();
         ModStrayModels.WORN_STONE_MASK = new WornStoneMaskModel();
@@ -212,6 +243,7 @@ public class ClientForgeEvents {
         ModStrayModels.MANDOM_WATCH = new WatchModel();
         ModStrayModels.MANDOM_WATCH_SMALL = new SmallWatchModel();
         ModStrayModels.MoldSpine = new MoldSpineModel();
+        ModStrayModels.MoldRightArm = new MoldRightArm<>();
         ModStrayModels.ChestPart = new ChestPart();
         ModStrayModels.SmallChestPart = new SmallChestPart();
         ModStrayModels.bodySpikePart = new BodySpikePart();
@@ -326,5 +358,6 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.ROAD_ROLLER_SCRAP.get(), RoadRollerScrapParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.ROAD_ROLLER_EXPLOSION.get(), RoadRollerExplosionParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.ROAD_ROLLER_SMOKE.get(), RoadRollerSmokeParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.TUSK_HOLE.get(), TuskHoleParticle.Provider::new);
     }
 }

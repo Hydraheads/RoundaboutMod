@@ -90,6 +90,10 @@ public class StandIcons {
     public static final ResourceLocation VAMPIRE_DEXTERITY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui//icons/fates/vampire/dexterity.png");
 
+
+    public static final ResourceLocation ZOMBIE_ENTER = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/zombie/enter.png");
+
     public static final ResourceLocation ZOMBIE_DISGUISE_OFF = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui//icons/fates/zombie/disguise_off.png");
     public static final ResourceLocation ZOMBIE_DISGUISE_ON = new ResourceLocation(Roundabout.MOD_ID,
@@ -100,6 +104,16 @@ public class StandIcons {
             "textures/gui//icons/fates/zombie/projectiles.png");
     public static final ResourceLocation ZOMBIE_WORM = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui//icons/fates/zombie/worm.png");
+    public static final ResourceLocation ZOMBIE_WORM_1 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/zombie/worm_1.png");
+    public static final ResourceLocation ZOMBIE_WORM_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/zombie/worm_2.png");
+    public static final ResourceLocation ZOMBIE_WORM_3 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/zombie/worm_3.png");
+    public static final ResourceLocation ZOMBIE_WORM_4 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/zombie/worm_4.png");
+    public static final ResourceLocation ZOMBIE_WORM_5 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/zombie/worm_5.png");
 
     public static final ResourceLocation SURVIVOR_ANGER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/survivor_anger.png");
@@ -200,6 +214,18 @@ public class StandIcons {
 
     public static final ResourceLocation DODGE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/dodge.png");
+
+    public static final ResourceLocation VAMP_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/vampire/punch.png");
+    public static final ResourceLocation VAMP_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/vampire/barrage.png");
+    public static final ResourceLocation VAMP_GUARD = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/vampire/guard.png");
+    public static final ResourceLocation SWEEP_KICK = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/vampire/sweep.png");
+    public static final ResourceLocation COMBO = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/vampire/combo.png");
+
     public static final ResourceLocation HAIR_SPIKE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/powers/vampire/hair_spike.png");
     public static final ResourceLocation BLOOD_CLUTCH = new ResourceLocation(Roundabout.MOD_ID,
@@ -450,6 +476,24 @@ public class StandIcons {
             "textures/gui/icons/cinderella/lipstick.png");
     public static final ResourceLocation CINDERELLA_VISAGES = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/cinderella/visages.png");
+
+    public static final ResourceLocation MANUAL_SHOOTING_OFF = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/manhattan_transfer/auto_shooting_off.png");
+    public static final ResourceLocation MANUAL_SHOOTING_ON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/manhattan_transfer/auto_shooting_on.png");
+    public static final ResourceLocation CONTROL_MODE_OFF = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/manhattan_transfer/control_mode_off.png");
+    public static final ResourceLocation CONTROL_MODE_ON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/manhattan_transfer/control_mode_on.png");
+    public static final ResourceLocation WIND_VISION_OFF = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/manhattan_transfer/wind_vision_off.png");
+    public static final ResourceLocation WIND_VISION_ON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/manhattan_transfer/wind_vision_on.png");
+    public static final ResourceLocation WIND_READING = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/manhattan_transfer/wind_vision_universal.png");
+    public static final ResourceLocation MANHATTAN_DAMAGE_BOOST = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/manhattan_transfer/manhattan_damage_boost.png");
+
     public static final ResourceLocation D4C_BETWEEN_VISION = Roundabout.location("textures/gui/icons/d4c/between_vision.png");
     public static final ResourceLocation D4C_DIMENSION_KIDNAP = Roundabout.location("textures/gui/icons/d4c/dimension_kidnap.png");
     public static final ResourceLocation D4C_CLONE_SUMMON = Roundabout.location("textures/gui/icons/d4c/clone_summon.png");
@@ -467,14 +511,14 @@ public class StandIcons {
     public static final ResourceLocation GREEN_DAY_BARRAGE = Roundabout.location("textures/gui/icons/green_day/punch_barrage.png");
     public static final ResourceLocation GREEN_DAY_STITCH = Roundabout.location("textures/gui/icons/green_day/stitch.png");
     public static final ResourceLocation GREEN_DAY_PARDON = Roundabout.location("textures/gui/icons/green_day/secco_peace.png");
-    public static final ResourceLocation GREEN_DAY_ARM_RETURN_RIGHT = Roundabout.location("textures/gui/icons/green_day/arm_return_right.png");
-    public static final ResourceLocation GREEN_DAY_ARM_RETURN_LEFT = Roundabout.location("textures/gui/icons/green_day/arm_return_left.png");
+    public static final ResourceLocation GREEN_DAY_ARM_RETURN_RIGHT = Roundabout.location("textures/gui/icons/green_day/main_arm_return.png");
+    public static final ResourceLocation GREEN_DAY_ARM_RETURN_LEFT = Roundabout.location("textures/gui/icons/green_day/off_hand_return.png");
     public static final ResourceLocation GREEN_DAY_MOLD_FIELD = Roundabout.location("textures/gui/icons/green_day/mold_field.png");
     public static final ResourceLocation GREEN_DAY_MOLD_LEAP = Roundabout.location("textures/gui/icons/green_day/mold_leap.png");
-    public static final ResourceLocation GREEN_DAY_MOLD_PUNCH_LEFT = Roundabout.location("textures/gui/icons/green_day/mold_punch_left.png");
-    public static final ResourceLocation GREEN_DAY_MOLD_PUNCH_RIGHT = Roundabout.location("textures/gui/icons/green_day/mold_punch_right.png");
-    public static final ResourceLocation GREEN_DAY_MOLD_SPIN_LEFT = Roundabout.location("textures/gui/icons/green_day/mold_spin_left.png");
-    public static final ResourceLocation GREEN_DAY_MOLD_SPIN_RIGHT = Roundabout.location("textures/gui/icons/green_day/mold_spin_right.png");
+    public static final ResourceLocation GREEN_DAY_MOLD_PUNCH_LEFT = Roundabout.location("textures/gui/icons/green_day/off_hand_throw.png");
+    public static final ResourceLocation GREEN_DAY_MOLD_PUNCH_RIGHT = Roundabout.location("textures/gui/icons/green_day/man_arm_throw.png");
+    public static final ResourceLocation GREEN_DAY_MOLD_SPIN_LEFT = Roundabout.location("textures/gui/icons/green_day/off_hand_spin.png");
+    public static final ResourceLocation GREEN_DAY_MOLD_SPIN_RIGHT = Roundabout.location("textures/gui/icons/green_day/main_arm_spin.png");
     public static final ResourceLocation GREEN_DAY_MOLD_FIELD_OFF = Roundabout.location("textures/gui/icons/green_day/mold_field_off.png");
 
     public static final ResourceLocation RATT_PLACE = Roundabout.location("textures/gui/icons/ratt/ratt_place.png");
@@ -489,6 +533,8 @@ public class StandIcons {
     public static final ResourceLocation RATT_BUCKET = Roundabout.location("textures/item/flesh_bucket.png");
     public static final ResourceLocation RATT_LEAP = Roundabout.location("textures/gui/icons/ratt/ratt_leap.png");
 
+    public static final ResourceLocation ANUBIS_MEMORY = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/anubis_memory.png");
     public static final ResourceLocation ANUBIS_ALLURING_LIGHT = Roundabout.location("textures/gui/icons/anubis/alluring_light.png");
     public static final ResourceLocation ANUBIS_RAGING_LIGHT = Roundabout.location("textures/gui/icons/anubis/raging_light.png");
     public static final ResourceLocation ANUBIS_BACKFLIP = Roundabout.location("textures/gui/icons/anubis/backflip.png");
@@ -502,18 +548,26 @@ public class StandIcons {
     public static final ResourceLocation ANUBIS_SLASH = Roundabout.location("textures/gui/icons/anubis/slash.png");
     public static final ResourceLocation ANUBIS_WIDE_SLASH = Roundabout.location("textures/gui/icons/anubis/wide_slash.png");
     public static final ResourceLocation ANUBIS_DIVE_ATTACK = Roundabout.location("textures/gui/icons/anubis/dive_attack.png");
-
     public static final ResourceLocation ANUBIS_DOUBLE_CUT = Roundabout.location("textures/gui/icons/anubis/double_cut.png");
     public static final ResourceLocation ANUBIS_UPPERCUT = Roundabout.location("textures/gui/icons/anubis/uppercut.png");
     public static final ResourceLocation ANUBIS_THRUST_CUT = Roundabout.location("textures/gui/icons/anubis/thrust_cut.png");
     public static final ResourceLocation ANUBIS_BARRAGE = Roundabout.location("textures/gui/icons/anubis/barrage.png");
     public static final ResourceLocation ANUBIS_SHIELDBREAK = Roundabout.location("textures/gui/icons/anubis/maybe_shieldbreak.png");
 
-
-
-    public static final ResourceLocation ANUBIS_MEMORY = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/anubis_memory.png");
-
+    public static final ResourceLocation TUSK_ACTS = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/tusk_acts.png");
+    public static final ResourceLocation[] TUSK_ICONS = {
+            null,
+            new ResourceLocation(Roundabout.MOD_ID,"textures/gui/icons/tusk/act_11.png"),
+            new ResourceLocation(Roundabout.MOD_ID,"textures/gui/icons/tusk/act_2.png"),
+            new ResourceLocation(Roundabout.MOD_ID,"textures/gui/icons/tusk/act_3.png"),
+            new ResourceLocation(Roundabout.MOD_ID,"textures/gui/icons/tusk/act_4.png")
+    };
+    public static final ResourceLocation TUSK_SPINTHROW = Roundabout.location("textures/gui/icons/tusk/spin_throw.png");
+    public static final ResourceLocation TUSK_SHOCKWAVE = Roundabout.location("textures/gui/icons/tusk/shockwave.png");
+    public static final ResourceLocation TUSK_NAILLEAP = Roundabout.location("textures/gui/icons/tusk/spin_leap.png");
+    public static final ResourceLocation TUSK_BALL_BRIDGE = Roundabout.location("textures/gui/icons/tusk/ball_bridge.png");
+    public static final ResourceLocation TUSK_DRILL_BRUSH = Roundabout.location("textures/gui/icons/tusk/drill_brush.png");
 
 
     public static final ResourceLocation SOFT_AND_WET_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,

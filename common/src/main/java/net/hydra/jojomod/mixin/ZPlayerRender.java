@@ -276,10 +276,19 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
    @Inject(method = "renderHand",at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/player/PlayerRenderer;setModelProperties(Lnet/minecraft/client/player/AbstractClientPlayer;)V",shift = At.Shift.AFTER))
     private void roundabout$hideAnubisArm(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, ModelPart $$4, ModelPart $$5, CallbackInfo ci) {
-        if ( AnubisLayer.shouldRender($$3) == HumanoidArm.RIGHT) {
+        HumanoidArm arm = null;
+        if (AnubisLayer.shouldRender($$3) != null) {
+            arm = AnubisLayer.shouldRender($$3);
+        }
+        StandUser SU = (StandUser) $$3;
+        if (SU.roundabout$getStandPowers() instanceof PowersTusk && PowerTypes.isUsingStand($$3)) {
+            arm = $$3.getMainArm();
+        }
+
+        if (arm == HumanoidArm.RIGHT) {
             this.getModel().rightArm.visible = false;
             this.getModel().rightSleeve.visible = false;
-        } else if (AnubisLayer.shouldRender($$3) == HumanoidArm.LEFT)  {
+        } else if (arm == HumanoidArm.LEFT)  {
             this.getModel().leftArm.visible = false;
             this.getModel().leftSleeve.visible = false;
         }
@@ -303,6 +312,11 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                     playerModel.rightSleeve.visible = false;
                     playerModel.leftArm.visible = false;
                     playerModel.leftSleeve.visible = false;
+                }
+
+                if(!PGD.HasMainArm){
+                    playerModel.rightArm.visible=false;
+                    playerModel.rightSleeve.visible=false;
                 }
             }
 
@@ -393,7 +407,12 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                                                                                                 AbstractClientPlayer acl, ModelPart $$4, ModelPart $$5,
                                                                                                 CallbackInfo ci) {
         ((IEntityAndData)acl).roundabout$setExclusiveLayers(true);
-        if (ClientUtil.getThrowFadeToTheEther() != 1 || ClientUtil.hasChangedArms(acl)){
+        boolean shouldRenderArms = true; // make this an AbilityScapeBasis thing at some point idk
+        StandUser standUser = (StandUser) acl;
+        if (AnubisLayer.shouldRender(acl) != null) {shouldRenderArms = false;}
+        if (standUser.roundabout$getStandPowers() instanceof PowersTusk && PowerTypes.isUsingStand(acl)) {shouldRenderArms = false;}
+
+        if ( (ClientUtil.getThrowFadeToTheEther() != 1 || ClientUtil.hasChangedArms(acl)) && shouldRenderArms ){
             ci.cancel();
             PlayerModel<AbstractClientPlayer> $$6 = this.getModel();
             this.setModelProperties(acl);
@@ -545,6 +564,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         }
         ShootingArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,yes,
                 0,0,$$4);
+        AnubisLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,yes,$$4);
         if ($$4 != null && $$4.equals(this.model.rightArm)) {
             MandomLayer.renderWatchFirstPerson(stack, buffer, getPackedLightCoords(acl, 1F), acl, 1, 1, 1, yes,
                     0, 0, $$4, ((IPlayerModel) this.model).roundabout$getSlim()
@@ -904,6 +924,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
             ShootingArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,yes,
                     0,0,$$5);
+            AnubisLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,yes,$$4);
         }
 
     @Unique

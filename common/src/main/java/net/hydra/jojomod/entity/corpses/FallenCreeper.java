@@ -256,6 +256,8 @@ public class FallenCreeper extends FallenMob implements PowerableMob {
     }
 
     public void ignite() {
+        if (!getActivated())
+            return;
         this.entityData.set(DATA_IS_IGNITED, true);
     }
 }

@@ -35,7 +35,6 @@
 
 
   "item.roundabout.stand_arrow": "Stand Arrow",
-  "item.roundabout.coffin_block_item": "Coffin",
   "item.roundabout.stand_beetle_arrow": "Stand Arrow",
   "item.roundabout.worthy_arrow": "Worthiness Arrow",
   "item.roundabout.luck_sword": "Luck Sword",
@@ -82,6 +81,7 @@
   "item.roundabout.cherries": "Cherries",
   "item.roundabout.hairspray": "Hairspray",
 
+  "roundabout.coffin_sleep": "Leave Coffin",
 
   "item.roundabout.star_platinum_disc": "Stand Disc",
   "item.roundabout.the_world_disc": "Stand Disc",
@@ -96,9 +96,11 @@
   "item.roundabout.cream_disc": "Stand Disc",
   "item.roundabout.max_cream_disc": "Stand Disc+",
   "item.roundabout.anubis_disc": "Stand Disc",
+  "item.roundabout.tusk_disc": "Stand Disc",
   "item.roundabout.achtung_baby_disc": "Stand Disc",
   "item.roundabout.max_ratt_disc": "Stand Disc+",
   "item.roundabout.max_anubis_disc": "Stand Disc+",
+  "item.roundabout.max_tusk_disc": "Stand Disc+",
   "item.roundabout.mandom_disc": "Stand Disc",
   "item.roundabout.walking_heart_disc": "Stand Disc",
   "item.roundabout.max_walking_heart_disc": "Stand Disc+",
@@ -115,6 +117,7 @@
   "item.roundabout.max_magicians_red_disc": "Stand Disc+",
   "item.roundabout.max_killer_queen_disc": "Stand Disc+",
   "item.roundabout.diver_down_disc": "Stand Disc",
+  "item.roundabout.manhattan_transfer_disc": "Stand Disc",
   "item.roundabout.max_diver_down_disc": "Stand Disc+",
   "item.roundabout.d4c_disc.desc": "D4C",
   "item.roundabout.green_day_disc.desc": "Green Day",
@@ -132,6 +135,8 @@
   "item.roundabout.cream_disc.desc": "Cream",
   "item.roundabout.anubis_disc.desc": "Anubis",
   "item.roundabout.max_anubis_disc.desc": "Anubis",
+  "item.roundabout.tusk_disc.desc": "Tusk",
+  "item.roundabout.max_tusk_disc.desc": "Tusk",
   "item.roundabout.achtung_baby_disc.desc": "Achtung Baby",
   "item.roundabout.survivor_disc.desc": "Survivor",
   "item.roundabout.hey_ya_disc.desc": "Hey Ya!",
@@ -139,6 +144,7 @@
   "item.roundabout.walking_heart_disc.desc": "Walking Heart",
   "item.roundabout.diver_down_disc.desc": "Diver Down",
   "item.roundabout.max_diver_down_disc.desc": "Diver Down",
+  "item.roundabout.manhattan_transfer_disc.desc": "Manhattan Transfer",
   "item.roundabout.none_disc.desc": "None",
 
   "item.roundabout.road_roller": "Road Roller",
@@ -238,6 +244,9 @@
   "item.roundabout.shizuka_mask": "Shizuka Visage",
   "item.roundabout.shizuka_mask.desc": "Shizuka (JoJovein / JoJo Stars)",
   "item.roundabout.shizuka_mask.tag": "Shizuka",
+  "item.roundabout.chaka_mask": "Chaka Visage",
+  "item.roundabout.chaka_mask.desc": "Chaka",
+  "item.roundabout.chaka_mask.tag": "Chaka",
 
   "item.roundabout.stand_arrow.fail": "Need more experience!",
 
@@ -248,6 +257,7 @@
   "item.roundabout.stand_arrow.haveStand": "You already have a stand, to remove it use stand disc",
   "item.roundabout.stand_arrow.acquireStand": "Stand Acquired! Press the summon key!",
   "item.roundabout.stand_arrow.acquireStand_2": "Press the power inventory key to see skills!",
+  "item.roundabout.stand_arrow.acquireZombie1": "You have been zombified!",
   "item.roundabout.stand_arrow.acquireVampire1": "You are now a Vampire",
   "item.roundabout.stand_arrow.acquireVampire2": "The Summon Key switches Attack Modes",
   "item.roundabout.stand_arrow.acquireVampire3": "Avoid Sunlight",
@@ -272,6 +282,7 @@
   "effect.roundabout.gravity_flip": "Gravity",
   "effect.roundabout.warding": "Warding",
   "effect.roundabout.vampire_blood": "Vampire Blood",
+  "effect.roundabout.unbalanced": "Unbalanced",
 
   "item.roundabout.creative_only.info": "Creative Only",
 
@@ -280,6 +291,7 @@
   "item.roundabout.terrier_spawn_egg": "Boston Terrier Spawn Egg",
   "item.roundabout.aesthetician_spawn_egg": "Aesthetician Spawn Egg",
   "item.roundabout.zombie_aesthetician_spawn_egg": "Zombie Aesthetician Spawn Egg",
+  "item.roundabout.anubis_guardian_spawn_egg": "Anubis Guardian Spawn Egg",
 
   "item.roundabout.painting_van_gough": "Van Gogh's Self-Portrait",
   "item.roundabout.painting_mona_lisa": "Mona Lisa",
@@ -340,6 +352,7 @@
   "entity.roundabout.jojo_npc_shizuka": "Shizuka",
   "entity.roundabout.jojo_npc_pocoloco": "Pocoloco",
   "entity.roundabout.aesthetician": "Aesthetician",
+  "entity.roundabout.jojo_npc_chaka": "Chaka",
   "entity.roundabout.zombie_aesthetician": "Zombie Aesthetician",
   "entity.roundabout.jojo_npc_steve": "Steve",
   "entity.roundabout.jojo_npc_alex": "Alex",
@@ -354,6 +367,10 @@
   "entity.roundabout.item_launching_bubble": "Item Launching Bubble",
   "entity.roundabout.go_beyond": "Go Beyond",
   "entity.roundabout.ground_bubble": "Underground Bubble",
+  "entity.roundabout.separated_legs": "Separated legs",
+  "entity.roundabout.separated_arm": "Seperated Arm",
+  "entity.roundabout.separated_arm_slim": "Seperated Arm Slim",
+
 
   "entity.roundabout.water_bottle": "Water Bottle",
   "entity.roundabout.bowler_hat": "Bowler Hat",
@@ -516,10 +533,14 @@
   "sounds.roundabout.vsong_damnable_ceremony": "Damnable Ceremony",
   "sounds.roundabout.vsong_gothic_organ": "Gothic Organ",
 
+  "sounds.roundabout.anubis_unsheathe": "Unsheathe",
+  "sounds.roundabout.summon_anubis": "Summon Stand",
   "sounds.roundabout.vampire_dash": "Fwoosh",
   "sounds.roundabout.vampire_gleam": "Sparkle",
   "sounds.roundabout.evil_aura_blast": "Chilling Breeze",
   "sounds.roundabout.aura_impact": "Aura Impact",
+
+  "sounds.roundabout.zombie_charge": "Zombie Charge",
 
   "sounds.roundabout.ripper_eyes_charge": "Fluid Buildup",
   "sounds.roundabout.ripper_eyes_beam": "Ripper Eyes",
@@ -1087,6 +1108,22 @@
   "instruction.roundabout.anubis_one": "Third Attack - Press Crouch Once",
   "instruction.roundabout.anubis_two": "Third Attack - Press Crouch Twice",
   "instruction.roundabout.press_skill_memory":"Press Skill %1$s While Selecting A Memory",
+  "ability.roundabout.ice_guard": "Guard",
+  "ability.roundabout.ice_guard.desc": "Block in front of you, just like a shield. When the purple shield meter takes enough damage, your guard drops. If freezing is unlocked in the vampire fate, also can make opponents colder.",
+
+  "ability.roundabout.aura_push": "Evil Aura Blast",
+  "ability.roundabout.aura_push.desc": "Fires vampiric aura in front of you, pushing mobs it hits slightly. Also pushes you backwards if you are in the air when you shoot it.",
+
+  "ability.roundabout.invis_vamp": "Camoflauge",
+  "ability.roundabout.invis_vamp.desc": "If you stand still, lets you blend into your surroundings and appear completely invisible.",
+
+  "ability.roundabout.deflection": "Deflection",
+  "ability.roundabout.deflection.desc": "Enter a temporary state of deflecting most incoming projectiles.",
+
+  "ability.roundabout.ripper_eyes": "Space Ripper Stingy Eyes",
+  "ability.roundabout.ripper_eyes.desc": "Charges up a continuous beam that does massive damage and bleed, traveling through even blocks. Can be interrupted. If you press it again, you can fire it off early as a weaker projectile.",
+
+  "instruction.roundabout.passive_manhattan": "Enter Control Mode or Activate Wind Vision",
 
   "ability.roundabout.punch": "Punch",
   "ability.roundabout.punch.desc": "Throws a punch directly in front of you. Hold it down for a 3 hit-combo!",
@@ -1096,6 +1133,31 @@
   "ability.roundabout.barrage.desc": "Trap your enemy in a flurry of blows, sending them flying at the end.",
   "ability.roundabout.kick_barrage": "Barrage of Kicks",
   "ability.roundabout.kick_barrage.desc": "A faster charging barrage that does not disable enemy attacks.",
+
+  "ability.roundabout.punch_fate": "Punch",
+  "ability.roundabout.punch_fate.desc": "Throws a punch directly in front of you. Hold it down for nonstop attacks!",
+
+  "ability.roundabout.sweep_kick": "Sweep/Stomp",
+  "ability.roundabout.sweep_kick.desc": "Throws a kick in a short range directly in front of you. The knockback is quite high. If used in the air, it instead makes you slam into the ground, briefly dazing mobs it hits.",
+
+  "ability.roundabout.hair_grab": "Hair Grab",
+  "ability.roundabout.hair_grab.desc": "Pulls a mob in towards you.",
+  "ability.roundabout.hair_spikes": "Hair Spikes",
+  "ability.roundabout.hair_spikes.desc": "After a while, extends hair spikes around you damaging mobs in a radius.",
+
+
+  "ability.roundabout.blood_clutch": "Blood Clutch",
+  "ability.roundabout.blood_clutch.desc": "After a brief delay, dashes forwards. Damages a mob on contact. If the mob that is hit can bleed, drinks their blood, potentially zombifying them on death.",
+
+  "ability.roundabout.ice_clutch": "Ice Clutch",
+  "ability.roundabout.ice_clutch.desc": "After a brief delay, dashes forwards. Damages a mob on contact. If the mob can be frozen, begins the process off freezing them, potentially slowing and weakening them. When fully frozen, mobs shatter on hit. Must be unlocked in vampire fate.",
+
+  "ability.roundabout.dodge_air": "Dash / Fade Dash",
+  "ability.roundabout.dodge_air.desc": "A quick burst of speed, useful for dodging. If you time it with a jump, it travels further, but takes longer to recharge. Can be used in the air, making you turn invisible briefly in the process.",
+
+
+  "ability.roundabout.combo": "Combo",
+  "ability.roundabout.combo.desc": "Abilities build up combo points displayed above the exp bar when used consecutively. Combo points make your attacks deal more damage.",
 
   "ability.roundabout.forward_barrage": "Forward Barrage",
   "ability.roundabout.forward_barrage.desc": "While barraging, your stand starts to float forward slowly.",
@@ -1321,13 +1383,13 @@
   "ability.roundabout.place_invis.desc": "Place blocks, passing your invisibility duration down to them. Only works while you are invisible. To activate this skill, you must be holding a block and invisible.",
 
   "ability.roundabout.ratt_scope": "Scoped Mode",
-  "ability.roundabout.ratt_scope.desc": "Hold Ratt and scope in, allowing you to shoot while moving. Interacting builds chargs, and punching releases it as a flurry of darts.",
-  "ability.roundabout.ratt_single": "Fire Darts",
-  "ability.roundabout.ratt_single.desc": "Shoots a volley of three darts, inflicting melt. Single Fire instead shoots one, stronger dart with greater knockback and damage",
-  "ability.roundabout.ratt_burst": "Mode Change",
-  "ability.roundabout.ratt_burst.desc": "Changes your manual firing mode between Single Fire and Burst Fire",
+  "ability.roundabout.ratt_scope.desc": "Hold Ratt and scope in, allowing you to shoot while moving. Interacting builds charge, and punching releases it as a flurry of darts.",
+  "ability.roundabout.ratt_fire": "Fire Darts",
+  "ability.roundabout.ratt_fire.desc": "Shoots a volley of three darts, inflicting melt and breaking block on the final hit",
+  "ability.roundabout.ratt_mode_change": "Mode Change",
+  "ability.roundabout.ratt_mode_change.desc": "Changes your manual firing mode between Single Fire and Burst Fire. Single Fire shoots one, stronger dart with greater knockback, damage, and melt duration.",
   "ability.roundabout.ratt_place": "Ratt Place",
-  "ability.roundabout.ratt_place.desc": "Place Ratt down, allowing Ratt to fire alongside you. Sneaking highlights ratt and displays the distance to you.",
+  "ability.roundabout.ratt_place.desc": "Place Ratt down, allowing Ratt to fire alongside you. Sneaking highlights ratt and displays the distance to you. Ratt is immune to being hit for a brief period upon being placed.",
   "ability.roundabout.ratt_place_burst": "Placed Burst Fire",
   "ability.roundabout.ratt_place_burst.desc": "Shoot a burst of 3 darts from Ratt's position to your cursor",
   "ability.roundabout.ratt_auto": "Automatic Mode",
@@ -1375,6 +1437,8 @@
 
   "ability.roundabout.blood_drink": "Blood Suck",
   "ability.roundabout.blood_drink.desc": "Consume blood through your hands so long as you remain facing your target, damaging them to restore your blood. If a mob has drinkable blood, the indicator will appear in the middle of the screen. If a mob is not agitated, you can score a critical blood suck. Villagers and Illagers will zombify upon being killed by this skill, and can be controlled. You can also absorb held plants for direct health.",
+  "ability.roundabout.blood_drink_simple": "Blood Suck",
+  "ability.roundabout.blood_drink_simple.desc": "Consume blood so long as you remain facing your target, damaging them to restore your blood. If a mob has drinkable blood, the indicator will appear in the middle of the screen. If a mob is not agitated, you can score a critical blood suck.",
   "ability.roundabout.vampire_passive": "Vampiric",
   "ability.roundabout.vampire_passive.desc": "You evaporate in sunlight. You run on blood instead of hunger, and eating raw foods and monster drops provide blood with no penalties. You cannot die of starvation. Drowning only lowers your speed. Iron Golems detest you, while zombies are neutral with your presence.",
   "ability.roundabout.mass_heal": "Blood Healing",
@@ -1383,6 +1447,25 @@
   "ability.roundabout.wall_walk_vamp.desc": "Latches onto walls, allowing you to walk slowly on them. Trigger by facing a wall in the air. Press again while wall walking and facing another wall to switch walls, or to step onto ceilings.",
   "ability.roundabout.vampire_vision": "Vampire Perspective",
   "ability.roundabout.vampire_vision.desc": "While enabled, allows for passive dark vision as well as a longer jump height while jump is held.",
+
+  "ability.roundabout.zombie_passive": "True Undead",
+  "ability.roundabout.zombie_passive.desc": "You are harmed by smite. Some potion effects are nullified or reversed: you are classified as undead.",
+
+  "ability.roundabout.zombie_passive_2": "Zombie Power",
+  "ability.roundabout.zombie_passive_2.desc": "Your strength, defense, and held jump height are increased. You can see in the dark.",
+
+  "ability.roundabout.zombie_disguise": "Zombie Disguise",
+  "ability.roundabout.zombie_disguise.desc": "Activate or de-activate freely. If your disguise is on, you are treated normally by golems and targeted by zombies. However, many of your zombie abilities and properties are sealed to make the disguise convincing.",
+
+  "ability.roundabout.zombie_worm": "Zombiefish",
+  "ability.roundabout.zombie_worm.desc": "Killing enemies with blood suck gives you a zombiefish which you can then summon. Maxes at 5. Zombiefish target your attack target.",
+
+  "ability.roundabout.zombie_projectiles": "Zombie Projectiles",
+  "ability.roundabout.zombie_projectiles.desc": "If you are holding knives, arrows, or knife bundles, you can sift them through your body and fire them off shotgun style.",
+
+  "ability.roundabout.zombie_enter": "Zombie Enter",
+  "ability.roundabout.zombie_enter.desc": "Lets you mount just about any animal. Passively, so long as you are not disguised, you hide inside of animals you are mounted to and this lets you drive them past the sun so long as you do not attack/use items.",
+
 
   "ability.roundabout.vamp_jump_boost": "Ultra Athleticism",
   "ability.roundabout.vamp_jump_boost.desc": "Grants 3 meter jump height and 5 meters while sneaking. Hold down for the longer jumps, and tap for shorter ones. With the powers moveset active, grants %1$s meter jump height and %2$s meters while sneaking.",
@@ -1433,12 +1516,13 @@
   "ability.roundabout.eye_manipulation.locked.desc": "As you practice your newfound body manipulation skills, you wonder what would happen if you manipulate your eye fluids. (powers moveset)",
 
 
-  "ability.roundabout.gd_punch_left": "Left Arm Launch",
-  "ability.roundabout.gd_return_left": "Left Arm Reattach",
-  "ability.roundabout.gd_spin_left": "Left Arm Spin",
-  "ability.roundabout.gd_punch_right": "Right Arm Launch",
-  "ability.roundabout.gd_return_right": "Right Arm Reattach",
-  "ability.roundabout.gd_spin_right": "Right Arm Spin",
+  "ability.roundabout.gd_punch_left": "Main Arm Launch",
+  "ability.roundabout.gd_punch_left.desc": "Separate your main hand from your body, throwing it out to attack or mine with the item in your main hand! Use again to control its movement",
+  "ability.roundabout.gd_return_left": "Main Arm Reattach",
+  "ability.roundabout.gd_spin_left": "Main Arm Spin",
+  "ability.roundabout.gd_punch_right": "Off Hand Launch",
+  "ability.roundabout.gd_return_right": "Off Hand Reattach",
+  "ability.roundabout.gd_spin_right": "Off Hand Spin",
   "ability.roundabout.gd_mold_leap": "Separation Leap",
   "ability.roundabout.gd_mold_leap.desc": "Separates your torso and legs, and launches you in the direction you are looking, allowing for great omnidirectional moblity whilst letting you avoid fall damage. Leaves you crawling while your legs float back to you, damaging mobs they come into contact with and letting you walk again. Your legs automatically return after a time",
   "ability.roundabout.gd_mold_field": "Mold Field",
@@ -1447,6 +1531,18 @@
   "ability.roundabout.gd_stitch.desc": "Stitches you up, recovering a tiny bit of health, and reducing bleed by 1 level",
   "ability.roundabout.gd_pardon": "Ally Selection",
   "ability.roundabout.gd_pardon.desc": "Select entities as allies, making them unaffected by your mold field",
+
+  "ability.roundabout.manual_shooting": "Shooting Mode",
+  "ability.roundabout.manual_shooting.desc": "Allows you to press left click with your mouse shoot where you want if you are controlling the stand and it contains a projectile. If you decide to keep automatic shooting, it will redirect istantly any bullet torwards the nearest moving entity.",
+  "ability.roundabout.control_mode": "Control Mode",
+  "ability.roundabout.control_mode.desc": "Lets you control the stand, moving it where you need to have it. if in manual shooting mode, press left click with your mouse if the stand contains a bullet to shoot it into the direction you are watching or the mob you are pointing to. If you don't enter control mode, the stand will slowly float forwards and wander a little bit near moving mobs. The same counts if you dont give any input to the stand's movement.",
+  "ability.roundabout.wind_vision": "Wind Vision",
+  "ability.roundabout.wind_vision.desc": "Lets you read wind movements just as your stand, giving you the same visuals as your stand.",
+  "ability.roundabout.bonus_damage": "Bonus Stand Damage",
+  "ability.roundabout.bonus_damage.desc": "When the stand redirects a bullet, a little stand damage is added to the projectile. It affects all projectiles",
+  "ability.roundabout.wind_reading": "Wind Reading",
+  "ability.roundabout.wind_reading.desc": " The stand read the wind instead of seeing, and the screen will appear greenish and only entities that move or that have moved render completely green with a glowing outline. It's also useful for scouting nearby areas",
+
 
   "ability.roundabout.diver_selection": "Diver Selection",
   "ability.roundabout.diver_selection.desc": "Opens an impairment wheel which you can apply effects onto yourself",
@@ -1737,16 +1833,24 @@
   "skins.roundabout.diver_down.birthdaydiver": "Birthday!",
   "skins.roundabout.diver_down.firediver": "Fire Down",
 
+  "skins.roundabout.manhattan_transfer.manhattan_part_6": "Anime",
+  "skins.roundabout.manhattan_transfer.manhattan_manga_part_6": "Manga",
+  "skins.roundabout.manhattan_transfer.brazilian_transfer": "Brazilian",
+  "skins.roundabout.manhattan_transfer.radioactive_transfer": "Radioactive",
+  "skins.roundabout.manhattan_transfer.pollination_transfer": "Pollination",
+
   "death.attack.anubis_possess": "%1$s couldn't challenge %2$s",
   "death.attack.anubis_spin": "%1$s was shredded by %2$s",
 
   "item.roundabout.anubis_item": "Mysterious Sword",
+  "roundabout.anubis_item.requires_mainhand": "Must be in Main Hand to use",
   "item.roundabout.anubis_item.message1" : "The sword is cursed! Seek out a cleric!",
+  "item.roundabout.anubis_item.failure" : "Nobody to kill...",
   "item.roundabout.anubis_item.sword_cleansed": "Anubis Cleansed!",
 
   "skins.roundabout.anubis.anime" : "Anime",
   "skins.roundabout.anubis.evil" : "Evil",
-  "skins.roundabout.anubis.wooden" : "Wooden",
+  "skins.roundabout.anubis.wooden" : "Sacrifical",
   "skins.roundabout.anubis.stone" : "Stone",
   "skins.roundabout.anubis.aquamarine" : "Aquamarine",
   "skins.roundabout.anubis.golden" : "Gilded",
@@ -1756,15 +1860,37 @@
   "skins.roundabout.anubis.gray_wagon": "Gray Wagon",
   "skins.roundabout.anubis.timekeeper": "Timekeeper",
   "skins.roundabout.anubis.chorus": "Chorus",
-  "skins.roundabout.anubis.alluring": "Raging",
-  "skins.roundabout.anubis.raging": "Alluring",
+  "skins.roundabout.anubis.alluring": "Alluring",
+  "skins.roundabout.anubis.raging": "Raging",
   "skins.roundabout.anubis.khopesh": "Khopesh",
   "skins.roundabout.anubis.cleaver": "Cleaver",
   "skins.roundabout.anubis.illusory": "Illusory",
+  "skins.roundabout.anubis.bloodstained": "Bloodstained",
+  "skins.roundabout.anubis.brilliance": "Brilliance",
+  "skins.roundabout.anubis.chainblade": "Chainblade",
+  "skins.roundabout.anubis.chef": "Chef",
+  "skins.roundabout.anubis.serpent": "Serpent",
+  "skins.roundabout.anubis.soulborn": "Soulborn",
+
+  "skins.roundabout.tusk.manga" : "Manga",
+  "skins.roundabout.tusk.blue" : "Blue",
+
+
+  "roundabout.tusk.act_1": "Act 1",
+  "roundabout.tusk.act_2" : "Act 2",
+  "roundabout.tusk.act_3" : "Act 3",
+  "roundabout.tusk.act_4": "Act 4",
+  "roundabout.tusk.change_acts" : "Change Acts",
 
   "roundabout.anubis.playback_title": "Replay Memories",
   "roundabout.anubis.memory_title": "Record Memories",
   "roundabout.anubis.memory_fail": "Memory is too long!",
+
+  "skins.roundabout.green_day.part_five_green_day": "Part 5",
+  "skins.roundabout.green_day.red_day": "Red Day",
+  "skins.roundabout.green_day.teal_day": "Teal Day",
+  "skins.roundabout.green_day.broccoli": "Broccoli",
+
 
 
 
@@ -2028,6 +2154,8 @@
   "config.roundabout.enableHeyYa.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableCinderella.name": "Enable Stand",
   "config.roundabout.enableCinderella.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+  "config.roundabout.enableManhattanTransfer.name": "Enable Stand",
+  "config.roundabout.enableManhattanTransfer.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableSurvivor.name": "Enable Stand",
   "config.roundabout.enableSurvivor.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
 
@@ -2037,6 +2165,12 @@
 
   "config.roundabout.mountingHorsesInCreativeTamesThem.name": "Creative Mount To Tame",
   "config.roundabout.mountingHorsesInCreativeTamesThem.desc": "If you mount a horse in creative mode, you instantly tame it.",
+
+  "config.roundabout.bleedRemovesStrength.name": "Bleed Removes Strength",
+  "config.roundabout.bleedRemovesStrength.desc": "Whether bleed removes the strength potion effect initially upon being applied.",
+
+  "config.roundabout.hexTwoSealsPotions.name": "Hex II Blocks Potions",
+  "config.roundabout.hexTwoSealsPotions.desc": "Whether hex 2 or higher prevents drinking and splashing potions while applied",
 
 
   "config.roundabout.bonusStandDmgByMaxLevel.name": "Bonus Levelup Damage",
@@ -2087,10 +2221,24 @@
   "config.roundabout.beetleArrowCost.desc": "Number of emeralds that the single trade costs, up to 64",
   "config.roundabout.brokenArrowTradeChance.name": "Broken Stand Arrow Trade Chance",
   "config.roundabout.brokenArrowTradeChance.desc": "Changes the weighting of the trade. Think of it like adding an extra, identical, trade to the possible options",
+  "config.roundabout.anubisTradeChance.name": "Anubis Trade Chance",
+  "config.roundabout.anubisTradeChance.desc": "Changes the weighting of the trade. Think of it like adding an extra, identical, trade to the possible options",
+  "config.roundabout.anubisTradeCost.name": "Anubis Trade Cost",
+  "config.roundabout.anubisTradeCost.desc": "Number of emeralds that a single trade costs, up to 64",
   "config.roundabout.brokenArrowCost.name": "Broken Stand Arrow Trade Cost",
   "config.roundabout.brokenArrowCost.desc": "Number of emeralds that a single trade costs, up to 64",
   "config.roundabout.brokenArrowsHaveStands.name": "Broken Arrow Traders Spawn With a Stand",
   "config.roundabout.brokenArrowsHaveStands.desc": "Whether or not Wandering Traders with a Broken Stand Arrow trade will spawn with a Stand or not",
+
+
+  "config.roundabout.anubisChance.name": "Mysterious Sword Chance",
+  "config.roundabout.anubisChance.desc": "Changes the weighting of the loot. Think of it like adding an extra, identical, item to the possible options ",
+  "config.roundabout.standArrowChance.name": "Stand Arrow Chance",
+  "config.roundabout.standArrowChance.desc": "Changes the weighting of the loot. Think of it like adding an extra, identical, item to the possible options ",
+  "config.roundabout.beetleArrowChance.name": "Beetle Arrow Chance",
+  "config.roundabout.beetleArrowChance.desc": "Changes the weighting of the loot. Think of it like adding an extra, identical, item to the possible options ",
+  "config.roundabout.dryLootMultiplier.name": "Dry Loot Multiplier",
+  "config.roundabout.dryLootMultiplier.desc": "Stand Arrows are more common in drier locations, such as desert wells, pyramids, and warm ocean ruins ",
 
 
   "config.roundabout.disableMeleeWhileStandActive.name": "Disable Melee With Stands",
@@ -2214,6 +2362,11 @@
   "config.roundabout.enableJojoveinVisagesInShop.name": "JoJovein Visages",
   "config.roundabout.enableJojoveinVisagesInShop.desc": "Whether or not visages for designs used in JoJovein (the precursor mod/server/modpack to Roundabout). For example, Shizuka from JoJo Stars, which uses an adapted fan design. This config requires a restart to load.",
 
+  "config.roundabout.manhattanTransferMaxRange.name": "Manhattan Transfer Max Range",
+  "config.roundabout.manhattanTransferMaxRange.desc": "How far you and Manhattan Transfer can distance until it despawns. The default is 200.",
+  "config.roundabout.getAutoSpeed.name":"Automatic Speed Modifier",
+  "config.roundabout.getAutoSpeed.desc": "Select the velocity of the stand's automatic movement from 1 to 5. The lowest is easier to shoot to the stand, the highest ones are optimal by who has mastered the stand and wants it to move faster.",
+
   "config.roundabout.walkingHeartAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.walkingHeartAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
   "config.roundabout.walkingHeartAttackMultOnMobs.name": "Mob Damage Multiplier",
@@ -2234,6 +2387,8 @@
 
   "config.roundabout.rattAttackBonusOnMobs.name": "Bonus Mob Damage",
   "config.roundabout.rattAttackBonusOnMobs.desc": "How much bonus damage Ratt darts deal to a mob.",
+  "config.roundabout.rattSafetyTicks.name": "Ratt Safety Ticks",
+  "config.roundabout.rattSafetyTicks.desc": "The amount of ticks until a placed Ratt can be attacked",
   "config.roundabout.rattAttackBonusOnBosses.name": "Bonus Boss Damage",
   "config.roundabout.rattAttackBonusOnBosses.desc": "Since Boss mobs cannot receive melt, they instead take a flat bonus damage ",
   "config.roundabout.rattMaxDespawnRange.name": "Despawn Range",
@@ -2709,6 +2864,11 @@
   "config.roundabout.levelsToRerollStandWithArrow.desc": "By default, it costs 1 level to change the stand charged on a stand arrow. Keep in mind using the arrow on a mob also rerolls it (and uses 1 durability).",
   "config.roundabout.canAwakenOtherPlayersWithArrows.name": "Arrows Vs Other Players",
   "config.roundabout.canAwakenOtherPlayersWithArrows.desc": "By default, shooting another player with a stand arrow does not awaken their stand to prevent forcing someone to be stuck with something bad.",
+
+  "config.roundabout.classicGasoline.name": "Classic Gasoline",
+  "config.roundabout.classicGasoline.desc": "Turn on for gasoline to be super oppressive in pvp like it used to be.",
+
+
   "config.roundabout.canThrowVisagesOntoOtherPlayers.name": "Visages Vs Other Players",
   "config.roundabout.canThrowVisagesOntoOtherPlayers.desc": "Whether or not stand item throws with visages can apply the visages on players. Mostly exists for debug testing.",
   "config.roundabout.standDiscsDropWithKeepGameRuleOff.name": "Stand Disc Drop Rule",
@@ -2767,6 +2927,7 @@
   "config.roundabout.vanillaMinecraftTweaks.name": "Vanilla Tweaks",
   "config.roundabout.worldgenSettings.name": "Worldgen",
   "config.roundabout.wanderingTraderSettings.name": "Wandering Trades",
+  "config.roundabout.brushingLootSettings.name": "Brushing Loot",
   "config.roundabout.itemSettings.name": "Items",
   "config.roundabout.nameTagSettings.name": "Nametags",
   "config.roundabout.griefSettings.name": "Griefing",
@@ -2782,6 +2943,7 @@
   "config.roundabout.standTweak.name": "Ratt",
   "config.roundabout.justiceSettings.name": "Justice",
   "config.roundabout.cinderellaSettings.name": "Cinderella",
+  "config.roundabout.manhattanTransferSettings.name": "Manhattan Transfer",
   "config.roundabout.heyYaSettings.name": "Hey Ya",
   "config.roundabout.mandomSettings.name": "Mandom",
   "config.roundabout.survivorSettings.name": "Survivor",
@@ -2789,6 +2951,11 @@
   "config.roundabout.theWorldSettings.name": "The World",
   "config.roundabout.starPlatinumSettings.name": "Star Platinum",
   "config.roundabout.timeStopSettings.name": "Time Stop",
+
+
+  "config.roundabout.powersSettings.name": "Powers",
+  "config.roundabout.powerSwitchingPenalty.name": "Switching Penalty",
+  "config.roundabout.powerSwitchingPenalty.desc": "A penalty incurred by switching between powers (example: vampire powers -> stand). By default it is designed to make you focus on one or the other to make pvp less sweaty.",
 
 
 
@@ -2825,6 +2992,8 @@
   "config.roundabout.mandomRewindShowsVisualEffectsToNonMandomUsers.desc": "Whether or not the visual effect of rewinding time appears on other players' screens. The ability is meant to be subtle and confusing canonically, but in the mod we didn't want people to mistake being rewound for lag or rubberbanding.",
   "config.roundabout.mandomRewindAttemptsToSkipInterpolation.name": "Rewind Blipping",
   "config.roundabout.mandomRewindAttemptsToSkipInterpolation.desc": "Turn this off if you have a mod that makes mobs invisible after using mandom. Whether or not time rewind attempts to skip interpolation, so mobs instantly blip into their new locations instead of visually sliding really fast like endermen teleports.",
+  "config.roundabout.tuskUsesShootMode.name": "Tusk Gun Mode",
+  "config.roundabout.tuskUsesShootMode.desc": "Whether you  need to hold right click and then press left click, or just right click",
 
   "config.roundabout.renderJusticeParticlesWhilePilotingInFirstPerson.name": "1st Person Fog",
   "config.roundabout.renderJusticeParticlesWhilePilotingInFirstPerson.desc": "Fog particles can be disabled for first person rendering of justice control mode.",
@@ -2850,6 +3019,13 @@
 
   "config.roundabout.SoftAndWetCurrentlySelectedBubble.name": "Selected Bubble Type",
   "config.roundabout.SoftAndWetCurrentlySelectedBubble.desc": "For Soft and Wet, your client remembers what bubble is presently selected.",
+
+  "config.roundabout.TuskAct.name": "Tusk Act",
+  "config.roundabout.TuskAct.desc": "Saves your Tusk Act after you log out.",
+
+  "config.roundabout.rattFiringMode.name": "Ratt Firing Mode",
+  "config.roundabout.rattFiringMode.desc": "Ratt's Manual Firing mode. See the Power Menu for more details",
+
 
   "config.roundabout.vampireVisionMode.name": "Selected Vision Type",
   "config.roundabout.vampireVisionMode.desc": "Toggle on and off vampiric night vision. V is the hotkey for vampiric fates.",

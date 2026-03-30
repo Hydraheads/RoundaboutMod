@@ -58,18 +58,22 @@ public abstract class AnubisRaidMixin {
     @Shadow
     public abstract void joinRaid(int i, Raider raider, @Nullable BlockPos blockPos, boolean bl);
 
+    @Shadow
+    private float totalHealth;
+
+    @Shadow
+    protected abstract void updateRaiders();
+
     @Inject(method = "spawnGroup", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$replaceFinalWave(BlockPos $$0, CallbackInfo ci) {
-        Roundabout.LOGGER.info(center.toString());
-        Roundabout.LOGGER.info("" + !this.level.getBiome(this.center).value().hasPrecipitation());
-        Roundabout.LOGGER.info(this.getGroupsSpawned() + " | " + (this.numGroups - 1));
-        if (this.getGroupsSpawned() == this.numGroups - 1) {
+        if (this.getGroupsSpawned() == 2) {
             if (!this.level.getBiome(this.center).value().hasPrecipitation()) {
-                Roundabout.LOGGER.info("SPAWN MF");
 
                 AnubisGuardian anubisGuardian = ModEntities.ANUBIS_GUARDIAN.spawn(this.level, $$0, MobSpawnType.TRIGGERED);
                 joinRaid(this.groupsSpawned + 1, anubisGuardian, $$0, false);
                 anubisGuardian.addEffect(new MobEffectInstance(MobEffects.GLOWING, 400));
+
+                this.totalHealth = anubisGuardian.getMaxHealth();
 
 
                 this.waveSpawnPos = Optional.empty();

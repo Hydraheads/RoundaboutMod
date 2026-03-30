@@ -13,11 +13,10 @@ import net.hydra.jojomod.entity.paintings.VanGoughPainting;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
+import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
-import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
-import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
-import net.hydra.jojomod.entity.substand.SeperatedLegsEntity;
+import net.hydra.jojomod.entity.substand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -33,6 +32,7 @@ public class ModEntities {
     public static float justiceHeight = 0.65f;
     public static float justiceWidth = 0.65F;
     public static EntityType<TerrierEntity> TERRIER_DOG;
+    public static EntityType<Zombiefish> ZOMBIEFISH;
     public static EntityType<AnubisGuardian> ANUBIS_GUARDIAN;
     public static EntityType<TheWorldEntity> THE_WORLD;
     public static EntityType<TheWorldEntity> THE_WORLD_ULTIMATE;
@@ -49,6 +49,8 @@ public class ModEntities {
     public static EntityType<SurvivorEntity> SURVIVOR;
     public static EntityType<GreenDayEntity> GREEN_DAY;
     public static EntityType<SeperatedLegsEntity> SEPERATED_LEGS;
+    public static EntityType<SeperatedArmEntity> SEPERATED_ARM;
+    public static EntityType<SeperatedArmSlimEntity> SEPERATED_ARM_SLIM;
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET;
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET_KING;
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET_DROWNED;
@@ -56,9 +58,16 @@ public class ModEntities {
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET_KILLER_QUEEN;
     public static EntityType<KillerQueenEntity> KILLER_QUEEN;
     public static EntityType<CinderellaEntity> CINDERELLA;
+    public static EntityType<ManhattanTransferEntity> MANHATTAN_TRANSFER;
+    public static EntityType<PollinationTransferEntity> POLLINATION_TRANSFER;
     public static EntityType<WalkingHeartEntity> WALKING_HEART;
     public static EntityType<JusticePirateEntity> JUSTICE_PIRATE;
     public static EntityType<DarkMirageEntity> DARK_MIRAGE;
+    public static EntityType<TuskEntity> TUSK_A1;
+    public static EntityType<TuskEntity> TUSK_A2;
+    public static EntityType<TuskEntity> TUSK_A3;
+    public static EntityType<TuskEntity> TUSK_A4;
+
     public static EntityType<StarPlatinumBaseballEntity> STAR_PLATINUM_BASEBALL;
     public static EntityType<DiverDownEntity> DIVER_DOWN;
     public static EntityType<HarpoonEntity> THROWN_HARPOON;
@@ -93,6 +102,8 @@ public class ModEntities {
     public static EntityType<SoftAndWetItemLaunchingBubbleEntity> ITEM_LAUNCHING_BUBBLE_ENTITY;
     public static EntityType<AnubisPossessorEntity> ANUBIS_POSSESSOR;
     public static EntityType<AnubisSlipstreamEntity> ANUBIS_SLIPSTREAM;
+    public static EntityType<TuskNailEntity> TUSK_NAIL;
+    public static EntityType<TuskHoleEntity> TUSK_HOLE;
 
     public static EntityType<GoBeyondEntity> GO_BEYOND;
     public static EntityType<EncasementBubbleEntity> ENCASEMENT_BUBBLE;
@@ -118,6 +129,7 @@ public class ModEntities {
     public static EntityType<RingoNPC> RINGO;
     public static EntityType<HatoNPC> HATO;
     public static EntityType<ShizukaNPC> SHIZUKA;
+    public static EntityType<ChakaNPC> CHAKA;
     public static EntityType<PlayerSteveNPC> STEVE_NPC;
     public static EntityType<PlayerAlexNPC> ALEX_NPC;
     public static EntityType<PlayerModifiedNPC> MODIFIED_NPC;

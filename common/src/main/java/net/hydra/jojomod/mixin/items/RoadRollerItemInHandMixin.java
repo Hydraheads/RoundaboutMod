@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.items;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.item.BowlerHatItem;
 import net.hydra.jojomod.item.RoadRollerItem;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -23,7 +24,9 @@ public class RoadRollerItemInHandMixin {
     private void hideRoadRollerItem(LivingEntity $$0, ItemStack $$1, ItemDisplayContext $$2, HumanoidArm $$3, PoseStack $$4, MultiBufferSource $$5, int $$6, CallbackInfo ci) {
 
         if (!$$1.isEmpty() && $$1.getItem() instanceof RoadRollerItem) {
-            ci.cancel();
+            if (FateTypes.isVampireStrong($$0)) {
+                ci.cancel();
+            }
         }
     }
 }

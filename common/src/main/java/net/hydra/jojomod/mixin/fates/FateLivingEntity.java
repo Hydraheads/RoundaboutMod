@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin.fates;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,7 +26,7 @@ public abstract class FateLivingEntity extends Entity {
     @Inject(method = "addEatEffect(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;)V", at = @At(value = "HEAD"), cancellable = true)
     protected void rdbt$addEatEffect(ItemStack $$0, Level $$1, LivingEntity $$2, CallbackInfo ci) {
         if (FateTypes.hasBloodHunger((LivingEntity) (Object) this)){
-            if ($$0.is(Items.GOLDEN_APPLE) || $$0.is(Items.ENCHANTED_GOLDEN_APPLE))
+            if (MainUtil.isEdibleToVampires($$0))
                 return;
             ci.cancel();
         }

@@ -28,6 +28,7 @@ public abstract class LayerPlayerRendererMixin<T extends LivingEntity, M extends
         this.addLayer(new StoneLayer<>($$0, this));
         this.addLayer(new FacelessLayer<>($$0, this));
         this.addLayer(new ShootingArmLayer<>($$0, this));
+        this.addLayer(new TuskLayer<>($$0, this));
         this.addLayer(new HeyYaLayer<>($$0, this));
         this.addLayer(new MandomLayer<>($$0, this));
         this.addLayer(new RattShoulderLayer<>($$0, this));
@@ -38,6 +39,7 @@ public abstract class LayerPlayerRendererMixin<T extends LivingEntity, M extends
         this.addLayer(new RoadRollerLayer<>($$0, this));
         this.addLayer(new WornStoneMaskLayer<>($$0, this));
         this.addLayer(new MoldSpineLayer<>($$0, this));
+        this.addLayer(new MoldRightArmLayer<>($$0, this));
     }
 
     /**Shadows, ignore

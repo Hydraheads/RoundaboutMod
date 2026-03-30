@@ -21,7 +21,7 @@ public class BowlerHatItemRendererMixin {
 
         if (!stack.isEmpty() && stack.getItem() instanceof BowlerHatItem) {
 
-            if (transformType == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND || transformType == ItemDisplayContext.FIRST_PERSON_LEFT_HAND || transformType == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND || transformType == ItemDisplayContext.THIRD_PERSON_LEFT_HAND) {
+            if (transformType == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND || transformType == ItemDisplayContext.THIRD_PERSON_LEFT_HAND) {
                 ci.cancel();
             }
         }

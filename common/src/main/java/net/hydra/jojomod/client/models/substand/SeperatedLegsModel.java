@@ -19,7 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class SeperatedLegsModel<T extends SeperatedLegsEntity> extends StandModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "seperated_legs"), "main");
+	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("roundabout", "seperated_legs"), "main");
 	private final ModelPart Head;
 	private final ModelPart Body;
 	private final ModelPart RightArm;

@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,13 +31,7 @@ public abstract class ForgeServerPlayer extends Player {
 
     @Inject(method = "die", at = @At(value = "HEAD"))
     public void roundabout$die(DamageSource $$0, CallbackInfo ci) {
-        StandPowers powers = ((StandUser)this).roundabout$getStandPowers();
-        if (powers != null && powers.isClashing()){
-            powers.endClash();
-        }
-        if ((((IPlayerEntity)this).roundabout$getVoiceData()) != null){
-            ((IPlayerEntity)this).roundabout$getVoiceData().playIfDying($$0);
-        }
+        MainUtil.onDeath(this,$$0);
     }
     @Inject(method = "changeDimension", at = @At(value = "HEAD"), cancellable = true, remap = false)
     private void roundabout$changeDim(ServerLevel p_9180_, net.minecraftforge.common.util.ITeleporter teleporter, CallbackInfoReturnable<Entity> cir) {

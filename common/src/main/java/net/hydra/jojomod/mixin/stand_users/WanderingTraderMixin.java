@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.stand_users;
 
-import net.hydra.jojomod.entity.WanderingTrades;
+import net.hydra.jojomod.util.loot.WanderingTrades;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandArrowItem;
@@ -21,8 +21,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import oshi.util.tuples.Pair;
-
-import java.util.Iterator;
 
 @Mixin(WanderingTrader.class)
 public abstract class WanderingTraderMixin

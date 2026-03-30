@@ -132,6 +132,10 @@ public class ForgeSounds {
             register(ModSounds.ROAD_ROLLER_EXPLOSION, ModSounds.ROAD_ROLLER_EXPLOSION_ID);
     public static final RegistryObject<SoundEvent> ROAD_ROLLER_MIXING_EVENT =
             register(ModSounds.ROAD_ROLLER_MIXING, ModSounds.ROAD_ROLLER_MIXING_ID);
+    public static final RegistryObject<SoundEvent> ANUBIS_UNSHEATHE_EVENT =
+            register(ModSounds.ANUBIS_UNSHEATHE, ModSounds.ANUBIS_UNSHEATHE_ID);
+    public static final RegistryObject<SoundEvent> SUMMON_ANUBIS_EVENT =
+            register(ModSounds.SUMMON_ANUBIS, ModSounds.ANUBIS_SUMMON_ID);
 
     public static final RegistryObject<SoundEvent> BLOOD_SUCK_EVENT =
             register(ModSounds.BLOOD_SUCK, ModSounds.BLOOD_SUCK_ID);
@@ -566,6 +570,8 @@ public class ForgeSounds {
             register(ModSounds.SURVIVOR_REMOVE, ModSounds.SURVIVOR_REMOVE_ID);
     public static final RegistryObject<SoundEvent> SUMMON_DIVER_DOWN =
             register(ModSounds.SUMMON_DIVER_DOWN, ModSounds.SUMMON_DIVER_DOWN_ID);
+    public static final RegistryObject<SoundEvent> ZOMBIE_CHARGE =
+            register(ModSounds.ZOMBIE_CHARGE, ModSounds.ZOMBIE_CHARGE_ID);
     public static final RegistryObject<SoundEvent> SUMMON_WALKING =
             register(ModSounds.SUMMON_WALKING, ModSounds.SUMMON_WALKING_ID);
     public static final RegistryObject<SoundEvent> HEEL_RAISE =

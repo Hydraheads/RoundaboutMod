@@ -68,6 +68,8 @@ public class ClientConfig implements Cloneable {
     public Boolean mandomRewindShowsVisualEffectsToNonMandomUsers;
     @BooleanOption(group = "inherit", value = true)
     public Boolean mandomRewindAttemptsToSkipInterpolation;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean tuskUsesShootMode;
 
     @FloatOption(group = "inherit", value = 0.44F, min = 0, max = 1)
     public Float invisibleBlockDepthF;
@@ -173,6 +175,8 @@ public class ClientConfig implements Cloneable {
     public static class DynamicSettings {
         @IntOption(group = "inherit", value = 1, min = 1, max = 8)
         public Integer SoftAndWetCurrentlySelectedBubble;
+        @IntOption(group = "inherit", value = 1, min = 1, max = 4)
+        public Integer TuskAct;
         @BooleanOption(group = "inherit",value = false)
         public Boolean rattFiringMode;
         @BooleanOption(group = "inherit", value = false)
@@ -181,6 +185,8 @@ public class ClientConfig implements Cloneable {
         public Boolean vampireVisionMode;
         @IntOption(group = "inherit", value = 1, min = 1, max = 8)
         public Integer currentPowerInventoryTab;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean  windVisionMode;
     }
     public static class VanillaMCTweaks {
         @BooleanOption(group = "inherit", value = true)

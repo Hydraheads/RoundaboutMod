@@ -20,12 +20,12 @@ import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.VampireData;
-import net.hydra.jojomod.event.index.FateTypes;
-import net.hydra.jojomod.event.index.PlayerPosIndex;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
+import net.hydra.jojomod.fates.powers.ZombieFate;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
 import net.hydra.jojomod.powers.GeneralPowers;
@@ -74,8 +74,6 @@ import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
@@ -106,6 +104,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Unique;
 
+import java.nio.file.Path;
 import java.util.*;
 
 
@@ -748,13 +747,17 @@ public class ClientUtil {
                     vdata.timeSinceMonster = (int) vargs[1];
                     vdata.timeSinceNpc = (int) vargs[2];
                 }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ZombieFish.value)) {
+                    ((IPlayerEntity)player).rdbt$setZombieFish((int) vargs[0]);
+                }
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.GunRecoil.value)) {
                     String sigmaString = (String) vargs[0];
                     ClientUtil.applyClientRecoil(player, sigmaString);
                 }
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPossessor.value)) {
-                    int i = (int) vargs[0];
-                    ((StandUser)player).roundabout$getPossessor().setTarget((LivingEntity) player.level().getEntity(i));
+                    Player possessed = (Player) player.level().getEntity((int)vargs[0]);
+                    LivingEntity target = (LivingEntity) player.level().getEntity((int)vargs[1]);
+                    ((StandUser)possessed).roundabout$getPossessor().setTarget(target);
                 }
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ShatterIce.value)) {
                     int i = (int) vargs[0];
@@ -1033,6 +1036,11 @@ public class ClientUtil {
                     }
                 }
             }
+
+            if (FateTypes.isHidden(ent)){
+                throwFade = 0;
+            }
+
         }
 
         return throwFade;
@@ -1146,6 +1154,15 @@ public class ClientUtil {
         }
     }
 
+    public static boolean shouldHideName(Entity ent){
+        if (ent != null) {
+            if (getThrowFadePercent(ent,1) <= 0){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean hasATimeStopSeeingStand(){
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
@@ -1220,9 +1237,8 @@ public class ClientUtil {
     public static void openHairspryUI(){
         Minecraft.getInstance().setScreen(new HairColorChangeScreen());
     }
-    public static void openMemoryRecordScreen(boolean recording){
-        Minecraft.getInstance().setScreen(new MemoryRecordScreen(recording));
-    }
+    public static void openMemoryRecordScreen(boolean recording){Minecraft.getInstance().setScreen(new MemoryRecordScreen(recording));}
+    public static void openTuskActScreen(){Minecraft.getInstance().setScreen(new TuskActScreen());}
     public static void strikePose(Player player, Minecraft C, boolean keyIsDown, Options option) {
         if (keyIsDown){
             if (!poseHeld){
@@ -1831,8 +1847,6 @@ public class ClientUtil {
                 FirstPersonArmsModel.player = play;
                 FirstPersonArmsSlimModel.player = play;
 
-
-
                 if (play.getCooldowns().isOnCooldown(play.getUseItem().getItem())) {
                     pl.roundabout$getItemAnimationActive().startIfStopped(cameraEnt.tickCount);
                     pl.roundabout$getItemAnimation().stop();
@@ -1840,7 +1854,6 @@ public class ClientUtil {
                     pl.roundabout$getItemAnimationActive().stop();
                     pl.roundabout$getItemAnimation().startIfStopped(cameraEnt.tickCount);
                 }
-
 
                 if (!(item instanceof JackalRifleItem)) {
                     if (slimBoolean) {
@@ -1858,16 +1871,35 @@ public class ClientUtil {
                     ModStrayModels.FirstPersonTommyGunModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
                 }
 
-
                 stack.popPose();
+            } else if (item instanceof AnubisItem) {
+
+                pl.roundabout$getItemAnimation().startIfStopped(cameraEnt.tickCount);
+                ModStrayModels.ANUBIS.renderFirstPerson(stack,source,light,play,cameraEnt.tickCount + $$4);
+
             } else {
                 pl.roundabout$getItemAnimation().stop();
                 pl.roundabout$getItemAnimationActive().stop();
             }
 
-            if (AnubisLayer.shouldRender(play) != null) {
-                  ModStrayModels.ANUBIS.renderFirstPerson(stack,source,light,play,$$4);
+            StandUser standUser = (StandUser) cameraEnt;
+            boolean isUsingAnubis = play.isUsingItem() && play.getUseItem().is(ModItems.ANUBIS_ITEM);
+            if (AnubisLayer.shouldRender(play) != null && !isUsingAnubis && !play.getMainHandItem().is(ModItems.ANUBIS_ITEM) ) {
+                ModStrayModels.ANUBIS.renderFirstPerson(stack,source,light,play,cameraEnt.tickCount + $$4);
+            } else if (standUser.roundabout$getStandPowers() instanceof PowersTusk && PowerTypes.isUsingStand(play)) {
+                stack.pushPose();
+                FirstPersonArmsModel.player = play;
+                FirstPersonArmsSlimModel.player = play;
+
+                if (slimBoolean) {
+                    ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
+                } else {
+                    ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
+                }
+                stack.popPose();
             }
+
+
 
         }
 

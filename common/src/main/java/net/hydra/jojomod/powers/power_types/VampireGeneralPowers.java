@@ -1,5 +1,7 @@
 package net.hydra.jojomod.powers.power_types;
 
+import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
@@ -8,9 +10,11 @@ import net.hydra.jojomod.entity.projectile.EvilAuraProjectile;
 import net.hydra.jojomod.entity.projectile.RipperEyesProjectile;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
@@ -153,9 +157,35 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         }
     }
 
+    public boolean isFallingFar(){
+        return self.fallDistance > 7;
+    }
+
+
+    public boolean isAttackIneptVisually(byte activeP, int slot){
+        if (slot == 3){
+            if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampiricFate vp) {
+                if (isGuarding() && self.onGround()) {
+                } else if ((vp.canLatchOntoWall() || (vp.isPlantedInWall() && !isHoldingSneak())) && vp.canWallWalkConfig()) {
+                } else if (isHoldingSneak()) {
+                    if (isFallingFar())
+                        return true;
+                } else {
+                    if (isFallingFar())
+                        return true;
+                }
+            }
+        }
+        return super.isAttackIneptVisually(activeP,slot);
+    }
     @Override
     public boolean canInterruptPower(){
         if (activePower == RIPPER_EYES_ACTIVATED || activePower == RIPPER_EYES){
+            setCooldown(PowerIndex.GENERAL_4,getRipperInterruptCooldown());
+            if (self instanceof ServerPlayer sp){
+                S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.GENERAL_4, getRipperInterruptCooldown());
+            }
+
             return true;
         }
         return super.canInterruptPower();
@@ -168,12 +198,14 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if (self.onGround()){
                 dash();
             } else {
-                airDash();
+                if (!isFallingFar()) {
+                    airDash();
+                }
             }
         }
     }
     public void evilAuraClient(){
-        if (!onCooldown(PowerIndex.GENERAL_3_SNEAK)){
+        if (!onCooldown(PowerIndex.GENERAL_3_SNEAK) && !isFallingFar()){
             this.tryPower(EVIL_AURA);
         }
     }
@@ -745,11 +777,15 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public void hairPullEntity(Entity entity) {
         if (!this.self.level().isClientSide()) {
             if (entity != null) {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.LASSO_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5f + Math.random() * 0.05f));
+                if (!(MainUtil.resistsKnockBack(entity))) {
+                    if (entity.isPassenger() && !(entity instanceof Player pl && pl.isCreative()))
+                        entity.removeVehicle();
+                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.LASSO_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5f + Math.random() * 0.05f));
 
-                entity.hurtMarked = true;
-                entity.hasImpulse = true;
-                entity.setDeltaMovement(self.getEyePosition().subtract(entity.position()).normalize().scale(1));
+                    entity.hurtMarked = true;
+                    entity.hasImpulse = true;
+                    entity.setDeltaMovement(self.getEyePosition().subtract(entity.position()).normalize().scale(1));
+                }
             } else {
                 this.self.level().playSound(null, this.self.blockPosition(),ModSounds.VAMPIRE_DIVE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5f + Math.random() * 0.08f));
             }
@@ -760,12 +796,15 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public int getRipperCooldown(){
         return 240;
     }
+    public int getRipperInterruptCooldown(){
+        return 60;
+    }
 
 
     public float getPunchStrength(Entity entity){
         if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
             if (this.getReducedDamage(entity)){
-                return 0.55F * (1+ (vp.getVampireData().strengthLevel * 0.1F));
+                return 0.55F * (1+ (vp.getVampireData().strengthLevel * 0.05F));
             } else {
                 return 2.1F * (1+ (vp.getVampireData().strengthLevel * 0.1F));
             }
@@ -949,6 +988,44 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     }
 
     @Override
+    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
+        List<AbilityIconInstance> $$1 = Lists.newArrayList();
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.roundabout.punch_fate",
+                "instruction.roundabout.press_attack", StandIcons.VAMP_PUNCH,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,0, "ability.roundabout.ice_guard",
+                "instruction.roundabout.hold_block", StandIcons.VAMP_GUARD,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.roundabout.sweep_kick",
+                "instruction.roundabout.hold_attack_crouch", StandIcons.SWEEP_KICK,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.barrage",
+                "instruction.roundabout.barrage", StandIcons.VAMP_BARRAGE,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.combo",
+                "instruction.roundabout.passive", StandIcons.COMBO,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.hair_grab",
+                "instruction.roundabout.press_skill", StandIcons.HAIR_GRAB,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.hair_spikes",
+                "instruction.roundabout.press_skill_crouch", StandIcons.HAIR_SPIKE,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.blood_clutch",
+                "instruction.roundabout.press_skill", StandIcons.BLOOD_CLUTCH,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.ice_clutch",
+                "instruction.roundabout.press_skill_crouch", StandIcons.ICE_CLUTCH,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.roundabout.dodge_air",
+                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,0, "ability.roundabout.wall_walk_vamp",
+                "instruction.roundabout.press_skill_air", StandIcons.WALL_WALK_VAMP,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,0, "ability.roundabout.aura_push",
+                "instruction.roundabout.press_skill_crouch", StandIcons.AURA,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,0, "ability.roundabout.invis_vamp",
+                "instruction.roundabout.press_skill_block", StandIcons.CAMO,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.roundabout.ripper_eyes",
+                "instruction.roundabout.press_skill", StandIcons.RIPPER_EYES,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+118,0, "ability.roundabout.deflection",
+                "instruction.roundabout.press_skill_crouch", StandIcons.DEFLECTION,4,level,bypas));
+
+
+        return $$1;
+    }
+
+    @Override
     /**Override this to set the special move*/
     public boolean setPowerOther(int move, int lastMove) {
         if (move == POWER_DIVE) {
@@ -1003,7 +1080,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 knockbackStrength = 0.10F;
 
                 if (MainUtil.canDrinkBlood(entity)) {
-                    if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
+                    DamageSource sauce = ModDamageTypes.of(self.level(),
+                            ModDamageTypes.BLOOD_DRAIN,self);
+                    if (entity.hurt(sauce,pow)) {
                         hitParticles(entity);
                         takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
                         if (!(entity instanceof Player) && entity instanceof LivingEntity LE){
@@ -1236,6 +1315,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if (getPlayerPos2() != PlayerPosIndex.HAIR_SPIKE_2) {
                 setPlayerPos2(PlayerPosIndex.HAIR_SPIKE_2);
             }
+            MainUtil.playPop(self);
             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXTEND_SPIKES_EVENT, SoundSource.PLAYERS, 1F, (float) (1.05f + Math.random() * 0.05f));
             List<Entity> hitbox = StandGrabHitbox(self,DamageHandler.genHitbox(self, self.getX(), self.getY(),
                     self.getZ(), 4, 4, 4), 4, 360);
@@ -1438,6 +1518,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
     public void ripperEyeShot(){
         if (!self.level().isClientSide()) {
+            MainUtil.playPop(self);
             RipperEyesProjectile auraProjectile = getRipperEyesProjectile();
             if (auraProjectile != null) {
                 shootRipperEyes(auraProjectile);
@@ -1505,6 +1586,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public void doRipperEyesActivated(){
         if (!self.level().isClientSide()) {
             if (getActivePower() == RIPPER_EYES) {
+                MainUtil.playPop(self);
                 playSoundsIfNearby(SoundIndex.RIPPER_EYES_BEAM, 45, false,false);
                 ripperEyesLeft = ripperBeamTime;
                 this.attackTimeDuring = 0;

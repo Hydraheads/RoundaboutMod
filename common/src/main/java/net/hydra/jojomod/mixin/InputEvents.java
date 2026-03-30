@@ -24,11 +24,14 @@ import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.FirearmItem;
 import net.hydra.jojomod.item.SnubnoseRevolverItem;
 import net.hydra.jojomod.powers.GeneralPowers;
+import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersCream;
+import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.item.FogBlockItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -252,6 +255,13 @@ public abstract class InputEvents implements IInputEvents {
                 return;
             }
 
+            if(powers instanceof PowersGreenDay PGD) {
+                if ((!PGD.HasMainArm)&& !(standComp.roundabout$hasStandOut())) {
+                    ci.setReturnValue(false);
+                    return;
+                }
+            }
+
             if (standComp.roundabout$getCombatMode()){
                 if (PowerTypes.isBrawling(player)){
                     ci.setReturnValue(rdbt$stopBreakingBlock());
@@ -345,13 +355,20 @@ public abstract class InputEvents implements IInputEvents {
         public void roundaboutBlockBreak(boolean $$0, CallbackInfo ci) {
             if (player != null) {
                 StandUser standComp = ((StandUser) player);
+                StandPowers powers = standComp.roundabout$getStandPowers();
 
                 if (standComp.roundabout$isPossessed()) {
                     ci.cancel();
                     return;
                 }
 
-                StandPowers powers = standComp.roundabout$getStandPowers();
+                if(powers instanceof PowersGreenDay PGD) {
+                    if ((!PGD.HasMainArm) && !(standComp.roundabout$hasStandOut())) {
+                        ci.cancel();
+                        return;
+                    }
+                }
+
                 if (powers.isPiloting()){
                     ci.cancel();
                     if (powers instanceof PowersJustice){
@@ -629,6 +646,14 @@ public abstract class InputEvents implements IInputEvents {
                 ci.cancel();
                 return;
             }
+
+            if(powers instanceof PowersGreenDay PGD) {
+                if ((!PGD.HasMainArm) && (!(standComp.roundabout$hasStandOut()) || powers.canCombatModeUse(player.getMainHandItem()))) {
+                    ci.cancel();
+                    return;
+                }
+            }
+
             if (powers.interceptAllInteractions()) {
                 roundabout$TryGuard();
                 ci.cancel();
@@ -1071,8 +1096,6 @@ public abstract class InputEvents implements IInputEvents {
                 KeyInputs.showEXPKey(player,((Minecraft) (Object) this), roundabout$sameKeyThree(KeyInputRegistry.showExp),
                         this.options);
                 KeyInputs.hideIcons(player,((Minecraft) (Object) this), roundabout$sameKeyThree(KeyInputRegistry.hide_good_info),
-                        this.options);
-                KeyInputs.hideIcons(player,((Minecraft) (Object) this), roundabout$sameKeyThree(KeyInputRegistry.fire_firearms),
                         this.options);
                 KeyInputs.switchRowsKey(player,((Minecraft) (Object) this), roundabout$sameKeyThree(KeyInputRegistry.switchRow),
                         this.options);

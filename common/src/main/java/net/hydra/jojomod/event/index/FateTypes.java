@@ -3,7 +3,9 @@ package net.hydra.jojomod.event.index;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.FatePowers;
@@ -156,18 +158,47 @@ public enum FateTypes {
     }
     public static boolean canSeeInTheDark(LivingEntity entity){
         if (entity instanceof Player PE){
-            return (((IFatePlayer)PE).rdbt$getFatePowers() instanceof ZombieFate VP &&
-                    VP.isVisionOn()) || (((IFatePlayer)PE).rdbt$getFatePowers() instanceof ZombieFate ZP);
+            return (((IFatePlayer)PE).rdbt$getFatePowers() instanceof VampireFate VP &&
+                    VP.isVisionOn()) || ((((IFatePlayer)PE).rdbt$getFatePowers() instanceof ZombieFate ZP &&
+                    !ZP.isDisguised()));
         }
         return false;
     }
     public static boolean takesSunlightDamage(LivingEntity entity){
         if (entity instanceof Player PE){
+            if (PE.isCreative()){
+                return false;
+            }
             return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal() ||
                     ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.ordinal();
         }
         if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire())
             return true;
+        if (entity instanceof Zombiefish)
+            return true;
+        return false;
+    }
+
+    public static boolean isHidden(Entity entity){
+        if (entity instanceof Player pl){
+            if (((IFatePlayer)pl).rdbt$getFatePowers() instanceof ZombieFate zp) {
+                if (pl.isPassenger() && !zp.isDisguised()) {
+                    if (pl.getVehicle() instanceof LivingEntity le) {
+                        if (!(le.hurtTime > 0 || pl.hurtTime > 0) &&
+                                !(pl.isUsingItem()) && !(pl.swinging)) {
+                            return true;
+                        }
+                    }
+                }
+
+            }
+
+            if (pl.isSleeping() && pl.getSleepingPos().isPresent()){
+                if (pl.level().getBlockState(pl.getSleepingPos().get()).is(ModBlocks.COFFIN_BLOCK)){
+                    return true;
+                }
+            }
+        }
         return false;
     }
     public static boolean isUndisguisedZombie(Entity entity){
@@ -213,8 +244,6 @@ public enum FateTypes {
         }
         return 0;
     }
-
-
 
 
     public static boolean isInSunlight(LivingEntity ent) {

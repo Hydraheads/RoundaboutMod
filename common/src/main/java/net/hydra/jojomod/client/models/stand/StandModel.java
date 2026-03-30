@@ -178,13 +178,7 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
                 }
                 float tickDelta2 = Math.min(tickDelta, 2);
                 float r = mobEntity.getUser().getViewXRot(tickDelta2);
-                // SAVING THIS FOR LATER
-         /*       if (mobEntity.getUser() != null) {
-                    StandUser SU = (StandUser) mobEntity.getUser();
-                    if (SU.roundabout$getPossessor() != null && SU.roundabout$getPossessor().getTarget() != null) {
-                        r = MainUtil.getLookAtEntityPitch(mobEntity.getUser(),SU.roundabout$getPossessor().getTarget());
-                    }
-                } */
+
                 rotX = ((r % 360) - swimRotCorrect) * Mth.DEG_TO_RAD;
                 rotY = 0;
 

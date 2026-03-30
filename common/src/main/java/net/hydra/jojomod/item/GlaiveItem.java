@@ -6,6 +6,7 @@ import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
@@ -115,10 +116,14 @@ public class GlaiveItem extends SwordItem {
                     if (target instanceof LivingEntity) {
                         ((LivingEntity) target).knockback(0.35f, player.getX() - target.getX(), player.getZ() - target.getZ());
                         if (MainUtil.getMobBleed(target)) {
-                            if ($$0.getItem() instanceof GlaiveItem GI && GI.getTier() == Tiers.WOOD){
+                            if (($$0.getItem() instanceof GlaiveItem GI && GI.getTier() == Tiers.WOOD)){
                                 MainUtil.makeBleed(target,0,400, player);
                             } else {
-                                MainUtil.makeBleed(target,1,400, player);
+                                if (((TimeStop) target.level()).CanTimeStopEntity(target)){
+                                    MainUtil.makeBleed(target,1,100, player);
+                                } else {
+                                    MainUtil.makeBleed(target,1,400, player);
+                                }
                                 MainUtil.makeMobBleed(target);
                             }
                         }

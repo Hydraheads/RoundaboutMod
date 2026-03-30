@@ -1,10 +1,13 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -14,6 +17,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -75,39 +79,30 @@ public class RattEntity extends StandEntity {
         return this.getPosition(d).add(0,0.15,0);
     }
 
-
-    public LivingEntity Target;
-    public LivingEntity getTarget() {
-        if (this.level().isClientSide){
-            return (LivingEntity) this.level().getEntity(this.entityData.get(TARGET_ID));
-        } else {
-            if (this.Target != null && this.Target.isRemoved()){
-                this.setFollowing(null);
-            }
-            return this.Target;
-        }
-    }
-    public void setRattTarget(LivingEntity StandSet){
-        this.Target = StandSet;
-        int standSetId = -1;
-        if (StandSet != null){
-            standSetId = StandSet.getId();
-        }
-        this.entityData.set(TARGET_ID, standSetId);
-    }
     public void setSavedSkin(byte skin) {this.entityData.set(SAVED_SKIN,skin);}
     public byte getSavedSkin() {return this.entityData.get(SAVED_SKIN);}
 
-    protected static final EntityDataAccessor<Integer> TARGET_ID = SynchedEntityData.defineId(RattEntity.class,
-            EntityDataSerializers.INT);
+    public boolean isSafe() {
+        return this.entityData.get(SAFE_TICKS) > 0;
+    }
+    public void changeSafeTicks(int d) {
+        if (d == 0) {
+            this.entityData.set(SAFE_TICKS,0);
+        }
+        this.entityData.set(SAFE_TICKS,this.entityData.get(SAFE_TICKS)+d);
+    }
+
     protected static final EntityDataAccessor<Byte> SAVED_SKIN = SynchedEntityData.defineId(RattEntity.class,
             EntityDataSerializers.BYTE);
+    protected static final EntityDataAccessor<Integer> SAFE_TICKS = SynchedEntityData.defineId(RattEntity.class,
+            EntityDataSerializers.INT);
+
     @Override
     protected void defineSynchedData() {
-        if (!this.entityData.hasItem(TARGET_ID)) {
+        if (!this.entityData.hasItem(SAVED_SKIN)) {
             super.defineSynchedData();
-            this.entityData.define(TARGET_ID, -1);
             this.entityData.define(SAVED_SKIN,(byte)0);
+            this.entityData.define(SAFE_TICKS, ConfigManager.getConfig().rattSettings.rattSafetyTicks);
         }
     }
 
@@ -152,17 +147,26 @@ public class RattEntity extends StandEntity {
     }
 
     @Override
+    public void tick() {
+        super.tick();
+        if (isSafe()) {
+            if (this.getUser() != null) {
+                if (this.getUser() instanceof Mob) {
+                    this.changeSafeTicks(0);
+                }
+            }
+            this.changeSafeTicks(-1);
+        }
+    }
+    @Override
     public boolean hurt(DamageSource source, float amount) {
+        if (isSafe()) {
+            this.changeSafeTicks(-5);
+            return false;
+        }
         if (source.getEntity() != null && source.getEntity() != this.getUser()) {
             if (this.getUser() != null ) {
 
-                if (source.getEntity() instanceof LivingEntity LE){
-                    if (PowerTypes.hasStandActivelyEquipped(LE)){
-                        if (!PowerTypes.hasStandActive(LE)){
-                            return false;
-                        }
-                    }
-                }
 
                 if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersRatt PR) {
                     if (!this.onGround()) {
@@ -177,7 +181,8 @@ public class RattEntity extends StandEntity {
                     }
                     PR.setCooldown(PowersRatt.SETPLACE, 80);
                     this.level().playSound(null, this.blockPosition(), ModSounds.RATT_DEPLACE_EVENT, SoundSource.PLAYERS, 0.5F, 1F);
-                    return this.getUser().hurt(source, Mth.clamp(amount * 0.5F, 0, 6));
+                    this.getUser().hurt(ModDamageTypes.of(this.level(),ModDamageTypes.STAND,source.getEntity()),(float)Mth.clamp(amount*0.5,0,0.5));
+                    return true;
                 }
             }
 

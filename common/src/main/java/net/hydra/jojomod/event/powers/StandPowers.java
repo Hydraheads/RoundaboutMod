@@ -153,6 +153,8 @@ public class StandPowers extends AbilityScapeBasis {
     public void onStandSwitch(){
         getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
     }
+    public void onPowerSwitch(){
+    }
     /**Runs this code while pressing R to activate powers*/
     public void onStandSummon(boolean desummon){
 
@@ -772,6 +774,8 @@ public class StandPowers extends AbilityScapeBasis {
             return this.getBarrageChargeSound();
         } else if (soundChoice == SoundIndex.GLAIVE_CHARGE) {
             return ModSounds.GLAIVE_CHARGE_EVENT;
+        } else if (soundChoice == SoundIndex.SWORD_UNSHEATHE) {
+            return ModSounds.ANUBIS_UNSHEATHE_EVENT;
         } else if (soundChoice == SoundIndex.REVOLVER_RELOAD) {
             return ModSounds.SNUBNOSE_RELOAD_EVENT;
         } else if (soundChoice == SoundIndex.SNIPER_RELOAD) {
@@ -888,12 +892,6 @@ public class StandPowers extends AbilityScapeBasis {
             return SoundIndex.BARRAGE_SOUND_GROUP;
         } else if (soundChoice <= SoundIndex.REVOLVER_RELOAD) {
             return SoundIndex.ITEM_GROUP;
-        } else if (soundChoice <= SoundIndex.SNIPER_RELOAD) {
-            return SoundIndex.ITEM_GROUP;
-        } else if (soundChoice <= SoundIndex.COLT_RELOAD) {
-            return SoundIndex.ITEM_GROUP;
-        } else if (soundChoice <= SoundIndex.TOMMY_RELOAD) {
-            return SoundIndex.ITEM_GROUP;
         } else if (soundChoice <= SoundIndex.GLAIVE_CHARGE) {
             return SoundIndex.ITEM_GROUP;
         }
@@ -901,8 +899,10 @@ public class StandPowers extends AbilityScapeBasis {
         return soundChoice;
     }
     public float getSoundPitchFromByte(byte soundChoice){
-        if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND){
+        if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND) {
             return this.getBarrageChargePitch();
+        } else if (soundChoice == SoundIndex.SWORD_UNSHEATHE){
+            return 0.9F;
         } else {
             return 1F;
         }

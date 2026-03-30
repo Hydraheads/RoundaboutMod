@@ -9,10 +9,13 @@ public class ModEntityRendererClient {
      * Note: Renderers render models, but models are different files.
      * Forge and Fabric need to actually register this info into the game individually.*/
     public static final ModelLayerLocation WOLF_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "wolf"), "main");
+    public static final ModelLayerLocation ZOMBIEFISH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "zombiefish"), "main");
     public static final ModelLayerLocation ANUBIS_GUARDIAN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "anubis_guardian"), "main");
     public static final ModelLayerLocation THE_WORLD_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "the_world"), "main");
     public static final ModelLayerLocation THE_WORLD_ULTIMATE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "the_world_ultimate"), "main");
     public static final ModelLayerLocation STAR_PLATINUM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "star_platinum"), "main");
+    public static final ModelLayerLocation COFFIN_LEFT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "coffin_left"), "main");
+    public static final ModelLayerLocation COFFIN_RIGHT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "coffin_right"), "main");
     public static final ModelLayerLocation SURVIVOR_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "survivor"), "main");
     public static final ModelLayerLocation JUSTICE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "justice"), "main");
     public static final ModelLayerLocation MAGICIANS_RED_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "magicians_red"), "main");
@@ -30,8 +33,14 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation KILLER_QUEEN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "soft_and_wet_killer_queen"), "main");
     public static final ModelLayerLocation SOFT_AND_WET_KILLER_QUEEN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "killer_queen"), "main");
     public static final ModelLayerLocation CINDERELLA_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "cinderella"), "main");
+    public static final ModelLayerLocation MANHATTAN_TRANSFER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "manhattan_transfer"), "main");
+    public static final ModelLayerLocation POLLINATION_TRANSFER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "pollination_transfer"), "main");
     public static final ModelLayerLocation JUSTICE_PIRATE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "justice_pirate"), "main");
     public static final ModelLayerLocation DARK_MIRAGE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "dark_mirage"), "main");
+    public static final ModelLayerLocation TUSK_A1_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk_a1"), "main");
+    public static final ModelLayerLocation TUSK_A2_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk_a2"), "main");
+    public static final ModelLayerLocation TUSK_A3_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk_a3"), "main");
+    public static final ModelLayerLocation TUSK_A4_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk_a4"), "main");
     public static final ModelLayerLocation STAR_PLATINUM_BASEBALL_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "star_platinum_baseball"), "main");
     public static final ModelLayerLocation DIVER_DOWN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "diver_down"), "main");
     public static final ModelLayerLocation HARPOON_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "harpoon"), "main");
@@ -53,6 +62,8 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation MR_SPIN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "magiicans_red_spin"), "main");
     public static final ModelLayerLocation GREEN_DAY_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "green_day"), "main");
     public static final ModelLayerLocation SEPERATED_LEGS_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "seperated_legs"), "main");
+    public static final ModelLayerLocation SEPERATED_ARM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "seperated_arm"), "main");
+    public static final ModelLayerLocation SEPERATED_ARM_SLIM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "seperated_arm_slim"), "main");
     public static final ModelLayerLocation ROAD_ROLLER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "road_roller"), "main");
 
     public static final ModelLayerLocation PAINTING_VAN_GOUGH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "van_gough"), "main");

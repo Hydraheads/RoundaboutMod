@@ -25,11 +25,8 @@ import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
-import net.hydra.jojomod.stand.powers.PowersAnubis;
-import net.hydra.jojomod.stand.powers.PowersCream;
-import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
+import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
-import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -811,6 +808,10 @@ public class StandHudRender {
         int iconY = scaledHeight - 32 - 4;
 
         context.blit(StandIcons.JOJO_ICONS_2, iconX, iconY, 182, 29, 11, 10);
+    }
+    public static void renderTuskHud(GuiGraphics context, Minecraft client, Player playerEntity,
+                                     int scaledWidth, int scaledHeight, int x, Font font) {
+
     }
 
     public static void renderTSHud(GuiGraphics context, Minecraft client, Player playerEntity,

@@ -37,7 +37,7 @@ public class ForgeItems {
     public static final RegistryObject<Item> CHERRIES = addToTab(ITEMS.register("cherries",
             () -> new Item(new Item.Properties()
                     .food(new FoodProperties.Builder().nutrition(1).saturationMod(0.0F).alwaysEat()
-                            .effect(new MobEffectInstance(ForgeEffects.WARDING.get(), 1200, 0), 1.0F)
+                            .effect(new MobEffectInstance(ForgeEffects.WARDING.get(), 2400, 0), 1.0F)
                             .build())
             )));
 
@@ -103,7 +103,7 @@ public class ForgeItems {
             () -> new BloodyStoneMaskBlockItem(ForgeBlocks.BLOODY_STONE_MASK_BLOCK.get(),
                     new Item.Properties().stacksTo(1)
             )));
-    public static final RegistryObject<BlockItem> COFFIN_BLOCK_ITEM = addToWIPTab(ITEMS.register("coffin_block",
+    public static final RegistryObject<BlockItem> COFFIN_BLOCK_ITEM = addToBuildingTab(ITEMS.register("coffin_block",
             () -> new CoffinBlockItem(DyeColor.BLACK, ForgeBlocks.COFFIN_BLOCK.get(),
                     new Item.Properties().stacksTo(1)
             )));
@@ -342,13 +342,15 @@ public class ForgeItems {
             () -> new BowlerHatItem(Tiers.IRON, 0F, -1.6F, new Item.Properties())
     ));
 
-    public static final RegistryObject<Item> ANUBIS_ITEM = addToWIPTab(ITEMS.register("anubis_item",
+    public static final RegistryObject<Item> ANUBIS_ITEM = addToTab(ITEMS.register("anubis_item",
             () -> new AnubisItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC))
     ));
-    public static final RegistryObject<Item> STAND_DISC_ANUBIS = addToWIPTab(ITEMS.register("anubis_disc",
-            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null))));
-    public static final RegistryObject<Item> MAX_STAND_DISC_ANUBIS = addToWIPTab(ITEMS.register("max_anubis_disc",
-            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null))));
+
+
+    public static final RegistryObject<Item> STAND_DISC_TUSK = addToWIPTab(ITEMS.register("tusk_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersTusk(null))));
+    public static final RegistryObject<Item> MAX_STAND_DISC_TUSK = addToWIPTab(ITEMS.register("max_tusk_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersTusk(null))));
 
 
     public static final RegistryObject<Item> SNUBNOSE_REVOLVER = addToTab(ITEMS.register("snubnose_revolver",
@@ -472,6 +474,9 @@ public class ForgeItems {
     public static final RegistryObject<ForgeSpawnEggItem> ZOMBIE_AESTHETICIAN_SPAWN_EGG = addToTab(ITEMS.register("zombie_aesthetician_spawn_egg",
             () -> new ForgeSpawnEggItem(ForgeEntities.ZOMBIE_AESTHETICIAN,
                     0x66BB6A, 0xffa8e8, new Item.Properties())));
+    public static final RegistryObject<ForgeSpawnEggItem> ANUBIS_GUARDIAN_SPAWN_EGG = addToTab(ITEMS.register("anubis_guardian_spawn_egg",
+            () -> new ForgeSpawnEggItem(ForgeEntities.ANUBIS_GUARDIAN,
+                    0x8E9393, 0x24395E, new Item.Properties())));
     public static final RegistryObject<Potion> HEX_POTION = POTIONS.register("roundabout.hex",
             () -> new Potion(new MobEffectInstance(ForgeEffects.HEX.get(), 9600, 0)));
     public static final RegistryObject<Potion> HEX_POTION_EXTENDED = POTIONS.register("roundabout.long_hex",
@@ -508,10 +513,10 @@ public class ForgeItems {
     public static final RegistryObject<Item> MAX_STAND_DISC_RATT = addToDiscTab(ITEMS.register("max_ratt_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersRatt(null))));
 
-    public static final RegistryObject<Item> STAND_DISC_KILLER_QUEEN = ITEMS.register("killer_queen_disc",
+ /*   public static final RegistryObject<Item> STAND_DISC_KILLER_QUEEN = ITEMS.register("killer_queen_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null)));
     public static final RegistryObject<Item> MAX_STAND_DISC_KILLER_QUEEN = ITEMS.register("max_killer_queen_disc",
-            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null)));
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null))); */
 
     public static final RegistryObject<Item> STAND_DISC_SOFT_AND_WET = addToDiscTab(ITEMS.register("soft_and_wet_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSoftAndWet(null))));
@@ -523,8 +528,17 @@ public class ForgeItems {
     public static final RegistryObject<Item> MAX_STAND_DISC_WALKING_HEART = addToDiscTab(ITEMS.register("max_walking_heart_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersWalkingHeart(null))));
 
+    public static final RegistryObject<Item> STAND_DISC_ANUBIS = addToDiscTab(ITEMS.register("anubis_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null))));
+    public static final RegistryObject<Item> MAX_STAND_DISC_ANUBIS = addToDiscTab(ITEMS.register("max_anubis_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null))));
+
     public static final RegistryObject<Item> STAND_DISC_CINDERELLA = addToDiscTab(ITEMS.register("cinderella_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null))));
+
+    public static final RegistryObject<Item> STAND_DISC_MANHATTAN_TRANSFER = addToWIPTab(ITEMS.register("manhattan_transfer_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersManhattanTransfer(null))));
+
     public static final RegistryObject<Item> STAND_DISC_ACHTUNG = addToDiscTab(ITEMS.register("achtung_baby_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAchtungBaby(null))));
     public static final RegistryObject<Item> STAND_DISC_SURVIVOR = addToDiscTab(ITEMS.register("survivor_disc",
@@ -534,25 +548,25 @@ public class ForgeItems {
     public static final RegistryObject<Item> STAND_DISC_MANDOM = addToDiscTab(ITEMS.register("mandom_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMandom(null))));
 
-    public static final RegistryObject<Item> STAND_DISC_D4C = ITEMS.register("d4c_disc",
+  /*  public static final RegistryObject<Item> STAND_DISC_D4C = ITEMS.register("d4c_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
     public static final RegistryObject<Item> MAX_STAND_DISC_D4C = ITEMS.register("max_d4c_disc",
-            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null))); */
 
     public static final RegistryObject<Item> STAND_DISC_GREEN_DAY = addToWIPTab(ITEMS.register("green_day_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersGreenDay(null))));
     public static final RegistryObject<Item> MAX_STAND_DISC_GREEN_DAY = addToWIPTab(ITEMS.register("max_green_day_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersGreenDay(null))));
 
-    public static final RegistryObject<Item> STAND_DISC_DIVER_DOWN = ITEMS.register("diver_down_disc",
+   /* public static final RegistryObject<Item> STAND_DISC_DIVER_DOWN = ITEMS.register("diver_down_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
     public static final RegistryObject<Item> MAX_STAND_DISC_DIVER_DOWN = ITEMS.register("max_diver_down_disc",
-            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null))); */
 
-    public static final RegistryObject<Item> STAND_DISC_CREAM = addToWIPTab(ITEMS.register("cream_disc",
+ /*   public static final RegistryObject<Item> STAND_DISC_CREAM = addToWIPTab(ITEMS.register("cream_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCream(null))));
     public static final RegistryObject<Item> MAX_STAND_DISC_CREAM = addToWIPTab(ITEMS.register("max_cream_disc",
-            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersCream(null))));
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersCream(null)))); */
 
     //metallica (i gotta do the max_stand_disc_metallica too, i have both sprites)
     public static final RegistryObject<Item> STAND_DISC_METALLICA = addToWIPTab(ITEMS.register("metallica_disc",
@@ -606,6 +620,8 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new ValentineVisage(null))));
     public static final RegistryObject<Item> SHIZUKA_MASK = addToTab(ITEMS.register("shizuka_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new ShizukaVisage(null))));
+    public static final RegistryObject<Item> CHAKA_MASK = addToTab(ITEMS.register("chaka_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new ChakaVisage(null))));
     public static final RegistryObject<Item> AESTHETICIAN_MASK_1 = ITEMS.register("aesthetician_mask_1",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisage1(null)));
     public static final RegistryObject<Item> AESTHETICIAN_MASK_2 = ITEMS.register("aesthetician_mask_2",
@@ -618,8 +634,8 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisage5(null)));
     public static final RegistryObject<Item> AESTHETICIAN_MASK_ZOMBIE = ITEMS.register("aesthetician_mask_zombie",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisageZombie(null)));
-    public static final RegistryObject<Item> INTERDIMENSIONAL_KEY = ITEMS.register("interdimensional_key",
-            () -> new InterdimensionalKeyItem(new Item.Properties().stacksTo(1)));
+   /* public static final RegistryObject<Item> INTERDIMENSIONAL_KEY = ITEMS.register("interdimensional_key",
+            () -> new InterdimensionalKeyItem(new Item.Properties().stacksTo(1))); */
 
 
     public static void assignStupidForge(){

@@ -472,19 +472,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
-    @Inject(method = "knockback",at = @At(value = "HEAD"))
-    public void roundabout$transferKnockback(double $$0, double $$1, double $$2, CallbackInfo ci) {
-        if (this.roundabout$isPossessed()) {
-            LivingEntity poss = (LivingEntity) this.roundabout$getPossessor();
-            if (poss != null) {
-                if (this.roundabout$getStandPowers() instanceof PowersWalkingHeart PWH && PWH.hasExtendedHeelsForWalking()) {return;}
-                poss.knockback($$0,$$1,$$2);
-            }
-
-
-        }
-    }
-
     @Override
     @Unique
     public boolean rdbt$tickEffectsBleedEdition(boolean grav){
@@ -1487,13 +1474,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     /// consider adding a tracked byte of some kind to possession to allow it to be used by several stands
-    @Unique
-    private void roundabout$onPossessionFinish() {
+    @Override
+    public void roundabout$onPossessionFinish() {
         if (this.roundabout$getPossessor() != null) {
             this.roundabout$getPossessor().discard();
             this.roundabout$setPossessor(null);
         }
-        //   P.getCooldowns().addCooldown(ModItems.ANUBIS_ITEM,10);
         if (this.rdbt$this() instanceof Player P) {
             P.displayClientMessage(Component.translatable("item.roundabout.anubis_item.message1").withStyle(ChatFormatting.RED), true);
         }
@@ -2096,6 +2082,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    //Zombies are undead
+    @Inject(method = "getMobType",at = @At(value = "HEAD"),cancellable = true, require = 0)
+    public void roundabout$getMobType(CallbackInfoReturnable<MobType> cir) {
+        if (FateTypes.isZombie(rdbt$this())){
+            cir.setReturnValue(MobType.UNDEAD);
+        }
+    }
+
+    //Zombies still should have the limited underwater penalty
+    @Inject(method = "canBreatheUnderwater",at = @At(value = "HEAD"),cancellable = true, require = 0)
+    public void roundabout$canBreatheUnderwater(CallbackInfoReturnable<Boolean> cir) {
+        if (FateTypes.isZombie(rdbt$this())){
+            cir.setReturnValue(false);
+        }
+    }
+
     @Unique
     public ItemStack roundabout$XHandCancelItem(EquipmentSlot ES) {
         if (this.roundabout$isPossessed()) {return ItemStack.EMPTY;}
@@ -2105,6 +2107,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 if (!SP.canCombatModeUse(getItemBySlot(ES))) {
                     return ItemStack.EMPTY;
                 }
+            }
+        }
+        if(roundabout$getStandPowers() instanceof PowersGreenDay  PGD && ES == EquipmentSlot.MAINHAND) {
+            if (!PGD.HasMainArm) {
+                return ItemStack.EMPTY;
             }
         }
         return getItemBySlot(ES);
@@ -3082,14 +3089,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
                 if (!this.level().isClientSide() || ((LivingEntity) (Object) this) instanceof Player) {
 
-                    // SAVING THIS FOR LATER
-               /*     if (this.roundabout$getPossessor() != null && this.roundabout$getPossessor().getTarget() != null) {
-                        float ry = MainUtil.getLookAtEntityYaw(rdbt$this(),this.roundabout$getPossessor().getTarget()) % 360;
-                        stand.setYRot(ry);
-                        stand.setYBodyRot(ry);
-                        stand.setYHeadRot(ry);
-                        return;
-                    }*/
+
 
                     stand.setYRot(roundabout$User.getYHeadRot() % 360);
                     stand.setXRot(roundabout$User.getXRot());
@@ -3290,9 +3290,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 $$1 = FM.getDamageMod($$1);
             }
             Entity ent2 = FM;
-            if (FM.getController() > 0 && FM.getController() != this.getId()){
-                ent2 = FM.controller;
-            }
             ci.setReturnValue(hurt(ModDamageTypes.of(this.level(), ModDamageTypes.CORPSE_EXPLOSION, ent2, $$0.getDirectEntity()),
                     $$1));
             return;
@@ -3368,15 +3365,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
-    @Inject(method = "addEffect(Lnet/minecraft/world/effect/MobEffectInstance;)Z", at = @At(value = "HEAD"))
-    public void roundabout$carryEffects(MobEffectInstance $$0, CallbackInfoReturnable<Boolean> cir) {
-        if (this.roundabout$isPossessed()) {
-            LivingEntity poss = this.roundabout$getPossessor();
-            if (poss != null) {
-                poss.addEffect($$0);
-            }
-        }
-    }
 
     /**Hex prevents eating effects from golden apples. Once you reach level 3 (commands only), all foods lose them*/
     @Inject(method = "addEatEffect", at = @At(value = "HEAD"), cancellable = true, require = 0)
@@ -3600,9 +3588,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             AG.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED,1,200));
             this.level().broadcastEntityEvent(this, (byte)35);
             cir.setReturnValue(true);
+            return;
         }
 
-        if ( (rdbt$this() instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers().cheatDeath(dsource))
+        if (rdbt$this() instanceof Player pl && (dsource.is(ModDamageTypes.BLOOD_DRAIN)
+        ) && FateTypes.isHuman(pl)){
+            pl.setHealth(pl.getMaxHealth()/2);
+            cir.setReturnValue(true);
+            FateTypes.setZombie(pl);
+            pl.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireZombie1").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD), true);
+
+            if (level() instanceof ServerLevel SL) {
+                SL.sendParticles(ModParticles.BLOOD_MIST,
+                        this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
+                        10, 0.4, 0.4, 0.4, 0.025);
+            }
+        } else if ( (rdbt$this() instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers().cheatDeath(dsource))
                 || roundabout$getStandPowers().cheatDeath(dsource)){
             cir.setReturnValue(true);
         } else if (hasEffect(ModEffects.VAMPIRE_BLOOD)){
@@ -3636,7 +3637,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "setSprinting", at = @At(value = "HEAD"), cancellable = true, require = 0)
     public void roundabout$canSprintPlayer(boolean $$0, CallbackInfo ci) {
         if (roundabout$getStandPowers().cancelSprint() || FateTypes.isTransforming(rdbt$this()) ||
-                (FateTypes.takesSunlightDamage(rdbt$this()) && FateTypes.isInSunlight(rdbt$this()))
+                (FateTypes.takesSunlightDamage(rdbt$this()) && FateTypes.isInSunlight(rdbt$this()) && !FateTypes.isHidden(rdbt$this()))
         || (rdbt$this() instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers().cancelSprint())){
             ci.cancel();
         }
@@ -3687,7 +3688,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void rdbt$adjGravTrav(){
         roundabout$adjustGravity();
 
-        if (this.isControlledByLocalInstance()) {
             if (MainUtil.isPlayerBonkingHead(((LivingEntity)(Object)this)) || isUsingItem()){
                 roundabout$setBigJumpCurrentProgress(0);
                 roundabout$setBigJump(false);
@@ -3739,7 +3739,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
                 }
             }
-        }
     }
 
     @Inject(method = "travel", at = @At(value = "HEAD"))
@@ -3873,6 +3872,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    @Inject(method = "isAffectedByPotions", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    protected void rooundabout$isAffectedByPotions(CallbackInfoReturnable<Boolean> cir) {
+        if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.hexTwoSealsPotions) {
+            MobEffectInstance mi = getEffect(ModEffects.HEX);
+            if (mi != null && mi.getAmplifier() > 0) {
+                cir.setReturnValue(false);
+            }
+        }
+    }
+
     public LivingEntity rdbt$this(){
         return ((LivingEntity) (Object)this);
     }
@@ -3930,12 +3939,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
 
-        if (hand.getItem() instanceof RoadRollerItem || offHand.getItem() instanceof RoadRollerItem) {
-            if (!FateTypes.isVampireStrong(rdbt$this())) {
-                basis = (basis * 0.50F);
-            }
-        }
-
         float sd = HeatUtil.getSlowdown(rdbt$this());
         if (sd > 0){
             basis = basis * (1f-sd);
@@ -3962,7 +3965,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         if (FateTypes.takesSunlightDamage(rdbt$this()) && FateTypes.isInSunlight(rdbt$this())){
-            basis *= 0.15F;
+            if (!FateTypes.isHidden(rdbt$this())) {
+                basis *= 0.15F;
+            }
         }
 
         if (FateTypes.hasBloodHunger((LivingEntity) (Object) this)) {
@@ -4110,7 +4115,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         hurt(ModDamageTypes.of(level(), ModDamageTypes.ICE_SHATTER, $$0.getEntity()), 30F);
                     }
                     S2CPacketUtil.shatterIce(getId());
-                    return false;
+                    return true;
                 }
             }
 
@@ -4278,7 +4283,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             || MainUtil.isStandDamage(source)
                             || source.is(DamageTypes.PLAYER_EXPLOSION)
                             || source.is(DamageTypes.EXPLOSION)){
-                        damageAmount*=0.5F;
+                        damageAmount*=0.37F;
                         modified = true;
                     }
                 }
@@ -4343,6 +4348,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 this.setRemainingFireTicks(1);
             }
         }
+        MainUtil.onDeath(this,$$0);
     }
 
     @Inject(method = "die(Lnet/minecraft/world/damagesource/DamageSource;)V", at = @At(value = "INVOKE",
@@ -4727,9 +4733,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     float f = (float)Mth.length(poss.getX() - poss.xo, 0.0, poss.getZ() - poss.zo);
                     float g = Math.min(f * 4.0f, 1.0f);
                     this.walkAnimation.update(g, 0.4f);
-                    if (this.roundabout$getStandPowers() != null && !this.level().isClientSide) {
-                   //     this.roundabout$getStandPowers().tickMobAI(poss.getTarget());
-                    }
                 }
             }
         }
@@ -4746,23 +4749,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 if (rdbt$this() instanceof Player P) {
                     if (poss != null) {
 
-                        rdbt$this().setDeltaMovement(Vec3.ZERO);
-                        Vec3 pos = P.getPosition(0.5F);
-
-                        pos = pos.lerp(poss.getPosition(0.5F),0.5).add(0,0.05,0);
-                        rdbt$this().teleportTo(pos.x,pos.y,pos.z);
-
                         LivingEntity target = poss.getTarget();
                         if (target != null) {
-                            if (target.hurtTime == 0 && !this.roundabout$isDazed() && roundabout$anubisAttackDelay >= 0) {
+                            if (target.hurtTime == 0 && !this.roundabout$isDazed() && roundabout$anubisAttackDelay <= 0) {
                                 if (P.getPosition(0.5F).distanceTo(target.getPosition(1)) < 1.4) {
                                     P.swing(InteractionHand.MAIN_HAND,true);
 
-                                    if (target.hurt(ModDamageTypes.of(P.level(), ModDamageTypes.ANUBIS_POSSESS,this),7.5F) && !target.isBlocking()) {
-                                        roundabout$anubisAttackDelay = 12;
-                                        P.crit(target);
-                                    } else {
+                                    if (target.isBlocking()) {
                                         roundabout$anubisAttackDelay = 50;
+                                        this.level().playSound(null,this.blockPosition(),SoundEvents.SHIELD_BLOCK,SoundSource.PLAYERS,1F,1F);
+                                    } else if (target.hurt(ModDamageTypes.of(P.level(), ModDamageTypes.ANUBIS_POSSESS,this),7.5F) ) {
+                                        roundabout$anubisAttackDelay = 15;
+                                        P.crit(target);
                                     }
 
                                     Vec3 delta = target.getPosition(1).subtract(P.getPosition(1)).multiply(0.3,0.3,0.3);
@@ -4772,10 +4770,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             } else if (roundabout$anubisAttackDelay > 0) {
                                 roundabout$anubisAttackDelay--;
                             }
+
                         }
                     }
+
                 }
             }
+
         }
 
     }
@@ -5221,6 +5222,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Shadow protected abstract int getCurrentSwingDuration();
 
     @Shadow public InteractionHand swingingArm;
+
+    @Shadow public abstract void setItemInHand(InteractionHand interactionHand, ItemStack itemStack);
+
     @Unique private boolean roundabout$isPRunning = false;
 
     @Override

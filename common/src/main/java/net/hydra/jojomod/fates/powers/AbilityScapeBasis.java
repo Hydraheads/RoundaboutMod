@@ -120,7 +120,7 @@ public class AbilityScapeBasis {
     /**If the above function is set to true, this will be the code called instead of the exp bar one. Make
      * a call to another class so too much client code doesn't unnecessarily exist in the standpowers class.*/
     public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
-                                  boolean removeNum){
+                                  boolean removeNum, Minecraft minecraft){
     }
 
 
@@ -165,6 +165,10 @@ public class AbilityScapeBasis {
 
     public float getStepHeightAddon(){
         return 0;
+    }
+
+    public void onKill(Entity target, DamageSource source){
+
     }
 
     /**For enhancement stands that adjust your normal player attack speed*/
@@ -2023,17 +2027,6 @@ public class AbilityScapeBasis {
         }
 
 
-        /// SAVING THIS FOR LATER
-   /*     StandUser SU = (StandUser) User;
-        if (SU.roundabout$isPossessed() && SU.roundabout$getPossessor() != null) {
-            LivingEntity target = SU.roundabout$getPossessor().getTarget();
-            if (target != null) {
-                if (target.distanceTo(User) < distMax ) {
-                    return target;
-                }
-            }
-
-        }*/
 
 
 

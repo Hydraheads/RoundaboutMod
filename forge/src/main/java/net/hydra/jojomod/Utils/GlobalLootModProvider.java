@@ -24,39 +24,7 @@ public class GlobalLootModProvider extends GlobalLootModifierProvider {
 
     @Override
     protected void start(){
-        add("stand_arrow_from_pyramid", new ForgeSusSandItemModifier(new LootItemCondition[]{
-                new LootTableIdCondition.Builder(new ResourceLocation("archaeology/desert_pyramid")).build()
-        }, ForgeItems.STAND_ARROW.get()));
 
-        add("stand_arrow_from_warm_ocean", new ForgeSusSandItemModifier(new LootItemCondition[]{
-                new LootTableIdCondition.Builder(new ResourceLocation("archaeology/ocean_ruin_warm")).build()
-        }, ForgeItems.STAND_ARROW.get()));
-
-        add("stand_arrow_from_well", new ForgeSusSandItemModifier(new LootItemCondition[]{
-                new LootTableIdCondition.Builder(new ResourceLocation("archaeology/desert_well")).build()
-        }, ForgeItems.STAND_ARROW.get()));
-
-        add("stand_arrow_from_cold_ocean", new ForgeSusGravelItemModifier(new LootItemCondition[]{
-                new LootTableIdCondition.Builder(new ResourceLocation("archaeology/ocean_ruin_cold")).build()
-        }, ForgeItems.STAND_ARROW.get()));
-
-        add("stand_arrow_from_trail_ruins", new ForgeSusGravelItemModifier(new LootItemCondition[]{
-                new LootTableIdCondition.Builder(new ResourceLocation("archaeology/trail_ruins_common")).build()
-        }, ForgeItems.STAND_ARROW.get()));
-
-        add("stand_arrow_from_trail_ruins_rare", new ForgeSusGravelItemModifier(new LootItemCondition[]{
-                new LootTableIdCondition.Builder(new ResourceLocation("archaeology/trail_ruins_rare")).build()
-        }, ForgeItems.STAND_ARROW.get()));
-
-      /*  add("anubis_from_trail_ruins", new ForgeSusGravelItemModifier(new LootItemCondition[]{
-                new LootTableIdCondition.Builder(new ResourceLocation("archaeology/trail_ruins_common")).build()
-        }, ForgeItems.ANUBIS_ITEM.get()));
-        add("anubis_from_trail_ruins_rare", new ForgeSusGravelItemModifier(new LootItemCondition[]{
-                new LootTableIdCondition.Builder(new ResourceLocation("archaeology/trail_ruins_rare")).build()
-        }, ForgeItems.ANUBIS_ITEM.get()));
-        add("stand_arrow_from_pyramid", new ForgeSusSandItemModifier(new LootItemCondition[]{
-                new LootTableIdCondition.Builder(new ResourceLocation("archaeology/desert_pyramid")).build()
-        }, ForgeItems.ANUBIS_ITEM.get())); */ // ADD FOR ANUBIS
 
 
         add("shipwreck_locacaca_pit", new ForgeItemModifiers(new LootItemCondition[] {

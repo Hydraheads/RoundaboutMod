@@ -39,6 +39,10 @@ public interface IPlayerEntity {
     void roundabout$setPower(byte style);
     byte roundabout$getPower();
 
+    /// Zombie Fate's zombie silverfish count
+    void rdbt$setZombieFish(int fish);
+    int rdbt$getZombieFish();
+
     /// bypasses the combat mode overrides
     ItemStack roundabout$getForRealMainHand();
     ItemStack roundabout$getForRealOffHand();

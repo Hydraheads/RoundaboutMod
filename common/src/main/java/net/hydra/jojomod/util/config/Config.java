@@ -50,6 +50,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public WanderingTraderSettings wanderingTraderSettings;
     @NestedOption(group = "modded")
+    public BrushingLootSettings brushingLootSettings;
+    @NestedOption(group = "modded")
     public ItemSettings itemSettings;
     @NestedOption(group = "modded")
     public NameTagSettings nameTagSettings;
@@ -59,6 +61,8 @@ public class Config implements Cloneable {
     public MiscSettings miscellaneousSettings;
     @NestedOption(group = "modded")
     public VampireSettings vampireSettings;
+    @NestedOption(group = "modded")
+    public PowersSettings powersSettings;
     @NestedOption(group = "modded")
     public StandLevelingSettings standLevelingSettings;
     @NestedOption(group = "modded")
@@ -71,6 +75,8 @@ public class Config implements Cloneable {
     public JusticeSettings justiceSettings;
     @NestedOption(group = "modded")
     public CinderellaSettings cinderellaSettings;
+    @NestedOption(group = "modded")
+    public ManhattanTransferSettings manhattanTransferSettings;
     @NestedOption(group = "modded")
     public HeyYaSettings heyYaSettings;
     @NestedOption(group = "modded")
@@ -131,6 +137,8 @@ public class Config implements Cloneable {
         @BooleanOption(group = "inherit", value = false)
         public Boolean canAwakenOtherPlayersWithArrows;
         @BooleanOption(group = "inherit", value = false)
+        public Boolean classicGasoline;
+        @BooleanOption(group = "inherit", value = false)
         public Boolean canThrowVisagesOntoOtherPlayers;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer switchStandDiscLength;
@@ -170,7 +178,7 @@ public class Config implements Cloneable {
         public Float beetleArrowTradeChance;
         @IntOption(group = "inherit", value = 10, min = 0, max = 64)
         public Integer beetleArrowCost;
-        @FloatOption(group = "inherit", value = 0F, min = 0, max = 100) // ADD FOR ANUBIS
+        @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)
         public Float anubisTradeChance;
         @IntOption(group = "inherit", value = 20, min = 0, max = 64)
         public Integer anubisTradeCost;
@@ -180,6 +188,18 @@ public class Config implements Cloneable {
         public Integer brokenArrowCost;
         @BooleanOption(group = "inherit",value = true)
         public Boolean brokenArrowsHaveStands;
+    }
+
+    public static class BrushingLootSettings {
+        @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)
+        public Float anubisChance;
+        @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)
+        public Float standArrowChance;
+        @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)
+        public Float beetleArrowChance;
+        @FloatOption(group = "inherit", value = 2F, min = 0, max = 100)
+        public Float dryLootMultiplier;
+
     }
 
 
@@ -195,6 +215,10 @@ public class Config implements Cloneable {
         public Boolean disableBleedingAndBloodSplatters;
         @BooleanOption(group = "inherit", value = false)
         public Boolean banDirectionalBlockPlacingFailure;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean bleedRemovesStrength;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean hexTwoSealsPotions;
     }
     public static class VampireSettings {
         @BooleanOption(group = "inherit", value = false)
@@ -224,6 +248,10 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 0, min = 0, max = 72000)
         public Integer bonusStandDmgByMaxLevel;
     }
+    public static class PowersSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean powerSwitchingPenalty;
+    }
     public static class GeneralStandSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean disableMeleeWhileStandActive;
@@ -235,7 +263,7 @@ public class Config implements Cloneable {
         public Boolean standsInterruptSomeStandAttacks;
         @BooleanOption(group = "inherit", value = true)
         public Boolean playersInterruptSomeStandAttacks;
-        @BooleanOption(group = "inherit", value = true)
+        @BooleanOption(group = "inherit", value = false)
         public Boolean spiritOutInterruption;
         @BooleanOption(group = "inherit", value = true)
         public Boolean barragesAreAlwaysInterruptable;
@@ -622,6 +650,15 @@ public class Config implements Cloneable {
         public Boolean canUseSurvivorOnBossesInSurvival;
     }
 
+    public static class ManhattanTransferSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableManhattanTransfer;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer manhattanTransferMaxRange;
+        @IntOption(group = "inherit", value = 4, min = 1, max = 5)
+        public Integer getAutoSpeed;
+    }
+
     public static class WalkingHeartSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableWalkingHeart;
@@ -644,6 +681,8 @@ public class Config implements Cloneable {
     public static class RattSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableRatt;
+        @IntOption(group = "inherit", value = 30, min = 0, max = 100)
+        public Integer rattSafetyTicks;
         @FloatOption(group = "inherit", value = 1F, min = 0F, max = 100F)
         public Float rattAttackBonusOnMobs;
         @FloatOption(group = "inherit", value = 2.5F, min = 0F, max = 100F)
@@ -652,7 +691,7 @@ public class Config implements Cloneable {
         public Integer rattMaxDespawnRange;
         @IntOption(group = "inherit", value = 30, min = 0, max = 100)
         public Integer rattChargePerHit;
-        @IntOption(group = "inherit", value = 4, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 2, min = 0, max = 72000)
         public Integer rattManualChargeRate;
         @IntOption(group = "inherit", value = 150, min = 0, max = 72000)
         public Integer rattLeapCooldown;
@@ -825,7 +864,7 @@ public class Config implements Cloneable {
         public Boolean postTSSoften;
         @BooleanOption(group = "inherit", value = true)
         public Boolean postTSCancel;
-        @IntOption(group = "inherit", value = 28, min = 0, max = 100)
+        @IntOption(group = "inherit", value = 20, min = 0, max = 100)
         public Integer timestopLeapCooldown;
         @BooleanOption(group = "inherit", value = true)
         public Boolean timestopCancelsFood;

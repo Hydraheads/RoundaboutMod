@@ -785,6 +785,7 @@ public class PowersWalkingHeart extends NewDashPreset {
         this.setCooldown(PowerIndex.SKILL_4, 3);
         this.setAttackTimeDuring(-10);
         this.setActivePower(PowerIndex.POWER_4_EXTRA);
+        MainUtil.playPop(self);
 
         if (this.self.level().isClientSide()){
             List<Entity> TE;

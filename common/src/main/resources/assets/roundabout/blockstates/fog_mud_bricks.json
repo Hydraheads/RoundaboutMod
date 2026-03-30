@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "in_fog=false": {
+      "model": "roundabout:block/fog_block_invisible"
+    },
+    "in_fog=true": {
+      "model": "minecraft:block/mud_bricks_north_west_mirrored"
+    }
+  }
+}

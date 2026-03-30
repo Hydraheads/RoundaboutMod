@@ -245,8 +245,8 @@ public class BlockGrabPreset extends NewPunchingStand {
             if (!this.getSelf().level().isClientSide) {
                 if (getStandUserSelf().roundabout$getTSJump() && !ClientNetworking.getAppropriateConfig().timeStopSettings.enableCarryingWhileHovering){
                     if (standEntity != null){
-                        boolean passenger = standEntity.getFirstPassenger() instanceof RoadRollerEntity;
-                        if (!passenger) {
+                        boolean passenger = standEntity.getFirstPassenger() instanceof Player;
+                        if (passenger) {
                             standEntity.ejectPassengers();
                         }
                     }
@@ -939,9 +939,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                 && !(entity instanceof MinecartSpawner)
                 && ((entity != null && ((IEntityAndData)entity).rdbt$returnPickup()))
                 && !(entity instanceof Projectile)
-                && !(entity instanceof LivingEntity lv &&
-                ((StandUser)lv).roundabout$getStandPowers() instanceof PowersWalkingHeart PW &&
-                PW.hasExtendedHeelsForWalking())
+                && !(MainUtil.resistsKnockBack(entity))
                 && !(entity instanceof StandEntity)){
             if (entity instanceof Player pl && this.getSelf().getVehicle() != null && ((StandUser) pl).roundabout$getStand() != null &&
                     ((StandUser) pl).roundabout$getStand().is(this.getSelf().getRootVehicle())){
