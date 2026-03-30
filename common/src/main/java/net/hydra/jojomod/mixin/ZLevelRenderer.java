@@ -280,48 +280,56 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
 
         ClientUtil.mirrorCycles = 0;
 
+        roundabout$renderAnubisMemory($$1);
+    }
+
+
+    @Unique
+    private void roundabout$renderAnubisMemory(float partial) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null) {
             Player P = mc.player;
             StandUser SU = (StandUser) P;
             if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA && P.getUUID().equals(PA.getSelf().getUUID()) ) {
-                if (SU.roundabout$getUniqueStandModeToggle() && PA.lastPartialTick != $$1) {
+                if (SU.roundabout$getUniqueStandModeToggle() && PA.lastPartialTick != partial) {
 
                     AnubisMemory memory = PA.getUsedMemory();
-                    if (memory.memory_type != AnubisMemory.INPUTS) {
-                        if (!memory.rots.isEmpty()) {
-                            int time = PA.getMaxPlayTime()-PA.playTime;
-                            for (int i=2;i<memory.rots.size();i++) {
-                                Vec3 rot = memory.rots.get(i);
-                                Vec3 pRot = memory.rots.get(i-1);
-                                if ( time == rot.x ) {
+                    if (memory != null) {
+                        if (memory.memory_type != AnubisMemory.INPUTS) {
+                            if (!memory.rots.isEmpty()) {
+                                int time = PA.getMaxPlayTime() - PA.playTime;
+                                for (int i = 2; i < memory.rots.size(); i++) {
+                                    Vec3 rot = memory.rots.get(i);
+                                    Vec3 pRot = memory.rots.get(i - 1);
+                                    if (time == rot.x) {
 
-                                    float extraTicks = 0;
-                                    if (PA.lastTick < time) {
-                                        extraTicks = (1-PA.lastPartialTick);
-                                        PA.lastPartialTick = 0;
-                                        PA.lastTick = time;
+                                        float extraTicks = 0;
+                                        if (PA.lastTick < time) {
+                                            extraTicks = (1 - PA.lastPartialTick);
+                                            PA.lastPartialTick = 0;
+                                            PA.lastTick = time;
+                                        }
+                                        float dT = partial - PA.lastPartialTick;
+                                        PA.lastPartialTick = partial;
+
+
+                                        float dx = (float) (P.getXRot() + rot.y * dT + pRot.y * extraTicks);
+                                        float dy = (float) (P.getYRot() + rot.z * dT + pRot.z * extraTicks);
+
+                                        P.setXRot(dx);
+                                        P.setYRot(dy < -360 ? 720 + dy : dy % 720);
+
+                                    } else if (time < rot.x) {
+                                        break;
                                     }
-                                    float dT = $$1-PA.lastPartialTick;
-                                    PA.lastPartialTick = $$1;
-
-
-                                    float dx =(float) (P.getXRot()+rot.y*dT + pRot.y*extraTicks );
-                                    float dy =(float) (P.getYRot()+rot.z*dT + pRot.z*extraTicks);
-
-                                    P.setXRot(dx);
-                                    P.setYRot(dy < -360 ? 720+dy : dy%720);
-
-                                } else if (time < rot.x) {break;}
+                                }
                             }
                         }
                     }
                 }
             }
         }
-
     }
-
 
     @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",
             at = @At(value = "TAIL"))

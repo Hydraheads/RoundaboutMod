@@ -7,7 +7,22 @@ import net.minecraft.client.animation.KeyframeAnimations;
 
 public class TuskAnimations {
 
-    public static final AnimationDefinition Default = AnimationDefinition.Builder.withLength(0.1667F)
+    public static final AnimationDefinition Default  = AnimationDefinition.Builder.withLength(0.1667F)
+            .addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(344.2048F, -8.8918F, -318.2615F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.POSITION,
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(2.5804F, -10.9463F, 17.1861F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(-18.9274F, 10.5F, -42.2695F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.POSITION,
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(-2.8754F, -11.1437F, 16.1609F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .build();
+
+    public static final AnimationDefinition Shooting = AnimationDefinition.Builder.withLength(0.1667F)
             .addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(344.2048F, -8.8918F, -318.2615F), AnimationChannel.Interpolations.LINEAR)
             ))

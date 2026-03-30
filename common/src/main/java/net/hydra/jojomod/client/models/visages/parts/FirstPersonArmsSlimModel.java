@@ -13,10 +13,7 @@ import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.TuskAnimations;
-import net.hydra.jojomod.event.index.LocacacaCurseIndex;
-import net.hydra.jojomod.event.index.Poses;
-import net.hydra.jojomod.event.index.PowerTypes;
-import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ColtRevolverItem;
 import net.hydra.jojomod.item.SnubnoseRevolverItem;
@@ -182,7 +179,7 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
 
 
                     AnimationDefinition anim = PT.getFirstPersonAnimation();
-                    if (anim == TuskAnimations.Default) {
+                    if (standUser.roundabout$getStandAnimation() == PowerIndex.NONE) {
                         standUser.roundabout$getWornStandAnimation().startIfStopped(player.tickCount);
                     }
                     this.animate(standUser.roundabout$getWornStandAnimation(),anim,partialTicks,1F);
@@ -275,6 +272,44 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                 }
                 poseStack.popPose();
 
+                StandUser user = ((StandUser) player);
+
+                if (user.roundabout$getStandPowers() instanceof PowersTusk PT && PT.getAct() > 1 && PT.hasNail() && PowerTypes.isUsingStand(player)) {
+                    if (renderRight) {
+                        poseStack.pushPose();
+                        this.transform.translateAndRotate(poseStack);
+                        this.rform.translateAndRotate(poseStack);
+                        this.right_arm.translateAndRotate(poseStack);
+                        poseStack.translate(-0.2, -0.8, 0);
+                        poseStack.scale(0.9F,0.9F,0.9F);
+                        ModStrayModels.TUSK_DRILL.render(
+                                player, partialTicks,
+                                poseStack,
+                                bufferSource,
+                                light,
+                                r, g, b, 1
+                        );
+                        poseStack.popPose();
+                    }
+
+                    if (renderLeft) {
+                        poseStack.pushPose();
+                        this.transform.translateAndRotate(poseStack);
+                        this.lform.translateAndRotate(poseStack);
+                        this.left_arm.translateAndRotate(poseStack);
+                        poseStack.translate(0, -0.8, 0);
+                        poseStack.scale(0.9F,0.9F,0.9F);
+                        ModStrayModels.TUSK_DRILL.render(
+                                player, partialTicks,
+                                poseStack,
+                                bufferSource,
+                                light,
+                                r, g, b, 1
+                        );
+                        poseStack.popPose();
+                    }
+                }
+
                 if (rightSleeve != null) {
                     if (bt == LocacacaCurseIndex.RIGHT_HAND) {
                         poseStack.pushPose();
@@ -332,7 +367,6 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                             }
                         }
 
-                        StandUser user = ((StandUser) player);
                         boolean hasMandom = (user.roundabout$getStandPowers() instanceof PowersMandom);
                         boolean hasMandomOut = (PowerTypes.hasStandActive(player)  && hasMandom);
                         if (hasMandom) {

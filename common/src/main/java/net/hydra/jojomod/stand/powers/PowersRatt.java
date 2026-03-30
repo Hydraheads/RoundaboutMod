@@ -974,7 +974,7 @@ public class PowersRatt extends NewDashPreset {
             if ($$0.getEntity() != null) {
                 if ($$0.getEntity().getPosition(1).distanceTo(this.getSelf().getPosition(1)) < 6.0) {
                     if (this.getSelf() instanceof Player P) {
-                        if (this.getStandUserSelf().roundabout$getCombatMode()) {
+                        if (this.getStandUserSelf().roundabout$getCombatMode() && PowerTypes.isUsingStand(this.getSelf())) {
                             int nc = Math.max(this.getChargeTime() - 30, 0);
                             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1F, 1F);
                             this.updatePowerInt(PowersRatt.UPDATE_CHARGE, nc);
@@ -1049,7 +1049,7 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
-                                  boolean removeNum) {
+                                  boolean removeNum, Minecraft minecraft) {
         double distance = getStandEntity(getSelf()).distanceTo(getSelf());
         StandHudRender.renderNumberHUD(context, Minecraft.getInstance(), screenWidth, screenHeight, x, distance, getMaxPilotRange(), StandIcons.JOJO_ICONS, 0,100,6141070);
     }

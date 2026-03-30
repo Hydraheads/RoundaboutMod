@@ -284,6 +284,7 @@
   "effect.roundabout.gravity_flip": "Gravity",
   "effect.roundabout.warding": "Warding",
   "effect.roundabout.vampire_blood": "Vampire Blood",
+  "effect.roundabout.unbalanced": "Unbalanced",
 
   "item.roundabout.creative_only.info": "Creative Only",
 
@@ -1862,8 +1863,8 @@
   "skins.roundabout.anubis.gray_wagon": "Gray Wagon",
   "skins.roundabout.anubis.timekeeper": "Timekeeper",
   "skins.roundabout.anubis.chorus": "Chorus",
-  "skins.roundabout.anubis.alluring": "Raging",
-  "skins.roundabout.anubis.raging": "Alluring",
+  "skins.roundabout.anubis.alluring": "Alluring",
+  "skins.roundabout.anubis.raging": "Raging",
   "skins.roundabout.anubis.khopesh": "Khopesh",
   "skins.roundabout.anubis.cleaver": "Cleaver",
   "skins.roundabout.anubis.illusory": "Illusory",
@@ -1891,6 +1892,8 @@
   "skins.roundabout.green_day.part_five_green_day": "Part 5",
   "skins.roundabout.green_day.red_day": "Red Day",
   "skins.roundabout.green_day.teal_day": "Teal Day",
+  "skins.roundabout.green_day.broccoli": "Broccoli",
+
 
 
 
@@ -2154,6 +2157,8 @@
   "config.roundabout.enableHeyYa.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableCinderella.name": "Enable Stand",
   "config.roundabout.enableCinderella.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+  "config.roundabout.enableManhattanTransfer.name": "Enable Stand",
+  "config.roundabout.enableManhattanTransfer.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableSurvivor.name": "Enable Stand",
   "config.roundabout.enableSurvivor.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
 
@@ -2359,6 +2364,11 @@
   "config.roundabout.emeraldCostCharacterVisage.desc": "Any character themed visage in the Cinderella shop, default 10.",
   "config.roundabout.enableJojoveinVisagesInShop.name": "JoJovein Visages",
   "config.roundabout.enableJojoveinVisagesInShop.desc": "Whether or not visages for designs used in JoJovein (the precursor mod/server/modpack to Roundabout). For example, Shizuka from JoJo Stars, which uses an adapted fan design. This config requires a restart to load.",
+
+  "config.roundabout.manhattanTransferMaxRange.name": "Manhattan Transfer Max Range",
+  "config.roundabout.manhattanTransferMaxRange.desc": "How far you and Manhattan Transfer can distance until it despawns. The default is 200.",
+  "config.roundabout.getAutoSpeed.name":"Automatic Speed Modifier",
+  "config.roundabout.getAutoSpeed.desc": "Select the velocity of the stand's automatic movement from 1 to 5. The lowest is easier to shoot to the stand, the highest ones are optimal by who has mastered the stand and wants it to move faster.",
 
   "config.roundabout.walkingHeartAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.walkingHeartAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
@@ -2936,6 +2946,7 @@
   "config.roundabout.standTweak.name": "Ratt",
   "config.roundabout.justiceSettings.name": "Justice",
   "config.roundabout.cinderellaSettings.name": "Cinderella",
+  "config.roundabout.manhattanTransferSettings.name": "Manhattan Transfer",
   "config.roundabout.heyYaSettings.name": "Hey Ya",
   "config.roundabout.mandomSettings.name": "Mandom",
   "config.roundabout.survivorSettings.name": "Survivor",
@@ -2984,6 +2995,8 @@
   "config.roundabout.mandomRewindShowsVisualEffectsToNonMandomUsers.desc": "Whether or not the visual effect of rewinding time appears on other players' screens. The ability is meant to be subtle and confusing canonically, but in the mod we didn't want people to mistake being rewound for lag or rubberbanding.",
   "config.roundabout.mandomRewindAttemptsToSkipInterpolation.name": "Rewind Blipping",
   "config.roundabout.mandomRewindAttemptsToSkipInterpolation.desc": "Turn this off if you have a mod that makes mobs invisible after using mandom. Whether or not time rewind attempts to skip interpolation, so mobs instantly blip into their new locations instead of visually sliding really fast like endermen teleports.",
+  "config.roundabout.tuskUsesShootMode.name": "Tusk Gun Mode",
+  "config.roundabout.tuskUsesShootMode.desc": "Whether you  need to hold right click and then press left click, or just right click",
 
   "config.roundabout.renderJusticeParticlesWhilePilotingInFirstPerson.name": "1st Person Fog",
   "config.roundabout.renderJusticeParticlesWhilePilotingInFirstPerson.desc": "Fog particles can be disabled for first person rendering of justice control mode.",
@@ -3012,6 +3025,9 @@
 
   "config.roundabout.TuskAct.name": "Tusk Act",
   "config.roundabout.TuskAct.desc": "Saves your Tusk Act after you log out.",
+
+  "config.roundabout.rattFiringMode.name": "Ratt Firing Mode",
+  "config.roundabout.rattFiringMode.desc": "Ratt's Manual Firing mode. See the Power Menu for more details",
 
 
   "config.roundabout.vampireVisionMode.name": "Selected Vision Type",

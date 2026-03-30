@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
@@ -15,21 +16,27 @@ import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Options;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ThrownPotion;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.EnderpearlItem;
+import net.minecraft.world.item.LingeringPotionItem;
+import net.minecraft.world.item.SplashPotionItem;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.IronBarsBlock;
-import net.minecraft.world.level.block.SlabBlock;
-import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.damagesource.DamageSource;
@@ -40,8 +47,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.entity.PathfinderMob;
+import org.joml.Vector3f;
 
 import java.util.Arrays;
 import java.util.List;
@@ -119,6 +128,8 @@ public class ManhattanTransferEntity extends StandEntity {
 
     }
 
+    public int SpinTicks = 0;
+    public void setSpinTicks(int val){SpinTicks = val;};
 
     @Override
     public boolean isNoGravity() {
@@ -138,6 +149,9 @@ public class ManhattanTransferEntity extends StandEntity {
     public boolean canBeHitByStands() {
         return true;
     }
+
+    @Override
+    public boolean canBeHitByProjectile() {return true;}
 
     @Override
     public boolean hasNoPhysics() {
@@ -160,6 +174,11 @@ public class ManhattanTransferEntity extends StandEntity {
     }
 
     @Override
+    public boolean canBeSeenAsEnemy() {
+        return true;
+    }
+
+    @Override
     public boolean redirectKnockbackToUser() {
         return false;
     }
@@ -173,10 +192,6 @@ public class ManhattanTransferEntity extends StandEntity {
     public boolean skipAttackInteraction(Entity $$0) {
         return false;
     }
-
-   /* @Override
-    public void knockback(double $$0, double $$1, double $$2) {
-    }*/
 
     @Override
     protected float getFlyingSpeed() {
@@ -193,28 +208,6 @@ public class ManhattanTransferEntity extends StandEntity {
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0);
 
     }
-
-    protected void onHitBlock(BlockHitResult $$0) {
-        if (!this.level().isClientSide()) {
-
-            // yoinked from BladedBowlerHatEntity
-           /* Vec3 velocity = this.getDeltaMovement();
-            Direction hitDir = $$0.getDirection();
-            Vec3 normal = Vec3.atLowerCornerOf(hitDir.getNormal());
-
-            // Makes it bounce
-            Vec3 reflected = velocity.subtract(normal.scale(2 * velocity.dot(normal)));
-
-            this.setDeltaMovement(reflected);
-
-            Vec3 hitLoc = $$0.getLocation();
-            Vec3 pushOut = normal.scale(0.2);
-            this.setPos(hitLoc.x + pushOut.x, hitLoc.y + pushOut.y, hitLoc.z + pushOut.z);*/
-
-        }
-    }
-
-
 
     @Override
     public boolean isControlledByLocalInstance() {
@@ -297,10 +290,8 @@ public class ManhattanTransferEntity extends StandEntity {
 
     public void doBasicPathfind() {
 
-        // int range = 15;
         Vec3 vec3d = this.getEyePosition(0);
         Vec3 vec3d2 = this.getViewVector(0);
-        // Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
         Vec3 vec3d3 = vec3d.add(vec3d2.x, vec3d2.y, vec3d2.z);
         BlockHitResult blockHit = this.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
         BlockPos pos = blockHit.getBlockPos();

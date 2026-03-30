@@ -811,39 +811,7 @@ public class StandHudRender {
     }
     public static void renderTuskHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                      int scaledWidth, int scaledHeight, int x, Font font) {
-        int l = scaledHeight - 32 + 3;
-        StandUser SU = (StandUser) playerEntity;
-        if (SU.roundabout$getStandPowers() instanceof PowersTusk PT) {
-            context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 71, 182, 5);
 
-            int deltaX = x;
-            if (PT.getHeavyNails() > 0) {
-                int k = (int) (18.2F * PT.getHeavyNails());
-                context.blit(StandIcons.JOJO_ICONS_2, deltaX, l, 0, 81, k, 5);
-                deltaX += k;
-            }
-            if (PT.getLightNails() > 0) {
-                int k = (int) (18.2F * PT.getLightNails());
-                context.blit(StandIcons.JOJO_ICONS_2, deltaX, l, 0, 76, k, 5);
-                deltaX += k;
-            }
-            if (PT.getNailCharge() > 0) {
-                int k = (int) (18.2F * PT.getNailCharge());
-                context.blit(StandIcons.JOJO_ICONS_2, deltaX, l, 0, 86, k, 5);
-                deltaX += k;
-            }
-
-
-            String $$6 = PT.getMaxActiveNails() + "";
-            int $$7 = (scaledWidth - font.width($$6)) / 2;
-            int $$8 = scaledHeight - 31 - 4;
-            context.drawString(font, $$6, $$7 + 1, $$8, 0, false);
-            context.drawString(font, $$6, $$7 - 1, $$8, 0, false);
-            context.drawString(font, $$6, $$7, $$8 + 1, 0, false);
-            context.drawString(font, $$6, $$7, $$8 - 1, 0, false);
-            context.drawString(font, $$6, $$7, $$8, 2867683, false);
-
-        }
     }
 
     public static void renderTSHud(GuiGraphics context, Minecraft client, Player playerEntity,

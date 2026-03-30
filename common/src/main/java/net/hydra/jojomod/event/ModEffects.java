@@ -14,5 +14,6 @@ public class ModEffects {
     public static MobEffect GRAVITY_FLIP;
     public static MobEffect WARDING;
     public static MobEffect VAMPIRE_BLOOD;
+    public static MobEffect UNBALANCED;
 
 }

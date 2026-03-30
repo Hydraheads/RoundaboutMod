@@ -181,7 +181,7 @@ public class RattEntity extends StandEntity {
                     }
                     PR.setCooldown(PowersRatt.SETPLACE, 80);
                     this.level().playSound(null, this.blockPosition(), ModSounds.RATT_DEPLACE_EVENT, SoundSource.PLAYERS, 0.5F, 1F);
-                    this.getUser().hurt(ModDamageTypes.of(this.level(),ModDamageTypes.STAND),(float)Mth.clamp(amount*0.5,0,0.5));
+                    this.getUser().hurt(ModDamageTypes.of(this.level(),ModDamageTypes.STAND,source.getEntity()),(float)Mth.clamp(amount*0.5,0,0.5));
                     return true;
                 }
             }

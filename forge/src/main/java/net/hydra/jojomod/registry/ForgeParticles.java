@@ -251,6 +251,10 @@ public class ForgeParticles {
             "road_roller_smoke",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> TUSK_HOLE = PARTICLES.register(
+            "tusk_hole",
+            () -> new SimpleParticleType(true)
+    );
 
     public static final RegistryObject<SimpleParticleType> METALLICA_FIELD_PNG = PARTICLES.register("metallica_field_png", () -> new SimpleParticleType(true));
 

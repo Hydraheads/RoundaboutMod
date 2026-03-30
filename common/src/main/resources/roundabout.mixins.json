@@ -238,6 +238,7 @@
     "time_stop.TimeStopThrowableProjectile",
     "time_stop.TimeStopWarden",
     "time_stop.TimeStopWorld",
+    "tusk.OffBalanceMixin",
     "vanilla_tweaks.ErrorFixUtil",
     "vanilla_tweaks.TameAbstractHorse"
   ],

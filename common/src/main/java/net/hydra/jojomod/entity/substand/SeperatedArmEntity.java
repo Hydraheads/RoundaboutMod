@@ -355,6 +355,8 @@ public class SeperatedArmEntity extends StandEntity {
 
         for(int j = 0;j<damages.size();j++) {
             Entity entity = damages.get(j);
+            item = (this.getMainHandItem().getItem());
+            itemStack = (this.getMainHandItem());
 
             if(entity instanceof ItemEntity IE){
                 if (IE.getItem().getItem().equals(item) || item instanceof AirItem){
@@ -418,6 +420,9 @@ public class SeperatedArmEntity extends StandEntity {
                         int f = EnchantmentHelper.getEnchantmentLevel(Enchantments.PROJECTILE_PROTECTION, $$3);
                         $$2 = (float) ($$2 * (1-(f*0.03)));
 
+                    }
+                    if(SpinTicks > 1){
+                        $$2 = $$2 / 6;
                     }
 
                     Entity $$4 = this.getUser();
