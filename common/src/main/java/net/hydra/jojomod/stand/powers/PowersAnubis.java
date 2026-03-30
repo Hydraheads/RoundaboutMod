@@ -904,9 +904,9 @@ public class PowersAnubis extends NewDashPreset {
         } else {
             this.activePowerPhase++;
             if (this.activePowerPhase == 3) {
-                this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown-10;
+                this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown-7;
             } else {
-                this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchCooldown-2;
+                this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchCooldown;
             }
 
         }
@@ -1568,7 +1568,7 @@ public class PowersAnubis extends NewDashPreset {
     public boolean isBarrageCharging() {return super.isBarrageCharging() || this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2;}
     public int getBarrageMinimum() {return getBarrageWindup();}
     @Override
-    public int getBarrageWindup() {return super.getBarrageWindup()+10;}
+    public int getBarrageWindup() {return super.getBarrageWindup();}
 
     @Override
     public boolean clickRelease() {
@@ -1702,7 +1702,7 @@ public class PowersAnubis extends NewDashPreset {
                     this.setAttackTimeMax(this.getAttackTimeMax()+5);
                 }
 
-                float pow = getHeavyPunchStrength(e);
+                float pow = getHeavyPunchStrength(e)*1.5F;
                 if (StandDamageEntityAttack(e, pow, 0, this.self)) {
                     if (e instanceof LivingEntity) {
                         addEXP(1);
