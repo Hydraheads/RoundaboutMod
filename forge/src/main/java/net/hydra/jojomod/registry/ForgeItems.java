@@ -634,6 +634,8 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisage5(null)));
     public static final RegistryObject<Item> AESTHETICIAN_MASK_ZOMBIE = ITEMS.register("aesthetician_mask_zombie",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisageZombie(null)));
+    public static final RegistryObject<Item> RAT_MASK = addToTab(ITEMS.register("rat_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new NonCharacterVisage(null))));
    /* public static final RegistryObject<Item> INTERDIMENSIONAL_KEY = ITEMS.register("interdimensional_key",
             () -> new InterdimensionalKeyItem(new Item.Properties().stacksTo(1))); */
 

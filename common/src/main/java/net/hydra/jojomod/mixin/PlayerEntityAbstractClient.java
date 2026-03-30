@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
+import net.hydra.jojomod.item.ModItems;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.BlockPos;
@@ -128,6 +129,8 @@ public abstract class PlayerEntityAbstractClient extends Player implements IPlay
 
                         }
                         return;
+                    } else if (visage.is(ModItems.RAT_MASK)){
+                        cir.setReturnValue(new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/rat/rat_skin.png"));
                     }
                 }
             }

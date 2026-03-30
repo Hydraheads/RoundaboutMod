@@ -364,6 +364,7 @@ public class ForgeEvents {
         ModItems.NEW_LOCACACA = ForgeItems.NEW_LOCACACA.get();
         ModItems.LUCKY_LIPSTICK = ForgeItems.LUCKY_LIPSTICK.get();
         ModItems.BLANK_MASK = ForgeItems.BLANK_MASK.get();
+        ModItems.RAT_MASK = ForgeItems.RAT_MASK.get();
         ModItems.MODIFICATION_MASK = ForgeItems.MODIFICATION_MASK.get();
         ModItems.SPEEDWAGON_MASK = ForgeItems.SPEEDWAGON_MASK.get();
         ModItems.SPEEDWAGON_FOUNDATION_MASK = ForgeItems.SPEEDWAGON_FOUNDATION_MASK.get();

@@ -111,6 +111,7 @@ public class ModItems {
     public static Item MUSIC_DISC_HALLELUJAH;
     public static Item LUCKY_LIPSTICK;
     public static Item BLANK_MASK;
+    public static Item RAT_MASK;
     public static Item MODIFICATION_MASK;
     public static Item JOTARO_MASK;
     public static Item JOTARO_4_MASK;

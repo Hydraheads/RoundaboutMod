@@ -208,6 +208,8 @@
   "item.roundabout.aya_mask": "Aya Visage",
   "item.roundabout.aya_mask.desc": "Aya Tsuji",
   "item.roundabout.aya_mask.tag": "Aya",
+  "item.roundabout.rat_mask": "Rat Costume",
+  "item.roundabout.rat_mask.desc": "It was Gwess' Idea...",
   "item.roundabout.speedwagon_foundation_mask": "Speedwagon Foundation Visage",
   "item.roundabout.speedwagon_foundation_mask.desc": "Employee",
   "item.roundabout.speedwagon_foundation_mask.tag": "SPW Worker",
@@ -496,6 +498,7 @@
   "key.roundabout.pose": "Strike Pose",
   "key.roundabout.hide_icons": "Hide Ability Icons",
   "key.roundabout.fire_firearms": "Fire Held Gun",
+  "key.roundabout.power_switch": "Switch Powers",
 
   "roundabout:item.roundabout.smithing_template.execution_upgrade.applies_to": "Iron Axe",
   "roundabout:item.roundabout.smithing_template.execution_upgrade.base_slot_description": "Add to iron axe",

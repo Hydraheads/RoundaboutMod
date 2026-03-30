@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.client.models.layers.*;
@@ -967,6 +968,14 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                         }
                     }
                     return;
+                } else if (visage.is(ModItems.RAT_MASK)){
+                    if (((IPlayerModel) this.model).roundabout$getSlim()){
+                        if (originalArms){
+                            model = roundabout$otherModel;
+                        } else {
+                            model = roundabout$mainModel;
+                        }
+                    }
                 }
             }
         }
