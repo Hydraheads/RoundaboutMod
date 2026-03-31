@@ -1,12 +1,16 @@
 package net.hydra.jojomod.entity.npcs;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.stand.RattEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.StandUsingNPC;
 import net.hydra.jojomod.entity.visages.mobs.AyaNPC;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersCinderella;
 import net.hydra.jojomod.item.ModItems;
@@ -15,23 +19,30 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.AABB;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Aesthetician extends StandUsingNPC {
@@ -163,9 +174,52 @@ public class Aesthetician extends StandUsingNPC {
             if (getSkinNumber() < 0){
                 rollTheSkin();
             }
+
+            if (!spentRat) {
+                if (tickCount % 35 == 0) {
+                    List<? extends Entity> le = DamageHandler.genHitbox(this, this.getX(), this.getY(),
+                            this.getZ(), 8, 8, 8);
+                    if (le != null && !le.isEmpty()) {
+                        Entity ent = le.get(0);
+                            for (Entity value : le) {
+                                if (value instanceof RattEntity RE) {
+                                    if (!spentRat) {
+                                        ((ServerLevel) level()).sendParticles(ParticleTypes.HAPPY_VILLAGER,
+                                                getEyePosition().x, getEyePosition().y, getEyePosition().z,
+                                                10, 0.2, 0.2, 0.2, 0.05);
+                                        level().playSound(null, blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1.5F, (float) (0.98 + (Math.random() * 0.04)));
+                                        swing(InteractionHand.MAIN_HAND);
+                                        ItemEntity itemEntity = new ItemEntity(level(), ent.getEyePosition().x,
+                                                ent.getEyePosition().y, ent.getEyePosition().z,
+                                                ModItems.RAT_MASK.getDefaultInstance().copy());
+                                        itemEntity.setPickUpDelay(0);
+                                        itemEntity.setThrower(this.getUUID());
+                                        this.level().addFreshEntity(itemEntity);
+                                        spentRat = true;
+                                        break;
+                                    }
+                                }
+                            }
+                    }
+                }
+            }
         }
     }
+    private final TargetingConditions ratTarg = TargetingConditions.forCombat().range(15.0).ignoreInvisibilityTesting();
 
+    public boolean spentRat = false;
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag $$0){
+        super.addAdditionalSaveData($$0);
+        $$0.putBoolean("spentRat",spentRat);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag $$0){
+        super.readAdditionalSaveData($$0);
+        spentRat = $$0.getBoolean("spentRat");
+    }
 
     @Override
     public boolean isUsingBrain(){

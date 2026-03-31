@@ -259,6 +259,10 @@ public class ClientForgeEvents {
         ModStrayModels.AvdolHairPart = new AvdolHairPart();
         ModStrayModels.JosukeDecalsPart = new JosukeDecalsPart();
         ModStrayModels.TasselHatPart = new TasselHatPart();
+        ModStrayModels.ratTailPart = new RatTailPart();
+        ModStrayModels.ratHatPart = new RatHatPart();
+        ModStrayModels.ratLeftLegPart = new RatLeftLegPart();
+        ModStrayModels.ratRightLegPart = new RatRightLegPart();
         ModStrayModels.LegCloakPart = new LegCloakPart();
         ModStrayModels.barrageArmsPart = new BarrageArmsPart();
         ModStrayModels.PlayerChestPart = new PlayerChestPart();
@@ -267,6 +271,7 @@ public class ClientForgeEvents {
         ModStrayModels.RightArmSlim = new RightArmSlimPart();
         ModStrayModels.LeftArm = new LeftArmPart();
         ModStrayModels.LeftArmSlim = new LeftArmSlimPart();
+        ModStrayModels.Head = new HeadPart();
         ModStrayModels.RightLeg = new RightLegPart();
         ModStrayModels.LeftLeg = new LeftLegPart();
         ModStrayModels.LeftHeel = new LeftHeelPart();

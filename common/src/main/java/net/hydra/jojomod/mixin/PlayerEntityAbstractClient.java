@@ -11,15 +11,20 @@ import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
+import net.hydra.jojomod.item.ModItems;
 import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -28,6 +33,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(AbstractClientPlayer.class)
 public abstract class PlayerEntityAbstractClient extends Player implements IPlayerEntityAbstractClient {
 
+
+    @Shadow
+    public abstract ResourceLocation getSkinTextureLocation();
+
+    @Shadow
+    protected abstract @Nullable PlayerInfo getPlayerInfo();
 
     public boolean roundabout$switched = false;
 
@@ -128,6 +139,8 @@ public abstract class PlayerEntityAbstractClient extends Player implements IPlay
 
                         }
                         return;
+                    } else if (visage.is(ModItems.RAT_MASK) && !isSpectator()){
+                        cir.setReturnValue(new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/rat/rat_skin.png"));
                     }
                 }
             }
@@ -143,8 +156,50 @@ public abstract class PlayerEntityAbstractClient extends Player implements IPlay
         }
     }
 
+    @Unique
+    @Override
+    public ResourceLocation roundabout$getTextureLocation2() {
+        IPlayerEntity ple = ((IPlayerEntity) this);
+        byte shape = ple.roundabout$getShapeShift();
+        ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
+        if (shift == ShapeShifts.OVA) {
+            return StandIcons.OVA_ENYA_SKIN;
+        } else if (shift == ShapeShifts.EERIE){
+            return StandIcons.EERIE_SKIN;
+        } else {
+            ItemStack visage = ple.roundabout$getMaskSlot();
+            if (visage != null && !visage.isEmpty()) {
+                if (visage.getItem() instanceof MaskItem MI) {
+                    if (MI.visageData.isCharacterVisage()) {
+                        if (FateTypes.isUndisguisedZombie(this)) {
+                            // 37 67 -34
+                            return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/zombie_skins/" + MI.visageData.getSkinPath() + ".png"));
+                        } else {
+                            return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/" + MI.visageData.getSkinPath() + ".png"));
+
+                        }
+                    }
+                }
+            }
+
+            if (FateTypes.isUndisguisedZombie(this)) {
+                PlayerModel pm = ClientUtil.getPlayerModel(this);
+                if (pm != null && (((IPlayerModel)pm).roundabout$getSlim())){
+                    return (StandIcons.ZOMBIE_SKIN_SLIM);
+                } else {
+                    return (StandIcons.ZOMBIE_SKIN);
+                }
+            }
+        }
+
+        return rdbt$getSkinTextureLocation3();
+    }
 
 
+    public ResourceLocation rdbt$getSkinTextureLocation3() {
+        PlayerInfo $$0 = this.getPlayerInfo();
+        return $$0 == null ? DefaultPlayerSkin.getDefaultSkin(this.getUUID()) : $$0.getSkinLocation();
+    }
 
     public PlayerEntityAbstractClient(Level $$0, BlockPos $$1, float $$2, GameProfile $$3) {
         super($$0, $$1, $$2, $$3);

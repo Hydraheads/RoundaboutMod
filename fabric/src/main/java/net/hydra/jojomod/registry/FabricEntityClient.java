@@ -256,6 +256,10 @@ public class FabricEntityClient {
         ModStrayModels.AvdolHairPart = new AvdolHairPart();
         ModStrayModels.JosukeDecalsPart = new JosukeDecalsPart();
         ModStrayModels.TasselHatPart = new TasselHatPart();
+        ModStrayModels.ratTailPart = new RatTailPart();
+        ModStrayModels.ratLeftLegPart = new RatLeftLegPart();
+        ModStrayModels.ratRightLegPart = new RatRightLegPart();
+        ModStrayModels.ratHatPart = new RatHatPart();
         ModStrayModels.LegCloakPart = new LegCloakPart();
         ModStrayModels.PlayerChestPart = new PlayerChestPart();
         ModStrayModels.barrageArmsPart = new BarrageArmsPart();
@@ -264,6 +268,7 @@ public class FabricEntityClient {
         ModStrayModels.RightArm = new RightArmPart();
         ModStrayModels.LeftArmSlim = new LeftArmSlimPart();
         ModStrayModels.LeftArm = new LeftArmPart();
+        ModStrayModels.Head = new HeadPart();
         ModStrayModels.RightLeg = new RightLegPart();
         ModStrayModels.LeftLeg = new LeftLegPart();
         ModStrayModels.RightHeel = new RightHeelPart();
