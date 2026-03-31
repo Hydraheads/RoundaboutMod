@@ -76,7 +76,7 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
         if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
             List<AnubisMemory> memories = PA.memories;
             boolean bypass = pl.isCreative() || (!SU.roundabout$getStandDisc().isEmpty() && SU.roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem);
-            final int count = bypass ? 8 : ((IPlayerEntity)pl).roundabout$getStandLevel();
+            final int count = bypass ? 8 : ((IPlayerEntity)pl).roundabout$getStandLevel()+1;
             for (int i = 0; i < count; ++i) {
                 AnubisMemory memory = memories.get(i);
                 if (memory != null) {

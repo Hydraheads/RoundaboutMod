@@ -271,6 +271,7 @@ public class ClientForgeEvents {
         ModStrayModels.RightArmSlim = new RightArmSlimPart();
         ModStrayModels.LeftArm = new LeftArmPart();
         ModStrayModels.LeftArmSlim = new LeftArmSlimPart();
+        ModStrayModels.Head = new HeadPart();
         ModStrayModels.RightLeg = new RightLegPart();
         ModStrayModels.LeftLeg = new LeftLegPart();
         ModStrayModels.LeftHeel = new LeftHeelPart();
