@@ -90,19 +90,19 @@ public class PowersGreenDay extends NewPunchingStand {
             "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_PUNCH_RIGHT,1,level,bypas));
         // charge fire
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39, topPos+118,0, "ability.roundabout.gd_return_left",
-                "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_ARM_RETURN_RIGHT,0,level,bypas));
+                "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_ARM_RETURN_RIGHT,1,level,bypas));
         // burst fire
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.gd_spin_left",
-                "instruction.roundabout.press_skill_block", StandIcons.GREEN_DAY_MOLD_SPIN_RIGHT,2,level,bypas));
+                "instruction.roundabout.press_skill_block", StandIcons.GREEN_DAY_MOLD_SPIN_RIGHT,1,level,bypas));
         // place ratt
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.gd_punch_right",
                 "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_PUNCH_LEFT,2,level,bypas));
         // place burst
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.gd_return_right",
-                "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_ARM_RETURN_LEFT,1,level,bypas));
+                "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_ARM_RETURN_LEFT,2,level,bypas));
         // place auto
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.gd_spin_right",
-                "instruction.roundabout.press_skill_block", StandIcons.GREEN_DAY_MOLD_SPIN_LEFT,1,level,bypas));
+                "instruction.roundabout.press_skill_block", StandIcons.GREEN_DAY_MOLD_SPIN_LEFT,2,level,bypas));
         // dodge
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
@@ -835,7 +835,8 @@ public class PowersGreenDay extends NewPunchingStand {
             PART_FIVE_GREEN_DAY = 1,
             RED_DAY = 2,
             TEAL_DAY = 3,
-            BROCCOLLI = 4;
+            BROCCOLLI = 4,
+            RED_NIGHT = 5;
 
 
     @Override
@@ -843,8 +844,9 @@ public class PowersGreenDay extends NewPunchingStand {
         return Arrays.asList(
                 PART_FIVE_GREEN_DAY,
                 RED_DAY,
-                TEAL_DAY
+                TEAL_DAY,
                 //BROCCOLLI
+                RED_NIGHT
 
         );
     }
@@ -864,6 +866,8 @@ public class PowersGreenDay extends NewPunchingStand {
         }
         else if (skinId == GreenDayEntity.BROCOLLI) {
             return Component.translatable("skins.roundabout.green_day.broccoli");
+        } else if (skinId == GreenDayEntity.RED_NIGHT) {
+            return Component.translatable("skins.roundabout.green_day.red_night");
         }
         return Component.translatable(  "skins.roundabout.green_day.part_five_green_day");
     }

@@ -65,7 +65,7 @@ public class StandHeldItemLayer <T extends StandEntity, M extends StandModel<T>>
                 shiftZ = -1F;
             }
             this.getParentModel().translateToHand(humanoidArm, poseStack, shiftZ, shiftY, shiftX);
-            if (MainUtil.isThrownBlockItem((itemStack.getItem()))) {
+            if (!(livingEntity instanceof SeperatedArmEntity) && MainUtil.isThrownBlockItem((itemStack.getItem()))) {
                 poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F));
             } else {
                 poseStack.mulPose(Axis.XP.rotationDegrees(-65.0F));

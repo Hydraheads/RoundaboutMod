@@ -370,8 +370,10 @@
   "entity.roundabout.go_beyond": "Go Beyond",
   "entity.roundabout.ground_bubble": "Underground Bubble",
   "entity.roundabout.separated_legs": "Separated legs",
-  "entity.roundabout.separated_arm": "Seperated Arm",
-  "entity.roundabout.separated_arm_slim": "Seperated Arm Slim",
+  "entity.roundabout.seperated_arm": "Seperated Arm",
+  "entity.roundabout.seperated_arm_slim": "Seperated Arm Slim",
+  "entity.roundabout.left_seperated_arm": "Left Seperated Arm",
+  "entity.roundabout.left_sepaeated_arm_slim": "Left Aeperated Arm Slim",
 
 
   "entity.roundabout.water_bottle": "Water Bottle",
@@ -1522,7 +1524,9 @@
   "ability.roundabout.gd_punch_left": "Main Arm Launch",
   "ability.roundabout.gd_punch_left.desc": "Separate your main hand from your body, throwing it out to attack or mine with the item in your main hand! Use again to control its movement",
   "ability.roundabout.gd_return_left": "Main Arm Reattach",
+  "ability.roundabout.gd_return_left.desc": "Return your detatched Main hand",
   "ability.roundabout.gd_spin_left": "Main Arm Spin",
+  "ability.roundabout.gd_spin_left.desc": "Causes your seperated main arm to spin in place, repeatedly attacking nearby entities. If the arm is in the air, knocks anything it hits upwards.",
   "ability.roundabout.gd_punch_right": "Off Hand Launch",
   "ability.roundabout.gd_return_right": "Off Hand Reattach",
   "ability.roundabout.gd_spin_right": "Off Hand Spin",
@@ -1893,8 +1897,7 @@
   "skins.roundabout.green_day.red_day": "Red Day",
   "skins.roundabout.green_day.teal_day": "Teal Day",
   "skins.roundabout.green_day.broccoli": "Broccoli",
-
-
+  "skins.roundabout.green_day.red_night": "Red Night",
 
 
   "skins.roundabout.achtung_baby.base": "Has No Form",
