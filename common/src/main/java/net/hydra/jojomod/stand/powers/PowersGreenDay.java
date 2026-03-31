@@ -249,6 +249,8 @@ public class PowersGreenDay extends NewPunchingStand {
     @Override
     public void tickPower() {
 
+
+
         moldShenanigans();
         if(legGoneTicks>0) {
             if (!this.self.level().isClientSide()) {
@@ -406,6 +408,7 @@ public class PowersGreenDay extends NewPunchingStand {
                         tryPowerPacket(PowerIndex.POWER_1);
                     } else {
                         tryPowerPacket(MAIN_ARM_THROW_SLIM);
+                       // tryPowerPacket(PowerIndex.POWER_1);
                     }
 
                 }
@@ -820,11 +823,11 @@ public class PowersGreenDay extends NewPunchingStand {
     }
     @Override
     public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
+        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.GOLD);
     }
     @Override
     public Component ifWipListDev(){
-        return Component.literal(  "Fish").withStyle(ChatFormatting.YELLOW);
+        return Component.literal(  "Fish").withStyle(ChatFormatting.GREEN);
     }
 
 

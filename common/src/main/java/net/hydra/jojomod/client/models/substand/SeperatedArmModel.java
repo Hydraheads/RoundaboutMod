@@ -25,6 +25,8 @@ public class SeperatedArmModel<T extends SeperatedArmEntity> extends StandModel<
 
 	public SeperatedArmModel(ModelPart root) {
 		this.stand = root.getChild("stand");
+		this.rightHand = stand.getChild("rightHand");
+		this.leftHand = stand.getChild("leftHand");
 		this.LeftArm = this.stand.getChild("LeftArm");
 	}
 
@@ -43,6 +45,8 @@ public class SeperatedArmModel<T extends SeperatedArmEntity> extends StandModel<
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
 		PartDefinition Stand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create(), PartPose.offset(0.0F, 12.0F, 0.0F));
+		PartDefinition RightHand = Stand.addOrReplaceChild("rightHand", CubeListBuilder.create(), PartPose.offsetAndRotation(2.0F, 0.0F, -6.0F,00.0F,0.0F,0.0F));
+		PartDefinition LeftHand = Stand.addOrReplaceChild("leftHand", CubeListBuilder.create(), PartPose.offsetAndRotation(2.0F, 0.0F, -6.0F,00.0F,0.0F,0.0F));
 
 		PartDefinition LeftArm = Stand.addOrReplaceChild("LeftArm", CubeListBuilder.create().texOffs(16, 48).addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
 				.texOffs(40, 16).addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.25F)), PartPose.offsetAndRotation(-1.0F, 10.0F, 1.0F, -1.5708F, 0.0F, 0.0F));
@@ -56,6 +60,7 @@ public class SeperatedArmModel<T extends SeperatedArmEntity> extends StandModel<
 	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
 		super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
 		defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
+		//defaultModifiers(pEntity);
 		this.animate(pEntity.floating, SeperatedLegsAnimations.LEGS_IDLE, pAgeInTicks, 1.5f);
 	}
 
