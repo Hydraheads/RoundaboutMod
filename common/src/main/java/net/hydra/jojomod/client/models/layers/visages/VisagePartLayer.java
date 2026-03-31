@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPlayerEntityAbstractClient;
 import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
@@ -205,6 +206,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                     r, g, b);
                             renderRatRightLeg(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
+                            if (user instanceof AbstractClientPlayer PE) {
+                                renderHead(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
+                                        r, g, b, ((IPlayerEntityAbstractClient)PE).roundabout$getTextureLocation2(), -0.01F, 0, 0, 1f);
+                            }
                         }
                         if (vd.rendersTasselHat() && !isBodyFrozen && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
                             renderTasselHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
@@ -417,6 +422,16 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
             ClientUtil.pushPoseAndCooperate(poseStack,30);
             getParentModel().leftArm.translateAndRotate(poseStack);
             ModStrayModels.LeftArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                    r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
+            ClientUtil.popPoseAndCooperate(poseStack,30);
+        }
+    }
+    public void renderHead(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                              float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
+        if (getParentModel().head.visible) {
+            ClientUtil.pushPoseAndCooperate(poseStack,30);
+            getParentModel().head.translateAndRotate(poseStack);
+            ModStrayModels.Head.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                     r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
             ClientUtil.popPoseAndCooperate(poseStack,30);
         }
