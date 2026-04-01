@@ -319,6 +319,10 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                     playerModel.rightArm.visible=false;
                     playerModel.rightSleeve.visible=false;
                 }
+                if(!PGD.HasOffHand){
+                    playerModel.leftArm.visible=false;
+                    playerModel.leftSleeve.visible=false;
+                }
             }
 
 

@@ -71,6 +71,7 @@ public class ModStrayModels {
 
     public static MoldSpineModel MoldSpine;
     public static MoldRightArm MoldRightArm;
+    public static MoldLeftArm MoldLeftArm;
 
     public static RoadRollerStrayModel ROAD_ROLLER;
 

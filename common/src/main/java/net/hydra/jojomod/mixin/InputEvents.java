@@ -654,6 +654,13 @@ public abstract class InputEvents implements IInputEvents {
                 }
             }
 
+            if(powers instanceof PowersGreenDay PGD) {
+                if ((!PGD.HasOffHand) && (!(standComp.roundabout$hasStandOut()) || powers.canCombatModeUse(player.getMainHandItem()))) {
+                    ci.cancel();
+                    return;
+                }
+            }
+
             if (powers.interceptAllInteractions()) {
                 roundabout$TryGuard();
                 ci.cancel();

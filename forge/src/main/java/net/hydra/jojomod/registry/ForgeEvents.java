@@ -20,10 +20,7 @@ import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.CreamEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
-import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
-import net.hydra.jojomod.entity.substand.SeperatedArmSlimEntity;
-import net.hydra.jojomod.entity.substand.SeperatedLegsEntity;
+import net.hydra.jojomod.entity.substand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -120,6 +117,8 @@ public class ForgeEvents {
         event.put(ForgeEntities.SEPERATED_LEGS.get(), SeperatedLegsEntity.createStandAttributes().build());
         event.put(ForgeEntities.SEPERATED_ARM.get(), SeperatedArmEntity.createStandAttributes().build());
         event.put(ForgeEntities.SEPERATED_ARM_SLIM.get(), SeperatedArmSlimEntity.createStandAttributes().build());
+        event.put(ForgeEntities.LEFT_SEPERATED_ARM.get(), LeftSeperatedArmEntity.createStandAttributes().build());
+        event.put(ForgeEntities.LEFT_SEPERATED_ARM_SLIM.get(), LeftSeperatedArmSlimEntity.createStandAttributes().build());
 ;    }
 
     @SubscribeEvent
@@ -564,6 +563,8 @@ public class ForgeEvents {
         ModEntities.SEPERATED_LEGS = ForgeEntities.SEPERATED_LEGS.get();
         ModEntities.SEPERATED_ARM = ForgeEntities.SEPERATED_ARM.get();
         ModEntities.SEPERATED_ARM_SLIM = ForgeEntities.SEPERATED_ARM_SLIM.get();
+        ModEntities.LEFT_SEPERATED_ARM = ForgeEntities.LEFT_SEPERATED_ARM.get();
+        ModEntities.LEFT_SEPERATED_ARM_SLIM = ForgeEntities.LEFT_SEPERATED_ARM_SLIM.get();
 
         ModEntities.THROWN_OBJECT = ForgeEntities.THROWN_OBJECT.get();
         ModEntities.THROWN_ANUBIS = ForgeEntities.THROWN_ANUBIS.get();
