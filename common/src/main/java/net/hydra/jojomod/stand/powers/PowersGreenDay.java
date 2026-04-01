@@ -39,6 +39,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.AirItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -435,11 +438,10 @@ public class PowersGreenDay extends NewPunchingStand {
 
     public boolean OffHandReturnServer() {
         ItemEntity $$2 = new ItemEntity(this.self.level(), this.self.getX(), this.self.getY() + 1, this.self.getZ(),Off_hand_entity.getMainHandItem());
-        $$2.setDefaultPickUpDelay();
         //this.self.level().addFreshEntity($$2);
         Player player = (Player)this.self;
-        player.getInventory().add(Off_hand_entity.getMainHandItem());
-        //this.self.spawnAtLocation(Main_arm.getMainHandItem());
+        this.self.spawnAtLocation(Off_hand_entity.getMainHandItem());
+
         Off_hand_entity.setUser(null);
         Off_hand_entity.discard();
         Off_hand_entity = null;
@@ -581,7 +583,7 @@ public class PowersGreenDay extends NewPunchingStand {
         $$2.setDefaultPickUpDelay();
         //this.self.level().addFreshEntity($$2);
         Player player = (Player)this.self;
-        player.getInventory().add(Main_arm.getMainHandItem());
+        this.self.spawnAtLocation(Main_arm.getMainHandItem());
         //this.self.spawnAtLocation(Main_arm.getMainHandItem());
         Main_arm.setUser(null);
         Main_arm.discard();
