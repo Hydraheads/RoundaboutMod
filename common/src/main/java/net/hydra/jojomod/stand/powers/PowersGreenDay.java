@@ -190,7 +190,7 @@ public class PowersGreenDay extends NewPunchingStand {
             }
 
             case SKILL_2_GUARD -> {
-                MainArmSpin();
+                OffHandSpin();
             }
             case SKILL_3_NORMAL -> {
                 Roundabout.LOGGER.info("dash");
@@ -245,7 +245,7 @@ public class PowersGreenDay extends NewPunchingStand {
             }
 
             case PowerIndex.POWER_2_BLOCK -> {
-                return MainArmSpinServer();
+                return OffHandSpinServer();
             }
 
             case OFF_HAND_THROW_SLIM -> {
@@ -456,6 +456,27 @@ public class PowersGreenDay extends NewPunchingStand {
         }
         return true;
     }
+
+    public void OffHandSpin(){
+        if(!this.onCooldown(PowerIndex.SKILL_2)) {
+            if(HasOffHand){
+                OffHandThrow();
+            }
+            tryPowerPacket(PowerIndex.POWER_2_BLOCK);
+            setCooldown(PowerIndex.SKILL_2, 250);
+        }
+
+
+    }
+
+    public boolean OffHandSpinServer(){
+
+        Off_hand_entity.setSpinTicks(30);
+        Off_hand_entity.flyingTicks = 0;
+        return true;
+    }
+
+
 
     /**
      * Main Arm Stuff
