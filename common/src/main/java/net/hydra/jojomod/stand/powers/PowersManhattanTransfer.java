@@ -14,6 +14,7 @@ import net.hydra.jojomod.entity.corpses.FallenCreeper;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
+import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
@@ -244,6 +245,8 @@ public class PowersManhattanTransfer extends NewDashPreset {
         return this.getStandEntity(this.getSelf()) != null;
     }
 
+    StandUser User = getUserData(this.self);
+
     @Override
     public void tickPower() {
         super.tickPower();
@@ -375,7 +378,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
             if (ent != null) {
                 Entity TE = MainUtil.getTargetEntity(ent, 100, 10);
-                if (TE != null /*&& TE != this.getSelf()*/ && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible()) {
+                if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible()) {
                     {
                         if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
                             entity.setDeltaMovement(entity.getForward());
@@ -408,11 +411,11 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
     @Override
     public int getDisplayPowerInventoryScale() {
-        return 30;
+        return 45;
     }
     @Override
     public int getDisplayPowerInventoryYOffset() {
-        return 18;
+        return 22;
     }
     @Override
     public Component getSkinName(byte skinId) {

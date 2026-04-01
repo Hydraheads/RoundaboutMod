@@ -1,70 +1,43 @@
 package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IGravityEntity;
-import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.entity.visages.CloneEntity;
-import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.OffsetIndex;
-import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
-import net.hydra.jojomod.util.config.ConfigManager;
-import net.hydra.jojomod.util.gravity.RotationUtil;
-import net.minecraft.client.Options;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ThrownPotion;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.EnderpearlItem;
-import net.minecraft.world.item.LingeringPotionItem;
-import net.minecraft.world.item.SplashPotionItem;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.damagesource.DamageSource;
-import net.hydra.jojomod.entity.stand.FollowingStandEntity;
-import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
-import net.hydra.jojomod.stand.powers.PowersRatt;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.*;
+import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
-import net.minecraft.world.entity.PathfinderMob;
-import org.joml.Vector3f;
 
-import java.util.Arrays;
-import java.util.List;
-
-
-import static net.hydra.jojomod.entity.stand.FollowingStandEntity.MOVE_FORWARD;
-import static net.hydra.jojomod.entity.stand.FollowingStandEntity.OFFSET_TYPE;
-import static net.hydra.jojomod.stand.powers.PowersManhattanTransfer.STAND_BLOCKED;
+import java.util.UUID;
 
 public class ManhattanTransferEntity extends StandEntity {
     public ManhattanTransferEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
     }
-
 
     public static final byte
             ANIME_SKIN = 1,
@@ -127,9 +100,6 @@ public class ManhattanTransferEntity extends StandEntity {
         setDeltaMovement(getForward().scale(0.3));
 
     }
-
-    public int SpinTicks = 0;
-    public void setSpinTicks(int val){SpinTicks = val;};
 
     @Override
     public boolean isNoGravity() {
@@ -248,23 +218,17 @@ public class ManhattanTransferEntity extends StandEntity {
 
         super.die($$0);
     }
-
     @Override
     protected void tickDeath() {
         super.die(this.damageSources().generic());
         super.tickDeath();
     }
 
-    protected static final EntityDataAccessor<Float> IDLE_ROTATION = SynchedEntityData.defineId(FollowingStandEntity.class,
-            EntityDataSerializers.FLOAT);
-
-    public final void setIdleRotation(float blocks) {
-        this.entityData.set(IDLE_ROTATION, blocks);
+    public StandUser getUserData(LivingEntity User) {
+          return ((StandUser) User);
     }
 
-    public final float getIdleRotation() {
-        return this.entityData.get(IDLE_ROTATION);
-    }
+    public boolean isPilotingEntity;
 
     @Override
     public void tick() {
@@ -273,6 +237,25 @@ public class ManhattanTransferEntity extends StandEntity {
         float yaw = this.getYRot();
         super.tick();
 
+        if (horizontalCollision || verticalCollision) {
+                this.getUserData(this.getUser()).roundabout$getStandPowers();
+                if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+
+                    if (!PM.isPiloting()) {
+                        this.setXRot(pitch + 25);
+
+                        this.setYBodyRot(pitch + 25);
+
+                        this.setYRot(yaw);
+                        if (yaw > -90 && yaw <= 0) {
+                            this.setYRot(yaw - 25);
+                        }
+                        if (yaw <= 90 && yaw > 0) {
+                            this.setYRot(yaw + 25);
+                        }
+                    }
+                }
+        }
         if (!this.level().isClientSide()) {
             if (!forceVisible) {
                 this.setXRot(pitch);
@@ -297,6 +280,5 @@ public class ManhattanTransferEntity extends StandEntity {
         BlockPos pos = blockHit.getBlockPos();
         this.navigation.moveTo(pos.getX(), pos.getY(), pos.getZ(), 0);
     }
-
 
 }
