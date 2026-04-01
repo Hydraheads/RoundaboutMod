@@ -181,6 +181,17 @@ public class PowersGreenDay extends NewPunchingStand {
             case SKILL_1_GUARD -> {
                 MainArmSpin();
             }
+            case SKILL_2_NORMAL -> {
+                OffHandThrow();
+            }
+
+            case SKILL_2_CROUCH -> {
+                OffHandReturn();
+            }
+
+            case SKILL_2_GUARD -> {
+                MainArmSpin();
+            }
             case SKILL_3_NORMAL -> {
                 Roundabout.LOGGER.info("dash");
                 dash();
@@ -206,6 +217,7 @@ public class PowersGreenDay extends NewPunchingStand {
     }
     public boolean IsMoldFieldActive = false;
     public static final byte MAIN_ARM_THROW_SLIM = 52;
+    public static final byte OFF_HAND_THROW_SLIM = 53;
 
     @Override
     public boolean setPowerOther(int move, int lastMove) {
@@ -223,6 +235,21 @@ public class PowersGreenDay extends NewPunchingStand {
             }
             case PowerIndex.POWER_3_EXTRA -> {
                 return moldLeapServer();
+            }
+            case PowerIndex.POWER_2 -> {
+                return OffHandThrowServer(ModEntities.SEPERATED_ARM.create(this.self.level()));
+            }
+
+            case PowerIndex.POWER_2_SNEAK -> {
+                return OffHandReturnServer();
+            }
+
+            case PowerIndex.POWER_2_BLOCK -> {
+                return MainArmSpinServer();
+            }
+
+            case OFF_HAND_THROW_SLIM -> {
+                return OffHandThrowServer(ModEntities.SEPERATED_ARM_SLIM.create(this.self.level()));
             }
             case PowerIndex.POWER_1 -> {
                 return MainArmThrowServer(ModEntities.SEPERATED_ARM.create(this.self.level()));
@@ -326,13 +353,115 @@ public class PowersGreenDay extends NewPunchingStand {
         super.updatePowerInt(activePower,data);
     }
 
-    public SeperatedArmEntity Main_arm = null;
+    /**
+     * Off Hand stuff
+     */
 
-    public boolean slimSkin = false;
-    public boolean toggleSlimSkin(){
-        slimSkin = true;
+
+    public SeperatedArmEntity Off_hand_entity = null;
+    public boolean HasOffHandCharge = true;
+    public boolean HasOffHand = true;
+
+    public boolean OffHandThrowServer(SeperatedArmEntity SAE){
+        if (Off_hand_entity == null) {
+            if (SAE != null) {
+                Off_hand_entity = SAE;
+                SAE.setUser(this.self);
+                SAE.setXRot(this.self.getXRot());
+                SAE.setYRot(this.self.getYRot());
+                SAE.setPos(getRayBlock(this.self,0.5f).add(0,-0.3,0));
+                SAE.setItemInHand(InteractionHand.MAIN_HAND,this.self.getItemInHand(InteractionHand.OFF_HAND).copy());
+                this.self.level().addFreshEntity(SAE);
+                SAE.jump(this.getRayBlock(this.self,20F));
+                Off_hand_entity= SAE;
+            }
+            this.self.getOffhandItem().setCount(0);
+            Vec3 location = getRayBlock(this.self, 1f);
+
+            // ((ServerLevel) this.self.level()).sendParticles(ModParticles.MOLD_DUST, location.x,
+            //       location.y, location.z,
+            //     24,
+            //   0.005, 0.005, 0.005,
+            // 0.1);
+        }else{
+            Double distance = MainUtil.cheapDistanceTo(
+                    this.self.getX(),
+                    this.self.getY(),
+                    this.self.getZ(),
+                    Off_hand_entity.getX(),
+                    Off_hand_entity.getY(),
+                    Off_hand_entity.getZ()
+            );
+            Float distanceF = distance.floatValue() + 2f;
+            Off_hand_entity.jump(this.getRayBlock(this.self,distanceF));
+        }
         return true;
     }
+
+
+    public void OffHandThrow(){
+        if (!this.onCooldown(PowerIndex.SKILL_2)) {
+            if(isBarrageAttacking()){
+                MainArmSpin();
+            }else {
+                if (HasOffHandCharge) {
+                    HasOffHandCharge = false;
+                } else {
+                    this.setCooldown(PowerIndex.SKILL_2, 120);
+                    HasOffHandCharge = true;
+                }
+                if (isClient()) {
+                    AbstractClientPlayer abstractClientPlayer = (AbstractClientPlayer) this.self;
+                    if ((abstractClientPlayer).getModelName().equals("default")) {
+                        tryPowerPacket(PowerIndex.POWER_2);
+                    } else {
+                        tryPowerPacket(OFF_HAND_THROW_SLIM);
+                        // tryPowerPacket(PowerIndex.POWER_1);
+                    }
+
+                }
+                HasOffHand = false;
+            }
+        }
+
+    }
+    public void OffHandReturn(){
+        if(!HasOffHand){
+            this.setCooldown(PowerIndex.SKILL_2, 200);
+            HasOffHand = true;
+            tryPowerPacket(PowerIndex.POWER_2_SNEAK);
+        }
+    }
+
+    public boolean OffHandReturnServer() {
+        ItemEntity $$2 = new ItemEntity(this.self.level(), this.self.getX(), this.self.getY() + 1, this.self.getZ(),Off_hand_entity.getMainHandItem());
+        $$2.setDefaultPickUpDelay();
+        //this.self.level().addFreshEntity($$2);
+        Player player = (Player)this.self;
+        player.getInventory().add(Off_hand_entity.getMainHandItem());
+        //this.self.spawnAtLocation(Main_arm.getMainHandItem());
+        Off_hand_entity.setUser(null);
+        Off_hand_entity.discard();
+        Off_hand_entity = null;
+        double Xangle = Math.toRadians(this.self.getLookAngle().x);
+        double Pitch = Math.toRadians(this.self.getLookAngle().y);
+        double Zangle = Math.toRadians(this.self.getLookAngle().z);
+        double diameter = 0.6d;
+        for (int i = 0; i < 11; i = i + 1) {
+            ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.STITCH,
+                    this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
+                    this.getSelf().getY() + (this.getSelf().getEyeHeight() * 0.7),
+                    this.getSelf().getZ() + (diameter * Math.cos(i * 4)) * Math.cos(Zangle),
+                    0, 0, 0, 0, 0);
+        }
+        return true;
+    }
+
+    /**
+     * Main Arm Stuff
+     */
+
+    public SeperatedArmEntity Main_arm = null;
 
     public void MainArmSpin(){
         if(!this.onCooldown(PowerIndex.SKILL_1)) {
@@ -449,6 +578,10 @@ public class PowersGreenDay extends NewPunchingStand {
         }
         return true;
     }
+
+    /**
+     * Ally List Stuff
+     */
 
 
 

@@ -20,11 +20,11 @@ import net.minecraft.world.entity.player.Player;
 
 import java.util.Map;
 
-public class MoldRightArmLayer<T extends LivingEntity, A extends HumanoidModel<T>> extends RenderLayer<T, A> {
+public class MoldLeftArmLayer<T extends LivingEntity, A extends HumanoidModel<T>> extends RenderLayer<T, A> {
     private static final Map<String, ResourceLocation> ARMOR_LOCATION_CACHE = Maps.newHashMap();
     private final EntityRenderDispatcher dispatcher;
 
-    public MoldRightArmLayer(EntityRendererProvider.Context context, LivingEntityRenderer<T, A> livingEntityRenderer) {
+    public MoldLeftArmLayer(EntityRendererProvider.Context context, LivingEntityRenderer<T, A> livingEntityRenderer) {
         super(livingEntityRenderer);
         this.dispatcher = context.getEntityRenderDispatcher();
     }
@@ -41,13 +41,15 @@ public class MoldRightArmLayer<T extends LivingEntity, A extends HumanoidModel<T
             boolean MoldedRightArm = false;
             boolean HasGreenDay = (user.roundabout$getStandPowers() instanceof PowersGreenDay);
             if (HasGreenDay){
-                MoldedRightArm = !((PowersGreenDay)user.roundabout$getStandPowers()).HasMainArm;
+                MoldedRightArm = !((PowersGreenDay)user.roundabout$getStandPowers()).HasOffHand;
             }
             if (!entity.isInvisible()) {
                 if (MoldedRightArm) {
+                    Roundabout.LOGGER.info("rendering");
+
                     poseStack.pushPose();
                     getParentModel().body.translateAndRotate(poseStack);
-                    ModStrayModels.MoldRightArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                    ModStrayModels.MoldLeftArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                                 10, 10, 10, 1F);
                     poseStack.popPose();
                 }

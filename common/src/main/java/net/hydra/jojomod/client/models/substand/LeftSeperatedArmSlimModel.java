@@ -7,7 +7,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.entity.substand.LeftSeperatedArmSlimEntity;
-import net.hydra.jojomod.entity.substand.SeperatedArmSlimEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.minecraft.client.model.geom.ModelLayerLocation;

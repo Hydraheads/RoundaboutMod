@@ -2114,6 +2114,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 return ItemStack.EMPTY;
             }
         }
+        if(roundabout$getStandPowers() instanceof PowersGreenDay  PGD && ES == EquipmentSlot.OFFHAND) {
+            if (!PGD.HasOffHand) {
+                return ItemStack.EMPTY;
+            }
+        }
         return getItemBySlot(ES);
     }
 
