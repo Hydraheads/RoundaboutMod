@@ -247,7 +247,7 @@ public class ManhattanTransferEntity extends StandEntity {
                         this.setYBodyRot(pitch + 25);
 
                         this.setYRot(yaw);
-                        if (yaw > -90 && yaw <= 0) {
+                        if (yaw >= -90 && yaw <= 0) {
                             this.setYRot(yaw - 25);
                         }
                         if (yaw <= 90 && yaw > 0) {
