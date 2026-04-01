@@ -36,6 +36,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -174,26 +175,26 @@ public class PowersGreenDay extends NewPunchingStand {
         switch (context)
         {
             case SKILL_1_NORMAL -> {
-                MainArmThrow();
+                attemptMainArmThrow();
             }
 
             case SKILL_1_CROUCH -> {
-                MainArmReturn();
+                attemptMainArmReturn();
             }
 
             case SKILL_1_GUARD -> {
-                MainArmSpin();
+                attemptMainArmSpin();
             }
             case SKILL_2_NORMAL -> {
-                OffHandThrow();
+                attemptOffHandThrow();
             }
 
             case SKILL_2_CROUCH -> {
-                OffHandReturn();
+                attemptOffHandReturn();
             }
 
             case SKILL_2_GUARD -> {
-                OffHandSpin();
+                attemptOffHandSpin();
             }
             case SKILL_3_NORMAL -> {
                 Roundabout.LOGGER.info("dash");
@@ -355,6 +356,44 @@ public class PowersGreenDay extends NewPunchingStand {
         }
         super.updatePowerInt(activePower,data);
     }
+    /**
+     * getting the right hand for left handed mobs = players n stuff idk look man
+     */
+
+    public void attemptMainArmThrow(){
+            MainArmThrow();
+
+
+    }
+    public void attemptMainArmReturn(){
+
+            MainArmReturn();
+
+
+    }
+    public void attemptMainArmSpin(){
+
+            MainArmSpin();
+
+
+    }
+
+    public void attemptOffHandThrow(){
+
+            OffHandThrow();
+
+    }
+    public void attemptOffHandReturn(){
+
+            OffHandReturn();
+
+    }
+    public void attemptOffHandSpin(){
+
+            OffHandSpin();
+
+    }
+
 
     /**
      * Off Hand stuff

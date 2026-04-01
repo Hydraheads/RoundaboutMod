@@ -315,13 +315,21 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                     playerModel.leftSleeve.visible = false;
                 }
 
-                if(!PGD.HasMainArm){
+                if(!PGD.HasMainArm && (PGD.self.getMainArm() ==HumanoidArm.RIGHT)){
                     playerModel.rightArm.visible=false;
                     playerModel.rightSleeve.visible=false;
                 }
-                if(!PGD.HasOffHand){
+                if(!PGD.HasOffHand && (PGD.self.getMainArm() ==HumanoidArm.RIGHT)){
                     playerModel.leftArm.visible=false;
                     playerModel.leftSleeve.visible=false;
+                }
+                if(!PGD.HasMainArm && (PGD.self.getMainArm() ==HumanoidArm.LEFT)){
+                    playerModel.leftArm.visible=false;
+                    playerModel.leftSleeve.visible=false;
+                }
+                if(!PGD.HasOffHand && (PGD.self.getMainArm() ==HumanoidArm.LEFT)){
+                    playerModel.rightArm.visible=false;
+                    playerModel.rightSleeve.visible=false;
                 }
             }
 

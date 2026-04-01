@@ -2110,12 +2110,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         if(roundabout$getStandPowers() instanceof PowersGreenDay  PGD && ES == EquipmentSlot.MAINHAND) {
-            if (!PGD.HasMainArm) {
+            if (!PGD.HasMainArm && (PGD.self.getMainArm() ==HumanoidArm.RIGHT)) {
                 return ItemStack.EMPTY;
             }
         }
         if(roundabout$getStandPowers() instanceof PowersGreenDay  PGD && ES == EquipmentSlot.OFFHAND) {
-            if (!PGD.HasOffHand) {
+            if (!PGD.HasOffHand && (PGD.self.getMainArm() == HumanoidArm.RIGHT)) {
+                return ItemStack.EMPTY;
+            }
+        }
+        if(roundabout$getStandPowers() instanceof PowersGreenDay  PGD && ES == EquipmentSlot.MAINHAND) {
+            if (!PGD.HasMainArm && (PGD.self.getMainArm() == HumanoidArm.LEFT)) {
+                return ItemStack.EMPTY;
+            }
+        }
+        if(roundabout$getStandPowers() instanceof PowersGreenDay  PGD && ES == EquipmentSlot.OFFHAND   ) {
+            if (!PGD.HasOffHand && (PGD.self.getMainArm() ==HumanoidArm.LEFT)) {
                 return ItemStack.EMPTY;
             }
         }
