@@ -31,7 +31,6 @@ import net.minecraft.world.entity.*;
 import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-
 import java.util.UUID;
 
 public class ManhattanTransferEntity extends StandEntity {
@@ -69,114 +68,67 @@ public class ManhattanTransferEntity extends StandEntity {
         this.entityData.set(TARGET_ID, standSetId);
     }
 
-    public float lockedYRot = 0;
-
-    public void setSavedSkin(byte skin) {
-        this.entityData.set(SAVED_SKIN, skin);
-    }
-
-    public byte getSavedSkin() {
-        return this.entityData.get(SAVED_SKIN);
-    }
-
     protected static final EntityDataAccessor<Integer> TARGET_ID = SynchedEntityData.defineId(ManhattanTransferEntity.class,
             EntityDataSerializers.INT);
-    protected static final EntityDataAccessor<Byte> SAVED_SKIN = SynchedEntityData.defineId(ManhattanTransferEntity.class,
-            EntityDataSerializers.BYTE);
-
     @Override
     protected void defineSynchedData() {
         if (!this.entityData.hasItem(TARGET_ID)) {
             super.defineSynchedData();
             this.entityData.define(TARGET_ID, -1);
-            this.entityData.define(SAVED_SKIN, (byte) 0);
         }
     }
-
-    public void movement(){
-        absMoveTo(this.getX(), this.getY(), this.getZ());
-
-        setDeltaMovement(getForward().scale(0.3));
-        setDeltaMovement(getForward().scale(0.3));
-
-    }
-
     @Override
     public boolean isNoGravity() {
         return true;
     }
-
     @Override
     public boolean lockPos() {
         return false;
     }
-
     @Override
     public boolean forceVisualRotation() {
         return true;
     }
-
     public boolean canBeHitByStands() {
         return true;
     }
-
     @Override
     public boolean canBeHitByProjectile() {return true;}
-
     @Override
     public boolean hasNoPhysics() {
         return false;
     }
-
     @Override
     public boolean standHasGravity() {
         return false;
     }
-
     @Override
     public boolean isInvulnerable() {
         return false;
     }
-
     @Override
     public boolean isAttackable() {
         return true;
     }
-
     @Override
     public boolean canBeSeenAsEnemy() {
         return true;
     }
-
     @Override
     public boolean redirectKnockbackToUser() {
         return false;
     }
-
     @Override
     public boolean isPickable() {
         return false;
     }
-
     @Override
     public boolean skipAttackInteraction(Entity $$0) {
         return false;
     }
-
     @Override
     protected float getFlyingSpeed() {
         return 0.10F;
-    }
-
-    public boolean stuck = false;
-
-    public static AttributeSupplier.Builder createStandAttributes() {
-        return StandEntity.createMobAttributes()
-                .add(Attributes.MOVEMENT_SPEED,
-                        0.01F)
-                .add(Attributes.MAX_HEALTH, 1.0)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 1.0);
-
     }
 
     @Override
@@ -213,9 +165,7 @@ public class ManhattanTransferEntity extends StandEntity {
 
     @Override
     public void die(DamageSource $$0) {
-
         this.deathTime = 0;
-
         super.die($$0);
     }
     @Override
@@ -227,8 +177,6 @@ public class ManhattanTransferEntity extends StandEntity {
     public StandUser getUserData(LivingEntity User) {
           return ((StandUser) User);
     }
-
-    public boolean isPilotingEntity;
 
     @Override
     public void tick() {
