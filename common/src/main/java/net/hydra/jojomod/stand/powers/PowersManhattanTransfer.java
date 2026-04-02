@@ -6,7 +6,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.zetalasis.client.shader.ManhattanVisionMode;
+//import net.zetalasis.client.shader.ManhattanVisionMode;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IGravityEntity;
@@ -66,7 +66,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.spongepowered.asm.mixin.Unique;
+//import org.spongepowered.asm.mixin.Unique;
 
 import java.util.Arrays;
 import java.util.List;
