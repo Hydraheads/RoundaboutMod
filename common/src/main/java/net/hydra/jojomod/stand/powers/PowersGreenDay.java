@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 
+import net.hydra.jojomod.entity.stand.CinderellaEntity;
 import net.hydra.jojomod.entity.stand.GreenDayEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
@@ -16,6 +17,7 @@ import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
+import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 
@@ -114,14 +116,17 @@ public class PowersGreenDay extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,0, "ability.roundabout.gd_mold_leap",
                 "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_MOLD_LEAP,3,level,bypas));
         // bucket passive
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,0, "ability.roundabout.gd_mold_field",
-                "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_FIELD,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,0, "ability.roundabout.gd_mold_spread",
+                "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_SPREAD,3,level,bypas));
         // ratt leap
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,0, "ability.roundabout.gd_stitch",
                 "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_STITCH,4,level,bypas));
 
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.roundabout.gd_pardon",
                 "instruction.roundabout.press_skill_block", StandIcons.GREEN_DAY_PARDON,4,level,bypas));
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+118,0, "ability.roundabout.gd_mold_field",
+                "instruction.roundabout.passive", StandIcons.GREEN_DAY_MOLD_FIELD,4,level,bypas));
 
         return $$1;
     }
@@ -135,10 +140,7 @@ public class PowersGreenDay extends NewPunchingStand {
         else if (isGuarding())
             setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_PARDON, PowerIndex.SKILL_4_GUARD);
         else
-            if(isMoldFieldOn())
-                setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_MOLD_FIELD_OFF, PowerIndex.SKILL_4);
-            else
-                setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_MOLD_FIELD, PowerIndex.SKILL_4);
+            setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_MOLD_SPREAD, PowerIndex.SKILL_4);
 
         if (isHoldingSneak())
             setSkillIcon(context, x, y, 2, StandIcons.GREEN_DAY_ARM_RETURN_LEFT, PowerIndex.SKILL_2_SNEAK);
@@ -211,7 +213,8 @@ public class PowersGreenDay extends NewPunchingStand {
                 Stitch();
             }
             case SKILL_4_NORMAL -> {
-                toggleMold();
+                //toggleMold();
+                MoldSpreadStart();
             }
             case SKILL_4_GUARD -> {
                 selectAllyClient();
@@ -232,7 +235,7 @@ public class PowersGreenDay extends NewPunchingStand {
                 
             }
             case PowerIndex.POWER_4 -> {
-                return toggleMoldField();
+                return MoldSpread();
             }
             case PowerIndex.POWER_4_BLOCK -> {
                 return selectAllyServer();
@@ -343,6 +346,7 @@ public class PowersGreenDay extends NewPunchingStand {
         super.tickPower();
 
 
+
     }
 
     @Override
@@ -356,6 +360,60 @@ public class PowersGreenDay extends NewPunchingStand {
         }
         super.updatePowerInt(activePower,data);
     }
+    /**
+     * Mold Spread Work
+     */
+    public void MoldSpreadStart(){
+        if (!this.onCooldown(PowerIndex.SKILL_4)) {
+                tryPowerPacket(PowerIndex.POWER_4);
+                this.setCooldown(PowerIndex.SKILL_4,200);
+        }
+    }
+
+
+    public boolean MoldSpread() {
+        if (!isClient()) {
+            List<Entity> damages = MainUtil.genHitbox(this.self.level(), this.self.getX(), this.self.getY(), this.self.getZ(), 5, 5, 5);
+            for (int j = 0; j < damages.size(); j++) {
+
+                Entity entity = damages.get(j);
+                if (!entity.equals(this) && !(allies .contains(entity.getStringUUID()))) {
+                    if (entity instanceof LivingEntity LE) {
+                        if (!(((StandUser) entity).roundabout$getStandPowers() instanceof PowersGreenDay)) {
+                            if (LE.hasEffect(ModEffects.MOLD)) {
+                                int level = LE.getEffect(ModEffects.MOLD).getAmplifier() + 1;
+                                LE.removeEffect(ModEffects.MOLD);
+                                LE.addEffect(new MobEffectInstance(ModEffects.MOLD, 600, level));
+                            } else {
+                                LE.addEffect(new MobEffectInstance(ModEffects.MOLD, 600, 0));
+                            }
+                        }
+
+                    }
+                }
+            }
+            for (int i = 0; i < 604; i = i + 1) {
+                double randX = Roundabout.RANDOM.nextDouble(-5, 5);
+                double randY = Roundabout.RANDOM.nextDouble(-5, 5);
+                double randZ = Roundabout.RANDOM.nextDouble(-5, 5);
+                ((ServerLevel) this.self.level()).sendParticles(new DustParticleOptions(new Vector3f(0.76F, 1.0F, 0.9F
+                        ), 2f),
+                        this.self.getX() + randX,
+                        this.self.getY() + randY,
+                        this.self.getZ() + randZ,
+                        0, 0, 0.2, 0, 0);
+
+            }
+            ((ServerLevel) this.self.level()).sendParticles(ModParticles.MOLD_DUST, this.self.getX(),
+                    this.self.getY() + 1, this.self.getZ(),
+                    263,
+                    0, 0, 0,
+                    0.1);
+        }
+        return true;
+    }
+
+
     /**
      * getting the right hand for left handed mobs = players n stuff idk look man
      */
@@ -443,7 +501,7 @@ public class PowersGreenDay extends NewPunchingStand {
 
     public void OffHandThrow(){
         if (!this.onCooldown(PowerIndex.SKILL_2)) {
-            if(isBarrageAttacking()){
+            if(isBarrageAttacking() && !HasOffHand){
                 MainArmSpin();
             }else {
                 if (HasOffHandCharge) {
@@ -584,7 +642,7 @@ public class PowersGreenDay extends NewPunchingStand {
 
     public void MainArmThrow(){
         if (!this.onCooldown(PowerIndex.SKILL_1)) {
-            if(isBarrageAttacking()){
+            if(isBarrageAttacking() && !HasMainArm){
                 MainArmSpin();
             }else {
                 if (HasMainArmCharge) {
