@@ -86,6 +86,7 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public AchtungSettings achtungSettings;
     @NestedOption(group = "modded")
+    public CenturyBoySettings centuryBoySettings;
     public WalkingHeartSettings walkingHeartSettings;
     @NestedOption(group = "modded")
     public RattSettings rattSettings;
@@ -657,6 +658,13 @@ public class Config implements Cloneable {
         public Integer manhattanTransferMaxRange;
         @IntOption(group = "inherit", value = 4, min = 1, max = 5)
         public Integer getAutoSpeed;
+    }
+
+    public static class CenturyBoySettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableCenturyBoy;
+        @IntOption(group = "inherit", value = 10000000, min = 1, max = 10000000)
+        public Integer CBDurability;
     }
 
     public static class WalkingHeartSettings {
