@@ -19,9 +19,11 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.MainUtil;
@@ -35,6 +37,9 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.chat.Component;
 
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -312,6 +317,7 @@ public class PowersGreenDay extends NewPunchingStand {
                 if (!this.self.level().isClientSide()) {
                     if(MainUtil.cheapDistanceTo(this.self.getX(),this.self.getY(),this.self.getZ(),currentlegs.getX(),currentlegs.getY(),currentlegs.getZ())<1 && currentlegs.StartupTicks == 0) {
                         legGoneTicks = 0;
+                        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.GREEN_DAY_STITCH_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                         ((StandUser) this.self).rdbt$SetCrawlTicks(0);
                         setActivePower(PowerIndex.POWER_3_BONUS);
                         this.updatePowerInt(PowerIndex.POWER_3_BONUS,0);
@@ -404,6 +410,7 @@ public class PowersGreenDay extends NewPunchingStand {
                         0, 0, 0.2, 0, 0);
 
             }
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.GREEN_DAY_MOLD_SPREAD_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             ((ServerLevel) this.self.level()).sendParticles(ModParticles.MOLD_DUST, this.self.getX(),
                     this.self.getY() + 1, this.self.getZ(),
                     263,
@@ -474,6 +481,7 @@ public class PowersGreenDay extends NewPunchingStand {
                 this.self.level().addFreshEntity(SAE);
                 SAE.jump(this.getRayBlock(this.self,20F));
                 Off_hand_entity= SAE;
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.GREEN_DAY_SPLIT_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
             }
             this.self.getOffhandItem().setCount(0);
             Vec3 location = getRayBlock(this.self, 1f);
@@ -546,6 +554,7 @@ public class PowersGreenDay extends NewPunchingStand {
         double Pitch = Math.toRadians(this.self.getLookAngle().y);
         double Zangle = Math.toRadians(this.self.getLookAngle().z);
         double diameter = 0.6d;
+        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.GREEN_DAY_STITCH_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
         for (int i = 0; i < 11; i = i + 1) {
             ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.STITCH,
                     this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
@@ -569,7 +578,7 @@ public class PowersGreenDay extends NewPunchingStand {
     }
 
     public boolean OffHandSpinServer(){
-
+        this.self.level().playSound(null, Off_hand_entity.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
         Off_hand_entity.setSpinTicks(30);
         Off_hand_entity.flyingTicks = 0;
         return true;
@@ -596,7 +605,7 @@ public class PowersGreenDay extends NewPunchingStand {
     }
 
     public boolean MainArmSpinServer(){
-
+            this.self.level().playSound(null, Main_arm.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
             Main_arm.setSpinTicks(30);
             Main_arm.flyingTicks = 0;
         return true;
@@ -614,6 +623,7 @@ public class PowersGreenDay extends NewPunchingStand {
                 this.self.level().addFreshEntity(SAE);
                 SAE.jump(this.getRayBlock(this.self,20F));
                 Main_arm = SAE;
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.GREEN_DAY_SPLIT_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
             }
             this.self.getMainHandItem().setCount(0);
             Vec3 location = getRayBlock(this.self, 1f);
@@ -689,6 +699,7 @@ public class PowersGreenDay extends NewPunchingStand {
         double Pitch = Math.toRadians(this.self.getLookAngle().y);
         double Zangle = Math.toRadians(this.self.getLookAngle().z);
         double diameter = 0.6d;
+        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.GREEN_DAY_STITCH_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
         for (int i = 0; i < 11; i = i + 1) {
             ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.STITCH,
                     this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
@@ -954,6 +965,7 @@ public class PowersGreenDay extends NewPunchingStand {
     }
 
     public void SpawnLegs(){
+        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.GREEN_DAY_SPLIT_EVENT, SoundSource.PLAYERS, 1.0F, 1.5F);
         SeperatedLegsEntity SLE = ModEntities.SEPERATED_LEGS.create(this.self.level());
         if(SLE != null) {
             SLE.setUser(this.self);
@@ -985,6 +997,7 @@ public class PowersGreenDay extends NewPunchingStand {
             double Pitch = Math.toRadians(this.self.getLookAngle().y);
             double Zangle = Math.toRadians(this.self.getLookAngle().z);
             double diameter = 0.6d;
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.GREEN_DAY_STITCH_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             for(int i = 0; i < 11; i = i + 1) {
                 ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.STITCH,
                         this.getSelf().getX() + (diameter * Math.sin(i*4)) * Math.cos(Xangle),
@@ -1062,6 +1075,21 @@ public class PowersGreenDay extends NewPunchingStand {
     }
 
     @Override
+    protected Byte getSummonSound() {return SoundIndex.SUMMON_SOUND;
+    }
+
+    @Override
+    public SoundEvent getSoundFromByte(byte soundChoice){
+        switch (soundChoice)
+        {
+            case SoundIndex.SUMMON_SOUND -> {
+                return ModSounds.SUMMON_GREEN_DAY_EVENT;
+            }
+        }
+        return super.getSoundFromByte(soundChoice);
+    }
+
+    @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
             return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.5F));
@@ -1069,6 +1097,7 @@ public class PowersGreenDay extends NewPunchingStand {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(4.2F));
         }
     }
+
 
     @Override
     public boolean isWip(){

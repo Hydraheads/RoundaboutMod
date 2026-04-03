@@ -5298,7 +5298,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                                     }
                                 }
                             }
-                            for (int i = 0; i < 604; i = i + 1) {
+                            for (int i = 0; i < 304; i = i + 1) {
                                 double randX = Roundabout.RANDOM.nextDouble(-10, 10);
                                 double randY = Roundabout.RANDOM.nextDouble(-10, 10);
                                 double randZ = Roundabout.RANDOM.nextDouble(-10, 10);
@@ -5312,7 +5312,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             }
                             ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST, this.getX(),
                                     this.getY() + 1, this.getZ(),
-                                    263,
+                                    123,
                                     0, 0, 0,
                                     0.2);
 
@@ -5339,7 +5339,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
                             }
                         }
-                        for (int i = 0; i < 24; i = i + 1) {
+                        for (int i = 0; i < 14; i = i + 1) {
                             double randX = Roundabout.RANDOM.nextDouble(-5, 5);
                             double randY = Roundabout.RANDOM.nextDouble(-5, 5);
                             double randZ = Roundabout.RANDOM.nextDouble(-5, 5);
@@ -5353,7 +5353,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         }
                         ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST, this.getX(),
                                 this.getY() + 1, this.getZ(),
-                                64,
+                                24,
                                 0, 0, 0,
                                 0.1);
                         int level = this.getEffect(ModEffects.MOLD).getAmplifier() + 1;

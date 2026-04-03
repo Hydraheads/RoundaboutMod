@@ -11,6 +11,12 @@
       "roundabout:summon_diver_down"
     ]
   },
+  "summon_green_day": {
+    "subtitle": "sounds.roundabout.summon_green_day",
+    "sounds": [
+      "roundabout:summon_green_day"
+    ]
+  },
   "summon_anubis": {
     "subtitle": "sounds.roundabout.summon_anubis",
     "sounds": [
@@ -2386,6 +2392,42 @@
     "sounds": [
       {
         "name":"roundabout:vsong_gothic_organ",
+        "stream": true
+      }
+    ]
+  },
+  "green_day_arm_spin": {
+    "subtitle": "sounds.roundabout.green_day_arm_spin",
+    "sounds": [
+      {
+        "name":"roundabout:green_day_arm_spin",
+        "stream": true
+      }
+    ]
+  },
+  "green_day_split": {
+    "subtitle": "sounds.roundabout.green_day_split",
+    "sounds": [
+      {
+        "name":"roundabout:green_day_split",
+        "stream": true
+      }
+    ]
+  },
+  "green_day_mold_spread": {
+    "subtitle": "sounds.roundabout.green_day_mold_spread",
+    "sounds": [
+      {
+        "name":"roundabout:green_day_mold_spread",
+        "stream": true
+      }
+    ]
+  },
+  "green_day_stitch": {
+    "subtitle": "sounds.roundabout.green_day_stitch",
+    "sounds": [
+      {
+        "name":"roundabout:green_day_stitch",
         "stream": true
       }
     ]
