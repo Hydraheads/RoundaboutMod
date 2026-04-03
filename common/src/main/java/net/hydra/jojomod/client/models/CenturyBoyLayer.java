@@ -1,8 +1,10 @@
 package net.hydra.jojomod.client.models;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -57,9 +59,74 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             heyfull = Math.min(heyfull / 10, 1f);
                         } else {
                             heyfull = CBticks - fixedPartial;
-                            heyfull = Math.max(heyfull / 10, 0)
+                            heyfull = Math.max(heyfull / 10, 0);
                         }
 
+                        /// body
+                        ClientUtil.pushPoseAndCooperate(poseStack, 26);
+
+                        boolean isHurt = entity.hurtTime > 0;
+                        float r = isHurt ? 1.0F : 1.0F;
+                        float g = isHurt ? 0.4F : 1.0F;
+                        float b = isHurt ? 0.4F : 1.0F;
+                        if (entity.isBaby()){
+                            poseStack.scale(0.6F, 0.6F, 0.6F);
+                            poseStack.translate(0.3, 1, -0.3);
+                        }
+
+                        getParentModel().body.translateAndRotate(poseStack);
+
+                        poseStack.translate(0.0, 0.75, 0.0);
+
+                        ModStrayModels.CENTURY_BOY.renderBody(entity,partialTicks,poseStack,bufferSource,
+                                packedLight, r, g, b, heyfull, skin);
+
+                        ClientUtil.popPoseAndCooperate(poseStack, 26);
+                        /// head
+                        ClientUtil.pushPoseAndCooperate(poseStack, 26);
+                        if (entity.isBaby()){
+                            poseStack.scale(0.6F, 0.6F, 0.6F);
+                            poseStack.translate(0.3, 1, -0.3);
+                        }
+
+                        getParentModel().head.translateAndRotate(poseStack);
+
+                        poseStack.translate(0.0, 0.75, 0.0);
+
+                        ModStrayModels.CENTURY_BOY.renderHead(entity,partialTicks,poseStack,bufferSource,
+                                packedLight, r, g, b, heyfull, skin);
+
+                        ClientUtil.popPoseAndCooperate(poseStack, 26);
+                        /// left arm
+                        ClientUtil.pushPoseAndCooperate(poseStack, 26);
+                        if (entity.isBaby()){
+                            poseStack.scale(0.6F, 0.6F, 0.6F);
+                            poseStack.translate(0.3, 1, -0.3);
+                        }
+
+                        getParentModel().leftArm.translateAndRotate(poseStack);
+
+                        poseStack.translate(-0.35, 0.63, 0.0);
+
+                        ModStrayModels.CENTURY_BOY.renderLeftArm(entity,partialTicks,poseStack,bufferSource,
+                                packedLight, r, g, b, heyfull, skin);
+
+                        ClientUtil.popPoseAndCooperate(poseStack, 26);
+                        /// left arm
+                        ClientUtil.pushPoseAndCooperate(poseStack, 26);
+                        if (entity.isBaby()){
+                            poseStack.scale(0.6F, 0.6F, 0.6F);
+                            poseStack.translate(0.3, 1, -0.3);
+                        }
+
+                        getParentModel().rightArm.translateAndRotate(poseStack);
+
+                        poseStack.translate(0.35, 0.63, 0.0);
+
+                        ModStrayModels.CENTURY_BOY.renderRightArm(entity,partialTicks,poseStack,bufferSource,
+                                packedLight, r, g, b, heyfull, skin);
+
+                        ClientUtil.popPoseAndCooperate(poseStack, 26);
                     }
                 }
             }

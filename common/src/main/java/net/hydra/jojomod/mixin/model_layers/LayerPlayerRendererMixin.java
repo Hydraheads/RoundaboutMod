@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.model_layers;
 
 import net.hydra.jojomod.client.FacelessLayer;
+import net.hydra.jojomod.client.models.CenturyBoyLayer;
 import net.hydra.jojomod.client.models.layers.*;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer;
@@ -31,6 +32,7 @@ public abstract class LayerPlayerRendererMixin<T extends LivingEntity, M extends
         this.addLayer(new TuskLayer<>($$0, this));
         this.addLayer(new HeyYaLayer<>($$0, this));
         this.addLayer(new MandomLayer<>($$0, this));
+        this.addLayer(new CenturyBoyLayer<>($$0, this));
         this.addLayer(new RattShoulderLayer<>($$0, this));
         this.addLayer(new AnubisLayer<>($$0, this));
         this.addLayer(new VisagePartLayer<>($$0, this));

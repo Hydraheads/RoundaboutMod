@@ -103,7 +103,8 @@ public class FabricItems {
 
     public static Item STAND_DISC_MANHATTAN_TRANSFER = registerItem("manhattan_transfer_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersManhattanTransfer(null)));
-
+    public static Item STAND_DISC_20_CENTURY_BOY = registerItem("20th_century_boy_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new Powers20thCenturyBoy(null)));
     public static Item STAND_DISC_HEY_YA = registerItem("hey_ya_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersHeyYa(null)));
     public static Item STAND_DISC_MANDOM = registerItem("mandom_disc",

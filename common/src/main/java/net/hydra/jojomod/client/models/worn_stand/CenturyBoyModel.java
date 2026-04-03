@@ -122,9 +122,57 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 		root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
 	}
 
-	public void renderBody(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light){
-		VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(context, (byte) 0)));
-		root().getChild("Waist").getChild("Body").render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+	public void renderBody(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
+						   int light, float r, float g, float b, float alpha, byte skin) {
+		if (context instanceof LivingEntity LE) {
+			this.root().getAllParts().forEach(ModelPart::resetPose);
+			if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
+				partialTicks = 0;
+			}
+			StandUser user = ((StandUser) LE);
+			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
+
+			root().getChild("Waist").getChild("Body").render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+		}
+	}
+	public void renderHead(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
+						   int light, float r, float g, float b, float alpha, byte skin) {
+		if (context instanceof LivingEntity LE) {
+			this.root().getAllParts().forEach(ModelPart::resetPose);
+			if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
+				partialTicks = 0;
+			}
+			StandUser user = ((StandUser) LE);
+			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
+
+			root().getChild("Waist").getChild("Head").render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+		}
+	}
+	public void renderRightArm(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
+							  int light, float r, float g, float b, float alpha, byte skin) {
+		if (context instanceof LivingEntity LE) {
+			this.root().getAllParts().forEach(ModelPart::resetPose);
+			if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
+				partialTicks = 0;
+			}
+			StandUser user = ((StandUser) LE);
+			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
+
+			root().getChild("Waist").getChild("RightArm").render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+		}
+	}
+	public void renderLeftArm(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
+						   int light, float r, float g, float b, float alpha, byte skin) {
+		if (context instanceof LivingEntity LE) {
+			this.root().getAllParts().forEach(ModelPart::resetPose);
+			if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
+				partialTicks = 0;
+			}
+			StandUser user = ((StandUser) LE);
+			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
+
+			root().getChild("Waist").getChild("LeftArm").render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+		}
 	}
 
 	public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
