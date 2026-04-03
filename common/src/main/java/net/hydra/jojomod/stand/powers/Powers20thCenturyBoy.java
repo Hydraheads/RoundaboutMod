@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.minecraft.ChatFormatting;
@@ -129,12 +130,14 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         switch (move){
+
             case PowerIndex.POWER_1, PowerIndex.POWER_1_SNEAK -> {
                 switchMode();
             }
             case PowerIndex.POWER_2, PowerIndex.POWER_2_SNEAK -> {
                 toggleInvincibility();
             }
+
         }
 
         return super.setPowerOther(move, lastMove);
@@ -142,12 +145,20 @@ public class Powers20thCenturyBoy extends NewDashPreset {
 
     @Override
     public void powerActivate(PowerContext context) {
-        this.tryPower(PowerIndex.POWER_1, true);
-            tryPowerPacket(PowerIndex.POWER_1);
 
-        if (!this.onCooldown(PowerIndex.SKILL_2)) {
-            this.tryPower(PowerIndex.POWER_2, true);
-            tryPowerPacket(PowerIndex.POWER_2);
+        switch (context) {
+            case SKILL_1_NORMAL, SKILL_1_CROUCH -> {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                tryPowerPacket(PowerIndex.POWER_1);
+            }
+            case SKILL_2_NORMAL,SKILL_2_CROUCH -> {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+                tryPowerPacket(PowerIndex.POWER_2);
+            }
+            case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
+                dash();
+            }
+
         }
 
     }
@@ -162,6 +173,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     }
 
     public void toggleInvincibility(){
+        Roundabout.LOGGER.info("aaa");
 
         if (!invincibleState) {
             invincibleState = true;
@@ -171,7 +183,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                     Roundabout.LOGGER.info("i'll cook something later guys don't worry1");
                 }
                 case 2 -> {
-
+                    defensemode();
                 }
                 case 3 -> {
                     Roundabout.LOGGER.info("i'll cook something later guys don't worry3");
@@ -205,5 +217,9 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         } else {
             return super.interceptDamageEvent(damageSource, amount);
         }
+    }
+
+    public void defensemode(){
+        ClientUtil.stopDestroyingBlock();
     }
 }

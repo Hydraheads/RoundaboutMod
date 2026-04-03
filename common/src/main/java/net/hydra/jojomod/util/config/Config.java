@@ -665,6 +665,10 @@ public class Config implements Cloneable {
         public Boolean enableCenturyBoy;
         @IntOption(group = "inherit", value = 10000000, min = 1, max = 10000000)
         public Integer CBDurability;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean CBchangesFOV;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean CBCanMoveCamera;
     }
 
     public static class WalkingHeartSettings {

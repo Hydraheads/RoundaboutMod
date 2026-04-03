@@ -495,6 +495,7 @@ public class FabricItems {
                         entries.accept(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK);
                         entries.accept(ModBlocks.BLOODY_STONE_MASK_BLOCK);
 
+                        entries.accept(STAND_DISC_20_CENTURY_BOY);
                         entries.accept(STAND_DISC_MANHATTAN_TRANSFER);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
@@ -570,6 +571,7 @@ public class FabricItems {
         ModItems.STAND_DISC_MANDOM = STAND_DISC_MANDOM;
         ModItems.STAND_DISC_SURVIVOR = STAND_DISC_SURVIVOR;
         ModItems.STAND_DISC_ACHTUNG = STAND_DISC_ACHTUNG;
+        ModItems.STAND_DISC_CENTURY_BOY = STAND_DISC_20_CENTURY_BOY;
         ModItems.STAND_DISC_METALLICA = STAND_DISC_METALLICA;
         ModItems.MAX_STAND_DISC_METALLICA = MAX_STAND_DISC_METALLICA;
         ((MaxStandDiscItem)MAX_STAND_DISC_METALLICA).baseDisc = ((StandDiscItem)STAND_DISC_METALLICA);
