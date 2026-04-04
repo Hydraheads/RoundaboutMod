@@ -20,6 +20,7 @@ public class GreenDayRenderer extends StandRenderer<GreenDayEntity> {
     private static final ResourceLocation TEAL_DAY= new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/blue_day.png");
     private static final ResourceLocation BROCOLLI = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/broccoli_green_day.png");
     private static final ResourceLocation RED_NIGHT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/red_night.png");
+    private static final ResourceLocation GORGONZOLA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/gorgonzola_green_day.png");
 
 
     public GreenDayRenderer(EntityRendererProvider.Context context) {
@@ -33,6 +34,7 @@ public class GreenDayRenderer extends StandRenderer<GreenDayEntity> {
             case(GreenDayEntity.TEAL_DAY) -> TEAL_DAY;
             case(GreenDayEntity.BROCOLLI) -> BROCOLLI;
             case(GreenDayEntity.RED_NIGHT) -> RED_NIGHT;
+            case(GreenDayEntity.GORGONZOLA) -> GORGONZOLA;
             default -> PART_FIVE_GREEN_DAY;
 
         };

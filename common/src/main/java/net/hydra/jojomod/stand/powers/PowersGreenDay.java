@@ -1118,7 +1118,8 @@ public class PowersGreenDay extends NewPunchingStand {
             RED_DAY = 2,
             TEAL_DAY = 3,
             BROCCOLLI = 4,
-            RED_NIGHT = 5;
+            RED_NIGHT = 5,
+            GORGONZOLA = 6;
 
 
     @Override
@@ -1128,7 +1129,8 @@ public class PowersGreenDay extends NewPunchingStand {
                 RED_DAY,
                 TEAL_DAY,
                 //BROCCOLLI
-                RED_NIGHT
+                RED_NIGHT,
+                GORGONZOLA
 
         );
     }
@@ -1150,6 +1152,8 @@ public class PowersGreenDay extends NewPunchingStand {
             return Component.translatable("skins.roundabout.green_day.broccoli");
         } else if (skinId == GreenDayEntity.RED_NIGHT) {
             return Component.translatable("skins.roundabout.green_day.red_night");
+        } else if (skinId == GreenDayEntity.GORGONZOLA) {
+            return Component.translatable("skins.roundabout.green_day.gorgonzola");
         }
         return Component.translatable(  "skins.roundabout.green_day.part_five_green_day");
     }

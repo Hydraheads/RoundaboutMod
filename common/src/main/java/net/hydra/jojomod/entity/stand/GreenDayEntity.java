@@ -13,7 +13,8 @@ public class GreenDayEntity extends FollowingStandEntity{
             RED_DAY = 2,
             TEAL_DAY = 3,
             BROCOLLI = 4,
-            RED_NIGHT = 5;
+            RED_NIGHT = 5,
+            GORGONZOLA = 6;
 
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState hideLeg = new AnimationState();
