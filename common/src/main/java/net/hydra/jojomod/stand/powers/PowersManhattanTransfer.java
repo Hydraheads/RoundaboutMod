@@ -1,9 +1,15 @@
 package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.mixin.ZWorldRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 //import net.zetalasis.client.shader.ManhattanVisionMode;
@@ -89,10 +95,10 @@ public class PowersManhattanTransfer extends NewDashPreset {
     @Override
     public StandEntity getNewStandEntity() {
         byte skin = ((StandUser) this.getSelf()).roundabout$getStandSkin();
-        if (((StandUser) this.getSelf()).roundabout$getStandSkin() == ManhattanTransferEntity.POLLINATION_SKIN) {
-            return ModEntities.POLLINATION_TRANSFER.create(this.getSelf().level());
-        }
-        return ModEntities.MANHATTAN_TRANSFER.create(this.getSelf().level());
+            if (((StandUser) this.getSelf()).roundabout$getStandSkin() == ManhattanTransferEntity.POLLINATION_SKIN) {
+                return ModEntities.POLLINATION_TRANSFER.create(this.getSelf().level());
+            }
+            return ModEntities.MANHATTAN_TRANSFER.create(this.getSelf().level());
     }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
@@ -135,8 +141,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
         return ClientNetworking.getAppropriateConfig().manhattanTransferSettings.getAutoSpeed;
     }
 
-    public static final byte CONTROL_WIND_VISION = PowerIndex.POWER_2;
-    public static final byte PLAYER_WIND_VISION = PowerIndex.POWER_4;
     @Override
     public void powerActivate(PowerContext context) {
         /**Making dash usable on both key presses*/
@@ -171,21 +175,49 @@ public class PowersManhattanTransfer extends NewDashPreset {
         this.tryPower(PowerIndex.POWER_4, true);
         tryPowerPacket(PowerIndex.POWER_4);
     }
+    //TODO: understand how to make entities unrender, and make it so if the vision is on the mobs unrender. Later on I'll figure out the movement detector
 
     public boolean switchVision(){
 
        getStandUserSelf().roundabout$setUniqueStandModeToggle(!switchWindVisionToggle());
         Entity entity;
-        if (!isClient() && this.self instanceof ServerPlayer PE) {
+        if (isClient() && this.self instanceof Player PE) {
             if (switchWindVisionToggle()) {
-
                 PE.displayClientMessage(Component.translatable("text.roundabout.survivor.anger_selection").withStyle(ChatFormatting.DARK_GREEN), true);
             }
             else{
+
                 PE.displayClientMessage(Component.translatable("text.roundabout.survivor.anger_selection_off").withStyle(ChatFormatting.DARK_AQUA), true);
             }
         }
         return true;
+    }
+
+
+    public int visionTicks;
+    @Override
+    public boolean highlightsEntity(Entity ent,Player player){
+
+        if(switchWindVisionToggle() || isPiloting()) {
+                if (ent.getDeltaMovement().x == 0 || ent.getDeltaMovement().y == 0 || ent.getDeltaMovement().z == 0) {
+                    if (ent != null && ent instanceof LivingEntity && !(ent instanceof StandEntity) && !ent.isInvisible()) {
+                        return false;
+                    }
+                }
+
+            else if (ent.getDeltaMovement().x != 0 || ent.getDeltaMovement().z != 0) {
+                if (ent != null && ent instanceof LivingEntity && !(ent instanceof StandEntity) && !ent.isInvisible()) {
+                    return true;
+                }
+            }
+
+        }
+        return false;
+    }
+
+    @Override
+    public int highlightsEntityColor(Entity ent, Player player){
+        return 12379456;
     }
 
     public boolean switchWindVisionToggle(){

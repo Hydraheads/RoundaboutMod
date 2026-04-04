@@ -5,11 +5,13 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -37,7 +39,6 @@ public class ManhattanTransferEntity extends StandEntity {
     public ManhattanTransferEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
     }
-
     public static final byte
             ANIME_SKIN = 1,
             MANGA_SKIN = 2,
@@ -185,7 +186,7 @@ public class ManhattanTransferEntity extends StandEntity {
         float yaw = this.getYRot();
         super.tick();
 
-        if (horizontalCollision || verticalCollision) {
+            if (horizontalCollision || verticalCollision) {
                 this.getUserData(this.getUser()).roundabout$getStandPowers();
                 if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
 
@@ -203,15 +204,16 @@ public class ManhattanTransferEntity extends StandEntity {
                         }
                     }
                 }
-        }
-        if (!this.level().isClientSide()) {
-            if (!forceVisible) {
-                this.setXRot(pitch);
-                this.setYRot(yaw);
-                this.setYBodyRot(yaw);
-                this.xRotO = pitch;
-                this.yRotO = yaw;
             }
+            if (!this.level().isClientSide()) {
+                if (!forceVisible) {
+                    this.setXRot(pitch);
+                    this.setYRot(yaw);
+                    this.setYBodyRot(yaw);
+                    this.xRotO = pitch;
+                    this.yRotO = yaw;
+
+                }
         }
         nextPathfind++;
         doBasicPathfind();
@@ -227,6 +229,27 @@ public class ManhattanTransferEntity extends StandEntity {
         BlockHitResult blockHit = this.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
         BlockPos pos = blockHit.getBlockPos();
         this.navigation.moveTo(pos.getX(), pos.getY(), pos.getZ(), 0);
+    }
+
+    public boolean isInRain() {
+        BlockPos $$0 = this.blockPosition();
+        return this.level().isRainingAt($$0)
+                || this.level().isRainingAt(BlockPos.containing((double)$$0.getX(), this.getBoundingBox().maxY, (double)$$0.getZ()));
+    }
+
+    public final AnimationState rain_dodging_manhattan = new AnimationState();
+
+    @Override
+    public void setupAnimationStates() {
+        super.setupAnimationStates();
+        if (this.getUser() != null) {
+            if (isInRain()) {
+                this.rain_dodging_manhattan.startIfStopped(this.tickCount);
+            } if (!isInRain()) {
+                this.rain_dodging_manhattan.stop();
+            }
+
+        }
     }
 
 }
