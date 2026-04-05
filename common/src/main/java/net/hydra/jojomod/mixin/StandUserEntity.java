@@ -4272,6 +4272,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             damageAmount = (damageAmount+(damageAmount*amt));
             modified = true;
         }
+        if (source != null && source.getEntity() instanceof LivingEntity sl &&
+                sl.hasEffect(ModEffects.SWITCH)) {
+            damageAmount = (damageAmount-(damageAmount*0.4F));
+            modified = true;
+        }
+        if (this.hasEffect(ModEffects.SWITCH)) {
+            damageAmount = (damageAmount+(damageAmount*0.4F));
+            modified = true;
+        }
         float changeDamage = FateTypes.getDamageResist(rdbt$this(),source,damageAmount);
         if (changeDamage > 0){
             damageAmount = (damageAmount-(damageAmount*changeDamage));

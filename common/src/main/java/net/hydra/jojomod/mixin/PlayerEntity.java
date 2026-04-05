@@ -49,6 +49,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -335,10 +336,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public void roundabout$setPower(byte style){
         if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$POWERS)) {
             roundabout$SetPos2(PlayerPosIndex.NONE);
-            if (style != this.getEntityData().get(ROUNDABOUT$POWERS)){
+            if (style != this.getEntityData().get(ROUNDABOUT$POWERS) && this.getEntityData().get(ROUNDABOUT$POWERS) != PowerTypes.NONE.ordinal()){
                 if (ClientNetworking.getAppropriateConfig().powersSettings.powerSwitchingPenalty) {
                     ((StandUser) this).roundabout$getStandPowers().onStandSwitch();
                     ((StandUser) this).roundabout$getStandPowers().onPowerSwitch();
+                    addEffect(new MobEffectInstance(ModEffects.SWITCH, 400, 0));
                 }
             }
             this.getEntityData().set(ROUNDABOUT$POWERS, style);

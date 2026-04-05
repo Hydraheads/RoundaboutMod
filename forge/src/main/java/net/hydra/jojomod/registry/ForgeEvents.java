@@ -501,6 +501,7 @@ public class ForgeEvents {
         ModEffects.WARDING = ForgeEffects.WARDING.get();
         ModEffects.VAMPIRE_BLOOD = ForgeEffects.VAMPIRE_BLOOD.get();
         ModEffects.UNBALANCED = ForgeEffects.UNBALANCED.get();
+        ModEffects.SWITCH = ForgeEffects.SWITCH.get();
         ModEffects.MOLD = ForgeEffects.MOLD.get();
 
 
