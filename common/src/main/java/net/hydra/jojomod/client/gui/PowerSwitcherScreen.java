@@ -110,9 +110,9 @@ public class PowerSwitcherScreen extends Screen {
             return;
         }
 
-        byte ppos = ((IPlayerEntity)minecraft.player).roundabout$GetPoseEmote();
-        if (pIcon.id != ppos) {
-            C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_STRIKE_POSE,pIcon.id);
+        byte ppos = PowerTypes.getPowerType(minecraft.player);
+        if (pIcon.id != ppos && pIcon.id != PowerTypes.NONE.ordinal()) {
+            C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_SWITCH_POWERS,pIcon.id);
         }
             //ModPacketHandler.PACKET_ACCESS.byteToServerPacket(pIcon3.id, PacketDataIndex.BYTE_CHANGE_MORPH);
     }
@@ -152,9 +152,9 @@ public class PowerSwitcherScreen extends Screen {
         STAND(Component.translatable("text.roundabout.powers.stand_select"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/icons/powers/stand/stand_summon.png"),(byte) PowerTypes.STAND.ordinal(),0,0),
         VAMPIRE(Component.translatable("text.roundabout.powers.vampire_select"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/icons/powers/stand/blood_clutch.png"),(byte) PowerTypes.VAMPIRE.ordinal(),0,62),
+                "textures/gui/icons/powers/vampire/blood_clutch.png"),(byte) PowerTypes.VAMPIRE.ordinal(),0,62),
 
-        NONE(Component.translatable("roundabout.pose.none"), new ResourceLocation(Roundabout.MOD_ID,
+        NONE(Component.translatable("text.roundabout.powers.none"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/pose_icons/jonathan.png"),(byte) PowerTypes.NONE.ordinal(),0,31);
 
         static PowerSwitcherScreen.posIcon getByte(PowerTypes pose) {
