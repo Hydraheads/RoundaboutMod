@@ -22,18 +22,23 @@ public abstract class MilkBucketMixin {
     @Unique
     List<MobEffectInstance> effects = new ArrayList<>();
 
-    @Inject(method = "finishUsingItem",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;removeAllEffects()Z"))
-    public void roundabout$beforeMilkClear(ItemStack itemStack, Level level, LivingEntity livingEntity, CallbackInfoReturnable<ItemStack> cir) {
+
+    @Inject(method = "finishUsingItem",at = @At(value = "HEAD"))
+    private void roundabout$beforeMilkClear(ItemStack itemStack, Level level, LivingEntity livingEntity, CallbackInfoReturnable<ItemStack> cir) {
+        Roundabout.LOGGER.info("A");
         for (MobEffectInstance effect : livingEntity.getActiveEffects()) {
             if (MainUtil.isSpecialEffect(effect)) {
                 effects.add(effect);
+                Roundabout.LOGGER.info(effect.toString());
             }
         }
     }
 
-    @Inject(method = "finishUsingItem",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;removeAllEffects()Z",shift = At.Shift.AFTER))
-    public void roundabout$afterMilkClear(ItemStack itemStack, Level level, LivingEntity livingEntity, CallbackInfoReturnable<ItemStack> cir) {
+    @Inject(method = "finishUsingItem",at = @At(value = "RETURN"))
+    private void roundabout$afterMilkClear(ItemStack itemStack, Level level, LivingEntity livingEntity, CallbackInfoReturnable<ItemStack> cir) {
+        Roundabout.LOGGER.info("B");
         for (MobEffectInstance effect : effects) {
+            Roundabout.LOGGER.info(effect.toString());
             livingEntity.addEffect(effect);
         }
         effects = new ArrayList<>();
