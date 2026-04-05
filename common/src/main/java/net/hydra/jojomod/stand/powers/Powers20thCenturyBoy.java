@@ -15,6 +15,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.Arrays;
@@ -94,7 +95,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         RETRO = 5,
         GOLD = 6,
         OLD_CENTURY_BOY = 7,
-        SHULKER = 8;
+        SHULKER = 8,
+        SULFUR = 9;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
@@ -105,7 +107,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                 RETRO,
                 GOLD,
                 OLD_CENTURY_BOY,
-                SHULKER
+                SHULKER,
+                SULFUR
 
         );
     }
@@ -120,6 +123,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             case Powers20thCenturyBoy.GOLD -> Component.translatable("skins.roundabout.20_centuryboy.gold");
             case Powers20thCenturyBoy.OLD_CENTURY_BOY -> Component.translatable("skins.roundabout.20_centuryboy.19th_century_boy");
             case Powers20thCenturyBoy.SHULKER -> Component.translatable("skins.roundabout.20_centuryboy.shulker");
+            case Powers20thCenturyBoy.SULFUR -> Component.translatable("skins.roundabout.20_centuryboy.sulfur");
             default -> Component.translatable("skins.roundabout.20_centuryboy.manga");
         };
     }
@@ -220,6 +224,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     }
 
     public void defensemode(){
-        ClientUtil.stopDestroyingBlock();
+        Entity entity = ClientUtil.getPlayer();
+        entity.setDeltaMovement(0,0,0);
     }
 }

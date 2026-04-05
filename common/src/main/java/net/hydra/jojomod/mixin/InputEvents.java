@@ -25,12 +25,9 @@ import net.hydra.jojomod.item.FirearmItem;
 import net.hydra.jojomod.item.SnubnoseRevolverItem;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
-import net.hydra.jojomod.stand.powers.PowersCream;
-import net.hydra.jojomod.stand.powers.PowersGreenDay;
-import net.hydra.jojomod.stand.powers.PowersJustice;
+import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.item.FogBlockItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
-import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
@@ -240,8 +237,14 @@ public abstract class InputEvents implements IInputEvents {
 
                     return $$1;
                 }
+
+
+
+
             }
         }
+
+
 
     @Inject(method = "startAttack", at = @At("HEAD"), cancellable = true)
     public void roundabout$Attack(CallbackInfoReturnable<Boolean> ci) {
@@ -257,6 +260,13 @@ public abstract class InputEvents implements IInputEvents {
 
             if(powers instanceof PowersGreenDay PGD) {
                 if ((!PGD.HasMainArm)&& !(standComp.roundabout$hasStandOut())) {
+                    ci.setReturnValue(false);
+                    return;
+                }
+            }
+
+            if (powers instanceof Powers20thCenturyBoy PCB) {
+                if (PCB.invincibleState) {
                     ci.setReturnValue(false);
                     return;
                 }
@@ -368,6 +378,10 @@ public abstract class InputEvents implements IInputEvents {
                         return;
                     }
                 }
+                if (powers instanceof Powers20thCenturyBoy PCB){
+                    if (PCB.invincibleState) ci.cancel(); return;
+                }
+
 
                 if (powers.isPiloting()){
                     ci.cancel();
@@ -645,6 +659,10 @@ public abstract class InputEvents implements IInputEvents {
             if (standComp.roundabout$isPossessed()) {
                 ci.cancel();
                 return;
+            }
+
+            if (powers instanceof Powers20thCenturyBoy centuryBoy){
+                if (centuryBoy.invincibleState) ci.cancel();
             }
 
             if(powers instanceof PowersGreenDay PGD) {
