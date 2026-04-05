@@ -964,6 +964,28 @@ public class ModSounds {
     public static final ResourceLocation SUMMON_DIVER_DOWN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_DIVER_DOWN);
     public static SoundEvent SUMMON_DIVER_DOWN_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_DIVER_DOWN_ID);
 
+    public static final String SUMMON_GREEN_DAY = "summon_green_day";
+    public static final ResourceLocation SUMMON_GREEN_DAY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_GREEN_DAY);
+    public static SoundEvent SUMMON_GREEN_DAY_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_GREEN_DAY_ID);
+
+    public static final String GREEN_DAY_ARM_SPIN = "green_day_arm_spin";
+    public static final ResourceLocation GREEN_DAY_ARM_SPIN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ GREEN_DAY_ARM_SPIN);
+    public static SoundEvent GREEN_DAY_ARM_SPIN_EVENT = SoundEvent.createVariableRangeEvent(GREEN_DAY_ARM_SPIN_ID);
+
+    public static final String GREEN_DAY_SPLIT = "green_day_split";
+    public static final ResourceLocation GREEN_DAY_SPLIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ GREEN_DAY_SPLIT);
+    public static SoundEvent GREEN_DAY_SPLIT_EVENT = SoundEvent.createVariableRangeEvent(GREEN_DAY_SPLIT_ID);
+
+    public static final String GREEN_DAY_MOLD_SPREAD = "green_day_mold_spread";
+    public static final ResourceLocation GREEN_DAY_MOLD_SPREAD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ GREEN_DAY_MOLD_SPREAD);
+    public static SoundEvent GREEN_DAY_MOLD_SPREAD_EVENT = SoundEvent.createVariableRangeEvent(GREEN_DAY_MOLD_SPREAD_ID);
+
+    public static final String GREEN_DAY_STITCH = "green_day_stitch";
+    public static final ResourceLocation GREEN_DAY_STITCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ GREEN_DAY_STITCH);
+    public static SoundEvent GREEN_DAY_STITCH_EVENT = SoundEvent.createVariableRangeEvent(GREEN_DAY_STITCH_ID);
+
+
+
     public static final String EXTEND_SPIKES = "extend_spikes";
     public static final ResourceLocation EXTEND_SPIKES_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EXTEND_SPIKES);
     public static SoundEvent EXTEND_SPIKES_EVENT = SoundEvent.createVariableRangeEvent(EXTEND_SPIKES_ID);

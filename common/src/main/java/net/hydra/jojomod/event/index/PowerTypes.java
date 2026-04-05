@@ -168,6 +168,21 @@ public enum PowerTypes {
         return false;
     }
 
+    public static boolean canHavePower(Entity entity, byte bt){
+        if (entity instanceof Player pl) {
+            if (bt == STAND.ordinal()) {
+                if (((StandUser) entity).roundabout$hasAStand()) {
+                    return true;
+                }
+            } else if (bt == VAMPIRE.ordinal()) {
+                if (FateTypes.isVampire(pl)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     //When you switch out of vampire, you should lose vampire powers for instance
     public static void fixPowers(Entity entity){
         if (entity instanceof Player pl) {

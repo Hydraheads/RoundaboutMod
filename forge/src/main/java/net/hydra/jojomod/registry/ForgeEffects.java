@@ -50,6 +50,9 @@ public class ForgeEffects{
     public static final RegistryObject<MobEffect> UNBALANCED =
             POTION_EFFECTS.register("unbalanced", () ->
                     new Effect(MobEffectCategory.HARMFUL, 2738639));
+    public static final RegistryObject<MobEffect> MOLD =
+            POTION_EFFECTS.register("mold", () ->
+                    new Effect(MobEffectCategory.HARMFUL, 0));
 
 
     public static class Effect extends MobEffect{

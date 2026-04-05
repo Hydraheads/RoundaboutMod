@@ -12,13 +12,19 @@ public class GreenDayEntity extends FollowingStandEntity{
             PART_FIVE_GREEN_DAY = 1,
             RED_DAY = 2,
             TEAL_DAY = 3,
-            BROCOLLI = 4;
+            BROCOLLI = 4,
+            RED_NIGHT = 5,
+            GORGONZOLA = 6;
 
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState hideLeg = new AnimationState();
     public final AnimationState kick_barrage = new AnimationState();
     public final AnimationState kick_barrage_end = new AnimationState();
     public final AnimationState kick_barrage_windup = new AnimationState();
+
+    public boolean Emissive(){
+        return this.getSkin() == 5;
+    }
 
     @Override
     public void setupAnimationStates() {

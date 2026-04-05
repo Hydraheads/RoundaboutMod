@@ -6,6 +6,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.AnubisItem;
 import net.hydra.jojomod.item.ModItems;
@@ -64,16 +65,19 @@ public class StandHeldItemLayer <T extends StandEntity, M extends StandModel<T>>
                 shiftZ = -1F;
             }
             this.getParentModel().translateToHand(humanoidArm, poseStack, shiftZ, shiftY, shiftX);
-            if (MainUtil.isThrownBlockItem((itemStack.getItem()))) {
+            if (!(livingEntity instanceof SeperatedArmEntity) && MainUtil.isThrownBlockItem((itemStack.getItem()))) {
                 poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F));
             } else {
                 poseStack.mulPose(Axis.XP.rotationDegrees(-65.0F));
+            }
+            if(livingEntity instanceof SeperatedArmEntity){
+                poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,-90),0,0.7F,0.5F);
             }
             poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
             boolean flag = humanoidArm == HumanoidArm.LEFT;
             poseStack.translate((float)(flag ? -1 : 1) / 16.0F, 0.125F, -0.625F);
 
-            if (MainUtil.isThrownBlockItem(itemStack.getItem())){
+            if (!(livingEntity instanceof SeperatedArmEntity) && MainUtil.isThrownBlockItem(itemStack.getItem())){
                 poseStack.scale(3,3,3);
             }
             if (itemStack.getItem() instanceof AnubisItem) {

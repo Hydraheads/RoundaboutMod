@@ -21,10 +21,13 @@ public class SeperatedArmSlimModel<T extends SeperatedArmSlimEntity> extends Sta
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "seperatedarmmodel"), "main");
 	private ModelPart stand;
+
 	private final ModelPart LeftArm;
 
 	public SeperatedArmSlimModel(ModelPart root) {
 		this.stand = root.getChild("stand");
+		this.rightHand = stand.getChild("rightHand");
+		this.leftHand = stand.getChild("leftHand");
 		this.LeftArm = this.stand.getChild("LeftArm");
 	}
 
@@ -43,9 +46,11 @@ public class SeperatedArmSlimModel<T extends SeperatedArmSlimEntity> extends Sta
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
 		PartDefinition Stand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create(), PartPose.offset(0.0F, 12.0F, 0.0F));
+		PartDefinition RightHand = Stand.addOrReplaceChild("rightHand", CubeListBuilder.create(), PartPose.offsetAndRotation(2.0F, 0.0F, -6.0F,00.0F,0.0F,0.0F));
+		PartDefinition LeftHand = Stand.addOrReplaceChild("leftHand", CubeListBuilder.create(), PartPose.offsetAndRotation(2.0F, 0.0F, -6.0F,00.0F,0.0F,0.0F));
 
-		PartDefinition LeftArm = Stand.addOrReplaceChild("LeftArm", CubeListBuilder.create().texOffs(16, 48).addBox(-1.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
-				.texOffs(40, 16).addBox(-1.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, new CubeDeformation(0.25F)), PartPose.offsetAndRotation(-1.0F, 10.0F, 1.0F, -1.5708F, 0.0F, 0.0F));
+		PartDefinition LeftArm = Stand.addOrReplaceChild("LeftArm", CubeListBuilder.create().texOffs(40,16).addBox(-1.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
+				.texOffs(40,16).addBox(-1.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, new CubeDeformation(0.25F)), PartPose.offsetAndRotation(-1.0F, 10.0F, 1.0F, -1.5708F, 0.0F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}

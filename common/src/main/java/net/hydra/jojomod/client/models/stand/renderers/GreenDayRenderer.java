@@ -5,6 +5,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.GreenDayModel;
 import net.hydra.jojomod.entity.stand.GreenDayEntity;
+import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -18,6 +19,8 @@ public class GreenDayRenderer extends StandRenderer<GreenDayEntity> {
     private static final ResourceLocation RED_DAY = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/red_day.png");
     private static final ResourceLocation TEAL_DAY= new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/blue_day.png");
     private static final ResourceLocation BROCOLLI = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/broccoli_green_day.png");
+    private static final ResourceLocation RED_NIGHT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/red_night.png");
+    private static final ResourceLocation GORGONZOLA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/gorgonzola_green_day.png");
 
 
     public GreenDayRenderer(EntityRendererProvider.Context context) {
@@ -30,6 +33,8 @@ public class GreenDayRenderer extends StandRenderer<GreenDayEntity> {
             case(GreenDayEntity.RED_DAY) -> RED_DAY;
             case(GreenDayEntity.TEAL_DAY) -> TEAL_DAY;
             case(GreenDayEntity.BROCOLLI) -> BROCOLLI;
+            case(GreenDayEntity.RED_NIGHT) -> RED_NIGHT;
+            case(GreenDayEntity.GORGONZOLA) -> GORGONZOLA;
             default -> PART_FIVE_GREEN_DAY;
 
         };
@@ -53,6 +58,10 @@ public class GreenDayRenderer extends StandRenderer<GreenDayEntity> {
         return super.getRenderType(entity, showBody, true, showOutline);
     }
 
+    @Override
+    public boolean skipLighting(GreenDayEntity entity) {
+        return entity.Emissive();
+    }
 
     @Override
     public float getStandOpacity(GreenDayEntity entity) {

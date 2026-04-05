@@ -33,6 +33,8 @@ public class FabricEffects extends MobEffect{
             register("vampire_blood", new FabricEffects(MobEffectCategory.HARMFUL, 8662571));
     public static final MobEffect UNBALANCED =
             register("unbalanced", new FabricEffects(MobEffectCategory.HARMFUL, 2738639));
+    public static final MobEffect MOLD =
+            register("mold", new FabricEffects(MobEffectCategory.HARMFUL, 0));
 
     protected FabricEffects(MobEffectCategory mobEffectCategory, int i) {
         super(mobEffectCategory, i);
@@ -54,5 +56,6 @@ public class FabricEffects extends MobEffect{
         ModEffects.WARDING = WARDING;
         ModEffects.VAMPIRE_BLOOD = VAMPIRE_BLOOD;
         ModEffects.UNBALANCED = UNBALANCED;
+        ModEffects.MOLD = MOLD;
     }
 }

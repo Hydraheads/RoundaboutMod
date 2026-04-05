@@ -1,5 +1,7 @@
 package net.hydra.jojomod.mixin;
 
+import com.google.common.collect.ImmutableMap;
+import com.mojang.serialization.Dynamic;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -27,6 +29,8 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -40,6 +44,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -589,6 +594,40 @@ public abstract class ZMob extends LivingEntity implements IMob {
                 }
             }
     }
+
+    @Unique
+    @Override
+    public void roundabout$purgePiglinAggro(Entity purge){
+        if (purge != null) {
+            Optional<? extends ExpirableValue<?>> $$1 = brain.getMemories().get(MemoryModuleType.ATTACK_TARGET);
+            if ($$1 != null) {
+                if (((LivingEntity)(Object)this) instanceof Piglin) {
+                    if (brain.getMemory(MemoryModuleType.ANGRY_AT).isPresent() &&
+                            brain.getMemory(MemoryModuleType.ANGRY_AT).get() == purge.getUUID()) {
+                        NbtOps nbtOps = NbtOps.INSTANCE;
+                        this.brain = this.makeBrain(new Dynamic<Tag>(nbtOps, nbtOps.createMap(ImmutableMap.of(nbtOps.createString("memories"), (Tag)nbtOps.emptyMap()))));
+                    }
+                    if (brain.getMemory(MemoryModuleType.ATTACK_TARGET).isPresent() &&
+                            brain.getMemory(MemoryModuleType.ATTACK_TARGET).get().getUUID() == purge.getUUID()) {
+                        NbtOps nbtOps = NbtOps.INSTANCE;
+                        this.brain = this.makeBrain(new Dynamic<Tag>(nbtOps, nbtOps.createMap(ImmutableMap.of(nbtOps.createString("memories"), (Tag)nbtOps.emptyMap()))));
+                    }
+                }
+                if (((LivingEntity)(Object)this) instanceof PiglinBrute){
+                    if (brain.getMemory(MemoryModuleType.ANGRY_AT).isPresent() &&
+                            brain.getMemory(MemoryModuleType.ANGRY_AT).get() == purge.getUUID()) {
+                        NbtOps nbtOps = NbtOps.INSTANCE;
+                        this.brain = this.makeBrain(new Dynamic<Tag>(nbtOps, nbtOps.createMap(ImmutableMap.of(nbtOps.createString("memories"), (Tag)nbtOps.emptyMap()))));
+                    }
+                    if (brain.getMemory(MemoryModuleType.ATTACK_TARGET).isPresent() &&
+                            brain.getMemory(MemoryModuleType.ATTACK_TARGET).get().getUUID() == purge.getUUID()) {
+                        NbtOps nbtOps = NbtOps.INSTANCE;
+                        this.brain = this.makeBrain(new Dynamic<Tag>(nbtOps, nbtOps.createMap(ImmutableMap.of(nbtOps.createString("memories"), (Tag)nbtOps.emptyMap()))));
+                    }
+                }
+            }
+        }
+    }
     @Unique
     @Override
     public void roundabout$deeplyEnforceTarget(Entity ent){
@@ -918,6 +957,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
                 Entity fleshTargetEntity = SL.getEntity(fleshTarget);
                 if (fleshTargetEntity instanceof LivingEntity LE){
+                    roundabout$purgePiglinAggro(LE);
                     LivingEntity hurtMob = LE.getLastHurtMob();
                     if (hurtMob != null && hurtMob.isAlive() && !hurtMob.is(this) && !hurtMob.is(LE)
                     && ((StandUser)hurtMob).rdbt$getFleshBud() != fleshTarget){

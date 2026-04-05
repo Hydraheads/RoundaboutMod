@@ -285,6 +285,7 @@
   "effect.roundabout.warding": "Warding",
   "effect.roundabout.vampire_blood": "Vampire Blood",
   "effect.roundabout.unbalanced": "Unbalanced",
+  "effect.roundabout.mold": "Mold",
 
   "item.roundabout.creative_only.info": "Creative Only",
 
@@ -370,8 +371,10 @@
   "entity.roundabout.go_beyond": "Go Beyond",
   "entity.roundabout.ground_bubble": "Underground Bubble",
   "entity.roundabout.separated_legs": "Separated legs",
-  "entity.roundabout.separated_arm": "Seperated Arm",
-  "entity.roundabout.separated_arm_slim": "Seperated Arm Slim",
+  "entity.roundabout.seperated_arm": "Seperated Arm",
+  "entity.roundabout.seperated_arm_slim": "Seperated Arm Slim",
+  "entity.roundabout.left_seperated_arm": "Left Seperated Arm",
+  "entity.roundabout.left_sepaeated_arm_slim": "Left Aeperated Arm Slim",
 
 
   "entity.roundabout.water_bottle": "Water Bottle",
@@ -1522,18 +1525,25 @@
   "ability.roundabout.gd_punch_left": "Main Arm Launch",
   "ability.roundabout.gd_punch_left.desc": "Separate your main hand from your body, throwing it out to attack or mine with the item in your main hand! Use again to control its movement",
   "ability.roundabout.gd_return_left": "Main Arm Reattach",
+  "ability.roundabout.gd_return_left.desc": "Return your detatched Main hand",
   "ability.roundabout.gd_spin_left": "Main Arm Spin",
+  "ability.roundabout.gd_spin_left.desc": "Causes your seperated main arm to spin in place, repeatedly attacking nearby entities. If the arm is in the air, knocks anything it hits upwards.",
   "ability.roundabout.gd_punch_right": "Off Hand Launch",
   "ability.roundabout.gd_return_right": "Off Hand Reattach",
   "ability.roundabout.gd_spin_right": "Off Hand Spin",
+  "ability.roundabout.gd_punch_right.desc": "Separate your Off hand from your body, throwing it out to attack or mine with the item in your off hand! Use again to control its movement",
+  "ability.roundabout.gd_return_right.desc": "Return your detatched Off hand",
+  "ability.roundabout.gd_spin_right.desc": "Causes your seperated Off hand  to spin in place, repeatedly attacking nearby entities. If the arm is in the air, knocks anything it hits upwards.",
   "ability.roundabout.gd_mold_leap": "Separation Leap",
   "ability.roundabout.gd_mold_leap.desc": "Separates your torso and legs, and launches you in the direction you are looking, allowing for great omnidirectional moblity whilst letting you avoid fall damage. Leaves you crawling while your legs float back to you, damaging mobs they come into contact with and letting you walk again. Your legs automatically return after a time",
-  "ability.roundabout.gd_mold_field": "Mold Field",
-  "ability.roundabout.gd_mold_field.desc": "Releases mold spores in a large area around you. Any mob in that area that lowers in elevation whilst being below you takes massive damage that ramps up over time. Players and certain mobs killed by the mold field with drop their heads. Organic projectiles below you in the mold field will rapidly disintegrate.",
+  "ability.roundabout.gd_mold_field": "Mold",
+  "ability.roundabout.gd_mold_field.desc": "Entities affected by your mold will take heavy damage as they get lower. This damage scales with what level of effect they have, as well as increasing it each time. This effect spreads to nearby mobs as affected entities take damage from the mold",
   "ability.roundabout.gd_stitch": "Stitch up",
   "ability.roundabout.gd_stitch.desc": "Stitches you up, recovering a tiny bit of health, and reducing bleed by 1 level",
   "ability.roundabout.gd_pardon": "Ally Selection",
-  "ability.roundabout.gd_pardon.desc": "Select entities as allies, making them unaffected by your mold field",
+  "ability.roundabout.gd_pardon.desc": "Select entities as allies, making them unaffected by your mold spread",
+  "ability.roundabout.gd_mold_spread":"Mold Spread",
+  "ability.roundabout.gd_mold_spread.desc":"Spreads Mold to all nearby entities, also increases mold level on entities that are already affected",
 
   "ability.roundabout.manual_shooting": "Shooting Mode",
   "ability.roundabout.manual_shooting.desc": "Allows you to press left click with your mouse shoot where you want if you are controlling the stand and it contains a projectile. If you decide to keep automatic shooting, it will redirect istantly any bullet torwards the nearest moving entity.",
@@ -1893,7 +1903,8 @@
   "skins.roundabout.green_day.red_day": "Red Day",
   "skins.roundabout.green_day.teal_day": "Teal Day",
   "skins.roundabout.green_day.broccoli": "Broccoli",
-
+  "skins.roundabout.green_day.red_night": "Red Night",
+  "skins.roundabout.green_day.gorgonzola": "Gorgonzola",
 
 
 
@@ -2926,6 +2937,7 @@
   "config.roundabout.major.common_config": "Common Config",
   "config.roundabout.major.close": "Close",
 
+  "config.roundabout.generalStandSettings.name": "General Stand",
   "config.roundabout.generalStandUserMobSettings.name": "Stand User Mobs",
   "config.roundabout.vanillaMinecraftTweaks.name": "Vanilla Tweaks",
   "config.roundabout.worldgenSettings.name": "Worldgen",

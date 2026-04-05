@@ -51,6 +51,8 @@ public class ModEntities {
     public static EntityType<SeperatedLegsEntity> SEPERATED_LEGS;
     public static EntityType<SeperatedArmEntity> SEPERATED_ARM;
     public static EntityType<SeperatedArmSlimEntity> SEPERATED_ARM_SLIM;
+    public static EntityType<LeftSeperatedArmSlimEntity> LEFT_SEPERATED_ARM_SLIM;
+    public static EntityType<LeftSeperatedArmEntity> LEFT_SEPERATED_ARM;
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET;
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET_KING;
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET_DROWNED;

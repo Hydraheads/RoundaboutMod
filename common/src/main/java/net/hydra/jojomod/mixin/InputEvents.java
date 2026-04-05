@@ -654,6 +654,13 @@ public abstract class InputEvents implements IInputEvents {
                 }
             }
 
+            if(powers instanceof PowersGreenDay PGD) {
+                if ((!PGD.HasOffHand) && (!(standComp.roundabout$hasStandOut()) || powers.canCombatModeUse(player.getMainHandItem()))) {
+                    ci.cancel();
+                    return;
+                }
+            }
+
             if (powers.interceptAllInteractions()) {
                 roundabout$TryGuard();
                 ci.cancel();
@@ -1100,6 +1107,8 @@ public abstract class InputEvents implements IInputEvents {
                 KeyInputs.switchRowsKey(player,((Minecraft) (Object) this), roundabout$sameKeyThree(KeyInputRegistry.switchRow),
                         this.options);
                 KeyInputs.strikePose(player,((Minecraft) (Object) this), KeyInputRegistry.pose.isDown(),
+                        this.options);
+                KeyInputs.strikePower(player,((Minecraft) (Object) this), KeyInputRegistry.power_switch.isDown(),
                         this.options);
 
                     if (KeyInputRegistry.menuKey.isDown()) {

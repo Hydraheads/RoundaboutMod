@@ -144,6 +144,7 @@ public class SeperatedArmEntity extends StandEntity {
 
     @Override
     public void tick() {
+        this.entityData.set(HELD_ITEM,this.getMainHandItem());
 
 
         tickeffects();
@@ -324,8 +325,11 @@ public class SeperatedArmEntity extends StandEntity {
 
         }else{
             hasUsedItem = false;
+            this.getHeldItem();
         }
     }
+
+
 
     public void attractMobs(){
         List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),16,16,16);
@@ -401,6 +405,7 @@ public class SeperatedArmEntity extends StandEntity {
                 if (flyingTicks > 2 && SpinTicks >0) {
                     BlockPos pos = new BlockPos(new Vec3i((int) this.getX(), (int) (this.getY() - 0.2), (int) this.getZ()));
                     if ((level().getBlockState(new BlockPos(pos)).isAir())) {
+                        this.level().addParticle(ParticleTypes.FLASH,this.getX(),this.getY(),this.getZ(),0,0,0);
                         entity.addDeltaMovement(new Vec3(0, 0.2, 0));
                     }
                 }

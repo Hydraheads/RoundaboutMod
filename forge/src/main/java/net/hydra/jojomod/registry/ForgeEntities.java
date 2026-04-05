@@ -649,4 +649,16 @@ public class ForgeEntities {
                     EntityType.Builder.<SeperatedArmSlimEntity>of(SeperatedArmSlimEntity::new, MobCategory.MISC).
                             sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":seperated_arm_slim")
             );
+
+    public static final RegistryObject<EntityType<LeftSeperatedArmEntity>> LEFT_SEPERATED_ARM =
+            ENTITY_TYPES.register("left_seperated_arm", () ->
+                    EntityType.Builder.<LeftSeperatedArmEntity>of(LeftSeperatedArmEntity::new, MobCategory.MISC).
+                            sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":left_seperated_arm")
+            );
+
+    public static final RegistryObject<EntityType<LeftSeperatedArmSlimEntity>> LEFT_SEPERATED_ARM_SLIM =
+            ENTITY_TYPES.register("left_seperated_arm_slim", () ->
+                    EntityType.Builder.<LeftSeperatedArmSlimEntity>of(LeftSeperatedArmSlimEntity::new, MobCategory.MISC).
+                            sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":left_seperated_arm_slim")
+            );
 }

@@ -1,5 +1,18 @@
 package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.mixin.ZWorldRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+//import net.zetalasis.client.shader.ManhattanVisionMode;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IGravityEntity;
@@ -14,6 +27,7 @@ import net.hydra.jojomod.entity.corpses.FallenCreeper;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
+import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
@@ -58,6 +72,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.minecraft.world.phys.shapes.VoxelShape;
+//import org.spongepowered.asm.mixin.Unique;
 
 import java.util.Arrays;
 import java.util.List;
@@ -73,9 +88,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
         return ClientNetworking.getAppropriateConfig().manhattanTransferSettings.enableManhattanTransfer;
 
     }
-    public boolean isAutomaticShootingOn() {
-        return this.getStandUserSelf().roundabout$getUniqueStandModeToggle();
-    }
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
         return new PowersManhattanTransfer(entity);
@@ -83,19 +95,19 @@ public class PowersManhattanTransfer extends NewDashPreset {
     @Override
     public StandEntity getNewStandEntity() {
         byte skin = ((StandUser) this.getSelf()).roundabout$getStandSkin();
-        if (((StandUser) this.getSelf()).roundabout$getStandSkin() == ManhattanTransferEntity.POLLINATION_SKIN) {
-            return ModEntities.POLLINATION_TRANSFER.create(this.getSelf().level());
-        }
-        return ModEntities.MANHATTAN_TRANSFER.create(this.getSelf().level());
+            if (((StandUser) this.getSelf()).roundabout$getStandSkin() == ManhattanTransferEntity.POLLINATION_SKIN) {
+                return ModEntities.POLLINATION_TRANSFER.create(this.getSelf().level());
+            }
+            return ModEntities.MANHATTAN_TRANSFER.create(this.getSelf().level());
     }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         // code for advanced icons
         ClientUtil.fx.roundabout$onGUI(context);
-
-        if (!isAutomaticShootingOn())
+      /*  if () {
             setSkillIcon(context, x, y, 1, StandIcons.MANUAL_SHOOTING_ON, PowerIndex.SKILL_1);
-        else
+        }
+        else*/
             setSkillIcon(context, x, y, 1, StandIcons.MANUAL_SHOOTING_OFF, PowerIndex.SKILL_1);
 
         if (isPiloting())
@@ -103,8 +115,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
         else
             setSkillIcon(context, x, y, 2, StandIcons.CONTROL_MODE_ON, PowerIndex.SKILL_2);
 
-        if (!isVisionOn())
+        if (switchWindVisionToggle()) {
             setSkillIcon(context, x, y, 4, StandIcons.WIND_VISION_ON, PowerIndex.SKILL_4);
+        }
         else
             setSkillIcon(context, x, y, 4, StandIcons.WIND_VISION_OFF, PowerIndex.SKILL_4);
 
@@ -112,13 +125,12 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
         super.renderIcons(context, x, y);
     }
-    public boolean hasMoreThanOnePos() {
-        List<Byte> posList = getPosList();
-        return (posList != null && !posList.isEmpty() && posList.size() == 1);
+    public Component getPosName(byte posID){
+        return Component.empty();
     }
-    public boolean switchShootingMode() {
-        getStandUserSelf().roundabout$setUniqueStandModeToggle(!isAutomaticShootingOn());
-        return true;
+    public List<Byte> getPosList(){
+        List<Byte> $$1 = Lists.newArrayList();
+        return $$1;
     }
     @Override
     public int getMaxPilotRange() {
@@ -134,45 +146,84 @@ public class PowersManhattanTransfer extends NewDashPreset {
         /**Making dash usable on both key presses*/
         switch (context) {
             case SKILL_1_NORMAL, SKILL_1_CROUCH -> {
-                toggleManualShootingClient();
+
             }
             case SKILL_2_NORMAL, SKILL_2_CROUCH -> {
                 toggleControlModeClient();
             }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
-                dash();
+                if(!isPiloting()) {
+                    dash();
+                }
             }
             case SKILL_4_NORMAL, SKILL_4_CROUCH -> {
-                clientChangeVision();
+                switchVisionClient();
             }
-        }
-    }
-    public boolean isVisionOn() {
-        ClientConfig clientConfig = ConfigManager.getClientConfig();
-        if (clientConfig != null && clientConfig.dynamicSettings != null) {
-            return clientConfig.dynamicSettings.windVisionMode;
-        }
-        return true;
-    }
-    public void clientChangeVision() {
-        ClientConfig clientConfig = ConfigManager.getClientConfig();
-        if (clientConfig != null && clientConfig.dynamicSettings != null) {
-            clientConfig.dynamicSettings.windVisionMode = !clientConfig.dynamicSettings.windVisionMode;
-            ConfigManager.saveClientConfig();
         }
     }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         switch (move) {
-            case PowerIndex.POWER_1 -> {
-                return switchShootingMode();
-            }
             case PowerIndex.POWER_4 -> {
-                return isVisionOn();
+                return switchVision();
             }
         }
-        return super.setPowerOther(move, lastMove);
+            return super.setPowerOther(move, lastMove);
     }
+
+    public void switchVisionClient(){
+        this.tryPower(PowerIndex.POWER_4, true);
+        tryPowerPacket(PowerIndex.POWER_4);
+    }
+    //TODO: understand how to make entities unrender, and make it so if the vision is on the mobs unrender. Later on I'll figure out the movement detector
+
+    public boolean switchVision(){
+
+       getStandUserSelf().roundabout$setUniqueStandModeToggle(!switchWindVisionToggle());
+        Entity entity;
+        if (isClient() && this.self instanceof Player PE) {
+            if (switchWindVisionToggle()) {
+                PE.displayClientMessage(Component.translatable("text.roundabout.survivor.anger_selection").withStyle(ChatFormatting.DARK_GREEN), true);
+            }
+            else{
+
+                PE.displayClientMessage(Component.translatable("text.roundabout.survivor.anger_selection_off").withStyle(ChatFormatting.DARK_AQUA), true);
+            }
+        }
+        return true;
+    }
+
+
+    public int visionTicks;
+    @Override
+    public boolean highlightsEntity(Entity ent,Player player){
+
+        if(switchWindVisionToggle() || isPiloting()) {
+                if (ent.getDeltaMovement().x == 0 || ent.getDeltaMovement().y == 0 || ent.getDeltaMovement().z == 0) {
+                    if (ent != null && ent instanceof LivingEntity && !(ent instanceof StandEntity) && !ent.isInvisible()) {
+                        return false;
+                    }
+                }
+
+            else if (ent.getDeltaMovement().x != 0 || ent.getDeltaMovement().z != 0) {
+                if (ent != null && ent instanceof LivingEntity && !(ent instanceof StandEntity) && !ent.isInvisible()) {
+                    return true;
+                }
+            }
+
+        }
+        return false;
+    }
+
+    @Override
+    public int highlightsEntityColor(Entity ent, Player player){
+        return 12379456;
+    }
+
+    public boolean switchWindVisionToggle(){
+        return getStandUserSelf().roundabout$getUniqueStandModeToggle();
+    }
+
     @Override
     public void setPiloting(int ID) {
         if (this.self instanceof Player PE) {
@@ -189,10 +240,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
     private float flyingSpeed = 0.055F;
     private float walkingSpeed = 0.005F;
-    public void toggleManualShootingClient() {
-        this.tryPower(PowerIndex.POWER_1, true);
-        tryPowerPacket(PowerIndex.POWER_1);
-    }
     public void toggleControlModeClient() {
         if (isPiloting()) {
             if (this.self instanceof Player PE) {
@@ -201,6 +248,8 @@ public class PowersManhattanTransfer extends NewDashPreset {
             }
             tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
         } else {
+            this.tryPower(PowerIndex.POWER_2, true);
+            tryPowerPacket(PowerIndex.POWER_2);
             StandEntity entity = this.getStandEntity(this.self);
             int L = 0;
             if (entity != null) {
@@ -243,15 +292,19 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public boolean isActive() {
         return this.getStandEntity(this.getSelf()) != null;
     }
-
+    StandUser User = getUserData(this.self);
     @Override
     public void tickPower() {
         super.tickPower();
         if (this.getStandEntity(this.getSelf()) != null) {
             Vec3 vec3 = new Vec3(walkingSpeed, 0, walkingSpeed);
             if (!isPiloting()) {
+                if(this.getStandEntity(this.getSelf()).isInWaterOrRain()){
+                    this.getStandEntity(this.getSelf()).setDeltaMovement(this.getStandEntity(this.getSelf()).getForward().scale(0.010 * configSpeed()));
+                }
+                else{
                 this.getStandEntity(this.getSelf()).setDeltaMovement(this.getStandEntity(this.getSelf()).getForward().scale(0.022 * configSpeed()));
-            }
+            }}
             if (isActive()) {
                 DimensionType t = this.getStandEntity(this.getSelf()).level().dimensionType();
                 DimensionType T = this.getSelf().level().dimensionType();
@@ -353,7 +406,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
         return displayStand;
     }
     public StandEntity displayStand = null;
-
     @Override
     public void pilotStandControls(KeyboardPilotInput kpi, LivingEntity entity) {
         int $$1 = 0;
@@ -375,44 +427,66 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
             if (ent != null) {
                 Entity TE = MainUtil.getTargetEntity(ent, 100, 10);
-                if (TE != null /*&& TE != this.getSelf()*/ && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible()) {
-                    {
-                        if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
-                            entity.setDeltaMovement(entity.getForward());
-                            entity.setDeltaMovement(entity.getForward().scale(0.06  * configSpeed()));
-                        } else {
-                            if ($$13 != 0) {
-                                entity.setDeltaMovement(delta.x / 1.1, $$13 * flyingSpeed * 3F, delta.z / 1.1);
+                if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible()) {
+                        if (ME.isInRain()) {
+                            if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
+                                entity.setDeltaMovement(entity.getForward());
+                                entity.setDeltaMovement(entity.getForward().scale(0.04 * configSpeed()));
                             } else {
-                                entity.setDeltaMovement(delta.x / 1.1, 0, delta.z / 1.1);
+                                if ($$13 != 0) {
+                                    entity.setDeltaMovement(delta.x / 1.6, $$13 * flyingSpeed * 2.5F, delta.z / 1.6);
+                                } else {
+                                    entity.setDeltaMovement(delta.x / 1.6, 0, delta.z / 1.6);
+                                }
+                            }
+                        } else {
+                            if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
+                                entity.setDeltaMovement(entity.getForward());
+                                entity.setDeltaMovement(entity.getForward().scale(0.06 * configSpeed()));
+                            } else {
+                                if ($$13 != 0) {
+                                    entity.setDeltaMovement(delta.x / 1.1, $$13 * flyingSpeed * 3F, delta.z / 1.1);
+                                } else {
+                                    entity.setDeltaMovement(delta.x / 1.1, 0, delta.z / 1.1);
+                                }
                             }
                         }
-
-                    }
                 }
-                else{
-                    if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
-                        entity.setDeltaMovement(entity.getForward());
-                        entity.setDeltaMovement(entity.getForward().scale(0.022  * configSpeed()));
-                    } else {
-                        if ($$13 != 0) {
-                            entity.setDeltaMovement(delta.x / 1.6, $$13 * flyingSpeed * 2.7F, delta.z / 1.6);
+                else {
+                        if (!ME.isInRain()) {
+                            if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
+                                entity.setDeltaMovement(entity.getForward());
+                                entity.setDeltaMovement(entity.getForward().scale(0.022 * configSpeed()));
+                            } else {
+                                if ($$13 != 0) {
+                                    entity.setDeltaMovement(delta.x / 1.6, $$13 * flyingSpeed * 2.7F, delta.z / 1.6);
+                                } else {
+                                    entity.setDeltaMovement(delta.x / 1.6, 0, delta.z / 1.6);
+                                }
+                            }
                         } else {
-                            entity.setDeltaMovement(delta.x / 1.6, 0, delta.z / 1.6);
+                            if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
+                                entity.setDeltaMovement(entity.getForward());
+                                entity.setDeltaMovement(entity.getForward().scale(0.012 * configSpeed()));
+                            } else {
+                                if ($$13 != 0) {
+                                    entity.setDeltaMovement(delta.x / 2.2, $$13 * flyingSpeed * 2F, delta.z / 2.2);
+                                } else {
+                                    entity.setDeltaMovement(delta.x / 2.2, 0, delta.z / 2.2);
+                                }
+                            }
                         }
                     }
-                }
             }
         }
     }
-
     @Override
     public int getDisplayPowerInventoryScale() {
-        return 30;
+        return 45;
     }
     @Override
     public int getDisplayPowerInventoryYOffset() {
-        return 18;
+        return 22;
     }
     @Override
     public Component getSkinName(byte skinId) {
@@ -474,11 +548,11 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
     @Override
     public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
+        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.DARK_PURPLE);
     }
     @Override
     public Component ifWipListDev(){
-        return Component.literal(  "14Kacper").withStyle(ChatFormatting.YELLOW);
+        return Component.literal(  "14Kacper").withStyle(ChatFormatting.BLUE);
     }
     //COMMAND TO QUICKLY PUT MANHATTAN TRANSFER INTO MOBS: /roundaboutSetStand @p manhattan_transfer 1 "from 1 to 5" 0 false
 

@@ -570,6 +570,16 @@ public class ForgeSounds {
             register(ModSounds.SURVIVOR_REMOVE, ModSounds.SURVIVOR_REMOVE_ID);
     public static final RegistryObject<SoundEvent> SUMMON_DIVER_DOWN =
             register(ModSounds.SUMMON_DIVER_DOWN, ModSounds.SUMMON_DIVER_DOWN_ID);
+    public static final RegistryObject<SoundEvent> SUMMON_GREEN_DAY =
+            register(ModSounds.SUMMON_GREEN_DAY, ModSounds.SUMMON_GREEN_DAY_ID);
+    public static final RegistryObject<SoundEvent> GREEN_DAY_SPIN =
+            register(ModSounds.GREEN_DAY_ARM_SPIN, ModSounds.GREEN_DAY_ARM_SPIN_ID);
+    public static final RegistryObject<SoundEvent> GREEN_DAY_SPLIT =
+            register(ModSounds.GREEN_DAY_SPLIT, ModSounds.GREEN_DAY_SPLIT_ID);
+    public static final RegistryObject<SoundEvent> GREEN_DAY_MOLD_SPREAD =
+            register(ModSounds.GREEN_DAY_MOLD_SPREAD, ModSounds.GREEN_DAY_MOLD_SPREAD_ID);
+    public static final RegistryObject<SoundEvent> GREEN_DAY_MOLD_STITCH =
+            register(ModSounds.GREEN_DAY_STITCH, ModSounds.GREEN_DAY_STITCH_ID);
     public static final RegistryObject<SoundEvent> ZOMBIE_CHARGE =
             register(ModSounds.ZOMBIE_CHARGE, ModSounds.ZOMBIE_CHARGE_ID);
     public static final RegistryObject<SoundEvent> SUMMON_WALKING =

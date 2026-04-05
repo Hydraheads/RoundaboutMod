@@ -19,9 +19,7 @@ import net.hydra.jojomod.client.models.projectile.*;
 import net.hydra.jojomod.client.models.projectile.renderers.*;
 import net.hydra.jojomod.client.models.stand.*;
 import net.hydra.jojomod.client.models.stand.renderers.*;
-import net.hydra.jojomod.client.models.substand.SeperatedArmModel;
-import net.hydra.jojomod.client.models.substand.SeperatedArmSlimModel;
-import net.hydra.jojomod.client.models.substand.SeperatedLegsModel;
+import net.hydra.jojomod.client.models.substand.*;
 import net.hydra.jojomod.client.models.substand.renderers.*;
 import net.hydra.jojomod.client.models.visages.*;
 import net.hydra.jojomod.client.models.visages.parts.*;
@@ -34,7 +32,6 @@ import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.npcs.ZombieAestheticianModel;
 import net.hydra.jojomod.client.models.npcs.renderers.ZombieAestheticianRenderer;
 import net.hydra.jojomod.client.models.projectile.renderers.NoRenderer;
-import net.hydra.jojomod.client.models.substand.LifeTrackerModel;
 import net.minecraft.client.model.SilverfishModel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
@@ -156,6 +153,8 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.SEPERATED_LEGS, SeperatedLegsRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SEPERATED_ARM, SeperatedArmRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SEPERATED_ARM_SLIM, SeperatedArmSlimRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.LEFT_SEPERATED_ARM, LeftSeperatedArmRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.LEFT_SEPERATED_ARM_SLIM, LeftSeperatedArmSlimRenderer::new);
 
         EntityRendererRegistry.register(FabricEntities.METALLICA_KNIFE, KnifeRenderer::new);
 
@@ -206,6 +205,8 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SEPERATED_LEGS_LAYER, SeperatedLegsModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SEPERATED_ARM_LAYER, SeperatedArmModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SEPERATED_ARM_SLIM_LAYER, SeperatedArmSlimModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.LEFT_SEPERATED_ARM_LAYER, LeftSeperatedArmModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.LEFT_SEPERATED_ARM_SLIM_LAYER, LeftSeperatedArmSlimModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STAND_FIREBALL_LAYER, StandFireballModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.RIPPER_EYES_LAYER, RipperEyesModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GASOLINE_LAYER, GasolineCanModel::createBodyLayer);
@@ -239,6 +240,7 @@ public class FabricEntityClient {
         ModStrayModels.CHAIR_RATT_SHOULDER = new ChairRattShoulderModel();
         ModStrayModels.MoldSpine = new MoldSpineModel();
         ModStrayModels.MoldRightArm = new MoldRightArm();
+        ModStrayModels.MoldLeftArm = new MoldLeftArm();
         ModStrayModels.MANDOM_WATCH = new WatchModel();
         ModStrayModels.MANDOM_WATCH_SMALL = new SmallWatchModel();
         ModStrayModels.ChestPart = new ChestPart();

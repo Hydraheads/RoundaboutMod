@@ -260,7 +260,7 @@ public class VampireFate extends VampiricFate {
 
     @Override
     public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
-                                  boolean removeNum, Minecraft minecraft){
+                                  boolean removeNum){
         StandHudRender.renderBloodExp(context,cameraPlayer,screenWidth,screenHeight,x);
     }
 

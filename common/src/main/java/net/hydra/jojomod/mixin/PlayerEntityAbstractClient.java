@@ -134,6 +134,7 @@ public abstract class PlayerEntityAbstractClient extends Player implements IPlay
                         if (FateTypes.isUndisguisedZombie(this)) {
                             // 37 67 -34
                             cir.setReturnValue(new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/zombie_skins/" + MI.visageData.getSkinPath() + ".png"));
+
                         } else {
                             cir.setReturnValue(new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/" + MI.visageData.getSkinPath() + ".png"));
 
@@ -141,6 +142,7 @@ public abstract class PlayerEntityAbstractClient extends Player implements IPlay
                         return;
                     } else if (visage.is(ModItems.RAT_MASK) && !isSpectator()){
                         cir.setReturnValue(new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/rat/rat_skin.png"));
+                        return;
                     }
                 }
             }
@@ -149,8 +151,10 @@ public abstract class PlayerEntityAbstractClient extends Player implements IPlay
                 PlayerModel pm = ClientUtil.getPlayerModel(this);
                 if (pm != null && (((IPlayerModel)pm).roundabout$getSlim())){
                     cir.setReturnValue(StandIcons.ZOMBIE_SKIN_SLIM);
+                    return;
                 } else {
                     cir.setReturnValue(StandIcons.ZOMBIE_SKIN);
+                    return;
                 }
             }
         }
