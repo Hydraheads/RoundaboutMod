@@ -2398,6 +2398,10 @@ public class MainUtil {
         } else if (context == PacketDataIndex.BYTE_RESPAWN_STRATEGY) {
             ((IPlayerEntity) player).rdbt$setRespawnStrategy(data);
             S2CPacketUtil.sendSimpleByteToClientPacket(player,PacketDataIndex.S2C_RESPAWN);
+        } else if (context == PacketDataIndex.BYTE_SWITCH_POWERS) {
+            if (PowerTypes.canHavePower(player,data)){
+                PowerTypes.setPowerType(player,data);
+            }
         }
     }
     /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
