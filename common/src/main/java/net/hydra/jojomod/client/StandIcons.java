@@ -553,6 +553,7 @@ public class StandIcons {
     public static final ResourceLocation ANUBIS_THRUST_CUT = Roundabout.location("textures/gui/icons/anubis/thrust_cut.png");
     public static final ResourceLocation ANUBIS_BARRAGE = Roundabout.location("textures/gui/icons/anubis/barrage.png");
     public static final ResourceLocation ANUBIS_SHIELDBREAK = Roundabout.location("textures/gui/icons/anubis/maybe_shieldbreak.png");
+    public static final ResourceLocation ANUBIS_GUARD = Roundabout.location("textures/gui/icons/anubis/guard.png");
 
     public static final ResourceLocation TUSK_ACTS = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/tusk_acts.png");
