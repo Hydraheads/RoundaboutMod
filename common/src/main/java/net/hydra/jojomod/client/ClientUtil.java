@@ -262,6 +262,9 @@ public class ClientUtil {
     public static void tickClientUtilStuff(){
         clientTicker++;
 
+        if (heldSwap > 0){
+            heldSwap--;
+        }
         if (renderBloodTicks > 0){
             renderBloodTicks--;
         }
@@ -1229,9 +1232,14 @@ public class ClientUtil {
     }
 
     public static boolean poseHeld = false;
+    public static boolean powerHeld = false;
+    public static int heldSwap = 0;
 
     public static void openPlunderScreen(){
         Minecraft.getInstance().setScreen(new PlunderScreen());
+    }
+    public static void openPowerSwitchScreen(){
+        Minecraft.getInstance().setScreen(new PowerSwitcherScreen());
     }
     public static void openStandSwitchUI(ItemStack arrow){
         Minecraft.getInstance().setScreen(new StandArrowRerollScreen(arrow));
@@ -1253,6 +1261,18 @@ public class ClientUtil {
         } else {
             if (poseHeld){
                 poseHeld = false;
+            }
+        }
+    }
+    public static void strikePower(Player player, Minecraft C, boolean keyIsDown, Options option) {
+        if (keyIsDown){
+            if (!powerHeld){
+                C.setScreen(new PowerSwitcherScreen());
+            }
+            powerHeld = true;
+        } else {
+            if (powerHeld){
+                powerHeld = false;
             }
         }
     }

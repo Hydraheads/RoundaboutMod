@@ -1108,6 +1108,8 @@ public abstract class InputEvents implements IInputEvents {
                         this.options);
                 KeyInputs.strikePose(player,((Minecraft) (Object) this), KeyInputRegistry.pose.isDown(),
                         this.options);
+                KeyInputs.strikePower(player,((Minecraft) (Object) this), KeyInputRegistry.power_switch.isDown(),
+                        this.options);
 
                     if (KeyInputRegistry.menuKey.isDown()) {
                         KeyInputs.menuKey(player,((Minecraft) (Object) this));
