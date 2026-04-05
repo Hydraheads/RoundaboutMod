@@ -1904,7 +1904,8 @@ public class MainUtil {
         return isSpecialEffect(value.getEffect());
     }
     public static boolean isSpecialEffect(MobEffect value){
-        return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS) ||
+        return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS)
+                || value.equals(ModEffects.SWITCH) ||
                 value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING);
     }
     public static boolean canHaveFrictionTaken(LivingEntity LE){
