@@ -3,6 +3,7 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPermaCasting;
+import net.hydra.jojomod.access.IPlayerEntityAbstractClient;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
@@ -23,6 +24,7 @@ import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.mixin.PlayerEntity;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
@@ -291,6 +293,16 @@ public class PowersGreenDay extends NewPunchingStand {
 
 
         moldShenanigans();
+        if(Objects.nonNull(this.getStandEntity(this.self))) {
+            if (this.getStandEntity(this.self).getAnimation() == GreenDayEntity.MOLD_SPREAD && hmm == 0) {
+                this.animateStand(StandEntity.IDLE);
+                this.poseStand(OffsetIndex.FOLLOW);
+                hmm = -1;
+            }
+        }
+        if(hmm > -1){
+            hmm--;
+        }
         if(legGoneTicks>0) {
             if (!this.self.level().isClientSide()) {
                 for (int i = 0; i < 2; i = i + 1) {
@@ -376,10 +388,18 @@ public class PowersGreenDay extends NewPunchingStand {
         }
     }
 
+    private int hmm = 0;
 
     public boolean MoldSpread() {
-        if (!isClient()) {
+        if (!isClient() && !this.isBarraging()) {
+
+            StandEntity stand = getStandEntity(this.self);
             List<Entity> damages = MainUtil.genHitbox(this.self.level(), this.self.getX(), this.self.getY(), this.self.getZ(), 5, 5, 5);
+            if(Objects.nonNull(stand)){
+                animateStand(GreenDayEntity.MOLD_SPREAD);
+                this.poseStand(OffsetIndex.ATTACK);
+                hmm = 20;
+            }
             for (int j = 0; j < damages.size(); j++) {
 
                 Entity entity = damages.get(j);
@@ -510,7 +530,7 @@ public class PowersGreenDay extends NewPunchingStand {
     public void OffHandThrow(){
         if (!this.onCooldown(PowerIndex.SKILL_2)) {
             if(isBarrageAttacking() && !HasOffHand){
-                MainArmSpin();
+                OffHandSpin();
             }else {
                 if (HasOffHandCharge) {
                     HasOffHandCharge = false;

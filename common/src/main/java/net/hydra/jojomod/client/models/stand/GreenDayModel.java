@@ -5,6 +5,7 @@ package net.hydra.jojomod.client.models.stand;// Made with Blockbench 4.10.4
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.hydra.jojomod.client.models.stand.animations.GreenDayAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.entity.stand.GreenDayEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -23,6 +24,8 @@ public class GreenDayModel<T extends GreenDayEntity> extends StandModel<T> {
 		this.rightHand = stand.getChild("stand2").getChild("body").getChild("body2")
 				.getChild("torso").getChild("upper_chest").getChild("right_arm").getChild("lower_right_arm");
 	}
+
+
 
 
 	public static LayerDefinition getTexturedModelData() {
@@ -227,8 +230,11 @@ public class GreenDayModel<T extends GreenDayEntity> extends StandModel<T> {
 		this.animate(pEntity.kick_barrage, StandAnimations.KICK_BARRAGE, pAgeInTicks, 1.25f);
 		this.animate(pEntity.kick_barrage_windup, StandAnimations.KICK_BARRAGE_CHARGE, pAgeInTicks, 1f);
 		this.animate(pEntity.kick_barrage_end, StandAnimations.KICK_BARRAGE_END, pAgeInTicks, 1f);
+		this.animate(pEntity.mold_spread_gd, GreenDayAnimations.mold_spread,pAgeInTicks,1f);
 
 	}
+
+
 	@Override
 	public ModelPart root() {
 		return stand;

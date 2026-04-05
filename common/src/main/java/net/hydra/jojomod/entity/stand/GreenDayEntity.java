@@ -21,6 +21,10 @@ public class GreenDayEntity extends FollowingStandEntity{
     public final AnimationState kick_barrage = new AnimationState();
     public final AnimationState kick_barrage_end = new AnimationState();
     public final AnimationState kick_barrage_windup = new AnimationState();
+    public final AnimationState mold_spread_gd = new AnimationState();
+
+    public static byte
+        MOLD_SPREAD = 121;
 
     public boolean Emissive(){
         return this.getSkin() == 5;
@@ -56,6 +60,13 @@ public class GreenDayEntity extends FollowingStandEntity{
                 this.kick_barrage_end.stop();
             }
 
+            if(this.getAnimation() == MOLD_SPREAD) {
+                this.mold_spread_gd.startIfStopped(this.tickCount);
+            }else {
+                this.mold_spread_gd.stop();
+            }
+
         }
     }
+
 }
