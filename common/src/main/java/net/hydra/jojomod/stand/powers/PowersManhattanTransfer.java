@@ -299,8 +299,12 @@ public class PowersManhattanTransfer extends NewDashPreset {
         if (this.getStandEntity(this.getSelf()) != null) {
             Vec3 vec3 = new Vec3(walkingSpeed, 0, walkingSpeed);
             if (!isPiloting()) {
+                if(this.getStandEntity(this.getSelf()).isInWaterOrRain()){
+                    this.getStandEntity(this.getSelf()).setDeltaMovement(this.getStandEntity(this.getSelf()).getForward().scale(0.010 * configSpeed()));
+                }
+                else{
                 this.getStandEntity(this.getSelf()).setDeltaMovement(this.getStandEntity(this.getSelf()).getForward().scale(0.022 * configSpeed()));
-            }
+            }}
             if (isActive()) {
                 DimensionType t = this.getStandEntity(this.getSelf()).level().dimensionType();
                 DimensionType T = this.getSelf().level().dimensionType();
@@ -424,32 +428,55 @@ public class PowersManhattanTransfer extends NewDashPreset {
             if (ent != null) {
                 Entity TE = MainUtil.getTargetEntity(ent, 100, 10);
                 if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible()) {
-                    {
-                        if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
-                            entity.setDeltaMovement(entity.getForward());
-                            entity.setDeltaMovement(entity.getForward().scale(0.06  * configSpeed()));
-                        } else {
-                            if ($$13 != 0) {
-                                entity.setDeltaMovement(delta.x / 1.1, $$13 * flyingSpeed * 3F, delta.z / 1.1);
+                        if (ME.isInRain()) {
+                            if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
+                                entity.setDeltaMovement(entity.getForward());
+                                entity.setDeltaMovement(entity.getForward().scale(0.04 * configSpeed()));
                             } else {
-                                entity.setDeltaMovement(delta.x / 1.1, 0, delta.z / 1.1);
+                                if ($$13 != 0) {
+                                    entity.setDeltaMovement(delta.x / 1.6, $$13 * flyingSpeed * 2.5F, delta.z / 1.6);
+                                } else {
+                                    entity.setDeltaMovement(delta.x / 1.6, 0, delta.z / 1.6);
+                                }
+                            }
+                        } else {
+                            if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
+                                entity.setDeltaMovement(entity.getForward());
+                                entity.setDeltaMovement(entity.getForward().scale(0.06 * configSpeed()));
+                            } else {
+                                if ($$13 != 0) {
+                                    entity.setDeltaMovement(delta.x / 1.1, $$13 * flyingSpeed * 3F, delta.z / 1.1);
+                                } else {
+                                    entity.setDeltaMovement(delta.x / 1.1, 0, delta.z / 1.1);
+                                }
                             }
                         }
-
-                    }
                 }
-                else{
-                    if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
-                        entity.setDeltaMovement(entity.getForward());
-                        entity.setDeltaMovement(entity.getForward().scale(0.022  * configSpeed()));
-                    } else {
-                        if ($$13 != 0) {
-                            entity.setDeltaMovement(delta.x / 1.6, $$13 * flyingSpeed * 2.7F, delta.z / 1.6);
+                else {
+                        if (!ME.isInRain()) {
+                            if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
+                                entity.setDeltaMovement(entity.getForward());
+                                entity.setDeltaMovement(entity.getForward().scale(0.022 * configSpeed()));
+                            } else {
+                                if ($$13 != 0) {
+                                    entity.setDeltaMovement(delta.x / 1.6, $$13 * flyingSpeed * 2.7F, delta.z / 1.6);
+                                } else {
+                                    entity.setDeltaMovement(delta.x / 1.6, 0, delta.z / 1.6);
+                                }
+                            }
                         } else {
-                            entity.setDeltaMovement(delta.x / 1.6, 0, delta.z / 1.6);
+                            if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
+                                entity.setDeltaMovement(entity.getForward());
+                                entity.setDeltaMovement(entity.getForward().scale(0.012 * configSpeed()));
+                            } else {
+                                if ($$13 != 0) {
+                                    entity.setDeltaMovement(delta.x / 2.2, $$13 * flyingSpeed * 2F, delta.z / 2.2);
+                                } else {
+                                    entity.setDeltaMovement(delta.x / 2.2, 0, delta.z / 2.2);
+                                }
+                            }
                         }
                     }
-                }
             }
         }
     }

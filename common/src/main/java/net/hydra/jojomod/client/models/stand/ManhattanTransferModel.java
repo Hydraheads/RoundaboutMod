@@ -232,8 +232,6 @@ public class ManhattanTransferModel<T extends ManhattanTransferEntity> extends S
     @Override
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         super.setupAnim(pEntity,pLimbSwing,pLimbSwingAmount,pAgeInTicks,pNetHeadYaw,pHeadPitch);
-       // defaultModifiers(pEntity);
-        //defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
         this.animate(pEntity.rain_dodging_manhattan, ManhattanTransferAnimations.Rain_Dodge, pAgeInTicks, 1f);
     }
 
