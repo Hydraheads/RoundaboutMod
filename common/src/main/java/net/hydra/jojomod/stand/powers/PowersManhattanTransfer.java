@@ -420,7 +420,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
             if (ent != null) {
                 Entity TE = MainUtil.getTargetEntity(ent, 100, 10);
-                if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible()) {
+                if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible() && TE.getDeltaMovement().x != 0 && TE.getDeltaMovement().z != 0) {
                         if (ME.isInRain()) {
                             if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
                                 entity.setDeltaMovement(entity.getForward());
