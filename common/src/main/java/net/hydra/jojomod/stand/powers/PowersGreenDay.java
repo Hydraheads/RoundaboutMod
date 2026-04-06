@@ -390,16 +390,10 @@ public class PowersGreenDay extends NewPunchingStand {
 
     private int hmm = 0;
 
-    public boolean MoldSpread() {
+    public void moldBurst(Vec3 pos,int rangeR){
         if (!isClient() && !this.isBarraging()) {
+            List<Entity> damages = MainUtil.genHitbox(this.self.level(), pos.x, pos.y,pos.z, rangeR, rangeR, rangeR);
 
-            StandEntity stand = getStandEntity(this.self);
-            List<Entity> damages = MainUtil.genHitbox(this.self.level(), this.self.getX(), this.self.getY(), this.self.getZ(), 5, 5, 5);
-            if(Objects.nonNull(stand)){
-                animateStand(GreenDayEntity.MOLD_SPREAD);
-                this.poseStand(OffsetIndex.ATTACK);
-                hmm = 20;
-            }
             for (int j = 0; j < damages.size(); j++) {
 
                 Entity entity = damages.get(j);
@@ -418,18 +412,36 @@ public class PowersGreenDay extends NewPunchingStand {
                     }
                 }
             }
-            for (int i = 0; i < 604; i = i + 1) {
-                double randX = Roundabout.RANDOM.nextDouble(-5, 5);
-                double randY = Roundabout.RANDOM.nextDouble(-5, 5);
-                double randZ = Roundabout.RANDOM.nextDouble(-5, 5);
+            for (int i = 0; i <rangeR * 50; i = i + 1) {
+                double randX = Roundabout.RANDOM.nextDouble(-rangeR, rangeR);
+                double randY = Roundabout.RANDOM.nextDouble(-rangeR, rangeR);
+                double randZ = Roundabout.RANDOM.nextDouble(-rangeR, rangeR);
                 ((ServerLevel) this.self.level()).sendParticles(new DustParticleOptions(new Vector3f(0.76F, 1.0F, 0.9F
                         ), 2f),
-                        this.self.getX() + randX,
-                        this.self.getY() + randY,
-                        this.self.getZ() + randZ,
+                        pos.x + randX,
+                        pos.y + randY,
+                        pos.z + randZ,
                         0, 0, 0.2, 0, 0);
 
             }
+
+        }
+    }
+
+
+    public boolean MoldSpread() {
+
+        if (!isClient() && !this.isBarraging()) {
+
+            StandEntity stand = getStandEntity(this.self);
+            if(Objects.nonNull(stand)){
+                animateStand(GreenDayEntity.MOLD_SPREAD);
+                this.poseStand(OffsetIndex.ATTACK);
+                hmm = 20;
+            }
+            moldBurst(this.self.getOnPos().getCenter(),3);
+            moldBurst(this.self.getOnPos().getCenter().add(0,-10,0),7);
+            moldBurst(this.self.getOnPos().getCenter().add(0,-27,0),10);
             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.GREEN_DAY_MOLD_SPREAD_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             ((ServerLevel) this.self.level()).sendParticles(ModParticles.MOLD_DUST, this.self.getX(),
                     this.self.getY() + 1, this.self.getZ(),
