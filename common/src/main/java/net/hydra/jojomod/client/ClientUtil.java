@@ -16,6 +16,7 @@ import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerMixingSound;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
+import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -69,6 +70,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.TooltipFlag;
 import net.zetalasis.client.shader.D4CShaderFX;
+import net.zetalasis.client.shader.ManhattanVisionMode;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
@@ -107,6 +109,9 @@ import org.spongepowered.asm.mixin.Unique;
 
 import java.nio.file.Path;
 import java.util.*;
+
+import static net.hydra.jojomod.util.MainUtil.getUserData;
+import static oshi.util.UserGroupInfo.getUser;
 
 
 public class ClientUtil {
@@ -915,6 +920,17 @@ public class ClientUtil {
         if (player != null) {
             if (((StandUser)player).roundabout$getStandPowers() instanceof PowersAchtungBaby PM && PM.invisibleVisionOn()){
                 return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean checkIfClientCanSeeMobsForWindVision() {
+
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersManhattanTransfer PMT) {
+            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM && ((PM.switchWindVisionToggle() || PM.isPiloting()))){
+                    return true;
             }
         }
         return false;

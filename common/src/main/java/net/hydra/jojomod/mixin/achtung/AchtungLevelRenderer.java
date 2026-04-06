@@ -3,6 +3,11 @@ package net.hydra.jojomod.mixin.achtung;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.entity.Entity;
@@ -32,13 +37,21 @@ public abstract class AchtungLevelRenderer {
     private void roundabout$renderEntity(Entity entity, double cameraX, double cameraY, double cameraZ, float partialTick, PoseStack stack, MultiBufferSource buffer, CallbackInfo ci) {
         if (entity != null){
             IEntityAndData entityAndData = ((IEntityAndData)entity);
-            if (!(entity instanceof LivingEntity) && entityAndData.roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung()){
+            if ((!(entity instanceof LivingEntity) && entityAndData.roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())){
                 /**A side effect of canceling rendering like this is for Achtung on non living entities is they do not
                  * render flames while invisible, this would be an easy fix but I don't know if it is necessary.
                  * LivingEntities use Entity function getInvisible entirely.*/
                 ci.cancel();
                 return;
             }
+                if (!(entity instanceof StandEntity) && entity.getDeltaMovement().x == 0 && entity.getDeltaMovement().z == 0) {
+                    if(ClientUtil.checkIfClientCanSeeMobsForWindVision()) {
+                        ci.cancel();
+                        return;
+                        /**Works when you are piloting ManhattanTransfer or Having Wind Vision activated. If an entity does not move, then it disappears.*/
+                        /**Note: if you prefer to do it on a new mixin then tell me(this message will be deleted when the stand will come out)*/
+                    }
+                }
         }
     }
     @Inject(method = "renderEntity(Lnet/minecraft/world/entity/Entity;DDDFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V",
