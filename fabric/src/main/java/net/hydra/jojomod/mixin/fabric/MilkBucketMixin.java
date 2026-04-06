@@ -27,7 +27,6 @@ public abstract class MilkBucketMixin {
         for (MobEffectInstance effect : livingEntity.getActiveEffects()) {
             if (MainUtil.isSpecialEffect(effect)) {
                 effects.add(effect);
-                Roundabout.LOGGER.info(effect.toString());
             }
         }
     }
