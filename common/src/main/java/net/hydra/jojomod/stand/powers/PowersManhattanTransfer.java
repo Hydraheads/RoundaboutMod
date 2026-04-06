@@ -1,10 +1,12 @@
 package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.mixin.EntityAndData;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.mixin.ZWorldRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -16,6 +18,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IGravityEntity;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -72,6 +75,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.joml.Vector3f;
 //import org.spongepowered.asm.mixin.Unique;
 
 import java.util.Arrays;
@@ -136,11 +140,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public int getMaxPilotRange() {
         return ClientNetworking.getAppropriateConfig().manhattanTransferSettings.manhattanTransferMaxRange;
     }
-
     public int configSpeed(){
         return ClientNetworking.getAppropriateConfig().manhattanTransferSettings.getAutoSpeed;
     }
-
     @Override
     public void powerActivate(PowerContext context) {
         /**Making dash usable on both key presses*/
@@ -176,12 +178,12 @@ public class PowersManhattanTransfer extends NewDashPreset {
         tryPowerPacket(PowerIndex.POWER_4);
     }
     //TODO: understand how to make entities unrender, and make it so if the vision is on the mobs unrender. Later on I'll figure out the movement detector
+//TODO: I hate having to mention parameters every single time I try to check a condition of another class t-t
 
     public boolean switchVision(){
 
-       getStandUserSelf().roundabout$setUniqueStandModeToggle(!switchWindVisionToggle());
-        Entity entity;
         if (isClient() && this.self instanceof Player PE) {
+            getStandUserSelf().roundabout$setUniqueStandModeToggle(!switchWindVisionToggle());
             if (switchWindVisionToggle()) {
                 PE.displayClientMessage(Component.translatable("text.roundabout.survivor.anger_selection").withStyle(ChatFormatting.DARK_GREEN), true);
             }
@@ -193,24 +195,15 @@ public class PowersManhattanTransfer extends NewDashPreset {
         return true;
     }
 
-
-    public int visionTicks;
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
 
         if(switchWindVisionToggle() || isPiloting()) {
-                if (ent.getDeltaMovement().x == 0 || ent.getDeltaMovement().y == 0 || ent.getDeltaMovement().z == 0) {
-                    if (ent != null && ent instanceof LivingEntity && !(ent instanceof StandEntity) && !ent.isInvisible()) {
-                        return false;
+            if (ent.getDeltaMovement().x != 0 || ent.getDeltaMovement().z != 0) {
+                    if (ent != null && ent instanceof LivingEntity && !(ent instanceof StandEntity)) {
+                        return true;
                     }
-                }
-
-            else if (ent.getDeltaMovement().x != 0 || ent.getDeltaMovement().z != 0) {
-                if (ent != null && ent instanceof LivingEntity && !(ent instanceof StandEntity) && !ent.isInvisible()) {
-                    return true;
-                }
             }
-
         }
         return false;
     }
