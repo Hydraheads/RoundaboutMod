@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.renderers.StandRenderer;
 import net.hydra.jojomod.client.models.substand.LeftSeperatedArmSlimModel;
 import net.hydra.jojomod.entity.substand.LeftSeperatedArmSlimEntity;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -35,7 +36,7 @@ public class LeftSeperatedArmSlimRenderer extends StandRenderer<LeftSeperatedArm
         Player P =((Player)seperatedArmSlimEntity.getUser());
         if( P != null || false) {
             if (P.getGameProfile() != null) {
-                return getSkin(((Player) seperatedArmSlimEntity.getUser()).getGameProfile());
+                return MainUtil.getPlayerSkinWithRespectToVisage((Player) seperatedArmSlimEntity.getUser());
             } else {
                 return PART_FIVE_GREEN_DAY;
             }
