@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.primitives.Floats;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.*;
@@ -41,6 +42,10 @@ import net.hydra.jojomod.stand.powers.PowersMetallica;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.resources.DefaultPlayerSkin;
+import net.minecraft.client.resources.SkinManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -3118,6 +3123,42 @@ public class MainUtil {
             return tag.getByte("Type") == (byte) 1;
         }
         return false;
+    }
+
+    public static ResourceLocation getPlayerSkinWithRespectToVisage(Player player){
+
+        if (player instanceof AbstractClientPlayer lpe) {
+
+
+            IPlayerEntity pl = ((IPlayerEntity) player);
+            ItemStack visage = pl.roundabout$getMaskSlot();
+            if(Objects.nonNull(visage)) {
+
+                if (visage.getItem() instanceof MaskItem MI) {
+                    //Roundabout.LOGGER.info(MI.visageData.generateVisageData(player).getSkinPath());
+                    return new ResourceLocation(Roundabout.MOD_ID,"textures/entity/visage/player_skins/" + MI.visageData.generateVisageData(player).getSkinPath() + ".png");
+
+                }
+            }
+        }
+                if (player.getGameProfile() != null) {
+                    if (!player.getGameProfile().isComplete()) {
+                        return new ResourceLocation(Roundabout.MOD_ID, "textures/stand/green_day/part_four_green_day.png");
+                    } else {
+                        final Minecraft minecraft = Minecraft.getInstance();
+                        SkinManager skinManager = minecraft.getSkinManager();
+                        final Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadSkinFromCache = skinManager.getInsecureSkinInformation(player.getGameProfile()); // returned map may or may not be typed
+                        if (loadSkinFromCache.containsKey(MinecraftProfileTexture.Type.SKIN)) {
+                            return skinManager.registerTexture(loadSkinFromCache.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN);
+                        } else {
+                            return DefaultPlayerSkin.getDefaultSkin(player.getGameProfile().getId());
+                        }
+                    }
+                }
+
+
+
+        return new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/part_four_green_day.png");
     }
 
 }
