@@ -43,8 +43,13 @@ public class AchtungItemInHandRenderer {
 
             float throwFadeToTheEther = 1f;
             IEntityAndData entityAndData = ((IEntityAndData) user);
+            if(((LocalPlayer) user).getDeltaMovement().x == 0 && ((LocalPlayer) user).getDeltaMovement().z == 0) {
+                if(ClientUtil.checkIfClientCanSeeMobsForWindVision()) {
+                    throwFadeToTheEther = throwFadeToTheEther * 0.2F;
+                }
+            }
             if (entityAndData.roundabout$getTrueInvisibility() > -1){
-                throwFadeToTheEther = throwFadeToTheEther*0.4F;
+                throwFadeToTheEther = throwFadeToTheEther*0.1F;
                 /**
                 StandPowers powers = user.roundabout$getStandPowers();
                 if (powers instanceof PowersAchtungBaby PB && PB.invisibleVisionOn()){

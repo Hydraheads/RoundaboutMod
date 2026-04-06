@@ -1,86 +1,41 @@
 package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.mixin.EntityAndData;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.access.IEntityAndData;
-import net.hydra.jojomod.mixin.ZWorldRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-//import net.zetalasis.client.shader.ManhattanVisionMode;
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IAbstractArrowAccess;
-import net.hydra.jojomod.access.IGravityEntity;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.client.StandIcons;
-import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.corpses.FallenCreeper;
-import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
-import net.hydra.jojomod.event.ModGamerules;
-import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
-import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.mixin.InputEvents;
-import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
-import net.hydra.jojomod.util.config.ClientConfig;
-import net.hydra.jojomod.util.config.ConfigManager;
-import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.entity.projectile.ThrownPotion;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.*;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import org.joml.Vector3f;
-//import org.spongepowered.asm.mixin.Unique;
-
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class PowersManhattanTransfer extends NewDashPreset {
     public PowersManhattanTransfer(LivingEntity self) {
@@ -172,32 +127,25 @@ public class PowersManhattanTransfer extends NewDashPreset {
         }
             return super.setPowerOther(move, lastMove);
     }
-
     public void switchVisionClient(){
         this.tryPower(PowerIndex.POWER_4, true);
         tryPowerPacket(PowerIndex.POWER_4);
     }
-    //TODO: understand how to make entities unrender, and make it so if the vision is on the mobs unrender. Later on I'll figure out the movement detector
-//TODO: I hate having to mention parameters every single time I try to check a condition of another class t-t
-
+    //TODO: Figure out the Vertical y movement detector
     public boolean switchVision(){
-
         if (isClient() && this.self instanceof Player PE) {
             getStandUserSelf().roundabout$setUniqueStandModeToggle(!switchWindVisionToggle());
             if (switchWindVisionToggle()) {
-                PE.displayClientMessage(Component.translatable("text.roundabout.survivor.anger_selection").withStyle(ChatFormatting.DARK_GREEN), true);
+                PE.displayClientMessage(Component.translatable("text.roundabout.manhattan_transfer.wind_vision").withStyle(ChatFormatting.DARK_GREEN), true);
             }
             else{
-
-                PE.displayClientMessage(Component.translatable("text.roundabout.survivor.anger_selection_off").withStyle(ChatFormatting.DARK_AQUA), true);
+                PE.displayClientMessage(Component.translatable("text.roundabout.manhattan_transfer.wind_vision_off").withStyle(ChatFormatting.DARK_AQUA), true);
             }
         }
         return true;
     }
-
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
-
         if(switchWindVisionToggle() || isPiloting()) {
             if (ent.getDeltaMovement().x != 0 || ent.getDeltaMovement().z != 0) {
                     if (ent != null && ent instanceof LivingEntity && !(ent instanceof StandEntity)) {
@@ -207,16 +155,13 @@ public class PowersManhattanTransfer extends NewDashPreset {
         }
         return false;
     }
-
     @Override
     public int highlightsEntityColor(Entity ent, Player player){
         return 12379456;
     }
-
     public boolean switchWindVisionToggle(){
         return getStandUserSelf().roundabout$getUniqueStandModeToggle();
     }
-
     @Override
     public void setPiloting(int ID) {
         if (this.self instanceof Player PE) {
@@ -264,8 +209,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
         return false;
     }
     public void sealStand(boolean forced) {
-
-
         int sealTime = 0;
         StandUser user = ((StandUser) this.self);
         if (this.self instanceof Player PE && PE.isCreative() && sealTime > 0) {
@@ -275,7 +218,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
             user.roundabout$setMaxSealedTicks(sealTime);
             user.roundabout$setSealedTicks(sealTime);
         }
-
         if (!this.self.level().isClientSide() && user instanceof Player PE) {
             S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) PE),
                     PacketDataIndex.S2C_INT_SEAL, sealTime);
@@ -373,7 +315,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 BRAZIL_SKIN,
                 RADIOACTIVE_SKIN,
                 POLLINATION_SKIN
-
         );
     }
     public boolean returnFakeStandForHud(){

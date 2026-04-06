@@ -2128,6 +2128,9 @@
   "text.roundabout.walking.cut_on": "Corner Cutting On",
   "text.roundabout.walking.cut_ff": "Corner Cutting Off",
 
+  "text.roundabout.manhattan_transfer.wind_vision": "Wind Vision On",
+  "text.roundabout.manhattan_transfer.wind_vision_off": "Wind Vision Off",
+
   "text.roundabout.vampire.flesh_bud_fail": "The victim is not weakened, or is agitated",
   "text.roundabout.vampire.flesh_bud_fail_already": "A flesh bud is already planted",
 
