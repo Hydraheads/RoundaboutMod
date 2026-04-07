@@ -12,11 +12,13 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,6 +32,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     public Powers20thCenturyBoy(LivingEntity self){super(self);}
 
     public boolean invincibleState = false;
+    public boolean defenseState = false;
     public int mode = 1;
 
     /** general definition stuff **/
@@ -198,6 +201,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             }
         } else {
             invincibleState = false;
+            defenseState = false;
         }
     }
 
@@ -207,7 +211,6 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     public boolean interceptDamageEvent(DamageSource damageSource, float amount) {
 
         if(invincibleState){
-            Roundabout.LOGGER.info("aAAAAAAAAA");
             /** ps: don't forget to put TA4 shot when it gets added **/
             if (damageSource.is(DamageTypes.FELL_OUT_OF_WORLD) ||
                     damageSource.is(DamageTypes.WITHER) ||
@@ -224,7 +227,37 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     }
 
     public void defensemode(){
-        Entity entity = ClientUtil.getPlayer();
-        entity.setDeltaMovement(0,0,0);
+        defenseState = true;
+    }
+
+    /**@Override
+    public void tickPower(){
+        if (defenseState){
+            if (this.self.onGround()){
+            this.self.setDeltaMovement(0,0,0);
+            } else{
+                this.self.setDeltaMovement(0, this.self.getDeltaMovement().y, 0);
+
+            this.self.hurtMarked = true;
+            }
+        }
+    }*/
+
+    @Override
+    public float inputSpeedModifiers(float basis) {
+        if (defenseState){
+         return 0;
+        }
+        return super.inputSpeedModifiers(basis);
+    }
+
+    @Override
+    public boolean cancelSprint() {
+        return defenseState;
+    }
+
+    @Override
+    public boolean cancelJump() {
+        return defenseState;
     }
 }
