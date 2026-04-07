@@ -1,5 +1,4 @@
-package net.hydra.jojomod.entity;
-
+package net.hydra.jojomod.entity.zombie_minion;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.core.BlockPos;
@@ -22,6 +21,7 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Silverfish;
+import net.minecraft.world.entity.monster.Vindicator;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -32,13 +32,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class Zombiefish extends Monster {
+public class BaseMinion extends Monster {
     public Entity controller;
     public UUID controller2;
     private static final EntityDataAccessor<Integer> CONTROLLER =
             SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.INT);
 
-    public Zombiefish(EntityType<? extends Zombiefish> $$0, Level $$1) {
+    public BaseMinion(EntityType<? extends BaseMinion> $$0, Level $$1) {
         super($$0, $$1);
     }
 
@@ -247,10 +247,10 @@ public class Zombiefish extends Monster {
                 if (controller instanceof LivingEntity LE) {
                     autoTarget = LE.getLastHurtByMob();
                     autoTarget2 = LE.getLastHurtMob();
-                    if (autoTarget instanceof Zombiefish fm && fm.getController() == this.getController()){
+                    if (autoTarget instanceof net.hydra.jojomod.entity.Zombiefish fm && fm.getController() == this.getController()){
                         autoTarget = null;
                     }
-                    if (autoTarget2 instanceof Zombiefish fm && fm.getController() == this.getController()){
+                    if (autoTarget2 instanceof net.hydra.jojomod.entity.Zombiefish fm && fm.getController() == this.getController()){
                         autoTarget2 = null;
                     }
                     boolean check1 = (this.getTarget() != autoTarget) || autoTarget == null;

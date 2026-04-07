@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.client.models.stand.renderers.StandRenderer;
 import net.hydra.jojomod.client.models.substand.SeperatedArmModel;
 import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -40,7 +41,7 @@ public class SeperatedArmRenderer extends StandRenderer<SeperatedArmEntity> {
         Player P =((Player)seperatedArmEntity.getUser());
         if( P != null || false) {
             if (P.getGameProfile() != null) {
-                return getSkin(((Player) seperatedArmEntity.getUser()).getGameProfile());
+                return MainUtil.getPlayerSkinWithRespectToVisage((Player) seperatedArmEntity.getUser());
             } else {
                 return PART_FIVE_GREEN_DAY;
             }
