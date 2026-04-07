@@ -336,6 +336,14 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public void roundabout$setPower(byte style){
         if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$POWERS)) {
             roundabout$SetPos2(PlayerPosIndex.NONE);
+            this.getEntityData().set(ROUNDABOUT$POWERS, style);
+        }
+    }
+    @Unique
+    @Override
+    public void roundabout$setPowerWithPenalty(byte style){
+        if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$POWERS)) {
+            roundabout$SetPos2(PlayerPosIndex.NONE);
             if (style != this.getEntityData().get(ROUNDABOUT$POWERS) && this.getEntityData().get(ROUNDABOUT$POWERS) != PowerTypes.NONE.ordinal()){
                 if (ClientNetworking.getAppropriateConfig().powersSettings.powerSwitchingPenalty) {
                     ((StandUser) this).roundabout$getStandPowers().onStandSwitch();
@@ -1317,7 +1325,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
         PowerTypes.initializeStandPower(this);
 
-        PowerTypes.fixPowers(this);
         if (compoundtag2.contains("guard")){
             ((StandUser)this).roundabout$setGuardPointsLoad(compoundtag2.getFloat("guard"));
             if (compoundtag2.contains("guard_break")) {

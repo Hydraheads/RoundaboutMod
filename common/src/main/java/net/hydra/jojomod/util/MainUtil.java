@@ -2406,7 +2406,7 @@ public class MainUtil {
             S2CPacketUtil.sendSimpleByteToClientPacket(player,PacketDataIndex.S2C_RESPAWN);
         } else if (context == PacketDataIndex.BYTE_SWITCH_POWERS) {
             if (PowerTypes.canHavePower(player,data)){
-                PowerTypes.setPowerType(player,data);
+                PowerTypes.setPowerTypeWithPenalty(player,data);
             }
         }
     }
@@ -2547,7 +2547,7 @@ public class MainUtil {
             if (queryNumber > powerTypes.size()-1){
                 queryNumber = 0;
             }
-            ((IPlayerEntity)player).roundabout$setPower((byte)powerTypes.get(queryNumber).ordinal());
+            ((IPlayerEntity)player).roundabout$setPowerWithPenalty((byte)powerTypes.get(queryNumber).ordinal());
 
         } else if (context == PacketDataIndex.SINGLE_BYTE_RIGHT_POWERS) {
             List<PowerTypes> powerTypes = PowerTypes.getAvailablePowers(player);
@@ -2564,7 +2564,7 @@ public class MainUtil {
             if (queryNumber < 0) {
                 queryNumber = powerTypes.size()-1;
             }
-            ((IPlayerEntity) player).roundabout$setPower((byte)powerTypes.get(queryNumber).ordinal());
+            ((IPlayerEntity) player).roundabout$setPowerWithPenalty((byte)powerTypes.get(queryNumber).ordinal());
         }
     }
 

@@ -38,6 +38,7 @@ public interface IPlayerEntity {
     byte rdbt$getRespawnStrategy();
     void roundabout$setPower(byte style);
     byte roundabout$getPower();
+    void roundabout$setPowerWithPenalty(byte style);
 
     /// Zombie Fate's zombie silverfish count
     void rdbt$setZombieFish(int fish);

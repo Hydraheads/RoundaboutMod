@@ -49,6 +49,11 @@ public enum PowerTypes {
             ((IPlayerEntity)pl).roundabout$setPower(type);
         }
     }
+    public static void setPowerTypeWithPenalty(Entity ent, byte type){
+        if (ent instanceof Player pl){
+            ((IPlayerEntity)pl).roundabout$setPowerWithPenalty(type);
+        }
+    }
 
 
     public static void initializeStandPower(Entity ent){
