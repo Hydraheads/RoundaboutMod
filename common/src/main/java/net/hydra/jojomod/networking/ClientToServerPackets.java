@@ -582,7 +582,7 @@ public class ClientToServerPackets {
                         if (world != null && world.getLevel() != null) {
                             sender.teleportTo(world.getLevel(), sender.getX(), sender.getY(), sender.getZ(), sender.getYRot(), sender.getXRot());
                             ((StandUser) sender).roundabout$summonStand(world.getLevel(), true, false);
-                            ModCriteria.DIMENSION_HOP_TRIGGER.trigger(sender);
+                            //ModCriteria.DIMENSION_HOP_TRIGGER.trigger(sender);
                         }
                     }
                 }
