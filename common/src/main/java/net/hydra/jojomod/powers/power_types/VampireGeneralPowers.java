@@ -147,7 +147,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
     public void ripperEyesClient(){
         if (!onCooldown(PowerIndex.GENERAL_4)){
-            this.tryPower(RIPPER_EYES);
+            if (getRipperLevel() > 0) {
+                this.tryPower(RIPPER_EYES);
+            }
         }
     }
 
@@ -228,6 +230,13 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         }
         return 0;
     }
+    public int getRipperLevel(){
+        if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
+            return vp.getVampireData().ripperEyesLevel;
+        }
+        return 0;
+    }
+
 
 
     public void clientBloodClutch(){
@@ -919,10 +928,14 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if (isHoldingSneak()) {
                 setSkillIcon(context, x, y, 4, StandIcons.DEFLECTION, PowerIndex.GENERAL_4_SNEAK);
             } else {
-                if (getActivePower() == RIPPER_EYES){
-                    setSkillIcon(context, x, y, 4, StandIcons.RIPPER_SHOT, PowerIndex.GENERAL_4);
+                if (getRipperLevel() > 0) {
+                    if (getActivePower() == RIPPER_EYES) {
+                        setSkillIcon(context, x, y, 4, StandIcons.RIPPER_SHOT, PowerIndex.GENERAL_4);
+                    } else {
+                        setSkillIcon(context, x, y, 4, StandIcons.RIPPER_EYES, PowerIndex.GENERAL_4);
+                    }
                 } else {
-                    setSkillIcon(context, x, y, 4, StandIcons.RIPPER_EYES, PowerIndex.GENERAL_4);
+                    setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                 }
             }
         }
