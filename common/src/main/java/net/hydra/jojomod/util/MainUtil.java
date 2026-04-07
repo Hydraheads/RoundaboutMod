@@ -3134,7 +3134,7 @@ public class MainUtil {
             ItemStack visage = pl.roundabout$getMaskSlot();
             if(Objects.nonNull(visage)) {
 
-                if (visage.getItem() instanceof MaskItem MI) {
+                if (visage.getItem() instanceof MaskItem MI && ! visage.getItem().equals(ModItems.RAT_MASK)) {
                     //Roundabout.LOGGER.info(MI.visageData.generateVisageData(player).getSkinPath());
                     return new ResourceLocation(Roundabout.MOD_ID,"textures/entity/visage/player_skins/" + MI.visageData.generateVisageData(player).getSkinPath() + ".png");
 
