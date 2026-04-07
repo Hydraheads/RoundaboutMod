@@ -65,6 +65,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 import oshi.util.tuples.Pair;
 
 import java.util.*;
@@ -830,7 +831,7 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     public void setAnimation(byte b) {
-        if (this.getSelf() instanceof Player P) {
+        if (this.getSelf() instanceof Player P && this.isClient()) {
             ((IPlayerEntity)P).roundabout$SetPoseEmote(Poses.NONE.id);
         }
         this.getStandUserSelf().roundabout$setStandAnimation(b);
@@ -2576,6 +2577,11 @@ public class PowersAnubis extends NewDashPreset {
                 }
             }
         }
+    }
+
+    @Override
+    public Vector3f getLeapColor() {
+        return new Vector3f(171F/255F,141F/255F,230F/255F);
     }
 }
 

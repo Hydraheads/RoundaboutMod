@@ -33,7 +33,7 @@ public class TuskLayer<T extends LivingEntity, A extends HumanoidModel<T>> exten
             LivingEntity livent = entity;
             if (!entity.isInvisible()) {
                 StandUser user = ((StandUser) livent);
-                if (PowerTypes.hasStandActivelyEquipped(entity)) {
+                if (PowerTypes.isUsingStand(entity)) {
                     if (user.roundabout$getStandPowers() instanceof PowersTusk PT && PT.getAct() > 1) {
                         ClientUtil.pushPoseAndCooperate(poseStack,47);
 
