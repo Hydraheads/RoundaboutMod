@@ -4,11 +4,14 @@ import net.hydra.jojomod.entity.goals.FallenRangedAttackGoal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
@@ -22,6 +25,22 @@ public class FallenSkeleton extends FallenMob implements RangedAttackMob  {
         super($$0, $$1);
     }
 
+    @Override
+    protected InteractionResult mobInteract(Player $$0, InteractionHand $$1) {
+        ItemStack $$2 = $$0.getItemInHand($$1);
+        if ($$2.is(Items.BONE) && this.getHealth() < this.getMaxHealth()
+                && !getActivated()) {
+            if (!$$0.level().isClientSide()) {
+                if (!$$0.getAbilities().instabuild) {
+                    $$2.shrink(1);
+                }
+
+                this.heal(getMaxHealth() / 4);
+                return InteractionResult.SUCCESS;
+            }
+        }
+        return super.mobInteract($$0,$$1);
+    }
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.25).add(Attributes.MAX_HEALTH, 20)
                 .add(Attributes.ATTACK_DAMAGE, 1).
