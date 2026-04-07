@@ -14,7 +14,8 @@ public class GreenDayEntity extends FollowingStandEntity{
             TEAL_DAY = 3,
             BROCOLLI = 4,
             RED_NIGHT = 5,
-            GORGONZOLA = 6;
+            GORGONZOLA = 6,
+            SILENCE = 7;
 
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState hideLeg = new AnimationState();
@@ -27,7 +28,7 @@ public class GreenDayEntity extends FollowingStandEntity{
         MOLD_SPREAD = 121;
 
     public boolean Emissive(){
-        return this.getSkin() == 5;
+        return this.getSkin() == 5 ;
     }
 
     @Override

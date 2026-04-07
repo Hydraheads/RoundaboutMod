@@ -5466,7 +5466,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public void rdbt$doMoldDetection(Vec3 movement){
         if(!this.level().isClientSide){
-                boolean down = previousYpos > this.getY();
+                boolean down = previousYpos > this.getY() + 0.1;
                 boolean isStand = (((LivingEntity) (Object) this) instanceof StandEntity);
                 if(this.hasEffect(ModEffects.MOLD)) {
                     if (!roundabout$getStandPowers().isStoppingTime() && !this.roundabout$isBubbleEncased() && !isStand && down && jumpImmunityTicks < 1) {

@@ -3,6 +3,7 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPermaCasting;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerEntityAbstractClient;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -24,6 +25,7 @@ import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.mixin.PlayerEntity;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -36,6 +38,7 @@ import net.minecraft.client.gui.GuiGraphics;
 
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 
 import net.minecraft.server.level.ServerLevel;
@@ -377,6 +380,34 @@ public class PowersGreenDay extends NewPunchingStand {
 
         }
         super.updatePowerInt(activePower,data);
+    }
+
+    /**
+      Secret skin
+     */
+    public void sculkFinish(){
+        StandEntity stand = this.getStandEntity(this.self);
+        if(Objects.nonNull(stand)){
+            ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.SCULK_SOUL, stand.getX(),
+                    stand.getY() + 1, stand.getZ(),
+                    63,
+                    0.5, 0.5, 0.5,
+                    0);
+
+            ((IPlayerEntity)this.self).roundabout$setUnlockedBonusSkin(true);
+        }
+    }
+
+    public void sculkBurst(int range){
+        StandEntity stand = this.getStandEntity(this.self);
+        if(Objects.nonNull(stand)){
+            ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.SCULK_SOUL, stand.getX(),
+                    stand.getY() + 1, stand.getZ(),
+                    44,
+                    (double) range /10, (double) range /10, (double) range /10,
+                    0);
+
+        }
     }
     /**
      * Mold Spread Work
@@ -1151,21 +1182,9 @@ public class PowersGreenDay extends NewPunchingStand {
             TEAL_DAY = 3,
             BROCCOLLI = 4,
             RED_NIGHT = 5,
-            GORGONZOLA = 6;
+            GORGONZOLA = 6,
+            SILENCE = 7;
 
-
-    @Override
-    public List<Byte> getSkinList() {
-        return Arrays.asList(
-                PART_FIVE_GREEN_DAY,
-                RED_DAY,
-                TEAL_DAY,
-                //BROCCOLLI
-                RED_NIGHT,
-                GORGONZOLA
-
-        );
-    }
 
     @Override
     public Component getSkinName(byte skinId) {
@@ -1179,18 +1198,57 @@ public class PowersGreenDay extends NewPunchingStand {
             return Component.translatable("skins.roundabout.green_day.red_day");
         } else if (skinId == GreenDayEntity.TEAL_DAY) {
             return Component.translatable("skins.roundabout.green_day.teal_day");
-        }
-        else if (skinId == GreenDayEntity.BROCOLLI) {
+        } else if (skinId == GreenDayEntity.BROCOLLI) {
             return Component.translatable("skins.roundabout.green_day.broccoli");
         } else if (skinId == GreenDayEntity.RED_NIGHT) {
             return Component.translatable("skins.roundabout.green_day.red_night");
         } else if (skinId == GreenDayEntity.GORGONZOLA) {
             return Component.translatable("skins.roundabout.green_day.gorgonzola");
+        } else if (skinId == GreenDayEntity.SILENCE ){
+            return Component.translatable("skins.roundabout.green_day.silence");
         }
+
         return Component.translatable(  "skins.roundabout.green_day.part_five_green_day");
     }
 
+    @Override
+    public List<Byte> getSkinList() {
+        List<Byte> $$1 = Lists.newArrayList();
+        $$1.add(PART_FIVE_GREEN_DAY);
+        $$1.add(TEAL_DAY);
+        if (this.getSelf() instanceof Player PE){
+            byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
+            ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
+            boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+            if (Level > 1 || bypass){
+                $$1.add(RED_DAY);
+                //$$1.add(STONE);
+                //        $$1.add(CHEF);
+            } if (Level > 2 || bypass){
+                $$1.add(RED_NIGHT);
 
+                //     $$1.add(SOULBORN);
+            } if (Level > 3 || bypass){
+                $$1.add(GORGONZOLA);
+
+            } if (Level > 4 || bypass){
+                //$$1.add(GRAY_WAGON);
+                //$$1.add(TIMEKEEPER);
+                //$$1.add(BLOODSTAINED);
+            } if (Level > 5 || bypass){
+                //$$1.add(DIAMOND);
+                //$$1.add(CHORUS);
+                //$$1.add(BRILLIANCE);
+            } if (Level > 6 || bypass){
+                //$$1.add(ANCIENT);
+            } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
+                $$1.add(SILENCE);
+                ;
+            }
+        }
+        return $$1;
+
+    }
 
 
 
