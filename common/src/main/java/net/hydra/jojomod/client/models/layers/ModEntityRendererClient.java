@@ -10,6 +10,7 @@ public class ModEntityRendererClient {
      * Forge and Fabric need to actually register this info into the game individually.*/
     public static final ModelLayerLocation WOLF_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "wolf"), "main");
     public static final ModelLayerLocation ZOMBIEFISH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "zombiefish"), "main");
+    public static final ModelLayerLocation VILLAGER_MINION_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "villager_minion"), "main");
     public static final ModelLayerLocation ANUBIS_GUARDIAN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "anubis_guardian"), "main");
     public static final ModelLayerLocation THE_WORLD_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "the_world"), "main");
     public static final ModelLayerLocation THE_WORLD_ULTIMATE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "the_world_ultimate"), "main");

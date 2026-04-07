@@ -22,6 +22,7 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
+import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -205,6 +206,11 @@ public class ForgeEntities {
             ENTITY_TYPES.register("fallen_villager", () ->
                     EntityType.Builder.of(FallenVillager::new, MobCategory.MISC).sized(0.6F, 1.95F).clientTrackingRange(8).
                             build(new ResourceLocation(Roundabout.MOD_ID, "fallen_villager").toString())
+            );
+    public static final RegistryObject<EntityType<VillagerMinion>> VILLAGER_MINION =
+            ENTITY_TYPES.register("villager_minion", () ->
+                    EntityType.Builder.of(VillagerMinion::new, MobCategory.MISC).sized(0.6F, 1.95F).clientTrackingRange(8).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "villager_minion").toString())
             );
     public static final RegistryObject<EntityType<FallenCreeper>> FALLEN_CREEPER =
             ENTITY_TYPES.register("fallen_creeper", () ->

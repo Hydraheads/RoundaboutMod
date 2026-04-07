@@ -24,6 +24,7 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
+import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -235,6 +236,12 @@ public class FabricEntities {
                         new ResourceLocation(Roundabout.MOD_ID, "fallen_villager"),
                         EntityType.Builder.of(FallenVillager::new, MobCategory.MISC).sized(0.6F, 1.95F).clientTrackingRange(8).build(Roundabout.MOD_ID+":fallen_skeleton")
                 );
+    public static final EntityType<VillagerMinion> VILLAGER_MINION =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "villager_minion"),
+                    EntityType.Builder.of(VillagerMinion::new, MobCategory.MISC).sized(0.6F, 1.95F).clientTrackingRange(8).build(Roundabout.MOD_ID+":villager_minion")
+            );
         public static final EntityType<FallenCreeper> FALLEN_CREEPER =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -867,6 +874,8 @@ public class FabricEntities {
                 ModEntities.FALLEN_CREEPER = FALLEN_CREEPER;
                 ModEntities.FALLEN_PHANTOM = FALLEN_PHANTOM;
 
+                ModEntities.VILLAGER_MINION = VILLAGER_MINION;
+
                 ModEntities.OVA_ENYA = OVA_ENYA;
                 ModEntities.ENYA = ENYA;
                 ModEntities.JOTARO = JOTARO;
@@ -927,6 +936,9 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(FALLEN_VILLAGER, FallenVillager.createAttributes());
                 FabricDefaultAttributeRegistry.register(FALLEN_CREEPER, FallenCreeper.createAttributes());
                 FabricDefaultAttributeRegistry.register(FALLEN_PHANTOM,FallenPhantom.createAttributes());
+
+            FabricDefaultAttributeRegistry.register(VILLAGER_MINION, VillagerMinion.createAttributes());
+
                 FabricDefaultAttributeRegistry.register(ROAD_ROLLER_ENTITY, RoadRollerEntity.createAttributes().build());
 
                 FabricDefaultAttributeRegistry.register(THE_WORLD, StandEntity.createStandAttributes());
