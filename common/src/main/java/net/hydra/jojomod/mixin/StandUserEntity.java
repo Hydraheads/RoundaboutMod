@@ -2356,6 +2356,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Unique
+    public int roundabout$CBVanishTicks = 0;
+
+    @Unique
+    @Override
+    public int roundabout$getCBVanishTicks(){
+        return roundabout$CBVanishTicks;
+    }
+    public void roundabout$setCBVanishTicks(int set){roundabout$CBVanishTicks = Mth.clamp(set, 0, 10);}
+    @Unique
     public int roundabout$anubisVanishTicks = 0;
 
     @Unique
@@ -4929,6 +4938,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$setAnubisVanishTicks(roundabout$getAnubisVanishTicks()+1);
         } else {
             roundabout$setAnubisVanishTicks(roundabout$getAnubisVanishTicks()-1);
+        }
+        if (roundabout$getStandPowers() instanceof Powers20thCenturyBoy && active){
+            roundabout$setCBVanishTicks(roundabout$getCBVanishTicks() + 1);
+        } else{
+            roundabout$setCBVanishTicks(roundabout$getCBVanishTicks() - 1);
         }
 
 
