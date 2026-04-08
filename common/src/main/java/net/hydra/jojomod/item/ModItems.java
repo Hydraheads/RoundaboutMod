@@ -54,7 +54,6 @@ public class ModItems {
     public static Item STAND_DISC_MANDOM;
     public static Item STAND_DISC_SURVIVOR;
     public static Item STAND_DISC_ACHTUNG;
-    public static Item STAND_DISC_CENTURY_BOY;
     public static Item STAND_DISC_DIVER_DOWN;
     public static Item MAX_STAND_DISC_DIVER_DOWN;
     public static Item STAND_DISC_METALLICA;

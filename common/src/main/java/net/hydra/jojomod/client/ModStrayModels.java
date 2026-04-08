@@ -19,7 +19,6 @@ public class ModStrayModels {
     public static FirstPersonColtRevolverModel FirstPersonColtRevolverModel;
     public static FirstPersonJackalRifleModel FirstPersonJackalRifleModel;
     public static HeyYaModel HEY_YA;
-    public static CenturyBoyModel CENTURY_BOY;
     public static BowlerHatModel BOWLER_HAT;
     public static WornStoneMaskModel WORN_STONE_MASK;
     public static WornBloodyStoneMaskModel WORN_BLOODY_STONE_MASK;

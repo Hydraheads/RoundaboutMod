@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.FacelessLayer;
-import net.hydra.jojomod.client.models.layers.CenturyBoyLayer;
 import net.hydra.jojomod.client.models.layers.*;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer;
@@ -66,7 +65,6 @@ public class VisageBasisRenderer extends LivingEntityRenderer<JojoNPC, PlayerMod
         this.addLayer(new TuskLayer<>($$0, this));
         this.addLayer(new HeyYaLayer<>($$0, this));
         this.addLayer(new MandomLayer<>($$0, this));
-        this.addLayer(new CenturyBoyLayer<>($$0, this));
         this.addLayer(new AnubisLayer<>($$0, this));
         this.addLayer(new VisagePartLayer<>($$0, this));
         this.addLayer(new MoldSpineLayer<>($$0, this));

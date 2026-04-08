@@ -547,8 +547,6 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersHeyYa(null))));
     public static final RegistryObject<Item> STAND_DISC_MANDOM = addToDiscTab(ITEMS.register("mandom_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMandom(null))));
-    public static final RegistryObject<Item> STAND_DISC_CENTURY_BOY = addToWIPTab(ITEMS.register("20th_century_boy_disc",
-            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new Powers20thCenturyBoy(null))));
 
   /*  public static final RegistryObject<Item> STAND_DISC_D4C = ITEMS.register("d4c_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));

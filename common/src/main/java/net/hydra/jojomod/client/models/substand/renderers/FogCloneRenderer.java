@@ -3,7 +3,6 @@ package net.hydra.jojomod.client.models.substand.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.FacelessLayer;
-import net.hydra.jojomod.client.models.layers.CenturyBoyLayer;
 import net.hydra.jojomod.client.models.layers.*;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer;
@@ -48,7 +47,6 @@ public class FogCloneRenderer<T extends FogCloneEntity> extends LivingEntityRend
         this.addLayer(new ShootingArmLayer<>(context, this));
         this.addLayer(new HeyYaLayer<>(context, this));
         this.addLayer(new MandomLayer<>(context, this));
-        this.addLayer(new CenturyBoyLayer<>(context, this));
         this.addLayer(new RattShoulderLayer<>(context, this));
         this.addLayer(new AnubisLayer<>(context, this));
         this.addLayer(new VisagePartLayer<>(context, this));

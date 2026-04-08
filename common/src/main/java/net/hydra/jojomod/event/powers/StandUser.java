@@ -128,8 +128,6 @@ public interface StandUser {
     void roundabout$setMandomVanishTicks(int set);
     int roundabout$getAnubisVanishTicks();
     void roundabout$setAnubisVanishTicks(int set);
-    int roundabout$getCBVanishTicks();
-    void roundabout$setCBVanishTicks(int set);
 
     void rdbt$doMoldDetection(Vec3 movement);
 
