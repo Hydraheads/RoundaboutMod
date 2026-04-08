@@ -1,7 +1,6 @@
-package net.hydra.jojomod.client.models;
+package net.hydra.jojomod.client.models.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
@@ -14,7 +13,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -106,7 +104,7 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
                         getParentModel().leftArm.translateAndRotate(poseStack);
 
-                        poseStack.translate(-0.35, 0.63, 0.0);
+                        poseStack.translate(-0.3, 0.63, 0.0);
 
                         ModStrayModels.CENTURY_BOY.renderLeftArm(entity,partialTicks,poseStack,bufferSource,
                                 packedLight, r, g, b, heyfull, skin);
@@ -121,7 +119,7 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
                         getParentModel().rightArm.translateAndRotate(poseStack);
 
-                        poseStack.translate(0.35, 0.63, 0.0);
+                        poseStack.translate(0.3, 0.63, 0.0);
 
                         ModStrayModels.CENTURY_BOY.renderRightArm(entity,partialTicks,poseStack,bufferSource,
                                 packedLight, r, g, b, heyfull, skin);
