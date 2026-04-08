@@ -158,7 +158,7 @@ public class SeperatedArmEntity extends StandEntity {
             if(user == null){
                 spawnAtLocation(this.getMainHandItem());
                 this.discard();
-            }else if(!(((StandUser)user).roundabout$getStandPowers() instanceof PowersGreenDay)){
+            }else if((!(((StandUser)user).roundabout$getStandPowers() instanceof PowersGreenDay)) || (!user.isAlive())){
                 spawnAtLocation(this.getMainHandItem());
                 this.discard();
             }
@@ -551,5 +551,10 @@ public class SeperatedArmEntity extends StandEntity {
     @Override
     public boolean isPushedByFluid() {
         return true;
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        return false;
     }
 }

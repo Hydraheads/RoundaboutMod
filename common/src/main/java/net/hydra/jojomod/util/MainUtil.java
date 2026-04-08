@@ -1911,7 +1911,7 @@ public class MainUtil {
     public static boolean isSpecialEffect(MobEffect value){
         return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS)
                 || value.equals(ModEffects.SWITCH) ||
-                value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING);
+                value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING) || value.equals(ModEffects.MOLD);
     }
     public static boolean canHaveFrictionTaken(LivingEntity LE){
         if (LE.onClimbable()){
@@ -3134,10 +3134,11 @@ public class MainUtil {
             ItemStack visage = pl.roundabout$getMaskSlot();
             if(Objects.nonNull(visage)) {
 
-                if (visage.getItem() instanceof MaskItem MI && ! visage.getItem().equals(ModItems.RAT_MASK)) {
-                    //Roundabout.LOGGER.info(MI.visageData.generateVisageData(player).getSkinPath());
-                    return new ResourceLocation(Roundabout.MOD_ID,"textures/entity/visage/player_skins/" + MI.visageData.generateVisageData(player).getSkinPath() + ".png");
-
+                if (visage.getItem() instanceof MaskItem MI) {
+                    if(! visage.getItem().equals(ModItems.RAT_MASK) &&! visage.getItem().equals(ModItems.BLANK_MASK)) {
+                        //Roundabout.LOGGER.info(MI.visageData.generateVisageData(player).getSkinPath());
+                        return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/" + MI.visageData.generateVisageData(player).getSkinPath() + ".png");
+                    }
                 }
             }
         }
