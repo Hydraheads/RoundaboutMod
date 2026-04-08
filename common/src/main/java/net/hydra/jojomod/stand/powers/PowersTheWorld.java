@@ -834,7 +834,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public float getImpalePunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (3F * (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (2.8F * (ClientNetworking.getAppropriateConfig().
                                 generalStandSettings.generalImpaleAttackMultiplier *0.01))));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs((float) (17F * (ClientNetworking.getAppropriateConfig().
@@ -861,7 +861,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                     if (this.StandDamageEntityAttack($$5,getAssaultStrength($$5), 0.4F, this.self)){
                         addEXP(3,LE);
                         if (!getAssaultEarlyTime()) {
-                            MainUtil.makeBleed($$5, 0, 100, null);
+                            MainUtil.makeBleed($$5, 0, 90, null);
                         } else {
                             MainUtil.makeBleed($$5, 0, 50, null);
                         }
@@ -910,7 +910,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         }
 
         if (isReduced){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.4F*mult));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.1F*mult));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(7F*mult));
         }

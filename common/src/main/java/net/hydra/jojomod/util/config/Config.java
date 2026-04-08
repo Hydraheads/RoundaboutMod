@@ -850,7 +850,7 @@ public class Config implements Cloneable {
         public Boolean mobsTeleportInsteadOfStoppingTime;
         @BooleanOption(group = "inherit", value = true)
         public Boolean wardenMovesInStoppedTime;
-        @IntOption(group = "inherit", value = 30, min = 0, max = 100)
+        @IntOption(group = "inherit", value = 25, min = 0, max = 100)
         public Integer playerDamageCapHealthPercent;
         @BooleanOption(group = "inherit", value = true)
         public Boolean creativeModeInfiniteTimeStop;

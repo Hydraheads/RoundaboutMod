@@ -474,7 +474,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         if ((((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
                             MainUtil.makeBleed(entity, 2, 100, this.getSelf());
                         } else {
-                            MainUtil.makeBleed(entity, 2, 200, this.getSelf());
+                            MainUtil.makeBleed(entity, 2, 160, this.getSelf());
                         }
                             MainUtil.makeMobBleed(entity);
                     }
