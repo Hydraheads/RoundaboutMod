@@ -316,15 +316,17 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
                     setGoo(pos, 1, -1, 2);
                     setGoo(pos, -1, -1, 2);
                 } else if (bounces == 1) {
-
-                    ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
-                            10, 0.4, 0.3, 0.4, 0.4);
+                        ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
+                                10, 0.4, 0.3, 0.4, 0.4);
                     setGoo(pos, 0, 0, 1);
 
                     setGoo(pos, 1, 0, 2);
                     setGoo(pos, -1, 0, 2);
                     setGoo(pos, 0, 1, 2);
                     setGoo(pos, 0, -1, 2);
+                    splashRadius = 1;
+                } else if (bounces == 2) {
+                    setGoo(pos, 0, 0, 2);
                     splashRadius = 1;
                 }
 
