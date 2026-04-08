@@ -48,6 +48,23 @@ public class FallenZombie extends FallenMob{
                 .add(Attributes.ATTACK_DAMAGE, 3).
                 add(Attributes.FOLLOW_RANGE, 48.0D);
     }
+
+    @Override
+    protected InteractionResult mobInteract(Player $$0, InteractionHand $$1) {
+        ItemStack $$2 = $$0.getItemInHand($$1);
+        if ($$2.is(Items.ROTTEN_FLESH) && this.getHealth() < this.getMaxHealth()
+                && !getActivated()) {
+            if (!$$0.level().isClientSide()) {
+                if (!$$0.getAbilities().instabuild) {
+                    $$2.shrink(1);
+                }
+
+                this.heal(getMaxHealth() / 4);
+                return InteractionResult.SUCCESS;
+            }
+        }
+        return super.mobInteract($$0,$$1);
+    }
     @Override
     public InteractionResult interactAt(Player player, Vec3 location, InteractionHand intHand) {
         if (!player.level().isClientSide()) {
