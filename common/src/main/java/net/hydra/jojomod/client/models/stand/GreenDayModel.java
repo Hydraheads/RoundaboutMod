@@ -253,6 +253,7 @@ public class GreenDayModel<T extends GreenDayEntity> extends StandModel<T> {
 		this.animate(pEntity.kick_barrage_end, StandAnimations.KICK_BARRAGE_END, pAgeInTicks, 1f);
 		this.animate(pEntity.mold_spread_gd, GreenDayAnimations.mold_spread,pAgeInTicks,1f);
 
+
 	}
 
 

@@ -107,40 +107,43 @@ public class PowersGreenDay extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+99,0, "ability.roundabout.barrage",
                 "instruction.roundabout.barrage", StandIcons.GREEN_DAY_BARRAGE,2,level,bypas));
         // manual scope
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.gd_punch_left",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,4, "ability.roundabout.gd_punch_left",
             "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_PUNCH_RIGHT,1,level,bypas));
         // charge fire
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39, topPos+118,0, "ability.roundabout.gd_return_left",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39, topPos+118,4, "ability.roundabout.gd_return_left",
                 "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_ARM_RETURN_RIGHT,1,level,bypas));
         // burst fire
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.gd_spin_left",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,5, "ability.roundabout.gd_spin_left",
                 "instruction.roundabout.press_skill_block", StandIcons.GREEN_DAY_MOLD_SPIN_RIGHT,1,level,bypas));
         // place ratt
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.gd_punch_right",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,3, "ability.roundabout.gd_punch_right",
                 "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_PUNCH_LEFT,2,level,bypas));
         // place burst
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.gd_return_right",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,3, "ability.roundabout.gd_return_right",
                 "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_ARM_RETURN_LEFT,2,level,bypas));
         // place auto
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.gd_spin_right",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,5, "ability.roundabout.gd_spin_right",
                 "instruction.roundabout.press_skill_block", StandIcons.GREEN_DAY_MOLD_SPIN_LEFT,2,level,bypas));
         // dodge
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
         // passive
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,0, "ability.roundabout.gd_mold_leap",
-                "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_MOLD_LEAP,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,0, "ability.roundabout.vault",
+                "instruction.roundabout.press_skill_air", StandIcons.GREEN_DAY_VAULT,3,level,bypas));
         // bucket passive
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,0, "ability.roundabout.gd_mold_spread",
-                "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_SPREAD,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,3, "ability.roundabout.gd_mold_leap",
+                "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_MOLD_LEAP,3,level,bypas));
         // ratt leap
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,0, "ability.roundabout.gd_stitch",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,0, "ability.roundabout.gd_mold_spread",
+                "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_SPREAD,4,level,bypas));
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,2, "ability.roundabout.gd_stitch",
                 "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_STITCH,4,level,bypas));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.roundabout.gd_pardon",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+118,0, "ability.roundabout.gd_pardon",
                 "instruction.roundabout.press_skill_block", StandIcons.GREEN_DAY_PARDON,4,level,bypas));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+118,0, "ability.roundabout.gd_mold_field",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+80,0, "ability.roundabout.gd_mold_field",
                 "instruction.roundabout.passive", StandIcons.GREEN_DAY_MOLD_FIELD,4,level,bypas));
 
         return $$1;
@@ -175,7 +178,7 @@ public class PowersGreenDay extends NewPunchingStand {
         if (isHoldingSneak())
             setSkillIcon(context, x, y, 2, StandIcons.GREEN_DAY_ARM_RETURN_LEFT, PowerIndex.SKILL_2_SNEAK);
         else
-        if(isGuarding())
+        if(isGuarding() || isBarrageAttacking())
             setSkillIcon(context, x, y, 2, StandIcons.GREEN_DAY_MOLD_SPIN_LEFT, PowerIndex.SKILL_2_GUARD);
         else
             setSkillIcon(context, x, y, 2, StandIcons.GREEN_DAY_MOLD_PUNCH_LEFT, PowerIndex.SKILL_2);
@@ -187,7 +190,9 @@ public class PowersGreenDay extends NewPunchingStand {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         else
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
-
+        if (canVault() ) {
+            setSkillIcon(context, x, y, 3, StandIcons.GREEN_DAY_VAULT, PowerIndex.GLOBAL_DASH);
+        }
         if (isHoldingSneak())
             setSkillIcon(context, x, y, 1, StandIcons.GREEN_DAY_ARM_RETURN_RIGHT, PowerIndex.SKILL_1);
         else
@@ -229,11 +234,10 @@ public class PowersGreenDay extends NewPunchingStand {
                 attemptOffHandSpin();
             }
             case SKILL_3_NORMAL -> {
-                Roundabout.LOGGER.info("dash");
-                dash();
+                tryToDashClient();
             }
             case SKILL_3_CROUCH -> {
-                Roundabout.LOGGER.info("Separation_Leap");
+
                 tryToStandLeapClient();
                 setcrawlserver(this.self);
 
@@ -258,11 +262,10 @@ public class PowersGreenDay extends NewPunchingStand {
 
     @Override
     public boolean setPowerOther(int move, int lastMove) {
-        switch (move)
-        {
+        switch (move) {
             case PowerIndex.POWER_4_SNEAK -> {
                 return StitchHeal(1.0f, this.self);
-                
+
             }
             case PowerIndex.POWER_4 -> {
                 return MoldSpread();
@@ -303,8 +306,12 @@ public class PowersGreenDay extends NewPunchingStand {
             case MAIN_ARM_THROW_SLIM -> {
                 return MainArmThrowServer(ModEntities.SEPERATED_ARM_SLIM.create(this.self.level()));
             }
+
+            case PowerIndex.VAULT -> {
+                return this.vault();
+            }
         }
-        return super.setPowerOther(move,lastMove);
+        return super.setPowerOther(move, lastMove);
     }
 
     public boolean hasCheckedAllies = false;
@@ -1190,6 +1197,33 @@ public class PowersGreenDay extends NewPunchingStand {
 
             }
         }
+    }
+
+    public void tryToDashClient(){
+        if (!doVault()){
+            dash();
+        }
+    }
+
+    @Override
+    public void levelUp(){
+        if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE){
+            IPlayerEntity ipe = ((IPlayerEntity) PE);
+            byte level = ipe.roundabout$getStandLevel();
+            if (level == 5) {
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.both").
+                        withStyle(ChatFormatting.AQUA), true);
+            } else {
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.both").
+                        withStyle(ChatFormatting.AQUA), true);
+            }
+        }
+        super.levelUp();
+    }
+
+    @Override
+    public byte getMaxLevel(){
+        return 5;
     }
 
     @Override
