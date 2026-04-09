@@ -87,6 +87,7 @@ public class Config implements Cloneable {
     public AchtungSettings achtungSettings;
     @NestedOption(group = "modded")
     public CenturyBoySettings centuryBoySettings;
+    @NestedOption(group = "modded")
     public WalkingHeartSettings walkingHeartSettings;
     @NestedOption(group = "modded")
     public RattSettings rattSettings;

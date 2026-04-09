@@ -148,10 +148,10 @@ public class RoundaboutBulletEntity extends AbstractArrow {
 
     private float getBulletDamage() {
         return switch (getAmmoType()) {
-            case SNUBNOSE -> timeStopShot ? 3.7F : 4.0F;
-            case TOMMY_GUN -> timeStopShot ? 0.74F : 0.94F;
+            case SNUBNOSE -> timeStopShot ? 3.7F : 4.5F;
+            case TOMMY_GUN -> timeStopShot ? 0.74F : 1.5F;
             case SNIPER -> timeStopShot ? 3.7F : 28.0F;
-            case COLT -> timeStopShot ? 3.8F : 5.7F;
+            case COLT -> timeStopShot ? 3.8F : 6.2F;
             default -> 0.0F;
         };
     }
