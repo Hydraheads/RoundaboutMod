@@ -13,6 +13,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.CinderellaEntity;
 import net.hydra.jojomod.entity.stand.GreenDayEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.WalkingHeartEntity;
 import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
 import net.hydra.jojomod.entity.substand.SeperatedLegsEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -43,6 +44,7 @@ import net.minecraft.core.particles.SculkChargeParticleOptions;
 import net.minecraft.network.chat.Component;
 
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -57,6 +59,8 @@ import net.minecraft.world.item.AirItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
@@ -146,12 +150,27 @@ public class PowersGreenDay extends NewPunchingStand {
     public void renderIcons(GuiGraphics context, int x, int y) {
         ClientUtil.fx.roundabout$onGUI(context);
 
-        if (isHoldingSneak())
-            setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_STITCH, PowerIndex.SKILL_4_SNEAK);
-        else if (isGuarding())
-            setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_PARDON, PowerIndex.SKILL_4_GUARD);
-        else
-            setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_MOLD_SPREAD, PowerIndex.SKILL_4);
+        boolean isSculk = false;
+        if (this.getSelf() instanceof Player PE) {
+            ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();
+            boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+            if (!((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin()) {
+                if ((this.self.level().getBiome(this.self.getOnPos()).is(Biomes.DEEP_DARK)) && !((IPlayerEntity)this.self).roundabout$getUnlockedBonusSkin()){
+                    setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_SCULK_ABSORB, PowerIndex.NONE);
+                    isSculk= true;
+                }
+            }
+        }
+
+
+        if (!isSculk) {
+            if (isHoldingSneak())
+                setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_STITCH, PowerIndex.SKILL_4_SNEAK);
+            else if (isGuarding())
+                setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_PARDON, PowerIndex.SKILL_4_GUARD);
+            else
+                setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_MOLD_SPREAD, PowerIndex.SKILL_4);
+        }
 
         if (isHoldingSneak())
             setSkillIcon(context, x, y, 2, StandIcons.GREEN_DAY_ARM_RETURN_LEFT, PowerIndex.SKILL_2_SNEAK);
@@ -295,7 +314,7 @@ public class PowersGreenDay extends NewPunchingStand {
     public void tickPower() {
 
 
-
+        handleSecretSkinThinking();
         moldShenanigans();
         if(Objects.nonNull(this.getStandEntity(this.self))) {
             if (this.getStandEntity(this.self).getAnimation() == GreenDayEntity.MOLD_SPREAD && hmm == 0) {
@@ -386,25 +405,59 @@ public class PowersGreenDay extends NewPunchingStand {
     /**
       Secret skin
      */
-    public void sculkFinish(){
-        StandEntity stand = this.getStandEntity(this.self);
-        if(Objects.nonNull(stand)){
-            ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.SCULK_SOUL, stand.getX(),
-                    stand.getY() + 1, stand.getZ(),
-                    63,
-                    0.5, 1, 0.5,
-                    0);
 
-            ((IPlayerEntity)this.self).roundabout$setUnlockedBonusSkin(true);
+
+    public int secretSkinObtainmentTimer = 0;
+    public void handleSecretSkinThinking(){
+        if(secretSkinObtainmentTimer>0){
+            secretSkinObtainmentTimer --;
+            if(secretSkinObtainmentTimer == 40){
+                sculkBurst(2);
+            }else if(secretSkinObtainmentTimer == 27){
+                sculkBurst(1);
+            }else if(secretSkinObtainmentTimer == 14){
+                sculkBurst(0.5);
+            }else if (secretSkinObtainmentTimer == 1){
+                sculkFinish();
+            }
+        }
+    }
+    public void sculkFinish() {
+
+        if (this.getSelf() instanceof Player PE) {
+            StandEntity stand = this.getStandEntity(this.self);
+            Level lv = this.self.level();
+            StandUser user = ((StandUser) PE);
+            if (Objects.nonNull(stand)) {
+                ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.SCULK_SOUL, stand.getX(),
+                        stand.getY() + 1, stand.getZ(),
+                        63,
+                        0.5, 1, 0.5,
+                        0);
+
+                if (!lv.isClientSide()) {
+                    IPlayerEntity ipe = ((IPlayerEntity) PE);
+                    ipe.roundabout$setUnlockedBonusSkin(true);
+                    lv.playSound(null, PE.getX(), PE.getY(),
+                            PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
+                    ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
+                            PE.getY() + PE.getEyeHeight(), PE.getZ(),
+                            10, 0.5, 0.5, 0.5, 0.2);
+                    user.roundabout$setStandSkin(GreenDayEntity.SILENCE);
+                    ((ServerPlayer) ipe).displayClientMessage(
+                            Component.translatable("unlock_skin.roundabout.green_day.silence"), true);
+                    user.roundabout$summonStand(lv, true, false);
+                }
+            }
         }
     }
 
-    public void sculkBurst(int range){
+    public void sculkBurst(double range){
         StandEntity stand = this.getStandEntity(this.self);
         if(Objects.nonNull(stand)){
             ((ServerLevel) this.self.level()).sendParticles(new SculkChargeParticleOptions(3), stand.getX(),
                     stand.getY() + 1, stand.getZ(),
-                    44,
+                    84,
                     (double) range, (double) range, (double) range ,
                     0);
 
@@ -423,7 +476,7 @@ public class PowersGreenDay extends NewPunchingStand {
     private int hmm = 0;
 
     public void moldBurst(Vec3 pos,int rangeR){
-        if (!isClient() && !this.isBarraging()) {
+         if (!isClient() && !this.isBarraging()) {
             List<Entity> damages = MainUtil.genHitbox(this.self.level(), pos.x, pos.y,pos.z, rangeR, rangeR, rangeR);
 
             for (int j = 0; j < damages.size(); j++) {
@@ -462,8 +515,9 @@ public class PowersGreenDay extends NewPunchingStand {
 
 
     public boolean MoldSpread() {
-
-        if (!isClient() && !this.isBarraging()) {
+        if((this.self.level().getBiome(this.self.getOnPos()).is(Biomes.DEEP_DARK)) && !((IPlayerEntity)this.self).roundabout$getUnlockedBonusSkin()){
+            secretSkinObtainmentTimer = 41;
+        } else if (!isClient() && !this.isBarraging()) {
 
             StandEntity stand = getStandEntity(this.self);
             if(Objects.nonNull(stand)){
@@ -1216,21 +1270,21 @@ public class PowersGreenDay extends NewPunchingStand {
     public List<Byte> getSkinList() {
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add(PART_FIVE_GREEN_DAY);
-        $$1.add(TEAL_DAY);
+        //$$1.add(TEAL_DAY);
         if (this.getSelf() instanceof Player PE){
             byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
             ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass){
-                $$1.add(RED_DAY);
+                //$$1.add(RED_DAY);
                 //$$1.add(STONE);
                 //        $$1.add(CHEF);
             } if (Level > 2 || bypass){
-                $$1.add(RED_NIGHT);
+                //$$1.add(RED_NIGHT);
 
                 //     $$1.add(SOULBORN);
             } if (Level > 3 || bypass){
-                $$1.add(GORGONZOLA);
+                //$$1.add(GORGONZOLA);
 
             } if (Level > 4 || bypass){
                 //$$1.add(GRAY_WAGON);

@@ -8,7 +8,6 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.SafePlaceContext;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
-import net.hydra.jojomod.client.models.stand.GreenDayModel;
 import net.hydra.jojomod.client.models.stand.renderers.StandRenderer;
 import net.hydra.jojomod.client.models.substand.LifeTrackerModel;
 import net.hydra.jojomod.client.models.substand.SeperatedLegsModel;
