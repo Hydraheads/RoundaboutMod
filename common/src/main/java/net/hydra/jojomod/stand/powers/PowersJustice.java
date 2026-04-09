@@ -252,6 +252,9 @@ public class PowersJustice extends NewDashPreset {
                 ipe.roundabout$shapeShift();
                 ipe.roundabout$setShapeShift(ShapeShifts.PLAYER.id);
             }
+            if (isCastingFog()) {
+                castFog();
+            }
         }
         super.onStandSwitch();
     }

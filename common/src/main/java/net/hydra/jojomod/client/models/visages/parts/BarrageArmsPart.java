@@ -8,6 +8,7 @@ import net.hydra.jojomod.access.IPlayerRenderer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.visages.BarrageArmAnimation;
+import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
@@ -193,7 +194,8 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                     int muscle = ((StandUser) LE).roundabout$getZappedToID();
 
                     Mob shapeShift = ((IPlayerRenderer) PR).roundabout$getShapeShift(player);
-                    if (shapeShift != null && $$7.getRenderer(shapeShift) instanceof HumanoidMobRenderer hr) {
+                    if (shapeShift != null && (ShapeShifts.isSkeleton(ShapeShifts.getShiftFromByte(shift)) ||
+                            ShapeShifts.isZombie(ShapeShifts.getShiftFromByte(shift))) && $$7.getRenderer(shapeShift) instanceof HumanoidMobRenderer hr){
                         consumer = bufferSource.getBuffer(RenderType.entityTranslucent(hr.getTextureLocation(shapeShift)));
                         if (hr.getModel() instanceof HumanoidModel<?> hm) {
                             rightArm = hm.rightArm;
