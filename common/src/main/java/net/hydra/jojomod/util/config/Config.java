@@ -152,6 +152,10 @@ public class Config implements Cloneable {
         public Integer knifeDamageOnMobs;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer knifeDamageOnPlayers;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer gunDamageOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer gunDamageOnPlayers;
         @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
         public Integer maxKnivesInOneHit;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
