@@ -133,6 +133,8 @@ public interface StandUser {
 
     void rdbt$doMoldDetection(Vec3 movement);
 
+    void rdbt$doWindVisionDetection(Vec3 movement);
+
     boolean roundabout$getActive();
     boolean roundabout$getMainhandOverride();
     boolean canAttack();

@@ -131,7 +131,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
         this.tryPower(PowerIndex.POWER_4, true);
         tryPowerPacket(PowerIndex.POWER_4);
     }
-    //TODO: Figure out the Vertical y movement detector
     public boolean switchVision(){
         if (isClient() && this.self instanceof Player PE) {
             getStandUserSelf().roundabout$setUniqueStandModeToggle(!switchWindVisionToggle());
@@ -147,11 +146,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
         if(switchWindVisionToggle() || isPiloting()) {
-            if (ent.getDeltaMovement().x != 0 || ent.getDeltaMovement().z != 0) {
                     if (ent != null && ent instanceof LivingEntity && !(ent instanceof StandEntity)) {
                         return true;
                     }
-            }
         }
         return false;
     }

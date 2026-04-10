@@ -5283,7 +5283,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
-
+    public double previousYposManhattan = 0.0;
+    public double previousXposManhattan = 0.0;
+    public double previousZposManhattan = 0.0;
     public double previousYpos = 0.0;
     public float MoldLevel = 0.0f;
     public int jumpImmunityTicks = 0;
@@ -5475,6 +5477,28 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     }
 
+    @Unique
+    @Override
+    public void rdbt$doWindVisionDetection(Vec3 movement){
+        if(!this.level().isClientSide){
+            boolean down = previousYposManhattan > this.getY();
+            boolean up = previousYposManhattan < this.getY();
+            boolean movementX = previousXposManhattan != this.getX();
+            boolean movementZ = previousZposManhattan != this.getZ();
+            boolean isStand = (((LivingEntity) (Object) this) instanceof StandEntity);
+                if (!roundabout$getStandPowers().isStoppingTime() && !this.roundabout$isBubbleEncased() && !isStand) {
+                        if (down || up) {
+                           // Roundabout.LOGGER.info("Changing the recipe of my food -Manhattan Transfer Dev");
+                        }
+                    else if (movementX || movementZ) {
+                      //  Roundabout.LOGGER.info("Changing the recipe of my food -Manhattan Transfer Dev");
+                    }
+                }
+        }
+        previousYposManhattan = this.getY();
+        previousXposManhattan = this.getX();
+        previousZposManhattan = this.getZ();
+    }
 
     @Unique
     @Override
@@ -5508,7 +5532,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                                     0.01);
                         }
                     }
-                }
+               }
 
         }
         if (previousYpos < this.getY()){
@@ -5681,5 +5705,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "travel", at = @At(value = "TAIL"),cancellable = true, require = 0)
     public void   MoldDetection(Vec3 movement,CallbackInfo info) {
         rdbt$doMoldDetection(movement);
+    }
+
+    @Inject(method = "travel", at = @At(value = "TAIL"),cancellable = true, require = 0)
+    public void  WindVisionDetection(Vec3 movement,CallbackInfo info) {
+        rdbt$doWindVisionDetection(movement);
     }
 }

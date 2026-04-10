@@ -44,14 +44,6 @@ public abstract class AchtungLevelRenderer {
                 ci.cancel();
                 return;
             }
-                if (!(entity instanceof StandEntity) && entity.getDeltaMovement().x == 0 && entity.getDeltaMovement().z == 0) {
-                    if(ClientUtil.checkIfClientCanSeeMobsForWindVision()) {
-                        ci.cancel();
-                        return;
-                        /**Works when you are piloting ManhattanTransfer or Having Wind Vision activated. If an entity does not move, then it disappears.*/
-                        /**Note: if you prefer to do it on a new mixin then tell me(this message will be deleted when the stand will come out)*/
-                    }
-                }
         }
     }
     @Inject(method = "renderEntity(Lnet/minecraft/world/entity/Entity;DDDFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V",
