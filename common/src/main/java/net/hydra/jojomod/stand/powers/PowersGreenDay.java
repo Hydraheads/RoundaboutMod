@@ -122,7 +122,7 @@ public class PowersGreenDay extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,3, "ability.roundabout.gd_return_right",
                 "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_ARM_RETURN_LEFT,2,level,bypas));
         // place auto
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,5, "ability.roundabout.gd_spin_right",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,4, "ability.roundabout.gd_spin_right",
                 "instruction.roundabout.press_skill_block", StandIcons.GREEN_DAY_MOLD_SPIN_LEFT,2,level,bypas));
         // dodge
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.roundabout.dodge",
@@ -131,13 +131,13 @@ public class PowersGreenDay extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,0, "ability.roundabout.vault",
                 "instruction.roundabout.press_skill_air", StandIcons.GREEN_DAY_VAULT,3,level,bypas));
         // bucket passive
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,3, "ability.roundabout.gd_mold_leap",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,2, "ability.roundabout.gd_mold_leap",
                 "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_MOLD_LEAP,3,level,bypas));
         // ratt leap
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,0, "ability.roundabout.gd_mold_spread",
                 "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_SPREAD,4,level,bypas));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,2, "ability.roundabout.gd_stitch",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,1, "ability.roundabout.gd_stitch",
                 "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_STITCH,4,level,bypas));
 
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+118,0, "ability.roundabout.gd_pardon",
@@ -168,7 +168,11 @@ public class PowersGreenDay extends NewPunchingStand {
 
         if (!isSculk) {
             if (isHoldingSneak())
-                setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_STITCH, PowerIndex.SKILL_4_SNEAK);
+                if (canExecuteMoveWithLevel(1)) {
+                    setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_STITCH, PowerIndex.SKILL_4);
+                } else {
+                    setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                }
             else if (isGuarding())
                 setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_PARDON, PowerIndex.SKILL_4_GUARD);
             else
@@ -176,15 +180,36 @@ public class PowersGreenDay extends NewPunchingStand {
         }
 
         if (isHoldingSneak())
-            setSkillIcon(context, x, y, 2, StandIcons.GREEN_DAY_ARM_RETURN_LEFT, PowerIndex.SKILL_2_SNEAK);
+            if (canExecuteMoveWithLevel(2)) {
+                setSkillIcon(context, x, y, 2, StandIcons.GREEN_DAY_ARM_RETURN_LEFT, PowerIndex.SKILL_2_SNEAK);
+            } else {
+                setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+            }
+
         else
         if(isGuarding() || isBarrageAttacking())
-            setSkillIcon(context, x, y, 2, StandIcons.GREEN_DAY_MOLD_SPIN_LEFT, PowerIndex.SKILL_2_GUARD);
+            if(isGuarding() || isBarrageAttacking())
+                if (canExecuteMoveWithLevel(5)) {
+                    setSkillIcon(context, x, y, 2, StandIcons.GREEN_DAY_MOLD_SPIN_LEFT, PowerIndex.SKILL_2_GUARD);
+                } else {
+                    setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+                }
+
         else
+        if (canExecuteMoveWithLevel(3)) {
             setSkillIcon(context, x, y, 2, StandIcons.GREEN_DAY_MOLD_PUNCH_LEFT, PowerIndex.SKILL_2);
+        } else {
+            setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+        }
+
 
         if (isHoldingSneak())
-            setSkillIcon(context, x, y, 3, StandIcons.GREEN_DAY_MOLD_LEAP, PowerIndex.GLOBAL_DASH);
+            if (canExecuteMoveWithLevel(2)) {
+                setSkillIcon(context, x, y, 3, StandIcons.GREEN_DAY_MOLD_LEAP, PowerIndex.GLOBAL_DASH);
+            } else {
+                setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+            }
+
         else
         if(isGuarding())
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
@@ -194,12 +219,27 @@ public class PowersGreenDay extends NewPunchingStand {
             setSkillIcon(context, x, y, 3, StandIcons.GREEN_DAY_VAULT, PowerIndex.GLOBAL_DASH);
         }
         if (isHoldingSneak())
-            setSkillIcon(context, x, y, 1, StandIcons.GREEN_DAY_ARM_RETURN_RIGHT, PowerIndex.SKILL_1);
+            if (canExecuteMoveWithLevel(4)) {
+                setSkillIcon(context, x, y, 1, StandIcons.GREEN_DAY_ARM_RETURN_RIGHT, PowerIndex.SKILL_1);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+            }
+
         else
         if(isGuarding() || isBarrageAttacking())
-            setSkillIcon(context, x, y, 1, StandIcons.GREEN_DAY_MOLD_SPIN_RIGHT, PowerIndex.SKILL_1);
+            if (canExecuteMoveWithLevel(5)) {
+                setSkillIcon(context, x, y, 1, StandIcons.GREEN_DAY_MOLD_SPIN_RIGHT, PowerIndex.SKILL_1);
+        } else {
+            setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+        }
+
         else
+        if (canExecuteMoveWithLevel(4)) {
             setSkillIcon(context, x, y, 1, StandIcons.GREEN_DAY_MOLD_PUNCH_RIGHT, PowerIndex.SKILL_1);
+        } else {
+            setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+        }
+
 
 
 
