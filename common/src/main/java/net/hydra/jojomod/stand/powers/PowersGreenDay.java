@@ -1085,6 +1085,7 @@ public class PowersGreenDay extends NewPunchingStand {
                             legGoneTicks = 240;
                             ((StandUser) this.self).rdbt$SetCrawlTicks(240);
                             getBarrageWindup();
+                            addEXP(3);
 
 
                             tryPowerPacket(PowerIndex.POWER_3_EXTRA);
@@ -1146,6 +1147,7 @@ public class PowersGreenDay extends NewPunchingStand {
     }
     public boolean StitchHeal(float hp, LivingEntity entity) {
         if(!isClient()) {
+            addEXP(3);
             float maxhp = entity.getMaxHealth();
             float currenthp = entity.getHealth();
 

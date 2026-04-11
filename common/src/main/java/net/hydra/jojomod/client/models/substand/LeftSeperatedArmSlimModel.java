@@ -48,7 +48,7 @@ public class LeftSeperatedArmSlimModel<T extends LeftSeperatedArmSlimEntity> ext
 		PartDefinition LeftHand = Stand.addOrReplaceChild("leftHand", CubeListBuilder.create(), PartPose.offsetAndRotation(2.0F, 0.0F, -6.0F,00.0F,0.0F,0.0F));
 
 		PartDefinition LeftArm = Stand.addOrReplaceChild("LeftArm", CubeListBuilder.create().texOffs(32,48).addBox(-1.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
-				.texOffs(32,48).addBox(-1.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, new CubeDeformation(0.25F)), PartPose.offsetAndRotation(-1.0F, 10.0F, 1.0F, -1.5708F, 0.0F, 0.0F));
+				.texOffs(48,48).addBox(-1.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, new CubeDeformation(0.25F)), PartPose.offsetAndRotation(-1.0F, 10.0F, 1.0F, -1.5708F, 0.0F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
