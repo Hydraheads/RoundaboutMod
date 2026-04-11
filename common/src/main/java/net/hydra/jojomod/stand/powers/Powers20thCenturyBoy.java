@@ -237,10 +237,6 @@ public class Powers20thCenturyBoy extends NewDashPreset {
 
     public void knockbackMode(){knockbackStance = true;}
 
-    /**@Override
-    public void tickPower(){
-
-    }*/
 
     @Override
     public float inputSpeedModifiers(float basis) {
