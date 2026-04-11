@@ -176,7 +176,7 @@ public class PowersGreenDay extends NewPunchingStand {
             else if (isGuarding())
                 setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_PARDON, PowerIndex.SKILL_4_GUARD);
             else
-                setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_MOLD_SPREAD, PowerIndex.SKILL_4);
+                setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_MOLD_SPREAD, PowerIndex.SKILL_4_SNEAK);
         }
 
         if (isHoldingSneak())
@@ -278,7 +278,7 @@ public class PowersGreenDay extends NewPunchingStand {
             case SKILL_3_CROUCH -> {
 
                 tryToStandLeapClient();
-                setcrawlserver(this.self);
+
 
 
             }
@@ -590,36 +590,39 @@ public class PowersGreenDay extends NewPunchingStand {
      */
 
     public void attemptMainArmThrow(){
+        if(canExecuteMoveWithLevel(4)) {
             MainArmThrow();
-
+        }
 
     }
     public void attemptMainArmReturn(){
-
+        if(canExecuteMoveWithLevel(4)) {
             MainArmReturn();
-
+        }
 
     }
     public void attemptMainArmSpin(){
-
+        if(canExecuteMoveWithLevel(3)) {
             MainArmSpin();
-
+        }
 
     }
 
     public void attemptOffHandThrow(){
-
+        if(canExecuteMoveWithLevel(3)) {
             OffHandThrow();
-
+        }
     }
     public void attemptOffHandReturn(){
-
+        if(canExecuteMoveWithLevel(3)) {
             OffHandReturn();
-
+        }
     }
     public void attemptOffHandSpin(){
+        if(canExecuteMoveWithLevel(5)) {
 
             OffHandSpin();
+        }
 
     }
 
@@ -1023,12 +1026,14 @@ public class PowersGreenDay extends NewPunchingStand {
         return 15526430;
     }
 
-    public void Stitch(){
-        if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
-            this.setCooldown(PowerIndex.SKILL_4_SNEAK, 400);
-            this.setCooldown(PowerIndex.SKILL_4_CROUCH_GUARD, 400);
-            this.tryPower(PowerIndex.POWER_4_SNEAK, true);
-            tryPowerPacket(PowerIndex.POWER_4_SNEAK);
+    public void Stitch() {
+        if (canExecuteMoveWithLevel(2)) {
+            if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
+                this.setCooldown(PowerIndex.SKILL_4_SNEAK, 400);
+                this.setCooldown(PowerIndex.SKILL_4_CROUCH_GUARD, 400);
+                this.tryPower(PowerIndex.POWER_4_SNEAK, true);
+                tryPowerPacket(PowerIndex.POWER_4_SNEAK);
+            }
         }
     }
 
@@ -1064,37 +1069,36 @@ public class PowersGreenDay extends NewPunchingStand {
     }
 
     public void tryToStandLeapClient() {
+            if (vaultOrFallBraceFails()) {
+                if (this.getSelf().onGround()) {
+                    boolean jojoveinLikeKeys = !ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpAndDashShareCooldown;
+                    if ((jojoveinLikeKeys && !this.onCooldown(PowerIndex.SKILL_3)) ||
+                            (!jojoveinLikeKeys && !this.onCooldown(PowerIndex.GLOBAL_DASH))) {
+                        if (canExecuteMoveWithLevel(2)) {
+                            if (jojoveinLikeKeys) {
+                                this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
+                            } else {
+                                this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
+                                //this.setCooldown(PowerIndex.SNEAK_MOVEMENT, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
+                            }
+                            setcrawlserver(this.self);
+                            legGoneTicks = 240;
+                            ((StandUser) this.self).rdbt$SetCrawlTicks(240);
+                            getBarrageWindup();
 
-        if (vaultOrFallBraceFails()) {
-            if (this.getSelf().onGround()) {
-                boolean jojoveinLikeKeys = !ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpAndDashShareCooldown;
-                if ((jojoveinLikeKeys && !this.onCooldown(PowerIndex.SKILL_3)) ||
-                        (!jojoveinLikeKeys && !this.onCooldown(PowerIndex.GLOBAL_DASH))) {
-                    if (canExecuteMoveWithLevel(getLeapLevel())) {
-                        if (jojoveinLikeKeys) {
-                            this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
-                        } else {
-                            this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
-                            //this.setCooldown(PowerIndex.SNEAK_MOVEMENT, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
+
+                            tryPowerPacket(PowerIndex.POWER_3_EXTRA);
+
+                            bonusLeapCount = 3;
+                            bigLeap(this.getSelf(), 20, 1);
+                            ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+                            ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_MOVEMENT, true);
+                            tryPowerPacket(PowerIndex.SNEAK_MOVEMENT);
                         }
-
-                        legGoneTicks = 240;
-                        ((StandUser)this.self).rdbt$SetCrawlTicks(240);
-                        getBarrageWindup();
-
-
-                        tryPowerPacket(PowerIndex.POWER_3_EXTRA);
-
-                        bonusLeapCount = 3;
-                        bigLeap(this.getSelf(), 20, 1);
-                        ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
-                        ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_MOVEMENT, true);
-                        tryPowerPacket(PowerIndex.SNEAK_MOVEMENT);
                     }
                 }
             }
-        }
     }
     public int legGoneTicks = 0;
     public SeperatedLegsEntity currentlegs;
@@ -1283,9 +1287,9 @@ public class PowersGreenDay extends NewPunchingStand {
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.5F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.6F));
         } else {
-            return levelupDamageMod(multiplyPowerByStandConfigMobs(4.2F));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(4.6F));
         }
     }
 

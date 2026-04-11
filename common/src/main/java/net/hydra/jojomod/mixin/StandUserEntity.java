@@ -5405,7 +5405,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         DamageType type = $$0.type();
         DamageSource uh = ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION);
         LivingEntity me = (LivingEntity) (Object) this;
-        if(type == uh.type() && (Roundabout.RANDOM.nextDouble()>0.8 ||me instanceof ServerPlayer)){
+        if(type == uh.type() && (Roundabout.RANDOM.nextDouble()>0.95 ||me instanceof ServerPlayer)){
             if((LivingEntity) (Object) this instanceof Zombie){
                 spawnAtLocation(new ItemStack(Items.ZOMBIE_HEAD));
             } else if (me instanceof Creeper) {
