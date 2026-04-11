@@ -70,25 +70,18 @@ public class BaseMinion extends Monster {
         return Entity.MovementEmission.EVENTS;
     }
 
-    @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.SILVERFISH_AMBIENT;
+        return SoundEvents.VINDICATOR_AMBIENT;
     }
 
-    @Override
-    protected SoundEvent getHurtSound(DamageSource $$0) {
-        return SoundEvents.SILVERFISH_HURT;
-    }
-
-    @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.SILVERFISH_DEATH;
+        return SoundEvents.VINDICATOR_DEATH;
     }
 
-    @Override
-    protected void playStepSound(BlockPos $$0, BlockState $$1) {
-        this.playSound(SoundEvents.SILVERFISH_STEP, 0.15F, 1.0F);
+    protected SoundEvent getHurtSound(DamageSource $$0) {
+        return SoundEvents.VINDICATOR_HURT;
     }
+
 
     @Override
     public boolean hurt(DamageSource $$0, float $$1) {

@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
 import net.hydra.jojomod.event.*;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
@@ -3615,6 +3616,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             return;
         }
 
+        if (rdbt$this() instanceof AbstractVillager || rdbt$this() instanceof AbstractIllager) {
+            if (dsource.is(ModDamageTypes.BLOOD_DRAIN)){
+                spawnZombieMinion(dsource.getEntity());
+                cir.setReturnValue(true);
+                return;
+            }
+            this.level().broadcastEntityEvent(this, (byte)35);
+        }
+
         if (rdbt$this() instanceof Player pl && (dsource.is(ModDamageTypes.BLOOD_DRAIN)
         ) && FateTypes.isHuman(pl)){
             pl.setHealth(pl.getMaxHealth()/2);
@@ -3654,6 +3664,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                                 10, 0.4, 0.4, 0.4, 0.025);
                         roundabout$deeplyRemoveAttackTarget();
                     }
+                }
+            }
+        }
+    }
+
+    public void spawnZombieMinion(Entity ent){
+        if (!this.level().isClientSide()) {
+            if (rdbt$this() instanceof Mob lent) {
+                VillagerMinion villagerMinion = lent.convertTo(ModEntities.VILLAGER_MINION, false);
+                villagerMinion.absMoveTo(lent.getX(), lent.getY(), lent.getZ());
+                villagerMinion.setController(ent);
+                if (villagerMinion != null) {
+                    this.level().addFreshEntity(villagerMinion);
+                    //this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
                 }
             }
         }

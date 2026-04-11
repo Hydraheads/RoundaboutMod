@@ -9,6 +9,9 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.Zombiefish;
+import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -976,6 +979,7 @@ public class VampireFate extends VampiricFate {
             return new VampireData(self.level());
         }
     }
+
 
     @Override
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
