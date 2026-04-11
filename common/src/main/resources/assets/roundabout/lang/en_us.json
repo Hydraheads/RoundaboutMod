@@ -1543,7 +1543,7 @@
   "ability.roundabout.gd_stitch": "Stitch up",
   "ability.roundabout.gd_stitch.desc": "Stitches you up, recovering a tiny bit of health, and reducing bleed by 1 level",
   "ability.roundabout.gd_pardon": "Ally Selection",
-  "ability.roundabout.gd_pardon.desc": "Select entities as allies, making them unaffected by your mold spread",
+  "ability.roundabout.gd_pardon.desc": "Select entities as allies, making them unaffected by your mold ",
   "ability.roundabout.gd_mold_spread":"Mold Spread",
   "ability.roundabout.gd_mold_spread.desc":"Spreads Mold to all nearby entities, also increases mold level on entities that are already affected",
 

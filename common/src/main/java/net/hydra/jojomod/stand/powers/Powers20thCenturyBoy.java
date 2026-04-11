@@ -12,13 +12,11 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +30,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     public Powers20thCenturyBoy(LivingEntity self){super(self);}
 
     public boolean invincibleState = false;
-    public boolean defenseState = false;
+    public boolean defenseStance = false;
+    public boolean knockbackStance = false;
     public int mode = 1;
 
     /** general definition stuff **/
@@ -163,7 +162,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                 tryPowerPacket(PowerIndex.POWER_2);
             }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
-                dash();
+                if (!invincibleState){dash();}
             }
 
         }
@@ -180,20 +179,18 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     }
 
     public void toggleInvincibility(){
-        Roundabout.LOGGER.info("aaa");
 
         if (!invincibleState) {
             invincibleState = true;
-            ClientUtil.stopDestroyingBlock();
             switch (mode) {
                 case 1 -> {
                     Roundabout.LOGGER.info("i'll cook something later guys don't worry1");
                 }
                 case 2 -> {
-                    defensemode();
+                    defenseMode();
                 }
                 case 3 -> {
-                    Roundabout.LOGGER.info("i'll cook something later guys don't worry3");
+                    knockbackMode();
                 }
                 case 4 -> {
                     Roundabout.LOGGER.info("i'll cook something later guys don't worry4");
@@ -201,7 +198,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             }
         } else {
             invincibleState = false;
-            defenseState = false;
+            defenseStance = false;
+            knockbackStance = false;
         }
     }
 
@@ -209,7 +207,14 @@ public class Powers20thCenturyBoy extends NewDashPreset {
 
     @Override
     public boolean interceptDamageEvent(DamageSource damageSource, float amount) {
+        if(knockbackStance){
+            if(!damageSource.is(DamageTypes.FALL)){
+                Roundabout.LOGGER.info("{} ", damageSource);
+                ClientUtil.getPlayer().setDeltaMovement(
+                        ClientUtil.getPlayer().position().subtract(
+                                damageSource.getSourcePosition()).multiply(new Vec3(amount/5, amount/5, amount/5)));
 
+        }}
         if(invincibleState){
             /** ps: don't forget to put TA4 shot when it gets added **/
             if (damageSource.is(DamageTypes.FELL_OUT_OF_WORLD) ||
@@ -226,15 +231,20 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         }
     }
 
-    public void defensemode(){
-        defenseState = true;
+    public void defenseMode(){
+        defenseStance = true;
     }
 
+    public void knockbackMode(){knockbackStance = true;}
 
+    /**@Override
+    public void tickPower(){
+
+    }*/
 
     @Override
     public float inputSpeedModifiers(float basis) {
-        if (defenseState){
+        if (invincibleState){
          return 0;
         }
         return super.inputSpeedModifiers(basis);
@@ -242,11 +252,11 @@ public class Powers20thCenturyBoy extends NewDashPreset {
 
     @Override
     public boolean cancelSprint() {
-        return defenseState;
+        return invincibleState;
     }
 
     @Override
     public boolean cancelJump() {
-        return defenseState;
+        return invincibleState;
     }
 }

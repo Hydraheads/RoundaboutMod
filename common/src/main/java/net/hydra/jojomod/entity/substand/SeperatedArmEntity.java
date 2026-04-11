@@ -399,7 +399,7 @@ public class SeperatedArmEntity extends StandEntity {
         for(int j = 0;j<damages.size();j++){
 
             Entity entity = damages.get(j);
-
+            ((StandUser)user).roundabout$getStandPowers().addEXP(1);
 
             if(!((entity.equals(this) ||entity.equals((Object)user)) || entity instanceof StandEntity || entity instanceof ItemEntity)) {
                 if (flyingTicks > 2 && SpinTicks >0) {
