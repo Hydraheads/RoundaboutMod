@@ -230,18 +230,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         defenseState = true;
     }
 
-    /**@Override
-    public void tickPower(){
-        if (defenseState){
-            if (this.self.onGround()){
-            this.self.setDeltaMovement(0,0,0);
-            } else{
-                this.self.setDeltaMovement(0, this.self.getDeltaMovement().y, 0);
 
-            this.self.hurtMarked = true;
-            }
-        }
-    }*/
 
     @Override
     public float inputSpeedModifiers(float basis) {

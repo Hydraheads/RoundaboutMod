@@ -216,9 +216,6 @@ public class BaseMinion extends Monster {
         this.yBodyRot = this.getYRot();
         if (!this.level().isClientSide()) {
             lifespan++;
-            if (lifespan > 1200){
-                discard();
-            }
             if (controller != null){
                 controller = this.level().getEntity(getController());
             } else {
