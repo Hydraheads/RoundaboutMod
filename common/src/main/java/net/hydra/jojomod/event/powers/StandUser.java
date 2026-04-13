@@ -133,8 +133,6 @@ public interface StandUser {
 
     void rdbt$doMoldDetection(Vec3 movement);
 
-    void rdbt$doWindVisionDetection(Vec3 movement);
-
     boolean roundabout$getActive();
     boolean roundabout$getMainhandOverride();
     boolean canAttack();
@@ -352,4 +350,8 @@ public interface StandUser {
     List<CooldownInstance> rdbt$getPowerCooldowns();
     void rdbt$setPowerCooldowns(List<CooldownInstance> cdi);
 
+    /**Manhattan Transfer*/
+    void rdbt$doWindVisionDetection();
+    void roundabout$setTrueInvisManhattan(int round);
+    int roundabout$getTrueInvisManhattan();
 }

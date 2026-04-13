@@ -72,6 +72,10 @@ public interface IEntityAndData {
     void roundabout$setTrueInvisibility(int only);
     int roundabout$getTrueInvisibility();
 
+    /**Manhattan Transfer*/
+    void roundabout$setTrueInvisibilityManhattan(int manhattanticking);
+    int roundabout$getTrueInvisibilityManhattan();
+
 
     void roundabout$universalTick();
 

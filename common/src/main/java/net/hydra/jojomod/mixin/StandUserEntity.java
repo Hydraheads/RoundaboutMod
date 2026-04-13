@@ -1553,6 +1553,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$TRUE_INVISIBILITY = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.INT);
+    @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$MANHATTAN_INVISIBILITY = SynchedEntityData.defineId(LivingEntity.class,
+            EntityDataSerializers.INT);
 
     @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$METALLICA_INVISIBILITY = SynchedEntityData.defineId(LivingEntity.class,
@@ -3168,6 +3171,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BOUND_TO, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_ZAPPED_TO_ATTACK, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$TRUE_INVISIBILITY, -1);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$MANHATTAN_INVISIBILITY, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$METALLICA_INVISIBILITY, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ADJUSTED_GRAVITY, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ONLY_BLEEDING, true);
@@ -3457,6 +3461,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return -1;
     }
 
+    @Unique
+    @Override
+    public void roundabout$setTrueInvisManhattan(int round) {
+        if (this.entityData.hasItem(ROUNDABOUT$MANHATTAN_INVISIBILITY)) {
+            roundabout$zappedTicks = 0;
+            this.getEntityData().set(ROUNDABOUT$MANHATTAN_INVISIBILITY, round);
+        }
+    }
+    @Unique
+    @Override
+    public int roundabout$getTrueInvisManhattan() {
+        if (this.entityData.hasItem(ROUNDABOUT$MANHATTAN_INVISIBILITY)) {
+            return this.getEntityData().get(ROUNDABOUT$MANHATTAN_INVISIBILITY);
+        }
+        return -1;
+    }
 
     @Unique
     @Override
@@ -5306,7 +5326,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             return false;
         }
     }
-
     public double previousYposManhattan = 0.0;
     public double previousXposManhattan = 0.0;
     public double previousZposManhattan = 0.0;
@@ -5503,26 +5522,26 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Unique
     @Override
-    public void rdbt$doWindVisionDetection(Vec3 movement){
+    public void rdbt$doWindVisionDetection(){
         if(!this.level().isClientSide){
             boolean down = previousYposManhattan > this.getY();
             boolean up = previousYposManhattan < this.getY();
             boolean movementX = previousXposManhattan != this.getX();
             boolean movementZ = previousZposManhattan != this.getZ();
             boolean isStand = (((LivingEntity) (Object) this) instanceof StandEntity);
-                if (!roundabout$getStandPowers().isStoppingTime() && !this.roundabout$isBubbleEncased() && !isStand) {
-                        if (down || up) {
-                           // Roundabout.LOGGER.info("Changing the recipe of my food -Manhattan Transfer Dev");
-                        }
-                    else if (movementX || movementZ) {
-                      //  Roundabout.LOGGER.info("Changing the recipe of my food -Manhattan Transfer Dev");
-                    }
-                }
+
+            IEntityAndData entityAndData = ((IEntityAndData) this);
+            if (!isStand && !roundabout$getStandPowers().isStoppingTime()) {
+                if (up || down || movementX || movementZ) {
+                        entityAndData.roundabout$setTrueInvisibilityManhattan(45);
+                } else {/*Ticking will go down until the entity unrenders*/}
+
+            }
         }
-        previousYposManhattan = this.getY();
-        previousXposManhattan = this.getX();
-        previousZposManhattan = this.getZ();
-    }
+            previousYposManhattan = this.getY();
+            previousXposManhattan = this.getX();
+            previousZposManhattan = this.getZ();
+        }
 
     @Unique
     @Override
@@ -5731,8 +5750,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         rdbt$doMoldDetection(movement);
     }
 
-    @Inject(method = "travel", at = @At(value = "TAIL"),cancellable = true, require = 0)
-    public void  WindVisionDetection(Vec3 movement,CallbackInfo info) {
-        rdbt$doWindVisionDetection(movement);
+   @Inject(method = "travel", at = @At(value = "TAIL"),cancellable = true, require = 0)
+    public void  WindVisionDetection(CallbackInfo info) {
+        rdbt$doWindVisionDetection();
     }
 }

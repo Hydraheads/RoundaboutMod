@@ -180,6 +180,42 @@ public abstract class EntityAndData implements IEntityAndData {
         }
     }
 
+    @Unique
+    @Override
+    public void roundabout$setTrueInvisibilityManhattan(int manhattanticking){
+        if (((Entity)(Object)this) instanceof LivingEntity LE){
+            ((StandUser)LE).roundabout$setTrueInvisManhattan(manhattanticking);
+
+            roundabout$trueInvisibilityManhattan = manhattanticking;
+            if (!this.level().isClientSide()) {
+                MainUtil.spreadRadialClientPacket(((Entity) (Object) this), 120, false,
+                        ServerToClientPackets.S2CPackets.MESSAGES.MANHATTAN_INVISIBILITY.value,
+                        getId(), manhattanticking
+                );
+            }
+        }
+    }
+
+    @Unique
+    public int roundabout$trueInvisibilityManhattan = -1;
+    @Unique
+    @Override
+    public int roundabout$getTrueInvisibilityManhattan(){
+        if (((Entity)(Object)this) instanceof LivingEntity LE){
+            return ((StandUser)LE).roundabout$getTrueInvisManhattan();
+        }
+        return roundabout$trueInvisibilityManhattan;
+    }
+
+    @Unique
+    public void roundabout$tickTrueInvisibilityManhattan(){
+        if (!this.level().isClientSide()){
+            if (roundabout$getTrueInvisibilityManhattan() > -1){
+                roundabout$setTrueInvisibilityManhattan(roundabout$getTrueInvisibilityManhattan()-1);
+            }
+        }
+    }
+
 
 
     /**Mandom Time Queue, not sure if it will have any other use*/
@@ -377,6 +413,20 @@ public abstract class EntityAndData implements IEntityAndData {
                     cir.setReturnValue(false);
                     return;
                 }
+            }
+            cir.setReturnValue(true);
+        }
+
+        if (ClientUtil.checkIfClientCanSeeMobsForWindVision()){
+            if(roundabout$getTrueInvisibilityManhattan() > 0){
+                if (this.level().isClientSide()) {
+                    cir.setReturnValue(false);
+                    return;
+                }
+            }
+            else{
+               cir.setReturnValue(true);
+                return;
             }
             cir.setReturnValue(true);
         }
@@ -661,6 +711,7 @@ public abstract class EntityAndData implements IEntityAndData {
     public void roundabout$universalTick(){
         roundabout$addSecondToQueue();
         roundabout$tickTrueInvisibility();
+        roundabout$tickTrueInvisibilityManhattan();
     }
 
     @Inject(method = "tick", at = @At(value = "HEAD"))

@@ -14,6 +14,7 @@ public class ServerToClientPackets {
             Chrono("chrono_vision_player"),
             MANDOM_PENALTY("mandom_penalty"),
             TRUE_INVISIBILITY("invis"),
+            MANHATTAN_INVISIBILITY("manhattan_invis"),
             SyncDaze("sync_daze"),
             SyncGuard("sync_guard"),
             UpdateBarrageClash("update_barrage_clash_s2c"),
