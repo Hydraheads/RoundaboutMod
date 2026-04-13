@@ -211,7 +211,7 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
             if ((player.isCrouching() && hasTommyAmmo(player) && getAmmo(itemStack) != maxAmmo) || (player.isCrouching() && player.isCreative())) {
                 if (!isReloading(itemStack)) {
                     setReloading(itemStack, true);
-                    player.getCooldowns().addCooldown(this, 140);
+                    player.getCooldowns().addCooldown(this, 70);
                     ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.TOMMY_RELOAD, 10, false);
                 }
 
