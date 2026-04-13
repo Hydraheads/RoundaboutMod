@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.zombie_minion;
 
 import net.hydra.jojomod.entity.Zombiefish;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.level.Level;
 

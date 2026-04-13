@@ -671,7 +671,7 @@ public class StandPowers extends AbilityScapeBasis {
     /**The amount of exp you gain from mining blocks*/
     public void gainExpFromSpecialMining(BlockState $$1, BlockPos $$2) {
         if (!($$1.getBlock() instanceof IceBlock) && !$$1.is(Blocks.PACKED_ICE) &&
-                !($$1.getDestroySpeed(this.self.level(),$$2) < 0.1)) {
+                !($$1.getDestroySpeed(this.self.level(),$$2) < 0.1) && MainUtil.isBlockExpAble($$1)) {
             if (Math.random() > 0.62) {
                 addEXP(1);
             }

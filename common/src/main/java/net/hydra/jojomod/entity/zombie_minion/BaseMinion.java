@@ -51,18 +51,11 @@ public class BaseMinion extends Monster {
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 
-    @Override
-    public double getMyRidingOffset() {
-        return 0.1;
-    }
-
-    @Override
-    protected float getStandingEyeHeight(Pose $$0, EntityDimensions $$1) {
-        return 0.13F;
-    }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 10.0).add(Attributes.MOVEMENT_SPEED, 0.33).add(Attributes.ATTACK_DAMAGE, 2.0);
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.3).add(Attributes.MAX_HEALTH, 24)
+                .add(Attributes.ATTACK_DAMAGE, 5).
+                add(Attributes.FOLLOW_RANGE, 48.0D);
     }
 
     @Override
@@ -116,9 +109,10 @@ public class BaseMinion extends Monster {
         }
     }
 
+
     @Override
     public MobType getMobType() {
-        return MobType.ARTHROPOD;
+        return MobType.UNDEAD;
     }
 
     @Override
@@ -287,4 +281,5 @@ public class BaseMinion extends Monster {
             return controller.killedEntity($$0,$$1);
         return true;
     }
+
 }

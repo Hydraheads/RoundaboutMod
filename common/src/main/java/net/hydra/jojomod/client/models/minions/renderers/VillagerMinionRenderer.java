@@ -1,6 +1,7 @@
 package net.hydra.jojomod.client.models.minions.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.minions.VillagerMinionModel;
 import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
@@ -13,7 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.monster.Vindicator;
 
 public class VillagerMinionRenderer<T extends VillagerMinion> extends MobRenderer<VillagerMinion, VillagerMinionModel<VillagerMinion>> {
-    private static final ResourceLocation VINDICATOR = new ResourceLocation("textures/entity/illager/vindicator.png");
+    private static final ResourceLocation VINDICATOR = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/minions/villager.png");
 
     public VillagerMinionRenderer(EntityRendererProvider.Context $$0) {
         super($$0, new VillagerMinionModel<>($$0.bakeLayer(ModEntityRendererClient.VILLAGER_MINION_LAYER)), 0.5F);

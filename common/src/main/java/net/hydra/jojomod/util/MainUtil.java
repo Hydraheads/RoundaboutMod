@@ -188,6 +188,7 @@ public class MainUtil {
     }
 
     public static ArrayList<String> walkableBlocks = Lists.newArrayList();
+    public static ArrayList<String> expLessBlocks = Lists.newArrayList();
     public static ArrayList<String> standBlockGrabBlacklist = Lists.newArrayList();
     public static ArrayList<String> naturalStandUserMobBlacklist = Lists.newArrayList();
     public static ArrayList<String> hypnotismMobBlackList = Lists.newArrayList();
@@ -351,6 +352,14 @@ public class MainUtil {
 
         ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
         if (walkableBlocks != null && !walkableBlocks.isEmpty() && rl != null && walkableBlocks.contains(rl.toString())){
+            return false;
+        }
+        return true;
+    }
+    public static boolean isBlockExpAble(BlockState bs){
+
+        ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
+        if (expLessBlocks != null && !expLessBlocks.isEmpty() && rl != null && expLessBlocks.contains(rl.toString())){
             return false;
         }
         return true;
