@@ -1,6 +1,8 @@
 package net.hydra.jojomod.entity.zombie_minion;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.goals.*;
+import net.hydra.jojomod.event.index.Tactics;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -22,9 +24,7 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Silverfish;
-import net.minecraft.world.entity.monster.Vindicator;
+import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -42,6 +42,10 @@ public class BaseMinion extends Monster {
     public UUID controller2;
     private static final EntityDataAccessor<Integer> CONTROLLER =
             SynchedEntityData.defineId(BaseMinion.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Byte> TARGET_TACTIC =
+            SynchedEntityData.defineId(BaseMinion.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Byte> MOVEMENT_TACTIC =
+            SynchedEntityData.defineId(BaseMinion.class, EntityDataSerializers.BYTE);
 
     public BaseMinion(EntityType<? extends BaseMinion> $$0, Level $$1) {
         super($$0, $$1);
@@ -49,13 +53,44 @@ public class BaseMinion extends Monster {
 
     @Override
     protected void registerGoals() {
+    }
+    public void addBehaviourGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(1, new ClimbOnTopOfPowderSnowGoal(this, this.level()));
         this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0, false));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.goalSelector.addGoal(7, new MinionStrollGoal(this, 1.0));
+        this.goalSelector.addGoal(6, new MinionFollowCommanderGoal(this, 1.0, 10.0F, 1.5F, false));
+        this.targetSelector.addGoal(1, new MinionTargetGoal(this));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::canGetMadAt));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false, this::canGetMadAt));
+   }
+
+    public boolean canGetMadAt(LivingEntity $$0) {
+        if (!this.canAttack($$0)) {
+            return false;
+        } else {
+            return (
+                    (this.getTargetTactic() == Tactics.HUNT_PLAYERS.id && $$0.getType() == EntityType.PLAYER && !(this.controller != null && $$0.is(this.controller))) ||
+                            (this.getTargetTactic() == Tactics.HUNT_MONSTERS.id && $$0 instanceof Enemy && !($$0 instanceof Creeper) && !(this.controller != null && $$0.is(this.controller)))
+            );
+        }
     }
 
+
+    public byte getTargetTactic() {
+        return this.getEntityData().get(TARGET_TACTIC);
+    }
+    public void setTargetTactic(byte byt){
+        this.entityData.set(TARGET_TACTIC, byt);
+    }
+    public byte getMovementTactic() {
+        return this.getEntityData().get(MOVEMENT_TACTIC);
+    }
+    public void setMovementTactic(byte byt){
+        this.entityData.set(MOVEMENT_TACTIC, byt);
+    }
     @Override
     protected InteractionResult mobInteract(Player $$0, InteractionHand $$1) {
         if (!$$0.isCrouching()){
@@ -198,6 +233,8 @@ public class BaseMinion extends Monster {
         if (this.controller != null) {
             $$0.putUUID("Controller", this.controller.getUUID());
         }
+        $$0.putByte("moveTactic",getMovementTactic());
+        $$0.putByte("targetTactic",getTargetTactic());
         $$0.putInt("Lifespan",lifespan);
         super.addAdditionalSaveData($$0);
     }
@@ -211,6 +248,8 @@ public class BaseMinion extends Monster {
                 this.setController(SE.getEntity($$2));
             }
         }
+        this.setTargetTactic($$0.getByte("targetTactic"));
+        this.setMovementTactic($$0.getByte("moveTactic"));
         lifespan = $$0.getInt("Lifespan");
     }
 
@@ -289,6 +328,8 @@ public class BaseMinion extends Monster {
     protected void defineSynchedData() {
         if (!this.entityData.hasItem(CONTROLLER)) {
             super.defineSynchedData();
+            this.entityData.define(TARGET_TACTIC, (byte) 0);
+            this.entityData.define(MOVEMENT_TACTIC, (byte) 0);
             this.entityData.define(CONTROLLER, -1);
         }
     }
