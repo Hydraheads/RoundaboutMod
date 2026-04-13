@@ -1,5 +1,6 @@
 package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -145,10 +146,20 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
-        if(switchWindVisionToggle() || isPiloting()) {
-                    if (ent != null && ent instanceof LivingEntity && !(ent instanceof StandEntity)) {
-                        return true;
-                    }
+        IEntityAndData entityAndData = ((IEntityAndData) ent);
+        if(switchWindVisionToggle()) {
+            if (this.getStandEntity(this.getSelf()) != null && ent != null && ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
+                if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent) && !player.hasLineOfSight(ent)) {
+                    return true;
+                }
+            }
+        }
+        if(isPiloting()){
+            if (this.getStandEntity(this.getSelf()) != null && ent != null && ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
+                if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
+                    return true;
+                }
+            }
         }
         return false;
     }
@@ -344,7 +355,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
         if (entity instanceof ManhattanTransferEntity ME) {
             LivingEntity ent = getPilotingStand();
-
+            IEntityAndData entityAndData = ((IEntityAndData) ent);
             entity.xxa = kpi.leftImpulse;
             entity.zza = kpi.forwardImpulse;
             Vec3 vec32 = new Vec3(entity.xxa * walkingSpeed, 0, entity.zza * walkingSpeed);
@@ -355,10 +366,10 @@ public class PowersManhattanTransfer extends NewDashPreset {
             if (kpi.jumping) {
                 $$13++;
             }
-
             if (ent != null) {
-                Entity TE = MainUtil.getTargetEntity(ent, 100, 10);
-                if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible() && TE.getDeltaMovement().x != 0 && TE.getDeltaMovement().z != 0) {
+                Entity TE = MainUtil.getTargetEntity(ent, 300, 10);
+                if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible() && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
+//TODO: fix the glowing mob speed boosting, ignore what is set up for now, since it doesn't work
                         if (ME.isInRain()) {
                             if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
                                 entity.setDeltaMovement(entity.getForward());

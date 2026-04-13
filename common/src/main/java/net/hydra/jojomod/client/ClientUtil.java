@@ -502,6 +502,15 @@ public class ClientUtil {
 
                     }
                 }
+                /**Invis Psuedo Tracked Data*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.MANHATTAN_INVISIBILITY.value)) {
+                    int entityID = (int)vargs[0];
+                    int altered = (int)vargs[1];
+                    Entity ent = player.level().getEntity(entityID);
+                    if (ent != null){
+                        ((IEntityAndData)ent).roundabout$setTrueInvisibilityManhattan(altered);
+                    }
+                }
                 /**Daze Packet*/
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncDaze.value)) {
                     byte dazeTime = (byte)vargs[0];
@@ -927,10 +936,8 @@ public class ClientUtil {
     public static boolean checkIfClientCanSeeMobsForWindVision() {
 
         LocalPlayer player = Minecraft.getInstance().player;
-        if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersManhattanTransfer PMT) {
-            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM && ((PM.switchWindVisionToggle() || PM.isPiloting()))){
+        if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersManhattanTransfer PMT && PMT.isPiloting()) {
                     return true;
-            }
         }
         return false;
     }
@@ -1105,7 +1112,6 @@ public class ClientUtil {
             if (powers.getGoBeyondTarget() != null && powers.getGoBeyondTarget().is(entity)) {
                 return 10978493;
             }
-
 
 
 
