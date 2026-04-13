@@ -1,4 +1,5 @@
 package net.hydra.jojomod.entity.zombie_minion;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.core.BlockPos;
@@ -10,6 +11,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -23,6 +26,8 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Silverfish;
 import net.minecraft.world.entity.monster.Vindicator;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
@@ -36,7 +41,7 @@ public class BaseMinion extends Monster {
     public Entity controller;
     public UUID controller2;
     private static final EntityDataAccessor<Integer> CONTROLLER =
-            SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.INT);
+            SynchedEntityData.defineId(BaseMinion.class, EntityDataSerializers.INT);
 
     public BaseMinion(EntityType<? extends BaseMinion> $$0, Level $$1) {
         super($$0, $$1);
@@ -49,6 +54,19 @@ public class BaseMinion extends Monster {
         this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0, false));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+    }
+
+    @Override
+    protected InteractionResult mobInteract(Player $$0, InteractionHand $$1) {
+        if (!$$0.isCrouching()){
+            if (getController() == $$0.getId()){
+                if ($$0.level().isClientSide()){
+                    ClientUtil.setZombieMinionScreen();
+                }
+                return InteractionResult.PASS;
+            }
+        }
+        return super.mobInteract($$0,$$1);
     }
 
 

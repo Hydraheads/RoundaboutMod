@@ -3622,7 +3622,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 cir.setReturnValue(true);
                 return;
             }
-            this.level().broadcastEntityEvent(this, (byte)35);
         }
 
         if (rdbt$this() instanceof Player pl && (dsource.is(ModDamageTypes.BLOOD_DRAIN)
