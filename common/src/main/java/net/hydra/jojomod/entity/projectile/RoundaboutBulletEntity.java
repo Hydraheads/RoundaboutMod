@@ -149,10 +149,10 @@ public class RoundaboutBulletEntity extends AbstractArrow {
 
     private float getBulletDamage() {
         return switch (getAmmoType()) {
-            case SNUBNOSE -> timeStopShot ? 3.7F : 4.5F;
-            case TOMMY_GUN -> timeStopShot ? 0.74F : 1.5F;
-            case SNIPER -> timeStopShot ? 3.7F : 28.0F;
-            case COLT -> timeStopShot ? 3.8F : 6.2F;
+            case SNUBNOSE -> timeStopShot ? 3.7F : ClientNetworking.getAppropriateConfig().itemSettings.snubnoseDamage;
+            case TOMMY_GUN -> timeStopShot ? 0.74F : ClientNetworking.getAppropriateConfig().itemSettings.tommyGunDamage;
+            case SNIPER -> timeStopShot ? 3.7F : ClientNetworking.getAppropriateConfig().itemSettings.rifleDamage;
+            case COLT -> timeStopShot ? 3.8F : ClientNetworking.getAppropriateConfig().itemSettings.coltDamage;
             default -> 0.0F;
         };
     }
@@ -207,8 +207,12 @@ public class RoundaboutBulletEntity extends AbstractArrow {
             float damage = getBulletDamage();
 
             if (getAmmoType() == SNIPER) {
-                float multiplier = Math.min(travelTicks / 7.0F, 1.0F);
-                damage = damage * multiplier;
+                    float multiplier = Math.min(travelTicks / 7.0F, 1.0F);
+                    damage = damage * multiplier;
+
+                if (MainUtil.isBossMob(livingEntity)) {
+                    damage = Math.min(damage,ClientNetworking.getAppropriateConfig().itemSettings.rifleDamage/3F);
+                }
             }
 
             if (getAmmoType() == SNUBNOSE && !hadIFrames) {

@@ -2903,6 +2903,20 @@
   "config.roundabout.knifeDamageOnPlayers.desc": "A damage multiplier for knives hitting players. Knives do not bypass armor, but they do penetrate enchantments for the most part.",
   "config.roundabout.gunDamageOnPlayers.name": "Gun Player Damage",
   "config.roundabout.gunDamageOnPlayers.desc": "A damage multiplier for guns hitting players. Guns are super fast, accurate, and have no windup. So it is not recommended to make them more powerful against players, they are mostly for inflicting bleed.",
+
+  "config.roundabout.rifleDamage.name": "Rifle Damage",
+  "config.roundabout.rifleDamage.desc": "Before being multiplied by the above, how much damage does the rifle cap at?",
+
+  "config.roundabout.snubnoseDamage.name": "Snubnose Damage",
+  "config.roundabout.snubnoseDamage.desc": "Before being multiplied by the above, the base snubnose damage. (it does +1 bonus damage if you hit while not on i-frames as well)",
+
+  "config.roundabout.coltDamage.name": "Colt Damage",
+  "config.roundabout.coltDamage.desc": "Before being multiplied by the above, the base colt damage.",
+
+  "config.roundabout.tommyGunDamage.name": "Tommy Gun Damage",
+  "config.roundabout.tommyGunDamage.desc": "Before being multiplied by the above, the base tommy gun damage.",
+
+
   "config.roundabout.maxKnivesInOneHit.name": "Max Knives In One Hit",
   "config.roundabout.maxKnivesInOneHit.desc": "The maximum amount of knives that can hit an entity at once. For instance, if you stop time and surround an entity with knife bundles, where is the limit?",
   "config.roundabout.gasolineExplosionDamage.name": "Gasoline Damage Multiplier",

@@ -159,7 +159,7 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
             }
             LivingEntity livingEntity = player;
             RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity(level, livingEntity);
-            $$7.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 4.0F, 5.0F);
+            $$7.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 3.0F, 5.0F);
             $$7.setAmmoType(RoundaboutBulletEntity.TOMMY_GUN);
             level.addFreshEntity($$7);
             S2CPacketUtil.gunRecoil(player, "tommy");
