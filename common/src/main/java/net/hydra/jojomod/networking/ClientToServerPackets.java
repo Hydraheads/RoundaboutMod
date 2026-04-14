@@ -502,7 +502,7 @@ public class ClientToServerPackets {
                                 } else if (context == Tactics.SENDHOME.id){
                                     fm.goHome();
                                 } else if (context == Tactics.EQUIP.id){
-                                    ItemStack plrItem = sender.getItemInHand(InteractionHand.MAIN_HAND);
+                                    ItemStack plrItem = sender.getItemBySlot(EquipmentSlot.MAINHAND);
                                     ItemStack corpseItem = fm.getMainHandItem();
                                     fm.setItemSlotAndDropWhenKilled2(EquipmentSlot.MAINHAND, plrItem);
                                     sender.setItemInHand(InteractionHand.MAIN_HAND, corpseItem);
