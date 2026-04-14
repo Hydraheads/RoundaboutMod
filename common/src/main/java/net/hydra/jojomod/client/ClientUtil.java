@@ -1389,9 +1389,9 @@ public class ClientUtil {
         isInCinderellaMobUI = entid;
         mc.setScreen(new VisageStoreScreen(costs));
     }
-    public static void setZombieMinionScreen() {
+    public static void setZombieMinionScreen(int entid) {
         Minecraft mc = Minecraft.getInstance();
-        mc.setScreen(new ZombieMinionScreen());
+        mc.setScreen(new ZombieMinionScreen(entid));
     }
     public static void setJusticeTacticsScreen() {
         Minecraft mc = Minecraft.getInstance();

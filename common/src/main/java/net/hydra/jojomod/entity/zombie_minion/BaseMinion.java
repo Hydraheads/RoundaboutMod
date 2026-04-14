@@ -1,6 +1,5 @@
 package net.hydra.jojomod.entity.zombie_minion;
 import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.goals.*;
 import net.hydra.jojomod.event.index.Tactics;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -96,7 +95,7 @@ public class BaseMinion extends Monster {
         if (!$$0.isCrouching()){
             if (getController() == $$0.getId()){
                 if ($$0.level().isClientSide()){
-                    ClientUtil.setZombieMinionScreen();
+                    ClientUtil.setZombieMinionScreen(getId());
                 }
                 return InteractionResult.CONSUME;
             }
@@ -288,10 +287,10 @@ public class BaseMinion extends Monster {
                 if (controller instanceof LivingEntity LE) {
                     autoTarget = LE.getLastHurtByMob();
                     autoTarget2 = LE.getLastHurtMob();
-                    if (autoTarget instanceof net.hydra.jojomod.entity.Zombiefish fm && fm.getController() == this.getController()){
+                    if (autoTarget instanceof BaseMinion fm && fm.getController() == this.getController()){
                         autoTarget = null;
                     }
-                    if (autoTarget2 instanceof net.hydra.jojomod.entity.Zombiefish fm && fm.getController() == this.getController()){
+                    if (autoTarget2 instanceof BaseMinion fm && fm.getController() == this.getController()){
                         autoTarget2 = null;
                     }
                     boolean check1 = (this.getTarget() != autoTarget) || autoTarget == null;

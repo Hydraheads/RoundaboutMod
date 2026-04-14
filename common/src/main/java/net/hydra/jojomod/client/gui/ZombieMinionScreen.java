@@ -6,9 +6,12 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyInputRegistry;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.index.Tactics;
@@ -25,6 +28,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
@@ -52,14 +56,13 @@ public class ZombieMinionScreen extends Screen {
     private boolean setFirstMousePos;
     public boolean zHeld;
 
+    public final int hostID;
+
     private final List<PoseSlot> slots = Lists.newArrayList();
 
-    public ZombieMinionScreen() {
+    public ZombieMinionScreen(int endid) {
         super(GameNarrator.NO_TITLE);
-        this.currentlyHovered = null;
-    }
-    public ZombieMinionScreen(ItemStack stack) {
-        super(GameNarrator.NO_TITLE);
+        hostID = endid;
         this.currentlyHovered = null;
     }
 
@@ -119,6 +122,20 @@ public class ZombieMinionScreen extends Screen {
         for (PoseSlot MobSlot : this.slots) {
             MobSlot.render(guiGraphics, i, j, f);
             MobSlot.setSelected(this.currentlyHovered == MobSlot.icon);
+
+            Player p = ClientUtil.getPlayer();
+            if (p != null) {
+                Entity ent = p.level().getEntity(hostID);
+                if (ent instanceof BaseMinion bm){
+                    if (MobSlot.getID() == bm.getMovementTactic() ||
+                            MobSlot.getID() == bm.getTargetTactic()
+                    || (MobSlot.getID() == 3 && bm.getMovementTactic() == 0)
+                            || (MobSlot.getID() == 6 && bm.getTargetTactic() == 0)){
+                        MobSlot.setCorrect(true);
+                    }
+                }
+            }
+
             if (bl || !MobSlot.isHoveredOrFocused()) continue;
             caughtSomething = true;
             this.currentlyHovered = MobSlot.icon;
@@ -250,6 +267,7 @@ public class ZombieMinionScreen extends Screen {
             this.yoff = yoff;
         }
 
+
         void drawIcon(GuiGraphics guiGraphics, int i, int j) {
             guiGraphics.blit(rl, i-1, j-1, 0, 0, 18, 18, 18, 18);
         }
@@ -271,6 +289,7 @@ public class ZombieMinionScreen extends Screen {
             extends AbstractWidget {
         final tacticIcon icon;
         private boolean isSelected;
+        private boolean isCorrect = false;
 
         public PoseSlot(tacticIcon pIcon, int i, int j) {
             super(i, j, 26, 26, pIcon.getName());
@@ -284,6 +303,8 @@ public class ZombieMinionScreen extends Screen {
                 this.icon.drawIcon(guiGraphics, this.getX() + 5, this.getY() + 5);
                 if (this.isSelected) {
                     this.drawSelection(guiGraphics);
+                } else if (isCorrect){
+                    this.drawSelection2(guiGraphics);
                 }
             }
         }
@@ -296,6 +317,13 @@ public class ZombieMinionScreen extends Screen {
         public void setSelected(boolean bl) {
             this.isSelected = bl;
         }
+        public void setCorrect(boolean bl) {
+            this.isCorrect = bl;
+        }
+
+        public int getID(){
+            return icon.id;
+        }
 
         private void drawSlot(GuiGraphics guiGraphics) {
             guiGraphics.blit(CORPSE_CHOOSER_LOCATION, this.getX(), this.getY(), 144.0f, 26.0f, 26, 26, 256, 256);
@@ -303,6 +331,9 @@ public class ZombieMinionScreen extends Screen {
 
         private void drawSelection(GuiGraphics guiGraphics) {
             guiGraphics.blit(CORPSE_CHOOSER_LOCATION, this.getX(), this.getY(), 170.0f, 26.0f, 26, 26, 256, 256);
+        }
+        private void drawSelection2(GuiGraphics guiGraphics) {
+            guiGraphics.blit(CORPSE_CHOOSER_LOCATION, this.getX(), this.getY(), 198.0f, 26.0f, 26, 26, 256, 256);
         }
     }
 }
