@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.goals.AnubisAttackGoal;
 import net.hydra.jojomod.entity.goals.RoundaboutFollowGoal;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -861,7 +862,11 @@ public abstract class ZMob extends LivingEntity implements IMob {
     private void roundabout$tickMob(CallbackInfo ci) {
         if (!level().isClientSide() && FateTypes.takesSunlightDamage(this)) {
             if (FateTypes.isInSunlight(this)) {
-                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth() * ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick);
+                if (((Mob)(Object)this) instanceof BaseMinion bm && bm.canGoHome()){
+                    bm.goHome();
+                } else {
+                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth() * ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick);
+                }
             }
         }
     }

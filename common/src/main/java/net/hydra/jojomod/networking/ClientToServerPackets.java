@@ -497,6 +497,7 @@ public class ClientToServerPackets {
                     if (TE instanceof BaseMinion fm){
                             if (fm.controller != null && fm.controller.is(sender)) {
                                 if (context == Tactics.SETHOME.id) {
+                                    fm.homeSet = true;
                                     fm.setHomePosition(fm.getPosition(1f));
                                 } else if (context == Tactics.SENDHOME.id){
                                     fm.goHome();

@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.Zombiefish;
+import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.FatePowers;
@@ -175,6 +176,8 @@ public enum FateTypes {
         if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire())
             return true;
         if (entity instanceof Zombiefish)
+            return true;
+        if (entity instanceof BaseMinion)
             return true;
         return false;
     }

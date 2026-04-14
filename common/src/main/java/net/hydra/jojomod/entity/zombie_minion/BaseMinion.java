@@ -3,7 +3,10 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.goals.*;
 import net.hydra.jojomod.event.index.Tactics;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -11,10 +14,13 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -24,19 +30,25 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.InfestedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.UUID;
 
 public class BaseMinion extends Monster {
     public Entity controller;
     public UUID controller2;
+    public boolean homeSet = false;
+    public int clientDigProg = 0;
+    public static final int digProgTick = 10;
 
     public Vec3 homePosition = Vec3.ZERO;
 
@@ -52,6 +64,8 @@ public class BaseMinion extends Monster {
             SynchedEntityData.defineId(BaseMinion.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Byte> MOVEMENT_TACTIC =
             SynchedEntityData.defineId(BaseMinion.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Integer> DIGPROG =
+            SynchedEntityData.defineId(BaseMinion.class, EntityDataSerializers.INT);
 
     public BaseMinion(EntityType<? extends BaseMinion> $$0, Level $$1) {
         super($$0, $$1);
@@ -73,6 +87,8 @@ public class BaseMinion extends Monster {
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
    }
+
+   public int digCooldown = 0;
 
     public boolean canGetMadAt(LivingEntity $$0) {
         if (!this.canAttack($$0)) {
@@ -122,9 +138,68 @@ public class BaseMinion extends Monster {
         setItemSlotAndDropWhenKilled($$0,$$1);
     }
 
-    public void goHome(){
-        teleportTo(homePosition.x,homePosition.y,homePosition.z);
+    public boolean canGoHome(){
+        return ((homeSet && digCooldown <= 0));
     }
+
+    public void goHome(){
+        if (homeSet && digCooldown <= 0) {
+            bam();
+            //setDigProg(7);
+            this.level().playSound(
+                    null,
+                    getOnPos(),
+                    SoundEvents.ROOTED_DIRT_BREAK,
+                    SoundSource.PLAYERS,
+                    1.0F,
+                    0.9F);
+            teleportTo(homePosition.x, homePosition.y, homePosition.z);
+            setPos(new Vec3(homePosition.x, homePosition.y, homePosition.z));
+            bam();
+
+            this.level().playSound(
+                    null,
+                    getOnPos(),
+                    SoundEvents.VINDICATOR_CELEBRATE,
+                    SoundSource.PLAYERS,
+                    1.0F,
+                    0.9F);
+            digCooldown = 140;
+            if (getMovementTactic() == Tactics.FOLLOW.id){
+                setMovementTactic(Tactics.STAY_PUT.id);
+            }
+            getNavigation().stop();
+        }
+    }
+
+    public void bam(){
+        BlockPos onPos = getOnPos();
+        if (onPos != null) {
+            BlockState bs = this.level().getBlockState(onPos);
+            if (bs != null) {
+                this.level().playSound(
+                        null,
+                        onPos,
+                        bs.getSoundType().getBreakSound(),
+                        SoundSource.PLAYERS,
+                        1.0F,
+                        0.9F);
+                blockBreakParticles(bs.getBlock(),
+                        new Vec3(this.getX(),
+                                this.getY(),
+                                this.getZ()));
+            }
+        }
+    }
+    public void blockBreakParticles(Block block, Vec3 pos){
+        if (!this.level().isClientSide()) {
+            ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
+                            block.defaultBlockState()),
+                    pos.x, pos.y, pos.z,
+                    200, 0.2, 0.4, 0.2, 0.5);
+        }
+    }
+
 
     @Override
     public boolean doHurtTarget(Entity $$0) {
@@ -231,6 +306,13 @@ public class BaseMinion extends Monster {
         }
         return null;
     }
+    public int getDigProg() {
+        return this.getEntityData().get(DIGPROG);
+    }
+
+    public void setDigProg(int prog){
+        this.entityData.set(DIGPROG, prog);
+    }
     public int getController() {
         return this.getEntityData().get(CONTROLLER);
     }
@@ -256,6 +338,7 @@ public class BaseMinion extends Monster {
         $$0.putByte("moveTactic",getMovementTactic());
         $$0.putByte("targetTactic",getTargetTactic());
         $$0.putInt("Lifespan",lifespan);
+        $$0.putBoolean("HomeSet",homeSet);
         $$0.putDouble("HomeX",getHomePosition().x);
         $$0.putDouble("HomeY",getHomePosition().y);
         $$0.putDouble("HomeZ",getHomePosition().z);
@@ -274,6 +357,7 @@ public class BaseMinion extends Monster {
         setHomePosition(new Vec3($$0.getDouble("HomeX"),$$0.getDouble("HomeY"),$$0.getDouble("HomeZ")));
         this.setTargetTactic($$0.getByte("targetTactic"));
         this.setMovementTactic($$0.getByte("moveTactic"));
+        homeSet = $$0.getBoolean("homeSet");
         lifespan = $$0.getInt("Lifespan");
     }
 
@@ -282,7 +366,13 @@ public class BaseMinion extends Monster {
     @Override
     public void tick(){
         if (!this.level().isClientSide()) {
+            if (getDigProg() > -1){
+                setDigProg(getDigProg()-1);
+            }
             lifespan++;
+            if (digCooldown > 0){
+                digCooldown--;
+            }
             if (controller != null){
                 controller = this.level().getEntity(getController());
             } else {
@@ -343,6 +433,14 @@ public class BaseMinion extends Monster {
                     }
                 }
             }
+        } else {
+            if (getDigProg() > -1){
+                clientDigProg = digProgTick;
+            } else {
+                if (clientDigProg > 0){
+                    clientDigProg--;
+                }
+            }
         }
         super.tick();
     }
@@ -354,6 +452,7 @@ public class BaseMinion extends Monster {
             this.entityData.define(TARGET_TACTIC, (byte) 0);
             this.entityData.define(MOVEMENT_TACTIC, (byte) 0);
             this.entityData.define(CONTROLLER, -1);
+            this.entityData.define(DIGPROG, -1);
         }
     }
 
