@@ -357,6 +357,8 @@
     "magicians_red.StandFireScreenEffectRendererMixin",
     "manhattan.HorseArmorWindVision",
     "manhattan.ManhattanHumanoidArmorFading",
+    "manhattan.ManhattanCapeLayer",
+    "manhattan.ManhattanSpiderEyesLayer",
     "metallica.MetallicaGameRenderer",
     "metallica.MetallicaItemInHandMixin",
     "metallica.MetallicaStuckLayerMixin",
