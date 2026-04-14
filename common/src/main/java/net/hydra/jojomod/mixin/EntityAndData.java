@@ -366,7 +366,7 @@ public abstract class EntityAndData implements IEntityAndData {
     }
     @Inject(method = "isInvisible", at = @At("HEAD"), cancellable = true)
     public void roundabout$isInvisible(CallbackInfoReturnable<Boolean> cir){
-        if (roundabout$getTrueInvisibility() > -1){
+        if (roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeMobsForWindVision()){
             if (this.level().isClientSide()){
                 if (ClientUtil.isPlayer((Entity)(Object)this)){
                     if (ClientUtil.getFirstPerson()){

@@ -1025,7 +1025,7 @@ public class ClientUtil {
         float throwFade = 1f;
         delta = delta % 1;
         IEntityAndData entityAndData = ((IEntityAndData) ent);
-        if (entityAndData.roundabout$getTrueInvisibility() > -1) {
+        if (entityAndData.roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeMobsForWindVision()) {
             throwFade = throwFade * 0.4F;
         }
         if (ent instanceof Player pl){
