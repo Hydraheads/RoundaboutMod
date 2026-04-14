@@ -3302,9 +3302,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 $$1/=3.2f;
                 $$1*= (float) (ClientNetworking.getAppropriateConfig().justiceSettings.corpseDamageMultOnPlayers *0.01);
                 $$1 = FM.getDamageMod($$1);
+
+                $$1*=1.2F;
             } else {
                 $$1 *= (float) (ClientNetworking.getAppropriateConfig().justiceSettings.corpseDamageMultOnMobs *0.01);
                 $$1 = FM.getDamageMod($$1);
+
+                $$1*=2F;
             }
             ci.setReturnValue(hurt(ModDamageTypes.of(this.level(), ModDamageTypes.CORPSE_ARROW, FM),
                     $$1));
@@ -3695,6 +3699,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 villagerMinion.absMoveTo(lent.getX(), lent.getY(), lent.getZ());
                 villagerMinion.setController(ent);
                 villagerMinion.setMovementTactic(Tactics.FOLLOW.id);
+                villagerMinion.setHomePosition(new Vec3(lent.getX(), lent.getY(), lent.getZ()));
                 if (villagerMinion != null) {
                     this.level().addFreshEntity(villagerMinion);
                     //this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));

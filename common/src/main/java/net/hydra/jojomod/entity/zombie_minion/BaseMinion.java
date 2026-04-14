@@ -23,11 +23,13 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.InfestedBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -35,6 +37,15 @@ import java.util.UUID;
 public class BaseMinion extends Monster {
     public Entity controller;
     public UUID controller2;
+
+    public Vec3 homePosition = Vec3.ZERO;
+
+    public Vec3 getHomePosition(){
+        return homePosition;
+    }
+    public void setHomePosition(Vec3 position){
+        homePosition = position;
+    }
     private static final EntityDataAccessor<Integer> CONTROLLER =
             SynchedEntityData.defineId(BaseMinion.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Byte> TARGET_TACTIC =
@@ -105,6 +116,25 @@ public class BaseMinion extends Monster {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.3).add(Attributes.MAX_HEALTH, 24)
                 .add(Attributes.ATTACK_DAMAGE, 5).
                 add(Attributes.FOLLOW_RANGE, 48.0D);
+    }
+
+    public void setItemSlotAndDropWhenKilled2(EquipmentSlot $$0, ItemStack $$1) {
+        setItemSlotAndDropWhenKilled($$0,$$1);
+    }
+
+    public void goHome(){
+        teleportTo(homePosition.x,homePosition.y,homePosition.z);
+    }
+
+    @Override
+    public boolean doHurtTarget(Entity $$0) {
+        boolean yeah = super.doHurtTarget($$0);
+        if (yeah){
+            if (!level().isClientSide() && !getMainHandItem().isEmpty() && getMainHandItem().getCount() > 0) {
+                getMainHandItem().hurtAndBreak(2, this, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+            }
+        }
+        return yeah;
     }
 
     @Override
@@ -226,6 +256,9 @@ public class BaseMinion extends Monster {
         $$0.putByte("moveTactic",getMovementTactic());
         $$0.putByte("targetTactic",getTargetTactic());
         $$0.putInt("Lifespan",lifespan);
+        $$0.putDouble("HomeX",getHomePosition().x);
+        $$0.putDouble("HomeY",getHomePosition().y);
+        $$0.putDouble("HomeZ",getHomePosition().z);
         super.addAdditionalSaveData($$0);
     }
     @Override
@@ -238,6 +271,7 @@ public class BaseMinion extends Monster {
                 this.setController(SE.getEntity($$2));
             }
         }
+        setHomePosition(new Vec3($$0.getDouble("HomeX"),$$0.getDouble("HomeY"),$$0.getDouble("HomeZ")));
         this.setTargetTactic($$0.getByte("targetTactic"));
         this.setMovementTactic($$0.getByte("moveTactic"));
         lifespan = $$0.getInt("Lifespan");
