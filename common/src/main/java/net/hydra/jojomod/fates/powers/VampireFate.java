@@ -10,7 +10,6 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.event.AbilityIconInstance;
-import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.PacketDataIndex;
@@ -20,9 +19,6 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.FatePowers;
-import net.hydra.jojomod.item.MaxStandDiscItem;
-import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.util.MainUtil;
@@ -260,7 +256,7 @@ public class VampireFate extends VampiricFate {
 
     @Override
     public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
-                                  boolean removeNum, Minecraft minecraft){
+                                  boolean removeNum){
         StandHudRender.renderBloodExp(context,cameraPlayer,screenWidth,screenHeight,x);
     }
 
@@ -976,6 +972,7 @@ public class VampireFate extends VampiricFate {
             return new VampireData(self.level());
         }
     }
+
 
     @Override
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){

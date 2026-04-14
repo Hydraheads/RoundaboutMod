@@ -242,6 +242,13 @@ public class C2SPacketUtil {
                 activePowerPhase
         );
     }
+    public static void switchZombieTacticPacket(int targetID, byte tactic){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.ZombieMinionTactic.value,
+                targetID,
+                tactic
+        );
+    }
     public static void standBarrageHitPacket(int targetID, int attackTimeDuring){
         ModMessageEvents.sendToServer(
                 ClientToServerPackets.StandPowerPackets.MESSAGES.StandBarrageHit.value,

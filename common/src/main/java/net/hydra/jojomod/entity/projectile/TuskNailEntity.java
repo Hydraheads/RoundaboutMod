@@ -198,7 +198,9 @@ public class TuskNailEntity extends AbstractArrow {
                             }
 
                             if (ent instanceof LivingEntity LIVE) {
-                                LIVE.addEffect(new MobEffectInstance(ModEffects.UNBALANCED,140));
+                                if (this.getAct() == 2) {
+                                    LIVE.addEffect(new MobEffectInstance(ModEffects.UNBALANCED, 140));
+                                }
                                 LE.setLastHurtMob(LIVE);
                                 PT.addEXP(this.getAct() == 1 ? 1 : 2);
                             }

@@ -81,6 +81,7 @@ public class PacketDataIndex {
     public static final byte BYTE_SUMMON_CORPSE = 9;
     public static final byte BYTE_CORPSE_TACTICS = 10;
     public static final byte BYTE_RESPAWN_STRATEGY = 11;
+    public static final byte BYTE_SWITCH_POWERS = 12;
 
     /**S2C Simple packets*/
     public static final byte S2C_SIMPLE_GENERATE_POWERS = 1;

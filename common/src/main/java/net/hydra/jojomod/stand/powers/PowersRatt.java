@@ -1049,7 +1049,7 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
-                                  boolean removeNum, Minecraft minecraft) {
+                                  boolean removeNum) {
         double distance = getStandEntity(getSelf()).distanceTo(getSelf());
         StandHudRender.renderNumberHUD(context, Minecraft.getInstance(), screenWidth, screenHeight, x, distance, getMaxPilotRange(), StandIcons.JOJO_ICONS, 0,100,6141070);
     }

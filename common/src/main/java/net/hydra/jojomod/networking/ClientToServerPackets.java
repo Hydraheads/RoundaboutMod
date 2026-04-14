@@ -9,9 +9,11 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.D4CEntity;
+import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.index.Corpses;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.index.Tactics;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.*;
@@ -85,6 +87,7 @@ public class ClientToServerPackets {
             HandshakeCooldowns("handshake_cooldowns"),
             GunShot("gun_shot"),
             GunRecoil("gun_recoil"),
+            ZombieMinionTactic("zombie_minion_tactics"),
             DimensionHopD4C("thread_hop_d4c_request_dimension_hop");
 
             public final String value;
@@ -482,6 +485,28 @@ public class ClientToServerPackets {
                     byte strafe = (byte)vargs[1];
                     ((StandUser) sender).roundabout$setDI(forward, strafe);
                 }
+                /**Zombie Minion Tactic Switching*/
+                if (message.equals(MESSAGES.ZombieMinionTactic.value)) {
+                    int targetID = (int)vargs[0];
+                    byte context = (byte)vargs[1];
+                    Entity TE = sender.level().getEntity(targetID);
+                    if (TE instanceof BaseMinion fm){
+                            if (fm.controller != null && fm.controller.is(sender)) {
+                                if (context == Tactics.ROAM.id || context == Tactics.FOLLOW.id ||
+                                        context == Tactics.STAY_PUT.id || context == Tactics.HOLD.id) {
+                                        fm.setMovementTactic(context);
+                                } else {
+                                    fm.setTargetTactic(context);
+                                    if (context == Tactics.PEACEFUL.id) {
+                                        fm.setAggressive(false);
+                                        fm.setLastHurtByPlayer(null);
+                                        fm.setLastHurtByMob(null);
+                                        fm.setTarget(null);
+                                    }
+                                }
+                            }
+                    }
+                }
                 /**Basic stand punch packet*/
                 if (message.equals(MESSAGES.StandPunch.value)) {
                     int targetID = (int)vargs[0];
@@ -582,7 +607,7 @@ public class ClientToServerPackets {
                         if (world != null && world.getLevel() != null) {
                             sender.teleportTo(world.getLevel(), sender.getX(), sender.getY(), sender.getZ(), sender.getYRot(), sender.getXRot());
                             ((StandUser) sender).roundabout$summonStand(world.getLevel(), true, false);
-                            ModCriteria.DIMENSION_HOP_TRIGGER.trigger(sender);
+                            //ModCriteria.DIMENSION_HOP_TRIGGER.trigger(sender);
                         }
                     }
                 }

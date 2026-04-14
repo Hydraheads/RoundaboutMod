@@ -9,6 +9,8 @@ import net.hydra.jojomod.client.models.RoadRollerStrayModel;
 import net.hydra.jojomod.client.models.WornBloodyStoneMaskModel;
 import net.hydra.jojomod.client.models.WornStoneMaskModel;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
+import net.hydra.jojomod.client.models.minions.VillagerMinionModel;
+import net.hydra.jojomod.client.models.minions.renderers.VillagerMinionRenderer;
 import net.hydra.jojomod.client.models.mobs.AnubisGuardianModel;
 import net.hydra.jojomod.client.models.mobs.renderers.AnubisGuardianRenderer;
 import net.hydra.jojomod.client.models.mobs.renderers.ZombiefishRenderer;
@@ -19,9 +21,7 @@ import net.hydra.jojomod.client.models.projectile.*;
 import net.hydra.jojomod.client.models.projectile.renderers.*;
 import net.hydra.jojomod.client.models.stand.*;
 import net.hydra.jojomod.client.models.stand.renderers.*;
-import net.hydra.jojomod.client.models.substand.SeperatedArmModel;
-import net.hydra.jojomod.client.models.substand.SeperatedArmSlimModel;
-import net.hydra.jojomod.client.models.substand.SeperatedLegsModel;
+import net.hydra.jojomod.client.models.substand.*;
 import net.hydra.jojomod.client.models.substand.renderers.*;
 import net.hydra.jojomod.client.models.visages.*;
 import net.hydra.jojomod.client.models.visages.parts.*;
@@ -34,7 +34,6 @@ import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.npcs.ZombieAestheticianModel;
 import net.hydra.jojomod.client.models.npcs.renderers.ZombieAestheticianRenderer;
 import net.hydra.jojomod.client.models.projectile.renderers.NoRenderer;
-import net.hydra.jojomod.client.models.substand.LifeTrackerModel;
 import net.minecraft.client.model.SilverfishModel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
@@ -149,6 +148,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.FALLEN_VILLAGER, FallenVillagerRenderer::new);
         EntityRendererRegistry.register(FabricEntities.FALLEN_CREEPER, FallenCreeperRenderer::new);
         EntityRendererRegistry.register(FabricEntities.FALLEN_PHANTOM,FallenPhantomRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.VILLAGER_MINION, VillagerMinionRenderer::new);
         EntityRendererRegistry.register(FabricEntities.VAN_GOUGH_PAINTING, VanGoghPaintingRenderer::new);
         EntityRendererRegistry.register(FabricEntities.VENUS_PAINTING, VenusPaintingRenderer::new);
         EntityRendererRegistry.register(FabricEntities.MONA_LISA_PAINTING, MonaLisaPaintingRenderer::new);
@@ -156,12 +156,15 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.SEPERATED_LEGS, SeperatedLegsRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SEPERATED_ARM, SeperatedArmRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SEPERATED_ARM_SLIM, SeperatedArmSlimRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.LEFT_SEPERATED_ARM, LeftSeperatedArmRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.LEFT_SEPERATED_ARM_SLIM, LeftSeperatedArmSlimRenderer::new);
 
         EntityRendererRegistry.register(FabricEntities.METALLICA_KNIFE, KnifeRenderer::new);
 
         /*Models*/
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.WOLF_LAYER, TerrierEntityModel::createBodyLayerTerrier);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ZOMBIEFISH_LAYER, SilverfishModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.VILLAGER_MINION_LAYER, VillagerMinionModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ANUBIS_GUARDIAN_LAYER, AnubisGuardianModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.THE_WORLD_LAYER, TheWorldModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.THE_WORLD_ULTIMATE_LAYER, TheWorldUltimateModel::getTexturedModelData);
@@ -206,6 +209,8 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SEPERATED_LEGS_LAYER, SeperatedLegsModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SEPERATED_ARM_LAYER, SeperatedArmModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SEPERATED_ARM_SLIM_LAYER, SeperatedArmSlimModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.LEFT_SEPERATED_ARM_LAYER, LeftSeperatedArmModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.LEFT_SEPERATED_ARM_SLIM_LAYER, LeftSeperatedArmSlimModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STAND_FIREBALL_LAYER, StandFireballModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.RIPPER_EYES_LAYER, RipperEyesModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GASOLINE_LAYER, GasolineCanModel::createBodyLayer);
@@ -228,6 +233,7 @@ public class FabricEntityClient {
         ModStrayModels.SHOOTING_ARM = new SoftAndWetShootingArmModel();
         ModStrayModels.TUSK_DRILL = new TuskDrillModel();
         ModStrayModels.HEY_YA = new HeyYaModel();
+        ModStrayModels.CENTURY_BOY = new CenturyBoyModel();
         ModStrayModels.BOWLER_HAT = new BowlerHatModel();
         ModStrayModels.WORN_STONE_MASK = new WornStoneMaskModel<>();
         ModStrayModels.WORN_BLOODY_STONE_MASK = new WornBloodyStoneMaskModel();
@@ -239,6 +245,7 @@ public class FabricEntityClient {
         ModStrayModels.CHAIR_RATT_SHOULDER = new ChairRattShoulderModel();
         ModStrayModels.MoldSpine = new MoldSpineModel();
         ModStrayModels.MoldRightArm = new MoldRightArm();
+        ModStrayModels.MoldLeftArm = new MoldLeftArm();
         ModStrayModels.MANDOM_WATCH = new WatchModel();
         ModStrayModels.MANDOM_WATCH_SMALL = new SmallWatchModel();
         ModStrayModels.ChestPart = new ChestPart();
@@ -256,6 +263,10 @@ public class FabricEntityClient {
         ModStrayModels.AvdolHairPart = new AvdolHairPart();
         ModStrayModels.JosukeDecalsPart = new JosukeDecalsPart();
         ModStrayModels.TasselHatPart = new TasselHatPart();
+        ModStrayModels.ratTailPart = new RatTailPart();
+        ModStrayModels.ratLeftLegPart = new RatLeftLegPart();
+        ModStrayModels.ratRightLegPart = new RatRightLegPart();
+        ModStrayModels.ratHatPart = new RatHatPart();
         ModStrayModels.LegCloakPart = new LegCloakPart();
         ModStrayModels.PlayerChestPart = new PlayerChestPart();
         ModStrayModels.barrageArmsPart = new BarrageArmsPart();
@@ -264,6 +275,7 @@ public class FabricEntityClient {
         ModStrayModels.RightArm = new RightArmPart();
         ModStrayModels.LeftArmSlim = new LeftArmSlimPart();
         ModStrayModels.LeftArm = new LeftArmPart();
+        ModStrayModels.Head = new HeadPart();
         ModStrayModels.RightLeg = new RightLegPart();
         ModStrayModels.LeftLeg = new LeftLegPart();
         ModStrayModels.RightHeel = new RightHeelPart();

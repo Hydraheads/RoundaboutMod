@@ -22,6 +22,7 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
+import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -205,6 +206,11 @@ public class ForgeEntities {
             ENTITY_TYPES.register("fallen_villager", () ->
                     EntityType.Builder.of(FallenVillager::new, MobCategory.MISC).sized(0.6F, 1.95F).clientTrackingRange(8).
                             build(new ResourceLocation(Roundabout.MOD_ID, "fallen_villager").toString())
+            );
+    public static final RegistryObject<EntityType<VillagerMinion>> VILLAGER_MINION =
+            ENTITY_TYPES.register("villager_minion", () ->
+                    EntityType.Builder.of(VillagerMinion::new, MobCategory.MISC).sized(0.6F, 1.95F).clientTrackingRange(8).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "villager_minion").toString())
             );
     public static final RegistryObject<EntityType<FallenCreeper>> FALLEN_CREEPER =
             ENTITY_TYPES.register("fallen_creeper", () ->
@@ -648,5 +654,17 @@ public class ForgeEntities {
             ENTITY_TYPES.register("seperated_arm_slim", () ->
                     EntityType.Builder.<SeperatedArmSlimEntity>of(SeperatedArmSlimEntity::new, MobCategory.MISC).
                             sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":seperated_arm_slim")
+            );
+
+    public static final RegistryObject<EntityType<LeftSeperatedArmEntity>> LEFT_SEPERATED_ARM =
+            ENTITY_TYPES.register("left_seperated_arm", () ->
+                    EntityType.Builder.<LeftSeperatedArmEntity>of(LeftSeperatedArmEntity::new, MobCategory.MISC).
+                            sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":left_seperated_arm")
+            );
+
+    public static final RegistryObject<EntityType<LeftSeperatedArmSlimEntity>> LEFT_SEPERATED_ARM_SLIM =
+            ENTITY_TYPES.register("left_seperated_arm_slim", () ->
+                    EntityType.Builder.<LeftSeperatedArmSlimEntity>of(LeftSeperatedArmSlimEntity::new, MobCategory.MISC).
+                            sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":left_seperated_arm_slim")
             );
 }

@@ -27,6 +27,8 @@ import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.DismountHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -465,6 +467,19 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
         }
     }
     public InteractionResult mobInteract(Player $$0, InteractionHand $$1) {
+
+        ItemStack $$2 = $$0.getItemInHand($$1);
+        if ($$2.is(Items.PHANTOM_MEMBRANE) && this.getHealth() < this.getMaxHealth()
+                && !getActivated()) {
+            if (!$$0.level().isClientSide()) {
+                if (!$$0.getAbilities().instabuild) {
+                    $$2.shrink(1);
+                }
+
+                this.heal(getMaxHealth() / 4);
+                return InteractionResult.SUCCESS;
+            }
+        }
         if (this.isVehicle() || !this.getActivated() || !(getController() == $$0.getId())) {
             return super.mobInteract($$0, $$1);
         } else {

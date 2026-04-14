@@ -112,6 +112,12 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
+    public Set<String> noExpBreakBlocks = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:netherrack"
+            )
+    );
+
 
     public Set<String> standBlockGrabBlacklist = new HashSet<>(
             Arrays.asList(

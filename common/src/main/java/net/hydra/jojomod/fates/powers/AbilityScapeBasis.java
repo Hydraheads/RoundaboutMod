@@ -62,6 +62,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3d;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,7 +121,7 @@ public class AbilityScapeBasis {
     /**If the above function is set to true, this will be the code called instead of the exp bar one. Make
      * a call to another class so too much client code doesn't unnecessarily exist in the standpowers class.*/
     public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
-                                  boolean removeNum, Minecraft minecraft){
+                                  boolean removeNum){
     }
 
 
@@ -1518,6 +1519,11 @@ public class AbilityScapeBasis {
                 tryPowerPacket(PowerIndex.BARRAGE_CHARGE);
             }
         }
+    }
+
+    // Leap Color
+    public Vector3f getLeapColor() {
+        return new Vector3f(1f, 0.65f, 0);
     }
 
     //Ledge Grab

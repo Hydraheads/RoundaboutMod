@@ -32,4 +32,5 @@ public interface IMob {
     void roundabout$setHypnotizedBy(LivingEntity set, int time);
     void roundabout$setHypnotizedBy(LivingEntity set);
     LivingEntity roundabout$getHypnotizedBy();
+    void roundabout$purgePiglinAggro(Entity purge);
 }

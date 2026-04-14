@@ -128,6 +128,8 @@ public interface StandUser {
     void roundabout$setMandomVanishTicks(int set);
     int roundabout$getAnubisVanishTicks();
     void roundabout$setAnubisVanishTicks(int set);
+    int roundabout$getCBVanishTicks();
+    void roundabout$setCBVanishTicks(int set);
 
     void rdbt$doMoldDetection(Vec3 movement);
 
@@ -348,4 +350,8 @@ public interface StandUser {
     List<CooldownInstance> rdbt$getPowerCooldowns();
     void rdbt$setPowerCooldowns(List<CooldownInstance> cdi);
 
+    /**Manhattan Transfer*/
+    void rdbt$doWindVisionDetection();
+    void roundabout$setTrueInvisManhattan(int round);
+    int roundabout$getTrueInvisManhattan();
 }

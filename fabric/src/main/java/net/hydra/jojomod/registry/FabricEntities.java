@@ -24,6 +24,7 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
+import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -235,6 +236,12 @@ public class FabricEntities {
                         new ResourceLocation(Roundabout.MOD_ID, "fallen_villager"),
                         EntityType.Builder.of(FallenVillager::new, MobCategory.MISC).sized(0.6F, 1.95F).clientTrackingRange(8).build(Roundabout.MOD_ID+":fallen_skeleton")
                 );
+    public static final EntityType<VillagerMinion> VILLAGER_MINION =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "villager_minion"),
+                    EntityType.Builder.of(VillagerMinion::new, MobCategory.MISC).sized(0.6F, 1.95F).clientTrackingRange(8).build(Roundabout.MOD_ID+":villager_minion")
+            );
         public static final EntityType<FallenCreeper> FALLEN_CREEPER =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -758,6 +765,22 @@ public class FabricEntities {
                             sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":seperated_arm_slim")
             );
 
+    public static final EntityType<LeftSeperatedArmEntity> LEFT_SEPERATED_ARM =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "left_seperated_arm"),
+                    EntityType.Builder.<LeftSeperatedArmEntity>of(LeftSeperatedArmEntity::new, MobCategory.MISC).
+                            sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":left_seperated_arm")
+            );
+
+    public static final EntityType<LeftSeperatedArmSlimEntity> LEFT_SEPERATED_ARM_SLIM =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "left_seperated_arm_slim"),
+                    EntityType.Builder.<LeftSeperatedArmSlimEntity>of(LeftSeperatedArmSlimEntity::new, MobCategory.MISC).
+                            sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":left_seperated_arm_slim")
+            );
+
 
     public static final EntityType<MetallicaKnifeEntity> METALLICA_KNIFE =
             Registry.register(
@@ -817,6 +840,8 @@ public class FabricEntities {
                 ModEntities.SEPERATED_LEGS = SEPERATED_LEGS;
                 ModEntities.SEPERATED_ARM = SEPERATED_ARM;
                 ModEntities.SEPERATED_ARM_SLIM = SEPERATED_ARM_SLIM;
+                ModEntities.LEFT_SEPERATED_ARM = LEFT_SEPERATED_ARM;
+                ModEntities.LEFT_SEPERATED_ARM_SLIM = LEFT_SEPERATED_ARM_SLIM;
                 ModEntities.STAND_FIREBALL = STAND_FIREBALL;
                 ModEntities.EVIL_AURA_PROJECTILE = EVIL_AURA_PROJECTILE;
                 ModEntities.RIPPER_EYES_PROJECTILE = RIPPER_EYES_PROJECTILE;
@@ -848,6 +873,8 @@ public class FabricEntities {
                 ModEntities.FALLEN_VILLAGER = FALLEN_VILLAGER;
                 ModEntities.FALLEN_CREEPER = FALLEN_CREEPER;
                 ModEntities.FALLEN_PHANTOM = FALLEN_PHANTOM;
+
+                ModEntities.VILLAGER_MINION = VILLAGER_MINION;
 
                 ModEntities.OVA_ENYA = OVA_ENYA;
                 ModEntities.ENYA = ENYA;
@@ -909,6 +936,9 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(FALLEN_VILLAGER, FallenVillager.createAttributes());
                 FabricDefaultAttributeRegistry.register(FALLEN_CREEPER, FallenCreeper.createAttributes());
                 FabricDefaultAttributeRegistry.register(FALLEN_PHANTOM,FallenPhantom.createAttributes());
+
+            FabricDefaultAttributeRegistry.register(VILLAGER_MINION, VillagerMinion.createAttributes());
+
                 FabricDefaultAttributeRegistry.register(ROAD_ROLLER_ENTITY, RoadRollerEntity.createAttributes().build());
 
                 FabricDefaultAttributeRegistry.register(THE_WORLD, StandEntity.createStandAttributes());
@@ -952,7 +982,9 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(LIFE_TRACKER, LifeTrackerEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SEPERATED_LEGS, SeperatedLegsEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SEPERATED_ARM, SeperatedArmEntity.createStandAttributes());
-            FabricDefaultAttributeRegistry.register(SEPERATED_ARM_SLIM, SeperatedArmEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(SEPERATED_ARM_SLIM, SeperatedArmEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(LEFT_SEPERATED_ARM, SeperatedArmEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(LEFT_SEPERATED_ARM_SLIM, SeperatedArmEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(D4C_CLONE, D4CCloneEntity.createAttributes());
 
                 /*Spawn Weights and Biomes*/

@@ -18,6 +18,7 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
+import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -51,6 +52,8 @@ public class ModEntities {
     public static EntityType<SeperatedLegsEntity> SEPERATED_LEGS;
     public static EntityType<SeperatedArmEntity> SEPERATED_ARM;
     public static EntityType<SeperatedArmSlimEntity> SEPERATED_ARM_SLIM;
+    public static EntityType<LeftSeperatedArmSlimEntity> LEFT_SEPERATED_ARM_SLIM;
+    public static EntityType<LeftSeperatedArmEntity> LEFT_SEPERATED_ARM;
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET;
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET_KING;
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET_DROWNED;
@@ -67,6 +70,7 @@ public class ModEntities {
     public static EntityType<TuskEntity> TUSK_A2;
     public static EntityType<TuskEntity> TUSK_A3;
     public static EntityType<TuskEntity> TUSK_A4;
+    public static EntityType<VillagerMinion> VILLAGER_MINION;
 
     public static EntityType<StarPlatinumBaseballEntity> STAR_PLATINUM_BASEBALL;
     public static EntityType<DiverDownEntity> DIVER_DOWN;

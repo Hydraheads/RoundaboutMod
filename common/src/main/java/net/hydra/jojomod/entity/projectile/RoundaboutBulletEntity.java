@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.projectile;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.access.IProjectileAccess;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -148,10 +149,10 @@ public class RoundaboutBulletEntity extends AbstractArrow {
 
     private float getBulletDamage() {
         return switch (getAmmoType()) {
-            case SNUBNOSE -> timeStopShot ? 3.7F : 4.0F;
-            case TOMMY_GUN -> timeStopShot ? 0.74F : 0.94F;
-            case SNIPER -> timeStopShot ? 3.7F : 28.0F;
-            case COLT -> timeStopShot ? 3.8F : 5.7F;
+            case SNUBNOSE -> timeStopShot ? 3.7F : ClientNetworking.getAppropriateConfig().itemSettings.snubnoseDamage;
+            case TOMMY_GUN -> timeStopShot ? 0.74F : ClientNetworking.getAppropriateConfig().itemSettings.tommyGunDamage;
+            case SNIPER -> timeStopShot ? 3.7F : ClientNetworking.getAppropriateConfig().itemSettings.rifleDamage;
+            case COLT -> timeStopShot ? 3.8F : ClientNetworking.getAppropriateConfig().itemSettings.coltDamage;
             default -> 0.0F;
         };
     }
@@ -206,12 +207,21 @@ public class RoundaboutBulletEntity extends AbstractArrow {
             float damage = getBulletDamage();
 
             if (getAmmoType() == SNIPER) {
-                float multiplier = Math.min(travelTicks / 7.0F, 1.0F);
-                damage = damage * multiplier;
+                    float multiplier = Math.min(travelTicks / 7.0F, 1.0F);
+                    damage = damage * multiplier;
+
+                if (MainUtil.isBossMob(livingEntity)) {
+                    damage = Math.min(damage,ClientNetworking.getAppropriateConfig().itemSettings.rifleDamage/3F);
+                }
             }
 
             if (getAmmoType() == SNUBNOSE && !hadIFrames) {
                 damage += 1.0F;
+            }
+            if (livingEntity instanceof Player) {
+                damage = (float) (damage * (ClientNetworking.getAppropriateConfig().itemSettings.gunDamageOnPlayers *0.01));
+            } else {
+                damage = (float) (damage * (ClientNetworking.getAppropriateConfig().itemSettings.gunDamageOnMobs *0.01));;
             }
 
             boolean didDamage = livingEntity.hurt(ModDamageTypes.of(level(), ModDamageTypes.BULLET, this, this.getOwner()), damage);

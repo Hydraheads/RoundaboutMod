@@ -1,6 +1,5 @@
 package net.hydra.jojomod.client;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
@@ -9,7 +8,6 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.PlayerMaskSlots;
@@ -97,6 +95,9 @@ public class KeyInputs {
     }
     public static void strikePose(Player player, Minecraft client, boolean keyIsDown, Options option){
         ClientUtil.strikePose(player,client,keyIsDown,option);
+    }
+    public static void strikePower(Player player, Minecraft client, boolean keyIsDown, Options option){
+        ClientUtil.strikePower(player,client,keyIsDown,option);
     }
     public static void hideIcons(Player player, Minecraft client, boolean keyIsDown, Options option){
         ClientUtil.hideIcons(player,client,keyIsDown,option);

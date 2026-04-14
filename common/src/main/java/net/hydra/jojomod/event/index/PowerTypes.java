@@ -49,6 +49,11 @@ public enum PowerTypes {
             ((IPlayerEntity)pl).roundabout$setPower(type);
         }
     }
+    public static void setPowerTypeWithPenalty(Entity ent, byte type){
+        if (ent instanceof Player pl){
+            ((IPlayerEntity)pl).roundabout$setPowerWithPenalty(type);
+        }
+    }
 
 
     public static void initializeStandPower(Entity ent){
@@ -164,6 +169,21 @@ public enum PowerTypes {
                     return false;
             }
             return ((StandUser)LE).roundabout$getActive();
+        }
+        return false;
+    }
+
+    public static boolean canHavePower(Entity entity, byte bt){
+        if (entity instanceof Player pl) {
+            if (bt == STAND.ordinal()) {
+                if (((StandUser) entity).roundabout$hasAStand()) {
+                    return true;
+                }
+            } else if (bt == VAMPIRE.ordinal()) {
+                if (FateTypes.isVampire(pl)) {
+                    return true;
+                }
+            }
         }
         return false;
     }

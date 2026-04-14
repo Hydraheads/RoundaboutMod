@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
 import net.hydra.jojomod.event.*;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
@@ -1390,8 +1391,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$leapTicks--;
             if (!this.level().isClientSide && roundabout$leapIntentionally) {
                 Vector3f color = new Vector3f(1f, 0.65f, 0);
-                if (this.roundabout$getStandPowers() instanceof PowersAnubis) {
-                    color = new Vector3f(171F/255F,141F/255F,230F/255F   );
+                if (PowerTypes.isUsingStand(this)) {
+                    color = this.roundabout$getStandPowers().getLeapColor();
                 }
                 ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(color, 1f), this.getX(), this.getY(), this.getZ(),
                         1, 0, 0, 0, 0.1);
@@ -1551,6 +1552,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             EntityDataSerializers.BOOLEAN);
     @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$TRUE_INVISIBILITY = SynchedEntityData.defineId(LivingEntity.class,
+            EntityDataSerializers.INT);
+    @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$MANHATTAN_INVISIBILITY = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.INT);
 
     @Unique
@@ -2110,7 +2114,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         if(roundabout$getStandPowers() instanceof PowersGreenDay  PGD && ES == EquipmentSlot.MAINHAND) {
-            if (!PGD.HasMainArm) {
+            if (!PGD.HasMainArm && (PGD.self.getMainArm() ==HumanoidArm.RIGHT)) {
+                return ItemStack.EMPTY;
+            }
+        }
+        if(roundabout$getStandPowers() instanceof PowersGreenDay  PGD && ES == EquipmentSlot.OFFHAND) {
+            if (!PGD.HasOffHand && (PGD.self.getMainArm() == HumanoidArm.RIGHT)) {
+                return ItemStack.EMPTY;
+            }
+        }
+        if(roundabout$getStandPowers() instanceof PowersGreenDay  PGD && ES == EquipmentSlot.MAINHAND) {
+            if (!PGD.HasMainArm && (PGD.self.getMainArm() == HumanoidArm.LEFT)) {
+                return ItemStack.EMPTY;
+            }
+        }
+        if(roundabout$getStandPowers() instanceof PowersGreenDay  PGD && ES == EquipmentSlot.OFFHAND   ) {
+            if (!PGD.HasOffHand && (PGD.self.getMainArm() ==HumanoidArm.LEFT)) {
                 return ItemStack.EMPTY;
             }
         }
@@ -2340,6 +2359,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         roundabout$mandomVanishTicks = Mth.clamp(set,0,10);
     }
 
+    @Unique
+    public int roundabout$CBVanishTicks = 0;
+
+    @Unique
+    @Override
+    public int roundabout$getCBVanishTicks(){
+        return roundabout$CBVanishTicks;
+    }
+    public void roundabout$setCBVanishTicks(int set){roundabout$CBVanishTicks = Mth.clamp(set, 0, 10);}
     @Unique
     public int roundabout$anubisVanishTicks = 0;
 
@@ -3143,6 +3171,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BOUND_TO, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_ZAPPED_TO_ATTACK, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$TRUE_INVISIBILITY, -1);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$MANHATTAN_INVISIBILITY, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$METALLICA_INVISIBILITY, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ADJUSTED_GRAVITY, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ONLY_BLEEDING, true);
@@ -3432,6 +3461,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return -1;
     }
 
+    @Unique
+    @Override
+    public void roundabout$setTrueInvisManhattan(int round) {
+        if (this.entityData.hasItem(ROUNDABOUT$MANHATTAN_INVISIBILITY)) {
+            roundabout$zappedTicks = 0;
+            this.getEntityData().set(ROUNDABOUT$MANHATTAN_INVISIBILITY, round);
+        }
+    }
+    @Unique
+    @Override
+    public int roundabout$getTrueInvisManhattan() {
+        if (this.entityData.hasItem(ROUNDABOUT$MANHATTAN_INVISIBILITY)) {
+            return this.getEntityData().get(ROUNDABOUT$MANHATTAN_INVISIBILITY);
+        }
+        return -1;
+    }
 
     @Unique
     @Override
@@ -3591,6 +3636,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             return;
         }
 
+        if (rdbt$this() instanceof AbstractVillager || rdbt$this() instanceof AbstractIllager) {
+            if (dsource.is(ModDamageTypes.BLOOD_DRAIN)){
+                spawnZombieMinion(dsource.getEntity());
+                cir.setReturnValue(true);
+                return;
+            }
+        }
+
         if (rdbt$this() instanceof Player pl && (dsource.is(ModDamageTypes.BLOOD_DRAIN)
         ) && FateTypes.isHuman(pl)){
             pl.setHealth(pl.getMaxHealth()/2);
@@ -3630,6 +3683,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                                 10, 0.4, 0.4, 0.4, 0.025);
                         roundabout$deeplyRemoveAttackTarget();
                     }
+                }
+            }
+        }
+    }
+
+    public void spawnZombieMinion(Entity ent){
+        if (!this.level().isClientSide()) {
+            if (rdbt$this() instanceof Mob lent) {
+                VillagerMinion villagerMinion = lent.convertTo(ModEntities.VILLAGER_MINION, false);
+                villagerMinion.absMoveTo(lent.getX(), lent.getY(), lent.getZ());
+                villagerMinion.setController(ent);
+                villagerMinion.setMovementTactic(Tactics.FOLLOW.id);
+                if (villagerMinion != null) {
+                    this.level().addFreshEntity(villagerMinion);
+                    //this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
                 }
             }
         }
@@ -4255,6 +4323,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (this.hasEffect(ModEffects.FACELESS)) {
             float amt = (float) (0.15* this.getEffect(ModEffects.FACELESS).getAmplifier()+0.15F);
             damageAmount = (damageAmount+(damageAmount*amt));
+            modified = true;
+        }
+        if (source != null && source.getEntity() instanceof LivingEntity sl &&
+                sl.hasEffect(ModEffects.SWITCH) && !source.is(ModDamageTypes.BLOOD_DRAIN)) {
+            damageAmount = (damageAmount-(damageAmount*0.3F));
+            modified = true;
+        }
+        if (this.hasEffect(ModEffects.SWITCH)) {
+            damageAmount = (damageAmount+(damageAmount*0.3F));
             modified = true;
         }
         float changeDamage = FateTypes.getDamageResist(rdbt$this(),source,damageAmount);
@@ -4906,6 +4983,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         } else {
             roundabout$setAnubisVanishTicks(roundabout$getAnubisVanishTicks()-1);
         }
+        if (roundabout$getStandPowers() instanceof Powers20thCenturyBoy && active){
+            roundabout$setCBVanishTicks(roundabout$getCBVanishTicks() + 1);
+        } else{
+            roundabout$setCBVanishTicks(roundabout$getCBVanishTicks() - 1);
+        }
 
 
         /**Soft and Wet Bubble Encase launch*/
@@ -5244,31 +5326,114 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             return false;
         }
     }
-
-
+    public double previousYposManhattan = 0.0;
+    public double previousXposManhattan = 0.0;
+    public double previousZposManhattan = 0.0;
     public double previousYpos = 0.0;
     public float MoldLevel = 0.0f;
     public int jumpImmunityTicks = 0;
 
     @Override
     public void DoMoldTick() {
-        MoldLevel = MoldLevel + 1f;
+        if (!this.level().isClientSide) {
+            MoldLevel = MoldLevel + 1f;
 
             if (MoldLevel % 3 == 0) {
+                if (this.hasEffect(ModEffects.MOLD)) {
+                    if (this.getEffect(ModEffects.MOLD).getAmplifier() > 19) {
+                        MoldLevel = 0;
+                        this.removeEffect(ModEffects.MOLD);
+                        if (true) {
 
-                if(MoldLevel > 60){
-                    MoldLevel = 0;
-                    if (true){
-                        this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION),326);
+                            // MOLD SPREAD
+
+                            List<Entity> damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), 10, 10, 10);
+                            for (int j = 0; j < damages.size(); j++) {
+
+                                Entity entity = damages.get(j);
+                                if (!entity.equals(this)) {
+                                    if (entity instanceof LivingEntity LE) {
+                                        if(!(((StandUser)entity).roundabout$getStandPowers() instanceof  PowersGreenDay)){
+                                        if (LE.hasEffect(ModEffects.MOLD)) {
+                                            int level = LE.getEffect(ModEffects.MOLD).getAmplifier() + 1;
+                                            LE.removeEffect(ModEffects.MOLD);
+                                            LE.addEffect(new MobEffectInstance(ModEffects.MOLD, 600, level));
+                                        } else {
+                                            LE.addEffect(new MobEffectInstance(ModEffects.MOLD, 600, 0));
+                                        }
+                                        }
+
+                                    }
+                                }
+                            }
+                            for (int i = 0; i < 304; i = i + 1) {
+                                double randX = Roundabout.RANDOM.nextDouble(-10, 10);
+                                double randY = Roundabout.RANDOM.nextDouble(-10, 10);
+                                double randZ = Roundabout.RANDOM.nextDouble(-10, 10);
+                                ((ServerLevel) level()).sendParticles(new DustParticleOptions(new Vector3f(0.76F, 1.0F, 0.9F
+                                        ), 2f),
+                                        this.getX() + randX,
+                                        this.getY() + randY,
+                                        this.getZ() + randZ,
+                                        0, 0, 0.2, 0, 0);
+
+                            }
+                            ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST, this.getX(),
+                                    this.getY() + 1, this.getZ(),
+                                    123,
+                                    0, 0, 0,
+                                    0.2);
+
+
+                            // MOLD SPREAD
+
+                            this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), 326);
+                        }
+                    } else {
+                        List<Entity> damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), 5, 5, 5);
+                        for (int j = 0; j < damages.size(); j++) {
+
+                            Entity entity = damages.get(j);
+                            if (entity instanceof LivingEntity LE) {
+                                if(!(((StandUser)entity).roundabout$getStandPowers() instanceof  PowersGreenDay)) {
+                                    if (LE.hasEffect(ModEffects.MOLD)) {
+                                        int level = LE.getEffect(ModEffects.MOLD).getAmplifier() + 1;
+                                        LE.removeEffect(ModEffects.MOLD);
+                                        LE.addEffect(new MobEffectInstance(ModEffects.MOLD, 600, level));
+                                    } else {
+                                        LE.addEffect(new MobEffectInstance(ModEffects.MOLD, 600, 0));
+                                    }
+                                }
+
+                            }
+                        }
+                        for (int i = 0; i < 14; i = i + 1) {
+                            double randX = Roundabout.RANDOM.nextDouble(-5, 5);
+                            double randY = Roundabout.RANDOM.nextDouble(-5, 5);
+                            double randZ = Roundabout.RANDOM.nextDouble(-5, 5);
+                            ((ServerLevel) level()).sendParticles(new DustParticleOptions(new Vector3f(0.76F, 1.0F, 0.9F
+                                    ), 2f),
+                                    this.getX() + randX,
+                                    this.getY() + randY,
+                                    this.getZ() + randZ,
+                                    0, 0, 0.2, 0, 0);
+
+                        }
+                        ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST, this.getX(),
+                                this.getY() + 1, this.getZ(),
+                                24,
+                                0, 0, 0,
+                                0.1);
+                        int level = this.getEffect(ModEffects.MOLD).getAmplifier() + 1;
+                        this.removeEffect(ModEffects.MOLD);
+                        this.addEffect(new MobEffectInstance(ModEffects.MOLD, 600, level));
+                        this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), (this.getEffect(ModEffects.MOLD).getAmplifier()) + 2.0f);
                     }
                 }
-                else {
-                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), (MoldLevel/3f) + 2.0f);
-                }
-
             }
 
 
+        }
     }
 
     @Override
@@ -5283,7 +5448,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         DamageType type = $$0.type();
         DamageSource uh = ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION);
         LivingEntity me = (LivingEntity) (Object) this;
-        if(type == uh.type() && (Roundabout.RANDOM.nextDouble()>0.8 ||me instanceof ServerPlayer)){
+        if(type == uh.type() && (Roundabout.RANDOM.nextDouble()>0.95 ||me instanceof ServerPlayer)){
             if((LivingEntity) (Object) this instanceof Zombie){
                 spawnAtLocation(new ItemStack(Items.ZOMBIE_HEAD));
             } else if (me instanceof Creeper) {
@@ -5355,34 +5520,62 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     }
 
+    @Unique
+    @Override
+    public void rdbt$doWindVisionDetection(){
+        if(!this.level().isClientSide){
+            boolean down = previousYposManhattan > this.getY();
+            boolean up = previousYposManhattan < this.getY();
+            boolean movementX = previousXposManhattan != this.getX();
+            boolean movementZ = previousZposManhattan != this.getZ();
+            boolean isStand = (((LivingEntity) (Object) this) instanceof StandEntity);
+
+            IEntityAndData entityAndData = ((IEntityAndData) this);
+            if (!isStand && !roundabout$getStandPowers().isStoppingTime()) {
+                if (up || down || movementX || movementZ) {
+                        entityAndData.roundabout$setTrueInvisibilityManhattan(45);
+                } else {/*Ticking will go down until the entity unrenders*/}
+
+            }
+        }
+            previousYposManhattan = this.getY();
+            previousXposManhattan = this.getX();
+            previousZposManhattan = this.getZ();
+        }
 
     @Unique
     @Override
     public void rdbt$doMoldDetection(Vec3 movement){
-        if(((IPermaCasting)this.level()).roundabout$inPermaCastRange(this.getOnPos(), PermanentZoneCastInstance.MOLD_FIELD)) {
-            LivingEntity MoldFieldCaster = ((IPermaCasting)this.level()).roundabout$inPermaCastRangeEntity(this.getOnPos(),PermanentZoneCastInstance.MOLD_FIELD);
-            if (MoldFieldCaster != null && !(((PowersGreenDay)((StandUser)MoldFieldCaster).roundabout$getStandPowers()).allies.contains(this.getStringUUID()))) {
-                boolean isUser = this.equals(MoldFieldCaster);
-                boolean down = previousYpos > this.getY();
+        if(!this.level().isClientSide){
+                boolean down = previousYpos > this.getY() + 0.1;
                 boolean isStand = (((LivingEntity) (Object) this) instanceof StandEntity);
-                if (!roundabout$getStandPowers().isStoppingTime() && !this.roundabout$isBubbleEncased() && !isUser && !isStand && down && (MoldFieldCaster.getY() > this.getY()) && !isUser && jumpImmunityTicks < 1) {
-                    for (int i = 0; i < 3; i = i + 1) {
+                if(this.hasEffect(ModEffects.MOLD)) {
+                    if (!roundabout$getStandPowers().isStoppingTime() && !this.roundabout$isBubbleEncased() && !isStand && down && jumpImmunityTicks < 1) {
+                        for (int i = 0; i < 3; i = i + 1) {
 
-                        double width = this.getBbWidth();
-                        double height = this.getBbHeight();
-                        double randomX = Roundabout.RANDOM.nextDouble(0 - (width / 2), width / 2);
-                        double randomY = Roundabout.RANDOM.nextDouble(0 - (height / 2), height / 2);
-                        double randomZ = Roundabout.RANDOM.nextDouble(0 - (width / 2), width / 2);
-                        (this.level()).addParticle(ModParticles.MOLD,
-                                this.getX() + randomX, (this.getY() + height / 2) + randomY, this.getZ() + randomZ,
-                                this.getDeltaMovement().x, this.getDeltaMovement().y, this.getDeltaMovement().z
-                        );
+                            double width = this.getBbWidth();
+                            double height = this.getBbHeight();
+                            double randomX = Roundabout.RANDOM.nextDouble(0 - (width / 2), width / 2);
+                            double randomY = Roundabout.RANDOM.nextDouble(0 - (height / 2), height / 2);
+                            double randomZ = Roundabout.RANDOM.nextDouble(0 - (width / 2), width / 2);
+                            (this.level()).addParticle(ModParticles.MOLD,
+                                    this.getX() + randomX, (this.getY() + height / 2) + randomY, this.getZ() + randomZ,
+                                    this.getDeltaMovement().x, this.getDeltaMovement().y, this.getDeltaMovement().z
+                            );
 
+                        }
+                        DoMoldTick();
                     }
-                    DoMoldTick();
-                }
-            }
-
+                    for (int i = 0; i < 4; i = i + 1) {
+                        if (this.tickCount % 20 == 0) {
+                            ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST, this.getX(),
+                                    this.getY() + 1, this.getZ(),
+                                    1,
+                                    0, 0, 0,
+                                    0.01);
+                        }
+                    }
+               }
 
         }
         if (previousYpos < this.getY()){
@@ -5555,5 +5748,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "travel", at = @At(value = "TAIL"),cancellable = true, require = 0)
     public void   MoldDetection(Vec3 movement,CallbackInfo info) {
         rdbt$doMoldDetection(movement);
+    }
+
+   @Inject(method = "travel", at = @At(value = "TAIL"),cancellable = true, require = 0)
+    public void  WindVisionDetection(CallbackInfo info) {
+        rdbt$doWindVisionDetection();
     }
 }

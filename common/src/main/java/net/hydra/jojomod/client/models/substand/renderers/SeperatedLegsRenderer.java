@@ -8,7 +8,6 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.SafePlaceContext;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
-import net.hydra.jojomod.client.models.stand.GreenDayModel;
 import net.hydra.jojomod.client.models.stand.renderers.StandRenderer;
 import net.hydra.jojomod.client.models.substand.LifeTrackerModel;
 import net.hydra.jojomod.client.models.substand.SeperatedLegsModel;
@@ -16,6 +15,7 @@ import net.hydra.jojomod.entity.stand.CinderellaEntity;
 import net.hydra.jojomod.entity.stand.GreenDayEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.substand.SeperatedLegsEntity;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -44,7 +44,7 @@ public class SeperatedLegsRenderer extends StandRenderer<SeperatedLegsEntity> {
         Player P =((Player)seperatedLegsEntity.getUser());
         if( P != null) {
             if (P.getGameProfile() != null) {
-                return getSkin(((Player) seperatedLegsEntity.getUser()).getGameProfile());
+                return MainUtil.getPlayerSkinWithRespectToVisage((Player) seperatedLegsEntity.getUser());
             } else {
                 return PART_FIVE_GREEN_DAY;
             }

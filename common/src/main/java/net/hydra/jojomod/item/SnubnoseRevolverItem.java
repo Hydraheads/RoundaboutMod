@@ -153,7 +153,7 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
             }
             LivingEntity livingEntity = player;
             RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity(level, livingEntity);
-            $$7.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 4.0F, 1.3F);
+            $$7.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F,3.5F, 1.3F);
             $$7.setAmmoType(RoundaboutBulletEntity.SNUBNOSE);
             level.addFreshEntity($$7);
             level.playSound(null, player.blockPosition(), ModSounds.SNUBNOSE_FIRE_EVENT, SoundSource.PLAYERS, 100.0F, 1.0F);

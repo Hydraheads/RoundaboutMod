@@ -19,6 +19,7 @@ public class ModStrayModels {
     public static FirstPersonColtRevolverModel FirstPersonColtRevolverModel;
     public static FirstPersonJackalRifleModel FirstPersonJackalRifleModel;
     public static HeyYaModel HEY_YA;
+    public static CenturyBoyModel CENTURY_BOY;
     public static BowlerHatModel BOWLER_HAT;
     public static WornStoneMaskModel WORN_STONE_MASK;
     public static WornBloodyStoneMaskModel WORN_BLOODY_STONE_MASK;
@@ -45,6 +46,10 @@ public class ModStrayModels {
     public static AvdolHairPart AvdolHairPart;
     public static JosukeDecalsPart JosukeDecalsPart;
     public static TasselHatPart TasselHatPart;
+    public static RatHatPart ratHatPart;
+    public static RatRightLegPart ratRightLegPart;
+    public static RatLeftLegPart ratLeftLegPart;
+    public static RatTailPart ratTailPart;
     public static LegCloakPart LegCloakPart;
     public static BarrageArmsPart barrageArmsPart;
     public static PlayerChestPart PlayerChestPart;
@@ -54,7 +59,7 @@ public class ModStrayModels {
     public static RightArmSlimPart RightArmSlim;
     public static LeftArmPart LeftArm;
     public static LeftArmSlimPart LeftArmSlim;
-    public static ChestPart Head;
+    public static HeadPart Head;
     public static RightLegPart RightLeg;
     public static LeftLegPart LeftLeg;
     public static LeftHeelPart LeftHeel;
@@ -67,6 +72,7 @@ public class ModStrayModels {
 
     public static MoldSpineModel MoldSpine;
     public static MoldRightArm MoldRightArm;
+    public static MoldLeftArm MoldLeftArm;
 
     public static RoadRollerStrayModel ROAD_ROLLER;
 

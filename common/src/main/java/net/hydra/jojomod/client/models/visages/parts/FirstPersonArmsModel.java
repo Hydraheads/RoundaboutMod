@@ -277,7 +277,7 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
 
                 StandUser user = ((StandUser) player);
 
-                if (user.roundabout$getStandPowers() instanceof PowersTusk PT && PT.getAct() > 1 && PT.hasNail() && PowerTypes.isUsingStand(player)) {
+                if (user.roundabout$getStandPowers() instanceof PowersTusk PT && PT.renderDrill() && PowerTypes.isUsingStand(player)) {
                     if (renderRight) {
                         poseStack.pushPose();
                         this.transform.translateAndRotate(poseStack);

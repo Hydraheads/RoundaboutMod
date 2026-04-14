@@ -20,11 +20,9 @@ import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.CreamEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
-import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
-import net.hydra.jojomod.entity.substand.SeperatedArmSlimEntity;
-import net.hydra.jojomod.entity.substand.SeperatedLegsEntity;
+import net.hydra.jojomod.entity.substand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
+import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.item.MaxStandDiscItem;
@@ -110,6 +108,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.FALLEN_VILLAGER.get(), FallenVillager.createAttributes().build());
         event.put(ForgeEntities.FALLEN_CREEPER.get(), FallenCreeper.createAttributes().build());
         event.put(ForgeEntities.FALLEN_PHANTOM.get(), FallenPhantom.createAttributes().build());
+        event.put(ForgeEntities.VILLAGER_MINION.get(), VillagerMinion.createAttributes().build());
         event.put(ForgeEntities.GROUND_HURRICANE.get(), GroundHurricaneEntity.createStandAttributes().build());
         event.put(ForgeEntities.TUSK_HOLE.get(), TuskHoleEntity.createStandAttributes().build());
         event.put(ForgeEntities.ANUBIS_POSSESSOR.get(), AnubisPossessorEntity.createStandAttributes().build());
@@ -120,6 +119,8 @@ public class ForgeEvents {
         event.put(ForgeEntities.SEPERATED_LEGS.get(), SeperatedLegsEntity.createStandAttributes().build());
         event.put(ForgeEntities.SEPERATED_ARM.get(), SeperatedArmEntity.createStandAttributes().build());
         event.put(ForgeEntities.SEPERATED_ARM_SLIM.get(), SeperatedArmSlimEntity.createStandAttributes().build());
+        event.put(ForgeEntities.LEFT_SEPERATED_ARM.get(), LeftSeperatedArmEntity.createStandAttributes().build());
+        event.put(ForgeEntities.LEFT_SEPERATED_ARM_SLIM.get(), LeftSeperatedArmSlimEntity.createStandAttributes().build());
 ;    }
 
     @SubscribeEvent
@@ -306,6 +307,7 @@ public class ForgeEvents {
         ModItems.STAND_DISC_CINDERELLA = ForgeItems.STAND_DISC_CINDERELLA.get();
         ModItems.STAND_DISC_HEY_YA = ForgeItems.STAND_DISC_HEY_YA.get();
         ModItems.STAND_DISC_MANDOM = ForgeItems.STAND_DISC_MANDOM.get();
+        ModItems.STAND_DISC_CENTURY_BOY = ForgeItems.STAND_DISC_CENTURY_BOY.get();
         ModItems.STAND_DISC_SURVIVOR = ForgeItems.STAND_DISC_SURVIVOR.get();
         ModItems.STAND_DISC_ACHTUNG = ForgeItems.STAND_DISC_ACHTUNG.get();
 
@@ -366,6 +368,7 @@ public class ForgeEvents {
         ModItems.NEW_LOCACACA = ForgeItems.NEW_LOCACACA.get();
         ModItems.LUCKY_LIPSTICK = ForgeItems.LUCKY_LIPSTICK.get();
         ModItems.BLANK_MASK = ForgeItems.BLANK_MASK.get();
+        ModItems.RAT_MASK = ForgeItems.RAT_MASK.get();
         ModItems.MODIFICATION_MASK = ForgeItems.MODIFICATION_MASK.get();
         ModItems.SPEEDWAGON_MASK = ForgeItems.SPEEDWAGON_MASK.get();
         ModItems.SPEEDWAGON_FOUNDATION_MASK = ForgeItems.SPEEDWAGON_FOUNDATION_MASK.get();
@@ -501,7 +504,8 @@ public class ForgeEvents {
         ModEffects.WARDING = ForgeEffects.WARDING.get();
         ModEffects.VAMPIRE_BLOOD = ForgeEffects.VAMPIRE_BLOOD.get();
         ModEffects.UNBALANCED = ForgeEffects.UNBALANCED.get();
-
+        ModEffects.SWITCH = ForgeEffects.SWITCH.get();
+        ModEffects.MOLD = ForgeEffects.MOLD.get();
 
 
         ModEntities.VAN_GOUGH_PAINTING = ForgeEntities.VAN_GOUGH_PAINTING.get();
@@ -563,6 +567,8 @@ public class ForgeEvents {
         ModEntities.SEPERATED_LEGS = ForgeEntities.SEPERATED_LEGS.get();
         ModEntities.SEPERATED_ARM = ForgeEntities.SEPERATED_ARM.get();
         ModEntities.SEPERATED_ARM_SLIM = ForgeEntities.SEPERATED_ARM_SLIM.get();
+        ModEntities.LEFT_SEPERATED_ARM = ForgeEntities.LEFT_SEPERATED_ARM.get();
+        ModEntities.LEFT_SEPERATED_ARM_SLIM = ForgeEntities.LEFT_SEPERATED_ARM_SLIM.get();
 
         ModEntities.THROWN_OBJECT = ForgeEntities.THROWN_OBJECT.get();
         ModEntities.THROWN_ANUBIS = ForgeEntities.THROWN_ANUBIS.get();
@@ -586,6 +592,8 @@ public class ForgeEvents {
         ModEntities.FALLEN_VILLAGER = ForgeEntities.FALLEN_VILLAGER.get();
         ModEntities.FALLEN_CREEPER = ForgeEntities.FALLEN_CREEPER.get();
         ModEntities.FALLEN_PHANTOM = ForgeEntities.FALLEN_PHANTOM.get();
+
+        ModEntities.VILLAGER_MINION = ForgeEntities.VILLAGER_MINION.get();
 
 
         ModEntities.OVA_ENYA = ForgeEntities.OVA_ENYA.get();

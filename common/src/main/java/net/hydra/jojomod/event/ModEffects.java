@@ -15,5 +15,7 @@ public class ModEffects {
     public static MobEffect WARDING;
     public static MobEffect VAMPIRE_BLOOD;
     public static MobEffect UNBALANCED;
+    public static MobEffect MOLD;
+    public static MobEffect SWITCH;
 
 }

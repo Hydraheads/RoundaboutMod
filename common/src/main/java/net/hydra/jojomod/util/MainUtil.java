@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.primitives.Floats;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.*;
@@ -41,6 +42,10 @@ import net.hydra.jojomod.stand.powers.PowersMetallica;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.resources.DefaultPlayerSkin;
+import net.minecraft.client.resources.SkinManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -183,6 +188,7 @@ public class MainUtil {
     }
 
     public static ArrayList<String> walkableBlocks = Lists.newArrayList();
+    public static ArrayList<String> expLessBlocks = Lists.newArrayList();
     public static ArrayList<String> standBlockGrabBlacklist = Lists.newArrayList();
     public static ArrayList<String> naturalStandUserMobBlacklist = Lists.newArrayList();
     public static ArrayList<String> hypnotismMobBlackList = Lists.newArrayList();
@@ -346,6 +352,14 @@ public class MainUtil {
 
         ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
         if (walkableBlocks != null && !walkableBlocks.isEmpty() && rl != null && walkableBlocks.contains(rl.toString())){
+            return false;
+        }
+        return true;
+    }
+    public static boolean isBlockExpAble(BlockState bs){
+
+        ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
+        if (expLessBlocks != null && !expLessBlocks.isEmpty() && rl != null && expLessBlocks.contains(rl.toString())){
             return false;
         }
         return true;
@@ -1904,8 +1918,9 @@ public class MainUtil {
         return isSpecialEffect(value.getEffect());
     }
     public static boolean isSpecialEffect(MobEffect value){
-        return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS) ||
-                value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING);
+        return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS)
+                || value.equals(ModEffects.SWITCH) ||
+                value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING) || value.equals(ModEffects.MOLD);
     }
     public static boolean canHaveFrictionTaken(LivingEntity LE){
         if (LE.onClimbable()){
@@ -2398,6 +2413,10 @@ public class MainUtil {
         } else if (context == PacketDataIndex.BYTE_RESPAWN_STRATEGY) {
             ((IPlayerEntity) player).rdbt$setRespawnStrategy(data);
             S2CPacketUtil.sendSimpleByteToClientPacket(player,PacketDataIndex.S2C_RESPAWN);
+        } else if (context == PacketDataIndex.BYTE_SWITCH_POWERS) {
+            if (PowerTypes.canHavePower(player,data)){
+                PowerTypes.setPowerTypeWithPenalty(player,data);
+            }
         }
     }
     /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
@@ -2537,7 +2556,7 @@ public class MainUtil {
             if (queryNumber > powerTypes.size()-1){
                 queryNumber = 0;
             }
-            ((IPlayerEntity)player).roundabout$setPower((byte)powerTypes.get(queryNumber).ordinal());
+            ((IPlayerEntity)player).roundabout$setPowerWithPenalty((byte)powerTypes.get(queryNumber).ordinal());
 
         } else if (context == PacketDataIndex.SINGLE_BYTE_RIGHT_POWERS) {
             List<PowerTypes> powerTypes = PowerTypes.getAvailablePowers(player);
@@ -2554,7 +2573,7 @@ public class MainUtil {
             if (queryNumber < 0) {
                 queryNumber = powerTypes.size()-1;
             }
-            ((IPlayerEntity) player).roundabout$setPower((byte)powerTypes.get(queryNumber).ordinal());
+            ((IPlayerEntity) player).roundabout$setPowerWithPenalty((byte)powerTypes.get(queryNumber).ordinal());
         }
     }
 
@@ -3113,6 +3132,43 @@ public class MainUtil {
             return tag.getByte("Type") == (byte) 1;
         }
         return false;
+    }
+
+    public static ResourceLocation getPlayerSkinWithRespectToVisage(Player player){
+
+        if (player instanceof AbstractClientPlayer lpe) {
+
+
+            IPlayerEntity pl = ((IPlayerEntity) player);
+            ItemStack visage = pl.roundabout$getMaskSlot();
+            if(Objects.nonNull(visage)) {
+
+                if (visage.getItem() instanceof MaskItem MI) {
+                    if(! visage.getItem().equals(ModItems.RAT_MASK) &&! visage.getItem().equals(ModItems.BLANK_MASK)) {
+                        //Roundabout.LOGGER.info(MI.visageData.generateVisageData(player).getSkinPath());
+                        return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/" + MI.visageData.generateVisageData(player).getSkinPath() + ".png");
+                    }
+                }
+            }
+        }
+                if (player.getGameProfile() != null) {
+                    if (!player.getGameProfile().isComplete()) {
+                        return new ResourceLocation(Roundabout.MOD_ID, "textures/stand/green_day/part_four_green_day.png");
+                    } else {
+                        final Minecraft minecraft = Minecraft.getInstance();
+                        SkinManager skinManager = minecraft.getSkinManager();
+                        final Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadSkinFromCache = skinManager.getInsecureSkinInformation(player.getGameProfile()); // returned map may or may not be typed
+                        if (loadSkinFromCache.containsKey(MinecraftProfileTexture.Type.SKIN)) {
+                            return skinManager.registerTexture(loadSkinFromCache.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN);
+                        } else {
+                            return DefaultPlayerSkin.getDefaultSkin(player.getGameProfile().getId());
+                        }
+                    }
+                }
+
+
+
+        return new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/part_four_green_day.png");
     }
 
 }

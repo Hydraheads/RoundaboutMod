@@ -520,6 +520,9 @@ public class StandIcons {
     public static final ResourceLocation GREEN_DAY_MOLD_SPIN_LEFT = Roundabout.location("textures/gui/icons/green_day/off_hand_spin.png");
     public static final ResourceLocation GREEN_DAY_MOLD_SPIN_RIGHT = Roundabout.location("textures/gui/icons/green_day/main_arm_spin.png");
     public static final ResourceLocation GREEN_DAY_MOLD_FIELD_OFF = Roundabout.location("textures/gui/icons/green_day/mold_field_off.png");
+    public static final ResourceLocation GREEN_DAY_MOLD_SPREAD = Roundabout.location("textures/gui/icons/green_day/mold_spread.png");
+    public static final ResourceLocation GREEN_DAY_SCULK_ABSORB = Roundabout.location("textures/gui/icons/green_day/sculk_absorb.png");
+    public static final ResourceLocation GREEN_DAY_VAULT = Roundabout.location("textures/gui/icons/green_day/stand_ledge_grab.png");
 
     public static final ResourceLocation RATT_PLACE = Roundabout.location("textures/gui/icons/ratt/ratt_place.png");
     public static final ResourceLocation RATT_RECALL = Roundabout.location("textures/gui/icons/ratt/ratt_recall.png");
@@ -553,6 +556,7 @@ public class StandIcons {
     public static final ResourceLocation ANUBIS_THRUST_CUT = Roundabout.location("textures/gui/icons/anubis/thrust_cut.png");
     public static final ResourceLocation ANUBIS_BARRAGE = Roundabout.location("textures/gui/icons/anubis/barrage.png");
     public static final ResourceLocation ANUBIS_SHIELDBREAK = Roundabout.location("textures/gui/icons/anubis/maybe_shieldbreak.png");
+    public static final ResourceLocation ANUBIS_GUARD = Roundabout.location("textures/gui/icons/anubis/guard.png");
 
     public static final ResourceLocation TUSK_ACTS = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/tusk_acts.png");

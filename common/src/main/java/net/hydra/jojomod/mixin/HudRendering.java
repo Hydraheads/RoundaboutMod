@@ -613,7 +613,7 @@ public abstract class HudRendering implements IHudAccess {
                 StandHudRender.renderClashHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, ((StandUserClientPlayer) minecraft.player).roundabout$getLastClashPower());
                 return true;
             } else if (((StandUser) minecraft.player).roundabout$isGuarding()) {
-                if (!(user.roundabout$getStandPowers() instanceof PowersRatt)) {
+                if (!(user.roundabout$getStandPowers() instanceof PowersRatt && PowerTypes.hasStandActivelyEquipped(minecraft.player))) {
                     StandHudRender.renderGuardHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha,showComboAmt);
                     if (showComboAmt){
                         if (((IPowersPlayer)minecraft.player).rdbt$getPowers() instanceof PunchingGeneralPowers pgp) {
@@ -650,7 +650,7 @@ public abstract class HudRendering implements IHudAccess {
                 StandHudRender.renderCreamTransformTimerHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PC);
                 return true;
             } else if (powers.replaceHudActively()){
-                powers.getReplacementHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x,removeNum,minecraft);
+                powers.getReplacementHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x,removeNum);
                 if (removeNum){
                     if (displayCombatTicks){
                         if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
@@ -664,10 +664,10 @@ public abstract class HudRendering implements IHudAccess {
                 }
                 return true;
             } else if (fate.replaceHudActively()){
-                fate.getReplacementHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x,removeNum,minecraft);
+                fate.getReplacementHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x,removeNum);
                 return true;
             } else if (user.roundabout$getStandPowers().replaceHudActively()){
-                user.roundabout$getStandPowers().getReplacementHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x,removeNum,minecraft);
+                user.roundabout$getStandPowers().getReplacementHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x,removeNum);
                 return true;
             } else if (((IEntityAndData)minecraft.player).roundabout$getTrueInvisibility() > -1){
                 StandHudRender.renderInvisibilityHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x);

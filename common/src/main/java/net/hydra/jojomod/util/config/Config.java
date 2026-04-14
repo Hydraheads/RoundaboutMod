@@ -86,6 +86,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public AchtungSettings achtungSettings;
     @NestedOption(group = "modded")
+    public CenturyBoySettings centuryBoySettings;
+    @NestedOption(group = "modded")
     public WalkingHeartSettings walkingHeartSettings;
     @NestedOption(group = "modded")
     public RattSettings rattSettings;
@@ -150,6 +152,18 @@ public class Config implements Cloneable {
         public Integer knifeDamageOnMobs;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer knifeDamageOnPlayers;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer gunDamageOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer gunDamageOnPlayers;
+        @FloatOption(group = "inherit", value = 28F, min = 0, max = 72000)
+        public Float rifleDamage;
+        @FloatOption(group = "inherit", value = 6.2F, min = 0, max = 72000)
+        public Float coltDamage;
+        @FloatOption(group = "inherit", value = 4.5F, min = 0, max = 72000)
+        public Float snubnoseDamage;
+        @FloatOption(group = "inherit", value = 2.1F, min = 0, max = 72000)
+        public Float tommyGunDamage;
         @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
         public Integer maxKnivesInOneHit;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
@@ -659,6 +673,17 @@ public class Config implements Cloneable {
         public Integer getAutoSpeed;
     }
 
+    public static class CenturyBoySettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableCenturyBoy;
+        @IntOption(group = "inherit", value = 10000000, min = 1, max = 10000000)
+        public Integer CBDurability;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean CBchangesFOV;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean CBCanMoveCamera;
+    }
+
     public static class WalkingHeartSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableWalkingHeart;
@@ -850,7 +875,7 @@ public class Config implements Cloneable {
         public Boolean mobsTeleportInsteadOfStoppingTime;
         @BooleanOption(group = "inherit", value = true)
         public Boolean wardenMovesInStoppedTime;
-        @IntOption(group = "inherit", value = 30, min = 0, max = 100)
+        @IntOption(group = "inherit", value = 25, min = 0, max = 100)
         public Integer playerDamageCapHealthPercent;
         @BooleanOption(group = "inherit", value = true)
         public Boolean creativeModeInfiniteTimeStop;

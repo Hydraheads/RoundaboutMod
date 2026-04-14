@@ -10,6 +10,7 @@ public class ModEntityRendererClient {
      * Forge and Fabric need to actually register this info into the game individually.*/
     public static final ModelLayerLocation WOLF_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "wolf"), "main");
     public static final ModelLayerLocation ZOMBIEFISH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "zombiefish"), "main");
+    public static final ModelLayerLocation VILLAGER_MINION_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "villager_minion"), "main");
     public static final ModelLayerLocation ANUBIS_GUARDIAN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "anubis_guardian"), "main");
     public static final ModelLayerLocation THE_WORLD_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "the_world"), "main");
     public static final ModelLayerLocation THE_WORLD_ULTIMATE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "the_world_ultimate"), "main");
@@ -64,6 +65,9 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation SEPERATED_LEGS_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "seperated_legs"), "main");
     public static final ModelLayerLocation SEPERATED_ARM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "seperated_arm"), "main");
     public static final ModelLayerLocation SEPERATED_ARM_SLIM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "seperated_arm_slim"), "main");
+    public static final ModelLayerLocation LEFT_SEPERATED_ARM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "left_seperated_arm"), "main");
+    public static final ModelLayerLocation LEFT_SEPERATED_ARM_SLIM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "left_seperated_arm_slim"), "main");
+
     public static final ModelLayerLocation ROAD_ROLLER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "road_roller"), "main");
 
     public static final ModelLayerLocation PAINTING_VAN_GOUGH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "van_gough"), "main");

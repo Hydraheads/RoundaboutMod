@@ -6,14 +6,14 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "FabricServerPlayer",
-    "LootTableMixin"
+    "FabricFireBlock",
+    "LootTableMixin",
+    "MilkBucketMixin"
   ],
   "client": [
     "DimensionResourceKeyD4CFabric",
     "ExperimentalFixD4CFabric",
-    "FabricFireBlock",
-    "FabricTerrainRenderContext",
-    "MilkBucketMixin"
+    "FabricTerrainRenderContext"
   ],
   "server": [
   ],

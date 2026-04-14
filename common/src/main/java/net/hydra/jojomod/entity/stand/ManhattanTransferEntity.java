@@ -1,71 +1,44 @@
 package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IGravityEntity;
-import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.entity.visages.CloneEntity;
-import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.OffsetIndex;
-import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
+import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
-import net.hydra.jojomod.util.config.ConfigManager;
-import net.hydra.jojomod.util.gravity.RotationUtil;
-import net.minecraft.client.Options;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ThrownPotion;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.EnderpearlItem;
-import net.minecraft.world.item.LingeringPotionItem;
-import net.minecraft.world.item.SplashPotionItem;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.damagesource.DamageSource;
-import net.hydra.jojomod.entity.stand.FollowingStandEntity;
-import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
-import net.hydra.jojomod.stand.powers.PowersRatt;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.*;
+import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
-import net.minecraft.world.entity.PathfinderMob;
-import org.joml.Vector3f;
-
-import java.util.Arrays;
-import java.util.List;
-
-
-import static net.hydra.jojomod.entity.stand.FollowingStandEntity.MOVE_FORWARD;
-import static net.hydra.jojomod.entity.stand.FollowingStandEntity.OFFSET_TYPE;
-import static net.hydra.jojomod.stand.powers.PowersManhattanTransfer.STAND_BLOCKED;
+import java.util.UUID;
 
 public class ManhattanTransferEntity extends StandEntity {
     public ManhattanTransferEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
     }
-
-
     public static final byte
             ANIME_SKIN = 1,
             MANGA_SKIN = 2,
@@ -96,117 +69,67 @@ public class ManhattanTransferEntity extends StandEntity {
         this.entityData.set(TARGET_ID, standSetId);
     }
 
-    public float lockedYRot = 0;
-
-    public void setSavedSkin(byte skin) {
-        this.entityData.set(SAVED_SKIN, skin);
-    }
-
-    public byte getSavedSkin() {
-        return this.entityData.get(SAVED_SKIN);
-    }
-
     protected static final EntityDataAccessor<Integer> TARGET_ID = SynchedEntityData.defineId(ManhattanTransferEntity.class,
             EntityDataSerializers.INT);
-    protected static final EntityDataAccessor<Byte> SAVED_SKIN = SynchedEntityData.defineId(ManhattanTransferEntity.class,
-            EntityDataSerializers.BYTE);
-
     @Override
     protected void defineSynchedData() {
         if (!this.entityData.hasItem(TARGET_ID)) {
             super.defineSynchedData();
             this.entityData.define(TARGET_ID, -1);
-            this.entityData.define(SAVED_SKIN, (byte) 0);
         }
     }
-
-    public void movement(){
-        absMoveTo(this.getX(), this.getY(), this.getZ());
-
-        setDeltaMovement(getForward().scale(0.3));
-        setDeltaMovement(getForward().scale(0.3));
-
-    }
-
-    public int SpinTicks = 0;
-    public void setSpinTicks(int val){SpinTicks = val;};
-
     @Override
     public boolean isNoGravity() {
         return true;
     }
-
     @Override
     public boolean lockPos() {
         return false;
     }
-
     @Override
     public boolean forceVisualRotation() {
         return true;
     }
-
     public boolean canBeHitByStands() {
         return true;
     }
-
     @Override
     public boolean canBeHitByProjectile() {return true;}
-
     @Override
     public boolean hasNoPhysics() {
         return false;
     }
-
     @Override
     public boolean standHasGravity() {
         return false;
     }
-
     @Override
     public boolean isInvulnerable() {
         return false;
     }
-
     @Override
     public boolean isAttackable() {
         return true;
     }
-
     @Override
     public boolean canBeSeenAsEnemy() {
         return true;
     }
-
     @Override
     public boolean redirectKnockbackToUser() {
         return false;
     }
-
     @Override
     public boolean isPickable() {
         return false;
     }
-
     @Override
     public boolean skipAttackInteraction(Entity $$0) {
         return false;
     }
-
     @Override
     protected float getFlyingSpeed() {
         return 0.10F;
-    }
-
-    public boolean stuck = false;
-
-    public static AttributeSupplier.Builder createStandAttributes() {
-        return StandEntity.createMobAttributes()
-                .add(Attributes.MOVEMENT_SPEED,
-                        0.01F)
-                .add(Attributes.MAX_HEALTH, 1.0)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 1.0);
-
     }
 
     @Override
@@ -243,27 +166,17 @@ public class ManhattanTransferEntity extends StandEntity {
 
     @Override
     public void die(DamageSource $$0) {
-
         this.deathTime = 0;
-
         super.die($$0);
     }
-
     @Override
     protected void tickDeath() {
         super.die(this.damageSources().generic());
         super.tickDeath();
     }
 
-    protected static final EntityDataAccessor<Float> IDLE_ROTATION = SynchedEntityData.defineId(FollowingStandEntity.class,
-            EntityDataSerializers.FLOAT);
-
-    public final void setIdleRotation(float blocks) {
-        this.entityData.set(IDLE_ROTATION, blocks);
-    }
-
-    public final float getIdleRotation() {
-        return this.entityData.get(IDLE_ROTATION);
+    public StandUser getUserData(LivingEntity User) {
+          return ((StandUser) User);
     }
 
     @Override
@@ -273,14 +186,34 @@ public class ManhattanTransferEntity extends StandEntity {
         float yaw = this.getYRot();
         super.tick();
 
-        if (!this.level().isClientSide()) {
-            if (!forceVisible) {
-                this.setXRot(pitch);
-                this.setYRot(yaw);
-                this.setYBodyRot(yaw);
-                this.xRotO = pitch;
-                this.yRotO = yaw;
+            if (horizontalCollision || verticalCollision) {
+                this.getUserData(this.getUser()).roundabout$getStandPowers();
+                if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+
+                    if (!PM.isPiloting()) {
+                        this.setXRot(pitch + 25);
+
+                        this.setYBodyRot(pitch + 25);
+
+                        this.setYRot(yaw);
+                        if (yaw >= -90 && yaw <= 0) {
+                            this.setYRot(yaw - 25);
+                        }
+                        if (yaw <= 90 && yaw > 0) {
+                            this.setYRot(yaw + 25);
+                        }
+                    }
+                }
             }
+            if (!this.level().isClientSide()) {
+                if (!forceVisible) {
+                    this.setXRot(pitch);
+                    this.setYRot(yaw);
+                    this.setYBodyRot(yaw);
+                    this.xRotO = pitch;
+                    this.yRotO = yaw;
+
+                }
         }
         nextPathfind++;
         doBasicPathfind();
@@ -298,5 +231,25 @@ public class ManhattanTransferEntity extends StandEntity {
         this.navigation.moveTo(pos.getX(), pos.getY(), pos.getZ(), 0);
     }
 
+    public boolean isInRain() {
+        BlockPos $$0 = this.blockPosition();
+        return this.level().isRainingAt($$0)
+                || this.level().isRainingAt(BlockPos.containing((double)$$0.getX(), this.getBoundingBox().maxY, (double)$$0.getZ()));
+    }
+
+    public final AnimationState rain_dodging_manhattan = new AnimationState();
+
+    @Override
+    public void setupAnimationStates() {
+        super.setupAnimationStates();
+        if (this.getUser() != null) {
+            if (isInRain()) {
+                this.rain_dodging_manhattan.startIfStopped(this.tickCount);
+            } if (!isInRain()) {
+                this.rain_dodging_manhattan.stop();
+            }
+
+        }
+    }
 
 }

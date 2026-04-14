@@ -142,7 +142,7 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
 
                 BlockPos check = this.blockPosition();
                 int n = 0;
-                while (this.level().getBlockState(check).isSolid() || n < 3) {
+                while (this.level().getBlockState(check).isSolid() && n < 3) {
                     check.below();
                     n++;
                 }

@@ -18,6 +18,7 @@
   "text.roundabout.powers.spin_select": "Spin",
   "text.roundabout.powers.martial_arts": "Martial Arts",
   "text.roundabout.powers.martial_arts_select": "MA",
+  "text.roundabout.powers.none": "Switch Powers!",
 
   "text.roundabout.fate.vampire": "Vampire",
   "text.roundabout.fate.vampire_hair": "Change Hair Color",
@@ -208,6 +209,8 @@
   "item.roundabout.aya_mask": "Aya Visage",
   "item.roundabout.aya_mask.desc": "Aya Tsuji",
   "item.roundabout.aya_mask.tag": "Aya",
+  "item.roundabout.rat_mask": "Rat Costume",
+  "item.roundabout.rat_mask.desc": "Gwess' Idea...",
   "item.roundabout.speedwagon_foundation_mask": "Speedwagon Foundation Visage",
   "item.roundabout.speedwagon_foundation_mask.desc": "Employee",
   "item.roundabout.speedwagon_foundation_mask.tag": "SPW Worker",
@@ -283,6 +286,8 @@
   "effect.roundabout.warding": "Warding",
   "effect.roundabout.vampire_blood": "Vampire Blood",
   "effect.roundabout.unbalanced": "Unbalanced",
+  "effect.roundabout.mold": "Mold",
+  "effect.roundabout.switch": "Switch",
 
   "item.roundabout.creative_only.info": "Creative Only",
 
@@ -368,8 +373,10 @@
   "entity.roundabout.go_beyond": "Go Beyond",
   "entity.roundabout.ground_bubble": "Underground Bubble",
   "entity.roundabout.separated_legs": "Separated legs",
-  "entity.roundabout.separated_arm": "Seperated Arm",
-  "entity.roundabout.separated_arm_slim": "Seperated Arm Slim",
+  "entity.roundabout.seperated_arm": "Seperated Arm",
+  "entity.roundabout.seperated_arm_slim": "Seperated Arm Slim",
+  "entity.roundabout.left_seperated_arm": "Left Seperated Arm",
+  "entity.roundabout.left_sepaeated_arm_slim": "Left Aeperated Arm Slim",
 
 
   "entity.roundabout.water_bottle": "Water Bottle",
@@ -497,6 +504,7 @@
   "key.roundabout.pose": "Strike Pose",
   "key.roundabout.hide_icons": "Hide Ability Icons",
   "key.roundabout.fire_firearms": "Fire Held Gun",
+  "key.roundabout.power_switch": "Switch Powers",
 
   "roundabout:item.roundabout.smithing_template.execution_upgrade.applies_to": "Iron Axe",
   "roundabout:item.roundabout.smithing_template.execution_upgrade.base_slot_description": "Add to iron axe",
@@ -1229,17 +1237,17 @@
   "ability.roundabout.corpse_army": "Corpse Army",
   "ability.roundabout.corpse_army.desc": "Acquire corpses with Executioner's Axe or Scissors (Justice User only), and craft a body bag to store them in. You can control these corpses if they are in your fog range. Corpses must be inactive or full health to be picked up by a body bag. Zombies, Skeletons, Creepers, Spiders, Villagers/Illagers, and Phantoms can become corpses. Interact with spider corpses you control to ride them.",
   "ability.roundabout.zombie_corpse": "Fallen Zombie",
-  "ability.roundabout.zombie_corpse.desc": "Zombie corpses can be acquired from zombies and husks. When activated, they are the most basic and well balanced army unit. If you crouch and interact with them, you can give them your held item, or trade their held item back. They can place blocks they are given if commanded to directly with interact in control mode, and can use mining tools to mine with the same control. Note that held items trade off corpse armor piercing damage.",
+  "ability.roundabout.zombie_corpse.desc": "Zombie corpses can be acquired from zombies and husks. When activated, they are the most basic and well balanced army unit. If you crouch and interact with them, you can give them your held item, or trade their held item back. They can place blocks they are given if commanded to directly with interact in control mode, and can use mining tools to mine with the same control. Note that held items trade off corpse armor piercing damage. Healed with rotten flesh while inactive.",
   "ability.roundabout.villager_corpse": "Fallen Villager",
-  "ability.roundabout.villager_corpse.desc": "Villager corpses can be acquired from villagers, witches, and other illagers you may find in a raid. They are similar to zombie corpses, albeit slightly faster and weaker, and cannot be given items. Their strength lies in their hidden resistance to projectiles, making them great at charging at those who are wielding ranged weapons.",
+  "ability.roundabout.villager_corpse.desc": "Villager corpses can be acquired from villagers, witches, and other illagers you may find in a raid. They are similar to zombie corpses, albeit slightly faster and weaker, and cannot be given items. Their strength lies in their hidden resistance to projectiles, making them great at charging at those who are wielding ranged weapons. Healed with emeralds while inactive.",
   "ability.roundabout.creeper_corpse": "Fallen Creeper",
-  "ability.roundabout.creeper_corpse.desc": "Creeper corpses can be acquired from creepers. They act as creepers do, so they may be a bit dangerous to use. However, in control mode, pressing interact on them detonates them. If you select and move a fallen creeper around first, this can be utilized to deliberately blow up holes in walls, or simply help you mine.",
+  "ability.roundabout.creeper_corpse.desc": "Creeper corpses can be acquired from creepers. They act as creepers do, so they may be a bit dangerous to use. However, in control mode, pressing interact on them detonates them. If you select and move a fallen creeper around first, this can be utilized to deliberately blow up holes in walls, or simply help you mine. Healed with gunpowder while inactive.",
   "ability.roundabout.skeleton_corpse": "Fallen Skeleton",
-  "ability.roundabout.skeleton_corpse.desc": "Skeleton corpses can be acquired from skeletons and strays. They are an overwhelming long range option. While not very powerful, they are good at knocking back and interrupting foes with their synchronized group shots. Just be careful, as their arrows can harm you as well, and the other corpses. Thus, they pair well with fallen spiders which are shorter and harder to hit with arrows.",
+  "ability.roundabout.skeleton_corpse.desc": "Skeleton corpses can be acquired from skeletons and strays. They are an overwhelming long range option. While not very powerful, they are good at knocking back and interrupting foes with their synchronized group shots. Just be careful, as their arrows can harm you as well, and the other corpses. Thus, they pair well with fallen spiders which are shorter and harder to hit with arrows. Healed with bones while inactive.",
   "ability.roundabout.spider_corpse": "Fallen Spider",
-  "ability.roundabout.spider_corpse.desc": "Spider corpses can be acquired from regular, full sized spiders. They are very fast and hard to hit. If you interact with them, you can mount them, and use them to ride up walls. They are perfect for gaining distance while eating or charging glaives.",
+  "ability.roundabout.spider_corpse.desc": "Spider corpses can be acquired from regular, full sized spiders. They are very fast and hard to hit. If you interact with them, you can mount them, and use them to ride up walls. They are perfect for gaining distance while eating or charging glaives. Healed with spider eyes while inactive.",
   "ability.roundabout.phantom_corpse": "Fallen Phantom",
-  "ability.roundabout.phantom_corpse.desc": "Phantom corpses can be acquired from phantoms. They can slowly move up and down to attack enemies who are at a different elevation than you, but their health is very low and they are vulnerable to harpoons. This is because their main use is as a mount. Exclusively at night time in the overworld, they can fly you around. This is because the night sky gives them power. Holding space makes you rise higher, and holding the dash ability key makes you sink lower.",
+  "ability.roundabout.phantom_corpse.desc": "Phantom corpses can be acquired from phantoms. They can slowly move up and down to attack enemies who are at a different elevation than you, but their health is very low and they are vulnerable to harpoons. This is because their main use is as a mount. Exclusively at night time in the overworld, they can fly you around. This is because the night sky gives them power. Holding space makes you rise higher, and holding the dash ability key makes you sink lower. Healed with membranes while inactive.",
 
   "ability.roundabout.fog_clones": "Illusion Clones",
   "ability.roundabout.fog_clones.desc": "Create fake mirages of yourself. If you are attacked, perhaps it was one of the mirages that was attacked, not you...",
@@ -1519,18 +1527,25 @@
   "ability.roundabout.gd_punch_left": "Main Arm Launch",
   "ability.roundabout.gd_punch_left.desc": "Separate your main hand from your body, throwing it out to attack or mine with the item in your main hand! Use again to control its movement",
   "ability.roundabout.gd_return_left": "Main Arm Reattach",
+  "ability.roundabout.gd_return_left.desc": "Return your detatched Main hand",
   "ability.roundabout.gd_spin_left": "Main Arm Spin",
+  "ability.roundabout.gd_spin_left.desc": "Causes your seperated main arm to spin in place, repeatedly attacking nearby entities. If the arm is in the air, knocks anything it hits upwards.",
   "ability.roundabout.gd_punch_right": "Off Hand Launch",
   "ability.roundabout.gd_return_right": "Off Hand Reattach",
   "ability.roundabout.gd_spin_right": "Off Hand Spin",
+  "ability.roundabout.gd_punch_right.desc": "Separate your Off hand from your body, throwing it out to attack or mine with the item in your off hand! Use again to control its movement",
+  "ability.roundabout.gd_return_right.desc": "Return your detatched Off hand",
+  "ability.roundabout.gd_spin_right.desc": "Causes your seperated Off hand  to spin in place, repeatedly attacking nearby entities. If the arm is in the air, knocks anything it hits upwards.",
   "ability.roundabout.gd_mold_leap": "Separation Leap",
   "ability.roundabout.gd_mold_leap.desc": "Separates your torso and legs, and launches you in the direction you are looking, allowing for great omnidirectional moblity whilst letting you avoid fall damage. Leaves you crawling while your legs float back to you, damaging mobs they come into contact with and letting you walk again. Your legs automatically return after a time",
-  "ability.roundabout.gd_mold_field": "Mold Field",
-  "ability.roundabout.gd_mold_field.desc": "Releases mold spores in a large area around you. Any mob in that area that lowers in elevation whilst being below you takes massive damage that ramps up over time. Players and certain mobs killed by the mold field with drop their heads. Organic projectiles below you in the mold field will rapidly disintegrate.",
+  "ability.roundabout.gd_mold_field": "Mold",
+  "ability.roundabout.gd_mold_field.desc": "Entities affected by your mold will take heavy damage as they get lower. This damage scales with what level of effect they have, as well as increasing it each time. This effect spreads to nearby mobs as affected entities take damage from the mold",
   "ability.roundabout.gd_stitch": "Stitch up",
   "ability.roundabout.gd_stitch.desc": "Stitches you up, recovering a tiny bit of health, and reducing bleed by 1 level",
   "ability.roundabout.gd_pardon": "Ally Selection",
-  "ability.roundabout.gd_pardon.desc": "Select entities as allies, making them unaffected by your mold field",
+  "ability.roundabout.gd_pardon.desc": "Select entities as allies, making them unaffected by your mold ",
+  "ability.roundabout.gd_mold_spread":"Mold Spread",
+  "ability.roundabout.gd_mold_spread.desc":"Spreads Mold to all nearby entities, also increases mold level on entities that are already affected",
 
   "ability.roundabout.manual_shooting": "Shooting Mode",
   "ability.roundabout.manual_shooting.desc": "Allows you to press left click with your mouse shoot where you want if you are controlling the stand and it contains a projectile. If you decide to keep automatic shooting, it will redirect istantly any bullet torwards the nearest moving entity.",
@@ -1890,8 +1905,9 @@
   "skins.roundabout.green_day.red_day": "Red Day",
   "skins.roundabout.green_day.teal_day": "Teal Day",
   "skins.roundabout.green_day.broccoli": "Broccoli",
-
-
+  "skins.roundabout.green_day.red_night": "Red Night",
+  "skins.roundabout.green_day.gorgonzola": "Gorgonzola",
+  "skins.roundabout.green_day.silence": "Silence",
 
 
   "skins.roundabout.achtung_baby.base": "Has No Form",
@@ -1904,6 +1920,7 @@
   "unlock_skin.roundabout.ratt.rat": "Rat? Unlocked!",
   "unlock_skin.roundabout.walking_heart.spider": "Webbing Heart Skin Unlocked!",
   "unlock_skin.roundabout.anubis.traitor": "Traitor Skins Unlocked!",
+  "unlock_skin.roundabout.green_day.silence": "Silence Skin Absorbed",
 
   "justice.morph.player": "Player",
   "justice.morph.villager": "Villager",
@@ -1952,6 +1969,12 @@
   "roundabout.stand_switch.custom": "Custom Stand",
   "roundabout.stand_switch.custom.desc": "A stand that you can design to your liking, think of it as your own stand. Costs %s levels to obtain.",
   "roundabout.stand_switch.none": "Choose Type",
+
+
+  "roundabout.minion.none": "Orders Select",
+  "roundabout.minion.tactics.equip": "Equip",
+  "roundabout.minion.tactics.sethome": "Set Home",
+  "roundabout.minion.tactics.sendhome": "Send Home",
 
   "roundabout.corpse.none": "Choose Body",
   "roundabout.corpse.tactics.none": "Tactic Select",
@@ -2111,6 +2134,9 @@
 
   "text.roundabout.walking.cut_on": "Corner Cutting On",
   "text.roundabout.walking.cut_ff": "Corner Cutting Off",
+
+  "text.roundabout.manhattan_transfer.wind_vision": "Wind Vision On",
+  "text.roundabout.manhattan_transfer.wind_vision_off": "Wind Vision Off",
 
   "text.roundabout.vampire.flesh_bud_fail": "The victim is not weakened, or is agitated",
   "text.roundabout.vampire.flesh_bud_fail_already": "A flesh bud is already planted",
@@ -2877,8 +2903,26 @@
   "config.roundabout.locacacaEatingCooldowns.desc": "The time between eating New Locacaca fruits, in ticks. By default, it takes roughly a minute in between, due to the powerful healing potential.",
   "config.roundabout.knifeDamageOnMobs.name": "Knife Mob Damage",
   "config.roundabout.knifeDamageOnMobs.desc": "A damage multiplier for knives hitting mobs. Knives do not bypass armor, but they do penetrate enchantments for the most part.",
+  "config.roundabout.gunDamageOnMobs.name": "Gun Damage",
+  "config.roundabout.gunDamageOnMobs.desc": "A damage multiplier for guns hitting mobs. Guns have higher dps than bows, but are still scaled to vanilla by default.",
   "config.roundabout.knifeDamageOnPlayers.name": "Knife Player Damage",
   "config.roundabout.knifeDamageOnPlayers.desc": "A damage multiplier for knives hitting players. Knives do not bypass armor, but they do penetrate enchantments for the most part.",
+  "config.roundabout.gunDamageOnPlayers.name": "Gun Player Damage",
+  "config.roundabout.gunDamageOnPlayers.desc": "A damage multiplier for guns hitting players. Guns are super fast, accurate, and have no windup. So it is not recommended to make them more powerful against players, they are mostly for inflicting bleed.",
+
+  "config.roundabout.rifleDamage.name": "Rifle Damage",
+  "config.roundabout.rifleDamage.desc": "Before being multiplied by the above, how much damage does the rifle cap at?",
+
+  "config.roundabout.snubnoseDamage.name": "Snubnose Damage",
+  "config.roundabout.snubnoseDamage.desc": "Before being multiplied by the above, the base snubnose damage. (it does +1 bonus damage if you hit while not on i-frames as well)",
+
+  "config.roundabout.coltDamage.name": "Colt Damage",
+  "config.roundabout.coltDamage.desc": "Before being multiplied by the above, the base colt damage.",
+
+  "config.roundabout.tommyGunDamage.name": "Tommy Gun Damage",
+  "config.roundabout.tommyGunDamage.desc": "Before being multiplied by the above, the base tommy gun damage.",
+
+
   "config.roundabout.maxKnivesInOneHit.name": "Max Knives In One Hit",
   "config.roundabout.maxKnivesInOneHit.desc": "The maximum amount of knives that can hit an entity at once. For instance, if you stop time and surround an entity with knife bundles, where is the limit?",
   "config.roundabout.gasolineExplosionDamage.name": "Gasoline Damage Multiplier",
@@ -2923,6 +2967,7 @@
   "config.roundabout.major.common_config": "Common Config",
   "config.roundabout.major.close": "Close",
 
+  "config.roundabout.generalStandSettings.name": "General Stand",
   "config.roundabout.generalStandUserMobSettings.name": "Stand User Mobs",
   "config.roundabout.vanillaMinecraftTweaks.name": "Vanilla Tweaks",
   "config.roundabout.worldgenSettings.name": "Worldgen",

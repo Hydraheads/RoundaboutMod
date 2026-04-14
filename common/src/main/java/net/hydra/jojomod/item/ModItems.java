@@ -54,6 +54,7 @@ public class ModItems {
     public static Item STAND_DISC_MANDOM;
     public static Item STAND_DISC_SURVIVOR;
     public static Item STAND_DISC_ACHTUNG;
+    public static Item STAND_DISC_CENTURY_BOY;
     public static Item STAND_DISC_DIVER_DOWN;
     public static Item MAX_STAND_DISC_DIVER_DOWN;
     public static Item STAND_DISC_METALLICA;
@@ -111,6 +112,7 @@ public class ModItems {
     public static Item MUSIC_DISC_HALLELUJAH;
     public static Item LUCKY_LIPSTICK;
     public static Item BLANK_MASK;
+    public static Item RAT_MASK;
     public static Item MODIFICATION_MASK;
     public static Item JOTARO_MASK;
     public static Item JOTARO_4_MASK;

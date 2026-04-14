@@ -16,6 +16,7 @@ import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerMixingSound;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
+import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -34,6 +35,7 @@ import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;
@@ -107,6 +109,9 @@ import org.spongepowered.asm.mixin.Unique;
 import java.nio.file.Path;
 import java.util.*;
 
+import static net.hydra.jojomod.util.MainUtil.getUserData;
+import static oshi.util.UserGroupInfo.getUser;
+
 
 public class ClientUtil {
 
@@ -134,6 +139,10 @@ public class ClientUtil {
         $$0.xRot = $$7;
         $$1.xRot += $$5 * 1.2F - $$6 * 0.4F;
         $$0.xRot += $$5 * 1.2F - $$6 * 0.4F;
+    }
+
+    public static Font getFont(){
+        return Minecraft.getInstance().font;
     }
 
     public static void setCheck(){
@@ -257,6 +266,9 @@ public class ClientUtil {
     public static void tickClientUtilStuff(){
         clientTicker++;
 
+        if (heldSwap > 0){
+            heldSwap--;
+        }
         if (renderBloodTicks > 0){
             renderBloodTicks--;
         }
@@ -488,6 +500,15 @@ public class ClientUtil {
                     if (ent != null){
                         ((IEntityAndData)ent).roundabout$setTrueInvisibility(altered);
 
+                    }
+                }
+                /**Invis Psuedo Tracked Data*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.MANHATTAN_INVISIBILITY.value)) {
+                    int entityID = (int)vargs[0];
+                    int altered = (int)vargs[1];
+                    Entity ent = player.level().getEntity(entityID);
+                    if (ent != null){
+                        ((IEntityAndData)ent).roundabout$setTrueInvisibilityManhattan(altered);
                     }
                 }
                 /**Daze Packet*/
@@ -911,6 +932,15 @@ public class ClientUtil {
         }
         return false;
     }
+
+    public static boolean checkIfClientCanSeeMobsForWindVision() {
+
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersManhattanTransfer PMT && PMT.isPiloting()) {
+                    return true;
+        }
+        return false;
+    }
     public static boolean isFabulous(){
 
         OptionInstance<GraphicsStatus> $$2 = Minecraft.getInstance().options.graphicsMode();
@@ -1085,7 +1115,6 @@ public class ClientUtil {
 
 
 
-
             if (powers.highlightsEntity(entity, player))
                 return powers.highlightsEntityColor(entity,player);
 
@@ -1224,9 +1253,14 @@ public class ClientUtil {
     }
 
     public static boolean poseHeld = false;
+    public static boolean powerHeld = false;
+    public static int heldSwap = 0;
 
     public static void openPlunderScreen(){
         Minecraft.getInstance().setScreen(new PlunderScreen());
+    }
+    public static void openPowerSwitchScreen(){
+        Minecraft.getInstance().setScreen(new PowerSwitcherScreen());
     }
     public static void openStandSwitchUI(ItemStack arrow){
         Minecraft.getInstance().setScreen(new StandArrowRerollScreen(arrow));
@@ -1248,6 +1282,18 @@ public class ClientUtil {
         } else {
             if (poseHeld){
                 poseHeld = false;
+            }
+        }
+    }
+    public static void strikePower(Player player, Minecraft C, boolean keyIsDown, Options option) {
+        if (keyIsDown){
+            if (!powerHeld){
+                C.setScreen(new PowerSwitcherScreen());
+            }
+            powerHeld = true;
+        } else {
+            if (powerHeld){
+                powerHeld = false;
             }
         }
     }
@@ -1342,6 +1388,10 @@ public class ClientUtil {
         Minecraft mc = Minecraft.getInstance();
         isInCinderellaMobUI = entid;
         mc.setScreen(new VisageStoreScreen(costs));
+    }
+    public static void setZombieMinionScreen(int entid) {
+        Minecraft mc = Minecraft.getInstance();
+        mc.setScreen(new ZombieMinionScreen(entid));
     }
     public static void setJusticeTacticsScreen() {
         Minecraft mc = Minecraft.getInstance();

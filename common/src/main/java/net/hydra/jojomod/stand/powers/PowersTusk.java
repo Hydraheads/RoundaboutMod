@@ -688,6 +688,9 @@ public class PowersTusk extends NewDashPreset {
         }
         return true;
     }
+    public boolean renderDrill() {
+        return this.getAct() > 1 && this.hasNail();
+    }
     public boolean isShooting() {
         return this.getActivePower() == PowersTusk.SHOOT_MODE;
     }
@@ -1028,7 +1031,7 @@ public class PowersTusk extends NewDashPreset {
     }
 
     @Override
-    public void getReplacementHUD(GuiGraphics context, Player playerEntity, int scaledWidth, int scaledHeight, int x, boolean removeNum, Minecraft minecraft) {
+    public void getReplacementHUD(GuiGraphics context, Player playerEntity, int scaledWidth, int scaledHeight, int x, boolean removeNum) {
         int l = scaledHeight - 32 + 3;
         StandUser SU = (StandUser) playerEntity;
         if (SU.roundabout$getStandPowers() instanceof PowersTusk PT) {
@@ -1052,7 +1055,7 @@ public class PowersTusk extends NewDashPreset {
             }
 
 
-            Font font = minecraft.font;
+            Font font = ClientUtil.getFont();
             String $$6 = PT.getMaxActiveNails() + "";
             int $$7 = (scaledWidth - font.width($$6)) / 2;
             int $$8 = scaledHeight - 31 - 4;
@@ -1176,6 +1179,12 @@ public class PowersTusk extends NewDashPreset {
             case BLUE -> Component.translatable("skins.roundabout.tusk.blue");
             default -> Component.translatable("skins.roundabout.tusk.manga");
         };
+    }
+
+
+    @Override
+    public Vector3f getLeapColor() {
+        return new Vector3f(127/255F,194/255F,249/255F);
     }
 
     @Override

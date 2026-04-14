@@ -103,7 +103,8 @@ public class FabricItems {
 
     public static Item STAND_DISC_MANHATTAN_TRANSFER = registerItem("manhattan_transfer_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersManhattanTransfer(null)));
-
+    public static Item STAND_DISC_20_CENTURY_BOY = registerItem("20th_century_boy_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new Powers20thCenturyBoy(null)));
     public static Item STAND_DISC_HEY_YA = registerItem("hey_ya_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersHeyYa(null)));
     public static Item STAND_DISC_MANDOM = registerItem("mandom_disc",
@@ -186,6 +187,7 @@ public class FabricItems {
     public static Item NEW_LOCACACA = registerItem("new_locacaca", new NewLocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA)));
     public static Item LUCKY_LIPSTICK = registerItem("lucky_lipstick", new LuckyLipstickItem(new Item.Properties().stacksTo(1)));
     public static Item BLANK_MASK = registerItem("blank_mask", new MaskItem(new Item.Properties().stacksTo(1), new NonCharacterVisage(null)));
+    public static Item RAT_MASK = registerItem("rat_mask", new MaskItem(new Item.Properties().stacksTo(1), new NonCharacterVisage(null)));
     public static Item MODIFICATION_MASK = registerItem("modification_mask", new ModificationMaskItem(new Item.Properties().stacksTo(1), new ModificationVisage(null)));
     public static Item SPEEDWAGON_MASK = registerItem("speedwagon_mask", new MaskItem(new Item.Properties().stacksTo(1), new SpeedwagonVisage(null)));
     public static Item SPEEDWAGON_FOUNDATION_MASK = registerItem("speedwagon_foundation_mask", new MaskItem(new Item.Properties().stacksTo(1), new SpeedwagonFoundationVisage(null)));
@@ -354,6 +356,7 @@ public class FabricItems {
                         entries.accept(JOSUKE_PART_EIGHT_MASK);
                         entries.accept(HATO_MASK);
                         entries.accept(SHIZUKA_MASK);
+                        entries.accept(RAT_MASK);
 
 
 
@@ -492,6 +495,7 @@ public class FabricItems {
                         entries.accept(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK);
                         entries.accept(ModBlocks.BLOODY_STONE_MASK_BLOCK);
 
+                        entries.accept(STAND_DISC_20_CENTURY_BOY);
                         entries.accept(STAND_DISC_MANHATTAN_TRANSFER);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
@@ -567,6 +571,7 @@ public class FabricItems {
         ModItems.STAND_DISC_MANDOM = STAND_DISC_MANDOM;
         ModItems.STAND_DISC_SURVIVOR = STAND_DISC_SURVIVOR;
         ModItems.STAND_DISC_ACHTUNG = STAND_DISC_ACHTUNG;
+        ModItems.STAND_DISC_CENTURY_BOY = STAND_DISC_20_CENTURY_BOY;
         ModItems.STAND_DISC_METALLICA = STAND_DISC_METALLICA;
         ModItems.MAX_STAND_DISC_METALLICA = MAX_STAND_DISC_METALLICA;
         ((MaxStandDiscItem)MAX_STAND_DISC_METALLICA).baseDisc = ((StandDiscItem)STAND_DISC_METALLICA);
@@ -634,6 +639,7 @@ public class FabricItems {
         ModItems.NEW_LOCACACA = NEW_LOCACACA;
         ModItems.LUCKY_LIPSTICK = LUCKY_LIPSTICK;
         ModItems.BLANK_MASK = BLANK_MASK;
+        ModItems.RAT_MASK = RAT_MASK;
         ModItems.MODIFICATION_MASK = MODIFICATION_MASK;
         ModItems.SPEEDWAGON_MASK = SPEEDWAGON_MASK;
         ModItems.SPEEDWAGON_FOUNDATION_MASK = SPEEDWAGON_FOUNDATION_MASK;

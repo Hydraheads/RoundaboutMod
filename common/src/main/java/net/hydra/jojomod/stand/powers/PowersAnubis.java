@@ -65,6 +65,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 import oshi.util.tuples.Pair;
 
 import java.util.*;
@@ -104,6 +105,9 @@ public class PowersAnubis extends NewDashPreset {
                 "instruction.roundabout.barrage", StandIcons.ANUBIS_BARRAGE,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99, 0, "ability.roundabout.anubis_shieldbreak",
                 "instruction.roundabout.kick_barrage", StandIcons.ANUBIS_SHIELDBREAK,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118, 0, "ability.roundabout.guard",
+                "instruction.roundabout.hold_block", StandIcons.ANUBIS_GUARD,1,level,bypas));
+
 
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.roundabout.anubis_alluring_light",
                 "instruction.roundabout.press_skill", StandIcons.ANUBIS_ALLURING_LIGHT,1,level,bypas));
@@ -827,6 +831,9 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     public void setAnimation(byte b) {
+        if (this.getSelf() instanceof Player P && this.isClient()) {
+            ((IPlayerEntity)P).roundabout$SetPoseEmote(Poses.NONE.id);
+        }
         this.getStandUserSelf().roundabout$setStandAnimation(b);
         this.getStandUserSelf().roundabout$getWornStandAnimation().stop();
         this.getStandUserSelf().roundabout$getWornStandAnimation().startIfStopped(this.getSelf().tickCount);
@@ -2570,6 +2577,11 @@ public class PowersAnubis extends NewDashPreset {
                 }
             }
         }
+    }
+
+    @Override
+    public Vector3f getLeapColor() {
+        return new Vector3f(171F/255F,141F/255F,230F/255F);
     }
 }
 

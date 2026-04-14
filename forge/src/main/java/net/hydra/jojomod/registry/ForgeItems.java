@@ -547,6 +547,8 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersHeyYa(null))));
     public static final RegistryObject<Item> STAND_DISC_MANDOM = addToDiscTab(ITEMS.register("mandom_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMandom(null))));
+    public static final RegistryObject<Item> STAND_DISC_CENTURY_BOY = addToWIPTab(ITEMS.register("20th_century_boy_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new Powers20thCenturyBoy(null))));
 
   /*  public static final RegistryObject<Item> STAND_DISC_D4C = ITEMS.register("d4c_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
@@ -634,6 +636,8 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisage5(null)));
     public static final RegistryObject<Item> AESTHETICIAN_MASK_ZOMBIE = ITEMS.register("aesthetician_mask_zombie",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisageZombie(null)));
+    public static final RegistryObject<Item> RAT_MASK = addToTab(ITEMS.register("rat_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new NonCharacterVisage(null))));
    /* public static final RegistryObject<Item> INTERDIMENSIONAL_KEY = ITEMS.register("interdimensional_key",
             () -> new InterdimensionalKeyItem(new Item.Properties().stacksTo(1))); */
 

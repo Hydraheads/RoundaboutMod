@@ -44,7 +44,7 @@ public class AchtungItemInHandRenderer {
             float throwFadeToTheEther = 1f;
             IEntityAndData entityAndData = ((IEntityAndData) user);
             if (entityAndData.roundabout$getTrueInvisibility() > -1){
-                throwFadeToTheEther = throwFadeToTheEther*0.4F;
+                throwFadeToTheEther = throwFadeToTheEther*0.1F;
                 /**
                 StandPowers powers = user.roundabout$getStandPowers();
                 if (powers instanceof PowersAchtungBaby PB && PB.invisibleVisionOn()){

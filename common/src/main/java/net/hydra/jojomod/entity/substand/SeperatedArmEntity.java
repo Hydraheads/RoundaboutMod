@@ -144,6 +144,7 @@ public class SeperatedArmEntity extends StandEntity {
 
     @Override
     public void tick() {
+        this.entityData.set(HELD_ITEM,this.getMainHandItem());
 
 
         tickeffects();
@@ -157,7 +158,7 @@ public class SeperatedArmEntity extends StandEntity {
             if(user == null){
                 spawnAtLocation(this.getMainHandItem());
                 this.discard();
-            }else if(!(((StandUser)user).roundabout$getStandPowers() instanceof PowersGreenDay)){
+            }else if((!(((StandUser)user).roundabout$getStandPowers() instanceof PowersGreenDay)) || (!user.isAlive())){
                 spawnAtLocation(this.getMainHandItem());
                 this.discard();
             }
@@ -324,8 +325,11 @@ public class SeperatedArmEntity extends StandEntity {
 
         }else{
             hasUsedItem = false;
+            this.getHeldItem();
         }
     }
+
+
 
     public void attractMobs(){
         List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),16,16,16);
@@ -395,12 +399,13 @@ public class SeperatedArmEntity extends StandEntity {
         for(int j = 0;j<damages.size();j++){
 
             Entity entity = damages.get(j);
-
+            ((StandUser)user).roundabout$getStandPowers().addEXP(1);
 
             if(!((entity.equals(this) ||entity.equals((Object)user)) || entity instanceof StandEntity || entity instanceof ItemEntity)) {
                 if (flyingTicks > 2 && SpinTicks >0) {
                     BlockPos pos = new BlockPos(new Vec3i((int) this.getX(), (int) (this.getY() - 0.2), (int) this.getZ()));
                     if ((level().getBlockState(new BlockPos(pos)).isAir())) {
+                        this.level().addParticle(ParticleTypes.FLASH,this.getX(),this.getY(),this.getZ(),0,0,0);
                         entity.addDeltaMovement(new Vec3(0, 0.2, 0));
                     }
                 }
@@ -546,5 +551,10 @@ public class SeperatedArmEntity extends StandEntity {
     @Override
     public boolean isPushedByFluid() {
         return true;
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        return false;
     }
 }

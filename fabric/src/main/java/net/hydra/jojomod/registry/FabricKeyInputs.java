@@ -38,6 +38,7 @@ public class FabricKeyInputs {
         KeyBindingHelper.registerKeyBinding(KeyInputRegistry.hide_good_info);
 
         KeyBindingHelper.registerKeyBinding(KeyInputRegistry.fire_firearms);
+        KeyBindingHelper.registerKeyBinding(KeyInputRegistry.power_switch);
 
     }
 }

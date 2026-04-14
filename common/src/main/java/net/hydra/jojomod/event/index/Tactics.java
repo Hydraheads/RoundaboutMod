@@ -20,7 +20,10 @@ public enum Tactics {
     CHANGE_TEAM((byte) 11),
     KILL_ALL((byte) 12),
     CACKLE((byte) 13),
-    HOLD((byte) 14);
+    HOLD((byte) 14),
+    EQUIP((byte) 15),
+    SETHOME((byte) 16),
+    SENDHOME((byte) 17);
 
     public final byte id;
 
