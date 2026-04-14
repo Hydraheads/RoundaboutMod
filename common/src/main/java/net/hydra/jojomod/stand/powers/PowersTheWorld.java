@@ -365,6 +365,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             } if (Level > 6 || bypass){
                 $$1.add(TheWorldEntity.AQUA_SKIN);
                 $$1.add(TheWorldEntity.BETA);
+                $$1.add(TheWorldEntity.KING);
                 $$1.add(TheWorldEntity.ULTIMATE_SKIN);
                 $$1.add(TheWorldEntity.ULTIMATE_KARS_SKIN);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
@@ -1094,6 +1095,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return Component.translatable(  "skins.roundabout.the_world.the_nether");
         } else if (skinId == TheWorldEntity.BRONZE){
             return Component.translatable(  "skins.roundabout.the_world.bronze");
+        } else if (skinId == TheWorldEntity.KING){
+            return Component.translatable(  "skins.roundabout.the_world.king");
         }
         return Component.translatable(  "skins.roundabout.the_world.base");
     }

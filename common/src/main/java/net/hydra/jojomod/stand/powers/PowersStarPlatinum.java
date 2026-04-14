@@ -1187,11 +1187,14 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             } if (Level > 5 || bypass){
                 $$1.add(StarPlatinumEntity.JOJONIUM_SKIN);
                 $$1.add(StarPlatinumEntity.PART_4_SKIN);
+                $$1.add(StarPlatinumEntity.PART_4_LIVE);
                 $$1.add(StarPlatinumEntity.CROP);
             } if (Level > 6 || bypass){
                 $$1.add(StarPlatinumEntity.PART_6_SKIN);
                 $$1.add(StarPlatinumEntity.MANGA_PURPLE_SKIN);
                 $$1.add(StarPlatinumEntity.PHANTOM);
+                $$1.add(StarPlatinumEntity.FINISHER);
+                $$1.add(StarPlatinumEntity.KING);
                 $$1.add(StarPlatinumEntity.BETA);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
                 $$1.add(StarPlatinumEntity.ATOMIC_SKIN);
@@ -1915,6 +1918,12 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             return Component.translatable(  "skins.roundabout.star_platinum.light");
         } else if (skinId == StarPlatinumEntity.PHANTOM){
             return Component.translatable(  "skins.roundabout.star_platinum.phantom");
+        } else if (skinId == StarPlatinumEntity.PART_4_LIVE){
+            return Component.translatable(  "skins.roundabout.star_platinum.part_4_live");
+        } else if (skinId == StarPlatinumEntity.KING){
+            return Component.translatable(  "skins.roundabout.star_platinum.king");
+        } else if (skinId == StarPlatinumEntity.FINISHER){
+            return Component.translatable(  "skins.roundabout.star_platinum.finisher");
         }
         return Component.translatable(  "skins.roundabout.star_platinum.base");
     }

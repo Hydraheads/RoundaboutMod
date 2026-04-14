@@ -46,7 +46,10 @@ public class StarPlatinumEntity extends FollowingStandEntity {
             TREE = 21,
             NETHER = 22,
             PHANTOM = 23,
-            LIGHT = 24;
+            LIGHT = 24,
+            PART_4_LIVE = 25,
+            FINISHER = 26,
+            KING = 27;
 
 
 

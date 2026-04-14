@@ -30,7 +30,8 @@ public class TheWorldEntity extends FollowingStandEntity {
             ULTIMATE_KARS_SKIN = 17,
             SCARLET = 18,
             THE_NETHER = 19,
-            BRONZE = 20;
+            BRONZE = 20,
+            KING = 21;
 
     public final AnimationState timeStopAnimationState = new AnimationState();
     public final AnimationState timeStopReleaseAnimation = new AnimationState();

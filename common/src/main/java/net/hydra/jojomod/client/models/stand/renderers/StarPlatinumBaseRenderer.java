@@ -39,6 +39,9 @@ public class StarPlatinumBaseRenderer<T extends StandEntity> extends StandRender
     public static final ResourceLocation NETHER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/nether.png");
     public static final ResourceLocation PHANTOM = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/phantom.png");
     public static final ResourceLocation LIGHT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/light.png");
+    public static final ResourceLocation FINISHER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/finisher.png");
+    public static final ResourceLocation PART_4_LIVE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/part_4_live.png");
+    public static final ResourceLocation KING = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/king.png");
     public StarPlatinumBaseRenderer(EntityRendererProvider.Context context, StandModel<StarPlatinumEntity> entityModel, float f) {
         super(context, entityModel,f);
         this.addLayer(new StarPlatinumEyeLayer<>(this));
@@ -95,6 +98,12 @@ public class StarPlatinumBaseRenderer<T extends StandEntity> extends StandRender
             return PHANTOM;
         } else if (BT == StarPlatinumEntity.LIGHT){
             return LIGHT;
+        } else if (BT == StarPlatinumEntity.FINISHER){
+            return FINISHER;
+        } else if (BT == StarPlatinumEntity.PART_4_LIVE){
+            return PART_4_LIVE;
+        } else if (BT == StarPlatinumEntity.KING){
+            return KING;
         }
         return PART_3_SKIN;
     }
