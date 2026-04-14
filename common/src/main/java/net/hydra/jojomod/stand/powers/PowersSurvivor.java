@@ -576,7 +576,8 @@ public class PowersSurvivor extends NewDashPreset {
             CONDUIT=9,
             CAKE=10,
             SPONGE=11,
-            SCULK=12;
+            SCULK=12,
+            REDSTONE=13;
 
     @Override
     public List<Byte> getSkinList() {
@@ -592,7 +593,8 @@ public class PowersSurvivor extends NewDashPreset {
                 CONDUIT,
                 CAKE,
                 SPONGE,
-                SCULK
+                SCULK,
+                REDSTONE
         );
     }
 
@@ -618,6 +620,7 @@ public class PowersSurvivor extends NewDashPreset {
             case CAKE -> Component.translatable("skins.roundabout.survivor.cake");
             case SPONGE -> Component.translatable("skins.roundabout.survivor.sponge");
             case SCULK -> Component.translatable("skins.roundabout.survivor.sculk");
+            case REDSTONE -> Component.translatable("skins.roundabout.survivor.redstone");
             default -> Component.translatable("skins.roundabout.survivor.base");
         };
     }

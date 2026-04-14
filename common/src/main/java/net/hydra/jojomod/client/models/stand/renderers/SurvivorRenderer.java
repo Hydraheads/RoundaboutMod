@@ -54,6 +54,9 @@ public class SurvivorRenderer<M extends StandEntity> extends StandRenderer<Survi
     private static final ResourceLocation SPONGE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/sponge.png");
     private static final ResourceLocation SPONGE_ACTIVATED = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/activated/sponge.png");
 
+    private static final ResourceLocation REDSTONE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/redstone.png");
+    private static final ResourceLocation REDSTONE_ACTIVATED = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/activated/redstone.png");
+
     public SurvivorRenderer(EntityRendererProvider.Context context) {
         super(context, new SurvivorModel<>(context.bakeLayer(ModEntityRendererClient.SURVIVOR_LAYER)),0f);
     }
@@ -84,6 +87,8 @@ public class SurvivorRenderer<M extends StandEntity> extends StandRenderer<Survi
                 return SPONGE_ACTIVATED;
             if (BT == PowersSurvivor.SCULK)
                 return SCULK_ACTIVATED;
+            if (BT == PowersSurvivor.REDSTONE)
+                return REDSTONE_ACTIVATED;
             return BASE_ACTIVATED;
         }
         if (BT == PowersSurvivor.RED)
@@ -108,6 +113,8 @@ public class SurvivorRenderer<M extends StandEntity> extends StandRenderer<Survi
             return SPONGE;
         if (BT == PowersSurvivor.SCULK)
             return SCULK;
+        if (BT == PowersSurvivor.REDSTONE)
+            return REDSTONE;
         return BASE;
     }
 
