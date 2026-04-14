@@ -497,7 +497,9 @@ public class ClientToServerPackets {
                     if (TE instanceof BaseMinion fm){
                             if (fm.controller != null && fm.controller.is(sender)) {
                                 if (context == Tactics.SETHOME.id) {
+                                    fm.setHomePosition(fm.getPosition(1f));
                                 } else if (context == Tactics.SENDHOME.id){
+                                    fm.goHome();
                                 } else if (context == Tactics.EQUIP.id){
                                     ItemStack plrItem = sender.getItemInHand(InteractionHand.MAIN_HAND);
                                     ItemStack corpseItem = fm.getMainHandItem();
