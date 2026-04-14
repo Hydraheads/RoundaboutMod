@@ -119,6 +119,7 @@ public class ModItems {
     public static Item JOTARO_6_MASK;
     public static Item DIO_MASK;
     public static Item DIO_VAMPIRE_MASK;
+    public static Item STRAIZO_VAMPIRE_MASK;
     public static Item SPEEDWAGON_MASK;
     public static Item SPEEDWAGON_FOUNDATION_MASK;
     public static Item ENYA_MASK;
@@ -196,9 +197,10 @@ public class ModItems {
                 ClientNetworking.getAppropriateConfig().cinderellaSettings.emeraldCostModificationVisage);
         int characterCostExp = ClientNetworking.getAppropriateConfig().cinderellaSettings.levelCostCharacterVisage;
         int characterCostEmerald = ClientNetworking.getAppropriateConfig().cinderellaSettings.emeraldCostCharacterVisage;
-
-        addToVisageStore(DIO_VAMPIRE_MASK,1, characterCostExp, characterCostEmerald);
+        //37 67 -34
         addToVisageStore(SPEEDWAGON_MASK,1, characterCostExp, characterCostEmerald);
+        addToVisageStore(DIO_VAMPIRE_MASK,1, characterCostExp, characterCostEmerald);
+        addToVisageStore(STRAIZO_VAMPIRE_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(JOTARO_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(AVDOL_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(KAKYOIN_MASK,1, characterCostExp, characterCostEmerald);
