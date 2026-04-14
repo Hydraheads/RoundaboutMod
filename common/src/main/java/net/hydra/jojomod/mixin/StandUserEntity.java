@@ -4327,11 +4327,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         if (source != null && source.getEntity() instanceof LivingEntity sl &&
                 sl.hasEffect(ModEffects.SWITCH) && !source.is(ModDamageTypes.BLOOD_DRAIN)) {
-            damageAmount = (damageAmount-(damageAmount*0.4F));
+            damageAmount = (damageAmount-(damageAmount*0.3F));
             modified = true;
         }
         if (this.hasEffect(ModEffects.SWITCH)) {
-            damageAmount = (damageAmount+(damageAmount*0.4F));
+            damageAmount = (damageAmount+(damageAmount*0.3F));
             modified = true;
         }
         float changeDamage = FateTypes.getDamageResist(rdbt$this(),source,damageAmount);

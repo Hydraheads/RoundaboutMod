@@ -348,7 +348,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 if (ClientNetworking.getAppropriateConfig().powersSettings.powerSwitchingPenalty) {
                     ((StandUser) this).roundabout$getStandPowers().onStandSwitch();
                     ((StandUser) this).roundabout$getStandPowers().onPowerSwitch();
-                    addEffect(new MobEffectInstance(ModEffects.SWITCH, 400, 0));
+                    addEffect(new MobEffectInstance(ModEffects.SWITCH, 240, 0));
                 }
             }
             this.getEntityData().set(ROUNDABOUT$POWERS, style);
