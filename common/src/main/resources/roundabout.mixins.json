@@ -355,6 +355,8 @@
     "magicians_red.GeckolibCompatMixin",
     "magicians_red.MagiciansRedAbstractFurnaceScreenMixin",
     "magicians_red.StandFireScreenEffectRendererMixin",
+    "manhattan.HorseArmorWindVision",
+    "manhattan.ManhattanHumanoidArmorFading",
     "metallica.MetallicaGameRenderer",
     "metallica.MetallicaItemInHandMixin",
     "metallica.MetallicaStuckLayerMixin",
