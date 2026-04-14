@@ -170,7 +170,7 @@ public class ZombieMinionScreen extends Screen {
 
         if (pIcon.id != Tactics.NONE.id) {
             minecraft.player.playSound(ModSounds.JUSTICE_SELECT_EVENT, 200F, 1.0F);
-            C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_CORPSE_TACTICS,pIcon.id);
+            C2SPacketUtil.switchZombieTacticPacket(hostID,pIcon.id);
         }
     }
     public boolean sameKeyOne(KeyMapping key1, Options options){
