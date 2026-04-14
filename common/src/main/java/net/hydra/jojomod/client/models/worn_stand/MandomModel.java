@@ -111,6 +111,10 @@ public class MandomModel extends PsuedoHierarchicalModel {
             "textures/stand/mandom/eye.png");
     public static ResourceLocation esidisi = new ResourceLocation(Roundabout.MOD_ID,
             "textures/stand/mandom/esidisi.png");
+    public static ResourceLocation command = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/mandom/command.png");
+    public static ResourceLocation command2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/mandom/emissive/command.png");
     public ResourceLocation getTextureLocation(Entity context, byte skin){
         switch (skin)
         {
@@ -127,6 +131,7 @@ public class MandomModel extends PsuedoHierarchicalModel {
             case PowersMandom.MELON -> {return melon;}
             case PowersMandom.EYE -> {return eye;}
             case PowersMandom.ESIDISI -> {return esidisi;}
+            case PowersMandom.COMMAND -> {return command;}
             default -> {return base;}
         }
     }
@@ -172,6 +177,10 @@ public class MandomModel extends PsuedoHierarchicalModel {
             //this.animate(user.roundabout$getHeyYaAnimation(), HeyYaAnimations.idle_normal, partialTicks, 1f);
             //The number at the end is inversely proportional so 2 is half speed
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
+            if (user.roundabout$getStandSkin() == PowersMandom.COMMAND){
+                consumer = bufferSource.getBuffer(RenderType.entityTranslucent(command2));
+                root().render(poseStack, consumer, 15728880, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
+            }
         }
     }
 
