@@ -590,7 +590,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (currentLevel == 1){
             amt = 25;
         } else {
-            amt = (100+((currentLevel-1)*50));
+            amt = (100+((currentLevel-1)*75));
         }
         amt= (int) (amt*(getLevelMultiplier()));
         return amt;

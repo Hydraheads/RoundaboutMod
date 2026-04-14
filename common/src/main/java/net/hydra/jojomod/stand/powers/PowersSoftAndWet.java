@@ -664,7 +664,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
         if (currentLevel == 1){
             amt = 100;
         } else {
-            amt = (100+((currentLevel-1)*55));
+            amt = (100+((currentLevel-1)*65));
         }
         amt= (int) (amt*getLevelMultiplier());
         return amt;
