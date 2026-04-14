@@ -1972,6 +1972,9 @@
 
 
   "roundabout.minion.none": "Orders Select",
+  "roundabout.minion.tactics.equip": "Equip",
+  "roundabout.minion.tactics.sethome": "Set Home",
+  "roundabout.minion.tactics.sendhome": "Send Home",
 
   "roundabout.corpse.none": "Choose Body",
   "roundabout.corpse.tactics.none": "Tactic Select",

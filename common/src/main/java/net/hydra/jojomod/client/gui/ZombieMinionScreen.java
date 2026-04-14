@@ -188,25 +188,17 @@ public class ZombieMinionScreen extends Screen {
         return false;
     }
 
-    ResourceLocation RL0 = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/tactics_icons/team_base.png");
-    ResourceLocation RL1 = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/tactics_icons/team_blue.png");
-    ResourceLocation RL2 = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/tactics_icons/team_red.png");
-    ResourceLocation RL3 = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/tactics_icons/team_green.png");
-    ResourceLocation RL4 = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/tactics_icons/team_mobs.png");
 
     public enum tacticIcon {
 
         NONE(Component.translatable("roundabout.minion.none"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/pose_icons/jonathan.png"),Tactics.NONE.id,0,31),
-        SELECT_ALL(Component.translatable("roundabout.corpse.tactics.select_all"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/tactics_icons/select_all.png"), Tactics.SELECT_ALL.id,-15,4),
-        DESELECT_ALL(Component.translatable("roundabout.corpse.tactics.deselect_all"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/tactics_icons/deselect_all.png"),Tactics.DESELECT_ALL.id,15,4),
+        EQUIP(Component.translatable("roundabout.minion.tactics.equip"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/tactics_icons/equip.png"), Tactics.EQUIP.id,-30,4),
+        SETHOME(Component.translatable("roundabout.minion.tactics.sethome"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/tactics_icons/sethome.png"),Tactics.SETHOME.id,0,4),
+        SENDHOME(Component.translatable("roundabout.minion.tactics.sendhome"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/tactics_icons/sendhome.png"),Tactics.SENDHOME.id,30,4),
         STAY_PUT(Component.translatable("roundabout.corpse.tactics.still"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/tactics_icons/stay_put.png"),Tactics.STAY_PUT.id,-31,40),
         ROAM(Component.translatable("roundabout.corpse.tactics.wander"), new ResourceLocation(Roundabout.MOD_ID,
@@ -222,19 +214,14 @@ public class ZombieMinionScreen extends Screen {
         HUNT_PLAYERS(Component.translatable("roundabout.corpse.tactics.hunt_player"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/tactics_icons/hunt_players.png"),Tactics.HUNT_PLAYERS.id,61,70),
         PEACEFUL(Component.translatable("roundabout.corpse.tactics.peaceful"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/tactics_icons/peaceful.png"),Tactics.PEACEFUL.id,31,70),
-        CHANGE_TEAM(Component.translatable("roundabout.corpse.tactics.change_team"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/tactics_icons/team_base.png"),Tactics.CHANGE_TEAM.id,-72,-28),
-        KILL_ALL(Component.translatable("roundabout.corpse.tactics.kill_all"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/tactics_icons/kill_corpses.png"),Tactics.KILL_ALL.id,45,4),
-        CACKLE(Component.translatable("roundabout.corpse.tactics.cackle"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/tactics_icons/cackle.png"),Tactics.CACKLE.id,-45,4);
+                "textures/gui/tactics_icons/peaceful.png"),Tactics.PEACEFUL.id,31,70);
 
         static tacticIcon getByte(Tactics tactics) {
             return switch (tactics) {
                 default -> throw new IncompatibleClassChangeError();
-                case SELECT_ALL -> SELECT_ALL;
-                case DESELECT_ALL -> DESELECT_ALL;
+                case EQUIP -> EQUIP;
+                case SETHOME -> SETHOME;
+                case SENDHOME -> SENDHOME;
                 case STAY_PUT -> STAY_PUT;
                 case HOLD -> HOLD;
                 case ROAM -> ROAM;
@@ -243,9 +230,6 @@ public class ZombieMinionScreen extends Screen {
                 case HUNT_MONSTERS -> HUNT_MONSTERS;
                 case HUNT_PLAYERS -> HUNT_PLAYERS;
                 case PEACEFUL -> PEACEFUL;
-                case CHANGE_TEAM -> CHANGE_TEAM;
-                case KILL_ALL -> KILL_ALL;
-                case CACKLE -> CACKLE;
             };
         }
         protected static final tacticIcon[] VALUES;
@@ -278,8 +262,8 @@ public class ZombieMinionScreen extends Screen {
         }
 
         static {
-            VALUES = new tacticIcon[]{NONE,SELECT_ALL,DESELECT_ALL,STAY_PUT,HOLD,ROAM,FOLLOW,
-            FOLLOW, DEFEND, HUNT_MONSTERS, HUNT_PLAYERS, PEACEFUL, CHANGE_TEAM, KILL_ALL, CACKLE};
+            VALUES = new tacticIcon[]{NONE,EQUIP,SENDHOME,SETHOME,STAY_PUT,HOLD,ROAM,FOLLOW,
+            FOLLOW, DEFEND, HUNT_MONSTERS, HUNT_PLAYERS, PEACEFUL};
         }
     }
 
@@ -296,36 +280,10 @@ public class ZombieMinionScreen extends Screen {
         @Override
         public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
             if (!this.icon.equals(tacticIcon.NONE)) {
-                if (!this.icon.equals(tacticIcon.CHANGE_TEAM)) {
-                    this.drawSlot(guiGraphics);
-                }
-                if (this.icon.equals(tacticIcon.CHANGE_TEAM)) {
-                    Player pl = Minecraft.getInstance().player;
-                    if (pl != null){
-                        StandEntity sd = ((StandUser)pl).roundabout$getStand();
-                        if (sd instanceof JusticeEntity JE){
-                            if (JE.getJusticeTeam() == 0){
-                                this.icon.drawIcon2(RL0, guiGraphics, this.getX() + 5, this.getY() + 5);
-                            } else if (JE.getJusticeTeam() == 1){
-                                this.icon.drawIcon2(RL1, guiGraphics, this.getX() + 5, this.getY() + 5);
-                            } else if (JE.getJusticeTeam() == 2){
-                                this.icon.drawIcon2(RL2, guiGraphics, this.getX() + 5, this.getY() + 5);
-                            } else if (JE.getJusticeTeam() == 3){
-                                this.icon.drawIcon2(RL3, guiGraphics, this.getX() + 5, this.getY() + 5);
-                            } else if (JE.getJusticeTeam() == 4){
-                                this.icon.drawIcon2(RL4, guiGraphics, this.getX() + 5, this.getY() + 5);
-                            }
-                        } else {
-                            this.icon.drawIcon(guiGraphics, this.getX() + 5, this.getY() + 5);
-                        }
-                    }
-                } else {
-                    this.icon.drawIcon(guiGraphics, this.getX() + 5, this.getY() + 5);
-                }
+                this.drawSlot(guiGraphics);
+                this.icon.drawIcon(guiGraphics, this.getX() + 5, this.getY() + 5);
                 if (this.isSelected) {
-                    if (!this.icon.equals(tacticIcon.CHANGE_TEAM)) {
-                        this.drawSelection(guiGraphics);
-                    }
+                    this.drawSelection(guiGraphics);
                 }
             }
         }
