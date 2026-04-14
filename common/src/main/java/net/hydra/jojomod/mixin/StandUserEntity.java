@@ -4325,7 +4325,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             modified = true;
         }
         if (source != null && source.getEntity() instanceof LivingEntity sl &&
-                sl.hasEffect(ModEffects.SWITCH)) {
+                sl.hasEffect(ModEffects.SWITCH) && !source.is(ModDamageTypes.BLOOD_DRAIN)) {
             damageAmount = (damageAmount-(damageAmount*0.4F));
             modified = true;
         }

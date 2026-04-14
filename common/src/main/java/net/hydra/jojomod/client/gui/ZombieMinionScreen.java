@@ -201,7 +201,7 @@ public class ZombieMinionScreen extends Screen {
 
     public enum tacticIcon {
 
-        NONE(Component.translatable("roundabout.corpse.tactics.none"), new ResourceLocation(Roundabout.MOD_ID,
+        NONE(Component.translatable("roundabout.minion.none"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/pose_icons/jonathan.png"),Tactics.NONE.id,0,31),
         SELECT_ALL(Component.translatable("roundabout.corpse.tactics.select_all"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/tactics_icons/select_all.png"), Tactics.SELECT_ALL.id,-15,4),
@@ -217,14 +217,12 @@ public class ZombieMinionScreen extends Screen {
                 "textures/gui/tactics_icons/follow.png"),Tactics.FOLLOW.id,-61,40),
         DEFEND(Component.translatable("roundabout.corpse.tactics.guard"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/tactics_icons/defend.png"),Tactics.DEFEND.id,31,40),
-        HUNT_TARGET(Component.translatable("roundabout.corpse.tactics.target"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/tactics_icons/target.png"),Tactics.HUNT_TARGET.id,31,70),
         HUNT_MONSTERS(Component.translatable("roundabout.corpse.tactics.hunt_monster"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/tactics_icons/hunt_monsters.png"),Tactics.HUNT_MONSTERS.id,61,40),
         HUNT_PLAYERS(Component.translatable("roundabout.corpse.tactics.hunt_player"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/tactics_icons/hunt_players.png"),Tactics.HUNT_PLAYERS.id,61,70),
         PEACEFUL(Component.translatable("roundabout.corpse.tactics.peaceful"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/tactics_icons/peaceful.png"),Tactics.PEACEFUL.id,91,55),
+                "textures/gui/tactics_icons/peaceful.png"),Tactics.PEACEFUL.id,31,70),
         CHANGE_TEAM(Component.translatable("roundabout.corpse.tactics.change_team"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/tactics_icons/team_base.png"),Tactics.CHANGE_TEAM.id,-72,-28),
         KILL_ALL(Component.translatable("roundabout.corpse.tactics.kill_all"), new ResourceLocation(Roundabout.MOD_ID,
@@ -242,7 +240,6 @@ public class ZombieMinionScreen extends Screen {
                 case ROAM -> ROAM;
                 case FOLLOW -> FOLLOW;
                 case DEFEND -> DEFEND;
-                case HUNT_TARGET -> HUNT_TARGET;
                 case HUNT_MONSTERS -> HUNT_MONSTERS;
                 case HUNT_PLAYERS -> HUNT_PLAYERS;
                 case PEACEFUL -> PEACEFUL;
@@ -282,7 +279,7 @@ public class ZombieMinionScreen extends Screen {
 
         static {
             VALUES = new tacticIcon[]{NONE,SELECT_ALL,DESELECT_ALL,STAY_PUT,HOLD,ROAM,FOLLOW,
-            FOLLOW, DEFEND, HUNT_TARGET, HUNT_MONSTERS, HUNT_PLAYERS, PEACEFUL, CHANGE_TEAM, KILL_ALL, CACKLE};
+            FOLLOW, DEFEND, HUNT_MONSTERS, HUNT_PLAYERS, PEACEFUL, CHANGE_TEAM, KILL_ALL, CACKLE};
         }
     }
 

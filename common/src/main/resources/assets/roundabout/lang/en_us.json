@@ -1970,6 +1970,9 @@
   "roundabout.stand_switch.custom.desc": "A stand that you can design to your liking, think of it as your own stand. Costs %s levels to obtain.",
   "roundabout.stand_switch.none": "Choose Type",
 
+
+  "roundabout.minion.none": "Orders Select",
+
   "roundabout.corpse.none": "Choose Body",
   "roundabout.corpse.tactics.none": "Tactic Select",
   "roundabout.corpse.tactics.still": "Stay Put",

@@ -98,7 +98,7 @@ public class BaseMinion extends Monster {
                 if ($$0.level().isClientSide()){
                     ClientUtil.setZombieMinionScreen();
                 }
-                return InteractionResult.PASS;
+                return InteractionResult.CONSUME;
             }
         }
         return super.mobInteract($$0,$$1);
