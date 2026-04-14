@@ -18,9 +18,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.ClimbOnTopOfPowderSnowGoal;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.*;
@@ -54,16 +52,17 @@ public class BaseMinion extends Monster {
     protected void registerGoals() {
     }
     public void addBehaviourGoals() {
+        this.targetSelector.addGoal(2, new HurtByTargetGoal(this).setAlertOthers());
+        this.targetSelector.addGoal(1, new MinionTargetGoal(this));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::canGetMadAt));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false, this::canGetMadAt));
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(1, new ClimbOnTopOfPowderSnowGoal(this, this.level()));
         this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0, false));
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
         this.goalSelector.addGoal(7, new MinionStrollGoal(this, 1.0));
         this.goalSelector.addGoal(6, new MinionFollowCommanderGoal(this, 1.0, 10.0F, 1.5F, false));
-        this.targetSelector.addGoal(1, new MinionTargetGoal(this));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::canGetMadAt));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false, this::canGetMadAt));
+        this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
+        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
    }
 
     public boolean canGetMadAt(LivingEntity $$0) {
@@ -140,12 +139,6 @@ public class BaseMinion extends Monster {
 
     public LivingEntity autoTarget;
     public LivingEntity autoTarget2;
-
-    @Override
-    public void setYBodyRot(float $$0) {
-        this.setYRot($$0);
-        super.setYBodyRot($$0);
-    }
 
     @Override
     public float getWalkTargetValue(BlockPos $$0, LevelReader $$1) {
@@ -256,7 +249,6 @@ public class BaseMinion extends Monster {
 
     @Override
     public void tick(){
-        this.yBodyRot = this.getYRot();
         if (!this.level().isClientSide()) {
             lifespan++;
             if (controller != null){

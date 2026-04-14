@@ -74,6 +74,7 @@ public class MinionFollowCommanderGoal extends Goal {
         if (this.navigation.isDone()) {
             return false;
         } else {
+
             return this.unableToMove() ? false : !(this.fallenMob.distanceToSqr(this.owner) <= (double)(this.stopDistance * this.stopDistance));
         }
     }
@@ -99,7 +100,6 @@ public class MinionFollowCommanderGoal extends Goal {
 
     @Override
     public void tick() {
-        this.fallenMob.getLookControl().setLookAt(this.owner, 10.0F, (float)this.fallenMob.getMaxHeadXRot());
         if (--this.timeToRecalcPath <= 0) {
             this.timeToRecalcPath = this.adjustedTickDelay(10);
             this.navigation.moveTo(this.owner, this.speedModifier);
