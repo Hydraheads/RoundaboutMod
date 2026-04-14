@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.advancement.criteria.ModCriteria;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
@@ -28,10 +29,13 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -492,7 +496,14 @@ public class ClientToServerPackets {
                     Entity TE = sender.level().getEntity(targetID);
                     if (TE instanceof BaseMinion fm){
                             if (fm.controller != null && fm.controller.is(sender)) {
-                                if (context == Tactics.ROAM.id || context == Tactics.FOLLOW.id ||
+                                if (context == Tactics.SETHOME.id) {
+                                } else if (context == Tactics.SENDHOME.id){
+                                } else if (context == Tactics.EQUIP.id){
+                                    ItemStack plrItem = sender.getItemInHand(InteractionHand.MAIN_HAND);
+                                    ItemStack corpseItem = fm.getMainHandItem();
+                                    fm.setItemSlotAndDropWhenKilled2(EquipmentSlot.MAINHAND, plrItem);
+                                    sender.setItemInHand(InteractionHand.MAIN_HAND, corpseItem);
+                                } else if (context == Tactics.ROAM.id || context == Tactics.FOLLOW.id ||
                                         context == Tactics.STAY_PUT.id || context == Tactics.HOLD.id) {
                                         fm.setMovementTactic(context);
                                 } else {

@@ -300,7 +300,24 @@ public class ZombieMinionScreen extends Screen {
         public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
             if (!this.icon.equals(tacticIcon.NONE)) {
                 this.drawSlot(guiGraphics);
-                this.icon.drawIcon(guiGraphics, this.getX() + 5, this.getY() + 5);
+
+                boolean replace = false;
+                if (this.icon.equals(tacticIcon.EQUIP)){
+                    Player p = ClientUtil.getPlayer();
+                    if (p != null) {
+                        Entity ent = p.level().getEntity(hostID);
+                        if (ent instanceof BaseMinion bm){
+                            ItemStack stack = bm.getMainHandItem();
+                            if (stack != null && !stack.isEmpty()){
+                                RenderSystem.enableBlend();
+                                guiGraphics.renderItem(stack, this.getX() + 5, this.getY() + 5);  // Draw the item itself
+                            }
+                        }
+                    }
+                }
+                if (!replace){
+                    this.icon.drawIcon(guiGraphics, this.getX() + 5, this.getY() + 5);
+                }
                 if (this.isSelected) {
                     this.drawSelection(guiGraphics);
                 } else if (isCorrect){
