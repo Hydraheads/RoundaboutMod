@@ -54,6 +54,8 @@ public class TuskNailEntity extends AbstractArrow {
         this.shoot($$6, $$7, $$8, $$4, $$5);
     }
 
+
+    private int life = 0;
     public TuskNailEntity(EntityType<? extends TuskNailEntity> $$0, Level $$1) {
         super($$0, $$1);
     }
@@ -106,6 +108,10 @@ public class TuskNailEntity extends AbstractArrow {
 
     public void tick() {
         super.tick();
+        this.life += 1;
+        if (this.life > 200) {
+            this.discard();
+        }
         if (!this.level().isClientSide()) {
             ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_TRAIL,
                     this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(),

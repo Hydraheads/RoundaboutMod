@@ -47,10 +47,10 @@ public abstract class AnubisDropsMixin {
                         tag.putByte("SkinType", SU.roundabout$getStandSkin());
 
                         float skin = 0;
-                        if (This instanceof Evoker || This instanceof Pillager || This instanceof Illusioner) {
-                            skin = 2F;
-                        } else if (This instanceof Vindicator) {
+                        if (This instanceof Evoker || This instanceof Illusioner) {
                             skin = 3F;
+                        } else {
+                            skin = 2F;
                         }
                         stack.getTag().putFloat("CustomModelData",skin);
 

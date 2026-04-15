@@ -58,6 +58,7 @@ public class AnubisMobLayer<T extends LivingEntity, M extends HierarchicalModel<
 
     private void renderIllager(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, AbstractIllager AI, float v, float v1, float v2, float partialTicks, float v4, float v5) {
         if (true) {
+            poseStack.pushPose();
             if (AI instanceof AnubisGuardian AG) {
                 if (!AG.hasTotem() && AG.getArmPose().equals(AbstractIllager.IllagerArmPose.ATTACKING)){
                     ((AnubisGuardianModel) this.getParentModel()).getArm(HumanoidArm.RIGHT).translateAndRotate(poseStack);
@@ -68,7 +69,6 @@ public class AnubisMobLayer<T extends LivingEntity, M extends HierarchicalModel<
                 ((AccessIllagerModel) this.getParentModel()).roundabout$getRightArm().translateAndRotate(poseStack);
             }
 
-            poseStack.pushPose();
             poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0, 1, 0, -90), 0, 0, 0);
             poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0, 0, 1, 90), 0, 0, 0);
             poseStack.translate(0.8, 0.5, 0.1);

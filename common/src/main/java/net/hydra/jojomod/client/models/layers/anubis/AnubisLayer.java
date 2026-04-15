@@ -220,7 +220,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
             }
 
             if (entity.getMainHandItem().getItem() instanceof AnubisItem) {
-                LivingEntity target = MainUtil.findClosestEntity(entity.level(),entity.position(),5F, livingEntity -> livingEntity instanceof AbstractIllager || (livingEntity instanceof Villager V && V.getVillagerData().getProfession().equals(VillagerProfession.CLERIC)) );
+                LivingEntity target = MainUtil.findClosestEntity(entity.level(),entity.position(),5F, livingEntity -> (livingEntity instanceof AbstractIllager &&  !(livingEntity instanceof AnubisGuardian))  || (livingEntity instanceof Villager V && V.getVillagerData().getProfession().equals(VillagerProfession.CLERIC)) );
                 if (target != null) {
                     float shakeMod = (5F-Math.min(5F,target.distanceTo(entity)))/5F;
                     poseStack.mulPose(Axis.ZP.rotationDegrees(-Math.abs(10*shakeMod)-(7*shakeMod) + (float)Math.random()*3F ));

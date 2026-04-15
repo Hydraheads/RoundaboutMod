@@ -127,7 +127,6 @@ public class AnubisItem extends Item {
         AABB box = LE.getBoundingBox().inflate(radius,2,radius);
         List<Mob> entities = LE.level().getNearbyEntities(Mob.class, TargetingConditions.DEFAULT,LE,box);
         entities.removeIf(entity -> entity instanceof Villager);
-        entities.removeIf(entity -> entity instanceof NeutralMob && entity.getTarget() == null);
         entities.removeIf(entity -> entity instanceof Piglin && entity.getTarget() == null);
         for (Mob M : entities) {
             if (M instanceof Wolf W && W.getOwner().equals(LE) ) {

@@ -332,7 +332,7 @@ public class PowersRatt extends NewDashPreset {
 
         if (RE != null) {
             Vec3 targetPos = getTargetPos().getLocation();
-            if (target != null) {
+            if (target != null && isAuto()) {
                 targetPos = target.getEyePosition(1);
                 if (isAuto()) {
                     double dist = targetPos.distanceTo(RE.getPosition(1));

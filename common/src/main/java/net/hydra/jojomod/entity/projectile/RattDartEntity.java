@@ -179,6 +179,7 @@ public class RattDartEntity extends AbstractArrow {
         }
     }
 
+    private int life = 0;
     public RattDartEntity(Level world, LivingEntity player,byte type) {
         super(ModEntities.RATT_DART, player, world);
         this.setShotType(type);
@@ -414,6 +415,10 @@ public class RattDartEntity extends AbstractArrow {
             this.setSuperthrowTicks(0);
         }
         super.tick();
+        this.life += 1;
+        if (life > 200) {
+            this.discard();
+        }
         if (this.getSuperthrowTicks() > 0) {
             this.setDeltaMovement(delta);
         }
