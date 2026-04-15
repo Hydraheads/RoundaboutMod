@@ -50,6 +50,8 @@ public class PowersKillerQueen extends NewPunchingStand {
     public void powerActivate(PowerContext context) {
         switch (context)
         {
+        	case SKILL_3_NORMAL:
+        		tryToDashClient();
         }
     }
     @Override
@@ -83,6 +85,13 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean wentForCharge = false;
+    
+    public void tryToDashClient(){
+        if (vaultOrFallBraceFails()){
+            dash();
+        }
+    }
+
     /**Punching stands only go for barrages when facing players, because barrages will be interrupted 100% of the time
      * otherwise.*/
     @Override
@@ -326,7 +335,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.paused").withStyle(ChatFormatting.AQUA);
+        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
     }
     @Override
     public Component ifWipListDev(){

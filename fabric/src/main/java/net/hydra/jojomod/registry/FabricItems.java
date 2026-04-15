@@ -93,10 +93,10 @@ public class FabricItems {
     public static Item MAX_STAND_DISC_WALKING_HEART = registerItem("max_walking_heart_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersWalkingHeart(null)));
 
-   /* public static Item STAND_DISC_KILLER_QUEEN = registerItem("killer_queen_disc",
+    public static Item STAND_DISC_KILLER_QUEEN = registerItem("killer_queen_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null)));
     public static Item MAX_STAND_DISC_KILLER_QUEEN = registerItem("max_killer_queen_disc",
-            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null))); */
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null))); 
 
     public static Item STAND_DISC_CINDERELLA = registerItem("cinderella_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null)));
@@ -511,6 +511,8 @@ public class FabricItems {
                    //     entries.accept(MAX_STAND_DISC_CREAM);
                         entries.accept(STAND_DISC_METALLICA);
                         entries.accept(MAX_STAND_DISC_METALLICA);
+                        entries.accept(STAND_DISC_KILLER_QUEEN);
+                        entries.accept(MAX_STAND_DISC_KILLER_QUEEN);
 
 
                     }).build());
@@ -566,9 +568,9 @@ public class FabricItems {
         ModItems.STAND_DISC_SOFT_AND_WET = STAND_DISC_SOFT_AND_WET;
         ModItems.MAX_STAND_DISC_SOFT_AND_WET = MAX_STAND_DISC_SOFT_AND_WET;
         ((MaxStandDiscItem)MAX_STAND_DISC_SOFT_AND_WET).baseDisc = ((StandDiscItem)STAND_DISC_SOFT_AND_WET);
-   /*     ModItems.STAND_DISC_KILLER_QUEEN = STAND_DISC_KILLER_QUEEN;
+        ModItems.STAND_DISC_KILLER_QUEEN = STAND_DISC_KILLER_QUEEN;
         ((MaxStandDiscItem)MAX_STAND_DISC_KILLER_QUEEN).baseDisc = ((StandDiscItem)STAND_DISC_KILLER_QUEEN);
-        ModItems.MAX_STAND_DISC_KILLER_QUEEN = MAX_STAND_DISC_KILLER_QUEEN; */
+        ModItems.MAX_STAND_DISC_KILLER_QUEEN = MAX_STAND_DISC_KILLER_QUEEN;
         ModItems.STAND_DISC_CINDERELLA = STAND_DISC_CINDERELLA;
         ModItems.STAND_DISC_MANHATTAN_TRANSFER = STAND_DISC_MANHATTAN_TRANSFER;
         ModItems.STAND_DISC_HEY_YA = STAND_DISC_HEY_YA;
