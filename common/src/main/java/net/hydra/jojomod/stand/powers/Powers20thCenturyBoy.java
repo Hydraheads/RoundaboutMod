@@ -208,7 +208,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     @Override
     public boolean interceptDamageEvent(DamageSource damageSource, float amount) {
         if(knockbackStance){
-            if(!damageSource.is(DamageTypes.FALL)){
+            if(damageSource.getEntity() != null){
                 Roundabout.LOGGER.info("{} ", damageSource);
                 ClientUtil.getPlayer().setDeltaMovement(
                         ClientUtil.getPlayer().position().subtract(
