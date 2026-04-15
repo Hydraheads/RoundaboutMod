@@ -62,7 +62,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                 setSkillIcon(context, x, y, 1, StandIcons.GROUND_IMPLANT_OUT, PowerIndex.SKILL_1);
             }
             case 2 ->{
-                setSkillIcon(context, x, y, 1, StandIcons.WATER_SHIELD, PowerIndex.SKILL_1);
+                setSkillIcon(context, x, y, 1, StandIcons.NEUTRAL_STANCE, PowerIndex.SKILL_1);
             }
             case 3 ->{
                 setSkillIcon(context, x, y, 1, StandIcons.RED_LASH, PowerIndex.SKILL_1);
@@ -246,13 +246,16 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         return super.inputSpeedModifiers(basis);
     }
 
-    @Override
-    public boolean cancelSprint() {
-        return invincibleState;
-    }
+    @Override public boolean cancelSprint() {return invincibleState;}
+
+    @Override public boolean cancelSprintParticles() {return invincibleState;}
+
+    @Override public boolean cancelJump() {return invincibleState;}
 
     @Override
-    public boolean cancelJump() {
-        return invincibleState;
+    public void tickPower() {
+        if (!hasStandActive(ClientUtil.getPlayer())){
+            invincibleState = false;
+        }
     }
 }
