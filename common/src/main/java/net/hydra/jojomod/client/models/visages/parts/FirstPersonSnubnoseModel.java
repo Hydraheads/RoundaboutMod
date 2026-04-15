@@ -9,6 +9,8 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.event.index.Poses;
+import net.hydra.jojomod.event.powers.visagedata.MistaVisage;
+import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.SnubnoseRevolverItem;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -73,8 +75,18 @@ public class FirstPersonSnubnoseModel<T extends Entity> extends PsuedoHierarchic
         SexyGun.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
-    public static ResourceLocation getTextureLocation(Entity entity) {
-        return new ResourceLocation(Roundabout.MOD_ID, "textures/item/snubnose_revolver.png");
+    public ResourceLocation getTextureLocation(Entity ct){
+        if (ct instanceof Player plent){
+            if (((IPlayerEntity) plent).roundabout$getMaskSlot() != null &&
+                    !((IPlayerEntity) plent).roundabout$getMaskSlot().isEmpty() &&
+                    ((IPlayerEntity) plent).roundabout$getMaskSlot().getItem() instanceof MaskItem ME &&
+                    ME.visageData instanceof MistaVisage){
+                return new ResourceLocation(Roundabout.MOD_ID,
+                        "textures/item/mista_gun.png");
+            }
+        }
+        return new ResourceLocation(Roundabout.MOD_ID,
+                "textures/item/snubnose_revolver.png");
     }
 
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int light, float r, float g, float b, float heyFull) {

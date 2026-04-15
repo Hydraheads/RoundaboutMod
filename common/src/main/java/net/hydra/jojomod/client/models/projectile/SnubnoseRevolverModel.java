@@ -6,6 +6,10 @@ package net.hydra.jojomod.client.models.projectile;// Made with Blockbench 5.0.3
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.event.powers.visagedata.JosukePartEightVisage;
+import net.hydra.jojomod.event.powers.visagedata.MistaVisage;
+import net.hydra.jojomod.item.MaskItem;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -18,6 +22,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 
 public class SnubnoseRevolverModel<T extends Entity> extends HierarchicalModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
@@ -68,20 +73,29 @@ public class SnubnoseRevolverModel<T extends Entity> extends HierarchicalModel<T
 
     }
 
-    public ResourceLocation getTextureLocation(){
+    public ResourceLocation getTextureLocation(Entity ct){
+        if (ct instanceof Player plent){
+            if (((IPlayerEntity) plent).roundabout$getMaskSlot() != null &&
+                    !((IPlayerEntity) plent).roundabout$getMaskSlot().isEmpty() &&
+                    ((IPlayerEntity) plent).roundabout$getMaskSlot().getItem() instanceof MaskItem ME &&
+                    ME.visageData instanceof MistaVisage){
+                return new ResourceLocation(Roundabout.MOD_ID,
+                        "textures/item/mista_gun.png");
+            }
+        }
         return new ResourceLocation(Roundabout.MOD_ID,
                 "textures/item/snubnose_revolver.png");
     }
 
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int light, float r, float g, float b, float heyFull) {
-        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucentCull(getTextureLocation()));
+        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucentCull(getTextureLocation(context)));
         root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
     }
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
                        int light, float r, float g, float b, float alpha, byte skin) {
         if (context instanceof LivingEntity LE) {
             this.root().getAllParts().forEach(ModelPart::resetPose);
-            VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation()));
+            VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
             //r = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
         }

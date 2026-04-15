@@ -2,15 +2,21 @@ package net.hydra.jojomod.mixin.model_registry;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IItemRenderer;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ModItemModels;
+import net.hydra.jojomod.event.powers.visagedata.MistaVisage;
+import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Final;
@@ -19,6 +25,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.selectors.ElementNode;
 
 import javax.annotation.Nullable;
 
@@ -97,10 +104,14 @@ public abstract class RegisterItemRenderer implements IItemRenderer {
                 return this.itemModelShaper.getModelManager().getModel(ModItemModels.STREET_SIGN_DANGER_D2);
             }
         }
+        rdbt$tempent = $$2;
+
 
         return value;
     }
 
+    @Unique
+    public Entity rdbt$tempent = null;
     @ModifyVariable(method = "render", at = @At(value = "HEAD"), argsOnly = true)
     public BakedModel roundabout$render(
             BakedModel value, ItemStack stack, ItemDisplayContext renderMode, boolean leftHanded, PoseStack matrices,
@@ -109,6 +120,16 @@ public abstract class RegisterItemRenderer implements IItemRenderer {
             return this.itemModelShaper.getModelManager().
                     getModel(ModItemModels.HARPOON_IN_HAND);
         } if (stack.is(ModItems.SNUBNOSE_REVOLVER) && renderMode != ItemDisplayContext.GUI && renderMode != ItemDisplayContext.GROUND) {
+
+            if (rdbt$tempent instanceof Player plent) {
+                if (((IPlayerEntity) plent).roundabout$getMaskSlot() != null &&
+                        !((IPlayerEntity) plent).roundabout$getMaskSlot().isEmpty() &&
+                        ((IPlayerEntity) plent).roundabout$getMaskSlot().getItem() instanceof MaskItem ME &&
+                        ME.visageData instanceof MistaVisage) {
+                    return this.itemModelShaper.getModelManager().getModel(ModItemModels.MISTA_REVOLVER_IN_HAND);
+                }
+            }
+
             return this.itemModelShaper.getModelManager().
                     getModel(ModItemModels.SNUBNOSE_REVOLVER_IN_HAND);
         } if (stack.is(ModItems.TOMMY_GUN) && renderMode != ItemDisplayContext.GUI && renderMode != ItemDisplayContext.GROUND) {

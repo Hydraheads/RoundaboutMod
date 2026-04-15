@@ -9,6 +9,7 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 public class ModItemModels {
     public static ModelResourceLocation HARPOON_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "harpoon_in_hand", "inventory");
     public static ModelResourceLocation SNUBNOSE_REVOLVER_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "snubnose_revolver_in_hand", "inventory");
+    public static ModelResourceLocation MISTA_REVOLVER_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "mista_revolver_in_hand", "inventory");
     public static ModelResourceLocation TOMMY_GUN_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "tommy_gun_in_hand", "inventory");
     public static ModelResourceLocation COLT_REVOLVER_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "colt_revolver_in_hand", "inventory");
     public static ModelResourceLocation JACKAL_RIFLE_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "jackal_rifle_in_hand", "inventory");
