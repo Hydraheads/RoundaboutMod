@@ -789,6 +789,13 @@ public class FabricEntities {
                     EntityType.Builder.<MetallicaKnifeEntity>of(MetallicaKnifeEntity::new, MobCategory.MISC).
                             sized(0.5f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":metallica_knife")
             );
+    public static final EntityType<MoldSporesEntity> MOLD_SPORE =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "mold_spore"),
+                    EntityType.Builder.of(MoldSporesEntity::new, MobCategory.CREATURE).
+                            sized(0.6f, 1.95f).clientTrackingRange(50).build(Roundabout.MOD_ID+":molds_pore")
+            );
 
         public static void register() {
                 /*Common Code Bridge*/
@@ -842,6 +849,7 @@ public class FabricEntities {
                 ModEntities.SEPERATED_ARM_SLIM = SEPERATED_ARM_SLIM;
                 ModEntities.LEFT_SEPERATED_ARM = LEFT_SEPERATED_ARM;
                 ModEntities.LEFT_SEPERATED_ARM_SLIM = LEFT_SEPERATED_ARM_SLIM;
+                ModEntities.MOLD_SPORES = MOLD_SPORE;
                 ModEntities.STAND_FIREBALL = STAND_FIREBALL;
                 ModEntities.EVIL_AURA_PROJECTILE = EVIL_AURA_PROJECTILE;
                 ModEntities.RIPPER_EYES_PROJECTILE = RIPPER_EYES_PROJECTILE;
@@ -985,6 +993,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(SEPERATED_ARM_SLIM, SeperatedArmEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(LEFT_SEPERATED_ARM, SeperatedArmEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(LEFT_SEPERATED_ARM_SLIM, SeperatedArmEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(MOLD_SPORE, MoldSporesEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(D4C_CLONE, D4CCloneEntity.createAttributes());
 
                 /*Spawn Weights and Biomes*/

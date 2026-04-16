@@ -5335,118 +5335,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public double previousXposManhattan = 0.0;
     public double previousZposManhattan = 0.0;
     public double previousYpos = 0.0;
-    public float MoldLevel = 0.0f;
-    public int jumpImmunityTicks = 0;
-
-    @Override
-    public void DoMoldTick() {
-        if (!this.level().isClientSide) {
-            MoldLevel = MoldLevel + 1f;
-
-            if (MoldLevel % 3 == 0) {
-                if (this.hasEffect(ModEffects.MOLD)) {
-                    if (this.getEffect(ModEffects.MOLD).getAmplifier() > 19) {
-                        MoldLevel = 0;
-                        this.removeEffect(ModEffects.MOLD);
-                        if (true) {
-
-                            // MOLD SPREAD
-
-                            List<Entity> damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), 10, 10, 10);
-                            for (int j = 0; j < damages.size(); j++) {
-
-                                Entity entity = damages.get(j);
-                                if (!entity.equals(this)) {
-                                    if (entity instanceof LivingEntity LE) {
-                                        if(!(((StandUser)entity).roundabout$getStandPowers() instanceof  PowersGreenDay)){
-                                        if (LE.hasEffect(ModEffects.MOLD)) {
-                                            int level = LE.getEffect(ModEffects.MOLD).getAmplifier() + 1;
-                                            LE.removeEffect(ModEffects.MOLD);
-                                            LE.addEffect(new MobEffectInstance(ModEffects.MOLD, 600, level));
-                                        } else {
-                                            LE.addEffect(new MobEffectInstance(ModEffects.MOLD, 600, 0));
-                                        }
-                                        }
-
-                                    }
-                                }
-                            }
-                            for (int i = 0; i < 304; i = i + 1) {
-                                double randX = Roundabout.RANDOM.nextDouble(-10, 10);
-                                double randY = Roundabout.RANDOM.nextDouble(-10, 10);
-                                double randZ = Roundabout.RANDOM.nextDouble(-10, 10);
-                                ((ServerLevel) level()).sendParticles(new DustParticleOptions(new Vector3f(0.76F, 1.0F, 0.9F
-                                        ), 2f),
-                                        this.getX() + randX,
-                                        this.getY() + randY,
-                                        this.getZ() + randZ,
-                                        0, 0, 0.2, 0, 0);
-
-                            }
-                            ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST, this.getX(),
-                                    this.getY() + 1, this.getZ(),
-                                    123,
-                                    0, 0, 0,
-                                    0.2);
 
 
-                            // MOLD SPREAD
 
-                            this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), 326);
-                        }
-                    } else {
-                        List<Entity> damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), 5, 5, 5);
-                        for (int j = 0; j < damages.size(); j++) {
-
-                            Entity entity = damages.get(j);
-                            if (entity instanceof LivingEntity LE) {
-                                if(!(((StandUser)entity).roundabout$getStandPowers() instanceof  PowersGreenDay)) {
-                                    if (LE.hasEffect(ModEffects.MOLD)) {
-                                        int level = LE.getEffect(ModEffects.MOLD).getAmplifier() + 1;
-                                        LE.removeEffect(ModEffects.MOLD);
-                                        LE.addEffect(new MobEffectInstance(ModEffects.MOLD, 600, level));
-                                    } else {
-                                        LE.addEffect(new MobEffectInstance(ModEffects.MOLD, 600, 0));
-                                    }
-                                }
-
-                            }
-                        }
-                        for (int i = 0; i < 14; i = i + 1) {
-                            double randX = Roundabout.RANDOM.nextDouble(-5, 5);
-                            double randY = Roundabout.RANDOM.nextDouble(-5, 5);
-                            double randZ = Roundabout.RANDOM.nextDouble(-5, 5);
-                            ((ServerLevel) level()).sendParticles(new DustParticleOptions(new Vector3f(0.76F, 1.0F, 0.9F
-                                    ), 2f),
-                                    this.getX() + randX,
-                                    this.getY() + randY,
-                                    this.getZ() + randZ,
-                                    0, 0, 0.2, 0, 0);
-
-                        }
-                        ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST, this.getX(),
-                                this.getY() + 1, this.getZ(),
-                                24,
-                                0, 0, 0,
-                                0.1);
-                        int level = this.getEffect(ModEffects.MOLD).getAmplifier() + 1;
-                        this.removeEffect(ModEffects.MOLD);
-                        this.addEffect(new MobEffectInstance(ModEffects.MOLD, 600, level));
-                        this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), (this.getEffect(ModEffects.MOLD).getAmplifier()) + 2.0f);
-                    }
-                }
-            }
-
-
-        }
-    }
-
-    @Override
-    public void MoldFieldExit() {
-        MoldLevel = 0;
-        this.tick();
-
-    }
     @Inject(method = "dropCustomDeathLoot", at = @At(value = "TAIL"), cancellable = true, require = 0)
     public void DropExtra(DamageSource $$0, int $$1, boolean $$2,CallbackInfo info){
         Entity cause = $$0.getEntity();
@@ -5548,29 +5439,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             previousZposManhattan = this.getZ();
         }
 
+    public float MoldLevel = 0.0f;
+    public int jumpImmunityTicks = 0;
+
+    @Override
+    public int getJumpImmunityTicks(){
+        return jumpImmunityTicks;
+    }
+
+
     @Unique
     @Override
     public void rdbt$doMoldDetection(Vec3 movement){
         if(!this.level().isClientSide){
-                boolean down = previousYpos > this.getY() + 0.1;
-                boolean isStand = (((LivingEntity) (Object) this) instanceof StandEntity);
+
                 if(this.hasEffect(ModEffects.MOLD)) {
-                    if (!roundabout$getStandPowers().isStoppingTime() && !this.roundabout$isBubbleEncased() && !isStand && down && jumpImmunityTicks < 1) {
-                        for (int i = 0; i < 3; i = i + 1) {
 
-                            double width = this.getBbWidth();
-                            double height = this.getBbHeight();
-                            double randomX = Roundabout.RANDOM.nextDouble(0 - (width / 2), width / 2);
-                            double randomY = Roundabout.RANDOM.nextDouble(0 - (height / 2), height / 2);
-                            double randomZ = Roundabout.RANDOM.nextDouble(0 - (width / 2), width / 2);
-                            (this.level()).addParticle(ModParticles.MOLD,
-                                    this.getX() + randomX, (this.getY() + height / 2) + randomY, this.getZ() + randomZ,
-                                    this.getDeltaMovement().x, this.getDeltaMovement().y, this.getDeltaMovement().z
-                            );
-
-                        }
-                        DoMoldTick();
-                    }
                     for (int i = 0; i < 4; i = i + 1) {
                         if (this.tickCount % 20 == 0) {
                             ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST, this.getX(),
@@ -5588,10 +5472,40 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         else{
             jumpImmunityTicks = jumpImmunityTicks -1;
+
         }
+        movingDown = (previousYpos-0.1 > this.getY());
         previousYpos = this.getY();
     }
     public int CrawlTicks = 0;
+    boolean movingDown = false;
+    @Override
+    public boolean GoingDown(){
+      return movingDown;
+    }
+
+    @Override
+    public void DoMoldTick() {
+        if (!this.level().isClientSide) {
+            MoldLevel = MoldLevel + 1f;
+
+            if (MoldLevel % 3 == 0) {
+                    if (MoldLevel/3 > 19) {
+                        MoldLevel = 0;
+                        if (true) {
+
+                            this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), 326);
+                        }
+                    } else {
+
+                        this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), MoldLevel/3 + 2.0f);
+                    }
+
+            }
+
+
+        }
+    }
 
     @Unique
     @Override

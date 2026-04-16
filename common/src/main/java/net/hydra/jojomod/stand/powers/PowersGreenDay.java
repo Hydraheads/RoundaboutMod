@@ -14,6 +14,7 @@ import net.hydra.jojomod.entity.stand.CinderellaEntity;
 import net.hydra.jojomod.entity.stand.GreenDayEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.WalkingHeartEntity;
+import net.hydra.jojomod.entity.substand.MoldSporesEntity;
 import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
 import net.hydra.jojomod.entity.substand.SeperatedLegsEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -521,43 +522,6 @@ public class PowersGreenDay extends NewPunchingStand {
 
     private int hmm = 0;
 
-    public void moldBurst(Vec3 pos,int rangeR){
-         if (!isClient() && !this.isBarraging()) {
-            List<Entity> damages = MainUtil.genHitbox(this.self.level(), pos.x, pos.y,pos.z, rangeR, rangeR, rangeR);
-
-            for (int j = 0; j < damages.size(); j++) {
-
-                Entity entity = damages.get(j);
-                if (!entity.equals(this) && !(allies .contains(entity.getStringUUID()))) {
-                    if (entity instanceof LivingEntity LE) {
-                        if (!(((StandUser) entity).roundabout$getStandPowers() instanceof PowersGreenDay)) {
-                            if (LE.hasEffect(ModEffects.MOLD)) {
-                                int level = LE.getEffect(ModEffects.MOLD).getAmplifier() + 1;
-                                LE.removeEffect(ModEffects.MOLD);
-                                LE.addEffect(new MobEffectInstance(ModEffects.MOLD, 600, level));
-                            } else {
-                                LE.addEffect(new MobEffectInstance(ModEffects.MOLD, 600, 0));
-                            }
-                        }
-
-                    }
-                }
-            }
-            for (int i = 0; i <rangeR * 50; i = i + 1) {
-                double randX = Roundabout.RANDOM.nextDouble(-rangeR, rangeR);
-                double randY = Roundabout.RANDOM.nextDouble(-rangeR, rangeR);
-                double randZ = Roundabout.RANDOM.nextDouble(-rangeR, rangeR);
-                ((ServerLevel) this.self.level()).sendParticles(new DustParticleOptions(new Vector3f(0.76F, 1.0F, 0.9F
-                        ), 2f),
-                        pos.x + randX,
-                        pos.y + randY,
-                        pos.z + randZ,
-                        0, 0, 0.2, 0, 0);
-
-            }
-
-        }
-    }
 
 
     public boolean MoldSpread() {
@@ -571,15 +535,19 @@ public class PowersGreenDay extends NewPunchingStand {
                 this.poseStand(OffsetIndex.ATTACK);
                 hmm = 20;
             }
-            moldBurst(this.self.getOnPos().getCenter(),3);
-            moldBurst(this.self.getOnPos().getCenter().add(0,-10,0),7);
-            moldBurst(this.self.getOnPos().getCenter().add(0,-27,0),10);
+            MoldSporesEntity SLE = ModEntities.MOLD_SPORES.create(this.self.level());
+            if(SLE != null) {
+                SLE.setUser(this.self);
+                SLE.setXRot(this.self.getXRot());
+                SLE.setYRot(this.self.getYRot());
+                SLE.setPos(this.self.getPosition(1).add(0,0.2,0));
+                this.self.level().addFreshEntity(SLE);
+            }
+            //moldBurst(this.self.getOnPos().getCenter(),3);
+            //moldBurst(this.self.getOnPos().getCenter().add(0,-10,0),7);
+            //moldBurst(this.self.getOnPos().getCenter().add(0,-27,0),10);
             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.GREEN_DAY_MOLD_SPREAD_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
-            ((ServerLevel) this.self.level()).sendParticles(ModParticles.MOLD_DUST, this.self.getX(),
-                    this.self.getY() + 1, this.self.getZ(),
-                    263,
-                    0, 0, 0,
-                    0.1);
+
         }
         return true;
     }
@@ -591,7 +559,9 @@ public class PowersGreenDay extends NewPunchingStand {
 
     public void attemptMainArmThrow(){
         if(canExecuteMoveWithLevel(4)) {
-            MainArmThrow();
+            if(!this.self.isUsingItem()){
+                MainArmThrow();
+            }
         }
 
     }
@@ -609,8 +579,10 @@ public class PowersGreenDay extends NewPunchingStand {
     }
 
     public void attemptOffHandThrow(){
-        if(canExecuteMoveWithLevel(3)) {
-            OffHandThrow();
+        if(!this.self.isUsingItem()) {
+            if (canExecuteMoveWithLevel(3)) {
+                OffHandThrow();
+            }
         }
     }
     public void attemptOffHandReturn(){
@@ -1383,7 +1355,5 @@ public class PowersGreenDay extends NewPunchingStand {
         return $$1;
 
     }
-
-
 
 }

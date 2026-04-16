@@ -121,6 +121,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.SEPERATED_ARM_SLIM.get(), SeperatedArmSlimEntity.createStandAttributes().build());
         event.put(ForgeEntities.LEFT_SEPERATED_ARM.get(), LeftSeperatedArmEntity.createStandAttributes().build());
         event.put(ForgeEntities.LEFT_SEPERATED_ARM_SLIM.get(), LeftSeperatedArmSlimEntity.createStandAttributes().build());
+        event.put(ForgeEntities.MOLD_SPORE.get(), AnubisPossessorEntity.createStandAttributes().build());
 ;    }
 
     @SubscribeEvent

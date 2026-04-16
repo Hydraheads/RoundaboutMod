@@ -1,7 +1,11 @@
 package net.hydra.jojomod.entity.zombie_minion;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.goals.*;
+import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.Tactics;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
@@ -38,6 +42,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.InfestedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -66,6 +74,8 @@ public class BaseMinion extends Monster {
             SynchedEntityData.defineId(BaseMinion.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Integer> DIGPROG =
             SynchedEntityData.defineId(BaseMinion.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> DIED_IN_SUN =
+            SynchedEntityData.defineId(BaseMinion.class, EntityDataSerializers.BOOLEAN);
 
     public BaseMinion(EntityType<? extends BaseMinion> $$0, Level $$1) {
         super($$0, $$1);
@@ -317,6 +327,24 @@ public class BaseMinion extends Monster {
         return this.getEntityData().get(CONTROLLER);
     }
 
+    public void setDiedInSun(boolean prog){
+        this.entityData.set(DIED_IN_SUN, prog);
+    }
+    public boolean getDiedInSun() {
+        return this.getEntityData().get(DIED_IN_SUN);
+    }
+
+    /**Cancel death animation*/
+    @Override
+    public void die(@NotNull DamageSource $$0) {
+        if (FateTypes.takesSunlightDamage(this)) {
+            if ($$0.is(ModDamageTypes.SUNLIGHT)) {
+                setDiedInSun(true);
+            }
+        }
+        super.die($$0);
+    }
+
     public void setController(int controller){
         this.entityData.set(CONTROLLER, controller);
     }
@@ -453,6 +481,7 @@ public class BaseMinion extends Monster {
             this.entityData.define(MOVEMENT_TACTIC, (byte) 0);
             this.entityData.define(CONTROLLER, -1);
             this.entityData.define(DIGPROG, -1);
+            this.entityData.define(DIED_IN_SUN, false);
         }
     }
 

@@ -4,8 +4,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ScreenEffectRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -14,8 +16,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
@@ -41,10 +46,30 @@ public class PilotingScreenEffectRenderer {
             StandEntity piloting = powers.getPilotingStand();
             if (powers.isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved() ) {
 
+                Minecraft mc = Minecraft.getInstance();
+                Camera camera = mc.gameRenderer.getMainCamera();
+
+                Vec3 camPos = camera.getPosition();
+
+                // Make a very small box around the camera
+                AABB cameraBox = new AABB(
+                        camPos.x - 1e-4, camPos.y - 1e-4, camPos.z - 1e-4,
+                        camPos.x + 1e-4, camPos.y + 1e-4, camPos.z + 1e-4
+                );
+
+                Level level = mc.level;
+
+                // Check if ANY block collision shape intersects this box
+                boolean insideCollision = !level.noCollision(cameraBox);
+
                 if (!$$2.noPhysics) {
                     BlockState $$3 = roundabout$getViewBlockingState(piloting);
                     if ($$3 != null) {
                         renderTex($$0.getBlockRenderer().getBlockModelShaper().getParticleIcon($$3), $$1);
+                    } else {
+                        if (insideCollision){
+                            renderTex($$0.getBlockRenderer().getBlockModelShaper().getParticleIcon(Blocks.STONE.defaultBlockState()), $$1);
+                        }
                     }
                 }
 
