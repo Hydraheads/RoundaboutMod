@@ -559,7 +559,9 @@ public class PowersGreenDay extends NewPunchingStand {
 
     public void attemptMainArmThrow(){
         if(canExecuteMoveWithLevel(4)) {
-            MainArmThrow();
+            if(!this.self.isUsingItem()){
+                MainArmThrow();
+            }
         }
 
     }
@@ -577,8 +579,10 @@ public class PowersGreenDay extends NewPunchingStand {
     }
 
     public void attemptOffHandThrow(){
-        if(canExecuteMoveWithLevel(3)) {
-            OffHandThrow();
+        if(!this.self.isUsingItem()) {
+            if (canExecuteMoveWithLevel(3)) {
+                OffHandThrow();
+            }
         }
     }
     public void attemptOffHandReturn(){

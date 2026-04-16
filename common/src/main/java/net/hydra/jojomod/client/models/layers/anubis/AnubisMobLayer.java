@@ -63,6 +63,7 @@ public class AnubisMobLayer<T extends LivingEntity, M extends HierarchicalModel<
                 if (!AG.hasTotem() && AG.getArmPose().equals(AbstractIllager.IllagerArmPose.ATTACKING)){
                     ((AnubisGuardianModel) this.getParentModel()).getArm(HumanoidArm.RIGHT).translateAndRotate(poseStack);
                 } else {
+                    poseStack.popPose();
                     return;
                 }
             } else {

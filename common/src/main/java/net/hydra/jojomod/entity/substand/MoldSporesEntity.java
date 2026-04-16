@@ -101,6 +101,7 @@ public class MoldSporesEntity extends StandEntity {
 
 
                         ((StandUser) entity).DoMoldTick();
+                        ((StandUser)User).roundabout$getStandPowers().addEXP(1);
                     }
                 }
             }
