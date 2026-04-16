@@ -350,6 +350,9 @@ public class StandIcons {
     public static final ResourceLocation CLOCK = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/mandom/clock.png");
 
+    public static final ResourceLocation NEUTRAL_STANCE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/20th_century_boy/neutralstance.png");
+
 
     public static final ResourceLocation SNAP_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/magicians_red/fire_clear.png");

@@ -4,7 +4,6 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AnimationState;
@@ -18,6 +17,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.List;
 import java.util.UUID;
@@ -131,7 +131,11 @@ public interface StandUser {
     int roundabout$getCBVanishTicks();
     void roundabout$setCBVanishTicks(int set);
 
+    int getJumpImmunityTicks();
+
     void rdbt$doMoldDetection(Vec3 movement);
+
+    void rdbt$doWindVisionDetection();
 
     boolean roundabout$getActive();
     boolean roundabout$getMainhandOverride();
@@ -299,6 +303,12 @@ public interface StandUser {
     int roundabout$getTrueInvis();
 
 
+    @Unique
+    void roundabout$setTrueInvisManhattan(int round);
+
+    @Unique
+    int roundabout$getTrueInvisManhattan();
+
     /**Metallica*/
     void roundabout$setMetallicaInvis(int invis);
     int roundabout$getMetallicaInvis();
@@ -338,6 +348,8 @@ public interface StandUser {
     void roundabout$setParallelRunning(boolean value);
     boolean roundabout$isParallelRunning();
 
+    boolean GoingDown();
+
     /** Green Day stuff**/
 
     void DoMoldTick();
@@ -350,8 +362,4 @@ public interface StandUser {
     List<CooldownInstance> rdbt$getPowerCooldowns();
     void rdbt$setPowerCooldowns(List<CooldownInstance> cdi);
 
-    /**Manhattan Transfer*/
-    void rdbt$doWindVisionDetection();
-    void roundabout$setTrueInvisManhattan(int round);
-    int roundabout$getTrueInvisManhattan();
 }

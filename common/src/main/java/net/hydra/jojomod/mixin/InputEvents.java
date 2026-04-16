@@ -662,7 +662,7 @@ public abstract class InputEvents implements IInputEvents {
             }
 
             if (powers instanceof Powers20thCenturyBoy centuryBoy){
-                if (centuryBoy.invincibleState) ci.cancel();
+                if (centuryBoy.invincibleState) ci.cancel(); return;
             }
 
             if(powers instanceof PowersGreenDay PGD) {

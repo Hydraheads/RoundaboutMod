@@ -1007,7 +1007,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
             byte playerP = ((IPlayerEntity)$$0).roundabout$GetPos();
 
-            /*Dodge makes you lean forward visually*/
+            /*When you die to the sun you don't appear*/
             if (playerP == PlayerPosIndex.SUNLIGHT){
                 ci.cancel();
                 return;
