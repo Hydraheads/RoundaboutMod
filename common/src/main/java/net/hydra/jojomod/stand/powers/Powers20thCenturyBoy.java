@@ -196,6 +196,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                     Roundabout.LOGGER.info("i'll cook something later guys don't worry4");
                 }
             }
+            ClientUtil.getPlayer().stopUsingItem();
+            ClientUtil.stopDestroyingBlock();
         } else {
             invincibleState = false;
             defenseStance = false;
