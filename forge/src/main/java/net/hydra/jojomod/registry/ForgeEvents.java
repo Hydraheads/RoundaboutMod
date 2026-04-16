@@ -121,6 +121,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.SEPERATED_ARM_SLIM.get(), SeperatedArmSlimEntity.createStandAttributes().build());
         event.put(ForgeEntities.LEFT_SEPERATED_ARM.get(), LeftSeperatedArmEntity.createStandAttributes().build());
         event.put(ForgeEntities.LEFT_SEPERATED_ARM_SLIM.get(), LeftSeperatedArmSlimEntity.createStandAttributes().build());
+        event.put(ForgeEntities.MOLD_SPORE.get(), AnubisPossessorEntity.createStandAttributes().build());
 ;    }
 
     @SubscribeEvent
@@ -369,6 +370,20 @@ public class ForgeEvents {
         ModItems.LUCKY_LIPSTICK = ForgeItems.LUCKY_LIPSTICK.get();
         ModItems.BLANK_MASK = ForgeItems.BLANK_MASK.get();
         ModItems.RAT_MASK = ForgeItems.RAT_MASK.get();
+
+
+        ModItems.CAT_REMAINS = ForgeItems.CAT_REMAINS.get();
+        ModItems.OCELOT_REMAINS = ForgeItems.OCELOT_REMAINS.get();
+        ModItems.PARROT_REMAINS = ForgeItems.PARROT_REMAINS.get();
+        ModItems.CHICKEN_REMAINS = ForgeItems.CHICKEN_REMAINS.get();
+        ModItems.DOG_REMAINS = ForgeItems.DOG_REMAINS.get();
+        ModItems.AXOLOTL_REMAINS = ForgeItems.AXOLOTL_REMAINS.get();
+        ModItems.POLAR_BEAR_REMAINS = ForgeItems.POLAR_BEAR_REMAINS.get();
+        ModItems.MOOSHROOM_REMAINS = ForgeItems.MOOSHROOM_REMAINS.get();
+        ModItems.GOAT_REMAINS = ForgeItems.GOAT_REMAINS.get();
+        ModItems.LLAMA_REMAINS = ForgeItems.LLAMA_REMAINS.get();
+        ModItems.SILVERFISH_REMAINS = ForgeItems.SILVERFISH_REMAINS.get();
+
         ModItems.MODIFICATION_MASK = ForgeItems.MODIFICATION_MASK.get();
         ModItems.SPEEDWAGON_MASK = ForgeItems.SPEEDWAGON_MASK.get();
         ModItems.SPEEDWAGON_FOUNDATION_MASK = ForgeItems.SPEEDWAGON_FOUNDATION_MASK.get();

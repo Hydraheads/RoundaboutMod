@@ -645,6 +645,28 @@ public class ForgeItems {
    /* public static final RegistryObject<Item> INTERDIMENSIONAL_KEY = ITEMS.register("interdimensional_key",
             () -> new InterdimensionalKeyItem(new Item.Properties().stacksTo(1))); */
 
+    public static final RegistryObject<Item> CAT_REMAINS = addToWIPTab(ITEMS.register("cat_remains",
+            () -> new HeadRemainsItem(new Item.Properties().stacksTo(64))));
+    public static final RegistryObject<Item> POLAR_BEAR_REMAINS = addToWIPTab(ITEMS.register("polar_bear_remains",
+            () -> new HeadRemainsItem(new Item.Properties().stacksTo(64))));
+    public static final RegistryObject<Item> MOOSHROOM_REMAINS = addToWIPTab(ITEMS.register("mooshroom_remains",
+            () -> new HeadRemainsItem(new Item.Properties().stacksTo(64))));
+    public static final RegistryObject<Item> GOAT_REMAINS = addToWIPTab(ITEMS.register("goat_remains",
+            () -> new HeadRemainsItem(new Item.Properties().stacksTo(64))));
+    public static final RegistryObject<Item> LLAMA_REMAINS = addToWIPTab(ITEMS.register("llama_remains",
+            () -> new HeadRemainsItem(new Item.Properties().stacksTo(64))));
+    public static final RegistryObject<Item> SILVERFISH_REMAINS = addToWIPTab(ITEMS.register("silverfish_remains",
+            () -> new HeadRemainsItem(new Item.Properties().stacksTo(64))));
+    public static final RegistryObject<Item> OCELOT_REMAINS = addToWIPTab(ITEMS.register("ocelot_remains",
+            () -> new BodyRemainsItem(new Item.Properties().stacksTo(64))));
+    public static final RegistryObject<Item> PARROT_REMAINS = addToWIPTab(ITEMS.register("parrot_remains",
+            () -> new BodyRemainsItem(new Item.Properties().stacksTo(64))));
+    public static final RegistryObject<Item> CHICKEN_REMAINS = addToWIPTab(ITEMS.register("chicken_remains",
+            () -> new BodyRemainsItem(new Item.Properties().stacksTo(64))));
+    public static final RegistryObject<Item> DOG_REMAINS = addToWIPTab(ITEMS.register("dog_remains",
+            () -> new BodyRemainsItem(new Item.Properties().stacksTo(64))));
+    public static final RegistryObject<Item> AXOLOTL_REMAINS = addToWIPTab(ITEMS.register("axolotl_remains",
+            () -> new BodyRemainsItem(new Item.Properties().stacksTo(64))));
 
     public static void assignStupidForge(){
         DispenserBlock.registerBehavior(ForgeItems.KNIFE.get(), DispenserRegistry.KNIFE);

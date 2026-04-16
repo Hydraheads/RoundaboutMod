@@ -667,4 +667,10 @@ public class ForgeEntities {
                     EntityType.Builder.<LeftSeperatedArmSlimEntity>of(LeftSeperatedArmSlimEntity::new, MobCategory.MISC).
                             sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":left_seperated_arm_slim")
             );
+    public static final RegistryObject<EntityType<MoldSporesEntity>> MOLD_SPORE =
+            ENTITY_TYPES.register("molds_spores", () ->
+                    EntityType.Builder.of(MoldSporesEntity::new, MobCategory.CREATURE).sized(0.6f, 1.95f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "molds_spores").toString())
+            );
 }

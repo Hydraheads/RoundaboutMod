@@ -217,6 +217,17 @@ public class FabricItems {
             new CoffinBlockItem(DyeColor.BLACK, FabricBlocks.COFFIN_BLOCK, new Item.Properties().stacksTo(1)));
 
 
+    public static Item CAT_REMAINS = registerItem("cat_remains", new HeadRemainsItem(new Item.Properties().stacksTo(64)));
+    public static Item MOOSHROOM_REMAINS = registerItem("mooshroom_remains", new HeadRemainsItem(new Item.Properties().stacksTo(64)));
+    public static Item GOAT_REMAINS = registerItem("goat_remains", new HeadRemainsItem(new Item.Properties().stacksTo(64)));
+    public static Item LLAMA_REMAINS = registerItem("llama_remains", new HeadRemainsItem(new Item.Properties().stacksTo(64)));
+    public static Item SILVERFISH_REMAINS = registerItem("silverfish_remains", new HeadRemainsItem(new Item.Properties().stacksTo(64)));
+    public static Item POLAR_BEAR_REMAINS = registerItem("polar_bear_remains", new HeadRemainsItem(new Item.Properties().stacksTo(64)));
+    public static Item DOG_REMAINS = registerItem("dog_remains", new BodyRemainsItem(new Item.Properties().stacksTo(64)));
+    public static Item CHICKEN_REMAINS = registerItem("chicken_remains", new BodyRemainsItem(new Item.Properties().stacksTo(64)));
+    public static Item PARROT_REMAINS = registerItem("parrot_remains", new BodyRemainsItem(new Item.Properties().stacksTo(64)));
+    public static Item OCELOT_REMAINS = registerItem("ocelot_remains", new BodyRemainsItem(new Item.Properties().stacksTo(64)));
+    public static Item AXOLOTL_REMAINS = registerItem("axolotl_remains", new BodyRemainsItem(new Item.Properties().stacksTo(64)));
 
     public static Item AESTHETICIAN_MASK_1 = registerItem("aesthetician_mask_1", new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisage1(null)));
     public static Item AESTHETICIAN_MASK_2 = registerItem("aesthetician_mask_2", new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisage2(null)));
@@ -498,6 +509,17 @@ public class FabricItems {
                         //entries.accept(STAND_DISC_WALKING_HEART);
                         entries.accept(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK);
                         entries.accept(ModBlocks.BLOODY_STONE_MASK_BLOCK);
+                        entries.accept(CAT_REMAINS);
+                        entries.accept(POLAR_BEAR_REMAINS);
+                        entries.accept(MOOSHROOM_REMAINS);
+                        entries.accept(GOAT_REMAINS);
+                        entries.accept(LLAMA_REMAINS);
+                        entries.accept(SILVERFISH_REMAINS);
+                        entries.accept(OCELOT_REMAINS);
+                        entries.accept(PARROT_REMAINS);
+                        entries.accept(CHICKEN_REMAINS);
+                        entries.accept(DOG_REMAINS);
+                        entries.accept(AXOLOTL_REMAINS);
 
                         entries.accept(STAND_DISC_20_CENTURY_BOY);
                         entries.accept(STAND_DISC_MANHATTAN_TRANSFER);
@@ -684,6 +706,18 @@ public class FabricItems {
      //   ModItems.INTERDIMENSIONAL_KEY = INTERDIMENSIONAL_KEY;
         ModItems.FLESH_BUCKET = FLESH_BUCKET;
         ModItems.CHERRIES = CHERRIES;
+
+        ModItems.CAT_REMAINS = CAT_REMAINS;
+        ModItems.OCELOT_REMAINS = OCELOT_REMAINS;
+        ModItems.PARROT_REMAINS = PARROT_REMAINS;
+        ModItems.CHICKEN_REMAINS = CHICKEN_REMAINS;
+        ModItems.DOG_REMAINS = DOG_REMAINS;
+        ModItems.AXOLOTL_REMAINS = AXOLOTL_REMAINS;
+        ModItems.POLAR_BEAR_REMAINS = POLAR_BEAR_REMAINS;
+        ModItems.MOOSHROOM_REMAINS = MOOSHROOM_REMAINS;
+        ModItems.GOAT_REMAINS = GOAT_REMAINS;
+        ModItems.LLAMA_REMAINS = LLAMA_REMAINS;
+        ModItems.SILVERFISH_REMAINS = SILVERFISH_REMAINS;
 
         ModItems.PAINTING_VAN_GOUGH = PAINTING_VAN_GOUGH;
         ModItems.PAINTING_MONA_LISA = PAINTING_MONA_LISA;
