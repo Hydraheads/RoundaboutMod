@@ -148,6 +148,18 @@
   "item.roundabout.manhattan_transfer_disc.desc": "Manhattan Transfer",
   "item.roundabout.none_disc.desc": "None",
 
+  "item.roundabout.ocelot_remains": "Ocelot Remains",
+  "item.roundabout.cat_remains": "Cat Remains",
+  "item.roundabout.llama_remains": "Llama Remains",
+  "item.roundabout.silverfish_remains": "Silverfish Remains",
+  "item.roundabout.mooshroom_remains": "Mooshroom Remains",
+  "item.roundabout.parrot_remains": "Parrot Remains",
+  "item.roundabout.polar_bear_remains": "Polar Bear Remains",
+  "item.roundabout.dog_remains": "Dog Remains",
+  "item.roundabout.chicken_remains": "Chicken Remains",
+  "item.roundabout.goat_remains": "Goat Remains",
+  "item.roundabout.axolotl_remains": "Axolotl Remains",
+
   "item.roundabout.road_roller": "Road Roller",
 
   "item.roundabout.snubnose_revolver": "Snubnose Revolver",
