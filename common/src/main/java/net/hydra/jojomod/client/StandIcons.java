@@ -309,7 +309,23 @@ public class StandIcons {
     public static final ResourceLocation SOFT_AND_WET_BUBBLE_ENCASEMENT = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/soft_and_wet/bubble_encase.png");
 
-
+    public static final ResourceLocation KILLER_QUEEN_PLANT_BOMB_BLOCK = new ResourceLocation(Roundabout.MOD_ID,
+    		"textures/gui/icons/killer_queen/plant_bomb_block.png");
+    public static final ResourceLocation KILLER_QUEEN_PLANT_BOMB_MOB = new ResourceLocation(Roundabout.MOD_ID,
+    		"textures/gui/icons/killer_queen/plant_bomb_mob.png");
+    public static final ResourceLocation KILLER_QUEEN_PLANT_BOMB_ITEM = new ResourceLocation(Roundabout.MOD_ID,
+    		"textures/gui/icons/killer_queen/plant_bomb_item.png");
+    public static final ResourceLocation KILLER_QUEEN_BOMB_SETIINGS = new ResourceLocation(Roundabout.MOD_ID,
+    		"textures/gui/icons/killer_queen/bomb_select.png");
+    public static final ResourceLocation KILLER_QUEEN_BOMB_DETONATE = new ResourceLocation(Roundabout.MOD_ID,
+    		"textures/gui/icons/killer_queen/detonate.png");
+    public static final ResourceLocation KILLER_QUEEN_BOMB_DEFUSE = new ResourceLocation(Roundabout.MOD_ID,
+    		"textures/gui/icons/killer_queen/defuse.png");
+    public static final ResourceLocation KILLER_QUEEN_BUBBLE_LAUNCH = new ResourceLocation(Roundabout.MOD_ID,
+    		"textures/gui/icons/killer_queen/bubble_launch.png");
+    public static final ResourceLocation KILLER_QUEEN_BUBBLE_REDIRECT = new ResourceLocation(Roundabout.MOD_ID,
+    		"textures/gui/icons/killer_queen/bubble_redirect.png");
+    
     public static final ResourceLocation MANDOM_VISION_ON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/mandom/vision_on.png");
     public static final ResourceLocation MANDOM_VISION_OFF = new ResourceLocation(Roundabout.MOD_ID,

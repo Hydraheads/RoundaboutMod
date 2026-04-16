@@ -34,6 +34,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -44,8 +45,20 @@ import java.util.List;
 
 public class PowersKillerQueen extends NewPunchingStand {
 
-
-
+	public enum BOMB_TYPE {
+		NONE,
+		BLOCK,
+		ITEM,
+		ENTITY,
+		BUBBLE
+	}
+	
+	public Entity bombEntity = null;
+	public BlockPos bombBlock = null;
+	public Entity bombBubble = null;
+	public boolean destroyTerrain = false;
+	public boolean explodeOnContact = false;
+	
     @Override
     public void powerActivate(PowerContext context) {
         switch (context)
@@ -245,15 +258,27 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
 
-        if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NONE);
+
+        if (isGuarding()) {
+            setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_BOMB_SETIINGS, PowerIndex.SKILL_1_SNEAK);
+        } else if (this.getBomb() != BOMB_TYPE.NONE) {
+    		setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_BOMB_DETONATE, PowerIndex.NO_CD);
+    	} else if (isHoldingSneak()){
+            setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_PLANT_BOMB_MOB, PowerIndex.SKILL_1_GUARD);
         } else {
-            setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD);
-
+        	setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_PLANT_BOMB_BLOCK, PowerIndex.SKILL_1);
         }
-
-        setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.SKILL_2);
-
+        
+        if (this.getBomb() != BOMB_TYPE.NONE && this.getBomb() != BOMB_TYPE.BUBBLE) {
+        	setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BOMB_DEFUSE, PowerIndex.NO_CD);
+        }
+         else if (this.getBomb() == BOMB_TYPE.BUBBLE) {
+    		setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BUBBLE_REDIRECT, PowerIndex.SKILL_2_GUARD);
+    	} else if (isHoldingSneak()){
+            setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BUBBLE_LAUNCH, PowerIndex.SKILL_2_SNEAK);
+        } else {
+        	setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.SKILL_2);
+        }
         if (isHoldingSneak()){
             setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NONE);
         } else {
@@ -349,4 +374,21 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
         return Component.translatable("skins.roundabout.killer_queen.base");
     }
-}
+    
+    public BOMB_TYPE getBomb() {
+    	if (this.bombEntity != null) {
+    		if (bombEntity instanceof ItemEntity) {
+    			return BOMB_TYPE.ITEM;
+    		} 
+    		return BOMB_TYPE.ENTITY;
+    	}
+    	if (this.bombBubble != null) {
+    		return BOMB_TYPE.BUBBLE;
+    	}
+    	if (this.bombBlock != null) {
+    		return BOMB_TYPE.BLOCK;
+    	}
+    	
+    	return BOMB_TYPE.NONE;
+    }
+ }
