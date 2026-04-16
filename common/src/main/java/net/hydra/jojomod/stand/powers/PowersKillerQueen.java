@@ -2,8 +2,13 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
+import net.hydra.jojomod.entity.projectile.SoftAndWetExplosiveBubbleEntity;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
@@ -21,10 +26,14 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
+import net.hydra.jojomod.util.config.ClientConfig;
+import net.hydra.jojomod.util.config.ConfigManager;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -44,7 +53,14 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PowersKillerQueen extends NewPunchingStand {
-
+	
+	// TODO Make Impale code
+	// TODO Make air bubble bomb spawn and entity
+	// TODO Make bomb entity
+	// TODO Make bomb item
+	// TODO Make bomb block
+	// TODO Bites The Dust
+	
 	public enum BOMB_TYPE {
 		NONE,
 		BLOCK,
@@ -58,14 +74,30 @@ public class PowersKillerQueen extends NewPunchingStand {
 	public Entity bombBubble = null;
 	public boolean destroyTerrain = false;
 	public boolean explodeOnContact = false;
+	public boolean BitesTheDustMode = false;
+	
 	
     @Override
     public void powerActivate(PowerContext context) {
         switch (context)
         {
+        	case SKILL_2_CROUCH:
+        		tryShootAirBubbleClient();
         	case SKILL_3_NORMAL:
         		tryToDashClient();
+        	case SKILL_4_NORMAL:
+        		bitesTheDustModeToggleClient();
         }
+    }
+    @Override
+    public boolean setPowerOther(int move, int lastMove) {
+    	if (move == PowerIndex.POWER_4) {
+    		return this.switchModes();
+    	} else if (move == PowerIndex.POWER_2) {
+    		return this.shootAirBubble();
+    	}
+    	
+    	return super.setPowerOther(move,  lastMove);
     }
     @Override
     public List<Byte> getSkinList() {
@@ -104,7 +136,93 @@ public class PowersKillerQueen extends NewPunchingStand {
             dash();
         }
     }
+    
+    public void tryShootAirBubbleClient() {
+    	if (!this.inBitesTheDustMode()) {
+            if (!this.onCooldown(PowerIndex.SKILL_2)) {
 
+                int bubbleType = 1;
+                /*ClientConfig clientConfig = ConfigManager.getClientConfig();
+                if (clientConfig != null && clientConfig.dynamicSettings != null) {
+                    bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
+                }*/
+
+                this.tryIntPower(PowerIndex.POWER_2, true, bubbleType);
+
+                tryIntPowerPacket(PowerIndex.POWER_2,bubbleType);
+                //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
+            }
+        } 
+    }
+
+    public void bitesTheDustModeToggleClient(){
+        //if (canExecuteMoveWithLevel(getShootingModeLevel())) {
+            this.tryPower(PowerIndex.POWER_4, true);
+            tryPowerPacket(PowerIndex.POWER_4);
+            
+
+            getStandUserSelf().roundabout$getStandPowers().tryPower(PowerIndex.NONE, true);
+            tryPowerPacket(PowerIndex.NONE);
+            //ClientUtil.stopDestroyingBlock();
+        //}
+    }
+    
+    public boolean inBitesTheDustMode(){
+        return BitesTheDustMode;
+    }
+
+    public boolean switchModes(){
+    	BitesTheDustMode = !(BitesTheDustMode);
+    	
+        return true;
+    }
+    
+    public boolean shootAirBubble(){
+        this.setCooldown(PowerIndex.SKILL_2_SNEAK, 3);
+        SoftAndWetExplosiveBubbleEntity bubble = getAirBubble();
+
+        if (bubble != null){
+
+            this.poseStand(OffsetIndex.FOLLOW);
+            this.setAttackTimeDuring(-10);
+            this.setActivePower(PowerIndex.POWER_2_SNEAK);
+            shootAirBubbleSpeed(bubble,getAirBubbleSpeed());
+            //bubbleListInit();
+            //this.bubbleList.add(bubble);
+            this.getSelf().level().addFreshEntity(bubble);
+
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXPLOSIVE_BUBBLE_SHOT_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+
+        }
+        return true;
+    }
+    
+    public float getAirBubbleSpeed(){
+        return (float) (0.54F*(ClientNetworking.getAppropriateConfig().
+                softAndWetSettings.explosiveBubbleShootSpeedMultiplier*0.01));
+    }
+    
+    public void shootAirBubbleSpeed(SoftAndWetBubbleEntity ankh, float speed){
+        ankh.setSped(speed);
+
+        Vec3 addToPosition = new Vec3(0,this.self.getEyeHeight()*0.8F,0);
+        Direction direction = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+        if (direction != Direction.DOWN){
+            addToPosition = RotationUtil.vecPlayerToWorld(addToPosition,direction);
+        }
+        Vec3 pos = this.self.getPosition(1).add(addToPosition.x,addToPosition.y,addToPosition.z).add(this.self.getForward().scale(this.self.getBbWidth()*1));
+        ankh.setPos(pos.x(), pos.y(), pos.z());
+        ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, speed, 0);
+    }
+    
+    public SoftAndWetExplosiveBubbleEntity getAirBubble(){
+        SoftAndWetExplosiveBubbleEntity bubble = new SoftAndWetExplosiveBubbleEntity(this.self,this.self.level());
+        bubble.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
+        bubble.setUser(this.self);
+        bubble.setOwner(this.self);
+        bubble.lifeSpan = 400;
+        return bubble;
+    }
     /**Punching stands only go for barrages when facing players, because barrages will be interrupted 100% of the time
      * otherwise.*/
     @Override
@@ -258,8 +376,10 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
 
-
-        if (isGuarding()) {
+    	
+    	if (inBitesTheDustMode() == true) {
+    		setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_BTD_DAY, PowerIndex.SKILL_1);
+    	} else if (isGuarding()) {
             setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_BOMB_SETIINGS, PowerIndex.SKILL_1_SNEAK);
         } else if (this.getBomb() != BOMB_TYPE.NONE) {
     		setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_BOMB_DETONATE, PowerIndex.NO_CD);
@@ -269,23 +389,31 @@ public class PowersKillerQueen extends NewPunchingStand {
         	setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_PLANT_BOMB_BLOCK, PowerIndex.SKILL_1);
         }
         
-        if (this.getBomb() != BOMB_TYPE.NONE && this.getBomb() != BOMB_TYPE.BUBBLE) {
+    	if (inBitesTheDustMode()) {
+    		setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BTD_COMBAT, PowerIndex.SKILL_2);
+    	} else if (this.getBomb() != BOMB_TYPE.NONE && this.getBomb() != BOMB_TYPE.BUBBLE) {
         	setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BOMB_DEFUSE, PowerIndex.NO_CD);
-        }
-         else if (this.getBomb() == BOMB_TYPE.BUBBLE) {
+        } else if (this.getBomb() == BOMB_TYPE.BUBBLE) {
     		setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BUBBLE_REDIRECT, PowerIndex.SKILL_2_GUARD);
     	} else if (isHoldingSneak()){
             setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BUBBLE_LAUNCH, PowerIndex.SKILL_2_SNEAK);
         } else {
-        	setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.SKILL_2);
+        	setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_PLANT_BOMB_ITEM, PowerIndex.SKILL_2);
         }
-        if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NONE);
+        
+        if (isHoldingSneak() && !(inBitesTheDustMode())){
+            setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_SUMMON, PowerIndex.SKILL_3);
         } else {
-            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.NONE);
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         }
-
-        setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4);
+        
+        if (inBitesTheDustMode()) {
+        	setSkillIcon(context, x, y, 4, StandIcons.KILLER_QUEEN_BTD_DEACTIVATE, PowerIndex.POWER_4);
+        }else {
+        	setSkillIcon(context, x, y, 4, StandIcons.KILLER_QUEEN_BTD_ACTIVATE, PowerIndex.POWER_4);
+        }
+        	
+        
     }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();

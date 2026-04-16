@@ -325,6 +325,17 @@ public class StandIcons {
     		"textures/gui/icons/killer_queen/bubble_launch.png");
     public static final ResourceLocation KILLER_QUEEN_BUBBLE_REDIRECT = new ResourceLocation(Roundabout.MOD_ID,
     		"textures/gui/icons/killer_queen/bubble_redirect.png");
+    public static final ResourceLocation KILLER_QUEEN_SHA_SUMMON = new ResourceLocation(Roundabout.MOD_ID,
+    		"textures/gui/icons/killer_queen/sha_summon.png");
+    public static final ResourceLocation KILLER_QUEEN_BTD_ACTIVATE = new ResourceLocation(Roundabout.MOD_ID,
+    		"textures/gui/icons/killer_queen/bites_the_dust_mode.png");
+    public static final ResourceLocation KILLER_QUEEN_BTD_DAY= new ResourceLocation(Roundabout.MOD_ID,
+    		"textures/gui/icons/killer_queen/btd_day.png");
+    public static final ResourceLocation KILLER_QUEEN_BTD_COMBAT = new ResourceLocation(Roundabout.MOD_ID,
+    		"textures/gui/icons/killer_queen/btd_combat.png");
+    public static final ResourceLocation KILLER_QUEEN_BTD_DEACTIVATE = new ResourceLocation(Roundabout.MOD_ID,
+    		"textures/gui/icons/killer_queen/btd_deactivate.png");
+    
     
     public static final ResourceLocation MANDOM_VISION_ON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/mandom/vision_on.png");
