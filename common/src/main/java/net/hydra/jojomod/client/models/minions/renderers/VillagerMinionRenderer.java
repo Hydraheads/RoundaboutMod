@@ -8,10 +8,12 @@ import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.monster.Vindicator;
 
@@ -38,5 +40,13 @@ public class VillagerMinionRenderer extends MobRenderer<VillagerMinion, Villager
     }
     public ResourceLocation getTextureLocation(VillagerMinion $$0) {
         return VINDICATOR;
+    }
+
+    @Override
+    public boolean shouldRender(VillagerMinion $$0, Frustum $$1, double $$2, double $$3, double $$4) {
+        if ($$0.getDiedInSun()){
+            return false;
+        }
+        return super.shouldRender($$0,$$1,$$2,$$3,$$4);
     }
 }
