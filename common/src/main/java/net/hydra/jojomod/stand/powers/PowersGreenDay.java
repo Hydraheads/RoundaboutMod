@@ -52,9 +52,11 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.FlyingMob;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AirItem;
 import net.minecraft.world.item.ItemStack;
@@ -170,14 +172,14 @@ public class PowersGreenDay extends NewPunchingStand {
         if (!isSculk) {
             if (isHoldingSneak())
                 if (canExecuteMoveWithLevel(2)) {
-                    setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_STITCH, PowerIndex.SKILL_4);
+                    setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_STITCH, PowerIndex.SKILL_4_SNEAK);
                 } else {
                     setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                 }
             else if (isGuarding())
                 setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_PARDON, PowerIndex.SKILL_4_GUARD);
             else
-                setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_MOLD_SPREAD, PowerIndex.SKILL_4_SNEAK);
+                setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_MOLD_SPREAD, PowerIndex.SKILL_4);
         }
 
         if (isHoldingSneak())
@@ -1002,7 +1004,7 @@ public class PowersGreenDay extends NewPunchingStand {
         if (canExecuteMoveWithLevel(2)) {
             if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
                 this.setCooldown(PowerIndex.SKILL_4_SNEAK, 400);
-                this.setCooldown(PowerIndex.SKILL_4_CROUCH_GUARD, 400);
+
                 this.tryPower(PowerIndex.POWER_4_SNEAK, true);
                 tryPowerPacket(PowerIndex.POWER_4_SNEAK);
             }
@@ -1223,6 +1225,41 @@ public class PowersGreenDay extends NewPunchingStand {
     }
 
     @Override
+    public void tickMobAI(LivingEntity attackTarget) {
+        if (attackTarget != null && attackTarget.isAlive()){
+            if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.BARRAGE)
+                    || attackTarget.distanceTo(this.getSelf()) <= 5){
+                rotateMobHead(attackTarget);
+            }
+            double RNG = Math.random();
+            if((this.self.getHealth() < this.self.getMaxHealth()) && (RNG > 0.99)){
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_SNEAK, true);
+            }
+            if(this.self instanceof FlyingMob || this.self instanceof Phantom){
+                if( (RNG > 0.99)){
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
+                }
+            }else
+            if(!(this.self.onGround()) && (RNG > 0.9)){
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
+            }
+
+            Entity targetEntity = getTargetEntity(this.self, -1);
+            if (targetEntity != null && targetEntity.is(attackTarget)) {
+                if (this.attackTimeDuring <= -1) {
+                    if (RNG < 0.35 && targetEntity instanceof Player && this.activePowerPhase <= 0 && !wentForCharge){
+                        wentForCharge = true;
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.BARRAGE_CHARGE, true);
+                    } else if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
+                        wentForCharge = false;
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.ATTACK, true);
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
     public void levelUp(){
         if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE){
             IPlayerEntity ipe = ((IPlayerEntity) PE);
@@ -1289,7 +1326,12 @@ public class PowersGreenDay extends NewPunchingStand {
             BROCCOLLI = 4,
             RED_NIGHT = 5,
             GORGONZOLA = 6,
-            SILENCE = 7;
+            SILENCE = 7,
+            TF_CENTURY = 8,
+            AMERICAN_IDIOT = 9,
+            NIMROD = 10,
+            SAVIOURS = 11,
+            MOUTH = 12;
 
 
     @Override
@@ -1312,6 +1354,16 @@ public class PowersGreenDay extends NewPunchingStand {
             return Component.translatable("skins.roundabout.green_day.gorgonzola");
         } else if (skinId == GreenDayEntity.SILENCE ){
             return Component.translatable("skins.roundabout.green_day.silence");
+        } else if (skinId == GreenDayEntity.TF_CENTURY ){
+        return Component.translatable("skins.roundabout.green_day.21_century");
+        } else if (skinId == GreenDayEntity.AMERICAN_IDIOT ){
+        return Component.translatable("skins.roundabout.green_day.american_idiot");
+        } else if (skinId == GreenDayEntity.NIMROD ){
+        return Component.translatable("skins.roundabout.green_day.nimrod");
+        } else if (skinId == GreenDayEntity.SAVIOURS ){
+        return Component.translatable("skins.roundabout.green_day.saviours");
+        } else if (skinId == GreenDayEntity.MOUTH ){
+        return Component.translatable("skins.roundabout.green_day.mouth");
         }
 
         return Component.translatable(  "skins.roundabout.green_day.part_five_green_day");
@@ -1327,26 +1379,23 @@ public class PowersGreenDay extends NewPunchingStand {
             ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass){
-                //$$1.add(RED_DAY);
-                //$$1.add(STONE);
-                //        $$1.add(CHEF);
-            } if (Level > 2 || bypass){
-                //$$1.add(RED_NIGHT);
+                $$1.add(SAVIOURS);
 
-                //     $$1.add(SOULBORN);
+            } if (Level > 2 || bypass){
+                $$1.add(NIMROD);
+
             } if (Level > 3 || bypass){
-                //$$1.add(GORGONZOLA);
+                $$1.add(TF_CENTURY);
 
             } if (Level > 4 || bypass){
-                //$$1.add(GRAY_WAGON);
-                //$$1.add(TIMEKEEPER);
-                //$$1.add(BLOODSTAINED);
+                $$1.add(AMERICAN_IDIOT);
+                $$1.add(MOUTH);
+
             } if (Level > 5 || bypass){
-                //$$1.add(DIAMOND);
-                //$$1.add(CHORUS);
-                //$$1.add(BRILLIANCE);
+
+
             } if (Level > 6 || bypass){
-                //$$1.add(ANCIENT);
+
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
                 $$1.add(SILENCE);
                 ;
