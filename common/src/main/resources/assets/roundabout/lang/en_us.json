@@ -148,6 +148,18 @@
   "item.roundabout.manhattan_transfer_disc.desc": "Manhattan Transfer",
   "item.roundabout.none_disc.desc": "None",
 
+  "item.roundabout.ocelot_remains": "Ocelot Remains",
+  "item.roundabout.cat_remains": "Cat Remains",
+  "item.roundabout.llama_remains": "Llama Remains",
+  "item.roundabout.silverfish_remains": "Silverfish Remains",
+  "item.roundabout.mooshroom_remains": "Mooshroom Remains",
+  "item.roundabout.parrot_remains": "Parrot Remains",
+  "item.roundabout.polar_bear_remains": "Polar Bear Remains",
+  "item.roundabout.dog_remains": "Dog Remains",
+  "item.roundabout.chicken_remains": "Chicken Remains",
+  "item.roundabout.goat_remains": "Goat Remains",
+  "item.roundabout.axolotl_remains": "Axolotl Remains",
+
   "item.roundabout.road_roller": "Road Roller",
 
   "item.roundabout.snubnose_revolver": "Snubnose Revolver",
@@ -787,6 +799,11 @@
   "sounds.roundabout.achtung_burst":  "Gone",
 
   "sounds.roundabout.cream_void_attack":  "Cream eating",
+
+  "sounds.roundabout.manhattan_summoning":  "Summon Manhattan Transfer",
+  "sounds.roundabout.manhattan_rain_dodging":  "Manhattan Transfer Dodging Rain",
+  "sounds.roundabout.manhattan_vision":  "Wind Reading ON",
+  "sounds.roundabout.manhattan_deflection":  "Manhattan Deflects Bullet",
 
   "sounds.roundabout.bullet_ricochet":  "Bullet ricochetted",
 
@@ -1924,6 +1941,11 @@
   "skins.roundabout.green_day.red_night": "Red Night",
   "skins.roundabout.green_day.gorgonzola": "Gorgonzola",
   "skins.roundabout.green_day.silence": "Silence",
+  "skins.roundabout.green_day.21_century": "Breakdown",
+  "skins.roundabout.green_day.american_idiot": "American Idiot",
+  "skins.roundabout.green_day.nimrod": "Nimrod",
+  "skins.roundabout.green_day.saviours": "Saviours",
+  "skins.roundabout.green_day.mouth": "Mouth",
 
 
   "skins.roundabout.achtung_baby.base": "Has No Form",

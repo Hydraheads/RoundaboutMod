@@ -15,8 +15,12 @@ public class GreenDayEntity extends FollowingStandEntity{
             BROCOLLI = 4,
             RED_NIGHT = 5,
             GORGONZOLA = 6,
-            SILENCE = 7;
-
+            SILENCE = 7,
+            TF_CENTURY = 8,
+            AMERICAN_IDIOT = 9,
+            NIMROD = 10,
+            SAVIOURS = 11,
+            MOUTH = 12;
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState hideLeg = new AnimationState();
     public final AnimationState kick_barrage = new AnimationState();

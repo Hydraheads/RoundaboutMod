@@ -187,6 +187,19 @@ public class ModSounds {
     public static final ResourceLocation CREAM_VOID_ATTACK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CREAM_VOID_ATTACK);
     public static SoundEvent CREAM_VOID_ATTACK_EVENT = SoundEvent.createVariableRangeEvent(CREAM_VOID_ATTACK_ID);
 
+    public static final String MANHATTAN_SUMMON = "manhattan_summoning";
+    public static final ResourceLocation MANHATTAN_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+MANHATTAN_SUMMON);
+    public static SoundEvent MANHATTAN_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(MANHATTAN_SUMMON_ID);
+    public static final String MANHATTAN_DODGING = "manhattan_rain_dodging";
+    public static final ResourceLocation MANHATTAN_DODGING_ID = new ResourceLocation(Roundabout.MOD_ID+":"+MANHATTAN_DODGING);
+    public static SoundEvent MANHATTAN_DODGING_EVENT = SoundEvent.createVariableRangeEvent(MANHATTAN_DODGING_ID);
+    public static final String MANHATTAN_VISION = "manhattan_vision";
+    public static final ResourceLocation MANHATTAN_VISION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+MANHATTAN_VISION);
+    public static SoundEvent MANHATTAN_VISION_EVENT = SoundEvent.createVariableRangeEvent(MANHATTAN_VISION_ID);
+    public static final String MANHATTAN_DEFLECTION = "manhattan_bullet_deflect";
+    public static final ResourceLocation MANHATTAN_DEFLECTION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+MANHATTAN_DEFLECTION);
+    public static SoundEvent MANHATTAN_DEFLECTION_EVENT = SoundEvent.createVariableRangeEvent(MANHATTAN_DEFLECTION_ID);
+
     public static final String SNUBNOSE_FIRE = "snubnose_fire";
     public static final ResourceLocation SNUBNOSE_FIRE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SNUBNOSE_FIRE);
     public static SoundEvent SNUBNOSE_FIRE_EVENT = SoundEvent.createVariableRangeEvent(SNUBNOSE_FIRE_ID);

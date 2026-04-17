@@ -59,6 +59,10 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
             ci.cancel();
             return;
         }
+        if (entityAndData.roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()){
+            ci.cancel();
+            return;
+        }
 
         dominant$Hand = entity.getMainArm() == HumanoidArm.RIGHT;
         if (entity instanceof Player) {
