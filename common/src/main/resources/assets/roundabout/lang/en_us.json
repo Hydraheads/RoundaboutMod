@@ -806,6 +806,11 @@
 
   "sounds.roundabout.cream_void_attack":  "Cream eating",
 
+  "sounds.roundabout.manhattan_summoning":  "Summon Manhattan Transfer",
+  "sounds.roundabout.manhattan_rain_dodging":  "Manhattan Transfer Dodging Rain",
+  "sounds.roundabout.manhattan_vision":  "Wind Reading ON",
+  "sounds.roundabout.manhattan_deflection":  "Manhattan Deflects Bullet",
+
   "sounds.roundabout.bullet_ricochet":  "Bullet ricochetted",
 
   "sounds.roundabout.snubnose_fire":  "Gun fired!",
@@ -1942,6 +1947,11 @@
   "skins.roundabout.green_day.red_night": "Red Night",
   "skins.roundabout.green_day.gorgonzola": "Gorgonzola",
   "skins.roundabout.green_day.silence": "Silence",
+  "skins.roundabout.green_day.21_century": "Breakdown",
+  "skins.roundabout.green_day.american_idiot": "American Idiot",
+  "skins.roundabout.green_day.nimrod": "Nimrod",
+  "skins.roundabout.green_day.saviours": "Saviours",
+  "skins.roundabout.green_day.mouth": "Mouth",
 
 
   "skins.roundabout.achtung_baby.base": "Has No Form",

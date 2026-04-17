@@ -15,14 +15,17 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
@@ -131,6 +134,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public void switchVisionClient(){
         this.tryPower(PowerIndex.POWER_4, true);
         tryPowerPacket(PowerIndex.POWER_4);
+        if (isClient() && switchWindVisionToggle()) {
+            this.self.playSound(ModSounds.MANHATTAN_VISION_EVENT, 200F, 1.0F);
+        }
     }
     public boolean switchVision(){
         if (isClient() && this.self instanceof Player PE) {
@@ -148,14 +154,14 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public boolean highlightsEntity(Entity ent,Player player){
         IEntityAndData entityAndData = ((IEntityAndData) ent);
         if(switchWindVisionToggle()) {
-            if (this.getStandEntity(this.getSelf()) != null && ent != null && ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
+            if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) && ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
                 if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent) && !player.hasLineOfSight(ent)) {
                     return true;
                 }
             }
         }
         if(isPiloting()){
-            if (this.getStandEntity(this.getSelf()) != null && ent != null && ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
+            if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) & ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
                 if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
                     return true;
                 }
@@ -180,7 +186,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 ipe.roundabout$setIsControlling(ID);
             } else {
                 ipe.roundabout$setIsControlling(ID);
-                poseStand(OffsetIndex.FOLLOW);
+                poseStand(OffsetIndex.FLOAT);
             }
         }
     }
@@ -455,6 +461,16 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
     protected Byte getSummonSound() {
         return SoundIndex.SUMMON_SOUND;
+    }
+    @Override
+    public SoundEvent getSoundFromByte(byte soundChoice){
+        switch (soundChoice)
+        {
+            case SoundIndex.SUMMON_SOUND -> {
+                return ModSounds.MANHATTAN_SUMMON_EVENT;
+            }
+        }
+        return super.getSoundFromByte(soundChoice);
     }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();

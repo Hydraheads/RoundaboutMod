@@ -1,9 +1,12 @@
 package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.mixin.justice.JusticeCreeper;
+import net.hydra.jojomod.mixin.justice.JusticeZombie;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -86,8 +89,9 @@ public class MoldSporesEntity extends StandEntity {
                         && !((StandUser) entity).roundabout$isBubbleEncased()
                         && !isStand
                         && ((StandUser) entity).GoingDown()
-                        && ((StandUser) entity).getJumpImmunityTicks() < 1 &&
-                        !entity.equals(User)) {
+                        && !(entity instanceof FallenMob)
+                        && ((StandUser) entity).getJumpImmunityTicks() < 1
+                        && !entity.equals(User)) {
                     if(!((PowersGreenDay)((StandUser)User).roundabout$getStandPowers()).allies.contains(entity.getStringUUID())) {
 
                         double width = entity.getBbWidth() / 2;

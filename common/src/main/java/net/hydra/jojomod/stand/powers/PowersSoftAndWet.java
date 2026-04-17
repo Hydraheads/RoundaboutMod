@@ -51,6 +51,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.FlyingMob;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Sheep;
@@ -1556,8 +1557,8 @@ public class PowersSoftAndWet extends NewPunchingStand {
     }
 
     @Override
-    public boolean hasShootingModeVisually(){
-        return true;
+    public boolean hasShootingModeVisually(HumanoidArm arm){
+        return arm == this.getSelf().getMainArm();
     }
     public float getBubbleSpeed(){
         if (bubbleType == PlunderTypes.OXYGEN.id){

@@ -22,6 +22,12 @@ public class GreenDayRenderer extends StandRenderer<GreenDayEntity> {
     private static final ResourceLocation RED_NIGHT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/red_night.png");
     private static final ResourceLocation GORGONZOLA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/gorgonzola_green_day.png");
     private static final ResourceLocation SILENCE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/silence_green_day.png");
+    private static final ResourceLocation TF_CENTURY = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/21st_century_green_day.png");
+    private static final ResourceLocation NIMROD = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/nimrod_green_day.png");
+    private static final ResourceLocation AMERICAN_IDIOT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/american_idiot_green_day.png");
+    private static final ResourceLocation SAVIOURS = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/saviours_green_day.png");
+    private static final ResourceLocation MOUTH = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/mouth_green_day.png");
+
 
 
     public GreenDayRenderer(EntityRendererProvider.Context context) {
@@ -31,12 +37,13 @@ public class GreenDayRenderer extends StandRenderer<GreenDayEntity> {
     @Override public ResourceLocation getTextureLocation(GreenDayEntity entity) {
         return switch (entity.getSkin()) {
             case(GreenDayEntity.PART_FIVE_GREEN_DAY) -> PART_FIVE_GREEN_DAY;
-            case(GreenDayEntity.RED_DAY) -> RED_DAY;
-            case(GreenDayEntity.TEAL_DAY) -> TEAL_DAY;
-            case(GreenDayEntity.BROCOLLI) -> BROCOLLI;
-            case(GreenDayEntity.RED_NIGHT) -> RED_NIGHT;
             case(GreenDayEntity.GORGONZOLA) -> GORGONZOLA;
             case(GreenDayEntity.SILENCE) -> SILENCE;
+            case(GreenDayEntity.TF_CENTURY) -> TF_CENTURY;
+            case(GreenDayEntity.NIMROD) -> NIMROD;
+            case(GreenDayEntity.AMERICAN_IDIOT) -> AMERICAN_IDIOT;
+            case(GreenDayEntity.SAVIOURS) -> SAVIOURS;
+            case(GreenDayEntity.MOUTH) -> MOUTH;
             default -> PART_FIVE_GREEN_DAY;
 
         };

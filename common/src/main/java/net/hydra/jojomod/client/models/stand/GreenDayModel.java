@@ -38,51 +38,50 @@ public class GreenDayModel<T extends GreenDayEntity> extends StandModel<T> {
 
 		PartDefinition head = stand2.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(0.0F, -24.15F, 0.0F));
 
-		PartDefinition head2 = head.addOrReplaceChild("head2", CubeListBuilder.create().texOffs(0, 0).addBox(-3.5F, -7.85F, -3.0F, 7.0F, 8.0F, 6.0F, new CubeDeformation(0.0F))
-				.texOffs(82, 0).addBox(-3.5F, -7.85F, -3.0F, 7.0F, 8.0F, 6.0F, new CubeDeformation(0.1F))
-				.texOffs(0, 69).addBox(-3.5F, -7.85F, -3.0F, 7.0F, 8.0F, 6.0F, new CubeDeformation(-0.1F))
-				.texOffs(71, 0).addBox(1.0F, -4.95F, -3.2F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F))
-				.texOffs(70, 6).addBox(-1.0F, -1.85F, -3.1F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
-				.texOffs(71, 0).addBox(-3.0F, -4.95F, -3.2F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F))
-				.texOffs(1, 15).addBox(-2.5F, -10.45F, -2.0F, 5.0F, 3.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition head2 = head.addOrReplaceChild("head2", CubeListBuilder.create().texOffs(55, 97).addBox(-4.0F, -6.85F, -3.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
+				.texOffs(-2, 68).addBox(-4.0F, -6.85F, -3.0F, 8.0F, 8.0F, 7.0F, new CubeDeformation(-0.1F))
+				.texOffs(70, 6).addBox(-1.0F, -1.25F, -3.1F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
+				.texOffs(71, 0).addBox(-3.0F, -3.25F, -3.2F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
+				.texOffs(71, 0).mirror().addBox(1.0F, -3.25F, -3.2F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false)
+				.texOffs(0, 14).addBox(-2.5F, -9.45F, -1.5F, 5.0F, 3.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -1.0F, -1.0F));
 
-		PartDefinition head6_r1 = head2.addOrReplaceChild("head6_r1", CubeListBuilder.create().texOffs(73, 35).mirror().addBox(-0.5F, -0.5F, 0.0F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-2.8F, -4.25F, -3.1F, -0.0514F, -0.264F, 0.161F));
+		PartDefinition head6_r1 = head2.addOrReplaceChild("head6_r1", CubeListBuilder.create().texOffs(73, 35).mirror().addBox(-0.5F, -0.5F, 0.0F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-2.8F, -2.95F, -2.6F, -0.0514F, -0.264F, 0.161F));
 
-		PartDefinition head5_r1 = head2.addOrReplaceChild("head5_r1", CubeListBuilder.create().texOffs(73, 35).addBox(-0.5F, -0.5F, 0.0F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.8F, -4.25F, -3.1F, -0.0514F, 0.264F, -0.161F));
+		PartDefinition head5_r1 = head2.addOrReplaceChild("head5_r1", CubeListBuilder.create().texOffs(73, 35).addBox(-0.5F, -0.5F, 0.0F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.8F, -2.95F, -2.6F, -0.0514F, 0.264F, -0.161F));
 
 		PartDefinition headthingies = head2.addOrReplaceChild("headthingies", CubeListBuilder.create(), PartPose.offset(-4.0F, 1.0F, 0.0F));
 
 		PartDefinition upper_left_arm_r1 = headthingies.addOrReplaceChild("upper_left_arm_r1", CubeListBuilder.create().texOffs(36, 54).mirror().addBox(-0.5F, 0.0F, -0.5F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false)
 				.texOffs(38, 54).mirror().addBox(-0.5F, 0.0F, 1.8F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false)
-				.texOffs(34, 54).mirror().addBox(-0.5F, 0.0F, 4.1F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.3464F, -9.2976F, -2.3F, 0.0F, 0.0F, -0.6545F));
+				.texOffs(34, 54).mirror().addBox(-0.5F, 0.0F, 4.1F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-0.0536F, -8.5976F, -1.8F, 0.0F, 0.0F, -0.6545F));
 
 		PartDefinition upper_right_arm_r1 = headthingies.addOrReplaceChild("upper_right_arm_r1", CubeListBuilder.create().texOffs(34, 54).addBox(0.5F, 0.0F, -0.5F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
 				.texOffs(36, 54).addBox(0.5F, 0.0F, -5.1F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-				.texOffs(38, 54).addBox(0.5F, 0.0F, -2.8F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(7.6536F, -9.2976F, 2.3F, 0.0F, 0.0F, 0.6545F));
+				.texOffs(38, 54).addBox(0.5F, 0.0F, -2.8F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(8.0536F, -8.5976F, 2.8F, 0.0F, 0.0F, 0.6545F));
 
 		PartDefinition upper_right_arm_r2 = headthingies.addOrReplaceChild("upper_right_arm_r2", CubeListBuilder.create().texOffs(50, 57).addBox(-0.3536F, 0.3F, 0.7F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
 				.texOffs(38, 57).addBox(-2.8536F, 0.3F, 0.7F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
-				.texOffs(48, 57).addBox(2.1464F, 0.3F, 0.7F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.8536F, -9.6411F, 3.2411F, -0.6545F, 0.0F, 0.0F));
+				.texOffs(48, 57).addBox(2.1464F, 0.3F, 0.7F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.8536F, -8.9411F, 5.1411F, -0.6545F, 0.0F, 0.0F));
 
 		PartDefinition upper_right_arm_r3 = headthingies.addOrReplaceChild("upper_right_arm_r3", CubeListBuilder.create().texOffs(48, 57).addBox(0.1464F, 0.3F, -0.7F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
 				.texOffs(38, 57).addBox(-4.8536F, 0.3F, -0.7F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
-				.texOffs(50, 57).addBox(-2.3536F, 0.3F, -0.7F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(5.8536F, -9.6411F, -3.2411F, 0.6545F, 0.0F, 0.0F));
+				.texOffs(50, 57).addBox(-2.3536F, 0.3F, -0.7F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(5.8536F, -8.9411F, -3.2411F, 0.6545F, 0.0F, 0.0F));
 
-		PartDefinition upper_right_arm_r4 = headthingies.addOrReplaceChild("upper_right_arm_r4", CubeListBuilder.create().texOffs(56, 57).addBox(-0.5F, 0.0F, -0.5F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(5.4F, -11.9464F, -2.1074F, 0.6545F, 0.0F, 0.0F));
+		PartDefinition upper_right_arm_r4 = headthingies.addOrReplaceChild("upper_right_arm_r4", CubeListBuilder.create().texOffs(56, 57).addBox(-0.5F, 0.0F, -0.5F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(5.4F, -11.2465F, -1.6074F, 0.6545F, 0.0F, 0.0F));
 
-		PartDefinition upper_right_arm_r5 = headthingies.addOrReplaceChild("upper_right_arm_r5", CubeListBuilder.create().texOffs(40, 58).addBox(0.1464F, 0.3F, -1.9F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.9536F, -13.0976F, -1.1F, 0.6545F, 0.0F, 0.0F));
+		PartDefinition upper_right_arm_r5 = headthingies.addOrReplaceChild("upper_right_arm_r5", CubeListBuilder.create().texOffs(40, 58).addBox(0.1464F, 0.3F, -1.9F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.9536F, -12.3976F, -0.6F, 0.6545F, 0.0F, 0.0F));
 
-		PartDefinition upper_right_arm_r6 = headthingies.addOrReplaceChild("upper_right_arm_r6", CubeListBuilder.create().texOffs(56, 57).addBox(-0.5F, 0.0F, 0.5F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(5.4F, -11.9464F, 2.1074F, -0.6545F, 0.0F, 0.0F));
+		PartDefinition upper_right_arm_r6 = headthingies.addOrReplaceChild("upper_right_arm_r6", CubeListBuilder.create().texOffs(56, 57).addBox(-0.5F, 0.0F, 0.5F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(5.4F, -11.2465F, 3.6074F, -0.6545F, 0.0F, 0.0F));
 
-		PartDefinition upper_right_arm_r7 = headthingies.addOrReplaceChild("upper_right_arm_r7", CubeListBuilder.create().texOffs(34, 10).addBox(0.5F, 0.0F, -0.5F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(6.7879F, -12.0073F, 1.0402F, 0.0F, 0.0F, 0.6545F));
+		PartDefinition upper_right_arm_r7 = headthingies.addOrReplaceChild("upper_right_arm_r7", CubeListBuilder.create().texOffs(34, 10).addBox(0.5F, 0.0F, -0.5F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(6.7879F, -11.3073F, 1.5402F, 0.0F, 0.0F, 0.6545F));
 
-		PartDefinition upper_right_arm_r8 = headthingies.addOrReplaceChild("upper_right_arm_r8", CubeListBuilder.create().texOffs(36, 10).addBox(1.1464F, 0.3F, 0.9F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(6.4577F, -12.6388F, -2.3598F, 0.0F, 0.0F, 0.6545F));
+		PartDefinition upper_right_arm_r8 = headthingies.addOrReplaceChild("upper_right_arm_r8", CubeListBuilder.create().texOffs(36, 10).addBox(1.1464F, 0.3F, 0.9F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(6.4577F, -11.9388F, -1.8598F, 0.0F, 0.0F, 0.6545F));
 
 		PartDefinition upper_right_arm_r9 = headthingies.addOrReplaceChild("upper_right_arm_r9", CubeListBuilder.create().texOffs(40, 10).addBox(0.1464F, 0.3F, 0.9F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
 				.texOffs(38, 10).addBox(0.1464F, 0.3F, -1.1F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-				.texOffs(42, 10).addBox(0.1464F, 0.3F, -1.1F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.5167F, -11.8518F, -0.3598F, 0.0F, 0.0F, -0.6545F));
+				.texOffs(42, 10).addBox(0.1464F, 0.3F, -1.1F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.5167F, -11.1518F, 0.1402F, 0.0F, 0.0F, -0.6545F));
 
-		PartDefinition upper_right_arm_r10 = headthingies.addOrReplaceChild("upper_right_arm_r10", CubeListBuilder.create().texOffs(40, 58).addBox(0.1464F, 0.3F, 1.9F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.9536F, -13.0976F, 1.1F, -0.6545F, 0.0F, 0.0F));
+		PartDefinition upper_right_arm_r10 = headthingies.addOrReplaceChild("upper_right_arm_r10", CubeListBuilder.create().texOffs(40, 58).addBox(0.1464F, 0.3F, 1.9F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.9536F, -12.3976F, 2.6F, -0.6545F, 0.0F, 0.0F));
 
 		PartDefinition body = stand2.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, -24.0F, 0.0F));
 
@@ -102,7 +101,6 @@ public class GreenDayModel<T extends GreenDayEntity> extends StandModel<T> {
 
 		PartDefinition upper_right_arm = right_arm.addOrReplaceChild("upper_right_arm", CubeListBuilder.create().texOffs(32, 34).addBox(-4.0F, -0.85F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
 				.texOffs(0, 45).addBox(-4.0F, -0.85F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.2F))
-				.texOffs(61, 119).mirror().addBox(-4.4F, -1.05F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.4F)).mirror(false)
 				.texOffs(0, 101).mirror().addBox(-4.4F, -1.05F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.3F)).mirror(false), PartPose.offset(0.0F, 0.1F, 0.0F));
 
 		PartDefinition right_shoulder_pad = upper_right_arm.addOrReplaceChild("right_shoulder_pad", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
@@ -121,8 +119,7 @@ public class GreenDayModel<T extends GreenDayEntity> extends StandModel<T> {
 
 		PartDefinition upper_left_arm = left_arm.addOrReplaceChild("upper_left_arm", CubeListBuilder.create().texOffs(44, 20).addBox(0.0F, -0.75F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.01F))
 				.texOffs(16, 45).addBox(0.0F, -0.75F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.2F))
-				.texOffs(0, 101).addBox(0.4F, -0.95F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.3F))
-				.texOffs(61, 119).addBox(0.4F, -0.95F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.4F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+				.texOffs(0, 101).addBox(0.4F, -0.95F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.3F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
 		PartDefinition left_shoulder_pad = upper_left_arm.addOrReplaceChild("left_shoulder_pad", CubeListBuilder.create(), PartPose.offset(0.0F, 0.1F, 0.0F));
 

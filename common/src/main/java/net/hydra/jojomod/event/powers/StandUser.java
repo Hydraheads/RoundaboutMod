@@ -6,10 +6,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -296,7 +293,7 @@ public interface StandUser {
     boolean roundabout$getDrowning();
     boolean roundabout$mutualActuallyHurt(DamageSource $$0, float $$1);
     boolean roundabout$hasAStand();
-    boolean roundabout$rotateArmToShoot();
+    boolean roundabout$rotateArmToShoot(HumanoidArm arm);
 
     /**Achtuah*/
     void roundabout$setTrueInvis(int bound);

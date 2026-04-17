@@ -166,7 +166,7 @@ public class StandPowers extends AbilityScapeBasis {
 
     /**Holds one arm out with the player model, override if you are using a stand like soft and wet or emperor that
      * should make the player hold their arm out in 3d person*/
-    public boolean hasShootingModeVisually(){
+    public boolean hasShootingModeVisually(HumanoidArm arm){
         return false;
     }
 

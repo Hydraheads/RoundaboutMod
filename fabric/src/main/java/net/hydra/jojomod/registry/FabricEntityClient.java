@@ -233,6 +233,7 @@ public class FabricEntityClient {
 
         ModStrayModels.SHOOTING_ARM = new SoftAndWetShootingArmModel();
         ModStrayModels.TUSK_DRILL = new TuskDrillModel();
+        ModStrayModels.TUSK_NAIL = new TuskNailModel();
         ModStrayModels.HEY_YA = new HeyYaModel();
         ModStrayModels.CENTURY_BOY = new CenturyBoyModel();
         ModStrayModels.BOWLER_HAT = new BowlerHatModel();

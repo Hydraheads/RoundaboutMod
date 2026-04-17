@@ -1,9 +1,13 @@
 package net.hydra.jojomod.entity.stand;
 
+import com.mojang.authlib.minecraft.client.MinecraftClient;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.event.index.OffsetIndex;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.stand.powers.PowersRatt;
@@ -18,6 +22,8 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -33,6 +39,9 @@ import net.minecraft.world.entity.*;
 import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+
+import javax.annotation.Nullable;
+import java.util.Objects;
 import java.util.UUID;
 
 public class ManhattanTransferEntity extends StandEntity {
@@ -179,12 +188,45 @@ public class ManhattanTransferEntity extends StandEntity {
           return ((StandUser) User);
     }
 
+ /*   public int DodgeRainTicks = 0;
+
+    public void setDodgeRainTicks(int val){DodgeRainTicks = val;};
+
+    public int getAmbientSoundInterval() {
+        return 1;
+    }
+    @Nullable
+    protected SoundEvent getAmbientSound() {
+        if (!isInRain()) {
+            return null;
+        } else {
+            return ModSounds.MANHATTAN_DODGING_EVENT;
+        }
+    }*/
+
     @Override
     public void tick() {
         validateUUID();
         float pitch = this.getXRot();
         float yaw = this.getYRot();
         super.tick();
+
+      /*  if(this.getUserData(this.getUser()) != null) {
+            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM && PM.isActive()) {
+                    if (isInRain()) {
+                        if (DodgeRainTicks > 0) {
+                            DodgeRainTicks--;
+
+                        } else {
+                            setDodgeRainTicks(440);
+                           // Roundabout.LOGGER.info("bwaah");
+                         //   this.level().playSound(null, this.blockPosition(), ModSounds.MANHATTAN_DODGING_EVENT, SoundSource.NEUTRAL, 1F, (float) (0.9F + (Math.random() * 0.2F)));
+                        }
+                    }
+                    else{
+                    }
+                }
+        }*/
 
             if (horizontalCollision || verticalCollision) {
                 this.getUserData(this.getUser()).roundabout$getStandPowers();
