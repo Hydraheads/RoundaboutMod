@@ -18,8 +18,7 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
-import net.hydra.jojomod.entity.zombie_minion.AxolotlMinion;
-import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
+import net.hydra.jojomod.entity.zombie_minion.*;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -73,10 +72,10 @@ public class ModEntities {
     public static EntityType<TuskEntity> TUSK_A4;
     public static EntityType<VillagerMinion> VILLAGER_MINION;
     public static EntityType<AxolotlMinion> AXOLOTL_MINION;
-    public static EntityType<AxolotlMinion> CHICKEN_MINION;
-    public static EntityType<AxolotlMinion> DOG_MINION;
-    public static EntityType<AxolotlMinion> OCELOT_MINION;
-    public static EntityType<AxolotlMinion> PARROT_MINION;
+    public static EntityType<ChickenMinion> CHICKEN_MINION;
+    public static EntityType<DogMinion> DOG_MINION;
+    public static EntityType<OcelotMinion> OCELOT_MINION;
+    public static EntityType<ParrotMinion> PARROT_MINION;
 
     public static EntityType<StarPlatinumBaseballEntity> STAR_PLATINUM_BASEBALL;
     public static EntityType<DiverDownEntity> DIVER_DOWN;

@@ -10,7 +10,14 @@ public class ModEntityRendererClient {
      * Forge and Fabric need to actually register this info into the game individually.*/
     public static final ModelLayerLocation WOLF_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "wolf"), "main");
     public static final ModelLayerLocation ZOMBIEFISH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "zombiefish"), "main");
+
     public static final ModelLayerLocation VILLAGER_MINION_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "villager_minion"), "main");
+    public static final ModelLayerLocation OCELOT_MINION_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "ocelot_minion"), "main");
+    public static final ModelLayerLocation PARROT_MINION_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "parrot_minion"), "main");
+    public static final ModelLayerLocation DOG_MINION_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "dog_minion"), "main");
+    public static final ModelLayerLocation AXOLOTL_MINION_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "axolotl_minion"), "main");
+    public static final ModelLayerLocation CHICKEN_MINION_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "chicken_minion"), "main");
+
     public static final ModelLayerLocation ANUBIS_GUARDIAN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "anubis_guardian"), "main");
     public static final ModelLayerLocation THE_WORLD_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "the_world"), "main");
     public static final ModelLayerLocation THE_WORLD_ULTIMATE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "the_world_ultimate"), "main");

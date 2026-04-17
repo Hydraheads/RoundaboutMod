@@ -22,7 +22,7 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
-import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
+import net.hydra.jojomod.entity.zombie_minion.*;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -209,8 +209,33 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<VillagerMinion>> VILLAGER_MINION =
             ENTITY_TYPES.register("villager_minion", () ->
-                    EntityType.Builder.of(VillagerMinion::new, MobCategory.MISC).sized(0.6F, 1.95F).clientTrackingRange(8).
+                    EntityType.Builder.of(VillagerMinion::new, MobCategory.MISC).sized(0.6F, 1.95F).clientTrackingRange(12).
                             build(new ResourceLocation(Roundabout.MOD_ID, "villager_minion").toString())
+            );
+    public static final RegistryObject<EntityType<OcelotMinion>> OCELOT_MINION =
+            ENTITY_TYPES.register("ocelot_minion", () ->
+                    EntityType.Builder.of(OcelotMinion::new, MobCategory.MISC).sized(0.6f, 0.7f).clientTrackingRange(12).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "ocelot_minion").toString())
+            );
+    public static final RegistryObject<EntityType<ParrotMinion>> PARROT_MINION =
+            ENTITY_TYPES.register("parrot_minion", () ->
+                    EntityType.Builder.of(ParrotMinion::new, MobCategory.MISC).sized(0.5f, 0.9f).clientTrackingRange(12).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "parrot_minion").toString())
+            );
+    public static final RegistryObject<EntityType<ChickenMinion>> CHICKEN_MINION =
+            ENTITY_TYPES.register("chicken_minion", () ->
+                    EntityType.Builder.of(ChickenMinion::new, MobCategory.MISC).sized(0.4f, 0.7f).clientTrackingRange(12).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "chicken_minion").toString())
+            );
+    public static final RegistryObject<EntityType<AxolotlMinion>> AXOLOTL_MINION =
+            ENTITY_TYPES.register("axolotl_minion", () ->
+                    EntityType.Builder.of(AxolotlMinion::new, MobCategory.MISC).sized(0.75f, 0.42f).clientTrackingRange(12).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "axolotl_minion").toString())
+            );
+    public static final RegistryObject<EntityType<DogMinion>> DOG_MINION =
+            ENTITY_TYPES.register("dog_minion", () ->
+                    EntityType.Builder.of(DogMinion::new, MobCategory.MISC).sized(0.6f, 0.85f).clientTrackingRange(12).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "dog_minion").toString())
             );
     public static final RegistryObject<EntityType<FallenCreeper>> FALLEN_CREEPER =
             ENTITY_TYPES.register("fallen_creeper", () ->
