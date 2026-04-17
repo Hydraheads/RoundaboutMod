@@ -12,6 +12,7 @@ import net.hydra.jojomod.client.models.worn_stand.*;
 public class ModStrayModels {
     public static SoftAndWetShootingArmModel SHOOTING_ARM;
     public static TuskDrillModel TUSK_DRILL;
+    public static TuskNailModel TUSK_NAIL;
     public static FirstPersonArmsModel FirstPersonArmsModel;
     public static FirstPersonArmsSlimModel FirstPersonArmsSlimModel;
     public static FirstPersonSnubnoseModel FirstPersonSnubnoseModel;

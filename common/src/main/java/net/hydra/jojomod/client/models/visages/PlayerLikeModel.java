@@ -435,28 +435,24 @@ public class  PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> im
 
         StandUser user = ((StandUser)$$0);
         if (user.roundabout$getEffectiveCombatMode() && !$$0.isUsingItem()){
-            if (user.roundabout$rotateArmToShoot()){
-                boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
-                if ($$9) {
-                    this.rightArm.yRot = -0.1F + this.head.yRot;
-                    this.rightArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
-                } else {
-                    this.leftArm.yRot = 0.1F + this.head.yRot;
-                    this.leftArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
-                }
+            if (user.roundabout$rotateArmToShoot(HumanoidArm.RIGHT)) {
+                this.rightArm.yRot = -0.1F + this.head.yRot;
+                this.rightArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+            }
+            if (user.roundabout$rotateArmToShoot(HumanoidArm.LEFT)) {
+                this.leftArm.yRot = 0.1F + this.head.yRot;
+                this.leftArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
             }
         } else if ($$0.host != null){
             StandUser user2 = ((StandUser)$$0.host);
             if (user2.roundabout$getEffectiveCombatMode() && !$$0.isUsingItem()){
-                if (user2.roundabout$rotateArmToShoot()){
-                    boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
-                    if ($$9) {
-                        this.rightArm.yRot = -0.1F + this.head.yRot;
-                        this.rightArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
-                    } else {
-                        this.leftArm.yRot = 0.1F + this.head.yRot;
-                        this.leftArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
-                    }
+                if (user.roundabout$rotateArmToShoot(HumanoidArm.RIGHT)) {
+                    this.rightArm.yRot = -0.1F + this.head.yRot;
+                    this.rightArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+                }
+                if (user.roundabout$rotateArmToShoot(HumanoidArm.LEFT)) {
+                    this.leftArm.yRot = 0.1F + this.head.yRot;
+                    this.leftArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
                 }
             }
         }
