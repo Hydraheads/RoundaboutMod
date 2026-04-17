@@ -88,7 +88,7 @@ public class TuskLayer<T extends LivingEntity, A extends HumanoidModel<T>> exten
                                 getParentModel().leftArm.translateAndRotate(poseStack);
                                 poseStack.translate(-0.05, -0.5, 0);
                             }
-                            poseStack.scale(0.8F, 0.8F, 0.8F);
+                            poseStack.scale(0.80F, 0.8F, 0.8F);
                             ModStrayModels.TUSK_DRILL.render(livent, partialTicks, poseStack, bufferSource, packedLight, r, g, b, 1.0F);
                             poseStack.popPose();
                         }
