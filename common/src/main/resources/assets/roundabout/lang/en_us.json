@@ -800,6 +800,11 @@
 
   "sounds.roundabout.cream_void_attack":  "Cream eating",
 
+  "sounds.roundabout.manhattan_summoning":  "Summon Manhattan Transfer",
+  "sounds.roundabout.manhattan_rain_dodging":  "Manhattan Transfer Dodging Rain",
+  "sounds.roundabout.manhattan_vision":  "Wind Reading ON",
+  "sounds.roundabout.manhattan_deflection":  "Manhattan Deflects Bullet",
+
   "sounds.roundabout.bullet_ricochet":  "Bullet ricochetted",
 
   "sounds.roundabout.snubnose_fire":  "Gun fired!",

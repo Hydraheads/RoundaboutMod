@@ -109,6 +109,9 @@ public class FirearmLayer<T extends LivingEntity, A extends HumanoidModel<T>> ex
         if (entity != null) {
             if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
                 return;
+            if(((IEntityAndData)entity).roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()){
+                return;
+            }
         }
 
         LivingEntity livent = entity;
