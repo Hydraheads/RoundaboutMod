@@ -18,6 +18,7 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
+import net.hydra.jojomod.entity.zombie_minion.AxolotlMinion;
 import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -71,6 +72,11 @@ public class ModEntities {
     public static EntityType<TuskEntity> TUSK_A3;
     public static EntityType<TuskEntity> TUSK_A4;
     public static EntityType<VillagerMinion> VILLAGER_MINION;
+    public static EntityType<AxolotlMinion> AXOLOTL_MINION;
+    public static EntityType<AxolotlMinion> CHICKEN_MINION;
+    public static EntityType<AxolotlMinion> DOG_MINION;
+    public static EntityType<AxolotlMinion> OCELOT_MINION;
+    public static EntityType<AxolotlMinion> PARROT_MINION;
 
     public static EntityType<StarPlatinumBaseballEntity> STAR_PLATINUM_BASEBALL;
     public static EntityType<DiverDownEntity> DIVER_DOWN;
@@ -146,6 +152,9 @@ public class ModEntities {
     public static EntityType<FallenVillager> FALLEN_VILLAGER;
     public static EntityType<FallenPhantom> FALLEN_PHANTOM;
     public static EntityType<FallenCreeper> FALLEN_CREEPER;
+
+
+
     public static final ResourceLocation HARPOON_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_harpoon.png");
     public static final ResourceLocation SNUBNOSE_IN_HAND_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/item/snubnose_revolver.png");
     public static final ResourceLocation TOMMY_GUN_IN_HAND_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/item/tommy_gun.png");

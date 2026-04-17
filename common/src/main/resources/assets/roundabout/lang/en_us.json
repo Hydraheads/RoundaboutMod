@@ -397,7 +397,7 @@
   "entity.roundabout.seperated_arm": "Seperated Arm",
   "entity.roundabout.seperated_arm_slim": "Seperated Arm Slim",
   "entity.roundabout.left_seperated_arm": "Left Seperated Arm",
-  "entity.roundabout.left_sepaeated_arm_slim": "Left Aeperated Arm Slim",
+  "entity.roundabout.left_seperated_arm_slim": "Left Aeperated Arm Slim",
 
 
   "entity.roundabout.water_bottle": "Water Bottle",
@@ -417,6 +417,12 @@
   "entity.roundabout.anubis_possessor": "Anubis Possessor",
   "entity.roundabout.anubis_slipstream": "Anubis Slipstream",
 
+  "entity.roundabout.villager_minion": "Zombie Minion",
+  "entity.roundabout.axolotl_minion": "Zombie Minion",
+  "entity.roundabout.chicken_minion": "Zombie Minion",
+  "entity.roundabout.dog_minion": "Zombie Minion",
+  "entity.roundabout.ocelot_minion": "Zombie Minion",
+  "entity.roundabout.parrot_minion": "Zombie Minion",
 
   "block.roundabout.meteor_block": "Meteorite Block",
   "block.roundabout.coffin_block": "Coffin",
