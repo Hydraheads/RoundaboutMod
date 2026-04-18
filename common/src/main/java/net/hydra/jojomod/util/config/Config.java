@@ -516,6 +516,22 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 24, min = 0, max = 72000)
         public Integer magiciansRedFlamethrowerWindup;
     }
+
+    public static class GreenDaySettings{
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableGreenDay;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer greenDayAttackMultOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer greenDayAttackMultOnPlayers;
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer greenDayGuardPoints;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer miningSpeedMultiplierGreenDay;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierGreenDay;
+    }
+
     public static class JusticeSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableJustice;
@@ -761,6 +777,8 @@ public class Config implements Cloneable {
         public Boolean invisiBurstAlertsMobs;
     }
 
+
+
     public static class CreamSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableCream;
@@ -778,20 +796,7 @@ public class Config implements Cloneable {
         public Integer creamVoidTime;
     }
 
-    public static class GreenDaySettings{
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean enableGreenDay;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer greenDayAttackMultOnMobs;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer greenDayAttackMultOnPlayers;
-        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
-        public Integer greenDayGuardPoints;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer miningSpeedMultiplierGreenDay;
-        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
-        public Integer getMiningTierGreenDay;
-    }
+
 
     public static class AnubisSettings {
         @BooleanOption(group = "inherit", value = true)
