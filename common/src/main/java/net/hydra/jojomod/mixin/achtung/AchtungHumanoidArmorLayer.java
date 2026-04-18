@@ -61,7 +61,7 @@ public abstract class AchtungHumanoidArmorLayer<T extends LivingEntity, M extend
                 && (!ClientUtil.checkIfClientCanSeeInvisAchtung())
                 && ClientNetworking.getAppropriateConfig() != null &&
                 ClientNetworking.getAppropriateConfig().achtungSettings != null &&
-                ClientNetworking.getAppropriateConfig().achtungSettings.hidesArmor) {
+                ClientNetworking.getAppropriateConfig().achtungSettings.hidesArmor && !ClientUtil.checkIfClientCanSeeMobsForWindVision()) {
             ci.cancel();
             return;
         }

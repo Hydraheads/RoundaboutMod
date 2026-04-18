@@ -96,6 +96,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public AnubisSettings anubisSettings;
     @NestedOption(group = "modded")
+    public GreenDaySettings greenDaySettings;
+    @NestedOption(group = "modded")
     public TheWorldSettings theWorldSettings;
     @NestedOption(group = "modded")
     public StarPlatinumSettings starPlatinumSettings;
@@ -774,6 +776,21 @@ public class Config implements Cloneable {
         public Integer getMiningTierCream;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer creamVoidTime;
+    }
+
+    public static class GreenDaySettings{
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableGreenDay;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer greenDayAttackMultOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer greenDayAttackMultOnPlayers;
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer greenDayGuardPoints;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer miningSpeedMultiplierGreenDay;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierGreenDay;
     }
 
     public static class AnubisSettings {
