@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.models.WornBloodyStoneMaskModel;
 import net.hydra.jojomod.client.models.WornStoneMaskModel;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
 import net.hydra.jojomod.client.models.minions.*;
+import net.hydra.jojomod.client.models.minions.head_parts.*;
 import net.hydra.jojomod.client.models.minions.renderers.*;
 import net.hydra.jojomod.client.models.mobs.AnubisGuardianModel;
 import net.hydra.jojomod.client.models.mobs.renderers.AnubisGuardianRenderer;
@@ -297,6 +298,15 @@ public class ClientForgeEvents {
         ModStrayModels.LeftLeg = new LeftLegPart();
         ModStrayModels.LeftHeel = new LeftHeelPart();
         ModStrayModels.RightHeel = new RightHeelPart();
+
+        ModStrayModels.GoatHeadPart = new GoatHeadPart();
+        ModStrayModels.CatHeadPart = new CatHeadPart();
+        ModStrayModels.VillagerHeadPart = new VillagerHeadPart();
+        ModStrayModels.LlamaHeadPart = new LlamaHeadPart();
+        ModStrayModels.PolarBearHeadPart = new PolarBearHeadPart();
+        ModStrayModels.MooshroomHeadPart = new MooshroomHeadPart();
+        ModStrayModels.SilverfishHeadPart = new SilverfishHeadPart();
+
         ModStrayModels.VampireHairOne = new VampireHairOnePart();
         ModStrayModels.VampireHairTwo = new VampireHairTwoPart();
         ModStrayModels.VampireHairFlesh = new VampireHairFleshBudLayer();

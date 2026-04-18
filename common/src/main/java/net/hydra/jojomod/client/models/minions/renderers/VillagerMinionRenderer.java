@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 
 public class VillagerMinionRenderer extends MobRenderer<VillagerMinion, VillagerMinionModel<VillagerMinion>> {
     private static final ResourceLocation VINDICATOR = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/minions/villager.png");
@@ -44,5 +45,11 @@ public class VillagerMinionRenderer extends MobRenderer<VillagerMinion, Villager
             return false;
         }
         return super.shouldRender($$0,$$1,$$2,$$3,$$4);
+    }
+
+    @Override
+
+    public void render(VillagerMinion $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
+        super.render($$0, $$1, $$2, $$3, $$4, $$5);
     }
 }
