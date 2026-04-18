@@ -39,6 +39,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SculkChargeParticleOptions;
@@ -80,10 +81,6 @@ public class PowersGreenDay extends NewPunchingStand {
         return super.tryPower(move, forced);
     }
 
-    @Override
-    public int getMaxGuardPoints(){
-        return 20;
-    }
 
     @Override
     public StandEntity getNewStandEntity() {
@@ -1405,4 +1402,35 @@ public class PowersGreenDay extends NewPunchingStand {
 
     }
 
+    @Override
+    public boolean isStandEnabled() {
+        return ClientNetworking.getAppropriateConfig().greenDaySettings.enableGreenDay;
+
+    }
+
+    @Override
+    public float multiplyPowerByStandConfigMobs(float power){
+        return (float) (power*(ClientNetworking.getAppropriateConfig().
+                greenDaySettings.greenDayAttackMultOnMobs*0.01));
+    }
+    @Override
+    public float multiplyPowerByStandConfigPlayers(float power){
+        return (float) (power*(ClientNetworking.getAppropriateConfig().
+                greenDaySettings.greenDayAttackMultOnPlayers*0.01));
+    }
+    @Override
+    public int getMaxGuardPoints(){
+        return ClientNetworking.getAppropriateConfig().greenDaySettings.greenDayGuardPoints;
+    }
+
+    @Override
+    public float getMiningMultiplier() {
+        return (float) (1F*(ClientNetworking.getAppropriateConfig().
+                greenDaySettings.miningSpeedMultiplierGreenDay *0.01));
+    }
+
+    @Override
+    public int getMiningLevel() {
+        return ClientNetworking.getAppropriateConfig().greenDaySettings.getMiningTierGreenDay;
+    }
 }
