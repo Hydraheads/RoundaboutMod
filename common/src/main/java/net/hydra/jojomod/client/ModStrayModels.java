@@ -3,6 +3,7 @@ package net.hydra.jojomod.client;
 import net.hydra.jojomod.client.models.RoadRollerStrayModel;
 import net.hydra.jojomod.client.models.WornBloodyStoneMaskModel;
 import net.hydra.jojomod.client.models.WornStoneMaskModel;
+import net.hydra.jojomod.client.models.minions.head_parts.*;
 import net.hydra.jojomod.client.models.projectile.*;
 import net.hydra.jojomod.client.models.stand.AnubisHumanoidModel;
 import net.hydra.jojomod.client.models.stand.AnubisModel;
@@ -66,6 +67,14 @@ public class ModStrayModels {
     public static LeftHeelPart LeftHeel;
     public static RightHeelPart RightHeel;
 
+
+    public static CatHeadPart CatHeadPart;
+    public static LlamaHeadPart LlamaHeadPart;
+    public static MooshroomHeadPart MooshroomHeadPart;
+    public static VillagerHeadPart VillagerHeadPart;
+    public static PolarBearHeadPart PolarBearHeadPart;
+    public static SilverfishHeadPart SilverfishHeadPart;
+    public static GoatHeadPart GoatHeadPart;
 
     public static VampireHairOnePart VampireHairOne;
     public static VampireHairTwoPart VampireHairTwo;
