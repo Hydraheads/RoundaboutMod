@@ -53,7 +53,7 @@ public class MoldSporesEntity extends StandEntity {
             }
             this.setDeltaMovement(0,-0.2,0);
             if (!onGround()) {
-                range += 0.1;
+                range += 0.07;
                 //this.setDeltaMovement(0,-0.4,0);
             }
                 ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST,
