@@ -72,29 +72,52 @@ public class PowersKillerQueen extends NewPunchingStand {
 	public Entity bombEntity = null;
 	public BlockPos bombBlock = null;
 	public Entity bombBubble = null;
-	public boolean destroyTerrain = false;
-	public boolean explodeOnContact = false;
-	public boolean BitesTheDustMode = false;
+	private boolean destroyTerrain = false;
+	private boolean explodeOnContact = false;
+	private boolean BitesTheDustMode = false;
 	
-	
+	public float standReach = 5;
+    public PowersKillerQueen(LivingEntity self) {super(self);}
+    
+    @Override
+    public StandPowers generateStandPowers(LivingEntity entity){
+        return new PowersKillerQueen(entity);
+    }
+    
+    @Override
+    public StandEntity getNewStandEntity() {
+        return ModEntities.KILLER_QUEEN.create(this.getSelf().level());
+    }
+
     @Override
     public void powerActivate(PowerContext context) {
+    	
         switch (context)
         {
-        	case SKILL_2_CROUCH:
+        	case SKILL_2_CROUCH -> {
         		tryShootAirBubbleClient();
-        	case SKILL_3_NORMAL:
+        	}
+        	case SKILL_3_NORMAL, SKILL_3_GUARD -> {
         		tryToDashClient();
-        	case SKILL_4_NORMAL:
+        	}
+        	case SKILL_3_CROUCH -> {
+        		if (this.BitesTheDustMode) {
+        			tryToDashClient();
+        		}
+        	}
+        	case SKILL_4_NORMAL, SKILL_4_CROUCH, SKILL_4_GUARD -> {
         		bitesTheDustModeToggleClient();
+        	}
+        	
         }
     }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
+    	
     	if (move == PowerIndex.POWER_4) {
-    		return this.switchModes();
+    		return switchModes();
     	} else if (move == PowerIndex.POWER_2) {
-    		return this.shootAirBubble();
+    		return shootAirBubble();
     	}
     	
     	return super.setPowerOther(move,  lastMove);
@@ -105,13 +128,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                 KillerQueenEntity.PART_4
         );
     }
-    public float standReach = 5;
-    public PowersKillerQueen(LivingEntity self) {super(self);}
+    
 
-    @Override
-    public StandPowers generateStandPowers(LivingEntity entity){
-        return new PowersKillerQueen(entity);
-    }
     @Override
     public int getMaxGuardPoints(){
         return 15;
@@ -120,13 +138,15 @@ public class PowersKillerQueen extends NewPunchingStand {
     public void handleStandAttack(Player player, Entity target){
         super.handleStandAttack(player,target);
     }
+    
+    
     @Override
     public boolean tryPower(int move, boolean forced) {
         return super.tryPower(move, forced);
     }
     @Override
-    public StandEntity getNewStandEntity() {
-        return ModEntities.KILLER_QUEEN.create(this.getSelf().level());
+    public boolean tryIntPower(int move, boolean forced, int chargeTime) {
+    	return super.tryIntPower(move, forced, chargeTime);
     }
 
     public boolean wentForCharge = false;
@@ -138,7 +158,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
     
     public void tryShootAirBubbleClient() {
-    	if (!this.inBitesTheDustMode()) {
+    	if (!this.BitesTheDustMode) {
             if (!this.onCooldown(PowerIndex.SKILL_2)) {
 
                 int bubbleType = 1;
@@ -156,7 +176,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void bitesTheDustModeToggleClient(){
-        //if (canExecuteMoveWithLevel(getShootingModeLevel())) {
+        /*if (canExecuteMoveWithLevel(getShootingModeLevel())) {
             this.tryPower(PowerIndex.POWER_4, true);
             tryPowerPacket(PowerIndex.POWER_4);
             
@@ -164,15 +184,18 @@ public class PowersKillerQueen extends NewPunchingStand {
             getStandUserSelf().roundabout$getStandPowers().tryPower(PowerIndex.NONE, true);
             tryPowerPacket(PowerIndex.NONE);
             //ClientUtil.stopDestroyingBlock();
-        //}
+        //}*/
+    	
+    	((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
+        tryPowerPacket(PowerIndex.POWER_4);
     }
     
     public boolean inBitesTheDustMode(){
-        return BitesTheDustMode;
+        return this.BitesTheDustMode;
     }
 
     public boolean switchModes(){
-    	BitesTheDustMode = !(BitesTheDustMode);
+    	this.BitesTheDustMode = !(this.BitesTheDustMode);
     	
         return true;
     }
@@ -189,6 +212,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             shootAirBubbleSpeed(bubble,getAirBubbleSpeed());
             //bubbleListInit();
             //this.bubbleList.add(bubble);
+            this.bombBubble = bubble;
+            
             this.getSelf().level().addFreshEntity(bubble);
 
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXPLOSIVE_BUBBLE_SHOT_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
@@ -357,15 +382,9 @@ public class PowersKillerQueen extends NewPunchingStand {
         return super.getSoundFromByte(soundChoice);
     }
 
-
-
-
     @Override
     public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos){
-        if (move == PowerIndex.POWER_1) {
-
-        }
-        return true;
+    	return tryPower(move, forced);
     }
 
 
@@ -408,9 +427,9 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
         
         if (inBitesTheDustMode()) {
-        	setSkillIcon(context, x, y, 4, StandIcons.KILLER_QUEEN_BTD_DEACTIVATE, PowerIndex.POWER_4);
+        	setSkillIcon(context, x, y, 4, StandIcons.KILLER_QUEEN_BTD_DEACTIVATE, PowerIndex.SKILL_4);
         }else {
-        	setSkillIcon(context, x, y, 4, StandIcons.KILLER_QUEEN_BTD_ACTIVATE, PowerIndex.POWER_4);
+        	setSkillIcon(context, x, y, 4, StandIcons.KILLER_QUEEN_BTD_ACTIVATE, PowerIndex.SKILL_4);
         }
         	
         
