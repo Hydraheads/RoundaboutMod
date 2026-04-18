@@ -51,7 +51,7 @@ public abstract class AchtungCapeLayer extends RenderLayer<AbstractClientPlayer,
     private void roundabout$renderCape(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
         if (ClientUtil.getThrowFadeToTheEther() != 1) {
             if ($$3.isCapeLoaded() && !$$3.isInvisible() && $$3.isModelPartShown(PlayerModelPart.CAPE)
-                && $$3.getCloakTextureLocation() != null
+                && $$3.getCloakTextureLocation() != null && !ClientUtil.checkIfClientCanSeeMobsForWindVision()
             ) {
                 ItemStack $$10 = $$3.getItemBySlot(EquipmentSlot.CHEST);
                 if (!$$10.is(Items.ELYTRA)) {

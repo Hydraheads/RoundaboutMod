@@ -13,6 +13,7 @@ import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
+import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
@@ -5427,12 +5428,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             boolean isStand = (((LivingEntity) (Object) this) instanceof StandEntity);
 
             IEntityAndData entityAndData = ((IEntityAndData) this);
-            if (!isStand && !roundabout$getStandPowers().isStoppingTime()) {
                 if (up || down || movementX || movementZ) {
+                    if(isInWater()){
+                        entityAndData.roundabout$setTrueInvisibilityManhattan(-1);
+                    }
+                    else{
                         entityAndData.roundabout$setTrueInvisibilityManhattan(45);
-                } else {/*Ticking will go down until the entity unrenders*/}
-
-            }
+                    }
+                }
+                else {/*Ticking will go down until the entity unrenders*/}
         }
             previousYposManhattan = this.getY();
             previousXposManhattan = this.getX();

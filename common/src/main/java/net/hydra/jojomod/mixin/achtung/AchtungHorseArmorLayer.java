@@ -20,7 +20,7 @@ public class AchtungHorseArmorLayer {
     private void rdbt$renderHorseArmor(PoseStack $$0, MultiBufferSource $$1, int $$2, Horse $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci)
     {
         if ($$3 != null) {
-            if (MainUtil.getEntityIsTrulyInvisible($$3) && !ClientUtil.checkIfClientCanSeeInvisAchtung()){
+            if (MainUtil.getEntityIsTrulyInvisible($$3) && !ClientUtil.checkIfClientCanSeeInvisAchtung() && !ClientUtil.checkIfClientCanSeeMobsForWindVision()){
                 ci.cancel();
             }
         }

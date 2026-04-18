@@ -125,6 +125,10 @@ public class ManhattanTransferEntity extends StandEntity {
         return true;
     }
     @Override
+    public boolean isPushedByFluid() {
+        return true;
+    }
+    @Override
     public boolean redirectKnockbackToUser() {
         return false;
     }

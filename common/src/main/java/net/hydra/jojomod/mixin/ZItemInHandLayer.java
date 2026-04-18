@@ -55,7 +55,7 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
         StandUserClient userClient = ((StandUserClient) entity);
         if (entityAndData.roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() && ClientNetworking.getAppropriateConfig() != null &&
         ClientNetworking.getAppropriateConfig().achtungSettings != null &&
-                ClientNetworking.getAppropriateConfig().achtungSettings.hidesHeldItems){
+                ClientNetworking.getAppropriateConfig().achtungSettings.hidesHeldItems && !ClientUtil.checkIfClientCanSeeMobsForWindVision()){
             ci.cancel();
             return;
         }
