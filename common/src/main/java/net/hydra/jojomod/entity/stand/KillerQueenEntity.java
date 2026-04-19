@@ -23,7 +23,10 @@ public class KillerQueenEntity extends FollowingStandEntity {
     }
 
     public static final byte
-            PART_4 = 0;
+            PART_4 = 0,
+    		MANGA = 1,
+			UMBRA = 2,
+    		GOGO = 3;
 
     public final AnimationState lid_open = new AnimationState();
     public final AnimationState hideFists = new AnimationState();

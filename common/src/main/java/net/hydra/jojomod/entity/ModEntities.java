@@ -60,6 +60,9 @@ public class ModEntities {
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET_DEBUT;
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET_KILLER_QUEEN;
     public static EntityType<KillerQueenEntity> KILLER_QUEEN;
+    /*public static EntityType<KillerQueenEntity> KILLER_QUEEN_MANGA;
+    public static EntityType<KillerQueenEntity> KILLER_QUEEN_UMBRA;
+    public static EntityType<KillerQueenEntity> KILLER_QUEEN_GOGO; */
     public static EntityType<CinderellaEntity> CINDERELLA;
     public static EntityType<ManhattanTransferEntity> MANHATTAN_TRANSFER;
     public static EntityType<PollinationTransferEntity> POLLINATION_TRANSFER;
