@@ -5436,6 +5436,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         entityAndData.roundabout$setTrueInvisibilityManhattan(45);
                     }
                 }
+  /*              else if(((LivingEntity) (Object) this) instanceof RoadRollerEntity){
+                    entityAndData.roundabout$setTrueInvisibilityManhattan(45);
+                }*/
                 else {/*Ticking will go down until the entity unrenders*/}
         }
             previousYposManhattan = this.getY();
