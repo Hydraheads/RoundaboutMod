@@ -2842,7 +2842,7 @@
   "config.roundabout.armThrowCooldown.name": "Arm Throw Cooldown",
   "config.roundabout.armThrowCooldown.desc": "The cooldown after using arm throw 2 times (Default is 120 ticks, or 6 secnds)",
   "config.roundabout.armSpinDuration.name": "Arm Spin Duration",
-  "config.roundabout.armSpinDuration.desc": "How long your seperated arms spin for after using the move, default is 20 ticks, or 1 second",
+  "config.roundabout.armSpinDuration.desc": "How long your seperated arms spin for after using the move, default is 30 ticks, or 1.5 seconds",
   "config.roundabout.armSpinCooldown.name": "Arm Spin Cooldown",
   "config.roundabout.armSpinCooldown.desc": "Default is 120 ticks, or 6 seconds",
 
