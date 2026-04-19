@@ -537,14 +537,12 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
         public Integer moldDefaultRange;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer moldFallSpeed;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer moldGrowthRate;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer moldSpreadCooldown;
-        @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
         public Integer armThrowCooldown;
-        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
         public Integer armSpinDuration;
         @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
         public Integer armSpinCooldown;

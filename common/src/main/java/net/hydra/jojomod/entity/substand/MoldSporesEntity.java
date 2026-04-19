@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
@@ -29,7 +30,7 @@ import org.joml.Vector3f;
 import java.util.List;
 
 public class MoldSporesEntity extends StandEntity {
-    public float range = 1;
+    public float range = ClientNetworking.getAppropriateConfig().greenDaySettings.moldDefaultRange;
     public int lifetime = 600;
     public MoldSporesEntity(EntityType<? extends StandEntity> $$0, Level $$1) {
         super($$0, $$1);
@@ -53,7 +54,7 @@ public class MoldSporesEntity extends StandEntity {
             }
             this.setDeltaMovement(0,-0.2,0);
             if (!onGround()) {
-                range += 0.07;
+                range += 0.07 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldGrowthRate / 100);
                 //this.setDeltaMovement(0,-0.4,0);
             }
                 ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST,
