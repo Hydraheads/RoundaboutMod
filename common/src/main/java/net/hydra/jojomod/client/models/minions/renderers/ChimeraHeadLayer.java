@@ -51,7 +51,10 @@ public class ChimeraHeadLayer<T extends LivingEntity, A extends EntityModel<T>> 
             ClientUtil.pushPoseAndCooperate(poseStack, 41);
             head.translateAndRotate(poseStack);
             //ModStrayModels.LlamaHeadPart.render(vm, partialTicks, poseStack, bufferSource, packedLight, r, g, b,1);
-            ModStrayModels.CatHeadPart.render(vm, partialTicks, poseStack, bufferSource, packedLight, r, g, b,1);
+            //ModStrayModels.CatHeadPart.render(vm, partialTicks, poseStack, bufferSource, packedLight, r, g, b,1);
+            //ModStrayModels.SilverfishHeadPart.render(vm, partialTicks, poseStack, bufferSource, packedLight, r, g, b,1);
+            //ModStrayModels.PolarBearHeadPart.render(vm, partialTicks, poseStack, bufferSource, packedLight, r, g, b,1);
+            ModStrayModels.GoatHeadPart.render(vm, partialTicks, poseStack, bufferSource, packedLight, r, g, b,1);
             ClientUtil.popPoseAndCooperate(poseStack, 41);
         }
 }

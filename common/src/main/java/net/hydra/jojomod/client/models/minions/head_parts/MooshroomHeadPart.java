@@ -60,7 +60,7 @@ public class MooshroomHeadPart extends PsuedoHierarchicalModel {
 
 
     public ResourceLocation getTextureLocation(){
-        return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_hats/diego.png");
+        return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/minions/mooshroom.png");
     }
 
     public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light) {
