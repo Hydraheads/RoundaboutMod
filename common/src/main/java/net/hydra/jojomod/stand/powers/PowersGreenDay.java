@@ -539,7 +539,7 @@ public class PowersGreenDay extends NewPunchingStand {
                 SLE.setUser(this.self);
                 SLE.setXRot(this.self.getXRot());
                 SLE.setYRot(this.self.getYRot());
-                SLE.setPos(this.self.getPosition(1).add(0,0.2,0));
+                SLE.setPos(this.self.getPosition(1).add(0,3,0));
                 this.self.level().addFreshEntity(SLE);
             }
             //moldBurst(this.self.getOnPos().getCenter(),3);
@@ -683,7 +683,11 @@ public class PowersGreenDay extends NewPunchingStand {
         ItemEntity $$2 = new ItemEntity(this.self.level(), this.self.getX(), this.self.getY() + 1, this.self.getZ(),Off_hand_entity.getMainHandItem());
         //this.self.level().addFreshEntity($$2);
         Player player = (Player)this.self;
-        this.self.spawnAtLocation(Off_hand_entity.getMainHandItem());
+        if(this.self.getOffhandItem().getItem() instanceof AirItem){
+            this.self.setItemInHand(InteractionHand.OFF_HAND,Off_hand_entity.getMainHandItem());
+        }else {
+            this.self.spawnAtLocation(Off_hand_entity.getMainHandItem());
+        }
 
         Off_hand_entity.setUser(null);
         Off_hand_entity.discard();
@@ -828,7 +832,11 @@ public class PowersGreenDay extends NewPunchingStand {
         $$2.setDefaultPickUpDelay();
         //this.self.level().addFreshEntity($$2);
         Player player = (Player)this.self;
-        this.self.spawnAtLocation(Main_arm.getMainHandItem());
+        if(this.self.getMainHandItem().getItem() instanceof AirItem){
+            this.self.setItemInHand(InteractionHand.MAIN_HAND,Main_arm.getMainHandItem());
+        }else {
+            this.self.spawnAtLocation(Main_arm.getMainHandItem());
+        }
         //this.self.spawnAtLocation(Main_arm.getMainHandItem());
         Main_arm.setUser(null);
         Main_arm.discard();
