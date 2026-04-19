@@ -6,6 +6,7 @@ import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.models.minions.VillagerMinionModel;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
+import net.hydra.jojomod.item.ModItems;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -50,12 +51,21 @@ public class ChimeraHeadLayer<T extends LivingEntity, A extends EntityModel<T>> 
             float b = isHurt ? 0.6F : 1.0F;
             ClientUtil.pushPoseAndCooperate(poseStack, 41);
             head.translateAndRotate(poseStack);
-            //ModStrayModels.LlamaHeadPart.render(vm, partialTicks, poseStack, bufferSource, packedLight, r, g, b,1);
-            //ModStrayModels.CatHeadPart.render(vm, partialTicks, poseStack, bufferSource, packedLight, r, g, b,1);
-            //ModStrayModels.SilverfishHeadPart.render(vm, partialTicks, poseStack, bufferSource, packedLight, r, g, b,1);
-            //ModStrayModels.PolarBearHeadPart.render(vm, partialTicks, poseStack, bufferSource, packedLight, r, g, b,1);
-            //ModStrayModels.GoatHeadPart.render(vm, partialTicks, poseStack, bufferSource, packedLight, r, g, b,1);
-            ModStrayModels.MooshroomHeadPart.render(vm, partialTicks, poseStack, bufferSource, packedLight, r, g, b,1);
+            if (vm.getHeadItem().is(ModItems.CAT_REMAINS)){
+                ModStrayModels.CatHeadPart.render(vm, partialTicks, poseStack, bufferSource, packedLight, r, g, b,1);
+            } else if (vm.getHeadItem().is(ModItems.GOAT_REMAINS)){
+                ModStrayModels.GoatHeadPart.render(vm, partialTicks, poseStack, bufferSource, packedLight, r, g, b,1);
+            } else if (vm.getHeadItem().is(ModItems.LLAMA_REMAINS)){
+                ModStrayModels.LlamaHeadPart.render(vm, partialTicks, poseStack, bufferSource, packedLight, r, g, b,1);
+            } else if (vm.getHeadItem().is(ModItems.SILVERFISH_REMAINS)){
+                ModStrayModels.SilverfishHeadPart.render(vm, partialTicks, poseStack, bufferSource, packedLight, r, g, b,1);
+            } else if (vm.getHeadItem().is(ModItems.POLAR_BEAR_REMAINS)){
+                ModStrayModels.PolarBearHeadPart.render(vm, partialTicks, poseStack, bufferSource, packedLight, r, g, b,1);
+            } else if (vm.getHeadItem().is(ModItems.MOOSHROOM_REMAINS)){
+                ModStrayModels.MooshroomHeadPart.render(vm, partialTicks, poseStack, bufferSource, packedLight, r, g, b,1);
+            } else {
+                ModStrayModels.VillagerHeadPart.render(vm, partialTicks, poseStack, bufferSource, packedLight, r, g, b,1);
+            }
             ClientUtil.popPoseAndCooperate(poseStack, 41);
         }
 }
