@@ -97,6 +97,10 @@ public class BaseMinion extends Monster {
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
    }
+    @Override
+    public boolean canBreatheUnderwater(){
+        return true;
+    }
 
    public int digCooldown = 0;
 
@@ -109,6 +113,11 @@ public class BaseMinion extends Monster {
                             (this.getTargetTactic() == Tactics.HUNT_MONSTERS.id && $$0 instanceof Enemy && !($$0 instanceof Creeper) && !(this.controller != null && $$0.is(this.controller)))
             );
         }
+    }
+
+    @Override
+    public boolean isPersistenceRequired() {
+        return true;
     }
 
 

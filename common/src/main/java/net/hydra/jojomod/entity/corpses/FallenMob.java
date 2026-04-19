@@ -735,6 +735,10 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     }
 
     @Override
+    public boolean isPersistenceRequired() {
+        return true;
+    }
+    @Override
     public void setRemainingPersistentAngerTime(int $$0) {
         this.remainingPersistentAngerTime = $$0;
     }
