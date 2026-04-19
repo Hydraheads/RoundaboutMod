@@ -248,11 +248,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         return super.inputSpeedModifiers(basis);
     }
 
-    @Override public boolean cancelSprint() {return invincibleState;}
-
     @Override public boolean cancelSprintParticles() {return invincibleState;}
 
-    @Override public boolean cancelJump() {return invincibleState;}
 
     @Override
     public void tickPower() {
