@@ -530,6 +530,24 @@ public class Config implements Cloneable {
         public Integer miningSpeedMultiplierGreenDay;
         @IntOption(group = "inherit", value = 0, min = 0, max = 4)
         public Integer getMiningTierGreenDay;
+        @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+        public Integer greenDayStitchHeal;
+        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
+        public Integer gDStitchcooldown;
+        @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+        public Integer moldDefaultRange;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer moldFallSpeed;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer moldGrowthRate;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer moldSpreadCooldown;
+        @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
+        public Integer armThrowCooldown;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer armSpinDuration;
+        @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
+        public Integer armSpinCooldown;
     }
 
     public static class JusticeSettings {
