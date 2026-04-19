@@ -38,7 +38,7 @@ public class FacelessLayer<T extends LivingEntity, M extends HumanoidModel<T>, A
                        float var5, float var6, float var7, float var8, float var9, float var10) {
 
         if (var4 instanceof Zombie || var4 instanceof Player) {
-            if (((IEntityAndData)var4).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
+            if (((IEntityAndData)var4).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() && !ClientUtil.checkIfClientCanSeeMobsForWindVision())
                 return;
             if (((IEntityAndData) var4).roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()) return;
 

@@ -8,8 +8,9 @@ import net.hydra.jojomod.client.models.RoadRollerStrayModel;
 import net.hydra.jojomod.client.models.WornBloodyStoneMaskModel;
 import net.hydra.jojomod.client.models.WornStoneMaskModel;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
-import net.hydra.jojomod.client.models.minions.VillagerMinionModel;
-import net.hydra.jojomod.client.models.minions.renderers.VillagerMinionRenderer;
+import net.hydra.jojomod.client.models.minions.*;
+import net.hydra.jojomod.client.models.minions.head_parts.*;
+import net.hydra.jojomod.client.models.minions.renderers.*;
 import net.hydra.jojomod.client.models.mobs.AnubisGuardianModel;
 import net.hydra.jojomod.client.models.mobs.renderers.AnubisGuardianRenderer;
 import net.hydra.jojomod.client.models.mobs.renderers.ZombiefishRenderer;
@@ -159,6 +160,11 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.FALLEN_CREEPER.get(), FallenCreeperRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FALLEN_PHANTOM.get(), FallenPhantomRenderer::new);
         event.registerEntityRenderer(ForgeEntities.VILLAGER_MINION.get(), VillagerMinionRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.DOG_MINION.get(), DogMinionRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.OCELOT_MINION.get(), OcelotMinionRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.PARROT_MINION.get(), ParrotMinionRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.CHICKEN_MINION.get(), ChickenMinionRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.AXOLOTL_MINION.get(), AxolotlMinionRenderer::new);
         event.registerEntityRenderer(ForgeEntities.VAN_GOUGH_PAINTING.get(), VanGoghPaintingRenderer::new);
         event.registerEntityRenderer(ForgeEntities.MONA_LISA_PAINTING.get(), MonaLisaPaintingRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BIRTH_OF_VENUS_PAINTING.get(), VenusPaintingRenderer::new);
@@ -176,7 +182,14 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.WOLF_LAYER, TerrierEntityModel::createBodyLayerTerrier);
         event.registerLayerDefinition(ModEntityRendererClient.ZOMBIEFISH_LAYER, SilverfishModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.ANUBIS_GUARDIAN_LAYER, AnubisGuardianModel::createBodyLayer);
+
         event.registerLayerDefinition(ModEntityRendererClient.VILLAGER_MINION_LAYER, VillagerMinionModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.AXOLOTL_MINION_LAYER, AxolotlMinionModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.CHICKEN_MINION_LAYER, ChickenMinionModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.DOG_MINION_LAYER, DogMinionModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.PARROT_MINION_LAYER, ParrotMinionModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.OCELOT_MINION_LAYER, OcelotMinionModel::createBodyLayer);
+
         event.registerLayerDefinition(ModEntityRendererClient.THE_WORLD_LAYER, TheWorldModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.THE_WORLD_ULTIMATE_LAYER, TheWorldUltimateModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STAR_PLATINUM_LAYER, StarPlatinumModel::getTexturedModelData);
@@ -285,6 +298,15 @@ public class ClientForgeEvents {
         ModStrayModels.LeftLeg = new LeftLegPart();
         ModStrayModels.LeftHeel = new LeftHeelPart();
         ModStrayModels.RightHeel = new RightHeelPart();
+
+        ModStrayModels.GoatHeadPart = new GoatHeadPart();
+        ModStrayModels.CatHeadPart = new CatHeadPart();
+        ModStrayModels.VillagerHeadPart = new VillagerHeadPart();
+        ModStrayModels.LlamaHeadPart = new LlamaHeadPart();
+        ModStrayModels.PolarBearHeadPart = new PolarBearHeadPart();
+        ModStrayModels.MooshroomHeadPart = new MooshroomHeadPart();
+        ModStrayModels.SilverfishHeadPart = new SilverfishHeadPart();
+
         ModStrayModels.VampireHairOne = new VampireHairOnePart();
         ModStrayModels.VampireHairTwo = new VampireHairTwoPart();
         ModStrayModels.VampireHairFlesh = new VampireHairFleshBudLayer();

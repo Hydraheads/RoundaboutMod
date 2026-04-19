@@ -96,6 +96,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public AnubisSettings anubisSettings;
     @NestedOption(group = "modded")
+    public GreenDaySettings greenDaySettings;
+    @NestedOption(group = "modded")
     public TheWorldSettings theWorldSettings;
     @NestedOption(group = "modded")
     public StarPlatinumSettings starPlatinumSettings;
@@ -514,6 +516,38 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 24, min = 0, max = 72000)
         public Integer magiciansRedFlamethrowerWindup;
     }
+
+    public static class GreenDaySettings{
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableGreenDay;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer greenDayAttackMultOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer greenDayAttackMultOnPlayers;
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer greenDayGuardPoints;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer miningSpeedMultiplierGreenDay;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierGreenDay;
+        @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+        public Integer greenDayStitchHeal;
+        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
+        public Integer gDStitchcooldown;
+        @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+        public Integer moldDefaultRange;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer moldGrowthRate;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer moldSpreadCooldown;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer armThrowCooldown;
+        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
+        public Integer armSpinDuration;
+        @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
+        public Integer armSpinCooldown;
+    }
+
     public static class JusticeSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableJustice;
@@ -759,6 +793,8 @@ public class Config implements Cloneable {
         public Boolean invisiBurstAlertsMobs;
     }
 
+
+
     public static class CreamSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableCream;
@@ -775,6 +811,8 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer creamVoidTime;
     }
+
+
 
     public static class AnubisSettings {
         @BooleanOption(group = "inherit", value = true)

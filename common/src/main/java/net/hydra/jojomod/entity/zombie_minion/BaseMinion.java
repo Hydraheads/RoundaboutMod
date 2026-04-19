@@ -7,6 +7,9 @@ import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.Tactics;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.BodyRemainsItem;
+import net.hydra.jojomod.item.HeadRemainsItem;
+import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -31,14 +34,18 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.InfestedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -76,6 +83,11 @@ public class BaseMinion extends Monster {
             SynchedEntityData.defineId(BaseMinion.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DIED_IN_SUN =
             SynchedEntityData.defineId(BaseMinion.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<ItemStack> HEAD_ITEM =
+            SynchedEntityData.defineId(BaseMinion.class, EntityDataSerializers.ITEM_STACK);
+    private static final EntityDataAccessor<ItemStack> BODY_ITEM =
+            SynchedEntityData.defineId(BaseMinion.class, EntityDataSerializers.ITEM_STACK);
+
 
     public BaseMinion(EntityType<? extends BaseMinion> $$0, Level $$1) {
         super($$0, $$1);
@@ -97,6 +109,10 @@ public class BaseMinion extends Monster {
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
    }
+    @Override
+    public boolean canBreatheUnderwater(){
+        return true;
+    }
 
    public int digCooldown = 0;
 
@@ -109,6 +125,11 @@ public class BaseMinion extends Monster {
                             (this.getTargetTactic() == Tactics.HUNT_MONSTERS.id && $$0 instanceof Enemy && !($$0 instanceof Creeper) && !(this.controller != null && $$0.is(this.controller)))
             );
         }
+    }
+
+    @Override
+    public boolean isPersistenceRequired() {
+        return true;
     }
 
 
@@ -124,17 +145,67 @@ public class BaseMinion extends Monster {
     public void setMovementTactic(byte byt){
         this.entityData.set(MOVEMENT_TACTIC, byt);
     }
+
+    public void dropHead(Player player){
+        if (getHeadItem() != null && !getHeadItem().isEmpty()){
+            ItemEntity itemEntity = new ItemEntity(level(),getX(), getY(), getZ(), getHeadItem());
+            level().addFreshEntity(itemEntity);
+            setHeadItem(ItemStack.EMPTY);
+        }
+    }
+    public void dropBody(Player player){
+        if (getBodyItem() != null && !getBodyItem().isEmpty()){
+            ItemEntity itemEntity = new ItemEntity(level(),getX(), getY(), getZ(), getBodyItem());
+            level().addFreshEntity(itemEntity);
+            setBodyItem(ItemStack.EMPTY);
+        }
+    }
     @Override
-    protected InteractionResult mobInteract(Player $$0, InteractionHand $$1) {
-        if (!$$0.isCrouching()){
-            if (getController() == $$0.getId()){
-                if ($$0.level().isClientSide()){
+    protected InteractionResult mobInteract(Player player, InteractionHand $$1) {
+        EquipmentSlot slot = $$1 == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+        if (player.isCreative() || player.getId() == getController()){
+            ItemStack stack = player.getItemBySlot(slot);
+            if (stack !=null && !stack.isEmpty()) {
+                if (stack.getItem() instanceof HeadRemainsItem) {
+                    if (!level().isClientSide()) {
+                        dropHead(player);
+                        setHeadItem(stack.copyWithCount(1));
+                        if (!player.getAbilities().instabuild) {
+                            stack.shrink(1);
+                        }
+                        this.level().playSound(null, this.blockPosition(), SoundEvents.ZOMBIE_INFECT, SoundSource.PLAYERS, 1F, 1);
+                    }
+                    return InteractionResult.CONSUME;
+                } else if (stack.getItem() instanceof BodyRemainsItem) {
+                    if (!level().isClientSide()) {
+                        dropBody(player);
+                        setBodyItem(stack.copyWithCount(1));
+                        if (!player.getAbilities().instabuild) {
+                            stack.shrink(1);
+                        }
+                        this.level().playSound(null, this.blockPosition(), SoundEvents.ZOMBIE_INFECT, SoundSource.PLAYERS, 1F, 1);
+                    }
+                    return InteractionResult.CONSUME;
+                } else if (stack.getItem() instanceof ShearsItem) {
+                    if (!level().isClientSide()) {
+                        dropHead(player);
+                        dropBody(player);
+                        this.level().playSound(null, this.blockPosition(), SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1F, 1);
+                    }
+
+                    return InteractionResult.CONSUME;
+                }
+            }
+        }
+        if (!player.isCrouching()){
+            if (getController() == player.getId()){
+                if (player.level().isClientSide()){
                     ClientUtil.setZombieMinionScreen(getId());
                 }
                 return InteractionResult.CONSUME;
             }
         }
-        return super.mobInteract($$0,$$1);
+        return super.mobInteract(player,$$1);
     }
 
 
@@ -334,6 +405,22 @@ public class BaseMinion extends Monster {
         return this.getEntityData().get(DIED_IN_SUN);
     }
 
+
+    public void setHeadItem(ItemStack prog){
+        this.entityData.set(HEAD_ITEM, prog);
+    }
+    public ItemStack getHeadItem() {
+        return this.getEntityData().get(HEAD_ITEM);
+    }
+
+
+    public void setBodyItem(ItemStack prog){
+        this.entityData.set(BODY_ITEM, prog);
+    }
+    public ItemStack getBodyItem() {
+        return this.getEntityData().get(BODY_ITEM);
+    }
+
     /**Cancel death animation*/
     @Override
     public void die(@NotNull DamageSource $$0) {
@@ -370,6 +457,16 @@ public class BaseMinion extends Monster {
         $$0.putDouble("HomeX",getHomePosition().x);
         $$0.putDouble("HomeY",getHomePosition().y);
         $$0.putDouble("HomeZ",getHomePosition().z);
+        ItemStack m1 = getHeadItem();
+        ItemStack m2 = getBodyItem();
+        if (!m1.isEmpty() || $$0.contains("headItem", 10)) {
+            CompoundTag compoundtag = new CompoundTag();
+            $$0.put("headItem",m1.save(compoundtag));
+        }
+        if (!m2.isEmpty() || $$0.contains("bodyItem", 10)) {
+            CompoundTag compoundtag = new CompoundTag();
+            $$0.put("bodyItem",m2.save(compoundtag));
+        }
         super.addAdditionalSaveData($$0);
     }
     @Override
@@ -380,6 +477,19 @@ public class BaseMinion extends Monster {
             if (this.level() instanceof ServerLevel SE){
                 controller2 = $$2;
                 this.setController(SE.getEntity($$2));
+            }
+        }
+        if ($$0.contains("headItem", 10)) {
+            CompoundTag compoundtag = $$0.getCompound("headItem");
+            ItemStack itemstack = ItemStack.of(compoundtag);
+            if (!itemstack.isEmpty() && itemstack.getItem() instanceof HeadRemainsItem SD){
+                setHeadItem(itemstack);
+            }
+        }if ($$0.contains("bodyItem", 10)) {
+            CompoundTag compoundtag = $$0.getCompound("bodyItem");
+            ItemStack itemstack = ItemStack.of(compoundtag);
+            if (!itemstack.isEmpty() && itemstack.getItem() instanceof BodyRemainsItem SD){
+                setBodyItem(itemstack);
             }
         }
         setHomePosition(new Vec3($$0.getDouble("HomeX"),$$0.getDouble("HomeY"),$$0.getDouble("HomeZ")));
@@ -482,6 +592,8 @@ public class BaseMinion extends Monster {
             this.entityData.define(CONTROLLER, -1);
             this.entityData.define(DIGPROG, -1);
             this.entityData.define(DIED_IN_SUN, false);
+            this.entityData.define(HEAD_ITEM, ItemStack.EMPTY);
+            this.entityData.define(BODY_ITEM, ItemStack.EMPTY);
         }
     }
 

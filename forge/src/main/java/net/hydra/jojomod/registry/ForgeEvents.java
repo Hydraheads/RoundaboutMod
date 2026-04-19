@@ -22,7 +22,7 @@ import net.hydra.jojomod.entity.stand.CreamEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
-import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
+import net.hydra.jojomod.entity.zombie_minion.*;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.item.MaxStandDiscItem;
@@ -109,6 +109,11 @@ public class ForgeEvents {
         event.put(ForgeEntities.FALLEN_CREEPER.get(), FallenCreeper.createAttributes().build());
         event.put(ForgeEntities.FALLEN_PHANTOM.get(), FallenPhantom.createAttributes().build());
         event.put(ForgeEntities.VILLAGER_MINION.get(), VillagerMinion.createAttributes().build());
+        event.put(ForgeEntities.AXOLOTL_MINION.get(), AxolotlMinion.createAttributes().build());
+        event.put(ForgeEntities.OCELOT_MINION.get(), OcelotMinion.createAttributes().build());
+        event.put(ForgeEntities.CHICKEN_MINION.get(), ChickenMinion.createAttributes().build());
+        event.put(ForgeEntities.PARROT_MINION.get(), ParrotMinion.createAttributes().build());
+        event.put(ForgeEntities.DOG_MINION.get(), DogMinion.createAttributes().build());
         event.put(ForgeEntities.GROUND_HURRICANE.get(), GroundHurricaneEntity.createStandAttributes().build());
         event.put(ForgeEntities.TUSK_HOLE.get(), TuskHoleEntity.createStandAttributes().build());
         event.put(ForgeEntities.ANUBIS_POSSESSOR.get(), AnubisPossessorEntity.createStandAttributes().build());
@@ -611,6 +616,11 @@ public class ForgeEvents {
         ModEntities.FALLEN_PHANTOM = ForgeEntities.FALLEN_PHANTOM.get();
 
         ModEntities.VILLAGER_MINION = ForgeEntities.VILLAGER_MINION.get();
+        ModEntities.OCELOT_MINION = ForgeEntities.OCELOT_MINION.get();
+        ModEntities.DOG_MINION = ForgeEntities.DOG_MINION.get();
+        ModEntities.PARROT_MINION = ForgeEntities.PARROT_MINION.get();
+        ModEntities.CHICKEN_MINION = ForgeEntities.CHICKEN_MINION.get();
+        ModEntities.AXOLOTL_MINION = ForgeEntities.AXOLOTL_MINION.get();
 
 
         ModEntities.OVA_ENYA = ForgeEntities.OVA_ENYA.get();
