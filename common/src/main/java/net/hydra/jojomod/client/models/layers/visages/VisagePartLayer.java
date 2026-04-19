@@ -46,7 +46,6 @@ import java.util.Map;
 
 public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>> extends RenderLayer<T, A> {
 
-    private static final Map<String, ResourceLocation> ARMOR_LOCATION_CACHE = Maps.newHashMap();
     private final EntityRenderDispatcher dispatcher;
     public VisagePartLayer(EntityRendererProvider.Context context, LivingEntityRenderer<T, A> livingEntityRenderer) {
         super(livingEntityRenderer);
@@ -61,7 +60,6 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         }
     }
     float scale = 1;
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/large_bubble.png");
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, float var9, float var10) {
         Minecraft minecraft = Minecraft.getInstance();

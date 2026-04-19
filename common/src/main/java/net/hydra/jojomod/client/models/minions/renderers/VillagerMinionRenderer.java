@@ -1,8 +1,12 @@
 package net.hydra.jojomod.client.models.minions.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
+import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer;
 import net.hydra.jojomod.client.models.minions.VillagerMinionModel;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
@@ -26,6 +30,8 @@ public class VillagerMinionRenderer extends MobRenderer<VillagerMinion, Villager
                 }
             }
         });
+
+        this.addLayer(new ChimeraHeadLayer<>($$0, this));
     }
         @Override
     protected void scale(VillagerMinion $$0, PoseStack $$1, float $$2) {
@@ -48,8 +54,9 @@ public class VillagerMinionRenderer extends MobRenderer<VillagerMinion, Villager
     }
 
     @Override
-
-    public void render(VillagerMinion $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
-        super.render($$0, $$1, $$2, $$3, $$4, $$5);
+    public void render(VillagerMinion minion, float $$1, float partialTicks, PoseStack stack,
+                       MultiBufferSource bufferSource, int packedLight) {
+        getModel().head.visible = false;
+        super.render(minion, $$1, partialTicks, stack, bufferSource, packedLight);
     }
 }

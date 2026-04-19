@@ -29,12 +29,15 @@ public class LlamaHeadPart extends PsuedoHierarchicalModel {
     }
 
     public static LayerDefinition createBodyLayer() {
-        CubeDeformation $$0 = CubeDeformation.NONE;
-        MeshDefinition $$1 = new MeshDefinition();
-        PartDefinition $$2 = $$1.getRoot();
-        $$2.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-2.0F, -14.0F, -10.0F, 4.0F, 4.0F, 9.0F, $$0).texOffs(0, 14).addBox("neck", -4.0F, -16.0F, -6.0F, 8.0F, 18.0F, 6.0F, $$0).texOffs(17, 0).addBox("ear", -4.0F, -19.0F, -4.0F, 3.0F, 3.0F, 2.0F, $$0).texOffs(17, 0).addBox("ear", 1.0F, -19.0F, -4.0F, 3.0F, 3.0F, 2.0F, $$0), PartPose.offset(0.0F, 7.0F, -6.0F));
+        MeshDefinition meshdefinition = new MeshDefinition();
+        PartDefinition partdefinition = meshdefinition.getRoot();
 
-        return LayerDefinition.create($$1, 128, 64);
+        PartDefinition head = partdefinition.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 14).addBox(-4.0F, -18.0F, -4.0F, 8.0F, 18.0F, 6.0F, new CubeDeformation(0.0F))
+                .texOffs(17, 0).addBox(-4.0F, -21.0F, -2.0F, 3.0F, 3.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(17, 0).addBox(1.0F, -21.0F, -2.0F, 3.0F, 3.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 0).addBox(-2.0F, -16.0F, -8.0F, 4.0F, 4.0F, 9.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        return LayerDefinition.create(meshdefinition, 128, 64);
     }
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
@@ -55,7 +58,7 @@ public class LlamaHeadPart extends PsuedoHierarchicalModel {
 
 
     public ResourceLocation getTextureLocation(){
-        return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_hats/diego.png");
+        return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/minions/llama.png");
     }
 
     public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light) {

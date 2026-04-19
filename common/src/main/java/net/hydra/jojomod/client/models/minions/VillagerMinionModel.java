@@ -15,7 +15,7 @@ import net.minecraft.world.entity.monster.AbstractIllager;
 
 public class VillagerMinionModel<T extends VillagerMinion> extends HierarchicalModel<T> implements ArmedModel, HeadedModel {
     private final ModelPart root;
-    private final ModelPart head;
+    public final ModelPart head;
     private final ModelPart hat;
     private final ModelPart arms;
     private final ModelPart leftLeg;
