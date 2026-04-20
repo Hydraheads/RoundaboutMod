@@ -3,6 +3,7 @@ package net.hydra.jojomod.client.models.minions.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.client.models.minions.AxolotlMinionModel;
 import net.hydra.jojomod.client.models.minions.VillagerMinionModel;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
@@ -39,6 +40,11 @@ public class ChimeraHeadLayer<T extends LivingEntity, A extends EntityModel<T>> 
                 //stack.mulPose(Axis.ZP.rotationDegrees(180f));
                 if (getParentModel() instanceof VillagerMinionModel<?> vdm) {
                     renderWithHead(vm,vdm.head,poseStack,bufferSource,packedLight,entity,xx,yy,zz,partialTicks,var9,var10);
+                } else if (getParentModel() instanceof AxolotlMinionModel<?> vdm) {
+                    ClientUtil.pushPoseAndCooperate(poseStack, 41);
+                    vdm.body.translateAndRotate(poseStack);
+                    renderWithHead(vm,vdm.head,poseStack,bufferSource,packedLight,entity,xx,yy,zz,partialTicks,var9,var10);
+                    ClientUtil.popPoseAndCooperate(poseStack, 41);
                 }
             }
         }
