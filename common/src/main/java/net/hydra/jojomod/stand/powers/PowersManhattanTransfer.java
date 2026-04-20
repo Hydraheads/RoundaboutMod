@@ -318,17 +318,17 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public static final byte
             ANIME_SKIN = 1,
             MANGA_SKIN = 2,
-            BRAZIL_SKIN = 3,
             AERO_TRANSFER_SKIN = 3,
-            RADIOACTIVE_SKIN = 4,
-            POLLINATION_SKIN = 5;
+            BRAZIL_SKIN = 4,
+            RADIOACTIVE_SKIN = 5,
+            POLLINATION_SKIN = 6;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 ANIME_SKIN,
                 MANGA_SKIN,
-                BRAZIL_SKIN,
                 AERO_TRANSFER_SKIN,
+                BRAZIL_SKIN,
                 RADIOACTIVE_SKIN,
                 POLLINATION_SKIN
         );
