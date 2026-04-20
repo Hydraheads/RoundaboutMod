@@ -1940,7 +1940,7 @@ public class PowersAnubis extends NewDashPreset {
 
 
             if (ePos.distanceTo(fVec) > ePos.distanceTo(bVec)) {return true;}
-            if (dist > radius-(dungle*factor)) {return true;}
+            if (dist > radius-(dungle*factor*0.35)) {return true;}
             return (dungle > angle );
         });
 
