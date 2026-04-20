@@ -318,14 +318,16 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public static final byte
             ANIME_SKIN = 1,
             MANGA_SKIN = 2,
-            BRAZIL_SKIN = 3,
-            RADIOACTIVE_SKIN = 4,
-            POLLINATION_SKIN = 5;
+            AERO_TRANSFER_SKIN = 3,
+            BRAZIL_SKIN = 4,
+            RADIOACTIVE_SKIN = 5,
+            POLLINATION_SKIN = 6;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 ANIME_SKIN,
                 MANGA_SKIN,
+                AERO_TRANSFER_SKIN,
                 BRAZIL_SKIN,
                 RADIOACTIVE_SKIN,
                 POLLINATION_SKIN
@@ -375,7 +377,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
             if (ent != null) {
                 Entity TE = MainUtil.getTargetEntity(ent, 300, 10);
                 if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible() && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
-//TODO: fix the glowing mob speed boosting, ignore what is set up for now, since it doesn't work
                         if (ME.isInRain()) {
                             if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
                                 entity.setDeltaMovement(entity.getForward());
@@ -445,6 +446,8 @@ public class PowersManhattanTransfer extends NewDashPreset {
             return Component.translatable(  "skins.roundabout.manhattan_transfer.manhattan_part_6");
         } else if (skinId == ManhattanTransferEntity.MANGA_SKIN){
             return Component.translatable(  "skins.roundabout.manhattan_transfer.manhattan_manga_part_6");
+        }else if (skinId == ManhattanTransferEntity.AERO_TRANSFER_SKIN){
+            return Component.translatable(  "skins.roundabout.manhattan_transfer.manhattan_aerosmith");
         } else if (skinId == ManhattanTransferEntity.BRAZIL_SKIN){
             return Component.translatable(  "skins.roundabout.manhattan_transfer.brazilian_transfer");
         } else if (skinId == ManhattanTransferEntity.RADIOACTIVE_SKIN){

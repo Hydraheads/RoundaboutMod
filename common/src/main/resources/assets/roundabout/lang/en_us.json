@@ -1889,6 +1889,7 @@
 
   "skins.roundabout.manhattan_transfer.manhattan_part_6": "Anime",
   "skins.roundabout.manhattan_transfer.manhattan_manga_part_6": "Manga",
+  "skins.roundabout.manhattan_transfer.manhattan_aerosmith": "Aerosmith",
   "skins.roundabout.manhattan_transfer.brazilian_transfer": "Brazilian",
   "skins.roundabout.manhattan_transfer.radioactive_transfer": "Radioactive",
   "skins.roundabout.manhattan_transfer.pollination_transfer": "Pollination",
@@ -2842,7 +2843,7 @@
   "config.roundabout.armThrowCooldown.name": "Arm Throw Cooldown",
   "config.roundabout.armThrowCooldown.desc": "The cooldown after using arm throw 2 times (Default is 120 ticks, or 6 secnds)",
   "config.roundabout.armSpinDuration.name": "Arm Spin Duration",
-  "config.roundabout.armSpinDuration.desc": "How long your seperated arms spin for after using the move, default is 20 ticks, or 1 second",
+  "config.roundabout.armSpinDuration.desc": "How long your seperated arms spin for after using the move, default is 30 ticks, or 1.5 seconds",
   "config.roundabout.armSpinCooldown.name": "Arm Spin Cooldown",
   "config.roundabout.armSpinCooldown.desc": "Default is 120 ticks, or 6 seconds",
 
