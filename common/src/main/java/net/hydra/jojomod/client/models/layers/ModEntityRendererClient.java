@@ -56,6 +56,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation ROUNDABOUT_BULLET_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "roundabout_bullet_entity"), "main");
     public static final ModelLayerLocation KNIFE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "knife"), "main");
     public static final ModelLayerLocation RATT_DART_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "ratt_dart"), "main");
+    public static final ModelLayerLocation TUSK1_NAIL_MODEL = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk1_nail"), "main");
     public static final ModelLayerLocation CROSSFIRE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "crossfire_hurricane"), "main");
     public static final ModelLayerLocation CROSSFIRE_FIRESTORM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "crossfire_firestorm"), "main");
     public static final ModelLayerLocation LIFE_DETECTOR = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "life_detector"), "main");

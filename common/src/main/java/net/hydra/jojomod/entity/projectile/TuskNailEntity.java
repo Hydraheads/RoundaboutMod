@@ -16,6 +16,7 @@ import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -26,6 +27,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -41,10 +43,13 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 import java.util.List;
 
 public class TuskNailEntity extends AbstractArrow {
+
+    public AnimationState animationState = new AnimationState();
 
     @Override
     public void shootFromRotation(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
@@ -113,7 +118,7 @@ public class TuskNailEntity extends AbstractArrow {
             this.discard();
         }
         if (!this.level().isClientSide()) {
-            ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_TRAIL,
+            ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(40/255F,214/255F,1F),1F),
                     this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(),
                     0, 0, 0, 0, 0.015);
 

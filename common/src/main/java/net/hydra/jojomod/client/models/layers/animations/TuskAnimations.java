@@ -20,6 +20,17 @@ public class TuskAnimations {
             ))
             .build();
 
+    public static final AnimationDefinition NAIL_1_SPIN = AnimationDefinition.Builder.withLength(0.5F).looping()
+            .addAnimation("nail2", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.5F, KeyframeAnimations.degreeVec(0.0F, 360.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .addAnimation("nail1", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.5F, KeyframeAnimations.degreeVec(0.0F, -360.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .build();
+
     public static final AnimationDefinition Default  = AnimationDefinition.Builder.withLength(0.1667F)
             .addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(344.2048F, -8.8918F, -318.2615F), AnimationChannel.Interpolations.LINEAR)
