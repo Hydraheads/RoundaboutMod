@@ -217,6 +217,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ROUNDABOUT_BULLET_LAYER, RoundaboutBulletModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KNIFE_LAYER, KnifeModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.RATT_DART_LAYER, RattDartModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK1_NAIL_MODEL, Tusk1NailModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.CROSSFIRE_LAYER, CrossfireHurricaneModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.CROSSFIRE_FIRESTORM_LAYER, CrossfireFirestormModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.LIFE_DETECTOR, LifeTrackerModel::createBodyLayer);
