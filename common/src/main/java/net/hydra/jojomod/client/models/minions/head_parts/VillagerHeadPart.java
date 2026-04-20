@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
+import net.hydra.jojomod.entity.zombie_minion.ParrotMinion;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -66,6 +67,12 @@ public class VillagerHeadPart extends PsuedoHierarchicalModel {
                        int light, float r, float g, float b, float alpha) {
         if (context instanceof LivingEntity LE) {
             this.root().getAllParts().forEach(ModelPart::resetPose);
+            if (context instanceof ParrotMinion pm){
+                head.xScale = 0.7F;
+                head.yScale = 0.7F;
+                head.zScale = 0.7F;
+                head.y += 1F;
+            }
             if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
                 partialTicks = 0;
             }
