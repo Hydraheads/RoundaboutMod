@@ -6,6 +6,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.entity.zombie_minion.DogMinion;
+import net.hydra.jojomod.entity.zombie_minion.OcelotMinion;
 import net.hydra.jojomod.entity.zombie_minion.ParrotMinion;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.model.geom.ModelPart;
@@ -82,6 +83,12 @@ public class LlamaHeadPart extends PsuedoHierarchicalModel {
                 head.yScale = 0.97F;
                 head.zScale = 0.97F;
                 head.x += 1F;
+                head.y += 2F;
+            }
+            if (context instanceof OcelotMinion pm){
+                head.xScale = 0.83F;
+                head.yScale = 0.83F;
+                head.zScale = 0.83F;
                 head.y += 2F;
             }
             if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){

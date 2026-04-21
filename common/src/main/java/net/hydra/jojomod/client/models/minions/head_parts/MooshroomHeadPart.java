@@ -6,6 +6,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.entity.zombie_minion.DogMinion;
+import net.hydra.jojomod.entity.zombie_minion.OcelotMinion;
 import net.hydra.jojomod.entity.zombie_minion.ParrotMinion;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.model.geom.ModelPart;
@@ -83,6 +84,9 @@ public class MooshroomHeadPart extends PsuedoHierarchicalModel {
                 head.zScale = 0.97F;
                 head.x += 1F;
                 head.y += 3F;
+            }
+            if (context instanceof OcelotMinion pm){
+                head.y += 2F;
             }
             if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
                 partialTicks = 0;
