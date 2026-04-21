@@ -58,7 +58,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.UUID;
 
-public class BaseMinion extends Monster {
+public class BaseMinion extends PathfinderMob {
     public Entity controller;
     public UUID controller2;
     public boolean homeSet = false;
@@ -328,16 +328,6 @@ public class BaseMinion extends Monster {
     public float getWalkTargetValue(BlockPos $$0, LevelReader $$1) {
         return InfestedBlock.isCompatibleHostBlock($$1.getBlockState($$0.below())) ? 10.0F : super.getWalkTargetValue($$0, $$1);
     }
-
-    public static boolean checkSilverfishSpawnRules(EntityType<Silverfish> $$0, LevelAccessor $$1, MobSpawnType $$2, BlockPos $$3, RandomSource $$4) {
-        if (checkAnyLightMonsterSpawnRules($$0, $$1, $$2, $$3, $$4)) {
-            Player $$5 = $$1.getNearestPlayer((double)$$3.getX() + 0.5, (double)$$3.getY() + 0.5, (double)$$3.getZ() + 0.5, 5.0, true);
-            return $$5 == null;
-        } else {
-            return false;
-        }
-    }
-
 
     @Override
     public MobType getMobType() {

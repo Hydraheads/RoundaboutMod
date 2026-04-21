@@ -51,9 +51,10 @@ public class ManhattanTransferEntity extends StandEntity {
     public static final byte
             ANIME_SKIN = 1,
             MANGA_SKIN = 2,
-            BRAZIL_SKIN = 3,
-            RADIOACTIVE_SKIN = 4,
-            POLLINATION_SKIN = 5;
+            AERO_TRANSFER_SKIN = 3,
+            BRAZIL_SKIN = 4,
+            RADIOACTIVE_SKIN = 5,
+            POLLINATION_SKIN = 6;
 
 
     public LivingEntity Target;
@@ -192,21 +193,9 @@ public class ManhattanTransferEntity extends StandEntity {
           return ((StandUser) User);
     }
 
- /*   public int DodgeRainTicks = 0;
+    public int DodgeRainTicks = 0;
 
     public void setDodgeRainTicks(int val){DodgeRainTicks = val;};
-
-    public int getAmbientSoundInterval() {
-        return 1;
-    }
-    @Nullable
-    protected SoundEvent getAmbientSound() {
-        if (!isInRain()) {
-            return null;
-        } else {
-            return ModSounds.MANHATTAN_DODGING_EVENT;
-        }
-    }*/
 
     @Override
     public void tick() {
@@ -215,33 +204,34 @@ public class ManhattanTransferEntity extends StandEntity {
         float yaw = this.getYRot();
         super.tick();
 
-      /*  if(this.getUserData(this.getUser()) != null) {
-            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM && PM.isActive()) {
-                    if (isInRain()) {
+        if(this.getUserData(this.getUser()) != null) {
+            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                   /* if (isInRain()) {
                         if (DodgeRainTicks > 0) {
                             DodgeRainTicks--;
 
                         } else {
                             setDodgeRainTicks(440);
                            // Roundabout.LOGGER.info("bwaah");
-                         //   this.level().playSound(null, this.blockPosition(), ModSounds.MANHATTAN_DODGING_EVENT, SoundSource.NEUTRAL, 1F, (float) (0.9F + (Math.random() * 0.2F)));
+                          //  this.level().playSound(null, this.blockPosition(), ModSounds.MANHATTAN_DODGING_EVENT, SoundSource.NEUTRAL, 1F, (float) (0.9F + (Math.random() * 0.2F)));
                         }
-                    }
-                    else{
-                    }
+                    }*/
+                if (stupidTicks >= 1) {
+                    //setMaster(this.getUser());
+                    stupidTicks--;
+                    this.setXRot(this.getUser().getXRot() % 360);
+                    this.setYRot(this.getUser().getYRot() % 360);
+                    this.setYBodyRot(this.getUser().getYRot() % 360);
+                    //this.setYBodyRot(yaw);
                 }
-        }*/
-
-            if (horizontalCollision || verticalCollision) {
-                this.getUserData(this.getUser()).roundabout$getStandPowers();
-                if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-
+                if (horizontalCollision || verticalCollision) {
                     if (!PM.isPiloting()) {
                         this.setXRot(pitch + 25);
 
                         this.setYBodyRot(pitch + 25);
 
                         this.setYRot(yaw);
+
                         if (yaw >= -90 && yaw <= 0) {
                             this.setYRot(yaw - 25);
                         }
@@ -251,6 +241,25 @@ public class ManhattanTransferEntity extends StandEntity {
                     }
                 }
             }
+        }
+      /*  if (horizontalCollision || verticalCollision) {
+                this.getUserData(this.getUser()).roundabout$getStandPowers();
+                if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                        if (!PM.isPiloting()) {
+                            this.setXRot(pitch + 25);
+
+                            this.setYBodyRot(pitch + 25);
+
+                            this.setYRot(yaw);
+                            if (yaw >= -90 && yaw <= 0) {
+                                this.setYRot(yaw - 25);
+                            }
+                            if (yaw <= 90 && yaw > 0) {
+                                this.setYRot(yaw + 25);
+                            }
+                        }
+                    }
+                }*/
             if (!this.level().isClientSide()) {
                 if (!forceVisible) {
                     this.setXRot(pitch);
@@ -260,11 +269,11 @@ public class ManhattanTransferEntity extends StandEntity {
                     this.yRotO = yaw;
 
                 }
-        }
+            }
         nextPathfind++;
         doBasicPathfind();
     }
-
+    int stupidTicks = 1;
     int nextPathfind = 1;
 
     public void doBasicPathfind() {

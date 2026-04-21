@@ -1905,7 +1905,7 @@ public class PowersAnubis extends NewDashPreset {
     public List<Entity> getBasicSwordHitBox(boolean crouching) {
         List<Entity> entities = defaultSwordHitbox(this.getSelf(),3, 45,0.01);
         if (crouching) {
-            entities = defaultSwordHitbox(this.getSelf(),2, 60,0.01);
+            entities = defaultSwordHitbox(this.getSelf(),2.5, 60,0.01);
         }
         return entities;
     }
@@ -1940,7 +1940,7 @@ public class PowersAnubis extends NewDashPreset {
 
 
             if (ePos.distanceTo(fVec) > ePos.distanceTo(bVec)) {return true;}
-            if (dist > radius-(dungle*factor)) {return true;}
+            if (dist > radius-(dungle*factor*0.35)) {return true;}
             return (dungle > angle );
         });
 
