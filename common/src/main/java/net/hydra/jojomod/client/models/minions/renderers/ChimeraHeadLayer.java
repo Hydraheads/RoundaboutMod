@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.models.minions.AxolotlMinionModel;
+import net.hydra.jojomod.client.models.minions.DogMinionModel;
 import net.hydra.jojomod.client.models.minions.ParrotMinionModel;
 import net.hydra.jojomod.client.models.minions.VillagerMinionModel;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
@@ -48,7 +49,8 @@ public class ChimeraHeadLayer<T extends LivingEntity, A extends EntityModel<T>> 
                     ClientUtil.popPoseAndCooperate(poseStack, 41);
                 } else if (getParentModel() instanceof ParrotMinionModel vdm) {
                     renderWithHead(vm,vdm.head,poseStack,bufferSource,packedLight,entity,xx,yy,zz,partialTicks,var9,var10);
-
+                } else if (getParentModel() instanceof DogMinionModel<?> vdm) {
+                    renderWithHead(vm,vdm.head,poseStack,bufferSource,packedLight,entity,xx,yy,zz,partialTicks,var9,var10);
                 }
             }
         }

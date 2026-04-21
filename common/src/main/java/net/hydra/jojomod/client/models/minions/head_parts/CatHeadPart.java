@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
+import net.hydra.jojomod.entity.zombie_minion.DogMinion;
 import net.hydra.jojomod.entity.zombie_minion.ParrotMinion;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.model.geom.ModelPart;
@@ -75,6 +76,10 @@ public class CatHeadPart extends PsuedoHierarchicalModel {
                 head.xScale = 0.77F;
                 head.yScale = 0.77F;
                 head.zScale = 0.77F;
+                head.y += 1F;
+            }
+            if (context instanceof DogMinion pm){
+                head.x += 1F;
                 head.y += 1F;
             }
             if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){

@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
+import net.hydra.jojomod.entity.zombie_minion.DogMinion;
 import net.hydra.jojomod.entity.zombie_minion.ParrotMinion;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.model.geom.ModelPart;
@@ -75,6 +76,13 @@ public class PolarBearHeadPart extends PsuedoHierarchicalModel {
                 head.yScale = 0.6F;
                 head.zScale = 0.6F;
                 head.y += 1F;
+            }
+            if (context instanceof DogMinion pm){
+                head.xScale = 0.97F;
+                head.yScale = 0.97F;
+                head.zScale = 0.97F;
+                head.x += 1F;
+                head.y += 3F;
             }
             if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
                 partialTicks = 0;
