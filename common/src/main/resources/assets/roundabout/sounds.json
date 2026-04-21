@@ -95,16 +95,46 @@
       "roundabout:ice_breaker"
     ]
   },
+  "sha_moving": {
+              "subtitle": "sounds.roundabout.sha_moving",
+              "sounds": [
+                "roundabout:sha_moving"
+              ]
+            },
+  "summon_sha": {
+            "subtitle": "sounds.roundabout.summon_sha",
+            "sounds": [
+              "roundabout:summon_sha"
+            ]
+          },
+  "killer_queen_buble_launch": {
+          "subtitle": "sounds.roundabout.killer_queen_buble_launch",
+          "sounds": [
+            "roundabout:killer_queen_buble_launch"
+          ]
+        },
+  "killer_queen_explosion": {
+        "subtitle": "sounds.roundabout.killer_queen_explosion",
+        "sounds": [
+          "roundabout:killer_queen_explosion"
+        ]
+      },
+  "killer_queen_bomb_detonate": {
+      "subtitle": "sounds.roundabout.killer_queen_bomb_detonate",
+      "sounds": [
+        "roundabout:killer_queen_bomb_detonate"
+      ]
+    },
   "killer_queen_barrage": {
     "subtitle": "sounds.roundabout.killer_queen_barrage",
     "sounds": [
       "roundabout:killer_queen_barrage"
     ]
   },
-  "killer_queen_summon": {
-    "subtitle": "sounds.roundabout.killer_queen_summon",
+  "summon_killer_queen": {
+    "subtitle": "sounds.roundabout.summon_killer_queen",
     "sounds": [
-      "roundabout:killer_queen_summon"
+      "roundabout:summon_killer_queen"
     ]
   },
   "summon_magician": {

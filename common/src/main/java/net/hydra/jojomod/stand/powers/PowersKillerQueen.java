@@ -55,6 +55,11 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
+import java.util.Dictionary;
+import java.util.Hashtable;
+
+import net.minecraft.world.level.block.TntBlock;
 
 public class PowersKillerQueen extends NewPunchingStand {
 	
@@ -65,7 +70,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 	// TODO Make bomb block
 	// TODO Bites The Dust
 	private static final byte
-		BLOCK_PLANTED=63,
+		BLOCK_PLANTED=52,
+		BLOCK_DETONATE=54,
 	
 		BOMB_NONE=0,
 		BOMB_BLOCK=1,
@@ -73,6 +79,13 @@ public class PowersKillerQueen extends NewPunchingStand {
 		BOMB_ENTITY=3,
 		BOMB_BUBBLE=4;
 	
+	/*public static Dictionary<Integer, BlockPos> blocksBombs;
+	
+	private void blocksBombsInit() {
+		if (blocksBombs == null) {
+			blocksBombs = new Hashtable<>();
+		}
+	}*/
 	
 	public Entity bombEntity = null;
 	public BlockPos bombBlock = null;
@@ -85,6 +98,8 @@ public class PowersKillerQueen extends NewPunchingStand {
     public PowersKillerQueen(LivingEntity self) {super(self);}
     @Override
     public int getMaxGuardPoints(){ return 15; }
+    
+    
     
     public static final byte
 	    PART_4 = 0,
@@ -126,6 +141,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     @Override
     public StandPowers generateStandPowers(LivingEntity entity){
+    	
         return new PowersKillerQueen(entity);
     }
     
@@ -140,10 +156,27 @@ public class PowersKillerQueen extends NewPunchingStand {
         switch (context)
         {
         	case SKILL_1_NORMAL -> {
-        		blockPlantBombClient();
+        		if (!this.inBitesTheDustMode()) {
+	        		if (this.getBomb() == NONE) {
+	        			blockPlantBombClient();
+	        		}else {
+	        			detonateClient();
+	        		}
+        		}
+        	}
+        	case SKILL_2_NORMAL -> {
+        		if (!this.inBitesTheDustMode()) {
+	        		if (this.getBomb() == NONE) {
+	        			// item plant method
+	        		}else {
+	        			defuseClient();
+	        		}
+        		}
         	}
         	case SKILL_2_CROUCH -> {
-        		tryShootAirBubbleClient();
+        		if (!this.inBitesTheDustMode()) {
+        			tryShootAirBubbleClient();
+        		}
         	}
         	case SKILL_3_NORMAL, SKILL_3_GUARD -> {
         		tryToDashClient();
@@ -159,18 +192,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         	
         }
     }
-    @Override
-    public boolean setPowerOther(int move, int lastMove) {
-    	if (move == PowerIndex.POWER_1) {
-    		return blockPlantBomb();
-    	} else if (move == PowerIndex.POWER_4) {
-    		return switchModes();
-    	} else if (move == PowerIndex.POWER_2) {
-    		return shootAirBubble();
-    	}
-    	
-    	return super.setPowerOther(move,  lastMove);
-    }
+    
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
 
@@ -218,9 +240,29 @@ public class PowersKillerQueen extends NewPunchingStand {
         super.handleStandAttack(player,target);
     }
     
+    @Override
+    public boolean setPowerOther(int move, int lastMove) {
+    	
+    	
+    	if (move == PowerIndex.POWER_1) {
+    		//return blockPlantBomb(); <- Do detonate
+    	} else if (move == PowerIndex.POWER_4) {
+    		return switchModes();
+    	} else if (move == PowerIndex.POWER_2) {
+    		// <- do defuse
+    		//return shootAirBubble();
+    	} else if (move == PowerIndex.POWER_2_SNEAK) {
+    		return shootAirBubble();
+    	} else if (move == PowersKillerQueen.BLOCK_DETONATE) {
+    		return explode();
+    	}
+    	
+    	return super.setPowerOther(move,  lastMove);
+    }
     
     @Override
     public boolean tryPower(int move, boolean forced) {
+    	
         return super.tryPower(move, forced);
     }
     @Override
@@ -230,9 +272,13 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos){
+    	
     	if (move == (int)PowersKillerQueen.BLOCK_PLANTED) {
     		this.bombBlock = blockPos;
+    	} else {
+    		
     	}
+    	
     	
     	return true; //super.tryBlockPosPower(move, forced, blockPos);
     }
@@ -244,6 +290,23 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (vaultOrFallBraceFails()){
             dash();
         }
+    }
+    
+    public void defuseClient() {
+    	byte bombType = this.getBomb();
+    	
+    	if (bombType == BOMB_BLOCK) {
+    		
+    	}
+    }
+    
+    public void detonateClient() {
+    	byte bombType = this.getBomb();
+    	
+    	if (bombType == BOMB_BLOCK) {
+    		((StandUser) this.getSelf()).roundabout$tryPower(PowersKillerQueen.BLOCK_DETONATE, true);
+            tryPowerPacket(PowersKillerQueen.BLOCK_DETONATE);
+    	}
     }
     
     public void tryShootAirBubbleClient() {
@@ -270,7 +333,6 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
     
     public void blockPlantBombClient() {
-    	Roundabout.LOGGER.info("client action");
     	StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
 		
         if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
@@ -287,13 +349,10 @@ public class PowersKillerQueen extends NewPunchingStand {
         		//tryBlockPosPower(PowersKillerQueen.BLOCK_PLANTED, true, pos);
         		((StandUser) this.getSelf()).roundabout$tryBlockPosPower(PowersKillerQueen.BLOCK_PLANTED, true, pos);
         		tryBlockPosPowerPacket(PowersKillerQueen.BLOCK_PLANTED, pos);
-        		
-        		Roundabout.LOGGER.info("got block at " + this.bombBlock);
         	}
         }
     	
-    	//((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
-        //tryPowerPacket(PowerIndex.POWER_1);
+    	
     }
     
     public boolean inBitesTheDustMode(){
@@ -354,35 +413,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         bubble.lifeSpan = 400;
         return bubble;
     }
-    
-    public boolean blockPlantBomb() {
-    	Roundabout.LOGGER.info("do it");
-    	if (!this.getSelf().level().isClientSide() && this.getBomb() == BOMB_NONE && !this.BitesTheDustMode) {
-    		StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
-    		Roundabout.LOGGER.info("got into first if");
-            if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
-            	Roundabout.LOGGER.info("got into second if");
-            	
-            	Vec3 vec3d = this.getSelf().getEyePosition(0);
-                Vec3 vec3d2 = this.getSelf().getViewVector(0);
-                Vec3 vec3d3 = vec3d.add(vec3d2.x * 3.5, vec3d2.y * 3.5, vec3d2.z * 3.5);
-                
-                BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this.getSelf()));       
-                BlockPos pos = blockHit.getBlockPos();
-            	BlockState state = this.getSelf().level().getBlockState(pos);
-            	
-            	if (!MainUtil.isBlockBlacklisted(state) && !state.isAir()) {
-            		tryBlockPosPower(PowersKillerQueen.BLOCK_PLANTED, true, pos);
-            		((StandUser) this.getSelf()).roundabout$tryBlockPosPower(PowersKillerQueen.BLOCK_PLANTED, true, pos);
-            		tryBlockPosPowerPacket(PowersKillerQueen.BLOCK_PLANTED, pos);
-            		
-            		Roundabout.LOGGER.info("got block at " + this.bombBlock);
-            	}
-            }
-    	}
-    	
-    	return true;
-    }
+   
     
     public boolean itemPlantBomb() { 
     	                                 
@@ -629,10 +660,22 @@ public class PowersKillerQueen extends NewPunchingStand {
     		return BOMB_BUBBLE;
     	}
     	if (this.bombBlock != null) {
-    		Roundabout.LOGGER.info("it detect that he has a active bomb");
     		return BOMB_BLOCK;
     	}
     	
     	return BOMB_NONE;
+    }
+    
+    public boolean explode() {
+    	
+		if (this.getBomb() == PowersKillerQueen.BOMB_BLOCK) {
+			if (!isClient()) {
+    			this.getSelf().level().removeBlock(this.bombBlock, true);
+    			
+			}
+    		this.bombBlock = null;
+    	}
+    	
+    	return true;
     }
  }

@@ -473,11 +473,26 @@ public class ModSounds {
     public static final String KILLER_QUEEN_BARRAGE = "killer_queen_barrage";
     public static final ResourceLocation KILLER_QUEEN_BARRAGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_BARRAGE);
     public static SoundEvent KILLER_QUEEN_BARRAGE_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_BARRAGE_ID);
-    public static final String KILLER_QUEEN_SUMMON = "killer_queen_summon";
+    public static final String KILLER_QUEEN_SUMMON = "summon_killer_queen";
     public static final ResourceLocation KILLER_QUEEN_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SUMMON);
     public static SoundEvent KILLER_QUEEN_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SUMMON_ID);
+    public static final String KILLER_QUEEN_DETONATE = "killer_queen_bomb_detonate";
+    public static final ResourceLocation KILLER_QUEEN_DETONATE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_DETONATE);
+    public static SoundEvent KILLER_QUEEN_DETONATE_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_DETONATE_ID);
+    public static final String KILLER_QUEEN_EXPLOSION = "killer_queen_explosion";
+    public static final ResourceLocation KILLER_QUEEN_EXPLOSION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_EXPLOSION);
+    public static SoundEvent KILLER_QUEEN_EXPLOSION_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_EXPLOSION_ID);
+    public static final String KILLER_QUEEN_BUBBLE_LAUNCH = "killer_queen_bubble_launch";
+    public static final ResourceLocation KILLER_QUEEN_BUBBLE_LAUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_BUBBLE_LAUNCH);
+    public static SoundEvent KILLER_QUEEN_BUBBLE_LAUNCH_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_BUBBLE_LAUNCH_ID);
 
-
+    public static final String SHA_SUMMON = "summon_sha";
+    public static final ResourceLocation SHA_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SHA_SUMMON);
+    public static SoundEvent SHA_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(SHA_SUMMON_ID);
+    public static final String SHA_MOVING = "sha_moving";
+    public static final ResourceLocation SHA_MOVING_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SHA_MOVING);
+    public static SoundEvent SHA_MOVING_EVENT = SoundEvent.createVariableRangeEvent(SHA_MOVING_ID);
+    
     public static final String EXPLOSIVE_PUNCH = "explosive_punch";
     public static final ResourceLocation EXPLOSIVE_PUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EXPLOSIVE_PUNCH);
     public static SoundEvent EXPLOSIVE_PUNCH_EVENT = SoundEvent.createVariableRangeEvent(EXPLOSIVE_PUNCH_ID);
