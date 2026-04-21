@@ -325,6 +325,9 @@ public class StandIcons {
 
     public static final ResourceLocation NEUTRAL_STANCE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/20th_century_boy/neutralstance.png");
+    public static final ResourceLocation TOGGLE_INVINCIBILITY = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/20th_century_boy/activateinvincibility.png");
+
 
 
     public static final ResourceLocation SNAP_ICON = new ResourceLocation(Roundabout.MOD_ID,
