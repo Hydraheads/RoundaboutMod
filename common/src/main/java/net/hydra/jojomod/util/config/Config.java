@@ -710,12 +710,16 @@ public class Config implements Cloneable {
     public static class CenturyBoySettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableCenturyBoy;
-        @IntOption(group = "inherit", value = 10000000, min = 1, max = 10000000)
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean CBHasDurability;
+        @IntOption(group = "inherit", value = 100, min = 1, max = 100000)
         public Integer CBDurability;
         @BooleanOption(group = "inherit", value = false)
         public Boolean CBchangesFOV;
         @BooleanOption(group = "inherit", value = true)
         public Boolean CBCanMoveCamera;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean oldKnockbackStance;
     }
 
     public static class WalkingHeartSettings {
