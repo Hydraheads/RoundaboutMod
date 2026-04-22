@@ -216,13 +216,17 @@ public class BaseMinion extends PathfinderMob {
                 } else if (stack.getItem() instanceof ShearsItem) {
                     if (!level().isClientSide()) {
                         ItemStack stackk = getBodyItem().copy();
+                        ItemStack stackk2 = getHeadItem().copy();
                         dropHead(player);
                         dropBody(player);
                         if (!stackk.isEmpty()){
                             BaseMinion bm = convertTo(ModEntities.VILLAGER_MINION, false);
                             if (bm != null){convertToMega(bm);}
                         }
-                        this.level().playSound(null, this.blockPosition(), SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1F, 1);
+                        if (!stackk.isEmpty() || !stackk2.isEmpty()) {
+                            this.level().playSound(null, this.blockPosition(), SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1F, 1);
+                            stack.hurtAndBreak(1, player, ($$1x) -> $$1x.broadcastBreakEvent($$1));
+                        }
                     }
 
                     return InteractionResult.CONSUME;
