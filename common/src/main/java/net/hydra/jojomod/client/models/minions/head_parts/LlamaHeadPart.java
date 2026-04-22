@@ -5,6 +5,10 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
+import net.hydra.jojomod.entity.zombie_minion.ChickenMinion;
+import net.hydra.jojomod.entity.zombie_minion.DogMinion;
+import net.hydra.jojomod.entity.zombie_minion.OcelotMinion;
+import net.hydra.jojomod.entity.zombie_minion.ParrotMinion;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -69,6 +73,30 @@ public class LlamaHeadPart extends PsuedoHierarchicalModel {
                        int light, float r, float g, float b, float alpha) {
         if (context instanceof LivingEntity LE) {
             this.root().getAllParts().forEach(ModelPart::resetPose);
+            if (context instanceof ParrotMinion pm){
+                head.xScale = 0.55F;
+                head.yScale = 0.55F;
+                head.zScale = 0.55F;
+                head.y += 1F;
+            }
+            if (context instanceof DogMinion pm){
+                head.xScale = 0.97F;
+                head.yScale = 0.97F;
+                head.zScale = 0.97F;
+                head.x += 1F;
+                head.y += 2F;
+            }
+            if (context instanceof OcelotMinion pm){
+                head.xScale = 0.83F;
+                head.yScale = 0.83F;
+                head.zScale = 0.83F;
+                head.y += 2F;
+            }
+            if (context instanceof ChickenMinion pm){
+                head.xScale = 0.63F;
+                head.yScale = 0.63F;
+                head.zScale = 0.63F;
+            }
             if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
                 partialTicks = 0;
             }

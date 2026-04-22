@@ -13,9 +13,11 @@ import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ServerPacketListener;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
@@ -32,6 +34,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     public boolean invincibleState = false;
     public boolean defenseStance = false;
     public boolean knockbackStance = false;
+    public boolean redstoneStance = false;
     public int mode = 1;
 
     /** general definition stuff **/
@@ -71,7 +74,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                 setSkillIcon(context, x, y, 1, StandIcons.RATT_LEAP, PowerIndex.SKILL_1);
             }
         }
-        setSkillIcon(context,x,y,2, StandIcons.MUSCLE, PowerIndex.SKILL_2);
+        setSkillIcon(context,x,y,2, StandIcons.TOGGLE_INVINCIBILITY, PowerIndex.SKILL_2);
         setSkillIcon(context,x,y,3,StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         super.renderIcons(context, x, y);
     }
@@ -193,7 +196,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                     knockbackMode();
                 }
                 case 4 -> {
-                    Roundabout.LOGGER.info("i'll cook something later guys don't worry4");
+                    redstoneMode();
                 }
             }
             ClientUtil.getPlayer().stopUsingItem();
@@ -202,6 +205,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             invincibleState = false;
             defenseStance = false;
             knockbackStance = false;
+            redstoneStance = false;
         }
     }
 
@@ -210,13 +214,24 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     @Override
     public boolean interceptDamageEvent(DamageSource damageSource, float amount) {
         if(knockbackStance){
-            if(damageSource.getEntity() != null){
-                Roundabout.LOGGER.info("{} ", damageSource);
-                ClientUtil.getPlayer().setDeltaMovement(
-                        ClientUtil.getPlayer().position().subtract(
-                                damageSource.getSourcePosition()).multiply(new Vec3(amount/5, amount/5, amount/5)));
+            if (ClientNetworking.getAppropriateConfig().centuryBoySettings.oldKnockbackStance){
+                if(damageSource.getEntity() != null){
+                    Roundabout.LOGGER.info("{} ", damageSource);
+                    ClientUtil.getPlayer().setDeltaMovement(
+                            ClientUtil.getPlayer().position().subtract(
+                                    damageSource.getSourcePosition()).multiply(new Vec3(amount/7.5, amount/7.5, amount/7.5)));
 
-        }}
+                }
+            }else{
+                /// to do: make an exception for iron golems in CenturyBoyKnockback
+                return false;
+            }
+
+
+        }
+        if (redstoneStance){
+
+        }
         if(invincibleState){
             /** ps: don't forget to put TA4 shot when it gets added **/
             if (damageSource.is(DamageTypes.FELL_OUT_OF_WORLD) ||
@@ -233,12 +248,12 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         }
     }
 
-    public void defenseMode(){
-        defenseStance = true;
-    }
+    public void defenseMode(){defenseStance = true;}
 
     public void knockbackMode(){knockbackStance = true;}
 
+
+    public void redstoneMode(){redstoneStance = false;}
 
     @Override
     public float inputSpeedModifiers(float basis) {

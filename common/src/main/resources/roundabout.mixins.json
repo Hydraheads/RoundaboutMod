@@ -57,6 +57,7 @@
     "blocks.CoffinSleepAtDayMixin",
     "cinderella.CinderellaVillager",
     "cinderella.ZCreeper",
+    "century_boy.CenturyBoyKnockback",
     "cream.CreamCancelHealthRegenMixin",
     "cream.CreamCancelPlayerHurtMixin",
     "d4c.D4CBlockBehaviour",

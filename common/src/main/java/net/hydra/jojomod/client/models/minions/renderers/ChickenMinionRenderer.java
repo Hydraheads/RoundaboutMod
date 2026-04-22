@@ -10,21 +10,15 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 
 public class ChickenMinionRenderer extends MobRenderer<ChickenMinion, ChickenMinionModel<ChickenMinion>> {
-    private static final ResourceLocation VINDICATOR = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/minions/villager.png");
+    private static final ResourceLocation VINDICATOR = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/minions/chicken.png");
 
     public ChickenMinionRenderer(EntityRendererProvider.Context $$0) {
-        super($$0, new ChickenMinionModel<>($$0.bakeLayer(ModEntityRendererClient.CHICKEN_MINION_LAYER)), 0.5F);
-        this.addLayer(new ItemInHandLayer<ChickenMinion, ChickenMinionModel<ChickenMinion>>(this, $$0.getItemInHandRenderer()) {
-            public void render(PoseStack $$0, MultiBufferSource $$1, int $$2, ChickenMinion $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9) {
-                if ($$3.isAggressive()) {
-                    super.render($$0, $$1, $$2, $$3, $$4, $$5, $$6, $$7, $$8, $$9);
-                }
-            }
-        });
+        super($$0, new ChickenMinionModel<>($$0.bakeLayer(ModEntityRendererClient.CHICKEN_MINION_LAYER)), 0.3F);
+        this.addLayer(new ChimeraHeadLayer<>($$0, this));
     }
     @Override
     protected void scale(ChickenMinion $$0, PoseStack $$1, float $$2) {
@@ -34,10 +28,23 @@ public class ChickenMinionRenderer extends MobRenderer<ChickenMinion, ChickenMin
             $$1.scale(1F, perc, 1F);
         }
     }
+    @Override
+    public void render(ChickenMinion minion, float $$1, float partialTicks, PoseStack stack,
+                       MultiBufferSource bufferSource, int packedLight) {
+        getModel().head.visible = false;
+        getModel().beak.visible = false;
+        getModel().redThing.visible = false;
+        super.render(minion, $$1, partialTicks, stack, bufferSource, packedLight);
+    }
     public ResourceLocation getTextureLocation(ChickenMinion $$0) {
         return VINDICATOR;
     }
 
+    protected float getBob(ChickenMinion $$0, float $$1) {
+        float $$2 = Mth.lerp($$1, $$0.oFlap, $$0.flap);
+        float $$3 = Mth.lerp($$1, $$0.oFlapSpeed, $$0.flapSpeed);
+        return (Mth.sin($$2) + 1.0F) * $$3;
+    }
     @Override
     public boolean shouldRender(ChickenMinion $$0, Frustum $$1, double $$2, double $$3, double $$4) {
         if ($$0.getDiedInSun()){

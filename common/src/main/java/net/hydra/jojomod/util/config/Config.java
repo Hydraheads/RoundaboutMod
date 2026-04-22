@@ -701,7 +701,7 @@ public class Config implements Cloneable {
     public static class ManhattanTransferSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableManhattanTransfer;
-        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 140, min = 0, max = 72000)
         public Integer manhattanTransferMaxRange;
         @IntOption(group = "inherit", value = 4, min = 1, max = 5)
         public Integer getAutoSpeed;
@@ -710,12 +710,16 @@ public class Config implements Cloneable {
     public static class CenturyBoySettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableCenturyBoy;
-        @IntOption(group = "inherit", value = 10000000, min = 1, max = 10000000)
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean CBHasDurability;
+        @IntOption(group = "inherit", value = 100, min = 1, max = 100000)
         public Integer CBDurability;
         @BooleanOption(group = "inherit", value = false)
         public Boolean CBchangesFOV;
         @BooleanOption(group = "inherit", value = true)
         public Boolean CBCanMoveCamera;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean oldKnockbackStance;
     }
 
     public static class WalkingHeartSettings {
