@@ -319,15 +319,17 @@ public class PowersManhattanTransfer extends NewDashPreset {
             ANIME_SKIN = 1,
             MANGA_SKIN = 2,
             AERO_TRANSFER_SKIN = 3,
-            BRAZIL_SKIN = 4,
-            RADIOACTIVE_SKIN = 5,
-            POLLINATION_SKIN = 6;
+            JOLLY_SKIN = 4,
+            BRAZIL_SKIN = 5,
+            RADIOACTIVE_SKIN = 6,
+            POLLINATION_SKIN = 7;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 ANIME_SKIN,
                 MANGA_SKIN,
                 AERO_TRANSFER_SKIN,
+                JOLLY_SKIN,
                 BRAZIL_SKIN,
                 RADIOACTIVE_SKIN,
                 POLLINATION_SKIN
@@ -446,8 +448,10 @@ public class PowersManhattanTransfer extends NewDashPreset {
             return Component.translatable(  "skins.roundabout.manhattan_transfer.manhattan_part_6");
         } else if (skinId == ManhattanTransferEntity.MANGA_SKIN){
             return Component.translatable(  "skins.roundabout.manhattan_transfer.manhattan_manga_part_6");
-        }else if (skinId == ManhattanTransferEntity.AERO_TRANSFER_SKIN){
-            return Component.translatable(  "skins.roundabout.manhattan_transfer.manhattan_aerosmith");
+        }else if (skinId == ManhattanTransferEntity.AERO_TRANSFER_SKIN) {
+            return Component.translatable("skins.roundabout.manhattan_transfer.manhattan_aerosmith");
+        }else if (skinId == ManhattanTransferEntity.JOLLY_SKIN){
+                return Component.translatable(  "skins.roundabout.manhattan_transfer.manhattan_jolly");
         } else if (skinId == ManhattanTransferEntity.BRAZIL_SKIN){
             return Component.translatable(  "skins.roundabout.manhattan_transfer.brazilian_transfer");
         } else if (skinId == ManhattanTransferEntity.RADIOACTIVE_SKIN){
