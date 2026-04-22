@@ -215,9 +215,10 @@ public class BaseMinion extends PathfinderMob {
                     return InteractionResult.CONSUME;
                 } else if (stack.getItem() instanceof ShearsItem) {
                     if (!level().isClientSide()) {
+                        ItemStack stackk = getBodyItem().copy();
                         dropHead(player);
                         dropBody(player);
-                        if (!getBodyItem().isEmpty()){
+                        if (!stackk.isEmpty()){
                             BaseMinion bm = convertTo(ModEntities.VILLAGER_MINION, false);
                             if (bm != null){convertToMega(bm);}
                         }
