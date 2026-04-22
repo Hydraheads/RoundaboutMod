@@ -334,14 +334,82 @@ public class BaseMinion extends PathfinderMob {
     }
 
     protected SoundEvent getAmbientSound() {
+        if (getHeadItem()!= null){
+            if (getHeadItem().is(ModItems.MOOSHROOM_REMAINS)){
+                return SoundEvents.COW_AMBIENT;
+            } else if (getHeadItem().is(ModItems.CAT_REMAINS)){
+                return this.random.nextInt(4) == 0 ? SoundEvents.CAT_PURREOW : SoundEvents.CAT_AMBIENT;
+            } else if (getHeadItem().is(ModItems.LLAMA_REMAINS)){
+                return SoundEvents.LLAMA_AMBIENT;
+            } else if (getHeadItem().is(ModItems.GOAT_REMAINS)){
+                return SoundEvents.GOAT_AMBIENT;
+            } else if (getHeadItem().is(ModItems.POLAR_BEAR_REMAINS)){
+                return SoundEvents.POLAR_BEAR_AMBIENT;
+            }
+        }
         return SoundEvents.VINDICATOR_AMBIENT;
     }
 
+    @Override
+    protected void playStepSound(BlockPos $$0, BlockState $$1) {
+        if (getBodyItem() != null) {
+            if (getBodyItem().is(ModItems.CHICKEN_REMAINS)) {
+                this.playSound(SoundEvents.CHICKEN_STEP, 0.15f, 1.0f);
+            } else if (getBodyItem().is(ModItems.DOG_REMAINS)){
+                this.playSound(SoundEvents.WOLF_STEP, 0.15F, 1.0F);
+            } else if (getBodyItem().is(ModItems.PARROT_REMAINS)){
+                this.playSound(SoundEvents.PARROT_STEP, 0.15F, 1.0F);
+            } else {
+                super.playStepSound($$0,$$1);
+            }
+        } else {
+            super.playStepSound($$0,$$1);
+        }
+    }
+
+    @Override
+    protected float getSoundVolume() {
+        if (getHeadItem()!= null) {
+            if (getHeadItem().is(ModItems.MOOSHROOM_REMAINS)) {
+                return 0.4F;
+            }
+        }
+        return super.getSoundVolume();
+    }
+
+    @Override
     protected SoundEvent getDeathSound() {
+        if (getHeadItem()!= null){
+            if (getHeadItem().is(ModItems.MOOSHROOM_REMAINS)){
+                return SoundEvents.COW_DEATH;
+            } else if (getHeadItem().is(ModItems.CAT_REMAINS)){
+                return SoundEvents.CAT_DEATH;
+            } else if (getHeadItem().is(ModItems.LLAMA_REMAINS)){
+                return SoundEvents.LLAMA_DEATH;
+            } else if (getHeadItem().is(ModItems.GOAT_REMAINS)){
+                return SoundEvents.GOAT_DEATH;
+            } else if (getHeadItem().is(ModItems.POLAR_BEAR_REMAINS)){
+                return SoundEvents.POLAR_BEAR_DEATH;
+            }
+        }
         return SoundEvents.VINDICATOR_DEATH;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource $$0) {
+        if (getHeadItem()!= null){
+            if (getHeadItem().is(ModItems.MOOSHROOM_REMAINS)){
+                return SoundEvents.COW_HURT;
+            } else if (getHeadItem().is(ModItems.CAT_REMAINS)){
+                return SoundEvents.CAT_HURT;
+            } else if (getHeadItem().is(ModItems.LLAMA_REMAINS)){
+                return SoundEvents.LLAMA_HURT;
+            } else if (getHeadItem().is(ModItems.GOAT_REMAINS)){
+                return SoundEvents.GOAT_HURT;
+            } else if (getHeadItem().is(ModItems.POLAR_BEAR_REMAINS)){
+                return SoundEvents.POLAR_BEAR_HURT;
+            }
+        }
         return SoundEvents.VINDICATOR_HURT;
     }
 
