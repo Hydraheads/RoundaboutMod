@@ -50,6 +50,8 @@ public class ChimeraHeadLayer<T extends LivingEntity, A extends EntityModel<T>> 
                     renderWithHead(vm,vdm.head,poseStack,bufferSource,packedLight,entity,xx,yy,zz,partialTicks,var9,var10);
                 } else if (getParentModel() instanceof OcelotMinionModel<?> vdm) {
                     renderWithHead(vm,vdm.head,poseStack,bufferSource,packedLight,entity,xx,yy,zz,partialTicks,var9,var10);
+                } else if (getParentModel() instanceof ChickenMinionModel<?> vdm) {
+                    renderWithHead(vm,vdm.head,poseStack,bufferSource,packedLight,entity,xx,yy,zz,partialTicks,var9,var10);
                 }
             }
         }

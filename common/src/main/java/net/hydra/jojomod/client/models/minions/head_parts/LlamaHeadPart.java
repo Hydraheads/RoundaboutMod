@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
+import net.hydra.jojomod.entity.zombie_minion.ChickenMinion;
 import net.hydra.jojomod.entity.zombie_minion.DogMinion;
 import net.hydra.jojomod.entity.zombie_minion.OcelotMinion;
 import net.hydra.jojomod.entity.zombie_minion.ParrotMinion;
@@ -90,6 +91,11 @@ public class LlamaHeadPart extends PsuedoHierarchicalModel {
                 head.yScale = 0.83F;
                 head.zScale = 0.83F;
                 head.y += 2F;
+            }
+            if (context instanceof ChickenMinion pm){
+                head.xScale = 0.63F;
+                head.yScale = 0.63F;
+                head.zScale = 0.63F;
             }
             if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
                 partialTicks = 0;
