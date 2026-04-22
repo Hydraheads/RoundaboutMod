@@ -27,8 +27,16 @@ public class TuskNailRenderer extends EntityRenderer<TuskNailEntity> {
         this.model = new Tusk1NailModel($$0.bakeLayer(ModEntityRendererClient.TUSK1_NAIL_MODEL));
     }
 
+    private static final ResourceLocation ACT_1 = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/tusk_one.png");
+    private static final ResourceLocation ACT_2 = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/tusk_two.png");
+
     @Override
-    public ResourceLocation getTextureLocation(TuskNailEntity tne) {return new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/tusk_one.png");}
+    public ResourceLocation getTextureLocation(TuskNailEntity tne) {
+        if (tne.getAct() == 1) {
+            return ACT_1;
+        }
+        return ACT_2;
+    }
 
     public void render(TuskNailEntity $$0, float $$1, float $$2, PoseStack poseStack, MultiBufferSource $$4, int $$5) {
         VertexConsumer $$6 = ItemRenderer.getFoilBufferDirect($$4, this.model.renderType(this.getTextureLocation($$0)), false, false);// $$0.isFoil());
