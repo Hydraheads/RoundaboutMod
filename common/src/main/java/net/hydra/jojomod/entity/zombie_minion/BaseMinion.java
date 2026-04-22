@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.zombie_minion;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.goals.*;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
@@ -10,6 +11,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.BodyRemainsItem;
 import net.hydra.jojomod.item.HeadRemainsItem;
 import net.hydra.jojomod.item.MaskItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -180,15 +182,36 @@ public class BaseMinion extends PathfinderMob {
                     if (!level().isClientSide()) {
                         dropBody(player);
                         setBodyItem(stack.copyWithCount(1));
+                        if (stack.is(ModItems.AXOLOTL_REMAINS)){
+                            BaseMinion bm = convertTo(ModEntities.AXOLOTL_MINION, false);
+                            if (bm != null){convertToMega(bm);}
+                        } else if (stack.is(ModItems.DOG_REMAINS)){
+                            BaseMinion bm = convertTo(ModEntities.DOG_MINION, false);
+                            if (bm != null){convertToMega(bm);}
+                        } else if (stack.is(ModItems.CHICKEN_REMAINS)){
+                            BaseMinion bm = convertTo(ModEntities.CHICKEN_MINION, false);
+                            if (bm != null){convertToMega(bm);}
+                        } else if (stack.is(ModItems.OCELOT_REMAINS)){
+                            BaseMinion bm = convertTo(ModEntities.OCELOT_MINION, false);
+                            if (bm != null){convertToMega(bm);}
+                        } else if (stack.is(ModItems.PARROT_REMAINS)){
+                            BaseMinion bm = convertTo(ModEntities.PARROT_MINION, false);
+                            if (bm != null){convertToMega(bm);}
+                        }
                         if (!player.getAbilities().instabuild) {
                             stack.shrink(1);
                         }
                         this.level().playSound(null, this.blockPosition(), SoundEvents.ZOMBIE_INFECT, SoundSource.PLAYERS, 1F, 1);
+
                     }
                     return InteractionResult.CONSUME;
                 } else if (stack.getItem() instanceof ShearsItem) {
                     if (!level().isClientSide()) {
                         dropHead(player);
+                        if (!getBodyItem().isEmpty()){
+                            BaseMinion bm = convertTo(ModEntities.VILLAGER_MINION, false);
+                            if (bm != null){convertToMega(bm);}
+                        }
                         dropBody(player);
                         this.level().playSound(null, this.blockPosition(), SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1F, 1);
                     }
@@ -208,6 +231,18 @@ public class BaseMinion extends PathfinderMob {
         return super.mobInteract(player,$$1);
     }
 
+    public <T extends Mob>void convertToMega(BaseMinion villagerMinion){
+            villagerMinion.absMoveTo(getX(), getY(), getZ());
+            villagerMinion.setController(getController());
+            villagerMinion.setMovementTactic(getMovementTactic());
+            villagerMinion.setHomePosition(getHomePosition());
+            villagerMinion.setHeadItem(getHeadItem());
+            villagerMinion.setBodyItem(getBodyItem());
+            if (villagerMinion != null) {
+                this.level().addFreshEntity(villagerMinion);
+                //this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+            }
+    }
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.3).add(Attributes.MAX_HEALTH, 24)
