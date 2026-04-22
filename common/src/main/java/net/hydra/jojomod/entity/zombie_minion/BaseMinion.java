@@ -1,4 +1,5 @@
 package net.hydra.jojomod.entity.zombie_minion;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
@@ -106,7 +107,9 @@ public class BaseMinion extends PathfinderMob {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(1, new ClimbOnTopOfPowderSnowGoal(this, this.level()));
         this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0, false));
-        this.goalSelector.addGoal(7, new MinionStrollGoal(this, 1.0));
+        if (!(this instanceof ParrotMinion)) {
+            this.goalSelector.addGoal(7, new MinionStrollGoal(this, 1.0));
+        }
         this.goalSelector.addGoal(6, new MinionFollowCommanderGoal(this, 1.0, 10.0F, 1.5F, false));
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
@@ -182,6 +185,11 @@ public class BaseMinion extends PathfinderMob {
                     if (!level().isClientSide()) {
                         dropBody(player);
                         setBodyItem(stack.copyWithCount(1));
+                        if (getMainHandItem() != null && !getMainHandItem().isEmpty()){
+                            ItemEntity itemEntity = new ItemEntity(level(),getX(), getY(), getZ(), getMainHandItem());
+                            level().addFreshEntity(itemEntity);
+                            setItemSlot(EquipmentSlot.MAINHAND,ItemStack.EMPTY);
+                        }
                         if (stack.is(ModItems.AXOLOTL_REMAINS)){
                             BaseMinion bm = convertTo(ModEntities.AXOLOTL_MINION, false);
                             if (bm != null){convertToMega(bm);}
@@ -208,11 +216,11 @@ public class BaseMinion extends PathfinderMob {
                 } else if (stack.getItem() instanceof ShearsItem) {
                     if (!level().isClientSide()) {
                         dropHead(player);
+                        dropBody(player);
                         if (!getBodyItem().isEmpty()){
                             BaseMinion bm = convertTo(ModEntities.VILLAGER_MINION, false);
                             if (bm != null){convertToMega(bm);}
                         }
-                        dropBody(player);
                         this.level().playSound(null, this.blockPosition(), SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1F, 1);
                     }
 
@@ -232,20 +240,16 @@ public class BaseMinion extends PathfinderMob {
     }
 
     public <T extends Mob>void convertToMega(BaseMinion villagerMinion){
-            villagerMinion.absMoveTo(getX(), getY(), getZ());
-            villagerMinion.setController(getController());
+            villagerMinion.setController(this.level().getEntity(getController()));
             villagerMinion.setMovementTactic(getMovementTactic());
+            villagerMinion.setTargetTactic(getTargetTactic());
             villagerMinion.setHomePosition(getHomePosition());
             villagerMinion.setHeadItem(getHeadItem());
             villagerMinion.setBodyItem(getBodyItem());
-            if (villagerMinion != null) {
-                this.level().addFreshEntity(villagerMinion);
-                //this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
-            }
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.3).add(Attributes.MAX_HEALTH, 24)
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.31).add(Attributes.MAX_HEALTH, 24)
                 .add(Attributes.ATTACK_DAMAGE, 5).
                 add(Attributes.FOLLOW_RANGE, 48.0D);
     }
