@@ -104,8 +104,11 @@ public class BaseMinion extends PathfinderMob {
         this.targetSelector.addGoal(1, new MinionTargetGoal(this));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::canGetMadAt));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false, this::canGetMadAt));
-        this.goalSelector.addGoal(1, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new ClimbOnTopOfPowderSnowGoal(this, this.level()));
+
+        if (!(this instanceof AxolotlMinion)) {
+            this.goalSelector.addGoal(1, new FloatGoal(this));
+            this.goalSelector.addGoal(1, new ClimbOnTopOfPowderSnowGoal(this, this.level()));
+        }
         this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0, false));
         if (!(this instanceof ParrotMinion)) {
             this.goalSelector.addGoal(7, new MinionStrollGoal(this, 1.0));
