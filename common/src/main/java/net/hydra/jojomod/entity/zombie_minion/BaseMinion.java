@@ -470,6 +470,7 @@ public class BaseMinion extends PathfinderMob {
         }
     }
 
+    @Override
     public void setLastHurtMob(Entity $$0) {
         if ($$0 != null && controller != null && controller.is($$0)){
             return;
