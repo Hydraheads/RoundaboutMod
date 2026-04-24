@@ -3699,14 +3699,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (!this.level().isClientSide()) {
             if (rdbt$this() instanceof Mob lent) {
                 VillagerMinion villagerMinion = lent.convertTo(ModEntities.VILLAGER_MINION, false);
-                villagerMinion.absMoveTo(lent.getX(), lent.getY(), lent.getZ());
                 villagerMinion.setController(ent);
                 villagerMinion.setMovementTactic(Tactics.FOLLOW.id);
                 villagerMinion.setHomePosition(new Vec3(lent.getX(), lent.getY(), lent.getZ()));
-                if (villagerMinion != null) {
-                    this.level().addFreshEntity(villagerMinion);
-                    //this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
-                }
             }
         }
     }

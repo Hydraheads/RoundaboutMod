@@ -100,15 +100,15 @@ public class BaseMinion extends PathfinderMob {
     protected void registerGoals() {
     }
     public void addBehaviourGoals() {
-        this.goalSelector.addGoal(1, new MinionPanicGoal(this,2.0F));
+        this.goalSelector.addGoal(1, new AvoidPanicGoal<LivingEntity>(this, LivingEntity.class, 6.0F, (double)1.0F, 1.2));;
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this).setAlertOthers());
         this.targetSelector.addGoal(2, new MinionTargetGoal(this));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::canGetMadAt));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false, this::canGetMadAt));
 
         if (!(this instanceof AxolotlMinion)) {
-            this.goalSelector.addGoal(1, new FloatGoal(this));
-            this.goalSelector.addGoal(1, new ClimbOnTopOfPowderSnowGoal(this, this.level()));
+            this.goalSelector.addGoal(2, new FloatGoal(this));
+            this.goalSelector.addGoal(2, new ClimbOnTopOfPowderSnowGoal(this, this.level()));
         }
         this.goalSelector.addGoal(6, new LeapAtTargetBearHeadGoal(this, 0.4F));
         this.goalSelector.addGoal(7, new MeleeAttackGoal(this, 1.0, false));
@@ -124,6 +124,14 @@ public class BaseMinion extends PathfinderMob {
         return true;
     }
 
+    public boolean shouldPanic() {
+        return (getHeadItem() != null && getHeadItem().is(ModItems.CAT_REMAINS))
+                && shouldPanic2() && getHealth() < getMaxHealth()*0.4F;
+    }
+    public boolean shouldPanic2() {
+        return getTarget() != null;
+    }
+
    public int digCooldown = 0;
 
     public boolean canGetMadAt(LivingEntity $$0) {
@@ -135,6 +143,13 @@ public class BaseMinion extends PathfinderMob {
                             (this.getTargetTactic() == Tactics.HUNT_MONSTERS.id && $$0 instanceof Enemy && !($$0 instanceof Creeper) && !(this.controller != null && $$0.is(this.controller)))
             );
         }
+    }
+    @Override
+    public boolean canAttack(LivingEntity $$0) {
+        if (shouldPanic()){
+            return false;
+        }
+        return super.canAttack($$0);
     }
 
     @Override
@@ -627,10 +642,9 @@ public class BaseMinion extends PathfinderMob {
                 }
             }
 
-            if (this.getTarget() != null && (!this.getTarget().isAlive() || this.getTarget().isRemoved() ||
+            if ((this.getTarget() != null && ((!this.getTarget().isAlive() || this.getTarget().isRemoved() ||
                     (controller != null && controller.is(getTarget()))
-            )
-            ){
+            )))){
                 this.setTarget(null);
                 this.setLastHurtByMob(null);
                 this.setLastHurtByPlayer(null);
