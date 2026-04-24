@@ -100,23 +100,24 @@ public class BaseMinion extends PathfinderMob {
     protected void registerGoals() {
     }
     public void addBehaviourGoals() {
-        this.targetSelector.addGoal(2, new HurtByTargetGoal(this).setAlertOthers());
-        this.targetSelector.addGoal(1, new MinionTargetGoal(this));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::canGetMadAt));
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false, this::canGetMadAt));
+        this.goalSelector.addGoal(1, new MinionPanicGoal(this,2.0F));
+        this.targetSelector.addGoal(3, new HurtByTargetGoal(this).setAlertOthers());
+        this.targetSelector.addGoal(2, new MinionTargetGoal(this));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::canGetMadAt));
+        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false, this::canGetMadAt));
 
         if (!(this instanceof AxolotlMinion)) {
             this.goalSelector.addGoal(1, new FloatGoal(this));
             this.goalSelector.addGoal(1, new ClimbOnTopOfPowderSnowGoal(this, this.level()));
         }
-        this.goalSelector.addGoal(5, new LeapAtTargetGoal(this, 0.4F));
-        this.goalSelector.addGoal(6, new MeleeAttackGoal(this, 1.0, false));
+        this.goalSelector.addGoal(6, new LeapAtTargetBearHeadGoal(this, 0.4F));
+        this.goalSelector.addGoal(7, new MeleeAttackGoal(this, 1.0, false));
         if (!(this instanceof ParrotMinion)) {
-            this.goalSelector.addGoal(8, new MinionStrollGoal(this, 1.0));
+            this.goalSelector.addGoal(9, new MinionStrollGoal(this, 1.0));
         }
-        this.goalSelector.addGoal(7, new MinionFollowCommanderGoal(this, 1.2, 10.0F, 1.5F, false));
-        this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
-        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
+        this.goalSelector.addGoal(8, new MinionFollowCommanderGoal(this, 1.2, 10.0F, 1.5F, false));
+        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
+        this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Mob.class, 8.0F));
    }
     @Override
     public boolean canBreatheUnderwater(){
