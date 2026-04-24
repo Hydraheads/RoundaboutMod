@@ -25,7 +25,6 @@ public abstract class ZAbstractSkeleton extends Monster
     @Inject(method = "registerGoals()V", at = @At(value = "HEAD"))
     protected void roundabout$registerGoals(CallbackInfo ci) {
         this.goalSelector.addGoal(3, new AvoidEntityGoal<DogMinion>(this, DogMinion.class, 6.0f, 1.0, 1.2));
-
     }
 
     /**Shadows, ignore

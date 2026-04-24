@@ -109,11 +109,12 @@ public class BaseMinion extends PathfinderMob {
             this.goalSelector.addGoal(1, new FloatGoal(this));
             this.goalSelector.addGoal(1, new ClimbOnTopOfPowderSnowGoal(this, this.level()));
         }
-        this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0, false));
+        this.goalSelector.addGoal(5, new LeapAtTargetGoal(this, 0.4F));
+        this.goalSelector.addGoal(6, new MeleeAttackGoal(this, 1.0, false));
         if (!(this instanceof ParrotMinion)) {
-            this.goalSelector.addGoal(7, new MinionStrollGoal(this, 1.0));
+            this.goalSelector.addGoal(8, new MinionStrollGoal(this, 1.0));
         }
-        this.goalSelector.addGoal(6, new MinionFollowCommanderGoal(this, 1.2, 10.0F, 1.5F, false));
+        this.goalSelector.addGoal(7, new MinionFollowCommanderGoal(this, 1.2, 10.0F, 1.5F, false));
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
    }
