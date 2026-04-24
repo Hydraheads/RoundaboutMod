@@ -5426,7 +5426,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             boolean movementX = previousXposManhattan != this.getX();
             boolean movementZ = previousZposManhattan != this.getZ();
             boolean isStand = (((LivingEntity) (Object) this) instanceof StandEntity);
-
             IEntityAndData entityAndData = ((IEntityAndData) this);
                 if (up || down || movementX || movementZ) {
                     if(isInWater()){
@@ -5436,9 +5435,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         entityAndData.roundabout$setTrueInvisibilityManhattan(45);
                     }
                 }
-  /*              else if(((LivingEntity) (Object) this) instanceof RoadRollerEntity){
+                else if(((LivingEntity) (Object) this) instanceof RoadRollerEntity){
                     entityAndData.roundabout$setTrueInvisibilityManhattan(45);
-                }*/
+                }
                 else {/*Ticking will go down until the entity unrenders*/}
         }
             previousYposManhattan = this.getY();
