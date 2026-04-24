@@ -1388,7 +1388,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (this.onGround() && roundabout$leapTicks < (MainUtil.maxLeapTicks() - 5)) {
                 roundabout$leapTicks = -1;
             }
+            if (roundabout$leapIntentionally){
             roundabout$cancelConsumableItem((LivingEntity) (Object) this);
+            }
             roundabout$leapTicks--;
             if (!this.level().isClientSide && roundabout$leapIntentionally) {
                 Vector3f color = new Vector3f(1f, 0.65f, 0);
