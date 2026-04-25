@@ -1,17 +1,16 @@
 package net.hydra.jojomod.mixin.century_boy;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.RedStoneWireBlock;
-import net.minecraft.world.level.block.TntBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,6 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public class CenturyBoyRedstone {
+    LevelAccessor accessor;
 
 
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
@@ -48,16 +48,12 @@ public class CenturyBoyRedstone {
                             tnt.explode(level, targetPos);
                             level.setBlock(targetPos, Blocks.AIR.defaultBlockState(),11);
 
-
-                        }/** else if (state.hasProperty(BlockStateProperties.POWER)) {
-                            BlockState newState = state.setValue(BlockStateProperties.POWER, 15);
-
-                            level.setBlock(targetPos, newState, 3);
+                        }else if (block instanceof ObserverBlock observer) {
+                            if (!level.getBlockTicks().hasScheduledTick(targetPos, observer)) {
+                                level.scheduleTick(targetPos, observer, 2);
+                            }
                         }
-                         isn't working rn, will fix later
-                         */
                     }
-
                     cir.setReturnValue(false);
                 }
             }
