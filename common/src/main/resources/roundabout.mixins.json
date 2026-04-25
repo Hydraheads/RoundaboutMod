@@ -57,6 +57,7 @@
     "blocks.CoffinSetTimeToNightMixin",
     "blocks.CoffinSleepAtDayMixin",
     "century_boy.CenturyBoyKnockback",
+    "century_boy.CenturyBoyRedstone",
     "cinderella.CinderellaVillager",
     "cinderella.ZCreeper",
     "cream.CreamCancelHealthRegenMixin",

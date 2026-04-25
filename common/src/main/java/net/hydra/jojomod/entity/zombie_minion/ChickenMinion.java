@@ -19,7 +19,7 @@ public class ChickenMinion extends BaseMinion{
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.31).add(Attributes.MAX_HEALTH, 24)
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.31).add(Attributes.MAX_HEALTH, 40)
                 .add(Attributes.ATTACK_DAMAGE, 7).
                 add(Attributes.FOLLOW_RANGE, 48.0D);
     }

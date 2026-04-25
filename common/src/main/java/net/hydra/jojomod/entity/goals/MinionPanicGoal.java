@@ -12,7 +12,6 @@ public class MinionPanicGoal extends PanicGoal {
 
     @Override
     protected boolean shouldPanic() {
-        return (this.mob instanceof BaseMinion bm && bm.getHeadItem() != null && bm.getHeadItem().is(ModItems.CAT_REMAINS))
-                && super.shouldPanic() && this.mob.getHealth() < this.mob.getMaxHealth()*0.3F;
+        return (this.mob instanceof BaseMinion bm && bm.shouldPanic());
     }
 }

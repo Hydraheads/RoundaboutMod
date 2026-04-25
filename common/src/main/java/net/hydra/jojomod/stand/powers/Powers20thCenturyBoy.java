@@ -216,11 +216,9 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         if(knockbackStance){
             if (ClientNetworking.getAppropriateConfig().centuryBoySettings.oldKnockbackStance){
                 if(damageSource.getEntity() != null){
-                    Roundabout.LOGGER.info("{} ", damageSource);
                     ClientUtil.getPlayer().setDeltaMovement(
                             ClientUtil.getPlayer().position().subtract(
                                     damageSource.getSourcePosition()).multiply(new Vec3(amount/7.5, amount/7.5, amount/7.5)));
-
                 }
             }else{
                 /// to do: make an exception for iron golems in CenturyBoyKnockback
@@ -230,7 +228,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
 
         }
         if (redstoneStance){
-
+            return false;
         }
         if(invincibleState){
             /** ps: don't forget to put TA4 shot when it gets added **/
@@ -253,7 +251,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     public void knockbackMode(){knockbackStance = true;}
 
 
-    public void redstoneMode(){redstoneStance = false;}
+    public void redstoneMode(){redstoneStance = true;}
 
     @Override
     public float inputSpeedModifiers(float basis) {

@@ -42,7 +42,7 @@ public class ParrotMinion extends BaseMinion{
         this.goalSelector.addGoal(7, new ParrotMinion.ParrotWanderGoal(this, (double)1.0F));
     }
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.27).add(Attributes.MAX_HEALTH, 24)
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.27).add(Attributes.MAX_HEALTH, 40)
                 .add(Attributes.ATTACK_DAMAGE, 7).add(Attributes.FLYING_SPEED, (double)0.4F).
                 add(Attributes.FOLLOW_RANGE, 48.0D);
     }

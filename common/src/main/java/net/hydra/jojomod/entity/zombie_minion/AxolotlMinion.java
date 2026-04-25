@@ -2,6 +2,8 @@ package net.hydra.jojomod.entity.zombie_minion;
 
 import com.google.common.collect.Maps;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
 import net.minecraft.world.entity.ai.control.SmoothSwimmingMoveControl;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
@@ -17,6 +19,11 @@ public class AxolotlMinion extends BaseMinion  implements LerpingModel {
         super($$0, $$1);
     }
 
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.31).add(Attributes.MAX_HEALTH, 40)
+                .add(Attributes.ATTACK_DAMAGE, 6).
+                add(Attributes.FOLLOW_RANGE, 48.0D);
+    }
     @Override
     protected void registerGoals() {
         //this.goalSelector.addGoal(1, new FallenZombieAttackGoal(this, 1.0, true));
