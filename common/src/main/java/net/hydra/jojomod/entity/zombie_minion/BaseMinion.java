@@ -3,6 +3,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.goals.*;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
@@ -274,7 +275,7 @@ public class BaseMinion extends PathfinderMob {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.31).add(Attributes.MAX_HEALTH, 24)
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.31).add(Attributes.MAX_HEALTH, 40)
                 .add(Attributes.ATTACK_DAMAGE, 5).
                 add(Attributes.FOLLOW_RANGE, 48.0D);
     }
@@ -575,7 +576,6 @@ public class BaseMinion extends PathfinderMob {
         }
         $$0.putByte("moveTactic",getMovementTactic());
         $$0.putByte("targetTactic",getTargetTactic());
-        $$0.putInt("Lifespan",lifespan);
         $$0.putBoolean("HomeSet",homeSet);
         $$0.putDouble("HomeX",getHomePosition().x);
         $$0.putDouble("HomeY",getHomePosition().y);
@@ -619,18 +619,66 @@ public class BaseMinion extends PathfinderMob {
         this.setTargetTactic($$0.getByte("targetTactic"));
         this.setMovementTactic($$0.getByte("moveTactic"));
         homeSet = $$0.getBoolean("homeSet");
-        lifespan = $$0.getInt("Lifespan");
     }
 
-    public int lifespan = 0;
+    Zombiefish z1 = null;
+    Zombiefish z2 = null;
+    int cd1 = 0;
+    int cd2 = 0;
 
+    public void discardBoth(){
+        if (z1 != null){
+            z1.discard();
+        } if (z2 != null){
+            z2.discard();
+        }
+    }
+    public Zombiefish zfish(){
+
+        return null;
+    }
     @Override
     public void tick(){
         if (!this.level().isClientSide()) {
+            if (cd1 > 0){
+                cd1--;
+            }
+            if (cd2 > 0){
+                cd2--;
+            }
+            if (getHeadItem() != null && getHeadItem().is(ModItems.SILVERFISH_REMAINS)){
+                if (getTarget() != null && getTarget().isAlive()){
+                    if ((z1 == null || z1.isRemoved() || !z1.isAlive()) && cd1 <= 0){
+                        z1 = ModEntities.ZOMBIEFISH.create(level());
+                        if (z1 != null){
+                            cd1 = 200;
+                            z1.copyPosition(this);
+                            z1.setHealth(1f);
+                            z1.setController(this);
+                            z1.lifespan = 400;
+                            this.level().addFreshEntity(z1);
+                        }
+                    } else if ((z2 == null || z2.isRemoved() || !z2.isAlive()) && cd2 <= 0){
+                        z2 = ModEntities.ZOMBIEFISH.create(level());
+                        if (z2 != null){
+                            cd2 = 200;
+                            z2.copyPosition(this);
+                            z2.setHealth(1f);
+                            z1.setController(this);
+                            z2.lifespan = 400;
+                            this.level().addFreshEntity(z2);
+                        }
+                    }
+                } else {
+                    discardBoth();
+                }
+            } else {
+                discardBoth();
+            }
+
             if (getDigProg() > -1){
                 setDigProg(getDigProg()-1);
             }
-            lifespan++;
             if (digCooldown > 0){
                 digCooldown--;
             }

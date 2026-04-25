@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -10,8 +11,9 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -19,12 +21,9 @@ import net.minecraft.world.entity.ai.goal.ClimbOnTopOfPowderSnowGoal;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Silverfish;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.InfestedBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -36,7 +35,7 @@ public class Zombiefish extends PathfinderMob {
     public Entity controller;
     public UUID controller2;
     private static final EntityDataAccessor<Integer> CONTROLLER =
-            SynchedEntityData.defineId(FallenMob.class, EntityDataSerializers.INT);
+            SynchedEntityData.defineId(Zombiefish.class, EntityDataSerializers.INT);
 
     public Zombiefish(EntityType<? extends Zombiefish> $$0, Level $$1) {
         super($$0, $$1);
@@ -48,7 +47,6 @@ public class Zombiefish extends PathfinderMob {
         this.goalSelector.addGoal(1, new ClimbOnTopOfPowderSnowGoal(this, this.level()));
         this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0, false));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 
     @Override
@@ -133,6 +131,17 @@ public class Zombiefish extends PathfinderMob {
         } else {
             super.setLastHurtByPlayer($$0);
         }
+    }
+
+    @Override
+    public boolean doHurtTarget(Entity $$0) {
+        Boolean bool = super.doHurtTarget($$0);
+        if (bool){
+            if ($$0 instanceof LivingEntity LE){
+                LE.addEffect(new MobEffectInstance(MobEffects.POISON, 200, 0), this);
+            }
+        }
+        return bool;
     }
 
     public void setLastHurtByMob(@Nullable LivingEntity $$0) {
