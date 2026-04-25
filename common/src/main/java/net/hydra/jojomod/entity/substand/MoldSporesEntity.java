@@ -1,9 +1,13 @@
 package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.mixin.justice.JusticeCreeper;
+import net.hydra.jojomod.mixin.justice.JusticeZombie;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -26,7 +30,7 @@ import org.joml.Vector3f;
 import java.util.List;
 
 public class MoldSporesEntity extends StandEntity {
-    public float range = 1;
+    public float range = ClientNetworking.getAppropriateConfig().greenDaySettings.moldDefaultRange;
     public int lifetime = 600;
     public MoldSporesEntity(EntityType<? extends StandEntity> $$0, Level $$1) {
         super($$0, $$1);
@@ -50,7 +54,7 @@ public class MoldSporesEntity extends StandEntity {
             }
             this.setDeltaMovement(0,-0.2,0);
             if (!onGround()) {
-                range += 0.1;
+                range += 0.07 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldGrowthRate / 100);
                 //this.setDeltaMovement(0,-0.4,0);
             }
                 ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST,
@@ -86,8 +90,9 @@ public class MoldSporesEntity extends StandEntity {
                         && !((StandUser) entity).roundabout$isBubbleEncased()
                         && !isStand
                         && ((StandUser) entity).GoingDown()
-                        && ((StandUser) entity).getJumpImmunityTicks() < 1 &&
-                        !entity.equals(User)) {
+                        && !(entity instanceof FallenMob)
+                        && ((StandUser) entity).getJumpImmunityTicks() < 1
+                        && !entity.equals(User)) {
                     if(!((PowersGreenDay)((StandUser)User).roundabout$getStandPowers()).allies.contains(entity.getStringUUID())) {
 
                         double width = entity.getBbWidth() / 2;

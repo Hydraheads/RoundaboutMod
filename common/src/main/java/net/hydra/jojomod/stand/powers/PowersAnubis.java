@@ -1300,7 +1300,7 @@ public class PowersAnubis extends NewDashPreset {
         float knockbackStrength = 0.85F + (this.getSelf().isSprinting() ? 0.1F : 0F);
         if (first) {knockbackStrength = 0.2F;}
 
-        List<Entity> entities = defaultSwordHitbox(this.getSelf(),4, 35,0.015);
+        List<Entity> entities = defaultSwordHitbox(this.getSelf(),2.7, 35,0.015);
         entities = doAttackChecks(entities);
 
         if (!entities.isEmpty()) {
@@ -1409,7 +1409,7 @@ public class PowersAnubis extends NewDashPreset {
         this.setAttackTimeDuring(-10);
 
 
-        List<Entity> entities = defaultSwordHitbox(this.getSelf(),3, 55,0.015);
+        List<Entity> entities = defaultSwordHitbox(this.getSelf(),2.7, 55,0.015);
         if (!entities.isEmpty()) {
             this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.ANUBIS_UPPERCUT_EVENT,SoundSource.PLAYERS,1F,0.9F + (float)(Math.random()*0.2));
         } else {
@@ -1903,9 +1903,9 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     public List<Entity> getBasicSwordHitBox(boolean crouching) {
-        List<Entity> entities = defaultSwordHitbox(this.getSelf(),4.5, 45,0.01);
+        List<Entity> entities = defaultSwordHitbox(this.getSelf(),3, 45,0.01);
         if (crouching) {
-            entities = defaultSwordHitbox(this.getSelf(),3, 60,0.01);
+            entities = defaultSwordHitbox(this.getSelf(),2.5, 60,0.01);
         }
         return entities;
     }
@@ -1935,11 +1935,12 @@ public class PowersAnubis extends NewDashPreset {
             double dungle = Math.abs(Math.toDegrees(vector.dot(Lookvec)));
 
 
-            final double FVec = Math.acos(vector.x)-Math.acos(forward.x);
-            final double BVec = Math.acos(vector.x)-Math.acos(backward.x);
+            final Vec3 fVec = Eyepos.add(forward);
+            final Vec3 bVec = Eyepos.add(backward);
 
-            if (Math.abs(FVec) > Math.abs(BVec)) {return true;}
-            if (dist > radius-(dungle*factor)) {return true;}
+
+            if (ePos.distanceTo(fVec) > ePos.distanceTo(bVec)) {return true;}
+            if (dist > radius-(dungle*factor*0.35)) {return true;}
             return (dungle > angle );
         });
 

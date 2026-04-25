@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -53,40 +54,88 @@ public class DamageHandler {
     }
 
     public static boolean StandDamageEntity(Entity entity, float power, Entity attacker){
-        return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.STAND, attacker), power);
+        boolean bool = entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.STAND, attacker), power);
+        if (bool && attacker instanceof LivingEntity LE){
+            LE.setLastHurtMob(entity);
+        }
+        return bool;
     }
     public static boolean VampireDamageEntity(Entity entity, float power, Entity attacker){
-        return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.VAMPIRE, attacker), power);
+        boolean bool = entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.VAMPIRE, attacker), power);
+        if (bool && attacker instanceof LivingEntity LE){
+            LE.setLastHurtMob(entity);
+        }
+        return bool;
     }
     public static boolean RipperEyesDamage(Entity entity, float power, Entity attacker){
-        return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.RIPPER_EYES, attacker), power);
+        boolean bool = entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.RIPPER_EYES, attacker), power);
+        if (bool && attacker instanceof LivingEntity LE){
+            LE.setLastHurtMob(entity);
+        }
+        return bool;
     }
     public static boolean StandRushDamageEntity(Entity entity, float power, Entity attacker){
-        return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.STAND_RUSH, attacker), power);
+        boolean bool =  entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.STAND_RUSH, attacker), power);
+        if (bool && attacker instanceof LivingEntity LE){
+            LE.setLastHurtMob(entity);
+        }
+        return bool;
     }
     public static boolean CrossfireDamageEntity(Entity entity, float power, Entity attacker){
-        return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.CROSSFIRE, attacker), power);
+        boolean bool =  entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.CROSSFIRE, attacker), power);
+        if (bool && attacker instanceof LivingEntity LE){
+            LE.setLastHurtMob(entity);
+        }
+        return bool;
     }
     public static boolean CorpseDamageEntity(Entity entity, float power, Entity attacker){
-        return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.CORPSE, attacker), power);
+        boolean bool =  entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.CORPSE, attacker), power);
+        if (bool && attacker instanceof LivingEntity LE){
+            LE.setLastHurtMob(entity);
+        }
+        return bool;
     }
     public static boolean CorpseDamageEntity(Entity entity, float power, Entity attacker, Entity attacker2){
-        return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.CORPSE, attacker, attacker2), power);
+        boolean bool =  entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.CORPSE, attacker, attacker2), power);
+        if (bool && attacker instanceof LivingEntity LE){
+            LE.setLastHurtMob(entity);
+        }
+        return bool;
     }
     public static boolean CorpseArrowDamageEntity(Entity entity, float power, Entity attacker){
-        return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.CORPSE_ARROW, attacker), power);
+        boolean bool =  entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.CORPSE_ARROW, attacker), power);
+        if (bool && attacker instanceof LivingEntity LE){
+            LE.setLastHurtMob(entity);
+        }
+        return bool;
     }
     public static boolean CorpseExplosionDamageEntity(Entity entity, float power, Entity attacker){
-        return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.CORPSE_EXPLOSION, attacker), power);
+        boolean bool =  entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.CORPSE_EXPLOSION, attacker), power);
+        if (bool && attacker instanceof LivingEntity LE){
+            LE.setLastHurtMob(entity);
+        }
+        return bool;
     }
     public static boolean PenetratingStandDamageEntity(Entity entity, float power, Entity attacker){
-        return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.PENETRATING_STAND, attacker), power);
+        boolean bool =  entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.PENETRATING_STAND, attacker), power);
+        if (bool && attacker instanceof LivingEntity LE){
+            LE.setLastHurtMob(entity);
+        }
+        return bool;
     }
     public static boolean StarFingerStandDamageEntity(Entity entity, float power, Entity attacker){
-        return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.STAR_FINGER, attacker), power);
+        boolean bool =  entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.STAR_FINGER, attacker), power);
+        if (bool && attacker instanceof LivingEntity LE){
+            LE.setLastHurtMob(entity);
+        }
+        return bool;
     }
     public static boolean HeelSpikeStandDamageEntity(Entity entity, float power, Entity attacker){
-        return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.HEEL_SPIKE, attacker), power);
+        boolean bool =  entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.HEEL_SPIKE, attacker), power);
+        if (bool && attacker instanceof LivingEntity LE){
+            LE.setLastHurtMob(entity);
+        }
+        return bool;
     }
 
 

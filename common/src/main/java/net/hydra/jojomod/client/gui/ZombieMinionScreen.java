@@ -309,6 +309,7 @@ public class ZombieMinionScreen extends Screen {
                         if (ent instanceof BaseMinion bm){
                             ItemStack stack = bm.getMainHandItem();
                             if (stack != null && !stack.isEmpty()){
+                                replace = true;
                                 RenderSystem.enableBlend();
                                 guiGraphics.renderItem(stack, this.getX() + 5, this.getY() + 5);  // Draw the item itself
                             }

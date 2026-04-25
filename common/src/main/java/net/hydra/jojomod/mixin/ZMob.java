@@ -56,11 +56,13 @@ import net.minecraft.world.entity.ai.memory.ExpirableValue;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.sensing.Sensing;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.Minecart;
@@ -215,7 +217,9 @@ public abstract class ZMob extends LivingEntity implements IMob {
     private void roundabout$dropCustomLoot(DamageSource $$0, int $$1, boolean $$2, CallbackInfo ci) {
         if (roundabout$isNaturalStandUser){
             if ($$0.getEntity() != null) {
-                if (((StandUser)this).roundabout$hasAStand() && !roundabout$isBred) {
+                if (((StandUser)this).roundabout$hasAStand() && !roundabout$isBred &&
+                        !(((Mob)(Object)this) instanceof Animal) &&
+                        !(((Mob)(Object)this) instanceof AbstractVillager)) {
                     if ($$0.getEntity() instanceof Player) {
                         if (!this.level().isClientSide()){
                             ExperienceOrb.award((ServerLevel) this.level(), this.position(), 160);

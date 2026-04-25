@@ -148,6 +148,18 @@
   "item.roundabout.manhattan_transfer_disc.desc": "Manhattan Transfer",
   "item.roundabout.none_disc.desc": "None",
 
+  "item.roundabout.ocelot_remains": "Ocelot Remains",
+  "item.roundabout.cat_remains": "Cat Remains",
+  "item.roundabout.llama_remains": "Llama Remains",
+  "item.roundabout.silverfish_remains": "Silverfish Remains",
+  "item.roundabout.mooshroom_remains": "Mooshroom Remains",
+  "item.roundabout.parrot_remains": "Parrot Remains",
+  "item.roundabout.polar_bear_remains": "Polar Bear Remains",
+  "item.roundabout.dog_remains": "Dog Remains",
+  "item.roundabout.chicken_remains": "Chicken Remains",
+  "item.roundabout.goat_remains": "Goat Remains",
+  "item.roundabout.axolotl_remains": "Axolotl Remains",
+
   "item.roundabout.road_roller": "Road Roller",
 
   "item.roundabout.snubnose_revolver": "Snubnose Revolver",
@@ -385,7 +397,7 @@
   "entity.roundabout.seperated_arm": "Seperated Arm",
   "entity.roundabout.seperated_arm_slim": "Seperated Arm Slim",
   "entity.roundabout.left_seperated_arm": "Left Seperated Arm",
-  "entity.roundabout.left_sepaeated_arm_slim": "Left Aeperated Arm Slim",
+  "entity.roundabout.left_seperated_arm_slim": "Left Aeperated Arm Slim",
 
 
   "entity.roundabout.water_bottle": "Water Bottle",
@@ -405,6 +417,12 @@
   "entity.roundabout.anubis_possessor": "Anubis Possessor",
   "entity.roundabout.anubis_slipstream": "Anubis Slipstream",
 
+  "entity.roundabout.villager_minion": "Zombie Minion",
+  "entity.roundabout.axolotl_minion": "Zombie Minion",
+  "entity.roundabout.chicken_minion": "Zombie Minion",
+  "entity.roundabout.dog_minion": "Zombie Minion",
+  "entity.roundabout.ocelot_minion": "Zombie Minion",
+  "entity.roundabout.parrot_minion": "Zombie Minion",
 
   "block.roundabout.meteor_block": "Meteorite Block",
   "block.roundabout.coffin_block": "Coffin",
@@ -787,6 +805,11 @@
   "sounds.roundabout.achtung_burst":  "Gone",
 
   "sounds.roundabout.cream_void_attack":  "Cream eating",
+
+  "sounds.roundabout.manhattan_summoning":  "Summon Manhattan Transfer",
+  "sounds.roundabout.manhattan_rain_dodging":  "Manhattan Transfer Dodging Rain",
+  "sounds.roundabout.manhattan_vision":  "Wind Reading ON",
+  "sounds.roundabout.manhattan_deflection":  "Manhattan Deflects Bullet",
 
   "sounds.roundabout.bullet_ricochet":  "Bullet ricochetted",
 
@@ -1866,7 +1889,9 @@
 
   "skins.roundabout.manhattan_transfer.manhattan_part_6": "Anime",
   "skins.roundabout.manhattan_transfer.manhattan_manga_part_6": "Manga",
+  "skins.roundabout.manhattan_transfer.manhattan_aerosmith": "Aerosmith",
   "skins.roundabout.manhattan_transfer.brazilian_transfer": "Brazilian",
+  "skins.roundabout.manhattan_transfer.manhattan_jolly": "Gift",
   "skins.roundabout.manhattan_transfer.radioactive_transfer": "Radioactive",
   "skins.roundabout.manhattan_transfer.pollination_transfer": "Pollination",
 
@@ -1924,6 +1949,11 @@
   "skins.roundabout.green_day.red_night": "Red Night",
   "skins.roundabout.green_day.gorgonzola": "Gorgonzola",
   "skins.roundabout.green_day.silence": "Silence",
+  "skins.roundabout.green_day.21_century": "Breakdown",
+  "skins.roundabout.green_day.american_idiot": "American Idiot",
+  "skins.roundabout.green_day.nimrod": "Nimrod",
+  "skins.roundabout.green_day.saviours": "Saviours",
+  "skins.roundabout.green_day.mouth": "Mouth",
 
 
   "skins.roundabout.achtung_baby.base": "Has No Form",
@@ -2192,6 +2222,8 @@
   "config.roundabout.enableMandom.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableAchtungBaby.name": "Enable Stand",
   "config.roundabout.enableAchtungBaby.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+  "config.roundabout.enableGreenDay.name": "Enable Stand",
+  "config.roundabout.enableGreenDay.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableHeyYa.name": "Enable Stand",
   "config.roundabout.enableHeyYa.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableCinderella.name": "Enable Stand",
@@ -2787,6 +2819,35 @@
   "config.roundabout.invisibleBlocksDistanceAwaySeenI.name": "Invisible Distance Seen",
   "config.roundabout.invisibleBlocksDistanceAwaySeenI.desc": "How far away can you see the invisible blocks roughly as the stand user, raising this makes mining view more obstructed but might help with combat.",
 
+  "config.roundabout.greenDayAttackMultOnPlayers.name": "Player Damage Multiplier",
+  "config.roundabout.greenDayAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
+  "config.roundabout.greenDayAttackMultOnMobs.name": "Mob Damage Multiplier",
+  "config.roundabout.greenDayAttackMultOnMobs.desc": "How much damage the stand deals to every other mob, same math as above.",
+  "config.roundabout.greenDayGuardPoints.name": "Guard Points",
+  "config.roundabout.greenDayGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
+  "config.roundabout.miningSpeedMultiplierGreenDay.name": "Mining Speed Multiplier",
+  "config.roundabout.miningSpeedMultiplierGreenDay.desc": "Adjust how fast the stand can mine.",
+  "config.roundabout.getMiningTierGreenDay.name": "Mining Tier",
+  "config.roundabout.getMiningTierGreenDay.desc": "Tier 0 is the default, it does not replace tools for harvesting blocks. Tier 1 is wood tier, tier 2 is stone tier, tier 3 is iron tier, and tier 4 is diamond tier.",
+  "config.roundabout.greenDayStitchHeal.name": "Stitch Heal Amount",
+  "config.roundabout.greenDayStitchHeal.desc": "The amount of health regained by Stitch",
+  "config.roundabout.gDStitchcooldown.name": "Stitch Cooldown",
+  "config.roundabout.gDStitchcooldown.desc": "Default is 400 ticks or 20 seconds",
+  "config.roundabout.moldDefaultRange.name": "Default Mold Spore Range",
+  "config.roundabout.moldDefaultRange.desc": "Defines the radius, in blocks your mold spores start with when you first use the move",
+  "config.roundabout.moldFallSpeed.name": "Mold Spores Fall Speed",
+  "config.roundabout.moldFallSpeed.desc": "The speed at which mold spores fall, lower speeds will lead to them spreading over a wider area",
+  "config.roundabout.moldGrowthRate.name": "Mold Spore Spread",
+  "config.roundabout.moldGrowthRate.desc": "Controls the rate at which mold spores increase in range as they fall down",
+  "config.roundabout.moldSpreadCooldown.name": "Mold Spread Cooldown",
+  "config.roundabout.moldSpreadCooldown.desc": "Default is 200 ticks, or 10 seconds",
+  "config.roundabout.armThrowCooldown.name": "Arm Throw Cooldown",
+  "config.roundabout.armThrowCooldown.desc": "The cooldown after using arm throw 2 times (Default is 120 ticks, or 6 secnds)",
+  "config.roundabout.armSpinDuration.name": "Arm Spin Duration",
+  "config.roundabout.armSpinDuration.desc": "How long your seperated arms spin for after using the move, default is 30 ticks, or 1.5 seconds",
+  "config.roundabout.armSpinCooldown.name": "Arm Spin Cooldown",
+  "config.roundabout.armSpinCooldown.desc": "Default is 120 ticks, or 6 seconds",
+
   "config.roundabout.theWorldAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.theWorldAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
   "config.roundabout.theWorldAttackMultOnMobs.name": "Mob Damage Multiplier",
@@ -3009,6 +3070,7 @@
   "config.roundabout.mandomSettings.name": "Mandom",
   "config.roundabout.survivorSettings.name": "Survivor",
   "config.roundabout.achtungSettings.name": "Achtung Baby",
+  "config.roundabout.greendaySettings.name": "Green Day",
   "config.roundabout.theWorldSettings.name": "The World",
   "config.roundabout.starPlatinumSettings.name": "Star Platinum",
   "config.roundabout.timeStopSettings.name": "Time Stop",

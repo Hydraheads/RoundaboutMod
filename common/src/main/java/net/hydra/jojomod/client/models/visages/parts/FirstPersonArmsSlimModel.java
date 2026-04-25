@@ -274,39 +274,53 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
 
                 StandUser user = ((StandUser) player);
 
-                if (user.roundabout$getStandPowers() instanceof PowersTusk PT && PT.renderDrill() && PowerTypes.isUsingStand(player)) {
+                if (user.roundabout$getStandPowers() instanceof PowersTusk PT && PowerTypes.isUsingStand(player)) {
+                    if  (PT.renderDrill()) {
+                        if (renderRight) {
+                            poseStack.pushPose();
+                            this.transform.translateAndRotate(poseStack);
+                            this.rform.translateAndRotate(poseStack);
+                            this.right_arm.translateAndRotate(poseStack);
+                            poseStack.translate(-0.2, -0.8, 0);
+                            poseStack.scale(0.9F, 0.9F, 0.9F);
+                            ModStrayModels.TUSK_DRILL.render(
+                                    player, partialTicks,
+                                    poseStack,
+                                    bufferSource,
+                                    light,
+                                    r, g, b, 1
+                            );
+                            poseStack.popPose();
+                        }
+
+                        if (renderLeft) {
+                            poseStack.pushPose();
+                            this.transform.translateAndRotate(poseStack);
+                            this.lform.translateAndRotate(poseStack);
+                            this.left_arm.translateAndRotate(poseStack);
+                            poseStack.translate(0, -0.8, 0);
+                            poseStack.scale(0.9F, 0.9F, 0.9F);
+                            ModStrayModels.TUSK_DRILL.render(
+                                    player, partialTicks,
+                                    poseStack,
+                                    bufferSource,
+                                    light,
+                                    r, g, b, 1
+                            );
+                            poseStack.popPose();
+                        }
+                    }
+                    if (renderLeft) {
+
+                    }
                     if (renderRight) {
-                        poseStack.pushPose();
+                       /* poseStack.pushPose();
                         this.transform.translateAndRotate(poseStack);
                         this.rform.translateAndRotate(poseStack);
                         this.right_arm.translateAndRotate(poseStack);
-                        poseStack.translate(-0.2, -0.8, 0);
-                        poseStack.scale(0.9F,0.9F,0.9F);
-                        ModStrayModels.TUSK_DRILL.render(
-                                player, partialTicks,
-                                poseStack,
-                                bufferSource,
-                                light,
-                                r, g, b, 1
-                        );
-                        poseStack.popPose();
-                    }
-
-                    if (renderLeft) {
-                        poseStack.pushPose();
-                        this.transform.translateAndRotate(poseStack);
-                        this.lform.translateAndRotate(poseStack);
-                        this.left_arm.translateAndRotate(poseStack);
-                        poseStack.translate(0, -0.8, 0);
-                        poseStack.scale(0.9F,0.9F,0.9F);
-                        ModStrayModels.TUSK_DRILL.render(
-                                player, partialTicks,
-                                poseStack,
-                                bufferSource,
-                                light,
-                                r, g, b, 1
-                        );
-                        poseStack.popPose();
+                        ModStrayModels.TUSK_NAIL.render(player, partialTicks, poseStack, bufferSource, light,
+                                r, g, b, 1,0);
+                        poseStack.popPose(); */
                     }
                 }
 

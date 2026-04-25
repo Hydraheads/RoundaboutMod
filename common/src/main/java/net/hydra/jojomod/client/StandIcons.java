@@ -352,6 +352,9 @@ public class StandIcons {
 
     public static final ResourceLocation NEUTRAL_STANCE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/20th_century_boy/neutralstance.png");
+    public static final ResourceLocation TOGGLE_INVINCIBILITY = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/20th_century_boy/activateinvincibility.png");
+
 
 
     public static final ResourceLocation SNAP_ICON = new ResourceLocation(Roundabout.MOD_ID,
@@ -523,6 +526,10 @@ public class StandIcons {
             "textures/gui/icons/manhattan_transfer/wind_vision_universal.png");
     public static final ResourceLocation MANHATTAN_DAMAGE_BOOST = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/manhattan_transfer/manhattan_damage_boost.png");
+    public static final ResourceLocation MANHATTAN_DODGE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/manhattan_transfer/work_in_progress.png");
+    public static final ResourceLocation MANHATTAN_SELF_HIGHLIGHT = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/manhattan_transfer/work_in_progress.png");
 
     public static final ResourceLocation D4C_BETWEEN_VISION = Roundabout.location("textures/gui/icons/d4c/between_vision.png");
     public static final ResourceLocation D4C_DIMENSION_KIDNAP = Roundabout.location("textures/gui/icons/d4c/dimension_kidnap.png");

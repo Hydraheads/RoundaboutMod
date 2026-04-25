@@ -24,7 +24,7 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
-import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
+import net.hydra.jojomod.entity.zombie_minion.*;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -228,7 +228,7 @@ public class FabricEntities {
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         new ResourceLocation(Roundabout.MOD_ID, "fallen_spider"),
-                        EntityType.Builder.of(FallenSpider::new, MobCategory.MISC).sized(1.4f, 0.9f).clientTrackingRange(8).build(Roundabout.MOD_ID+":fallen_skeleton")
+                        EntityType.Builder.of(FallenSpider::new, MobCategory.MISC).sized(1.4f, 0.9f).clientTrackingRange(8).build(Roundabout.MOD_ID+":fallen_spider")
                 );
         public static final EntityType<FallenVillager> FALLEN_VILLAGER =
                 Registry.register(
@@ -240,20 +240,51 @@ public class FabricEntities {
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "villager_minion"),
-                    EntityType.Builder.of(VillagerMinion::new, MobCategory.MISC).sized(0.6F, 1.95F).clientTrackingRange(8).build(Roundabout.MOD_ID+":villager_minion")
+                    EntityType.Builder.of(VillagerMinion::new, MobCategory.MISC).sized(0.6F, 1.95F).clientTrackingRange(12).build(Roundabout.MOD_ID+":villager_minion")
             );
+    public static final EntityType<OcelotMinion> OCELOT_MINION =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "ocelot_minion"),
+                    EntityType.Builder.of(OcelotMinion::new, MobCategory.MISC).sized(0.6f, 0.7f).clientTrackingRange(12).build(Roundabout.MOD_ID+":ocelot_minion")
+            );
+    public static final EntityType<DogMinion> DOG_MINION =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "dog_minion"),
+                    EntityType.Builder.of(DogMinion::new, MobCategory.MISC).sized(0.6f, 0.85f).clientTrackingRange(12).build(Roundabout.MOD_ID+":dog_minion")
+            );
+    public static final EntityType<ParrotMinion> PARROT_MINION =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "parrot_minion"),
+                    EntityType.Builder.of(ParrotMinion::new, MobCategory.MISC).sized(0.5f, 0.9f).clientTrackingRange(12).build(Roundabout.MOD_ID+":parrot_minion")
+            );
+    public static final EntityType<ChickenMinion> CHICKEN_MINION =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "chicken_minion"),
+                    EntityType.Builder.of(ChickenMinion::new, MobCategory.MISC).sized(0.4f, 0.7f).clientTrackingRange(12).build(Roundabout.MOD_ID+":chicken_minion")
+            );
+    public static final EntityType<AxolotlMinion> AXOLOTL_MINION =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "axolotl_minion"),
+                    EntityType.Builder.of(AxolotlMinion::new, MobCategory.MISC).sized(0.75f, 0.42f).clientTrackingRange(12).build(Roundabout.MOD_ID+":axolotl_minion")
+            );
+
         public static final EntityType<FallenCreeper> FALLEN_CREEPER =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         new ResourceLocation(Roundabout.MOD_ID, "fallen_creeper"),
-                        EntityType.Builder.of(FallenCreeper::new, MobCategory.MISC).sized(0.6F, 1.7F).clientTrackingRange(8).build(Roundabout.MOD_ID+":fallen_skeleton")
+                        EntityType.Builder.of(FallenCreeper::new, MobCategory.MISC).sized(0.6F, 1.7F).clientTrackingRange(8).build(Roundabout.MOD_ID+":fallen_creeper")
                 );
 
         public static final EntityType<FallenPhantom> FALLEN_PHANTOM =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         new ResourceLocation(Roundabout.MOD_ID, "fallen_phantom"),
-                        EntityType.Builder.of(FallenPhantom::new, MobCategory.MISC).sized(0.8F, 0.5F).clientTrackingRange(8).build(Roundabout.MOD_ID+":fallen_skeleton")
+                        EntityType.Builder.of(FallenPhantom::new, MobCategory.MISC).sized(0.8F, 0.5F).clientTrackingRange(8).build(Roundabout.MOD_ID+":fallen_phantom")
                 );
 
         public static final EntityType<TheWorldEntity> THE_WORLD =
@@ -428,7 +459,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     Roundabout.location("manhattan_transfer"),
                     EntityType.Builder.of(ManhattanTransferEntity::new, MobCategory.MISC).
-                            sized(0.85f, 0.50f).clientTrackingRange(14).build(Roundabout.MOD_ID+":manhattan_transfer")
+                            sized(0.70f, 0.40f).clientTrackingRange(14).build(Roundabout.MOD_ID+":manhattan_transfer")
             );
 
     public static final EntityType<PollinationTransferEntity> POLLINATION_TRANSFER =
@@ -890,6 +921,11 @@ public class FabricEntities {
                 ModEntities.FALLEN_PHANTOM = FALLEN_PHANTOM;
 
                 ModEntities.VILLAGER_MINION = VILLAGER_MINION;
+            ModEntities.OCELOT_MINION = OCELOT_MINION;
+            ModEntities.DOG_MINION = DOG_MINION;
+            ModEntities.PARROT_MINION = PARROT_MINION;
+            ModEntities.CHICKEN_MINION = CHICKEN_MINION;
+            ModEntities.AXOLOTL_MINION = AXOLOTL_MINION;
 
                 ModEntities.OVA_ENYA = OVA_ENYA;
                 ModEntities.ENYA = ENYA;
@@ -953,6 +989,11 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(FALLEN_PHANTOM,FallenPhantom.createAttributes());
 
             FabricDefaultAttributeRegistry.register(VILLAGER_MINION, VillagerMinion.createAttributes());
+            FabricDefaultAttributeRegistry.register(AXOLOTL_MINION, AxolotlMinion.createAttributes());
+            FabricDefaultAttributeRegistry.register(CHICKEN_MINION, ChickenMinion.createAttributes());
+            FabricDefaultAttributeRegistry.register(DOG_MINION, DogMinion.createAttributes());
+            FabricDefaultAttributeRegistry.register(OCELOT_MINION, OcelotMinion.createAttributes());
+            FabricDefaultAttributeRegistry.register(PARROT_MINION, ParrotMinion.createAttributes());
 
                 FabricDefaultAttributeRegistry.register(ROAD_ROLLER_ENTITY, RoadRollerEntity.createAttributes().build());
 

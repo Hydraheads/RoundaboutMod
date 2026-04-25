@@ -34,6 +34,8 @@ public class ManhattanTransferBaseRenderer extends StandRenderer<ManhattanTransf
 
     private static final ResourceLocation ANIME_SKIN = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/manhattan_transfer/manhattan_part_6.png");
     private static final ResourceLocation MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/manhattan_transfer/manhattan_manga_part_6.png");
+    private static final ResourceLocation AERO_TRANSFER_SKIN = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/manhattan_transfer/manhattan_aerosmith.png");
+    private static final ResourceLocation JOLLY_SKIN = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/manhattan_transfer/jollytransfer.png");
     private static final ResourceLocation BRAZIL_SKIN = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/manhattan_transfer/brazilian_transfer.png");
     private static final ResourceLocation RADIOACTIVE_SKIN = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/manhattan_transfer/radioactive_transfer.png");
     private static final ResourceLocation POLLINATION_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/manhattan_transfer/pollination_transfer.png");
@@ -48,14 +50,18 @@ public class ManhattanTransferBaseRenderer extends StandRenderer<ManhattanTransf
         if (BT == ManhattanTransferEntity.MANGA_SKIN) {
             return MANGA_SKIN;
         }
+        if (BT == ManhattanTransferEntity.AERO_TRANSFER_SKIN) {
+            return AERO_TRANSFER_SKIN;
+        }
+        if (BT == ManhattanTransferEntity.JOLLY_SKIN) {
+            return JOLLY_SKIN;
+        }
         if (BT == ManhattanTransferEntity.BRAZIL_SKIN) {
             return BRAZIL_SKIN;
         }
-
         if (BT == ManhattanTransferEntity.RADIOACTIVE_SKIN) {
             return RADIOACTIVE_SKIN;
         }
-
         if (BT == ManhattanTransferEntity.POLLINATION_SKIN) {
             return POLLINATION_SKIN;
         }

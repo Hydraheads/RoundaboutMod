@@ -13,6 +13,7 @@ import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
+import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
@@ -867,8 +868,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     @Override
-    public boolean roundabout$rotateArmToShoot(){
-        if (roundabout$getStandPowers().hasShootingModeVisually() && PowerTypes.hasStandActivelyEquipped(rdbt$this())){
+    public boolean roundabout$rotateArmToShoot(HumanoidArm arm){
+        if (roundabout$getStandPowers().hasShootingModeVisually(arm) && PowerTypes.hasStandActivelyEquipped(rdbt$this())){
             return true;
         }
         return false;
@@ -1387,7 +1388,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (this.onGround() && roundabout$leapTicks < (MainUtil.maxLeapTicks() - 5)) {
                 roundabout$leapTicks = -1;
             }
+            if (roundabout$leapIntentionally){
             roundabout$cancelConsumableItem((LivingEntity) (Object) this);
+            }
             roundabout$leapTicks--;
             if (!this.level().isClientSide && roundabout$leapIntentionally) {
                 Vector3f color = new Vector3f(1f, 0.65f, 0);
@@ -3696,14 +3699,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (!this.level().isClientSide()) {
             if (rdbt$this() instanceof Mob lent) {
                 VillagerMinion villagerMinion = lent.convertTo(ModEntities.VILLAGER_MINION, false);
-                villagerMinion.absMoveTo(lent.getX(), lent.getY(), lent.getZ());
                 villagerMinion.setController(ent);
                 villagerMinion.setMovementTactic(Tactics.FOLLOW.id);
                 villagerMinion.setHomePosition(new Vec3(lent.getX(), lent.getY(), lent.getZ()));
-                if (villagerMinion != null) {
-                    this.level().addFreshEntity(villagerMinion);
-                    //this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
-                }
             }
         }
     }
@@ -5425,14 +5423,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             boolean movementX = previousXposManhattan != this.getX();
             boolean movementZ = previousZposManhattan != this.getZ();
             boolean isStand = (((LivingEntity) (Object) this) instanceof StandEntity);
-
             IEntityAndData entityAndData = ((IEntityAndData) this);
-            if (!isStand && !roundabout$getStandPowers().isStoppingTime()) {
                 if (up || down || movementX || movementZ) {
+                    if(isInWater()){
+                        entityAndData.roundabout$setTrueInvisibilityManhattan(-1);
+                    }
+                    else{
                         entityAndData.roundabout$setTrueInvisibilityManhattan(45);
-                } else {/*Ticking will go down until the entity unrenders*/}
-
-            }
+                    }
+                }
+                else if(((LivingEntity) (Object) this) instanceof RoadRollerEntity){
+                    entityAndData.roundabout$setTrueInvisibilityManhattan(45);
+                }
+                else {/*Ticking will go down until the entity unrenders*/}
         }
             previousYposManhattan = this.getY();
             previousXposManhattan = this.getX();

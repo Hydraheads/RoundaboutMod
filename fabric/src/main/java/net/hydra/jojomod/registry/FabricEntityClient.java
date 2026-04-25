@@ -9,8 +9,9 @@ import net.hydra.jojomod.client.models.RoadRollerStrayModel;
 import net.hydra.jojomod.client.models.WornBloodyStoneMaskModel;
 import net.hydra.jojomod.client.models.WornStoneMaskModel;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
-import net.hydra.jojomod.client.models.minions.VillagerMinionModel;
-import net.hydra.jojomod.client.models.minions.renderers.VillagerMinionRenderer;
+import net.hydra.jojomod.client.models.minions.*;
+import net.hydra.jojomod.client.models.minions.head_parts.*;
+import net.hydra.jojomod.client.models.minions.renderers.*;
 import net.hydra.jojomod.client.models.mobs.AnubisGuardianModel;
 import net.hydra.jojomod.client.models.mobs.renderers.AnubisGuardianRenderer;
 import net.hydra.jojomod.client.models.mobs.renderers.ZombiefishRenderer;
@@ -151,6 +152,11 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.FALLEN_CREEPER, FallenCreeperRenderer::new);
         EntityRendererRegistry.register(FabricEntities.FALLEN_PHANTOM,FallenPhantomRenderer::new);
         EntityRendererRegistry.register(FabricEntities.VILLAGER_MINION, VillagerMinionRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.CHICKEN_MINION, ChickenMinionRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.OCELOT_MINION, OcelotMinionRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.PARROT_MINION, ParrotMinionRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.DOG_MINION, DogMinionRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.AXOLOTL_MINION, AxolotlMinionRenderer::new);
         EntityRendererRegistry.register(FabricEntities.VAN_GOUGH_PAINTING, VanGoghPaintingRenderer::new);
         EntityRendererRegistry.register(FabricEntities.VENUS_PAINTING, VenusPaintingRenderer::new);
         EntityRendererRegistry.register(FabricEntities.MONA_LISA_PAINTING, MonaLisaPaintingRenderer::new);
@@ -166,7 +172,14 @@ public class FabricEntityClient {
         /*Models*/
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.WOLF_LAYER, TerrierEntityModel::createBodyLayerTerrier);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ZOMBIEFISH_LAYER, SilverfishModel::createBodyLayer);
+
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.VILLAGER_MINION_LAYER, VillagerMinionModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.AXOLOTL_MINION_LAYER, AxolotlMinionModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.CHICKEN_MINION_LAYER, ChickenMinionModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DOG_MINION_LAYER, DogMinionModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.PARROT_MINION_LAYER, ParrotMinionModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.OCELOT_MINION_LAYER, OcelotMinionModel::createBodyLayer);
+
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ANUBIS_GUARDIAN_LAYER, AnubisGuardianModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.THE_WORLD_LAYER, TheWorldModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.THE_WORLD_ULTIMATE_LAYER, TheWorldUltimateModel::getTexturedModelData);
@@ -206,6 +219,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ROUNDABOUT_BULLET_LAYER, RoundaboutBulletModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KNIFE_LAYER, KnifeModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.RATT_DART_LAYER, RattDartModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK1_NAIL_MODEL, Tusk1NailModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.CROSSFIRE_LAYER, CrossfireHurricaneModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.CROSSFIRE_FIRESTORM_LAYER, CrossfireFirestormModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.LIFE_DETECTOR, LifeTrackerModel::createBodyLayer);
@@ -235,6 +249,7 @@ public class FabricEntityClient {
 
         ModStrayModels.SHOOTING_ARM = new SoftAndWetShootingArmModel();
         ModStrayModels.TUSK_DRILL = new TuskDrillModel();
+        ModStrayModels.TUSK_NAIL = new TuskNailModel();
         ModStrayModels.HEY_YA = new HeyYaModel();
         ModStrayModels.CENTURY_BOY = new CenturyBoyModel();
         ModStrayModels.BOWLER_HAT = new BowlerHatModel();
@@ -282,6 +297,15 @@ public class FabricEntityClient {
         ModStrayModels.RightLeg = new RightLegPart();
         ModStrayModels.LeftLeg = new LeftLegPart();
         ModStrayModels.RightHeel = new RightHeelPart();
+
+        ModStrayModels.GoatHeadPart = new GoatHeadPart();
+        ModStrayModels.CatHeadPart = new CatHeadPart();
+        ModStrayModels.VillagerHeadPart = new VillagerHeadPart();
+        ModStrayModels.LlamaHeadPart = new LlamaHeadPart();
+        ModStrayModels.PolarBearHeadPart = new PolarBearHeadPart();
+        ModStrayModels.MooshroomHeadPart = new MooshroomHeadPart();
+        ModStrayModels.SilverfishHeadPart = new SilverfishHeadPart();
+
         ModStrayModels.VampireHairOne = new VampireHairOnePart();
         ModStrayModels.VampireHairTwo = new VampireHairTwoPart();
         ModStrayModels.VampireHairFlesh = new VampireHairFleshBudLayer();

@@ -106,7 +106,15 @@ public class PowersTusk extends NewDashPreset {
     @Override public int getDisplayPowerInventoryYOffset() {return this.getAct() < 3 ? 20 : 0;}
     @Override public int getDisplayPowerInventoryScale() {return this.getAct() == 4 ? 24 : 30;}
     @Override public boolean hasPassiveCombatMode() {return this.getActivePower() != PowerIndex.MINING ;}
-    @Override public boolean hasShootingModeVisually() {return !isGunMode() || this.getActivePower() == PowersTusk.SHOOT_MODE ;}
+    @Override public boolean hasShootingModeVisually(HumanoidArm arm) {
+        if (!isGunMode() || this.getActivePower() == PowersTusk.SHOOT_MODE) {
+            if (renderBothArms()) {
+                return true;
+            }
+            return arm == this.getSelf().getMainArm();
+        }
+        return false;
+    }
     @Override public boolean interceptGuard() {return true;}
     @Override public boolean interceptAttack() {return super.interceptAttack();}
     @Override public boolean clickRelease() {return this.nailCharge > 0 || this.getActivePower() == PowersTusk.SHOOT_MODE;}
@@ -258,6 +266,7 @@ public class PowersTusk extends NewDashPreset {
 
                 this.setActivePower(PowersTusk.FIRE_NAIL);
                 this.setAttackTimeDuring(0);
+                this.setAttackTime(0);
                 if (!isClient()) {
                     if (this.getAct() > 2) {
                         this.shootNail(this.getAct() == 3 ? 1.3F : 0.85F, 0.1F);
@@ -461,6 +470,10 @@ public class PowersTusk extends NewDashPreset {
         }
         if (nailFireDelay > 0) {
             nailFireDelay --;
+        }
+
+        if (this.getStandUserSelf().roundabout$getStandAnimation() == PowersTusk.FIRE_BOTH_NAILS && this.getAttackTime() > 5) {
+            this.setAnimation(PowerIndex.NONE);
         }
     }
 

@@ -1,5 +1,6 @@
 package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -15,16 +16,20 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -43,16 +48,19 @@ public class PowersManhattanTransfer extends NewDashPreset {
         super(self);
     }
     public static final byte
-            STAND_BLOCKED = 78;
+            STAND_BLOCKED = 78,
+
+
+            MANHATTAN_VISION = 82,
+            MANHATTAN_DODGE = 83;
     public boolean isStandEnabled() {
         return ClientNetworking.getAppropriateConfig().manhattanTransferSettings.enableManhattanTransfer;
-
     }
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
         return new PowersManhattanTransfer(entity);
     }
-    @Override
+   @Override
     public StandEntity getNewStandEntity() {
         byte skin = ((StandUser) this.getSelf()).roundabout$getStandSkin();
             if (((StandUser) this.getSelf()).roundabout$getStandSkin() == ManhattanTransferEntity.POLLINATION_SKIN) {
@@ -81,7 +89,12 @@ public class PowersManhattanTransfer extends NewDashPreset {
         else
             setSkillIcon(context, x, y, 4, StandIcons.WIND_VISION_OFF, PowerIndex.SKILL_4);
 
-        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        if(isPiloting()){
+            setSkillIcon(context, x, y, 3, StandIcons.MANHATTAN_DODGE, PowerIndex.GLOBAL_DASH);
+        }
+        else{
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        }
 
         super.renderIcons(context, x, y);
     }
@@ -103,15 +116,18 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public void powerActivate(PowerContext context) {
         /**Making dash usable on both key presses*/
         switch (context) {
-            case SKILL_1_NORMAL, SKILL_1_CROUCH -> {
+            case SKILL_1_NORMAL, SKILL_1_CROUCH-> {
 
             }
-            case SKILL_2_NORMAL, SKILL_2_CROUCH -> {
+                case SKILL_2_NORMAL, SKILL_2_CROUCH -> {
                 toggleControlModeClient();
             }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 if(!isPiloting()) {
                     dash();
+                }
+                else{
+                    manhattanDodge();
                 }
             }
             case SKILL_4_NORMAL, SKILL_4_CROUCH -> {
@@ -128,9 +144,41 @@ public class PowersManhattanTransfer extends NewDashPreset {
         }
             return super.setPowerOther(move, lastMove);
     }
+
+    @Override
+    public boolean tryPower(int move, boolean forced) {
+        switch (move) {
+
+            case PowersManhattanTransfer.MANHATTAN_DODGE -> {
+              /*  this.setCooldown(PowersManhattanTransfer.MANHATTAN_DODGE,ClientNetworking.getAppropriateConfig().rattSettings.rattLeapCooldown);
+                if (this.getStandEntity(this.getSelf()) != null) {
+                    Vec3 dir = this.getStandEntity(this.getSelf()).getViewVector(1);
+                    dir = dir.scale(2);
+                    Vec3 vec3 = new Vec3(dir.x, Mth.clamp(dir.y+0.2F,0.1,100), dir.z);
+                    this.getStandEntity(this.getSelf()).setDeltaMovement(11, 11, 11);
+                }*/
+                //this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.RATT_LEAP_EVENT, SoundSource.PLAYERS, 1F,1.2F);
+            }
+        }
+        return super.tryPower(move, forced);
+    }
+
+    public void manhattanDodge() {
+        if (!onCooldown(PowersManhattanTransfer.MANHATTAN_DODGE) && !isAttackIneptVisually(PowersManhattanTransfer.MANHATTAN_DODGE,4)) {
+            tryPower(PowersManhattanTransfer.MANHATTAN_DODGE);
+            tryPowerPacket(PowersManhattanTransfer.MANHATTAN_DODGE);
+            if (isClient()) {
+                this.self.playSound(ModSounds.VAMPIRE_DASH_EVENT, 200F, 1.0F);
+            }
+        }
+    }
+
     public void switchVisionClient(){
         this.tryPower(PowerIndex.POWER_4, true);
         tryPowerPacket(PowerIndex.POWER_4);
+        if (isClient() && switchWindVisionToggle()) {
+            this.self.playSound(ModSounds.MANHATTAN_VISION_EVENT, 200F, 1.0F);
+        }
     }
     public boolean switchVision(){
         if (isClient() && this.self instanceof Player PE) {
@@ -148,15 +196,22 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public boolean highlightsEntity(Entity ent,Player player){
         IEntityAndData entityAndData = ((IEntityAndData) ent);
         if(switchWindVisionToggle()) {
-            if (this.getStandEntity(this.getSelf()) != null && ent != null && ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
+            if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) && ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
                 if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent) && !player.hasLineOfSight(ent)) {
                     return true;
                 }
             }
         }
         if(isPiloting()){
-            if (this.getStandEntity(this.getSelf()) != null && ent != null && ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
+            if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) & ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
                 if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
+                    return true;
+                }
+            }
+        }
+        if (ent instanceof ManhattanTransferEntity ME) {
+            if (this.getSelf() == ME.getUser()) {
+                if (this.isHoldingSneak()) {
                     return true;
                 }
             }
@@ -165,6 +220,13 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
     @Override
     public int highlightsEntityColor(Entity ent, Player player){
+        if (ent instanceof ManhattanTransferEntity ME) {
+            if (this.getSelf() == ME.getUser()) {
+                if (this.isHoldingSneak() && !isPiloting()) {
+                    return 12379556;
+                }
+            }
+        }
         return 12379456;
     }
     public boolean switchWindVisionToggle(){
@@ -180,7 +242,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 ipe.roundabout$setIsControlling(ID);
             } else {
                 ipe.roundabout$setIsControlling(ID);
-                poseStand(OffsetIndex.FOLLOW);
+                poseStand(OffsetIndex.FLOAT);
             }
         }
     }
@@ -235,7 +297,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public boolean isActive() {
         return this.getStandEntity(this.getSelf()) != null;
     }
-    StandUser User = getUserData(this.self);
+   // StandUser User = getUserData(this.self);
     @Override
     public void tickPower() {
         super.tickPower();
@@ -312,14 +374,18 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public static final byte
             ANIME_SKIN = 1,
             MANGA_SKIN = 2,
-            BRAZIL_SKIN = 3,
-            RADIOACTIVE_SKIN = 4,
-            POLLINATION_SKIN = 5;
+            AERO_TRANSFER_SKIN = 3,
+            JOLLY_SKIN = 4,
+            BRAZIL_SKIN = 5,
+            RADIOACTIVE_SKIN = 6,
+            POLLINATION_SKIN = 7;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 ANIME_SKIN,
                 MANGA_SKIN,
+                AERO_TRANSFER_SKIN,
+                JOLLY_SKIN,
                 BRAZIL_SKIN,
                 RADIOACTIVE_SKIN,
                 POLLINATION_SKIN
@@ -369,7 +435,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
             if (ent != null) {
                 Entity TE = MainUtil.getTargetEntity(ent, 300, 10);
                 if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible() && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
-//TODO: fix the glowing mob speed boosting, ignore what is set up for now, since it doesn't work
                         if (ME.isInRain()) {
                             if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
                                 entity.setDeltaMovement(entity.getForward());
@@ -439,6 +504,10 @@ public class PowersManhattanTransfer extends NewDashPreset {
             return Component.translatable(  "skins.roundabout.manhattan_transfer.manhattan_part_6");
         } else if (skinId == ManhattanTransferEntity.MANGA_SKIN){
             return Component.translatable(  "skins.roundabout.manhattan_transfer.manhattan_manga_part_6");
+        }else if (skinId == ManhattanTransferEntity.AERO_TRANSFER_SKIN) {
+            return Component.translatable("skins.roundabout.manhattan_transfer.manhattan_aerosmith");
+        }else if (skinId == ManhattanTransferEntity.JOLLY_SKIN){
+                return Component.translatable(  "skins.roundabout.manhattan_transfer.manhattan_jolly");
         } else if (skinId == ManhattanTransferEntity.BRAZIL_SKIN){
             return Component.translatable(  "skins.roundabout.manhattan_transfer.brazilian_transfer");
         } else if (skinId == ManhattanTransferEntity.RADIOACTIVE_SKIN){
@@ -455,6 +524,16 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
     protected Byte getSummonSound() {
         return SoundIndex.SUMMON_SOUND;
+    }
+    @Override
+    public SoundEvent getSoundFromByte(byte soundChoice){
+        switch (soundChoice)
+        {
+            case SoundIndex.SUMMON_SOUND -> {
+                return ModSounds.MANHATTAN_SUMMON_EVENT;
+            }
+        }
+        return super.getSoundFromByte(soundChoice);
     }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
@@ -496,6 +575,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public Component ifWipListDev(){
         return Component.literal(  "14Kacper").withStyle(ChatFormatting.BLUE);
     }
-    //COMMAND TO QUICKLY PUT MANHATTAN TRANSFER INTO MOBS: /roundaboutSetStand @p manhattan_transfer 1 "from 1 to 5" 0 false
+    //COMMAND TO QUICKLY PUT MANHATTAN TRANSFER INTO ALL MOBS: /roundaboutSetStand @e manhattan_transfer 1 "from 1 to 5" 0 false
 
 }

@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.hydra.jojomod.stand.powers.PowersCream;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -31,6 +32,18 @@ public abstract class KeysKeyboardInput extends Input {
 
             StandUser user = ((StandUser) player);
             if (user.roundabout$isPossessed()) {
+                this.up = false;
+                this.down = false;
+                this.left = false;
+                this.right = false;
+                this.forwardImpulse = 0;
+                this.leftImpulse = 0;
+                this.jumping = false;
+                this.shiftKeyDown = false;
+                ci.cancel();
+            }
+
+            if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy CB && CB.invincibleState) {
                 this.up = false;
                 this.down = false;
                 this.left = false;

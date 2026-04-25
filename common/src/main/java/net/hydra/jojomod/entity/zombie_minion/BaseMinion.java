@@ -1,12 +1,19 @@
 package net.hydra.jojomod.entity.zombie_minion;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.goals.*;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.Tactics;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.BodyRemainsItem;
+import net.hydra.jojomod.item.HeadRemainsItem;
+import net.hydra.jojomod.item.MaskItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -31,14 +38,18 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.InfestedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -51,7 +62,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.UUID;
 
-public class BaseMinion extends Monster {
+public class BaseMinion extends PathfinderMob {
     public Entity controller;
     public UUID controller2;
     public boolean homeSet = false;
@@ -76,6 +87,11 @@ public class BaseMinion extends Monster {
             SynchedEntityData.defineId(BaseMinion.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DIED_IN_SUN =
             SynchedEntityData.defineId(BaseMinion.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<ItemStack> HEAD_ITEM =
+            SynchedEntityData.defineId(BaseMinion.class, EntityDataSerializers.ITEM_STACK);
+    private static final EntityDataAccessor<ItemStack> BODY_ITEM =
+            SynchedEntityData.defineId(BaseMinion.class, EntityDataSerializers.ITEM_STACK);
+
 
     public BaseMinion(EntityType<? extends BaseMinion> $$0, Level $$1) {
         super($$0, $$1);
@@ -85,18 +101,37 @@ public class BaseMinion extends Monster {
     protected void registerGoals() {
     }
     public void addBehaviourGoals() {
-        this.targetSelector.addGoal(2, new HurtByTargetGoal(this).setAlertOthers());
-        this.targetSelector.addGoal(1, new MinionTargetGoal(this));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::canGetMadAt));
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false, this::canGetMadAt));
-        this.goalSelector.addGoal(1, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new ClimbOnTopOfPowderSnowGoal(this, this.level()));
-        this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0, false));
-        this.goalSelector.addGoal(7, new MinionStrollGoal(this, 1.0));
-        this.goalSelector.addGoal(6, new MinionFollowCommanderGoal(this, 1.0, 10.0F, 1.5F, false));
-        this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
-        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
+        this.goalSelector.addGoal(1, new AvoidPanicGoal<LivingEntity>(this, LivingEntity.class, 6.0F, (double)1.0F, 1.2));;
+        this.targetSelector.addGoal(3, new HurtByTargetGoal(this).setAlertOthers());
+        this.targetSelector.addGoal(2, new MinionTargetGoal(this));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::canGetMadAt));
+        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false, this::canGetMadAt));
+
+        if (!(this instanceof AxolotlMinion)) {
+            this.goalSelector.addGoal(2, new FloatGoal(this));
+            this.goalSelector.addGoal(2, new ClimbOnTopOfPowderSnowGoal(this, this.level()));
+        }
+        this.goalSelector.addGoal(6, new LeapAtTargetBearHeadGoal(this, 0.4F));
+        this.goalSelector.addGoal(7, new MeleeAttackGoal(this, 1.0, false));
+        if (!(this instanceof ParrotMinion)) {
+            this.goalSelector.addGoal(9, new MinionStrollGoal(this, 1.0));
+        }
+        this.goalSelector.addGoal(8, new MinionFollowCommanderGoal(this, 1.2, 10.0F, 1.5F, false));
+        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
+        this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Mob.class, 8.0F));
    }
+    @Override
+    public boolean canBreatheUnderwater(){
+        return true;
+    }
+
+    public boolean shouldPanic() {
+        return (getHeadItem() != null && getHeadItem().is(ModItems.CAT_REMAINS))
+                && shouldPanic2() && getHealth() < getMaxHealth()*0.4F;
+    }
+    public boolean shouldPanic2() {
+        return getTarget() != null;
+    }
 
    public int digCooldown = 0;
 
@@ -109,6 +144,18 @@ public class BaseMinion extends Monster {
                             (this.getTargetTactic() == Tactics.HUNT_MONSTERS.id && $$0 instanceof Enemy && !($$0 instanceof Creeper) && !(this.controller != null && $$0.is(this.controller)))
             );
         }
+    }
+    @Override
+    public boolean canAttack(LivingEntity $$0) {
+        if (shouldPanic()){
+            return false;
+        }
+        return super.canAttack($$0);
+    }
+
+    @Override
+    public boolean isPersistenceRequired() {
+        return true;
     }
 
 
@@ -124,22 +171,111 @@ public class BaseMinion extends Monster {
     public void setMovementTactic(byte byt){
         this.entityData.set(MOVEMENT_TACTIC, byt);
     }
+
+    public void dropHead(Player player){
+        if (getHeadItem() != null && !getHeadItem().isEmpty()){
+            ItemEntity itemEntity = new ItemEntity(level(),getX(), getY(), getZ(), getHeadItem());
+            level().addFreshEntity(itemEntity);
+            setHeadItem(ItemStack.EMPTY);
+        }
+    }
+    public void dropBody(Player player){
+        if (getBodyItem() != null && !getBodyItem().isEmpty()){
+            ItemEntity itemEntity = new ItemEntity(level(),getX(), getY(), getZ(), getBodyItem());
+            level().addFreshEntity(itemEntity);
+            setBodyItem(ItemStack.EMPTY);
+        }
+    }
     @Override
-    protected InteractionResult mobInteract(Player $$0, InteractionHand $$1) {
-        if (!$$0.isCrouching()){
-            if (getController() == $$0.getId()){
-                if ($$0.level().isClientSide()){
+    protected InteractionResult mobInteract(Player player, InteractionHand $$1) {
+        EquipmentSlot slot = $$1 == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+        if (player.isCreative() || player.getId() == getController()){
+            ItemStack stack = player.getItemBySlot(slot);
+            if (stack !=null && !stack.isEmpty()) {
+                if (stack.getItem() instanceof HeadRemainsItem) {
+                    if (!level().isClientSide()) {
+                        dropHead(player);
+                        setHeadItem(stack.copyWithCount(1));
+                        if (!player.getAbilities().instabuild) {
+                            stack.shrink(1);
+                        }
+                        this.level().playSound(null, this.blockPosition(), SoundEvents.ZOMBIE_INFECT, SoundSource.PLAYERS, 1F, 1);
+                    }
+                    return InteractionResult.CONSUME;
+                } else if (stack.getItem() instanceof BodyRemainsItem) {
+                    if (!level().isClientSide()) {
+                        dropBody(player);
+                        setBodyItem(stack.copyWithCount(1));
+                        if (getMainHandItem() != null && !getMainHandItem().isEmpty()){
+                            ItemEntity itemEntity = new ItemEntity(level(),getX(), getY(), getZ(), getMainHandItem());
+                            level().addFreshEntity(itemEntity);
+                            setItemSlot(EquipmentSlot.MAINHAND,ItemStack.EMPTY);
+                        }
+                        if (stack.is(ModItems.AXOLOTL_REMAINS)){
+                            BaseMinion bm = convertTo(ModEntities.AXOLOTL_MINION, false);
+                            if (bm != null){convertToMega(bm);}
+                        } else if (stack.is(ModItems.DOG_REMAINS)){
+                            BaseMinion bm = convertTo(ModEntities.DOG_MINION, false);
+                            if (bm != null){convertToMega(bm);}
+                        } else if (stack.is(ModItems.CHICKEN_REMAINS)){
+                            BaseMinion bm = convertTo(ModEntities.CHICKEN_MINION, false);
+                            if (bm != null){convertToMega(bm);}
+                        } else if (stack.is(ModItems.OCELOT_REMAINS)){
+                            BaseMinion bm = convertTo(ModEntities.OCELOT_MINION, false);
+                            if (bm != null){convertToMega(bm);}
+                        } else if (stack.is(ModItems.PARROT_REMAINS)){
+                            BaseMinion bm = convertTo(ModEntities.PARROT_MINION, false);
+                            if (bm != null){convertToMega(bm);}
+                        }
+                        if (!player.getAbilities().instabuild) {
+                            stack.shrink(1);
+                        }
+                        this.level().playSound(null, this.blockPosition(), SoundEvents.ZOMBIE_INFECT, SoundSource.PLAYERS, 1F, 1);
+
+                    }
+                    return InteractionResult.CONSUME;
+                } else if (stack.getItem() instanceof ShearsItem) {
+                    if (!level().isClientSide()) {
+                        ItemStack stackk = getBodyItem().copy();
+                        ItemStack stackk2 = getHeadItem().copy();
+                        dropHead(player);
+                        dropBody(player);
+                        if (!stackk.isEmpty()){
+                            BaseMinion bm = convertTo(ModEntities.VILLAGER_MINION, false);
+                            if (bm != null){convertToMega(bm);}
+                        }
+                        if (!stackk.isEmpty() || !stackk2.isEmpty()) {
+                            this.level().playSound(null, this.blockPosition(), SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1F, 1);
+                            stack.hurtAndBreak(1, player, ($$1x) -> $$1x.broadcastBreakEvent($$1));
+                        }
+                    }
+
+                    return InteractionResult.CONSUME;
+                }
+            }
+        }
+        if (!player.isCrouching()){
+            if (getController() == player.getId()){
+                if (player.level().isClientSide()){
                     ClientUtil.setZombieMinionScreen(getId());
                 }
                 return InteractionResult.CONSUME;
             }
         }
-        return super.mobInteract($$0,$$1);
+        return super.mobInteract(player,$$1);
     }
 
+    public <T extends Mob>void convertToMega(BaseMinion villagerMinion){
+            villagerMinion.setController(this.level().getEntity(getController()));
+            villagerMinion.setMovementTactic(getMovementTactic());
+            villagerMinion.setTargetTactic(getTargetTactic());
+            villagerMinion.setHomePosition(getHomePosition());
+            villagerMinion.setHeadItem(getHeadItem());
+            villagerMinion.setBodyItem(getBodyItem());
+    }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.3).add(Attributes.MAX_HEALTH, 24)
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.31).add(Attributes.MAX_HEALTH, 40)
                 .add(Attributes.ATTACK_DAMAGE, 5).
                 add(Attributes.FOLLOW_RANGE, 48.0D);
     }
@@ -228,14 +364,82 @@ public class BaseMinion extends Monster {
     }
 
     protected SoundEvent getAmbientSound() {
+        if (getHeadItem()!= null){
+            if (getHeadItem().is(ModItems.MOOSHROOM_REMAINS)){
+                return SoundEvents.COW_AMBIENT;
+            } else if (getHeadItem().is(ModItems.CAT_REMAINS)){
+                return this.random.nextInt(4) == 0 ? SoundEvents.CAT_PURREOW : SoundEvents.CAT_AMBIENT;
+            } else if (getHeadItem().is(ModItems.LLAMA_REMAINS)){
+                return SoundEvents.LLAMA_AMBIENT;
+            } else if (getHeadItem().is(ModItems.GOAT_REMAINS)){
+                return SoundEvents.GOAT_AMBIENT;
+            } else if (getHeadItem().is(ModItems.POLAR_BEAR_REMAINS)){
+                return SoundEvents.POLAR_BEAR_AMBIENT;
+            }
+        }
         return SoundEvents.VINDICATOR_AMBIENT;
     }
 
+    @Override
+    protected void playStepSound(BlockPos $$0, BlockState $$1) {
+        if (getBodyItem() != null) {
+            if (getBodyItem().is(ModItems.CHICKEN_REMAINS)) {
+                this.playSound(SoundEvents.CHICKEN_STEP, 0.15f, 1.0f);
+            } else if (getBodyItem().is(ModItems.DOG_REMAINS)){
+                this.playSound(SoundEvents.WOLF_STEP, 0.15F, 1.0F);
+            } else if (getBodyItem().is(ModItems.PARROT_REMAINS)){
+                this.playSound(SoundEvents.PARROT_STEP, 0.15F, 1.0F);
+            } else {
+                super.playStepSound($$0,$$1);
+            }
+        } else {
+            super.playStepSound($$0,$$1);
+        }
+    }
+
+    @Override
+    protected float getSoundVolume() {
+        if (getHeadItem()!= null) {
+            if (getHeadItem().is(ModItems.MOOSHROOM_REMAINS)) {
+                return 0.4F;
+            }
+        }
+        return super.getSoundVolume();
+    }
+
+    @Override
     protected SoundEvent getDeathSound() {
+        if (getHeadItem()!= null){
+            if (getHeadItem().is(ModItems.MOOSHROOM_REMAINS)){
+                return SoundEvents.COW_DEATH;
+            } else if (getHeadItem().is(ModItems.CAT_REMAINS)){
+                return SoundEvents.CAT_DEATH;
+            } else if (getHeadItem().is(ModItems.LLAMA_REMAINS)){
+                return SoundEvents.LLAMA_DEATH;
+            } else if (getHeadItem().is(ModItems.GOAT_REMAINS)){
+                return SoundEvents.GOAT_DEATH;
+            } else if (getHeadItem().is(ModItems.POLAR_BEAR_REMAINS)){
+                return SoundEvents.POLAR_BEAR_DEATH;
+            }
+        }
         return SoundEvents.VINDICATOR_DEATH;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource $$0) {
+        if (getHeadItem()!= null){
+            if (getHeadItem().is(ModItems.MOOSHROOM_REMAINS)){
+                return SoundEvents.COW_HURT;
+            } else if (getHeadItem().is(ModItems.CAT_REMAINS)){
+                return SoundEvents.CAT_HURT;
+            } else if (getHeadItem().is(ModItems.LLAMA_REMAINS)){
+                return SoundEvents.LLAMA_HURT;
+            } else if (getHeadItem().is(ModItems.GOAT_REMAINS)){
+                return SoundEvents.GOAT_HURT;
+            } else if (getHeadItem().is(ModItems.POLAR_BEAR_REMAINS)){
+                return SoundEvents.POLAR_BEAR_HURT;
+            }
+        }
         return SoundEvents.VINDICATOR_HURT;
     }
 
@@ -257,16 +461,6 @@ public class BaseMinion extends Monster {
     public float getWalkTargetValue(BlockPos $$0, LevelReader $$1) {
         return InfestedBlock.isCompatibleHostBlock($$1.getBlockState($$0.below())) ? 10.0F : super.getWalkTargetValue($$0, $$1);
     }
-
-    public static boolean checkSilverfishSpawnRules(EntityType<Silverfish> $$0, LevelAccessor $$1, MobSpawnType $$2, BlockPos $$3, RandomSource $$4) {
-        if (checkAnyLightMonsterSpawnRules($$0, $$1, $$2, $$3, $$4)) {
-            Player $$5 = $$1.getNearestPlayer((double)$$3.getX() + 0.5, (double)$$3.getY() + 0.5, (double)$$3.getZ() + 0.5, 5.0, true);
-            return $$5 == null;
-        } else {
-            return false;
-        }
-    }
-
 
     @Override
     public MobType getMobType() {
@@ -297,6 +491,7 @@ public class BaseMinion extends Monster {
         }
     }
 
+    @Override
     public void setLastHurtMob(Entity $$0) {
         if ($$0 != null && controller != null && controller.is($$0)){
             return;
@@ -334,6 +529,22 @@ public class BaseMinion extends Monster {
         return this.getEntityData().get(DIED_IN_SUN);
     }
 
+
+    public void setHeadItem(ItemStack prog){
+        this.entityData.set(HEAD_ITEM, prog);
+    }
+    public ItemStack getHeadItem() {
+        return this.getEntityData().get(HEAD_ITEM);
+    }
+
+
+    public void setBodyItem(ItemStack prog){
+        this.entityData.set(BODY_ITEM, prog);
+    }
+    public ItemStack getBodyItem() {
+        return this.getEntityData().get(BODY_ITEM);
+    }
+
     /**Cancel death animation*/
     @Override
     public void die(@NotNull DamageSource $$0) {
@@ -365,11 +576,20 @@ public class BaseMinion extends Monster {
         }
         $$0.putByte("moveTactic",getMovementTactic());
         $$0.putByte("targetTactic",getTargetTactic());
-        $$0.putInt("Lifespan",lifespan);
         $$0.putBoolean("HomeSet",homeSet);
         $$0.putDouble("HomeX",getHomePosition().x);
         $$0.putDouble("HomeY",getHomePosition().y);
         $$0.putDouble("HomeZ",getHomePosition().z);
+        ItemStack m1 = getHeadItem();
+        ItemStack m2 = getBodyItem();
+        if (!m1.isEmpty() || $$0.contains("headItem", 10)) {
+            CompoundTag compoundtag = new CompoundTag();
+            $$0.put("headItem",m1.save(compoundtag));
+        }
+        if (!m2.isEmpty() || $$0.contains("bodyItem", 10)) {
+            CompoundTag compoundtag = new CompoundTag();
+            $$0.put("bodyItem",m2.save(compoundtag));
+        }
         super.addAdditionalSaveData($$0);
     }
     @Override
@@ -382,22 +602,83 @@ public class BaseMinion extends Monster {
                 this.setController(SE.getEntity($$2));
             }
         }
+        if ($$0.contains("headItem", 10)) {
+            CompoundTag compoundtag = $$0.getCompound("headItem");
+            ItemStack itemstack = ItemStack.of(compoundtag);
+            if (!itemstack.isEmpty() && itemstack.getItem() instanceof HeadRemainsItem SD){
+                setHeadItem(itemstack);
+            }
+        }if ($$0.contains("bodyItem", 10)) {
+            CompoundTag compoundtag = $$0.getCompound("bodyItem");
+            ItemStack itemstack = ItemStack.of(compoundtag);
+            if (!itemstack.isEmpty() && itemstack.getItem() instanceof BodyRemainsItem SD){
+                setBodyItem(itemstack);
+            }
+        }
         setHomePosition(new Vec3($$0.getDouble("HomeX"),$$0.getDouble("HomeY"),$$0.getDouble("HomeZ")));
         this.setTargetTactic($$0.getByte("targetTactic"));
         this.setMovementTactic($$0.getByte("moveTactic"));
         homeSet = $$0.getBoolean("homeSet");
-        lifespan = $$0.getInt("Lifespan");
     }
 
-    public int lifespan = 0;
+    Zombiefish z1 = null;
+    Zombiefish z2 = null;
+    int cd1 = 0;
+    int cd2 = 0;
 
+    public void discardBoth(){
+        if (z1 != null){
+            z1.discard();
+        } if (z2 != null){
+            z2.discard();
+        }
+    }
+    public Zombiefish zfish(){
+
+        return null;
+    }
     @Override
     public void tick(){
         if (!this.level().isClientSide()) {
+            if (cd1 > 0){
+                cd1--;
+            }
+            if (cd2 > 0){
+                cd2--;
+            }
+            if (getHeadItem() != null && getHeadItem().is(ModItems.SILVERFISH_REMAINS)){
+                if (getTarget() != null && getTarget().isAlive()){
+                    if ((z1 == null || z1.isRemoved() || !z1.isAlive()) && cd1 <= 0){
+                        z1 = ModEntities.ZOMBIEFISH.create(level());
+                        if (z1 != null){
+                            cd1 = 200;
+                            z1.copyPosition(this);
+                            z1.setHealth(1f);
+                            z1.setController(this);
+                            z1.lifespan = 400;
+                            this.level().addFreshEntity(z1);
+                        }
+                    } else if ((z2 == null || z2.isRemoved() || !z2.isAlive()) && cd2 <= 0){
+                        z2 = ModEntities.ZOMBIEFISH.create(level());
+                        if (z2 != null){
+                            cd2 = 200;
+                            z2.copyPosition(this);
+                            z2.setHealth(1f);
+                            z1.setController(this);
+                            z2.lifespan = 400;
+                            this.level().addFreshEntity(z2);
+                        }
+                    }
+                } else {
+                    discardBoth();
+                }
+            } else {
+                discardBoth();
+            }
+
             if (getDigProg() > -1){
                 setDigProg(getDigProg()-1);
             }
-            lifespan++;
             if (digCooldown > 0){
                 digCooldown--;
             }
@@ -409,10 +690,9 @@ public class BaseMinion extends Monster {
                 }
             }
 
-            if (this.getTarget() != null && (!this.getTarget().isAlive() || this.getTarget().isRemoved() ||
+            if ((this.getTarget() != null && ((!this.getTarget().isAlive() || this.getTarget().isRemoved() ||
                     (controller != null && controller.is(getTarget()))
-            )
-            ){
+            )))){
                 this.setTarget(null);
                 this.setLastHurtByMob(null);
                 this.setLastHurtByPlayer(null);
@@ -482,6 +762,8 @@ public class BaseMinion extends Monster {
             this.entityData.define(CONTROLLER, -1);
             this.entityData.define(DIGPROG, -1);
             this.entityData.define(DIED_IN_SUN, false);
+            this.entityData.define(HEAD_ITEM, ItemStack.EMPTY);
+            this.entityData.define(BODY_ITEM, ItemStack.EMPTY);
         }
     }
 

@@ -173,6 +173,30 @@
       "roundabout:cream_void_attack"
     ]
   },
+  "manhattan_rain_dodging": {
+    "subtitle": "sounds.roundabout.manhattan_rain_dodging",
+    "sounds": [
+        "roundabout:manhattan_rain_dodging"
+    ]
+  },
+  "manhattan_summoning": {
+    "subtitle": "sounds.roundabout.manhattan_summoning",
+    "sounds": [
+      "roundabout:manhattan_summoning"
+    ]
+  },
+  "manhattan_vision": {
+    "subtitle": "sounds.roundabout.manhattan_vision",
+    "sounds": [
+      "roundabout:manhattan_vision"
+    ]
+  },
+  "manhattan_deflection": {
+    "subtitle": "sounds.roundabout.manhattan_deflection",
+    "sounds": [
+      "roundabout:manhattan_deflection"
+    ]
+  },
   "snubnose_fire": {
     "subtitle": "sounds.roundabout.snubnose_fire",
     "sounds": [

@@ -17,6 +17,7 @@ import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
+import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.animation.AnimationChannel;
@@ -296,12 +297,12 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             StandUser user = ((StandUser)$$0);
             if (rdbt$isNotPosing($$0)) {
                 if (user.roundabout$getEffectiveCombatMode() && !$$0.isUsingItem()) {
-                    if (user.roundabout$rotateArmToShoot()) {
-                        boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
-                        if ($$9) {
+                    if (user.roundabout$rotateArmToShoot(HumanoidArm.LEFT) || user.roundabout$rotateArmToShoot(HumanoidArm.RIGHT))  {
+                        if (user.roundabout$rotateArmToShoot(HumanoidArm.RIGHT)) {
                             this.rightArm.yRot = -0.1F + this.head.yRot;
                             this.rightArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
-                        } else {
+                        }
+                        if (user.roundabout$rotateArmToShoot(HumanoidArm.LEFT)) {
                             this.leftArm.yRot = 0.1F + this.head.yRot;
                             this.leftArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
                         }

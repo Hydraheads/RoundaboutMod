@@ -81,6 +81,19 @@ public class ModItems {
     public static Item ANUBIS_GUARDIAN_SPAWN_EGG;
     public static Item ROAD_ROLLER;
 
+
+    public static Item CAT_REMAINS;
+    public static Item OCELOT_REMAINS;
+    public static Item PARROT_REMAINS;
+    public static Item CHICKEN_REMAINS;
+    public static Item DOG_REMAINS;
+    public static Item AXOLOTL_REMAINS;
+    public static Item POLAR_BEAR_REMAINS;
+    public static Item MOOSHROOM_REMAINS;
+    public static Item GOAT_REMAINS;
+    public static Item LLAMA_REMAINS;
+    public static Item SILVERFISH_REMAINS;
+
     public static Item KNIFE;
     public static Item KNIFE_BUNDLE;
 

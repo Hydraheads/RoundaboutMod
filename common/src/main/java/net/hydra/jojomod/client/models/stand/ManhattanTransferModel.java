@@ -148,7 +148,7 @@ public class ManhattanTransferModel<T extends ManhattanTransferEntity> extends S
 
         PartDefinition front_anime = front_petals.addOrReplaceChild("front_anime", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition front_petals_r1 = front_anime.addOrReplaceChild("front_petals_r1", CubeListBuilder.create().texOffs(40, 16).addBox(-3.5F, 0.0F, -2.5F, 7.0F, 0.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.2182F, 0.0F, 0.0F));
+        PartDefinition front_petals_r1 = front_anime.addOrReplaceChild("front_petals_r1", CubeListBuilder.create().texOffs(40, 16).addBox(-3.5F, -0.0185F, -2.5F, 7.0F, 0.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.2182F, 0.0F, 0.0F));
 
         PartDefinition front_manga = front_petals.addOrReplaceChild("front_manga", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
@@ -174,9 +174,9 @@ public class ManhattanTransferModel<T extends ManhattanTransferEntity> extends S
 
         PartDefinition right_anime = right_petals.addOrReplaceChild("right_anime", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-       PartDefinition right_petals_r1 = right_anime.addOrReplaceChild("right_petals_r1", CubeListBuilder.create().texOffs(40, 16).addBox(-3.5F, 0.0F, -2.5F, 7.0F, 0.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.2182F, 0.0F, 0.0F));
+        PartDefinition right_petals_r1 = right_anime.addOrReplaceChild("right_petals_r1", CubeListBuilder.create().texOffs(40, 16).addBox(-3.5F, -0.0185F, -2.5F, 7.0F, 0.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.2182F, 0.0F, 0.0F));
 
-       PartDefinition right_manga = right_petals.addOrReplaceChild("right_manga", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition right_manga = right_petals.addOrReplaceChild("right_manga", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition manga_petal_r2 = right_manga.addOrReplaceChild("manga_petal_r2", CubeListBuilder.create().texOffs(43, 12).mirror().addBox(-3.5F, -2.5005F, -0.0218F, 7.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, -0.1082F, 0.4882F, -0.0436F, 0.0F, 0.0F));
 
@@ -192,7 +192,7 @@ public class ManhattanTransferModel<T extends ManhattanTransferEntity> extends S
 
         PartDefinition left_anime = left_petals.addOrReplaceChild("left_anime", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition left_petals_r1 = left_anime.addOrReplaceChild("left_petals_r1", CubeListBuilder.create().texOffs(40, 16).addBox(-3.5F, 0.0F, -2.5F, 7.0F, 0.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.2182F, 0.0F, 0.0F));
+        PartDefinition left_petals_r1 = left_anime.addOrReplaceChild("left_petals_r1", CubeListBuilder.create().texOffs(40, 16).addBox(-3.5F, -0.0185F, -2.5F, 7.0F, 0.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.2182F, 0.0F, 0.0F));
 
         PartDefinition left_manga = left_petals.addOrReplaceChild("left_manga", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
@@ -214,7 +214,7 @@ public class ManhattanTransferModel<T extends ManhattanTransferEntity> extends S
 
         PartDefinition back_anime = back_petals.addOrReplaceChild("back_anime", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition back_petals_r1 = back_anime.addOrReplaceChild("back_petals_r1", CubeListBuilder.create().texOffs(40, 16).addBox(-3.5F, 0.0F, -2.5F, 7.0F, 0.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.2182F, 0.0F, 0.0F));
+        PartDefinition back_petals_r1 = back_anime.addOrReplaceChild("back_petals_r1", CubeListBuilder.create().texOffs(40, 16).addBox(-3.5F, -0.0185F, -2.5F, 7.0F, 0.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.2182F, 0.0F, 0.0F));
 
         PartDefinition back_manga = back_petals.addOrReplaceChild("back_manga", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
