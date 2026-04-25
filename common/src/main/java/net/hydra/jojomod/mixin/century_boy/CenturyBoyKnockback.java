@@ -28,11 +28,8 @@ public abstract class CenturyBoyKnockback {
     @Shadow public abstract void knockback(double $$0, double $$1, double $$2);
 
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
-
     private void knockbackBoost(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir){
-
         if((Object)this instanceof StandUser user) {
-
             if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB){
 
                 Player player = (Player) (Object)this;
@@ -43,12 +40,12 @@ public abstract class CenturyBoyKnockback {
                     Entity entity = source.getEntity();
                     if (entity != null) {
 
-                        double y = entity.getX() - player.getX();
-                        double x;
-                        for(x = entity.getZ() - player.getZ(); y* y + x * x < 1.0E-4; x = (Math.random() - Math.random()) * 0.01) {
-                            y = (Math.random() - Math.random()) * 0.01;
+                        double x = entity.getX() - player.getX();
+                        double y;
+                        for(y = entity.getZ() - player.getZ(); x* x + y * y < 1.0E-4; y = (Math.random() - Math.random()) * 0.01) {
+                            x = (Math.random() - Math.random()) * 0.01;
                         }
-                        knockback((double) 0.8F,y*2,x*2);
+                        knockback((double) 0.8F,x*2,y*2);
                     }
 
                     cir.setReturnValue(false);
