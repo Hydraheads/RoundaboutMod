@@ -1,6 +1,8 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -18,6 +20,7 @@ import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -36,6 +39,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -48,27 +52,32 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
-import java.util.Dictionary;
-import java.util.Hashtable;
+//import java.util.UUID;
+//import java.util.Dictionary;
+//import java.util.Hashtable;
 
-import net.minecraft.world.level.block.TntBlock;
+
 
 public class PowersKillerQueen extends NewPunchingStand {
+	public PowersKillerQueen(LivingEntity self) {super(self);}
 	
 	// TODO Make Impale code
 	// TODO Make air bubble bomb spawn and entity
 	// TODO Make bomb entity
 	// TODO Make bomb item
-	// TODO Make bomb block
+	// TODO Make bomb block -- in progress
 	// TODO Bites The Dust
+	
 	private static final byte
 		BLOCK_PLANTED=52,
 		BLOCK_DETONATE=54,
@@ -79,27 +88,24 @@ public class PowersKillerQueen extends NewPunchingStand {
 		BOMB_ENTITY=3,
 		BOMB_BUBBLE=4;
 	
-	/*public static Dictionary<Integer, BlockPos> blocksBombs;
+	public static ArrayList<String> blowableBlocksBlackList = Lists.newArrayList("minecraft:bedrock", "minecraft:obsidian");
 	
-	private void blocksBombsInit() {
-		if (blocksBombs == null) {
-			blocksBombs = new Hashtable<>();
-		}
-	}*/
+	public boolean isBlockBlackListed(BlockState bs) {
+		ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
+		return (blowableBlocksBlackList != null && !blowableBlocksBlackList.isEmpty() && rl != null && blowableBlocksBlackList.contains(rl.toString()));
+	}
 	
 	public Entity bombEntity = null;
 	public BlockPos bombBlock = null;
 	public Entity bombBubble = null;
-	private boolean destroyTerrain = false;
+	private boolean destroyTerrain = true;
 	private boolean explodeOnContact = false;
 	private boolean BitesTheDustMode = false;
 	
 	public float standReach = 5;
-    public PowersKillerQueen(LivingEntity self) {super(self);}
+    
     @Override
     public int getMaxGuardPoints(){ return 15; }
-    
-    
     
     public static final byte
 	    PART_4 = 0,
@@ -232,8 +238,11 @@ public class PowersKillerQueen extends NewPunchingStand {
         }else {
         	setSkillIcon(context, x, y, 4, StandIcons.KILLER_QUEEN_BTD_ACTIVATE, PowerIndex.SKILL_4);
         }
+        
     }   
 
+    
+    
     
     @Override
     public void handleStandAttack(Player player, Entity target){
@@ -281,6 +290,21 @@ public class PowersKillerQueen extends NewPunchingStand {
     	
     	
     	return true; //super.tryBlockPosPower(move, forced, blockPos);
+    }
+
+    @Override
+    public void tickPower(){
+    	byte currentBomb = this.getBomb();
+    	
+    	if (currentBomb == BOMB_BLOCK) {
+    		Vec3 iconPos = new Vec3(this.bombBlock.getX(), this.bombBlock.getY(), this.bombBlock.getZ());
+    		
+    		if (isClient()) {
+    			//this.getSelf().level().addAlwaysVisibleParticle(getImpactParticle(), iconPos.x, iconPos.y, iconPos.z, iconPos.x, iconPos.y, iconPos.z);
+    		}
+    	}
+    	
+        super.tickPower();
     }
 
     
@@ -345,7 +369,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             BlockPos pos = blockHit.getBlockPos();
         	BlockState state = this.getSelf().level().getBlockState(pos);
         	
-        	if (!MainUtil.isBlockBlacklisted(state) && !state.isAir()) {
+        	if (!isBlockBlackListed(state) && !state.isAir()) {
         		//tryBlockPosPower(PowersKillerQueen.BLOCK_PLANTED, true, pos);
         		((StandUser) this.getSelf()).roundabout$tryBlockPosPower(PowersKillerQueen.BLOCK_PLANTED, true, pos);
         		tryBlockPosPowerPacket(PowersKillerQueen.BLOCK_PLANTED, pos);
@@ -666,12 +690,29 @@ public class PowersKillerQueen extends NewPunchingStand {
     	return BOMB_NONE;
     }
     
+    public void explodeBlocks(BlockPos location) {
+    	Vec3 center = new Vec3(location.getX(), location.getY(), location.getZ());
+    	
+    	for (BlockPos pos : BlockPos.betweenClosed(location.offset(1, 1, 1), location.offset(-1, -1, -1))) {
+			BlockState info = this.getSelf().level().getBlockState(pos);
+			if (isBlockBlackListed(info)) {continue;}
+			
+			Double explosionDistance = 2.0 + ((double) this.getSelf().getRandom().nextIntBetweenInclusive(-2, 2) / 10.0);
+			
+			Double dist2 = center.distanceToSqr(pos.getX(), pos.getY(), pos.getZ());
+			Roundabout.LOGGER.info("Distance 2: " + dist2);
+			if (dist2 <= explosionDistance) {
+				boolean shouldDrop = !info.requiresCorrectToolForDrops();
+				this.getSelf().level().destroyBlock(pos, shouldDrop);
+			}
+		}
+    }
+    
     public boolean explode() {
     	
 		if (this.getBomb() == PowersKillerQueen.BOMB_BLOCK) {
 			if (!isClient()) {
-    			this.getSelf().level().removeBlock(this.bombBlock, true);
-    			
+				if (this.destroyTerrain) {explodeBlocks(this.bombBlock);}
 			}
     		this.bombBlock = null;
     	}

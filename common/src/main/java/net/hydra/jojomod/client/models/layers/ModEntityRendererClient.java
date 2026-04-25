@@ -67,7 +67,8 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation SEPERATED_ARM_SLIM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "seperated_arm_slim"), "main");
     public static final ModelLayerLocation LEFT_SEPERATED_ARM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "left_seperated_arm"), "main");
     public static final ModelLayerLocation LEFT_SEPERATED_ARM_SLIM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "left_seperated_arm_slim"), "main");
-
+    public static final ModelLayerLocation KILLER_QUEEN_BLOCKBOMB = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "block_bomb"), "main");
+    
     public static final ModelLayerLocation ROAD_ROLLER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "road_roller"), "main");
 
     public static final ModelLayerLocation PAINTING_VAN_GOUGH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "van_gough"), "main");

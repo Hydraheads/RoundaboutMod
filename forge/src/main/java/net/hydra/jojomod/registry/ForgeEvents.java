@@ -67,6 +67,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.SOFT_AND_WET_DEBUT.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SOFT_AND_WET_KILLER_QUEEN.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.KILLER_QUEEN.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.BLOCK_BOMB.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.CINDERELLA.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.MANHATTAN_TRANSFER.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.POLLINATION_TRANSFER.get(), StandEntity.createStandAttributes().build());
