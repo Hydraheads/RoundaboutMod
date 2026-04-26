@@ -576,7 +576,9 @@ public class PunchingGeneralPowers extends GeneralPowers {
                 knockbackStrength = 0.10F;
 
                 if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
-                    takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
+                    if (!(entity instanceof Player)) {
+                        takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
+                    }
                     this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
                     addToCombo();
                     hitParticles(entity);

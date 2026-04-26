@@ -29,6 +29,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -47,7 +48,11 @@ public class PowersManhattanTransfer extends NewDashPreset {
         super(self);
     }
     public static final byte
-            STAND_BLOCKED = 78;
+            STAND_BLOCKED = 78,
+
+
+            MANHATTAN_VISION = 82,
+            MANHATTAN_DODGE = 83;
     public boolean isStandEnabled() {
         return ClientNetworking.getAppropriateConfig().manhattanTransferSettings.enableManhattanTransfer;
     }
@@ -84,7 +89,12 @@ public class PowersManhattanTransfer extends NewDashPreset {
         else
             setSkillIcon(context, x, y, 4, StandIcons.WIND_VISION_OFF, PowerIndex.SKILL_4);
 
-        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        if(isPiloting()){
+            setSkillIcon(context, x, y, 3, StandIcons.MANHATTAN_DODGE, PowerIndex.GLOBAL_DASH);
+        }
+        else{
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        }
 
         super.renderIcons(context, x, y);
     }
@@ -106,15 +116,18 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public void powerActivate(PowerContext context) {
         /**Making dash usable on both key presses*/
         switch (context) {
-            case SKILL_1_NORMAL, SKILL_1_CROUCH -> {
+            case SKILL_1_NORMAL, SKILL_1_CROUCH-> {
 
             }
-            case SKILL_2_NORMAL, SKILL_2_CROUCH -> {
+                case SKILL_2_NORMAL, SKILL_2_CROUCH -> {
                 toggleControlModeClient();
             }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 if(!isPiloting()) {
                     dash();
+                }
+                else{
+                    manhattanDodge();
                 }
             }
             case SKILL_4_NORMAL, SKILL_4_CROUCH -> {
@@ -131,6 +144,35 @@ public class PowersManhattanTransfer extends NewDashPreset {
         }
             return super.setPowerOther(move, lastMove);
     }
+
+    @Override
+    public boolean tryPower(int move, boolean forced) {
+        switch (move) {
+
+            case PowersManhattanTransfer.MANHATTAN_DODGE -> {
+              /*  this.setCooldown(PowersManhattanTransfer.MANHATTAN_DODGE,ClientNetworking.getAppropriateConfig().rattSettings.rattLeapCooldown);
+                if (this.getStandEntity(this.getSelf()) != null) {
+                    Vec3 dir = this.getStandEntity(this.getSelf()).getViewVector(1);
+                    dir = dir.scale(2);
+                    Vec3 vec3 = new Vec3(dir.x, Mth.clamp(dir.y+0.2F,0.1,100), dir.z);
+                    this.getStandEntity(this.getSelf()).setDeltaMovement(11, 11, 11);
+                }*/
+                //this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.RATT_LEAP_EVENT, SoundSource.PLAYERS, 1F,1.2F);
+            }
+        }
+        return super.tryPower(move, forced);
+    }
+
+    public void manhattanDodge() {
+        if (!onCooldown(PowersManhattanTransfer.MANHATTAN_DODGE) && !isAttackIneptVisually(PowersManhattanTransfer.MANHATTAN_DODGE,4)) {
+            tryPower(PowersManhattanTransfer.MANHATTAN_DODGE);
+            tryPowerPacket(PowersManhattanTransfer.MANHATTAN_DODGE);
+            if (isClient()) {
+                this.self.playSound(ModSounds.VAMPIRE_DASH_EVENT, 200F, 1.0F);
+            }
+        }
+    }
+
     public void switchVisionClient(){
         this.tryPower(PowerIndex.POWER_4, true);
         tryPowerPacket(PowerIndex.POWER_4);
@@ -167,10 +209,24 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 }
             }
         }
+        if (ent instanceof ManhattanTransferEntity ME) {
+            if (this.getSelf() == ME.getUser()) {
+                if (this.isHoldingSneak()) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
     @Override
     public int highlightsEntityColor(Entity ent, Player player){
+        if (ent instanceof ManhattanTransferEntity ME) {
+            if (this.getSelf() == ME.getUser()) {
+                if (this.isHoldingSneak() && !isPiloting()) {
+                    return 12379556;
+                }
+            }
+        }
         return 12379456;
     }
     public boolean switchWindVisionToggle(){
@@ -319,18 +375,22 @@ public class PowersManhattanTransfer extends NewDashPreset {
             ANIME_SKIN = 1,
             MANGA_SKIN = 2,
             AERO_TRANSFER_SKIN = 3,
-            BRAZIL_SKIN = 4,
-            RADIOACTIVE_SKIN = 5,
-            POLLINATION_SKIN = 6;
+            JOLLY_SKIN = 4,
+            BRAZIL_SKIN = 5,
+            RADIOACTIVE_SKIN = 6,
+            POLLINATION_SKIN = 7,
+            UFO_TRANSFER_SKIN = 8;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 ANIME_SKIN,
                 MANGA_SKIN,
                 AERO_TRANSFER_SKIN,
+                JOLLY_SKIN,
                 BRAZIL_SKIN,
                 RADIOACTIVE_SKIN,
-                POLLINATION_SKIN
+                POLLINATION_SKIN,
+                UFO_TRANSFER_SKIN
         );
     }
     public boolean returnFakeStandForHud(){
@@ -446,15 +506,20 @@ public class PowersManhattanTransfer extends NewDashPreset {
             return Component.translatable(  "skins.roundabout.manhattan_transfer.manhattan_part_6");
         } else if (skinId == ManhattanTransferEntity.MANGA_SKIN){
             return Component.translatable(  "skins.roundabout.manhattan_transfer.manhattan_manga_part_6");
-        }else if (skinId == ManhattanTransferEntity.AERO_TRANSFER_SKIN){
-            return Component.translatable(  "skins.roundabout.manhattan_transfer.manhattan_aerosmith");
+        }else if (skinId == ManhattanTransferEntity.AERO_TRANSFER_SKIN) {
+            return Component.translatable("skins.roundabout.manhattan_transfer.manhattan_aerosmith");
+        }else if (skinId == ManhattanTransferEntity.JOLLY_SKIN){
+                return Component.translatable(  "skins.roundabout.manhattan_transfer.manhattan_jolly");
         } else if (skinId == ManhattanTransferEntity.BRAZIL_SKIN){
             return Component.translatable(  "skins.roundabout.manhattan_transfer.brazilian_transfer");
         } else if (skinId == ManhattanTransferEntity.RADIOACTIVE_SKIN){
             return Component.translatable(  "skins.roundabout.manhattan_transfer.radioactive_transfer");
         } else if (skinId == ManhattanTransferEntity.POLLINATION_SKIN){
             return Component.translatable(  "skins.roundabout.manhattan_transfer.pollination_transfer");
+        }else if (skinId == ManhattanTransferEntity.UFO_TRANSFER_SKIN){
+            return Component.translatable(  "skins.roundabout.manhattan_transfer.ufotransfer");
         }
+
 
         return Component.translatable(  "skins.roundabout.manhattan_transfer.manhattan_part_6");
     }

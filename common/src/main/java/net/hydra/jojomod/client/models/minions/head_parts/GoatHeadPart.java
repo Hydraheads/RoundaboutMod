@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
+import net.hydra.jojomod.entity.zombie_minion.AxolotlMinion;
 import net.hydra.jojomod.entity.zombie_minion.DogMinion;
 import net.hydra.jojomod.entity.zombie_minion.OcelotMinion;
 import net.hydra.jojomod.entity.zombie_minion.ParrotMinion;
@@ -89,6 +90,12 @@ public class GoatHeadPart extends PsuedoHierarchicalModel {
             }
             if (context instanceof OcelotMinion pm){
                 head.y += 2F;
+            }
+
+            if (context instanceof AxolotlMinion pm){
+                head.xScale = 0.98F;
+                head.yScale = 0.98F;
+                head.zScale = 0.98F;
             }
             if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
                 partialTicks = 0;

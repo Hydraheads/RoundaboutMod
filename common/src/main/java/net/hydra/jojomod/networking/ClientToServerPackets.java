@@ -502,10 +502,12 @@ public class ClientToServerPackets {
                                 } else if (context == Tactics.SENDHOME.id){
                                     fm.goHome();
                                 } else if (context == Tactics.EQUIP.id){
-                                    ItemStack plrItem = sender.getItemBySlot(EquipmentSlot.MAINHAND);
-                                    ItemStack corpseItem = fm.getMainHandItem();
-                                    fm.setItemSlotAndDropWhenKilled2(EquipmentSlot.MAINHAND, plrItem);
-                                    sender.setItemInHand(InteractionHand.MAIN_HAND, corpseItem);
+                                    if (fm.getBodyItem() == null || fm.getBodyItem().isEmpty()) {
+                                        ItemStack plrItem = sender.getItemBySlot(EquipmentSlot.MAINHAND);
+                                        ItemStack corpseItem = fm.getMainHandItem();
+                                        fm.setItemSlotAndDropWhenKilled2(EquipmentSlot.MAINHAND, plrItem);
+                                        sender.setItemInHand(InteractionHand.MAIN_HAND, corpseItem);
+                                    }
                                 } else if (context == Tactics.ROAM.id || context == Tactics.FOLLOW.id ||
                                         context == Tactics.STAY_PUT.id || context == Tactics.HOLD.id) {
                                         fm.setMovementTactic(context);

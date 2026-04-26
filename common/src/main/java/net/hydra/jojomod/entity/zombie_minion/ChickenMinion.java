@@ -1,10 +1,15 @@
 package net.hydra.jojomod.entity.zombie_minion;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 
@@ -13,6 +18,14 @@ public class ChickenMinion extends BaseMinion{
         super($$0, $$1);
     }
 
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.31).add(Attributes.MAX_HEALTH, 40)
+                .add(Attributes.ATTACK_DAMAGE, 7).
+                add(Attributes.FOLLOW_RANGE, 48.0D);
+    }
+
+    protected void checkFallDamage(double $$0, boolean $$1, BlockState $$2, BlockPos $$3) {
+    }
     @Override
     protected void registerGoals() {
         //this.goalSelector.addGoal(1, new FallenZombieAttackGoal(this, 1.0, true));

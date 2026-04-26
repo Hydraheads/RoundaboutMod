@@ -6,6 +6,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
@@ -20,6 +23,13 @@ public class DogMinion extends BaseMinion{
         //this.goalSelector.addGoal(1, new FallenZombieAttackGoal(this, 1.0, true));
         this.addBehaviourGoals();
     }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.33).add(Attributes.MAX_HEALTH, 40)
+                .add(Attributes.ATTACK_DAMAGE, 8).
+                add(Attributes.FOLLOW_RANGE, 48.0D);
+    }
+
     public void handleEntityEvent(byte $$0) {
         if ($$0 == 8) {
             this.isShaking = true;

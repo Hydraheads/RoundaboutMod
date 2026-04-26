@@ -52,10 +52,11 @@ public class ManhattanTransferEntity extends StandEntity {
             ANIME_SKIN = 1,
             MANGA_SKIN = 2,
             AERO_TRANSFER_SKIN = 3,
-            BRAZIL_SKIN = 4,
-            RADIOACTIVE_SKIN = 5,
-            POLLINATION_SKIN = 6;
-
+            JOLLY_SKIN = 4,
+            BRAZIL_SKIN = 5,
+            RADIOACTIVE_SKIN = 6,
+            POLLINATION_SKIN = 7,
+            UFO_TRANSFER_SKIN = 8;
 
     public LivingEntity Target;
 

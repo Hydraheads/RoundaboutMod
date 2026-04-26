@@ -1,7 +1,10 @@
 package net.hydra.jojomod.mixin.cinderella;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.entity.goals.AvoidCatHeadGoal;
 import net.hydra.jojomod.entity.goals.AvoidEntityWhenFacelessGoal;
+import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
+import net.hydra.jojomod.entity.zombie_minion.OcelotMinion;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersRatt;
@@ -11,6 +14,8 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
+import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
@@ -61,8 +66,11 @@ public abstract class ZCreeper extends Monster {
     }
 
     /**Creepers start becoming shy when faceless*/
+    /**They also run from ocelot minions*/
     @Inject(method = "registerGoals()V", at = @At(value = "HEAD"))
     protected void roundabout$registerGoals(CallbackInfo ci) {
+        this.goalSelector.addGoal(3, new AvoidEntityGoal(this, OcelotMinion.class, 6.0F, (double)1.0F, 1.2));
+        this.goalSelector.addGoal(3, new AvoidCatHeadGoal<>(this, BaseMinion.class, 6.0F, (double)1.0F, 1.2));
         this.goalSelector.addGoal(3, new AvoidEntityWhenFacelessGoal<>(this, Player.class, 6.0F, 1.0, 1.2));
     }
 
