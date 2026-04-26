@@ -55,7 +55,8 @@ public class ManhattanTransferEntity extends StandEntity {
             JOLLY_SKIN = 4,
             BRAZIL_SKIN = 5,
             RADIOACTIVE_SKIN = 6,
-            POLLINATION_SKIN = 7;
+            POLLINATION_SKIN = 7,
+            UFO_TRANSFER_SKIN = 8;
 
     public LivingEntity Target;
 
