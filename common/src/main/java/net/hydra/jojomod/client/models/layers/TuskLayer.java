@@ -80,7 +80,6 @@ public class TuskLayer<T extends LivingEntity, A extends HumanoidModel<T>> exten
 
 
                         if (PT.renderDrill()) {
-                            Roundabout.LOGGER.info(PT.renderBothArms() + " | " + entity.getMainArm());
                             if (PT.renderBothArms() || entity.getMainArm() == HumanoidArm.RIGHT) {
                                 poseStack.pushPose(); // DRILL
                                 getParentModel().rightArm.translateAndRotate(poseStack);
