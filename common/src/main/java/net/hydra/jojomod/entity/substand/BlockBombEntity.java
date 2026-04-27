@@ -6,6 +6,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
 
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -17,11 +18,14 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
 
@@ -29,15 +33,22 @@ public class BlockBombEntity extends StandEntity {
 	
 	private BlockPos bombPos;
 	
-	
-	
 	public BlockBombEntity(EntityType<? extends StandEntity> $$0, Level $$1) {
 		super($$0, $$1);
+		
 	}
 	
+	public static AttributeSupplier.Builder createStandAttributes() {
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,
+                0.0F).add(Attributes.MAX_HEALTH, 10.0).add(Attributes.ATTACK_DAMAGE, 0.0);
+    }
+	
 	public void setBlockPos(BlockPos pos) {
-		if (this.bombPos != null) {
+		if (pos != null) {
 			this.bombPos = pos;
+			Vec3 positionInWorld = this.bombPos.getCenter().add(0.0F, -0.5F, 0.0F);
+			
+			this.setPos(positionInWorld);
 		}
 	}
 	
@@ -47,12 +58,42 @@ public class BlockBombEntity extends StandEntity {
 	
 	@Override
     public void tick() {
-        this.setBlockPos(this.bombPos);
+		boolean client = this.level().isClientSide();
+        LivingEntity user = this.getUser();
+        if (!client) {
+            if(user == null){
+                
+                this.discard();
+            }else if((!(((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen)) || (!user.isAlive())){
+                
+                this.discard();
+            }
+            else{
+            	
+            }
+		
+        }
     }
 	
 	protected static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(BlockBombEntity .class,
             EntityDataSerializers.INT);
 	
+	@Override
+    protected AABB makeBoundingBox() {
+        return super.makeBoundingBox();
+    }
+	
+	
+	
+	@Override
+    public boolean isPickable() {
+        return false;
+    }
+    @Override
+    public boolean isInvulnerable() {
+    	
+        return true;
+    }	
 	
 	@Override
     public boolean canBeCollidedWith() {
@@ -78,4 +119,18 @@ public class BlockBombEntity extends StandEntity {
         return false;
     }
 	
+    @Override
+    public boolean canBeHitByProjectile() {
+    	return false;
+    }
+    @Override
+    public boolean canBeHitByStands() {
+    	
+    	return false;
+    }
+    @Override
+    public boolean mayInteract(Level $$0, BlockPos pos) {
+    	return false;
+    }
+  
 }

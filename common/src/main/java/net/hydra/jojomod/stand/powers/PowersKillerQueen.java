@@ -29,6 +29,7 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
+import net.hydra.jojomod.entity.substand.BlockBombEntity;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -81,12 +82,15 @@ public class PowersKillerQueen extends NewPunchingStand {
 	private static final byte
 		BLOCK_PLANTED=52,
 		BLOCK_DETONATE=54,
+		DEFUSE = 57,
 	
 		BOMB_NONE=0,
 		BOMB_BLOCK=1,
 		BOMB_ITEM=2,
 		BOMB_ENTITY=3,
 		BOMB_BUBBLE=4;
+	
+	private boolean hasBomb = false;
 	
 	public static ArrayList<String> blowableBlocksBlackList = Lists.newArrayList("minecraft:bedrock", "minecraft:obsidian");
 	
@@ -96,8 +100,9 @@ public class PowersKillerQueen extends NewPunchingStand {
 	}
 	
 	public Entity bombEntity = null;
-	public BlockPos bombBlock = null;
+	public BlockBombEntity bombBlock = null;
 	public Entity bombBubble = null;
+	
 	private boolean destroyTerrain = true;
 	private boolean explodeOnContact = false;
 	private boolean BitesTheDustMode = false;
@@ -163,7 +168,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         {
         	case SKILL_1_NORMAL -> {
         		if (!this.inBitesTheDustMode()) {
-	        		if (this.getBomb() == NONE) {
+	        		if (!this.hasBomb) {
 	        			blockPlantBombClient();
 	        		}else {
 	        			detonateClient();
@@ -172,7 +177,8 @@ public class PowersKillerQueen extends NewPunchingStand {
         	}
         	case SKILL_2_NORMAL -> {
         		if (!this.inBitesTheDustMode()) {
-	        		if (this.getBomb() == NONE) {
+        			Roundabout.LOGGER.info("HasBomb: " + this.hasBomb + " getBomb: " + this.getBomb());
+	        		if (!this.hasBomb) {
 	        			// item plant method
 	        		}else {
 	        			defuseClient();
@@ -257,8 +263,10 @@ public class PowersKillerQueen extends NewPunchingStand {
     		//return blockPlantBomb(); <- Do detonate
     	} else if (move == PowerIndex.POWER_4) {
     		return switchModes();
+    	} else if (move == PowersKillerQueen.DEFUSE) {
+    		return defuseServer();
     	} else if (move == PowerIndex.POWER_2) {
-    		// <- do defuse
+    		
     		//return shootAirBubble();
     	} else if (move == PowerIndex.POWER_2_SNEAK) {
     		return shootAirBubble();
@@ -283,7 +291,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos){
     	
     	if (move == (int)PowersKillerQueen.BLOCK_PLANTED) {
-    		this.bombBlock = blockPos;
+    		this.blockPlantBombServer(blockPos);
     	} else {
     		
     	}
@@ -317,11 +325,27 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
     
     public void defuseClient() {
+    	//byte bombType = this.getBomb();
+    	
+    	((StandUser) this.getSelf()).roundabout$tryPower(PowersKillerQueen.DEFUSE, true);
+        tryPowerPacket(PowersKillerQueen.DEFUSE);
+    	
+        this.hasBomb = false;
+
+    }
+    public boolean defuseServer() {
     	byte bombType = this.getBomb();
+  
     	
     	if (bombType == BOMB_BLOCK) {
-    		
+    		this.bombBlock.discard();
+    		this.bombBlock = null;
+
     	}
+    	
+    	this.hasBomb = false;
+    	
+    	return true;
     }
     
     public void detonateClient() {
@@ -331,6 +355,8 @@ public class PowersKillerQueen extends NewPunchingStand {
     		((StandUser) this.getSelf()).roundabout$tryPower(PowersKillerQueen.BLOCK_DETONATE, true);
             tryPowerPacket(PowersKillerQueen.BLOCK_DETONATE);
     	}
+    	
+    	this.hasBomb = false;
     }
     
     public void tryShootAirBubbleClient() {
@@ -359,7 +385,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public void blockPlantBombClient() {
     	StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
 		
-        if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
+        if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved() && !this.hasBomb) {
         	
         	Vec3 vec3d = this.getSelf().getEyePosition(0);
             Vec3 vec3d2 = this.getSelf().getViewVector(0);
@@ -374,9 +400,21 @@ public class PowersKillerQueen extends NewPunchingStand {
         		((StandUser) this.getSelf()).roundabout$tryBlockPosPower(PowersKillerQueen.BLOCK_PLANTED, true, pos);
         		tryBlockPosPowerPacket(PowersKillerQueen.BLOCK_PLANTED, pos);
         	}
+        	this.hasBomb = true;
         }
     	
     	
+    }
+    
+    public void blockPlantBombServer(BlockPos pos) {
+    	if (pos != null) {
+    		this.bombBlock = ModEntities.BLOCK_BOMB.create(this.getSelf().level());
+    		this.bombBlock.setUser(this.self);
+    		this.bombBlock.setBlockPos(pos);
+    		this.self.level().addFreshEntity(this.bombBlock);
+    		//this.bombBlock.setXRot(0.0f);
+    		//this.bombBlock.setYRot(0.0f);
+    	}
     }
     
     public boolean inBitesTheDustMode(){
@@ -565,7 +603,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
     
     public SoundEvent getSoundFromByte(byte soundChoice){
-       Roundabout.LOGGER.info(""+soundChoice);
+       //Roundabout.LOGGER.info(""+soundChoice);
         switch (soundChoice)
         {
             case SoundIndex.BARRAGE_CRY_SOUND -> {
@@ -578,12 +616,6 @@ public class PowersKillerQueen extends NewPunchingStand {
         return super.getSoundFromByte(soundChoice);
     }
 
-
-
-    @Override
-    public void buttonInput2(boolean KeyIsDown, Options options) {
-
-    }
 
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
@@ -700,7 +732,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 			Double explosionDistance = 2.0 + ((double) this.getSelf().getRandom().nextIntBetweenInclusive(-2, 2) / 10.0);
 			
 			Double dist2 = center.distanceToSqr(pos.getX(), pos.getY(), pos.getZ());
-			Roundabout.LOGGER.info("Distance 2: " + dist2);
+			
 			if (dist2 <= explosionDistance) {
 				boolean shouldDrop = !info.requiresCorrectToolForDrops();
 				this.getSelf().level().destroyBlock(pos, shouldDrop);
@@ -711,12 +743,16 @@ public class PowersKillerQueen extends NewPunchingStand {
     public boolean explode() {
     	
 		if (this.getBomb() == PowersKillerQueen.BOMB_BLOCK) {
+			BlockPos pos = this.bombBlock.getBlockPos();
 			if (!isClient()) {
-				if (this.destroyTerrain) {explodeBlocks(this.bombBlock);}
+				if (this.destroyTerrain) {explodeBlocks(pos);}
 			}
+    		this.bombBlock.discard();
     		this.bombBlock = null;
     	}
     	
+		this.hasBomb = false;
+		
     	return true;
     }
  }

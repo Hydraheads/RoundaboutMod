@@ -18,10 +18,14 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.SkinManager;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.Map;
+
+import org.lwjgl.opengl.GL11;
 
 public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
 	private static final ResourceLocation PART_4_KILLER_QUEEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbomb.png");
@@ -33,19 +37,7 @@ public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
     
     @Override
     public ResourceLocation getTextureLocation(BlockBombEntity blockBombEntity) {
-
-        //Player user = (Player)seperatedLegsEntity.getUser();
-        //GameProfile profile = user.getGameProfile();
-        Player P =((Player)blockBombEntity.getUser());
-        if( P != null || false) {
-            if (P.getGameProfile() != null) {
-                return MainUtil.getPlayerSkinWithRespectToVisage((Player) blockBombEntity.getUser());
-            } else {
-                return PART_4_KILLER_QUEEN;
-            }
-        }else{
-            return PART_4_KILLER_QUEEN;
-        }
+        return PART_4_KILLER_QUEEN;
     }
     
     public void render(BlockBombEntity blockBombEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
@@ -53,9 +45,28 @@ public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
     	if (ClientUtil.canSeeStands(ClientPlayer)) {
         	Player UserPlayer =((Player)blockBombEntity.getUser());
         	if (UserPlayer == ClientPlayer) {
-        		super.render(blockBombEntity, f, g, matrixStack, vertexConsumerProvider, i);
+        		
+        		super.render(blockBombEntity, f, g, matrixStack, vertexConsumerProvider, i);	
         	}
         }
     }
+    
+    @Override
+    protected int getBlockLightLevel(BlockBombEntity blockBombEntity, BlockPos pos) {
+    	return 15;
+    }
+    
+   @Override
+    protected int getSkyLightLevel(BlockBombEntity blockBombEntity, BlockPos pos) {
+	   //BlockPos.MutableBlockPos mutPos = pos.mutable();
+	   /* 
+	   int upwards = super.getSkyLightLevel(blockBombEntity, pos.above());
+	   int east = super.getSkyLightLevel(blockBombEntity, pos.east());
+	   int west = super.getSkyLightLevel(blockBombEntity, pos.west());
+	   int north = super.getSkyLightLevel(blockBombEntity, pos.north());
+	   int south = super.getSkyLightLevel(blockBombEntity, pos.south());
+	   */   
+	   return 15;
+   }
     
 }

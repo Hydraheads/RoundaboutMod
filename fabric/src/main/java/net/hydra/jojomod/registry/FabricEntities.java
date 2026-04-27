@@ -444,7 +444,7 @@ public class FabricEntities {
                         BuiltInRegistries.ENTITY_TYPE,
                         Roundabout.location("block_bomb"),
                         EntityType.Builder.of(BlockBombEntity::new, MobCategory.MISC).
-                                sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":block_bomb")
+                                sized(0.75f, 0.75f).clientTrackingRange(14).build(Roundabout.MOD_ID+":block_bomb")
                 );
         public static final EntityType<CinderellaEntity> CINDERELLA =
                 Registry.register(
@@ -862,6 +862,7 @@ public class FabricEntities {
                 ModEntities.SOFT_AND_WET_KING = SOFT_AND_WET_KING;
                 ModEntities.SOFT_AND_WET_KILLER_QUEEN = SOFT_AND_WET_KILLER_QUEEN;
                 ModEntities.KILLER_QUEEN = KILLER_QUEEN;
+                ModEntities.BLOCK_BOMB = BLOCK_BOMB;
                 ModEntities.CINDERELLA = CINDERELLA;
                 ModEntities.MANHATTAN_TRANSFER = MANHATTAN_TRANSFER;
                 ModEntities.POLLINATION_TRANSFER = POLLINATION_TRANSFER;
@@ -1017,6 +1018,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(SOFT_AND_WET_KING, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SOFT_AND_WET_KILLER_QUEEN, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(KILLER_QUEEN, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(BLOCK_BOMB, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(JUSTICE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(JUSTICE_PIRATE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DARK_MIRAGE, StandEntity.createStandAttributes());
