@@ -113,6 +113,9 @@ public class AnubisModel extends PsuedoHierarchicalModel {
                                             new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/soul_2.png"),
                                             new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/soul_3.png")};
 
+    public static ResourceLocation emissive_chainblade_1 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/emissive/chainblade_1.png");
+    public static ResourceLocation emissive_chainblade_2 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/emissive/chainblade_2.png");
+
 
 
     public ResourceLocation getTextureLocation(Entity context, byte skin){
@@ -149,6 +152,17 @@ public class AnubisModel extends PsuedoHierarchicalModel {
         }
     }
 
+    public ResourceLocation getEmissive(Entity context, byte skin) {
+        if (skin == 21) {
+            return context.tickCount % 6 < 3 && PowerTypes.isUsingStand(context) ? emissive_chainblade_1 : emissive_chainblade_2;
+        } else if (skin == 20) {
+            return brilliance;
+        } else if (skin == 16) {
+            return illusory;
+        }
+        return anime;
+    }
+
 
 
     public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light) {
@@ -172,6 +186,13 @@ public class AnubisModel extends PsuedoHierarchicalModel {
 
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
+            StandUser SU = (StandUser) context;
+            if (SU.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.isUsingStand(context)) {
+                if (skin == PowersAnubis.CHAINBLADE || skin == PowersAnubis.BRILLIANCE || skin == PowersAnubis.ILLUSORY ) {
+                    VertexConsumer Consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getEmissive(context, skin)));
+                    root().render(poseStack, Consumer, 15728880, OverlayTexture.NO_OVERLAY, 1, 1, 1, alpha);
+                }
+            }
         }
     }
 
@@ -295,6 +316,13 @@ public class AnubisModel extends PsuedoHierarchicalModel {
         }
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity, skin )));
         root().render(poseStack,consumer,packedLight,OverlayTexture.NO_OVERLAY,1,1,1,alpha);
+        StandUser SU = (StandUser) entity;
+        if (SU.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.isUsingStand(entity)) {
+            if (skin == PowersAnubis.CHAINBLADE || skin == PowersAnubis.BRILLIANCE || skin == PowersAnubis.ILLUSORY ) {
+                VertexConsumer Consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getEmissive(entity, skin)));
+                root().render(poseStack, Consumer, 15728880, OverlayTexture.NO_OVERLAY, 1, 1, 1, alpha);
+            }
+        }
     }
 }
 
