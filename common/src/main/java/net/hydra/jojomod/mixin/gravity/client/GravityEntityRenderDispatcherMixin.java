@@ -115,8 +115,6 @@ public abstract class GravityEntityRenderDispatcherMixin {
             cancellable = true
     )
     private static void inject_renderShadow(PoseStack matrices, MultiBufferSource vertexConsumers, Entity entity, float opacity, float tickDelta, LevelReader world, float radius, CallbackInfo ci) {
-
-
         Direction gravityDirection = GravityAPI.getGravityDirection(entity);
         float fade = 1f;
         fade = ClientUtil.getThrowFadePercent(entity,tickDelta);

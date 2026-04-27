@@ -68,6 +68,11 @@ public abstract class ZEntityRenderDispatcher {
             ci.cancel();
             return;
         }
+        float fade = ClientUtil.getThrowFadePercent(entity,$$4);
+        if (fade < 1){
+            ci.cancel();
+            return;
+        }
 
         if (entity instanceof LivingEntity LE && !roundabout$recurse){
             byte bt =  ((StandUser)LE).roundabout$getGlow();
