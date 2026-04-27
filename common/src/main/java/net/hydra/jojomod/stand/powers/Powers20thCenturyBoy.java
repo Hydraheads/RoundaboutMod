@@ -266,7 +266,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
 
     @Override
     public void tickPower() {
-        if (!hasStandActive(ClientUtil.getPlayer())){
+        if (!hasStandActive(this.getSelf())){
             invincibleState = false;
         }
     }
