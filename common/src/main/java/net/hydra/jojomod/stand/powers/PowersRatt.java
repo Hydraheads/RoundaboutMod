@@ -540,7 +540,11 @@ public class PowersRatt extends NewDashPreset {
                 }
             }
             if (isPacketPlayer()) {
-                if (isAuto()) {
+                if (isAutoMining()) {
+                    if (isClient()) {
+                        BurstFire();
+                    }
+                } else if (isAuto()) {
                     if (isClient()) {
                         BurstFire();
                     }
