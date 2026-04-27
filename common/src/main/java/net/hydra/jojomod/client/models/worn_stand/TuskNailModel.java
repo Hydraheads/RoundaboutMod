@@ -63,9 +63,6 @@ public class TuskNailModel extends PsuedoHierarchicalModel {
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int light, float r, float g, float b, float alpha,int i) {
         if (context instanceof LivingEntity LE) {
             this.root().getAllParts().forEach(ModelPart::resetPose);
-            if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
-                partialTicks = 0;
-            }
             StandUser user = ((StandUser) LE);
             user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount+i*3);
             this.animate(user.roundabout$getWornStandIdleAnimation(), TuskAnimations.NAIL_FLOAT,partialTicks+i*3,1.0F);
@@ -76,7 +73,7 @@ public class TuskNailModel extends PsuedoHierarchicalModel {
             r = r*(1-scale) +  (float)Math.sin(partialTicks+i) * scale;
             g = g*(1-scale) +  (float)Math.sin(partialTicks+i*2) * scale;
             b = b*(1-scale) +  (float)Math.sin(partialTicks+i*3) * scale;
-            root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
+            root().render(poseStack, consumer, 15728880, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
         }
     }
 

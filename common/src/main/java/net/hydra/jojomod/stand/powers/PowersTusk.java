@@ -128,6 +128,12 @@ public class PowersTusk extends NewDashPreset {
 
 
     public int getMaxActiveNails() {return 10-(int)Math.ceil(getLightNails()+getHeavyNails());}
+
+    private int getMainHandNails() {return Math.min(5, getMaxActiveNails() );}
+    private int getOffHandNails() {return Math.max(0,getMaxActiveNails()-5);}
+    public int getLeftHandNails() {return this.getSelf().getMainArm() == HumanoidArm.RIGHT ? getOffHandNails() : getMainHandNails();}
+    public int getRightHandNails() {return this.getSelf().getMainArm() == HumanoidArm.RIGHT ? getMainHandNails() : getOffHandNails();}
+
     public boolean hasNail() {return getMaxActiveNails() > 0;}
     private float lightCooldown = 0;
     public float getLightNails() {return lightCooldown;}

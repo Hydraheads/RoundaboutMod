@@ -44,6 +44,7 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
+import org.joml.Quaternionf;
 
 public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalModel {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
@@ -277,38 +278,86 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
 
                 StandUser user = ((StandUser) player);
 
-                if (user.roundabout$getStandPowers() instanceof PowersTusk PT && PT.renderDrill() && PowerTypes.isUsingStand(player)) {
-                    if (renderRight) {
-                        poseStack.pushPose();
-                        this.transform.translateAndRotate(poseStack);
-                        this.rform.translateAndRotate(poseStack);
-                        this.right_arm.translateAndRotate(poseStack);
-                        poseStack.translate(-0.2, -0.8, 0);
-                        poseStack.scale(0.9F,0.9F,0.9F);
-                        ModStrayModels.TUSK_DRILL.render(
-                                player, partialTicks,
-                                poseStack,
-                                bufferSource,
-                                light,
-                                r, g, b, 1
-                        );
-                        poseStack.popPose();
-                    }
+                if (user.roundabout$getStandPowers() instanceof PowersTusk PT && PowerTypes.isUsingStand(player)) {
+                    if (PT.renderDrill()) {
+                        if (renderRight) {
+                            poseStack.pushPose();
+                            this.transform.translateAndRotate(poseStack);
+                            this.rform.translateAndRotate(poseStack);
+                            this.right_arm.translateAndRotate(poseStack);
+                            poseStack.translate(-0.2, -0.8, 0);
+                            poseStack.scale(0.9F, 0.9F, 0.9F);
+                            ModStrayModels.TUSK_DRILL.render(
+                                    player, partialTicks,
+                                    poseStack,
+                                    bufferSource,
+                                    light,
+                                    r, g, b, 1
+                            );
+                            poseStack.popPose();
+                        }
 
+                        if (renderLeft) {
+                            poseStack.pushPose();
+                            this.transform.translateAndRotate(poseStack);
+                            this.lform.translateAndRotate(poseStack);
+                            this.left_arm.translateAndRotate(poseStack);
+                            poseStack.translate(0, -0.8, 0);
+                            poseStack.scale(0.9F, 0.9F, 0.9F);
+                            ModStrayModels.TUSK_DRILL.render(
+                                    player, partialTicks,
+                                    poseStack,
+                                    bufferSource,
+                                    light,
+                                    r, g, b, 1
+                            );
+                            poseStack.popPose();
+                        }
+                    }
                     if (renderLeft) {
                         poseStack.pushPose();
                         this.transform.translateAndRotate(poseStack);
                         this.lform.translateAndRotate(poseStack);
                         this.left_arm.translateAndRotate(poseStack);
-                        poseStack.translate(0, -0.8, 0);
-                        poseStack.scale(0.9F,0.9F,0.9F);
-                        ModStrayModels.TUSK_DRILL.render(
-                                player, partialTicks,
-                                poseStack,
-                                bufferSource,
-                                light,
-                                r, g, b, 1
-                        );
+                        poseStack.translate(0.2,0.6,0.1);  // FORWARD, DOWN, LEFT
+                        poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,0,1,90),0,0,0);
+                        for(int i=4;i>=1;i--) {
+                            if (PT.getLeftHandNails() >= 5-i) {
+                                ModStrayModels.TUSK_NAIL.render(player, partialTicks, poseStack, bufferSource, light,
+                                        r, g, b, 1, i);
+                            }
+                            poseStack.translate(0,0,-0.075);
+                        }
+                        poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,90),0,0,0);
+                        poseStack.translate(0,0.05,-0.1); // BACKWARD LEFT
+                        if (PT.getLeftHandNails() >= 5) {
+                            ModStrayModels.TUSK_NAIL.render(player, partialTicks, poseStack, bufferSource, light,
+                                    r, g, b, 1, 5);
+                        }
+
+                        poseStack.popPose();
+                    }
+                    if (renderRight) {
+                        poseStack.pushPose();
+                        this.transform.translateAndRotate(poseStack);
+                        this.rform.translateAndRotate(poseStack);
+                        this.right_arm.translateAndRotate(poseStack);
+                        poseStack.translate(-0.2,0.6,0.1);  // UP, FORWARD, RIGHT
+                        poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,0,1,-90),0,0,0);
+                        for(int i=4;i>=1;i--) {
+                            if (PT.getRightHandNails() >= 5-i) {
+                                ModStrayModels.TUSK_NAIL.render(player, partialTicks, poseStack, bufferSource, light,
+                                        r, g, b, 1, i);
+                            }
+                            poseStack.translate(0,0,-0.075);
+                        }
+                        poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,90),0,0,0);
+                        poseStack.translate(0,0.05,-0.1); // FORWARD, RIGHT, UP
+                        if (PT.getRightHandNails() >= 5) {
+                            ModStrayModels.TUSK_NAIL.render(player, partialTicks, poseStack, bufferSource, light,
+                                    r, g, b, 1, 5);
+                        }
+
                         poseStack.popPose();
                     }
                 }

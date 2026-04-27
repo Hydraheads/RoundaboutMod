@@ -258,6 +258,13 @@ public abstract class ZEntityRenderDispatcher {
         }
 
         if (((TimeStop)$$2.level()).CanTimeStopEntity($$2) && $$2 instanceof LivingEntity) {
+
+
+            float fade = ClientUtil.getThrowFadePercent($$2,$$4);
+            if (fade < 1){
+                ci.cancel();
+                return;
+            }
             $$4 = Minecraft.getInstance().getFrameTime();
             float $$7 = shadowRadius;
             if ($$2 instanceof Mob $$8 && $$8.isBaby()) {

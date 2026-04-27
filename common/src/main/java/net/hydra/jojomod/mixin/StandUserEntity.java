@@ -513,7 +513,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     MobEffect $$1 = $$0.next();
                     MobEffectInstance $$2 = this.activeEffects.get($$1);
                     if ($$2.isVisible() && !$$2.getEffect().equals(ModEffects.BLEED) && !$$2.getEffect().equals(ModEffects.CAPTURING_LOVE)
-                            && !$$2.getEffect().equals(ModEffects.FACELESS)) {
+                            && !$$2.getEffect().equals(ModEffects.FACELESS)&& !$$2.getEffect().equals(ModEffects.SWITCH)) {
                         onlyBleeding = false;
                     }
                 }
