@@ -23,6 +23,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import java.util.Arrays;
 import java.util.List;
@@ -82,6 +83,16 @@ public class RattEntity extends StandEntity {
     public void setSavedSkin(byte skin) {this.entityData.set(SAVED_SKIN,skin);}
     public byte getSavedSkin() {return this.entityData.get(SAVED_SKIN);}
 
+    public void setAutoMining(boolean mining) {this.entityData.set(AUTO_MINING,mining);}
+    public boolean getAutoMining() {return this.entityData.get(AUTO_MINING);}
+
+    public Vec3 getMiningCoords(){
+        Vector3f v3 = this.entityData.get(MINING_COORDS);
+        return new Vec3(v3.x,v3.y,v3.z);
+    } public void setMiningCoords(Vec3 miningCoords){
+        this.entityData.set(MINING_COORDS,miningCoords.toVector3f());;
+    }
+
     public boolean isSafe() {
         return this.entityData.get(SAFE_TICKS) > 0;
     }
@@ -96,6 +107,10 @@ public class RattEntity extends StandEntity {
             EntityDataSerializers.BYTE);
     protected static final EntityDataAccessor<Integer> SAFE_TICKS = SynchedEntityData.defineId(RattEntity.class,
             EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Boolean> AUTO_MINING = SynchedEntityData.defineId(RattEntity.class,
+            EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Vector3f> MINING_COORDS = SynchedEntityData.defineId(RattEntity.class,
+            EntityDataSerializers.VECTOR3);
 
     @Override
     protected void defineSynchedData() {
@@ -103,6 +118,8 @@ public class RattEntity extends StandEntity {
             super.defineSynchedData();
             this.entityData.define(SAVED_SKIN,(byte)0);
             this.entityData.define(SAFE_TICKS, ConfigManager.getConfig().rattSettings.rattSafetyTicks);
+            this.entityData.define(AUTO_MINING,false);
+            this.entityData.define(MINING_COORDS,Vec3.ZERO.toVector3f());
         }
     }
 

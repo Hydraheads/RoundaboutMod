@@ -102,6 +102,7 @@ public class PowersRatt extends NewDashPreset {
             CHANGE_MODE = 7,
             SETPLACE = 8,
             SCOPE = 9,
+            MINING = 10,
             RATT_LEAP = 5;
 
 
@@ -192,6 +193,24 @@ public class PowersRatt extends NewDashPreset {
     public boolean isPlaced() {return this.getStandEntity(this.getSelf()) != null;}
     public boolean isAuto() {return this.getStandUserSelf().roundabout$getUniqueStandModeToggle();}
 
+    public boolean isAutoMining() {
+        Entity stand = getStandEntity(self);
+        if (stand instanceof RattEntity rattEntity){
+            return rattEntity.getAutoMining();
+        }
+        return false;
+    }
+    public void setAutoMining(boolean autoMining, Vec3 coords) {
+        Entity stand = getStandEntity(self);
+        if (stand instanceof RattEntity rattEntity){
+            rattEntity.setAutoMining(autoMining);
+            rattEntity.setMiningCoords(coords);
+        }
+    }
+    public void setAutoMining(boolean autoMining) {
+        setAutoMining(autoMining,Vec3.ZERO);
+    }
+
 
     public boolean isSingleFire() {
         return ConfigManager.getClientConfig().dynamicSettings.rattFiringMode;
@@ -239,8 +258,6 @@ public class PowersRatt extends NewDashPreset {
         return null;
     }
 
-
-
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         ClientUtil.fx.roundabout$onGUI(context);
@@ -248,11 +265,18 @@ public class PowersRatt extends NewDashPreset {
         if (isPlaced()) {
             if (!isHoldingSneak()) {
                 LockedOrNot(context,x,y,1,StandIcons.RATT_BURST,PowersRatt.PLACE_BURST,0);
+                setSkillIcon(context,x,y,3,StandIcons.DODGE,PowerIndex.GLOBAL_DASH);
             } else {
                 if (isAuto()) {
                     LockedOrNot(context,x,y,1,StandIcons.RATT_AUTO,PowersRatt.CHANGE_MODE,1);
                 } else {
                     LockedOrNot(context,x,y,1,StandIcons.RATT_UNAUTO,PowersRatt.CHANGE_MODE,1);
+                }
+
+                if (isAutoMining()){
+                    LockedOrNot(context,x,y,3,StandIcons.RATT_MINING_ACTIVE,PowerIndex.GLOBAL_DASH,2);
+                } else {
+                    LockedOrNot(context,x,y,3,StandIcons.RATT_MINING,PowerIndex.GLOBAL_DASH,2);
                 }
             }
             if (scopeLevel == 0) {
@@ -273,8 +297,8 @@ public class PowersRatt extends NewDashPreset {
                     LockedOrNot(context,x,y,2,StandIcons.RATT_SINGLE,PowersRatt.CHANGE_MODE,3);
                 }
             }
+            setSkillIcon(context,x,y,3,StandIcons.DODGE,PowerIndex.GLOBAL_DASH);
         }
-        setSkillIcon(context,x,y,3,StandIcons.DODGE,PowerIndex.GLOBAL_DASH);
 
         LockedOrNot(context,x,y,4,StandIcons.RATT_LEAP,PowersRatt.RATT_LEAP,4);
 
@@ -289,6 +313,10 @@ public class PowersRatt extends NewDashPreset {
                 if (SE != null) {
                     SE.setPos(pos);
                 }
+            }
+            case MINING -> {
+                getLookCoords = pos;
+                super.tryPosPower(move,forced,pos);
             }
             case PowersRatt.NET_PLACE -> {
                 this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
@@ -332,7 +360,9 @@ public class PowersRatt extends NewDashPreset {
 
         if (RE != null) {
             Vec3 targetPos = getTargetPos().getLocation();
-            if (target != null && isAuto()) {
+            if (isAutoMining()) {
+                targetPos = RE.getMiningCoords();
+            } else if (target != null && isAuto()) {
                 targetPos = target.getEyePosition(1);
                 if (isAuto()) {
                     double dist = targetPos.distanceTo(RE.getPosition(1));
@@ -629,12 +659,28 @@ public class PowersRatt extends NewDashPreset {
                     }
                 }
             }
-            case SKILL_3_NORMAL, SKILL_3_CROUCH -> dash();
+            case SKILL_3_NORMAL -> dash();
+            case SKILL_3_CROUCH -> {
+                if (!isPlaced()){
+                    dash();
+                } else {
+                    RattMiningToggleClient();
+                }
+            }
 
             case SKILL_4_NORMAL, SKILL_4_CROUCH -> RattLeap();
         }
     }
 
+
+    public void RattMiningToggleClient() {
+        Vec3 vec3d = this.getSelf().getEyePosition(0);
+        Vec3 vec3d2 = this.getSelf().getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * 20, vec3d2.y * 20, vec3d2.z * 20);
+        BlockHitResult blockHit = this.self.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
+
+        tryPosPowerPacket(PowersRatt.MINING,blockHit.getLocation());
+    }
     public void RattLeap() {
         if (!onCooldown(PowersRatt.RATT_LEAP) && !isAttackIneptVisually(PowersRatt.RATT_LEAP,4)) {
             tryPower(PowersRatt.RATT_LEAP);
@@ -756,6 +802,8 @@ public class PowersRatt extends NewDashPreset {
         }
     }
 
+    public Vec3 getLookCoords = Vec3.ZERO;
+
     @Override
     public boolean tryPower(int move, boolean forced) {
         switch (move) {
@@ -818,7 +866,32 @@ public class PowersRatt extends NewDashPreset {
                     this.animateStand(RattEntity.LOADING);
                 }
             }
+            case PowersRatt.MINING -> {
+                Entity stand = getStandEntity(self);
+                if (stand instanceof RattEntity ratt) {
+                    if (!isAutoMining()) {
+                        setAutoMining(true, getLookCoords);
+                        this.setShotCooldown(PlaceShootCooldown);
+                        if (this.getActivePower() != PowersRatt.MINING) {
+                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.RATT_LOADING_EVENT, SoundSource.PLAYERS);
+                        }
+                        this.setAttackTimeDuring(0);
+                        this.setAttackTime(-1);
+                        this.setActivePower(PowersRatt.MINING);
+                    } else {
+                        setAutoMining(false);
+                        this.attackTimeDuring = -1;
+                        this.setActivePower(PowerIndex.NONE);
+                    }
 
+                    if (this.getSelf() instanceof Player) {
+                        S2CPacketUtil.sendActivePowerPacket((Player) this.getSelf(), this.getActivePower());
+                    }
+                    if (!isClient()) {
+                        this.animateStand(RattEntity.LOADING);
+                    }
+                }
+            }
             case PowersRatt.RATT_LEAP -> {
                 this.setCooldown(PowersRatt.RATT_LEAP,ClientNetworking.getAppropriateConfig().rattSettings.rattLeapCooldown);
                 Vec3 dir = this.getSelf().getViewVector(1);
