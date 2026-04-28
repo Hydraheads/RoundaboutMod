@@ -36,7 +36,7 @@ public class ChimeraHeadLayer<T extends LivingEntity, A extends EntityModel<T>> 
         @Override
         public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, float var9, float var10) {
             if (entity instanceof BaseMinion vm) {
-                if (((IEntityAndData)vm).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
+                if (((IEntityAndData)vm).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() && !ClientUtil.checkIfClientCanSeeMobsForWindVision() || ClientUtil.checkIfClientCanSeeMobsForWindVision() && ((IEntityAndData)vm).roundabout$getTrueInvisibilityManhattan() < 1)
                     return;
                 //stack.mulPose(Axis.ZP.rotationDegrees(180f));
                 if (getParentModel() instanceof VillagerMinionModel<?> vdm) {

@@ -5416,30 +5416,30 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Unique
     @Override
-    public void rdbt$doWindVisionDetection(){
-        if(!this.level().isClientSide){
-            boolean down = previousYposManhattan > this.getY();
-            boolean up = previousYposManhattan < this.getY();
-            boolean movementX = previousXposManhattan != this.getX();
-            boolean movementZ = previousZposManhattan != this.getZ();
-            boolean isStand = (((LivingEntity) (Object) this) instanceof StandEntity);
+    public void rdbt$doWindVisionDetection() {
+        if (!this.level().isClientSide) {
+            //boolean isStand = (((LivingEntity) (Object) this) instanceof BaseMinion BM);
             IEntityAndData entityAndData = ((IEntityAndData) this);
-                if (up || down || movementX || movementZ) {
-                    if(isInWater()){
-                        entityAndData.roundabout$setTrueInvisibilityManhattan(-1);
-                    }
-                    else{
-                        entityAndData.roundabout$setTrueInvisibilityManhattan(45);
-                    }
+            SavedSecond lastSecond = entityAndData.roundabout$getLastSavedSecond();
+            SavedSecond firstSecond = entityAndData.roundabout$getFirstSavedSecond();
+
+            boolean posCompare = lastSecond.position.x != firstSecond.position.x || lastSecond.position.z != firstSecond.position.z;
+            boolean posCompareY = lastSecond.position.y != firstSecond.position.y;
+
+            if (posCompare) {
+                if (isInWater()) {
+                    entityAndData.roundabout$setTrueInvisibilityManhattan(-1);
+                } else {
+                    entityAndData.roundabout$setTrueInvisibilityManhattan(1);
                 }
-                else if(((LivingEntity) (Object) this) instanceof RoadRollerEntity){
-                    entityAndData.roundabout$setTrueInvisibilityManhattan(45);
-                }
-                else {/*Ticking will go down until the entity unrenders*/}
+            } else if (((LivingEntity) (Object) this) instanceof RoadRollerEntity) {
+                entityAndData.roundabout$setTrueInvisibilityManhattan(1);
+            }
+            else if(posCompareY){
+                entityAndData.roundabout$setTrueInvisibilityManhattan(75);
+            }else {/*Ticking will go down until the entity unrenders}*/
+            }
         }
-            previousYposManhattan = this.getY();
-            previousXposManhattan = this.getX();
-            previousZposManhattan = this.getZ();
         }
 
     public float MoldLevel = 0.0f;

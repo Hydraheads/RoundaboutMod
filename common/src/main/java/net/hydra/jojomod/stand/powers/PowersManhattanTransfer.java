@@ -393,29 +393,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 UFO_TRANSFER_SKIN
         );
     }
-    public boolean returnFakeStandForHud(){
-        return !hasStandActive(self);
-    }
-    public StandEntity getStandForHUDIfFake(){
-        if (displayStand == null){
-            displayStand = getNewStandEntity();
-        }
-        if (displayStand != null) {
-            if (this.self instanceof Player PL && ((IPlayerEntity) PL).roundabout$getStandSkin() != displayStand.getSkin()) {
-                displayStand = getNewStandEntity();
-            }
-        }
-        if (displayStand != null) {
-            displayStand.setSkin(((StandUser) self).roundabout$getStandSkin());
-            displayStand.setAnimation(((StandUser) self).roundabout$getStandAnimation());
-            displayStand.setIdleAnimation(((StandUser) self).roundabout$getIdlePos());
-            displayStand.tickCount = self.tickCount;
-            displayStand.setUser(self);
-            displayStand.setupAnimationStates();
-        }
-        return displayStand;
-    }
-    public StandEntity displayStand = null;
     @Override
     public void pilotStandControls(KeyboardPilotInput kpi, LivingEntity entity) {
         int $$1 = 0;
