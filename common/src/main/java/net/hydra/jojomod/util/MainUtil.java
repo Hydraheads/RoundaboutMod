@@ -3189,4 +3189,12 @@ public class MainUtil {
         return new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/part_four_green_day.png");
     }
 
+    public static BlockHitResult getMotionPath(Entity entity,float distOut){
+        Vec3 vec3d = entity.getEyePosition(1f);
+        Vec3 vec3d2 = entity.getDeltaMovement();
+        return entity.level().clip(new ClipContext(vec3d, vec3d.add(vec3d2.x * distOut,
+                vec3d2.y * distOut, vec3d2.z * distOut), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
+                entity));
+    }
+
 }

@@ -52,6 +52,7 @@ import net.minecraft.world.level.block.WebBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
@@ -117,8 +118,38 @@ public class SeperatedArmEntity extends StandEntity {
         flyingTicks=0;
     }
 
+    public void jump2(Vec3 jumpT0Pos){
+        Vec3 location = new Vec3(this.getX(),this.getY(),this.getZ());
+        ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST, location.x,
+                location.y, location.z,
+                24,
+                0.005, 0.005, 0.005,
+                0.1);
+        //this.setDeltaMovement(jumpT0Pos);
+        this.lookAt(EntityAnchorArgument.Anchor.EYES,jumpT0Pos);
+        if(this.getMainHandItem().getItem() instanceof FireworkRocketItem FRE){
+
+            level().playSound(null, this.blockPosition(), SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.PLAYERS, 1.0F, 1.0F);
+            this.getMainHandItem().setCount(this.getMainHandItem().getCount() - 1);
+            CompoundTag fireworks = getMainHandItem().getTag().getCompound("Fireworks");
+            if(fireworks.contains("Flight")){
+                FireworkLaunchTicks = (fireworks.getByte("Flight")) * 20;
+            }
+            this.setDeltaMovement((this.getLookAngle().multiply(2,2,2)).add(0,0,0));
+        }else{
+            this.setDeltaMovement((this.getLookAngle().multiply(2,2,2)).add(0,0,0));
+        }
+
+        LaunchAngle = this.getDeltaMovement();
+        Can_activate = true;
+        flyingTicks=0;
+    }
+
     public BlockPos IsArmContactingBlock(){
+
+        //BlockHitResult hitResult = this.level().;
         BlockPos Checkpos = this.getOnPos();
+
         for(int i = 0; i < 4; i = i + 1){
             if(!(this.level().getBlockState(Checkpos.above()).getBlock()instanceof AirBlock )){
                 return Checkpos.above();
@@ -137,6 +168,7 @@ public class SeperatedArmEntity extends StandEntity {
             }
 
         }
+        //return hitResult.getBlockPos();
         return Checkpos;
     }
     public int flyingTicks=0;
@@ -164,7 +196,6 @@ public class SeperatedArmEntity extends StandEntity {
             }
             else{
                 if(!onGround()){
-                    Roundabout.LOGGER.info(Integer.toString(flyingTicks));
                     flyingTicks +=1;
                 }else{
                     flyingTicks = 0;
@@ -483,14 +514,18 @@ public class SeperatedArmEntity extends StandEntity {
 
                 else {
                     Can_activate = false;
-                    this.setDeltaMovement(0,0,0);
-                    Vec3 location = new Vec3(this.getX(),this.getY(),this.getZ());
+                    this.setDeltaMovement(0, 0, 0);
+                    Vec3 location = new Vec3(this.getX(), this.getY(), this.getZ());
                     ((ServerLevel) this.level()).sendParticles(ParticleTypes.CRIT, location.x,
                             location.y, location.z,
                             16,
                             0.45, 0.45, 0.45,
                             0.1);
-                    entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user),(Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue())*1.5f);
+                    if (entity instanceof Player) {
+                        entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), (Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue()) * 1.75f);
+                    } else {
+                        entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), (Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue()) * 1f);
+                    }
                 }
             }
         }

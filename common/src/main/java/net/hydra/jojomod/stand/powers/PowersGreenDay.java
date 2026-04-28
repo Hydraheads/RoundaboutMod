@@ -529,18 +529,20 @@ public class PowersGreenDay extends NewPunchingStand {
         } else if (!isClient() && !this.isBarraging()) {
 
             StandEntity stand = getStandEntity(this.self);
-            if(Objects.nonNull(stand)){
+            if(Objects.nonNull(stand)) {
                 animateStand(GreenDayEntity.MOLD_SPREAD);
                 this.poseStand(OffsetIndex.ATTACK);
                 hmm = 20;
-            }
-            MoldSporesEntity SLE = ModEntities.MOLD_SPORES.create(this.self.level());
-            if(SLE != null) {
-                SLE.setUser(this.self);
-                SLE.setXRot(this.self.getXRot());
-                SLE.setYRot(this.self.getYRot());
-                SLE.setPos(this.self.getPosition(1).add(0,3,0));
-                this.self.level().addFreshEntity(SLE);
+                MoldSporesEntity SLE = ModEntities.MOLD_SPORES.create(this.self.level());
+                if (SLE != null) {
+                    SLE.setUser(this.self);
+                    SLE.setXRot(this.self.getXRot());
+                    SLE.setYRot(this.self.getYRot());
+                    SLE.setPos(this.getRayBlock(this.self,2).add(0,1,0));
+
+                    SLE.setDeltaMovement(0, 0.7, 0);
+                    this.self.level().addFreshEntity(SLE);
+                }
             }
             //moldBurst(this.self.getOnPos().getCenter(),3);
             //moldBurst(this.self.getOnPos().getCenter().add(0,-10,0),7);
@@ -617,7 +619,7 @@ public class PowersGreenDay extends NewPunchingStand {
                 SAE.setPos(getRayBlock(this.self,0.5f).add(0,-0.3,0));
                 SAE.setItemInHand(InteractionHand.MAIN_HAND,this.self.getItemInHand(InteractionHand.OFF_HAND).copy());
                 this.self.level().addFreshEntity(SAE);
-                SAE.jump(this.getRayBlock(this.self,20F));
+                SAE.jump(this.getRayBlock(this.self, 20F));
                 Off_hand_entity= SAE;
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.GREEN_DAY_SPLIT_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
             }
@@ -630,16 +632,17 @@ public class PowersGreenDay extends NewPunchingStand {
             //   0.005, 0.005, 0.005,
             // 0.1);
         }else{
-            Double distance = MainUtil.cheapDistanceTo(
-                    this.self.getX(),
-                    this.self.getY(),
-                    this.self.getZ(),
-                    Off_hand_entity.getX(),
-                    Off_hand_entity.getY(),
-                    Off_hand_entity.getZ()
-            );
-            Float distanceF = distance.floatValue() + 2f;
-            Off_hand_entity.jump(this.getRayBlock(this.self,distanceF));
+            //if(!(((StandUser) this.self).roundabout$getTargetEntity(this.self,20)==null)) {
+            //    SAE.jump(((StandUser) this.self).roundabout$getTargetEntity(this.self,20F).getOnPos().);
+            //}else{
+
+            Off_hand_entity.jump(this.getRayBlock(this.self, 20F));
+            Off_hand_entity.jump2(((StandUser)this.self).roundabout$getTargetEntity(this.self,20).getEyePosition());
+
+
+
+
+            //}
         }
         return true;
     }
@@ -776,16 +779,9 @@ public class PowersGreenDay extends NewPunchingStand {
                  //   0.005, 0.005, 0.005,
                    // 0.1);
         }else{
-            Double distance = MainUtil.cheapDistanceTo(
-                    this.self.getX(),
-                    this.self.getY(),
-                    this.self.getZ(),
-                    Main_arm.getX(),
-                    Main_arm.getY(),
-                    Main_arm.getZ()
-            );
-            Float distanceF = distance.floatValue() + 2f;
-            Main_arm.jump(this.getRayBlock(this.self,distanceF));
+
+            Main_arm.jump(this.getRayBlock(this.self, 20F));
+            Main_arm.jump2(((StandUser)this.self).roundabout$getTargetEntity(this.self,20).getEyePosition());
         }
         return true;
     }
@@ -1040,9 +1036,9 @@ public class PowersGreenDay extends NewPunchingStand {
                 new Vec3(blockHit.getLocation().x, blockHit.getLocation().y,blockHit.getLocation().z))*0.75+1;
 
         MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
-                ((blockHit.getLocation().x - this.getSelf().getX())/mag)*mult*1.7,
-                (0.3+ Math.max((blockHit.getLocation().y - this.getSelf().getY())/mag,0))*mult*1.7,
-                ((blockHit.getLocation().z - this.getSelf().getZ())/mag)*mult*1.7
+                ((blockHit.getLocation().x - this.getSelf().getX())/mag)*mult*2.2,
+                (0.3+ (Math.max((blockHit.getLocation().y - this.getSelf().getY())/mag,0))*1) * mult,
+                ((blockHit.getLocation().z - this.getSelf().getZ())/mag)*mult*2.2
         );
 
     }
@@ -1307,7 +1303,7 @@ public class PowersGreenDay extends NewPunchingStand {
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.6F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.45F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(4.6F));
         }

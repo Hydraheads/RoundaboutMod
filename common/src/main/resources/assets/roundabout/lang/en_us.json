@@ -1575,7 +1575,7 @@
   "ability.roundabout.gd_mold_leap": "Separation Leap",
   "ability.roundabout.gd_mold_leap.desc": "Separates your torso and legs, and launches you in the direction you are looking, allowing for great omnidirectional moblity whilst letting you avoid fall damage. Leaves you crawling while your legs float back to you, damaging mobs they come into contact with and letting you walk again. Your legs automatically return after a time",
   "ability.roundabout.gd_mold_field": "Mold",
-  "ability.roundabout.gd_mold_field.desc": "Entities in range of your mold will take heavy damage as they get lower. Entities killed in this way have a chance to drop thier head.",
+  "ability.roundabout.gd_mold_field.desc": "Entities in range of your mold will take heavy damage as they get lower. Entities killed in this way have a chance to drop their head. In addition, any entities that die in the mold will increase its range and duration.",
   "ability.roundabout.gd_stitch": "Stitch up",
   "ability.roundabout.gd_stitch.desc": "Stitches you up, recovering a tiny bit of health, and reducing bleed by 1 level",
   "ability.roundabout.gd_pardon": "Ally Selection",

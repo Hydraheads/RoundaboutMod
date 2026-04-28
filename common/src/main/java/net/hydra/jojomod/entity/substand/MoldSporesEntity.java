@@ -5,17 +5,20 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.mixin.justice.JusticeCreeper;
 import net.hydra.jojomod.mixin.justice.JusticeZombie;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -46,15 +49,23 @@ public class MoldSporesEntity extends StandEntity {
         this.setFadeOut((byte) 1);
         boolean client = this.level().isClientSide();
         LivingEntity user = this.getUser();
+        StandUser StandUU = (StandUser)user;
         if (!client) {
             tickeffect();
             if (user == null) {
                 spawnAtLocation(this.getMainHandItem());
                 this.discard();
             }
-            this.setDeltaMovement(0,-0.2,0);
+            if(!(StandUU.roundabout$getStandPowers() instanceof PowersGreenDay)){
+                this.discard();
+            }
+            if (this.getDeltaMovement().y > 0.2){
+                this.setDeltaMovement(this.getDeltaMovement().add(0,-00.06,0));
+            }else {
+                this.setDeltaMovement(0, -0.2, 0);
+            }
             if (!onGround()) {
-                range += 0.07 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldGrowthRate / 100);
+                range += 0.09 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldGrowthRate / 100);
                 //this.setDeltaMovement(0,-0.4,0);
             }
                 ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST,
@@ -105,7 +116,12 @@ public class MoldSporesEntity extends StandEntity {
                         ;
 
 
-                        ((StandUser) entity).DoMoldTick();
+                        //((StandUser) entity).DoMoldTick();
+                       // if(((LivingEntity) entity).getHealth() <= 4){
+                       //     lifetime += 200;
+                       //     range += 4;
+                        //}
+                        entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION),4);
                         ((StandUser)User).roundabout$getStandPowers().addEXP(1);
                     }
                 }
