@@ -423,6 +423,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     @Override
     public boolean cancelSprintJump(){
         if (this.hasHurricane() || isChargingCrossfire() || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE
+                || this.getActivePower() == PowerIndex.POWER_1
                 || this.getActivePower() == PowerIndex.RANGED_BARRAGE_2 || this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE_2
                 || this.getActivePower() == PowerIndex.RANGED_BARRAGE || this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE
                 || this.getActivePower() == PowerIndex.POWER_4_BONUS){

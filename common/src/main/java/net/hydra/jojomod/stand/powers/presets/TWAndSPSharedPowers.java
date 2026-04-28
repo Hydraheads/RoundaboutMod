@@ -1213,6 +1213,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     @Override
     public boolean cancelSprintJump(){
         if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2
+                || this.getActivePower() == PowerIndex.POWER_1_SNEAK
                 || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
             return true;
         }
