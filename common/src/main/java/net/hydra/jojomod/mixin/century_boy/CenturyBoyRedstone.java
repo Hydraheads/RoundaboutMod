@@ -54,9 +54,9 @@ public class CenturyBoyRedstone {
                             }
                         }/** else if (block instanceof SculkSensorBlock sculk) {
                             if (!level.getBlockTicks().hasScheduledTick(targetPos, sculk)){
-                                level.scheduleTick(targetPos, sculk, 2);*/
+                                level.scheduleTick(targetPos, sculk, 2);
                             }
-                        }
+                        }*/
                     }
                     cir.setReturnValue(false);
                 }
