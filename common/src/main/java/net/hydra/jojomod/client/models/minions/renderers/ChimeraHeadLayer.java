@@ -1,6 +1,7 @@
 package net.hydra.jojomod.client.models.minions.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.models.minions.*;
@@ -35,7 +36,8 @@ public class ChimeraHeadLayer<T extends LivingEntity, A extends EntityModel<T>> 
         @Override
         public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, float var9, float var10) {
             if (entity instanceof BaseMinion vm) {
-
+                if (((IEntityAndData)vm).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
+                    return;
                 //stack.mulPose(Axis.ZP.rotationDegrees(180f));
                 if (getParentModel() instanceof VillagerMinionModel<?> vdm) {
                     renderWithHead(vm,vdm.head,poseStack,bufferSource,packedLight,entity,xx,yy,zz,partialTicks,var9,var10);
