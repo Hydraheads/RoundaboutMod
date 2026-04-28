@@ -882,9 +882,6 @@ public class PowersRatt extends NewDashPreset {
                     if (!isAutoMining()) {
                         setAutoMining(true, getLookCoords);
                         this.setShotCooldown(PlaceShootCooldown);
-                        if (this.getActivePower() != PowersRatt.MINING) {
-                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.RATT_LOADING_EVENT, SoundSource.PLAYERS);
-                        }
                         this.setAttackTimeDuring(0);
                         this.setAttackTime(-1);
                         this.setActivePower(PowersRatt.MINING);
