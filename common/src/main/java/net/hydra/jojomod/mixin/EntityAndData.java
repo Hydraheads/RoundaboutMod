@@ -260,6 +260,15 @@ public abstract class EntityAndData implements IEntityAndData {
         }
         return null;
     }
+
+    @Unique
+    public SavedSecond roundabout$getFirstSavedSecond() {
+        if (!roundabout$secondQue.isEmpty()) {
+            return roundabout$secondQue.getFirst();
+        }
+        return null;
+    }
+
     @Unique
     public void roundabout$resetSecondQueue(){
         roundabout$secondQue = new ArrayDeque<>();

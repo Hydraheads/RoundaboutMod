@@ -63,6 +63,10 @@ public interface IEntityAndData {
     void roundabout$setDeltaMovementRaw(Vec3 ec);
     ArrayDeque<SavedSecond> roundabout$getSecondQue();
 
+    SavedSecond roundabout$getFirstSavedSecond();
+
+    // the one above is always something related to mandom, but it's actual purpose is for movement detectors
+
     SavedSecond roundabout$getLastSavedSecond();
     void roundabout$addSecondToQueue();
 
