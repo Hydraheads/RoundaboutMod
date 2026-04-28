@@ -55,6 +55,7 @@ public class RattDartEntity extends AbstractArrow {
     private static final EntityDataAccessor<Integer> ROUNDABOUT$BOUNCES = SynchedEntityData.defineId(RattDartEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Byte> ROUNDABOUT$TYPE = SynchedEntityData.defineId(RattDartEntity.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$PARTICLES = SynchedEntityData.defineId(RattDartEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$BREAKS_BLOCKS = SynchedEntityData.defineId(RattDartEntity.class, EntityDataSerializers.BOOLEAN);
 
     public byte getShotType() {
         if (this.getEntityData().hasItem(ROUNDABOUT$TYPE)) {
@@ -105,6 +106,18 @@ public class RattDartEntity extends AbstractArrow {
         }
     }
 
+    public boolean getBlockBreak() {
+        if (this.getEntityData().hasItem(ROUNDABOUT$BREAKS_BLOCKS)) {
+            return this.getEntityData().get(ROUNDABOUT$BREAKS_BLOCKS);
+        }
+        return false;
+    }
+    public void setBlockBreak(boolean b) {
+        if (this.getEntityData().hasItem(ROUNDABOUT$BREAKS_BLOCKS)) {
+            this.getEntityData().set(ROUNDABOUT$BREAKS_BLOCKS,b);
+        }
+    }
+
 
 
 
@@ -123,7 +136,7 @@ public class RattDartEntity extends AbstractArrow {
             this.getEntityData().define(ROUNDABOUT$BOUNCES, 0);
             this.getEntityData().define(ROUNDABOUT$TYPE, RattDartEntity.BASIC);
             this.getEntityData().define(ROUNDABOUT$PARTICLES, true);
-
+            this.getEntityData().define(ROUNDABOUT$BREAKS_BLOCKS, false);
         }
     }
 
@@ -142,6 +155,9 @@ public class RattDartEntity extends AbstractArrow {
         if ($$0.contains("particles")) {
             this.entityData.set(ROUNDABOUT$PARTICLES,$$0.getBoolean("particles"));
         }
+        if ($$0.contains("breaks")) {
+            this.entityData.set(ROUNDABOUT$BREAKS_BLOCKS,$$0.getBoolean("breaks"));
+        }
     }
 
     @Override
@@ -158,6 +174,9 @@ public class RattDartEntity extends AbstractArrow {
         }
         if (this.getEntityData().hasItem(ROUNDABOUT$PARTICLES)) {
             $$0.putBoolean("particles",this.getEntityData().get(ROUNDABOUT$PARTICLES));
+        }
+        if (this.getEntityData().hasItem(ROUNDABOUT$BREAKS_BLOCKS)) {
+            $$0.putBoolean("breaks",this.getEntityData().get(ROUNDABOUT$BREAKS_BLOCKS));
         }
     }
 
@@ -201,7 +220,14 @@ public class RattDartEntity extends AbstractArrow {
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
         if (!this.level().isClientSide()) {
-            if (getBounces() > 0) {
+            if (getBlockBreak() && getOwner() instanceof Player pl && MainUtil.getIsGamemodeApproriateForGrief(pl) && MainUtil.canPlaceOnClaim(pl,$$0)) {
+                BlockState BSS = this.level().getBlockState($$0.getBlockPos());
+                if (MainUtil.isDestructible(level(),$$0.getBlockPos(), BSS) && !MainUtil.isBlockDestructionBlacklisted(BSS)){
+                    level().destroyBlock($$0.getBlockPos(), false, pl);
+                }
+                discard();
+                return;
+            } else if (getBounces() > 0) {
                 this.setBounces(getBounces()-1);
 
                 // yoinked from BladedBowlerHatEntity

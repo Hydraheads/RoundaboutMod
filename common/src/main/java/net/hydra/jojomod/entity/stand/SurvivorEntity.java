@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.stand;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
@@ -170,7 +171,8 @@ public class SurvivorEntity extends MultipleTypeStand {
 
     public static boolean canZapEntity(Entity ent){
         return (ent != null && ent.isAlive() && !ent.isRemoved() && (ent instanceof Mob || ent instanceof Player)
-                && !(ent instanceof StandEntity)&& !(ent instanceof FallenMob) && ent.isPickable() && !ent.isInvulnerable() &&
+                && !(ent instanceof StandEntity)&& !(ent instanceof FallenMob) && !(ent instanceof BaseMinion)
+                && ent.isPickable() && !ent.isInvulnerable() &&
                 !(ent instanceof Player PL && PL.isCreative()) &&
                 ent instanceof LivingEntity LE
                 && !((StandUser) LE).roundabout$isBubbleEncased());

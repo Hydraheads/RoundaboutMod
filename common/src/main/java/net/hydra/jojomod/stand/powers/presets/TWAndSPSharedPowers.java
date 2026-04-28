@@ -18,6 +18,7 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
@@ -457,9 +458,13 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public float getImpaleKnockback(){
         return 1.3F;
     }
+
     public void impaleImpact(Entity entity){
         if (activePower == PowerIndex.POWER_1_SNEAK){
         this.setAttackTimeDuring(-20);
+        if (entity != null && entity.distanceTo(self) > impaleRange+0.75F) {
+            entity = null;
+        }
         if (entity != null) {
             hitParticlesCenter(entity);
 
@@ -472,9 +477,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     addEXP(5, LE);
                     if (MainUtil.getMobBleed(entity)) {
                         if ((((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
-                            MainUtil.makeBleed(entity, 2, 100, this.getSelf());
+                            MainUtil.makeBleed(entity, 0, 200, this.getSelf());
                         } else {
-                            MainUtil.makeBleed(entity, 2, 160, this.getSelf());
+                            MainUtil.makeBleed(entity, 2, 200, this.getSelf());
                         }
                             MainUtil.makeMobBleed(entity);
                     }
@@ -597,6 +602,11 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         /*Time Resume*/
         if (!level.isClientSide()) {
             if (((TimeStop) level).isTimeStoppingEntity(this.getSelf())) {
+                if (self.getUseItem() != null && self.getUseItem().getItem() instanceof GlaiveItem){
+                    self.releaseUsingItem();
+                    self.stopUsingItem();
+                }
+
                 if (ClientNetworking.getAppropriateConfig().timeStopSettings.postTSCancel) {
                     if (this.getActivePower() == PowerIndex.POWER_1_SNEAK || this.getActivePower() == PowerIndex.POWER_1
                             || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
@@ -1203,6 +1213,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     @Override
     public boolean cancelSprintJump(){
         if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2
+                || this.getActivePower() == PowerIndex.POWER_1_SNEAK
                 || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
             return true;
         }
@@ -1827,6 +1838,10 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     public void finalAttackImpact(Entity entity){
         this.setAttackTimeDuring(-20);
+
+        if (entity != null && entity.distanceTo(self) > 5.5F) {
+            entity = null;
+        }
         if (entity != null) {
             hitParticlesCenter(entity);
             float pow;

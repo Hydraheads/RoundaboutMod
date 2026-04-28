@@ -98,6 +98,10 @@ public class GlaiveItem extends SwordItem {
     public void glaiveAttack(ItemStack $$0, Level $$1, ServerPlayer player, Entity target){
         if (player.getInventory().contains($$0)) {
             $$1.playSound(null, player, ModSounds.GLAIVE_ATTACK_EVENT, SoundSource.PLAYERS, 1F, 1F);
+            if (target != null && target.distanceTo(player) > 3.75F) {
+                target = null;
+            }
+
             if (target != null) {
                 float power = (float) player.getAttributeValue(Attributes.ATTACK_DAMAGE);
                 float $$2;
@@ -120,9 +124,9 @@ public class GlaiveItem extends SwordItem {
                                 MainUtil.makeBleed(target,0,400, player);
                             } else {
                                 if (((TimeStop) target.level()).CanTimeStopEntity(target)){
-                                    MainUtil.makeBleed(target,1,100, player);
+                                    MainUtil.makeBleed(target,0,300, player);
                                 } else {
-                                    MainUtil.makeBleed(target,1,400, player);
+                                    MainUtil.makeBleed(target,1,300, player);
                                 }
                                 MainUtil.makeMobBleed(target);
                             }

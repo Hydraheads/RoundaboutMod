@@ -906,9 +906,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
         if (value != null) {
             if (!((StandUser)roundabout$Mob).roundabout$getStandDisc().isEmpty()){
                 ((StandUser)value).roundabout$setStandDisc(((StandUser)roundabout$Mob).roundabout$getStandDisc());
-            } if (!((IMob)roundabout$Mob).roundabout$isWorthy()){
-                ((IMob)value).roundabout$setWorthy(true);
             }
+             ((IMob)value).roundabout$setWorthy(((IMob)roundabout$Mob).roundabout$isWorthy());
         }
         return (T) value;
     }

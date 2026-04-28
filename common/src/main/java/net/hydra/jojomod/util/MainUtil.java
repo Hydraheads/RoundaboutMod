@@ -190,6 +190,7 @@ public class MainUtil {
     public static ArrayList<String> walkableBlocks = Lists.newArrayList();
     public static ArrayList<String> expLessBlocks = Lists.newArrayList();
     public static ArrayList<String> standBlockGrabBlacklist = Lists.newArrayList();
+    public static ArrayList<String> standDestructionBlacklist = Lists.newArrayList();
     public static ArrayList<String> naturalStandUserMobBlacklist = Lists.newArrayList();
     public static ArrayList<String> hypnotismMobBlackList = Lists.newArrayList();
 
@@ -258,6 +259,13 @@ public class MainUtil {
     public static boolean isBlockBlacklisted(BlockState bs){
         ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
         if (standBlockGrabBlacklist != null && !standBlockGrabBlacklist.isEmpty() && rl != null && standBlockGrabBlacklist.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isBlockDestructionBlacklisted(BlockState bs){
+        ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
+        if (standDestructionBlacklist != null && !standDestructionBlacklist.isEmpty() && rl != null && standDestructionBlacklist.contains(rl.toString())){
             return true;
         }
         return false;
@@ -1858,6 +1866,16 @@ public class MainUtil {
         float xRot = (float) (Math.toDegrees(-Math.atan2(dy, horizontalDistance)));
 
         return new Vec2(xRot, yRot); // Vec2 is (xRot, yRot)
+    }
+
+    public static boolean isDestructible(Level level, BlockPos pos, BlockState state){
+        if (confirmIsOre(state) && !state.hasBlockEntity())
+            return false;
+        float hardness = state.getDestroySpeed(level, pos);
+        if (hardness >= 0 && hardness < 50) {
+            return true;
+        }
+        return false;
     }
 
     /**Returns the horizontal angle between two mobs in degrees*/
