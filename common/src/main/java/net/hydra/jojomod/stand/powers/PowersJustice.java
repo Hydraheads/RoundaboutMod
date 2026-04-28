@@ -697,7 +697,7 @@ public class PowersJustice extends NewDashPreset {
         } else if (currentLevel == 2){
             amt = 150;
         } else {
-            amt = (100+((currentLevel-1)*100));
+            amt = (100+((currentLevel-1)*150));
         }
         amt= (int) (amt*(getLevelMultiplier()));
         return amt;
