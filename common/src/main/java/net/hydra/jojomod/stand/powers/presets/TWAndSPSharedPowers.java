@@ -458,9 +458,13 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public float getImpaleKnockback(){
         return 1.3F;
     }
+
     public void impaleImpact(Entity entity){
         if (activePower == PowerIndex.POWER_1_SNEAK){
         this.setAttackTimeDuring(-20);
+        if (entity != null && entity.distanceTo(self) > impaleRange+0.75F) {
+            entity = null;
+        }
         if (entity != null) {
             hitParticlesCenter(entity);
 
@@ -1833,6 +1837,10 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     public void finalAttackImpact(Entity entity){
         this.setAttackTimeDuring(-20);
+
+        if (entity != null && entity.distanceTo(self) > 5.5F) {
+            entity = null;
+        }
         if (entity != null) {
             hitParticlesCenter(entity);
             float pow;

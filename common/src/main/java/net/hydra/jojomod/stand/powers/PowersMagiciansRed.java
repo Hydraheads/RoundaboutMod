@@ -1663,6 +1663,10 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public void lassoImpact(Entity entity){
         if (this.activePower == PowerIndex.POWER_1) {
             this.setAttackTimeDuring(-20);
+
+            if (entity != null && entity.distanceTo(self) > 4.5F) {
+                entity = null;
+            }
             if (entity != null) {
                 if (entity instanceof LivingEntity LE) {
                     ((StandUser) LE).roundabout$setBoundTo(this.self);

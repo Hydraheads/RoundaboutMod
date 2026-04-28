@@ -1845,7 +1845,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public float getImpalePunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(((float) ((float) 2.8F* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod(((float) ((float) 3F* (ClientNetworking.getAppropriateConfig().
                     starPlatinumSettings.starPlatinumAttackMultOnPlayers*0.01) * (ClientNetworking.getAppropriateConfig().
                     generalStandSettings.generalImpaleAttackMultiplier *0.01))));
         } else {
