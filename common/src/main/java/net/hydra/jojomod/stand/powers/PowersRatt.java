@@ -680,12 +680,14 @@ public class PowersRatt extends NewDashPreset {
 
 
     public void RattMiningToggleClient() {
-        Vec3 vec3d = this.getSelf().getEyePosition(0);
-        Vec3 vec3d2 = this.getSelf().getViewVector(0);
-        Vec3 vec3d3 = vec3d.add(vec3d2.x * 20, vec3d2.y * 20, vec3d2.z * 20);
-        BlockHitResult blockHit = this.self.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
+        if (canExecuteMoveWithLevel(2)) {
+            Vec3 vec3d = this.getSelf().getEyePosition(0);
+            Vec3 vec3d2 = this.getSelf().getViewVector(0);
+            Vec3 vec3d3 = vec3d.add(vec3d2.x * 20, vec3d2.y * 20, vec3d2.z * 20);
+            BlockHitResult blockHit = this.self.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
 
-        tryPosPowerPacket(PowersRatt.MINING,blockHit.getLocation());
+            tryPosPowerPacket(PowersRatt.MINING, blockHit.getLocation());
+        }
     }
     public void RattLeap() {
         if (!onCooldown(PowersRatt.RATT_LEAP) && !isAttackIneptVisually(PowersRatt.RATT_LEAP,4)) {
@@ -1344,8 +1346,11 @@ public class PowersRatt extends NewDashPreset {
         // bucket passive
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.ratt_bucket",
                 "instruction.roundabout.passive", StandIcons.RATT_BUCKET,3,level,bypas));
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+76,topPos+80,2, "ability.roundabout.ratt_mining",
+                "instruction.roundabout.press_skill_crouch", StandIcons.RATT_MINING,3,level,bypas));
         // ratt leap
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+76,topPos+80,4, "ability.roundabout.ratt_leap",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+76,topPos+99,4, "ability.roundabout.ratt_leap",
                 "instruction.roundabout.press_skill", StandIcons.RATT_LEAP,4,level,bypas));
 
         return $$1;

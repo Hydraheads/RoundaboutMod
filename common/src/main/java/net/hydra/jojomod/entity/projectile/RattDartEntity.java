@@ -222,11 +222,11 @@ public class RattDartEntity extends AbstractArrow {
         if (!this.level().isClientSide()) {
             if (getBlockBreak() && getOwner() instanceof Player pl && MainUtil.getIsGamemodeApproriateForGrief(pl) && MainUtil.canPlaceOnClaim(pl,$$0)) {
                 BlockState BSS = this.level().getBlockState($$0.getBlockPos());
-                if (MainUtil.isDestructible(level(),$$0.getBlockPos(), BSS)){
+                if (MainUtil.isDestructible(level(),$$0.getBlockPos(), BSS) && !MainUtil.isBlockDestructionBlacklisted(BSS)){
                     level().destroyBlock($$0.getBlockPos(), false, pl);
-                    discard();
-                    return;
                 }
+                discard();
+                return;
             } else if (getBounces() > 0) {
                 this.setBounces(getBounces()-1);
 

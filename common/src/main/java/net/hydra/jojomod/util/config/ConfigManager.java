@@ -76,6 +76,11 @@ public abstract class ConfigManager {
             MainUtil.standBlockGrabBlacklist.clear();
             MainUtil.standBlockGrabBlacklist.addAll(getAdvancedConfig().standBlockGrabBlacklist);
         }
+        if (getAdvancedConfig().standDestructionBlacklist != null)
+        {
+            MainUtil.standDestructionBlacklist.clear();
+            MainUtil.standDestructionBlacklist.addAll(getAdvancedConfig().standDestructionBlacklist);
+        }
         if (getAdvancedConfig().naturalStandUserMobBlacklist != null)
         {
             MainUtil.naturalStandUserMobBlacklist.clear();
