@@ -1860,6 +1860,16 @@ public class MainUtil {
         return new Vec2(xRot, yRot); // Vec2 is (xRot, yRot)
     }
 
+    public static boolean isDestructible(Level level, BlockPos pos, BlockState state){
+        if (confirmIsOre(state) && !state.hasBlockEntity())
+            return false;
+        float hardness = state.getDestroySpeed(level, pos);
+        if (hardness >= 0 && hardness < 50) {
+            return true;
+        }
+        return false;
+    }
+
     /**Returns the horizontal angle between two mobs in degrees*/
     public static float getLookAtEntityYaw(Entity user, Entity targetEntity) {
         double d = targetEntity.getX() - user.getX();

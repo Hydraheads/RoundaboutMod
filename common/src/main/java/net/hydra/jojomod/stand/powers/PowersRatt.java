@@ -615,7 +615,9 @@ public class PowersRatt extends NewDashPreset {
             if (this.getStandEntity(this.getSelf()) instanceof RattEntity RE) {
                 RattDartEntity e = new RattDartEntity(RE.level(), this.getSelf());
                 Vec3 v = this.getRotations(this.getShootTarget());
-                e.shootFromRotation(RE, (float) v.x * 180 / (float) Math.PI + 180, (float) v.y * 180 / (float) Math.PI, -0.5F, ShotPowerFloats[1], 0.84F);
+                float rand = 0.84F;
+                if (isAutoMining()){e.setBlockBreak(true); rand = 0.74F;}
+                e.shootFromRotation(RE, (float) v.x * 180 / (float) Math.PI + 180, (float) v.y * 180 / (float) Math.PI, -0.5F, ShotPowerFloats[1], rand);
                 e.setSuperthrowTicks(50);
                 RE.level().addFreshEntity(e);
             }
@@ -764,6 +766,7 @@ public class PowersRatt extends NewDashPreset {
         RattDartEntity e = new RattDartEntity(this.getSelf().level(),this.getSelf(), type );
         e.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0.5F, ShotPowerFloats[1], accuracy);
         e.setSuperthrowTicks(50);
+        if (isAutoMining()){e.setBlockBreak(true);}
         this.getSelf().level().addFreshEntity(e);
     }
 
@@ -778,6 +781,7 @@ public class PowersRatt extends NewDashPreset {
         RattDartEntity e = new RattDartEntity(this.getSelf().level(),this.getSelf(),i >PowersRatt.MaxThreshold ? RattDartEntity.CHARGED : RattDartEntity.BASIC );
         e.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0.5F, power, accuracy);
         e.setSuperthrowTicks(50);
+        if (isAutoMining()){e.setBlockBreak(true);}
         this.getSelf().level().addFreshEntity(e);
 
     }
