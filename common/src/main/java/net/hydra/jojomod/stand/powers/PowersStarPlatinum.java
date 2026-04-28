@@ -374,14 +374,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 }
             }
         } else {
-            if (getActivePower() == STAR_FINGER || getActivePower() == STAR_FINGER_2
-                    || getActivePower() == STAR_FINGER_3
-                    || getActivePower() == STAR_FINGER_SILENT){
-                if (((TimeStop) this.self.level()).inTimeStopRange(self)){
-                    canFingerBleed = false;
-                }
-            } else {
-                canFingerBleed = true;
+            if (((TimeStop) this.self.level()).inTimeStopRange(self)){
+                canFingerBleed = false;
             }
             StandEntity stand = getStandEntity(this.self);
             if (!(Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE && this.self instanceof ServerPlayer PE && SE.getScoping() &&
@@ -1585,6 +1579,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (Objects.nonNull(stand)){
             this.setAttackTimeDuring(0);
             this.setActivePower(POWER_STAR_FINGER);
+            canFingerBleed  = true;
             double rand = Math.random();
             byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
             if (skn == StarPlatinumEntity.OVA_SKIN ||
