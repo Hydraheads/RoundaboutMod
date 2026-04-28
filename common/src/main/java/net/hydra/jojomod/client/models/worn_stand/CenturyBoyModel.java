@@ -103,6 +103,15 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 			"textures/stand/20_centuryboy/shulker.png");
 	public static ResourceLocation sulfur = new ResourceLocation(Roundabout.MOD_ID,
 			"textures/stand/20_centuryboy/sulfur.png");
+	public static ResourceLocation lemon = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/20_centuryboy/lemon.png");
+	public static ResourceLocation blue = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/20_centuryboy/blue.png");
+	public static ResourceLocation grape = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/20_centuryboy/grape.png");
+	public static ResourceLocation strawberry = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/20_centuryboy/strawberry.png");
+
 
 	public ResourceLocation getTextureLocation(Entity context, byte skin){
 		switch (skin){
@@ -114,6 +123,10 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 			case Powers20thCenturyBoy.OLD_CENTURY_BOY -> {return old_century_boy;}
 			case Powers20thCenturyBoy.SHULKER -> {return shulker;}
 			case Powers20thCenturyBoy.SULFUR -> {return sulfur;}
+			case Powers20thCenturyBoy.LEMON -> {return lemon;}
+			case Powers20thCenturyBoy.BLUE -> {return blue;}
+			case Powers20thCenturyBoy.GRAPE -> {return grape;}
+			case Powers20thCenturyBoy.STRAWBERRY -> {return strawberry;}
 			default -> {return manga;}
 		}
 	}

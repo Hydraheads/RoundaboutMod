@@ -13,6 +13,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.gameevent.GameEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -52,11 +53,11 @@ public class CenturyBoyRedstone {
                             if (!level.getBlockTicks().hasScheduledTick(targetPos, observer)) {
                                 level.scheduleTick(targetPos, observer, 2);
                             }
-                        }/** else if (block instanceof SculkSensorBlock sculk) {
+                        }else if (block instanceof SculkSensorBlock sculk) {
                             if (!level.getBlockTicks().hasScheduledTick(targetPos, sculk)){
-                                level.scheduleTick(targetPos, sculk, 2);
+                                level.gameEvent(player, GameEvent.PROJECTILE_LAND, player.position());
                             }
-                        }*/
+                        }
                     }
                     cir.setReturnValue(false);
                 }
