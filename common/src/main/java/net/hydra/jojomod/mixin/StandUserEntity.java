@@ -5507,28 +5507,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
       return movingDown;
     }
 
-    @Override
-    public void DoMoldTick() {
-        if (!this.level().isClientSide) {
-            MoldLevel = MoldLevel + 1f;
 
-            if (MoldLevel % 3 == 0) {
-                    if (MoldLevel/3 > 19) {
-                        MoldLevel = 0;
-                        if (true) {
-
-                            this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), 326);
-                        }
-                    } else {
-
-                        this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), MoldLevel/3 + 2.0f);
-                    }
-
-            }
-
-
-        }
-    }
 
     @Unique
     @Override
