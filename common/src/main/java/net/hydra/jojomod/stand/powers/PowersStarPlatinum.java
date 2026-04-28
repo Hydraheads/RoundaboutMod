@@ -374,6 +374,15 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 }
             }
         } else {
+            if (getActivePower() == STAR_FINGER || getActivePower() == STAR_FINGER_2
+                    || getActivePower() == STAR_FINGER_3
+                    || getActivePower() == STAR_FINGER_SILENT){
+                if (((TimeStop) this.self.level()).inTimeStopRange(self)){
+                    canFingerBleed = false;
+                }
+            } else {
+                canFingerBleed = true;
+            }
             StandEntity stand = getStandEntity(this.self);
             if (!(Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE && this.self instanceof ServerPlayer PE && SE.getScoping() &&
                     SE.level().dimensionTypeId() == this.self.level().dimensionTypeId())) {
@@ -940,7 +949,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 if (entity instanceof LivingEntity LE){
                     addEXP(1, LE);
                     if (ticksForFinger >13){
-                        MainUtil.makeBleed(LE,0,200,this.self);
+                        if (canFingerBleed) {
+                            MainUtil.makeBleed(LE, 0, 200, this.self);
+                        }
                     }
                 }
             }
@@ -949,13 +960,16 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 takeDeterminedKnockback(this.self, entity, knockbackStrength);
                 if (entity instanceof LivingEntity LE){
                     addEXP(2, LE);
-                    MainUtil.makeBleed(LE,1,200,this.self);
+                    if (canFingerBleed) {
+                        MainUtil.makeBleed(LE, 1, 200, this.self);
+                    }
                 }
             } else {
                 knockShield2(entity, 40);
             }
         }
     }
+    public boolean canFingerBleed = true;
 
     public boolean StarFingerDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker){
         if (attacker instanceof TamableAnimal TA){

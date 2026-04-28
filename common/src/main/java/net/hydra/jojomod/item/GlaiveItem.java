@@ -120,9 +120,9 @@ public class GlaiveItem extends SwordItem {
                                 MainUtil.makeBleed(target,0,400, player);
                             } else {
                                 if (((TimeStop) target.level()).CanTimeStopEntity(target)){
-                                    MainUtil.makeBleed(target,1,100, player);
+                                    MainUtil.makeBleed(target,0,300, player);
                                 } else {
-                                    MainUtil.makeBleed(target,1,400, player);
+                                    MainUtil.makeBleed(target,1,300, player);
                                 }
                                 MainUtil.makeMobBleed(target);
                             }
