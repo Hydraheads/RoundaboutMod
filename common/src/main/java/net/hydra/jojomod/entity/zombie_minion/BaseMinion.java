@@ -147,7 +147,7 @@ public class BaseMinion extends PathfinderMob {
     }
     @Override
     public boolean canAttack(LivingEntity $$0) {
-        if (shouldPanic()){
+        if (shouldPanic() || this.getTargetTactic() == Tactics.PEACEFUL.id){
             return false;
         }
         return super.canAttack($$0);
