@@ -3278,8 +3278,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         //Stand Damage new IFrames vs melee
         if ((float)this.invulnerableTime > 10.0F && !$$0.is(DamageTypeTags.BYPASSES_COOLDOWN)) {
             if (!MainUtil.isStandDamage($$0) && roundabout$standHurtTicks > 0){
-                ci.setReturnValue(false);
-                return;
+                if (!((TimeStop)((LivingEntity)(Object)this).level()).isTimeStoppingEntity((LivingEntity)(Object)this)) {
+                    ci.setReturnValue(false);
+                    return;
+                }
             }
         }
 
