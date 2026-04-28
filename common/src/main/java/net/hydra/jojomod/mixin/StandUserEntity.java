@@ -178,6 +178,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private int roundabout$leapTicks = -1;
     @Unique
+    private int roundabout$standHurtTicks = -1;
+    @Unique
     private boolean roundabout$leapIntentionally = false;
     @Unique
     private int roundabout$destructionModeTrailTicks = -1;
@@ -1384,6 +1386,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.rdbt$tickCooldowns();
         this.roundabout$tickGuard();
         this.roundabout$tickDaze();
+        if (this.roundabout$standHurtTicks > 0) {
+            this.roundabout$standHurtTicks--;
+        }
         if (this.roundabout$leapTicks > -1) {
             if (this.onGround() && roundabout$leapTicks < (MainUtil.maxLeapTicks() - 5)) {
                 roundabout$leapTicks = -1;
@@ -3270,6 +3275,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "hurt", at = @At(value = "HEAD"), cancellable = true, require = 0)
     private void roundabout$RoundaboutDamage(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci) {
 
+        //Stand Damage new IFrames vs melee
+        if ((float)this.invulnerableTime > 10.0F && !$$0.is(DamageTypeTags.BYPASSES_COOLDOWN)) {
+            if (!MainUtil.isStandDamage($$0) && roundabout$standHurtTicks > 0){
+                ci.setReturnValue(false);
+                return;
+            }
+        }
+
         //Vampire transformation immunity
         if (FateTypes.isTransforming(rdbt$this()) && !$$0.is(DamageTypes.GENERIC_KILL)){
             ci.setReturnValue(false);
@@ -3991,6 +4004,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         if (roundabout$mutualActuallyHurt($$0,$$1)){
             ci.cancel();
+        } else {
+            if  (MainUtil.isStandDamage($$0)){
+                roundabout$standHurtTicks = 10;
+            }
         }
     }
 
