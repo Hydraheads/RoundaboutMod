@@ -199,7 +199,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                     redstoneMode();
                 }
             }
-            ClientUtil.getPlayer().stopUsingItem();
+            this.self.stopUsingItem();
             ClientUtil.stopDestroyingBlock();
         } else {
             invincibleState = false;
@@ -216,8 +216,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         if(knockbackStance){
             if (ClientNetworking.getAppropriateConfig().centuryBoySettings.oldKnockbackStance){
                 if(damageSource.getEntity() != null){
-                    ClientUtil.getPlayer().setDeltaMovement(
-                            ClientUtil.getPlayer().position().subtract(
+                    this.self.setDeltaMovement(
+                            this.self.position().subtract(
                                     damageSource.getSourcePosition()).multiply(new Vec3(amount/7.5, amount/7.5, amount/7.5)));
                 }
             }else{
@@ -266,7 +266,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
 
     @Override
     public void tickPower() {
-        if (!hasStandActive(ClientUtil.getPlayer())){
+        if (!hasStandActive(this.getSelf())){
             invincibleState = false;
         }
     }

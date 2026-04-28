@@ -423,6 +423,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     @Override
     public boolean cancelSprintJump(){
         if (this.hasHurricane() || isChargingCrossfire() || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE
+                || this.getActivePower() == PowerIndex.POWER_1
                 || this.getActivePower() == PowerIndex.RANGED_BARRAGE_2 || this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE_2
                 || this.getActivePower() == PowerIndex.RANGED_BARRAGE || this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE
                 || this.getActivePower() == PowerIndex.POWER_4_BONUS){
@@ -1663,6 +1664,10 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public void lassoImpact(Entity entity){
         if (this.activePower == PowerIndex.POWER_1) {
             this.setAttackTimeDuring(-20);
+
+            if (entity != null && entity.distanceTo(self) > 4.5F) {
+                entity = null;
+            }
             if (entity != null) {
                 if (entity instanceof LivingEntity LE) {
                     ((StandUser) LE).roundabout$setBoundTo(this.self);

@@ -374,14 +374,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 }
             }
         } else {
-            if (getActivePower() == STAR_FINGER || getActivePower() == STAR_FINGER_2
-                    || getActivePower() == STAR_FINGER_3
-                    || getActivePower() == STAR_FINGER_SILENT){
-                if (((TimeStop) this.self.level()).inTimeStopRange(self)){
-                    canFingerBleed = false;
-                }
-            } else {
-                canFingerBleed = true;
+            if (((TimeStop) this.self.level()).inTimeStopRange(self)){
+                canFingerBleed = false;
             }
             StandEntity stand = getStandEntity(this.self);
             if (!(Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE && this.self instanceof ServerPlayer PE && SE.getScoping() &&
@@ -999,7 +993,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             return levelupDamageMod((float) ((float) 1.525* (ClientNetworking.getAppropriateConfig().
                     starPlatinumSettings.starPlatinumAttackMultOnPlayers*0.01)));
         } else {
-            return levelupDamageMod((float) ((float) 5* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod((float) ((float) 4.9* (ClientNetworking.getAppropriateConfig().
                     starPlatinumSettings.starPlatinumAttackMultOnMobs*0.01)));
         }
     } public float getHeavyPunchStrength(Entity entity){
@@ -1007,7 +1001,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             return levelupDamageMod((float) ((float) 2.17* (ClientNetworking.getAppropriateConfig().
                     starPlatinumSettings.starPlatinumAttackMultOnPlayers*0.01)));
         } else {
-            return levelupDamageMod((float) ((float) 6* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod((float) ((float) 5.9* (ClientNetworking.getAppropriateConfig().
                     starPlatinumSettings.starPlatinumAttackMultOnMobs*0.01)));
         }
     }
@@ -1585,6 +1579,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (Objects.nonNull(stand)){
             this.setAttackTimeDuring(0);
             this.setActivePower(POWER_STAR_FINGER);
+            canFingerBleed  = true;
             double rand = Math.random();
             byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
             if (skn == StarPlatinumEntity.OVA_SKIN ||
@@ -1850,7 +1845,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public float getImpalePunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(((float) ((float) 2.8F* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod(((float) ((float) 3F* (ClientNetworking.getAppropriateConfig().
                     starPlatinumSettings.starPlatinumAttackMultOnPlayers*0.01) * (ClientNetworking.getAppropriateConfig().
                     generalStandSettings.generalImpaleAttackMultiplier *0.01))));
         } else {
