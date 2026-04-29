@@ -165,6 +165,8 @@ public class FabricItems {
 
     public static Item HAIRSPRAY = registerItem("hairspray", new HairsprayItem(new Item.Properties().stacksTo(64)));
 
+    public static Item OCCULT_CHARGE = registerItem("occult_charge", new OccultChargeItem(new Item.Properties().stacksTo(16)));
+
     public static Item MATCH = registerItem("match", new MatchItem(new Item.Properties().stacksTo(64)));
     public static Item MATCH_BUNDLE = registerItem("match_bundle", new MatchItem(new Item.Properties().stacksTo(16)));
     public static Item GASOLINE_CAN = registerItem("gasoline_can", new GasolineCanItem(new Item.Properties().stacksTo(16)));
@@ -318,6 +320,7 @@ public class FabricItems {
                         entries.accept(MATCH_BUNDLE);
                         entries.accept(GASOLINE_CAN);
                         entries.accept(GASOLINE_BUCKET);
+                        entries.accept(OCCULT_CHARGE);
                         entries.accept(SNUBNOSE_REVOLVER);
                         entries.accept(TOMMY_GUN);
                         entries.accept(COLT_REVOLVER);
@@ -612,6 +615,7 @@ public class FabricItems {
         ModItems.MAX_STAND_DISC_CREAM = MAX_STAND_DISC_CREAM;*/
         ModItems.LUCK_UPGRADE = LUCK_UPGRADE;
         ModItems.EXECUTION_UPGRADE = EXECUTION_UPGRADE;
+        ModItems.OCCULT_CHARGE = OCCULT_CHARGE;
         ModItems.LUCK_SWORD = LUCK_SWORD;
         ModItems.SCISSORS = SCISSORS;
         ModItems.SACRIFICIAL_DAGGER = SACRIFICIAL_DAGGER;

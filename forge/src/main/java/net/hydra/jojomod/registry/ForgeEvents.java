@@ -250,6 +250,7 @@ public class ForgeEvents {
         ModItems.STAND_BEETLE_ARROW = ForgeItems.STAND_BEETLE_ARROW.get();
         ModItems.LUCK_UPGRADE = ForgeItems.LUCK_UPGRADE.get();
         ModItems.EXECUTION_UPGRADE = ForgeItems.EXECUTION_UPGRADE.get();
+        ModItems.OCCULT_CHARGE = ForgeItems.OCCULT_CHARGE.get();
         ModItems.HAIRSPRAY = ForgeItems.HAIRSPRAY.get();
         ModItems.LUCK_SWORD = ForgeItems.LUCK_SWORD.get();
         ModItems.WOODEN_GLAIVE = ForgeItems.WOODEN_GLAIVE.get();

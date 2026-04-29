@@ -107,6 +107,7 @@ public class ModItems {
     public static Item LUCK_SWORD;
     public static Item LUCK_UPGRADE;
     public static Item EXECUTION_UPGRADE;
+    public static Item OCCULT_CHARGE;
 
     public static Item HARPOON;
     public static Item SCISSORS;

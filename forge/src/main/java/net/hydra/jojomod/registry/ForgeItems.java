@@ -61,6 +61,8 @@ public class ForgeItems {
             () -> new GasolineCanItem(new Item.Properties().stacksTo(16))));
     public static final RegistryObject<Item> GASOLINE_BUCKET = addToTab(ITEMS.register("gasoline_bucket",
             () -> new GasolineBucketItem(new Item.Properties().stacksTo(1))));
+    public static final RegistryObject<Item> OCCULT_CHARGE = addToTab(ITEMS.register("occult_charge",
+            () -> new OccultChargeItem(new Item.Properties().stacksTo(16))));
     public static final RegistryObject<Item> ROAD_ROLLER = addToTab(ITEMS.register("road_roller",
             () -> new RoadRollerItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<BlockItem> WIRE_TRAP = addToBuildingTab(ITEMS.register("wire_trap",
