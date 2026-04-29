@@ -177,7 +177,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         	}
         	case SKILL_2_NORMAL -> {
         		if (!this.inBitesTheDustMode()) {
-        			Roundabout.LOGGER.info("HasBomb: " + this.hasBomb + " getBomb: " + this.getBomb());
+        			
 	        		if (!this.hasBomb) {
 	        			// item plant method
 	        		}else {

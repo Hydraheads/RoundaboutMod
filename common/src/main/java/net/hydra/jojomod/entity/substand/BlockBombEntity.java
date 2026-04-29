@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.substand;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.PenetratableWithProjectile;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
@@ -69,7 +70,8 @@ public class BlockBombEntity extends StandEntity {
                 this.discard();
             }
             else{
-            	
+            	this.bodyRotationX = 0;
+            	this.bodyRotationY = 0;
             }
 		
         }
@@ -133,4 +135,6 @@ public class BlockBombEntity extends StandEntity {
     	return false;
     }
   
+    
+    
 }
