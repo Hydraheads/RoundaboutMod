@@ -273,10 +273,14 @@ public class PowersRatt extends NewDashPreset {
                     LockedOrNot(context,x,y,1,StandIcons.RATT_UNAUTO,PowersRatt.CHANGE_MODE,1);
                 }
 
-                if (isAutoMining()){
-                    LockedOrNot(context,x,y,3,StandIcons.RATT_MINING_ACTIVE,PowerIndex.GLOBAL_DASH,2);
+                if (canUseMelt()) {
+                    if (isAutoMining()) {
+                        LockedOrNot(context, x, y, 3, StandIcons.RATT_MINING_ACTIVE, PowerIndex.GLOBAL_DASH, 2);
+                    } else {
+                        LockedOrNot(context, x, y, 3, StandIcons.RATT_MINING, PowerIndex.GLOBAL_DASH, 2);
+                    }
                 } else {
-                    LockedOrNot(context,x,y,3,StandIcons.RATT_MINING,PowerIndex.GLOBAL_DASH,2);
+                    setSkillIcon(context,x,y,3,StandIcons.DODGE,PowerIndex.GLOBAL_DASH);
                 }
             }
             if (scopeLevel == 0) {
@@ -667,7 +671,7 @@ public class PowersRatt extends NewDashPreset {
             }
             case SKILL_3_NORMAL -> dash();
             case SKILL_3_CROUCH -> {
-                if (!isPlaced()){
+                if (!isPlaced() || !canUseMelt()){
                     dash();
                 } else {
                     RattMiningToggleClient();
@@ -1343,12 +1347,17 @@ public class PowersRatt extends NewDashPreset {
         // bucket passive
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.ratt_bucket",
                 "instruction.roundabout.passive", StandIcons.RATT_BUCKET,3,level,bypas));
-
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+76,topPos+80,2, "ability.roundabout.ratt_mining",
-                "instruction.roundabout.press_skill_crouch", StandIcons.RATT_MINING,3,level,bypas));
-        // ratt leap
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+76,topPos+99,4, "ability.roundabout.ratt_leap",
-                "instruction.roundabout.press_skill", StandIcons.RATT_LEAP,4,level,bypas));
+        if (canUseMelt()) {
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 76, topPos + 80, 2, "ability.roundabout.ratt_mining",
+                    "instruction.roundabout.press_skill_crouch", StandIcons.RATT_MINING, 3, level, bypas));
+            // ratt leap
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 76, topPos + 99, 4, "ability.roundabout.ratt_leap",
+                    "instruction.roundabout.press_skill", StandIcons.RATT_LEAP, 4, level, bypas));
+        } else {
+            // ratt leap
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 76, topPos + 80, 4, "ability.roundabout.ratt_leap",
+                    "instruction.roundabout.press_skill", StandIcons.RATT_LEAP, 4, level, bypas));
+        }
 
         return $$1;
     }
@@ -1356,5 +1365,8 @@ public class PowersRatt extends NewDashPreset {
     @Override
     public boolean isStandEnabled() {
         return ClientNetworking.getAppropriateConfig().rattSettings.enableRatt;
+    }
+    public boolean canUseMelt() {
+        return ClientNetworking.getAppropriateConfig().rattSettings.enableRattBlockMelt;
     }
 }

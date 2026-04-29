@@ -760,6 +760,8 @@ public class Config implements Cloneable {
         public Integer rattLeapCooldown;
         @FloatOption(group = "inherit", value = 1.12F, min = 0, max = 100)
         public Float rattLeapStrength;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableRattBlockMelt;
     }
 
     public static class AchtungSettings {

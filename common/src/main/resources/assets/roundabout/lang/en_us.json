@@ -2481,6 +2481,10 @@
   "config.roundabout.rattLeapStrength.name": "Leap Strength",
   "config.roundabout.rattLeapStrength.desc": "How strong Ratt's leap is",
 
+  "config.roundabout.enableRattBlockMelt.name": "Enable Block Melt",
+  "config.roundabout.enableRattBlockMelt.desc": "If Ratt can use its newer move to melt blocks.",
+
+
   "config.roundabout.anubisMemoryOpen.name": "Anubis Memories",
   "config.roundabout.anubisMemories.name": "Anubis Client Settings",
   "config.roundabout.anubisPogoCounter.name": "Anubis Pogo Indicator",
