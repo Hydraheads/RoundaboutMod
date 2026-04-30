@@ -88,6 +88,11 @@ public class FabricItems {
     public static Item MAX_STAND_DISC_SOFT_AND_WET = registerItem("max_soft_and_wet_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersSoftAndWet(null)));
 
+    public static Item STAND_DISC_EMPEROR = registerItem("emperor_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersEmperor(null)));
+    public static Item MAX_STAND_DISC_EMPEROR= registerItem("max_emperor_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersEmperor(null)));
+
     public static Item STAND_DISC_WALKING_HEART = registerItem("walking_heart_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersWalkingHeart(null)));
     public static Item MAX_STAND_DISC_WALKING_HEART = registerItem("max_walking_heart_disc",
@@ -536,6 +541,8 @@ public class FabricItems {
                    //     entries.accept(MAX_STAND_DISC_CREAM);
                         entries.accept(STAND_DISC_METALLICA);
                         entries.accept(MAX_STAND_DISC_METALLICA);
+                        entries.accept(STAND_DISC_EMPEROR);
+                        entries.accept(MAX_STAND_DISC_EMPEROR);
 
 
                     }).build());
@@ -591,6 +598,9 @@ public class FabricItems {
         ModItems.STAND_DISC_SOFT_AND_WET = STAND_DISC_SOFT_AND_WET;
         ModItems.MAX_STAND_DISC_SOFT_AND_WET = MAX_STAND_DISC_SOFT_AND_WET;
         ((MaxStandDiscItem)MAX_STAND_DISC_SOFT_AND_WET).baseDisc = ((StandDiscItem)STAND_DISC_SOFT_AND_WET);
+        ModItems.STAND_DISC_EMPEROR = STAND_DISC_EMPEROR;
+        ModItems.MAX_STAND_DISC_EMPEROR = MAX_STAND_DISC_EMPEROR;
+        ((MaxStandDiscItem)MAX_STAND_DISC_EMPEROR).baseDisc = ((StandDiscItem)STAND_DISC_EMPEROR);
    /*     ModItems.STAND_DISC_KILLER_QUEEN = STAND_DISC_KILLER_QUEEN;
         ((MaxStandDiscItem)MAX_STAND_DISC_KILLER_QUEEN).baseDisc = ((StandDiscItem)STAND_DISC_KILLER_QUEEN);
         ModItems.MAX_STAND_DISC_KILLER_QUEEN = MAX_STAND_DISC_KILLER_QUEEN; */

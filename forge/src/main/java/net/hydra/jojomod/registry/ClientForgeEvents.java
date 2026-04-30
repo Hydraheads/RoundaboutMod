@@ -250,6 +250,8 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.REDD_LAYER, ReddModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.CHAIR_RATT_LAYER, ChairRattModel::getTexturedModelData);
         ModStrayModels.SHOOTING_ARM = new SoftAndWetShootingArmModel();
+        ModStrayModels.EMPEROR_SHOOTING_ARM = new EmperorShootingArmModel();
+        ModStrayModels.EMPEROR_MODEL = new EmperorModel();
         ModStrayModels.TUSK_DRILL = new TuskDrillModel();
         ModStrayModels.TUSK_NAIL = new TuskNailModel();
         ModStrayModels.HEY_YA = new HeyYaModel();

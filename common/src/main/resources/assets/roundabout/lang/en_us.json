@@ -93,6 +93,8 @@
   "item.roundabout.soft_and_wet_disc": "Stand Disc",
   "item.roundabout.cinderella_disc": "Stand Disc",
   "item.roundabout.survivor_disc": "Stand Disc",
+  "item.roundabout.emperor_disc": "Stand Disc",
+  "item.roundabout.max_emperor_disc": "Stand Disc+",
   "item.roundabout.hey_ya_disc": "Stand Disc",
   "item.roundabout.ratt_disc": "Stand Disc",
   "item.roundabout.cream_disc": "Stand Disc",
@@ -135,6 +137,8 @@
   "item.roundabout.ratt_disc.desc": "Ratt",
   "item.roundabout.max_cream_disc.desc": "Cream",
   "item.roundabout.cream_disc.desc": "Cream",
+  "item.roundabout.emperor_disc.desc": "Emperor",
+  "item.roundabout.,max_emperor_disc.desc": "Emperor",
   "item.roundabout.anubis_disc.desc": "Anubis",
   "item.roundabout.max_anubis_disc.desc": "Anubis",
   "item.roundabout.tusk_disc.desc": "Tusk",
@@ -1602,6 +1606,25 @@
   "ability.roundabout.diver_zip": "Diver Zip",
   "ability.roundabout.diver_zip.desc": "Your stand dives into the ground and zips you around! Control your direction using arrow keys",
 
+  "ability.roundabout.emperor_shoot": "Shoot",
+  "ability.roundabout.emperor_shoot.desc": "Shoot a bullet from the emperor.",
+  "ability.roundabout.emperor_heat": "Heat",
+  "ability.roundabout.emperor_heat.desc": "This takes over your experience bar. As you shoot the emperor, it ticks up, and once it is high enough you will not be able to shoot.",
+  "ability.roundabout.emperor_squint": "Squint",
+  "ability.roundabout.emperor_squint.desc": "Slight zoom, not very pronounced, also slows you down a little.",
+  "ability.roundabout.emperor_single": "Single shot",
+  "ability.roundabout.emperor_single.desc": "Shoot one shot every click, it takes a lower amount of heat.",
+  "ability.roundabout.emperor_triple": "Triple shot",
+  "ability.roundabout.emperor_triple.desc": "Shoot three shots per click, it takes a higher amount of heat.",
+  "ability.roundabout.emperor_control_mode_on": "Control mode",
+  "ability.roundabout.emperor_control_mode_on.desc": "The bullets you fire home to your crosshair while turned on.",
+  "ability.roundabout.emperor_auto_mode_on": "Auto mode",
+  "ability.roundabout.emperor_auto_mode_on.desc": "The bullets you fire home to the closest mob to the bullet.",
+  "ability.roundabout.emperor_speed_up": "Bullet speed up",
+  "ability.roundabout.emperor_speed_up.desc": "Your bullets speed up as you hold this ability. The faster a bullet goes, the more damage it does.",
+  "ability.roundabout.emperor_speed_down": "Bullet speed down",
+  "ability.roundabout.emperor_speed_down.desc": "Your bullets slow down as you hold this ability. The slower a bullet goes, the less damage it does.",
+
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Locked",
   "ability.roundabout.locked.desc": "Unlock at Development Stage %1$s",
@@ -1963,6 +1986,10 @@
   "skins.roundabout.green_day.mouth": "Mouth",
 
 
+  "skins.roundabout.emperor.manga": "Manga",
+  "skins.roundabout.emperor.anime": "Anime",
+
+
   "skins.roundabout.achtung_baby.base": "Has No Form",
 
   "unlock_skin.roundabout.the_world.over_heaven": "The World: Over Heaven Skin Unlocked!",
@@ -2227,6 +2254,8 @@
   "config.roundabout.enableAnubis.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableMandom.name": "Enable Stand",
   "config.roundabout.enableMandom.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+  "config.roundabout.enableEmperor.name": "Enable Stand",
+  "config.roundabout.enableEmperor.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableAchtungBaby.name": "Enable Stand",
   "config.roundabout.enableAchtungBaby.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableGreenDay.name": "Enable Stand",
@@ -2598,6 +2627,13 @@
   "config.roundabout.waterShieldCooldown.desc": "The cooldown of the situational water shield ability, if you have a water bottle to use. The default is 40 ticks, or 2 seconds.",
   "config.roundabout.waterShieldBucketCooldown.name": "Water Shield Bucket Cooldown",
   "config.roundabout.waterShieldBucketCooldown.desc": "The cooldown of the situational water shield ability, if you have a bucket to use. The default is 40 ticks, or 2 seconds.",
+
+
+  "config.roundabout.emperorShootingModePower.name": "Bullet power",
+  "config.roundabout.emperorShootingModePower.desc": "[PLACEHOLDER]",
+  "config.roundabout.bulletShootSpeedMultiplier.name": "Speed multiplier",
+  "config.roundabout.bulletShootSpeedMultiplier.desc": "[PLACEHOLDER]",
+
 
   "config.roundabout.meteorsEmitParticles.name": "Meteors Emit Particles",
   "config.roundabout.meteorsEmitParticles.desc": "If ancient meteors emit particles when touching an impact mound.",

@@ -4,7 +4,9 @@ import com.google.common.base.MoreObjects;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.client.models.stand.JusticeModel;
 import net.hydra.jojomod.client.models.stand.renderers.JusticeBaseRenderer;
@@ -15,6 +17,7 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.stand.powers.PowersEmperor;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.MainUtil;
@@ -25,9 +28,12 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
@@ -91,6 +97,19 @@ public abstract class ZItemInHandRenderer {
            //         return;
            //     }
            // }
+
+            if (user.roundabout$getStandPowers() instanceof PowersEmperor && user.roundabout$getCombatMode()){
+
+                poseStack.pushPose();
+                poseStack.translate(0.3, -0.3, -0.7);
+                poseStack.mulPose(Axis.XP.rotationDegrees(265.0F));
+                poseStack.mulPose(Axis.YP.rotationDegrees(135.0F));
+                poseStack.mulPose(Axis.ZP.rotationDegrees(0.0F));
+                ModStrayModels.EMPEROR_MODEL.renderToBuffer(poseStack, bufferSource.getBuffer(RenderType.entityCutoutNoCull(new ResourceLocation(Roundabout.MOD_ID, "textures/stand/emperor/emperor_anime.png"))), light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                poseStack.popPose();
+
+                poseStack.scale(0.0F, 0.0F, 0.0F);
+            }
 
 
             if (powers.isPiloting()){

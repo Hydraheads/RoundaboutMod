@@ -96,6 +96,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public AnubisSettings anubisSettings;
     @NestedOption(group = "modded")
+    public EmperorSettings emperorSettings;
+    @NestedOption(group = "modded")
     public GreenDaySettings greenDaySettings;
     @NestedOption(group = "modded")
     public TheWorldSettings theWorldSettings;
@@ -833,6 +835,19 @@ public class Config implements Cloneable {
         public Integer anubisBackflipCooldown;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer anubisMaxMemory;
+    }
+
+    public static class EmperorSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableEmperor;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer emperorShootingModePower;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer heatGainedPerShot;
+        @IntOption(group = "inherit", value = 3, min = 0, max = 72000)
+        public Integer heatTickDownRate;
+        @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
+        public Integer bulletShootSpeedMultiplier;
     }
 
     public static class TheWorldSettings {
