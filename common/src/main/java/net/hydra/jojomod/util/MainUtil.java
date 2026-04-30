@@ -191,6 +191,7 @@ public class MainUtil {
     public static ArrayList<String> expLessBlocks = Lists.newArrayList();
     public static ArrayList<String> standBlockGrabBlacklist = Lists.newArrayList();
     public static ArrayList<String> standDestructionBlacklist = Lists.newArrayList();
+    public static ArrayList<String> occultChargeEffectsToBanish = Lists.newArrayList();
     public static ArrayList<String> naturalStandUserMobBlacklist = Lists.newArrayList();
     public static ArrayList<String> hypnotismMobBlackList = Lists.newArrayList();
 
@@ -259,6 +260,13 @@ public class MainUtil {
     public static boolean isBlockBlacklisted(BlockState bs){
         ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
         if (standBlockGrabBlacklist != null && !standBlockGrabBlacklist.isEmpty() && rl != null && standBlockGrabBlacklist.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isEffectBanishable(MobEffectInstance mei){
+        ResourceLocation rl = BuiltInRegistries.MOB_EFFECT.getKey(mei.getEffect());
+        if (occultChargeEffectsToBanish != null && !occultChargeEffectsToBanish.isEmpty() && rl != null && occultChargeEffectsToBanish.contains(rl.toString())){
             return true;
         }
         return false;

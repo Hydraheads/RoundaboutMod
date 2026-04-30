@@ -81,6 +81,11 @@ public abstract class ConfigManager {
             MainUtil.standDestructionBlacklist.clear();
             MainUtil.standDestructionBlacklist.addAll(getAdvancedConfig().standDestructionBlacklist);
         }
+        if (getAdvancedConfig().occultChargeEffectsToBanish != null)
+        {
+            MainUtil.occultChargeEffectsToBanish.clear();
+            MainUtil.occultChargeEffectsToBanish.addAll(getAdvancedConfig().occultChargeEffectsToBanish);
+        }
         if (getAdvancedConfig().naturalStandUserMobBlacklist != null)
         {
             MainUtil.naturalStandUserMobBlacklist.clear();
