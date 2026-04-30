@@ -43,8 +43,8 @@ public class OccultChargeItem  extends Item {
         $$1.getCooldowns().addCooldown(this, 20);
         if (!$$0.isClientSide) {
             drawMagicSymbol($$0,$$1.position());
-            int radius = 20;
-            AABB box = $$1.getBoundingBox().inflate(radius,radius,radius);
+            int radiusa = 20;
+            AABB box = $$1.getBoundingBox().inflate(radiusa,radiusa,radiusa);
             List<Entity> entities = $$0.getEntities(null,box);
             for (Entity M : entities) {
                 if (M instanceof LivingEntity LV) {
@@ -54,8 +54,30 @@ public class OccultChargeItem  extends Item {
                             LV.removeEffect(effect.getEffect());
                         }
                     }
-                    LV.addEffect(new MobEffectInstance(ModEffects.HEX, 100, 1,false,false));
-                    LV.addEffect(new MobEffectInstance(ModEffects.BANISH, 100, 0,false,true));
+                    LV.addEffect(new MobEffectInstance(ModEffects.HEX, 6000, 1,false,false));
+                    LV.addEffect(new MobEffectInstance(ModEffects.BANISH, 6000, 0,false,true));
+
+                    if (LV.getUUID() != $$1.getUUID()) {
+                        double speed = 0.2;   // how fast particles move outward
+                        int points = 12;      // how many directions (density of the ring)
+
+                        for (int i = 0; i < points; i++) {
+                            double angle = 2 * Math.PI * i / points;
+
+                            double vx = Math.cos(angle) * speed;
+                            double vz = Math.sin(angle) * speed;
+
+                            ((ServerLevel) $$0).sendParticles(
+                                    ModParticles.OCCULT,
+                                    LV.getEyePosition().x,
+                                    LV.getEyePosition().y,
+                                    LV.getEyePosition().z,
+                                    0, // IMPORTANT: directional mode
+                                    vx, 0, vz, // velocity outward
+                                    1 // speed multiplier (acts like scale for velocity)
+                            );
+                        }
+                    }
                 }
             }
         }

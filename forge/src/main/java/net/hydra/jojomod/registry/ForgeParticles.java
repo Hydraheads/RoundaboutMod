@@ -207,6 +207,10 @@ public class ForgeParticles {
             "stitch",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> OCCULT = PARTICLES.register(
+            "occult",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> HYPNO_SWIRL = PARTICLES.register(
             "hypno_swirl",
             () -> new SimpleParticleType(true)
