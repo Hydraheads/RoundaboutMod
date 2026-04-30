@@ -231,7 +231,7 @@ public class Config implements Cloneable {
         public Boolean disableBleedingAndBloodSplatters;
         @BooleanOption(group = "inherit", value = false)
         public Boolean banDirectionalBlockPlacingFailure;
-        @BooleanOption(group = "inherit", value = true)
+        @BooleanOption(group = "inherit", value = false)
         public Boolean bleedRemovesStrength;
         @BooleanOption(group = "inherit", value = true)
         public Boolean hexTwoSealsPotions;

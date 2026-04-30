@@ -6,6 +6,8 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -29,8 +31,8 @@ public class LocacacaItem extends Item {
             entity.setHealth(health);
         }
 
-
-        if (entity.hasEffect(ModEffects.HEX)){
+        MobEffectInstance effect = entity.getEffect(ModEffects.HEX);
+        if (effect != null && effect.getAmplifier() > 1){
             ((StandUser)entity).roundabout$setLocacacaCurse(LocacacaCurseIndex.HEART);
             return;
         }

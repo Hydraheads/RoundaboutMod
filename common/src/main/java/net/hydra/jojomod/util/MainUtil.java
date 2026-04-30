@@ -1945,6 +1945,7 @@ public class MainUtil {
     }
     public static boolean isSpecialEffect(MobEffect value){
         return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS)
+                || value.equals(ModEffects.BANISH)
                 || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.STAND_VIRUS) ||
                 value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING) || value.equals(ModEffects.MOLD);
     }

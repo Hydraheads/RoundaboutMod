@@ -32,8 +32,8 @@ public class BleedPotionItem {
     private void roundabout$finishUsingItem(ItemStack $$0, Level $$1, LivingEntity $$2, CallbackInfoReturnable<ItemStack> cir) {
         if (!$$1.isClientSide() && $$2 != null && $$1 instanceof ServerLevel sl){
             if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.hexTwoSealsPotions) {
-                MobEffectInstance mi = $$2.getEffect(ModEffects.HEX);
-                if (mi != null && mi.getAmplifier() > 0) {
+                MobEffectInstance mi = $$2.getEffect(ModEffects.BANISH);
+                if (mi != null) {
 
                     Player $$3 = $$2 instanceof Player ? (Player) $$2 : null;
                     if ($$3 instanceof ServerPlayer) {

@@ -54,7 +54,8 @@ public class OccultChargeItem  extends Item {
                             LV.removeEffect(effect.getEffect());
                         }
                     }
-                    LV.addEffect(new MobEffectInstance(ModEffects.HEX, 40, 1));
+                    LV.addEffect(new MobEffectInstance(ModEffects.HEX, 100, 1,false,false));
+                    LV.addEffect(new MobEffectInstance(ModEffects.BANISH, 100, 0,false,true));
                 }
             }
         }

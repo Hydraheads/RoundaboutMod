@@ -515,7 +515,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     MobEffect $$1 = $$0.next();
                     MobEffectInstance $$2 = this.activeEffects.get($$1);
                     if ($$2.isVisible() && !$$2.getEffect().equals(ModEffects.BLEED) && !$$2.getEffect().equals(ModEffects.CAPTURING_LOVE)
-                            && !$$2.getEffect().equals(ModEffects.FACELESS)&& !$$2.getEffect().equals(ModEffects.SWITCH)) {
+                            && !$$2.getEffect().equals(ModEffects.FACELESS)
+                            && !$$2.getEffect().equals(ModEffects.BANISH) && !$$2.getEffect().equals(ModEffects.SWITCH)) {
                         onlyBleeding = false;
                     }
                 }
@@ -3961,8 +3962,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "isAffectedByPotions", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void rooundabout$isAffectedByPotions(CallbackInfoReturnable<Boolean> cir) {
         if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.hexTwoSealsPotions) {
-            MobEffectInstance mi = getEffect(ModEffects.HEX);
-            if (mi != null && mi.getAmplifier() > 0) {
+            MobEffectInstance mi = getEffect(ModEffects.BANISH);
+            if (mi != null) {
                 cir.setReturnValue(false);
             }
         }
