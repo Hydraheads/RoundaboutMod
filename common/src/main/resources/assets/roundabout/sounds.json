@@ -23,6 +23,12 @@
       "roundabout:summon_anubis"
     ]
   },
+  "banish": {
+    "subtitle": "sounds.roundabout.banish",
+    "sounds": [
+      "roundabout:banish"
+    ]
+  },
   "anubis_unsheathe": {
     "subtitle": "sounds.roundabout.anubis_unsheathe",
     "sounds": [

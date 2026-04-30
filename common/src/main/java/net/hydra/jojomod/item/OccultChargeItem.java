@@ -2,6 +2,7 @@ package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
@@ -39,7 +40,7 @@ public class OccultChargeItem  extends Item {
 
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
         ItemStack $$3 = $$1.getItemInHand($$2);
-        $$0.playSound((Player)null, $$1.getX(), $$1.getY(), $$1.getZ(), SoundEvents.ENDER_PEARL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / ($$0.getRandom().nextFloat() * 0.4F + 0.8F));
+        $$0.playSound((Player)null, $$1.getX(), $$1.getY(), $$1.getZ(), ModSounds.BANISH_EVENT, SoundSource.NEUTRAL, 1F, 0.2F / ($$0.getRandom().nextFloat() * 0.2F + 0.9F));
         $$1.getCooldowns().addCooldown(this, 20);
         if (!$$0.isClientSide) {
             drawMagicSymbol($$0,$$1.position());
@@ -50,12 +51,13 @@ public class OccultChargeItem  extends Item {
                 if (M instanceof LivingEntity LV) {
                     List<MobEffectInstance> effects = new ArrayList<>(LV.getActiveEffects());
                     for (MobEffectInstance effect : effects) {
-                        if (!MainUtil.isSpecialEffect(effect) && MainUtil.isEffectBanishable(effect)) {
+                        if (!MainUtil.isSpecialEffect(effect) && MainUtil.isEffectBanishable(effect)
+                        && !effect.isInfiniteDuration()) {
                             LV.removeEffect(effect.getEffect());
                         }
                     }
-                    LV.addEffect(new MobEffectInstance(ModEffects.HEX, 6000, 1,false,false));
-                    LV.addEffect(new MobEffectInstance(ModEffects.BANISH, 6000, 0,false,true));
+                    LV.addEffect(new MobEffectInstance(ModEffects.HEX, 7200, 1,false,false));
+                    LV.addEffect(new MobEffectInstance(ModEffects.BANISH, 7200, 0,false,true));
 
                     if (LV.getUUID() != $$1.getUUID()) {
                         double speed = 0.2;   // how fast particles move outward

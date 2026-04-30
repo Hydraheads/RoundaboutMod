@@ -69,6 +69,8 @@ public class ForgeSounds {
             register(ModSounds.SOFT_AND_WET_KICK, ModSounds.SOFT_AND_WET_KICK_ID);
     public static final RegistryObject<SoundEvent> BUBBLE_POP_EVENT =
             register(ModSounds.BUBBLE_POP, ModSounds.BUBBLE_POP_ID);
+    public static final RegistryObject<SoundEvent> BANISH_EVENT =
+            register(ModSounds.BANISH, ModSounds.BANISH_ID);
     public static final RegistryObject<SoundEvent> EXPLOSIVE_BUBBLE_POP_EVENT =
             register(ModSounds.EXPLOSIVE_BUBBLE_POP, ModSounds.EXPLOSIVE_BUBBLE_POP_ID);
     public static final RegistryObject<SoundEvent> EXPLOSIVE_BUBBLE_SHOT_EVENT =

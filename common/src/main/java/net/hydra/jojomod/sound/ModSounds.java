@@ -163,6 +163,11 @@ public class ModSounds {
     public static final ResourceLocation BUBBLE_POP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BUBBLE_POP);
     public static SoundEvent BUBBLE_POP_EVENT = SoundEvent.createVariableRangeEvent(BUBBLE_POP_ID);
 
+    public static final String BANISH = "banish";
+    public static final ResourceLocation BANISH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BANISH);
+    public static SoundEvent BANISH_EVENT = SoundEvent.createVariableRangeEvent(BANISH_ID);
+
+
     public static final String EXPLOSIVE_BUBBLE_POP = "explosive_bubble_pop";
     public static final ResourceLocation EXPLOSIVE_BUBBLE_POP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EXPLOSIVE_BUBBLE_POP);
     public static SoundEvent EXPLOSIVE_BUBBLE_POP_EVENT = SoundEvent.createVariableRangeEvent(EXPLOSIVE_BUBBLE_POP_ID);

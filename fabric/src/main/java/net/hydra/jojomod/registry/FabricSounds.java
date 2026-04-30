@@ -92,6 +92,7 @@ public class FabricSounds {
         addSound(ModSounds.GO_BEYOND_HIT_ID, ModSounds.GO_BEYOND_HIT_EVENT);
         addSound(ModSounds.GO_BEYOND_LAUNCH_ID, ModSounds.GO_BEYOND_LAUNCH_EVENT);
         addSound(ModSounds.BUBBLE_POP_ID, ModSounds.BUBBLE_POP_EVENT);
+        addSound(ModSounds.BANISH_ID, ModSounds.BANISH_EVENT);
 
         addSound(ModSounds.EXPLOSIVE_BUBBLE_POP_ID, ModSounds.EXPLOSIVE_BUBBLE_POP_EVENT);
         addSound(ModSounds.EXPLOSIVE_BUBBLE_SHOT_ID, ModSounds.EXPLOSIVE_BUBBLE_SHOT_EVENT);
