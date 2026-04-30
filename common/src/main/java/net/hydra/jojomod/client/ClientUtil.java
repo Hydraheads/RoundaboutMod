@@ -1764,6 +1764,11 @@ public class ClientUtil {
         localPlayer.turn(0.0F, recoilPitch);
     }
 
+/*    ClientUtil.renderFirstPersonModelParts(localPlayer,partialTick,poseStack, bufferSource, light);
+
+        if (cameraEnt instanceof Player play && ((IPowersPlayer)cameraEnt).rdbt$getPowers() instanceof PowersEmperor vf) {
+}*/
+
     public static<T extends LivingEntity, M extends EntityModel<T>> void renderFirstPersonModelParts(Entity cameraEnt, float $$4, PoseStack stack, MultiBufferSource source, int light){
 
         if (cameraEnt instanceof Player play) {

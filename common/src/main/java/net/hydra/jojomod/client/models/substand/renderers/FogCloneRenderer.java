@@ -46,6 +46,7 @@ public class FogCloneRenderer<T extends FogCloneEntity> extends LivingEntityRend
         this.addLayer(new StoneLayer<>(context, this));
         this.addLayer(new FacelessLayer<>(context, this));
         this.addLayer(new ShootingArmLayer<>(context, this));
+        this.addLayer(new EmperorArmLayer<>(context, this));
         this.addLayer(new HeyYaLayer<>(context, this));
         this.addLayer(new MandomLayer<>(context, this));
         this.addLayer(new CenturyBoyLayer<>(context, this));

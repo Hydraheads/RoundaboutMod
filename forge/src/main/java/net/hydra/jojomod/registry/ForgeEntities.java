@@ -495,6 +495,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "roundabout_bullet_entity").toString())
             );
+    public static final RegistryObject<EntityType<EmperorBulletEntity>> EMPEROR_BULLET_ENTITY =
+            ENTITY_TYPES.register("emperor_bullet_entity", () ->
+                    EntityType.Builder.<EmperorBulletEntity>of(EmperorBulletEntity::new, MobCategory.MISC).sized(0.25f, 0.25f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "emperor_bullet_entity").toString())
+            );
     public static final RegistryObject<EntityType<MatchEntity>> THROWN_MATCH =
             ENTITY_TYPES.register("match", () ->
                     EntityType.Builder.<MatchEntity>of(MatchEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).

@@ -82,6 +82,7 @@ public class ModEntities {
     public static EntityType<HarpoonEntity> THROWN_HARPOON;
     public static EntityType<BladedBowlerHatEntity> BLADED_BOWLER_HAT;
     public static EntityType<RoundaboutBulletEntity> ROUNDABOUT_BULLET_ENTITY;
+    public static EntityType<EmperorBulletEntity> EMPEROR_BULLET;
     public static EntityType<RattDartEntity> RATT_DART;
     public static EntityType<KnifeEntity> THROWN_KNIFE;
     public static EntityType<MetallicaKnifeEntity> METALLICA_KNIFE;

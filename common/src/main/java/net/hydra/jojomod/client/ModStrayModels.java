@@ -7,11 +7,14 @@ import net.hydra.jojomod.client.models.minions.head_parts.*;
 import net.hydra.jojomod.client.models.projectile.*;
 import net.hydra.jojomod.client.models.stand.AnubisHumanoidModel;
 import net.hydra.jojomod.client.models.stand.AnubisModel;
+import net.hydra.jojomod.client.models.stand.EmperorModel;
 import net.hydra.jojomod.client.models.visages.parts.*;
 import net.hydra.jojomod.client.models.worn_stand.*;
 
 public class ModStrayModels {
     public static SoftAndWetShootingArmModel SHOOTING_ARM;
+    public static EmperorModel EMPEROR_MODEL;
+    public static EmperorShootingArmModel EMPEROR_SHOOTING_ARM;
     public static TuskDrillModel TUSK_DRILL;
     public static TuskNailModel TUSK_NAIL;
     public static FirstPersonArmsModel FirstPersonArmsModel;

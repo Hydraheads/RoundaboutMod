@@ -1,9 +1,6 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.block.CoffinBlock;
-import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.event.powers.visagedata.aesthetician.*;
 import net.hydra.jojomod.item.*;
@@ -15,7 +12,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraftforge.common.ForgeSpawnEggItem;
@@ -575,6 +571,11 @@ public class ForgeItems {
     //metallica (i gotta do the max_stand_disc_metallica too, i have both sprites)
     public static final RegistryObject<Item> STAND_DISC_METALLICA = addToWIPTab(ITEMS.register("metallica_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMetallica(null))));
+
+    public static final RegistryObject<Item> STAND_DISC_EMPEROR = addToWIPTab(ITEMS.register("emperor_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersEmperor(null))));
+    public static final RegistryObject<Item> MAX_STAND_DISC_EMPEROR = addToWIPTab(ITEMS.register("max_emperor_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersEmperor(null))));
 
     public static final RegistryObject<Item> WORTHY_ARROW = addToTab(ITEMS.register("worthy_arrow",
             () -> new WorthyArrowItem(new Item.Properties().stacksTo(1))));

@@ -1,8 +1,6 @@
 package net.hydra.jojomod.item;
 
-import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -13,24 +11,13 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class OccultChargeItem  extends Item {
     public OccultChargeItem(Item.Properties $$0) {
@@ -43,21 +30,7 @@ public class OccultChargeItem  extends Item {
         $$1.getCooldowns().addCooldown(this, 20);
         if (!$$0.isClientSide) {
             drawMagicSymbol($$0,$$1.position());
-            int radius = 20;
-            AABB box = $$1.getBoundingBox().inflate(radius,radius,radius);
-            List<Entity> entities = $$0.getEntities(null,box);
-            for (Entity M : entities) {
-                if (M instanceof LivingEntity LV) {
-                    List<MobEffectInstance> effects = new ArrayList<>(LV.getActiveEffects());
-                    for (MobEffectInstance effect : effects) {
-                        if (!MainUtil.isSpecialEffect(effect) && MainUtil.isEffectBanishable(effect)) {
-                            LV.removeEffect(effect.getEffect());
-                        }
-                    }
-                    LV.addEffect(new MobEffectInstance(ModEffects.HEX, 100, 1,false,false));
-                    LV.addEffect(new MobEffectInstance(ModEffects.BANISH, 100, 0,false,true));
-                }
-            }
+
         }
 
         $$1.awardStat(Stats.ITEM_USED.get(this));
@@ -117,9 +90,5 @@ public class OccultChargeItem  extends Item {
         Vec3 p3 = new Vec3(center.x + r * Math.cos(Math.toRadians(330)), center.y, center.z + r * Math.sin(Math.toRadians(330)));
 
         drawTriangle(level, p1, p2, p3, 30, particle);
-    }
-
-    public void banishEffects(){
-
     }
 }

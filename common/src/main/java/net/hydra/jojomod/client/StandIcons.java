@@ -637,6 +637,29 @@ public class StandIcons {
     public static final ResourceLocation DIVER_DOWN_ZIP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/diver_down/diver_zip.png");
 
+    public static final ResourceLocation EMPEROR_SPEED_UP = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/emperor/emperor_speed_up.png");
+    public static final ResourceLocation EMPEROR_SPEED_DOWN = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/emperor/emperor_speed_down.png");
+    public static final ResourceLocation EMPEROR_HEAT = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/emperor/emperor_heat.png");
+    public static final ResourceLocation EMPEROR_SHOOT = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/emperor/emperor_shoot.png");
+    public static final ResourceLocation EMPEROR_SINGLE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/emperor/emperor_single.png");
+    public static final ResourceLocation EMPEROR_TRIPLE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/emperor/emperor_triple.png");
+    public static final ResourceLocation EMPEROR_CONTROL_MODE_ON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/emperor/emperor_control_mode_on.png");
+    public static final ResourceLocation EMPEROR_CONTROL_MODE_OFF = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/emperor/emperor_control_mode_off.png");
+    public static final ResourceLocation EMPEROR_AUTO_MODE_ON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/emperor/emperor_auto_mode_on.png");
+    public static final ResourceLocation EMPEROR_AUTO_MODE_OFF = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/emperor/emperor_auto_mode_off.png");
+    public static final ResourceLocation EMPEROR_SQUINT = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/emperor/emperor_squint.png");
+
     public static final ResourceLocation EERIE_SKIN = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/eerie_shift.png");
     public static final ResourceLocation EERIE_SKIN_ALEX = new ResourceLocation(Roundabout.MOD_ID,

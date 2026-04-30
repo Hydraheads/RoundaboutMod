@@ -339,6 +339,11 @@ public class ForgeEvents {
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_TUSK.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_TUSK.get());
 
 
+        ModItems.STAND_DISC_EMPEROR = ForgeItems.STAND_DISC_EMPEROR.get();
+        ModItems.MAX_STAND_DISC_EMPEROR = ForgeItems.MAX_STAND_DISC_EMPEROR.get();
+        ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_EMPEROR.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_EMPEROR.get());
+
+
         ModItems.COFFEE_GUM = ForgeItems.COFFEE_GUM.get();
         ModItems.CHERRIES = ForgeItems.CHERRIES.get();
 

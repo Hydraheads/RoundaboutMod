@@ -116,7 +116,6 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.MOLD_SPORE, NoRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ANUBIS_SLIPSTREAM, NoRenderer::new);
         EntityRendererRegistry.register(FabricEntities.TUSK_NAIL, TuskNailRenderer::new);
-        EntityRendererRegistry.register(FabricEntities.TUSK_HOLE, NoRenderer::new);
         EntityRendererRegistry.register(FabricEntities.PLUNDER_BUBBLE, SoftAndWetBubbleRenderer::new);
         EntityRendererRegistry.register(FabricEntities.EXPLOSIVE_BUBBLE, SoftAndWetBubbleRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ITEM_LAUNCHING_BUBBLE_ENTITY, SoftAndWetBubbleRenderer::new);
@@ -246,6 +245,8 @@ public class FabricEntityClient {
 
 
         ModStrayModels.SHOOTING_ARM = new SoftAndWetShootingArmModel();
+        ModStrayModels.EMPEROR_MODEL = new EmperorModel();
+        ModStrayModels.EMPEROR_SHOOTING_ARM = new EmperorShootingArmModel();
         ModStrayModels.TUSK_DRILL = new TuskDrillModel();
         ModStrayModels.TUSK_NAIL = new TuskNailModel();
         ModStrayModels.HEY_YA = new HeyYaModel();
