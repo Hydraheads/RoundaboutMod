@@ -64,7 +64,7 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
             return;
         }
 
-        if(User != null && ClientUtil.checkIfClientCanSeeMobsForWindVision() && (((IEntityAndData)mobEntity).roundabout$getTrueInvisibilityManhattan() < 1)){
+        if (User != null && ((IEntityAndData)User).roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()){
             return;
         }
 

@@ -364,6 +364,8 @@
     "manhattan.ManhattanElytraLayer",
     "manhattan.ManhattanHumanoidArmorFading",
     "manhattan.ManhattanSpiderEyesLayer",
+    "manhattan.SaddleLayerManhattan",
+    "manhattan.ManhattanArrowLayer",
     "metallica.MetallicaGameRenderer",
     "metallica.MetallicaItemInHandMixin",
     "metallica.MetallicaStuckLayerMixin",

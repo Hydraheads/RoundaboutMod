@@ -80,6 +80,8 @@ public interface IEntityAndData {
     void roundabout$setTrueInvisibilityManhattan(int manhattanticking);
     int roundabout$getTrueInvisibilityManhattan();
 
+    void rdbt$doWindVisionDetection();
+
 
     void roundabout$universalTick();
 

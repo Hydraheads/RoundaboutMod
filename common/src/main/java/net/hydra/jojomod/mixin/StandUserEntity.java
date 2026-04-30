@@ -5349,9 +5349,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             return false;
         }
     }
-    public double previousYposManhattan = 0.0;
-    public double previousXposManhattan = 0.0;
-    public double previousZposManhattan = 0.0;
     public double previousYpos = 0.0;
 
 
@@ -5433,35 +5430,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
 
     }
-
-    @Unique
-    @Override
-    public void rdbt$doWindVisionDetection() {
-        if (!this.level().isClientSide) {
-            //boolean isStand = (((LivingEntity) (Object) this) instanceof BaseMinion BM);
-            IEntityAndData entityAndData = ((IEntityAndData) this);
-            SavedSecond lastSecond = entityAndData.roundabout$getLastSavedSecond();
-            SavedSecond firstSecond = entityAndData.roundabout$getFirstSavedSecond();
-            if (firstSecond != null && lastSecond != null) {
-
-                boolean posCompare = lastSecond.position.x != firstSecond.position.x || lastSecond.position.z != firstSecond.position.z;
-                boolean posCompareY = lastSecond.position.y != firstSecond.position.y;
-
-                if (posCompare) {
-                    if (isInWater()) {
-                        entityAndData.roundabout$setTrueInvisibilityManhattan(-1);
-                    } else {
-                        entityAndData.roundabout$setTrueInvisibilityManhattan(1);
-                    }
-                } else if (((LivingEntity) (Object) this) instanceof RoadRollerEntity) {
-                    entityAndData.roundabout$setTrueInvisibilityManhattan(1);
-                } else if (posCompareY) {
-                    entityAndData.roundabout$setTrueInvisibilityManhattan(75);
-                } else {/*Ticking will go down until the entity unrenders}*/
-                }
-            }
-        }
-        }
 
     public float MoldLevel = 0.0f;
     public int jumpImmunityTicks = 0;
@@ -5672,8 +5640,4 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         rdbt$doMoldDetection(movement);
     }
 
-   @Inject(method = "travel", at = @At(value = "TAIL"),cancellable = true, require = 0)
-    public void  WindVisionDetection(CallbackInfo info) {
-        rdbt$doWindVisionDetection();
-    }
 }

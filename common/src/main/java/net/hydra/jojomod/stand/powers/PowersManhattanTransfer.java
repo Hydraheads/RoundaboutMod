@@ -403,7 +403,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
             IEntityAndData entityAndData = ((IEntityAndData) ent);
             entity.xxa = kpi.leftImpulse;
             entity.zza = kpi.forwardImpulse;
-            Vec3 vec32 = new Vec3(entity.xxa * walkingSpeed, 0, entity.zza * walkingSpeed);
             Vec3 delta = entity.getDeltaMovement();
             if (kpi.shiftKeyDown) {
                 $$13--;
@@ -413,7 +412,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
             }
             if (ent != null) {
                 Entity TE = MainUtil.getTargetEntity(ent, 300, 10);
-                if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible() && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
+                if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible()) {
                         if (ME.isInRain()) {
                             if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
                                 entity.setDeltaMovement(entity.getForward());

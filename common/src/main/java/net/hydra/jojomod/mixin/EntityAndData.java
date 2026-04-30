@@ -1,13 +1,11 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IEntityAndData;
-import net.hydra.jojomod.access.ILevelAccess;
-import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.access.IPowersPlayer;
+import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
@@ -38,6 +36,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -819,5 +818,37 @@ public abstract class EntityAndData implements IEntityAndData {
         this.deltaMovement = ec;
     }
 
+    @Inject(method = "move", at = @At(value = "TAIL"),cancellable = true, require = 0)
+    public void  WindVisionDetection(CallbackInfo info) {
+        rdbt$doWindVisionDetection();
+    }
 
+    @Unique
+    @Override
+    public void rdbt$doWindVisionDetection() {
+        if (!this.level().isClientSide) {
+            if(((Entity) (Object) this) instanceof StandEntity){
+                IEntityAndData entityAndData = ((IEntityAndData) this);
+                entityAndData.roundabout$setTrueInvisibilityManhattan(10);
+            }
+            if ((((Entity) (Object) this) instanceof Mob) || ((Entity) (Object) this) instanceof Player || ((Entity) (Object) this) instanceof LivingEntity) {
+                IEntityAndData entityAndData = ((IEntityAndData) this);
+                SavedSecond lastSecond = entityAndData.roundabout$getLastSavedSecond();
+                SavedSecond firstSecond = entityAndData.roundabout$getFirstSavedSecond();
+                if (firstSecond != null && lastSecond != null) {
+
+                    boolean posCompare = lastSecond.position.x != firstSecond.position.x || lastSecond.position.z != firstSecond.position.z;
+                    boolean posCompareY = lastSecond.position.y != firstSecond.position.y;
+
+                    if (posCompare){
+                        entityAndData.roundabout$setTrueInvisibilityManhattan(10);
+                    } else if (((LivingEntity) (Object) this) instanceof RoadRollerEntity) {
+                        entityAndData.roundabout$setTrueInvisibilityManhattan(10);
+                    } else if (posCompareY) {
+                        entityAndData.roundabout$setTrueInvisibilityManhattan(75);
+                    } else {}
+                }
+            }
+        }
+    }
 }
