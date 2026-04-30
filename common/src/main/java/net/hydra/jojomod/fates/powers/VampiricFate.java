@@ -609,7 +609,7 @@ public int speedActivated = 0;
 
 
     public boolean canLatchOntoWall(){
-        if (onCooldown(PowerIndex.SKILL_2) || self.isSwimming())
+        if (onCooldown(PowerIndex.FATE_3) || self.isSwimming())
             return false;
 
         if (MainUtil.isStandingInBlock(self))

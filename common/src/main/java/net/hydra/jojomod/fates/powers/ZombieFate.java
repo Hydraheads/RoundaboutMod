@@ -580,7 +580,7 @@ public class ZombieFate extends VampiricFate {
         }
         setSkillIcon(context, x, y, 2, StandIcons.ZOMBIE_DRINK, PowerIndex.FATE_2);
         if (canTargetEnter()){
-            setSkillIcon(context, x, y, 3, StandIcons.ZOMBIE_ENTER, PowerIndex.FATE_3);
+            setSkillIcon(context, x, y, 3, StandIcons.ZOMBIE_ENTER, PowerIndex.NO_CD);
         } else {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         }

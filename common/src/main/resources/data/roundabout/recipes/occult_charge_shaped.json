@@ -2,20 +2,20 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "tag": "minecraft:wool"
+    "Y": {
+      "item": "minecraft:ender_pearl"
     },
     "X": {
-      "tag": "minecraft:planks"
+      "item": "minecraft:chorus_fruit"
     }
   },
   "pattern": [
-    "XXX",
-    "###",
-    "XXX"
+    " X ",
+    "XYX",
+    " X "
   ],
   "result": {
-    "item": "roundabout:coffin_block"
+    "item": "roundabout:occult_charge"
   },
   "show_notification": true
 }
