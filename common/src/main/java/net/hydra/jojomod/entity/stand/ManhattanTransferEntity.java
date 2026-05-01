@@ -258,13 +258,19 @@ public class ManhattanTransferEntity extends StandEntity {
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
-        if (this.getUser() != null) {
-            if (isInRain()) {
-                this.rain_dodging_manhattan.startIfStopped(this.tickCount);
-            } if (!isInRain()) {
-                this.rain_dodging_manhattan.stop();
+        if(this.getUserData(this.getUser()) != null && this.getUser() != null) {
+            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                if (!PM.isActive()) {
+                    //this.rain_dodging_manhattan.stop();
+                } else {
+                    if (isInRain()) {
+                        this.rain_dodging_manhattan.startIfStopped(this.tickCount);
+                    }
+                    if (!isInRain()) {
+                        this.rain_dodging_manhattan.stop();
+                    }
+                }
             }
-
         }
     }
 

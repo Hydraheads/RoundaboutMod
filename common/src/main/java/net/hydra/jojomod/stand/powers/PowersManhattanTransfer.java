@@ -447,9 +447,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
                                 entity.setDeltaMovement(entity.getForward().scale(0.04 * configSpeed()));
                             } else {
                                 if ($$13 != 0) {
-                                    entity.setDeltaMovement(delta.x / 1.6, $$13 * flyingSpeed * 2.5F, delta.z / 1.6);
+                                    entity.setDeltaMovement(delta.x / 1.4, $$13 * flyingSpeed * 2.5F, delta.z / 1.4);
                                 } else {
-                                    entity.setDeltaMovement(delta.x / 1.6, 0, delta.z / 1.6);
+                                    entity.setDeltaMovement(delta.x / 1.4, 0, delta.z / 1.4);
                                 }
                             }
                         } else {
