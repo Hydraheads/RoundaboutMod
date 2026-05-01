@@ -151,13 +151,15 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
             case PowersManhattanTransfer.MANHATTAN_DODGE -> {
               /*  this.setCooldown(PowersManhattanTransfer.MANHATTAN_DODGE,ClientNetworking.getAppropriateConfig().rattSettings.rattLeapCooldown);
+                //Vec3 dir = this.getStandEntity(this.getSelf()).getViewVector(1);
                 if (this.getStandEntity(this.getSelf()) != null) {
                     Vec3 dir = this.getStandEntity(this.getSelf()).getViewVector(1);
-                    dir = dir.scale(2);
-                    Vec3 vec3 = new Vec3(dir.x, Mth.clamp(dir.y+0.2F,0.1,100), dir.z);
-                    this.getStandEntity(this.getSelf()).setDeltaMovement(11, 11, 11);
+                    dir = dir.scale(3);
+                    Vec3 vec3 = new Vec3(dir.x, dir.y, dir.z);
+                    this.getStandEntity(this.getSelf()).setDeltaMovement(vec3);
+                    //entity.setDeltaMovement(entity.getForward());
                 }*/
-                //this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.RATT_LEAP_EVENT, SoundSource.PLAYERS, 1F,1.2F);
+              //  this.getStandEntity(this.getSelf()).level().playSound(null,this.getSelf().blockPosition(),ModSounds.VAMPIRE_DASH_EVENT, SoundSource.PLAYERS, 1F,1.2F);
             }
         }
         return super.tryPower(move, forced);
@@ -297,7 +299,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public boolean isActive() {
         return this.getStandEntity(this.getSelf()) != null;
     }
-   // StandUser User = getUserData(this.self);
     @Override
     public void tickPower() {
         super.tickPower();

@@ -126,26 +126,19 @@ public class ManhattanTransferEntity extends StandEntity {
     public boolean canBeSeenAsEnemy() {
         return true;
     }
-    @Override
+   /* @Override
     public boolean isPushedByFluid() {
         return true;
-    }
-    @Override
-    public boolean redirectKnockbackToUser() {
-        return false;
-    }
-    @Override
-    public boolean isPickable() {
-        return false;
-    }
+    }*/
+
     @Override
     public boolean skipAttackInteraction(Entity $$0) {
         return false;
     }
-    @Override
+ /*   @Override
     protected float getFlyingSpeed() {
         return 0.10F;
-    }
+    }*/
 
     @Override
     public boolean isControlledByLocalInstance() {
@@ -176,7 +169,7 @@ public class ManhattanTransferEntity extends StandEntity {
             return false;
         }
         this.markHurt();
-        return super.hurt(source, amount);
+        return super.hurt(source, amount * 2);
     }
 
     @Override
