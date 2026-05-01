@@ -1287,10 +1287,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         // this is needed to ensure that your jump doesn't get a random boost the middle of it if you're to activate your stand etc.
         // it recalculates when it finds a block .5 below you, this number is arbitrary and technically you can still boost within that tiny distance
         // this could maybe be done by directly injecting into Entity.setOnGround and Entity.setOnGroundWithKnownMovement but probably isn't necessary
-        AABB box = this.getBoundingBox();
-        box = new AABB(box.minX,box.minY-0.5,box.minZ,box.maxX,box.maxY,box.maxZ);
-        if (this.level().findSupportingBlock(this,box).isPresent()) {
-            roundabout$jumpHeight = roundabout$calculateBonusJumpHeight();
+        if (rdbt$this() instanceof Player pl) {
+            AABB box = this.getBoundingBox();
+            box = new AABB(box.minX, box.minY - 0.5, box.minZ, box.maxX, box.maxY, box.maxZ);
+            if (this.level().findSupportingBlock(this, box).isPresent()) {
+                roundabout$jumpHeight = roundabout$calculateBonusJumpHeight();
+            }
         }
 
         roundabout$tickStandOrStandless();
