@@ -4078,11 +4078,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
 
-        List<AnubisSlipstreamEntity> slipstreams = rdbt$this().level().getEntitiesOfClass(AnubisSlipstreamEntity.class,this.getBoundingBox().inflate(3));
-        if (!slipstreams.isEmpty() && rdbt$this() instanceof Player &&
-                ( (this.roundabout$getStandPowers() instanceof PowersAnubis && !PowerTypes.hasStandActive(this) || !(this.roundabout$getStandPowers() instanceof PowersAnubis)  )  )
-        ) {
-            basis *= 1.6F;
+        if (rdbt$this() instanceof Player) {
+            List<AnubisSlipstreamEntity> slipstreams = rdbt$this().level().getEntitiesOfClass(AnubisSlipstreamEntity.class, this.getBoundingBox().inflate(3));
+            if (!slipstreams.isEmpty() &&
+                    ((this.roundabout$getStandPowers() instanceof PowersAnubis && !PowerTypes.hasStandActive(this) || !(this.roundabout$getStandPowers() instanceof PowersAnubis)))
+            ) {
+                basis *= 1.6F;
+            }
         }
 
 
