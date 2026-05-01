@@ -2273,9 +2273,9 @@ public class PowersMagiciansRed extends NewPunchingStand {
         float barrageLength = this.getRangedBarrage2Length();
         float power;
         if (this.getReducedDamage(entity)){
-            power = 7/barrageLength;
+            power = 10/barrageLength;
         } else {
-            power = 15/barrageLength;
+            power = 16/barrageLength;
         }
         /*Barrage hits are incapable of killing their target until the last hit.*/
         if (entity instanceof LivingEntity){

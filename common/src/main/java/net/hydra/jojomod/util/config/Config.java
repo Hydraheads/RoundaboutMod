@@ -245,7 +245,7 @@ public class Config implements Cloneable {
         public Boolean vampireLeveling;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer sunDamageUnderwaterReach;
-        @IntOption(group = "inherit", value = 200, min = 1, max = 72000)
+        @IntOption(group = "inherit", value = 150, min = 1, max = 72000)
         public Integer expPerVampLevelUp;
         @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
         public Integer expTypeCapPerDay;

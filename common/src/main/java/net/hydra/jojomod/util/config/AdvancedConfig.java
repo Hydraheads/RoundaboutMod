@@ -140,7 +140,6 @@ public class AdvancedConfig implements Cloneable {
             Arrays.asList(
                     "minecraft:absorption",
                     "minecraft:saturation",
-                    "minecraft:invisibility",
                     "minecraft:jump_boost",
                     "minecraft:water_breathing",
                     "minecraft:strength",

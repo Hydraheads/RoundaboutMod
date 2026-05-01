@@ -212,6 +212,12 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         }
     }
 
+
+    @Override
+    public float getPickMiningSpeed() {
+        return 10.5F;
+    }
+
     @Override
     public void onHitGuard(float amt, DamageSource sauce){
         if (getFreezeLevel() > 0) {

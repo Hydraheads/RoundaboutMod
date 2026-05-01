@@ -1287,10 +1287,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         // this is needed to ensure that your jump doesn't get a random boost the middle of it if you're to activate your stand etc.
         // it recalculates when it finds a block .5 below you, this number is arbitrary and technically you can still boost within that tiny distance
         // this could maybe be done by directly injecting into Entity.setOnGround and Entity.setOnGroundWithKnownMovement but probably isn't necessary
-        AABB box = this.getBoundingBox();
-        box = new AABB(box.minX,box.minY-0.5,box.minZ,box.maxX,box.maxY,box.maxZ);
-        if (this.level().findSupportingBlock(this,box).isPresent()) {
-            roundabout$jumpHeight = roundabout$calculateBonusJumpHeight();
+        if (rdbt$this() instanceof Player pl) {
+            AABB box = this.getBoundingBox();
+            box = new AABB(box.minX, box.minY - 0.5, box.minZ, box.maxX, box.maxY, box.maxZ);
+            if (this.level().findSupportingBlock(this, box).isPresent()) {
+                roundabout$jumpHeight = roundabout$calculateBonusJumpHeight();
+            }
         }
 
         roundabout$tickStandOrStandless();
@@ -1922,6 +1924,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     @Override
     public boolean roundabout$getEffectiveCombatMode() {
+
         if (PowerTypes.isBrawling(rdbt$this())){
             return true;
         }
@@ -2080,6 +2083,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /// does what getItemInHand does
     @Inject(method = "getMainHandItem",at = @At(value = "HEAD"),cancellable = true, require = 0)
     public void roundabout$getMainHandItem(CallbackInfoReturnable<ItemStack> cir) {
+        if (!(rdbt$this() instanceof Player))
+            return;
+
         ItemStack ret = roundabout$XHandCancelItem(EquipmentSlot.MAINHAND);
         if (ret.equals(ItemStack.EMPTY)) {
             cir.setReturnValue(ret);
@@ -2088,6 +2094,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Inject(method = "getOffhandItem",at = @At(value = "HEAD"),cancellable = true, require = 0)
     public void roundabout$getOffHandItem(CallbackInfoReturnable<ItemStack> cir) {
+        if (!(rdbt$this() instanceof Player))
+            return;
+
         ItemStack ret = roundabout$XHandCancelItem(EquipmentSlot.OFFHAND);
         if (ret.equals(ItemStack.EMPTY)) {
             cir.setReturnValue(ret);
@@ -4069,11 +4078,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
 
-        List<AnubisSlipstreamEntity> slipstreams = rdbt$this().level().getEntitiesOfClass(AnubisSlipstreamEntity.class,this.getBoundingBox().inflate(3));
-        if (!slipstreams.isEmpty() && rdbt$this() instanceof Player &&
-                ( (this.roundabout$getStandPowers() instanceof PowersAnubis && !PowerTypes.hasStandActive(this) || !(this.roundabout$getStandPowers() instanceof PowersAnubis)  )  )
-        ) {
-            basis *= 1.6F;
+        if (rdbt$this() instanceof Player) {
+            List<AnubisSlipstreamEntity> slipstreams = rdbt$this().level().getEntitiesOfClass(AnubisSlipstreamEntity.class, this.getBoundingBox().inflate(3));
+            if (!slipstreams.isEmpty() &&
+                    ((this.roundabout$getStandPowers() instanceof PowersAnubis && !PowerTypes.hasStandActive(this) || !(this.roundabout$getStandPowers() instanceof PowersAnubis)))
+            ) {
+                basis *= 1.6F;
+            }
         }
 
 
