@@ -1,18 +1,16 @@
 package net.hydra.jojomod.mixin.century_boy;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -53,10 +51,25 @@ public class CenturyBoyRedstone {
                             if (!level.getBlockTicks().hasScheduledTick(targetPos, observer)) {
                                 level.scheduleTick(targetPos, observer, 2);
                             }
-                        }else if (block instanceof SculkSensorBlock sculk) {
-                            if (!level.getBlockTicks().hasScheduledTick(targetPos, sculk)){
+                        }else if (block instanceof SculkSensorBlock || block instanceof CalibratedSculkSensorBlock) {
+                            if (!level.getBlockTicks().hasScheduledTick(targetPos, block)){
                                 level.gameEvent(player, GameEvent.PROJECTILE_LAND, player.position());
                             }
+                        }else if (block instanceof DoorBlock door) {
+                            if (state.getValue(DoorBlock.HALF) != DoubleBlockHalf.LOWER){
+                                boolean isOpen = state.getValue(DoorBlock.OPEN);
+                                door.setOpen(null,level,state,targetPos,!isOpen);
+
+                            }
+                        } else if (block instanceof TrapDoorBlock door) {
+                            boolean isOpen = state.getValue(DoorBlock.OPEN);
+                            level.setBlock(targetPos, state.setValue(TrapDoorBlock.OPEN, !isOpen), 3);
+
+                        } else if (block instanceof RedstoneLampBlock lamp) {
+                            boolean lit = state.getValue(RedstoneLampBlock.LIT);
+                            level.setBlock(targetPos, state.setValue(RedstoneLampBlock.LIT, !lit), 3);
+
+                            level.scheduleTick(targetPos, lamp, 50);
                         }
                     }
                     cir.setReturnValue(false);
