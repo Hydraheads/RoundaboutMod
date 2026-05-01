@@ -831,7 +831,7 @@ public abstract class EntityAndData implements IEntityAndData {
                 IEntityAndData entityAndData = ((IEntityAndData) this);
                 entityAndData.roundabout$setTrueInvisibilityManhattan(10);
             }
-            if ((((Entity) (Object) this) instanceof Mob) || ((Entity) (Object) this) instanceof Player || ((Entity) (Object) this) instanceof LivingEntity) {
+            if ((((Entity) (Object) this) instanceof Mob ME) || ((Entity) (Object) this) instanceof Player || ((Entity) (Object) this) instanceof LivingEntity) {
                 IEntityAndData entityAndData = ((IEntityAndData) this);
                 SavedSecond lastSecond = entityAndData.roundabout$getLastSavedSecond();
                 SavedSecond firstSecond = entityAndData.roundabout$getFirstSavedSecond();
@@ -840,13 +840,19 @@ public abstract class EntityAndData implements IEntityAndData {
                     boolean posCompare = lastSecond.position.x != firstSecond.position.x || lastSecond.position.z != firstSecond.position.z;
                     boolean posCompareY = lastSecond.position.y != firstSecond.position.y;
 
-                    if (posCompare){
-                        entityAndData.roundabout$setTrueInvisibilityManhattan(10);
-                    } else if (((LivingEntity) (Object) this) instanceof RoadRollerEntity) {
-                        entityAndData.roundabout$setTrueInvisibilityManhattan(10);
-                    } else if (posCompareY) {
-                        entityAndData.roundabout$setTrueInvisibilityManhattan(75);
-                    } else {}
+                    if(((Entity) (Object) this).isInWater()){
+                        entityAndData.roundabout$setTrueInvisibilityManhattan(-1);
+                    }
+                    else {
+                        if (posCompare) {
+                            entityAndData.roundabout$setTrueInvisibilityManhattan(10);
+                        } else if (((LivingEntity) (Object) this) instanceof RoadRollerEntity) {
+                            entityAndData.roundabout$setTrueInvisibilityManhattan(10);
+                        } else if (posCompareY) {
+                            entityAndData.roundabout$setTrueInvisibilityManhattan(75);
+                        } else {
+                        }
+                    }
                 }
             }
         }

@@ -156,14 +156,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public boolean switchShootingOther(){
         if (!isClient() && this.self instanceof Player PE) {
             getStandUserSelf().roundabout$setUniqueStandModeToggle(!switchShootingMode());
-            if (!switchShootingMode()) {
-                visionModeClient = true;
-                PE.displayClientMessage(Component.translatable("text.roundabout.manhattan_transfer.wind_vision").withStyle(ChatFormatting.DARK_GREEN), true);
-            }
-            else{
-                visionModeClient = false;
-                PE.displayClientMessage(Component.translatable("text.roundabout.manhattan_transfer.wind_vision_off").withStyle(ChatFormatting.DARK_AQUA), true);
-            }
         }
         return true;
     }
@@ -493,107 +485,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
             }
         }
     }
-
-     /*   @Override
-    public boolean dealWithProjectile(Entity ent, HitResult res){
-        if (!ent.level().isClientSide()) {
-            StandEntity stand = getStandEntity(this.self);
-            if (Objects.nonNull(stand) && stand instanceof ManhattanTransferEntity SE && this.self instanceof ServerPlayer PE) {
-                if (SE.getScoping() && !onCooldown(PowerIndex.SKILL_EXTRA_2)) {
-                    if (!hasBlock() && !hasEntity() &&
-                            ((StandUser) this.getSelf()).roundabout$getActivePower() == PowerIndex.GUARD) {
-                        boolean success = false;
-                        if (ent instanceof AbstractArrow AA) {
-                            ItemStack ii = ((IAbstractArrowAccess)ent).roundabout$GetPickupItem();
-                            if (!ii.isEmpty() && !ii.isDamageableItem()) {
-                                success = true;
-                                S2CPacketUtil.sendSimpleByteToClientPacket(PE,
-                                        PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK);
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                                if (AA.pickup.equals(AbstractArrow.Pickup.ALLOWED)) {
-                                    SE.canAcquireHeldItem = true;
-                                } else {
-                                    SE.canAcquireHeldItem = false;
-                                }
-                                SE.setHeldItem(ii.copyAndClear());
-                            } else if (ent instanceof RattDartEntity RD) {
-                                success = true;
-                                RD.applyEffect(this.getSelf());
-                            } else if (ent instanceof RoundaboutBulletEntity BE) {
-                                success = true;
-                                SE.canAcquireHeldItem = true;
-                                ItemStack bulletItem = BE.getBulletItemStack();
-                                SE.setHeldItem(bulletItem);
-                            }
-                        } else if (ent instanceof ThrownAnubisEntity TAE) {
-                            success = true;
-                            SE.canAcquireHeldItem = true;
-                            ItemStack anubisItem = TAE.getItem();
-                            SE.setHeldItem(anubisItem);
-                        } else if (ent instanceof ThrownObjectEntity TO) {
-                            ItemStack ii = TO.getItem();
-                            if (!ii.isEmpty()) {
-                                success = true;
-                                S2CPacketUtil.sendSimpleByteToClientPacket(PE,
-                                        PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK);
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                                if (TO.places) {
-                                    SE.canAcquireHeldItem = true;
-                                } else {
-                                    SE.canAcquireHeldItem = false;
-                                }
-                                SE.setHeldItem(ii.copyAndClear());
-                            }
-                        } else if (ent instanceof ThrownPotion TP) {
-                            ItemStack ii = TP.getItem();
-                            if (!ii.isEmpty()) {
-                                success = true;
-                                S2CPacketUtil.sendSimpleByteToClientPacket(PE,
-                                        PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK);
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                                if (TP.getOwner() == null || TP.getOwner() instanceof Player) {
-                                    SE.canAcquireHeldItem = true;
-                                } else {
-                                    SE.canAcquireHeldItem = false;
-                                }
-                                SE.setHeldItem(ii.copyAndClear());
-                            }
-                        }
-
-                        if (success){
-                            int cdr = ClientNetworking.getAppropriateConfig().starPlatinumSettings.guardianCooldown;
-                            S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
-                                    PowerIndex.SKILL_EXTRA_2, cdr);
-                            ((StarPlatinumEntity) stand).setScoping(false);
-                            if (ClientNetworking.getAppropriateConfig().starPlatinumSettings.starPlatinumScopeUsesPotionEffectForNightVision) {
-                                MobEffectInstance ME = this.getSelf().getEffect(MobEffects.NIGHT_VISION);
-                                if (ME != null && ME.getDuration() >= 100000 && ME.getAmplifier() > 20) {
-                                    this.getSelf().removeEffect(MobEffects.NIGHT_VISION);
-                                }
-                            }
-                            this.setCooldown(PowerIndex.SKILL_EXTRA_2, cdr);
-                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.ITEM_CATCH_EVENT, SoundSource.PLAYERS, 1.7F, 1.2F);
-                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 0.5F);
-                            poseStand(OffsetIndex.FOLLOW_NOLEAN);
-                            if (MainUtil.isThrownBlockItem(SE.getHeldItem().getItem())) {
-                                animateStand(StandEntity.BLOCK_GRAB);
-                            } else {
-                                animateStand(StandEntity.ITEM_GRAB);
-                            }
-
-                            ((ServerLevel) this.self.level()).sendParticles(ModParticles.AIR_CRACKLE,
-                                    ent.getX(), ent.getY(), ent.getZ(),
-                                    0, 0, 0, 0, 0);
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        return super.dealWithProjectile(ent,res);
-    }*/
-
-    /**Ignore this, it's for later :)    */
 
     @Override
     public int getDisplayPowerInventoryScale() {
