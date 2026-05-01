@@ -1924,6 +1924,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     @Override
     public boolean roundabout$getEffectiveCombatMode() {
+
         if (PowerTypes.isBrawling(rdbt$this())){
             return true;
         }
@@ -2082,6 +2083,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /// does what getItemInHand does
     @Inject(method = "getMainHandItem",at = @At(value = "HEAD"),cancellable = true, require = 0)
     public void roundabout$getMainHandItem(CallbackInfoReturnable<ItemStack> cir) {
+        if (!(rdbt$this() instanceof Player))
+            return;
+
         ItemStack ret = roundabout$XHandCancelItem(EquipmentSlot.MAINHAND);
         if (ret.equals(ItemStack.EMPTY)) {
             cir.setReturnValue(ret);
@@ -2090,6 +2094,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Inject(method = "getOffhandItem",at = @At(value = "HEAD"),cancellable = true, require = 0)
     public void roundabout$getOffHandItem(CallbackInfoReturnable<ItemStack> cir) {
+        if (!(rdbt$this() instanceof Player))
+            return;
+
         ItemStack ret = roundabout$XHandCancelItem(EquipmentSlot.OFFHAND);
         if (ret.equals(ItemStack.EMPTY)) {
             cir.setReturnValue(ret);
