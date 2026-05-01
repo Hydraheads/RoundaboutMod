@@ -22,7 +22,8 @@
     "ForgeGameRendererMixin",
     "ForgeHumanoidArmorLayer",
     "ForgeKillsScreenInputsFix",
-    "ForgeScreenEffectRenderer"
+    "ForgeScreenEffectRenderer",
+    "SaddleLayerManhattan"
   ],
   "server": [
   ],
