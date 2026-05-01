@@ -941,6 +941,14 @@ public class ClientUtil {
         }
         return false;
     }
+    public static boolean checkIfClientCanSeeMobsForWindVisionFromPlayerPov() {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersManhattanTransfer PMT && PMT.switchWindVisionToggle() && PMT.isActive()) {
+            return true;
+        }
+        return false;
+    }
+
     public static boolean isFabulous(){
 
         OptionInstance<GraphicsStatus> $$2 = Minecraft.getInstance().options.graphicsMode();
