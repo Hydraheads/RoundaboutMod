@@ -58,37 +58,8 @@ public class ManhattanTransferEntity extends StandEntity {
             POLLINATION_SKIN = 7,
             UFO_TRANSFER_SKIN = 8;
 
-    public LivingEntity Target;
 
-    public LivingEntity getTarget() {
-        if (this.level().isClientSide) {
-            return (LivingEntity) this.level().getEntity(this.entityData.get(TARGET_ID));
-        } else {
-            if (this.Target != null && this.Target.isRemoved()) {
-                this.setFollowing(null);
-            }
-            return this.Target;
-        }
-    }
 
-    public void setManhattanTarget(LivingEntity StandSet) {
-        this.Target = StandSet;
-        int standSetId = -1;
-        if (StandSet != null) {
-            standSetId = StandSet.getId();
-        }
-        this.entityData.set(TARGET_ID, standSetId);
-    }
-
-    protected static final EntityDataAccessor<Integer> TARGET_ID = SynchedEntityData.defineId(ManhattanTransferEntity.class,
-            EntityDataSerializers.INT);
-    @Override
-    protected void defineSynchedData() {
-        if (!this.entityData.hasItem(TARGET_ID)) {
-            super.defineSynchedData();
-            this.entityData.define(TARGET_ID, -1);
-        }
-    }
     @Override
     public boolean isNoGravity() {
         return true;
@@ -126,19 +97,15 @@ public class ManhattanTransferEntity extends StandEntity {
     public boolean canBeSeenAsEnemy() {
         return true;
     }
-   /* @Override
-    public boolean isPushedByFluid() {
-        return true;
-    }*/
 
     @Override
     public boolean skipAttackInteraction(Entity $$0) {
         return false;
     }
- /*   @Override
+    @Override
     protected float getFlyingSpeed() {
         return 0.10F;
-    }*/
+    }
 
     @Override
     public boolean isControlledByLocalInstance() {
@@ -169,7 +136,7 @@ public class ManhattanTransferEntity extends StandEntity {
             return false;
         }
         this.markHurt();
-        return super.hurt(source, amount * 2);
+        return super.hurt(source, amount);
     }
 
     @Override

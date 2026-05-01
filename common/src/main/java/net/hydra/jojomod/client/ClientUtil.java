@@ -943,7 +943,7 @@ public class ClientUtil {
     }
     public static boolean checkIfClientCanSeeMobsForWindVisionFromPlayerPov() {
         LocalPlayer player = Minecraft.getInstance().player;
-        if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersManhattanTransfer PMT && PMT.switchWindVisionToggle() && PMT.isActive()) {
+        if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersManhattanTransfer PMT && PMT.visionModeClient && PMT.isActive()) {
             return true;
         }
         return false;
