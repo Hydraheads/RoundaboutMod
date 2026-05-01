@@ -102,6 +102,12 @@ public class RattEntity extends StandEntity {
         }
         this.entityData.set(SAFE_TICKS,this.entityData.get(SAFE_TICKS)+d);
     }
+    public int getRatTarget() {
+        return this.entityData.get(RATT_TARGET);
+    }
+    public void setRatTarget(int d) {
+        this.entityData.set(RATT_TARGET,d);
+    }
 
     protected static final EntityDataAccessor<Byte> SAVED_SKIN = SynchedEntityData.defineId(RattEntity.class,
             EntityDataSerializers.BYTE);
@@ -111,6 +117,8 @@ public class RattEntity extends StandEntity {
             EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Vector3f> MINING_COORDS = SynchedEntityData.defineId(RattEntity.class,
             EntityDataSerializers.VECTOR3);
+    protected static final EntityDataAccessor<Integer> RATT_TARGET = SynchedEntityData.defineId(RattEntity.class,
+            EntityDataSerializers.INT);
 
     @Override
     protected void defineSynchedData() {
@@ -120,6 +128,7 @@ public class RattEntity extends StandEntity {
             this.entityData.define(SAFE_TICKS, ConfigManager.getConfig().rattSettings.rattSafetyTicks);
             this.entityData.define(AUTO_MINING,false);
             this.entityData.define(MINING_COORDS,Vec3.ZERO.toVector3f());
+            this.entityData.define(RATT_TARGET,0);
         }
     }
 
@@ -165,6 +174,11 @@ public class RattEntity extends StandEntity {
 
     @Override
     public void tick() {
+        if (!level().isClientSide()){
+            if (this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersRatt PR) {
+                setRatTarget(PR.rattTarget);
+            }
+        }
         super.tick();
         if (isSafe()) {
             if (this.getUser() != null) {
