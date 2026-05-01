@@ -565,6 +565,7 @@ public class ForgeEvents {
         ModEntities.SOFT_AND_WET_DEBUT = ForgeEntities.SOFT_AND_WET_DEBUT.get();
         ModEntities.SOFT_AND_WET_KILLER_QUEEN = ForgeEntities.SOFT_AND_WET_KILLER_QUEEN.get();
         ModEntities.KILLER_QUEEN = ForgeEntities.KILLER_QUEEN.get();
+        ModEntities.BLOCK_BOMB = ForgeEntities.BLOCK_BOMB.get();
         ModEntities.CINDERELLA = ForgeEntities.CINDERELLA.get();
         ModEntities.MANHATTAN_TRANSFER = ForgeEntities.MANHATTAN_TRANSFER.get();
         ModEntities.POLLINATION_TRANSFER = ForgeEntities.POLLINATION_TRANSFER.get();
