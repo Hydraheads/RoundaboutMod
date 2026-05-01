@@ -62,16 +62,16 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     public void renderIcons(GuiGraphics context, int x, int y) {
         switch (mode) {
             case 1 ->{
-                setSkillIcon(context, x, y, 1, StandIcons.GROUND_IMPLANT_OUT, PowerIndex.SKILL_1);
+                setSkillIcon(context, x, y, 1, StandIcons.GROUND_STANCE, PowerIndex.SKILL_1);
             }
             case 2 ->{
                 setSkillIcon(context, x, y, 1, StandIcons.NEUTRAL_STANCE, PowerIndex.SKILL_1);
             }
             case 3 ->{
-                setSkillIcon(context, x, y, 1, StandIcons.RED_LASH, PowerIndex.SKILL_1);
+                setSkillIcon(context, x, y, 1, StandIcons.KNOCKBACK_STANCE, PowerIndex.SKILL_1);
             }
             case 4 ->{
-                setSkillIcon(context, x, y, 1, StandIcons.RATT_LEAP, PowerIndex.SKILL_1);
+                setSkillIcon(context, x, y, 1, StandIcons.REDSTONE_STANCE, PowerIndex.SKILL_1);
             }
         }
         setSkillIcon(context,x,y,2, StandIcons.TOGGLE_INVINCIBILITY, PowerIndex.SKILL_2);
