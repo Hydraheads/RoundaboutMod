@@ -22,6 +22,7 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.DamageHandler;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -47,16 +48,29 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.animal.Chicken;
+import net.minecraft.world.entity.animal.Cow;
+import net.minecraft.world.entity.animal.Parrot;
+import net.minecraft.world.entity.animal.Pig;
+import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.animal.goat.Goat;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -722,6 +736,22 @@ public class PowersKillerQueen extends NewPunchingStand {
     	return BOMB_NONE;
     }
     
+    public void explosionHurt(Vec3 pos) {
+    	List<Entity> highDamages = MainUtil.genHitbox(this.getSelf().level(), pos.x(), pos.y(), pos.z(), 0.5, 0.5, 0.5);
+    	List<Entity> lowDamages = MainUtil.genHitbox(this.getSelf().level(), pos.x(), pos.y(), pos.z(), 1.5, 1.5, 1.5);
+    	DamageSource dmg = ModDamageTypes.of(this.getSelf().level(), DamageTypes.PLAYER_EXPLOSION, this.getSelf());;
+    	
+    	for(int j = 0;j<highDamages.size();j++) {
+            Entity entity = highDamages.get(j);
+            entity.hurt(dmg, 10.0f);
+        }
+    	for(int j = 0;j<lowDamages.size();j++) {
+            Entity entity = lowDamages.get(j);
+            entity.hurt(dmg, 7.0f);
+        }
+    	
+    }
+    
     public void explodeBlocks(BlockPos location) {
     	Vec3 center = new Vec3(location.getX(), location.getY(), location.getZ());
     	
@@ -746,6 +776,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 			BlockPos pos = this.bombBlock.getBlockPos();
 			if (!isClient()) {
 				if (this.destroyTerrain) {explodeBlocks(pos);}
+				this.explosionHurt(pos.getCenter());
 			}
     		this.bombBlock.discard();
     		this.bombBlock = null;
