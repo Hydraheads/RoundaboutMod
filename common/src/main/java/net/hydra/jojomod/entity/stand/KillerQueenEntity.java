@@ -23,7 +23,21 @@ public class KillerQueenEntity extends FollowingStandEntity {
     }
 
     public static final byte
-            PART_4 = 0;
+            PART_4 = 0,
+    		MANGA = 1,
+			UMBRA = 2,
+    		GOGO = 3,
+    		ARTWORK = 4,
+    		CRACKED = 5,
+    		CREEPER = 6,
+    		STRAY = 7,
+    		NIGHTMARE = 8,
+    		LIMBUSMORTIS = 9,
+    		JOJOLION = 10,
+    		GUNPOWDER = 11,
+    		FINAL = 12,
+    		DEADLY = 13,
+    		YELLOW = 14;
 
     public final AnimationState lid_open = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
@@ -34,6 +48,12 @@ public class KillerQueenEntity extends FollowingStandEntity {
     public final AnimationState finalKickWindup = new AnimationState();
     public final AnimationState finalKick = new AnimationState();
     public final AnimationState finalPunch = new AnimationState();
+    public final AnimationState blockPlant = new AnimationState();
+    public final AnimationState itemGrab = new AnimationState();
+    public final AnimationState itemThrow = new AnimationState();
+    public final AnimationState detonate = new AnimationState();
+    public final AnimationState thirdBomb = new AnimationState();
+    
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();

@@ -101,10 +101,11 @@ public abstract class ZItemInHandRenderer {
             if (user.roundabout$getStandPowers() instanceof PowersEmperor && user.roundabout$getCombatMode()){
 
                 poseStack.pushPose();
-                poseStack.translate(0.3, -0.3, -0.7);
-                poseStack.mulPose(Axis.XP.rotationDegrees(265.0F));
+                poseStack.translate(0.3, -0.25, -0.7);
+                poseStack.mulPose(Axis.XP.rotationDegrees(290.0F));
                 poseStack.mulPose(Axis.YP.rotationDegrees(135.0F));
-                poseStack.mulPose(Axis.ZP.rotationDegrees(0.0F));
+                poseStack.mulPose(Axis.ZP.rotationDegrees(-30.0F));
+                poseStack.scale(0.9F, 0.9F, 0.9F);
                 ModStrayModels.EMPEROR_MODEL.renderToBuffer(poseStack, bufferSource.getBuffer(RenderType.entityCutoutNoCull(new ResourceLocation(Roundabout.MOD_ID, "textures/stand/emperor/emperor_anime.png"))), light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
                 poseStack.popPose();
 

@@ -577,8 +577,6 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         }
         ShootingArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,yes,
                 0,0,$$4);
-        //EmperorArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,yes,
-        //        0,0,$$4);
         AnubisLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,yes,$$4);
         if ($$4 != null && $$4.equals(this.model.rightArm)) {
             MandomLayer.renderWatchFirstPerson(stack, buffer, getPackedLightCoords(acl, 1F), acl, 1, 1, 1, yes,
@@ -939,8 +937,6 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
             ShootingArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,yes,
                     0,0,$$5);
-            //EmperorArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,yes,
-            //        0,0,$$5);
             AnubisLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,yes,$$4);
         }
 

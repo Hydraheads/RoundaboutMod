@@ -1,14 +1,11 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.projectile.EmperorBulletEntity;
-import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
-import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -16,22 +13,18 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
-import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -46,6 +39,11 @@ public class PowersEmperor extends NewDashPreset {
         return ClientNetworking.getAppropriateConfig().emperorSettings.enableEmperor;
     }
 
+    private boolean controlMode = true;
+
+    public boolean isControlMode() {
+        return controlMode;
+    }
 
     public boolean holdDownClick = false;
     public boolean consumeClickInput = false;
@@ -84,28 +82,90 @@ public class PowersEmperor extends NewDashPreset {
         }
     }
 
+    private LivingEntity findTarget(Vec3 bulletPos) {
 
+        double range = 10;
+
+        List<LivingEntity> entities = self.level().getEntitiesOfClass(
+                LivingEntity.class,
+                new net.minecraft.world.phys.AABB(
+                        bulletPos.x - range, bulletPos.y - range, bulletPos.z - range,
+                        bulletPos.x + range, bulletPos.y + range, bulletPos.z + range
+                ),
+                e -> e != self && e.isAlive()
+        );
+
+        LivingEntity closest = null;
+        double closestDist = Double.MAX_VALUE;
+
+        for (LivingEntity entity : entities) {
+
+            double dist = entity.distanceToSqr(bulletPos);
+
+            if (dist < closestDist) {
+                closestDist = dist;
+                closest = entity;
+            }
+        }
+
+        return closest;
+    }
     @Override
     public void tickPower() {
         super.tickPower();
 
         if (shootTicks > 0) {
             shootTicks -= getLowerTicks();
-
             shootTicks = Math.max(0, shootTicks);
         }
+
+        if (controlMode) {
+            bulletList.removeIf(b -> b == null || !b.isAlive());
+
+            for (EmperorBulletEntity bullet : bulletList) {
+                if (bullet == null || !bullet.isAlive()) continue;
+
+                Vec3 target = self.getEyePosition().add(self.getLookAngle().scale(60));
+                Vec3 toTarget = target.subtract(bullet.position()).normalize();
+
+                double speed = bullet.getDeltaMovement().length();
+                Vec3 newMotion = toTarget.scale(speed);
+
+                bullet.setDeltaMovement(newMotion);
+            }
+        }
+
+        if (autoMode) {
+
+            bulletList.removeIf(b -> b == null || !b.isAlive());
+
+            for (EmperorBulletEntity bullet : bulletList) {
+
+                LivingEntity target = findTarget(bullet.position());
+
+                if (target == null) continue;
+
+                Vec3 toTarget = target.getEyePosition()
+                        .subtract(bullet.position())
+                        .normalize();
+
+                double speed = Math.max(0.5, bullet.getDeltaMovement().length());
+                Vec3 newMotion = toTarget.scale(speed);
+
+                bullet.setDeltaMovement(newMotion);
+                bullet.hasImpulse = true;
+            }
+        }
     }
-
-
 
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         if (move == PowerIndex.POWER_1) {
             tripleShot = !tripleShot;
-            System.out.println("TOGGLED SERVER: " + tripleShot);
             return true;
         } else if (move == PowerIndex.POWER_2) {
-            return this.controlModeInactive();
+            controlModeToggle();
+            return true;
         } else if (move == PowerIndex.POWER_2_SNEAK) {
             return this.autoModeActive();
         } else if (move == PowerIndex.POWER_4_EXTRA) {
@@ -117,14 +177,13 @@ public class PowersEmperor extends NewDashPreset {
     public static final byte
             SHOOT = PowerIndex.POWER_4_EXTRA;
 
-
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
         PowersEmperor PA = new PowersEmperor(entity);
         ((StandUser)entity).roundabout$setStandSkin((byte) 1);
         return PA;}
 
-    private boolean autoMode;
+    private boolean autoMode = true;
 
     public boolean autoModeActive(){
         return autoMode;
@@ -136,12 +195,6 @@ public class PowersEmperor extends NewDashPreset {
         if (getSelf() instanceof StandUser su) {
             su.roundabout$setUniqueStandModeToggle(!su.roundabout$getUniqueStandModeToggle());
         }
-    }
-
-    private boolean controlMode;
-
-    public boolean controlModeInactive(){
-        return controlMode;
     }
 
     @Override
@@ -160,10 +213,10 @@ public class PowersEmperor extends NewDashPreset {
                 setSkillIcon(context, x, y, 2, StandIcons.EMPEROR_AUTO_MODE_OFF, PowerIndex.SKILL_2_SNEAK);
             }
         } else {
-            if (controlModeInactive()) {
-                setSkillIcon(context, x, y, 2, StandIcons.EMPEROR_CONTROL_MODE_OFF, PowerIndex.SKILL_2);
-            } else if (!controlModeInactive()) {
+            if (isControlMode()) {
                 setSkillIcon(context, x, y, 2, StandIcons.EMPEROR_CONTROL_MODE_ON, PowerIndex.SKILL_2);
+            } else {
+                setSkillIcon(context, x, y, 2, StandIcons.EMPEROR_CONTROL_MODE_OFF, PowerIndex.SKILL_2);
             }
         }
 
@@ -205,12 +258,6 @@ public class PowersEmperor extends NewDashPreset {
 
         return super.tryPower(move, forced);
     }
-
-
-
-
-
-
 
     @Override
     public void powerActivate(PowerContext context) {
@@ -254,7 +301,7 @@ public class PowersEmperor extends NewDashPreset {
     }
 
     private void bulletSpeedDown() {
-        speedMultiplier = Mth.clamp(speedMultiplier - 0.15f, 0.2f, 3.0f);
+        speedMultiplier = Mth.clamp(speedMultiplier - 1.0f, 3.0f, 5.0f);
     }
 
     private void autoModeToggle() {
@@ -295,14 +342,6 @@ public class PowersEmperor extends NewDashPreset {
         }
     }
 
-    public float getBulletStrength(Entity entity) {
-        if (this.getReducedDamage(entity)) {
-            return levelupDamageMod(multiplyPowerByStandConfigShooting(multiplyPowerByStandConfigPlayers(1.35F)));
-        } else {
-            return levelupDamageMod(multiplyPowerByStandConfigShooting(multiplyPowerByStandConfigMobs(3F)));
-        }
-    }
-
     public float multiplyPowerByStandConfigShooting(float power) {
         return (float) (power * (ClientNetworking.getAppropriateConfig().
                 emperorSettings.emperorShootingModePower * 0.01));
@@ -322,7 +361,6 @@ public class PowersEmperor extends NewDashPreset {
         }
         return false;
     }
-
 
     public boolean confirmShot(int useTicks){
         if (canShootBullet(useTicks)){
@@ -388,12 +426,16 @@ public class PowersEmperor extends NewDashPreset {
                 bullet.setBaseDamage(getEmperorBulletStrength(this.self) * speedMultiplier);
 
                 this.bulletList.add(bullet);
+                bullet.setOwner(this.self);
+
                 this.getSelf().level().addFreshEntity(bullet);
             }
 
         } else {
 
             EmperorBulletEntity bullet = getEmperorBullet();
+
+            bullet.setOwner(this.self);
 
             bullet.shootFromRotation(
                     (Player) this.self,
@@ -423,12 +465,6 @@ public class PowersEmperor extends NewDashPreset {
         return true;
     }
 
-
-
-
-
-
-
     public static final byte
             ANIME = 0,
             MANGA = 1;
@@ -452,10 +488,6 @@ public class PowersEmperor extends NewDashPreset {
             default -> Component.translatable("skins.roundabout.emperor.anime");
         };
     }
-
-
-
-
 
     @Override
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass){

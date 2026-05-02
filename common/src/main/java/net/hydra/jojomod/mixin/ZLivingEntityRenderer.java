@@ -235,6 +235,11 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
                         10));
             }
         }
+        else if(ClientUtil.checkIfClientCanSeeMobsForWindVision() || ClientUtil.checkIfClientCanSeeMobsForWindVisionFromPlayerPov()){
+            ci.setReturnValue(roundabout$PackRed(
+                    15,
+                    10));
+        }
     }
 
     // risky because it's brittle, but it honestly might just work

@@ -383,6 +383,12 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "d4c").toString())
             );
+    public static final RegistryObject<EntityType<BlockBombEntity>> BLOCK_BOMB =
+            ENTITY_TYPES.register("block_bomb", () ->
+                    EntityType.Builder.of(BlockBombEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "block_bomb").toString())
+            );
     public static final RegistryObject<EntityType<CinderellaEntity>> CINDERELLA =
             ENTITY_TYPES.register("cinderella", () ->
                     EntityType.Builder.of(CinderellaEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
@@ -678,29 +684,29 @@ public class ForgeEntities {
     public static final RegistryObject<EntityType<SeperatedArmEntity>> SEPERATED_ARM =
             ENTITY_TYPES.register("seperated_arm", () ->
                     EntityType.Builder.<SeperatedArmEntity>of(SeperatedArmEntity::new, MobCategory.MISC).
-                            sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":seperated_arm")
+                            sized(0.5F, 0.5F).clientTrackingRange(15).build(Roundabout.MOD_ID+":seperated_arm")
             );
 
     public static final RegistryObject<EntityType<SeperatedArmSlimEntity>> SEPERATED_ARM_SLIM =
             ENTITY_TYPES.register("seperated_arm_slim", () ->
                     EntityType.Builder.<SeperatedArmSlimEntity>of(SeperatedArmSlimEntity::new, MobCategory.MISC).
-                            sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":seperated_arm_slim")
+                            sized(0.5F, 0.5F).clientTrackingRange(15).build(Roundabout.MOD_ID+":seperated_arm_slim")
             );
 
     public static final RegistryObject<EntityType<LeftSeperatedArmEntity>> LEFT_SEPERATED_ARM =
             ENTITY_TYPES.register("left_seperated_arm", () ->
                     EntityType.Builder.<LeftSeperatedArmEntity>of(LeftSeperatedArmEntity::new, MobCategory.MISC).
-                            sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":left_seperated_arm")
+                            sized(0.5F, 0.5F).clientTrackingRange(15).build(Roundabout.MOD_ID+":left_seperated_arm")
             );
 
     public static final RegistryObject<EntityType<LeftSeperatedArmSlimEntity>> LEFT_SEPERATED_ARM_SLIM =
             ENTITY_TYPES.register("left_seperated_arm_slim", () ->
                     EntityType.Builder.<LeftSeperatedArmSlimEntity>of(LeftSeperatedArmSlimEntity::new, MobCategory.MISC).
-                            sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":left_seperated_arm_slim")
+                            sized(0.5F, 0.5F).clientTrackingRange(15).build(Roundabout.MOD_ID+":left_seperated_arm_slim")
             );
     public static final RegistryObject<EntityType<MoldSporesEntity>> MOLD_SPORE =
             ENTITY_TYPES.register("molds_spores", () ->
-                    EntityType.Builder.of(MoldSporesEntity::new, MobCategory.CREATURE).sized(0.6f, 1.95f).
+                    EntityType.Builder.of(MoldSporesEntity::new, MobCategory.CREATURE).sized(0.01f, 0.01f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "molds_spores").toString())
             );

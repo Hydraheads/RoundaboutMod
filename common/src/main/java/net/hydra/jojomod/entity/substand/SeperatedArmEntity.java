@@ -48,6 +48,7 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.WebBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Path;
@@ -146,12 +147,11 @@ public class SeperatedArmEntity extends StandEntity {
     }
 
     public BlockPos IsArmContactingBlock(){
-
-        //BlockHitResult hitResult = this.level().;
+        
         BlockPos Checkpos = this.getOnPos();
 
         for(int i = 0; i < 4; i = i + 1){
-            if(!(this.level().getBlockState(Checkpos.above()).getBlock()instanceof AirBlock )){
+            if(!(this.level().getBlockState(Checkpos.above()).getBlock()instanceof AirBlock ) ){
                 return Checkpos.above();
             }else if(!(this.level().getBlockState(Checkpos.below()).getBlock()instanceof AirBlock)){
                 return Checkpos.below();
@@ -166,6 +166,23 @@ public class SeperatedArmEntity extends StandEntity {
             }else{
                 return null;
             }
+
+          //  if(isColliding(Checkpos.above(),(this.level().getBlockState(Checkpos.above())))){
+          //      return Checkpos.above();
+          //  }else if(isColliding(Checkpos.below(),(this.level().getBlockState(Checkpos.below())))){
+          //      return Checkpos.below();
+          //  }else if(isColliding(Checkpos.south(),(this.level().getBlockState(Checkpos.south())))){
+          //      return Checkpos.south();
+          //  }else if(isColliding(Checkpos.north(),(this.level().getBlockState(Checkpos.north())))){
+          //      return Checkpos.north();
+          //  }else if(isColliding(Checkpos.east(),(this.level().getBlockState(Checkpos.east())))){
+          //      return Checkpos.east();
+         //   }else if(isColliding(Checkpos.west(),(this.level().getBlockState(Checkpos.west())))){
+          //      return Checkpos.west();
+         //   }else{
+         //       return null;
+         //   }
+
 
         }
         //return hitResult.getBlockPos();

@@ -72,10 +72,10 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public void renderIcons(GuiGraphics context, int x, int y) {
         // code for advanced icons
         ClientUtil.fx.roundabout$onGUI(context);
-      /*  if () {
+        if (switchShootingMode()) {
             setSkillIcon(context, x, y, 1, StandIcons.MANUAL_SHOOTING_ON, PowerIndex.SKILL_1);
         }
-        else*/
+        else
             setSkillIcon(context, x, y, 1, StandIcons.MANUAL_SHOOTING_OFF, PowerIndex.SKILL_1);
 
         if (isPiloting())
@@ -83,7 +83,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
         else
             setSkillIcon(context, x, y, 2, StandIcons.CONTROL_MODE_ON, PowerIndex.SKILL_2);
 
-        if (switchWindVisionToggle()) {
+        if (visionModeClient) {
             setSkillIcon(context, x, y, 4, StandIcons.WIND_VISION_ON, PowerIndex.SKILL_4);
         }
         else
@@ -117,7 +117,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
         /**Making dash usable on both key presses*/
         switch (context) {
             case SKILL_1_NORMAL, SKILL_1_CROUCH-> {
-
+                switchShooting();
             }
                 case SKILL_2_NORMAL, SKILL_2_CROUCH -> {
                 toggleControlModeClient();
@@ -138,11 +138,26 @@ public class PowersManhattanTransfer extends NewDashPreset {
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         switch (move) {
+            case PowerIndex.POWER_1 -> {
+                return switchShootingOther();
+            }
             case PowerIndex.POWER_4 -> {
-                return switchVision();
+                switchVision();
             }
         }
             return super.setPowerOther(move, lastMove);
+    }
+
+    public void switchShooting(){
+        this.tryPower(PowerIndex.POWER_1, true);
+        tryPowerPacket(PowerIndex.POWER_1);
+    }
+
+    public boolean switchShootingOther(){
+        if (!isClient() && this.self instanceof Player PE) {
+            getStandUserSelf().roundabout$setUniqueStandModeToggle(!switchShootingMode());
+        }
+        return true;
     }
 
     @Override
@@ -151,13 +166,15 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
             case PowersManhattanTransfer.MANHATTAN_DODGE -> {
               /*  this.setCooldown(PowersManhattanTransfer.MANHATTAN_DODGE,ClientNetworking.getAppropriateConfig().rattSettings.rattLeapCooldown);
+                //Vec3 dir = this.getStandEntity(this.getSelf()).getViewVector(1);
                 if (this.getStandEntity(this.getSelf()) != null) {
                     Vec3 dir = this.getStandEntity(this.getSelf()).getViewVector(1);
-                    dir = dir.scale(2);
-                    Vec3 vec3 = new Vec3(dir.x, Mth.clamp(dir.y+0.2F,0.1,100), dir.z);
-                    this.getStandEntity(this.getSelf()).setDeltaMovement(11, 11, 11);
+                    dir = dir.scale(3);
+                    Vec3 vec3 = new Vec3(dir.x, dir.y, dir.z);
+                    this.getStandEntity(this.getSelf()).setDeltaMovement(vec3);
+                    //entity.setDeltaMovement(entity.getForward());
                 }*/
-                //this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.RATT_LEAP_EVENT, SoundSource.PLAYERS, 1F,1.2F);
+              //  this.getStandEntity(this.getSelf()).level().playSound(null,this.getSelf().blockPosition(),ModSounds.VAMPIRE_DASH_EVENT, SoundSource.PLAYERS, 1F,1.2F);
             }
         }
         return super.tryPower(move, forced);
@@ -176,26 +193,30 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public void switchVisionClient(){
         this.tryPower(PowerIndex.POWER_4, true);
         tryPowerPacket(PowerIndex.POWER_4);
-        if (isClient() && switchWindVisionToggle()) {
+        if (isClient() && visionModeClient) {
             this.self.playSound(ModSounds.MANHATTAN_VISION_EVENT, 200F, 1.0F);
         }
     }
-    public boolean switchVision(){
+
+    public boolean visionModeClient = false;
+
+    public void switchVision(){
         if (isClient() && this.self instanceof Player PE) {
-            getStandUserSelf().roundabout$setUniqueStandModeToggle(!switchWindVisionToggle());
-            if (switchWindVisionToggle()) {
+
+            if (!visionModeClient) {
+                visionModeClient = true;
                 PE.displayClientMessage(Component.translatable("text.roundabout.manhattan_transfer.wind_vision").withStyle(ChatFormatting.DARK_GREEN), true);
             }
             else{
+                visionModeClient = false;
                 PE.displayClientMessage(Component.translatable("text.roundabout.manhattan_transfer.wind_vision_off").withStyle(ChatFormatting.DARK_AQUA), true);
             }
         }
-        return true;
     }
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
         IEntityAndData entityAndData = ((IEntityAndData) ent);
-        if(switchWindVisionToggle()) {
+        if(visionModeClient) {
             if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) && ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
                 if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent) && !player.hasLineOfSight(ent)) {
                     return true;
@@ -229,7 +250,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
         }
         return 12379456;
     }
-    public boolean switchWindVisionToggle(){
+    public boolean switchShootingMode(){
         return getStandUserSelf().roundabout$getUniqueStandModeToggle();
     }
     @Override
@@ -297,7 +318,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public boolean isActive() {
         return this.getStandEntity(this.getSelf()) != null;
     }
-   // StandUser User = getUserData(this.self);
     @Override
     public void tickPower() {
         super.tickPower();
@@ -419,9 +439,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
                                 entity.setDeltaMovement(entity.getForward().scale(0.04 * configSpeed()));
                             } else {
                                 if ($$13 != 0) {
-                                    entity.setDeltaMovement(delta.x / 1.6, $$13 * flyingSpeed * 2.5F, delta.z / 1.6);
+                                    entity.setDeltaMovement(delta.x / 1.4, $$13 * flyingSpeed * 2.5F, delta.z / 1.4);
                                 } else {
-                                    entity.setDeltaMovement(delta.x / 1.6, 0, delta.z / 1.6);
+                                    entity.setDeltaMovement(delta.x / 1.4, 0, delta.z / 1.4);
                                 }
                             }
                         } else {
@@ -465,6 +485,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
             }
         }
     }
+
     @Override
     public int getDisplayPowerInventoryScale() {
         return 45;

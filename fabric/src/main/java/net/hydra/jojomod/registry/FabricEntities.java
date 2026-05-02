@@ -439,6 +439,13 @@ public class FabricEntities {
                         EntityType.Builder.of(KillerQueenEntity::new, MobCategory.MISC).
                                 sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":killer_queen")
                 );
+        public static final EntityType<BlockBombEntity> BLOCK_BOMB =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        Roundabout.location("block_bomb"),
+                        EntityType.Builder.of(BlockBombEntity::new, MobCategory.MISC).
+                                sized(0.75f, 0.75f).clientTrackingRange(14).build(Roundabout.MOD_ID+":block_bomb")
+                );
         public static final EntityType<CinderellaEntity> CINDERELLA =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -785,7 +792,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "seperated_arm"),
                     EntityType.Builder.<SeperatedArmEntity>of(SeperatedArmEntity::new, MobCategory.MISC).
-                            sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":seperated_arm")
+                            sized(0.5F, 0.5F).clientTrackingRange(15).build(Roundabout.MOD_ID+":seperated_arm")
             );
 
     public static final EntityType<SeperatedArmSlimEntity> SEPERATED_ARM_SLIM =
@@ -793,7 +800,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "seperated_arm_slim"),
                     EntityType.Builder.<SeperatedArmSlimEntity>of(SeperatedArmSlimEntity::new, MobCategory.MISC).
-                            sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":seperated_arm_slim")
+                            sized(0.5F, 0.5F).clientTrackingRange(15).build(Roundabout.MOD_ID+":seperated_arm_slim")
             );
 
     public static final EntityType<LeftSeperatedArmEntity> LEFT_SEPERATED_ARM =
@@ -801,7 +808,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "left_seperated_arm"),
                     EntityType.Builder.<LeftSeperatedArmEntity>of(LeftSeperatedArmEntity::new, MobCategory.MISC).
-                            sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":left_seperated_arm")
+                            sized(0.5F, 0.5F).clientTrackingRange(15).build(Roundabout.MOD_ID+":left_seperated_arm")
             );
 
     public static final EntityType<LeftSeperatedArmSlimEntity> LEFT_SEPERATED_ARM_SLIM =
@@ -809,7 +816,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "left_seperated_arm_slim"),
                     EntityType.Builder.<LeftSeperatedArmSlimEntity>of(LeftSeperatedArmSlimEntity::new, MobCategory.MISC).
-                            sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":left_seperated_arm_slim")
+                            sized(0.5F, 0.5F).clientTrackingRange(15).build(Roundabout.MOD_ID+":left_seperated_arm_slim")
             );
 
 
@@ -825,7 +832,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "mold_spore"),
                     EntityType.Builder.of(MoldSporesEntity::new, MobCategory.CREATURE).
-                            sized(0.6f, 1.95f).clientTrackingRange(50).build(Roundabout.MOD_ID+":molds_pore")
+                            sized(0.01f, 0.01f).clientTrackingRange(50).build(Roundabout.MOD_ID+":molds_pore")
             );
 
         public static void register() {
@@ -855,6 +862,7 @@ public class FabricEntities {
                 ModEntities.SOFT_AND_WET_KING = SOFT_AND_WET_KING;
                 ModEntities.SOFT_AND_WET_KILLER_QUEEN = SOFT_AND_WET_KILLER_QUEEN;
                 ModEntities.KILLER_QUEEN = KILLER_QUEEN;
+                ModEntities.BLOCK_BOMB = BLOCK_BOMB;
                 ModEntities.CINDERELLA = CINDERELLA;
                 ModEntities.MANHATTAN_TRANSFER = MANHATTAN_TRANSFER;
                 ModEntities.POLLINATION_TRANSFER = POLLINATION_TRANSFER;
@@ -1010,6 +1018,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(SOFT_AND_WET_KING, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SOFT_AND_WET_KILLER_QUEEN, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(KILLER_QUEEN, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(BLOCK_BOMB, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(JUSTICE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(JUSTICE_PIRATE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DARK_MIRAGE, StandEntity.createStandAttributes());

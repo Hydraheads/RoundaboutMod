@@ -132,11 +132,11 @@ public class PowersRatt extends NewDashPreset {
 
 
 
-    private int rattTarget = 0;
+    public int rattTarget = 0;
 
     public LivingEntity getShootTarget() {
-        if (this.getStandEntity(this.getSelf()) instanceof RattEntity) {
-            Entity e = this.getSelf().level().getEntity(rattTarget);
+        if (this.getStandEntity(this.getSelf()) instanceof RattEntity RE) {
+            Entity e = this.getSelf().level().getEntity(RE.getRatTarget());
             if (e instanceof LivingEntity LE) {
                 return LE;
             }
@@ -366,7 +366,7 @@ public class PowersRatt extends NewDashPreset {
             Vec3 targetPos = getTargetPos().getLocation();
             if (isAutoMining()) {
                 targetPos = RE.getMiningCoords();
-            } else if (target != null && isAuto()) {
+            } else if (target != null) {
                 targetPos = target.getEyePosition(1);
                 if (isAuto()) {
                     double dist = targetPos.distanceTo(RE.getPosition(1));
