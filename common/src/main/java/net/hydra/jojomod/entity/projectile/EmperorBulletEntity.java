@@ -34,7 +34,11 @@ import java.util.UUID;
 public class EmperorBulletEntity extends AbstractArrow {
     @Override
     protected ItemStack getPickupItem() {
-        return null;
+        return ItemStack.EMPTY;
+    }
+    @Override
+    public boolean isPickable() {
+        return false;
     }
 
     public EmperorBulletEntity(EntityType<? extends EmperorBulletEntity> type, Level level) {
@@ -49,7 +53,6 @@ public class EmperorBulletEntity extends AbstractArrow {
     }
 
     public LivingEntity standUser;
-
 
     private float getBulletDamage() {
         LivingEntity owner = (LivingEntity) this.getOwner();
@@ -77,6 +80,8 @@ public class EmperorBulletEntity extends AbstractArrow {
             this.discard();
             return;
         }
+
+        this.setNoGravity(true);
 
         this.setDeltaMovement(this.getDeltaMovement().scale(0.995));
 
