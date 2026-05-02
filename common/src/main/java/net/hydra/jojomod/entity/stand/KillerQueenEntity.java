@@ -48,6 +48,12 @@ public class KillerQueenEntity extends FollowingStandEntity {
     public final AnimationState finalKickWindup = new AnimationState();
     public final AnimationState finalKick = new AnimationState();
     public final AnimationState finalPunch = new AnimationState();
+    public final AnimationState blockPlant = new AnimationState();
+    public final AnimationState itemGrab = new AnimationState();
+    public final AnimationState itemThrow = new AnimationState();
+    public final AnimationState detonate = new AnimationState();
+    public final AnimationState thirdBomb = new AnimationState();
+    
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
