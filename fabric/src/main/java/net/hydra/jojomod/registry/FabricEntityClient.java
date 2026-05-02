@@ -35,6 +35,7 @@ import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.npcs.ZombieAestheticianModel;
 import net.hydra.jojomod.client.models.npcs.renderers.ZombieAestheticianRenderer;
 import net.hydra.jojomod.client.models.projectile.renderers.NoRenderer;
+import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
 import net.minecraft.client.model.SilverfishModel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
@@ -117,6 +118,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.MOLD_SPORE, NoRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ANUBIS_SLIPSTREAM, NoRenderer::new);
         EntityRendererRegistry.register(FabricEntities.TUSK_NAIL, TuskNailRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.TUSK_HOLE, NoRenderer::new);
         EntityRendererRegistry.register(FabricEntities.PLUNDER_BUBBLE, SoftAndWetBubbleRenderer::new);
         EntityRendererRegistry.register(FabricEntities.EXPLOSIVE_BUBBLE, SoftAndWetBubbleRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ITEM_LAUNCHING_BUBBLE_ENTITY, SoftAndWetBubbleRenderer::new);

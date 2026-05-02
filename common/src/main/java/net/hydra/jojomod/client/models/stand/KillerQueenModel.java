@@ -158,11 +158,12 @@ public class KillerQueenModel<T extends KillerQueenEntity> extends StandModel<T>
         super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
         defaultModifiers(pEntity);
         defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
-        this.animate(pEntity.finalKickWindup, TheWorldAnimations.FINAL_KICK_WINDUP, pAgeInTicks, 1f);
-        this.animate(pEntity.finalKick, TheWorldAnimations.FINAL_KICK, pAgeInTicks, 0.8f);
+        this.animate(pEntity.finalKickWindup, KillerQueenAnimations.HeavyKickWindup, pAgeInTicks, 1f);
+        this.animate(pEntity.finalKick, KillerQueenAnimations.HeavyKick, pAgeInTicks, 0.8f);
         this.animate(pEntity.finalPunch, StarPlatinumAnimations.FINAL_PUNCH, pAgeInTicks, 1.4f);
-        this.animate(pEntity.lid_open, KillerQueenAnimations.lidopen, pAgeInTicks, 1f);
+        this.animate(pEntity.lid_open, KillerQueenAnimations.lid_open, pAgeInTicks, 1f);
         this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1F);
+        this.animate(pEntity.blockPlant, KillerQueenAnimations.BombPlant, pAgeInTicks, 1F);
 
         this.animate(pEntity.miningBarrageAnimationState, KillerQueenAnimations.Barrage, pAgeInTicks, 1f);
         this.animate(pEntity.barrageHurtAnimationState, KillerQueenAnimations.BarrageDamage, pAgeInTicks, 2.5f);
