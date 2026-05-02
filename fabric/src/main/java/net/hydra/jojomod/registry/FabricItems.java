@@ -497,6 +497,8 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_WALKING_HEART);
                         entries.accept(STAND_DISC_ANUBIS);
                         entries.accept(MAX_STAND_DISC_ANUBIS);
+                        entries.accept(STAND_DISC_GREEN_DAY);
+                        entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_CINDERELLA);
                         entries.accept(STAND_DISC_ACHTUNG);
                         entries.accept(STAND_DISC_SURVIVOR);
@@ -531,8 +533,6 @@ public class FabricItems {
 
                         entries.accept(STAND_DISC_20_CENTURY_BOY);
                         entries.accept(STAND_DISC_MANHATTAN_TRANSFER);
-                        entries.accept(STAND_DISC_GREEN_DAY);
-                        entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_TUSK);
                         entries.accept(MAX_STAND_DISC_TUSK);
                         //entries.accept(STAND_DISC_DIVER_DOWN);

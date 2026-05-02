@@ -180,13 +180,16 @@ public class PowersGreenDay extends NewPunchingStand {
 
         if (!isSculk) {
             if (isHoldingSneak())
-                if (canExecuteMoveWithLevel(2)) {
+
                     setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_PARDON, PowerIndex.SKILL_4_SNEAK);
+
+            else if (isGuarding())
+                if (canExecuteMoveWithLevel(2)) {
+                    setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_STITCH, PowerIndex.SKILL_4_GUARD);
                 } else {
                     setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                 }
-            else if (isGuarding())
-                setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_STITCH, PowerIndex.SKILL_4_GUARD);
+
             else
 
                 setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_MOLD_SPREAD, PowerIndex.SKILL_4);
@@ -1324,18 +1327,18 @@ public class PowersGreenDay extends NewPunchingStand {
     }
 
 
-    @Override
-    public boolean isWip(){
-        return true;
-    }
-    @Override
-    public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.GOLD);
-    }
-    @Override
-    public Component ifWipListDev(){
-        return Component.literal(  "Fish").withStyle(ChatFormatting.GREEN);
-    }
+    //@Override
+    //public boolean isWip(){
+    //    return true;
+    //}
+   // @Override
+   // public Component ifWipListDevStatus(){
+    //    return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.GOLD);
+    //}
+    //@Override
+   // public Component ifWipListDev(){
+   //     return Component.literal(  "Fish").withStyle(ChatFormatting.GREEN);
+   // }
 
 
     public static final byte
@@ -1405,6 +1408,7 @@ public class PowersGreenDay extends NewPunchingStand {
 
             } if (Level > 3 || bypass){
                 $$1.add(TF_CENTURY);
+                $$1.add(GORGONZOLA);
 
             } if (Level > 4 || bypass){
                 $$1.add(AMERICAN_IDIOT);

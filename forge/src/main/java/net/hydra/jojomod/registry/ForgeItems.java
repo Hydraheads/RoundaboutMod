@@ -553,9 +553,9 @@ public class ForgeItems {
     public static final RegistryObject<Item> MAX_STAND_DISC_D4C = ITEMS.register("max_d4c_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null))); */
 
-    public static final RegistryObject<Item> STAND_DISC_GREEN_DAY = addToWIPTab(ITEMS.register("green_day_disc",
+    public static final RegistryObject<Item> STAND_DISC_GREEN_DAY = addToDiscTab(ITEMS.register("green_day_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersGreenDay(null))));
-    public static final RegistryObject<Item> MAX_STAND_DISC_GREEN_DAY = addToWIPTab(ITEMS.register("max_green_day_disc",
+    public static final RegistryObject<Item> MAX_STAND_DISC_GREEN_DAY = addToDiscTab(ITEMS.register("max_green_day_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersGreenDay(null))));
 
    /* public static final RegistryObject<Item> STAND_DISC_DIVER_DOWN = ITEMS.register("diver_down_disc",
