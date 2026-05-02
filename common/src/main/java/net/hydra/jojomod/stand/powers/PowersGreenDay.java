@@ -654,7 +654,9 @@ public class PowersGreenDay extends NewPunchingStand {
             //}else{
 
             Off_hand_entity.jump(this.getRayBlock(this.self, 20F));
-            Off_hand_entity.jump2(((StandUser)this.self).roundabout$getTargetEntity(this.self,20).getEyePosition());
+            if(((StandUser)this.self).roundabout$getTargetEntity(this.self,20) != null) {
+                Off_hand_entity.jump2(((StandUser) this.self).roundabout$getTargetEntity(this.self, 20).getEyePosition());
+            }
 
 
 
@@ -798,7 +800,9 @@ public class PowersGreenDay extends NewPunchingStand {
         }else{
 
             Main_arm.jump(this.getRayBlock(this.self, 20F));
-            Main_arm.jump2(((StandUser)this.self).roundabout$getTargetEntity(this.self,20).getEyePosition());
+            if(((StandUser)this.self).roundabout$getTargetEntity(this.self,20) != null) {
+                Main_arm.jump2(((StandUser) this.self).roundabout$getTargetEntity(this.self, 20).getEyePosition());
+            }
         }
         return true;
     }
@@ -993,11 +997,13 @@ public class PowersGreenDay extends NewPunchingStand {
     @Override
     public boolean highlightsEntity(Entity ent, Player player) {
         if(player.isCrouching()) {
-            if (allies.contains(ent.getStringUUID()) && player.hasLineOfSight(ent)){
-                return true;
-            } else if (!(((StandUser) player).roundabout$getTargetEntity(player, 16) == null)) {
-                if (((StandUser) player).roundabout$getTargetEntity(player, 16).equals(ent)) {
+            if (ent instanceof LivingEntity) {
+                if (allies.contains(ent.getStringUUID()) && player.hasLineOfSight(ent)) {
                     return true;
+                } else if (!(((StandUser) player).roundabout$getTargetEntity(player, 16) == null)) {
+                    if (((StandUser) player).roundabout$getTargetEntity(player, 16).equals(ent)) {
+                        return true;
+                    }
                 }
             }
         }
@@ -1020,8 +1026,8 @@ public class PowersGreenDay extends NewPunchingStand {
 
     public void Stitch() {
         if (canExecuteMoveWithLevel(2)) {
-            if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
-                this.setCooldown(PowerIndex.SKILL_4_SNEAK, ClientNetworking.getAppropriateConfig().greenDaySettings.gDStitchcooldown);
+            if (!this.onCooldown(PowerIndex.SKILL_4_GUARD)) {
+                this.setCooldown(PowerIndex.SKILL_4_GUARD, ClientNetworking.getAppropriateConfig().greenDaySettings.gDStitchcooldown);
 
                 this.tryPower(PowerIndex.POWER_4_SNEAK, true);
                 tryPowerPacket(PowerIndex.POWER_4_SNEAK);
@@ -1327,18 +1333,18 @@ public class PowersGreenDay extends NewPunchingStand {
     }
 
 
-    //@Override
-    //public boolean isWip(){
-    //    return true;
-    //}
-   // @Override
-   // public Component ifWipListDevStatus(){
-    //    return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.GOLD);
-    //}
-    //@Override
-   // public Component ifWipListDev(){
-   //     return Component.literal(  "Fish").withStyle(ChatFormatting.GREEN);
-   // }
+    @Override
+    public boolean isWip(){
+        return true;
+    }
+    @Override
+    public Component ifWipListDevStatus(){
+        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.GOLD);
+    }
+    @Override
+    public Component ifWipListDev(){
+        return Component.literal(  "Fish").withStyle(ChatFormatting.GREEN);
+    }
 
 
     public static final byte
@@ -1430,6 +1436,7 @@ public class PowersGreenDay extends NewPunchingStand {
 
     @Override
     public boolean isStandEnabled() {
+
         return ClientNetworking.getAppropriateConfig().greenDaySettings.enableGreenDay;
 
     }

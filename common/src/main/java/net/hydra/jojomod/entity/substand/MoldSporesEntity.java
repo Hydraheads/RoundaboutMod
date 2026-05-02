@@ -54,7 +54,7 @@ public class MoldSporesEntity extends StandEntity {
         LivingEntity user = this.getUser();
         StandUser StandUU = (StandUser)user;
         if (!client) {
-            tickeffect();
+
             if (user == null) {
                 spawnAtLocation(this.getMainHandItem());
                 this.discard();
@@ -75,6 +75,7 @@ public class MoldSporesEntity extends StandEntity {
                 range += 0.09 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldGrowthRate / 100);
                 //this.setDeltaMovement(0,-0.4,0);
             }
+            tickeffect();
                 ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST,
                         this.getX(),
                         this.getY(),

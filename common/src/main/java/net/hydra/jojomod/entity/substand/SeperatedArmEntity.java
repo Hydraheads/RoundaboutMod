@@ -577,7 +577,7 @@ public class SeperatedArmEntity extends StandEntity {
 
     @Override
     public boolean canCollideWith(Entity $$0) {
-        return true;
+        return false;
     }
 
     @Override
