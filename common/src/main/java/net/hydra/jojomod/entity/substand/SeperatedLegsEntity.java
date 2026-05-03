@@ -5,6 +5,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.mixin.PlayerEntity;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -55,8 +56,13 @@ public class SeperatedLegsEntity extends StandEntity {
         if (!client) {
             if(StartupTicks==0){
                 if((!(this.getUser() == null) && (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay))){
-                    this.lookAt(EntityAnchorArgument.Anchor.EYES,User.getEyePosition());
-                    this.setDeltaMovement(this.getLookAngle().multiply(0.2,0.2,0.2));
+                   if(!((PowersGreenDay)((StandUser)this.getUser()).roundabout$getStandPowers()).isGuarding()) {
+                       this.lookAt(EntityAnchorArgument.Anchor.EYES, User.getEyePosition());
+                       this.setDeltaMovement(this.getLookAngle().multiply(0.2, 0.2, 0.2));
+                   }else{
+                       this.setDeltaMovement(0,0,0);
+                   }
+
                 }else{
                     this.discard();
                 }
@@ -86,6 +92,7 @@ public class SeperatedLegsEntity extends StandEntity {
 
         super.tick();
     }
+
 
 
     @Override

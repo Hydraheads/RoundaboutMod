@@ -45,6 +45,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SculkChargeParticleOptions;
 import net.minecraft.network.chat.Component;
 
+import net.minecraft.server.Main;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -137,16 +138,27 @@ public class PowersGreenDay extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,0, "ability.roundabout.gd_mold_spread",
                 "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_SPREAD,4,level,bypas));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,2, "ability.roundabout.gd_stitch",
-                "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_STITCH,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.roundabout.gd_pardon",
+                "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_PARDON,4,level,bypas));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+118,0, "ability.roundabout.gd_pardon",
-                "instruction.roundabout.press_skill_block", StandIcons.GREEN_DAY_PARDON,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+118,2, "ability.roundabout.gd_stitch",
+                "instruction.roundabout.press_skill_block", StandIcons.GREEN_DAY_STITCH,4,level,bypas));
 
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+80,0, "ability.roundabout.gd_mold_field",
                 "instruction.roundabout.passive", StandIcons.GREEN_DAY_MOLD_FIELD,4,level,bypas));
 
         return $$1;
+    }
+
+    @Override
+    public boolean isAttackIneptVisually(byte activeP, int slot) {
+        if(slot == 1){
+            return (this.self.isCrouching() && HasMainArm);
+        }
+        if(slot == 2){
+            return (this.self.isCrouching() && HasOffHand);
+        }
+        return super.isAttackIneptVisually(activeP, slot);
     }
 
     @Override
@@ -169,13 +181,14 @@ public class PowersGreenDay extends NewPunchingStand {
         if (!isSculk) {
             if (isHoldingSneak())
                 if (canExecuteMoveWithLevel(2)) {
-                    setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_STITCH, PowerIndex.SKILL_4_SNEAK);
+                    setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_PARDON, PowerIndex.SKILL_4_SNEAK);
                 } else {
                     setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                 }
             else if (isGuarding())
-                setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_PARDON, PowerIndex.SKILL_4_GUARD);
+                setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_STITCH, PowerIndex.SKILL_4_GUARD);
             else
+
                 setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_MOLD_SPREAD, PowerIndex.SKILL_4);
         }
 
@@ -283,14 +296,15 @@ public class PowersGreenDay extends NewPunchingStand {
 
             }
             case SKILL_4_CROUCH, SKILL_4_CROUCH_GUARD -> {
-                Stitch();
+                selectAllyClient();
             }
             case SKILL_4_NORMAL -> {
                 //toggleMold();
                 MoldSpreadStart();
             }
             case SKILL_4_GUARD -> {
-                selectAllyClient();
+
+                Stitch();
             }
 
         }
@@ -975,7 +989,7 @@ public class PowersGreenDay extends NewPunchingStand {
 
     @Override
     public boolean highlightsEntity(Entity ent, Player player) {
-        if(((StandUser)player).roundabout$isGuarding()) {
+        if(player.isCrouching()) {
             if (allies.contains(ent.getStringUUID()) && player.hasLineOfSight(ent)){
                 return true;
             } else if (!(((StandUser) player).roundabout$getTargetEntity(player, 16) == null)) {

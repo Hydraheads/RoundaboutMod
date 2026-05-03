@@ -7,6 +7,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.mixin.PlayerEntity;
 import net.hydra.jojomod.mixin.justice.JusticeCreeper;
 import net.hydra.jojomod.mixin.justice.JusticeZombie;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
@@ -25,12 +26,14 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
 import java.util.List;
+import java.util.Objects;
 
 public class MoldSporesEntity extends StandEntity {
     public float range = ClientNetworking.getAppropriateConfig().greenDaySettings.moldDefaultRange;
@@ -56,7 +59,11 @@ public class MoldSporesEntity extends StandEntity {
                 spawnAtLocation(this.getMainHandItem());
                 this.discard();
             }
-            if(!(StandUU.roundabout$getStandPowers() instanceof PowersGreenDay)){
+            if(StandUU != null) {
+                if (!(StandUU.roundabout$getStandPowers() instanceof PowersGreenDay)) {
+                    this.discard();
+                }
+            }else{
                 this.discard();
             }
             if (this.getDeltaMovement().y > 0.2){
@@ -91,47 +98,50 @@ public class MoldSporesEntity extends StandEntity {
     public void tickeffect(){
         List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),range,range,range);
         for(int j = 0;j<damages.size();j++) {
-            Entity entity = damages.get(j);
+            if (Objects.nonNull(this.getUser())) {
+                Entity entity = damages.get(j);
 
-            //boolean down = previousYpos > entity.getY() + 0.1;
+                //boolean down = previousYpos > entity.getY() + 0.1;
 
-            boolean isStand = (entity instanceof StandEntity);
-            if(entity instanceof LivingEntity) {
-                if (!((StandUser) entity).roundabout$getStandPowers().isStoppingTime()
-                        && !((StandUser) entity).roundabout$isBubbleEncased()
-                        && !isStand
-                        && ((StandUser) entity).GoingDown()
-                        && !(entity instanceof FallenMob)
-                        && ((StandUser) entity).getJumpImmunityTicks() < 1
-                        && !entity.equals(User)) {
-                    if(!((PowersGreenDay)((StandUser)User).roundabout$getStandPowers()).allies.contains(entity.getStringUUID())) {
+                boolean isStand = (entity instanceof StandEntity);
+                boolean playerBalanceDetection = ((entity.getY() < this.getUser().getY() && this.getUser() instanceof Player) || (!(entity instanceof Player)));
+                if (entity instanceof LivingEntity) {
 
-                        double width = entity.getBbWidth() / 2;
-                        double height = entity.getBbHeight() / 2;
-                        ((ServerLevel) level()).sendParticles(ModParticles.MOLD
-                                , entity.getX(),
-                                (entity.getY() + height / 2),
-                                entity.getZ(),
-                                13, width, height, width, 0)
-                        ;
+                    if (!((StandUser) entity).roundabout$getStandPowers().isStoppingTime()
+                            && !((StandUser) entity).roundabout$isBubbleEncased()
+                            && !isStand
+                            && ((StandUser) entity).GoingDown()
+                            && !(entity instanceof FallenMob)
+                            && ((StandUser) entity).getJumpImmunityTicks() < 1
+                            && !entity.equals(User)
+                            && playerBalanceDetection) {
+                        if (!((PowersGreenDay) ((StandUser) User).roundabout$getStandPowers()).allies.contains(entity.getStringUUID())) {
+
+                            double width = entity.getBbWidth() / 2;
+                            double height = entity.getBbHeight() / 2;
+                            ((ServerLevel) level()).sendParticles(ModParticles.MOLD
+                                    , entity.getX(),
+                                    (entity.getY() + height / 2),
+                                    entity.getZ(),
+                                    13, width, height, width, 0)
+                            ;
 
 
-                        //((StandUser) entity).DoMoldTick();
-                       // if(((LivingEntity) entity).getHealth() <= 4){
-                       //     lifetime += 200;
-                       //     range += 4;
-                        //}
-                        entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION),4);
-                        ((StandUser)User).roundabout$getStandPowers().addEXP(1);
+                            //((StandUser) entity).DoMoldTick();
+                            // if(((LivingEntity) entity).getHealth() <= 4){
+                            //     lifetime += 200;
+                            //     range += 4;
+                            //}
+                            if (entity instanceof Player) {
+                                entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), 4);
+                            } else {
+                                entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), 7);
+                            }
+                            ((StandUser) User).roundabout$getStandPowers().addEXP(1);
+                        }
                     }
                 }
             }
-
-
-
-
-
-
 
         }
     }

@@ -792,7 +792,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "seperated_arm"),
                     EntityType.Builder.<SeperatedArmEntity>of(SeperatedArmEntity::new, MobCategory.MISC).
-                            sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":seperated_arm")
+                            sized(0.5F, 0.5F).clientTrackingRange(15).build(Roundabout.MOD_ID+":seperated_arm")
             );
 
     public static final EntityType<SeperatedArmSlimEntity> SEPERATED_ARM_SLIM =
@@ -800,7 +800,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "seperated_arm_slim"),
                     EntityType.Builder.<SeperatedArmSlimEntity>of(SeperatedArmSlimEntity::new, MobCategory.MISC).
-                            sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":seperated_arm_slim")
+                            sized(0.5F, 0.5F).clientTrackingRange(15).build(Roundabout.MOD_ID+":seperated_arm_slim")
             );
 
     public static final EntityType<LeftSeperatedArmEntity> LEFT_SEPERATED_ARM =
@@ -808,7 +808,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "left_seperated_arm"),
                     EntityType.Builder.<LeftSeperatedArmEntity>of(LeftSeperatedArmEntity::new, MobCategory.MISC).
-                            sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":left_seperated_arm")
+                            sized(0.5F, 0.5F).clientTrackingRange(15).build(Roundabout.MOD_ID+":left_seperated_arm")
             );
 
     public static final EntityType<LeftSeperatedArmSlimEntity> LEFT_SEPERATED_ARM_SLIM =
@@ -816,7 +816,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "left_seperated_arm_slim"),
                     EntityType.Builder.<LeftSeperatedArmSlimEntity>of(LeftSeperatedArmSlimEntity::new, MobCategory.MISC).
-                            sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":left_seperated_arm_slim")
+                            sized(0.5F, 0.5F).clientTrackingRange(15).build(Roundabout.MOD_ID+":left_seperated_arm_slim")
             );
 
 
@@ -832,7 +832,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "mold_spore"),
                     EntityType.Builder.of(MoldSporesEntity::new, MobCategory.CREATURE).
-                            sized(0.6f, 1.95f).clientTrackingRange(50).build(Roundabout.MOD_ID+":molds_pore")
+                            sized(0.01f, 0.01f).clientTrackingRange(50).build(Roundabout.MOD_ID+":molds_pore")
             );
 
         public static void register() {
