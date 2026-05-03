@@ -758,12 +758,21 @@ public class BaseMinion extends PathfinderMob {
                 }
                 if (headChargeAmt2 > 0){
                     headChargeAmt2--;
-                    if (headChargeAmt == 0){
-
+                    if (headChargeAmt2 == 0){
+                        headChargeAmt3 = 14;
+                        Vec3 $$1 = new Vec3((targ.getX() - this.getX()), (double)0.0F, (targ.getZ() - this.getZ()));
+                        $$1 = $$1.normalize().scale(0.85);
+                        speedVec = new Vec3($$1.x,$$1.y,$$1.z);
+                        setDeltaMovement(speedVec.x,getDeltaMovement().y,speedVec.z);
                     }
+                } if (headChargeAmt3 > 0){
+                    headChargeAmt3--;
+                    setDeltaMovement(speedVec.x,getDeltaMovement().y,speedVec.z);
                 }
             } else {
                 headChargeAmt = 0;
+                headChargeAmt2 = 0;
+                headChargeAmt3 = 0;
             }
 
 
@@ -781,11 +790,13 @@ public class BaseMinion extends PathfinderMob {
 
     int headChargeAmt = 0;
     int headChargeAmt2 = 0;
+    int headChargeAmt3 = 0;
+    public Vec3 speedVec = Vec3.ZERO;
 
     @Override
     public float getSpeed() {
         float spd = super.getSpeed();
-        if (headChargeAmt2 > 0){
+        if (headChargeAmt2 > 0 || headChargeAmt3 > 0){
             return 0;
         }
         return spd;
