@@ -293,13 +293,26 @@ public class BladedBowlerHatEntity extends AbstractArrow {
         @Override
         protected void onHitEntity(EntityHitResult $$0) {
             Entity $$1 = $$0.getEntity();
+            Entity $$4 = this.getOwner();
+
+            if ($$1 != null){
+                if ($$4 != null){
+                    if ($$4.getUUID() == $$1.getUUID()){
+                        return;
+                    }
+                }
+            } else {
+                return;
+            }
             if ($$1 instanceof SoftAndWetBubbleEntity)
                 return;
             if ($$1 instanceof PrimedTnt)
                 return;
             float $$2 = 4.0F;
+            if ($$1 instanceof Player){
+                $$2*=1.3F;
+            }
 
-            Entity $$4 = this.getOwner();
             DamageSource $$5 = ModDamageTypes.of(this.level(),ModDamageTypes.BLADED_BOWLER_HAT,this, (Entity)($$4 == null ? this : $$4));
             this.dealtDamage = true;
 
