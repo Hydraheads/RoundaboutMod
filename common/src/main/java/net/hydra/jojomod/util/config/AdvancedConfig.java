@@ -136,17 +136,14 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:reinforced_deepslate"
             )
     );
-    public Set<String> occultChargeEffectsToBanish = new HashSet<>(
+    public Set<String> occultChargeEffectsToBanishv2 = new HashSet<>(
             Arrays.asList(
                     "minecraft:absorption",
                     "minecraft:saturation",
                     "minecraft:jump_boost",
-                    "minecraft:water_breathing",
                     "minecraft:strength",
                     "minecraft:speed",
-                    "minecraft:resistance",
-                    "minecraft:health_boost",
-                    "minecraft:fire_resistance"
+                    "minecraft:resistance"
             )
     );
 
