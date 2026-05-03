@@ -1,5 +1,6 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -45,7 +46,8 @@ public class BarbedWireBundleBlock extends Block {
     @Override
     public void entityInside(BlockState $$0, Level level, BlockPos blockPos, Entity entity) {
 
-        if (!entity.isCrouching() && entity instanceof LivingEntity) {
+        if (!entity.isCrouching() && entity instanceof LivingEntity && !(entity instanceof FallenMob)
+        && !MainUtil.isBossMob(entity)) {
             net.minecraft.world.phys.AABB AB = entity.getBoundingBox();
             VoxelShape vs = MAIN_SHAPE;
                 if (!entity.isInvulnerable() && entity.isAlive()){
