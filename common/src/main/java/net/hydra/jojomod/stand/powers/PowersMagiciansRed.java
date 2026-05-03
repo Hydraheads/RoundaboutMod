@@ -3223,6 +3223,10 @@ public class PowersMagiciansRed extends NewPunchingStand {
     boolean splash = false;
     @Override
     public void punchImpact(Entity entity){
+
+        if (entity != null && entity.distanceTo(self) > 8.5) {
+            entity = null;
+        }
         if (this.getActivePowerPhase() >= 50){
             this.setActivePowerPhase((byte) (this.getActivePowerPhase()-50));
             splash = true;
