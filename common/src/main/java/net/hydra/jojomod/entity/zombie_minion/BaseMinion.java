@@ -741,6 +741,32 @@ public class BaseMinion extends PathfinderMob {
                     }
                 }
             }
+
+
+            if (getHeadItem() != null && getHeadItem().is(ModItems.GOAT_REMAINS)) {
+                LivingEntity targ = getTarget();
+                if (headChargeAmt > 0)
+                    headChargeAmt--;
+                if (targ != null && canAttack(targ) && headChargeAmt <= 0) {
+                    headChargeAmt = 200;
+                    headChargeAmt2 = 15;
+                    Vec3 $$0 = this.getDeltaMovement();
+                    Vec3 $$1 = new Vec3((targ.getX() - this.getX())*-1, (double)0.0F, (targ.getZ() - this.getZ())*-1);
+                    $$1 = $$1.normalize().scale(0.85).add($$0.scale(0.2));
+
+                    this.setDeltaMovement($$1.x, (double)0.4F, $$1.z);
+                }
+                if (headChargeAmt2 > 0){
+                    headChargeAmt2--;
+                    if (headChargeAmt == 0){
+
+                    }
+                }
+            } else {
+                headChargeAmt = 0;
+            }
+
+
         } else {
             if (getDigProg() > -1){
                 clientDigProg = digProgTick;
@@ -751,6 +777,18 @@ public class BaseMinion extends PathfinderMob {
             }
         }
         super.tick();
+    }
+
+    int headChargeAmt = 0;
+    int headChargeAmt2 = 0;
+
+    @Override
+    public float getSpeed() {
+        float spd = super.getSpeed();
+        if (headChargeAmt2 > 0){
+            return 0;
+        }
+        return spd;
     }
 
     @Override
