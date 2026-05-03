@@ -8,11 +8,13 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.layers.animations.TuskAnimations;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.projectile.TuskNailEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -21,10 +23,12 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.DebugParticles;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.animation.AnimationDefinition;
@@ -43,6 +47,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
@@ -481,7 +486,20 @@ public class PowersTusk extends NewDashPreset {
         if (this.getStandUserSelf().roundabout$getStandAnimation() == PowersTusk.FIRE_BOTH_NAILS && this.getAttackTime() > 5) {
             this.setAnimation(PowerIndex.NONE);
         }
+
+        if (isClient()) {
+            this.targetHole = null;
+            if (this.getAct() == 3 && PowerTypes.isUsingStand(this.getSelf())) {
+                Entity target = MainUtil.raytraceGroundThingsThroughWalls(this.getSelf().level(),this.getSelf(),25);
+                if (target != null) {
+                    if (target instanceof TuskHoleEntity THE) {
+                        this.targetHole = THE;
+                    }
+                }
+            }
+        }
     }
+
 
     public List<Entity> ShockwaveHitbox(List<Entity> entities, float maxDistance) {
         List<Entity> hitEntities = new ArrayList<>(entities) {
@@ -871,7 +889,58 @@ public class PowersTusk extends NewDashPreset {
     }
 
 
-    public void buttonInputWarp(boolean keyIsDown, Options options) {}
+
+
+    public TuskHoleEntity targetHole = null;
+    public void buttonInputWarp(boolean keyIsDown, Options options) {
+        if (keyIsDown) {
+            if (targetHole != null) {
+                if (isHoleNearby()) {
+                    Roundabout.LOGGER.info("SNEAK: " + this.targetHole);
+                } else {
+                    if (this.getSelf() instanceof Player P) {
+                        P.displayClientMessage(Component.translatable("message.tusk.nearby_hole").withStyle(ChatFormatting.RED), true);
+                    }
+                }
+            }
+        }
+    }
+
+
+    @Override
+    public boolean highlightsEntity(Entity ent, Player player) {
+        if (this.getAct() == 3) {
+            return ent.equals(this.targetHole) || (this.isHoldingSneak() && ent instanceof TuskHoleEntity);
+        }
+        return false;
+    }
+
+    @Override
+    public int highlightsEntityColor(Entity ent, Player player) {
+        if (this.getAct() == 3) {
+            if (ent.equals(this.targetHole)) {
+                return isHoleNearby() ? 2676479 : 16755200;
+            } else if (this.isHoldingSneak()) {
+                return 16777215;
+            }
+        }
+        return 16777215;
+    }
+
+    public boolean isHoleNearby() {
+        float radius = 2.0F;
+        Vec3 pos = this.getSelf().getPosition(0);
+        List<Entity> targets = MainUtil.genHitbox(this.getSelf().level(),
+                pos.x-radius,pos.y-radius,pos.z-radius,
+                pos.x+radius,pos.y+radius,pos.z+radius);
+        for (Entity entity : targets) {
+            if (entity instanceof TuskHoleEntity && entity.distanceTo(this.getSelf()) < radius) {
+                return this.targetHole == null || targetHole != entity;
+            }
+        }
+        return false;
+    }
+
     public void buttonInputAdvance(boolean keyIsDown, Options options) {}
 
 

@@ -741,6 +741,41 @@ public class BaseMinion extends PathfinderMob {
                     }
                 }
             }
+
+
+            if (getHeadItem() != null && getHeadItem().is(ModItems.GOAT_REMAINS)) {
+                LivingEntity targ = getTarget();
+                if (headChargeAmt > 0)
+                    headChargeAmt--;
+                if (targ != null && canAttack(targ) && headChargeAmt <= 0) {
+                    headChargeAmt = 200;
+                    headChargeAmt2 = 15;
+                    Vec3 $$0 = this.getDeltaMovement();
+                    Vec3 $$1 = new Vec3((targ.getX() - this.getX())*-1, (double)0.0F, (targ.getZ() - this.getZ())*-1);
+                    $$1 = $$1.normalize().scale(0.85).add($$0.scale(0.2));
+
+                    this.setDeltaMovement($$1.x, (double)0.4F, $$1.z);
+                }
+                if (headChargeAmt2 > 0){
+                    headChargeAmt2--;
+                    if (headChargeAmt2 == 0){
+                        headChargeAmt3 = 14;
+                        Vec3 $$1 = new Vec3((targ.getX() - this.getX()), (double)0.0F, (targ.getZ() - this.getZ()));
+                        $$1 = $$1.normalize().scale(0.85);
+                        speedVec = new Vec3($$1.x,$$1.y,$$1.z);
+                        setDeltaMovement(speedVec.x,getDeltaMovement().y,speedVec.z);
+                    }
+                } if (headChargeAmt3 > 0){
+                    headChargeAmt3--;
+                    setDeltaMovement(speedVec.x,getDeltaMovement().y,speedVec.z);
+                }
+            } else {
+                headChargeAmt = 0;
+                headChargeAmt2 = 0;
+                headChargeAmt3 = 0;
+            }
+
+
         } else {
             if (getDigProg() > -1){
                 clientDigProg = digProgTick;
@@ -751,6 +786,20 @@ public class BaseMinion extends PathfinderMob {
             }
         }
         super.tick();
+    }
+
+    int headChargeAmt = 0;
+    int headChargeAmt2 = 0;
+    int headChargeAmt3 = 0;
+    public Vec3 speedVec = Vec3.ZERO;
+
+    @Override
+    public float getSpeed() {
+        float spd = super.getSpeed();
+        if (headChargeAmt2 > 0 || headChargeAmt3 > 0){
+            return 0;
+        }
+        return spd;
     }
 
     @Override

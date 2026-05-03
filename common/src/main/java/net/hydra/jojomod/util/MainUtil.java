@@ -17,6 +17,7 @@ import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.paintings.RoundaboutPainting;
+import net.hydra.jojomod.entity.pathfinding.GroundPathfindingStandAttackEntity;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
@@ -3139,6 +3140,49 @@ public class MainUtil {
                 double hitDistance = eyePos.distanceTo(hitOptional.get());
                 if (hitDistance < closestDistance && !entity.isSpectator() && MainUtil.isStandPickable(entity) && !entity.isInvulnerable()
                         && !entity.hasPassenger(player)) {
+                    closestDistance = hitDistance;
+                    closest = entity;
+                }
+            }
+        }
+
+        return closest; // null if no valid hit
+    }
+
+    public static Entity raytraceGroundThingsThroughWalls(Level world, LivingEntity player, double maxDistance) {
+
+        Vec3 eyePos = player.getEyePosition(1.0F); // player.getEyePosition(float)
+        Vec3 lookVec = player.getViewVector(1.0F); // player.getViewVector(float)
+        Vec3 reachVec = eyePos.add(lookVec.scale(maxDistance)); // end point of the ray
+
+        // Raytrace blocks first
+        ClipContext blockContext = new ClipContext(
+                eyePos,
+                reachVec,
+                ClipContext.Block.OUTLINE,
+                ClipContext.Fluid.NONE,
+                player
+        );
+
+        BlockHitResult blockHit = world.clip(blockContext);
+        double blockHitDistance = maxDistance;
+
+        //
+        // Search for potential target entities in bounding box
+        AABB box = player.getBoundingBox().expandTowards(lookVec.scale(maxDistance)).inflate(1.0);
+        List<Entity> candidates = world.getEntities(player, box,
+                (e) -> e instanceof Entity && e.isAlive()); // removed pickable here
+
+        Entity closest = null;
+        double closestDistance = blockHitDistance;
+
+        for (Entity entity : candidates) {
+            AABB aabb = entity.getBoundingBox().inflate(0.3); // widen the target hit box a bit
+            Optional<Vec3> hitOptional = aabb.clip(eyePos, reachVec);
+
+            if (hitOptional.isPresent()) {
+                double hitDistance = eyePos.distanceTo(hitOptional.get());
+                if (hitDistance < closestDistance && entity instanceof GroundPathfindingStandAttackEntity) {
                     closestDistance = hitDistance;
                     closest = entity;
                 }
