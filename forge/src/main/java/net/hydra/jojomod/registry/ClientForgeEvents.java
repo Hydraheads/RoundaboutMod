@@ -125,7 +125,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.ANUBIS_POSSESSOR.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ANUBIS_SLIPSTREAM.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.TUSK_NAIL.get(), TuskNailRenderer::new);
-        event.registerEntityRenderer(ForgeEntities.TUSK_HOLE.get(), NoRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.TUSK_HOLE.get(), TuskHoleRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ROAD_ROLLER_ENTITY.get(), RoadRollerEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SEPERATED_LEGS.get(), SeperatedLegsRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SEPERATED_ARM.get(), SeperatedArmRenderer::new);
@@ -228,6 +228,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.TUSK1_NAIL_MODEL, Tusk1NailModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.HARPOON_LAYER, HarpoonModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.BLADED_BOWLER_HAT_LAYER, BladedBowlerHatModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.TUSK_HOLE_LAYER, TuskHoleModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.ROUNDABOUT_BULLET_LAYER, RoundaboutBulletModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.CROSSFIRE_LAYER, CrossfireHurricaneModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.CROSSFIRE_FIRESTORM_LAYER, CrossfireFirestormModel::createBodyLayer);

@@ -118,7 +118,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.MOLD_SPORE, NoRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ANUBIS_SLIPSTREAM, NoRenderer::new);
         EntityRendererRegistry.register(FabricEntities.TUSK_NAIL, TuskNailRenderer::new);
-        EntityRendererRegistry.register(FabricEntities.TUSK_HOLE, NoRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.TUSK_HOLE, TuskHoleRenderer::new);
         EntityRendererRegistry.register(FabricEntities.PLUNDER_BUBBLE, SoftAndWetBubbleRenderer::new);
         EntityRendererRegistry.register(FabricEntities.EXPLOSIVE_BUBBLE, SoftAndWetBubbleRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ITEM_LAUNCHING_BUBBLE_ENTITY, SoftAndWetBubbleRenderer::new);
@@ -217,6 +217,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DIVER_DOWN_LAYER, DiverDownModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.HARPOON_LAYER, HarpoonModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.BLADED_BOWLER_HAT_LAYER, BladedBowlerHatModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_HOLE_LAYER, TuskHoleModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ROUNDABOUT_BULLET_LAYER, RoundaboutBulletModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KNIFE_LAYER, KnifeModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.RATT_DART_LAYER, RattDartModel::getTexturedModelData);

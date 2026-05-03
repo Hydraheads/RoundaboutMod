@@ -126,14 +126,25 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
         LivingEntity $$0 = this.getUser();
         super.tick();
 
-        if (!client && nearest != null) {
-            if (this.distanceTo(nearest) < 0.5) {
-                this.doHurtTarget(nearest);
-                nearest = null;
+        if (this.getUser() != null) { // doubles lifespan during act 3
+            if (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersTusk PT) {
+                if (PT.getAct() == 3) {
+                    if (!this.level().isClientSide() && this.tickCount % 2 == 0) {
+                        this.lifeSpan ++;
+                    }
+                }
             }
         }
 
         if (!client) {
+
+            if (nearest != null) {
+                if (this.distanceTo(nearest) < 0.5) {
+                    this.doHurtTarget(nearest);
+                    nearest = null;
+                }
+            }
+
             if ($$0 != null && ((StandUser) $$0).roundabout$getStandPowers() instanceof PowersTusk) {
                 Vec3 vec3 = this.getDeltaMovement();
                 double x = this.getX() + vec3.x;
