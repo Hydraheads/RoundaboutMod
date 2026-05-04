@@ -53,19 +53,29 @@ public class KillerQueenEntity extends FollowingStandEntity {
     public final AnimationState itemThrow = new AnimationState();
     public final AnimationState detonate = new AnimationState();
     public final AnimationState thirdBomb = new AnimationState();
+    public final AnimationState mobBombPlant= new AnimationState();
+    public final AnimationState mobBombPlant2 = new AnimationState();
+    public final AnimationState bubbleLaunch = new AnimationState();
+    public final AnimationState bubbleRedirect= new AnimationState();
+    
+    public static byte
+		KICK = 25,
+		KICK_CHARGE = 27,
+    	DETONATE = 121,
+    	BLOCK_PLANT = 122;
     
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
         if (this.getUser() != null) {
 
-            if (this.getAnimation() != 12) {
+            if (this.getAnimation() != BARRAGE) {
                 this.hideFists.startIfStopped(this.tickCount);
             } else {
                 this.hideFists.stop();
             }
 
-            if (this.getAnimation() != 80) {
+            if (this.getAnimation() != KICK_BARRAGE) {
                 this.hideLeg.startIfStopped(this.tickCount);
                 this.kick_barrage.stop();
             } else {
@@ -74,16 +84,28 @@ public class KillerQueenEntity extends FollowingStandEntity {
             }
 
 
-            if (this.getAnimation() == 42) {
+            if (this.getAnimation() == KICK_BARRAGE_WINDUP) {
                 this.kick_barrage_windup.startIfStopped(this.tickCount);
             } else {
                 this.kick_barrage_windup.stop();
             }
 
-            if (this.getAnimation() == 43) {
+            if (this.getAnimation() == KICK_BARRAGE_END) {
                 this.kick_barrage_end.startIfStopped(this.tickCount);
             } else {
                 this.kick_barrage_end.stop();
+            }
+            
+            if (this.getAnimation() == DETONATE) {
+            	this.detonate.startIfStopped(this.tickCount);
+            } else {
+                this.detonate.stop();
+            }
+            
+            if (this.getAnimation() == BLOCK_PLANT) {
+            	this.blockPlant.startIfStopped(this.tickCount);
+            } else {
+                this.blockPlant.stop();
             }
         }
     }

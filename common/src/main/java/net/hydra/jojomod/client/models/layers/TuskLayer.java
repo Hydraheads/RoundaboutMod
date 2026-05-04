@@ -79,7 +79,7 @@ public class TuskLayer<T extends LivingEntity, A extends HumanoidModel<T>> exten
 
 
 
-                        if (PT.renderDrill()) {
+                       /* if (PT.renderDrill()) {
                             if (PT.renderBothArms() || entity.getMainArm() == HumanoidArm.RIGHT) {
                                 poseStack.pushPose(); // DRILL
                                 getParentModel().rightArm.translateAndRotate(poseStack);
@@ -96,7 +96,7 @@ public class TuskLayer<T extends LivingEntity, A extends HumanoidModel<T>> exten
                                 ModStrayModels.TUSK_DRILL.render(livent, partialTicks, poseStack, bufferSource, packedLight, r, g, b, 1.0F);
                                 poseStack.popPose();
                             }
-                        }
+                        } */
                     }
                 }
             }

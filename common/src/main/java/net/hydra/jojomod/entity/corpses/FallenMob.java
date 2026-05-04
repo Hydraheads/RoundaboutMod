@@ -259,7 +259,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
 
     public float getAtkPower(Entity $$0){
         if (((StandUser)this).roundabout$getStandPowers().getReducedDamage($$0)){
-            return getDamageMod((float) ((float) (this.getAttributeValue(Attributes.ATTACK_DAMAGE)/2)
+            return getDamageMod((float) ((float) (this.getAttributeValue(Attributes.ATTACK_DAMAGE)*0.67F)
                                 * (ClientNetworking.getAppropriateConfig().justiceSettings.corpseDamageMultOnPlayers *0.01)));
         }
         return getDamageMod((float) ((float) this.getAttributeValue(Attributes.ATTACK_DAMAGE)

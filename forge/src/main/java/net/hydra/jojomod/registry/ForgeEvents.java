@@ -501,6 +501,7 @@ public class ForgeEvents {
         ModParticles.STITCH = ForgeParticles.STITCH.get();
         ModParticles.OCCULT = ForgeParticles.OCCULT.get();
         ModParticles.HYPNO_SWIRL = ForgeParticles.HYPNO_SWIRL.get();
+        ModParticles.TUSK_VORTEX = ForgeParticles.TUSK_VORTEX.get();
         ModParticles.METALLICA_NAIL = ForgeParticles.METALLICA_NAIL.get();
         ModParticles.METALLICA_RAZOR = ForgeParticles.METALLICA_RAZOR.get();
         ModParticles.METALLICA_SCISSORS = ForgeParticles.METALLICA_SCISSORS.get();
