@@ -627,9 +627,10 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override
     protected Byte getSummonSound() { return SoundIndex.SUMMON_SOUND;}
     
+    @Override
     public SoundEvent getSoundFromByte(byte soundChoice){
-       //Roundabout.LOGGER.info(""+soundChoice);
-        switch (soundChoice)
+       Roundabout.LOGGER.info(""+soundChoice);
+        /*switch (soundChoice)
         {
             case SoundIndex.BARRAGE_CRY_SOUND -> {
                 return ModSounds.KILLER_QUEEN_BARRAGE_EVENT;
@@ -640,7 +641,16 @@ public class PowersKillerQueen extends NewPunchingStand {
             case PowersKillerQueen.DETONATE -> {
             	return ModSounds.KILLER_QUEEN_DETONATE_EVENT;
             }
-        }
+        }*/
+       
+       if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND) {
+    	   return ModSounds.KILLER_QUEEN_BARRAGE_EVENT;
+       }else if (soundChoice == SoundIndex.SUMMON_SOUND) {
+    	   return ModSounds.KILLER_QUEEN_SUMMON_EVENT;
+       }else if (soundChoice == PowersKillerQueen.DETONATE) {
+    	   return ModSounds.KILLER_QUEEN_DETONATE_EVENT;
+       }
+       
         return super.getSoundFromByte(soundChoice);
     }
 
@@ -728,11 +738,11 @@ public class PowersKillerQueen extends NewPunchingStand {
     	
     	for(int j = 0;j<highDamages.size();j++) {
             Entity entity = highDamages.get(j);
-            entity.hurt(dmg, 10.0f);
+            entity.hurt(dmg, 6.0f);
         }
     	for(int j = 0;j<lowDamages.size();j++) {
             Entity entity = lowDamages.get(j);
-            entity.hurt(dmg, 7.0f);
+            entity.hurt(dmg, 5.0f);
         }
     	
     }
