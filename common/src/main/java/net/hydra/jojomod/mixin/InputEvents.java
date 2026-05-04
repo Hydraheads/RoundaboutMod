@@ -272,7 +272,7 @@ public abstract class InputEvents implements IInputEvents {
                 }
             }
 
-            if (standComp.roundabout$getCombatMode()){
+            if (standComp.roundabout$getCombatMode() && PowerTypes.isMiningStand(player)){
                 if (PowerTypes.isBrawling(player)){
                     ci.setReturnValue(rdbt$stopBreakingBlock());
                 } else {
@@ -391,7 +391,7 @@ public abstract class InputEvents implements IInputEvents {
                     return;
                 }
 
-                if (standComp.roundabout$getCombatMode() && !PowerTypes.isBrawlButNotAttacking(player)){
+                if (standComp.roundabout$getCombatMode() && !PowerTypes.isMiningStand(player) && !PowerTypes.isBrawlButNotAttacking(player)){
                     ci.cancel();
                     return;
                 }
@@ -1221,7 +1221,7 @@ public abstract class InputEvents implements IInputEvents {
                 }
             }
 
-            if (standComp.roundabout$getCombatMode() && !PowerTypes.isBrawlButNotAttacking(player)){
+            if (standComp.roundabout$getCombatMode() && !PowerTypes.isMiningStand(player) && !PowerTypes.isBrawlButNotAttacking(player)){
                 if (roundabout$activeMining || Minecraft.getInstance().gameMode.isDestroying()) {
                     roundabout$activeMining = false;
                     Minecraft.getInstance().gameMode.stopDestroyBlock();
@@ -1233,7 +1233,7 @@ public abstract class InputEvents implements IInputEvents {
             if (PowerTypes.hasStandActive(player) && !((TimeStop)player.level()).CanTimeStopEntity(player)) {
                 isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING)
                         || this.gameMode.isDestroying();
-                if (this.options.keyAttack.isDown() && !player.isUsingItem() && !standComp.roundabout$getCombatMode()) {
+                if (this.options.keyAttack.isDown() && !player.isUsingItem() && (!standComp.roundabout$getCombatMode() || PowerTypes.isMiningStand(player)) ) {
                     if (powers.isMiningStand()){
                         Entity TE = standComp.roundabout$getTargetEntity(player, -1);
                         if (!isMining && TE == null && this.hitResult != null && !this.player.isHandsBusy()

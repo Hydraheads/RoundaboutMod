@@ -92,6 +92,10 @@ public class PowersSoftAndWet extends NewPunchingStand {
         return ClientNetworking.getAppropriateConfig().softAndWetSettings.enableSoftAndWet;
     }
 
+    @Override
+    public boolean isMiningStand() {
+        return super.isMiningStand() && !this.getStandUserSelf().roundabout$getEffectiveCombatMode();
+    }
 
     public List<SoftAndWetBubbleEntity> bubbleList = new ArrayList<>();
     @Override
@@ -1231,6 +1235,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
         this.setWaterShieldTicks(ClientNetworking.getAppropriateConfig().softAndWetSettings.waterShieldDurationInTicks);
     }
     public boolean switchModes(){
+        if (this.getActivePower() == PowerIndex.MINING) {this.setPowerNone();}
         if (getStandUserSelf().roundabout$getCombatMode()){
             getStandUserSelf().roundabout$setCombatMode(false);
             if (this.self.level().isClientSide()){

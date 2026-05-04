@@ -393,6 +393,7 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.RAGING_LIGHT.get(), AnubisLightParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.ALLURING_LIGHT.get(), AnubisLightParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.HYPNO_SWIRL.get(), HypnoSwirlParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.TUSK_VORTEX.get(), TuskVortexParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.BABY_CRACKLE.get(), BabyCrackleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.MAGIC_DUST.get(), MagicDustParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.BRIEF_MAGIC_DUST.get(), BriefMagicDustParticle.Provider::new);

@@ -125,6 +125,7 @@ public class GroundPathfindingStandAttackEntity extends PathfinderMob {
                     if (lifeSpan > 0){
                         lifeSpan--;
                     } else {
+                        this.onEnd();
                         this.discard();
                     }
                 }
@@ -134,4 +135,6 @@ public class GroundPathfindingStandAttackEntity extends PathfinderMob {
         }
         super.tick();
     }
+
+    public void onEnd() {}
 }

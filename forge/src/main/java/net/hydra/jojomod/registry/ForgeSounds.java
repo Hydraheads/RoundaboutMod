@@ -224,6 +224,12 @@ public class ForgeSounds {
             register(ModSounds.KILLER_QUEEN_BARRAGE, ModSounds.KILLER_QUEEN_BARRAGE_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_SUMMON_EVENT =
             register(ModSounds.KILLER_QUEEN_SUMMON, ModSounds.KILLER_QUEEN_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_EXPLOSION_EVENT =
+            register(ModSounds.KILLER_QUEEN_EXPLOSION, ModSounds.KILLER_QUEEN_EXPLOSION_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_DETONATE_EVENT =
+            register(ModSounds.KILLER_QUEEN_DETONATE, ModSounds.KILLER_QUEEN_DETONATE_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_BUBBLE_LAUNCH_EVENT =
+            register(ModSounds.KILLER_QUEEN_BUBBLE_LAUNCH, ModSounds.KILLER_QUEEN_BUBBLE_LAUNCH_ID);
     public static final RegistryObject<SoundEvent> EXPLOSIVE_PUNCH_EVENT =
             register(ModSounds.EXPLOSIVE_PUNCH, ModSounds.EXPLOSIVE_PUNCH_ID);
     public static final RegistryObject<SoundEvent> FIRE_BLAST_EVENT =

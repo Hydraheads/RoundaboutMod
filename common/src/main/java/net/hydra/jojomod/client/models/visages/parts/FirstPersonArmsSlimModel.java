@@ -277,7 +277,7 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                 StandUser user = ((StandUser) player);
 
                 if (user.roundabout$getStandPowers() instanceof PowersTusk PT && PowerTypes.isUsingStand(player)) {
-                    if  (PT.renderDrill()) {
+                  /*  if  (PT.renderDrill()) {
                         if (renderRight) {
                             poseStack.pushPose();
                             this.transform.translateAndRotate(poseStack);
@@ -311,7 +311,7 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                             );
                             poseStack.popPose();
                         }
-                    }
+                    } */
                     if (renderLeft) {
                         poseStack.pushPose();
                         this.transform.translateAndRotate(poseStack);

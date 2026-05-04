@@ -268,10 +268,11 @@ public class FabricSounds {
         addSound(ModSounds.ANUBIS_SHIELDBREAK_ID, ModSounds.ANUBIS_SHIELDBREAK_EVENT);
         addSound(ModSounds.ANUBIS_EXTRA_ID, ModSounds.ANUBIS_EXTRA_EVENT);
 
-
-
         addSound(ModSounds.KILLER_QUEEN_BARRAGE_ID, ModSounds.KILLER_QUEEN_BARRAGE_EVENT);
         addSound(ModSounds.KILLER_QUEEN_SUMMON_ID, ModSounds.KILLER_QUEEN_SUMMON_EVENT);
+        addSound(ModSounds.KILLER_QUEEN_EXPLOSION_ID, ModSounds.KILLER_QUEEN_EXPLOSION_EVENT);
+        addSound(ModSounds.KILLER_QUEEN_DETONATE_ID, ModSounds.KILLER_QUEEN_DETONATE_EVENT);
+        addSound(ModSounds.KILLER_QUEEN_BUBBLE_LAUNCH_ID, ModSounds.KILLER_QUEEN_BUBBLE_LAUNCH_EVENT);
 
         addSound(ModSounds.THE_WORLD_OVER_HEAVEN_ID, ModSounds.THE_WORLD_OVER_HEAVEN_EVENT);
         addSound(ModSounds.UNLOCK_SKIN_ID, ModSounds.UNLOCK_SKIN_EVENT);

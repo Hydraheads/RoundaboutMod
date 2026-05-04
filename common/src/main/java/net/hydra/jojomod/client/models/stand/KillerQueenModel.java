@@ -164,6 +164,14 @@ public class KillerQueenModel<T extends KillerQueenEntity> extends StandModel<T>
         this.animate(pEntity.lid_open, KillerQueenAnimations.lid_open, pAgeInTicks, 1f);
         this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1F);
         this.animate(pEntity.blockPlant, KillerQueenAnimations.BombPlant, pAgeInTicks, 1F);
+        this.animate(pEntity.itemGrab, KillerQueenAnimations.Item_Grab, pAgeInTicks, 1F);
+        this.animate(pEntity.itemThrow, KillerQueenAnimations.Item_Throw, pAgeInTicks, 1F);
+        this.animate(pEntity.detonate, KillerQueenAnimations.detonate, pAgeInTicks, 1F);
+        this.animate(pEntity.thirdBomb, KillerQueenAnimations.TertiaryBomb, pAgeInTicks, 1F);
+        this.animate(pEntity.mobBombPlant, KillerQueenAnimations.FirstBombTouchMob, pAgeInTicks, 1F);
+        this.animate(pEntity.mobBombPlant2, KillerQueenAnimations.FirstBombTouchMob2, pAgeInTicks, 1F);
+        this.animate(pEntity.bubbleLaunch, KillerQueenAnimations.bubble_launch, pAgeInTicks, 1F);
+        this.animate(pEntity.bubbleRedirect, KillerQueenAnimations.bubble_redirection, pAgeInTicks, 1F);
 
         this.animate(pEntity.miningBarrageAnimationState, KillerQueenAnimations.Barrage, pAgeInTicks, 1f);
         this.animate(pEntity.barrageHurtAnimationState, KillerQueenAnimations.BarrageDamage, pAgeInTicks, 2.5f);

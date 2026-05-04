@@ -70,6 +70,8 @@ public class ModParticles {
 
     public static SimpleParticleType HYPNO_SWIRL;
 
+    public static SimpleParticleType TUSK_VORTEX;
+
     public static SimpleParticleType ROAD_ROLLER_EXPLOSION;
     public static SimpleParticleType ROAD_ROLLER_SMOKE;
     public static SimpleParticleType ROAD_ROLLER_SCRAP;

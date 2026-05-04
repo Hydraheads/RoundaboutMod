@@ -11,10 +11,11 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetExplosiveBubbleEntity;
+import net.hydra.jojomod.entity.stand.GreenDayEntity;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
-import net.hydra.jojomod.entity.stand.TheWorldEntity;
+//import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+//import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -56,14 +57,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.animal.Chicken;
-import net.minecraft.world.entity.animal.Cow;
-import net.minecraft.world.entity.animal.Parrot;
-import net.minecraft.world.entity.animal.Pig;
-import net.minecraft.world.entity.animal.Sheep;
-import net.minecraft.world.entity.animal.goat.Goat;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -81,6 +74,7 @@ import java.util.List;
 //import java.util.UUID;
 //import java.util.Dictionary;
 //import java.util.Hashtable;
+import java.util.Objects;
 
 
 
@@ -125,7 +119,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 	public float standReach = 5;
 	public boolean wentForCharge = false;
 	
-	private static int detonateMaxTicks = 500;
+	private static int detonateMaxTicks = 6;
 	private int detonateTicks = -1;
     
     @Override
@@ -269,6 +263,13 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     @Override
     public void tickPower(){
+    	
+    	if(Objects.nonNull(this.getStandEntity(this.self))) {
+            if (this.getStandEntity(this.self).getAnimation() == KillerQueenEntity.DETONATE && this.detonateTicks == 0) {
+                this.animateStand(StandEntity.IDLE);
+                this.poseStand(OffsetIndex.FOLLOW);
+            }
+        }
     	
     	if (currentBombStatus == BOMB_BLOCK) {
     		//Vec3 iconPos = new Vec3(this.bombBlock.getX(), this.bombBlock.getY(), this.bombBlock.getZ());
@@ -621,16 +622,15 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     @Override
-    public byte chooseBarrageSound(){
-        return SoundIndex.BARRAGE_CRY_SOUND;
-    }
-    @Override
-    protected Byte getSummonSound() {return SoundIndex.SUMMON_SOUND;
-    }
+    public byte chooseBarrageSound(){ return SoundIndex.BARRAGE_CRY_SOUND;}
     
+    @Override
+    protected Byte getSummonSound() { return SoundIndex.SUMMON_SOUND;}
+    
+    @Override
     public SoundEvent getSoundFromByte(byte soundChoice){
-       //Roundabout.LOGGER.info(""+soundChoice);
-        switch (soundChoice)
+       Roundabout.LOGGER.info(""+soundChoice);
+        /*switch (soundChoice)
         {
             case SoundIndex.BARRAGE_CRY_SOUND -> {
                 return ModSounds.KILLER_QUEEN_BARRAGE_EVENT;
@@ -641,7 +641,16 @@ public class PowersKillerQueen extends NewPunchingStand {
             case PowersKillerQueen.DETONATE -> {
             	return ModSounds.KILLER_QUEEN_DETONATE_EVENT;
             }
-        }
+        }*/
+       
+       if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND) {
+    	   return ModSounds.KILLER_QUEEN_BARRAGE_EVENT;
+       }else if (soundChoice == SoundIndex.SUMMON_SOUND) {
+    	   return ModSounds.KILLER_QUEEN_SUMMON_EVENT;
+       }else if (soundChoice == PowersKillerQueen.DETONATE) {
+    	   return ModSounds.KILLER_QUEEN_DETONATE_EVENT;
+       }
+       
         return super.getSoundFromByte(soundChoice);
     }
 
@@ -729,11 +738,11 @@ public class PowersKillerQueen extends NewPunchingStand {
     	
     	for(int j = 0;j<highDamages.size();j++) {
             Entity entity = highDamages.get(j);
-            entity.hurt(dmg, 10.0f);
+            entity.hurt(dmg, 6.0f);
         }
     	for(int j = 0;j<lowDamages.size();j++) {
             Entity entity = lowDamages.get(j);
-            entity.hurt(dmg, 7.0f);
+            entity.hurt(dmg, 5.0f);
         }
     	
     }
@@ -776,11 +785,10 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     public boolean detonate() {
     	if (!this.isClient()) {
-    		playSoundsIfNearby(DETONATE, 27, true);
-    		//this.poseStand(OffsetIndex.ATTACK);
-    		//this.setAttackTimeDuring(-8);
-    		//this.setActivePower(PowersKillerQueen.DETONATE);
-    		//this.explode();
+    		this.playSoundsIfNearby(DETONATE, 27, true);
+    		animateStand(KillerQueenEntity.DETONATE);
+    		this.poseStand(OffsetIndex.ATTACK);
+    		
     		this.detonateTicks = detonateMaxTicks;
     	}
     	
