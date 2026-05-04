@@ -53,6 +53,18 @@
       "roundabout:zombie_charge"
     ]
   },
+  "goat_charge": {
+    "subtitle": "sounds.roundabout.goat_charge",
+    "sounds": [
+      "roundabout:goat_charge"
+    ]
+  },
+  "goat_dash": {
+    "subtitle": "sounds.roundabout.goat_dash",
+    "sounds": [
+      "roundabout:goat_dash"
+    ]
+  },
   "ripper_eyes_beam": {
     "subtitle": "sounds.roundabout.ripper_eyes_beam",
     "sounds": [

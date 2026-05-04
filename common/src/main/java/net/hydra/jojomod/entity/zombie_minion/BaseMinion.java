@@ -5,6 +5,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.goals.*;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.Tactics;
@@ -151,6 +152,14 @@ public class BaseMinion extends PathfinderMob {
             return false;
         }
         return super.canAttack($$0);
+    }
+
+    @Override
+    public float maxUpStep() {
+        if (isCharging()){
+            return super.maxUpStep()+1;
+        }
+        return super.maxUpStep();
     }
 
     @Override
@@ -752,22 +761,38 @@ public class BaseMinion extends PathfinderMob {
                     headChargeAmt2 = 15;
                     Vec3 $$0 = this.getDeltaMovement();
                     Vec3 $$1 = new Vec3((targ.getX() - this.getX())*-1, (double)0.0F, (targ.getZ() - this.getZ())*-1);
-                    $$1 = $$1.normalize().scale(0.85).add($$0.scale(0.2));
+                    $$1 = $$1.normalize().scale(0.75).add($$0.scale(0.2));
+                    this.level().playSound(null, this.blockPosition(), ModSounds.GOAT_CHARGE_EVENT, SoundSource.NEUTRAL, 1F, 1);
 
                     this.setDeltaMovement($$1.x, (double)0.4F, $$1.z);
                 }
                 if (headChargeAmt2 > 0){
                     headChargeAmt2--;
+
                     if (headChargeAmt2 == 0){
                         headChargeAmt3 = 14;
                         Vec3 $$1 = new Vec3((targ.getX() - this.getX()), (double)0.0F, (targ.getZ() - this.getZ()));
                         $$1 = $$1.normalize().scale(0.85);
                         speedVec = new Vec3($$1.x,$$1.y,$$1.z);
                         setDeltaMovement(speedVec.x,getDeltaMovement().y,speedVec.z);
+                        this.level().playSound(null, this.blockPosition(), ModSounds.GOAT_DASH_EVENT,
+                                SoundSource.NEUTRAL, 1F, 1);
                     }
                 } if (headChargeAmt3 > 0){
                     headChargeAmt3--;
                     setDeltaMovement(speedVec.x,getDeltaMovement().y,speedVec.z);
+
+                    if (!this.level().isClientSide()) {
+                        Vec3 pos = getPosition(1);
+                        ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
+                                        level().getBlockState(getOnPos())),
+                                pos.x, pos.y, pos.z,
+                                4, 0.2, 0, 0.2, 0.5);
+                        pos = getEyePosition(1);
+                        ((ServerLevel) this.level()).sendParticles(ModParticles.STAR,
+                                pos.x, pos.y, pos.z,
+                                1, 0.2, 0.2, 0.2, 0.02);
+                    }
                 }
             } else {
                 headChargeAmt = 0;
@@ -786,6 +811,10 @@ public class BaseMinion extends PathfinderMob {
             }
         }
         super.tick();
+    }
+
+    public boolean isCharging(){
+        return headChargeAmt3 > 0;
     }
 
     int headChargeAmt = 0;
@@ -813,6 +842,13 @@ public class BaseMinion extends PathfinderMob {
             this.entityData.define(DIED_IN_SUN, false);
             this.entityData.define(HEAD_ITEM, ItemStack.EMPTY);
             this.entityData.define(BODY_ITEM, ItemStack.EMPTY);
+        }
+    }
+
+    @Override
+    public void knockback(double d, double e, double f) {
+        if (!isCharging()){
+            super.knockback(d,e,f);
         }
     }
 

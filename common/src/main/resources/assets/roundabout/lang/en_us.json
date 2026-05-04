@@ -585,7 +585,9 @@
   "sounds.roundabout.aura_impact": "Aura Impact",
   "sounds.roundabout.banish": "Banish",
 
+  "sounds.roundabout.goat_dash": "Burst",
   "sounds.roundabout.zombie_charge": "Zombie Charge",
+  "sounds.roundabout.goat_charge": "Goat Charge",
 
   "sounds.roundabout.ripper_eyes_charge": "Fluid Buildup",
   "sounds.roundabout.ripper_eyes_beam": "Ripper Eyes",

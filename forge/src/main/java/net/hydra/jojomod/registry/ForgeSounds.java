@@ -593,6 +593,10 @@ public class ForgeSounds {
             register(ModSounds.GREEN_DAY_STITCH, ModSounds.GREEN_DAY_STITCH_ID);
     public static final RegistryObject<SoundEvent> ZOMBIE_CHARGE =
             register(ModSounds.ZOMBIE_CHARGE, ModSounds.ZOMBIE_CHARGE_ID);
+    public static final RegistryObject<SoundEvent> GOAT_CHARGE =
+            register(ModSounds.GOAT_CHARGE, ModSounds.GOAT_CHARGE_ID);
+    public static final RegistryObject<SoundEvent> GOAT_DASH =
+            register(ModSounds.GOAT_DASH, ModSounds.GOAT_DASH_ID);
     public static final RegistryObject<SoundEvent> SUMMON_WALKING =
             register(ModSounds.SUMMON_WALKING, ModSounds.SUMMON_WALKING_ID);
     public static final RegistryObject<SoundEvent> HEEL_RAISE =
