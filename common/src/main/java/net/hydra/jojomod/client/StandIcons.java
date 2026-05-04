@@ -615,8 +615,12 @@ public class StandIcons {
     public static final ResourceLocation TUSK_SPINTHROW = Roundabout.location("textures/gui/icons/tusk/spin_throw.png");
     public static final ResourceLocation TUSK_SHOCKWAVE = Roundabout.location("textures/gui/icons/tusk/shockwave.png");
     public static final ResourceLocation TUSK_NAILLEAP = Roundabout.location("textures/gui/icons/tusk/spin_leap.png");
-    public static final ResourceLocation TUSK_BALL_BRIDGE = Roundabout.location("textures/gui/icons/tusk/ball_bridge.png");
+   // public static final ResourceLocation TUSK_BALL_BRIDGE = Roundabout.location("textures/gui/icons/tusk/ball_bridge.png");
+    public static final ResourceLocation TUSK_TARGET = Roundabout.location("textures/gui/icons/tusk/target.png");
     public static final ResourceLocation TUSK_DRILL_BRUSH = Roundabout.location("textures/gui/icons/tusk/drill_brush.png");
+    public static final ResourceLocation TUSK_FLATTEN = Roundabout.location("textures/gui/icons/tusk/flatten.png");
+    public static final ResourceLocation TUSK_GRASP = Roundabout.location("textures/gui/icons/tusk/grasp.png");
+    public static final ResourceLocation TUSK_WORMHOLE = Roundabout.location("textures/gui/icons/tusk/wormhole.png");
 
 
     public static final ResourceLocation SOFT_AND_WET_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,

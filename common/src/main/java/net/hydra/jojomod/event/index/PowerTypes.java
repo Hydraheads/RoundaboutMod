@@ -162,6 +162,17 @@ public enum PowerTypes {
         }
         return false;
     }
+
+    public static boolean isMiningStand(Entity entity) {
+        if (entity instanceof LivingEntity LE) {
+            StandUser user = (StandUser) LE;
+            if (user.roundabout$getStandPowers() != null) {
+                return user.roundabout$getStandPowers().isMiningStand();
+            }
+        }
+        return false;
+    }
+
     public static boolean hasPowerActive(Entity entity){
         if (entity instanceof LivingEntity LE){
             if (entity instanceof Player PL){

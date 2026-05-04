@@ -26,14 +26,13 @@ public class TuskHoleRenderer extends EntityRenderer<TuskHoleEntity> {
     public TuskHoleRenderer(EntityRendererProvider.Context $$0) {
         super($$0);
         this.model = new TuskHoleModel($$0.bakeLayer(ModEntityRendererClient.TUSK_HOLE_LAYER));
-        Roundabout.LOGGER.info("TUSK HOLE MODEL");
     }
 
     public void render(TuskHoleEntity $$0, float $$1, float $$2, PoseStack poseStack, MultiBufferSource $$4, int $$5) {
         poseStack.pushPose();
         poseStack.scale(1,0.3F,1);
         poseStack.translate(0,-1.34,0);
-        this.model.renderToBuffer(poseStack, $$4.getBuffer(RenderType.entitySolid(this.getTextureLocation($$0))), $$5, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.model.renderToBuffer(poseStack, $$4.getBuffer(RenderType.entityTranslucentCull(this.getTextureLocation($$0))), $$5, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0);
         poseStack.popPose();
     }
 
