@@ -770,18 +770,27 @@ public class BaseMinion extends PathfinderMob {
                     headChargeAmt2--;
 
                     if (headChargeAmt2 == 0){
-                        headChargeAmt3 = 14;
-                        Vec3 $$1 = new Vec3((targ.getX() - this.getX()), (double)0.0F, (targ.getZ() - this.getZ()));
-                        $$1 = $$1.normalize().scale(0.85);
-                        speedVec = new Vec3($$1.x,$$1.y,$$1.z);
-                        setDeltaMovement(speedVec.x,getDeltaMovement().y,speedVec.z);
-                        this.level().playSound(null, this.blockPosition(), ModSounds.GOAT_DASH_EVENT,
-                                SoundSource.NEUTRAL, 1F, 1);
+                        if (targ != null) {
+                            headChargeAmt3 = 14;
+                            Vec3 $$1 = new Vec3((targ.getX() - this.getX()), (double) 0.0F, (targ.getZ() - this.getZ()));
+                            $$1 = $$1.normalize().scale(0.85);
+                            speedVec = new Vec3($$1.x, $$1.y, $$1.z);
+                            setDeltaMovement(speedVec.x, getDeltaMovement().y, speedVec.z);
+                            this.level().playSound(null, this.blockPosition(), ModSounds.GOAT_DASH_EVENT,
+                                    SoundSource.NEUTRAL, 1F, 1);
+                        }
                     }
                 } if (headChargeAmt3 > 0){
                     headChargeAmt3--;
-                    setDeltaMovement(speedVec.x,getDeltaMovement().y,speedVec.z);
-
+                    if (getBodyItem() != null && getBodyItem().is(ModItems.PARROT_REMAINS)){
+                        if (targ != null) {
+                            Vec3 $$1 = new Vec3((targ.getX() - this.getX()), (targ.getY() - this.getY()), (targ.getZ() - this.getZ()));
+                            $$1 = $$1.normalize().scale(0.95);
+                            setDeltaMovement(speedVec.x, $$1.y, speedVec.z);
+                        }
+                    } else {
+                        setDeltaMovement(speedVec.x,getDeltaMovement().y,speedVec.z);
+                    }
                     if (!this.level().isClientSide()) {
                         Vec3 pos = getPosition(1);
                         ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
