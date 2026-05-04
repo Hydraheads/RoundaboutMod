@@ -1,6 +1,7 @@
 package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -66,7 +67,8 @@ public class BarbedWireBlock extends RotatedPillarBlock
     @SuppressWarnings("deprecation")
     @Override
     public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
-        if (!entity.isCrouching() && entity instanceof LivingEntity) {
+        if (!entity.isCrouching() && entity instanceof LivingEntity && !(entity instanceof FallenMob)
+                && !MainUtil.isBossMob(entity)) {
             net.minecraft.world.phys.AABB AB = entity.getBoundingBox();
             VoxelShape vs =  getTrueShape(blockState);
             if (AB.intersects(blockPos.getX()+vs.min(Direction.Axis.X),blockPos.getY()+vs.min(Direction.Axis.Y),blockPos.getZ()+vs.min(Direction.Axis.Z),

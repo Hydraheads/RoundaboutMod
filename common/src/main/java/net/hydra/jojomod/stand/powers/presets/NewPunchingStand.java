@@ -152,6 +152,10 @@ public class NewPunchingStand extends NewDashPreset {
     @Override
     public void punchImpact(Entity entity){
         this.setAttackTimeDuring(-10);
+
+        if (entity != null && entity.distanceTo(self) > getReach()+1) {
+            entity = null;
+        }
         if (entity != null) {
             float pow;
             float knockbackStrength;

@@ -85,7 +85,11 @@ public class CoffinBlock extends BedBlock {
             BlockState finalState = state;
             player.startSleepInBed(pos).ifLeft(sleepResult1 -> {
                 if (sleepResult1 != null) {
-                    player.displayClientMessage(sleepResults.getOrDefault(sleepResult1, sleepResult1.getMessage()), true);
+                    if (Player.BedSleepingProblem.NOT_POSSIBLE_NOW.equals(sleepResult1)){
+                        player.displayClientMessage(Component.translatable("text.roundabout.vampire.coffin_cant_sleep"), true);
+                    } else {
+                        player.displayClientMessage(sleepResults.getOrDefault(sleepResult1, sleepResult1.getMessage()), true);
+                    }
                 }
             });
             return InteractionResult.CONSUME;
