@@ -4192,34 +4192,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
 
 
-            //Frozen deaths from vampire freeze / ice sculptures / white album
-            if ($$0.getEntity() != null && !$$0.is(DamageTypes.THORNS) && !$$0.is(ModDamageTypes.STAND_FIRE)){
-                if (HeatUtil.isBodyFrozen(rdbt$this()) && !level().isClientSide()){
-                    ((ServerLevel) this.level()).sendParticles(
-                            new BlockParticleOption(ParticleTypes.BLOCK, Blocks.ICE.defaultBlockState()),
-                            this.getEyePosition().x,
-                            this.getEyePosition().y,
-                            this.getEyePosition().z,
-                            110, 0.0, 0, 0.0, 0.5);
 
-                    level().playSound(
-                            null,
-                            blockPosition(),
-                            ModSounds.ICE_BREAKER_EVENT,
-                            SoundSource.PLAYERS,
-                            1.0F,
-                            (float) ( 1.0F+Math.random()*0.01F));
-                    HeatUtil.resetHeat(rdbt$this());
-
-                    if (rdbt$this() instanceof Player) {
-                        hurt(ModDamageTypes.of(level(), ModDamageTypes.ICE_SHATTER, $$0.getEntity()), 15F);
-                    } else {
-                        hurt(ModDamageTypes.of(level(), ModDamageTypes.ICE_SHATTER, $$0.getEntity()), 30F);
-                    }
-                    S2CPacketUtil.shatterIce(getId());
-                    return true;
-                }
-            }
 
         }
         return false;
@@ -4588,6 +4561,37 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         @SuppressWarnings("deprecation")
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true, require = 0)
         private void roundabout$roundabouthurt(DamageSource damageSource, float $$1, CallbackInfoReturnable<Boolean> ci) {
+
+            //Frozen deaths from vampire freeze / ice sculptures / white album
+            if (damageSource.getEntity() != null && !damageSource.is(DamageTypes.THORNS) && !damageSource.is(ModDamageTypes.STAND_FIRE)){
+                if (HeatUtil.isBodyFrozen(rdbt$this()) && !level().isClientSide()){
+                    ((ServerLevel) this.level()).sendParticles(
+                            new BlockParticleOption(ParticleTypes.BLOCK, Blocks.ICE.defaultBlockState()),
+                            this.getEyePosition().x,
+                            this.getEyePosition().y,
+                            this.getEyePosition().z,
+                            110, 0.0, 0, 0.0, 0.5);
+
+                    level().playSound(
+                            null,
+                            blockPosition(),
+                            ModSounds.ICE_BREAKER_EVENT,
+                            SoundSource.PLAYERS,
+                            1.0F,
+                            (float) ( 1.0F+Math.random()*0.01F));
+                    HeatUtil.resetHeat(rdbt$this());
+
+                    if (rdbt$this() instanceof Player) {
+                        hurt(ModDamageTypes.of(level(), ModDamageTypes.ICE_SHATTER, damageSource.getEntity()), 15F);
+                    } else {
+                        hurt(ModDamageTypes.of(level(), ModDamageTypes.ICE_SHATTER, damageSource.getEntity()), 30F);
+                    }
+                    S2CPacketUtil.shatterIce(getId());
+                    ci.cancel();
+                    return;
+                }
+            }
+
         if (((StandUser)this).roundabout$getStandPowers() instanceof PowersD4C powers)
         {
             if (((StandUser)this).roundabout$isParallelRunning())
