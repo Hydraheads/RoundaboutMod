@@ -322,6 +322,8 @@ public class FabricSounds {
         addSound(ModSounds.SURVIVOR_PLACE_ID, ModSounds.SURVIVOR_PLACE_EVENT);
         addSound(ModSounds.SURVIVOR_REMOVE_ID, ModSounds.SURVIVOR_REMOVE_EVENT);
         addSound(ModSounds.ZOMBIE_CHARGE_ID, ModSounds.ZOMBIE_CHARGE_EVENT);
+        addSound(ModSounds.GOAT_CHARGE_ID, ModSounds.GOAT_CHARGE_EVENT);
+        addSound(ModSounds.GOAT_DASH_ID, ModSounds.GOAT_DASH_EVENT);
         addSound(ModSounds.ACHTUNG_BURST_ID, ModSounds.ACHTUNG_BURST_EVENT);
         addSound(ModSounds.RIPPER_EYES_BEAM_ID, ModSounds.RIPPER_EYES_BEAM_EVENT);
         addSound(ModSounds.RIPPER_EYES_CHARGE_ID, ModSounds.RIPPER_EYES_CHARGE_EVENT);

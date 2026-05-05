@@ -976,6 +976,13 @@ public class ModSounds {
     public static final ResourceLocation ZOMBIE_CHARGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ZOMBIE_CHARGE);
     public static SoundEvent ZOMBIE_CHARGE_EVENT = SoundEvent.createVariableRangeEvent(ZOMBIE_CHARGE_ID);
 
+    public static final String GOAT_CHARGE = "goat_charge";
+    public static final ResourceLocation GOAT_CHARGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GOAT_CHARGE);
+    public static SoundEvent GOAT_CHARGE_EVENT = SoundEvent.createVariableRangeEvent(GOAT_CHARGE_ID);
+
+    public static final String GOAT_DASH = "goat_dash";
+    public static final ResourceLocation GOAT_DASH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GOAT_DASH);
+    public static SoundEvent GOAT_DASH_EVENT = SoundEvent.createVariableRangeEvent(GOAT_DASH_ID);
 
     public static final String ACHTUNG_BURST = "achtung_burst";
     public static final ResourceLocation ACHTUNG_BURST_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ACHTUNG_BURST);
