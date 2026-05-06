@@ -32,7 +32,7 @@ public class PowersGratefulDead extends NewPunchingStand {
     }
     @Override
     public StandEntity getNewStandEntity(){
-        return ModEntities.THE_GRATEFUL_DEAD.create(this.getSelf().level());
+        return ModEntities.GRATEFUL_DEAD.create(this.getSelf().level());
     }
 
     @Override
@@ -84,14 +84,15 @@ public class PowersGratefulDead extends NewPunchingStand {
 
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
+        //Passives and ledge grab to-do
         $$1.add(drawSingleGUIIcon(context, 18, leftPos+20, topPos+80, 0, "ability.roundabout.punch",
-                "instruction.roundabout.press_attack", StandIcons.THE_GRATEFUL_DEAD_PUNCH,0,level,bypas));
+                "instruction.roundabout.press_attack", StandIcons.GRATEFUL_DEAD_PUNCH,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,0, "ability.roundabout.guard",
-                "instruction.roundabout.hold_block", StandIcons.THE_GRATEFUL_DEAD_GUARD,0,level,bypas));
+                "instruction.roundabout.hold_block", StandIcons.GRATEFUL_DEAD_GUARD,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.roundabout.final_punch",
-                "instruction.roundabout.hold_attack_crouch", StandIcons.THE_GRATEFUL_DEAD_DOUBLE_PUNCH,0,level,bypas));
+                "instruction.roundabout.hold_attack_crouch", StandIcons.GRATEFUL_DEAD_DOUBLE_PUNCH,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.barrage",
-                "instruction.roundabout.barrage", StandIcons.THE_GRATEFUL_DEAD_BARRAGE,0,level,bypas));
+                "instruction.roundabout.barrage", StandIcons.GRATEFUL_DEAD_BARRAGE,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.miasma",
                 "instruction.roundabout.miasma", StandIcons.MIASMA_ACTIVE,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.age_grab",
@@ -104,6 +105,7 @@ public class PowersGratefulDead extends NewPunchingStand {
                 "instruction.roundabout.age_disguise", StandIcons.AGE_DISGUISE_2,4,level,bypas));
         return $$1;
     }
+
 
     public boolean isMiasmaActive() {return false;}
 

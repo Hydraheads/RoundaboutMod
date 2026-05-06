@@ -18,7 +18,7 @@ public class GratefulDeadRenderer extends StandRenderer<GratefulDeadEntity>{
     private static final ResourceLocation MANGA = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/grateful_dead/manga.png");
 
     public GratefulDeadRenderer(EntityRendererProvider.Context context) {
-        super(context, new GratefulDeadModel<>(context.bakeLayer(ModEntityRendererClient.THE_GRATEFUL_DEAD_LAYER)), 0f);
+        super(context, new GratefulDeadModel<>(context.bakeLayer(ModEntityRendererClient.GRATEFUL_DEAD_LAYER)), 0f);
     }
     @Override
     public ResourceLocation getTextureLocation(GratefulDeadEntity entity){

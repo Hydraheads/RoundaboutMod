@@ -327,7 +327,7 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "d4c").toString())
             );
-    public static final RegistryObject<EntityType<GratefulDeadEntity>> THE_GRATEFUL_DEAD =
+    public static final RegistryObject<EntityType<GratefulDeadEntity>> GRATEFUL_DEAD =
             ENTITY_TYPES.register("grateful_dead", () ->
                     EntityType.Builder.of(GratefulDeadEntity::new, MobCategory.MISC).sized(0.75f, 2.05f).
                             clientTrackingRange(14).

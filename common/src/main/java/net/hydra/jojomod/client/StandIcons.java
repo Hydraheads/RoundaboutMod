@@ -387,13 +387,13 @@ public class StandIcons {
     public static final ResourceLocation DIVER_SELECTION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/diver_down/diver_selection.png");
 
-    public static final ResourceLocation THE_GRATEFUL_DEAD_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
+    public static final ResourceLocation GRATEFUL_DEAD_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/grateful_dead/punch.png");
-    public static final ResourceLocation THE_GRATEFUL_DEAD_GUARD = new ResourceLocation(Roundabout.MOD_ID,
+    public static final ResourceLocation GRATEFUL_DEAD_GUARD = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/grateful_dead/guard.png");
-    public static final ResourceLocation THE_GRATEFUL_DEAD_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
+    public static final ResourceLocation GRATEFUL_DEAD_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/grateful_dead/barrage.png");
-    public static final ResourceLocation THE_GRATEFUL_DEAD_DOUBLE_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
+    public static final ResourceLocation GRATEFUL_DEAD_DOUBLE_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/grateful_dead/double_punch.png");
     public static final ResourceLocation AGE_GRAB = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/grateful_dead/age_grab.png");
