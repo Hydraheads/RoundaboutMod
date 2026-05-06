@@ -28,7 +28,7 @@ public class LeapAtTargetBearHeadGoal extends Goal {
             this.target = this.mob.getTarget();
             if (this.target == null || (mob instanceof BaseMinion bm &&
                     (!(bm.getHeadItem() != null && bm.getHeadItem().is(ModItems.POLAR_BEAR_REMAINS)) ||
-                            !bm.canGetMadAt(this.target)))) {
+                            !bm.canAttack(this.target)))) {
                 return false;
             } else {
                 double $$0 = this.mob.distanceToSqr(this.target);

@@ -104,7 +104,6 @@ public class BaseMinion extends PathfinderMob {
     public void addBehaviourGoals() {
         this.goalSelector.addGoal(1, new AvoidPanicGoal<LivingEntity>(this, LivingEntity.class, 6.0F, (double)1.0F, 1.2));;
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this).setAlertOthers());
-        this.targetSelector.addGoal(2, new MinionTargetGoal(this));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::canGetMadAt));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false, this::canGetMadAt));
 
@@ -496,7 +495,7 @@ public class BaseMinion extends PathfinderMob {
         if ($$0 != null && controller != null && controller.is($$0)){
             return;
         } else {
-            super.setLastHurtMob($$0);
+            super.setLastHurtByMob($$0);
         }
     }
 
@@ -699,9 +698,10 @@ public class BaseMinion extends PathfinderMob {
                 }
             }
 
-            if ((this.getTarget() != null && ((!this.getTarget().isAlive() || this.getTarget().isRemoved() ||
+            if (this.getTarget() != null && (!this.getTarget().isAlive() || this.getTarget().isRemoved() ||
                     (controller != null && controller.is(getTarget()))
-            )))){
+                    )
+            ){
                 this.setTarget(null);
                 this.setLastHurtByMob(null);
                 this.setLastHurtByPlayer(null);
@@ -721,8 +721,18 @@ public class BaseMinion extends PathfinderMob {
                     if (autoTarget instanceof BaseMinion fm && fm.getController() == this.getController()){
                         autoTarget = null;
                     }
+                    if (autoTarget != null && (autoTarget.isRemoved() || !autoTarget.isAlive()))
+                        autoTarget = null;
                     if (autoTarget2 instanceof BaseMinion fm && fm.getController() == this.getController()){
                         autoTarget2 = null;
+                    }
+                    if (autoTarget2 != null && (autoTarget2.isRemoved() || !autoTarget2.isAlive()))
+                        autoTarget2 = null;
+                    if (autoTarget == null && autoTarget2 == null){
+                        if (getLastHurtByMob() != null && getLastHurtByMob().isAlive()
+                                && !getLastHurtByMob().isRemoved()){
+                            setTarget(autoTarget);
+                        }
                     }
                     boolean check1 = (this.getTarget() != autoTarget) || autoTarget == null;
                     boolean check2 = (this.getTarget() != autoTarget2) || autoTarget2 == null;
