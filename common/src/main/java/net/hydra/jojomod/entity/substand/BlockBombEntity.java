@@ -27,9 +27,12 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
+
+import org.joml.Vector3f;
 
 public class BlockBombEntity extends StandEntity {
 	
@@ -40,10 +43,12 @@ public class BlockBombEntity extends StandEntity {
 	private BlockPos bombPos;
 	private BlockEntity blockInfo;
 	private BlockState originalState;
+	private static final int maxTickIndicator = 6;
+	private int tickIndicator = maxTickIndicator;
 	
 	public BlockBombEntity(EntityType<? extends StandEntity> $$0, Level $$1) {
-		super($$0, $$1);
 		
+		super($$0, $$1);
 	}
 	
 	public static AttributeSupplier.Builder createStandAttributes() {
@@ -59,6 +64,7 @@ public class BlockBombEntity extends StandEntity {
 			
 			
 			this.setPos(positionInWorld);
+			
 		}
 	}
 	
@@ -82,15 +88,30 @@ public class BlockBombEntity extends StandEntity {
                 this.discard();
             }
             else{
-            	this.bodyRotationX = 0;
-            	this.bodyRotationY = 0;
-            	this.headRotationX = 0;
-            	this.headRotationY = 0;
+            	
+            	
+            	this.setHeadRotationX(0);
+            	this.setHeadRotationY(0);
+            	this.setStandRotationX(0);
+            	this.setStandRotationY(0);
+            	this.setStandRotationZ(0);
+            	if (this.tickIndicator > 0 && this.tickIndicator % 2 == 0){   
+	            	Vec3 pos = bombPos.getCenter();
+	            	
+	            	
+	            	((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0.02F, 0.02F, 0.04F), 2.5f),
+	            			pos.x,
+	                        pos.y+1.0f,
+	                        pos.z,
+	                        2, 0, 0, 0, 1.2);
+	            	this.tickIndicator--;
+	            }
             	
             	//this.detectInside();
             }
 		
         }
+        super.tick();
     }
 	
 	public void detectInside() {
@@ -106,6 +127,9 @@ public class BlockBombEntity extends StandEntity {
 		}
 		
 	}
+	
+
+	
 	
 	@Override
     protected AABB makeBoundingBox() { return super.makeBoundingBox();}
@@ -139,5 +163,11 @@ public class BlockBombEntity extends StandEntity {
     
     @Override
     public boolean mayInteract(Level $$0, BlockPos pos) { return false;}
+    
+
+    @Override
+    public boolean forceVisualRotation(){
+        return true;
+    }
   
 }
