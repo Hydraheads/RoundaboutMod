@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -26,10 +27,12 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
 
 import java.util.List;
 
@@ -159,32 +162,36 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
                     double z = this.getZ() + vec3.z;
 
                     BlockPos check = this.blockPosition();
-                    int n = 0;
-                    while (this.level().getBlockState(check).isSolid() && n < 3) {
+                    for (int i=0;i<3;i++) {
                         check.below();
-                        n++;
+                        if (this.level().getBlockState(check).isSolid()) {
+                            break;
+                        }
                     }
 
-                    this.level().addParticle(ModParticles.TUSK_HOLE, x, check.getY() + 0.02, z, 0.0, 0.0, 0.0);
+                    BlockState bs = this.level().getBlockState(this.blockPosition());
+                    y = y%1;
+                    if (!bs.isAir()) {
+                        double height = bs.getBlock().getVisualShape(bs,this.level(),this.blockPosition(), CollisionContext.of(this)).max(Direction.Axis.Y);
+                        y += height-y;
+                    }
 
-
-                    ((ServerLevel) this.level()).sendParticles(ModParticles.TUSK_HOLE, x,
-                            check.getY() + 0.02, z,
-                            0,
-                            0,
-                            0,
-                            0,
-                            0.1);
+                    ((ServerLevel) this.level()).sendParticles(ModParticles.TUSK_HOLE, x, check.getY() + y  + 0.04, z, 0, 0, 0, 0, 0.1);
                 }
             } else {
                 Vec3 pos = this.getPosition(0);
-                ((ServerLevel) this.level()).sendParticles(ModParticles.TUSK_VORTEX, pos.x,
-                        pos.y + 0.02, pos.z,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0.1);
+            /*    for (int i=0;i<10;i++) {
+                    Vec3 rPos = pos.offsetRandom(this.random,3);
+                    Vec3 vel = rPos.subtract(pos).normalize();
+                    ((ServerLevel) this.level()).sendParticles(ParticleTypes.BUBBLE, rPos.x,
+                            rPos.y + 0.02, rPos.z,
+                            0, // ignore
+                            vel.x, // x,y,z
+                            vel.y,
+                            vel.z,
+                            0.1); // idk
+                } */
+
                 if (this.tickCount % 2 == 0) {
                     float radius = 7.5F;
                     List<Entity> targets = MainUtil.genHitbox(this.level(),

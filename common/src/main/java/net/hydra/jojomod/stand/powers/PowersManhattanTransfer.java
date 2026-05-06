@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -8,14 +9,18 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
+import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.mixin.EntityAndData;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -25,15 +30,24 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.ThrownPotion;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.*;
@@ -42,6 +56,9 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+
+import static net.hydra.jojomod.client.ClientUtil.playSound;
 
 public class PowersManhattanTransfer extends NewDashPreset {
     public PowersManhattanTransfer(LivingEntity self) {
@@ -52,7 +69,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
 
             MANHATTAN_VISION = 82,
-            MANHATTAN_DODGE = 83;
+            MANHATTAN_DODGE = 83,
+            DEFLECT_PROJECTILE = 84;
+
     public boolean isStandEnabled() {
         return ClientNetworking.getAppropriateConfig().manhattanTransferSettings.enableManhattanTransfer;
     }
@@ -176,6 +195,14 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 }*/
               //  this.getStandEntity(this.getSelf()).level().playSound(null,this.getSelf().blockPosition(),ModSounds.VAMPIRE_DASH_EVENT, SoundSource.PLAYERS, 1F,1.2F);
             }
+            case PowersManhattanTransfer.DEFLECT_PROJECTILE -> {
+              Roundabout.LOGGER.info("PEW!");
+
+                if(this.getStandEntity(this.getSelf()) != null && this.getStandEntity(this.getSelf()) instanceof  ManhattanTransferEntity ME){
+                    ME.setHeldItemManhattan(ItemStack.EMPTY);
+                    ME.hasItem = false;
+                }
+            }
         }
         return super.tryPower(move, forced);
     }
@@ -213,6 +240,26 @@ public class PowersManhattanTransfer extends NewDashPreset {
             }
         }
     }
+    @Override
+    public void pilotInputAttack(){
+        LivingEntity ent = getPilotingStand();
+        if (ent != null && !switchShootingMode()) {
+            tryPower(PowersManhattanTransfer.DEFLECT_PROJECTILE, true);
+            tryPowerPacket(PowersManhattanTransfer.DEFLECT_PROJECTILE);
+            Entity TE = MainUtil.getTargetEntity(ent, 300, 10);
+            IEntityAndData entityAndData = ((IEntityAndData) TE);
+            //If Target is detected
+            if (TE != null && entityAndData.roundabout$getTrueInvisibilityManhattan() > 1 && !(TE instanceof StandEntity && !TE.isAttackable())) {
+                Vec3 vec3d = ent.getEyePosition(0);
+                Vec3 vec3d2 = ent.getViewVector(0);
+                Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
+                BlockHitResult blockHit = ent.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, ent));
+                if ((blockHit.distanceTo(ent) - 1) < ent.distanceToSqr(TE)) {
+                }
+            }
+        }
+    }
+
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
         IEntityAndData entityAndData = ((IEntityAndData) ent);
@@ -577,6 +624,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public Component ifWipListDev(){
         return Component.literal(  "14Kacper").withStyle(ChatFormatting.BLUE);
     }
-    //COMMAND TO QUICKLY PUT MANHATTAN TRANSFER INTO ALL MOBS: /roundaboutSetStand @e manhattan_transfer 1 "from 1 to 5" 0 false
+    //COMMAND TO QUICKLY PUT MANHATTAN TRANSFER INTO ALL MOBS: /roundaboutSetStand @e manhattan_transfer 1 "from 1 to 8" 0 false
 
 }

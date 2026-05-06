@@ -217,7 +217,7 @@ public class PowersTusk extends NewDashPreset {
                     return (!canLaunchItem(IPE.roundabout$getForRealMainHand()) && !canLaunchItem(IPE.roundabout$getForRealOffHand())) || !hasNail();
                 }
             } else if (this.getAct() == 2 ) {
-                return getHoleTarget() != null;
+                return getHoleTarget() == null;
             } else if (this.getAct() == 3 ) {
                 return !isHoleNearby();
             }
@@ -387,6 +387,8 @@ public class PowersTusk extends NewDashPreset {
         switch (move) {
 
             case PowersTusk.TARGET -> {
+                this.setActivePower(PowersTusk.TARGET);
+                this.setAttackTime(0);
                 Entity target = this.getSelf().level().getEntity(value);
                 if (target != null) {
                     this.getSelf().setLastHurtMob(target);
@@ -939,12 +941,14 @@ public class PowersTusk extends NewDashPreset {
 
     @Override
     public boolean highlightsEntity(Entity ent, Player player) {
-        if (this.getAct() == 2 && ent.equals(MainUtil.getTargetEntity(this.getSelf(),15,10)) ) {
-            return true;
-        }
+        if (PowerTypes.isUsingStand(player)) {
+            if (this.getAct() == 2 && this.getSelf().getLastHurtMob() == ent && this.getActivePower() == PowersTusk.TARGET && this.getAttackTime() < 20 ) {
+                return true;
+            }
 
-        if (this.getAct() == 3) {
-            return ent.equals(this.targetHole) || (this.isHoldingSneak() && ent instanceof TuskHoleEntity);
+            if (this.getAct() == 3) {
+                return ent.equals(this.targetHole) || (this.isHoldingSneak() && ent instanceof TuskHoleEntity);
+            }
         }
         return false;
     }
