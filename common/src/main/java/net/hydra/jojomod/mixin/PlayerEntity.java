@@ -348,7 +348,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 if (ClientNetworking.getAppropriateConfig().powersSettings.powerSwitchingPenalty) {
                     ((StandUser) this).roundabout$getStandPowers().onStandSwitch();
                     ((StandUser) this).roundabout$getStandPowers().onPowerSwitch();
-                    addEffect(new MobEffectInstance(ModEffects.SWITCH, 240, 0));
+                    if (!this.isCreative()) {
+                        addEffect(new MobEffectInstance(ModEffects.SWITCH, 240, 0));
+                    }
                 }
             }
             this.getEntityData().set(ROUNDABOUT$POWERS, style);
@@ -1832,6 +1834,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
 
     @Shadow public abstract void displayClientMessage(Component component, boolean bl);
+
+    @Shadow
+    public abstract boolean isCreative();
 
     @Inject(method = "canHarmPlayer", at=@At("HEAD"), cancellable = true)
     private void roundabout$canHarmPlayer(Player player, CallbackInfoReturnable<Boolean> cir)
