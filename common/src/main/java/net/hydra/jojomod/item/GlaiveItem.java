@@ -2,9 +2,12 @@ package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -58,11 +61,19 @@ public class GlaiveItem extends SwordItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
         ItemStack $$3 = $$1.getItemInHand($$2);
+        if (ClientNetworking.getAppropriateConfig().itemSettings.noGlaiveDuringPunchRecharge) {
+            if ($$1 != null) {
+                if (((StandUser) $$1).roundabout$getStandPowers().isInAttackString()) {
+                    return InteractionResultHolder.fail($$3);
+                }
+            }
+        }
+
         if ($$1.getAttackStrengthScale(1) >= 1F) {
             $$1.startUsingItem($$2);
                 if ($$1.getUseItem() == $$3 && $$1.getUseItemRemainingTicks() == $$1.getUseItem().getUseDuration()) {
-                    if ($$0.isClientSide) {
-                        C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_GLAIVE_START_SOUND);
+                    if (!$$0.isClientSide) {
+                        ((StandUser) $$1).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.GLAIVE_CHARGE, 10, false);
                     }
                     return InteractionResultHolder.success($$3);
                 }
@@ -76,8 +87,8 @@ public class GlaiveItem extends SwordItem {
         if ($$2 instanceof Player $$4) {
             int $$5 = this.getUseDuration($$0) - $$3;
             int itemTime = 20;
-            if ($$1.isClientSide) {
-                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_ITEM_STOP_SOUND);
+            if (!$$1.isClientSide) {
+                ((StandUser) $$4).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 30,false);
             }
             if ($$5 >= itemTime) {
                 if ($$1.isClientSide){
@@ -91,6 +102,8 @@ public class GlaiveItem extends SwordItem {
                 $$2.swing(interactionhand);
                 ((Player) $$2).resetAttackStrengthTicker();
                 $$4.awardStat(Stats.ITEM_USED.get(this));
+            } else {
+                ((Player) $$2).resetAttackStrengthTicker();
             }
         }
     }
