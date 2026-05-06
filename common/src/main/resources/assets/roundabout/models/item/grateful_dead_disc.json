@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/template_music_disc",
   "textures": {
-    "layer0": "roundabout:item/the_grateful_dead_disc"
+    "layer0": "roundabout:item/grateful_dead_disc"
   }
 }

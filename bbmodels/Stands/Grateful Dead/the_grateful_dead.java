@@ -5,7 +5,7 @@
 
 public class the_grateful_dead<T extends Entity> extends EntityModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "the_grateful_dead"), "main");
+	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "grateful_dead"), "main");
 	private final ModelPart stand;
 	private final ModelPart stand2;
 	private final ModelPart head;

@@ -4,7 +4,6 @@ import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
@@ -388,12 +387,12 @@ public class FabricEntities {
                         EntityType.Builder.of(DiverDownEntity::new, MobCategory.MISC).
                                 sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":diver_down")
                 );
-        public static final EntityType<TheGratefulDeadEntity> THE_GRATEFUL_DEAD =
+        public static final EntityType<GratefulDeadEntity> THE_GRATEFUL_DEAD =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
-                        Roundabout.location("the_grateful_dead"),
-                        EntityType.Builder.of(TheGratefulDeadEntity::new, MobCategory.MISC).
-                                sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":the_grateful_dead")
+                        Roundabout.location("grateful_dead"),
+                        EntityType.Builder.of(GratefulDeadEntity::new, MobCategory.MISC).
+                                sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":grateful_dead")
                 );
         public static final EntityType<HarpoonEntity> THROWN_HARPOON =
                 Registry.register(

@@ -21,14 +21,14 @@ import java.util.List;
 
 import java.util.Arrays;
 
-public class PowersTheGratefulDead extends NewPunchingStand {
-    public PowersTheGratefulDead(LivingEntity self){
+public class PowersGratefulDead extends NewPunchingStand {
+    public PowersGratefulDead(LivingEntity self){
         super(self);
     }
 
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
-        return new PowersTheGratefulDead(entity);
+        return new PowersGratefulDead(entity);
     }
     @Override
     public StandEntity getNewStandEntity(){
@@ -138,23 +138,23 @@ public class PowersTheGratefulDead extends NewPunchingStand {
     }
 
     public static final byte
-            ANIME_THE_GRATEFUL_DEAD = 0,
-            MANGA_THE_GRATEFUL_DEAD = 1;
+            ANIME_GRATEFUL_DEAD = 0,
+            MANGA_GRATEFUL_DEAD = 1;
 
     @Override
     public List<Byte> getSkinList(){
         return Arrays.asList(
-                ANIME_THE_GRATEFUL_DEAD,
-                MANGA_THE_GRATEFUL_DEAD
+                ANIME_GRATEFUL_DEAD,
+                MANGA_GRATEFUL_DEAD
         );
     }
 
     @Override
     public Component getSkinName(byte skinId){
-        if(skinId==MANGA_THE_GRATEFUL_DEAD){
-            return Component.translatable("skins.roundabout.the_grateful_dead.manga");
+        if(skinId==MANGA_GRATEFUL_DEAD){
+            return Component.translatable("skins.roundabout.grateful_dead.manga");
         }else{
-            return Component.translatable("skins.roundabout.the_grateful_dead.anime");
+            return Component.translatable("skins.roundabout.grateful_dead.anime");
         }
     }
 

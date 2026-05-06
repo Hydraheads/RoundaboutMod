@@ -1,16 +1,16 @@
 package net.hydra.jojomod.client.models.stand;
 
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
-import net.hydra.jojomod.client.models.stand.animations.TheGratefulDeadAnimations;
-import net.hydra.jojomod.entity.stand.TheGratefulDeadEntity;
+import net.hydra.jojomod.client.models.stand.animations.GratefulDeadAnimations;
+import net.hydra.jojomod.entity.stand.GratefulDeadEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.stand.powers.PowersTheGratefulDead;
+import net.hydra.jojomod.stand.powers.PowersGratefulDead;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 
-public class TheGratefulDeadModel<T extends TheGratefulDeadEntity> extends StandModel<T>{
-    public TheGratefulDeadModel(ModelPart root){
+public class GratefulDeadModel<T extends GratefulDeadEntity> extends StandModel<T>{
+    public GratefulDeadModel(ModelPart root){
         this.stand = root.getChild("stand");
         this.head = stand.getChild("stand2").getChild("head");
         this.body = stand.getChild("stand2").getChild("body");
@@ -139,12 +139,12 @@ public class TheGratefulDeadModel<T extends TheGratefulDeadEntity> extends Stand
 
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
-    StandPowers Power = new PowersTheGratefulDead(null);
+    StandPowers Power = new PowersGratefulDead(null);
 
     @Override
     public void defaultAnimations(T entity, float animationProgress, float windupLength){
-        this.animate(entity.idleAnimationState, TheGratefulDeadAnimations.IDLE_GROUND, animationProgress, 1f);
-        this.animate(entity.idleAnimationState2, TheGratefulDeadAnimations.IDLE_FLOAT, animationProgress, 1f);
+        this.animate(entity.idleAnimationState, GratefulDeadAnimations.IDLE_GROUND, animationProgress, 1f);
+        this.animate(entity.idleAnimationState2, GratefulDeadAnimations.IDLE_FLOAT, animationProgress, 1f);
         this.animate(entity.punchState1, StandAnimations.COMBO1, animationProgress, 1.4f);
         this.animate(entity.punchState2, StandAnimations.COMBO2, animationProgress, 1.16666f); /*1.1666 for 6 ticks, 1.4 for 5*/
         this.animate(entity.punchState3, StandAnimations.COMBO3, animationProgress, 1.16666f);
@@ -165,10 +165,10 @@ public class TheGratefulDeadModel<T extends TheGratefulDeadEntity> extends Stand
         defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
         defaultModifiers(pEntity);
 
-        this.animate(pEntity.openHands, TheGratefulDeadAnimations.OPEN_HANDS, pAgeInTicks, 1F);
-        this.animate(pEntity.closeLeft, TheGratefulDeadAnimations.CLOSE_LEFT, pAgeInTicks, 1F);
-        this.animate(pEntity.closeRight, TheGratefulDeadAnimations.CLOSE_RIGHT, pAgeInTicks, 1F);
-        this.animate(pEntity.closeHands, TheGratefulDeadAnimations.CLOSE_HANDS, pAgeInTicks, 1F);
+        this.animate(pEntity.openHands, GratefulDeadAnimations.OPEN_HANDS, pAgeInTicks, 1F);
+        this.animate(pEntity.closeLeft, GratefulDeadAnimations.CLOSE_LEFT, pAgeInTicks, 1F);
+        this.animate(pEntity.closeRight, GratefulDeadAnimations.CLOSE_RIGHT, pAgeInTicks, 1F);
+        this.animate(pEntity.closeHands, GratefulDeadAnimations.CLOSE_HANDS, pAgeInTicks, 1F);
         this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1F);
     }
 }

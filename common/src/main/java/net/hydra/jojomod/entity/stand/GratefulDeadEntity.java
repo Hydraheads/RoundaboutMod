@@ -13,8 +13,8 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-public class TheGratefulDeadEntity extends FollowingStandEntity{
-    public TheGratefulDeadEntity(EntityType<? extends Mob> entityType, Level world) {
+public class GratefulDeadEntity extends FollowingStandEntity{
+    public GratefulDeadEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
     }
     public static final byte
