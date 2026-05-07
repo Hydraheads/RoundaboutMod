@@ -635,9 +635,17 @@ public class BaseMinion extends PathfinderMob {
     int cd2 = 0;
 
     public void discardBoth(){
-        if (z1 != null){
+        if (z1 != null && !z1.isRemoved()){
+
+            ((ServerLevel) this.level()).sendParticles(ParticleTypes.POOF, z1.getEyePosition().x,
+                    z1.getEyePosition().y, z1.getEyePosition().z,
+                    5, 0.1, 0.1, 0.1, 0.01);
             z1.discard();
-        } if (z2 != null){
+        } if (z2 != null&& !z2.isRemoved()){
+
+            ((ServerLevel) this.level()).sendParticles(ParticleTypes.POOF, z2.getEyePosition().x,
+                    z2.getEyePosition().y, z2.getEyePosition().z,
+                    5, 0.1, 0.1, 0.1, 0.01);
             z2.discard();
         }
     }
