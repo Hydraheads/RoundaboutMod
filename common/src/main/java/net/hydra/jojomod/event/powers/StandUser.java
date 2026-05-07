@@ -4,11 +4,9 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -16,8 +14,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 public interface StandUser {
@@ -25,10 +25,13 @@ public interface StandUser {
      * Minimize the amount of synced data to just things you really need.*/
     boolean roundabout$hasStandOut();
     void roundabout$tryBlockPosPower(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit);
+    void roundabout$tryBlockPosPowerF(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit);
+    void roundabout$tryBlockPosPowerP(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit);
     Vec3 roundabout$frictionSave();
     void roundabout$deeplyRemoveAttackTarget();
     boolean roundabout$getQueForTargetDeletion();
     boolean rdbt$getJumping();
+    boolean rdbt$isServerControlledCooldown(CooldownInstance ci, byte num);
     void roundabout$removeQueForTargetDeletion();
     void roundabout$onStandOutLookAround(StandEntity passenger);
     boolean roundabout$getUniqueStandModeToggle();
@@ -40,8 +43,12 @@ public interface StandUser {
     void roundabout$setEmulator(LivingEntity le);
     boolean rdbt$tickEffectsBleedEdition(boolean grav);
     void rdbt$setRemoveLoveSafety(boolean yup);
-
+    void roundabout$setGlow(byte glow);
+    byte roundabout$getGlow();
     void roundabout$updateStandOutPosition(FollowingStandEntity passenger);
+
+    void roundabout$setHeat(int e);
+    int roundabout$getHeat();
 
     int roundabout$increaseAirSupply(int $$0);
     int roundabout$getZappedTicks();
@@ -53,6 +60,10 @@ public interface StandUser {
     Entity roundabout$getBoundTo();
     void roundabout$setBoundTo(Entity $$0);
     int roundabout$getBoundToID();
+
+
+    void rdbt$setFleshBud(UUID bud);
+    UUID rdbt$getFleshBud();
 
     void roundabout$setBoundToID(int bound);
     boolean roundabout$isStringBound();
@@ -66,9 +77,11 @@ public interface StandUser {
     void roundabout$standMount(StandEntity StandSet);
     void roundabout$setStand(StandEntity StandSet);
     float roundabout$getGuardPoints();
+    void roundabout$setGuardPointsLoad(float GuardPoints);
     float roundabout$getMaxGuardPoints();
     void roundabout$setGuardPoints(float GuardPoints);
     boolean roundabout$getGuardBroken();
+    void roundabout$syncGuard();
     void roundabout$setGuardBroken(boolean guardBroken);
     void roundabout$fixGuard();
     void roundabout$regenGuard(float regen);
@@ -76,15 +89,16 @@ public interface StandUser {
     void roundabout$breakGuard();
     ItemStack roundabout$getStandDisc();
     void roundabout$setStandDisc(ItemStack stack);
-
+    void roundabout$setMetallicaInvisibility(int fade);
+    int roundabout$getMetallicaInvisibility();
+    void roundabout$setMetalMeter(float amount);
+    float roundabout$getMetalMeter();
     int roundabout$getAttackTimeMax();
     int roundabout$getAttackTime();
     DamageSource roundabout$getLogSource();
     int roundabout$getAttackTimeDuring();
     void roundabout$setBleedLevel(int bleedLevel);
     int roundabout$getBleedLevel();
-    byte roundabout$getGlow();
-    void roundabout$setGlow(byte glowingSkin);
     boolean roundabout$getOnlyBleeding();
     void roundabout$setOnlyBleeding(boolean only);
     byte roundabout$getActivePowerPhase();
@@ -96,16 +110,29 @@ public interface StandUser {
     void roundabout$summonStand(Level theWorld, boolean forced, boolean sound);
     AnimationState roundabout$getHandLayerAnimation();
     void roundabout$setHandLayerAnimation(AnimationState layer);
+
     AnimationState roundabout$getWornStandIdleAnimation();
-    void roundabout$setHeyYaAnimation(AnimationState layer);
-    AnimationState roundabout$getHeyYaAnimation2();
+    void roundabout$setWornStandIdleAnimation(AnimationState layer);
+
+    AnimationState roundabout$getWornStandAnimation();
+
+    // TODO: fix this shit below, make it so that we don't add a new vanishticks every stand :/
     int roundabout$getHeyYaVanishTicks();
     void roundabout$setHeyYaVanishTicks(int set);
     int roundabout$getRattShoulderVanishTicks();
     void roundabout$setRattShoulderVanishTicks(int set);
     int roundabout$getMandomVanishTicks();
     void roundabout$setMandomVanishTicks(int set);
+    int roundabout$getAnubisVanishTicks();
+    void roundabout$setAnubisVanishTicks(int set);
+    int roundabout$getCBVanishTicks();
+    void roundabout$setCBVanishTicks(int set);
+
+    int getJumpImmunityTicks();
+
     void rdbt$doMoldDetection(Vec3 movement);
+
+    void rdbt$doWindVisionDetection();
 
     boolean roundabout$getActive();
     boolean roundabout$getMainhandOverride();
@@ -128,6 +155,9 @@ public interface StandUser {
     void roundabout$setRejectionStandPowers(StandPowers powers);
     ItemStack roundabout$getRejectionStandDisc();
     void roundabout$setRejectionStandDisc(ItemStack disc);
+
+    boolean roundabout$getInteractedWithDisc();
+    void roundabout$setInteractedWithDisc(boolean discInteract);
 
     void roundabout$setStandPowers(StandPowers standPowers);
     void roundabout$setAttackTimeDuring(int attackTimeDuring);
@@ -152,6 +182,16 @@ public interface StandUser {
     void roundabout$tryIntPower(int move,boolean forced, int chargeTime, int move2, int move3);
     void roundabout$tryBlockPosPower(int move, boolean forced, BlockPos blockPos);
     void roundabout$tryPosPower(int move, boolean forced, Vec3 blockPos);
+    void roundabout$tryPowerF(int move, boolean forced);
+    void roundabout$tryIntPowerF(int move, boolean forced, int chargeTime);
+    void roundabout$tryIntPowerF(int move,boolean forced, int chargeTime, int move2, int move3);
+    void roundabout$tryBlockPosPowerF(int move, boolean forced, BlockPos blockPos);
+    void roundabout$tryPosPowerF(int move, boolean forced, Vec3 blockPos);
+    void roundabout$tryPowerP(int move, boolean forced);
+    void roundabout$tryIntPowerP(int move, boolean forced, int chargeTime);
+    void roundabout$tryIntPowerP(int move,boolean forced, int chargeTime, int move2, int move3);
+    void roundabout$tryBlockPosPowerP(int move, boolean forced, BlockPos blockPos);
+    void roundabout$tryPosPowerP(int move, boolean forced, Vec3 blockPos);
     void roundabout$addFollower(FollowingStandEntity $$0);
     void roundabout$removeFollower(FollowingStandEntity $$0);
 
@@ -204,6 +244,8 @@ public interface StandUser {
     float roundaboutGetMaxStoredDamage();
 
     byte roundabout$getStoredDamageByte();
+    void rdbt$setHideDeath(Boolean hide);
+    boolean rdbt$getHideDeath();
 
     void roundabout$UniversalTick();
     void roundabout$startAutoSpinAttack(int p_204080_);
@@ -251,12 +293,22 @@ public interface StandUser {
     boolean roundabout$getDrowning();
     boolean roundabout$mutualActuallyHurt(DamageSource $$0, float $$1);
     boolean roundabout$hasAStand();
-    boolean roundabout$rotateArmToShoot();
+    boolean roundabout$rotateArmToShoot(HumanoidArm arm);
 
     /**Achtuah*/
     void roundabout$setTrueInvis(int bound);
-
     int roundabout$getTrueInvis();
+
+
+    @Unique
+    void roundabout$setTrueInvisManhattan(int round);
+
+    @Unique
+    int roundabout$getTrueInvisManhattan();
+
+    /**Metallica*/
+    void roundabout$setMetallicaInvis(int invis);
+    int roundabout$getMetallicaInvis();
 
     /**Gravity Direction*/
 
@@ -272,6 +324,15 @@ public interface StandUser {
     boolean roundabout$isLaunchBubbleEncased();
     void roundabout$setBubbleLaunchEncased();
 
+
+    SoundEvent roundabout$getHurtSound(DamageSource sauce);
+
+    /**Anubis Possesion */
+    boolean roundabout$isPossessed();
+    PathfinderMob roundabout$getPossessor();
+    void roundabout$setPossessor(PathfinderMob e);
+    void roundabout$onPossessionFinish();
+
     /**Play around with falling gravity*/
     void roundabout$setAdjustedGravity(int adj);
     int roundabout$getAdjustedGravity();
@@ -284,9 +345,18 @@ public interface StandUser {
     void roundabout$setParallelRunning(boolean value);
     boolean roundabout$isParallelRunning();
 
+    boolean GoingDown();
+
     /** Green Day stuff**/
 
     void DoMoldTick();
     void MoldFieldExit();
+    void rdbt$SetCrawlTicks(int ticks);
+    boolean rdbt$isForceCrawl();
+    int rdbt$getCrawlTicks();
+
+    List<CooldownInstance> rdbt$initPowerCooldowns();
+    List<CooldownInstance> rdbt$getPowerCooldowns();
+    void rdbt$setPowerCooldowns(List<CooldownInstance> cdi);
 
 }

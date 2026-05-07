@@ -2,6 +2,11 @@
   "replace": false,
   "values": [
     "roundabout:time",
-    "roundabout:go_beyond"
+    "roundabout:go_beyond",
+    "roundabout:dagger",
+    "roundabout:ice_shatter",
+    "roundabout:sunlight",
+    "roundabout:blood_drain",
+    "roundabout:melting"
   ]
 }

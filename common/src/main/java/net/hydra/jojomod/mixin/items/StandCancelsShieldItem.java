@@ -1,5 +1,7 @@
 package net.hydra.jojomod.mixin.items;
 
+import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -20,7 +22,7 @@ public class StandCancelsShieldItem {
     public void roundabout$useRoundabout(Level $$0, Player $$1, InteractionHand $$2, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> ci) {
         StandUser user = ((StandUser) $$1);
 
-        if (user.roundabout$getActive() && user.roundabout$getStandPowers().interceptGuard() && $$2 == InteractionHand.OFF_HAND){
+        if (PowerTypes.hasStandActive($$1) && user.roundabout$getStandPowers().interceptGuard() && $$2 == InteractionHand.OFF_HAND){
             ci.setReturnValue(InteractionResultHolder.fail($$1.getItemInHand($$2)));
         } else {
             ItemStack itemStack = $$1.getItemInHand($$2);

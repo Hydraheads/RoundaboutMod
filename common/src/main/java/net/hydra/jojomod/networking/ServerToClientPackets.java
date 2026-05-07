@@ -14,6 +14,7 @@ public class ServerToClientPackets {
             Chrono("chrono_vision_player"),
             MANDOM_PENALTY("mandom_penalty"),
             TRUE_INVISIBILITY("invis"),
+            MANHATTAN_INVISIBILITY("manhattan_invis"),
             SyncDaze("sync_daze"),
             SyncGuard("sync_guard"),
             UpdateBarrageClash("update_barrage_clash_s2c"),
@@ -24,9 +25,12 @@ public class ServerToClientPackets {
             SyncCooldown("sync_cooldown"),
             SyncCooldownMax("sync_cooldown_max"),
             SyncActivePower("sync_active_power"),
+            SyncActivePowerFate("sync_active_power_fate"),
+            SyncActivePowerPowers("sync_active_power_powers"),
             SyncPowerInventory("sync_power_inventory"),
             IntPowerData("int_power_data"),
             IntToClient("generic_int_to_client"),
+            DoubleIntToClient("generic_double_int_to_client"),
             SimpleByteToClient("simple_byte_to_client"),
             ByteBundleToClient("byte_bundle_to_client"),
             AddTSEntity("add_ts_entity"),
@@ -36,7 +40,21 @@ public class ServerToClientPackets {
             ResumeTileEntityTS("resume_tile_ent_ts"),
             SendNewDynamicWorld("send_new_dynamic_world"),
             EjectPRunning("eject_p_running"),
-            HeelExtend("heel_extend");
+            HeelExtend("heel_extend"),
+            RefreshAllCooldowns("refresh_cooldowns"),
+            AffirmAllCooldowns("affirm_cooldown_sync"),
+            CreamUpdateTimer("cream_update_timer"),
+            CreamUpdateTransformTimer("cream_update_transform_timer"),
+            CreamUpdateTransformDirection("cream_update_transform_direction"),
+            VampireMessage("vampire_message"),
+            UpdateVampireData("update_vampire_data"),
+            UpdateVampireData2("update_vampire_data_2"),
+            UpdateVampireData3("update_vampire_data_3"),
+            ZombieFish("zombie_fish"),
+            GunRecoil("gun_recoil"),
+            SyncPossessor("sync_possessor"),
+            ShatterIce("shatter_ice"),
+            SyncAllies("sync_allies");
 
             public final String value;
 

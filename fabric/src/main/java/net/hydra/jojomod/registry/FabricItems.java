@@ -5,10 +5,14 @@ import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StreetSignBlock;
+import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.event.powers.visagedata.aesthetician.*;
 import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.item.paintings.BirthOfVenusPaintingItem;
+import net.hydra.jojomod.item.paintings.MonaLisaPaintingItem;
+import net.hydra.jojomod.item.paintings.VanGoughPaintingItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.*;
 import net.minecraft.core.Registry;
@@ -16,6 +20,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.Potions;
@@ -38,36 +44,69 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMagiciansRed(null)));
     public static Item MAX_STAND_DISC_THE_WORLD = registerItem("max_the_world_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersTheWorld(null)));
+
     public static Item STAND_DISC_JUSTICE = registerItem("justice_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersJustice(null)));
     public static Item MAX_STAND_DISC_JUSTICE= registerItem("max_justice_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersJustice(null)));
-    public static Item STAND_DISC_D4C = registerItem("d4c_disc",
+
+    /*public static Item STAND_DISC_D4C = registerItem("d4c_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
     public static Item MAX_STAND_DISC_D4C = registerItem("max_d4c_disc",
-            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null))); */
+
     public static Item STAND_DISC_GREEN_DAY = registerItem("green_day_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersGreenDay(null)));
     public static Item MAX_STAND_DISC_GREEN_DAY = registerItem("max_green_day_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersGreenDay(null)));
+
     public static Item STAND_DISC_RATT = registerItem("ratt_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersRatt(null)));
     public static Item MAX_STAND_DISC_RATT = registerItem("max_ratt_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersRatt(null)));
+
+    public static Item STAND_DISC_ANUBIS = registerItem("anubis_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null)));
+    public static Item MAX_STAND_DISC_ANUBIS = registerItem("max_anubis_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null)));
+
+    public static Item STAND_DISC_TUSK = registerItem("tusk_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersTusk(null)));
+    public static Item MAX_STAND_DISC_TUSK = registerItem("max_tusk_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersTusk(null)));
+
+    public static Item STAND_DISC_METALLICA = registerItem("metallica_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMetallica(null)));
+    public static Item MAX_STAND_DISC_METALLICA = registerItem("max_metallica_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersMetallica(null)));
+
     public static Item STAND_DISC_SOFT_AND_WET = registerItem("soft_and_wet_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSoftAndWet(null)));
     public static Item MAX_STAND_DISC_SOFT_AND_WET = registerItem("max_soft_and_wet_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersSoftAndWet(null)));
+
+    public static Item STAND_DISC_EMPEROR = registerItem("emperor_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersEmperor(null)));
+    public static Item MAX_STAND_DISC_EMPEROR= registerItem("max_emperor_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersEmperor(null)));
+
     public static Item STAND_DISC_WALKING_HEART = registerItem("walking_heart_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersWalkingHeart(null)));
     public static Item MAX_STAND_DISC_WALKING_HEART = registerItem("max_walking_heart_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersWalkingHeart(null)));
+
     public static Item STAND_DISC_KILLER_QUEEN = registerItem("killer_queen_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null)));
     public static Item MAX_STAND_DISC_KILLER_QUEEN = registerItem("max_killer_queen_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null)));
+
     public static Item STAND_DISC_CINDERELLA = registerItem("cinderella_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null)));
+
+    public static Item STAND_DISC_MANHATTAN_TRANSFER = registerItem("manhattan_transfer_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersManhattanTransfer(null)));
+    public static Item STAND_DISC_20_CENTURY_BOY = registerItem("20th_century_boy_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new Powers20thCenturyBoy(null)));
     public static Item STAND_DISC_HEY_YA = registerItem("hey_ya_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersHeyYa(null)));
     public static Item STAND_DISC_MANDOM = registerItem("mandom_disc",
@@ -76,10 +115,17 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSurvivor(null)));
     public static Item STAND_DISC_ACHTUNG = registerItem("achtung_baby_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAchtungBaby(null)));
-    public static Item STAND_DISC_DIVER_DOWN = registerItem("diver_down_disc",
+
+   /* public static Item STAND_DISC_DIVER_DOWN = registerItem("diver_down_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
     public static Item MAX_STAND_DISC_DIVER_DOWN = registerItem("max_diver_down_disc",
-            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null))); */
+
+ /*   public static Item STAND_DISC_CREAM = registerItem("cream_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCream(null)));
+    public static Item MAX_STAND_DISC_CREAM = registerItem("max_cream_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersCream(null))); */
+
     public static Item STAND_DISC_GRATEFUL_DEAD = registerItem("grateful_dead_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersGratefulDead(null)));
     public static Item MAX_STAND_DISC_GRATEFUL_DEAD = registerItem("max_grateful_dead_disc",
@@ -92,14 +138,30 @@ public class FabricItems {
     );
     public static Item LUCK_SWORD = registerItem("luck_sword", new LuckSwordItem(Tiers.IRON, 5F, -2.8F, new Item.Properties()));
     public static Item SCISSORS = registerItem("scissors", new ScissorItem(Tiers.IRON, 0F, -1.6F, new Item.Properties()));
+    public static Item SACRIFICIAL_DAGGER = registerItem("sacrificial_dagger", new SacrificialDaggerItem(Tiers.IRON, 0.5F, -1.9F, new Item.Properties()));
     public static Item HARPOON = registerItem("harpoon", new HarpoonItem((new Item.Properties()).durability(250)));
+
+    public static Item BOWLER_HAT = registerItem("bowler_hat", new BowlerHatItem(Tiers.IRON, 0F, -1.6F, new Item.Properties()));
+
+    public static Item ANUBIS_ITEM = registerItem("anubis_item", new AnubisItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+
+    public static Item SNUBNOSE_REVOLVER = registerItem("snubnose_revolver", new SnubnoseRevolverItem(new Item.Properties().stacksTo(1)));
+    public static Item SNUBNOSE_AMMO = registerItem("snubnose_ammo", new SnubnoseAmmoItem(new Item.Properties().stacksTo(64)));
+
+    public static Item TOMMY_GUN = registerItem("tommy_gun", new TommyGunItem(new Item.Properties().stacksTo(1)));
+    public static Item TOMMY_AMMO = registerItem("tommy_ammo", new TommyAmmoItem(new Item.Properties().stacksTo(64)));
+
+    public static Item COLT_REVOLVER = registerItem("colt_revolver", new ColtRevolverItem(new Item.Properties().stacksTo(1)));
+
+    public static Item JACKAL_RIFLE = registerItem("jackal_rifle", new JackalRifleItem(new Item.Properties().stacksTo(1)));
+    public static Item SNIPER_AMMO = registerItem("sniper_ammo", new SniperAmmoItem(new Item.Properties().stacksTo(64)));
 
     public static Item WOODEN_GLAIVE = registerItem("wooden_glaive", new GlaiveItem(Tiers.WOOD, 4F, -2.9F, new Item.Properties(),4));
     public static Item STONE_GLAIVE = registerItem("stone_glaive", new GlaiveItem(Tiers.STONE, 4F, -2.9F, new Item.Properties(),6));
     public static Item IRON_GLAIVE = registerItem("iron_glaive", new GlaiveItem(Tiers.IRON, 4F, -2.9F, new Item.Properties(),7));
     public static Item GOLDEN_GLAIVE = registerItem("golden_glaive", new GlaiveItem(Tiers.GOLD, 4F, -2.9F, new Item.Properties(),10));
     public static Item DIAMOND_GLAIVE = registerItem("diamond_glaive", new GlaiveItem(Tiers.DIAMOND, 4F, -2.9F, new Item.Properties(),9));
-    public static Item NETHERITE_GLAIVE = registerItem("netherite_glaive", new GlaiveItem(Tiers.NETHERITE, 4F, -2.9F, new Item.Properties(),12));
+    public static Item NETHERITE_GLAIVE = registerItem("netherite_glaive", new GlaiveItem(Tiers.NETHERITE, 4F, -2.9F, new Item.Properties().fireResistant(),12));
     public static Item EXECUTIONER_AXE = registerItem("executioner_axe", new ExecutionerAxeItem(Tiers.IRON, 7F, -3.3F, new Item.Properties(),12));
 
     public static Item BODY_BAG = registerItem("body_bag", new BodyBagItem(new Item.Properties().stacksTo(1)));
@@ -107,10 +169,15 @@ public class FabricItems {
     public static Item KNIFE = registerItem("knife", new KnifeItem(new Item.Properties().stacksTo(64)));
     public static Item KNIFE_BUNDLE = registerItem("knife_bundle", new KnifeItem(new Item.Properties().stacksTo(16)));
 
+    public static Item HAIRSPRAY = registerItem("hairspray", new HairsprayItem(new Item.Properties().stacksTo(64)));
+
+    public static Item OCCULT_CHARGE = registerItem("occult_charge", new OccultChargeItem(new Item.Properties().stacksTo(16)));
+
     public static Item MATCH = registerItem("match", new MatchItem(new Item.Properties().stacksTo(64)));
     public static Item MATCH_BUNDLE = registerItem("match_bundle", new MatchItem(new Item.Properties().stacksTo(16)));
     public static Item GASOLINE_CAN = registerItem("gasoline_can", new GasolineCanItem(new Item.Properties().stacksTo(16)));
     public static Item GASOLINE_BUCKET = registerItem("gasoline_bucket", new GasolineBucketItem(new Item.Properties().stacksTo(1)));
+    public static Item ROAD_ROLLER = registerItem("road_roller", new RoadRollerItem(new Item.Properties().stacksTo(1)));
 
     public static Item STAND_DISC = registerItem("stand_disc", new EmptyStandDiscItem(new Item.Properties().stacksTo(1)));
     public static Item COFFEE_GUM = registerItem("coffee_gum", new Item(new Item.Properties().food(ModFoodComponents.COFFEE_GUM)));
@@ -128,22 +195,47 @@ public class FabricItems {
     public static Item NEW_LOCACACA = registerItem("new_locacaca", new NewLocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA)));
     public static Item LUCKY_LIPSTICK = registerItem("lucky_lipstick", new LuckyLipstickItem(new Item.Properties().stacksTo(1)));
     public static Item BLANK_MASK = registerItem("blank_mask", new MaskItem(new Item.Properties().stacksTo(1), new NonCharacterVisage(null)));
+    public static Item RAT_MASK = registerItem("rat_mask", new MaskItem(new Item.Properties().stacksTo(1), new NonCharacterVisage(null)));
     public static Item MODIFICATION_MASK = registerItem("modification_mask", new ModificationMaskItem(new Item.Properties().stacksTo(1), new ModificationVisage(null)));
+    public static Item SPEEDWAGON_MASK = registerItem("speedwagon_mask", new MaskItem(new Item.Properties().stacksTo(1), new SpeedwagonVisage(null)));
+    public static Item SPEEDWAGON_FOUNDATION_MASK = registerItem("speedwagon_foundation_mask", new MaskItem(new Item.Properties().stacksTo(1), new SpeedwagonFoundationVisage(null)));
+    public static Item STRAIZO_VAMPIRE_MASK = registerItem("straizo_vampire_mask", new MaskItem(new Item.Properties().stacksTo(1), new StraizoVampireVisage(null)));
     public static Item JOTARO_MASK = registerItem("jotaro_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroVisage(null)));
+    public static Item JOTARO_4_MASK = registerItem("jotaro_4_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroFourVisage(null)));
+    public static Item JOTARO_6_MASK = registerItem("jotaro_6_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroSixVisage(null)));
     public static Item DIO_MASK = registerItem("dio_mask", new MaskItem(new Item.Properties().stacksTo(1), new DIOVisage(null)));
+    public static Item DIO_VAMPIRE_MASK = registerItem("dio_vampire_mask", new MaskItem(new Item.Properties().stacksTo(1), new DioVampireVisage(null)));
     public static Item AVDOL_MASK = registerItem("avdol_mask", new MaskItem(new Item.Properties().stacksTo(1), new AvdolVisage(null)));
+    public static Item KAKYOIN_MASK = registerItem("kakyoin_mask", new MaskItem(new Item.Properties().stacksTo(1), new KakyoinVisage(null)));
     public static Item DIEGO_MASK = registerItem("diego_mask", new MaskItem(new Item.Properties().stacksTo(1), new DiegoVisage(null)));
     public static Item VALENTINE_MASK = registerItem("valentine_mask", new MaskItem(new Item.Properties().stacksTo(1), new ValentineVisage(null)));
+    public static Item MISTA_MASK = registerItem("mista_mask", new MaskItem(new Item.Properties().stacksTo(1), new MistaVisage(null)));
     public static Item JOSUKE_PART_EIGHT_MASK = registerItem("josuke_part_eight_mask", new MaskItem(new Item.Properties().stacksTo(1), new JosukePartEightVisage(null)));
     public static Item GUCCIO_MASK = registerItem("guccio_mask", new MaskItem(new Item.Properties().stacksTo(1), new GuccioVisage(null)));
     public static Item HATO_MASK = registerItem("hato_mask", new MaskItem(new Item.Properties().stacksTo(1), new HatoVisage(null)));
     public static Item SHIZUKA_MASK = registerItem("shizuka_mask", new MaskItem(new Item.Properties().stacksTo(1), new ShizukaVisage(null)));
+    public static Item CHAKA_MASK = registerItem("chaka_mask", new MaskItem(new Item.Properties().stacksTo(1), new ChakaVisage(null)));
     public static Item ENYA_MASK = registerItem("enya_mask", new MaskItem(new Item.Properties().stacksTo(1), new EnyaVisage(null)));
     public static Item ENYA_OVA_MASK = registerItem("enya_ova_mask", new MaskItem(new Item.Properties().stacksTo(1), new EnyaOVAVisage(null)));
     public static Item AYA_MASK = registerItem("aya_mask", new MaskItem(new Item.Properties().stacksTo(1), new AyaVisage(null)));
     public static Item RINGO_MASK = registerItem("ringo_mask", new MaskItem(new Item.Properties().stacksTo(1), new RingoVisage(null)));
     public static Item POCOLOCO_MASK = registerItem("pocoloco_mask", new MaskItem(new Item.Properties().stacksTo(1), new PocolocoVisage(null)));
 
+    public static Item COFFIN_BLOCK_ITEM = registerItem("coffin_block",
+            new CoffinBlockItem(DyeColor.BLACK, FabricBlocks.COFFIN_BLOCK, new Item.Properties().stacksTo(1)));
+
+
+    public static Item CAT_REMAINS = registerItem("cat_remains", new HeadRemainsItem(new Item.Properties().stacksTo(64)));
+    public static Item MOOSHROOM_REMAINS = registerItem("mooshroom_remains", new HeadRemainsItem(new Item.Properties().stacksTo(64)));
+    public static Item GOAT_REMAINS = registerItem("goat_remains", new HeadRemainsItem(new Item.Properties().stacksTo(64)));
+    public static Item LLAMA_REMAINS = registerItem("llama_remains", new HeadRemainsItem(new Item.Properties().stacksTo(64)));
+    public static Item SILVERFISH_REMAINS = registerItem("silverfish_remains", new HeadRemainsItem(new Item.Properties().stacksTo(64)));
+    public static Item POLAR_BEAR_REMAINS = registerItem("polar_bear_remains", new HeadRemainsItem(new Item.Properties().stacksTo(64)));
+    public static Item DOG_REMAINS = registerItem("dog_remains", new BodyRemainsItem(new Item.Properties().stacksTo(64)));
+    public static Item CHICKEN_REMAINS = registerItem("chicken_remains", new BodyRemainsItem(new Item.Properties().stacksTo(64)));
+    public static Item PARROT_REMAINS = registerItem("parrot_remains", new BodyRemainsItem(new Item.Properties().stacksTo(64)));
+    public static Item OCELOT_REMAINS = registerItem("ocelot_remains", new BodyRemainsItem(new Item.Properties().stacksTo(64)));
+    public static Item AXOLOTL_REMAINS = registerItem("axolotl_remains", new BodyRemainsItem(new Item.Properties().stacksTo(64)));
 
     public static Item AESTHETICIAN_MASK_1 = registerItem("aesthetician_mask_1", new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisage1(null)));
     public static Item AESTHETICIAN_MASK_2 = registerItem("aesthetician_mask_2", new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisage2(null)));
@@ -155,9 +247,17 @@ public class FabricItems {
     public static Item FOG_DIRT_COATING = registerItem("fog_dirt_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_DIRT_COATING, new Item.Properties(), Blocks.DIRT));
     public static Item FOG_TRAP = registerItem("fog_trap", (Item) new FogBlockItem(ModBlocks.FOG_TRAP, new Item.Properties(), Blocks.TRIPWIRE));
 
-    public static Item INTERDIMENSIONAL_KEY = registerItem("interdimensional_key", new InterdimensionalKeyItem(new Item.Properties().stacksTo(1)));
+   // public static Item INTERDIMENSIONAL_KEY = registerItem("interdimensional_key", new InterdimensionalKeyItem(new Item.Properties().stacksTo(1)));
 
-    public static Item FLESH_BUCKET = registerItem("flesh_bucket", new FleshBucketItem(new Item.Properties().stacksTo(1)));
+    public static Item FLESH_BUCKET = registerItem("flesh_bucket", new FleshBucketItem(new Item.Properties().stacksTo(1).durability(16)));
+    public static final FoodProperties CHERRY =new FoodProperties.Builder().nutrition(1).saturationMod(0.0F).alwaysEat()
+            .effect(new MobEffectInstance(ModEffects.WARDING, 2400, 0), 1.0F)
+            .build();
+    public static Item CHERRIES = registerItem("cherries", new Item(new Item.Properties().food(CHERRY)));
+
+    public static Item PAINTING_BIRTH_OF_VENUS = registerItem("painting_venus", new BirthOfVenusPaintingItem(new Item.Properties().stacksTo(1)));
+    public static Item PAINTING_VAN_GOUGH = registerItem("painting_van_gough", new VanGoughPaintingItem(new Item.Properties().stacksTo(1)));
+    public static Item PAINTING_MONA_LISA = registerItem("painting_mona_lisa", new MonaLisaPaintingItem(new Item.Properties().stacksTo(1)));
 
     public static Item MUSIC_DISC_TORTURE_DANCE = registerItem("music_disc_torture_dance",
             new RecordItem(1, ModSounds.TORTURE_DANCE_EVENT,
@@ -173,6 +273,8 @@ public class FabricItems {
             0xfffef2, 0xffa8e8, new Item.Properties()));
     public static final Item ZOMBIE_AESTHETICIAN_SPAWN_EGG = registerItem("zombie_aesthetician_spawn_egg", new SpawnEggItem(FabricEntities.ZOMBIE_AESTHETICIAN,
             0x66BB6A, 0xffa8e8, new Item.Properties()));
+    public static final Item ANUBIS_GUARDIAN_SPAWN_EGG = registerItem("anubis_guardian_spawn_egg", new SpawnEggItem(FabricEntities.ANUBIS_GUARDIAN,
+            0x8E9393, 0x24395E, new Item.Properties()));
     public static final Potion HEX_POTION =
             Registry.register(BuiltInRegistries.POTION, new ResourceLocation(Roundabout.MOD_ID, "roundabout.hex"),
                     new Potion(new MobEffectInstance(ModEffects.HEX, 9600, 0)));
@@ -186,7 +288,7 @@ public class FabricItems {
     public static void registerPotions(){
         FabricBrewingRecipeRegistry.registerPotionRecipe(Potions.AWKWARD, Ingredient.of(ModItems.LOCACACA_PIT), HEX_POTION);
         FabricBrewingRecipeRegistry.registerPotionRecipe(HEX_POTION, Ingredient.of(Items.REDSTONE), HEX_POTION_EXTENDED);
-        FabricBrewingRecipeRegistry.registerPotionRecipe(HEX_POTION, Ingredient.of(Items.GLOWSTONE), HEX_POTION_STRONG);
+        FabricBrewingRecipeRegistry.registerPotionRecipe(HEX_POTION, Ingredient.of(Items.GLOWSTONE_DUST), HEX_POTION_STRONG);
     }
 
     private static Item registerItem(String name, Item item){
@@ -210,29 +312,127 @@ public class FabricItems {
                         entries.accept(GOLDEN_GLAIVE);
                         entries.accept(DIAMOND_GLAIVE);
                         entries.accept(NETHERITE_GLAIVE);
+                        entries.accept(SACRIFICIAL_DAGGER);
                         entries.accept(SCISSORS);
                         entries.accept(EXECUTION_UPGRADE);
                         entries.accept(EXECUTIONER_AXE);
                         entries.accept(BODY_BAG);
                         entries.accept(CREATIVE_BODY_BAG);
                         entries.accept(HARPOON);
+                        entries.accept(BOWLER_HAT);
                         entries.accept(KNIFE);
                         entries.accept(KNIFE_BUNDLE);
                         entries.accept(MATCH);
                         entries.accept(MATCH_BUNDLE);
                         entries.accept(GASOLINE_CAN);
                         entries.accept(GASOLINE_BUCKET);
-                        entries.accept(ModBlocks.WIRE_TRAP);
-                        entries.accept(ModBlocks.BARBED_WIRE);
-                        entries.accept(ModBlocks.BARBED_WIRE_BUNDLE);
+                        entries.accept(OCCULT_CHARGE);
+                        entries.accept(SNUBNOSE_REVOLVER);
+                        entries.accept(TOMMY_GUN);
+                        entries.accept(COLT_REVOLVER);
+                        entries.accept(JACKAL_RIFLE);
+                        entries.accept(SNUBNOSE_AMMO);
+                        entries.accept(TOMMY_AMMO);
+                        entries.accept(SNIPER_AMMO);
+                        entries.accept(ROAD_ROLLER);
                         entries.accept(AESTHETICIAN_SPAWN_EGG);
                         entries.accept(ZOMBIE_AESTHETICIAN_SPAWN_EGG);
                         entries.accept(TERRIER_SPAWN_EGG);
+                        entries.accept(ANUBIS_GUARDIAN_SPAWN_EGG);
                         entries.accept(COFFEE_GUM);
+                        entries.accept(LIGHT_BULB);
                         entries.accept(LOCACACA_PIT.asItem());
                         entries.accept(LOCACACA);
                         entries.accept(LOCACACA_BRANCH.asItem());
                         entries.accept(NEW_LOCACACA);
+                        entries.accept(CHERRIES);
+                        entries.accept(METEORITE);
+                        entries.accept(METEORITE_INGOT);
+                        entries.accept(ANUBIS_ITEM);
+
+                        entries.accept(MUSIC_DISC_TORTURE_DANCE);
+                        entries.accept(MUSIC_DISC_HALLELUJAH);
+
+                        entries.accept(ModBlocks.STEREO);
+                        entries.accept(WORTHY_ARROW);
+                        entries.accept(LUCKY_LIPSTICK);
+                        entries.accept(BLANK_MASK);
+                        entries.accept(MODIFICATION_MASK);
+                        entries.accept(SPEEDWAGON_MASK);
+                        entries.accept(DIO_VAMPIRE_MASK);
+                        entries.accept(STRAIZO_VAMPIRE_MASK);
+                        entries.accept(JOTARO_MASK);
+                        entries.accept(AVDOL_MASK);
+                        entries.accept(KAKYOIN_MASK);
+                        entries.accept(SPEEDWAGON_FOUNDATION_MASK);
+                        entries.accept(DIO_MASK);
+                        entries.accept(ENYA_MASK);
+                        entries.accept(CHAKA_MASK);
+                        entries.accept(JOTARO_4_MASK);
+                        entries.accept(AYA_MASK);
+                        entries.accept(MISTA_MASK);
+                        entries.accept(JOTARO_6_MASK);
+                        entries.accept(GUCCIO_MASK);
+                        entries.accept(DIEGO_MASK);
+                        entries.accept(POCOLOCO_MASK);
+                        entries.accept(RINGO_MASK);
+                        entries.accept(VALENTINE_MASK);
+                        entries.accept(JOSUKE_PART_EIGHT_MASK);
+                        entries.accept(HATO_MASK);
+                        entries.accept(SHIZUKA_MASK);
+                        entries.accept(RAT_MASK);
+
+
+
+
+                    }).build());
+
+    public static final CreativeModeTab JOJO_BUILDING_GROUP = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
+            new ResourceLocation(Roundabout.MOD_ID, "jojo_building_blocks"),
+            FabricItemGroup.builder().title(Component.translatable("itemgroup.jojo_building_blocks"))
+                    .icon(() -> new ItemStack(ModBlocks.GODDESS_STATUE_BLOCK)).displayItems((displayContext, entries) -> {
+                        entries.accept(ModBlocks.WOODEN_MANOR_TABLE);
+                        entries.accept(ModBlocks.WOODEN_MANOR_CHAIR);
+                        entries.accept(ModBlocks.COFFIN_BLOCK);
+                        entries.accept(ModBlocks.WOOL_SLAB_WHITE);
+                        entries.accept(ModBlocks.WOOL_SLAB_BLACK);
+                        entries.accept(ModBlocks.WOOL_SLAB_BLUE);
+                        entries.accept(ModBlocks.WOOL_SLAB_BROWN);
+                        entries.accept(ModBlocks.WOOL_SLAB_CYAN);
+                        entries.accept(ModBlocks.WOOL_SLAB_DARK_GREEN);
+                        entries.accept(ModBlocks.WOOL_SLAB_DARK_GREY);
+                        entries.accept(ModBlocks.WOOL_SLAB_GREEN);
+                        entries.accept(ModBlocks.WOOL_SLAB_LIGHT_BLUE);
+                        entries.accept(ModBlocks.WOOL_SLAB_LIGHT_GREY);
+                        entries.accept(ModBlocks.WOOL_SLAB_MAGENTA);
+                        entries.accept(ModBlocks.WOOL_SLAB_ORANGE);
+                        entries.accept(ModBlocks.WOOL_SLAB_PURPLE);
+                        entries.accept(ModBlocks.WOOL_SLAB_PINK);
+                        entries.accept(ModBlocks.WOOL_SLAB_RED);
+                        entries.accept(ModBlocks.WOOL_SLAB_YELLOW);
+                        entries.accept(ModBlocks.WOOL_STAIRS_WHITE);
+                        entries.accept(ModBlocks.WOOL_STAIRS_BLACK);
+                        entries.accept(ModBlocks.WOOL_STAIRS_BLUE);
+                        entries.accept(ModBlocks.WOOL_STAIRS_BROWN);
+                        entries.accept(ModBlocks.WOOL_STAIRS_CYAN);
+                        entries.accept(ModBlocks.WOOL_STAIRS_DARK_GREEN);
+                        entries.accept(ModBlocks.WOOL_STAIRS_DARK_GREY);
+                        entries.accept(ModBlocks.WOOL_STAIRS_GREEN);
+                        entries.accept(ModBlocks.WOOL_STAIRS_LIGHT_BLUE);
+                        entries.accept(ModBlocks.WOOL_STAIRS_LIGHT_GREY);
+                        entries.accept(ModBlocks.WOOL_STAIRS_MAGENTA);
+                        entries.accept(ModBlocks.WOOL_STAIRS_ORANGE);
+                        entries.accept(ModBlocks.WOOL_STAIRS_PURPLE);
+                        entries.accept(ModBlocks.WOOL_STAIRS_PINK);
+                        entries.accept(ModBlocks.WOOL_STAIRS_RED);
+                        entries.accept(ModBlocks.WOOL_STAIRS_YELLOW);
+                        entries.accept(ModBlocks.METEOR_BLOCK);
+                        entries.accept(ModBlocks.IMPACT_MOUND);
+                        entries.accept(ModBlocks.SHINY_QUARTZ);
+                        entries.accept(ModBlocks.SHINY_QUARTZ_TILES);
+                        entries.accept(ModBlocks.REGAL_FLOOR);
+                        entries.accept(ModBlocks.REGAL_WALL);
+                        entries.accept(ModBlocks.GODDESS_STATUE_BLOCK);
                         entries.accept(ModBlocks.WALL_STREET_SIGN_DIO);
                         entries.accept(ModBlocks.WALL_STREET_SIGN_RIGHT);
                         entries.accept(ModBlocks.WALL_STREET_SIGN_STOP);
@@ -243,48 +443,25 @@ public class FabricItems {
                         entries.accept(STREET_SIGN_STOP_BLOCK_ITEM);
                         entries.accept(STREET_SIGN_YIELD_BLOCK_ITEM);
                         entries.accept(STREET_SIGN_DANGER_BLOCK_ITEM);
-                        entries.accept(LIGHT_BULB);
+                        entries.accept(ModBlocks.GLASS_DOOR);
                         entries.accept(ModBlocks.CEILING_LIGHT);
+                        entries.accept(ModBlocks.WALL_LANTERN);
                         entries.accept(ModBlocks.MIRROR);
                         entries.accept(ModBlocks.ANCIENT_METEOR);
-                        entries.accept(METEORITE);
-                        entries.accept(METEORITE_INGOT);
-                        entries.accept(ModBlocks.METEOR_BLOCK);
-                        entries.accept(ModBlocks.REGAL_FLOOR);
-                        entries.accept(ModBlocks.REGAL_WALL);
-                        entries.accept(ModBlocks.WOODEN_MANOR_TABLE);
-
-                        entries.accept(MUSIC_DISC_TORTURE_DANCE);
-                        entries.accept(MUSIC_DISC_HALLELUJAH);
-
+                        entries.accept(ModBlocks.BARBED_WIRE);
+                        entries.accept(PAINTING_VAN_GOUGH);
+                        entries.accept(PAINTING_MONA_LISA);
+                        entries.accept(PAINTING_BIRTH_OF_VENUS);
                         entries.accept(ModBlocks.FLESH_BLOCK);
                         entries.accept(ModItems.FLESH_BUCKET);
-
+                        entries.accept(ModBlocks.WIRE_TRAP);
+                        entries.accept(ModBlocks.BARBED_WIRE_BUNDLE);
                         entries.accept(ModBlocks.LOCACACA_CACTUS);
-                        entries.accept(ModBlocks.GODDESS_STATUE_BLOCK);
-                        entries.accept(ModBlocks.STEREO);
-                        entries.accept(WORTHY_ARROW);
-                        entries.accept(LUCKY_LIPSTICK);
-                        entries.accept(BLANK_MASK);
-                        entries.accept(MODIFICATION_MASK);
-                        entries.accept(JOTARO_MASK);
-                        entries.accept(DIO_MASK);
-                        entries.accept(ENYA_MASK);
-                        entries.accept(AVDOL_MASK);
-                        entries.accept(DIEGO_MASK);
-                        entries.accept(VALENTINE_MASK);
-                        entries.accept(JOSUKE_PART_EIGHT_MASK);
-                        entries.accept(AYA_MASK);
-                        entries.accept(GUCCIO_MASK);
-                        entries.accept(POCOLOCO_MASK);
-                        entries.accept(RINGO_MASK);
-                        entries.accept(HATO_MASK);
-                        entries.accept(SHIZUKA_MASK);
-
-
-
+                        entries.accept(ModBlocks.CULTIVATION_POT);
+                        entries.accept(ModBlocks.MELON_PARFAIT);
 
                     }).build());
+
 
     public static void putDiscNBT(Item IT, CreativeModeTab.Output entries){
         if (IT instanceof StandDiscItem SE){
@@ -313,10 +490,14 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_JUSTICE);
                         entries.accept(STAND_DISC_MAGICIANS_RED);
                         entries.accept(MAX_STAND_DISC_MAGICIANS_RED);
+                        entries.accept(STAND_DISC_RATT);
+                        entries.accept(MAX_STAND_DISC_RATT);
                         entries.accept(STAND_DISC_SOFT_AND_WET);
                         entries.accept(MAX_STAND_DISC_SOFT_AND_WET);
                         entries.accept(STAND_DISC_WALKING_HEART);
                         entries.accept(MAX_STAND_DISC_WALKING_HEART);
+                        entries.accept(STAND_DISC_ANUBIS);
+                        entries.accept(MAX_STAND_DISC_ANUBIS);
                         entries.accept(STAND_DISC_CINDERELLA);
                         entries.accept(STAND_DISC_ACHTUNG);
                         entries.accept(STAND_DISC_SURVIVOR);
@@ -335,12 +516,36 @@ public class FabricItems {
                         //entries.accept(MAX_STAND_DISC_D4C);
                         //entries.accept(INTERDIMENSIONAL_KEY);
                         //entries.accept(STAND_DISC_WALKING_HEART);
+                        entries.accept(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK);
+                        entries.accept(ModBlocks.BLOODY_STONE_MASK_BLOCK);
+                        entries.accept(CAT_REMAINS);
+                        entries.accept(POLAR_BEAR_REMAINS);
+                        entries.accept(MOOSHROOM_REMAINS);
+                        entries.accept(GOAT_REMAINS);
+                        entries.accept(LLAMA_REMAINS);
+                        entries.accept(SILVERFISH_REMAINS);
+                        entries.accept(OCELOT_REMAINS);
+                        entries.accept(PARROT_REMAINS);
+                        entries.accept(CHICKEN_REMAINS);
+                        entries.accept(DOG_REMAINS);
+                        entries.accept(AXOLOTL_REMAINS);
+
+                        entries.accept(STAND_DISC_20_CENTURY_BOY);
+                        entries.accept(STAND_DISC_MANHATTAN_TRANSFER);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
-                        entries.accept(STAND_DISC_RATT);
-                        entries.accept(MAX_STAND_DISC_RATT);
+                        entries.accept(STAND_DISC_TUSK);
+                        entries.accept(MAX_STAND_DISC_TUSK);
                         //entries.accept(STAND_DISC_DIVER_DOWN);
                         //entries.accept(MAX_STAND_DISC_DIVER_DOWN);
+                   //     entries.accept(STAND_DISC_CREAM);
+                   //     entries.accept(MAX_STAND_DISC_CREAM);
+                        entries.accept(STAND_DISC_METALLICA);
+                        entries.accept(MAX_STAND_DISC_METALLICA);
+                        entries.accept(STAND_DISC_KILLER_QUEEN);
+                        entries.accept(MAX_STAND_DISC_KILLER_QUEEN);
+                        entries.accept(STAND_DISC_EMPEROR);
+                        entries.accept(MAX_STAND_DISC_EMPEROR);
                         entries.accept(STAND_DISC_GRATEFUL_DEAD);
                         entries.accept(MAX_STAND_DISC_GRATEFUL_DEAD);
 
@@ -380,39 +585,58 @@ public class FabricItems {
         ModItems.STAND_DISC_JUSTICE = STAND_DISC_JUSTICE;
         ((MaxStandDiscItem)MAX_STAND_DISC_JUSTICE).baseDisc = ((StandDiscItem)STAND_DISC_JUSTICE);
         ModItems.MAX_STAND_DISC_JUSTICE = MAX_STAND_DISC_JUSTICE;
-        ((MaxStandDiscItem)MAX_STAND_DISC_D4C).baseDisc = ((StandDiscItem)STAND_DISC_D4C);
+   /*     ((MaxStandDiscItem)MAX_STAND_DISC_D4C).baseDisc = ((StandDiscItem)STAND_DISC_D4C);
         ModItems.MAX_STAND_DISC_D4C = MAX_STAND_DISC_D4C;
-        ModItems.STAND_DISC_D4C = STAND_DISC_D4C;
+        ModItems.STAND_DISC_D4C = STAND_DISC_D4C; */
         ModItems.MAX_STAND_DISC_GREEN_DAY = MAX_STAND_DISC_GREEN_DAY;
         ModItems.STAND_DISC_GREEN_DAY = STAND_DISC_GREEN_DAY;
         ((MaxStandDiscItem)MAX_STAND_DISC_GREEN_DAY).baseDisc = ((StandDiscItem)STAND_DISC_GREEN_DAY);
         ModItems.MAX_STAND_DISC_RATT = MAX_STAND_DISC_RATT;
         ModItems.STAND_DISC_RATT = STAND_DISC_RATT;
         ((MaxStandDiscItem)MAX_STAND_DISC_RATT).baseDisc = ((StandDiscItem)STAND_DISC_RATT);
+        ModItems.MAX_STAND_DISC_ANUBIS = MAX_STAND_DISC_ANUBIS;
+        ModItems.STAND_DISC_ANUBIS = STAND_DISC_ANUBIS;
+        ((MaxStandDiscItem)MAX_STAND_DISC_ANUBIS).baseDisc = ((StandDiscItem)STAND_DISC_ANUBIS);
+        ModItems.MAX_STAND_DISC_TUSK = MAX_STAND_DISC_TUSK;
+        ModItems.STAND_DISC_TUSK = STAND_DISC_TUSK;
+        ((MaxStandDiscItem)MAX_STAND_DISC_TUSK).baseDisc = ((StandDiscItem)STAND_DISC_TUSK);
         ModItems.STAND_DISC_SOFT_AND_WET = STAND_DISC_SOFT_AND_WET;
         ModItems.MAX_STAND_DISC_SOFT_AND_WET = MAX_STAND_DISC_SOFT_AND_WET;
         ((MaxStandDiscItem)MAX_STAND_DISC_SOFT_AND_WET).baseDisc = ((StandDiscItem)STAND_DISC_SOFT_AND_WET);
+        ModItems.STAND_DISC_EMPEROR = STAND_DISC_EMPEROR;
+        ModItems.MAX_STAND_DISC_EMPEROR = MAX_STAND_DISC_EMPEROR;
+        ((MaxStandDiscItem)MAX_STAND_DISC_EMPEROR).baseDisc = ((StandDiscItem)STAND_DISC_EMPEROR);
         ModItems.STAND_DISC_KILLER_QUEEN = STAND_DISC_KILLER_QUEEN;
         ((MaxStandDiscItem)MAX_STAND_DISC_KILLER_QUEEN).baseDisc = ((StandDiscItem)STAND_DISC_KILLER_QUEEN);
         ModItems.MAX_STAND_DISC_KILLER_QUEEN = MAX_STAND_DISC_KILLER_QUEEN;
         ModItems.STAND_DISC_CINDERELLA = STAND_DISC_CINDERELLA;
+        ModItems.STAND_DISC_MANHATTAN_TRANSFER = STAND_DISC_MANHATTAN_TRANSFER;
         ModItems.STAND_DISC_HEY_YA = STAND_DISC_HEY_YA;
         ModItems.STAND_DISC_MANDOM = STAND_DISC_MANDOM;
         ModItems.STAND_DISC_SURVIVOR = STAND_DISC_SURVIVOR;
         ModItems.STAND_DISC_ACHTUNG = STAND_DISC_ACHTUNG;
+        ModItems.STAND_DISC_CENTURY_BOY = STAND_DISC_20_CENTURY_BOY;
+        ModItems.STAND_DISC_METALLICA = STAND_DISC_METALLICA;
+        ModItems.MAX_STAND_DISC_METALLICA = MAX_STAND_DISC_METALLICA;
+        ((MaxStandDiscItem)MAX_STAND_DISC_METALLICA).baseDisc = ((StandDiscItem)STAND_DISC_METALLICA);
         ModItems.STAND_DISC_WALKING_HEART = STAND_DISC_WALKING_HEART;
         ModItems.MAX_STAND_DISC_WALKING_HEART = MAX_STAND_DISC_WALKING_HEART;
         ((MaxStandDiscItem)MAX_STAND_DISC_WALKING_HEART).baseDisc = ((StandDiscItem)STAND_DISC_WALKING_HEART);
-        ModItems.STAND_DISC_DIVER_DOWN = STAND_DISC_DIVER_DOWN;
+      /*  ModItems.STAND_DISC_DIVER_DOWN = STAND_DISC_DIVER_DOWN;
         ((MaxStandDiscItem)MAX_STAND_DISC_DIVER_DOWN).baseDisc = ((StandDiscItem)STAND_DISC_DIVER_DOWN);
-        ModItems.MAX_STAND_DISC_DIVER_DOWN = MAX_STAND_DISC_DIVER_DOWN;
+        ModItems.MAX_STAND_DISC_DIVER_DOWN = MAX_STAND_DISC_DIVER_DOWN; */
+       /* ModItems.STAND_DISC_CREAM = STAND_DISC_CREAM;
+        ((MaxStandDiscItem)MAX_STAND_DISC_CREAM).baseDisc = ((StandDiscItem)STAND_DISC_CREAM);
+        ModItems.MAX_STAND_DISC_CREAM = MAX_STAND_DISC_CREAM;*/
         ModItems.STAND_DISC_GRATEFUL_DEAD = STAND_DISC_GRATEFUL_DEAD;
         ModItems.MAX_STAND_DISC_GRATEFUL_DEAD = MAX_STAND_DISC_GRATEFUL_DEAD;
         ((MaxStandDiscItem)MAX_STAND_DISC_GRATEFUL_DEAD).baseDisc = ((StandDiscItem)STAND_DISC_GRATEFUL_DEAD);
         ModItems.LUCK_UPGRADE = LUCK_UPGRADE;
         ModItems.EXECUTION_UPGRADE = EXECUTION_UPGRADE;
+        ModItems.OCCULT_CHARGE = OCCULT_CHARGE;
         ModItems.LUCK_SWORD = LUCK_SWORD;
         ModItems.SCISSORS = SCISSORS;
+        ModItems.SACRIFICIAL_DAGGER = SACRIFICIAL_DAGGER;
         ModItems.WOODEN_GLAIVE = WOODEN_GLAIVE;
         ModItems.STONE_GLAIVE = STONE_GLAIVE;
         ModItems.IRON_GLAIVE = IRON_GLAIVE;
@@ -423,15 +647,26 @@ public class FabricItems {
         ModItems.BODY_BAG = BODY_BAG;
         ModItems.CREATIVE_BODY_BAG = CREATIVE_BODY_BAG;
         ModItems.HARPOON = HARPOON;
+        ModItems.BOWLER_HAT = BOWLER_HAT;
+        ModItems.HAIRSPRAY = HAIRSPRAY;
         ModItems.KNIFE = KNIFE;
         ModItems.KNIFE_BUNDLE = KNIFE_BUNDLE;
         ModItems.MATCH = MATCH;
         ModItems.MATCH_BUNDLE = MATCH_BUNDLE;
         ModItems.GASOLINE_CAN = GASOLINE_CAN;
         ModItems.GASOLINE_BUCKET = GASOLINE_BUCKET;
+        ModItems.ANUBIS_ITEM = ANUBIS_ITEM;
+        ModItems.SNUBNOSE_REVOLVER = SNUBNOSE_REVOLVER;
+        ModItems.TOMMY_GUN = TOMMY_GUN;
+        ModItems.COLT_REVOLVER = COLT_REVOLVER;
+        ModItems.SNUBNOSE_AMMO = SNUBNOSE_AMMO;
+        ModItems.TOMMY_AMMO = TOMMY_AMMO;
+        ModItems.JACKAL_RIFLE = JACKAL_RIFLE;
+        ModItems.SNIPER_AMMO = SNIPER_AMMO;
         ModItems.STAND_DISC = STAND_DISC;
         ModItems.COFFEE_GUM = COFFEE_GUM;
         ModItems.METEORITE = METEORITE;
+        ModItems.ROAD_ROLLER = ROAD_ROLLER;
         ModItems.METEORITE_INGOT = METEORITE_INGOT;
         ModItems.LOCACACA_PIT = LOCACACA_PIT;
 
@@ -452,18 +687,28 @@ public class FabricItems {
         ModItems.NEW_LOCACACA = NEW_LOCACACA;
         ModItems.LUCKY_LIPSTICK = LUCKY_LIPSTICK;
         ModItems.BLANK_MASK = BLANK_MASK;
+        ModItems.RAT_MASK = RAT_MASK;
         ModItems.MODIFICATION_MASK = MODIFICATION_MASK;
+        ModItems.SPEEDWAGON_MASK = SPEEDWAGON_MASK;
+        ModItems.SPEEDWAGON_FOUNDATION_MASK = SPEEDWAGON_FOUNDATION_MASK;
+        ModItems.STRAIZO_VAMPIRE_MASK = STRAIZO_VAMPIRE_MASK;
         ModItems.JOTARO_MASK = JOTARO_MASK;
+        ModItems.JOTARO_4_MASK = JOTARO_4_MASK;
+        ModItems.JOTARO_6_MASK = JOTARO_6_MASK;
         ModItems.DIO_MASK = DIO_MASK;
+        ModItems.DIO_VAMPIRE_MASK = DIO_VAMPIRE_MASK;
         ModItems.AVDOL_MASK = AVDOL_MASK;
+        ModItems.KAKYOIN_MASK = KAKYOIN_MASK;
         ModItems.DIEGO_MASK = DIEGO_MASK;
         ModItems.POCOLOCO_MASK = POCOLOCO_MASK;
         ModItems.RINGO_MASK = RINGO_MASK;
         ModItems.VALENTINE_MASK = VALENTINE_MASK;
+        ModItems.MISTA_MASK = MISTA_MASK;
         ModItems.JOSUKE_PART_EIGHT_MASK = JOSUKE_PART_EIGHT_MASK;
         ModItems.GUCCIO_MASK = GUCCIO_MASK;
         ModItems.HATO_MASK = HATO_MASK;
         ModItems.SHIZUKA_MASK = SHIZUKA_MASK;
+        ModItems.CHAKA_MASK = CHAKA_MASK;
         ModItems.ENYA_MASK = ENYA_MASK;
         ModItems.ENYA_OVA_MASK = ENYA_OVA_MASK;
         ModItems.AYA_MASK = AYA_MASK;
@@ -476,11 +721,29 @@ public class FabricItems {
         ModItems.TERRIER_SPAWN_EGG = TERRIER_SPAWN_EGG;
         ModItems.AESTHETICIAN_SPAWN_EGG = AESTHETICIAN_SPAWN_EGG;
         ModItems.ZOMBIE_AESTHETICIAN_SPAWN_EGG = ZOMBIE_AESTHETICIAN_SPAWN_EGG;
+        ModItems.ANUBIS_GUARDIAN_SPAWN_EGG = ANUBIS_GUARDIAN_SPAWN_EGG;
         ModItems.MUSIC_DISC_TORTURE_DANCE = MUSIC_DISC_TORTURE_DANCE;
         ModItems.MUSIC_DISC_HALLELUJAH = MUSIC_DISC_HALLELUJAH;
         ModItems.FOG_BLOCK_ITEMS = FOG_BLOCK_ITEMS;
-        ModItems.INTERDIMENSIONAL_KEY = INTERDIMENSIONAL_KEY;
+     //   ModItems.INTERDIMENSIONAL_KEY = INTERDIMENSIONAL_KEY;
         ModItems.FLESH_BUCKET = FLESH_BUCKET;
+        ModItems.CHERRIES = CHERRIES;
+
+        ModItems.CAT_REMAINS = CAT_REMAINS;
+        ModItems.OCELOT_REMAINS = OCELOT_REMAINS;
+        ModItems.PARROT_REMAINS = PARROT_REMAINS;
+        ModItems.CHICKEN_REMAINS = CHICKEN_REMAINS;
+        ModItems.DOG_REMAINS = DOG_REMAINS;
+        ModItems.AXOLOTL_REMAINS = AXOLOTL_REMAINS;
+        ModItems.POLAR_BEAR_REMAINS = POLAR_BEAR_REMAINS;
+        ModItems.MOOSHROOM_REMAINS = MOOSHROOM_REMAINS;
+        ModItems.GOAT_REMAINS = GOAT_REMAINS;
+        ModItems.LLAMA_REMAINS = LLAMA_REMAINS;
+        ModItems.SILVERFISH_REMAINS = SILVERFISH_REMAINS;
+
+        ModItems.PAINTING_VAN_GOUGH = PAINTING_VAN_GOUGH;
+        ModItems.PAINTING_MONA_LISA = PAINTING_MONA_LISA;
+        ModItems.PAINTING_BIRTH_OF_VENUS = PAINTING_BIRTH_OF_VENUS;
 
         ModItems.initializeVisageStore();
         //ModItems.STAND_ARROW_POOL.add((StandDiscItem)STAND_DISC_D4C);

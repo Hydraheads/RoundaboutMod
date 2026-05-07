@@ -1,0 +1,42 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "roundabout:item/anubis_item"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "scale": [
+        0,
+        0,
+        0
+      ]
+    },
+    "thirdperson_lefthand": {
+      "scale": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "custom_model_data": 1
+      },
+      "model": "roundabout:item/anubis_unsheathed"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 2
+      },
+      "model": "roundabout:item/anubis_cleaver"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 3
+      },
+      "model": "roundabout:item/anubis_illusory"
+    }
+  ]
+}

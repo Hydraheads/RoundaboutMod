@@ -1,9 +1,11 @@
 package net.hydra.jojomod.item;
 
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
@@ -63,7 +65,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
             CompoundTag tag = $$3.isEmpty() ? null : $$3.getTagElement("StandDisc");
             CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
             if (tag2 != null) {
-                if ($$1.isCrouching()) {
+                if ($$1.isCrouching() && !ConfigManager.getAdvancedConfig().standArrowSecondaryPoolv5.isEmpty()) {
                     int reroll = ClientNetworking.getAppropriateConfig().itemSettings.levelsToRerollStandWithArrow;
                     if ($$1.experienceLevel >= reroll || $$1.isCreative()) {
                         if (ConfigManager.getAdvancedConfig().standArrowSecondaryPoolv5.isEmpty()) {
@@ -89,7 +91,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
                     return InteractionResultHolder.consume($$3);
                 }
             } else {
-                if (!$$1.isCrouching() || ConfigManager.getAdvancedConfig().standArrowSecondaryPoolv5.isEmpty()) {
+                if (ConfigManager.getAdvancedConfig().standArrowSecondaryPoolv5.isEmpty()) {
                     if (!$$0.isClientSide) {
                         rollStand($$0, $$1, $$3, true);
                         return InteractionResultHolder.consume($$3);
@@ -161,6 +163,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
             }
             if (!itemstack.isEmpty() && itemstack.getItem() instanceof StandDiscItem de) {
                 if (grantStand(itemstack, live)) {
+                    PowerTypes.forceInitializeStandPower(live);
                     $$1.playSound(null, live.blockPosition(), ModSounds.STAND_ARROW_USE_EVENT, SoundSource.PLAYERS, 1.5F, 1F);
                     ((ServerLevel) $$1).sendParticles(ParticleTypes.FIREWORK, live.getX(),
                             live.getY() + live.getEyeHeight(), live.getZ(),
@@ -183,7 +186,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
             if (tag2 != null) {
                 itemstack = ItemStack.of(tag2);
             }
-            if (!itemstack.isEmpty() && itemstack.getItem() instanceof StandDiscItem de) {
+            if (itemstack != null && !itemstack.isEmpty() && itemstack.getItem() instanceof StandDiscItem de) {
                 ((StandUser)live).roundabout$setRejectionStandDisc(itemstack.copy());
                 de.generateStandPowerRejection(live);
                 $$0.removeTagKey("StandDisc");
@@ -224,6 +227,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
                                         if (grantStand(itemstack, $$2)) {
                                             $$1.playSound(null, $$2.blockPosition(), ModSounds.STAND_ARROW_USE_EVENT, SoundSource.PLAYERS, 1.5F, 1F);
                                             PE.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireStand").withStyle(ChatFormatting.WHITE), true);
+                                            ((IPlayerEntity)PE).roundabout$qmessage(1);
                                             ((ServerLevel) $$1).sendParticles(ParticleTypes.FIREWORK, $$2.getX(),
                                                     $$2.getY() + $$2.getEyeHeight(), $$2.getZ(),
                                                     20, 0, 0, 0, 0.4);
@@ -290,7 +294,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
 
     @Override
     public UseAnim getUseAnimation(ItemStack $$0) {
-        return UseAnim.BLOCK;
+        return UseAnim.BOW;
     }
 
 

@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -25,7 +26,6 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -151,6 +151,10 @@ public class PowersJustice extends NewDashPreset {
             return Component.translatable(  "skins.roundabout.justice.dark_mirage");
         } else if (skinId == JusticeEntity.JOJONIUM){
             return Component.translatable(  "skins.roundabout.justice.jojonium");
+        } else if (skinId == JusticeEntity.PUMPKIN){
+            return Component.translatable(  "skins.roundabout.justice.pumpkin");
+        } else if (skinId == JusticeEntity.JACK){
+            return Component.translatable(  "skins.roundabout.justice.jack");
         }
         return Component.translatable(  "skins.roundabout.justice.base");
     }
@@ -247,6 +251,9 @@ public class PowersJustice extends NewDashPreset {
             if (!ShapeShifts.getShiftFromByte(morph).equals(ShapeShifts.PLAYER)){
                 ipe.roundabout$shapeShift();
                 ipe.roundabout$setShapeShift(ShapeShifts.PLAYER.id);
+            }
+            if (isCastingFog()) {
+                castFog();
             }
         }
         super.onStandSwitch();
@@ -432,6 +439,19 @@ public class PowersJustice extends NewDashPreset {
         } else  {
 
         }
+    }
+
+    @Override
+    public void onStandSwitchInto(){
+        if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative()))) {
+            if (this.getSelf() instanceof Player) {
+                if (!isClient()) {
+                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().justiceSettings.fogCloneCooldown);
+                }
+            }
+            this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().justiceSettings.fogCloneCooldown);
+        }
+        super.onStandSwitchInto();
     }
 
     public LivingEntity rollCorpse(){
@@ -677,7 +697,7 @@ public class PowersJustice extends NewDashPreset {
         } else if (currentLevel == 2){
             amt = 150;
         } else {
-            amt = (100+((currentLevel-1)*100));
+            amt = (100+((currentLevel-1)*150));
         }
         amt= (int) (amt*(getLevelMultiplier()));
         return amt;
@@ -879,9 +899,11 @@ public class PowersJustice extends NewDashPreset {
             } if (Level > 2 || bypass){
                 $$1.add(JusticeEntity.STRAY_SKIN);
                 $$1.add(JusticeEntity.BOGGED);
-            } if (Level > 3 || bypass){
                 $$1.add(JusticeEntity.WITHER);
                 $$1.add(JusticeEntity.TWILIGHT);
+            } if (Level > 3 || bypass){
+                $$1.add(JusticeEntity.PUMPKIN);
+                $$1.add(JusticeEntity.JACK);
                 $$1.add(JusticeEntity.JOJONIUM);
             } if (Level > 4 || bypass){
                 $$1.add(JusticeEntity.TAROT);
@@ -1287,12 +1309,17 @@ public class PowersJustice extends NewDashPreset {
                             if (value instanceof FallenMob fm) {
                                 if (fm.controller != null && fm.controller.is(this.getSelf())) {
                                     if (fm.getSelected()) {
+                                        fm.manualTarget = null;
+                                        fm.autoTarget = null;
+                                        fm.autoTarget2 = null;
+                                        fm.corpseTarget = null;
+                                        fm.setTarget(null);
+                                        fm.setLastHurtByMob(null);
+                                        fm.setLastHurtMob(null);
+                                        fm.setPersistentAngerTarget(null);
+                                        fm.setLastHurtByPlayer(null);
+                                        fm.setAggressive(false);
                                         fm.getNavigation().moveTo(fm.getNavigation().createPath(blockPos, 0), 1);
-                                        if (fm.getTarget() != null){
-                                            fm.manualTarget = null;
-                                            fm.setLastHurtByMob(null);
-                                            fm.setTarget(null);
-                                        }
                                     }
                                 }
                             }
@@ -1334,8 +1361,8 @@ public class PowersJustice extends NewDashPreset {
             fclone2.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
             fclone.setPlayer(PE);
             fclone2.setPlayer(PE);
-            fclone.setTimer(100);
-            fclone2.setTimer(101);
+            fclone.setTimer(160);
+            fclone2.setTimer(161);
             float first = ((this.getSelf().getYHeadRot()-25)%360);
             float second = ((this.getSelf().getYHeadRot()+25)%360);
             fclone.setYRot(first);

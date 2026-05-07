@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "P": {
+      "item": "minecraft:painting"
+    },
+    "M": {
+      "item": "minecraft:elytra"
+    },
+    "C": {
+      "item": "minecraft:popped_chorus_fruit"
+    },
+    "I": {
+      "item": "minecraft:gold_ingot"
+    },
+    "G": {
+      "item": "minecraft:golden_apple"
+    },
+    "E": {
+      "item": "minecraft:totem_of_undying"
+    }
+  },
+  "pattern": [
+    "EME",
+    "IPI",
+    "CGC"
+  ],
+  "result": {
+    "count": 1,
+    "item": "roundabout:painting_van_gough"
+  },
+  "show_notification": true
+}

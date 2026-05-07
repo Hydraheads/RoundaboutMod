@@ -1,5 +1,6 @@
 package net.hydra.jojomod.stand.powers.presets;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -7,6 +8,8 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.TimeStopInstance;
@@ -15,11 +18,13 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -44,6 +49,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -83,7 +89,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     @Override
     public float getPickMiningSpeed() {
-        return 12F;
+        return 14F;
     }
     @Override
     public float getAxeMiningSpeed() {
@@ -119,6 +125,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 tryPowerPacket(PowerIndex.POWER_2_BLOCK);
             }
         }
+    }
+    public Vec3 getTSColor(){
+        return new Vec3(1f,1f,1f);
     }
     public void tryToStandLeapClient() {
         if (hasBlock() || hasEntity())
@@ -210,8 +219,13 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                                 stand.setYRot(this.getSelf().getYHeadRot() % 360);
                                 stand.setXRot(this.getSelf().getXRot());
                             } else {
-                                stand.setYRot(getLookAtPlaceYaw(stand,vec3d3));
-                                stand.setXRot(getLookAtPlacePitch(stand,vec3d3));
+                                Direction gdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+                                Vec2 grot = new Vec2(getLookAtPlaceYaw(stand,vec3d3),
+                                        getLookAtPlacePitch(stand,vec3d3)
+                                );
+                                grot =  RotationUtil.rotWorldToPlayer(grot,gdir);
+                                stand.setYRot(grot.x);
+                                stand.setXRot(grot.y);
                             }
                             if (post < 0.4){
                                 stand.setPos(vec3d3);
@@ -444,9 +458,16 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public float getImpaleKnockback(){
         return 1.3F;
     }
+
     public void impaleImpact(Entity entity){
+        if (activePower == PowerIndex.POWER_1_SNEAK){
         this.setAttackTimeDuring(-20);
+        if (entity != null && entity.distanceTo(self) > impaleRange+0.75F) {
+            entity = null;
+        }
         if (entity != null) {
+            hitParticlesCenter(entity);
+
             float pow;
             float knockbackStrength;
             pow = getImpalePunchStrength(entity);
@@ -456,14 +477,14 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     addEXP(5, LE);
                     if (MainUtil.getMobBleed(entity)) {
                         if ((((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
-                            MainUtil.makeBleed(entity, 2, 100, this.getSelf());
+                            MainUtil.makeBleed(entity, 0, 200, this.getSelf());
                         } else {
                             MainUtil.makeBleed(entity, 2, 200, this.getSelf());
                         }
                             MainUtil.makeMobBleed(entity);
                     }
                 }
-                this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
+                takeDeterminedKnockback(this.self, entity, knockbackStrength);
             } else {
                 knockShield2(entity, 100);
             }
@@ -485,6 +506,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
         if (!this.self.level().isClientSide()) {
             this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+        }
         }
     }
 
@@ -580,8 +602,20 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         /*Time Resume*/
         if (!level.isClientSide()) {
             if (((TimeStop) level).isTimeStoppingEntity(this.getSelf())) {
+                if (self.getUseItem() != null && self.getUseItem().getItem() instanceof GlaiveItem){
+                    self.releaseUsingItem();
+                    self.stopUsingItem();
+                }
+
+                if (ClientNetworking.getAppropriateConfig().timeStopSettings.postTSCancel) {
+                    if (this.getActivePower() == PowerIndex.POWER_1_SNEAK || this.getActivePower() == PowerIndex.POWER_1
+                            || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                    }
+                }
+
                 float tsTimeRemaining = (float) (ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopMinimumCooldown+((this.maxChargedTSTicks-this.getChargedTSTicks())*5*(ClientNetworking.getAppropriateConfig().timeStopSettings.additionalCooldownPerSecondsUsed *0.01)));
-                if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.POWER_1_SNEAK
+                if ((this.getActivePower() == PowerIndex.ATTACK
                         || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE || this.getActivePower() == PowerIndex.SNEAK_ATTACK ||
                         this.getActivePower() == PowerIndex.POWER_1) && this.getAttackTimeDuring() > -1){
                     this.hasActedInTS = true;
@@ -643,6 +677,10 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     @Override
     public boolean setPowerSneakMovement(int lastMove) {
+
+        if (!onCooldown(PowerIndex.SKILL_4)) { // leaping puts timestop on a cooldown
+            this.setCooldown(PowerIndex.SKILL_4, ConfigManager.getConfig().timeStopSettings.timestopLeapCooldown);
+        }
 
         this.setAttackTimeDuring(-1);
         this.setActivePower(PowerIndex.NONE);
@@ -749,7 +787,11 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
     }
     public boolean clientForwardBarrage(){
-        if (this.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2){
+        if ((this.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2)){
+            if (attackTimeDuring < 0){
+                return true;
+            }
+
             if (!forwardBarrage) {
                 hold1 = true;
                 forwardBarrage = true;
@@ -968,6 +1010,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                             && ((StandUser) entity).roundabout$getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
                         initiateClash(entity);
                     } else {
+                        hitParticles(entity);
+
                         float pow;
                         float knockbackStrength = 0;
                         /**By saving the velocity before hitting, we can let people approach barraging foes
@@ -1047,10 +1091,10 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public void kickBarrageImpact2(Entity entity, boolean lastHit, float knockbackStrength){
         if (entity instanceof LivingEntity){
             if (lastHit) {
-                this.takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
+                takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
             } else {
 
-                this.takeKnockbackWithY(entity, knockbackStrength,
+                takeKnockbackWithY(entity, knockbackStrength,
                         Mth.sin(this.getSelf().getYRot() * ((float) Math.PI / 180)),
                         Mth.sin(-15 * ((float) Math.PI / 180)),
                         -Mth.cos(this.getSelf().getYRot() * ((float) Math.PI / 180)));
@@ -1169,6 +1213,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     @Override
     public boolean cancelSprintJump(){
         if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2
+                || this.getActivePower() == PowerIndex.POWER_1_SNEAK
                 || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
             return true;
         }
@@ -1253,10 +1298,17 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             stand.setFadePercent(50);
             this.setActivePower(PowerIndex.POWER_2_BLOCK);
             this.poseStand(OffsetIndex.LOOSE);
-            stand.setYRot(this.getSelf().getYHeadRot() % 360);
-            stand.setXRot(this.getSelf().getXRot());
+
+            Vec2 twoVec = new Vec2((this.getSelf().getYHeadRot() % 360),(this.getSelf().getXRot()));
+            Direction gdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+            Vec2 twoVecGrav = RotationUtil.rotPlayerToWorld(twoVec,gdir);
+            Vec3 threeVec = new Vec3(0,0.25,0);
+            threeVec = RotationUtil.vecPlayerToWorld(threeVec,gdir);
+
+            stand.setYRot(twoVec.x);
+            stand.setXRot(twoVec.y);
             moveVec = DamageHandler.getRotationVector(
-                    this.getSelf().getXRot(), (float) (this.getSelf().getYRot())).scale(1.8).add(0, 0.25, 0);
+                    twoVecGrav.y, (float) (twoVecGrav.x)).scale(1.8).add(threeVec.x,threeVec.y,threeVec.z);
             stand.setPos(this.getSelf().position().add(moveVec));
             return true;
         }
@@ -1277,7 +1329,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
         StandUser standUser = ((StandUser) playerEntity);
-        boolean standOn = standUser.roundabout$getActive();
+        boolean standOn = PowerTypes.hasStandActive(playerEntity);
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
         if (standOn && this.getActivePower() == PowerIndex.BARRAGE_2 && attackTimeDuring > -1) {
@@ -1325,6 +1377,25 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
     }
 
+
+    @Override
+    public void onStandSwitchInto(){
+        float tsTimeRemaining = (float) (ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopMinimumCooldown+((this.getMaxChargeTSTime())*5*(ClientNetworking.getAppropriateConfig().timeStopSettings.additionalCooldownPerSecondsUsed *0.01)));
+        tsTimeRemaining+=ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopBonusActionsCooldown;
+
+        int sendTSCooldown = Math.round(tsTimeRemaining);
+        if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative() && ClientNetworking.getAppropriateConfig().timeStopSettings.creativeModeInfiniteTimeStop))) {
+            if (this.getSelf() instanceof Player) {
+                if (!isClient()) {
+                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, sendTSCooldown);
+                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
+                }
+            }
+            this.setCooldown(PowerIndex.SKILL_4, sendTSCooldown);
+            this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
+        }
+        super.onStandSwitchInto();
+    }
 
     public static final byte KICK_BARRAGE_NOISE = 106;
     public static final byte KICK_BARRAGE_NOISE_2 = KICK_BARRAGE_NOISE+1;
@@ -1767,7 +1838,12 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     public void finalAttackImpact(Entity entity){
         this.setAttackTimeDuring(-20);
+
+        if (entity != null && entity.distanceTo(self) > 5.5F) {
+            entity = null;
+        }
         if (entity != null) {
+            hitParticlesCenter(entity);
             float pow;
             float knockbackStrength;
             pow = getFinalPunchStrength(entity);
@@ -1779,7 +1855,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         addEXP(5, LE);
                     }
                 }
-                this.takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
+                takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
             } else {
                 if (chargedFinal >= maxSuperHitTime) {
                     knockShield2(entity, getFinalAttackKnockShieldTime());
@@ -1791,7 +1867,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             float halfReach = (float) (distMax * 0.5);
             Vec3 pointVec = DamageHandler.getRayPoint(self, halfReach);
             if (!this.self.level().isClientSide) {
-                ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.EXPLOSION, pointVec.x, pointVec.y, pointVec.z,
+                ((ServerLevel) this.self.level()).sendParticles(ModParticles.PUNCH_MISS, pointVec.x, pointVec.y, pointVec.z,
                         1, 0.0, 0.0, 0.0, 1);
             }
         }
@@ -1903,6 +1979,24 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
         return super.tryPower(move,forced);
     }
+
+    @Override
+    public boolean setPowerGuard() {
+        if (this.getIsTsCharging()) {
+            this.setCooldown(PowerIndex.SKILL_4,ConfigManager.getConfig().timeStopSettings.timeStopInterruptedCooldownv2);
+        }
+        return super.setPowerGuard();
+    }
+
+    @Override
+    public void onStandSummon(boolean desummon) {
+        if (desummon && this.getIsTsCharging() ) {
+            this.setCooldown(PowerIndex.SKILL_4,ConfigManager.getConfig().timeStopSettings.timeStopInterruptedCooldownv2);
+        }
+        super.onStandSummon(desummon);
+    }
+
+
     @Override
     public float getSoundPitchFromByte(byte soundChoice){
         if (soundChoice == TIME_STOP_NOISE_3) {

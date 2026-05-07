@@ -90,8 +90,8 @@ public class SoftAndWetItemLaunchingBubbleEntity extends SoftAndWetBubbleEntity{
     }
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
         if (!this.entityData.hasItem(HELD_ITEM)){
+            super.defineSynchedData();
             this.entityData.define(HELD_ITEM, ItemStack.EMPTY);
         }
     }

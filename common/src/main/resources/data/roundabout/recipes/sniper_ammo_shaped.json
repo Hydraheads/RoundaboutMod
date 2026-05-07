@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "minecraft:gunpowder"
+    },
+    "I":
+    {
+      "item": "minecraft:copper_ingot"
+    },
+    "P":
+    {
+      "item": "minecraft:heavy_weighted_pressure_plate"
+    },
+    "F":
+    {
+      "item": "minecraft:gold_nugget"
+    },
+    "G":
+    {
+      "item": "minecraft:gold_ingot"
+    }
+  },
+  "pattern": [
+    " I ",
+    "FBF",
+    "GPG"
+  ],
+  "result": {
+    "count": 16,
+    "item": "roundabout:sniper_ammo"
+  },
+  "show_notification": true
+}

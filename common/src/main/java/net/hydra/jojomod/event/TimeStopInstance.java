@@ -26,6 +26,8 @@ public class TimeStopInstance {
     public double range;
 
     public int duration;
+    public int firstDuration;
+    public int durationInterpolation;
     public int maxDuration;
 
 
@@ -36,6 +38,8 @@ public class TimeStopInstance {
         this.z = z;
         this.range = range;
         this.duration = duration;
+        this.firstDuration = duration;
+        this.durationInterpolation = 0;
         this.maxDuration = maxDuration;
     }
 }

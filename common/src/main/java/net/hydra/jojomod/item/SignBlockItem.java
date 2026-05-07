@@ -25,7 +25,7 @@ public class SignBlockItem extends BlockItem {
     public SignBlockItem(Block block, Item.Properties properties) {
         super(block, properties);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> $$4 = ImmutableMultimap.builder();
-        $$4.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", 8.0, AttributeModifier.Operation.ADDITION));
+        $$4.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", 7.0, AttributeModifier.Operation.ADDITION));
         $$4.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", -2.7, AttributeModifier.Operation.ADDITION));
         this.defaultModifiers = $$4.build();
     }
@@ -36,27 +36,6 @@ public class SignBlockItem extends BlockItem {
     }
     public float getDamage() {
         return 9.2F;
-    }
-    @Override
-    public boolean hurtEnemy(ItemStack $$0, LivingEntity $$1, LivingEntity $$2) {
-        if (!$$1.level().isClientSide()) {
-            if (MainUtil.getMobBleed($$1)){
-                MainUtil.makeBleed($$1,1,100,$$2);
-            }
-            CompoundTag ct = $$0.getOrCreateTagElement("BlockStateTag");
-            int ctd = ct.getInt("damaged");
-            ctd++;
-            if (ctd > 2) {
-                $$1.level().playSound(null, $$1.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS,
-                        1F, 1);
-                $$0.shrink(1);
-            } else {
-                $$1.level().playSound(null, $$1.blockPosition(), ModSounds.SIGN_HIT_EVENT, SoundSource.PLAYERS,
-                        1F, 1);
-                ct.putInt("damaged", ctd);
-            }
-        }
-        return true;
     }
 
     public String getDescriptionId() {

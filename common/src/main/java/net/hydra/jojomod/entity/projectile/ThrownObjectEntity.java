@@ -126,7 +126,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
     public static final byte
             SPTHROW = 1,
             TWTHROW = 2,
-            SOFTTHROW = 3;
+            SOFTTHROW = 3,
+            SPINTHROW = 4;
     public static boolean throwAnObject(LivingEntity thrower, boolean canSnipe, ItemStack item, float getShotAccuracy,
                                      float getBundleAccuracy,
                                      float getThrowAngle1, float getThrowAngle2, float getThrowAngle3,
@@ -254,28 +255,28 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     thrower.level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                 }
             }
-        } else if (item.getItem() instanceof ArrowItem && !(item.getItem() instanceof RoundaboutArrowItem)){
+        } else if (item.getItem() instanceof ArrowItem && !(item.getItem() instanceof RoundaboutArrowItem)) {
             ArrowItem $$10 = (ArrowItem) item.getItem();
             AbstractArrow $$11 = $$10.createArrow(thrower.level(), item, thrower);
             $$11.setPos(pos);
-            $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.0F*mult, getShotAccuracy);
+            $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.0F * mult, getShotAccuracy);
             $$11.setCritArrow(true);
             StandEntity standEntity = ((StandUser) thrower).roundabout$getStand();
             if (standEntity != null && (styleType == SPTHROW || styleType == TWTHROW)) {
-                if (!standEntity.canAcquireHeldItem){
+                if (!standEntity.canAcquireHeldItem) {
                     $$11.pickup = AbstractArrow.Pickup.DISALLOWED;
                 }
             }
 
-            if (!canGiveYouItem){
+            if (!canGiveYouItem) {
                 $$11.pickup = AbstractArrow.Pickup.DISALLOWED;
             }
 
-            if (canSnipe){
-                ((ISuperThrownAbstractArrow)$$11).roundabout$starThrowInit();
+            if (canSnipe) {
+                ((ISuperThrownAbstractArrow) $$11).roundabout$starThrowInit();
             }
             thrower.level().addFreshEntity($$11);
-            if (playSounds){
+            if (playSounds) {
                 thrower.level().playSound(null, $$11, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
             }
         } else if (item.is(Items.TRIDENT)){
@@ -307,6 +308,15 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     thrower.level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                 }
             }
+        } else if (item.getItem() instanceof AnubisItem) {
+            ThrownAnubisEntity anubis = new ThrownAnubisEntity(thrower, thrower.level(),item);
+            anubis.setPos(pos);
+            anubis.shootFromRotation(thrower, xRot, yRot, 0.0F, 2F*mult, getShotAccuracy);
+            thrower.level().addFreshEntity(anubis);
+
+            if (playSounds){
+                thrower.level().playSound(null, anubis, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+            }
         } else {
             boolean canPlace = getCanPlace;
             ThrownObjectEntity thrownBlockOrItem = new ThrownObjectEntity(thrower, thrower.level(), item, canPlace);
@@ -321,7 +331,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             thrower.level().addFreshEntity(thrownBlockOrItem);
 
             if (playSounds) {
-                if (item.is(Items.IRON_NUGGET) || item.is(Items.GOLD_NUGGET) || item.is(Items.DIAMOND) || item.is(Items.FLINT)) {
+                if (item.is(Items.IRON_NUGGET) || item.is(Items.GOLD_NUGGET) || item.is(Items.DIAMOND) || item.is(Items.FLINT) || item.is(ModItems.SNUBNOSE_AMMO) || item.is(ModItems.TOMMY_AMMO)
+                        || item.is(ModItems.SNIPER_AMMO)) {
                     thrower.level().playSound(null, thrownBlockOrItem, ModSounds.BALL_BEARING_SHOT_EVENT, SoundSource.PLAYERS, 1.0F, 1F);
                 } else {
                     thrower.level().playSound(null, thrownBlockOrItem, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
@@ -352,8 +363,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
         if (!this.getEntityData().hasItem(ROUNDABOUT$SUPER_THROWN)) {
+            super.defineSynchedData();
             this.getEntityData().define(ROUNDABOUT$SUPER_THROWN, false);
             this.getEntityData().define(ROUNDABOUT$STYLE, (byte)0);
         }
@@ -420,6 +431,10 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                                 direction)) != InteractionResult.FAIL){
                             this.tempDirection = direction;
                             return true;
+                        } else {
+                            if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.banDirectionalBlockPlacingFailure){
+                                return true;
+                            }
                         }
                     }
                 } catch(Exception e) {
@@ -466,8 +481,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     }
                 } else if (this.getItem().is(Items.BRICK) || this.getItem().is(Items.NETHER_BRICK)) {
                     Block blkk = this.level().getBlockState($$0.getBlockPos()).getBlock();
-                    if (this.places && blkk instanceof AbstractGlassBlock || blkk instanceof StainedGlassPaneBlock
-                            || blkk.defaultBlockState().is(Blocks.GLASS_PANE)){
+                    if (this.places && (blkk instanceof AbstractGlassBlock || blkk instanceof StainedGlassPaneBlock
+                            || blkk.defaultBlockState().is(Blocks.GLASS_PANE))){
                         if (this.level().removeBlock($$0.getBlockPos(),false)){
                             blockBreakParticles(blkk,
                                     new Vec3($$0.getBlockPos().getX()+0.5,
@@ -579,6 +594,12 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 enchant = true;
             } else if (this.getItem().is(Items.IRON_NUGGET)){
                 damage = 10;
+            } else if (this.getItem().is(ModItems.SNIPER_AMMO)){
+                damage = 7;
+            } else if (this.getItem().is(ModItems.SNUBNOSE_AMMO)){
+                damage = 6;
+            } else if (this.getItem().is(ModItems.TOMMY_AMMO)){
+                damage = 3;
             } else if (this.getItem().is(Items.PRISMARINE_SHARD)){
                 damage = 7;
             } else if (this.getItem().is(Items.BRICK)){
@@ -617,7 +638,10 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         } else if (getStyle() == TWTHROW){
             damage*= (float) (ClientNetworking.getAppropriateConfig().generalStandSettings.standThrownObjectMultiplier *0.01);
             damage*= 0.9F;
-        } else {
+        } else if (getStyle() == SPINTHROW) {
+            damage*= (float) (ClientNetworking.getAppropriateConfig().generalStandSettings.standThrownObjectMultiplier *0.01);// make this spinThrowObjectMultiplier
+            damage*= 0.75F;
+        }else {
             damage*= (float) (ClientNetworking.getAppropriateConfig().generalStandSettings.standThrownObjectMultiplier *0.01);
         }
         return damage;
@@ -640,7 +664,11 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectile(this,$$0)){
                 this.discard();
                 return;
+            } else if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectileNoDiscard(this,$$0)){
+                return;
             }
+        } else if ($$1 instanceof SoftAndWetPlunderBubbleEntity){
+            return;
         }
 
         Entity $$4 = this.getOwner();

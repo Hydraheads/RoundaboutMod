@@ -9,11 +9,10 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaskItem;
-import net.hydra.jojomod.mixin.PlayerEntity;
-import net.hydra.jojomod.stand.powers.PowersHeyYa;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -44,7 +43,7 @@ public class RattShoulderLayer<T extends LivingEntity, A extends HumanoidModel<T
     float scale = 1;
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
-        if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+        if (ClientUtil.canSeeStands(ClientUtil.getPlayer()) && !entity.isBaby()) {
             if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
                 return;
             LivingEntity livent = entity;
@@ -55,7 +54,7 @@ public class RattShoulderLayer<T extends LivingEntity, A extends HumanoidModel<T
                     }
                     StandUser user = ((StandUser) livent);
                     int heyTicks = user.roundabout$getRattShoulderVanishTicks();
-                    boolean hasHeyYaOut = (user.roundabout$getActive() && user.roundabout$getStandPowers() instanceof PowersRatt);
+                    boolean hasHeyYaOut = (PowerTypes.hasStandActive(livent) && user.roundabout$getStandPowers() instanceof PowersRatt);
                     /* all of this code is copied from hey ya! */
                     if (heyTicks > 0 || hasHeyYaOut) {
                         byte skin = user.roundabout$getStandSkin();
@@ -81,14 +80,19 @@ public class RattShoulderLayer<T extends LivingEntity, A extends HumanoidModel<T
 
                         if (hasHeyYaOut) {
                             /* idlePos == 0 is shoulder, 1 is head */
-                            if ((user.roundabout$getStandPowers()).scopeLevel != 0) {
+                            if ((user.roundabout$getStandPowers()).getStandUserSelf().roundabout$getCombatMode()) {
                                 if (entity.getMainArm().equals(HumanoidArm.LEFT)) {
                                     getParentModel().leftArm.translateAndRotate(poseStack);
                                 } else {
                                     getParentModel().rightArm.translateAndRotate(poseStack);
                                 }
                                 poseStack.scale(0.35F, 0.35F, 0.35F);
-                                poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(new Vector3f(1, 0, 0), -90), 0, 0, -1);
+                                if (skin < RattEntity.CHAIR_RAT_SKIN) {
+                                    poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,-90), 0, 0, -1);
+                                } else {
+                                    poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,90),0,0,-1);
+                                    poseStack.translate(-0.35,0.8,-3);
+                                }
                                 poseStack.translate( entity.getMainArm().equals(HumanoidArm.LEFT) ? -0.35 : 0.35F, -1.3F, 0.6F);
                                 //  poseStack.translate(0.3F, 0F, -3F);
                             } else {
@@ -139,8 +143,18 @@ public class RattShoulderLayer<T extends LivingEntity, A extends HumanoidModel<T
                             float g = isHurt ? 0.0F : 1.0F;
                             float b = isHurt ? 0.0F : 1.0F;
                             if (user.roundabout$getRattShoulderVanishTicks() != 0) {
-                                ModStrayModels.RATT_SHOULDER.render(livent, partialTicks, poseStack, bufferSource, packedLight,
-                                        r, g, b, heyFull, skin);
+                                if (skin == RattEntity.REDD_SKIN) {
+                                    ModStrayModels.REDD_SHOULDER.render(livent,partialTicks,poseStack,bufferSource,packedLight,
+                                            r, g, b, heyFull, skin);
+                                } else if(skin >= RattEntity.CHAIR_RAT_SKIN) {
+                                    poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,180),0,0,0);
+                                    ModStrayModels.CHAIR_RATT_SHOULDER.render(livent,partialTicks,poseStack,bufferSource,packedLight,
+                                            r, g, b, heyFull, skin);
+                                } else {
+                                    ModStrayModels.RATT_SHOULDER.render(livent, partialTicks, poseStack, bufferSource, packedLight,
+                                            r, g, b, heyFull, skin);
+                                }
+
 
                             }
                             poseStack.popPose();

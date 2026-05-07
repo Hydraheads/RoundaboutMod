@@ -1,6 +1,7 @@
 package net.hydra.jojomod.access;
 
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -8,6 +9,10 @@ import net.minecraft.world.item.ItemStack;
 public interface IMob {
     boolean roundabout$isWorthy();
     void roundabout$setWorthy(boolean $$0);
+    boolean roundabout$isVampire();
+    void roundabout$setVampire(boolean $$0);
+    byte roundabout$getFate();
+    void roundabout$setFate(byte fate);
     void roundabout$deeplyRemoveTargets();
     void roundabout$deeplyEnforceTarget(Entity ent);
     int roundabout$getSightProtectionTicks();
@@ -21,4 +26,11 @@ public interface IMob {
     void roundabout$toggleFightOrFlight(boolean flight);
     boolean roundabout$getFightOrFlight();
     void roundabout$resetAtkCD();
+    boolean roundabout$getIsBred();
+    void roundabout$setIsBred(boolean set);
+
+    void roundabout$setHypnotizedBy(LivingEntity set, int time);
+    void roundabout$setHypnotizedBy(LivingEntity set);
+    LivingEntity roundabout$getHypnotizedBy();
+    void roundabout$purgePiglinAggro(Entity purge);
 }

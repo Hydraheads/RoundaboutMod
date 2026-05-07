@@ -26,3 +26,5 @@ mandatory = true
 versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "BOTH"
+["badoptimizations:cache_hooks"]
+common = "net.hydra.jojomod.util.BadOptimizationsFixer"

@@ -12,6 +12,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -67,7 +68,9 @@ public abstract class StarPlatinumAbstractArrow extends Entity implements ISuper
     }
     @Inject(method = "defineSynchedData", at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$defineSynchedData(CallbackInfo ci) {
-        this.entityData.define(ROUNDABOUT$SUPER_THROWN, false);
+        if (!((AbstractArrow)(Object)this).getEntityData().hasItem(ROUNDABOUT$SUPER_THROWN)) {
+            this.entityData.define(ROUNDABOUT$SUPER_THROWN, false);
+        }
     }
     @Inject(method = "tick", at = @At(value = "TAIL"),cancellable = true)
     private void roundabout$SuperThrow(CallbackInfo ci) {

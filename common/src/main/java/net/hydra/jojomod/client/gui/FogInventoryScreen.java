@@ -70,7 +70,6 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
 
     public FogInventoryScreen(Player $$0, FeatureFlagSet $$1, boolean $$2) {
         super(new FogInventoryScreen.ItemPickerMenu($$0), $$0.getInventory(), CommonComponents.EMPTY);
-        $$0.containerMenu = this.menu;
         this.imageHeight = 136;
         this.imageWidth = 195;
         this.displayOperatorCreativeTab = $$2;
@@ -82,7 +81,7 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
     }
 
     private void tryRefreshInvalidatedTabs(FeatureFlagSet $$0, boolean $$1, HolderLookup.Provider $$2) {
-        if (CreativeModeTabs.tryRebuildTabContents($$0, $$1, $$2)) {
+
             for (CreativeModeTab $$3 : CreativeModeTabs.allTabs()) {
                 Collection<ItemStack> $$4 = $$3.getDisplayItems();
                 if ($$3 == selectedTab) {
@@ -93,7 +92,6 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
                     }
                 }
             }
-        }
     }
 
     private void refreshCurrentTabContents(Collection<ItemStack> $$0) {
@@ -616,6 +614,13 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
 
     @Override
     public void render(GuiGraphics $$0, int $$1, int $$2, float $$3) {
+        if (this.minecraft.player != null) {
+            this.tryRefreshInvalidatedTabs(
+                    this.minecraft.player.connection.enabledFeatures(),
+                    this.hasPermissions(this.minecraft.player),
+                    this.minecraft.player.level().registryAccess()
+            );
+        }
         this.renderBackground($$0);
         super.render($$0, $$1, $$2, $$3);
 

@@ -43,6 +43,11 @@ public class PacketDataIndex {
     public static final byte INT_RELLA_START = 12;
     public static final byte INT_RELLA_CANCEL = 13;
     public static final byte INT_CURRENT_ITEM = 14;
+    public static final byte INT_GRAVITY_FLIP = 15;
+    public static final byte INT_GRAVITY_FLIP_2 = 16;
+    public static final byte INT_GRAVITY_FLIP_3 = 17;
+    public static final byte INT_GRAVITY_FLIP_4 = 18;
+    public static final byte INT_VAMPIRE_SKILL_BUY = 19;
 
     /**Single Byte packets*/
     public static final byte SINGLE_BYTE_GLAIVE_START_SOUND = 1;
@@ -62,6 +67,13 @@ public class PacketDataIndex {
     public static final byte SINGLE_BYTE_DESUMMON = 16;
     public static final byte SINGLE_BYTE_SKIN_LEFT_SEALED = 30;
     public static final byte SINGLE_BYTE_SKIN_RIGHT_SEALED = 31;
+    public static final byte END_BLOOD_SPEED = 32;
+    public static final byte QUERY_STAND_UPDATE = 33;
+    public static final byte QUERY_STAND_UPDATE_2 = 34;
+    public static final byte QUERY_VAMPIRE_UPDATE = 35;
+    public static final byte SINGLE_BYTE_LEFT_POWERS = 36;
+    public static final byte SINGLE_BYTE_RIGHT_POWERS = 37;
+    public static final byte FIX_COOLDOWN_FOR_SERVER = 38;
 
     /**Byte packets*/
     public static final byte BYTE_CHANGE_MORPH = 6;
@@ -69,12 +81,15 @@ public class PacketDataIndex {
     public static final byte BYTE_UPDATE_COOLDOWN = 8;
     public static final byte BYTE_SUMMON_CORPSE = 9;
     public static final byte BYTE_CORPSE_TACTICS = 10;
+    public static final byte BYTE_RESPAWN_STRATEGY = 11;
+    public static final byte BYTE_SWITCH_POWERS = 12;
 
     /**S2C Simple packets*/
     public static final byte S2C_SIMPLE_GENERATE_POWERS = 1;
     public static final byte S2C_SIMPLE_FREEZE_STAND = 2;
     public static final byte S2C_SIMPLE_SUSPEND_RIGHT_CLICK = 3;
     public static final byte S2C_SIMPLE_CLOSE_THE_RELLA = 4;
+    public static final byte S2C_RESPAWN = 5;
 
 
     /**S2C Int packets*/
@@ -84,6 +99,18 @@ public class PacketDataIndex {
     public static final byte S2C_POWER_INVENTORY = 6;
     public static final byte S2C_INT_SEAL = 7;
     public static final byte S2C_INT_BUBBLE_FINISH = 8;
+    public static final byte S2C_INT_VAMPIRE_SPEED = 9;
+    public static final byte S2C_INT_STAND_MODE = 10;
+    public static final byte S2C_INT_FLESH_BUD = 11;
+    public static final byte S2C_INT_CORNER_CUT = 12;
+    public static final byte S2C_INT_COMBO_AMT = 13;
+    public static final byte S2C_INT_COMBO_SEC_LEFT = 14;
+    public static final byte S2C_INT_FADE = 15;
+    public static final byte S2C_INT_FADE_UPDATE = 16;
+    public static final byte AESTHETICIAN_OPEN = 17;
+    public static final byte S2C_SNYC_ACTIVE_POWER = 18;
+    public static final byte S2C_INT_RIPPER_EYES = 19;
+
 
     /**S2C BUNDLE packets*/
     public static final byte S2C_BUNDLE_POWER_INV = 1;

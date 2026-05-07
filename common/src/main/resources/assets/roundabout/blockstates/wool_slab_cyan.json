@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "roundabout:block/wool_slab_cyan"
+    },
+    "type=double": {
+      "model": "minecraft:block/cyan_wool"
+    },
+    "type=top": {
+      "model": "roundabout:block/wool_slab_cyan_top"
+    }
+  }
+}

@@ -4,17 +4,23 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersStarPlatinum;
+import net.hydra.jojomod.stand.powers.PowersTheWorld;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -80,10 +86,7 @@ public class NewPunchingStand extends NewDashPreset {
         if (attackTarget != null && attackTarget.isAlive()){
             if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.BARRAGE)
                     || attackTarget.distanceTo(this.getSelf()) <= 5){
-                this.getSelf().setXRot(getLookAtEntityPitch(this.getSelf(), attackTarget));
-                float yrot = getLookAtEntityYaw(this.getSelf(), attackTarget);
-                this.getSelf().setYRot(yrot);
-                this.getSelf().setYHeadRot(yrot);
+                rotateMobHead(attackTarget);
             }
 
             Entity targetEntity = getTargetEntity(this.self, -1);
@@ -104,11 +107,6 @@ public class NewPunchingStand extends NewDashPreset {
 
     @Override
     public boolean setPowerAttack(){
-        if (((StandUser)this.getSelf()).roundabout$isParallelRunning())
-        {
-            return false;
-        }
-
         if (this.activePowerPhase >= 3){
             this.activePowerPhase = 1;
         } else {
@@ -154,6 +152,10 @@ public class NewPunchingStand extends NewDashPreset {
     @Override
     public void punchImpact(Entity entity){
         this.setAttackTimeDuring(-10);
+
+        if (entity != null && entity.distanceTo(self) > getReach()+1) {
+            entity = null;
+        }
         if (entity != null) {
             float pow;
             float knockbackStrength;
@@ -173,7 +175,7 @@ public class NewPunchingStand extends NewDashPreset {
                     if (lasthit){addEXP(2,LE);} else {addEXP(1,LE);}
                 }
 
-                this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
+                takeDeterminedKnockback(this.self, entity, knockbackStrength);
             } else {
                 if (this.activePowerPhase >= this.activePowerPhaseMax) {
                     if (entity instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers().interceptGuard()
@@ -190,7 +192,7 @@ public class NewPunchingStand extends NewDashPreset {
             float halfReach = (float) (distMax * 0.5);
             Vec3 pointVec = DamageHandler.getRayPoint(self, halfReach);
             if (!this.self.level().isClientSide) {
-                ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.EXPLOSION, pointVec.x, pointVec.y, pointVec.z,
+                ((ServerLevel) this.self.level()).sendParticles(ModParticles.PUNCH_MISS, pointVec.x, pointVec.y, pointVec.z,
                         1, 0.0, 0.0, 0.0, 1);
             }
         }
@@ -219,9 +221,15 @@ public class NewPunchingStand extends NewDashPreset {
         }
 
         if (!this.self.level().isClientSide()) {
+            if (entity != null) {
+                hitParticles(entity);
+            } else {
+            }
             this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
         }
     }
+
+
 
     @Override
     public boolean setPowerBarrageCharge() {
@@ -308,7 +316,7 @@ public class NewPunchingStand extends NewDashPreset {
             if (throwPunch) {
                 this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
                 if (StandDamageEntityAttack(this.getSelf(), pow, 0, this.self)) {
-                    this.takeDeterminedKnockback(this.self, this.getSelf(), kbs);
+                    takeDeterminedKnockback(this.self, this.getSelf(), kbs);
                     if ((kbs *= (float) (1.0 - ((LivingEntity)this.getSelf()).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
                         return;
                     }
@@ -355,7 +363,7 @@ public class NewPunchingStand extends NewDashPreset {
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
         StandUser standUser = ((StandUser) playerEntity);
-        boolean standOn = standUser.roundabout$getActive();
+        boolean standOn = PowerTypes.hasStandActive(playerEntity);
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
 
@@ -406,7 +414,22 @@ public class NewPunchingStand extends NewDashPreset {
             if (standOn) {
                 if (TE != null) {
                     if (barTexture == 0) {
-                        context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
+                        boolean converted = false;
+                        // Mob Grab range shows green
+                        if (this instanceof BlockGrabPreset bgp && (this instanceof PowersStarPlatinum || this instanceof PowersTheWorld)){
+                            Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(), 2.1F);
+                            Entity targetEntity2 = MainUtil.getTargetEntity(this.getSelf(), 5F);
+                            if (targetEntity2 != null && bgp.canGrab(targetEntity2)) {
+                                if (targetEntity != null && bgp.canGrab(targetEntity)) {
+                                    converted = true;
+                                }
+                            }
+                        }
+                        if (!converted) {
+                            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
+                        } else {
+                            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 82, 15, 6);
+                        }
                     }
                 }
             }

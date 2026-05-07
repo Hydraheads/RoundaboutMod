@@ -9,13 +9,31 @@ public class GreenDayEntity extends FollowingStandEntity{
 
     public GreenDayEntity(EntityType<? extends Mob> entityType, Level world) { super(entityType, world); }
     public static final byte
-            PART_FIVE_GREEN_DAY = 0;
-
+            PART_FIVE_GREEN_DAY = 1,
+            RED_DAY = 2,
+            TEAL_DAY = 3,
+            BROCOLLI = 4,
+            RED_NIGHT = 5,
+            GORGONZOLA = 6,
+            SILENCE = 7,
+            TF_CENTURY = 8,
+            AMERICAN_IDIOT = 9,
+            NIMROD = 10,
+            SAVIOURS = 11,
+            MOUTH = 12;
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState hideLeg = new AnimationState();
     public final AnimationState kick_barrage = new AnimationState();
     public final AnimationState kick_barrage_end = new AnimationState();
     public final AnimationState kick_barrage_windup = new AnimationState();
+    public final AnimationState mold_spread_gd = new AnimationState();
+
+    public static byte
+        MOLD_SPREAD = 121;
+
+    public boolean Emissive(){
+        return this.getSkin() == 5 ;
+    }
 
     @Override
     public void setupAnimationStates() {
@@ -47,6 +65,13 @@ public class GreenDayEntity extends FollowingStandEntity{
                 this.kick_barrage_end.stop();
             }
 
+            if(this.getAnimation() == MOLD_SPREAD) {
+                this.mold_spread_gd.startIfStopped(this.tickCount);
+            }else {
+                this.mold_spread_gd.stop();
+            }
+
         }
     }
+
 }

@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "roundabout:block/stone_mask",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "roundabout:block/stone_mask",
+      "y": 0
+    },
+    "facing=south": {
+      "model": "roundabout:block/stone_mask",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "roundabout:block/stone_mask",
+      "y": 270
+    }
+  }
+}

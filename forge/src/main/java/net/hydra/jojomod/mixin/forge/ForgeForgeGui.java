@@ -1,7 +1,12 @@
 package net.hydra.jojomod.mixin.forge;
 
-import net.hydra.jojomod.Roundabout;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.hud.StandHudRender;
+import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -12,19 +17,52 @@ import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodData;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
+import net.minecraftforge.client.gui.overlay.GuiOverlayManager;
+import net.minecraftforge.client.gui.overlay.NamedGuiOverlay;
+import org.checkerframework.checker.units.qual.A;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ForgeGui.class)
 public abstract class ForgeForgeGui extends Gui {
 
+    @Shadow public int rightHeight;
+
     public ForgeForgeGui(Minecraft p_232355_, ItemRenderer p_232356_) {
         super(p_232355_, p_232356_);
+    }
+
+    @Inject(method = "renderFood(IILnet/minecraft/client/gui/GuiGraphics;)V", at = @At(value = "HEAD"), remap = false, cancellable = true)
+    public void roundabout$renderFood(int width, int height, GuiGraphics guiGraphics, CallbackInfo ci) {
+        Player player = (Player) this.minecraft.getCameraEntity();
+        if (player != null){
+            if (FateTypes.hasBloodHunger(player)){
+                ci.cancel();
+                minecraft.getProfiler().push("food");
+                RenderSystem.enableBlend();
+
+                FoodData stats = minecraft.player.getFoodData();
+                int level = stats.getFoodLevel();
+
+                int left = width / 2 + 91;
+                int top = height - rightHeight;
+                rightHeight += 10;
+
+
+                ClientUtil.renderHungerStuff(guiGraphics,player,left,top,
+                        this.random.nextInt(3),level,this.tickCount);
+
+                RenderSystem.disableBlend();
+                minecraft.getProfiler().pop();
+            }
+        }
     }
 
     @Inject(method = "renderAir(IILnet/minecraft/client/gui/GuiGraphics;)V", at = @At(value = "INVOKE",
@@ -33,7 +71,7 @@ public abstract class ForgeForgeGui extends Gui {
         if (minecraft.player != null && minecraft.level != null){
             int oxygenBonus = ((StandUser)minecraft.player).roundabout$getStandPowers().getAirAmount();
             int maxOxygenBonus = ((StandUser)minecraft.player).roundabout$getStandPowers().getMaxAirAmount();
-            if (oxygenBonus > -1 && ((StandUser)minecraft.player).roundabout$getActive()) {
+            if (oxygenBonus > -1 && PowerTypes.hasStandActive(minecraft.player)) {
                 int $$28 = minecraft.player.getMaxAirSupply();
                 int $$29 = Math.min(minecraft.player.getAirSupply(), $$28);
                 boolean $$3 = !minecraft.player.canBreatheUnderwater() && !MobEffectUtil.hasWaterBreathing(minecraft.player) &&
@@ -60,6 +98,13 @@ public abstract class ForgeForgeGui extends Gui {
                 }
             }
         }
+    }
+
+    @Inject(method = "pre",at = @At(value = "HEAD"),remap = false, cancellable = true )
+    private void roundabout$stopGuiCancelling(NamedGuiOverlay overlay, GuiGraphics guiGraphics, CallbackInfoReturnable<Boolean> cir) {
+        /// this should allow for specifically stopping cancellations, but it doesn't seem to want to cooperate
+
+
     }
 
     @Unique

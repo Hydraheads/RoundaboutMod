@@ -87,6 +87,104 @@ public class C2SPacketUtil {
         );
     }
 
+    public static void tryPowerPacketF(byte packet){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.TryPowerF.value,
+                packet
+        );
+    }
+
+    public static void tryIntPowerPacketF(byte packet, int integer){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.TryIntPowerF.value,
+                packet,
+                integer
+        );
+    }
+
+    public static void tryTripleIntPacketF(byte packet, int in1, int in2, int in3){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.TryTripleIntPowerF.value,
+                packet,
+                in1,
+                in2,
+                in3
+        );
+    }
+
+    public static void tryBlockPosPowerFPacket(byte packet, BlockPos pos){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.TryBlockPosPowerF.value,
+                packet,
+                pos
+        );
+    }
+    public static void tryBlockPosPowerFPacket(byte packet, BlockPos pos, HitResult hitResult){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.TryHitResultPosPowerF.value,
+                packet,
+                pos,
+                hitResult
+        );
+    }
+    public static void tryPosPowerFPacket(byte packet, Vec3 pos){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.TryPosPowerF.value,
+                packet,
+                pos.toVector3f()
+        );
+    }
+
+
+    public static void tryPowerPacketP(byte packet){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.TryPowerP.value,
+                packet
+        );
+    }
+
+    public static void tryIntPowerPacketP(byte packet, int integer){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.TryIntPowerP.value,
+                packet,
+                integer
+        );
+    }
+
+    public static void tryTripleIntPacketP(byte packet, int in1, int in2, int in3){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.TryTripleIntPowerP.value,
+                packet,
+                in1,
+                in2,
+                in3
+        );
+    }
+
+    public static void tryBlockPosPowerPPacket(byte packet, BlockPos pos){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.TryBlockPosPowerP.value,
+                packet,
+                pos
+        );
+    }
+    public static void tryBlockPosPowerPPacket(byte packet, BlockPos pos, HitResult hitResult){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.TryHitResultPosPowerP.value,
+                packet,
+                pos,
+                hitResult
+        );
+    }
+    public static void tryPosPowerPPacket(byte packet, Vec3 pos){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.TryPosPowerP.value,
+                packet,
+                pos.toVector3f()
+        );
+    }
+
+
     public static void trySingleBytePacket(byte packet){
         ModMessageEvents.sendToServer(
                 ClientToServerPackets.StandPowerPackets.MESSAGES.SingleByteToServer.value,
@@ -110,6 +208,11 @@ public class C2SPacketUtil {
     public static void standSummonPacket(){
         ModMessageEvents.sendToServer(
                 ClientToServerPackets.StandPowerPackets.MESSAGES.StandSummon.value
+        );
+    }
+    public static void requestZombieFish(){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.RequestZombieFish.value
         );
     }
 
@@ -139,9 +242,23 @@ public class C2SPacketUtil {
                 activePowerPhase
         );
     }
+    public static void switchZombieTacticPacket(int targetID, byte tactic){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.ZombieMinionTactic.value,
+                targetID,
+                tactic
+        );
+    }
     public static void standBarrageHitPacket(int targetID, int attackTimeDuring){
         ModMessageEvents.sendToServer(
                 ClientToServerPackets.StandPowerPackets.MESSAGES.StandBarrageHit.value,
+                targetID,
+                attackTimeDuring
+        );
+    }
+    public static void powersBarrageHitPacket(int targetID, int attackTimeDuring){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.PowersBarrageHit.value,
                 targetID,
                 attackTimeDuring
         );
@@ -157,6 +274,13 @@ public class C2SPacketUtil {
 
     /**The client asks the server for the config essentially.*/
     public static void handshakePacket(){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.Handshake.value
+        );
+    }
+
+    /**The client asks the server for cooldowns essentially.*/
+    public static void handshakeCooldownPacket(){
         ModMessageEvents.sendToServer(
                 ClientToServerPackets.StandPowerPackets.MESSAGES.Handshake.value
         );
@@ -180,11 +304,46 @@ public class C2SPacketUtil {
         );
     }
 
+    /**Release right click to stop guarding*/
+    public static void hairColorUpdatePacket(float red,float green,float blue){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.HairColor.value,
+                red,
+                green,
+                blue
+        );
+    }
 
     /**Release right click to stop guarding*/
     public static void guardCancelPacket(){
         ModMessageEvents.sendToServer(
                 ClientToServerPackets.StandPowerPackets.MESSAGES.GuardCancel.value
+        );
+    }
+    /**Finish Blood Suck*/
+    public static void finishSuckingPacket(){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.FinishSucking.value
+        );
+    }
+    /**Cancel Blood Suck*/
+    public static void cancelSuckingPacket(){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.CancelSucking.value
+        );
+    }
+
+    /**Release right click to stop guarding*/
+    public static void handShakeCooldownPacket(){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.HandshakeCooldowns.value
+        );
+    }
+
+    /**Fire the gun when left-clicking*/
+    public static void gunShot(){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.GunShot.value
         );
     }
 

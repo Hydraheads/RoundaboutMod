@@ -139,7 +139,7 @@ public abstract class PilotingCamera implements ICamera {
     @Inject(method = "setup", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$setup(BlockGetter blockGetter, Entity entity, boolean bl, boolean bl2, float f, CallbackInfo ci) {
         if (!roundabout$cleared) {
-            if (entity != null && ((TimeStop) entity.level()).CanTimeStopEntity(entity)) {
+            if (entity != null && ((TimeStop) entity.level()).CanTimeStopEntity(entity) && !entity.isPassenger()) {
                     f = ((IEntityAndData) entity).roundabout$getPreTSTick();
                     roundabout$cleared = true;
                     this.setup(blockGetter, entity, bl, bl2, f);

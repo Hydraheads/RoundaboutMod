@@ -13,11 +13,14 @@ import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.SavedSecond;
+import net.hydra.jojomod.event.index.AnubisMemory;
+import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.level.LightLayer;
 import net.zetalasis.client.shader.RPostShaderRegistry;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.client.models.layers.PreRenderEntity;
@@ -276,8 +279,57 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                                             Matrix4f $$7, CallbackInfo ci) {
 
         ClientUtil.mirrorCycles = 0;
+
+        roundabout$renderAnubisMemory($$1);
     }
 
+
+    @Unique
+    private void roundabout$renderAnubisMemory(float partial) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player != null) {
+            Player P = mc.player;
+            StandUser SU = (StandUser) P;
+            if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA && P.getUUID().equals(PA.getSelf().getUUID()) ) {
+                if (SU.roundabout$getUniqueStandModeToggle() && PA.lastPartialTick != partial) {
+
+                    AnubisMemory memory = PA.getUsedMemory();
+                    if (memory != null) {
+                        if (memory.memory_type != AnubisMemory.INPUTS) {
+                            if (!memory.rots.isEmpty()) {
+                                int time = PA.getMaxPlayTime() - PA.playTime;
+                                for (int i = 2; i < memory.rots.size(); i++) {
+                                    Vec3 rot = memory.rots.get(i);
+                                    Vec3 pRot = memory.rots.get(i - 1);
+                                    if (time == rot.x) {
+
+                                        float extraTicks = 0;
+                                        if (PA.lastTick < time) {
+                                            extraTicks = (1 - PA.lastPartialTick);
+                                            PA.lastPartialTick = 0;
+                                            PA.lastTick = time;
+                                        }
+                                        float dT = partial - PA.lastPartialTick;
+                                        PA.lastPartialTick = partial;
+
+
+                                        float dx = (float) (P.getXRot() + rot.y * dT + pRot.y * extraTicks);
+                                        float dy = (float) (P.getYRot() + rot.z * dT + pRot.z * extraTicks);
+
+                                        P.setXRot(dx);
+                                        P.setYRot(dy < -360 ? 720 + dy : dy % 720);
+
+                                    } else if (time < rot.x) {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",
             at = @At(value = "TAIL"))
@@ -293,8 +345,20 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             double $$11 = $$9.y();
             double $$12 = $$9.z();
             MultiBufferSource.BufferSource $$20 = this.renderBuffers.bufferSource();
+            //ClientUtil.renderFirstPersonModelParts($$4.getEntity(), $$10, $$11, $$12, partialTick, $$0, (MultiBufferSource) $$20, rdbt$getPackedLightCoords(player,partialTick));
             this.roundabout$renderStringOnPlayer(player, $$10, $$11, $$12, partialTick, $$0, (MultiBufferSource) $$20);
         }
+    }
+    public final int rdbt$getPackedLightCoords(LivingEntity $$0, float $$1) {
+        BlockPos $$2 = BlockPos.containing($$0.getLightProbePosition($$1));
+        return LightTexture.pack(this.rdbt$getBlockLightLevel($$0, $$2), this.rdbt$getSkyLightLevel($$0, $$2));
+    }
+    protected int rdbt$getSkyLightLevel(LivingEntity $$0, BlockPos $$1) {
+        return $$0.level().getBrightness(LightLayer.SKY, $$1);
+    }
+
+    protected int rdbt$getBlockLightLevel(LivingEntity $$0, BlockPos $$1) {
+        return $$0.isOnFire() ? 15 : $$0.level().getBrightness(LightLayer.BLOCK, $$1);
     }
 
     @Unique

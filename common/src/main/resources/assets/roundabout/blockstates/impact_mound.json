@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "roundabout:block/impact_mound_slab"
+    },
+    "type=double": {
+      "model": "roundabout:block/impact_mound"
+    },
+    "type=top": {
+      "model": "roundabout:block/impact_mound_top"
+    }
+  }
+}

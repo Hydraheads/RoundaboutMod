@@ -1,5 +1,6 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -45,7 +46,8 @@ public class BarbedWireBundleBlock extends Block {
     @Override
     public void entityInside(BlockState $$0, Level level, BlockPos blockPos, Entity entity) {
 
-        if (!entity.isCrouching() && entity instanceof LivingEntity) {
+        if (!entity.isCrouching() && entity instanceof LivingEntity && !(entity instanceof FallenMob)
+        && !MainUtil.isBossMob(entity)) {
             net.minecraft.world.phys.AABB AB = entity.getBoundingBox();
             VoxelShape vs = MAIN_SHAPE;
                 if (!entity.isInvulnerable() && entity.isAlive()){
@@ -54,8 +56,10 @@ public class BarbedWireBundleBlock extends Block {
                     if (power > 0) {
                         /**Velocity for players is clientside so it requires additional packet*/
                         if (!level.isClientSide && !(entity instanceof Player) && !(entity.getControllingPassenger() != null && entity.getControllingPassenger() instanceof Player)) {
-                            if (entity.hurt(ModDamageTypes.of(level, ModDamageTypes.BARBED_WIRE), power)){
-                                MainUtil.makeBleed(entity,0,200,null);
+                            if (!(entity instanceof LivingEntity LE && MainUtil.isBossMob(LE))) {
+                                if (entity.hurt(ModDamageTypes.of(level, ModDamageTypes.BARBED_WIRE), power)) {
+                                    MainUtil.makeBleed(entity, 0, 200, null);
+                                }
                             }
                         } else if (level.isClientSide && (entity instanceof Player || (entity.getControllingPassenger() != null && entity.getControllingPassenger() instanceof Player))){
                             C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_VELOCITY_BARBED_WIRE,power);

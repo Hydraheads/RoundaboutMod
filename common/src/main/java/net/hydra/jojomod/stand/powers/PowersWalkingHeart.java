@@ -2,7 +2,6 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -12,19 +11,17 @@ import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.event.AbilityIconInstance;
-import net.hydra.jojomod.event.index.LocacacaCurseIndex;
-import net.hydra.jojomod.event.index.OffsetIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
-import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
-import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
+import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -33,9 +30,9 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Position;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.PacketUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -55,7 +52,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -80,6 +80,12 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
     public boolean canWallWalkConfig(){
         return ClientNetworking.getAppropriateConfig().walkingHeartSettings.enableWallWalking;
+    }
+    public int walkingCDPerHit(){
+        return ClientNetworking.getAppropriateConfig().walkingHeartSettings.walkingHeartCooldownPerHit;
+    }
+    public int walkingMaxHits(){
+        return ClientNetworking.getAppropriateConfig().walkingHeartSettings.walkingHeartMaxHits;
     }
 
     @Override
@@ -137,6 +143,7 @@ public class PowersWalkingHeart extends NewDashPreset {
         super.levelUp();
     }
 
+
     @Override
     public void powerActivate(PowerContext context) {
         switch (context)
@@ -165,21 +172,33 @@ public class PowersWalkingHeart extends NewDashPreset {
                 ItemStack stack = self.getMainHandItem();
                 if (!stack.isEmpty() && stack.is(Items.COBWEB) && stack.getCount() >= 64){
                     tryPowerPacket(PowerIndex.POWER_3_BONUS);
+                    return;
                 }
+            }
+            if (canWallWalkConfig() && canCornerCutConfig()) {
+                tryPowerPacket(PowerIndex.POWER_4_BONUS);
             }
         }
     }
 
 
     public void extendHeels(){
-        if (!this.onCooldown(PowerIndex.SKILL_3) || hasExtendedHeelsForWalking()) {
-            if (!inCombatMode()){
+        if ((!this.onCooldown(PowerIndex.SKILL_3) && !onCooldown(PowerIndex.SKILL_2)) || hasExtendedHeelsForWalking()) {
+            if (!inCombatMode() && !self.isSwimming()){
+                if (forceBlock())
+                    return;
+
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
             tryPowerPacket(PowerIndex.POWER_2);
             }
         }
     }
 
+    public boolean forceBlock(){
+        if (!MainUtil.isBlockWalkableSimplified(self.level().getBlockState(self.getOnPos())))
+            return true;
+        return false;
+    }
 
     public void dashOrWallLatch(){
         if (inCombatMode())
@@ -191,9 +210,10 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public void doWallLatchClient(){
-        if (!this.onCooldown(PowerIndex.SKILL_3)) {
-            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
-            tryPowerPacket(PowerIndex.POWER_3);
+        if (!this.onCooldown(PowerIndex.SKILL_3) && !onCooldown(PowerIndex.SKILL_2)) {
+            if (canLatchOntoWall() && canWallWalkConfig()) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+            }
         }
     }
 
@@ -211,6 +231,15 @@ public class PowersWalkingHeart extends NewDashPreset {
         return getStandUserSelf().roundabout$getUniqueStandModeToggle();
     }
     public boolean canLatchOntoWall(){
+        if (onCooldown(PowerIndex.SKILL_2) || self.isSwimming())
+            return false;
+
+        if (MainUtil.isStandingInBlock(self))
+            return false;
+
+        if (forceBlock())
+            return false;
+
         if ((this.self.onGround() && !hasExtendedHeelsForWalking()) || (!this.self.onGround() && hasExtendedHeelsForWalking()))
             return false;
 
@@ -246,7 +275,42 @@ public class PowersWalkingHeart extends NewDashPreset {
         return MainUtil.isBlockWalkable(bs);
     }
 
+
+
+    public void setHeelAttachCooldown(){
+        int attachment = getHeelUnattachCooldown();
+        if (attachment > 0) {
+            this.setCooldown(PowerIndex.SKILL_2, getHeelUnattachCooldown());
+            S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
+                    PowerIndex.SKILL_2, getHeelUnattachCooldown());
+        }
+    }
+
+    public int getHeelUnattachCooldown(){
+        return hitsSinceAttached*walkingCDPerHit();
+    }
+    public void hitHeelExtendedState(){
+        if (hasExtendedHeelsForWalking()) {
+            int maxhits = walkingMaxHits();
+            if (maxhits >= 0) {
+                hitsSinceAttached++;
+                if (hitsSinceAttached > maxhits) {
+                    toggleSpikes(false);
+                }
+            }
+        }
+    }
+    public void onActuallyHurt(DamageSource $$0, float $$1){
+        if ($$0.getEntity() != null && !$$0.is(DamageTypes.THORNS)) {
+            hitHeelExtendedState();
+        }
+    }
+
+    public int hitsSinceAttached = 0;
+
     public void regularExtendHeels(){
+        if (self.isSwimming())
+            return;
         boolean isAnchored = hasExtendedHeelsForWalking();
             if (isAnchored){
                 if (!this.self.level().isClientSide()) {
@@ -255,9 +319,9 @@ public class PowersWalkingHeart extends NewDashPreset {
             } else {
                 if (!inCombatMode()) {
                     if (self.onGround()) {
-                        this.setCooldown(PowerIndex.SKILL_3, 8);
+                        this.setCooldown(PowerIndex.SKILL_3, 10);
                         if (!this.self.level().isClientSide()) {
-                            setHeelDirection(Direction.DOWN);
+                            setHeelDirection(((IGravityEntity)this.self).roundabout$getGravityDirection());
                             toggleSpikes(true);
                         }
                     }
@@ -304,16 +368,16 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public void wallLatch(){
-        if (canLatchOntoWall() && canWallWalkConfig()){
-            this.setCooldown(PowerIndex.SKILL_3, 6);
-            if (!this.self.level().isClientSide()) {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.WALL_LATCH_EVENT, SoundSource.PLAYERS, 1F, 1f);
-                toggleSpikes(true);
-                Direction gd = RotationUtil.getRealFacingDirection2(this.self);
-                setHeelDirection(gd);
-                ((IGravityEntity) this.self).roundabout$setGravityDirection(gd);
-                justFlippedTicks = 7;
-            }
+            this.setCooldown(PowerIndex.SKILL_3, 10);
+            toggleSpikes(true);
+            Direction gd = RotationUtil.getRealFacingDirection2(this.self);
+            setHeelDirection(gd);
+            ((IGravityEntity) this.self).roundabout$setGravityDirection(gd);
+            justFlippedTicks = 7;
+        if (self.level().isClientSide()){
+            C2SPacketUtil.intToServerPacket(
+                    PacketDataIndex.INT_GRAVITY_FLIP_2,MainUtil.getIntFromDirection(gd)
+            );
         }
     }
 
@@ -324,6 +388,29 @@ public class PowersWalkingHeart extends NewDashPreset {
         }
     }
 
+    public Direction getIntendedDirection(){
+        Direction rightAxis = Direction.DOWN;
+        MobEffectInstance mi = self.getEffect(ModEffects.GRAVITY_FLIP);
+        if (mi != null) {
+            if (mi.getAmplifier() == 0) {
+                rightAxis = Direction.NORTH;
+            }
+            if (mi.getAmplifier() == 1) {
+                rightAxis = Direction.SOUTH;
+            }
+            if (mi.getAmplifier() == 2) {
+                rightAxis = Direction.EAST;
+            }
+            if (mi.getAmplifier() == 3) {
+                rightAxis = Direction.WEST;
+            }
+            if (mi.getAmplifier() == 4) {
+                rightAxis = Direction.UP;
+            }
+        }
+        return rightAxis;
+    }
+
     public void toggleSpikes(boolean toggle){
         if (!this.self.level().isClientSide()) {
             boolean getTog = getStandUserSelf().roundabout$getUniqueStandModeToggle();
@@ -331,6 +418,16 @@ public class PowersWalkingHeart extends NewDashPreset {
                 if (toggle) {
                     this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXTEND_SPIKES_EVENT, SoundSource.PLAYERS, 1F, 1f);
                 } else {
+                    Direction gf = ((IGravityEntity)self).roundabout$getGravityDirection();
+                    if (gf != getIntendedDirection()) {
+                        Vec3 vec = new Vec3(0, 0.3f, 0);
+                        vec = RotationUtil.vecPlayerToWorld(vec, gf);
+                        self.teleportTo(
+                                self.getX() + vec.x,
+                                self.getY() + vec.y,
+                                self.getZ() + vec.z);
+                    }
+                    setHeelAttachCooldown();
                     this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXTEND_SPIKES_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
                 }
             }
@@ -351,6 +448,7 @@ public class PowersWalkingHeart extends NewDashPreset {
         else
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
 
+        boolean isSpider = false;
         if (this.getSelf() instanceof Player PE) {
             ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
@@ -358,10 +456,28 @@ public class PowersWalkingHeart extends NewDashPreset {
                 ItemStack stack = self.getMainHandItem();
                 if (!stack.isEmpty() && stack.is(Items.COBWEB) && stack.getCount() >= 64){
                     setSkillIcon(context, x, y, 4, StandIcons.SPIDER_SKIN, PowerIndex.NONE);
+                    isSpider = true;
+                }
+            }
+        }
+
+        if (!isSpider){
+            if (canWallWalkConfig() && canCornerCutConfig()) {
+                if (canCutCorners()) {
+                    setSkillIcon(context, x, y, 4, StandIcons.WALL_CUT, PowerIndex.NONE);
+                } else {
+                    setSkillIcon(context, x, y, 4, StandIcons.WALL_PASS, PowerIndex.NONE);
                 }
             }
         }
     }
+
+    public int cutCorners = 0;
+
+    public boolean canCutCorners(){
+        return cutCorners == 2;
+    }
+
 
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
@@ -389,20 +505,28 @@ public class PowersWalkingHeart extends NewDashPreset {
         return super.getSoundFromByte(soundChoice);
     }
 
+    public int slowHeelTicks = 0;
+
     @Override
     public float inputSpeedModifiers(float basis){
         if (inCombatMode()) {
             return 0;
+        } else if (hasExtendedHeelsForWalking() && (canCutCorners() || slowHeelTicks > 0)){
+            return basis*0.8F;
         }
         return super.inputSpeedModifiers(basis);
     }
     public boolean inCombatMode(){
-        return getStandUserSelf().roundabout$getCombatMode();
+        return getStandUserSelf().roundabout$getCombatMode() && PowerTypes.hasStandActivelyEquipped(self);
+    }
+
+    public boolean canCornerCutConfig(){
+        return ClientNetworking.getAppropriateConfig().walkingHeartSettings.enableCornerCutting;
     }
 
     @Override
     public boolean cancelJump(){
-        return inCombatMode();
+        return inCombatMode() || ((hasExtendedHeelsForWalking() && canCutCorners()));
     }
     @Override
     public boolean cancelSprint(){
@@ -498,6 +622,10 @@ public class PowersWalkingHeart extends NewDashPreset {
                 spiderUnlock();
             }
 
+            case PowerIndex.POWER_4_BONUS-> {
+                serverSetCutCorners();
+            }
+
         }
         return super.tryPower(move,forced);
     }
@@ -557,7 +685,7 @@ public class PowersWalkingHeart extends NewDashPreset {
 
     public float getSpikeDamage(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 2.1F* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod((float) ((float) 1.8F* (ClientNetworking.getAppropriateConfig().
                     walkingHeartSettings.walkingHeartAttackMultOnPlayers*0.01)));
         } else {
             return levelupDamageMod((float) ((float) 3* (ClientNetworking.getAppropriateConfig().
@@ -565,7 +693,17 @@ public class PowersWalkingHeart extends NewDashPreset {
         }
     }
 
+    @Override
+    public boolean interceptAllInteractions(){
+        return inCombatMode();
+    }
+
     public boolean HeelSpikeDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker, boolean rightClick){
+        if (target == null)
+            return false;
+
+        hitParticlesCenter(target);
+
         if (attacker instanceof TamableAnimal TA){
             if (target instanceof TamableAnimal TT && TT.getOwner() != null
                     && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
@@ -636,9 +774,10 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public boolean replaceHudActively(){
-        return inCombatMode() || getShootTicks() > 0;
+        return (inCombatMode() || getShootTicks() > 0) && PowerTypes.hasStandActivelyEquipped(self);
     }
-    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x){
+    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
+                                  boolean removeNum){
         StandHudRender.renderWalkingHeartHud(context,cameraPlayer,screenWidth,screenHeight,x);
     }
 
@@ -646,9 +785,30 @@ public class PowersWalkingHeart extends NewDashPreset {
         this.setCooldown(PowerIndex.SKILL_4, 3);
         this.setAttackTimeDuring(-10);
         this.setActivePower(PowerIndex.POWER_4_EXTRA);
+        MainUtil.playPop(self);
 
         if (this.self.level().isClientSide()){
-            List<Entity> TE = this.getTargetEntityListThroughWalls(self, 7F,10);
+            List<Entity> TE;
+            if (!ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxes){
+                TE = this.getTargetEntityList(self, 7F,10);
+            } else {
+                TE = this.getTargetEntityListThroughWalls(self, 7F,10);
+                if (!TE.isEmpty()){
+                    List<Entity> TE2 = new ArrayList<>();
+                    for (Entity value : TE) {
+                        if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxesOnBosses){
+                            TE2.add(value);
+                        } else if (MainUtil.isBossMob(value)){
+                            if (MainUtil.canActuallyHitInvolved(value,self)){
+                                TE2.add(value);
+                            }
+                        } else {
+                            TE2.add(value);
+                        }
+                    }
+                    TE = TE2;
+                }
+            }
             if (TE == null || TE.isEmpty()){
                 tryPowerPacket(PowerIndex.POWER_1_BONUS);
             } else {
@@ -676,6 +836,8 @@ public class PowersWalkingHeart extends NewDashPreset {
             if (curse == LocacacaCurseIndex.LEFT_LEG && PE.getMainArm() == HumanoidArm.LEFT)
                 return true;
         }
+        if (HeatUtil.isLegsFrozen(self))
+            return true;
 
             return false;
     }
@@ -684,88 +846,328 @@ public class PowersWalkingHeart extends NewDashPreset {
         useSpikeAttackF(false);
     }
 
+
+    public Direction cutDirection;
+    public boolean tryCut(Vec3 cutPos){
+        BlockPos pos1 = BlockPos.containing(cutPos);
+        BlockState bs = this.self.level().getBlockState(pos1);
+        return MainUtil.isBlockWalkable(bs);
+    }
+
+    public boolean tryCutEast(Vec3 mpos){
+        return (tryCut(mpos.add(new Vec3(0.1,0,0)))
+                || tryCut(mpos.add(new Vec3(self.getBbWidth()*1.1f,0,0)))
+                || tryCut(mpos.add(new Vec3(self.getBbWidth()*1.4f,0,0)))
+                || tryCut(mpos.add(new Vec3(self.getBbWidth()*1.6f,0,0)))
+        );
+    }
+    public boolean tryCutWest(Vec3 mpos){
+        return (tryCut(mpos.add(new Vec3(-0.1,0,0)))
+                || tryCut(mpos.add(new Vec3(-self.getBbWidth()*1.1f,0,0)))
+                || tryCut(mpos.add(new Vec3(-self.getBbWidth()*1.4f,0,0)))
+                || tryCut(mpos.add(new Vec3(-self.getBbWidth()*1.6f,0,0)))
+        );
+    }
+    public boolean tryCutNorth(Vec3 mpos){
+        return (tryCut(mpos.add(new Vec3(0,0,-0.1)))
+                || tryCut(mpos.add(new Vec3(0,0,-self.getBbWidth()*1.1f)))
+                || tryCut(mpos.add(new Vec3(0,0,-self.getBbWidth()*1.4f)))
+                || tryCut(mpos.add(new Vec3(0,0,-self.getBbWidth()*1.6f)))
+        );
+    }
+    public boolean tryCutSouth(Vec3 mpos){
+        return (tryCut(mpos.add(new Vec3(0,0,0.1)))
+                || tryCut(mpos.add(new Vec3(0,0,self.getBbWidth()*1.1f)))
+                || tryCut(mpos.add(new Vec3(0,0,self.getBbWidth()*1.4f)))
+                || tryCut(mpos.add(new Vec3(0,0,self.getBbWidth()*1.6f)))
+        );
+    }
+    public boolean tryCutUp(Vec3 mpos){
+        return (tryCut(mpos.add(new Vec3(0,0.1,0)))
+                || tryCut(mpos.add(new Vec3(0,self.getBbWidth()*1.1f,0)))
+                || tryCut(mpos.add(new Vec3(0,self.getBbWidth()*1.4f,0)))
+                || tryCut(mpos.add(new Vec3(0,self.getBbWidth()*1.6f,0)))
+        );
+    }
+    public boolean tryCutDown(Vec3 mpos){
+        return (tryCut(mpos.add(new Vec3(0,-0.1,0)))
+                || tryCut(mpos.add(new Vec3(0,-self.getBbWidth()*1.1f,0)))
+                || tryCut(mpos.add(new Vec3(0,-self.getBbWidth()*1.4f,0)))
+                || tryCut(mpos.add(new Vec3(0,-self.getBbWidth()*1.6f,0)))
+        );
+    }
+
+    public boolean canCutX(){
+
+        Vec3 mpos = this.self.getPosition(1F);
+        if (tryCutEast(mpos)){
+            if (tryCutWest(mpos))
+                return false;
+            cutDirection = Direction.EAST;
+        } else if (tryCutWest(mpos)){
+            cutDirection = Direction.WEST;
+        } else if (tryCutSouth(mpos)){
+            if (tryCutNorth(mpos))
+                return false;
+            cutDirection = Direction.SOUTH;
+        } else if (tryCutNorth(mpos)){
+            cutDirection = Direction.NORTH;
+        } else if (tryCutUp(mpos)){
+            if (tryCutDown(mpos))
+                return false;
+            cutDirection = Direction.UP;
+        } else if (tryCutDown(mpos)){
+            cutDirection = Direction.DOWN;
+        } else {
+            return false;
+        }
+        return true;
+    }
+    record DirDist(Direction dir, float dist) {}
+    public boolean canCut(){
+
+        Vec3 mpos = this.self.getPosition(1F);
+
+        float northTest = -1*-1*(float) (lastGroundPosition.z - mpos.z);
+        float southTest = -1*(float) (lastGroundPosition.z - mpos.z);
+        float eastTest = -1*(float) (lastGroundPosition.x - mpos.x);
+        float westTest =  -1*-1*(float) (lastGroundPosition.x - mpos.x);
+        float upTest = -1*(float) (lastGroundPosition.y - mpos.y);
+        float downTest = -1*-1*(float) (lastGroundPosition.y - mpos.y);
+        List<DirDist> tests = List.of(
+                new DirDist(Direction.NORTH, northTest),
+                new DirDist(Direction.SOUTH, southTest),
+                new DirDist(Direction.EAST,  eastTest),
+                new DirDist(Direction.WEST,  westTest),
+                new DirDist(Direction.UP,    upTest),
+                new DirDist(Direction.DOWN,  downTest)
+        );
+
+        List<DirDist> ordered = new ArrayList<>(tests);
+        ordered.sort(Comparator.comparing(d -> d.dist()));
+
+        for (DirDist test : ordered) {
+            boolean success = switch (test.dir()) {
+                case EAST  -> tryCutEast(mpos);
+                case WEST  -> tryCutWest(mpos);
+                case NORTH -> tryCutNorth(mpos);
+                case SOUTH -> tryCutSouth(mpos);
+                case UP    -> tryCutUp(mpos);
+                case DOWN  -> tryCutDown(mpos);
+            };
+
+            if (success) {
+                cutDirection = test.dir();
+                if (cutDirection == Direction.EAST)
+                    if (tryCutWest(mpos))
+                        return false;
+                if (cutDirection == Direction.WEST)
+                    if (tryCutEast(mpos))
+                        return false;
+                if (cutDirection == Direction.NORTH)
+                    if (tryCutSouth(mpos))
+                        return false;
+                if (cutDirection == Direction.SOUTH)
+                    if (tryCutNorth(mpos))
+                        return false;
+                if (cutDirection == Direction.UP)
+                    if (tryCutDown(mpos))
+                        return false;
+                if (cutDirection == Direction.DOWN)
+                    if (tryCutUp(mpos))
+                        return false;
+                return true;
+            }
+        }
+        return false;
+    }
+    @Override
+    //Stands sending simple message
+    public void serverQueried(){
+        //Make
+        if (self instanceof ServerPlayer pl) {
+            S2CPacketUtil.sendGenericIntToClientPacket(pl, PacketDataIndex.S2C_INT_STAND_MODE,
+                    cutCorners);
+        }
+    }
+    public void serverQueried2(){
+        if (self instanceof ServerPlayer pl) {
+            toggleSpikes(false);
+        }
+    }
+
+    public void serverSetCutCorners(){
+        if (canCutCorners()){
+            setCutCorners(1);
+            ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.walking.cut_ff").withStyle(ChatFormatting.DARK_PURPLE), true);
+        } else {
+            setCutCorners(2);
+            ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.walking.cut_on").withStyle(ChatFormatting.DARK_PURPLE), true);
+        }
+    }
+
+    public void setCutCorners(int corners){
+        //Make
+        if (self instanceof ServerPlayer pl) {
+            cutCorners = corners;
+            S2CPacketUtil.sendGenericIntToClientPacket(pl, PacketDataIndex.S2C_INT_STAND_MODE,
+                    corners);
+        }
+    }
+
+    @Override
+    public void clientIntUpdated(int integer){
+        cutCorners = integer;
+    }
+
+    public Vec3 lastGroundPosition = Vec3.ZERO;
+
     public int lastTick = 0;
     public void tickPower() {
         if (lastTick != self.tickCount){
             setHeelExtension(getHeelExtension()-1);
             lastTick = self.tickCount;
         }
-        if (this.self.level().isClientSide()) {
-            if (!inCombatMode()){
-                currentKickTicks = 0;
-            } else if (currentKickTicks < chargeKickTicks()){
-                currentKickTicks++;
-            }
 
-            if (hasExtendedHeelsForWalking() && !getStandUserSelf().rdbt$getJumping()){
-                if (!self.onGround()) {
-                    if (this.self.getDeltaMovement().y < 0){
-                        this.self.setDeltaMovement(this.self.getDeltaMovement().add(0,-0.14,0));
+
+
+        if (this.self.level().isClientSide()) {
+
+            if (isPacketPlayer()){
+
+                Vec3 newVec = new Vec3(0, -0.2, 0);
+                Vec3 newVec2 = new Vec3(0, -1.0, 0);
+                Vec3 newVec4 = new Vec3(0, -0.5, 0);
+                Vec3 newVec5 = new Vec3(0, -1.1, 0);
+
+                newVec = RotationUtil.vecPlayerToWorld(newVec, ((IGravityEntity) self).roundabout$getGravityDirection());
+                BlockPos pos = BlockPos.containing(self.getPosition(1).add(newVec));
+                newVec2 = RotationUtil.vecPlayerToWorld(newVec2, ((IGravityEntity) self).roundabout$getGravityDirection());
+                BlockPos pos2 = BlockPos.containing(self.getPosition(1).add(newVec2));
+                newVec4 = RotationUtil.vecPlayerToWorld(newVec4, ((IGravityEntity) self).roundabout$getGravityDirection());
+                BlockPos pos4 = BlockPos.containing(self.getPosition(1).add(newVec4));
+                newVec5 = RotationUtil.vecPlayerToWorld(newVec5, ((IGravityEntity) self).roundabout$getGravityDirection());
+                BlockPos pos5 = BlockPos.containing(self.getPosition(1).add(newVec5));
+
+
+                if (cutCorners == 0 && self instanceof Player) {
+                    cutCorners = 1;
+                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.QUERY_STAND_UPDATE);
+                } else if (canCutCorners()) {
+                    slowHeelTicks = 20;
+                } else {
+                    if (slowHeelTicks > 0) {
+                        slowHeelTicks--;
                     }
                 }
-            }
+
+
+                if (!inCombatMode()) {
+                    currentKickTicks = 0;
+                } else if (currentKickTicks < chargeKickTicks()) {
+                    currentKickTicks++;
+                }
+
+                if (hasExtendedHeelsForWalking() && !getStandUserSelf().rdbt$getJumping()) {
+                    if (!self.onGround()) {
+                        if (this.self.getDeltaMovement().y < 0) {
+                            if (!(canCutCorners() && justFlippedTicks > 0)) {
+                                this.self.setDeltaMovement(this.self.getDeltaMovement().add(0, -0.14, 0));
+                            }
+                        }
+                    }
+                }
+
+
+                if (self.isSwimming()) {
+                    toggleSpikes(false);
+                    C2SPacketUtil.trySingleBytePacket(
+                            PacketDataIndex.QUERY_STAND_UPDATE_2
+                    );
+                }
+                if (inCombatMode() && isBlockedByStone()) {
+                    switchModes();
+                }
+
+                if (hasExtendedHeelsForWalking()) {
+                    if (justFlippedTicks > 0) {
+                        justFlippedTicks--;
+                    } else {
+                        if (self.onGround() && MainUtil.isBlockWalkableSimplified(self.getBlockStateOn())) {
+                            mercyTicks = 5;
+                            lastGroundPosition = self.position();
+                        } else {
+                            if (
+                                    (
+                                            MainUtil.isBlockWalkable(self.level().getBlockState(pos))
+                                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos2))
+                                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos4))
+                                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos5))
+                                    )) {
+                                mercyTicks--;
+                            } else {
+                                if (canCutCorners()) {
+                                    if (mercyTicks > 4) {
+                                        mercyTicks = 4;
+                                    }
+                                    mercyTicks -= 1;
+                                    if (canCut() && cutDirection != ((IGravityEntity) this.self).roundabout$getGravityDirection()) {
+                                        ((IGravityEntity) this.self).roundabout$setGravityDirection(cutDirection);
+                                        setHeelDirection(cutDirection);
+                                        justFlippedTicks = 5;
+                                        C2SPacketUtil.intToServerPacket(
+                                                PacketDataIndex.INT_GRAVITY_FLIP, MainUtil.getIntFromDirection(heelDirection)
+                                        );
+                                    }
+                                } else {
+                                    mercyTicks = 0;
+                                }
+                            }
+                        }
+                        if (self.isSleeping() || (( ( !self.onGround() && !this.getStandUserSelf().roundabout$isPossessed() ) ) && mercyTicks <= 0) || self.getRootVehicle() != this.self) {
+                            heelDirection = Direction.DOWN;
+                            if (((IGravityEntity) this.self).roundabout$getGravityDirection() != heelDirection) {
+                                grantFallImmunity();
+                            }
+                            toggleSpikes(false);
+                            C2SPacketUtil.trySingleBytePacket(
+                                    PacketDataIndex.QUERY_STAND_UPDATE_2
+                            );
+                            ((IGravityEntity) this.self).roundabout$setGravityDirection(heelDirection);
+                            setHeelDirection(heelDirection);
+                            justFlippedTicks = 5;
+                            C2SPacketUtil.intToServerPacket(
+                                    PacketDataIndex.INT_GRAVITY_FLIP, MainUtil.getIntFromDirection(heelDirection)
+                            );
+                        }
+                    }
+
+                } else {
+                    setHeelDirection(Direction.DOWN);
+                }
+        }
+
         } else {
 
-            if (inCombatMode() && isBlockedByStone()){
-                switchModes();
+
+            if (!hasExtendedHeelsForWalking()){
+                hitsSinceAttached = 0;
+                setHeelDirection(Direction.DOWN);
             }
 
-            if (hasExtendedHeelsForWalking()){
-                if (justFlippedTicks > 0){
-                    justFlippedTicks--;
-                } else {
-                    Vec3 newVec = new Vec3(0,-0.2,0);
-                    Vec3 newVec2 = new Vec3(0,-1.0,0);
-                    Vec3 newVec4 = new Vec3(0,-0.5,0);
-                    Vec3 newVec5 = new Vec3(0,-1.1,0);
+            Vec3 newVec = new Vec3(0,-0.2,0);
+            Vec3 newVec4 = new Vec3(0,-0.5,0);
 
-                    newVec = RotationUtil.vecPlayerToWorld(newVec,((IGravityEntity)self).roundabout$getGravityDirection());
-                    BlockPos pos = BlockPos.containing(self.getPosition(1).add(newVec));
-                    newVec2 = RotationUtil.vecPlayerToWorld(newVec2,((IGravityEntity)self).roundabout$getGravityDirection());
-                    BlockPos pos2 = BlockPos.containing(self.getPosition(1).add(newVec2));
-                    newVec4 = RotationUtil.vecPlayerToWorld(newVec4,((IGravityEntity)self).roundabout$getGravityDirection());
-                    BlockPos pos4 = BlockPos.containing(self.getPosition(1).add(newVec4));
-                    newVec5 = RotationUtil.vecPlayerToWorld(newVec5,((IGravityEntity)self).roundabout$getGravityDirection());
-                    BlockPos pos5 = BlockPos.containing(self.getPosition(1).add(newVec5));
-
-                    BlockState state1 = self.level().getBlockState(pos);
-                    BlockState state2 = self.level().getBlockState(pos2);
-                    BlockState state4 = self.level().getBlockState(pos4);
-                    BlockState state5 = self.level().getBlockState(pos5);
-                    boolean isOnValidBlock =  MainUtil.isBlockWalkableSimplified(state1)
-                            && MainUtil.isBlockWalkableSimplified(state2)
-                            && MainUtil.isBlockWalkableSimplified(state4)
-                            && MainUtil.isBlockWalkableSimplified(state5);
-
-                    if (self.onGround() && MainUtil.isBlockWalkableSimplified(self.getBlockStateOn())
-                    && isOnValidBlock){
-                        mercyTicks = 5;
-                    } else {
-                        if (
-                                (
-                                        MainUtil.isBlockWalkable(self.level().getBlockState(pos))
-                                                || MainUtil.isBlockWalkable(self.level().getBlockState(pos2))
-                                                || MainUtil.isBlockWalkable(self.level().getBlockState(pos4))
-                                                || MainUtil.isBlockWalkable(self.level().getBlockState(pos5))
-                                )){
-                            mercyTicks--;
-                        } else {
-                            mercyTicks = 0;
-                        }
-                    }
-                    if (self.isSleeping() || ((!self.onGround() || !isOnValidBlock) && mercyTicks <= 0) || self.getRootVehicle() != this.self) {
-                        heelDirection = Direction.DOWN;
-                        if (((IGravityEntity) this.self).roundabout$getGravityDirection() != heelDirection){
-                            grantFallImmunity();
-                        }
-                        toggleSpikes(false);
-                        ((IGravityEntity) this.self).roundabout$setGravityDirection(heelDirection);
-                        setHeelDirection(heelDirection);
-                    }
-                }
-
-            } else {
-                setHeelDirection(Direction.DOWN);
+            newVec = RotationUtil.vecPlayerToWorld(newVec,((IGravityEntity)self).roundabout$getGravityDirection());
+            BlockPos pos = BlockPos.containing(self.getPosition(1).add(newVec));
+            newVec4 = RotationUtil.vecPlayerToWorld(newVec4,((IGravityEntity)self).roundabout$getGravityDirection());
+            BlockPos pos4 = BlockPos.containing(self.getPosition(1).add(newVec4));
+            BlockState state1 = self.level().getBlockState(pos);
+            BlockState state4 = self.level().getBlockState(pos4);
+            boolean isOnValidBlock =  MainUtil.isBlockWalkableSimplified(state1)
+                    && MainUtil.isBlockWalkableSimplified(state4);
+            if (!isOnValidBlock){
+                toggleSpikes(false);
             }
         }
 
@@ -788,6 +1190,19 @@ public class PowersWalkingHeart extends NewDashPreset {
         }
 
         super.tickPower();
+    }
+
+    @Override
+    public float getStepHeightAddon(){
+        if (hasExtendedHeelsForWalking()){
+            if (canWallWalkConfig())
+                return 0.4F;
+            else
+                return 2.0F;
+        } else if (!(self instanceof Player)){
+            return 3.0F;
+        }
+        return 0;
     }
 
     public int getRaiseTicks(){
@@ -830,7 +1245,6 @@ public class PowersWalkingHeart extends NewDashPreset {
         buttonInputSpike(keyIsDown,options,true);
         return true;
     }
-
 
     public boolean holdDownClick = false;
     public boolean consumeClickInput = false;
@@ -925,12 +1339,20 @@ public class PowersWalkingHeart extends NewDashPreset {
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
         if (canWallWalkConfig()) {
             $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.wall_walk_move",
-                    "instruction.roundabout.press_skill", StandIcons.WALL_WALK, 3, level, bypass));
+                    "instruction.roundabout.press_skill_air", StandIcons.WALL_WALK, 3, level, bypass));
             $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.firm_swing",
                     "instruction.roundabout.passive", StandIcons.FIRM_SWING, 0, level, bypass));
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.fall_disperse",
+                    "instruction.roundabout.passive", StandIcons.FALL_ABSORB, 0, level, bypass));
+            if (canCornerCutConfig()) {
+                $$1.add(drawSingleGUIIcon(context, 18, leftPos + 57, topPos + 80, 0, "ability.roundabout.corner_cut",
+                        "instruction.roundabout.press_skill", StandIcons.WALL_CUT, 4, level, bypass));
+            }
         } else {
             $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.firm_swing",
                     "instruction.roundabout.passive", StandIcons.FIRM_SWING, 0, level, bypass));
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.fall_disperse",
+                    "instruction.roundabout.passive", StandIcons.FALL_ABSORB, 0, level, bypass));
         }
         return $$1;
     }
@@ -946,6 +1368,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                 $$1.add(WalkingHeartEntity.MODEL_SKIN);
                 $$1.add(WalkingHeartEntity.PURPLE_SKIN);
             }if (Level > 2 || bypass) {
+                $$1.add(WalkingHeartEntity.SCARECROW_SKIN);
                 $$1.add(WalkingHeartEntity.VALENTINE_SKIN);
                 $$1.add(WalkingHeartEntity.VERDANT_SKIN);
             }if (Level > 3 || bypass) {
@@ -980,13 +1403,15 @@ public class PowersWalkingHeart extends NewDashPreset {
             return Component.translatable(  "skins.roundabout.walking_heart.gothic");
         } else if (skinId == WalkingHeartEntity.SPIDER_SKIN){
             return Component.translatable(  "skins.roundabout.walking_heart.spider");
+        } else if (skinId == WalkingHeartEntity.SCARECROW_SKIN){
+            return Component.translatable(  "skins.roundabout.walking_heart.scarecrow");
         }
         return Component.translatable(  "skins.roundabout.walking_heart.base");
     }
 
 
     public static int chargeKickTicks(){
-        return 8;
+        return 9;
     }
     public int currentKickTicks = 0;
 

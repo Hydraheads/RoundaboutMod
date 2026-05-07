@@ -1,20 +1,25 @@
 package net.hydra.jojomod.access;
 
-import net.hydra.jojomod.event.powers.visagedata.VisageData;
+import net.hydra.jojomod.event.VampireData;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
+import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.util.PlayerMaskSlots;
 import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 
 public interface IPlayerEntity {
     Inventory roundabout$GetInventory();
     boolean roundabout$getBlinded();
     byte roundabout$getModChest();
+    float rdbt$mutualMiningSpeedFunction(BlockState $$0, StandPowers powers);
+    float rdbt$mutualMiningSpeedFunction2(BlockState $$0, GeneralPowers powers);
     void roundabout$setModChest(byte chestType);
     void roundabout$setBlinded(boolean blinded);
     void roundabout$SetPos(byte Pos);
+    void roundabout$SetPos2(byte Pos);
     int roundabout$getAirTime();
     int roundabout$getClientDodgeTime();
     int roundabout$getControlling();
@@ -29,10 +34,43 @@ public interface IPlayerEntity {
     void roundabout$setShapeShift(byte level);
     void roundabout$shapeShiftSilent();
     void roundabout$shapeShift();
+    void rdbt$setRespawnStrategy(byte strat);
+    byte rdbt$getRespawnStrategy();
+    void roundabout$setPower(byte style);
+    byte roundabout$getPower();
+    void roundabout$setPowerWithPenalty(byte style);
+
+    /// Zombie Fate's zombie silverfish count
+    void rdbt$setZombieFish(int fish);
+    int rdbt$getZombieFish();
+
+    /// bypasses the combat mode overrides
+    ItemStack roundabout$getForRealMainHand();
+    ItemStack roundabout$getForRealOffHand();
+
+    float rdbt$getHairColorX();
+    float rdbt$getHairColorY();
+    float rdbt$getHairColorZ();
+    void rdbt$setHairColorX(float color);
+    void rdbt$setHairColorY(float color);
+    void rdbt$setHairColorZ(float color);
+
+    void roundabout$setFate(byte style);
+    byte roundabout$getFate();
+    void roundabout$qmessage(int messageID);
+
+    void rdbt$queryServerForCooldowns();
+    boolean rdbt$getCooldownQuery();
+    void rdbt$setCooldownQuery(boolean query);
+
+
+    void rdbt$setVampireData(VampireData vdata);
+    VampireData rdbt$getVampireData();
     void roundabout$setShapeShiftExtraData(byte level);
     byte roundabout$getShapeShift();
     byte roundabout$getShapeShiftExtraData();
     byte roundabout$GetPos();
+    byte roundabout$GetPos2();
     void roundabout$SetPoseEmote(byte Pos);
     byte roundabout$GetPoseEmote();
     void roundabout$addKnife();
@@ -58,6 +96,7 @@ public interface IPlayerEntity {
     void roundabout$setStandSkin(byte level);
     void roundabout$setIdlePos(byte level);
     byte roundabout$getIdlePos();
+    AnimationState roundabout$getBarrageArms();
     byte roundabout$getTeam();
     void roundabout$setTeamColor(byte color);
     byte roundabout$getTeamColor();
@@ -80,17 +119,13 @@ public interface IPlayerEntity {
     AnimationState roundabout$getBubbleAim();
     int roundabout$getBubbleShotAimPoints();
     void roundabout$setBubbleShotAimPoints(int shotPoints);
+
+
+    AnimationState roundabout$getItemAnimationActive();
+    AnimationState roundabout$getItemAnimation();
+
     AnimationState roundabout$getBubbleShotAim();
     AnimationState roundabout$getOffsetCorrect();
-    AnimationState getWry();
-    AnimationState getGiorno();
-    AnimationState getKoichi();
-    AnimationState getOhNo();
-    AnimationState getJoseph();
-    AnimationState getTortureDance();
-    AnimationState getWamuu();
-    AnimationState getJonathan();
-    AnimationState getJotaro();
-    AnimationState getWatch();
+    AnimationState getStyleAnimation();
 
 }

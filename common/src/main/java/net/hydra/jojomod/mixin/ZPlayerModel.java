@@ -1,17 +1,25 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerModel;
+import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.models.layers.anubis.AnubisAnimations;
 import net.hydra.jojomod.client.models.layers.animations.FirstPersonLayerAnimations;
-import net.hydra.jojomod.event.index.Poses;
+import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.powers.GeneralPowers;
+import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
-import net.hydra.jojomod.item.MaskItem;
-import net.hydra.jojomod.item.ModificationMaskItem;
+import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.animation.AnimationChannel;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.animation.Keyframe;
@@ -24,10 +32,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Vector3f;
@@ -39,10 +44,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Mixin(PlayerModel.class)
 public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel<T> implements IPlayerModel {
@@ -60,6 +62,12 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
     @Shadow @Final public ModelPart leftSleeve;
 
+    @Shadow @Final public ModelPart rightPants;
+
+    @Shadow @Final public ModelPart leftPants;
+
+    @Shadow @Final private ModelPart ear;
+
     public ZPlayerModel(ModelPart $$0) {
         super($$0);
     }
@@ -68,6 +76,16 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
     @Unique
     public boolean roundabout$getSlim(){
         return this.slim;
+    }
+    @Override
+    @Unique
+    public ModelPart roundabout$getEar(){
+        return this.ear;
+    }
+    @Override
+    @Unique
+    public ModelPart roundabout$getCloak(){
+        return this.cloak;
     }
 
 
@@ -101,12 +119,13 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             two.xRot = 0.0F;
             boolean change = false;
             float yes = $$0.tickCount;
+           boolean offsetCorrect = true;
             if (!ClientUtil.checkIfGamePaused() && !((TimeStop)$$0.level()).CanTimeStopEntity($$0)){
                 yes+=ClientUtil.getFrameTime();
             }
             IPlayerEntity ipe = ((IPlayerEntity) $$0);
             StandUser SE = ((StandUser) $$0);
-            if (SE.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && SE.roundabout$getEffectiveCombatMode()) {
+            if (SE.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && SE.roundabout$getEffectiveCombatMode() && PowerTypes.hasStandActivelyEquipped($$0)) {
                 if (ipe.roundabout$getBubbleShotAimPoints() > 0){
                     ipe.roundabout$getBubbleShotAim().startIfStopped($$0.tickCount); change = true;
                     this.roundabout$animate(ipe.roundabout$getBubbleShotAim(), FirstPersonLayerAnimations.bubble_aim_recoil, yes, 1f);
@@ -119,28 +138,101 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             } else {
                 ipe.roundabout$getBubbleAim().stop();
                 ipe.roundabout$getBubbleShotAim().stop();
+
+            }
+
+
+            byte posByte = ((IPlayerEntity) $$0).roundabout$GetPos2();
+            if (posByte == PlayerPosIndex.GUARD) {
+                this.rightArm.yRot = 0.1F;
+                this.leftArm.yRot = -0.1F;
+
+                //yrot = arm spinny, zrot = arm go up and down
+
+                this.rightArm.xRot = -1F;
+                this.leftArm.xRot = -1F;
+                offsetCorrect = false;
+                change = true;
+            } else if (posByte == PlayerPosIndex.BARRAGE_CHARGE){
+                this.rightArm.yRot = 0.1F;
+                this.leftArm.yRot = -0.1F;
+                this.rightArm.xRot = -0.4F;
+                this.leftArm.xRot = -0.4F;
+                offsetCorrect = false;
+                change = true;
+            } else if (posByte == PlayerPosIndex.SWEEP_KICK){
+                boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
+                GeneralPowers gp = ((IPowersPlayer)$$0).rdbt$getPowers();
+                int amt = Mth.clamp(gp.attackTimeDuring,0,10);
+                if ($$9){
+                    this.rightLeg.copyFrom(one);
+                    this.rightPants.copyFrom(one);
+                    ps.pushPose();
+                    ps.translate(0.05,0,-0.1);
+                    ps.mulPose(Axis.XP.rotationDegrees(90-(36*amt)-(ClientUtil.getFrameTime()*36)));
+
+                    RenderType tl = RenderType.entityTranslucentCull($$0.getSkinTextureLocation());
+                    if (ClientUtil.hasChangedLegs($$0)){
+                        tl = RenderType.entityTranslucent(ClientUtil.getChangedLegTexture($$0));
+                    }
+                    rightLeg.render(ps, mb.getBuffer(tl), packedLight, OverlayTexture.NO_OVERLAY);
+                    tl = RenderType.entityTranslucent($$0.getSkinTextureLocation());
+                    if (ClientUtil.hasChangedLegs($$0)){
+                        tl = RenderType.entityTranslucent(ClientUtil.getChangedLegTexture($$0));
+                    }
+                    rightPants.render(ps, mb.getBuffer(tl), packedLight, OverlayTexture.NO_OVERLAY);
+                    ps.popPose();
+                }
+                return true;
             }
 
             if (change){
-                ipe.roundabout$getOffsetCorrect().startIfStopped($$0.tickCount);
-                this.roundabout$animate(ipe.roundabout$getOffsetCorrect(), FirstPersonLayerAnimations.offsetCorrect, yes, 1f);
+                if (offsetCorrect) {
+                    ipe.roundabout$getOffsetCorrect().startIfStopped($$0.tickCount);
+                    this.roundabout$animate(ipe.roundabout$getOffsetCorrect(), FirstPersonLayerAnimations.offsetCorrect, yes, 1f);
+                } else {
+                    ipe.roundabout$getOffsetCorrect().stop();
+                }
                 this.rightSleeve.copyFrom(this.rightArm);
                 this.leftSleeve.copyFrom(this.leftArm);
-                one.render(ps, mb.getBuffer(RenderType.entityTranslucentCull($$0.getSkinTextureLocation())), packedLight, OverlayTexture.NO_OVERLAY);
-                two.render(ps, mb.getBuffer(RenderType.entityTranslucent($$0.getSkinTextureLocation())), packedLight, OverlayTexture.NO_OVERLAY);
+                RenderType tl = RenderType.entityTranslucentCull($$0.getSkinTextureLocation());
+                if (ClientUtil.hasChangedArms($$0)){
+                    tl = RenderType.entityTranslucent(ClientUtil.getChangedArmTexture($$0));
+                }
+                one.render(ps, mb.getBuffer(tl), packedLight, OverlayTexture.NO_OVERLAY);
+                tl = RenderType.entityTranslucent($$0.getSkinTextureLocation());
+                if (ClientUtil.hasChangedArms($$0)){
+                    tl = RenderType.entityTranslucent(ClientUtil.getChangedArmTexture($$0));
+                }
+                two.render(ps, mb.getBuffer(tl), packedLight, OverlayTexture.NO_OVERLAY);
                 return true;
             }
         }
         return false;
     }
+
+    @Unique
+    public boolean rdbt$isNotPosing(LivingEntity player){
+        if (player instanceof Player PE){
+            IPlayerEntity ipe = ((IPlayerEntity) player);
+            Poses pose = Poses.getPosFromByte(ipe.roundabout$GetPoseEmote());
+            return pose == Poses.NONE;
+        }
+        return true;
+    }
+
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/geom/ModelPart;copyFrom(Lnet/minecraft/client/model/geom/ModelPart;)V", shift = At.Shift.BEFORE, ordinal = 0))
     public void roundabout$SetupAnim2(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
 
-        if ($$0 instanceof Player) {
+        if ($$0 instanceof Player P) {
+            StandUser SU = (StandUser) P;
             IPlayerEntity ipe = ((IPlayerEntity) $$0);
-            boolean pose = ipe.roundabout$GetPoseEmote() != Poses.NONE.id;
-            if (pose) {
-                this.head.resetPose();
+            byte poseEmote = ipe.roundabout$GetPoseEmote();
+            boolean pose = poseEmote != Poses.NONE.id;
+            if (pose && !P.isPassenger() && !P.isVisuallySwimming() && !P.isFallFlying()) {
+                if (poseEmote != Poses.SITTING.id) {
+                    this.head.resetPose();
+                }
                 this.body.resetPose();
                 this.rightLeg.resetPose();
                 this.leftLeg.resetPose();
@@ -148,59 +240,159 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 this.leftArm.resetPose();
             }
 
-            this.roundabout$animate(ipe.getWry(), Poses.WRY.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getGiorno(), Poses.GIORNO.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getJoseph(), Poses.JOSEPH.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getKoichi(), Poses.KOICHI.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getOhNo(), Poses.OH_NO.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getTortureDance(), Poses.TORTURE_DANCE.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getWamuu(), Poses.WAMUU.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getJotaro(), Poses.JOTARO.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getJonathan(), Poses.JONATHAN.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getWatch(), Poses.WATCH.ad, $$3, 1f);
+            boolean firstPerson = net.minecraft.client.Minecraft.getInstance().options.getCameraType().isFirstPerson();
+            Player mainP = ClientUtil.getPlayer();
+            if (!firstPerson || !(mainP != null && $$0.is(mainP))){
+                if (!P.isPassenger() && !P.isVisuallySwimming() && !P.isFallFlying()) {
+                    if (Poses.getAnimation(P) != null) {
+                        this.roundabout$animate(ipe.getStyleAnimation(),Poses.getAnimation(P),$$3,1f);
+                    }
+                }
+
+                if ($$0.getUseItem().is(ModItems.ANUBIS_ITEM)) {
+                    ipe.roundabout$getItemAnimation().startIfStopped($$0.tickCount);
+                    this.leftArm.xRot = 0;
+                    this.leftArm.yRot = 0;
+                    this.rightArm.xRot = 0;
+                    this.rightArm.yRot = 0;
+                    this.roundabout$animate(ipe.roundabout$getItemAnimation(), $$0.getMainArm() == HumanoidArm.LEFT ? AnubisAnimations.L_Unsheathe : AnubisAnimations.Unsheathe, $$3, 1F);
+                } else {
+                    ipe.roundabout$getItemAnimation().stop();
+                }
+                if ($$0.getUseItem().is(ModItems.ANUBIS_ITEM)
+                        || (SU.roundabout$getStandPowers() instanceof PowersAnubis
+                        && PowerTypes.hasStandActive(P)
+                        && SU.roundabout$getStandAnimation() != PowerIndex.NONE) ) {
+
+                    if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
+                        if (SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+                            this.leftLeg.resetPose();
+                            this.rightLeg.resetPose();
+                            this.head.resetPose();
+                            this.body.resetPose();
+                        }
+                    }
+
+                }
+
+                if (SU.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(P)) {
+                    AnimationDefinition anim = PowersAnubis.getAnimation(SU);
+                    if (anim != null) {
+                        this.leftArm.xRot = 0;
+                        this.leftArm.yRot = 0;
+                        this.rightArm.xRot = 0;
+                        this.rightArm.yRot = 0;
+                        SU.roundabout$getWornStandAnimation().startIfStopped($$0.tickCount);
+                        this.roundabout$animate(SU.roundabout$getWornStandAnimation(), anim, $$3, 1F);
+                    } else {
+                        SU.roundabout$getWornStandAnimation().stop();
+                    }
+
+                }
+
+
+            }
 
             /**Shoot mode aiming*/
             StandUser user = ((StandUser)$$0);
-            if (user.roundabout$getEffectiveCombatMode() && !$$0.isUsingItem()){
-                if (user.roundabout$rotateArmToShoot()){
-                    boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
-                    if ($$9) {
-                        this.rightArm.yRot = -0.1F + this.head.yRot;
-                        this.rightArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
-                    } else {
-                        this.leftArm.yRot = 0.1F + this.head.yRot;
-                        this.leftArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
-                    }
-                } else if (user.roundabout$getStandPowers() instanceof PowersWalkingHeart){
-                    boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
-                    if ($$9) {
+            if (rdbt$isNotPosing($$0)) {
+                if (user.roundabout$getEffectiveCombatMode() && !$$0.isUsingItem()) {
+                    if (user.roundabout$rotateArmToShoot(HumanoidArm.LEFT) || user.roundabout$rotateArmToShoot(HumanoidArm.RIGHT))  {
+                        if (user.roundabout$rotateArmToShoot(HumanoidArm.RIGHT)) {
+                            this.rightArm.yRot = -0.1F + this.head.yRot;
+                            this.rightArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+                        }
+                        if (user.roundabout$rotateArmToShoot(HumanoidArm.LEFT)) {
+                            this.leftArm.yRot = 0.1F + this.head.yRot;
+                            this.leftArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+                        }
+                    } else if (user.roundabout$getStandPowers() instanceof PowersWalkingHeart && PowerTypes.hasStandActivelyEquipped($$0)) {
+                        boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
+                        if ($$9) {
+                            this.rightLeg.yRot = -0.1F + this.head.yRot;
+                            this.rightLeg.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+
+                            this.rightLeg.xRot = Math.max(this.rightLeg.xRot, -2.5f);
+                            this.rightLeg.xRot -= 0.2f;
+
+
+                            this.leftLeg.yRot = 0;
+                            this.leftLeg.xRot = 0;
+                            this.leftLeg.zRot = 0;
+                        } else {
+                            this.leftLeg.yRot = 0.1F + this.head.yRot;
+                            this.leftLeg.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+
+                            this.leftLeg.xRot = Math.max(this.leftLeg.xRot, -2.5f);
+                            this.leftLeg.xRot -= 0.2f;
+
+                            this.rightLeg.yRot = 0;
+                            this.rightLeg.xRot = 0;
+                            this.rightLeg.zRot = 0;
+                        }
+                        this.rightArm.zRot = 0.5F;
+                        this.leftArm.zRot = -0.5F;
+                        this.rightArm.xRot = 0F;
+                        this.leftArm.xRot = 0F;
+                        this.rightArm.yRot = 0F;
+                        this.leftArm.yRot = 0F;
+                    } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.GUARD) {
+                        float curve = ((float) (-Math.PI / 2) + this.head.xRot) / 3;
+                        this.rightArm.yRot = -0.9F;
+                        this.rightArm.xRot = -1.1F + curve;
+                        this.leftArm.yRot = 0.9F;
+                        this.leftArm.xRot = -1.4F + curve;
+                    } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.BARRAGE_CHARGE) {
+                        float curve = ((float) (-Math.PI / 2) + this.head.xRot) / 3;
+                        this.rightArm.yRot = 0.4F;
+                        this.rightArm.xRot = -0F + curve;
+                        this.leftArm.yRot = -0.4F;
+                        this.leftArm.xRot = -0F + curve;
+                    } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.SWEEP_KICK) {
                         this.rightLeg.yRot = -0.1F + this.head.yRot;
                         this.rightLeg.xRot = (float) (-Math.PI / 2) + this.head.xRot;
 
-                        this.rightLeg.xRot = Math.max(this.rightLeg.xRot,-2.5f);
-                        this.rightLeg.xRot -=0.2f;
+                        this.rightLeg.xRot = Math.max(this.rightLeg.xRot, -2.5f);
+                        this.rightLeg.xRot -= 0.2f;
 
 
                         this.leftLeg.yRot = 0;
                         this.leftLeg.xRot = 0;
                         this.leftLeg.zRot = 0;
-                    } else {
-                        this.leftLeg.yRot = 0.1F + this.head.yRot;
-                        this.leftLeg.xRot = (float) (-Math.PI / 2) + this.head.xRot;
-
-                        this.leftLeg.xRot = Math.max(this.leftLeg.xRot,-2.5f);
-                        this.leftLeg.xRot -=0.2f;
-
-                        this.rightLeg.yRot = 0;
-                        this.rightLeg.xRot = 0;
-                        this.rightLeg.zRot = 0;
+                    } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.CLUTCH_WINDUP) {
+                        float curve = ((float) (-Math.PI / 2) + this.head.xRot) / 3;
+                        this.rightArm.yRot = 0.6F;
+                        this.rightArm.xRot = -0F + curve;
+                        this.leftArm.yRot = -0.6F;
+                        this.leftArm.xRot = -0F + curve;
+                    } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.CLUTCH_DASH) {
+                        float curve = ((float) (-Math.PI / 2) + this.head.xRot) / 3;
+                        this.rightArm.yRot = -0.2F;
+                        this.rightArm.xRot = -1.1F + curve;
+                        this.leftArm.yRot = 0.2F;
+                        this.leftArm.xRot = -1.4F + curve;
                     }
-                    this.rightArm.zRot=0.5F;
-                    this.leftArm.zRot=-0.5F;
-                    this.rightArm.xRot=0F;
-                    this.leftArm.xRot=0F;
-                    this.rightArm.yRot=0F;
-                    this.leftArm.yRot=0F;
+                } else if (MainUtil.isHoldingRoadRoller($$0) && FateTypes.isVampireStrong($$0)) {
+                    boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
+                    if ($$9) {
+                        this.rightArm.zRot = -0.175F + this.body.yRot;
+                        this.rightArm.xRot = (float) (-Math.PI / 1) + this.body.xRot;
+                        this.rightArm.y = -0.1F;
+                        this.leftArm.zRot = 0.175F + this.body.yRot;
+                        this.leftArm.xRot = (float) (-Math.PI / 1) + this.body.xRot;
+                        this.leftArm.y = -0.1F;
+                    } else {
+                        this.rightArm.zRot = -0.175F + this.body.yRot;
+                        this.rightArm.xRot = (float) (-Math.PI / 1) + this.body.xRot;
+                        this.rightArm.y = -0.1F;
+                        this.leftArm.zRot = 0.175F + this.body.yRot;
+                        this.leftArm.xRot = (float) (-Math.PI / 1) + this.body.xRot;
+                        this.leftArm.y = -0.1F;
+                    }
+                } else if ($$0.getUseItem().is(ModItems.ANUBIS_ITEM) && ClientUtil.checkIfIsFirstPerson((Player)$$0)) {
+                    this.rightArm.yRot = 0;
+                    this.rightArm.zRot = 0;
+                    this.rightArm.xRot = 0;
                 }
             }
             this.hat.copyFrom(this.head);
@@ -208,23 +400,43 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
     }
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "TAIL"))
     public void roundabout$SetupAnim3(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
-        if ($$0 instanceof Player) {
+        if ($$0 instanceof Player P) {
             IPlayerEntity ipe = ((IPlayerEntity) $$0);
+            StandUser SU = (StandUser) P;
 
+         //   Roundabout.LOGGER.info(""+ipe.roundabout$getItemAnimation().getAccumulatedTime());
 
             if (ipe.roundabout$GetPoseEmote() != Poses.NONE.id) {
 
                 this.cloak.resetPose();
-                this.roundabout$animate2(ipe.getWry(), Poses.WRY.ad, $$3, 1f);
-                this.roundabout$animate2(ipe.getGiorno(), Poses.GIORNO.ad, $$3, 1f);
-                this.roundabout$animate2(ipe.getJoseph(), Poses.JOSEPH.ad, $$3, 1f);
-                this.roundabout$animate2(ipe.getKoichi(), Poses.KOICHI.ad, $$3, 1f);
-                this.roundabout$animate2(ipe.getOhNo(), Poses.OH_NO.ad, $$3, 1f);
-                this.roundabout$animate2(ipe.getTortureDance(), Poses.TORTURE_DANCE.ad, $$3, 1f);
-                this.roundabout$animate2(ipe.getWamuu(), Poses.WAMUU.ad, $$3, 1f);
-                this.roundabout$animate2(ipe.getJotaro(), Poses.JOTARO.ad, $$3, 1f);
-                this.roundabout$animate2(ipe.getJonathan(), Poses.JONATHAN.ad, $$3, 1f);
-                this.roundabout$animate2(ipe.getWatch(), Poses.WATCH.ad, $$3, 1f);
+                if (!P.isPassenger() && !P.isVisuallySwimming() && !P.isFallFlying()) {
+                    if (Poses.getAnimation(P) != null) {
+                        this.roundabout$animate2(ipe.getStyleAnimation(), Poses.getAnimation(P), $$3, 1f);
+                    }
+                }
+
+                if ($$0.getUseItem().is(ModItems.ANUBIS_ITEM)) {
+                    ipe.roundabout$getItemAnimation().startIfStopped($$0.tickCount);
+                    this.leftArm.xRot = 0;
+                    this.leftArm.yRot = 0;
+                    this.rightArm.xRot = 0;
+                    this.rightArm.yRot = 0;
+                    this.roundabout$animate(ipe.roundabout$getItemAnimation(), $$0.getMainArm() == HumanoidArm.LEFT ? AnubisAnimations.L_Unsheathe : AnubisAnimations.Unsheathe, $$3, 1F);
+                } else {
+                    ipe.roundabout$getItemAnimation().stop();
+                }
+                AnimationDefinition anim = PowersAnubis.getAnimation(SU);
+                if (anim != null) {
+                    this.leftArm.xRot = 0;
+                    this.leftArm.yRot = 0;
+                    this.rightArm.xRot = 0;
+                    this.rightArm.yRot = 0;
+                    SU.roundabout$getWornStandAnimation().startIfStopped($$0.tickCount);
+                    this.roundabout$animate(SU.roundabout$getWornStandIdleAnimation(),anim,$$3,1F);
+                } else {
+                    SU.roundabout$getWornStandAnimation().stop();
+                }
+
                 if ($$0.getItemBySlot(EquipmentSlot.CHEST).isEmpty()) {
                         this.cloak.z += 0.0F;
                         this.cloak.y += 0.0F;
@@ -263,8 +475,33 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
                 }
             }
+
+            if ( SU.roundabout$isPossessed()  ) {
+                PathfinderMob poss = SU.roundabout$getPossessor();
+                if (poss != null && poss.getTarget() != null) {
+                    float xRot = (float) Math.toRadians(MainUtil.getLookAtEntityPitch(P,poss.getTarget()));
+                    this.head.xRot = xRot;
+                    this.hat.xRot = xRot;
+                    float yRot = (float) Math.toRadians(MainUtil.getLookAtEntityPitch(P,poss.getTarget()));
+                    this.head.yRot = yRot;
+                    this.hat.yRot = yRot;
+
+                }
+            }
+
         }
     }
+
+    @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V",at = @At(value = "HEAD"))
+    private void roundabout$modelRidingCancel(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
+        if ($$0.isPassenger()) {
+            Entity mount = $$0.getVehicle();
+            if (mount instanceof AnubisPossessorEntity) {
+                this.riding = false;
+            }
+        }
+    }
+
     @Unique
     protected void roundabout$animate(AnimationState $$0, AnimationDefinition $$1, float $$2, float $$3) {
         $$0.updateTime($$2, $$3);
@@ -391,17 +628,17 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
     @Unique
     public Optional<ModelPart> roundabout$getAnyDescendantWithName(String $$0) {
-        if (Objects.equals($$0, "body")){
+        if (Objects.equals($$0, "body")) {
             return Optional.of(this.body);
-        } else if (Objects.equals($$0, "head")){
+        } else if (Objects.equals($$0, "head")) {
             return Optional.of(this.head);
-        } else if (Objects.equals($$0, "right_leg")){
+        } else if (Objects.equals($$0, "right_leg")) {
             return Optional.of(this.rightLeg);
-        } else if (Objects.equals($$0, "left_leg")){
+        } else if (Objects.equals($$0, "left_leg")) {
             return Optional.of(this.leftLeg);
-        } else if (Objects.equals($$0, "right_arm")){
+        } else if (Objects.equals($$0, "right_arm")) {
             return Optional.of(this.rightArm);
-        } else if (Objects.equals($$0, "left_arm")){
+        } else if (Objects.equals($$0, "left_arm")) {
             return Optional.of(this.leftArm);
         }
         return Optional.empty();

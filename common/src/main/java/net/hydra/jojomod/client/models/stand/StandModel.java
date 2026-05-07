@@ -177,7 +177,9 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
                     }
                 }
                 float tickDelta2 = Math.min(tickDelta, 2);
-                rotX = ((mobEntity.getUser().getViewXRot(tickDelta2) % 360) - swimRotCorrect) * Mth.DEG_TO_RAD;
+                float r = mobEntity.getUser().getViewXRot(tickDelta2);
+
+                rotX = ((r % 360) - swimRotCorrect) * Mth.DEG_TO_RAD;
                 rotY = 0;
 
             } else if (animationStyle == OffsetIndex.FIXED_STYLE) {

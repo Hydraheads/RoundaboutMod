@@ -27,6 +27,6 @@ public class ModCriteria {
 
     public static void bootstrap()
     {
-        DIMENSION_HOP_TRIGGER = register(new DimensionHopCriterion());
+        //DIMENSION_HOP_TRIGGER = register(new DimensionHopCriterion());
     }
 }

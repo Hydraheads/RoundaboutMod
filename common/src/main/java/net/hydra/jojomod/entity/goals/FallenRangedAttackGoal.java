@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.goals;
 
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.corpses.FallenSkeleton;
 import net.hydra.jojomod.event.index.Tactics;
 import net.minecraft.world.entity.LivingEntity;
@@ -138,7 +139,7 @@ public class FallenRangedAttackGoal<T extends FallenSkeleton & RangedAttackMob> 
                         this.mob.stopUsingItem();
                     } else if ($$2) {
                         int $$5 = this.mob.getTicksUsingItem();
-                        if ($$5 >= 20) {
+                        if ($$5 >= 20 && mob.controller !=null && mob.controller.tickCount % ClientNetworking.getAppropriateConfig().justiceSettings.skeletonFireInterval == 0) {
                             this.mob.stopUsingItem();
                             this.mob.performRangedAttack($$0, BowItem.getPowerForTime($$5));
                             this.attackTime = this.attackIntervalMin;

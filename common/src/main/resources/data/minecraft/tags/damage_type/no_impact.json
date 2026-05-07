@@ -2,6 +2,9 @@
   "replace": false,
   "values": [
     "roundabout:stand_fire",
-    "roundabout:stand_virus"
+    "roundabout:stand_virus",
+    "roundabout:hamon",
+    "roundabout:vampire",
+    "roundabout:martial_arts"
   ]
 }

@@ -1,0 +1,24 @@
+{
+  "variants": {
+    "in_fog=false": {
+      "model": "roundabout:block/fog_block_invisible"
+    },
+    "in_fog=true": [
+      {
+        "model": "minecraft:block/pink_concrete_powder"
+      },
+      {
+        "model": "minecraft:block/pink_concrete_powder",
+        "y": 90
+      },
+      {
+        "model": "minecraft:block/pink_concrete_powder",
+        "y": 180
+      },
+      {
+        "model": "minecraft:block/pink_concrete_powder",
+        "y": 270
+      }
+    ]
+  }
+}

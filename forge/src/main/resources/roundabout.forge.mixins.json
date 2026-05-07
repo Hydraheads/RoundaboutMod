@@ -6,10 +6,15 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "ExperimentalFixD4CForge",
+    "ForgeCoffinSleepAtDayMixin",
+    "ForgeEatingMixin",
+    "ForgeLootTableMixin",
+    "ForgeMilkBucketMixin",
     "ForgePlayer",
     "ForgeServerPlayer"
   ],
   "client": [
+    "AnubisForgeToggleKeyMapping",
     "DimensionResourceKeyD4CForge",
     "ForgeClientPacketListener",
     "ForgeFireBlock",
@@ -17,7 +22,8 @@
     "ForgeGameRendererMixin",
     "ForgeHumanoidArmorLayer",
     "ForgeKillsScreenInputsFix",
-    "ForgeScreenEffectRenderer"
+    "ForgeScreenEffectRenderer",
+    "SaddleLayerManhattan"
   ],
   "server": [
   ],

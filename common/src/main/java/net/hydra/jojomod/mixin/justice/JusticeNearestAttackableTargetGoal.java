@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.justice;
 
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -37,6 +38,13 @@ public abstract class JusticeNearestAttackableTargetGoal<T extends LivingEntity>
                     ZE.setLastHurtByPlayer(null);
                     ZE.setLastHurtByMob(null);
                     ZE.setTarget(null);
+                }
+            } else {
+                //vampires cannot be targeted
+                if (FateTypes.isEvil(target)){
+                    if (target.getLastHurtMob() instanceof Zombie)
+                        return;
+                    target = null;
                 }
             }
         } else if (this.mob instanceof AbstractSkeleton ZE && target instanceof Player $$0){

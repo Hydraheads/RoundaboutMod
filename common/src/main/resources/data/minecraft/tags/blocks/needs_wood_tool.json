@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "roundabout:goddess_statue"
+    "roundabout:goddess_statue",
+    "roundabout:shiny_quartz",
+    "roundabout:shiny_quartz_tiles"
   ]
 }

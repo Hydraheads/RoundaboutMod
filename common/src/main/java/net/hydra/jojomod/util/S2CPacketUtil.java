@@ -1,13 +1,13 @@
 package net.hydra.jojomod.util;
 
+import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.core.Vec3i;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.zetalasis.networking.message.api.ModMessageEvents;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 /**it is NOT okay to have client only classes here
@@ -33,6 +33,74 @@ public class S2CPacketUtil {
             );
         }
     }
+    public static void refreshCooldowns(Player player){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.RefreshAllCooldowns.value
+            );
+        }
+    }
+
+    public static void beamVampireData(Player player){
+        if (player instanceof ServerPlayer SP) {
+            VampireData data = ((IPlayerEntity)player).rdbt$getVampireData();
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData.value,
+                    data.vampireLevel,
+                    data.bloodExp,
+                    data.animalExp,
+                    data.monsterEXP,
+                    data.npcExp,
+                    data.timeSinceAnimal,
+                    data.timeSinceMonster,
+                    data.timeSinceNpc,
+
+                    data.strengthLevel,
+                    data.dexterityLevel,
+                    data.resilienceLevel,
+
+                    data.hypnotismLevel,
+                    data.superHearingLevel,
+                    data.bloodSpeedLevel,
+
+                    data.graftingLevel,
+                    data.fleshBudLevel,
+                    data.daggerSplatterLevel,
+
+                    data.jumpLevel,
+                    data.ripperEyesLevel,
+                    data.freezeLevel
+            );
+        }
+    }
+    public static void beamVampireData2(Player player){
+        if (player instanceof ServerPlayer SP) {
+            VampireData data = ((IPlayerEntity)player).rdbt$getVampireData();
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData2.value,
+                    data.vampireLevel,
+                    data.bloodExp,
+                    data.animalExp,
+                    data.monsterEXP,
+                    data.npcExp,
+                    data.timeSinceAnimal,
+                    data.timeSinceMonster,
+                    data.timeSinceNpc
+            );
+        }
+    }
+
+    public static void beamVampireTimings(Player player){
+        if (player instanceof ServerPlayer SP) {
+            VampireData data = ((IPlayerEntity)player).rdbt$getVampireData();
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData3.value,
+                    data.timeSinceAnimal,
+                    data.timeSinceMonster,
+                    data.timeSinceNpc
+            );
+        }
+    }
     public static void synchGuard(Player player, float guardPoints, boolean guardBroken){
         if (player instanceof ServerPlayer SP) {
             ModMessageEvents.sendToPlayer(SP,
@@ -48,6 +116,21 @@ public class S2CPacketUtil {
                     ServerToClientPackets.S2CPackets.MESSAGES.UpdateBarrageClash.value,
                     id,
                     clashProgress
+            );
+        }
+    }
+    public static void updateZombieFish(Player player, int amt){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.ZombieFish.value,
+                    amt
+            );
+        }
+    }
+    public static void affirmCooldownsS2C(Player player){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.AffirmAllCooldowns.value
             );
         }
     }
@@ -115,6 +198,22 @@ public class S2CPacketUtil {
             );
         }
     }
+    public static void sendActivePowerFatePacket(Player player, byte activePower){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SyncActivePowerFate.value,
+                    activePower
+            );
+        }
+    }
+    public static void sendActivePowerPowersPacket(Player player, byte activePower){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SyncActivePowerPowers.value,
+                    activePower
+            );
+        }
+    }
 
     public static void sendPowerInventorySettings(Player player, int anchorPlace, float distanceOut, float idleOpacity,
                                                   float combatOpacity, float enemyOpacity, int anchorPlaceAttack){
@@ -144,6 +243,16 @@ public class S2CPacketUtil {
             ModMessageEvents.sendToPlayer(SP,
                     ServerToClientPackets.S2CPackets.MESSAGES.IntToClient.value,
                     context,
+                    data
+            );
+        }
+    }
+    public static void sendGenericIntIntToClientPacket(Player player, byte context, int data1, int data){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.DoubleIntToClient.value,
+                    context,
+                    data1,
                     data
             );
         }
@@ -233,6 +342,70 @@ public class S2CPacketUtil {
         if (player instanceof ServerPlayer SP) {
             ModMessageEvents.sendToPlayer(SP,
                     ServerToClientPackets.S2CPackets.MESSAGES.EjectPRunning.value
+            );
+        }
+    }
+    public static void creamUpdateTimer(Player player, int time){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTimer.value,
+                    time
+            );
+        }
+    }
+    public static void vampireMessage(Player player){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.VampireMessage.value
+            );
+        }
+    }
+    public static void gunRecoil(Player player, String string){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.GunRecoil.value, string
+            );
+        }
+    }
+    public static void creamUpdateTransformTimer(Player player, int time){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTransformTimer.value,
+                    time
+            );
+        }
+    }
+    public static void creamUpdateTransformDirection(Player player, int transformDirectionValue){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTransformDirection.value,
+                    transformDirectionValue
+            );
+        }
+    }
+
+    public static void syncPossessorTarget(Player player, int target) {
+        if (player instanceof ServerPlayer) {
+            ModMessageEvents.sendToAll(
+                    ServerToClientPackets.S2CPackets.MESSAGES.SyncPossessor.value,
+                    player.getId(),
+                    target
+            );
+        }
+    }
+
+    public static void shatterIce(int entityId) {
+            ModMessageEvents.sendToAll(
+                    ServerToClientPackets.S2CPackets.MESSAGES.ShatterIce.value,
+                    entityId
+            );
+    }
+
+    public static void sync_allies(Player player,String allies) {
+        if(player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SyncAllies.value,
+                    allies
             );
         }
     }

@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.goals;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.event.index.Tactics;
 import net.minecraft.world.entity.*;
@@ -39,7 +40,6 @@ public class CorpseTargetGoal extends TargetGoal {
                         return false;
                     }
                 }
-
                 return this.canAttack($$1, HURT_BY_TARGETING);
             }
         } else {
@@ -70,6 +70,14 @@ public class CorpseTargetGoal extends TargetGoal {
 
         }
         super.tick();
+    }
+    @Override
+    public boolean canContinueToUse() {
+        LivingEntity $$0 = this.mob.getTarget();
+        if ($$0 == null) {
+           this.targetMob = null;
+        }
+        return super.canContinueToUse();
     }
 
     @Override

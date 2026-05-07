@@ -1,13 +1,8 @@
 package net.hydra.jojomod.block;
 
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.item.FogBlockItem;
-import net.hydra.jojomod.item.FogCoatBlockItem;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.flag.FeatureFlag;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -15,11 +10,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
-import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.function.ToIntFunction;
 
@@ -38,11 +31,48 @@ public class ModBlocks {
     public static final BooleanProperty IN_FOG = BooleanProperty.create("in_fog");
     public static final IntegerProperty COLOR = IntegerProperty.create("color", 0, 12);
     public static final IntegerProperty FLESH_LAYER = IntegerProperty.create("layers", 1, 4);
+    public static final IntegerProperty EATING_STAGE = IntegerProperty.create("stage",1,3);
     public static Block ANCIENT_METEOR;
     public static Block METEOR_BLOCK;
+    public static Block IMPACT_MOUND;
     public static Block REGAL_FLOOR;
     public static Block REGAL_WALL;
     public static Block WOODEN_MANOR_TABLE;
+    public static Block WOODEN_MANOR_CHAIR;
+    public static Block WOOL_SLAB_WHITE;
+    public static Block WOOL_STAIRS_WHITE;
+    public static Block WOOL_SLAB_BLACK;
+    public static Block WOOL_STAIRS_BLACK;
+    public static Block WOOL_SLAB_BLUE;
+    public static Block WOOL_STAIRS_BLUE;
+    public static Block WOOL_SLAB_BROWN;
+    public static Block WOOL_STAIRS_BROWN;
+    public static Block WOOL_SLAB_CYAN;
+    public static Block WOOL_STAIRS_CYAN;
+    public static Block WOOL_SLAB_DARK_GREEN;
+    public static Block WOOL_STAIRS_DARK_GREEN;
+    public static Block WOOL_SLAB_DARK_GREY;
+    public static Block WOOL_STAIRS_DARK_GREY;
+    public static Block WOOL_SLAB_GREEN;
+    public static Block WOOL_STAIRS_GREEN;
+    public static Block WOOL_SLAB_LIGHT_BLUE;
+    public static Block WOOL_STAIRS_LIGHT_BLUE;
+    public static Block WOOL_SLAB_LIGHT_GREY;
+    public static Block WOOL_STAIRS_LIGHT_GREY;
+    public static Block WOOL_SLAB_MAGENTA;
+    public static Block WOOL_STAIRS_MAGENTA;
+    public static Block WOOL_SLAB_ORANGE;
+    public static Block WOOL_STAIRS_ORANGE;
+    public static Block WOOL_SLAB_PURPLE;
+    public static Block WOOL_STAIRS_PURPLE;
+    public static Block WOOL_SLAB_PINK;
+    public static Block WOOL_STAIRS_PINK;
+    public static Block WOOL_SLAB_RED;
+    public static Block WOOL_STAIRS_RED;
+    public static Block WOOL_SLAB_YELLOW;
+    public static Block WOOL_STAIRS_YELLOW;
+    public static Block WALL_LANTERN;
+    public static Block GLASS_DOOR;
     public static Block LOCACACA_CACTUS;
     public static Block LOCACACA_BLOCK;
     public static Block NEW_LOCACACA_BLOCK;
@@ -76,6 +106,11 @@ public class ModBlocks {
 
     public static Block FLESH_BLOCK;
 
+    public static Block CULTIVATION_POT;
+    public static Block CULTIVATED_CHERRY_SAPLING;
+    public static Block CULTIVATED_OAK_SAPLING;
+    public static Block CULTIVATED_LOCACACA;
+
     public static Block STAND_FIRE;
     public static Block ORANGE_FIRE;
     public static Block BLUE_FIRE;
@@ -85,59 +120,29 @@ public class ModBlocks {
     public static Block CREAM_FIRE;
     public static Block FOG_DIRT;
     public static Block FOG_DIRT_COATING;
-    public static Block FOG_CLAY;
-    public static Block FOG_CLAY_COATING;
-    public static Block FOG_GRAVEL;
-    public static Block FOG_GRAVEL_COATING;
-    public static Block FOG_SAND;
-    public static Block FOG_SAND_COATING;
-    public static Block FOG_OAK_PLANKS;
-    public static Block FOG_OAK_PLANKS_COATING;
-    public static Block FOG_SPRUCE_PLANKS;
-    public static Block FOG_SPRUCE_PLANKS_COATING;
-    public static Block FOG_BIRCH_PLANKS;
-    public static Block FOG_BIRCH_PLANKS_COATING;
-    public static Block FOG_JUNGLE_PLANKS;
-    public static Block FOG_JUNGLE_PLANKS_COATING;
-    public static Block FOG_ACACIA_PLANKS;
-    public static Block FOG_ACACIA_PLANKS_COATING;
-    public static Block FOG_DARK_OAK_PLANKS;
-    public static Block FOG_DARK_OAK_PLANKS_COATING;
-    public static Block FOG_MANGROVE_PLANKS;
-    public static Block FOG_MANGROVE_PLANKS_COATING;
-    public static Block FOG_CHERRY_PLANKS;
-    public static Block FOG_CHERRY_PLANKS_COATING;
-    public static Block FOG_STONE;
-    public static Block FOG_STONE_COATING;
-    public static Block FOG_COBBLESTONE;
-    public static Block FOG_COBBLESTONE_COATING;
-    public static Block FOG_MOSSY_COBBLESTONE;
-    public static Block FOG_MOSSY_COBBLESTONE_COATING;
-    public static Block FOG_DEEPSLATE;
-    public static Block FOG_DEEPSLATE_COATING;
-    public static Block FOG_COAL_ORE;
-    public static Block FOG_IRON_ORE;
-    public static Block FOG_GOLD_ORE;
-    public static Block FOG_LAPIS_ORE;
-    public static Block FOG_DIAMOND_ORE;
-    public static Block FOG_STONE_BRICKS;
-    public static Block FOG_STONE_BRICKS_COATING;
-    public static Block FOG_NETHERRACK;
-    public static Block FOG_NETHERRACK_COATING;
-    public static Block FOG_NETHER_BRICKS;
-    public static Block FOG_NETHER_BRICKS_COATING;
     public static Block FOG_TRAP;
 
+    public static Block SHINY_QUARTZ;
+    public static Block SHINY_QUARTZ_TILES;
+
+    public static Block EQUIPPABLE_STONE_MASK_BLOCK;
+    public static Block BLOODY_STONE_MASK_BLOCK;
+    public static Block COFFIN_BLOCK;
+
     public static Block D4C_LIGHT_BLOCK;
+
+    public static Block MELON_PARFAIT;
 
     public static BlockEntityType<StandFireBlockEntity> STAND_FIRE_BLOCK_ENTITY;
     public static BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY;
     public static BlockEntityType<MirrorBlockEntity> MIRROR_BLOCK_ENTITY;
     public static BlockEntityType<BubbleScaffoldBlockEntity> BUBBLE_SCAFFOLD_BLOCK_ENTITY;
     public static BlockEntityType<InvisiBlockEntity> INVISIBLE_BLOCK_ENTITY;
+    public static BlockEntityType<CoffinBlockEntity> COFFIN_BLOCK_ENTITY;
     public static BlockEntityType<FogTrapBlockEntity> FOG_TRAP_BLOCK_ENTITY;
     public static BlockEntityType<D4CLightBlockEntity> D4C_LIGHT_BLOCK_ENTITY;
-    public static Block ANCIENT_METEOR_PROPERTIES = new Block(
+    public static BlockEntityType<ProtectionBlockEntity> PROTECTION_BLOCK_ENTITY;
+    public static Block ANCIENT_METEOR_PROPERTIES = new AncientMeteorBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.METAL)
                     .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
@@ -145,6 +150,15 @@ public class ModBlocks {
                     .strength(5.0F, 6.0F)
                     .sound(SoundType.METAL)
     );
+    public static Block SHINY_QUARTZ_PROPERTIES = new Block(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.QUARTZ).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.8F)
+    );
+    public static Block SHINY_QUARTZ_TILES_PROPERTIES = new Block(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.QUARTZ).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.8F)
+    );
+    public static Block IMPACT_MOUND_PROPERTIES = new SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DIRT).speedFactor(0.7f).strength(0.5F).sound(SoundType.GRAVEL));
 
     private static ToIntFunction<BlockState> litBlockEmission(int p_50760_) {
         return (p_50763_) -> {
@@ -187,6 +201,229 @@ public class ModBlocks {
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(2.0F).sound(SoundType.WOOD).ignitedByLava()
     );
+    public static Block WOODEN_MANOR_CHAIR_PROPERTIES = new ManorChairBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(2.0F).sound(SoundType.WOOD).ignitedByLava()
+                    .pushReaction(PushReaction.BLOCK)
+                    .lightLevel((L) -> {
+                        return 1;
+                    })
+    );
+    public static Block WOOL_SLAB_WHITE_PROPERTIES = new SlabBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_SLAB_BLACK_PROPERTIES = new SlabBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_SLAB_RED_PROPERTIES = new SlabBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_SLAB_LIGHT_GREY_PROPERTIES = new SlabBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_SLAB_BROWN_PROPERTIES = new SlabBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_SLAB_BLUE_PROPERTIES = new SlabBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_SLAB_CYAN_PROPERTIES = new SlabBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_SLAB_DARK_GREEN_PROPERTIES = new SlabBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_SLAB_DARK_GREY_PROPERTIES = new SlabBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_SLAB_GREEN_PROPERTIES = new SlabBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_SLAB_LIGHT_BLUE_PROPERTIES = new SlabBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_SLAB_MAGENTA_PROPERTIES = new SlabBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_SLAB_ORANGE_PROPERTIES = new SlabBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_SLAB_PURPLE_PROPERTIES = new SlabBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_SLAB_PINK_PROPERTIES = new SlabBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_SLAB_YELLOW_PROPERTIES = new SlabBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+
+    public static Block WOOL_STAIRS_WHITE_PROPERTIES = new RoundaboutStairs(
+            Blocks.WHITE_WOOL.defaultBlockState(),
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_STAIRS_BLUE_PROPERTIES = new RoundaboutStairs(
+            Blocks.BLUE_WOOL.defaultBlockState(),
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_STAIRS_CYAN_PROPERTIES = new RoundaboutStairs(
+            Blocks.CYAN_WOOL.defaultBlockState(),
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_STAIRS_DARK_GREEN_PROPERTIES = new RoundaboutStairs(
+            Blocks.GREEN_WOOL.defaultBlockState(),
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_STAIRS_DARK_GREY_PROPERTIES = new RoundaboutStairs(
+            Blocks.GRAY_WOOL.defaultBlockState(),
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_STAIRS_GREEN_PROPERTIES = new RoundaboutStairs(
+            Blocks.GREEN_WOOL.defaultBlockState(),
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_STAIRS_LIGHT_BLUE_PROPERTIES = new RoundaboutStairs(
+            Blocks.LIGHT_BLUE_WOOL.defaultBlockState(),
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_STAIRS_MAGENTA_PROPERTIES = new RoundaboutStairs(
+            Blocks.MAGENTA_WOOL.defaultBlockState(),
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_STAIRS_ORANGE_PROPERTIES = new RoundaboutStairs(
+            Blocks.ORANGE_WOOL.defaultBlockState(),
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_STAIRS_PURPLE_PROPERTIES = new RoundaboutStairs(
+            Blocks.PURPLE_WOOL.defaultBlockState(),
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_STAIRS_PINK_PROPERTIES = new RoundaboutStairs(
+            Blocks.PINK_WOOL.defaultBlockState(),
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_STAIRS_RED_PROPERTIES = new RoundaboutStairs(
+            Blocks.RED_WOOL.defaultBlockState(),
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_STAIRS_YELLOW_PROPERTIES = new RoundaboutStairs(
+            Blocks.YELLOW_WOOL.defaultBlockState(),
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_STAIRS_LIGHT_GREY_PROPERTIES = new RoundaboutStairs(
+            Blocks.LIGHT_GRAY_WOOL.defaultBlockState(),
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_STAIRS_BROWN_PROPERTIES = new RoundaboutStairs(
+            Blocks.BROWN_WOOL.defaultBlockState(),
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+    public static Block WOOL_STAIRS_BLACK_PROPERTIES = new RoundaboutStairs(
+            Blocks.BLACK_WOOL.defaultBlockState(),
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
+
+
+
+
 
     public static Block LOCACACA_CACTUS_PROPERTIES = new LocacacaCactusBlock(
             BlockBehaviour.Properties.of()
@@ -393,7 +630,7 @@ public class ModBlocks {
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.PODZOL)
                     .instrument(NoteBlockInstrument.BANJO)
-                    .strength(5.0F, 1.0F)
+                    .strength(2.5F, 1.0F)
                     .sound(SoundType.HONEY_BLOCK)
     );
     public static BubbleScaffoldBlock BUBBLE_SCAFFOLD_BLOCK_PROPERTIES = new BubbleScaffoldBlock(
@@ -432,6 +669,53 @@ public class ModBlocks {
             BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).replaceable().noCollission().instabreak().lightLevel((p_152607_) -> {
                 return 15;
             }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));
+
+    public static EquippableStoneMaskBlock EQUIPPABLE_STONE_MASK_PROPERTIES = new EquippableStoneMaskBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(0.35F).sound(SoundType.STONE).pushReaction(PushReaction.DESTROY).lightLevel((L) -> {
+                return 1;
+            }));
+    public static BloodyStoneMaskBlock BLOODY_STONE_MASK_PROPERTIES = new BloodyStoneMaskBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(0.35F).sound(SoundType.STONE).pushReaction(PushReaction.DESTROY).lightLevel((L) -> {
+                return 1;
+            }));
+    public static CoffinBlock COFFIN_BLOCK_PROPERTIES = new CoffinBlock(
+            DyeColor.BLACK, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(0.35F).sound(SoundType.STONE).pushReaction(PushReaction.DESTROY).lightLevel((L) -> {
+                return 1;
+            }));
+
+    public static Block WALL_LANTERN_PROPERTIES = new LanternWallBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(2.0F).sound(SoundType.WOOD).ignitedByLava()
+                    .lightLevel(state -> 14)
+                    .noOcclusion()
+    );
+    public static Block GLASS_DOOR_PROPERTIES = new GlassDoorBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_LIGHT_BLUE)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.3F).sound(SoundType.GLASS).ignitedByLava()
+                    .noOcclusion()
+                    .pushReaction(PushReaction.BLOCK)
+    );
+
+    public static CultivationPotBlock cultivationPot(Block $$0, FeatureFlag... $$1) {
+        BlockBehaviour.Properties $$2 = BlockBehaviour.Properties.of().instabreak().noOcclusion().pushReaction(PushReaction.DESTROY);
+        if ($$1.length > 0) {
+            $$2 = $$2.requiredFeatures($$1);
+        }
+
+        return new CultivationPotBlock($$0, $$2);
+    }
+
+    public static Block MELON_PARFAIT_PROPERTIES = new MelonParfaitBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_LIGHT_BLUE)
+                    .strength(0.3F).sound(SoundType.GLASS)
+                    .noOcclusion()
+                    .pushReaction(PushReaction.DESTROY)
+    );
 
     public static List<String> dontGenState = new ArrayList<String>();
     public static List<String> blockBlacklist = Arrays.asList(
@@ -474,7 +758,14 @@ public class ModBlocks {
             "azalea",
             "flowering_azalea",
             "fog_trap",
-            "fog_trap_coating"
+            "fog_trap_coating",
+            "infested_stone_bricks",
+            "infested_mossy_stone_bricks",
+            "infested_stone",
+            "infested_cobblestone",
+            "infested_chiseled_stone_bricks",
+            "infested_cracked_stone_bricks",
+            "infested_mossy_stone"
     );
 
     public static List<String> dontGen = Arrays.asList("fog_dirt");

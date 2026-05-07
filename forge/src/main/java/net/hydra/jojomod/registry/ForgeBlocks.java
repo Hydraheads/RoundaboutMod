@@ -39,6 +39,24 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> METEOR_BLOCK = BLOCKS.register("meteor_block",
             () -> ModBlocks.METEOR_BLOCK_PROPERTIES
             );
+    public static final RegistryObject<Block> SHINY_QUARTZ = BLOCKS.register("shiny_quartz",
+            () -> SHINY_QUARTZ_PROPERTIES
+    );
+    public static final RegistryObject<Block> SHINY_QUARTZ_TILES = BLOCKS.register("shiny_quartz_tiles",
+            () -> SHINY_QUARTZ_TILES_PROPERTIES
+    );
+    public static final RegistryObject<Block> IMPACT_MOUND = BLOCKS.register("impact_mound",
+            () -> IMPACT_MOUND_PROPERTIES
+    );
+    public static final RegistryObject<Block> EQUIPPABLE_STONE_MASK_BLOCK = BLOCKS.register("stone_mask",
+            () -> ModBlocks.EQUIPPABLE_STONE_MASK_PROPERTIES
+    );
+    public static final RegistryObject<Block> BLOODY_STONE_MASK_BLOCK = BLOCKS.register("bloody_stone_mask",
+            () -> BLOODY_STONE_MASK_PROPERTIES
+    );
+    public static final RegistryObject<Block> COFFIN_BLOCK = BLOCKS.register("coffin_block",
+            () -> COFFIN_BLOCK_PROPERTIES
+    );
     public static final RegistryObject<Block> REGAL_WALL = BLOCKS.register("regal_wall",
             () -> ModBlocks.REGAL_WALL_PROPERTIES
     );
@@ -48,6 +66,127 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> WOODEN_MANOR_TABLE = BLOCKS.register("wooden_manor_table",
             () -> ModBlocks.WOODEN_MANOR_TABLE_PROPERTIES
     );
+    public static final RegistryObject<Block> WOODEN_MANOR_CHAIR = BLOCKS.register("wooden_manor_chair",
+            () -> ModBlocks.WOODEN_MANOR_CHAIR_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_SLAB_WHITE = BLOCKS.register("wool_slab_white",
+            () -> ModBlocks.WOOL_SLAB_WHITE_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_SLAB_BLACK = BLOCKS.register("wool_slab_black",
+            () -> ModBlocks.WOOL_SLAB_BLACK_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_SLAB_RED = BLOCKS.register("wool_slab_red",
+            () -> ModBlocks.WOOL_SLAB_RED_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_SLAB_LIGHT_GREY = BLOCKS.register("wool_slab_light_grey",
+            () -> ModBlocks.WOOL_SLAB_LIGHT_GREY_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_SLAB_BROWN = BLOCKS.register("wool_slab_brown",
+            () -> ModBlocks.WOOL_SLAB_BROWN_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_SLAB_BLUE = BLOCKS.register("wool_slab_blue",
+            () -> ModBlocks.WOOL_SLAB_BLUE_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_SLAB_CYAN = BLOCKS.register("wool_slab_cyan",
+            () -> ModBlocks.WOOL_SLAB_CYAN_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_SLAB_DARK_GREEN = BLOCKS.register("wool_slab_dark_green",
+            () -> ModBlocks.WOOL_SLAB_DARK_GREEN_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_SLAB_DARK_GREY = BLOCKS.register("wool_slab_dark_grey",
+            () -> ModBlocks.WOOL_SLAB_DARK_GREY_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_SLAB_GREEN = BLOCKS.register("wool_slab_green",
+            () -> ModBlocks.WOOL_SLAB_GREEN_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_SLAB_LIGHT_BLUE = BLOCKS.register("wool_slab_light_blue",
+            () -> ModBlocks.WOOL_SLAB_LIGHT_BLUE_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_SLAB_MAGENTA = BLOCKS.register("wool_slab_magenta",
+            () -> ModBlocks.WOOL_SLAB_MAGENTA_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_SLAB_ORANGE = BLOCKS.register("wool_slab_orange",
+            () -> ModBlocks.WOOL_SLAB_ORANGE_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_SLAB_PURPLE = BLOCKS.register("wool_slab_purple",
+            () -> ModBlocks.WOOL_SLAB_PURPLE_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_SLAB_PINK = BLOCKS.register("wool_slab_pink",
+            () -> ModBlocks.WOOL_SLAB_PINK_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_SLAB_YELLOW = BLOCKS.register("wool_slab_yellow",
+            () -> ModBlocks.WOOL_SLAB_YELLOW_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_STAIRS_WHITE = BLOCKS.register("wool_stairs_white",
+            () -> ModBlocks.WOOL_STAIRS_WHITE_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_STAIRS_BLUE = BLOCKS.register("wool_stairs_blue",
+            () -> ModBlocks.WOOL_STAIRS_BLUE_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_STAIRS_CYAN = BLOCKS.register("wool_stairs_cyan",
+            () -> ModBlocks.WOOL_STAIRS_CYAN_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_STAIRS_DARK_GREEN = BLOCKS.register("wool_stairs_dark_green",
+            () -> ModBlocks.WOOL_STAIRS_DARK_GREEN_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_STAIRS_DARK_GREY = BLOCKS.register("wool_stairs_dark_grey",
+            () -> ModBlocks.WOOL_STAIRS_DARK_GREY_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_STAIRS_GREEN = BLOCKS.register("wool_stairs_green",
+            () -> ModBlocks.WOOL_STAIRS_GREEN_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_STAIRS_LIGHT_BLUE = BLOCKS.register("wool_stairs_light_blue",
+            () -> ModBlocks.WOOL_STAIRS_LIGHT_BLUE_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_STAIRS_MAGENTA = BLOCKS.register("wool_stairs_magenta",
+            () -> ModBlocks.WOOL_STAIRS_MAGENTA_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_STAIRS_ORANGE = BLOCKS.register("wool_stairs_orange",
+            () -> ModBlocks.WOOL_STAIRS_ORANGE_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_STAIRS_PURPLE = BLOCKS.register("wool_stairs_purple",
+            () -> ModBlocks.WOOL_STAIRS_PURPLE_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_STAIRS_PINK = BLOCKS.register("wool_stairs_pink",
+            () -> ModBlocks.WOOL_STAIRS_PINK_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_STAIRS_RED = BLOCKS.register("wool_stairs_red",
+            () -> ModBlocks.WOOL_STAIRS_RED_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_STAIRS_YELLOW = BLOCKS.register("wool_stairs_yellow",
+            () -> ModBlocks.WOOL_STAIRS_YELLOW_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_STAIRS_LIGHT_GREY = BLOCKS.register("wool_stairs_light_grey",
+            () -> ModBlocks.WOOL_STAIRS_LIGHT_GREY_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_STAIRS_BLACK = BLOCKS.register("wool_stairs_black",
+            () -> ModBlocks.WOOL_STAIRS_BLACK_PROPERTIES
+    );
+    public static final RegistryObject<Block> WOOL_STAIRS_BROWN = BLOCKS.register("wool_stairs_brown",
+            () -> ModBlocks.WOOL_STAIRS_BROWN_PROPERTIES
+    );
+
+    public static final RegistryObject<Block> WALL_LANTERN = BLOCKS.register("wall_lantern",
+            () -> ModBlocks.WALL_LANTERN_PROPERTIES
+    );
+    public static final RegistryObject<Block> GLASS_DOOR = BLOCKS.register("glass_door",
+            () -> ModBlocks.GLASS_DOOR_PROPERTIES
+    );
+
+    public static final RegistryObject<Block> CULTIVATION_POT = BLOCKS.register("cultivation_pot",
+            () -> ModBlocks.cultivationPot(Blocks.AIR)
+    );
+    public static final RegistryObject<Block> CULTIVATED_CHERRY_SAPLING = BLOCKS.register("cultivated_cherry_sapling",
+            () -> ModBlocks.cultivationPot(Blocks.CHERRY_SAPLING)
+    );
+    public static final RegistryObject<Block> CULTIVATED_OAK_SAPLING = BLOCKS.register("cultivated_oak_sapling",
+            () -> ModBlocks.cultivationPot(Blocks.OAK_SAPLING)
+    );
+
+    public static final RegistryObject<Block> MELON_PARFAIT = BLOCKS.register("melon_parfait",
+            () -> MELON_PARFAIT_PROPERTIES);
+
+
     public static final RegistryObject<Block> LOCACACA_CACTUS = BLOCKS.register("locacaca_cactus",
             () -> ModBlocks.LOCACACA_CACTUS_PROPERTIES
     );
@@ -55,6 +194,9 @@ public class ForgeBlocks {
             () -> ModBlocks.LOCACACA_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> NEW_LOCACACA_BLOCK = BLOCKS.register("new_locacaca_plant",
             () -> ModBlocks.NEW_LOCACACA_BLOCK_PROPERTIES);
+    public static final RegistryObject<Block> CULTIVATED_LOCACACA = BLOCKS.register("cultivated_locacaca",
+            () -> ModBlocks.cultivationPot(NEW_LOCACACA_BLOCK.get()));
+
     public static final RegistryObject<Block> GASOLINE_SPLATTER = BLOCKS.register("gasoline_splatter",
             () -> ModBlocks.GASOLINE_SPLATTER_PROPERTIES);
     public static final RegistryObject<Block> BLOOD_SPLATTER = BLOCKS.register("blood_splatter",
@@ -139,6 +281,8 @@ public class ForgeBlocks {
             () -> BlockEntityType.Builder.of(InvisiBlockEntity::new, INVISIBLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "invisible_block")));
     public static final RegistryObject<BlockEntityType<FogTrapBlockEntity>> FOG_TRAP_BLOCK_ENTITY = BLOCK_ENTITIES.register("fog_trap",
             () -> BlockEntityType.Builder.of(FogTrapBlockEntity::new, FOG_TRAP.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "fog_trap")));
+    public static final RegistryObject<BlockEntityType<CoffinBlockEntity>> COFFIN_BLOCK_ENTITY = BLOCK_ENTITIES.register("coffin_block",
+            () -> BlockEntityType.Builder.of(CoffinBlockEntity::new, COFFIN_BLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "coffin_block")));
     public static final RegistryObject<BlockEntityType<D4CLightBlockEntity>> D4C_LIGHT_BLOCK_ENTITY = BLOCK_ENTITIES.register("d4c_light_block",
             () -> BlockEntityType.Builder.of(D4CLightBlockEntity::new, D4C_LIGHT_BLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "d4c_light_block")));
 

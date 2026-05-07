@@ -47,8 +47,10 @@ public class GroundBubbleEntity extends GroundPathfindingStandAttackEntity {
 
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(SIZE, 0);
+        if (!this.entityData.hasItem(SIZE)) {
+            super.defineSynchedData();
+            this.entityData.define(SIZE, 0);
+        }
     }
     @Override
     public boolean hurt(DamageSource source, float amount) {

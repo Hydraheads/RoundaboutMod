@@ -25,6 +25,12 @@ public abstract class RegisterModelBakery {
     @Inject(method = "<init>", at = @At(value = "TAIL"))
     public void roundabout$addITEMNAME(BlockColors $$0, ProfilerFiller $$1, Map $$2, Map $$3, CallbackInfo ci) {
         this.loadTopLevel(ModItemModels.HARPOON_IN_HAND);
+        this.loadTopLevel(ModItemModels.SNUBNOSE_REVOLVER_IN_HAND);
+        this.loadTopLevel(ModItemModels.MISTA_REVOLVER_IN_HAND);
+        this.loadTopLevel(ModItemModels.TOMMY_GUN_IN_HAND);
+        this.loadTopLevel(ModItemModels.COLT_REVOLVER_IN_HAND);
+        this.loadTopLevel(ModItemModels.JACKAL_RIFLE_IN_HAND);
+        this.loadTopLevel(ModItemModels.ANUBIS_IN_HAND);
         this.loadTopLevel(ModItemModels.STAND_BOW);
         this.loadTopLevel(ModItemModels.STAND_BEETLE_BOW);
         this.loadTopLevel(ModItemModels.WORTHY_BOW);
@@ -59,6 +65,7 @@ public abstract class RegisterModelBakery {
         this.loadTopLevel(ModItemModels.STREET_SIGN_DANGER_HELD_D);
         this.loadTopLevel(ModItemModels.STREET_SIGN_DANGER_HELD_D2);
         this.topLevelModels.get(ModItemModels.HARPOON_IN_HAND).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.ANUBIS_IN_HAND).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.STAND_BOW).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.STAND_BEETLE_BOW).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.WORTHY_BOW).resolveParents(this::getModel);
@@ -66,6 +73,7 @@ public abstract class RegisterModelBakery {
         this.topLevelModels.get(ModItemModels.STAND_ARROW_CROSSBOW).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.STAND_BEETLE_CROSSBOW).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.DREAD_BOOK).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.MISTA_REVOLVER_IN_HAND).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.FOG_BLOCK_ICON).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.STREET_SIGN_DIO_D).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.STREET_SIGN_DIO_D2).resolveParents(this::getModel);

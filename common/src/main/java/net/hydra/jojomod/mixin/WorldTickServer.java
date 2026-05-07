@@ -14,9 +14,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.protocol.game.ClientboundSoundEntityPacket;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.progress.ChunkProgressListener;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.RandomSequences;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -28,9 +32,12 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CommandBlock;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.entity.EntityTickList;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.storage.LevelStorageSource;
+import net.minecraft.world.level.storage.ServerLevelData;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -41,17 +48,29 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
 
 @Mixin(ServerLevel.class)
 public class WorldTickServer {
 
+
+    /**This is the birth of every anti stand griefing totem on the server*/
+
+    @Inject(method = "<init>(Lnet/minecraft/server/MinecraftServer;Ljava/util/concurrent/Executor;Lnet/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess;Lnet/minecraft/world/level/storage/ServerLevelData;Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/world/level/dimension/LevelStem;Lnet/minecraft/server/level/progress/ChunkProgressListener;ZJLjava/util/List;ZLnet/minecraft/world/RandomSequences;)V", at = @At(value = "RETURN")
+            , require = 0)
+    private void roundabout$tickInit(MinecraftServer $$0, Executor $$1, LevelStorageSource.LevelStorageAccess $$2, ServerLevelData $$3, ResourceKey $$4, LevelStem $$5, ChunkProgressListener $$6, boolean $$7, long $$8, List $$9, boolean $$10, RandomSequences $$11, CallbackInfo ci) {
+
+    }
+
     /** Called every tick on the Server. Checks if a mob has a stand out, and updates the position of the stand.
      * @see FollowingStandEntity#tickStandOut */
 
 
-    @Inject(method = "tick", at = @At(value = "HEAD"))
+    @Inject(method = "tick", at = @At(value = "HEAD")
+            , require = 0)
     private void roundabout$tickTimeStopList(BooleanSupplier $$0, CallbackInfo ci) {
         ((ILevelAccess)this).roundabout$tickPlunderBubbleRemoval();
 
@@ -74,7 +93,8 @@ public class WorldTickServer {
             }
         });
     }
-    @Inject(method = "gameEvent", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "gameEvent", at = @At(value = "HEAD"), cancellable = true
+            , require = 0)
     private void roundabout$gameEvent(GameEvent $$0, Vec3 $$1, GameEvent.Context $$2, CallbackInfo ci) {
         if(((ILevelAccess)this).roundabout$isSoundPlundered(BlockPos.containing($$1))){
             ci.cancel();
@@ -85,7 +105,8 @@ public class WorldTickServer {
         }
     }
 
-    @Inject(method = "playSeededSound(Lnet/minecraft/world/entity/player/Player;DDDLnet/minecraft/core/Holder;Lnet/minecraft/sounds/SoundSource;FFJ)V", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "playSeededSound(Lnet/minecraft/world/entity/player/Player;DDDLnet/minecraft/core/Holder;Lnet/minecraft/sounds/SoundSource;FFJ)V", at = @At(value = "HEAD"), cancellable = true
+            , require = 0)
     private void roundabout$playSeededSound(Player $$0, double $$1, double $$2, double $$3, Holder<SoundEvent> $$4, SoundSource $$5, float $$6, float $$7, long $$8, CallbackInfo ci) {
         BlockPos bpos = new BlockPos((int) $$1, (int) $$2, (int) $$3);
         if(((ILevelAccess)this).roundabout$isSoundPlundered(bpos)){
@@ -96,7 +117,8 @@ public class WorldTickServer {
             ci.cancel();
         }
     }
-    @Inject(method = "playSeededSound(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/Holder;Lnet/minecraft/sounds/SoundSource;FFJ)V", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "playSeededSound(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/Holder;Lnet/minecraft/sounds/SoundSource;FFJ)V", at = @At(value = "HEAD"), cancellable = true
+            , require = 0)
     public void roundabout$playSeededSound2(Player $$0, Entity $$1, Holder<SoundEvent> $$2, SoundSource $$3, float $$4, float $$5, long $$6, CallbackInfo ci) {
         if(((ILevelAccess)this).roundabout$isSoundPlundered($$1.blockPosition())){
             SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this).roundabout$getSoundPlunderedBubble($$1.blockPosition());
@@ -113,7 +135,8 @@ public class WorldTickServer {
         }
     }
 
-    @Inject(method = "tick", at = @At(value = "TAIL"))
+    @Inject(method = "tick", at = @At(value = "TAIL")
+            , require = 0)
     private void roundabout$tickInGeneralTail(BooleanSupplier $$0, CallbackInfo ci) {
         ((ILevelAccess)this).roundabout$tickPlunderBubbleRemoval();
     }
@@ -144,7 +167,8 @@ public class WorldTickServer {
             ci.cancel();
         }
     }
-    @Inject(method = "tickBlock", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "tickBlock", at = @At(value = "HEAD"), cancellable = true
+            , require = 0)
     private void roundabout$BlockTick(BlockPos $$0x, Block $$1x, CallbackInfo ci) {
         if (((TimeStop) this).inTimeStopRange($$0x) && !($$1x instanceof CommandBlock)){
             ((LevelAccessor) this).scheduleTick($$0x, $$1x, 1);
@@ -159,7 +183,8 @@ public class WorldTickServer {
     @Shadow
     private void tickPassenger(Entity $$0, Entity $$1){
     }
-    @Inject(method = "tickNonPassenger", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "tickNonPassenger", at = @At(value = "HEAD"), cancellable = true
+            , require = 0)
     private void roundabout$TickEntity2(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
             if ($$0 instanceof FollowingStandEntity SE) {
@@ -193,7 +218,8 @@ public class WorldTickServer {
             }
         }
     }
-    @Inject(method = "tickNonPassenger", at = @At(value = "TAIL"), cancellable = true)
+    @Inject(method = "tickNonPassenger", at = @At(value = "TAIL"), cancellable = true
+            , require = 0)
     private void roundabout$TickEntityX(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
             if ($$0 instanceof LivingEntity LE) {
@@ -204,7 +230,8 @@ public class WorldTickServer {
         }
     }
 
-    @Inject(method = "tickPassenger", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "tickPassenger", at = @At(value = "HEAD"), cancellable = true
+            , require = 0)
     private void roundabout$TickEntity5(Entity $$0, Entity $$1, CallbackInfo ci) {
 
         if ($$1 instanceof FollowingStandEntity SE) {
@@ -238,7 +265,8 @@ public class WorldTickServer {
         }
     }
 
-    @Inject(method = "tickPassenger", at = @At(value = "TAIL"), cancellable = true)
+    @Inject(method = "tickPassenger", at = @At(value = "TAIL"), cancellable = true
+            , require = 0)
     private void roundabout$TickEntity6(Entity $$0, Entity $$1, CallbackInfo ci) {
         if ($$1 instanceof LivingEntity LE) {
             for (FollowingStandEntity SE : ((StandUser)$$1).roundabout$getFollowers()) {
@@ -246,7 +274,8 @@ public class WorldTickServer {
             }
         }
     }
-    @Inject(method = "tickTime", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "tickTime", at = @At(value = "HEAD"), cancellable = true
+            , require = 0)
     private void roundabout$TickEntity3(CallbackInfo ci) {
         if (ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1){
             if (((TimeStop) this).inTimeStopRange(new Vec3i((int) 0, (int) 0, (int) 0))){
@@ -254,7 +283,8 @@ public class WorldTickServer {
             }
         }
     }
-    @Inject(method = "tick", at = @At(value = "HEAD"))
+    @Inject(method = "tick", at = @At(value = "HEAD")
+            , require = 0)
     private void roundabout$TickEntity3(BooleanSupplier $$0, CallbackInfo ci) {
         ((TimeStop) this).tickTimeStoppingEntity();
         ((IPermaCasting) this).roundabut$tickPermaCastingEntity();

@@ -1,0 +1,24 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+        "2": "roundabout:block/glass_door",
+        "particle": "roundabout:block/glass_door"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 3],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7, 0, 0]},
+			"faces": {
+				"north": {"uv": [0, 0, 4, 4], "texture": "#2"},
+				"east": {"uv": [0, 8, 0.75, 12], "texture": "#2"},
+				"south": {"uv": [0, 4, 4, 8], "texture": "#2"},
+				"west": {"uv": [8, 0, 8.75, 4], "texture": "#2"},
+				"up": {"uv": [4.75, 8.75, 0.75, 8], "texture": "#2"},
+				"down": {"uv": [12, 4, 8, 4.75], "texture": "#2"}
+			}
+		}
+	]
+}

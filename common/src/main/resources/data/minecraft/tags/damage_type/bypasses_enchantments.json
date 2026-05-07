@@ -5,6 +5,7 @@
     "roundabout:melting",
     "roundabout:heel_spike",
     "roundabout:explosive_stand",
+    "roundabout:ice_shatter",
     "roundabout:crossfire",
     "roundabout:stand_rush",
     "roundabout:corpse",
@@ -21,6 +22,14 @@
     "roundabout:gas_explosion",
     "roundabout:stand_virus",
     "roundabout:stand_fire",
-    "roundabout:go_beyond"
+    "roundabout:go_beyond",
+    "roundabout:bladed_bowler_hat",
+    "roundabout:dagger",
+    "roundabout:sunlight",
+    "roundabout:blood_drain",
+    "roundabout:vampire",
+    "roundabout:ripper_eyes",
+    "roundabout:hamon",
+    "roundabout:martial_arts"
   ]
 }

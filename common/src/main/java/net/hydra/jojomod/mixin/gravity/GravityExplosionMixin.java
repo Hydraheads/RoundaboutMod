@@ -77,6 +77,7 @@ public abstract class GravityExplosionMixin {
             cancellable = true
     )
     private void rdbt$explode(CallbackInfo ci) {
+        /**
         ci.cancel();
 
         float $$18 = this.radius * 2.0F;
@@ -134,6 +135,8 @@ public abstract class GravityExplosionMixin {
                 }
             }
         }
+
+         */
 
     }
 

@@ -113,6 +113,7 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
 
     public final AnimationState JOTARO = new AnimationState();
     public final AnimationState JONATHAN = new AnimationState();
+    public final AnimationState VAMPIRE = new AnimationState();
 
     public boolean isSimple(){
         return false;
@@ -163,6 +164,11 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
             this.JOSEPH.startIfStopped(this.tickCount);
         } else {
             this.JOSEPH.stop();
+        }
+        if (standPos == Poses.VAMPIRE_TRANSFORMATION) {
+            this.VAMPIRE.startIfStopped(this.tickCount);
+        } else {
+            this.VAMPIRE.stop();
         }
     }
     public ItemStack getBasis(){
@@ -404,6 +410,13 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
         p_35425_.updateActivityFromSchedule(this.level().getDayTime(), this.level().getGameTime());
     }
 
+    public ItemStack truebasis = ItemStack.EMPTY;
+    public ItemStack getTrueBasis(){
+        return truebasis;
+    }public void setTrueBasis(ItemStack basis){
+        truebasis = basis;
+    }
+
     protected void ageBoundaryReached() {
         super.ageBoundaryReached();
         if (this.level() instanceof ServerLevel) {
@@ -426,8 +439,8 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
     protected static final EntityDataAccessor<CompoundTag> DATA_SHOULDER_LEFT = SynchedEntityData.defineId(JojoNPC.class, EntityDataSerializers.COMPOUND_TAG);
     protected static final EntityDataAccessor<CompoundTag> DATA_SHOULDER_RIGHT = SynchedEntityData.defineId(JojoNPC.class, EntityDataSerializers.COMPOUND_TAG);
     protected void defineSynchedData() {
-        super.defineSynchedData();
         if (!this.entityData.hasItem(ROUNDABOUT$SKIN_NUMBER)) {
+            super.defineSynchedData();
             this.entityData.define(DATA_UNHAPPY_COUNTER, 0);
             this.entityData.define(ROUNDABOUT$POS, (byte) 0);
             this.entityData.define(DATA_PLAYER_ABSORPTION_ID, 0.0F);

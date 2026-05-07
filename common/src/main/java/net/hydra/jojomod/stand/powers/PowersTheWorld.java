@@ -1,6 +1,8 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.ICreeper;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -8,6 +10,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.entity.visages.mobs.DIONPC;
 import net.hydra.jojomod.entity.visages.mobs.DiegoNPC;
@@ -15,6 +18,8 @@ import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.event.powers.visagedata.DiegoVisage;
+import net.hydra.jojomod.event.powers.visagedata.voicedata.DiegoVoice;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.DIOVoice;
@@ -24,6 +29,7 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
@@ -61,6 +67,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
@@ -86,6 +93,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         }
 
         if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DIOVoice DV){
+            DV.playSummon();
+        } else if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DiegoVoice DV){
             DV.playSummon();
         }
         playStandUserOnlySoundsIfNearby(this.getSummonSound(), 10, false,false);
@@ -114,9 +123,33 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         return ClientNetworking.getAppropriateConfig().theWorldSettings.theWorldGuardPoints;
     }
     @Override
+    public Vec3 getTSColor(){
+        byte skin = ((StandUser) self).roundabout$getStandSkin();
+        if (skin == TheWorldEntity.OVA_SKIN)
+            return new Vec3(1.7f, 0.4f, 0.4f);
+        if (skin == TheWorldEntity.THE_NETHER)
+            return new Vec3(1.5f, 1.0f, 0.5f);
+        if (skin == TheWorldEntity.OVER_HEAVEN)
+            return new Vec3(1.5f, 0.5f, 1.5f);
+        if (skin == TheWorldEntity.ARCADE_SKIN || skin == TheWorldEntity.ARCADE_SKIN_2)
+            return Vec3.ZERO;
+        if (skin == TheWorldEntity.PART_7_SKIN)
+            return new Vec3(1.5f, 1.5f, 0.5f);
+        if (skin == TheWorldEntity.PART_7_BLUE || skin == TheWorldEntity.BLACK_SKIN)
+            return new Vec3(0.5f, 0.5f, 1.5f);
+        if (skin == TheWorldEntity.ULTIMATE_SKIN || skin == TheWorldEntity.ULTIMATE_KARS_SKIN
+                || skin == TheWorldEntity.DARK_SKIN
+        )
+            return new Vec3(0.5,0.5,0.5);
+
+        return super.getTSColor();
+    }
+    @Override
     public void playTheLastHitSound(){
         Byte LastHitSound = this.getLastHitSound();
-        if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DIOVoice DV){
+        if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DIOVoice DV) {
+            DV.playSoundIfPossible(getSoundFromByte(LastHitSound), 20, 1, 2);
+        } else if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DiegoVoice DV){
             DV.playSoundIfPossible( getSoundFromByte(LastHitSound),20,1,2);
         } else {
             this.playStandUserOnlySoundsIfNearby(LastHitSound, 15, false,
@@ -129,6 +162,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (!this.self.level().isClientSide()) {
             if (this.self instanceof Player pe && ((IPlayerEntity) pe).roundabout$getVoiceData() instanceof DIOVoice DV) {
                 DV.playSoundIfPossible(ModSounds.DIO_SHINE_EVENT,22,1,2);
+            } else if (this.self instanceof Player pe && ((IPlayerEntity) pe).roundabout$getVoiceData() instanceof DiegoVoice DV) {
+                DV.playSoundIfPossible(ModSounds.DIEGO_SHINE_EVENT,22,1,2);
             }
         }
     }
@@ -144,6 +179,15 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                         playSoundsIfNearby(barrageCrySound, 27, false, true);
                     }
                 }
+            } else if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DiegoVoice DV) {
+
+                    if (!DV.inTheMiddleOfTalking()) {
+                        DV.forceTalkingTicks(70);
+                        byte barrageCrySound = this.chooseBarrageSound();
+                        if (barrageCrySound != SoundIndex.NO_SOUND) {
+                            playSoundsIfNearby(barrageCrySound, 27, false, true);
+                        }
+                    }
             } else {
                 byte barrageCrySound = this.chooseBarrageSound();
                 if (barrageCrySound != SoundIndex.NO_SOUND) {
@@ -223,6 +267,21 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
             if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DIOVoice DV) {
                 DV.forceTalkingTicks(70);
+                if (skn == TheWorldEntity.ARCADE_SKIN || skn == TheWorldEntity.ARCADE_SKIN_2) {
+                    playSoundsIfNearby(BARRAGE_NOISE_8, 27, false);
+                    return;
+                }
+                if (skn == TheWorldEntity.OVA_SKIN) {
+                    playSoundsIfNearby(BARRAGE_NOISE_5, 27, false);
+                    return;
+                }
+                if (skn == TheWorldEntity.PART_7_SKIN || skn == TheWorldEntity.PART_7_BLUE) {
+                    playSoundsIfNearby(BARRAGE_NOISE_3, 27, false);
+                    return;
+                }
+                playSoundsIfNearby(BARRAGE_NOISE_2, 27, false);
+            } else if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DiegoVoice DV) {
+                DV.forceTalkingTicks(70);
                 if (skn == TheWorldEntity.ARCADE_SKIN || skn == TheWorldEntity.ARCADE_SKIN_2){
                     playSoundsIfNearby(BARRAGE_NOISE_8, 27, false);
                     return;
@@ -280,22 +339,23 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public List<Byte> getSkinList(){
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add(TheWorldEntity.PART_3_SKIN);
+        $$1.add(TheWorldEntity.MANGA_SKIN);
         if (this.getSelf() instanceof Player PE){
             byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
             ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass){
-                $$1.add(TheWorldEntity.MANGA_SKIN);
                 $$1.add(TheWorldEntity.BLACK_SKIN);
-            } if (Level > 2 || bypass){
                 $$1.add(TheWorldEntity.OVA_SKIN);
-                $$1.add(TheWorldEntity.FOUR_DEE_EXPERIENCE);
-            } if (Level > 3 || bypass){
+            } if (Level > 2 || bypass){
                 $$1.add(TheWorldEntity.HERITAGE_SKIN);
                 $$1.add(TheWorldEntity.ARCADE_SKIN);
                 $$1.add(TheWorldEntity.ARCADE_SKIN_2);
-            } if (Level > 4 || bypass){
+            } if (Level > 3 || bypass){
                 $$1.add(TheWorldEntity.DARK_SKIN);
+                $$1.add(TheWorldEntity.BRONZE);
+                $$1.add(TheWorldEntity.FOUR_DEE_EXPERIENCE);
+            } if (Level > 4 || bypass){
                 $$1.add(TheWorldEntity.AGOGO_SKIN);
                 $$1.add(TheWorldEntity.SCARLET);
             } if (Level > 5 || bypass){
@@ -305,6 +365,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             } if (Level > 6 || bypass){
                 $$1.add(TheWorldEntity.AQUA_SKIN);
                 $$1.add(TheWorldEntity.BETA);
+                $$1.add(TheWorldEntity.KING);
                 $$1.add(TheWorldEntity.ULTIMATE_SKIN);
                 $$1.add(TheWorldEntity.ULTIMATE_KARS_SKIN);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
@@ -362,8 +423,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     @Override
     public void setChargeTicksMult(){
-        this.setChargedTSTicks(this.getChargedTSTicks()*(1+
-                (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld -100)/100));
+        this.setChargedTSTicks(this.getChargedTSTicks());
     }
 
     @Override
@@ -479,10 +539,17 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             playSoundsIfNearby(ASSAULT_NOISE, 27, false);
             this.animateStand(TheWorldEntity.ASSAULT);
             this.poseStand(OffsetIndex.LOOSE);
-            stand.setYRot(this.getSelf().getYHeadRot() % 360);
-            stand.setXRot(this.getSelf().getXRot());
+
+            Vec2 twoVec = new Vec2((this.getSelf().getYHeadRot() % 360),(this.getSelf().getXRot()));
+            Direction gdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+            Vec2 twoVecGrav = RotationUtil.rotPlayerToWorld(twoVec,gdir);
+            Vec3 threeVec = new Vec3(0,0.25,0);
+            threeVec = RotationUtil.vecPlayerToWorld(threeVec,gdir);
+
+            stand.setYRot(twoVec.x);
+            stand.setXRot(twoVec.y);
             assultVec = DamageHandler.getRotationVector(
-                    this.getSelf().getXRot(), (float) (this.getSelf().getYRot())).scale(1.8).add(0,0.25,0);
+                    twoVecGrav.y, (float) (twoVecGrav.x)).scale(1.8).add(threeVec.x,threeVec.y,threeVec.z);
             stand.setPos(this.getSelf().position().add(assultVec));
             return true;
         }
@@ -508,11 +575,6 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
-        StandUser standUser = ((StandUser) playerEntity);
-        boolean standOn = standUser.roundabout$getActive();
-        int j = scaledHeight / 2 - 7 - 4;
-        int k = scaledWidth / 2 - 8;
-
             super.renderAttackHud(context,playerEntity,
                     scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
     }
@@ -573,8 +635,14 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                                 stand.setYRot(this.getSelf().getYHeadRot() % 360);
                                 stand.setXRot(this.getSelf().getXRot());
                             } else {
-                                stand.setYRot(getLookAtPlaceYaw(stand,blockCenterPlus));
-                                stand.setXRot(getLookAtPlacePitch(stand,blockCenterPlus));
+
+                                Direction gdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+                                Vec2 grot = new Vec2(getLookAtPlaceYaw(stand,blockCenterPlus),
+                                        getLookAtPlacePitch(stand,blockCenterPlus)
+                                        );
+                                grot =  RotationUtil.rotWorldToPlayer(grot,gdir);
+                                stand.setYRot(grot.x);
+                                stand.setXRot(grot.y);
                             }
                             if (post < 0.4){
                                 stand.setPos(blockHit.getBlockPos().getCenter());
@@ -596,7 +664,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                             }
                             AABB BB2 = stand.getBoundingBox();
-                            if (this.attackTimeDuring > 10) {
+                            if (this.attackTimeDuring > 11) {
                                 if (this.getActivePower() != PowerIndex.POWER_1_BONUS){
                                     tryAssaultHit(stand, BB1, BB2);
                                 }
@@ -653,7 +721,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (this.getReducedDamage(entity)){
             ret = (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD);
             if (this.chargedFinal >= maxSuperHitTime){
-                ret +=1;
+                ret +=0.5F;
             }
         } else {
             ret = (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD)+3;
@@ -694,7 +762,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.75F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.55F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(5));
         }
@@ -702,7 +770,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.5F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.2F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(6F));
         }
@@ -788,11 +856,22 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                         !$$5.isInvulnerable() && $$5.isAlive() && !(this.self.isPassenger() &&
                         this.self.getVehicle().getUUID() == $$5.getUUID()) && stand.getSensing().hasLineOfSight($$5)){
 
+                    hitParticlesCenter(LE);
+
+
                     if (this.StandDamageEntityAttack($$5,getAssaultStrength($$5), 0.4F, this.self)){
                         addEXP(3,LE);
-                        MainUtil.makeBleed($$5,0,100,null);
+                        if (!getAssaultEarlyTime()) {
+                            MainUtil.makeBleed($$5, 0, 90, null);
+                        } else {
+                            MainUtil.makeBleed($$5, 0, 50, null);
+                        }
                     } else if (((LivingEntity) $$5).isBlocking()) {
-                        MainUtil.knockShieldPlusStand($$5,40);
+                        if (!getAssaultEarlyTime()) {
+                            MainUtil.knockShieldPlusStand($$5,40);
+                        } else {
+                            MainUtil.knockShieldPlusStand($$5,30);
+                        }
                     }
 
                     stopSoundsIfNearby(ASSAULT_NOISE, 100, false);
@@ -814,16 +893,25 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         }
         return false;
     }
+
+    public boolean getAssaultEarlyTime(){
+        return getAttackTimeDuring() < 20;
+    }
     public float getAssaultStrength(Entity entity){
         float mult = 1;
+        boolean isReduced = this.getReducedDamage(entity);
         if (getAttackTimeDuring() > 95){
-            mult = 1.5F;
+            mult = 2.0F;
         } else if (getAttackTimeDuring() > 70){
+            mult = 1.5F;
+        } else if (getAttackTimeDuring() > 45){
             mult = 1.25F;
+        } else if (getAssaultEarlyTime() && isReduced){
+            mult = 0.75F;
         }
 
-        if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.7F*mult));
+        if (isReduced){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.1F*mult));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(7F*mult));
         }
@@ -927,7 +1015,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         //Roundabout.LOGGER.info("AT: "+this.attackTime+" ATD: "+this.attackTimeDuring+" kickstarted: "+this.kickStarted+" APP: "+this.getActivePowerPhase()+" MAX:"+this.getActivePowerPhaseMax());
         super.tickPower();
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
-            if (this.getSelf().getAirSupply() < this.getSelf().getMaxAirSupply() && ((StandUser) this.getSelf()).roundabout$getActive()){
+            if (this.getSelf().getAirSupply() < this.getSelf().getMaxAirSupply() && PowerTypes.hasStandActive(self)){
             } else {
                 if (this.getSelf().isEyeInFluid(FluidTags.WATER)
                         && !this.getSelf().level().getBlockState(BlockPos.containing(
@@ -936,7 +1024,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                     /***Removed weird code*/
 
                 } else {
-                    if (((StandUser) this.getSelf()).roundabout$getActive()) {
+                    if (PowerTypes.hasStandActive(self)) {
                             this.setAirAmount(Math.min(this.getAirAmount() + 4, this.getMaxAirAmount()));
                     }
                 }
@@ -944,7 +1032,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         }
 
 
-        if (((StandUser) this.getSelf()).roundabout$getActive()) {
+        if (PowerTypes.hasStandActive(self)) {
             if (this.getAirAmount() > 0 && this.getSelf().getAirSupply() < this.getSelf().getMaxAirSupply()) {
                 this.getSelf().setAirSupply(Math.max(0, Math.min(this.getSelf().getAirSupply() + 4, this.getSelf().getMaxAirSupply())));
                 this.setAirAmount(Math.max(0, Math.min(this.getAirAmount() - 4, this.getMaxAirAmount())));
@@ -1005,6 +1093,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return Component.translatable(  "skins.roundabout.the_world.scarlet");
         } else if (skinId == TheWorldEntity.THE_NETHER){
             return Component.translatable(  "skins.roundabout.the_world.the_nether");
+        } else if (skinId == TheWorldEntity.BRONZE){
+            return Component.translatable(  "skins.roundabout.the_world.bronze");
+        } else if (skinId == TheWorldEntity.KING){
+            return Component.translatable(  "skins.roundabout.the_world.king");
         }
         return Component.translatable(  "skins.roundabout.the_world.base");
     }
@@ -1029,7 +1121,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (currentLevel == 1){
             amt = 100;
         } else {
-            amt = (100+((currentLevel-1)*50));
+            amt = (100+((currentLevel-1)*100));
         }
         amt= (int) (amt*(getLevelMultiplier()));
         return amt;
@@ -1110,10 +1202,12 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 } else if (this.getSelf() instanceof FlyingMob) {
                     tptype = TPTYPE.AIR;
                 }
-                if (this.attackTimeDuring <= -1) {
+                if (this.attackTimeDuring <= -1 && !isClashing()) {
                     if (!this.getSelf().isPassenger()) {
                         teleportTime = Math.max(0, teleportTime - 1);
-                        if (teleportTime == 0 && !(this.getSelf() instanceof Creeper CREEP && CREEP.isIgnited())) {
+                        if (teleportTime == 0 &&
+                                !(this.getSelf() instanceof Creeper CREEP
+                                        && (CREEP.isIgnited() || ((ICreeper)CREEP).roundabout$getSwell() > 0))) {
                             if (dist <= 8 && !(this.getSelf() instanceof Creeper)) {
                                 Vec3 pos = this.getSelf().position().add(0, this.getSelf().getEyeHeight(), 0);
                                 float p = 0;
@@ -1174,10 +1268,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 if (check) {
                     if ((this.getActivePower() != PowerIndex.NONE)
                             || dist <= 5) {
-                        this.getSelf().setXRot(getLookAtEntityPitch(this.getSelf(), attackTarget));
-                        float yrot = getLookAtEntityYaw(this.getSelf(), attackTarget);
-                        this.getSelf().setYRot(yrot);
-                        this.getSelf().setYHeadRot(yrot);
+                        rotateMobHead(attackTarget);
                     }
 
                     if (this.attackTimeDuring == -1 || (this.attackTimeDuring < -1 && this.activePower == PowerIndex.ATTACK)) {
@@ -1241,9 +1332,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     protected boolean teleport(TPTYPE tptype) {
         if (!this.getSelf().level().isClientSide() && this.getSelf().isAlive()) {
-            double $$0 = this.getSelf().getX() + (this.getSelf().getRandom().nextDouble() - 0.5) * 19.0;
+            double $$0 = this.getSelf().getX() + (this.getSelf().getRandom().nextDouble() - 0.5) * 10.0;
             double $$1 = this.getSelf().getY() + (double)(this.getSelf().getRandom().nextInt(16) - 8);
-            double $$2 = this.getSelf().getZ() + (this.getSelf().getRandom().nextDouble() - 0.5) * 19.0;
+            double $$2 = this.getSelf().getZ() + (this.getSelf().getRandom().nextDouble() - 0.5) * 10.0;
             return this.teleport($$0, $$1, $$2,tptype);
         } else {
             return false;
@@ -1417,6 +1508,31 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                         playSoundsIfNearby(barrageCrySound, 32, false, true);
                     }
                 }
+            } else if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DiegoVoice DV) {
+
+                if (!DV.inTheMiddleOfTalking()) {
+                    DV.forceTalkingTicks(70);
+                    byte bt = ((StandUser) this.getSelf()).roundabout$getStandSkin();
+                    if (bt == TheWorldEntity.ARCADE_SKIN || bt == TheWorldEntity.ARCADE_SKIN_2) {
+                        playSoundsIfNearby(BARRAGE_NOISE_7, 32, false, true);
+                        return;
+                    }
+                    if (bt == TheWorldEntity.OVA_SKIN) {
+                        return;
+                    }
+                    if (bt == TheWorldEntity.PART_7_BLUE || bt == TheWorldEntity.PART_7_SKIN) {
+                        playSoundsIfNearby(KICK_BARRAGE_NOISE_3, 32, false, true);
+                    } else {
+                        double rand = Math.random();
+                        byte barrageCrySound;
+                        if (rand > 0.5) {
+                            barrageCrySound = KICK_BARRAGE_NOISE;
+                        } else {
+                            barrageCrySound = KICK_BARRAGE_NOISE_2;
+                        }
+                        playSoundsIfNearby(barrageCrySound, 32, false, true);
+                    }
+                }
             } else {
                 byte bt = ((StandUser) this.getSelf()).roundabout$getStandSkin();
                 if (bt == TheWorldEntity.ARCADE_SKIN || bt == TheWorldEntity.ARCADE_SKIN_2) {
@@ -1438,6 +1554,11 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public void playTSVoiceSound(){
         if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DIOVoice DV) {
+            if (!DV.inTheMiddleOfTalking()) {
+                DV.forceTalkingTicks(40);
+                playSoundsIfNearby(getTSVoice(), 100, false, true);
+            }
+        } else if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DiegoVoice DV) {
             if (!DV.inTheMiddleOfTalking()) {
                 DV.forceTalkingTicks(40);
                 playSoundsIfNearby(getTSVoice(), 100, false, true);

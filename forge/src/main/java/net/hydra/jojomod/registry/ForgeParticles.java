@@ -35,6 +35,10 @@ public class ForgeParticles {
             "air_crackle",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> HEARTBEAT = PARTICLES.register(
+            "heartbeat",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> MENACING = PARTICLES.register(
             "menacing",
             () -> new SimpleParticleType(true)
@@ -87,6 +91,38 @@ public class ForgeParticles {
             "purple_star",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> BLUE_SPARKLE = PARTICLES.register(
+            "blue_sparkle",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> RED_SPARKLE = PARTICLES.register(
+            "red_sparkle",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> ICE_SPARKLE = PARTICLES.register(
+            "ice_sparkle",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> VAMPIRE_AURA = PARTICLES.register(
+            "vampire_aura",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> PUNCH_IMPACT_A = PARTICLES.register(
+            "punch_impact_a",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> PUNCH_MISS = PARTICLES.register(
+            "punch_miss",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> PUNCH_IMPACT_B = PARTICLES.register(
+            "punch_impact_b",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> PUNCH_IMPACT_C = PARTICLES.register(
+            "punch_impact_c",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> BUBBLE_TRAIL = PARTICLES.register(
             "bubble_trail",
             () -> new SimpleParticleType(true)
@@ -131,6 +167,10 @@ public class ForgeParticles {
             "pink_smoke",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> BLOOD_MIST = PARTICLES.register(
+            "blood_mist",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> BUBBLE_POP = PARTICLES.register(
             "soft_bubble_pop",
             () -> new SimpleParticleType(true)
@@ -167,6 +207,18 @@ public class ForgeParticles {
             "stitch",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> OCCULT = PARTICLES.register(
+            "occult",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> HYPNO_SWIRL = PARTICLES.register(
+            "hypno_swirl",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> TUSK_VORTEX = PARTICLES.register(
+            "tusk_vortex",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> MOLD_DUST = PARTICLES.register(
             "mold_dust",
             () -> new SimpleParticleType(true)
@@ -175,4 +227,60 @@ public class ForgeParticles {
             "mold",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> RAGING_LIGHT = PARTICLES.register(
+            "raging_light",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> ALLURING_LIGHT = PARTICLES.register(
+            "alluring_light",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> DUST_CRUMBLE = PARTICLES.register(
+            "dust_crumble",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> FIRE_CRUMBLE = PARTICLES.register(
+            "fire_crumble",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> SOUL_FIRE_CRUMBLE = PARTICLES.register(
+            "soul_fire_crumble",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> ROAD_ROLLER_SCRAP = PARTICLES.register(
+            "road_roller_scrap",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> ROAD_ROLLER_EXPLOSION = PARTICLES.register(
+            "road_roller_explosion",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> ROAD_ROLLER_SMOKE = PARTICLES.register(
+            "road_roller_smoke",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> TUSK_HOLE = PARTICLES.register(
+            "tusk_hole",
+            () -> new SimpleParticleType(true)
+    );
+
+    public static final RegistryObject<SimpleParticleType> METALLICA_FIELD_PNG = PARTICLES.register("metallica_field_png", () -> new SimpleParticleType(true));
+
+    public static final RegistryObject<SimpleParticleType> METALLICA_NAIL = PARTICLES.register("nail",
+            () -> new SimpleParticleType(true));
+
+    public static final RegistryObject<SimpleParticleType> METALLICA_RAZOR = PARTICLES.register("razor",
+            () -> new SimpleParticleType(true));
+
+    public static final RegistryObject<SimpleParticleType> METALLICA_SCISSORS = PARTICLES.register("scissors",
+            () -> new SimpleParticleType(true));
+
+    public static final RegistryObject<SimpleParticleType> METALLICA_A = PARTICLES.register(
+            "metallica_a", () -> new SimpleParticleType(false));
+    public static final RegistryObject<SimpleParticleType> METALLICA_B = PARTICLES.register(
+            "metallica_b", () -> new SimpleParticleType(false));
+    public static final RegistryObject<SimpleParticleType> METALLICA_C = PARTICLES.register(
+            "metallica_c", () -> new SimpleParticleType(false));
+    public static final RegistryObject<SimpleParticleType> METALLICA_D = PARTICLES.register(
+            "metallica_d", () -> new SimpleParticleType(false));
 }

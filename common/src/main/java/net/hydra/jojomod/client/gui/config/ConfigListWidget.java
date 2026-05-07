@@ -5,7 +5,9 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.Config;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.hydra.jojomod.util.config.annotation.Hidden;
 import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -15,6 +17,7 @@ import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.network.chat.Component;
 
 import java.lang.reflect.Field;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -61,11 +64,12 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                     this.addEntry(new BooleanEntry(field, instance));
                 } else if (value instanceof Integer || value instanceof Float) {
                     this.addEntry(new NumberEntry(field, instance));
-                }
-                else {
+                } else if (value instanceof String) {
+                    this.addEntry(new StringEntry(field, instance));
+                } else if(!field.isAnnotationPresent(Hidden.class)) {
                     Object nestedObject = field.get(instance);
                     this.addEntry(new CommentEntry(
-                            Component.translatable("config.roundabout."+field.getName()+".name").getString()));
+                            Component.translatable("config.roundabout." + field.getName() + ".name").getString()));
 
                     if (nestedObject == null) {
                         continue;
@@ -74,11 +78,14 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                     for (Field clazzField : nestedObject.getClass().getFields()) {
                         clazzField.setAccessible(true);
                         Object clazzValue = clazzField.get(nestedObject);
-
-                        if (clazzValue instanceof Boolean) {
-                            this.addEntry(new BooleanEntry(clazzField, nestedObject));
-                        } else if (clazzValue instanceof Integer || clazzValue instanceof Float) {
-                            this.addEntry(new NumberEntry(clazzField, nestedObject));
+                        if (!clazzField.isAnnotationPresent(Hidden.class)) {
+                            if (clazzValue instanceof Boolean) {
+                                this.addEntry(new BooleanEntry(clazzField, nestedObject));
+                            } else if (clazzValue instanceof Integer || clazzValue instanceof Float) {
+                                this.addEntry(new NumberEntry(clazzField, nestedObject));
+                            } else if (clazzValue instanceof String) {
+                                this.addEntry(new StringEntry(clazzField, nestedObject));
+                            }
                         }
                     }
                 }
@@ -87,6 +94,10 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                 throw new RuntimeException("Failed to parse configFields", e);
             }
         }
+        if (selectedType == ConfigType.CLIENT) {
+            this.addEntry(new AnubisEntry(ConfigManager.getClientConfigPath()));
+        }
+
     }
 
     @Override
@@ -100,6 +111,29 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
     }
 
     public abstract static class Entry extends ContainerObjectSelectionList.Entry<Entry> {
+    }
+
+    public class AnubisEntry extends Entry {
+        private Button button;
+        public Path config_path;
+        public AnubisEntry(Path p) {
+            config_path = p;
+            button = Button.builder(Component.translatable("config.roundabout.anubisMemoryOpen.name"), (button) -> {
+                Util.getPlatform().openUri(config_path.toUri());
+            }).build();
+        }
+        @Override
+        public void render(GuiGraphics drawContext, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float delta) {
+            button.setX(x+entryWidth/4);
+            button.setY(y);
+            button.render(drawContext, mouseX, mouseY, delta);
+        }
+
+
+        @Override
+        public List<? extends NarratableEntry> narratables() {return List.of(button);}
+        @Override
+        public List<? extends GuiEventListener> children() {return List.of(button);}
     }
 
     public class BooleanEntry extends Entry {
@@ -217,6 +251,52 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
             return List.of(editButton);
         }
     }
+
+
+    public class StringEntry extends Entry {
+        private final Field field;
+        private final Object instance;
+        private final Button editButton;
+
+        public StringEntry(Field field, Object instance) {
+            this.field = field;
+            this.instance = instance;
+
+            String display = getFieldDisplay();
+            editButton = Button.builder(Component.literal(display), btn -> {
+                Minecraft.getInstance().setScreen(new EditValueScreen(ConfigListWidget.this.parent, field, instance, configType,getScrollAmount()));
+            }).size(constant2, 20).build();
+        }
+
+        private String getFieldDisplay() {
+            try {
+                return field.getName() + ": " + field.get(instance);
+            } catch (IllegalAccessException e) {
+                return field.getName() + ": [error]";
+            }
+        }
+
+        @Override
+        public void render(GuiGraphics drawContext, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
+            editButton.setX(x);
+            editButton.setY(y);
+            editButton.setMessage(Component.translatable("config.roundabout."+field.getName()+".name"));
+            editButton.render(drawContext, mouseX, mouseY, partialTick);
+            renderHover(drawContext,index,y,x,width,height,mouseX,mouseY,hovering,partialTick,field, editButton);
+
+        }
+
+        @Override
+        public List<? extends GuiEventListener> children() {
+            return List.of(editButton);
+        }
+
+        @Override
+        public List<? extends NarratableEntry> narratables() {
+            return List.of(editButton);
+        }
+    }
+
 
     public class CommentEntry extends Entry {
         private final String comment;

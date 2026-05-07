@@ -1,0 +1,56 @@
+{
+  "parent": "builtin/entity",
+  "gui_light": "front",
+  "textures": {
+    "particle": "roundabout:item/anubis_item"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "scale": [
+        0,
+        0,
+        0
+      ]
+    },
+    "thirdperson_lefthand": {
+      "scale": [
+        0,
+        0,
+        0
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [ 0, -90, 25 ],
+      "translation": [ -3, 17, 1],
+      "scale": [ 0, 0, 0 ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [ 0, 90, -25 ],
+      "translation": [ 13, 17, 1],
+      "scale": [ 0, 0, 0 ]
+    },
+    "gui": {
+      "rotation": [ 15, -25, -5 ],
+      "translation": [ 2, 3, 0 ],
+      "scale": [ 0.65, 0.65, 0.65 ]
+    },
+    "fixed": {
+      "rotation": [ 0, 180, 0 ],
+      "translation": [ -2, 4, -5],
+      "scale":[ 0.5, 0.5, 0.5]
+    },
+    "ground": {
+      "rotation": [ 0, 0, 0 ],
+      "translation": [ 4, 4, 2],
+      "scale":[ 0.25, 0.25, 0.25]
+    }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "roundabout:throwing": 1
+      },
+      "model": "roundabout:item/anubis"
+    }
+  ]
+}

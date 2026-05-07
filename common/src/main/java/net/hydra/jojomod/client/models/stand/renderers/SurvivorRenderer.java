@@ -48,6 +48,15 @@ public class SurvivorRenderer<M extends StandEntity> extends StandRenderer<Survi
     private static final ResourceLocation CAKE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/cake.png");
     private static final ResourceLocation CAKE_ACTIVATED = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/activated/cake.png");
 
+    private static final ResourceLocation SCULK = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/sculk.png");
+    private static final ResourceLocation SCULK_ACTIVATED = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/activated/sculk.png");
+
+    private static final ResourceLocation SPONGE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/sponge.png");
+    private static final ResourceLocation SPONGE_ACTIVATED = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/activated/sponge.png");
+
+    private static final ResourceLocation REDSTONE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/redstone.png");
+    private static final ResourceLocation REDSTONE_ACTIVATED = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/activated/redstone.png");
+
     public SurvivorRenderer(EntityRendererProvider.Context context) {
         super(context, new SurvivorModel<>(context.bakeLayer(ModEntityRendererClient.SURVIVOR_LAYER)),0f);
     }
@@ -74,6 +83,12 @@ public class SurvivorRenderer<M extends StandEntity> extends StandRenderer<Survi
                 return CONDUIT_ACTIVATED;
             if (BT == PowersSurvivor.CAKE)
                 return CAKE_ACTIVATED;
+            if (BT == PowersSurvivor.SPONGE)
+                return SPONGE_ACTIVATED;
+            if (BT == PowersSurvivor.SCULK)
+                return SCULK_ACTIVATED;
+            if (BT == PowersSurvivor.REDSTONE)
+                return REDSTONE_ACTIVATED;
             return BASE_ACTIVATED;
         }
         if (BT == PowersSurvivor.RED)
@@ -94,6 +109,12 @@ public class SurvivorRenderer<M extends StandEntity> extends StandRenderer<Survi
             return CONDUIT;
         if (BT == PowersSurvivor.CAKE)
             return CAKE;
+        if (BT == PowersSurvivor.SPONGE)
+            return SPONGE;
+        if (BT == PowersSurvivor.SCULK)
+            return SCULK;
+        if (BT == PowersSurvivor.REDSTONE)
+            return REDSTONE;
         return BASE;
     }
 

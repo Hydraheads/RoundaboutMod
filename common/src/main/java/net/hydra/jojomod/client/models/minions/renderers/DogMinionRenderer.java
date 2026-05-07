@@ -1,0 +1,53 @@
+package net.hydra.jojomod.client.models.minions.renderers;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
+import net.hydra.jojomod.client.models.minions.DogMinionModel;
+import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
+import net.hydra.jojomod.entity.zombie_minion.DogMinion;
+import net.hydra.jojomod.entity.zombie_minion.ParrotMinion;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.culling.Frustum;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
+import net.minecraft.resources.ResourceLocation;
+
+public class DogMinionRenderer extends MobRenderer<DogMinion, DogMinionModel<DogMinion>> {
+    private static final ResourceLocation VINDICATOR = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/minions/wolf.png");
+
+    public DogMinionRenderer(EntityRendererProvider.Context $$0) {
+        super($$0, new DogMinionModel($$0.bakeLayer(ModEntityRendererClient.DOG_MINION_LAYER)), 0.5F);
+        this.addLayer(new ChimeraHeadLayer<>($$0, this));
+    }
+
+
+    @Override
+    protected void scale(DogMinion $$0, PoseStack $$1, float $$2) {
+        $$1.scale(1F, 1F, 1F);
+        if ($$0.clientDigProg > 0 && $$0.getDigProg() <= -1){
+            float perc = 1f-(($$0.clientDigProg-$$2)/((float) BaseMinion.digProgTick));
+            $$1.scale(1F, perc, 1F);
+        }
+    }
+    public ResourceLocation getTextureLocation(DogMinion $$0) {
+        return VINDICATOR;
+    }
+    protected float getBob(DogMinion $$0, float $$1) {
+        return $$0.getTailAngle();
+    }
+    @Override
+    public void render(DogMinion minion, float $$1, float partialTicks, PoseStack stack,
+                       MultiBufferSource bufferSource, int packedLight) {
+        getModel().head.visible = false;
+        super.render(minion, $$1, partialTicks, stack, bufferSource, packedLight);
+    }
+    @Override
+    public boolean shouldRender(DogMinion $$0, Frustum $$1, double $$2, double $$3, double $$4) {
+        if ($$0.getDiedInSun()){
+            return false;
+        }
+        return super.shouldRender($$0,$$1,$$2,$$3,$$4);
+    }
+}

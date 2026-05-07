@@ -38,6 +38,16 @@ public class TeleportStandPassengers {
         }
     }
 
+    @Inject(method = "teleportTo(DDD)V",at = @At(value = "TAIL"))
+    private void roundabout$teleportPossessor(double $$0, double $$1, double $$2, CallbackInfo ci) {
+        if ( ((Entity)(Object)this) instanceof LivingEntity LE) {
+            StandUser SU = (StandUser) LE;
+            if (SU.roundabout$isPossessed() && SU.roundabout$getPossessor() != null) {
+                SU.roundabout$getPossessor().teleportTo($$0,$$1,$$2);
+            }
+        }
+    }
+
     /**Shadows, ignore
      * -------------------------------------------------------------------------------------------------------------
      * */

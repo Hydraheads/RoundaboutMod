@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.justice;
 
 import net.hydra.jojomod.access.IIronGolem;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.target.DefendVillageTargetGoal;
@@ -46,6 +47,11 @@ public class JusticeDefendVillageTargetGoal {
             ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
 
             if (ShapeShifts.isZombie(shift) || ShapeShifts.isSkeleton(shift)) {
+                this.potentialTarget = $$5;
+            }
+
+            //Villagers attack vampire players, here for performance reasons
+            if (shift == ShapeShifts.PLAYER && FateTypes.isEvil($$5)) {
                 this.potentialTarget = $$5;
             }
         }

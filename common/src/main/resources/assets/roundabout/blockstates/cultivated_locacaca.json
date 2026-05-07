@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "roundabout:block/cultivated_locacaca"
+    },
+    "age=1": {
+      "model": "roundabout:block/cultivated_locacaca_2"
+    }
+  }
+}

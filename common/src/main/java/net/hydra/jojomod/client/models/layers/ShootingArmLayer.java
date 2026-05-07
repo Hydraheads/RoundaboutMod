@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.minecraft.client.model.HumanoidModel;
@@ -32,12 +33,12 @@ public class ShootingArmLayer <T extends LivingEntity, A extends HumanoidModel<T
     private static final ResourceLocation TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/large_bubble.png");
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
-        if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+        if (ClientUtil.canSeeStands(ClientUtil.getPlayer()) && !entity.isUsingItem()) {
             LivingEntity livent = entity;
             if (!entity.isInvisible()) {
                 if (entity!= null) {
                     StandUser user = ((StandUser)livent);
-                    if (user.roundabout$getCombatMode()) {
+                    if (user.roundabout$getCombatMode() && PowerTypes.hasStandActivelyEquipped(entity)) {
                         if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
                             ClientUtil.pushPoseAndCooperate(poseStack,47);
 
@@ -75,7 +76,7 @@ public class ShootingArmLayer <T extends LivingEntity, A extends HumanoidModel<T
             if (!entity.isInvisible()) {
                 if (entity!= null) {
                     StandUser user = ((StandUser)entity);
-                    if (user.roundabout$getCombatMode()) {
+                    if (user.roundabout$getCombatMode() && PowerTypes.hasStandActivelyEquipped(entity)) {
                         if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
                             ClientUtil.pushPoseAndCooperate(poseStack,48);
 

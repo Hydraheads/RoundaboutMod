@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "D": {
+      "item": "minecraft:dirt"
+    },
+    "M":
+    {
+      "item": "roundabout:meteorite"
+    }
+  },
+  "pattern": [
+    "DDD",
+    "DMD",
+    "DDD"
+  ],
+  "result": {
+    "count": 16,
+    "item": "roundabout:impact_mound"
+  },
+  "show_notification": true
+}

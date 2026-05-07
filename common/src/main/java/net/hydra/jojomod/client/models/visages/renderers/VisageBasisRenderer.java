@@ -3,10 +3,10 @@ package net.hydra.jojomod.client.models.visages.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IPlayerModel;
-import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.FacelessLayer;
+import net.hydra.jojomod.client.models.layers.CenturyBoyLayer;
 import net.hydra.jojomod.client.models.layers.*;
+import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.item.MaskItem;
@@ -63,9 +63,15 @@ public class VisageBasisRenderer extends LivingEntityRenderer<JojoNPC, PlayerMod
         this.addLayer(new StoneLayer<>($$0, this));
         this.addLayer(new FacelessLayer<>($$0, this));
         this.addLayer(new ShootingArmLayer<>($$0, this));
+        this.addLayer(new TuskLayer<>($$0, this));
         this.addLayer(new HeyYaLayer<>($$0, this));
         this.addLayer(new MandomLayer<>($$0, this));
+        this.addLayer(new CenturyBoyLayer<>($$0, this));
+        this.addLayer(new AnubisLayer<>($$0, this));
         this.addLayer(new VisagePartLayer<>($$0, this));
+        this.addLayer(new MoldSpineLayer<>($$0, this));
+        this.addLayer(new MoldRightArmLayer<>($$0, this));
+        this.addLayer(new MoldLeftArmLayer<>($$0, this));
         otherModel = new PlayerModel<>($$0.bakeLayer(ModelLayers.PLAYER_SLIM), true);
         mainModel = this.model;
     }

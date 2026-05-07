@@ -3,6 +3,7 @@ package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.entity.projectile.FleshPileEntity;
 import net.hydra.jojomod.entity.projectile.RattDartEntity;
+import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersRatt;
@@ -16,6 +17,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -140,34 +142,35 @@ public class FleshBlock
     public void entityInside(BlockState $$0, Level $$1, BlockPos $$2, Entity entity) {
         double y = entity.getY()-((int)entity.getY());
         AABB bounds = VISUAL_SHAPE[$$0.getValue(LAYERS)].bounds();
-        if ( !(entity instanceof RattDartEntity) && !(entity instanceof FleshPileEntity) ) {
-            if (y <= bounds.getYsize()) {
-                boolean cond = false;
-                if (entity instanceof LivingEntity L) {
-                    StandPowers S = ((StandUser) L).roundabout$getStandPowers();
-                    if (S != null && S instanceof PowersRatt) {
-                        cond = true;
-                    }
-                }
-                Vec3 vec3 = entity.getDeltaMovement();
-                if (!cond && !entity.isInvulnerable()) {
-                    float clamp = $$0.getValue(LAYERS) == 1 ? 0.001F : 0.0005F;
-                    entity.setDeltaMovement(new Vec3(
-                            Mth.clamp(vec3.x, -clamp, clamp),
-                            ($$0.getValue(LAYERS) == 1 && vec3.y > 0) ? 0 : -0.05F,
-                            Mth.clamp(vec3.z, -clamp, clamp)
-                    ));
+        if (entity instanceof RattDartEntity || entity instanceof FleshPileEntity || entity instanceof RattEntity) {return;}
+        if (y <= bounds.getYsize()) {
+            boolean cond = false;
+            if (entity instanceof LivingEntity L) {
+                StandPowers S = ((StandUser) L).roundabout$getStandPowers();
+                if (S != null && S instanceof PowersRatt) {
+                    cond = true;
                 }
             }
+            Vec3 vec3 = entity.getDeltaMovement();
+            if (!cond && !entity.isInvulnerable()) {
+                float clamp = $$0.getValue(LAYERS) == 1 ? 0.001F : 0.0005F;
+                entity.setDeltaMovement(new Vec3(
+                        Mth.clamp(vec3.x, -clamp, clamp),
+                        ($$0.getValue(LAYERS) == 1 && vec3.y > 0) ? 0 : -0.05F,
+                        Mth.clamp(vec3.z, -clamp, clamp)
+                ));
+            }
         }
-        entity.resetFallDistance();
+        if (entity.fallDistance > entity.getMaxFallDistance()) {
+            entity.resetFallDistance();
+        }
     }
 
     @Override
     public InteractionResult use(BlockState $$0, Level $$1, BlockPos $$2, Player $$3, InteractionHand $$4, BlockHitResult $$5) {
         StandPowers powers = ((StandUser)  $$3 ).roundabout$getStandPowers();
         if (powers instanceof PowersRatt) {
-            if ($$3.isCrouching()) {
+            if ($$3.getMainHandItem().is(Items.AIR)) {
                 if (!powers.isClient()) {
                     Level level = powers.getSelf().level();
                     level.setBlockAndUpdate($$2, Blocks.AIR.defaultBlockState());

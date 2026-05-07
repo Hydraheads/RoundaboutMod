@@ -41,7 +41,12 @@ public abstract class AchtungHumanoidArmorLayer<T extends LivingEntity, M extend
             at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$RenderModelAchtung(PoseStack $$0, MultiBufferSource $$1,int $$2, ArmorItem $$3, A $$4,boolean $$5,
     float $$6, float $$7, float $$8, String $$9, CallbackInfo ci){
-        if (ClientUtil.getThrowFadeToTheEther() != 1) {
+        float fade = ClientUtil.getThrowFadeToTheEther();
+        if (fade != 1) {
+            if (fade <= 0){
+                ci.cancel();
+                return;
+            }
             VertexConsumer $$10 = $$1.getBuffer(RenderType.entityTranslucentCull(this.getArmorLocation($$3, $$5, $$9)));
             $$4.renderToBuffer($$0, $$10, $$2, OverlayTexture.NO_OVERLAY, $$6, $$7, $$8, 1.0F);
             ci.cancel();
@@ -56,7 +61,7 @@ public abstract class AchtungHumanoidArmorLayer<T extends LivingEntity, M extend
                 && (!ClientUtil.checkIfClientCanSeeInvisAchtung())
                 && ClientNetworking.getAppropriateConfig() != null &&
                 ClientNetworking.getAppropriateConfig().achtungSettings != null &&
-                ClientNetworking.getAppropriateConfig().achtungSettings.hidesArmor) {
+                ClientNetworking.getAppropriateConfig().achtungSettings.hidesArmor && !ClientUtil.checkIfClientCanSeeMobsForWindVision()) {
             ci.cancel();
             return;
         }

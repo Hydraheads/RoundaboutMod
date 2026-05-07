@@ -52,6 +52,8 @@ public class JusticeBaseRenderer extends StandRenderer<JusticeEntity> {
     private static final ResourceLocation BLUE_FLAME = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice/flamed_blue.png");
     private static final ResourceLocation DARK_MIRAGE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice/dark_mirage.png");
     private static final ResourceLocation JOJONIUM = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice/jojonium.png");
+    private static final ResourceLocation PUMPKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice/pumpkin.png");
+    private static final ResourceLocation JACK = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/justice/jack.png");
 
 
 
@@ -86,6 +88,10 @@ public class JusticeBaseRenderer extends StandRenderer<JusticeEntity> {
             return DARK_MIRAGE;
         } else if (BT == JusticeEntity.JOJONIUM){
             return JOJONIUM;
+        } else if (BT == JusticeEntity.PUMPKIN){
+            return PUMPKIN;
+        } else if (BT == JusticeEntity.JACK){
+            return JACK;
         }
         return PART_3_SKIN;
     }

@@ -1,5 +1,6 @@
 package net.hydra.jojomod.access;
 
+import net.minecraft.client.Camera;
 import net.minecraft.resources.ResourceLocation;
 
 public interface IShaderGameRenderer {
@@ -8,4 +9,5 @@ public interface IShaderGameRenderer {
     boolean roundabout$tsShaderStatus();
 
     float roundabout$getFrameCount();
+    float roundabout$getFov(Camera activeRenderInfo, float partialTicks, boolean useFOVSetting);
 }

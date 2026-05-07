@@ -1,6 +1,6 @@
 {
   "type": "minecraft:blasting",
-  "category": "misc",
+  "category": "building",
   "cookingtime": 100,
   "experience": 7.0,
   "group": "roundabout:meteorite",

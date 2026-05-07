@@ -22,7 +22,13 @@ public class SoftAndWetEntity extends FollowingStandEntity {
             KIRA = 10,
             COLORS = 11,
             GREEN = 12,
-            KNIGHT = 13;
+            KNIGHT = 13,
+            MORIOH = 14,
+            ART = 15,
+            NATURE = 16,
+            MELON = 17,
+            WHEEL = 18,
+            ACTION = 19;
 
 
     public final AnimationState hideFists = new AnimationState();

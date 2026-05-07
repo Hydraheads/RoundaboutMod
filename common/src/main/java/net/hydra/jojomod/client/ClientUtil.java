@@ -3,15 +3,55 @@ package net.hydra.jojomod.client;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.gui.*;
+import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
+import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsModel;
+import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsSlimModel;
+import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerAmbientSound;
+import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerExplosionSound;
+import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerMixingSound;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
+import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
+import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.networking.ModMessages;
+import net.hydra.jojomod.event.VampireData;
+import net.hydra.jojomod.event.index.*;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
+import net.hydra.jojomod.fates.FatePowers;
+import net.hydra.jojomod.fates.powers.VampireFate;
+import net.hydra.jojomod.fates.powers.VampiricFate;
+import net.hydra.jojomod.fates.powers.ZombieFate;
+import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
+import net.hydra.jojomod.powers.GeneralPowers;
+import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
+import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
+import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.HeatUtil;
+import net.hydra.jojomod.util.gravity.GravityAPI;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.client.sounds.SoundManager;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.stand.powers.*;
@@ -24,7 +64,11 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.TooltipFlag;
 import net.zetalasis.client.shader.D4CShaderFX;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.D4CCloneEntity;
@@ -32,13 +76,10 @@ import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.item.BodyBagItem;
 import net.zetalasis.networking.message.api.ModMessageEvents;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -48,8 +89,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -67,10 +106,11 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Unique;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.StringTokenizer;
+import java.nio.file.Path;
+import java.util.*;
+
+import static net.hydra.jojomod.util.MainUtil.getUserData;
+import static oshi.util.UserGroupInfo.getUser;
 
 
 public class ClientUtil {
@@ -79,12 +119,36 @@ public class ClientUtil {
     public static Matrix4f savedPose;
     public static int checkthis = 0;
     public static int checkthisdat = 0;
+    public static int renderBloodTicks = 0;
     public static boolean skipInterpolation = false;
 
     /**Fallback in case the client exits the range and can't be fed the packet anymore.
      * Not a perfect solution but it should help.*/
     public static int skipInterpolationFixAccidentTicks = -1;
 
+
+    public static void animateZombieArmsNoBob(ModelPart $$0, ModelPart $$1, boolean $$2, float $$3, float $$4) {
+        float $$5 = Mth.sin($$3 * (float) Math.PI);
+        float $$6 = Mth.sin((1.0F - (1.0F - $$3) * (1.0F - $$3)) * (float) Math.PI);
+        $$1.zRot = 0.0F;
+        $$0.zRot = 0.0F;
+        $$1.yRot = -(0.1F - $$5 * 0.6F);
+        $$0.yRot = 0.1F - $$5 * 0.6F;
+        float $$7 = (float) -Math.PI / ($$2 ? 1.5F : 2.25F);
+        $$1.xRot = $$7;
+        $$0.xRot = $$7;
+        $$1.xRot += $$5 * 1.2F - $$6 * 0.4F;
+        $$0.xRot += $$5 * 1.2F - $$6 * 0.4F;
+    }
+
+    public static Font getFont(){
+        return Minecraft.getInstance().font;
+    }
+
+    public static void setCheck(){
+        //Right-clicking a visage opens the power inventory (see inputevents mixin for another use case)
+        KeyInputs.menuKey(Minecraft.getInstance().player, Minecraft.getInstance());
+    }
     public static boolean isPlayerOrCamera(Entity ent){
         Minecraft mc = Minecraft.getInstance();
         if (!(mc.getCameraEntity() != null && ent.is(mc.getCameraEntity())) &&
@@ -94,6 +158,107 @@ public class ClientUtil {
         return false;
     }
 
+
+    public static double getCameradDistance(Entity ent){
+        return Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().distanceTo(ent.position());
+    }
+
+    public static boolean rendersRipperEyes(Entity ent){
+        if (ent instanceof Player pl && ((IPlayerEntity)pl).roundabout$GetPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE){
+            return true;
+        }
+        return false;
+    }
+    public static boolean disableBobbing(Entity ent){
+        return rendersRipperEyes(ent);
+    }
+
+    public static boolean hasChangedArms(Entity ent){
+        if (HeatUtil.isArmsFrozen(ent)){
+            return true;
+        }
+        return false;
+    }
+    public static ResourceLocation getChangedArmTexture(Entity ent){
+        if (HeatUtil.isArmsFrozen(ent)){
+            return StandIcons.ICICLE_LAYER;
+        }
+        return StandIcons.ICICLE_LAYER;
+    }
+
+    public static boolean hasChangedLegs(Entity ent){
+        if (HeatUtil.isLegsFrozen(ent)){
+            return true;
+        }
+        return false;
+    }
+    public static ResourceLocation getChangedLegTexture(Entity ent){
+        if (HeatUtil.isArmsFrozen(ent)){
+            return StandIcons.ICICLE_LAYER;
+        }
+        return StandIcons.ICICLE_LAYER;
+    }
+    public static boolean hasChangedHead(Entity ent){
+        if (HeatUtil.isBodyFrozen(ent)){
+            return true;
+        }
+        return false;
+    }
+    public static ResourceLocation getChangedHeadTexture(Entity ent){
+        if (HeatUtil.isArmsFrozen(ent)){
+            return StandIcons.ICICLE_LAYER;
+        }
+        return StandIcons.ICICLE_LAYER;
+    }
+    public static boolean hasChangedBody(Entity ent){
+        if (HeatUtil.isBodyFrozen(ent)){
+            return true;
+        }
+        return false;
+    }
+    public static ResourceLocation getChangedBodyTexture(Entity ent){
+        if (HeatUtil.isArmsFrozen(ent)){
+            return StandIcons.ICICLE_LAYER;
+        }
+        return StandIcons.ICICLE_LAYER;
+    }
+    public static ResourceLocation getChangedBodyBreastTexture(Entity ent){
+        if (HeatUtil.isArmsFrozen(ent)){
+            return StandIcons.ICE_CHEST_LAYER;
+        }
+        return StandIcons.ICE_CHEST_LAYER;
+    }
+    public static boolean hideCapeAndEars(Entity ent){
+        if (HeatUtil.isBodyFrozen(ent)){
+            return true;
+        }
+        return false;
+    }
+    public static boolean hideArmor(Entity ent){
+        if (HeatUtil.isBodyFrozen(ent) &&
+                isHiddenIceEntity(ent)){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isHiddenIceEntity(Entity ent){
+        return (ent != null && (ent instanceof Player) || (ent instanceof Mob mb
+        && !mb.isBaby() && (ent.getType()==EntityType.ZOMBIE
+                ||ent.getType()==EntityType.HUSK
+                ||ent.getType()==EntityType.CREEPER
+                ||ent.getType()==EntityType.DROWNED
+                ||ent.getType()==EntityType.SKELETON)));
+    }
+    public static boolean hideLegs(Entity ent){
+        if (HeatUtil.isLegsFrozen(ent) &&
+                isHiddenIceEntity(ent)){
+            return true;
+        }
+        return false;
+    }
+    public static int getFrozenLevel(){
+        return frozenLevel;
+    }
     public static int clientTicker;
     public static int getClientTicker(){
         return clientTicker;
@@ -101,6 +266,12 @@ public class ClientUtil {
     public static void tickClientUtilStuff(){
         clientTicker++;
 
+        if (heldSwap > 0){
+            heldSwap--;
+        }
+        if (renderBloodTicks > 0){
+            renderBloodTicks--;
+        }
         /**
         Minecraft mc = Minecraft.getInstance();
         if (mc!= null && mc.player != null) {
@@ -111,6 +282,12 @@ public class ClientUtil {
         if (ClientUtil.popSounds != null){
             ClientUtil.popSounds.popSounds();
             ClientUtil.popSounds = null;
+        }
+
+        if (roadRollerPickingRRE != null) {
+            if (!roadRollerPickingRRE.isAlive() && roadRollerPickingRRE.isRemoved()) {
+                roadRollerPickingRRE = null;
+            }
         }
 
         if (ClientUtil.isInCinderellaMobUI > -1){
@@ -177,6 +354,37 @@ public class ClientUtil {
         ent.setYHeadRot(lerpYRot);
     }
 
+    private static RoadRollerMixingSound roadRollerMixingSound;
+    private static RoadRollerEntity roadRollerPickingRRE;
+
+    public static void setRoadRollerPickingEntity(RoadRollerEntity RRE) {
+        roadRollerPickingRRE = RRE;
+    }
+
+    public static RoadRollerEntity getRoadRollerPickingRRE() {
+        return roadRollerPickingRRE;
+    }
+
+    public static void handleRoadRollerAmbientSound(Entity entity) {
+        Minecraft.getInstance().getSoundManager().play(new RoadRollerAmbientSound(ModSounds.ROAD_ROLLER_AMBIENT_EVENT, SoundSource.PLAYERS, 1, 0, entity));
+    }
+
+    public static void handleRoadRollerExplosionSound(Entity entity) {
+        Minecraft.getInstance().getSoundManager().play(new RoadRollerExplosionSound(ModSounds.ROAD_ROLLER_EXPLOSION_EVENT, SoundSource.PLAYERS, 1, 0, entity));
+    }
+
+    public static void handleRoadRollerMixingSound(Entity entity) {
+        roadRollerMixingSound = new RoadRollerMixingSound(ModSounds.ROAD_ROLLER_MIXING_EVENT, SoundSource.PLAYERS, 1.0F, 0.0F, entity);
+        Minecraft.getInstance().getSoundManager().play(roadRollerMixingSound);
+    }
+    public static void stopRoadRollerMixingSound(Entity entity) {
+        if (roadRollerMixingSound != null) {
+            Minecraft.getInstance().getSoundManager().stop(roadRollerMixingSound);
+            roadRollerMixingSound = null;
+        }
+    }
+
+
     public static void preRenderCinderellaMask(CinderellaVisageDisplayEntity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
 
 
@@ -202,15 +410,27 @@ public class ClientUtil {
         }
     }
 
+    public static void clickVampireSlot(int slot){
+        C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_VAMPIRE_SKILL_BUY,slot);
+        SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
+        soundmanager.play(SimpleSoundInstance.forUI(ModSounds.VAMPIRE_DRAIN_EVENT, 1.0F));
+    }
+
     public static @Nullable Connection getC2SConnection()
     {
         Minecraft client = Minecraft.getInstance();
-        if (client.player == null)
+        if (client == null || client.player == null)
             return null;
 
+        if (((IClientNetworking)client) == null){
+            return null;
+        }
         Connection integratedServerCon = ((IClientNetworking)client).roundabout$getServer();
 
         return (integratedServerCon != null ? integratedServerCon : client.player.connection.getConnection());
+    }
+    public static boolean renderBloodMeter(){
+        return renderBloodTicks > 0;
     }
 
     public static void handleGeneralPackets(String message, Object... vargs) {
@@ -280,6 +500,15 @@ public class ClientUtil {
                     if (ent != null){
                         ((IEntityAndData)ent).roundabout$setTrueInvisibility(altered);
 
+                    }
+                }
+                /**Invis Psuedo Tracked Data*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.MANHATTAN_INVISIBILITY.value)) {
+                    int entityID = (int)vargs[0];
+                    int altered = (int)vargs[1];
+                    Entity ent = player.level().getEntity(entityID);
+                    if (ent != null){
+                        ((IEntityAndData)ent).roundabout$setTrueInvisibilityManhattan(altered);
                     }
                 }
                 /**Daze Packet*/
@@ -354,6 +583,16 @@ public class ClientUtil {
                     byte power = (byte) vargs[0];
                     MainUtil.syncActivePower(player,power);
                 }
+                /**Syncs the active power the fate is using*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncActivePowerFate.value)) {
+                    byte power = (byte) vargs[0];
+                    MainUtil.syncActivePowerFate(player,power);
+                }
+                /**Syncs the active power the powers is using*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncActivePowerPowers.value)) {
+                    byte power = (byte) vargs[0];
+                    MainUtil.syncActivePowerPowers(player,power);
+                }
 
                 /**Syncs the power inventory settings*/
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPowerInventory.value)) {
@@ -379,6 +618,13 @@ public class ClientUtil {
                     byte context = (byte) vargs[0];
                     int data = (int) vargs[1];
                     ClientUtil.handleIntPacketS2C(player,data,context);
+                }
+                /**Generic double int that is sent to the client*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.DoubleIntToClient.value)) {
+                    byte context = (byte) vargs[0];
+                    int data = (int) vargs[1];
+                    int data2 = (int) vargs[2];
+                    ClientUtil.handleDoubleIntPacketS2C(player,data,data2,context);
                 }
                 /**Generic byte that is sent to the client*/
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SimpleByteToClient.value)) {
@@ -450,6 +696,103 @@ public class ClientUtil {
                         PW.setHeelExtension(3);
                     }
                 }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.RefreshAllCooldowns.value)) {
+                    MainUtil.clearCooldowns(player);
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AffirmAllCooldowns.value)) {
+                    ((IPlayerEntity)player).rdbt$setCooldownQuery(true);
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTimer.value)) {
+                    int sigmaTime = (int) vargs[0];
+                    if (((StandUser)player).roundabout$getStandPowers() instanceof PowersCream PC) {
+                        PC.setVoidTime(sigmaTime);
+                    }
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTransformTimer.value)) {
+                    int sigmaTime = (int) vargs[0];
+                    if (((StandUser)player).roundabout$getStandPowers() instanceof PowersCream PC) {
+                        PC.setTransformTimer(sigmaTime);
+                    }
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTransformDirection.value)) {
+                    int sigmaDirection = (int) vargs[0];
+                    if (((StandUser)player).roundabout$getStandPowers() instanceof PowersCream PC) {
+                        PC.setTransformDirection(sigmaDirection);
+                    }
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.VampireMessage.value)) {
+                    playSound(ModSounds.VAMPIRE_MESSAGE_EVENT,player,2,1);
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData.value)) {
+                    VampireData vdata = ((IPlayerEntity)player).rdbt$getVampireData();
+                    vdata.vampireLevel = (int) vargs[0];
+                    vdata.bloodExp = (int) vargs[1];
+                    vdata.animalExp = (int) vargs[2];
+                    vdata.monsterEXP = (int) vargs[3];
+                    vdata.npcExp = (int) vargs[4];
+                    vdata.timeSinceAnimal = (int) vargs[5];
+                    vdata.timeSinceMonster = (int) vargs[6];
+                    vdata.timeSinceNpc = (int) vargs[7];
+
+                    vdata.strengthLevel = (byte) vargs[8];
+                    vdata.dexterityLevel = (byte) vargs[9];
+                    vdata.resilienceLevel = (byte) vargs[10];
+
+                    vdata.hypnotismLevel = (byte) vargs[11];
+                    vdata.superHearingLevel = (byte) vargs[12];
+                    vdata.bloodSpeedLevel = (byte) vargs[13];
+
+                    vdata.graftingLevel = (byte) vargs[14];
+                    vdata.fleshBudLevel = (byte) vargs[15];
+                    vdata.daggerSplatterLevel = (byte) vargs[16];
+
+                    vdata.jumpLevel = (byte) vargs[17];
+                    vdata.ripperEyesLevel = (byte) vargs[18];
+                    vdata.freezeLevel = (byte) vargs[19];
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData2.value)) {
+                    VampireData vdata = ((IPlayerEntity)player).rdbt$getVampireData();
+                    vdata.vampireLevel = (int) vargs[0];
+                    vdata.bloodExp = (int) vargs[1];
+                    vdata.animalExp = (int) vargs[2];
+                    vdata.monsterEXP = (int) vargs[3];
+                    vdata.npcExp = (int) vargs[4];
+                    vdata.timeSinceAnimal = (int) vargs[5];
+                    vdata.timeSinceMonster = (int) vargs[6];
+                    vdata.timeSinceNpc = (int) vargs[7];
+                    renderBloodTicks = 60;
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData3.value)) {
+                    VampireData vdata = ((IPlayerEntity)player).rdbt$getVampireData();
+                    vdata.timeSinceAnimal = (int) vargs[0];
+                    vdata.timeSinceMonster = (int) vargs[1];
+                    vdata.timeSinceNpc = (int) vargs[2];
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ZombieFish.value)) {
+                    ((IPlayerEntity)player).rdbt$setZombieFish((int) vargs[0]);
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.GunRecoil.value)) {
+                    String sigmaString = (String) vargs[0];
+                    ClientUtil.applyClientRecoil(player, sigmaString);
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPossessor.value)) {
+                    Player possessed = (Player) player.level().getEntity((int)vargs[0]);
+                    LivingEntity target = (LivingEntity) player.level().getEntity((int)vargs[1]);
+                    ((StandUser)possessed).roundabout$getPossessor().setTarget(target);
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ShatterIce.value)) {
+                    int i = (int) vargs[0];
+                    Entity target = player.level().getEntity(i);
+                    if (target instanceof LivingEntity LE) {
+                        ((StandUser)LE).rdbt$setHideDeath(true);
+                    }
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncAllies.value)) {;
+                    String data = (String) vargs[0];
+                    if(((StandUser) player).roundabout$getStandPowers() instanceof PowersGreenDay PGD){
+                        PGD.allies = PGD.allyListParser(data);
+                    }
+                }
                 // theoretical deregister dynamic worlds packet
                 // String name = buf.readUtf();
                 //        ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(name));
@@ -459,6 +802,32 @@ public class ClientUtil {
                 //        }
             }
         });
+    }
+    public static List<Component> getTooltipFromItem(Minecraft p_281881_, ItemStack p_282833_) {
+        return p_282833_.getTooltipLines(p_281881_.player, p_281881_.options.advancedItemTooltips ? TooltipFlag.Default.ADVANCED : TooltipFlag.Default.NORMAL);
+    }
+    public static boolean getDirectionRight(LivingEntity self){
+
+        Direction rightAxis = Direction.DOWN;
+        MobEffectInstance mi = Minecraft.getInstance().player.getEffect(ModEffects.GRAVITY_FLIP);
+        if (mi != null) {
+            if (mi.getAmplifier() == 0) {
+                rightAxis = Direction.NORTH;
+            }
+            if (mi.getAmplifier() == 1) {
+                rightAxis = Direction.SOUTH;
+            }
+            if (mi.getAmplifier() == 2) {
+                rightAxis = Direction.EAST;
+            }
+            if (mi.getAmplifier() == 3) {
+                rightAxis = Direction.WEST;
+            }
+            if (mi.getAmplifier() == 4) {
+                rightAxis = Direction.UP;
+            }
+        }
+        return ((IGravityEntity)self).roundabout$getGravityDirection() != rightAxis;
     }
 
     /**
@@ -490,6 +859,54 @@ public class ClientUtil {
                 IE.setFinished(true);
                 popSounds = IE;
             }
+        } else if (context == PacketDataIndex.S2C_INT_VAMPIRE_SPEED){
+            if (((IFatePlayer)player).rdbt$getFatePowers() instanceof VampiricFate VP){
+                VP.setSpeedActivated(data);
+            }
+        } else if (context == PacketDataIndex.S2C_INT_STAND_MODE){
+            ((StandUser) player).roundabout$getStandPowers().clientIntUpdated(data);
+        } else if (context == PacketDataIndex.S2C_INT_FLESH_BUD){
+            Entity target = player.level().getEntity(data);
+            if (target != null && !target.isRemoved() && target.isAlive() && target.distanceTo(getPlayer()) < 30) {
+                playSound(ModSounds.FLESH_BUD_EVENT,target,1,1);
+            }
+        } else if (context == PacketDataIndex.S2C_INT_COMBO_AMT){
+            if (((IPowersPlayer) player).rdbt$getPowers() instanceof PunchingGeneralPowers pgp){
+                pgp.setComboAmt(data);
+            }
+        } else if (context == PacketDataIndex.S2C_INT_COMBO_SEC_LEFT){
+            if (((IPowersPlayer) player).rdbt$getPowers() instanceof PunchingGeneralPowers pgp){
+                pgp.setComboExpireTicks(data);
+            }
+        } else if (context == PacketDataIndex.AESTHETICIAN_OPEN){
+            setCinderellaUI2(true,data);
+        } else if (context == PacketDataIndex.S2C_INT_RIPPER_EYES) {
+            if (((IPowersPlayer)player).rdbt$getPowers() instanceof VampireGeneralPowers vgp){
+                vgp.ripperEyesLeft = data;
+            }
+        }
+    }
+    public static void handleDoubleIntPacketS2C(Player player, int data, int data2, byte context) {
+        if (context == PacketDataIndex.S2C_INT_FADE){
+            Entity target = player.level().getEntity(data);
+            if (target instanceof Player pl) {
+                ((IPowersPlayer) pl).rdbt$getPowers().setFaded(data2);
+            }
+        } else if (context == PacketDataIndex.S2C_INT_FADE_UPDATE){
+            Entity target = player.level().getEntity(data);
+            if (target instanceof Player pl) {
+                ((IPowersPlayer) pl).rdbt$getPowers().fadeOutInterpolation = 5;
+                ((IPowersPlayer) pl).rdbt$getPowers().setFaded(data2);
+            }
+        } else if (context == PacketDataIndex.S2C_SNYC_ACTIVE_POWER) {
+            Entity target = player.level().getEntity(data);
+            if (target instanceof LivingEntity LE) {
+                StandUser SU = (StandUser) LE;
+                if (SU.roundabout$getStandPowers() != null) {
+                    SU.roundabout$getStandPowers().setActivePower((byte) data2);
+                    SU.roundabout$getStandPowers().setAttackTimeDuring(0);
+                }
+            }
         }
     }
 
@@ -515,6 +932,23 @@ public class ClientUtil {
         }
         return false;
     }
+
+    public static boolean checkIfClientCanSeeMobsForWindVision() {
+
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersManhattanTransfer PMT && PMT.isPiloting()) {
+                    return true;
+        }
+        return false;
+    }
+    public static boolean checkIfClientCanSeeMobsForWindVisionFromPlayerPov() {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersManhattanTransfer PMT && PMT.visionModeClient && PMT.isActive()) {
+            return true;
+        }
+        return false;
+    }
+
     public static boolean isFabulous(){
 
         OptionInstance<GraphicsStatus> $$2 = Minecraft.getInstance().options.graphicsMode();
@@ -546,6 +980,13 @@ public class ClientUtil {
             return Minecraft.getInstance().options.getCameraType().isFirstPerson();
         }
         return false;
+    }
+
+    public static boolean sneakToggleHeld = false;
+    public static boolean isSneakToggleHeld(){
+        return sneakToggleHeld;
+    } public static void setSneakToggleHeld(boolean heldTime){
+        sneakToggleHeld = heldTime;
     }
     public static boolean checkIfStandIsYoursAndFirstPerson(StandEntity stand) {
         LocalPlayer player = Minecraft.getInstance().player;
@@ -588,6 +1029,72 @@ public class ClientUtil {
         return hideInvis;
     }
 
+    public static float getThrowFadePercent(Entity ent, float delta){
+        float throwFade = 1f;
+        delta = delta % 1;
+        IEntityAndData entityAndData = ((IEntityAndData) ent);
+        if (entityAndData.roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeMobsForWindVision()) {
+            throwFade = throwFade * 0.4F;
+        }
+        if (ent instanceof Player pl){
+            GeneralPowers gp = ((IPowersPlayer)pl).rdbt$getPowers();
+            int interp = gp.fadeOutInterpolation;
+            if (gp.isFaded()){
+                throwFade = (float) (throwFade *
+                        (1.0-
+                                Math.min(((((float)interp)*0.2f) +(delta*(0.2f))),1)
+                ));
+            } else {
+                if (interp > 0) {
+                    throwFade = (float) (throwFade *
+                            (0.0 +
+                                    Math.max(((((float) interp) * 0.2f) + (delta*(0.2f))), 1)
+                            ));
+                }
+            }
+
+            byte posX = ((IPlayerEntity)pl).roundabout$GetPos2();
+            if (posX == PlayerPosIndex.VANISH_PERSIST){
+                throwFade = 0;
+            } else if (posX == PlayerPosIndex.VANISH_START){
+                if (!ConfigManager.getClientConfig().blinkWithCamo){
+                    throwFade = 0;
+                } else {
+                    int tc = pl.tickCount % 8;
+                    if (tc  == 0){
+                        throwFade = 1 - (delta*0.5F);
+                    }else if (tc  == 1){
+                        throwFade = 0.5F - (delta*0.5F);
+                    }else if (tc  == 2 || tc == 3){
+                        throwFade = 0;
+                    }else if (tc  == 4){
+                        throwFade = 0 + (delta*0.5F);
+                    }else if (tc  == 5){
+                        throwFade = 0.5F +  (delta*0.5F);
+                    }
+                }
+            }
+
+            if (FateTypes.isHidden(ent)){
+                throwFade = 0;
+            }
+
+        }
+
+        return throwFade;
+    }
+
+    public static PlayerModel getPlayerModel(Entity entity){
+        if (entity instanceof Player player){
+            EntityRenderDispatcher dispatch = Minecraft.getInstance().getEntityRenderDispatcher();
+            EntityRenderer<?> ER = dispatch.getRenderer(player);
+            if (ER instanceof LivingEntityRenderer PR && PR.getModel() instanceof PlayerModel<?> pm) {
+                return pm;
+            }
+        }
+        return null;
+    }
+
     public static void setThrowFadeToTheEther(float ether){
         throwFadeToTheEther = ether;
     }
@@ -597,27 +1104,30 @@ public class ClientUtil {
     public static int getThrowFadeToTheEtherInt(){
         return Mth.floor(throwFadeToTheEther*255);
     }
+    //How visible the next rendered model part will be
     public static float throwFadeToTheEther = 1f;
+
+    //If this is the case, thin ice will be rendered over the next rendered model part
+    public static int frozenLevel = 0;
+
     public static int getOutlineColor(Entity entity) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
+            FatePowers fatePowers = ((IFatePlayer)player).rdbt$getFatePowers();
 
             if (powers.getGoBeyondTarget() != null && powers.getGoBeyondTarget().is(entity)) {
                 return 10978493;
             }
 
-            if (powers instanceof PowersRatt PR) {
-                if (PR.getShootTarget() != null) {
-                    if (PR.getShootTarget().equals(entity)) {
-                        return 12948493;
-                    }
-                }
-            }
+
 
             if (powers.highlightsEntity(entity, player))
                 return powers.highlightsEntityColor(entity,player);
+
+            if (fatePowers.highlightsEntity(entity, player))
+                return fatePowers.highlightsEntityColor(entity,player);
 
             if (MainUtil.isZapper(player,entity)){
                 //15974080
@@ -654,6 +1164,38 @@ public class ClientUtil {
         if (clientConfig != null && clientConfig.timeStopSettings != null &&
                 clientConfig.timeStopSettings.tsStandsSeeTSTeleportAndDontFreeze) {
             return hasATimeStopSeeingStand();
+        }
+        return false;
+    }
+
+    public static void playSound(SoundEvent event, Entity entity, float volume, float pitch){
+        SoundInstance qSound = new EntityBoundSoundInstance(
+                event,
+                SoundSource.NEUTRAL,
+                volume,
+                pitch,
+                entity,
+                entity.level().random.nextLong()
+        );
+        Minecraft.getInstance().getSoundManager().play(qSound);
+    }
+
+    public static void tickHeartbeat(Entity entity){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            if (((IFatePlayer)player).rdbt$getFatePowers() instanceof VampiricFate vp){
+                if (vp.isHearing()){
+                    vp.tickHeartbeat(entity);
+                }
+            }
+        }
+    }
+
+    public static boolean shouldHideName(Entity ent){
+        if (ent != null) {
+            if (getThrowFadePercent(ent,1) <= 0){
+                return true;
+            }
         }
         return false;
     }
@@ -719,16 +1261,26 @@ public class ClientUtil {
     }
 
     public static boolean poseHeld = false;
+    public static boolean powerHeld = false;
+    public static int heldSwap = 0;
 
     public static void openPlunderScreen(){
         Minecraft.getInstance().setScreen(new PlunderScreen());
     }
+    public static void openPowerSwitchScreen(){
+        Minecraft.getInstance().setScreen(new PowerSwitcherScreen());
+    }
     public static void openStandSwitchUI(ItemStack arrow){
         Minecraft.getInstance().setScreen(new StandArrowRerollScreen(arrow));
     }
-    public static void openModificationVisageUI(ItemStack visage){
-        Minecraft.getInstance().setScreen(new ModificationVisageScreen(visage));
+    public static void openModificationVisageUI(ItemStack visage, int slot){
+        Minecraft.getInstance().setScreen(new ModificationVisageScreen(visage, slot));
     }
+    public static void openHairspryUI(){
+        Minecraft.getInstance().setScreen(new HairColorChangeScreen());
+    }
+    public static void openMemoryRecordScreen(boolean recording){Minecraft.getInstance().setScreen(new MemoryRecordScreen(recording));}
+    public static void openTuskActScreen(){Minecraft.getInstance().setScreen(new TuskActScreen());}
     public static void strikePose(Player player, Minecraft C, boolean keyIsDown, Options option) {
         if (keyIsDown){
             if (!poseHeld){
@@ -739,6 +1291,31 @@ public class ClientUtil {
             if (poseHeld){
                 poseHeld = false;
             }
+        }
+    }
+    public static void strikePower(Player player, Minecraft C, boolean keyIsDown, Options option) {
+        if (keyIsDown){
+            if (!powerHeld){
+                C.setScreen(new PowerSwitcherScreen());
+            }
+            powerHeld = true;
+        } else {
+            if (powerHeld){
+                powerHeld = false;
+            }
+        }
+    }
+    public static boolean heldDownHide = false;
+    public static void hideIcons(Player player, Minecraft C, boolean keyIsDown, Options option) {
+        if (ConfigManager.getClientConfig() == null || ConfigManager.getClientConfig().dynamicSettings == null)
+            return;
+        if (keyIsDown) {
+            if (!heldDownHide) {
+                ConfigManager.getClientConfig().dynamicSettings.hideGUI = !ConfigManager.getClientConfig().dynamicSettings.hideGUI;
+                heldDownHide = true;
+            }
+        } else {
+            heldDownHide = false;
         }
     }
     public static void openCorpseBag(ItemStack stack) {
@@ -813,11 +1390,16 @@ public class ClientUtil {
 
     public static int isInCinderellaMobUI = -1;
     public static void setCinderellaUI(boolean costs, int entid) {
-        Minecraft mc = Minecraft.getInstance();
-
         C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_RELLA_START,entid);
+    }
+    public static void setCinderellaUI2(boolean costs, int entid) {
+        Minecraft mc = Minecraft.getInstance();
         isInCinderellaMobUI = entid;
         mc.setScreen(new VisageStoreScreen(costs));
+    }
+    public static void setZombieMinionScreen(int entid) {
+        Minecraft mc = Minecraft.getInstance();
+        mc.setScreen(new ZombieMinionScreen(entid));
     }
     public static void setJusticeTacticsScreen() {
         Minecraft mc = Minecraft.getInstance();
@@ -828,7 +1410,6 @@ public class ClientUtil {
         mc.setScreen(new JusticeMobSwitcherScreen());
     }
     public static void setJusticeBlockScreen() {
-        C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_OPEN_FOG_INVENTORY);
         Minecraft mc = Minecraft.getInstance();
         mc.setScreen(
                 new FogInventoryScreen(
@@ -1112,20 +1693,13 @@ public class ClientUtil {
         if (context == 1) {
             ((StandUser) player).roundabout$setGasolineTime(context);
         } else if (context == PacketDataIndex.S2C_SIMPLE_FREEZE_STAND) {
-            if (((StandUser)player).roundabout$getStandPowers().hasCooldowns() ||
-                    ((StandUser)player).roundabout$isSealed()) {
-                int punishTicks = ClientNetworking.getAppropriateConfig().itemSettings.switchStandDiscWhileOnCooldownsLength;
-                if (punishTicks > 0){
-                    ((StandUser) player).roundabout$setMaxSealedTicks(punishTicks);
-                    ((StandUser) player).roundabout$setSealedTicks(punishTicks);
-                }
-            } else {
                 int switchTicks = ClientNetworking.getAppropriateConfig().itemSettings.switchStandDiscLength;
                 if (switchTicks > 0){
-                    ((StandUser) player).roundabout$setMaxSealedTicks(switchTicks);
-                    ((StandUser) player).roundabout$setSealedTicks(switchTicks);
+                    if (((StandUser) player).roundabout$getSealedTicks() < switchTicks) {
+                        ((StandUser) player).roundabout$setMaxSealedTicks(switchTicks);
+                        ((StandUser) player).roundabout$setSealedTicks(switchTicks);
+                    }
                 }
-            }
         } else if (context == PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK) {
             ((StandUser) player).roundabout$getStandPowers().suspendGuard = true;
             ((StandUser) player).roundabout$getStandPowers().scopeLevel = 0;
@@ -1133,6 +1707,8 @@ public class ClientUtil {
             if (Minecraft.getInstance().screen instanceof VisageStoreScreen vs){
                 setScreenNull = true;
             }
+        } else if (context == PacketDataIndex.S2C_RESPAWN){
+            Minecraft.getInstance().player.respawn();
         }
     } public static void handleSimpleBytePacketS2C(byte context){
         LocalPlayer player = Minecraft.getInstance().player;
@@ -1181,6 +1757,216 @@ public class ClientUtil {
         }
 
         return null;
+    }
+
+    public static void applyClientRecoil(Player player, String string) {
+        Minecraft mc = Minecraft.getInstance();
+        LocalPlayer localPlayer = mc.player;
+
+        if (player == null) return;
+
+        float recoilPitch = -10F;
+        if (Objects.equals(string, "sniper")) {
+            recoilPitch = -13F;
+        }
+        localPlayer.turn(0.0F, recoilPitch);
+    }
+
+/*    ClientUtil.renderFirstPersonModelParts(localPlayer,partialTick,poseStack, bufferSource, light);
+
+        if (cameraEnt instanceof Player play && ((IPowersPlayer)cameraEnt).rdbt$getPowers() instanceof PowersEmperor vf) {
+}*/
+
+    public static<T extends LivingEntity, M extends EntityModel<T>> void renderFirstPersonModelParts(Entity cameraEnt, float $$4, PoseStack stack, MultiBufferSource source, int light){
+
+        if (cameraEnt instanceof Player play) {
+
+            // vampire
+            if (((IFatePlayer)cameraEnt).rdbt$getFatePowers() instanceof VampireFate vf){
+                int poggers = vf.getProgressIntoAnimation();
+                if (poggers >= 16 && poggers <= 22) {
+                    stack.pushPose();
+                    poggers -= 16;
+                    Vec3 vec = cameraEnt.getEyePosition();
+
+                    IPlayerEntity pl = ((IPlayerEntity) cameraEnt);
+                    float r = pl.rdbt$getHairColorX();
+                    float g = pl.rdbt$getHairColorY();
+                    float b = pl.rdbt$getHairColorZ();
+
+
+                    ItemStack visage = pl.roundabout$getMaskSlot();
+                    if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
+                        VisageData vd = ME.visageData;
+                        if (vd != null && vd.isCharacterVisage()) {
+                            r = ((float) vd.getHairColor().getX()) / 255;
+                            g = ((float) vd.getHairColor().getY()) / 255;
+                            b = ((float) vd.getHairColor().getZ()) / 255;
+                        }
+                    }
+
+
+                    Vec3 gtranslation = new Vec3(0, -0.5, 0);
+                    stack.translate(gtranslation.x, gtranslation.y, gtranslation.z);
+                    stack.mulPose(Axis.ZP.rotationDegrees(180f));
+                    stack.mulPose(Axis.XP.rotationDegrees(1));
+
+                    ModStrayModels.VampireHairFlesh.render(cameraEnt, $$4, stack, source, light, r, g, b, 1);
+
+                    stack.popPose();
+                }
+            }
+            byte bt = ((IPlayerEntity) play).roundabout$GetPos2();
+            // vampire again
+            if (ClientUtil.rendersRipperEyes(play)) {
+                stack.pushPose();
+                Vec3 gtranslation = new Vec3(0, -0.1, 0);
+                stack.translate(gtranslation.x, gtranslation.y, gtranslation.z);
+                float opacity = 0.5F;
+                stack.mulPose(Axis.ZP.rotationDegrees(180f));
+                boolean yes = false;
+                for (var i = 0; i< 20; i++) {
+                    stack.pushPose();
+                    if (yes) {
+                        stack.scale(1.01F, 1.01F, 1.01F);
+                    }
+                    //gtranslation = RotationUtil.vecPlayerToWorld(gtranslation,gravityDirection);
+
+                    ModStrayModels.ripperEyesPart.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source,
+                            LightTexture.FULL_BRIGHT,
+                            1, 1, 1, opacity);
+                    yes = !yes;
+                    stack.popPose();
+                    stack.translate(0,0,-0.5);
+                }
+                stack.popPose();
+            } else if (bt == PlayerPosIndex.BARRAGE) {
+                stack.pushPose();
+
+                boolean isHurt = play.hurtTime > 0;
+                float r = isHurt ? 1.0F : 1.0F;
+                float g = isHurt ? 0.6F : 1.0F;
+                float b = isHurt ? 0.6F : 1.0F;
+                Direction gravityDirection = GravityAPI.getGravityDirection(cameraEnt);
+                Vec3 gtranslation = new Vec3(0, -0.4, 0);
+
+                //gtranslation = RotationUtil.vecPlayerToWorld(gtranslation,gravityDirection);
+                stack.translate(gtranslation.x, gtranslation.y, gtranslation.z);
+
+                float opacity = 0.5F;
+                if (ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().opacitySettings != null) {
+                    opacity = ConfigManager.getClientConfig().opacitySettings.opacityOfPlayerBarrageArms;
+                }
+                stack.mulPose(Axis.ZP.rotationDegrees(180f));
+                stack.mulPose(Axis.XP.rotationDegrees(-22));
+                ModStrayModels.barrageArmsPart.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light,
+                        r, g, b, opacity);
+                stack.popPose();
+            } else if (bt == PlayerPosIndex.HAIR_SPIKE_2 || bt == PlayerPosIndex.HAIR_SPIKE) {
+                stack.pushPose();
+                boolean isHurt = play.hurtTime > 0;
+
+                IPlayerEntity pl = ((IPlayerEntity) cameraEnt);
+                float r = pl.rdbt$getHairColorX();
+                float g = pl.rdbt$getHairColorY();
+                float b = pl.rdbt$getHairColorZ();
+
+
+                ItemStack visage = pl.roundabout$getMaskSlot();
+                if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
+                    VisageData vd = ME.visageData;
+                    if (vd != null && vd.isCharacterVisage()) {
+                        r = ((float) vd.getHairColor().getX()) / 255;
+                        g = ((float) vd.getHairColor().getY()) / 255;
+                        b = ((float) vd.getHairColor().getZ()) / 255;
+                    }
+                }
+                Vec3 gtranslation = new Vec3(0, 0.1, 0);
+                stack.translate(gtranslation.x, gtranslation.y, gtranslation.z);
+
+                stack.mulPose(Axis.ZP.rotationDegrees(180f));
+                stack.mulPose(Axis.XP.rotationDegrees(-22));
+                ModStrayModels.bodySpikePart.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light,
+                        r, g, b, 1);
+                stack.popPose();
+            }
+
+            IPlayerEntity pl = ((IPlayerEntity) cameraEnt);
+
+            boolean slimBoolean = false;
+
+            EntityRenderer<?> renderer =
+                    Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(play);
+            if (renderer instanceof PlayerRenderer playerRenderer) {
+                PlayerModel<?> model = playerRenderer.getModel();
+                IPlayerModel ipm = (IPlayerModel) model;
+                slimBoolean = ipm.roundabout$getSlim();
+            }
+
+            Item item = play.getUseItem().getItem();
+            if (item instanceof FirearmItem) {
+                stack.pushPose();
+
+                FirstPersonArmsModel.player = play;
+                FirstPersonArmsSlimModel.player = play;
+
+                if (play.getCooldowns().isOnCooldown(play.getUseItem().getItem())) {
+                    pl.roundabout$getItemAnimationActive().startIfStopped(cameraEnt.tickCount);
+                    pl.roundabout$getItemAnimation().stop();
+                } else {
+                    pl.roundabout$getItemAnimationActive().stop();
+                    pl.roundabout$getItemAnimation().startIfStopped(cameraEnt.tickCount);
+                }
+
+                if (!(item instanceof JackalRifleItem)) {
+                    if (slimBoolean) {
+                        ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
+                    } else {
+                        ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
+                    }
+                }
+
+                if (item instanceof SnubnoseRevolverItem) {
+                    ModStrayModels.FirstPersonSnubnoseModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+                } else if (item instanceof ColtRevolverItem) {
+                    ModStrayModels.FirstPersonColtRevolverModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+                } else if (item instanceof TommyGunItem) {
+                    ModStrayModels.FirstPersonTommyGunModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+                }
+
+                stack.popPose();
+            } else if (item instanceof AnubisItem) {
+
+                pl.roundabout$getItemAnimation().startIfStopped(cameraEnt.tickCount);
+                ModStrayModels.ANUBIS.renderFirstPerson(stack,source,light,play,cameraEnt.tickCount + $$4);
+
+            } else {
+                pl.roundabout$getItemAnimation().stop();
+                pl.roundabout$getItemAnimationActive().stop();
+            }
+
+            StandUser standUser = (StandUser) cameraEnt;
+            boolean isUsingAnubis = play.isUsingItem() && play.getUseItem().is(ModItems.ANUBIS_ITEM);
+            if (AnubisLayer.shouldRender(play) != null && !isUsingAnubis && !play.getMainHandItem().is(ModItems.ANUBIS_ITEM) ) {
+                ModStrayModels.ANUBIS.renderFirstPerson(stack,source,light,play,cameraEnt.tickCount + $$4);
+            } else if (standUser.roundabout$getStandPowers() instanceof PowersTusk && PowerTypes.isUsingStand(play)) {
+                stack.pushPose();
+                FirstPersonArmsModel.player = play;
+                FirstPersonArmsSlimModel.player = play;
+
+                if (slimBoolean) {
+                    ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
+                } else {
+                    //ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
+                    ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
+                }
+                stack.popPose();
+            }
+
+
+
+        }
+
     }
 
     @Unique
@@ -1292,7 +2078,9 @@ public class ClientUtil {
         );
     }
 
-
+    public static void handleBowlerHatFlySound(Entity entity) {
+        Minecraft.getInstance().getSoundManager().play(new BowlerHatFlyingSound(ModSounds.BOWLER_HAT_FLY_SOUND_EVENT, SoundSource.PLAYERS, 1, 0, entity));
+    }
 
     public static void applyJusticeFogBlockTextureOverlayInInventory(ItemStack $$0, ItemDisplayContext $$1, boolean $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, int $$6,
                                                                      ItemModelShaper shaper, BlockEntityWithoutLevelRenderer renderer, ItemRenderer itemRenderer){
@@ -1319,6 +2107,51 @@ public class ClientUtil {
             }
 
             $$3.popPose();
+        }
+    }
+
+    public static boolean forceEntityRendering(Entity entity){
+        if (entity instanceof Player pl){
+            if (((StandUser)pl).roundabout$hasStandOut()){
+                return true;
+            }
+            if (((IPlayerEntity)pl).roundabout$GetPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**Simulating Blood Bar and whatnot*/
+    public static void renderHungerStuff(GuiGraphics graphics, Player player, int width, int height, int rand,
+                                         int foodlevel, int tickCount){
+
+        if (FateTypes.hasBloodHunger(player)){
+            for (int $$23 = 0; $$23 < 10; $$23++) {
+                int $$24 = height;
+                int $$25 = 238;
+                int $$26 = 238;
+                int sizey2 = 0;
+                if (player.hasEffect(ModEffects.BLEED)) {
+                    $$25 = 229;
+                    $$26 = 229;
+                    sizey2 = 0;
+                }
+
+                //if (player.getFoodData().getSaturationLevel() <= 0.0F && tickCount % (foodlevel * 3 + 1) == 0) {
+                //    $$24 = height + (rand - 1);
+                //}
+
+                int $$27 = width - $$23 * 8 - 9;
+                graphics.blit(StandIcons.JOJO_ICONS_2, $$27, $$24, $$26, 18, 9, 9);
+                if ($$23 * 2 + 1 < foodlevel) {
+                    graphics.blit(StandIcons.JOJO_ICONS_2, $$27, $$24, $$25, sizey2, 9, 9);
+                }
+
+                if ($$23 * 2 + 1 == foodlevel) {
+                    graphics.blit(StandIcons.JOJO_ICONS_2, $$27, $$24, $$25, sizey2+9, 9, 9);
+                }
+            }
         }
     }
 }

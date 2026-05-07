@@ -4,6 +4,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.powers.visagedata.AyaVisage;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
+import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.LivingEntity;
 
 public class AestheticianVisage4 extends AyaVisage {
@@ -12,6 +13,10 @@ public class AestheticianVisage4 extends AyaVisage {
     }
     public VisageData generateVisageData(LivingEntity entity){
         return new AestheticianVisage4(entity);
+    }
+    @Override
+    public Vec3i getHairColor(){
+        return new Vec3i(143,148,196);
     }
     @Override
     public JojoNPC getModelNPC(LivingEntity pl){

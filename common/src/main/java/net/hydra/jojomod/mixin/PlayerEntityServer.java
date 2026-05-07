@@ -150,12 +150,28 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
             ipe.roundabout$setIdleYOffset(yOffset);
             ipe.roundabout$setTeamColor(teamColor);
             ipe.roundabout$setAnchorPlaceAttack(anchorPlaceAttack);
+
+            ipe.rdbt$setHairColorX(((IPlayerEntity) $$0).rdbt$getHairColorX());
+            ipe.rdbt$setHairColorY(((IPlayerEntity) $$0).rdbt$getHairColorY());
+            ipe.rdbt$setHairColorZ(((IPlayerEntity) $$0).rdbt$getHairColorZ());
+            ipe.rdbt$setZombieFish(((IPlayerEntity) $$0).rdbt$getZombieFish());
+
             S2CPacketUtil.sendPowerInventorySettings(
                         ((ServerPlayer)((Player)(Object)this)), anchorPlace,distanceOut,
                     ipe.roundabout$getSizePercent(),
                     ipe.roundabout$getIdleRotation(),
                     ipe.roundabout$getIdleYOffset(),
                     anchorPlaceAttack);
+
+            if (!this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_LOSE_FATE_ON_DEATH)) {
+                byte strat = ((IPlayerEntity) $$0).rdbt$getRespawnStrategy();
+                if (strat < 1) {
+                    ipe.roundabout$setFate(((IPlayerEntity) $$0).roundabout$getFate());
+                }
+            }
+
+            ipe.rdbt$setVampireData(((IPlayerEntity) $$0).rdbt$getVampireData());
+            ipe.roundabout$setPower(((IPlayerEntity) $$0).roundabout$getPower());
         }
     }
 

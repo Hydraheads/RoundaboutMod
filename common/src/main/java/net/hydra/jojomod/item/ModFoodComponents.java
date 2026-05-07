@@ -1,5 +1,6 @@
 package net.hydra.jojomod.item;
 
+import net.hydra.jojomod.event.ModEffects;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
@@ -11,4 +12,5 @@ public class ModFoodComponents {
             .build();
     public static final FoodProperties LOCACACA = new FoodProperties.Builder().nutrition(4).saturationMod(0.1f)
             .alwaysEat().build();
+
 }

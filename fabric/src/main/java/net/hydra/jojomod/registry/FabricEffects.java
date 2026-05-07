@@ -18,6 +18,7 @@ public class FabricEffects extends MobEffect{
 
     public static final MobEffect BLEED = register("bleed", new FabricEffects(MobEffectCategory.HARMFUL, 11994666));
     public static final MobEffect HEX = register("hex", new FabricEffects(MobEffectCategory.HARMFUL, 11606258)); //old color 16762706
+    public static final MobEffect BANISH = register("banish", new FabricEffects(MobEffectCategory.NEUTRAL, 15099838)); //old color 16762706
     public static final MobEffect STAND_VIRUS = register("stand_virus", new FabricEffects(MobEffectCategory.HARMFUL, 9979490));
     public static final MobEffect CAPTURING_LOVE = register("capturing_love", new FabricEffects(MobEffectCategory.BENEFICIAL, 16772988));
     public static final MobEffect FACELESS = register("faceless", new FabricEffects(MobEffectCategory.HARMFUL, 10329495));
@@ -27,6 +28,16 @@ public class FabricEffects extends MobEffect{
             );
     public static final MobEffect GRAVITY_FLIP =
             register("gravity_flip", new FabricEffects(MobEffectCategory.NEUTRAL, 4906114));
+    public static final MobEffect WARDING =
+            register("warding", new FabricEffects(MobEffectCategory.BENEFICIAL, 16760283));
+    public static final MobEffect SWITCH =
+            register("switch", new FabricEffects(MobEffectCategory.HARMFUL, 9974431));
+    public static final MobEffect VAMPIRE_BLOOD =
+            register("vampire_blood", new FabricEffects(MobEffectCategory.HARMFUL, 8662571));
+    public static final MobEffect UNBALANCED =
+            register("unbalanced", new FabricEffects(MobEffectCategory.HARMFUL, 2738639));
+    public static final MobEffect MOLD =
+            register("mold", new FabricEffects(MobEffectCategory.HARMFUL, 0));
 
     protected FabricEffects(MobEffectCategory mobEffectCategory, int i) {
         super(mobEffectCategory, i);
@@ -40,10 +51,16 @@ public class FabricEffects extends MobEffect{
     public static void register(){
         ModEffects.BLEED = BLEED;
         ModEffects.HEX = HEX;
+        ModEffects.BANISH = BANISH;
         ModEffects.STAND_VIRUS = STAND_VIRUS;
         ModEffects.CAPTURING_LOVE = CAPTURING_LOVE;
         ModEffects.FACELESS = FACELESS;
         ModEffects.MELTING = MELTING;
         ModEffects.GRAVITY_FLIP = GRAVITY_FLIP;
+        ModEffects.WARDING = WARDING;
+        ModEffects.SWITCH = SWITCH;
+        ModEffects.VAMPIRE_BLOOD = VAMPIRE_BLOOD;
+        ModEffects.UNBALANCED = UNBALANCED;
+        ModEffects.MOLD = MOLD;
     }
 }

@@ -142,7 +142,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
             at = @At(
                     value = "HEAD"
             ),
-            cancellable = true)
+            cancellable = true, require = 0)
     private void roundabout$calculateEntityAnimation(boolean $$0, CallbackInfo ci) {
         Direction gravityDirection = GravityAPI.getGravityDirection(rdbt$this());
         if (gravityDirection == Direction.DOWN)
@@ -191,7 +191,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
             at = @At(
                     value = "HEAD"
             ),
-            cancellable = true)
+            cancellable = true, require = 0)
     private void roundabout$travelWithGravity(Vec3 $$0, CallbackInfo ci) {
         Direction gravityDirection = GravityAPI.getGravityDirection(rdbt$this());
         int changeContext = 0;
@@ -339,6 +339,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
         this.calculateEntityAnimation(this instanceof FlyingAnimal);
 
         ((StandUser)this).rdbt$doMoldDetection($$0);
+        ((StandUser)this).rdbt$doWindVisionDetection();
     }
 
 
@@ -347,7 +348,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
             at = @At(
                     value = "HEAD"
             ),
-            cancellable = true
+            cancellable = true, require = 0
     )
     private void roundabout$modify_playBlockFallSound_getBlockState_0(CallbackInfo ci) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
@@ -371,7 +372,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
                     target = "(DDD)Lnet/minecraft/world/phys/Vec3;",
                     ordinal = 0
             ),
-            cancellable = true)
+            cancellable = true, require = 0)
     private void roundabout$redirect_canSee_new_0(Entity entity, CallbackInfoReturnable<Boolean> cir) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
 
@@ -393,7 +394,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
     @Inject(
             method = "getLocalBoundsForPose(Lnet/minecraft/world/entity/Pose;)Lnet/minecraft/world/phys/AABB;",
             at = @At("RETURN"),
-            cancellable = true
+            cancellable = true, require = 0
     )
     private void roundabout$inject_getBoundingBox(Pose pose, CallbackInfoReturnable<AABB> cir) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
@@ -444,7 +445,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
             at = @At(
                     value = "HEAD"
             ),
-            cancellable = true
+            cancellable = true, require = 0
     )
     private void roundabout$augmentHurtKnockaback(double $$0, double $$1, double $$2, CallbackInfo ci){
         if (MainUtil.isKnockbackImmune(rdbt$this())){
@@ -527,7 +528,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
             at = @At(
                     value = "HEAD"
             ),
-            cancellable = true)
+            cancellable = true, require = 0)
     private void roundabout$blocked(LivingEntity target, CallbackInfo ci) {
         Direction gravityDirection = GravityAPI.getGravityDirection(target);
         Direction gravityDirection2 = GravityAPI.getGravityDirection(rdbt$this());
@@ -577,7 +578,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
             at = @At(
                     value = "HEAD"
             ),
-            cancellable = true)
+            cancellable = true, require = 0)
     private void roundabout$spawnItemParticles(ItemStack $$0, int $$1, CallbackInfo ci){
         Direction gravityDirection = GravityAPI.getGravityDirection(this);
         if (gravityDirection == Direction.DOWN)
@@ -604,7 +605,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
             at = @At(
                     value = "HEAD"
             ),
-            cancellable = true
+            cancellable = true, require = 0
     )
     private void roundabout$tickEffects(CallbackInfo ci) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
@@ -684,7 +685,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
             at = @At(
                     value = "HEAD"
             ),
-            cancellable = true
+            cancellable = true, require = 0
     )
     private void roundabout$modify_addDeathParticless_addParticle_0(CallbackInfo ci) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
@@ -706,7 +707,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
             at = @At(
                     value = "HEAD"
             ),
-            cancellable = true
+            cancellable = true, require = 0
     )
     public void isDamageSourceBlocked(DamageSource $$0, CallbackInfoReturnable<Boolean> cir) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);

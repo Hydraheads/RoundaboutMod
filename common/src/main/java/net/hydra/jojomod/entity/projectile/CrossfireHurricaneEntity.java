@@ -530,11 +530,13 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
 
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(USER_ID, -1);
-        this.entityData.define(SIZE, 0);
-        this.entityData.define(CROSS_NUMBER, 0);
-        this.entityData.define(MAX_SIZE, 0);
+        if (!this.entityData.hasItem(USER_ID)) {
+            super.defineSynchedData();
+            this.entityData.define(USER_ID, -1);
+            this.entityData.define(SIZE, 0);
+            this.entityData.define(CROSS_NUMBER, 0);
+            this.entityData.define(MAX_SIZE, 0);
+        }
     }
 
     @Override

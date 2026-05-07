@@ -5,19 +5,20 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.client.models.stand.JusticeModel;
 import net.hydra.jojomod.client.models.stand.renderers.JusticeBaseRenderer;
 import net.hydra.jojomod.client.models.stand.renderers.JusticeRenderer;
 import net.hydra.jojomod.client.models.stand.renderers.StandRenderer;
 import net.hydra.jojomod.entity.stand.*;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.item.GlaiveItem;
-import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.item.StandArrowItem;
-import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
+import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.stand.powers.PowersEmperor;
+import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
@@ -27,16 +28,18 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.entity.monster.AbstractIllager;
+import net.minecraft.world.item.*;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -63,6 +66,10 @@ public abstract class ZItemInHandRenderer {
 
     @Shadow protected abstract void renderPlayerArm(PoseStack $$0, MultiBufferSource $$1, int $$2, float $$3, float $$4, HumanoidArm $$5);
 
+    @Shadow private float oMainHandHeight;
+
+    @Shadow private float mainHandHeight;
+
     @Inject(method = "renderHandsWithItems", at = @At(value = "HEAD"), cancellable = true)
     public<T extends LivingEntity, M extends EntityModel<T>>
     void roundabout$renderHandsWithItems(float partialTick, PoseStack poseStack, MultiBufferSource.BufferSource bufferSource,
@@ -82,6 +89,27 @@ public abstract class ZItemInHandRenderer {
                     ci.cancel();
                     return;
                 }
+            }
+
+           // if (user.roundabout$getStandPowers() instanceof PowersGreenDay PGD ) {
+           //     if (!PGD.HasMainArm || !(PGD.Main_arm == null)) {
+           //         ci.cancel();
+           //         return;
+           //     }
+           // }
+
+            if (user.roundabout$getStandPowers() instanceof PowersEmperor && user.roundabout$getCombatMode()){
+
+                poseStack.pushPose();
+                poseStack.translate(0.3, -0.25, -0.7);
+                poseStack.mulPose(Axis.XP.rotationDegrees(290.0F));
+                poseStack.mulPose(Axis.YP.rotationDegrees(135.0F));
+                poseStack.mulPose(Axis.ZP.rotationDegrees(-30.0F));
+                poseStack.scale(0.9F, 0.9F, 0.9F);
+                ModStrayModels.EMPEROR_MODEL.renderToBuffer(poseStack, bufferSource.getBuffer(RenderType.entityCutoutNoCull(new ResourceLocation(Roundabout.MOD_ID, "textures/stand/emperor/emperor_anime.png"))), light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                poseStack.popPose();
+
+                poseStack.scale(0.0F, 0.0F, 0.0F);
             }
 
 
@@ -127,7 +155,16 @@ public abstract class ZItemInHandRenderer {
                 }
                 ci.cancel();
             }
+
         }
+    }
+    @Inject(method = "renderHandsWithItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endBatch()V", shift = At.Shift.BEFORE), cancellable = true)
+    public<T extends LivingEntity, M extends EntityModel<T>>
+    void roundabout$renderHandsWithItemsX(float partialTick, PoseStack poseStack, MultiBufferSource.BufferSource bufferSource,
+                                         LocalPlayer localPlayer, int light, CallbackInfo ci) {
+
+        //We can render any model here in first person
+        ClientUtil.renderFirstPersonModelParts(localPlayer,partialTick,poseStack, bufferSource, light);
     }
 
     @Unique
@@ -163,26 +200,65 @@ public abstract class ZItemInHandRenderer {
     public void roundabout$tick(CallbackInfo ci) {
     }
     @Inject(method = "renderArmWithItem", at = @At(value = "HEAD"), cancellable = true)
-    public void roundabout$renderArmWithItemAbstractClientPlayer(AbstractClientPlayer abstractClientPlayer, float ff, float g, InteractionHand interactionHand, float h, ItemStack itemStack, float i, PoseStack poseStack, MultiBufferSource multiBufferSource, int j, CallbackInfo ci) {
+    public void roundabout$renderArmWithItemAbstractClientPlayer(AbstractClientPlayer abstractClientPlayer, float partialTick, float g, InteractionHand interactionHand, float h, ItemStack itemStack, float attackProg, PoseStack poseStack, MultiBufferSource multiBufferSource, int j, CallbackInfo ci) {
         if (abstractClientPlayer.isScoping()) {
             return;
         }
 
-        if (abstractClientPlayer != null && ((StandUser)abstractClientPlayer).roundabout$getEffectiveCombatMode() && !abstractClientPlayer.isUsingItem()){
-            ClientUtil.pushPoseAndCooperate(poseStack,4);
-            boolean $$10 = interactionHand == InteractionHand.MAIN_HAND;
-            HumanoidArm humarm = $$10 ? abstractClientPlayer.getMainArm() : abstractClientPlayer.getMainArm().getOpposite();
-            if ($$10 && !abstractClientPlayer.isInvisible()) {
-                this.renderPlayerArm(poseStack, multiBufferSource, j, i, h, humarm);
+        if (abstractClientPlayer != null && ((StandUser)abstractClientPlayer).roundabout$getEffectiveCombatMode() && !abstractClientPlayer.isUsingItem() ||
+                AnubisLayer.shouldRender(abstractClientPlayer) != null || abstractClientPlayer.getItemInHand(interactionHand).is(ModItems.ANUBIS_ITEM)) {
+
+            if (PowerTypes.isBrawling(abstractClientPlayer)){
+                boolean $$10 = interactionHand == InteractionHand.MAIN_HAND;
+                if ($$10){
+                    poseStack.pushPose();
+
+
+                    InteractionHand hand = abstractClientPlayer.swingingArm;
+                    InteractionHand hand2 = hand;
+                    if (hand2 == InteractionHand.MAIN_HAND){
+                        hand2 =  InteractionHand.OFF_HAND;
+                    } else {
+                        hand2 =  InteractionHand.MAIN_HAND;
+                    }
+
+                    HumanoidArm $$11 = $$10 ? abstractClientPlayer.getMainArm() : abstractClientPlayer.getMainArm().getOpposite();
+                    float $$5 = abstractClientPlayer.getAttackAnim(partialTick);
+                    float hd = hand == InteractionHand.MAIN_HAND ? $$5 : 0.0F;
+                    float xd = 1.0F - Mth.lerp(partialTick, this.oMainHandHeight, this.mainHandHeight);
+                    this.renderPlayerArm(poseStack, multiBufferSource, j, xd, hd, $$11);
+                    abstractClientPlayer.setMainArm(abstractClientPlayer.getMainArm().getOpposite());
+                    poseStack.popPose();
+
+
+                    abstractClientPlayer.swingingArm = hand2;
+                    poseStack.pushPose();
+
+                    hd = hand2 == InteractionHand.MAIN_HAND ? $$5 : 0.0F;
+                    xd = 1.0F - Mth.lerp(partialTick, this.oMainHandHeight, this.mainHandHeight);
+                    this.renderPlayerArm(poseStack, multiBufferSource, j, xd, hd, $$11.getOpposite());
+                    abstractClientPlayer.setMainArm(abstractClientPlayer.getMainArm().getOpposite());
+                    abstractClientPlayer.swingingArm = hand;
+                    ci.cancel();
+                    poseStack.popPose();
+                }
+            } else {
+                ClientUtil.pushPoseAndCooperate(poseStack,4);
+                boolean $$10 = interactionHand == InteractionHand.MAIN_HAND;
+                HumanoidArm humarm = $$10 ? abstractClientPlayer.getMainArm() : abstractClientPlayer.getMainArm().getOpposite();
+                if ($$10 && !abstractClientPlayer.isInvisible()) {
+                    this.renderPlayerArm(poseStack, multiBufferSource, j, attackProg, h, humarm);
+                }
+                ClientUtil.popPoseAndCooperate(poseStack,4);
+                ci.cancel();
+                return;
             }
-            ClientUtil.popPoseAndCooperate(poseStack,4);
-            ci.cancel();
-            return;
         }
 
 
 
         if (!itemStack.isEmpty()) {
+            float shakeMod = 0F;
             if (abstractClientPlayer.isUsingItem() && abstractClientPlayer.getUseItemRemainingTicks() > 0 && abstractClientPlayer.getUsedItemHand() == interactionHand) {
 
                 boolean bl = interactionHand == InteractionHand.MAIN_HAND;
@@ -206,7 +282,7 @@ public abstract class ZItemInHandRenderer {
                     ci.cancel();
                     ClientUtil.pushPoseAndCooperate(poseStack,10);
 
-                    this.applyItemArmTransform(poseStack, humanoidArm, i);
+                    this.applyItemArmTransform(poseStack, humanoidArm, attackProg);
                     poseStack.translate((float) q * -0.3f, 0.25, 0.15731531f);
                     if (itemStack.is(ModItems.KNIFE) || itemStack.is(ModItems.KNIFE_BUNDLE)) {
                         poseStack.mulPose(Axis.XP.rotationDegrees(-55.0f));
@@ -217,7 +293,7 @@ public abstract class ZItemInHandRenderer {
                     }
                     poseStack.mulPose(Axis.YP.rotationDegrees((float) q * 35.3f));
                     poseStack.mulPose(Axis.ZP.rotationDegrees((float) q * -9.785f));
-                    float r = (float) itemStack.getUseDuration() - ((float) this.minecraft.player.getUseItemRemainingTicks() - ff + kT2);
+                    float r = (float) itemStack.getUseDuration() - ((float) this.minecraft.player.getUseItemRemainingTicks() - partialTick + kT2);
                     float l = r / knifeTime;
                     if (l > kT2) {
                         l = kT2;
@@ -241,10 +317,10 @@ public abstract class ZItemInHandRenderer {
                     this.renderItem(abstractClientPlayer, itemStack, bl2 ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND :
                             ItemDisplayContext.FIRST_PERSON_LEFT_HAND, !bl2, poseStack, multiBufferSource, j);
                     ClientUtil.popPoseAndCooperate(poseStack,10);
-                } else if (itemStack.getUseAnimation() == UseAnim.BLOCK && itemStack.getItem() instanceof StandArrowItem) {
+                } else if (itemStack.getUseAnimation() == UseAnim.BOW && itemStack.getItem() instanceof SacrificialDaggerItem) {
                     ci.cancel();
                     ClientUtil.pushPoseAndCooperate(poseStack,11);
-                    this.applyItemArmTransform(poseStack, humanoidArm, i);
+                    this.applyItemArmTransform(poseStack, humanoidArm, attackProg);
                     poseStack.translate((float) q * -0.3f, 0.25, 0.15731531f);
                     float knifeTime = 5f;
                     float kT2 = (float) (knifeTime * 0.1);
@@ -252,7 +328,36 @@ public abstract class ZItemInHandRenderer {
                     poseStack.mulPose(Axis.XP.rotationDegrees(30.0f));
                     poseStack.mulPose(Axis.YP.rotationDegrees((float) q * -35.3f));
                     poseStack.mulPose(Axis.ZP.rotationDegrees((float) q * -9.785f));
-                    float r = (float) itemStack.getUseDuration() - ((float) this.minecraft.player.getUseItemRemainingTicks() - ff + kT2);
+                    float r = (float) itemStack.getUseDuration() - ((float) this.minecraft.player.getUseItemRemainingTicks() - partialTick + kT2);
+                    float l = r / knifeTime;
+                    l/=2;
+                    if (l > kT2) {
+                        l = kT2;
+                    }
+                    if (l > kT3) {
+                        float m = Mth.sin((r - kT3) * 1.3f);
+                        float n = l - kT3;
+                        float o = m * n;
+                        poseStack.translate(o * 0.0f, o * 0.004f, o * 0.0f);
+                    }
+                    poseStack.translate(0.0f, l * -0.6, l * -0.1f);
+                    poseStack.scale(1.0f, 1.0f, 1.0f);
+                    poseStack.mulPose(Axis.YN.rotationDegrees((float) q * 45.0f));
+                    this.renderItem(abstractClientPlayer, itemStack, bl2 ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND :
+                            ItemDisplayContext.FIRST_PERSON_LEFT_HAND, !bl2, poseStack, multiBufferSource, j);
+                    ClientUtil.popPoseAndCooperate(poseStack,11);
+                } else if (itemStack.getUseAnimation() == UseAnim.BOW && itemStack.getItem() instanceof StandArrowItem) {
+                    ci.cancel();
+                    ClientUtil.pushPoseAndCooperate(poseStack,11);
+                    this.applyItemArmTransform(poseStack, humanoidArm, attackProg);
+                    poseStack.translate((float) q * -0.3f, 0.25, 0.15731531f);
+                    float knifeTime = 5f;
+                    float kT2 = (float) (knifeTime * 0.1);
+                    float kT3 = (float) (knifeTime * 0.01);
+                    poseStack.mulPose(Axis.XP.rotationDegrees(30.0f));
+                    poseStack.mulPose(Axis.YP.rotationDegrees((float) q * -35.3f));
+                    poseStack.mulPose(Axis.ZP.rotationDegrees((float) q * -9.785f));
+                    float r = (float) itemStack.getUseDuration() - ((float) this.minecraft.player.getUseItemRemainingTicks() - partialTick + kT2);
                     float l = r / knifeTime;
                     if (l > kT2) {
                         l = kT2;
@@ -274,27 +379,30 @@ public abstract class ZItemInHandRenderer {
                 if (itemStack.getItem() instanceof StandArrowItem SI){
                     LivingEntity ME =  MainUtil.homeOnWorthy(abstractClientPlayer.level(),abstractClientPlayer.position(),5);
                     if (ME != null && SI.isWorthinessType(itemStack,ME)) {
-                        float homingMod = (5-Math.min(5,ME.distanceTo(abstractClientPlayer)))/5;
-                        boolean bl = interactionHand == InteractionHand.MAIN_HAND;
-                        HumanoidArm humanoidArm = bl ? abstractClientPlayer.getMainArm() : abstractClientPlayer.getMainArm().getOpposite();
-                        boolean bl2;
-                        boolean bl3 = bl2 = humanoidArm == HumanoidArm.RIGHT;
-                        int q = bl2 ? 1 : -1;
-                        ci.cancel();
-                        ClientUtil.pushPoseAndCooperate(poseStack,12);
+                        shakeMod = (5-Math.min(5,ME.distanceTo(abstractClientPlayer)))/5;
 
-                        this.applyItemArmTransform(poseStack, humanoidArm, i);
-                        poseStack.translate((float) q * -0.28f, 0.15, 0.1);
-                        float knifeTime = 5f;
-                        float kT2 = (float) (knifeTime * 0.1);
-                        float r = (-ff + kT2);
-                        poseStack.scale(1.0f, 1.0f, 1.0f);
-                        poseStack.mulPose(Axis.XP.rotationDegrees(-30.0f-Math.abs(20F*(r*homingMod))-(14F*homingMod)));
-                        this.renderItem(abstractClientPlayer, itemStack, bl2 ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND :
-                                ItemDisplayContext.FIRST_PERSON_LEFT_HAND, !bl2, poseStack, multiBufferSource, j);
-                        ClientUtil.popPoseAndCooperate(poseStack,12);
                     }
                 }
+            }
+
+            if (shakeMod != 0.0F) {
+                boolean bl = interactionHand == InteractionHand.MAIN_HAND;
+                HumanoidArm humanoidArm = bl ? abstractClientPlayer.getMainArm() : abstractClientPlayer.getMainArm().getOpposite();
+                boolean bl2 = humanoidArm == HumanoidArm.RIGHT;
+                int q = bl2 ? 1 : -1;
+                ci.cancel();
+                ClientUtil.pushPoseAndCooperate(poseStack,12);
+
+                this.applyItemArmTransform(poseStack, humanoidArm, attackProg);
+                poseStack.translate((float) q * -0.28f, 0.15, 0.1);
+                float knifeTime = 5f;
+                float kT2 = (float) (knifeTime * 0.1);
+                float r = (-partialTick + kT2);
+                poseStack.scale(1.0f, 1.0f, 1.0f);
+                poseStack.mulPose(Axis.XP.rotationDegrees(-30.0f-Math.abs(20F*(r*shakeMod))-(14F*shakeMod)));
+                this.renderItem(abstractClientPlayer, itemStack, bl2 ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND :
+                        ItemDisplayContext.FIRST_PERSON_LEFT_HAND, !bl2, poseStack, multiBufferSource, j);
+                ClientUtil.popPoseAndCooperate(poseStack,12);
             }
         }
     }

@@ -6,16 +6,21 @@ package net.hydra.jojomod.client.models.stand;// Made with Blockbench 4.12.5
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.models.stand.animations.RattAnimations;
 import net.hydra.jojomod.entity.stand.RattEntity;
+import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
 public class RattModel<T extends RattEntity> extends StandModel<T> {
@@ -128,21 +133,44 @@ public class RattModel<T extends RattEntity> extends StandModel<T> {
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		super.renderToBuffer(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        super.renderToBuffer(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 
 	@Override
 	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+		Minecraft mc = Minecraft.getInstance();
+
+		Vec3 rots = new Vec3(this.head.xRot,this.stand.yRot,0);
+
 		super.setupAnim(pEntity,pLimbSwing,pLimbSwingAmount,pAgeInTicks,pNetHeadYaw,pHeadPitch);
 
-        StandUser SU = (StandUser) ((RattEntity)pEntity).getUser();
+		StandUser SU = (StandUser) pEntity.getUser();
 		if (SU != null) {
 			if (SU.roundabout$getStandPowers() instanceof PowersRatt PR) {
-				Entity target = PR.getShootTarget();
-				Vec3 v = PR.getRotations(target);
-				this.head.xRot = Mth.lerp(this.head.xRot, (float) v.x, 0.85F);
+				if (!mc.isPaused() && !(((TimeStop) pEntity.level()).CanTimeStopEntity(pEntity.getUser()))) {
+                    Entity target = PR.getShootTarget();
+					Vec3 v = PR.getRotations(target);
+
+
+                    float fade = (float) pEntity.getFadeOut() / pEntity.getMaxFade();
+                    if (fade != 1)  {
+                        v = new Vec3((float) (Mth.lerp(fade, 0, v.x)),v.y,0);
+                    }
+                    if (pEntity.getUser() != null) {
+                        if (pEntity.getUser() instanceof Player P) {
+                            if (((IPlayerEntity)P).roundabout$GetPoseEmote() != Poses.NONE.id) {
+                                v = new Vec3(Mth.lerp(0.2,pEntity.getHeadRotationX(),0),v.y,0);
+                            }
+                        }
+                    }
+
+					this.head.xRot = Mth.lerp(this.head.xRot, (float) v.x, 0.85F);
+					this.stand.yRot = Mth.lerp(this.stand.yRot, (float) v.y, 0.85F);
+				} else {
+					this.head.xRot = (float)rots.x;
+					this.stand.yRot =(float)rots.y;
+				}
 				pEntity.setHeadRotationX(this.head.xRot);
-				this.stand.yRot = Mth.lerp(this.stand.yRot, (float) v.y, 0.85F);
 				pEntity.setStandRotationY(this.stand.yRot);
 			}
 		}
@@ -151,5 +179,10 @@ public class RattModel<T extends RattEntity> extends StandModel<T> {
 
 
 		this.animate(pEntity.fire, RattAnimations.Fire, pAgeInTicks, 1f);
-		this.animate(pEntity.loading, RattAnimations.Loading, pAgeInTicks, 1f);}
+		this.animate(pEntity.loading, RattAnimations.Loading, pAgeInTicks, 1f);
+
+        if (pEntity.isSafe()) {
+            this.setAlpha(0.5F);
+        }
+    }
 }

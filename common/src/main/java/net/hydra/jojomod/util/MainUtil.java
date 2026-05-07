@@ -2,19 +2,22 @@ package net.hydra.jojomod.util;
 
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.primitives.Floats;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.gui.FogInventoryMenu;
-import net.hydra.jojomod.client.gui.FogInventoryScreen;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
+import net.hydra.jojomod.entity.paintings.RoundaboutPainting;
+import net.hydra.jojomod.entity.pathfinding.GroundPathfindingStandAttackEntity;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
@@ -24,13 +27,26 @@ import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModGamerules;
+import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.fates.FatePowers;
+import net.hydra.jojomod.fates.powers.VampiricFate;
+import net.hydra.jojomod.powers.GeneralPowers;
+import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersMetallica;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
+import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.resources.DefaultPlayerSkin;
+import net.minecraft.client.resources.SkinManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -45,6 +61,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
@@ -62,12 +79,15 @@ import net.minecraft.world.entity.animal.sniffer.Sniffer;
 import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.decoration.Painting;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.npc.*;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.inventory.AbstractFurnaceMenu;
@@ -75,15 +95,14 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.GameType;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.*;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.zetalasis.networking.message.api.ModMessageEvents;
 
 import javax.annotation.Nullable;
@@ -101,6 +120,43 @@ public class MainUtil {
         isClient = true;
     }
 
+
+    public static void playPop(Entity entity){
+        if (entity instanceof LivingEntity LE && !LE.level().isClientSide()){
+            StandUser SE = ((StandUser) LE);
+            if (SE.roundabout$isBubbleEncased()) {
+                SE.roundabout$setBubbleEncased((byte) 0);
+                LE.level().playSound(null, LE.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
+                        SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+                ((ServerLevel) LE.level()).sendParticles(ModParticles.BUBBLE_POP,
+                        LE.getX(), LE.getY() + LE.getBbHeight() * 0.5, LE.getZ(),
+                        5, 0.25, 0.25, 0.25, 0.025);
+            }
+        }
+    }
+
+
+    public static final Map<DyeColor, ItemLike> SHEEP_DYE;
+    static {
+        SHEEP_DYE = Util.make(Maps.newEnumMap(DyeColor.class), ($$0) -> {
+            $$0.put(DyeColor.WHITE, Blocks.WHITE_WOOL);
+            $$0.put(DyeColor.ORANGE, Blocks.ORANGE_WOOL);
+            $$0.put(DyeColor.MAGENTA, Blocks.MAGENTA_WOOL);
+            $$0.put(DyeColor.LIGHT_BLUE, Blocks.LIGHT_BLUE_WOOL);
+            $$0.put(DyeColor.YELLOW, Blocks.YELLOW_WOOL);
+            $$0.put(DyeColor.LIME, Blocks.LIME_WOOL);
+            $$0.put(DyeColor.PINK, Blocks.PINK_WOOL);
+            $$0.put(DyeColor.GRAY, Blocks.GRAY_WOOL);
+            $$0.put(DyeColor.LIGHT_GRAY, Blocks.LIGHT_GRAY_WOOL);
+            $$0.put(DyeColor.CYAN, Blocks.CYAN_WOOL);
+            $$0.put(DyeColor.PURPLE, Blocks.PURPLE_WOOL);
+            $$0.put(DyeColor.BLUE, Blocks.BLUE_WOOL);
+            $$0.put(DyeColor.BROWN, Blocks.BROWN_WOOL);
+            $$0.put(DyeColor.GREEN, Blocks.GREEN_WOOL);
+            $$0.put(DyeColor.RED, Blocks.RED_WOOL);
+            $$0.put(DyeColor.BLACK, Blocks.BLACK_WOOL);
+        });
+    }
 
     public static boolean isMeleeDamage(DamageSource di){
         if (di.is(DamageTypes.PLAYER_ATTACK) || di.is(DamageTypes.MOB_ATTACK))
@@ -121,11 +177,86 @@ public class MainUtil {
         }
         return false;
     }
+    public static boolean isPlayerInFireBlock(Entity player) {
+        // Get the position of the block the player is standing in
+        BlockPos pos = BlockPos.containing(player.getX(), player.getY()+0.01F, player.getZ());
 
+        // Get the block at that position
+        Block block = player.level().getBlockState(pos).getBlock();
 
+        // Check if it’s a subclass of AbstractFireBlock
+        return block instanceof BaseFireBlock;
+    }
 
     public static ArrayList<String> walkableBlocks = Lists.newArrayList();
+    public static ArrayList<String> expLessBlocks = Lists.newArrayList();
     public static ArrayList<String> standBlockGrabBlacklist = Lists.newArrayList();
+    public static ArrayList<String> standDestructionBlacklist = Lists.newArrayList();
+    public static ArrayList<String> occultChargeEffectsToBanish = Lists.newArrayList();
+    public static ArrayList<String> naturalStandUserMobBlacklist = Lists.newArrayList();
+    public static ArrayList<String> hypnotismMobBlackList = Lists.newArrayList();
+
+    public static ArrayList<String> addedMobsWithRedBlood = Lists.newArrayList();
+    public static ArrayList<String> addedMobsWithBlueBlood = Lists.newArrayList();
+    public static ArrayList<String> addedMobsWithEnderBlood = Lists.newArrayList();
+    public static ArrayList<String> removeBloodFromThese = Lists.newArrayList();
+    public static ArrayList<String> unfreezableMobs = Lists.newArrayList();
+    public static ArrayList<String> foodThatHasEffectsForVampires = Lists.newArrayList();
+    public static Set<String> foodThatGivesBloodList = Set.of();
+    Map<String, FoodBloodStats> foodThatGivesBloodMap;
+
+    public record FoodBloodStats(String id, int hunger, float saturation) {}
+
+    public static Map<String, FoodBloodStats> parseFoodList(Set<String> entries) {
+        Map<String, FoodBloodStats> map = new HashMap<>();
+
+        for (String entry : entries) {
+            String[] parts = entry.split(":");
+            if (parts.length < 4) continue; // safety check
+
+            // Recombine the namespaced ID ("minecraft:beef" = parts[0] + ":" + parts[1])
+            String id = parts[0] + ":" + parts[1];
+            int hunger = Integer.parseInt(parts[2]);
+            float saturation = Float.parseFloat(parts[3].replace("F", "")); // remove trailing F
+
+            map.put(id, new FoodBloodStats(id, hunger, saturation));
+        }
+
+        return map;
+    }
+
+    public static Map<String, FoodBloodStats> foodMap;
+
+
+    public static int getBloodAmount(ItemStack stack) {
+        if (foodMap != null && !foodMap.isEmpty()) {
+            // Get the registry name of the item
+            ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
+            if (id != null) {
+                FoodBloodStats stats = foodMap.get(id.toString());
+                if (stats != null) {
+                    // You can use either hunger, saturation, or a combination
+                    return stats.hunger(); // or stats.saturation(), depending on what you need
+                }
+            }
+        }
+        return 0;
+    }
+
+    public static float getSaturationAmount(ItemStack stack) {
+        if (foodMap != null && !foodMap.isEmpty()) {
+            // Get the registry name of the item
+            ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
+            if (id != null) {
+                FoodBloodStats stats = foodMap.get(id.toString());
+                if (stats != null) {
+                    // You can use either hunger, saturation, or a combination
+                    return stats.saturation(); // or stats.saturation(), depending on what you need
+                }
+            }
+        }
+        return 0;
+    }
 
     public static boolean isBlockBlacklisted(BlockState bs){
         ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
@@ -134,29 +265,145 @@ public class MainUtil {
         }
         return false;
     }
+    public static boolean isEffectBanishable(MobEffectInstance mei){
+        ResourceLocation rl = BuiltInRegistries.MOB_EFFECT.getKey(mei.getEffect());
+        if (occultChargeEffectsToBanish != null && !occultChargeEffectsToBanish.isEmpty() && rl != null && occultChargeEffectsToBanish.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isBlockDestructionBlacklisted(BlockState bs){
+        ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
+        if (standDestructionBlacklist != null && !standDestructionBlacklist.isEmpty() && rl != null && standDestructionBlacklist.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isItemGrabBlacklisted(ItemStack stack){
+        ResourceLocation rl = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        if (standBlockGrabBlacklist != null && !standBlockGrabBlacklist.isEmpty() && rl != null && standBlockGrabBlacklist.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isMobStandUserBlacklisted(Entity ent){
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        if (naturalStandUserMobBlacklist != null && !naturalStandUserMobBlacklist.isEmpty() && rl != null && naturalStandUserMobBlacklist.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isHypnotismTargetBlacklisted(Entity ent){
+        if (ent == null)
+            return false;
+        if (ent instanceof FallenMob)
+            return true;
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        if (hypnotismMobBlackList != null && !hypnotismMobBlackList.isEmpty() && rl != null && hypnotismMobBlackList.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isEdibleToVampires(ItemStack stack){
+        if (stack == null || stack.isEmpty())
+            return false;
+        ResourceLocation rl = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        if (foodThatHasEffectsForVampires != null && !foodThatHasEffectsForVampires.isEmpty() && rl != null && foodThatHasEffectsForVampires.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isFreezableMobBlacklisted(Entity ent){
+        if (ent == null)
+            return false;
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        if (unfreezableMobs != null && !unfreezableMobs.isEmpty() && rl != null && unfreezableMobs.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isWhitelistedRedBlood(Entity ent){
+        if (ent == null)
+            return false;
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        if (addedMobsWithRedBlood != null && !addedMobsWithRedBlood.isEmpty() && rl != null && addedMobsWithRedBlood.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isWhitelistedBlueBlood(Entity ent){
+        if (ent == null)
+            return false;
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        if (addedMobsWithBlueBlood != null && !addedMobsWithBlueBlood.isEmpty() && rl != null && addedMobsWithBlueBlood.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isWhitelistedEnderBlood(Entity ent){
+        if (ent == null)
+            return false;
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        if (addedMobsWithEnderBlood != null && !addedMobsWithEnderBlood.isEmpty() && rl != null && addedMobsWithEnderBlood.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isBloodBlacklisted(Entity ent){
+        if (ent == null)
+            return false;
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        if (removeBloodFromThese != null && !removeBloodFromThese.isEmpty() && rl != null && removeBloodFromThese.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
     public static boolean isBlockWalkable(BlockState bs){
         if (!bs.isSolid()){
             return false;
         }
+        return true;
+    }
+    public static boolean isBlockWalkableSimplified(BlockState bs){
+
         ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
         if (walkableBlocks != null && !walkableBlocks.isEmpty() && rl != null && walkableBlocks.contains(rl.toString())){
             return false;
         }
         return true;
     }
-    public static boolean isBlockWalkableSimplified(BlockState bs){
+    public static boolean isBlockExpAble(BlockState bs){
+
         ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
-        if (walkableBlocks != null && !walkableBlocks.isEmpty() && rl != null && walkableBlocks.contains(rl.toString())){
+        if (expLessBlocks != null && !expLessBlocks.isEmpty() && rl != null && expLessBlocks.contains(rl.toString())){
             return false;
         }
         return true;
+    }
+    public static boolean isStandingInBlock(LivingEntity LE){
+        if (LE.level().getBlockState(BlockPos.containing(LE.getPosition(1))).isSolid()){
+            return true;
+        }
+        return false;
+    }
+
+    public static void clearCooldowns(Entity ent){
+        if (ent instanceof LivingEntity LE){
+            StandUser SU = ((StandUser) LE);
+            StandPowers powers = SU.roundabout$getStandPowers();
+            powers.refreshCooldowns();
+            if (ent instanceof ServerPlayer SP){
+                S2CPacketUtil.refreshCooldowns(SP);
+            }
+        }
     }
 
     public static boolean isKnockbackImmune(Entity ent){
         if (ent instanceof LivingEntity LE){
             StandUser SU = ((StandUser) LE);
             if (SU.roundabout$getStandPowers() instanceof PowersWalkingHeart PW && (PW.hasExtendedHeelsForWalking()
-            || (SU.roundabout$getActive() && ent instanceof Mob mb && mb.onGround()))){
+            || (PowerTypes.hasStandActive(ent) && ent instanceof Mob mb && mb.onGround()))){
                 return true;
             }
 
@@ -343,7 +590,7 @@ public class MainUtil {
 
     public static double getWorthyOdds(Mob mob) {
         if ((isBossMob(mob) && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
-        || mob instanceof JojoNPC){
+        || mob instanceof JojoNPC || isMobStandUserBlacklisted(mob)){
             return 0;
         }
         return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.worthyMobOdds;
@@ -365,7 +612,7 @@ public class MainUtil {
     public static double getStandUserOdds(Mob mob) {
         if ((isBossMob(mob) && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
                 || mob instanceof JojoNPC
-                || mob instanceof Vex){
+        || isMobStandUserBlacklisted(mob)){
             return 0;
         } else if (mob instanceof AbstractVillager){
             return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.standUserVillagerOdds;
@@ -390,22 +637,27 @@ public class MainUtil {
                 || LE instanceof JojoNPC);
 
     }
-    public static LivingEntity homeOnWorthy(Level level, Vec3 vec3, double range) {
-        List<Entity> EntitiesInRange = genHitbox(level, vec3.x, vec3.y,
-                vec3.z, range, range, range);
+
+    public static LivingEntity findClosestEntity(Level level, Vec3 pos, double range, Predicate<LivingEntity> condition) {
+        List<Entity> EntitiesInRange = genHitbox(level, pos.x, pos.y,
+                pos.z, range, range, range);
         List<Entity> hitEntities = new ArrayList<>(EntitiesInRange) {
         };
         LivingEntity mm = null;
         double distance = -1;
         for (Entity value : hitEntities) {
             if (value instanceof LivingEntity mb){
-                if (canGrantStand(mb) && (distance == -1 || mb.distanceToSqr(vec3) < distance)){
+                if (condition.test(mb) && (distance == -1 || mb.distanceToSqr(pos) < distance)){
                     mm = mb;
-                    distance = mb.distanceToSqr(vec3);
+                    distance = mb.distanceToSqr(pos);
                 }
             }
         }
         return mm;
+    }
+
+    public static LivingEntity homeOnWorthy(Level level, Vec3 vec3, double range) {
+        return findClosestEntity(level,vec3,range, MainUtil::canGrantStand);
     }
 
     public static ItemStack saveToDiscData(LivingEntity ent, ItemStack stack){
@@ -446,16 +698,17 @@ public class MainUtil {
                 }
 
 
-                if (!(user.roundabout$getStandPowers() instanceof PowersJustice) ||
-                        (!BuiltInRegistries.ITEM.getKey(stack.getItem()).getNamespace().equals(Roundabout.MOD_ID)) && !stack.is(Items.AIR)) {
+                if (stack == null || stack.isEmpty() || stack.getItem() instanceof AirItem)
+                    return;
 
-                        Roundabout.LOGGER.warn("Attempted to give player {} item {}, but they failed the check! Justice User: {}",
-                                player.getName().getString(),
-                                BuiltInRegistries.ITEM.getKey(stack.getItem()),
-                                (user.roundabout$getStandPowers() instanceof PowersJustice)
-                        );
-                        //sp.connection.disconnect(Component.literal("Exploit Detected"));
-                        return;
+                if (!(stack.getItem() instanceof FogBlockItem)) {
+                    Roundabout.LOGGER.warn("Attempted to give player {} item {}, but they failed the check! Justice User: {}",
+                            player.getName().getString(),
+                            BuiltInRegistries.ITEM.getKey(stack.getItem()),
+                            (user.roundabout$getStandPowers() instanceof PowersJustice)
+                    );
+                    //sp.connection.disconnect(Component.literal("Exploit Detected"));
+                    return;
                 }
 
                 CompoundTag compoundtag = BlockItem.getBlockEntityData(itemstack);
@@ -475,11 +728,128 @@ public class MainUtil {
                     player.inventoryMenu.getSlot(integer).setByPlayer(itemstack);
                     player.inventoryMenu.broadcastChanges();
                 } else if (flag && flag2) {
-                    player.drop(itemstack, true);
+                    if (canAddItem(itemstack,player.getInventory())){
+                        addItem(player,itemstack);
+                    } else {
+                        player.drop(itemstack, true);
+                    }
                 }
 
             }
         }
+    }
+
+
+
+
+    public static boolean canAddItem(ItemStack itemStack, Inventory inventory) {
+        boolean bl = false;
+        for (ItemStack itemStack2 : inventory.items) {
+            if (!itemStack2.isEmpty() && (!ItemStack.isSameItemSameTags(itemStack2, itemStack) || itemStack2.getCount() >= itemStack2.getMaxStackSize())) continue;
+            bl = true;
+            break;
+        }
+        return bl;
+    }
+
+    public static boolean isWearingEitherStoneMask(Entity ent){
+        return isWearingStoneMask(ent) || isWearingBloodyStoneMask(ent);
+    }
+
+    public static void activateStoneMask(Entity ent){
+        if (ent instanceof LivingEntity LE && !ent.isInWater() && !ent.level().isClientSide()){
+            ItemStack stack = LE.getItemBySlot(EquipmentSlot.HEAD);
+            if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem())){
+
+                if (ent instanceof Player PE){
+                    IFatePlayer ifp = (IFatePlayer) PE;
+                    if (FateTypes.isHuman(PE)){
+                        ifp.rdbt$startVampireTransformation(true);
+                    }
+                }
+                ItemStack stack2 = ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem().getDefaultInstance();
+                stack2.setTag(stack.getTag());
+                LE.setItemSlot(EquipmentSlot.HEAD,stack2);
+            }
+        }
+    }
+    //only called at end of transformation
+    public static void popOffStoneMask(Entity ent){
+        if (ent instanceof LivingEntity LE){
+            ItemStack helmet = LE.getItemBySlot(EquipmentSlot.HEAD);
+            if (helmet != null && !helmet.isEmpty() && helmet.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())){
+
+                    Level level = ent.level();
+
+                    // Do nothing if no helmet
+                    if (helmet.isEmpty()) return;
+
+
+                    if (!level.isClientSide) {
+                        // Remove the helmet
+                        ent.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
+                        // Drop item slightly above the player’s head
+                        Vec3 pos = ent.position().add(0, ent.getBbHeight() * 0.8, 0);
+                        ItemEntity drop = new ItemEntity(level, pos.x, pos.y, pos.z, helmet.copy());
+
+                        // Give it some small random velocity like a pop effect
+                        drop.setDeltaMovement(
+                                (level.random.nextDouble() - 0.5) * 0.2,
+                                0.3 + level.random.nextDouble() * 0.2,
+                                (level.random.nextDouble() - 0.5) * 0.2
+                        );
+
+                        // Shrink the player's inventory copy only after spawning the entity
+                        helmet.shrink(helmet.getCount());
+                        level.addFreshEntity(drop);
+                    }
+
+            }
+        }
+    }
+    public static void clearStoneMask(Entity ent){
+        if (ent instanceof LivingEntity LE){
+            if (FateTypes.isTransforming(LE))
+                return;
+
+            ItemStack stack = LE.getItemBySlot(EquipmentSlot.HEAD);
+            if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())){
+                ItemStack stack2 = ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem().getDefaultInstance();
+                stack2.setTag(stack.getTag());
+                LE.setItemSlot(EquipmentSlot.HEAD,stack2);
+            }
+
+            stack = LE.getItemBySlot(EquipmentSlot.MAINHAND);
+            if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())){
+                ItemStack stack2 = ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem().getDefaultInstance();
+                stack2.setTag(stack.getTag());
+                LE.setItemSlot(EquipmentSlot.MAINHAND,stack2);
+            }
+            stack = LE.getItemBySlot(EquipmentSlot.OFFHAND);
+            if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())){
+                ItemStack stack2 = ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem().getDefaultInstance();
+                stack2.setTag(stack.getTag());
+                LE.setItemSlot(EquipmentSlot.OFFHAND,stack2);
+            }
+        }
+    }
+    public static boolean isWearingStoneMask(Entity ent){
+        if (ent instanceof LivingEntity LE){
+            ItemStack stack = LE.getItemBySlot(EquipmentSlot.HEAD);
+            if (stack != null && !stack.isEmpty()){
+                return stack.is(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem());
+            }
+        }
+        return false;
+    }
+    public static boolean isWearingBloodyStoneMask(Entity ent){
+        if (ent instanceof LivingEntity LE){
+            ItemStack stack = LE.getItemBySlot(EquipmentSlot.HEAD);
+            if (stack != null && !stack.isEmpty()){
+                return stack.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem());
+            }
+        }
+        return false;
     }
 
     public static boolean confirmIsOre(BlockState state){
@@ -562,21 +932,129 @@ public class MainUtil {
         }
         return null;
     }
-    public static boolean getMobBleed(Entity Mob) {
+
+    // if splattered vampire blood can resurrect a mob when they die
+    public static boolean canMobResurrectWithBlood(Entity mob){
+        if (mob instanceof Mob mb && (mb.getMobType() == MobType.UNDEAD || mb instanceof ZombieHorse))
+            return false;
+        return true;
+    }
+
+    public static boolean getMobBleed(Entity mob) {
         if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.disableBleedingAndBloodSplatters){
             return false;
         }
 
-        if (Mob instanceof LivingEntity){
-            return Mob instanceof Zombie || (Mob instanceof Animal && !(Mob instanceof SkeletonHorse) && !(Mob instanceof ZombieHorse))
-                    || Mob instanceof Villager || Mob instanceof WaterAnimal || Mob instanceof WanderingTrader || Mob instanceof Witch
-                    || Mob instanceof AbstractIllager || Mob instanceof Creeper || Mob instanceof Player || Mob instanceof AbstractPiglin
-                    || Mob instanceof JojoNPC
-                    || Mob instanceof Spider || Mob instanceof EnderDragon || Mob instanceof EnderMan;
+        if (isBloodBlacklisted(mob))
+            return false;
+
+        if (isWhitelistedRedBlood(mob) || isWhitelistedBlueBlood(mob) || isWhitelistedEnderBlood(mob))
+            return true;
+
+        if (mob instanceof LivingEntity){
+            return mob instanceof Zombie || (mob instanceof Animal && !(mob instanceof SkeletonHorse) && !(mob instanceof ZombieHorse))
+                    || mob instanceof Villager || mob instanceof Bat || mob instanceof WaterAnimal || mob instanceof WanderingTrader || mob instanceof Witch
+                    || mob instanceof AbstractIllager || mob instanceof Creeper || mob instanceof Player || mob instanceof AbstractPiglin
+                    || mob instanceof JojoNPC || mob instanceof Zoglin || mob instanceof Ravager
+                    || mob instanceof Spider || mob instanceof EnderDragon || mob instanceof EnderMan;
         }
         return false;
     }
 
+    public static void onDeath(Entity entity, DamageSource source){
+        StandPowers powers = ((StandUser)entity).roundabout$getStandPowers();
+        if (powers != null && powers.isClashing()){
+            powers.endClash();
+        }
+
+        if (entity instanceof ServerPlayer pl) {
+            if ((((IPlayerEntity) entity).roundabout$getVoiceData()) != null) {
+                ((IPlayerEntity) entity).roundabout$getVoiceData().playIfDying(source);
+            }
+        }
+        if (source.getEntity() instanceof Player pl) {
+            ((IPowersPlayer) pl).rdbt$getPowers().onKill(entity,source);
+            ((IFatePlayer) pl).rdbt$getFatePowers().onKill(entity,source);
+        }
+        if (source.getEntity() instanceof LivingEntity le) {
+            ((StandUser) le).roundabout$getStandPowers().onKill(entity,source);
+        }
+    }
+
+    public static Vec3 getMobCenter(Entity entity, float centerpercent){
+        Vec3 start = entity.getPosition(1f);
+        Vec3 hitbox = new Vec3(0,entity.getBbHeight()*centerpercent,0);
+        hitbox = RotationUtil.vecPlayerToWorld(hitbox,
+                ((IGravityEntity)entity).roundabout$getGravityDirection());
+        return start.add(hitbox);
+    }
+
+    public static boolean canFreeze(Entity mob){
+        return (!isFreezableMobBlacklisted(mob) && !(mob instanceof Mob mb && isBossMob(mb))
+                && !(mob != null && ((TimeStop)mob.level()).CanTimeStopEntity(mob))
+        &&  !(mob instanceof LivingEntity le && FateTypes.isVampire(le)));
+    }
+    public static boolean canDrinkBlood(Entity mob){
+        return (getMobBleed(mob) && !hasEnderBlood(mob) && mob.isAlive() && !mob.isRemoved()
+                && !(mob != null && ((TimeStop)mob.level()).CanTimeStopEntity(mob)) &&
+                !(mob instanceof Mob mb && ((IMob)mb).roundabout$isVampire()));
+    }
+    public static boolean canDrinkBlood2(Entity mob){
+        return (getMobBleed(mob) && !hasEnderBlood(mob) && mob.isAlive() && !mob.isRemoved()
+                && !(mob != null && ((TimeStop)mob.level()).CanTimeStopEntity(mob)));
+    }
+
+    public static boolean resistsKnockBack(Entity ent){
+        if (ent instanceof LivingEntity LE &&
+                ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW &&
+                PW.hasExtendedHeelsForWalking()){
+            return true;
+        }
+        return false;
+    }
+    public static boolean canDrinkBloodFair(Entity ent,Entity drinker){
+        return canDrinkBlood(ent) && !(ent instanceof Player);
+    }
+    public static boolean canPlantBud(Entity ent,Entity drinker){
+        return canDrinkBlood2(ent) && !(ent instanceof Player);
+    }
+    public static boolean canDrinkBloodCritAggro(Entity ent,Entity drinker){
+        return !(ent instanceof Mob mb && mb.getTarget() != null && mb.getTarget().is(drinker));
+    }
+    public static boolean canDrinkBloodCrit(Entity ent,Entity drinker){
+        if (ent instanceof LivingEntity LE && (LE.hasEffect(ModEffects.VAMPIRE_BLOOD)))
+            return false;
+        return canDrinkBloodCritAggro(ent,drinker);
+    }
+
+    public static void removeFleshBud(Entity entity){
+        if (entity instanceof LivingEntity LE && entity.level() instanceof ServerLevel sl && ((StandUser)LE).rdbt$getFleshBud() != null){
+            ((StandUser)LE).rdbt$setFleshBud(null);
+            SoundEvent sound = ModSounds.FLESH_BUD_REMOVAL_EVENT;
+            entity.level().playSound(null, BlockPos.containing(entity.position()), sound, SoundSource.BLOCKS, 1F, 1F);
+
+            sl.sendParticles(ParticleTypes.CRIT, entity.getEyePosition().x, entity.getEyePosition().y,entity.getEyePosition().z,
+                    10, 0.5F, 0.5F, 0.5F, 0.4);
+        }
+    }
+
+    public static boolean isPlayerBonkingHead(LivingEntity player) {
+        Level level = player.level();
+        Vec3 mainVec = new Vec3(0, 0.05, 0);
+        mainVec = RotationUtil.vecPlayerToWorld(mainVec,((IGravityEntity)player).roundabout$getGravityDirection());
+        AABB headSpace = player.getBoundingBox().expandTowards(mainVec.x,mainVec.y,mainVec.z);
+        return !level.noCollision(player, headSpace);
+    }
+
+    public static boolean isUsingMetallica(Entity ent){
+        if (ent instanceof LivingEntity LE && ((StandUser)ent).roundabout$getStandPowers() instanceof PowersMetallica PM){
+            if (PM.hasStandActive(LE)){
+                return true;
+            }
+        }
+
+        return false;
+    }
     public static void makeFaceless(Entity entity, int ticks, int power, Entity user){
         if (entity instanceof LivingEntity LE){
             if (((LivingEntity)entity).hasEffect(ModEffects.FACELESS)){
@@ -591,6 +1069,7 @@ public class MainUtil {
     }
 
     public static void makeMobBleed(Entity target) {
+        if (!(target instanceof LivingEntity LE && FateTypes.hasBloodHunger(LE))) {
             int variety = (int) Math.round(Math.random() * 4);
             Block modBlock = ModBlocks.BLOOD_SPLATTER;
             if (MainUtil.hasBlueBlood(target)) {
@@ -611,16 +1090,17 @@ public class MainUtil {
                 MainUtil.setSplatter(target.level(), target.getOnPos(), (int) Math.floor(Math.random() * 3) - 1, 1, modBlock.defaultBlockState().
                         setValue(ModBlocks.BLOOD_LEVEL, Integer.valueOf((int) Math.round(Math.random() * 3))));
             }
+        }
     }
     public static boolean hasBlueBlood(Entity target){
-        if (target instanceof Spider || target instanceof Bee || target instanceof Silverfish  || target instanceof Squid){
+        if (isWhitelistedBlueBlood(target) || target instanceof Spider || target instanceof Bee || target instanceof Silverfish  || target instanceof Squid){
             return true;
         } else {
             return false;
         }
     }
     public static boolean hasEnderBlood(Entity target){
-        if (target instanceof EnderMan || target instanceof Endermite || target instanceof EnderDragon){
+        if (isWhitelistedEnderBlood(target) || target instanceof EnderMan || target instanceof Endermite || target instanceof EnderDragon){
             return true;
         } else {
             return false;
@@ -633,6 +1113,15 @@ public class MainUtil {
 
     private static double clampHorizontal(double $$0) {
         return Mth.clamp($$0, -3.0E7, 3.0E7);
+    }
+
+    public static void updateHairColor(Player player,float red, float green, float blue){
+        if (player != null){
+            IPlayerEntity iplayer = ((IPlayerEntity)player);
+            iplayer.rdbt$setHairColorX(red);
+            iplayer.rdbt$setHairColorY(green);
+            iplayer.rdbt$setHairColorZ(blue);
+        }
     }
 
     private static double clampVertical(double $$0) {
@@ -703,7 +1192,7 @@ public class MainUtil {
     }
 
     public static float gasDamageMultiplier(){
-        return (float) (0.83F * (ClientNetworking.getAppropriateConfig().itemSettings.gasolineExplosionDamage *0.01));
+        return (float) (0.78F * (ClientNetworking.getAppropriateConfig().itemSettings.gasolineExplosionDamage *0.01));
     }
 
     public static void makeBleed(Entity entity, int level, int ticks, Entity source){
@@ -711,6 +1200,20 @@ public class MainUtil {
             return;
         }
         if (getMobBleed(entity)){
+
+            //Bleed now removes strength but only on apply
+            if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.bleedRemovesStrength) {
+                ((LivingEntity) entity).removeEffect(MobEffects.DAMAGE_BOOST);
+            }
+
+            if (!hasEnderBlood(entity) && !hasBlueBlood(entity)) {
+                if (source != null && isWearingEitherStoneMask(source) && source.distanceTo(entity) < 5) {
+                    activateStoneMask(source);
+                } else if (isWearingStoneMask(entity)) {
+                    activateStoneMask(entity);
+                }
+            }
+
             ((StandUser)entity).roundabout$setBleedLevel(level);
             ((LivingEntity)entity).addEffect(new MobEffectInstance(ModEffects.BLEED, ticks, level), source);
         }
@@ -866,6 +1369,13 @@ public class MainUtil {
     public static double fixAngle(float angle){
        return (Math.abs(angle) % 360);
     }
+
+    public static void slowTarget(Entity e, float p) {
+        e.hurtMarked = true;
+        e.setDeltaMovement(e.getDeltaMovement().scale(p));
+        e.hasImpulse = true;
+    }
+
     public static void takeKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
 
         if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
@@ -876,6 +1386,13 @@ public class MainUtil {
             return;
         }
         takeUnresistableKnockbackWithY(entity,strength,x,y,z);
+    }
+    public static void takeNoKnockback(Entity entity) {
+        entity.hurtMarked = true;
+        entity.setDeltaMovement(0,
+                0,
+                0);
+        entity.hasImpulse = true;
     }
     public static void takeUnresistableKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
         entity.hurtMarked = true;
@@ -972,6 +1489,13 @@ public class MainUtil {
         cdist = Math.abs(z-z2);
         if (cdist > mdist){mdist=cdist;}
         return mdist;
+    }
+    public static double timeStopDistanceTo(double x,double y,double z,double x2,double y2, double z2){
+        if (ClientNetworking.getAppropriateConfig() != null && ClientNetworking.getAppropriateConfig().timeStopSettings != null
+        && ClientNetworking.getAppropriateConfig().timeStopSettings.usePreciseMath){
+            return new Vec3(x,y,z).distanceTo(new Vec3(x2,y2,z2));
+        }
+        return cheapDistanceTo(x,y,z,x2,y2,z2);
     }
     public static double cheapDistanceTo2(double x,double z,double x2,double z2){
         double mdist = 0;
@@ -1289,7 +1813,9 @@ public class MainUtil {
                 || sauce.is(ModDamageTypes.CORPSE) || sauce.is(ModDamageTypes.CORPSE_EXPLOSION) || sauce.is(ModDamageTypes.CORPSE_ARROW)
                 || sauce.is(ModDamageTypes.MELTING)
                 || sauce.is(ModDamageTypes.HEEL_SPIKE)
-        ){
+                || sauce.is(ModDamageTypes.CREAM_VOID_BALL)
+                || sauce.is(ModDamageTypes.ANUBIS_POSSESS)
+                || sauce.is(ModDamageTypes.ANUBIS_SPIN) ){
             return true;
         }
         return false;
@@ -1300,8 +1826,21 @@ public class MainUtil {
         }
         return false;
     }
-    public static boolean isArmorBypassingButNotShieldBypassing(DamageSource sauce){
-        if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.CORPSE) || sauce.is(ModDamageTypes.EXPLOSIVE_STAND)  || sauce.is(ModDamageTypes.HEEL_SPIKE)  ||
+
+
+    public static boolean getReducedDamage(Entity entity){
+        return (entity instanceof Player || entity instanceof StandEntity ||
+                ((entity instanceof LivingEntity LE && !((StandUser)LE).roundabout$getStandDisc().isEmpty()) &&
+                        ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.standUserMobsTakePlayerDamageMultipliers)
+        );
+    }
+
+    public static boolean isArmorBypassingButNotShieldBypassing(DamageSource sauce, Entity target){
+        if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.CORPSE)
+                || sauce.is(ModDamageTypes.RIPPER_EYES)
+                || sauce.is(ModDamageTypes.VAMPIRE) || sauce.is(ModDamageTypes.HAMON) ||
+                (sauce.is(ModDamageTypes.MARTIAL_ARTS) && getReducedDamage(target))
+                || sauce.is(ModDamageTypes.EXPLOSIVE_STAND)  || sauce.is(ModDamageTypes.HEEL_SPIKE)  ||
                 sauce.is(ModDamageTypes.CORPSE_ARROW) ||  sauce.is(ModDamageTypes.STAND_RUSH) ||  sauce.is(ModDamageTypes.CROSSFIRE) ||
                 sauce.is(ModDamageTypes.CORPSE_EXPLOSION)) {
             return true;
@@ -1310,7 +1849,7 @@ public class MainUtil {
     }
 
 
-    /**Returns the vertical angle between two mobs*/
+    /**Returns the vertical angle between two mobs in degrees*/
     public static float getLookAtEntityPitch(Entity user, Entity targetEntity) {
         double f;
         double d = targetEntity.getEyePosition().x - user.getEyePosition().x;
@@ -1338,7 +1877,17 @@ public class MainUtil {
         return new Vec2(xRot, yRot); // Vec2 is (xRot, yRot)
     }
 
-    /**Returns the horizontal angle between two mobs*/
+    public static boolean isDestructible(Level level, BlockPos pos, BlockState state){
+        if (confirmIsOre(state) && !state.hasBlockEntity())
+            return false;
+        float hardness = state.getDestroySpeed(level, pos);
+        if (hardness >= 0 && hardness < 50) {
+            return true;
+        }
+        return false;
+    }
+
+    /**Returns the horizontal angle between two mobs in degrees*/
     public static float getLookAtEntityYaw(Entity user, Entity targetEntity) {
         double d = targetEntity.getX() - user.getX();
         double e = targetEntity.getZ() - user.getZ();
@@ -1372,6 +1921,8 @@ public class MainUtil {
             if ((ent instanceof Player PE && PE.isCreative()) && rewinder != null && !rewinder.is(ent)){
                 return false;
             }
+            if (ent instanceof ArmorStand || ent instanceof Painting || ent instanceof RoundaboutPainting)
+                return false;
             return true;
         }
         return false;
@@ -1391,12 +1942,13 @@ public class MainUtil {
 
     /**Is it a potion effect that should not be easily discarded or plundered, or has special particles*/
     public static boolean isSpecialEffect(MobEffectInstance value){
-        return value.getEffect().equals(ModEffects.BLEED) || value.getEffect().equals(ModEffects.FACELESS) ||
-                value.getEffect().equals(ModEffects.CAPTURING_LOVE);
+        return isSpecialEffect(value.getEffect());
     }
     public static boolean isSpecialEffect(MobEffect value){
-        return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS) ||
-                value.equals(ModEffects.CAPTURING_LOVE);
+        return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS)
+                || value.equals(ModEffects.BANISH)
+                || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.STAND_VIRUS) ||
+                value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING) || value.equals(ModEffects.MOLD);
     }
     public static boolean canHaveFrictionTaken(LivingEntity LE){
         if (LE.onClimbable()){
@@ -1493,7 +2045,12 @@ public class MainUtil {
         }
         return basis;
     }
+
+    //Walls corners and doors check
     public static boolean canActuallyHitInvolved(Entity self, Entity entity){
+        if (entity instanceof SoftAndWetPlunderBubbleEntity){
+            return false;
+        }
         if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.generalDetectionGoThroughDoorsAndCorners){
             return true;
         }
@@ -1647,8 +2204,9 @@ public class MainUtil {
 
         return $$8 == null ? null : new EntityHitResult($$8, $$9);
     }
-    public static boolean isBossMob(LivingEntity LE){
-        if (LE instanceof Warden || LE instanceof EnderDragon || LE instanceof WitherBoss){
+    public static boolean isBossMob(Entity LE){
+        if (LE instanceof Warden || LE instanceof EnderDragon || LE instanceof WitherBoss ||
+                (LE instanceof LivingEntity ll && (ModPacketHandler.PLATFORM_ACCESS.getBoss(ll)))){
             return true;
         }
         return false;
@@ -1749,7 +2307,9 @@ public class MainUtil {
     public static boolean forceAggression(LivingEntity LE){
         if (LE != null){
             StandUser user = ((StandUser) LE);
-            return (user.roundabout$hasAStand() || user.roundabout$getZappedToID() > -1);
+            return ( (user.roundabout$hasAStand() && !(user.roundabout$getStandPowers() instanceof PowersAnubis && LE instanceof Cow)   )  || user.roundabout$getZappedToID() > -1
+                    || user.rdbt$getFleshBud() != null ||
+                    (LE instanceof Mob mb && ((IMob)mb).roundabout$isVampire()));
         }
         return false;
     }
@@ -1781,6 +2341,16 @@ public class MainUtil {
             }
         }
         return false;
+    }
+
+    public static ItemStack roundaboutGetUsedItem(Entity entity) {
+        if (entity instanceof Player) {
+            InteractionHand interactionHand = ((Player) entity).getUsedItemHand();
+            ItemStack itemInHand = ((Player) entity).getItemInHand(interactionHand);
+            Roundabout.LOGGER.info("Get used item print:"+itemInHand);
+            return itemInHand;
+        }
+        return ItemStack.EMPTY;
     }
 
     /**Code for determining if it is appropriate to place a splatter down*/
@@ -1818,6 +2388,13 @@ public class MainUtil {
     public static void handShake(ServerPlayer player){
         Networking.sendConfigToPlayer(player);
     }
+
+    public static void handShakeCooldowns(ServerPlayer player){
+        ((StandUser)player).roundabout$getStandPowers().syncAllCooldowns();
+        S2CPacketUtil.affirmCooldownsS2C(player);
+        ((StandUser)player).roundabout$syncGuard();
+    }
+
 
     /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
 
@@ -1861,6 +2438,13 @@ public class MainUtil {
                 ((IPlayerEntity) player).roundabout$setShapeShift(data);
             }
 
+        } else if (context == PacketDataIndex.BYTE_RESPAWN_STRATEGY) {
+            ((IPlayerEntity) player).rdbt$setRespawnStrategy(data);
+            S2CPacketUtil.sendSimpleByteToClientPacket(player,PacketDataIndex.S2C_RESPAWN);
+        } else if (context == PacketDataIndex.BYTE_SWITCH_POWERS) {
+            if (PowerTypes.canHavePower(player,data)){
+                PowerTypes.setPowerTypeWithPenalty(player,data);
+            }
         }
     }
     /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
@@ -1889,6 +2473,7 @@ public class MainUtil {
         } else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_POWER_INVENTORY) {
             StandUser standUser = ((StandUser) player);
             standUser.roundabout$getStandPowers().setCooldown(context,-1);
+            PowerTypes.initializeStandPower(player);
             IPlayerEntity iplay = ((IPlayerEntity) player);
             byte unlocked = 0;
             if (iplay.roundabout$getUnlockedBonusSkin()){
@@ -1912,7 +2497,9 @@ public class MainUtil {
             player.containerMenu = new FogInventoryMenu(player.getInventory(), !player.level().isClientSide, player);
             ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);
         } else if (context == PacketDataIndex.SINGLE_BYTE_GLAIVE_START_SOUND) {
-            ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.GLAIVE_CHARGE, 10, false);
+            if (player.getUseItem() != null && player.getUseItem().getItem() instanceof GlaiveItem) {
+                ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.GLAIVE_CHARGE, 10, false);
+            }
         } else if (context == PacketDataIndex.SINGLE_BYTE_ITEM_STOP_SOUND) {
             ((StandUser) player).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 30,false);
         } else if (context == PacketDataIndex.SINGLE_BYTE_STAND_ARROW_START_SOUND) {
@@ -1935,7 +2522,7 @@ public class MainUtil {
                 }
             }
         } else if (context == PacketDataIndex.SINGLE_BYTE_FORWARD_BARRAGE) {
-            if (player != null){
+            if (player != null && ((StandUser)player).roundabout$getStandPowers().attackTimeDuring >= 0){
                 ((StandUser)player).roundabout$getStandPowers().forwardBarrage = true;
                 ((StandUser)player).roundabout$getStandPowers().moveStarted = true;
                 ((StandUser)player).roundabout$getStandPowers().poseStand(OffsetIndex.LOOSE);
@@ -1962,11 +2549,102 @@ public class MainUtil {
         } else if (context == PacketDataIndex.SINGLE_BYTE_DESUMMON) {
             if (player != null) {
                 StandUser user = ((StandUser) player);
-                if (user.roundabout$getActive()){
+                if (PowerTypes.hasStandActive(player)){
                     user.roundabout$summonStand(player.level(), false, false);
                 }
             }
+        } else if (context == PacketDataIndex.END_BLOOD_SPEED) {
+            if (player != null) {
+                if (((IFatePlayer)player).rdbt$getFatePowers() instanceof VampiricFate vp){
+                    vp.setSpeedActivated(0);
+                }
+            }
+        } else if (context == PacketDataIndex.QUERY_STAND_UPDATE) {
+            if (player != null) {
+                ((StandUser)player).roundabout$getStandPowers().serverQueried();
+            }
+        } else if (context == PacketDataIndex.QUERY_STAND_UPDATE_2) {
+            if (player != null) {
+                ((StandUser)player).roundabout$getStandPowers().serverQueried2();
+            }
+        } else if (context == PacketDataIndex.QUERY_VAMPIRE_UPDATE) {
+            if (player != null) {
+                S2CPacketUtil.beamVampireData(player);
+            }
+        } else if (context == PacketDataIndex.SINGLE_BYTE_LEFT_POWERS) {
+            List<PowerTypes> powerTypes = PowerTypes.getAvailablePowers(player);
+            int queryNumber = 0;
+            int powerNumber = ((IPlayerEntity)player).roundabout$getPower();
+            for (var i = 0; i < powerTypes.size(); i++){
+                PowerTypes pt = powerTypes.get(i);
+                if (powerNumber == pt.ordinal()){
+                    queryNumber = i;
+                }
+            }
+
+            queryNumber++;
+            if (queryNumber > powerTypes.size()-1){
+                queryNumber = 0;
+            }
+            ((IPlayerEntity)player).roundabout$setPowerWithPenalty((byte)powerTypes.get(queryNumber).ordinal());
+
+        } else if (context == PacketDataIndex.SINGLE_BYTE_RIGHT_POWERS) {
+            List<PowerTypes> powerTypes = PowerTypes.getAvailablePowers(player);
+            int queryNumber = 0;
+            int powerNumber = ((IPlayerEntity) player).roundabout$getPower();
+            for (var i = 0; i < powerTypes.size(); i++) {
+                PowerTypes pt = powerTypes.get(i);
+                if (powerNumber == pt.ordinal()) {
+                    queryNumber = i;
+                }
+            }
+
+            queryNumber--;
+            if (queryNumber < 0) {
+                queryNumber = powerTypes.size()-1;
+            }
+            ((IPlayerEntity) player).roundabout$setPowerWithPenalty((byte)powerTypes.get(queryNumber).ordinal());
+        } else if (context == PacketDataIndex.FIX_COOLDOWN_FOR_SERVER) {
+            StandUser user = ((StandUser) player);
+            int attackTimeMax = user.roundabout$getAttackTimeMax();
+            if (attackTimeMax > 0) {
+                float attackTime = user.roundabout$getAttackTime();
+                float finalATime = attackTime / attackTimeMax;
+                if (finalATime <= 1) {
+                    user.roundabout$getStandPowers().setAttackTime((attackTimeMax+1));
+                    user.roundabout$getStandPowers().setActivePowerPhase((byte) 0);
+                }
+            }
         }
+    }
+
+    public static Direction getDirectionFromInt(int integer){
+        if (integer == 0)
+            return Direction.UP;
+        if (integer == 1)
+            return Direction.DOWN;
+        if (integer == 2)
+            return Direction.NORTH;
+        if (integer == 3)
+            return Direction.SOUTH;
+        if (integer == 4)
+            return Direction.EAST;
+
+            return Direction.WEST;
+    }
+    public static int getIntFromDirection(Direction dir){
+        if (dir == Direction.UP)
+            return 0;
+        if (dir == Direction.DOWN)
+            return 1;
+        if (dir == Direction.NORTH)
+            return 2;
+        if (dir == Direction.SOUTH)
+            return 3;
+        if (dir == Direction.EAST)
+            return 4;
+
+        return 5;
     }
 
     public static boolean getIsGamemodeApproriateForGrief(Entity Li){
@@ -1989,6 +2667,13 @@ public class MainUtil {
             }
         }
 
+        return false;
+    }
+
+    public static boolean isUsingSnubnose(Player player) {
+        if (player.getUseItem().getItem() instanceof SnubnoseRevolverItem) {
+            return true;
+        }
         return false;
     }
 
@@ -2030,6 +2715,19 @@ public class MainUtil {
             ((StandUser)player).roundabout$setBigJumpCurrentProgress(data);
         }
     }
+    public static boolean isCollidingWithAnyBlock(Entity entity) {
+        Level level = entity.level();
+        AABB box = entity.getBoundingBox();
+
+        for (VoxelShape shape : level.getBlockCollisions(entity, box)) {
+            if (!shape.isEmpty()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     @SuppressWarnings("deprecation")
     public static void handleIntPacketC2S(Player player, int data, byte context){
         if (context == PacketDataIndex.INT_GLAIVE_TARGET){
@@ -2058,12 +2756,9 @@ public class MainUtil {
             ((StandUser)player).roundabout$getStandPowers().updateIntMove(data);
         } else if (context == PacketDataIndex.INT_UPDATE_PILOT){
             StandEntity SE = ((StandUser)player).roundabout$getStand();
-            if (SE != null){
-                BlockPos veci3 = BlockPos.containing(new Vec3(SE.getEyePosition().x, SE.getEyePosition().y, SE.getEyePosition().z));
-                BlockState bl3 = SE.level().getBlockState(veci3);
-                if (!(bl3.isSolid() && (bl3.getBlock().isCollisionShapeFullBlock(bl3,player.level(),veci3) ||
-                        (bl3.getBlock() instanceof SlabBlock ||
-                        bl3.getBlock() instanceof StairBlock)))){
+            Entity target = player.level().getEntity(data);
+            if (target != null){
+                if (!isCollidingWithAnyBlock(target)){
                     ((StandUser)player).roundabout$getStandPowers().setPiloting(data);
                 }
             } else {
@@ -2116,13 +2811,131 @@ public class MainUtil {
             }
         } else if (context == PacketDataIndex.INT_RELLA_START){
             Entity target = player.level().getEntity(data);
-            if (target instanceof Aesthetician aes){
+            if (target instanceof Aesthetician aes && aes.getTarget() == null){
+                S2CPacketUtil.sendGenericIntToClientPacket(player,PacketDataIndex.AESTHETICIAN_OPEN,data);
                 aes.addPlayerToList(player);
             }
         } else if (context == PacketDataIndex.INT_RELLA_CANCEL){
             Entity target = player.level().getEntity(data);
             if (target instanceof Aesthetician aes){
                 aes.removePlayerFromList(player);
+            }
+        } else if (context == PacketDataIndex.INT_GRAVITY_FLIP){
+            StandPowers powers = ((StandUser)player).roundabout$getStandPowers();
+            Direction cd = MainUtil.getDirectionFromInt(data);
+            ((IGravityEntity) player).roundabout$setGravityDirection(cd);
+            if (powers instanceof PowersWalkingHeart pw){
+                pw.setHeelDirection(cd);
+                pw.justFlippedTicks = 5;
+            }
+        } else if (context == PacketDataIndex.INT_GRAVITY_FLIP_2){
+            StandPowers powers = ((StandUser)player).roundabout$getStandPowers();
+            Direction cd = MainUtil.getDirectionFromInt(data);
+            if (powers instanceof PowersWalkingHeart pw){
+                if (!player.level().isClientSide()) {
+                    player.level().playSound(null, player.blockPosition(), ModSounds.WALL_LATCH_EVENT, SoundSource.PLAYERS, 1F, 1f);
+
+                }
+                pw.toggleSpikes(true);
+                pw.setHeelDirection(cd);
+                pw.justFlippedTicks = 7;
+            }
+            ((IGravityEntity) player).roundabout$setGravityDirection(cd);
+        } else if (context == PacketDataIndex.INT_GRAVITY_FLIP_3){
+            FatePowers powers = ((IFatePlayer)player).rdbt$getFatePowers();
+            Direction cd = MainUtil.getDirectionFromInt(data);
+            if (powers instanceof VampiricFate vf) {
+                vf.canLatchOntoWall();
+                if (vf.saveState != null) {
+                    player.level().playSound(
+                            null,
+                            player.blockPosition(),
+                            vf.saveState.getSoundType().getBreakSound(),
+                            SoundSource.PLAYERS,
+                            1.0F,
+                            0.9F);
+                    vf.blockBreakParticles(vf.saveState.getBlock(),
+                            new Vec3(player.getX(),
+                                    player.getY(),
+                                    player.getZ()));
+                }
+                vf.setWallWalkDirection(cd);
+                vf.justFlippedTicks = 7;
+                player.level().playSound(null, player.blockPosition(), ModSounds.VAMPIRE_WALL_GRIP_EVENT, SoundSource.PLAYERS, 2F, 1f);
+            }
+            ((IGravityEntity) player).roundabout$setGravityDirection(cd);
+        } else if (context == PacketDataIndex.INT_GRAVITY_FLIP_4){
+            FatePowers powers = ((IFatePlayer)player).rdbt$getFatePowers();
+            Direction cd = MainUtil.getDirectionFromInt(data);
+            if (powers instanceof VampiricFate vf) {
+                vf.setWallWalkDirection(cd);
+                vf.justFlippedTicks = 5;
+            }
+            ((IGravityEntity) player).roundabout$setGravityDirection(cd);
+        } else if (context == PacketDataIndex.INT_VAMPIRE_SKILL_BUY){
+            VampireData vdata = ((IPlayerEntity)player).rdbt$getVampireData();
+            if (vdata.getPoints() > 0){
+                if (data==1) {
+                    if (vdata.strengthLevel < VampireData.strengthMaxLevel) {
+                        vdata.setStrengthLevel(vdata.strengthLevel + 1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 2) {
+                    if (vdata.dexterityLevel < VampireData.dexterityMaxLevel){
+                        vdata.setDexterityLevel(vdata.dexterityLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 3) {
+                    if (vdata.resilienceLevel < VampireData.reslienceMaxLevel){
+                        vdata.setResilienceLevel(vdata.resilienceLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 4) {
+                    if (vdata.hypnotismLevel < VampireData.hypnotismMaxLevel){
+                        vdata.setHypnotismLevel(vdata.hypnotismLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 5) {
+                    if (vdata.superHearingLevel < VampireData.superHearingMaxLevel){
+                        vdata.setSuperHearingLevel(vdata.superHearingLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 6) {
+                    if (vdata.bloodSpeedLevel < VampireData.bloodSpeedMaxLevel){
+                        vdata.setBloodSpeedLevel(vdata.bloodSpeedLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 7) {
+                    if (vdata.graftingLevel < VampireData.graftingMaxLevel){
+                        vdata.setGraftingLevel(vdata.graftingLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 8) {
+                    if (vdata.fleshBudLevel < VampireData.fleshBudMaxLevel){
+                        vdata.setFleshBudLevel(vdata.fleshBudLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 9) {
+                    if (vdata.daggerSplatterLevel < VampireData.daggerSplatterMaxLevel){
+                        vdata.setDaggerSplatterLevel(vdata.daggerSplatterLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 10) {
+                    if (vdata.jumpLevel < VampireData.jumpMaxLevel){
+                        vdata.setJumpLevel(vdata.jumpLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 11) {
+                    if (vdata.ripperEyesLevel < VampireData.ripperEyesMaxLevel){
+                        vdata.setRipperEyesLevel(vdata.ripperEyesLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 12) {
+                    if (vdata.freezeLevel < VampireData.freezeMaxLevel){
+                        vdata.setFreezeLevel(vdata.freezeLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                }
             }
         }
     }
@@ -2138,6 +2951,41 @@ public class MainUtil {
     public static void syncActivePower(Player pl, byte activePower){
 
         StandPowers powers = ((StandUser) pl).roundabout$getStandPowers();
+
+        if (powers.activePower != activePower){
+            if (activePower == PowerIndex.NONE){
+                powers.setAttackTimeDuring(-1);
+            } else {
+                powers.setAttackTimeDuring(0);
+            }
+        }
+        powers.updateMovesFromPacket(activePower);
+        powers.setActivePower(activePower);
+        powers.kickStartClient();
+
+    }
+
+    public static void syncActivePowerFate(Player pl, byte activePower){
+
+        FatePowers powers = ((IFatePlayer) pl).rdbt$getFatePowers();
+
+        if (powers.activePower != activePower){
+            if (activePower == PowerIndex.NONE){
+                powers.setAttackTimeDuring(-1);
+            } else {
+                powers.setAttackTimeDuring(0);
+            }
+        }
+        powers.updateMovesFromPacket(activePower);
+        powers.setActivePower(activePower);
+        powers.kickStartClient();
+
+    }
+    public static void syncActivePowerPowers(Player pl, byte activePower){
+
+        //FILL THIS IN FOR POWERS
+
+        GeneralPowers powers = ((IPowersPlayer) pl).rdbt$getPowers();
 
         if (powers.activePower != activePower){
             if (activePower == PowerIndex.NONE){
@@ -2257,6 +3105,19 @@ public class MainUtil {
         return closest; // null if no valid hit
     }
 
+
+    public static boolean isHoldingRoadRoller(Entity ent){
+        if (ent instanceof LivingEntity LE){
+            ItemStack hand = LE.getMainHandItem();
+            ItemStack offHand = LE.getOffhandItem();
+            if ((!hand.isEmpty() && hand.getItem() instanceof RoadRollerItem) || (!offHand.isEmpty() && offHand.getItem() instanceof RoadRollerItem)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     public static Entity raytraceEntityStandThroughWalls(Level world, LivingEntity player, double maxDistance) {
 
         Vec3 eyePos = player.getEyePosition(1.0F); // player.getEyePosition(float)
@@ -2299,6 +3160,107 @@ public class MainUtil {
         }
 
         return closest; // null if no valid hit
+    }
+
+    public static Entity raytraceGroundThingsThroughWalls(Level world, LivingEntity player, double maxDistance) {
+
+        Vec3 eyePos = player.getEyePosition(1.0F); // player.getEyePosition(float)
+        Vec3 lookVec = player.getViewVector(1.0F); // player.getViewVector(float)
+        Vec3 reachVec = eyePos.add(lookVec.scale(maxDistance)); // end point of the ray
+
+        // Raytrace blocks first
+        ClipContext blockContext = new ClipContext(
+                eyePos,
+                reachVec,
+                ClipContext.Block.OUTLINE,
+                ClipContext.Fluid.NONE,
+                player
+        );
+
+        BlockHitResult blockHit = world.clip(blockContext);
+        double blockHitDistance = maxDistance;
+
+        //
+        // Search for potential target entities in bounding box
+        AABB box = player.getBoundingBox().expandTowards(lookVec.scale(maxDistance)).inflate(1.0);
+        List<Entity> candidates = world.getEntities(player, box,
+                (e) -> e instanceof Entity && e.isAlive()); // removed pickable here
+
+        Entity closest = null;
+        double closestDistance = blockHitDistance;
+
+        for (Entity entity : candidates) {
+            AABB aabb = entity.getBoundingBox().inflate(0.3); // widen the target hit box a bit
+            Optional<Vec3> hitOptional = aabb.clip(eyePos, reachVec);
+
+            if (hitOptional.isPresent()) {
+                double hitDistance = eyePos.distanceTo(hitOptional.get());
+                if (hitDistance < closestDistance && entity instanceof GroundPathfindingStandAttackEntity) {
+                    closestDistance = hitDistance;
+                    closest = entity;
+                }
+            }
+        }
+
+        return closest; // null if no valid hit
+    }
+
+    public static boolean isUnremovableDisc(ItemStack itemStack) {
+        CompoundTag tag = itemStack.getTagElement("Special");
+        return tag != null;
+    }
+
+    public static boolean isTraitorDisc(ItemStack itemStack) {
+        CompoundTag tag = itemStack.getTagElement("Special");
+        if (tag != null) {
+            return tag.getByte("Type") == (byte) 1;
+        }
+        return false;
+    }
+
+    public static ResourceLocation getPlayerSkinWithRespectToVisage(Player player){
+
+        if (player instanceof AbstractClientPlayer lpe) {
+
+
+            IPlayerEntity pl = ((IPlayerEntity) player);
+            ItemStack visage = pl.roundabout$getMaskSlot();
+            if(Objects.nonNull(visage)) {
+
+                if (visage.getItem() instanceof MaskItem MI) {
+                    if(! visage.getItem().equals(ModItems.RAT_MASK) &&! visage.getItem().equals(ModItems.BLANK_MASK)) {
+                        //Roundabout.LOGGER.info(MI.visageData.generateVisageData(player).getSkinPath());
+                        return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/" + MI.visageData.generateVisageData(player).getSkinPath() + ".png");
+                    }
+                }
+            }
+        }
+                if (player.getGameProfile() != null) {
+                    if (!player.getGameProfile().isComplete()) {
+                        return new ResourceLocation(Roundabout.MOD_ID, "textures/stand/green_day/part_four_green_day.png");
+                    } else {
+                        final Minecraft minecraft = Minecraft.getInstance();
+                        SkinManager skinManager = minecraft.getSkinManager();
+                        final Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadSkinFromCache = skinManager.getInsecureSkinInformation(player.getGameProfile()); // returned map may or may not be typed
+                        if (loadSkinFromCache.containsKey(MinecraftProfileTexture.Type.SKIN)) {
+                            return skinManager.registerTexture(loadSkinFromCache.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN);
+                        } else {
+                            return DefaultPlayerSkin.getDefaultSkin(player.getGameProfile().getId());
+                        }
+                    }
+                }
+
+
+
+        return new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/part_four_green_day.png");
+    }
+
+    public static BlockHitResult getMotionPath(Entity entity,float distOut){
+        Vec3 vec3d = entity.getEyePosition(1f);
+        Vec3 vec3d2 = entity.getDeltaMovement();
+        return entity.level().clip(new ClipContext(vec3d, vec3d.add(vec3d2.x * distOut,
+                vec3d2.y * distOut, vec3d2.z * distOut), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
+                entity));
     }
 
 }

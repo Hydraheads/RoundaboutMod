@@ -125,10 +125,10 @@ public class TheWorldAnimations {
                     new Keyframe(0.6031F, KeyframeAnimations.degreeVec(17.0886F, -18.8294F, -12.5471F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .build();
+
     public static final AnimationDefinition ASSAULT = AnimationDefinition.Builder.withLength(0.5F)
             .addAnimation("stand2", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.25F, KeyframeAnimations.degreeVec(-27.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.5F, KeyframeAnimations.degreeVec(51.7444F, 12.7F, 68.0794F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .addAnimation("stand2", new AnimationChannel(AnimationChannel.Targets.POSITION,
@@ -137,12 +137,10 @@ public class TheWorldAnimations {
             ))
             .addAnimation("head2", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.25F, KeyframeAnimations.degreeVec(58.8468F, 2.5915F, 4.2775F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.5F, KeyframeAnimations.degreeVec(21.2926F, -7.1936F, -17.5177F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .addAnimation("head2", new AnimationChannel(AnimationChannel.Targets.POSITION,
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.25F, KeyframeAnimations.posVec(-0.098F, -1.2616F, -0.8055F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.5F, KeyframeAnimations.posVec(0.0F, -3.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .addAnimation("body2", new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -152,7 +150,7 @@ public class TheWorldAnimations {
             ))
             .addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.25F, KeyframeAnimations.degreeVec(-27.6211F, 12.1991F, 21.9905F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.25F, KeyframeAnimations.degreeVec(-21.6942F, 21.172F, 41.6975F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.5F, KeyframeAnimations.degreeVec(17.7177F, 33.1874F, 72.4454F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.POSITION,
@@ -165,8 +163,7 @@ public class TheWorldAnimations {
             ))
             .addAnimation("lower_right_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.25F, KeyframeAnimations.degreeVec(-22.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.5F, KeyframeAnimations.degreeVec(-79.1543F, -9.2604F, -102.2483F), AnimationChannel.Interpolations.CATMULLROM)
+                    new Keyframe(0.375F, KeyframeAnimations.degreeVec(-79.1543F, -9.2604F, -102.2483F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .addAnimation("lower_right_arm", new AnimationChannel(AnimationChannel.Targets.POSITION,
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
@@ -197,14 +194,11 @@ public class TheWorldAnimations {
             ))
             .addAnimation("right_leg", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.25F, KeyframeAnimations.degreeVec(-35.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.3333F, KeyframeAnimations.degreeVec(52.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.5F, KeyframeAnimations.degreeVec(12.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .addAnimation("right_leg", new AnimationChannel(AnimationChannel.Targets.POSITION,
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.25F, KeyframeAnimations.posVec(0.0F, -1.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.3333F, KeyframeAnimations.posVec(0.0F, -1.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.5F, KeyframeAnimations.posVec(0.2638F, 0.145F, -0.2435F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .addAnimation("upper_right_leg", new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -216,7 +210,6 @@ public class TheWorldAnimations {
             .addAnimation("lower_right_leg", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.25F, KeyframeAnimations.degreeVec(30.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.3333F, KeyframeAnimations.degreeVec(75.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.5F, KeyframeAnimations.degreeVec(35.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .addAnimation("lower_right_leg", new AnimationChannel(AnimationChannel.Targets.POSITION,
@@ -224,13 +217,12 @@ public class TheWorldAnimations {
             ))
             .addAnimation("left_leg", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.25F, KeyframeAnimations.degreeVec(17.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.3333F, KeyframeAnimations.degreeVec(-12.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.5F, KeyframeAnimations.degreeVec(-67.1882F, 9.2319F, 3.8603F), AnimationChannel.Interpolations.CATMULLROM)
+                    new Keyframe(0.1667F, KeyframeAnimations.degreeVec(-25.74F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.375F, KeyframeAnimations.degreeVec(-67.1882F, 9.2319F, 3.8603F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .addAnimation("left_leg", new AnimationChannel(AnimationChannel.Targets.POSITION,
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.5F, KeyframeAnimations.posVec(0.1821F, 0.0563F, 0.4622F), AnimationChannel.Interpolations.CATMULLROM)
+                    new Keyframe(0.375F, KeyframeAnimations.posVec(0.1821F, 0.0563F, 0.4622F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .addAnimation("upper_left_leg", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
@@ -240,8 +232,7 @@ public class TheWorldAnimations {
             ))
             .addAnimation("lower_left_leg", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.25F, KeyframeAnimations.degreeVec(-0.63F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.3333F, KeyframeAnimations.degreeVec(5.83F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.1667F, KeyframeAnimations.degreeVec(21.59F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.5F, KeyframeAnimations.degreeVec(110.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .addAnimation("lower_left_leg", new AnimationChannel(AnimationChannel.Targets.POSITION,
@@ -272,8 +263,7 @@ public class TheWorldAnimations {
             ))
             .build();
 
-
-        public static final AnimationDefinition FINAL_KICK = AnimationDefinition.Builder.withLength(0.3333F)
+    public static final AnimationDefinition FINAL_KICK = AnimationDefinition.Builder.withLength(0.3333F)
                 .addAnimation("stand2", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                         new Keyframe(0.0F, KeyframeAnimations.degreeVec(3.2257F, 365.4047F, -14.3558F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(0.0833F, KeyframeAnimations.degreeVec(23.1556F, 383.4855F, -8.0528F), AnimationChannel.Interpolations.CATMULLROM),

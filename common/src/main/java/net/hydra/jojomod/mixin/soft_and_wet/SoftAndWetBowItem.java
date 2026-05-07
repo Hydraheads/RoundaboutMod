@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin.soft_and_wet;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,14 +27,7 @@ public class SoftAndWetBowItem {
             int $$7 = this.getUseDuration($$0) - $$3;
             float $$8 = getPowerForTime($$7);
             if (!((double) $$8 < 0.1)) {
-                if (!$$1.isClientSide()) {
-                    SE.roundabout$setBubbleEncased((byte) 0);
-                    $$1.playSound(null, $$2.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
-                            SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
-                    ((ServerLevel) $$1).sendParticles(ModParticles.BUBBLE_POP,
-                            $$2.getX(), $$2.getY() + $$2.getBbHeight() * 0.5, $$2.getZ(),
-                            5, 0.25, 0.25, 0.25, 0.025);
-                }
+                MainUtil.playPop($$2);
             }
         }
     }

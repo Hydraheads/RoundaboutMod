@@ -33,14 +33,15 @@ public class AdvancedConfig implements Cloneable {
         SERVER_OINLY_INSTANCE = config;
     }
 
-    public Set<String> standArrowPoolv3 = new HashSet<>(
+    public Set<String> standArrowPoolv4 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
                     "roundabout:the_world_disc",
                     "roundabout:justice_disc",
                     "roundabout:magicians_red_disc",
                     "roundabout:soft_and_wet_disc",
-                    "roundabout:walking_heart_disc"
+                    "roundabout:walking_heart_disc",
+                    "roundabout:ratt_disc"
             )
     );
     public Set<String> standArrowSecondaryPoolv5 = new HashSet<>(
@@ -61,9 +62,42 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:cinderella_disc",
                     "roundabout:soft_and_wet_disc",
                     "roundabout:achtung_baby_disc",
-                    "roundabout:walking_heart_disc"
+                    "roundabout:walking_heart_disc",
+                    "roundabout:ratt_disc"
             )
     );
+
+
+    public Set<String> foodThatGivesBloodListV4 = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:beef:3:0.8F",
+                    "roundabout:flesh_block:3:0.8F",
+                    "minecraft:chicken:2:0.6F",
+                    "minecraft:cod:2:0.6F",
+                    "minecraft:pufferfish:2:0.6F",
+                    "minecraft:tropical_fish:2:0.6F",
+                    "minecraft:cod:2:0.6F",
+                    "minecraft:mutton:2:0.8F",
+                    "minecraft:porkchop:3:0.8F",
+                    "minecraft:rabbit:3:0.6F",
+                    "minecraft:salmon:2:0.8F",
+                    "minecraft:rotten_flesh:2:0.6F",
+                    "minecraft:spider_eye:2:0.6F"
+            )
+    );
+
+    public Set<String> foodThatHasEffectsForVampiresV1 = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:golden_apple",
+                    "minecraft:enchanted_golden_apple",
+                    "roundabout:cherries",
+                    "roundabout:locacaca",
+                    "roundabout:new_locacaca"
+            )
+    );
+
+
+
     public Set<String> humanoidOnlyStandUserMobPoolv2 = new HashSet<>(
             Arrays.asList(
                     "roundabout:hey_ya_disc",
@@ -71,9 +105,16 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
-    public Set<String> walkingHeartWalkOnBlockBlacklist = new HashSet<>(
+    public Set<String> walkingHeartWalkOnBlockBlacklist2 = new HashSet<>(
             Arrays.asList(
-                    "minecraft:barrier"
+                    "minecraft:barrier",
+                    "minecraft:mud"
+            )
+    );
+
+    public Set<String> noExpBreakBlocks = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:netherrack"
             )
     );
 
@@ -82,6 +123,78 @@ public class AdvancedConfig implements Cloneable {
             Arrays.asList(
                     "minecraft:crying_obsidian",
                     "minecraft:ancient_debris"
+            )
+    );
+    public Set<String> standDestructionBlacklist = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:diamond_block",
+                    "minecraft:gold_block",
+                    "minecraft:netherite_block",
+                    "minecraft:emerald_block",
+                    "minecraft:redstone_block",
+                    "minecraft:cobblestone_wall",
+                    "minecraft:reinforced_deepslate"
+            )
+    );
+    public Set<String> occultChargeEffectsToBanishv2 = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:absorption",
+                    "minecraft:saturation",
+                    "minecraft:jump_boost",
+                    "minecraft:strength",
+                    "minecraft:speed",
+                    "minecraft:resistance"
+            )
+    );
+
+    public Set<String> naturalStandUserMobBlacklist = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:zombie_horse",
+                    "minecraft:vex"
+            )
+    );
+    public Set<String> hypnotismMobBlackList = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:ender_dragon",
+                    "minecraft:wither",
+                    "minecraft:warden"
+            )
+    );
+
+    public Set<String> addedMobsWithRedBlood = new HashSet<>(
+            Arrays.asList(
+                    "mod_id:add_entry_here",
+                    "mod_id:add_other_entry_here"
+            )
+    );
+    public Set<String> addedMobsWithBlueBlood = new HashSet<>(
+            Arrays.asList(
+                    "mod_id:add_entry_here",
+                    "mod_id:add_other_entry_here"
+            )
+    );
+    public Set<String> addedMobsWithEnderBlood = new HashSet<>(
+            Arrays.asList(
+                    "mod_id:add_entry_here",
+                    "mod_id:add_other_entry_here"
+            )
+    );
+    public Set<String> removeBloodFromThese = new HashSet<>(
+            Arrays.asList(
+                    "mod_id:add_entry_here",
+                    "mod_id:add_other_entry_here"
+            )
+    );
+    public Set<String> removeFreezableMobs = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:blaze",
+                    "minecraft:vex",
+                    "minecraft:stray",
+                    "minecraft:magma_cube",
+                    "minecraft:snow_golem",
+                    "minecraft:iron_golem",
+                    "minecraft:copper_golem",
+                    "minecraft:allay"
             )
     );
 }

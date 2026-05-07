@@ -12,4 +12,6 @@ public interface IPlayerModel {
     boolean roundabout$setupFirstPersonAnimations(AbstractClientPlayer $$0, float $$1, float $$2, float $$3, float $$4, float $$5,
                                                   ModelPart one, ModelPart two, MultiBufferSource mb,
                                                   int packedLight, PoseStack ps);
+    ModelPart roundabout$getEar();
+    ModelPart roundabout$getCloak();
 }

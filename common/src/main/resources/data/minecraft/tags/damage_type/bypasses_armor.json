@@ -3,6 +3,7 @@
   "values": [
     "roundabout:time",
     "roundabout:penetrating_stand",
+    "roundabout:ice_shatter",
     "roundabout:star_finger",
     "roundabout:heart",
     "roundabout:fusion",
@@ -11,6 +12,10 @@
     "roundabout:stand_fire",
     "roundabout:melting",
     "roundabout:go_beyond",
-    "roundabout:disintegration"
+    "roundabout:disintegration",
+    "roundabout:dagger",
+    "roundabout:sunlight",
+    "roundabout:blood_drain",
+    "roundabout:anubis_possess"
   ]
 }

@@ -3,6 +3,7 @@
   "values": [
     "roundabout:stand",
     "roundabout:heel_spike",
+    "roundabout:ice_shatter",
     "roundabout:explosive_stand",
     "roundabout:crossfire",
     "roundabout:stand_rush",
@@ -14,6 +15,12 @@
     "roundabout:match",
     "roundabout:fusion",
     "roundabout:stand_virus",
-    "roundabout:go_beyond"
+    "roundabout:go_beyond",
+    "roundabout:dagger",
+    "roundabout:blood_drain",
+    "roundabout:vampire",
+    "roundabout:ripper_eyes",
+    "roundabout:hamon",
+    "roundabout:martial_arts"
   ]
 }

@@ -7,15 +7,22 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StreetSignBlock;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.Zombiefish;
+import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
+import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
+import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
+import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
+import net.hydra.jojomod.entity.stand.CreamEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
+import net.hydra.jojomod.entity.substand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
+import net.hydra.jojomod.entity.zombie_minion.*;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.item.MaxStandDiscItem;
@@ -41,6 +48,8 @@ public class ForgeEvents {
     @SubscribeEvent
     public static void entityAttributes(EntityAttributeCreationEvent event) {
         event.put(ForgeEntities.TERRIER_DOG.get(), Wolf.createAttributes().build());
+        event.put(ForgeEntities.ZOMBIEFISH.get(), Zombiefish.createAttributes().build());
+        event.put(ForgeEntities.ANUBIS_GUARDIAN.get(), AnubisGuardian.createAttributes().build());
         event.put(ForgeEntities.THE_WORLD.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.THE_WORLD_ULTIMATE.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.STAR_PLATINUM.get(), StandEntity.createStandAttributes().build());
@@ -50,18 +59,28 @@ public class ForgeEvents {
         event.put(ForgeEntities.D4C.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.GREEN_DAY.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.RATT.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.REDD.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.CHAIR_RAT.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SOFT_AND_WET.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SOFT_AND_WET_KING.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SOFT_AND_WET_DROWNED.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SOFT_AND_WET_DEBUT.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SOFT_AND_WET_KILLER_QUEEN.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.KILLER_QUEEN.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.BLOCK_BOMB.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.CINDERELLA.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.MANHATTAN_TRANSFER.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.POLLINATION_TRANSFER.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.WALKING_HEART.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.CREAM.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.MAGICIANS_RED.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.MAGICIANS_RED_OVA.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SURVIVOR.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.DARK_MIRAGE.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.TUSK_A1.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.TUSK_A2.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.TUSK_A3.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.TUSK_A4.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.DIVER_DOWN.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.GRATEFUL_DEAD.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.OVA_ENYA.get(), OVAEnyaNPC.createAttributes().build());
@@ -77,6 +96,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.RINGO.get(), RingoNPC.createAttributes().build());
         event.put(ForgeEntities.HATO.get(), HatoNPC.createAttributes().build());
         event.put(ForgeEntities.SHIZUKA.get(), ShizukaNPC.createAttributes().build());
+        event.put(ForgeEntities.CHAKA.get(), ChakaNPC.createAttributes().build());
         event.put(ForgeEntities.POCOLOCO.get(), PocolocoNPC.createAttributes().build());
         event.put(ForgeEntities.GUCCIO.get(), GuccioNPC.createAttributes().build());
         event.put(ForgeEntities.VALENTINE.get(), ValentineNPC.createAttributes().build());
@@ -90,11 +110,26 @@ public class ForgeEvents {
         event.put(ForgeEntities.FALLEN_VILLAGER.get(), FallenVillager.createAttributes().build());
         event.put(ForgeEntities.FALLEN_CREEPER.get(), FallenCreeper.createAttributes().build());
         event.put(ForgeEntities.FALLEN_PHANTOM.get(), FallenPhantom.createAttributes().build());
+        event.put(ForgeEntities.VILLAGER_MINION.get(), VillagerMinion.createAttributes().build());
+        event.put(ForgeEntities.AXOLOTL_MINION.get(), AxolotlMinion.createAttributes().build());
+        event.put(ForgeEntities.OCELOT_MINION.get(), OcelotMinion.createAttributes().build());
+        event.put(ForgeEntities.CHICKEN_MINION.get(), ChickenMinion.createAttributes().build());
+        event.put(ForgeEntities.PARROT_MINION.get(), ParrotMinion.createAttributes().build());
+        event.put(ForgeEntities.DOG_MINION.get(), DogMinion.createAttributes().build());
         event.put(ForgeEntities.GROUND_HURRICANE.get(), GroundHurricaneEntity.createStandAttributes().build());
+        event.put(ForgeEntities.TUSK_HOLE.get(), TuskHoleEntity.createStandAttributes().build());
+        event.put(ForgeEntities.ANUBIS_POSSESSOR.get(), AnubisPossessorEntity.createStandAttributes().build());
         event.put(ForgeEntities.GROUND_BUBBLE.get(), GroundBubbleEntity.createStandAttributes().build());
         event.put(ForgeEntities.LIFE_TRACKER.get(), LifeTrackerEntity.createStandAttributes().build());
         event.put(ForgeEntities.D4C_CLONE.get(), D4CCloneEntity.createAttributes().build());
-    }
+        event.put(ForgeEntities.ROAD_ROLLER_ENTITY.get(), RoadRollerEntity.createAttributes().build());
+        event.put(ForgeEntities.SEPERATED_LEGS.get(), SeperatedLegsEntity.createStandAttributes().build());
+        event.put(ForgeEntities.SEPERATED_ARM.get(), SeperatedArmEntity.createStandAttributes().build());
+        event.put(ForgeEntities.SEPERATED_ARM_SLIM.get(), SeperatedArmSlimEntity.createStandAttributes().build());
+        event.put(ForgeEntities.LEFT_SEPERATED_ARM.get(), LeftSeperatedArmEntity.createStandAttributes().build());
+        event.put(ForgeEntities.LEFT_SEPERATED_ARM_SLIM.get(), LeftSeperatedArmSlimEntity.createStandAttributes().build());
+        event.put(ForgeEntities.MOLD_SPORE.get(), AnubisPossessorEntity.createStandAttributes().build());
+;    }
 
     @SubscribeEvent
     public static void registerSpawnPlacements(SpawnPlacementRegisterEvent event) {
@@ -112,10 +147,55 @@ public class ForgeEvents {
         /*Common Code Bridge*/
 
         ModBlocks.METEOR_BLOCK = ForgeBlocks.METEOR_BLOCK.get();
+        ModBlocks.IMPACT_MOUND = ForgeBlocks.IMPACT_MOUND.get();
+        ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK = ForgeBlocks.EQUIPPABLE_STONE_MASK_BLOCK.get();
+        ModBlocks.BLOODY_STONE_MASK_BLOCK = ForgeBlocks.BLOODY_STONE_MASK_BLOCK.get();
+        ModBlocks.COFFIN_BLOCK = ForgeBlocks.COFFIN_BLOCK.get();
         ModBlocks.REGAL_FLOOR = ForgeBlocks.REGAL_FLOOR.get();
         ModBlocks.WOODEN_MANOR_TABLE = ForgeBlocks.WOODEN_MANOR_TABLE.get();
+        ModBlocks.WOODEN_MANOR_CHAIR = ForgeBlocks.WOODEN_MANOR_CHAIR.get();
+        ModBlocks.WOOL_SLAB_WHITE = ForgeBlocks.WOOL_SLAB_WHITE.get();
+        ModBlocks.WOOL_STAIRS_WHITE = ForgeBlocks.WOOL_STAIRS_WHITE.get();
+        ModBlocks.WOOL_SLAB_BLACK = ForgeBlocks.WOOL_SLAB_BLACK.get();
+        ModBlocks.WOOL_STAIRS_BLACK = ForgeBlocks.WOOL_STAIRS_BLACK.get();
+        ModBlocks.WOOL_SLAB_BLUE = ForgeBlocks.WOOL_SLAB_BLUE.get();
+        ModBlocks.WOOL_STAIRS_BLUE = ForgeBlocks.WOOL_STAIRS_BLUE.get();
+        ModBlocks.WOOL_SLAB_BROWN = ForgeBlocks.WOOL_SLAB_BROWN.get();
+        ModBlocks.WOOL_STAIRS_BROWN = ForgeBlocks.WOOL_STAIRS_BROWN.get();
+        ModBlocks.WOOL_SLAB_CYAN = ForgeBlocks.WOOL_SLAB_CYAN.get();
+        ModBlocks.WOOL_STAIRS_CYAN = ForgeBlocks.WOOL_STAIRS_CYAN.get();
+        ModBlocks.WOOL_SLAB_DARK_GREEN = ForgeBlocks.WOOL_SLAB_DARK_GREEN.get();
+        ModBlocks.WOOL_STAIRS_DARK_GREEN = ForgeBlocks.WOOL_STAIRS_DARK_GREEN.get();
+        ModBlocks.WOOL_SLAB_DARK_GREY = ForgeBlocks.WOOL_SLAB_DARK_GREY.get();
+        ModBlocks.WOOL_STAIRS_DARK_GREY = ForgeBlocks.WOOL_STAIRS_DARK_GREY.get();
+        ModBlocks.WOOL_SLAB_GREEN = ForgeBlocks.WOOL_SLAB_GREEN.get();
+        ModBlocks.WOOL_STAIRS_GREEN = ForgeBlocks.WOOL_STAIRS_GREEN.get();
+        ModBlocks.WOOL_SLAB_LIGHT_BLUE = ForgeBlocks.WOOL_SLAB_LIGHT_BLUE.get();
+        ModBlocks.WOOL_STAIRS_LIGHT_BLUE = ForgeBlocks.WOOL_STAIRS_LIGHT_BLUE.get();
+        ModBlocks.WOOL_SLAB_LIGHT_GREY = ForgeBlocks.WOOL_SLAB_LIGHT_GREY.get();
+        ModBlocks.WOOL_STAIRS_LIGHT_GREY = ForgeBlocks.WOOL_STAIRS_LIGHT_GREY.get();
+        ModBlocks.WOOL_SLAB_MAGENTA = ForgeBlocks.WOOL_SLAB_MAGENTA.get();
+        ModBlocks.WOOL_STAIRS_MAGENTA = ForgeBlocks.WOOL_STAIRS_MAGENTA.get();
+        ModBlocks.WOOL_SLAB_ORANGE = ForgeBlocks.WOOL_SLAB_ORANGE.get();
+        ModBlocks.WOOL_STAIRS_ORANGE = ForgeBlocks.WOOL_STAIRS_ORANGE.get();
+        ModBlocks.WOOL_SLAB_PURPLE = ForgeBlocks.WOOL_SLAB_PURPLE.get();
+        ModBlocks.WOOL_STAIRS_PURPLE = ForgeBlocks.WOOL_STAIRS_PURPLE.get();
+        ModBlocks.WOOL_SLAB_PINK = ForgeBlocks.WOOL_SLAB_PINK.get();
+        ModBlocks.WOOL_STAIRS_PINK = ForgeBlocks.WOOL_STAIRS_PINK.get();
+        ModBlocks.WOOL_SLAB_RED = ForgeBlocks.WOOL_SLAB_RED.get();
+        ModBlocks.WOOL_STAIRS_RED = ForgeBlocks.WOOL_STAIRS_RED.get();
+        ModBlocks.WOOL_SLAB_YELLOW = ForgeBlocks.WOOL_SLAB_YELLOW.get();
+        ModBlocks.WOOL_STAIRS_YELLOW = ForgeBlocks.WOOL_STAIRS_YELLOW.get();
+        ModBlocks.GLASS_DOOR = ForgeBlocks.GLASS_DOOR.get();
+        ModBlocks.WALL_LANTERN = ForgeBlocks.WALL_LANTERN.get();
         ModBlocks.REGAL_WALL = ForgeBlocks.REGAL_WALL.get();
+        ModBlocks.CULTIVATION_POT = ForgeBlocks.CULTIVATION_POT.get();
+        ModBlocks.CULTIVATED_CHERRY_SAPLING = ForgeBlocks.CULTIVATED_CHERRY_SAPLING.get();
+        ModBlocks.CULTIVATED_OAK_SAPLING = ForgeBlocks.CULTIVATED_OAK_SAPLING.get();
+        ModBlocks.CULTIVATED_LOCACACA = ForgeBlocks.CULTIVATED_LOCACACA.get();
         ModBlocks.ANCIENT_METEOR = ForgeBlocks.ANCIENT_METEOR.get();
+        ModBlocks.SHINY_QUARTZ = ForgeBlocks.SHINY_QUARTZ.get();
+        ModBlocks.SHINY_QUARTZ_TILES = ForgeBlocks.SHINY_QUARTZ_TILES.get();
         ModBlocks.LOCACACA_CACTUS = ForgeBlocks.LOCACACA_CACTUS.get();
         ModBlocks.LOCACACA_BLOCK = ForgeBlocks.LOCACACA_BLOCK.get();
         ModBlocks.NEW_LOCACACA_BLOCK = ForgeBlocks.NEW_LOCACACA_BLOCK.get();
@@ -149,6 +229,7 @@ public class ForgeEvents {
         ModBlocks.BUBBLE_SCAFFOLD = ForgeBlocks.BUBBLE_SCAFFOLD.get();
         ModBlocks.INVISIBLOCK = ForgeBlocks.INVISIBLOCK.get();
         ModBlocks.D4C_LIGHT_BLOCK = ForgeBlocks.D4C_LIGHT_BLOCK.get();
+        ModBlocks.MELON_PARFAIT = ForgeBlocks.MELON_PARFAIT.get();
 
         ModBlocks.ORANGE_FIRE = ForgeBlocks.ORANGE_FIRE.get();
         ModBlocks.BLUE_FIRE = ForgeBlocks.BLUE_FIRE.get();
@@ -164,12 +245,15 @@ public class ForgeEvents {
         ModBlocks.INVISIBLE_BLOCK_ENTITY = ForgeBlocks.INVISIBLE_BLOCK_ENTITY.get();
         ModBlocks.D4C_LIGHT_BLOCK_ENTITY = ForgeBlocks.D4C_LIGHT_BLOCK_ENTITY.get();
         ModBlocks.FOG_TRAP_BLOCK_ENTITY = ForgeBlocks.FOG_TRAP_BLOCK_ENTITY.get();
+        ModBlocks.COFFIN_BLOCK_ENTITY = ForgeBlocks.COFFIN_BLOCK_ENTITY.get();
 
         ModItems.STAND_ARROW = ForgeItems.STAND_ARROW.get();
         ModItems.WORTHY_ARROW = ForgeItems.WORTHY_ARROW.get();
         ModItems.STAND_BEETLE_ARROW = ForgeItems.STAND_BEETLE_ARROW.get();
         ModItems.LUCK_UPGRADE = ForgeItems.LUCK_UPGRADE.get();
         ModItems.EXECUTION_UPGRADE = ForgeItems.EXECUTION_UPGRADE.get();
+        ModItems.OCCULT_CHARGE = ForgeItems.OCCULT_CHARGE.get();
+        ModItems.HAIRSPRAY = ForgeItems.HAIRSPRAY.get();
         ModItems.LUCK_SWORD = ForgeItems.LUCK_SWORD.get();
         ModItems.WOODEN_GLAIVE = ForgeItems.WOODEN_GLAIVE.get();
         ModItems.STONE_GLAIVE = ForgeItems.STONE_GLAIVE.get();
@@ -178,7 +262,9 @@ public class ForgeEvents {
         ModItems.DIAMOND_GLAIVE = ForgeItems.DIAMOND_GLAIVE.get();
         ModItems.NETHERITE_GLAIVE = ForgeItems.NETHERITE_GLAIVE.get();
         ModItems.SCISSORS = ForgeItems.SCISSORS.get();
+        ModItems.SACRIFICIAL_DAGGER = ForgeItems.SACRIFICIAL_DAGGER.get();
         ModItems.EXECUTIONER_AXE = ForgeItems.EXECUTIONER_AXE.get();
+        ModItems.BOWLER_HAT = ForgeItems.BOWLER_HAT.get();
         ModItems.BODY_BAG = ForgeItems.BODY_BAG.get();
         ModItems.CREATIVE_BODY_BAG = ForgeItems.CREATIVE_BODY_BAG.get();
         ModItems.HARPOON = ForgeItems.HARPOON.get();
@@ -188,50 +274,97 @@ public class ForgeEvents {
         ModItems.MATCH_BUNDLE = ForgeItems.MATCH_BUNDLE.get();
         ModItems.GASOLINE_CAN = ForgeItems.GASOLINE_CAN.get();
         ModItems.GASOLINE_BUCKET = ForgeItems.GASOLINE_BUCKET.get();
+        ModItems.ROAD_ROLLER = ForgeItems.ROAD_ROLLER.get();
         ModItems.STAND_DISC = ForgeItems.STAND_DISC.get();
+
         ModItems.STAND_DISC_THE_WORLD = ForgeItems.STAND_DISC_THE_WORLD.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_THE_WORLD.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_THE_WORLD.get());
         ModItems.MAX_STAND_DISC_THE_WORLD = ForgeItems.MAX_STAND_DISC_THE_WORLD.get();
+
         ModItems.STAND_DISC_STAR_PLATINUM = ForgeItems.STAND_DISC_STAR_PLATINUM.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_STAR_PLATINUM.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_STAR_PLATINUM.get());
         ModItems.MAX_STAND_DISC_STAR_PLATINUM = ForgeItems.MAX_STAND_DISC_STAR_PLATINUM.get();
+
         ModItems.STAND_DISC_JUSTICE = ForgeItems.STAND_DISC_JUSTICE.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_JUSTICE.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_JUSTICE.get());
         ModItems.MAX_STAND_DISC_JUSTICE = ForgeItems.MAX_STAND_DISC_JUSTICE.get();
+
         ModItems.STAND_DISC_MAGICIANS_RED = ForgeItems.STAND_DISC_MAGICIANS_RED.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_MAGICIANS_RED.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_MAGICIANS_RED.get());
         ModItems.MAX_STAND_DISC_MAGICIANS_RED = ForgeItems.MAX_STAND_DISC_MAGICIANS_RED.get();
+
         ModItems.STAND_DISC_KILLER_QUEEN = ForgeItems.STAND_DISC_KILLER_QUEEN.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_KILLER_QUEEN.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_KILLER_QUEEN.get());
         ModItems.MAX_STAND_DISC_KILLER_QUEEN = ForgeItems.MAX_STAND_DISC_KILLER_QUEEN.get();
-        ModItems.STAND_DISC_D4C = ForgeItems.STAND_DISC_D4C.get();
+
+      /*  ModItems.STAND_DISC_D4C = ForgeItems.STAND_DISC_D4C.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_D4C.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_D4C.get());
-        ModItems.MAX_STAND_DISC_D4C = ForgeItems.MAX_STAND_DISC_D4C.get();
+        ModItems.MAX_STAND_DISC_D4C = ForgeItems.MAX_STAND_DISC_D4C.get(); */
+
         ModItems.STAND_DISC_GREEN_DAY = ForgeItems.STAND_DISC_GREEN_DAY.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_GREEN_DAY.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_GREEN_DAY.get());
-        ModItems.MAX_STAND_DISC_D4C = ForgeItems.MAX_STAND_DISC_GREEN_DAY.get();
+        ModItems.MAX_STAND_DISC_GREEN_DAY = ForgeItems.MAX_STAND_DISC_GREEN_DAY.get();
+
         ModItems.STAND_DISC_RATT = ForgeItems.STAND_DISC_RATT.get();
         ModItems.MAX_STAND_DISC_RATT = ForgeItems.MAX_STAND_DISC_RATT.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_RATT.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_RATT.get());
+
         ModItems.STAND_DISC_SOFT_AND_WET = ForgeItems.STAND_DISC_SOFT_AND_WET.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_SOFT_AND_WET.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_SOFT_AND_WET.get());
         ModItems.MAX_STAND_DISC_SOFT_AND_WET = ForgeItems.MAX_STAND_DISC_SOFT_AND_WET.get();
+
         ModItems.STAND_DISC_CINDERELLA = ForgeItems.STAND_DISC_CINDERELLA.get();
         ModItems.STAND_DISC_HEY_YA = ForgeItems.STAND_DISC_HEY_YA.get();
         ModItems.STAND_DISC_MANDOM = ForgeItems.STAND_DISC_MANDOM.get();
+        ModItems.STAND_DISC_CENTURY_BOY = ForgeItems.STAND_DISC_CENTURY_BOY.get();
         ModItems.STAND_DISC_SURVIVOR = ForgeItems.STAND_DISC_SURVIVOR.get();
         ModItems.STAND_DISC_ACHTUNG = ForgeItems.STAND_DISC_ACHTUNG.get();
+
         ModItems.STAND_DISC_WALKING_HEART = ForgeItems.STAND_DISC_WALKING_HEART.get();
         ModItems.MAX_STAND_DISC_WALKING_HEART = ForgeItems.MAX_STAND_DISC_WALKING_HEART.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_WALKING_HEART.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_WALKING_HEART.get());
-        ModItems.STAND_DISC_DIVER_DOWN = ForgeItems.STAND_DISC_DIVER_DOWN.get();
+
+       /* ModItems.STAND_DISC_DIVER_DOWN = ForgeItems.STAND_DISC_DIVER_DOWN.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_DIVER_DOWN.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_DIVER_DOWN.get());
-        ModItems.MAX_STAND_DISC_DIVER_DOWN = ForgeItems.MAX_STAND_DISC_DIVER_DOWN.get();
+        ModItems.MAX_STAND_DISC_DIVER_DOWN = ForgeItems.MAX_STAND_DISC_DIVER_DOWN.get(); */
+
+        /*ModItems.STAND_DISC_CREAM = ForgeItems.STAND_DISC_CREAM.get();
+        ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_CREAM.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_CREAM.get());
+        ModItems.MAX_STAND_DISC_CREAM = ForgeItems.MAX_STAND_DISC_CREAM.get(); */
+
+        ModItems.STAND_DISC_ANUBIS = ForgeItems.STAND_DISC_ANUBIS.get();
+        ModItems.MAX_STAND_DISC_ANUBIS = ForgeItems.MAX_STAND_DISC_ANUBIS.get();
+        ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_ANUBIS.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_ANUBIS.get());
+
+        ModItems.STAND_DISC_TUSK = ForgeItems.STAND_DISC_TUSK.get();
+        ModItems.MAX_STAND_DISC_TUSK = ForgeItems.MAX_STAND_DISC_TUSK.get();
+        ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_TUSK.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_TUSK.get());
+
+
+        ModItems.STAND_DISC_EMPEROR = ForgeItems.STAND_DISC_EMPEROR.get();
+        ModItems.MAX_STAND_DISC_EMPEROR = ForgeItems.MAX_STAND_DISC_EMPEROR.get();
+        ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_EMPEROR.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_EMPEROR.get());
+
         ModItems.STAND_DISC_GRATEFUL_DEAD = ForgeItems.STAND_DISC_GRATEFUL_DEAD.get();
         ModItems.MAX_STAND_DISC_GRATEFUL_DEAD = ForgeItems.MAX_STAND_DISC_GRATEFUL_DEAD.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_GRATEFUL_DEAD.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_GRATEFUL_DEAD.get());
 
         ModItems.COFFEE_GUM = ForgeItems.COFFEE_GUM.get();
+        ModItems.CHERRIES = ForgeItems.CHERRIES.get();
+
+        ModItems.ANUBIS_ITEM = ForgeItems.ANUBIS_ITEM.get();
+
+        ModItems.SNUBNOSE_REVOLVER = ForgeItems.SNUBNOSE_REVOLVER.get();
+        ModItems.SNUBNOSE_AMMO = ForgeItems.SNUBNOSE_AMMO.get();
+
+        ModItems.TOMMY_GUN = ForgeItems.TOMMY_GUN.get();
+        ModItems.TOMMY_AMMO = ForgeItems.TOMMY_AMMO.get();
+
+        ModItems.COLT_REVOLVER = ForgeItems.COLT_REVOLVER.get();
+
+        ModItems.JACKAL_RIFLE = ForgeItems.JACKAL_RIFLE.get();
+        ModItems.SNIPER_AMMO = ForgeItems.SNIPER_AMMO.get();
+
 
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_DIO.get()).referenceItem = ForgeItems.STREET_SIGN_DIO_BLOCK_ITEM.get().getDefaultInstance();
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_RIGHT.get()).referenceItem = ForgeItems.STREET_SIGN_RIGHT_BLOCK_ITEM.get().getDefaultInstance();
@@ -252,14 +385,36 @@ public class ForgeEvents {
         ModItems.NEW_LOCACACA = ForgeItems.NEW_LOCACACA.get();
         ModItems.LUCKY_LIPSTICK = ForgeItems.LUCKY_LIPSTICK.get();
         ModItems.BLANK_MASK = ForgeItems.BLANK_MASK.get();
+        ModItems.RAT_MASK = ForgeItems.RAT_MASK.get();
+
+
+        ModItems.CAT_REMAINS = ForgeItems.CAT_REMAINS.get();
+        ModItems.OCELOT_REMAINS = ForgeItems.OCELOT_REMAINS.get();
+        ModItems.PARROT_REMAINS = ForgeItems.PARROT_REMAINS.get();
+        ModItems.CHICKEN_REMAINS = ForgeItems.CHICKEN_REMAINS.get();
+        ModItems.DOG_REMAINS = ForgeItems.DOG_REMAINS.get();
+        ModItems.AXOLOTL_REMAINS = ForgeItems.AXOLOTL_REMAINS.get();
+        ModItems.POLAR_BEAR_REMAINS = ForgeItems.POLAR_BEAR_REMAINS.get();
+        ModItems.MOOSHROOM_REMAINS = ForgeItems.MOOSHROOM_REMAINS.get();
+        ModItems.GOAT_REMAINS = ForgeItems.GOAT_REMAINS.get();
+        ModItems.LLAMA_REMAINS = ForgeItems.LLAMA_REMAINS.get();
+        ModItems.SILVERFISH_REMAINS = ForgeItems.SILVERFISH_REMAINS.get();
+
         ModItems.MODIFICATION_MASK = ForgeItems.MODIFICATION_MASK.get();
+        ModItems.SPEEDWAGON_MASK = ForgeItems.SPEEDWAGON_MASK.get();
+        ModItems.SPEEDWAGON_FOUNDATION_MASK = ForgeItems.SPEEDWAGON_FOUNDATION_MASK.get();
+        ModItems.STRAIZO_VAMPIRE_MASK = ForgeItems.STRAIZO_VAMPIRE_MASK.get();
         ModItems.JOTARO_MASK = ForgeItems.JOTARO_MASK.get();
+        ModItems.JOTARO_4_MASK = ForgeItems.JOTARO_4_MASK.get();
+        ModItems.JOTARO_6_MASK = ForgeItems.JOTARO_6_MASK.get();
         ModItems.DIO_MASK = ForgeItems.DIO_MASK.get();
+        ModItems.DIO_VAMPIRE_MASK = ForgeItems.DIO_VAMPIRE_MASK.get();
         ModItems.GUCCIO_MASK = ForgeItems.GUCCIO_MASK.get();
         ModItems.ENYA_MASK = ForgeItems.ENYA_MASK.get();
         ModItems.ENYA_OVA_MASK = ForgeItems.ENYA_OVA_MASK.get();
         ModItems.VALENTINE_MASK = ForgeItems.VALENTINE_MASK.get();
         ModItems.JOSUKE_PART_EIGHT_MASK = ForgeItems.JOSUKE_PART_EIGHT_MASK.get();
+        ModItems.MISTA_MASK = ForgeItems.MISTA_MASK.get();
         ModItems.AYA_MASK = ForgeItems.AYA_MASK.get();
         ModItems.AESTHETICIAN_MASK_1 = ForgeItems.AESTHETICIAN_MASK_1.get();
         ModItems.AESTHETICIAN_MASK_2 = ForgeItems.AESTHETICIAN_MASK_2.get();
@@ -268,19 +423,25 @@ public class ForgeEvents {
         ModItems.AESTHETICIAN_MASK_5 = ForgeItems.AESTHETICIAN_MASK_5.get();
         ModItems.AESTHETICIAN_MASK_ZOMBIE = ForgeItems.AESTHETICIAN_MASK_ZOMBIE.get();
         ModItems.AVDOL_MASK = ForgeItems.AVDOL_MASK.get();
+        ModItems.KAKYOIN_MASK = ForgeItems.KAKYOIN_MASK.get();
         ModItems.DIEGO_MASK = ForgeItems.DIEGO_MASK.get();
         ModItems.RINGO_MASK = ForgeItems.RINGO_MASK.get();
         ModItems.HATO_MASK = ForgeItems.HATO_MASK.get();
         ModItems.SHIZUKA_MASK = ForgeItems.SHIZUKA_MASK.get();
+        ModItems.CHAKA_MASK = ForgeItems.CHAKA_MASK.get();
+        ModItems.PAINTING_VAN_GOUGH = ForgeItems.PAINTING_VAN_GOUGH.get();
+        ModItems.PAINTING_MONA_LISA = ForgeItems.PAINTING_MONA_LISA.get();
+        ModItems.PAINTING_BIRTH_OF_VENUS = ForgeItems.PAINTING_BIRTH_OF_VENUS.get();
         ModItems.POCOLOCO_MASK = ForgeItems.POCOLOCO_MASK.get();
         ModItems.TERRIER_SPAWN_EGG = ForgeItems.TERRIER_SPAWN_EGG.get();
         ModItems.AESTHETICIAN_SPAWN_EGG = ForgeItems.AESTHETICIAN_SPAWN_EGG.get();
         ModItems.ZOMBIE_AESTHETICIAN_SPAWN_EGG = ForgeItems.ZOMBIE_AESTHETICIAN_SPAWN_EGG.get();
+        ModItems.ANUBIS_GUARDIAN_SPAWN_EGG = ForgeItems.ANUBIS_GUARDIAN_SPAWN_EGG.get();
         ModItems.MUSIC_DISC_TORTURE_DANCE = ForgeItems.MUSIC_DISC_TORTURE_DANCE.get();
         ModItems.MUSIC_DISC_HALLELUJAH = ForgeItems.MUSIC_DISC_HALLELUJAH.get();
         ModItems.FOG_BLOCK_ITEMS = ForgeCreativeTab.FOG_GROUP.get();
 
-        ModItems.INTERDIMENSIONAL_KEY = ForgeItems.INTERDIMENSIONAL_KEY.get();
+     //   ModItems.INTERDIMENSIONAL_KEY = ForgeItems.INTERDIMENSIONAL_KEY.get();
 
         ModItems.FLESH_BUCKET = ForgeItems.FLESH_BUCKET.get();
 
@@ -288,7 +449,7 @@ public class ForgeEvents {
 
         BrewingRecipeRegistry.addRecipe(new ForgeBrewingRecipes(Potions.AWKWARD, ModItems.LOCACACA_PIT, ForgeItems.HEX_POTION.get()));
         BrewingRecipeRegistry.addRecipe(new ForgeBrewingRecipes(ForgeItems.HEX_POTION.get(), Items.REDSTONE, ForgeItems.HEX_POTION_EXTENDED.get()));
-        BrewingRecipeRegistry.addRecipe(new ForgeBrewingRecipes(ForgeItems.HEX_POTION.get(), Items.GLOWSTONE, ForgeItems.HEX_POTION_STRONG.get()));
+        BrewingRecipeRegistry.addRecipe(new ForgeBrewingRecipes(ForgeItems.HEX_POTION.get(), Items.GLOWSTONE_DUST, ForgeItems.HEX_POTION_STRONG.get()));
 
 
         ModParticles.HIT_IMPACT = ForgeParticles.HIT_IMPACT.get();
@@ -299,6 +460,7 @@ public class ForgeEvents {
         ModParticles.POINTER = ForgeParticles.POINTER.get();
         ModParticles.POINTER_SOFT = ForgeParticles.POINTER_SOFT.get();
         ModParticles.AIR_CRACKLE = ForgeParticles.AIR_CRACKLE.get();
+        ModParticles.HEARTBEAT = ForgeParticles.HEARTBEAT.get();
         ModParticles.MENACING = ForgeParticles.MENACING.get();
         ModParticles.VACUUM = ForgeParticles.VACUUM.get();
         ModParticles.ORANGE_FLAME = ForgeParticles.ORANGE_FLAME.get();
@@ -312,6 +474,14 @@ public class ForgeEvents {
         ModParticles.HEART_ATTACK_MINI = ForgeParticles.HEART_ATTACK_MINI.get();
         ModParticles.ENERGY_DISTORTION = ForgeParticles.ENERGY_DISTORTION.get();
         ModParticles.PURPLE_STAR = ForgeParticles.PURPLE_STAR.get();
+        ModParticles.BLUE_SPARKLE = ForgeParticles.BLUE_SPARKLE.get();
+        ModParticles.RED_SPARKLE = ForgeParticles.RED_SPARKLE.get();
+        ModParticles.ICE_SPARKLE = ForgeParticles.ICE_SPARKLE.get();
+        ModParticles.VAMPIRE_AURA = ForgeParticles.VAMPIRE_AURA.get();
+        ModParticles.PUNCH_IMPACT_A = ForgeParticles.PUNCH_IMPACT_A.get();
+        ModParticles.PUNCH_IMPACT_B = ForgeParticles.PUNCH_IMPACT_B.get();
+        ModParticles.PUNCH_IMPACT_C = ForgeParticles.PUNCH_IMPACT_C.get();
+        ModParticles.PUNCH_MISS = ForgeParticles.PUNCH_MISS.get();
         ModParticles.BUBBLE_TRAIL = ForgeParticles.BUBBLE_TRAIL.get();
         ModParticles.WARDEN_CLOCK = ForgeParticles.WARDEN_CLOCK.get();
         ModParticles.CLOCK = ForgeParticles.CLOCK.get();
@@ -323,6 +493,7 @@ public class ForgeEvents {
         ModParticles.BLUE_CLOCK = ForgeParticles.BLUE_CLOCK.get();
         ModParticles.CINDERELLA_GLOW = ForgeParticles.CINDERELLA_GLOW.get();
         ModParticles.PINK_SMOKE = ForgeParticles.PINK_SMOKE.get();
+        ModParticles.BLOOD_MIST = ForgeParticles.BLOOD_MIST.get();
         ModParticles.BUBBLE_POP = ForgeParticles.BUBBLE_POP.get();
         ModParticles.PLUNDER = ForgeParticles.PLUNDER.get();
         ModParticles.FRICTIONLESS = ForgeParticles.FRICTIONLESS.get();
@@ -332,32 +503,66 @@ public class ForgeEvents {
         ModParticles.BRIEF_MAGIC_DUST = ForgeParticles.BRIEF_MAGIC_DUST.get();
         ModParticles.D4C_LINES = ForgeParticles.D4C_LINES.get();
         ModParticles.STITCH = ForgeParticles.STITCH.get();
+        ModParticles.OCCULT = ForgeParticles.OCCULT.get();
+        ModParticles.HYPNO_SWIRL = ForgeParticles.HYPNO_SWIRL.get();
+        ModParticles.TUSK_VORTEX = ForgeParticles.TUSK_VORTEX.get();
+        ModParticles.METALLICA_NAIL = ForgeParticles.METALLICA_NAIL.get();
+        ModParticles.METALLICA_RAZOR = ForgeParticles.METALLICA_RAZOR.get();
+        ModParticles.METALLICA_SCISSORS = ForgeParticles.METALLICA_SCISSORS.get();
+        ModParticles.METALLICA_A = ForgeParticles.METALLICA_A.get();
+        ModParticles.METALLICA_B = ForgeParticles.METALLICA_B.get();
+        ModParticles.METALLICA_C = ForgeParticles.METALLICA_C.get();
+        ModParticles.METALLICA_D = ForgeParticles.METALLICA_D.get();
+        ModParticles.METALLICA_FIELD_PNG = ForgeParticles.METALLICA_FIELD_PNG.get();
         ModParticles.MOLD_DUST = ForgeParticles.MOLD_DUST.get();
         ModParticles.MOLD = ForgeParticles.MOLD.get();
+        ModParticles.RAGING_LIGHT = ForgeParticles.RAGING_LIGHT.get();
+        ModParticles.ALLURING_LIGHT = ForgeParticles.ALLURING_LIGHT.get();
+        ModParticles.DUST_CRUMBLE = ForgeParticles.DUST_CRUMBLE.get();
+        ModParticles.FIRE_CRUMBLE = ForgeParticles.FIRE_CRUMBLE.get();
+        ModParticles.SOUL_FIRE_CRUMBLE = ForgeParticles.SOUL_FIRE_CRUMBLE.get();
+        ModParticles.ROAD_ROLLER_SCRAP = ForgeParticles.ROAD_ROLLER_SCRAP.get();
+        ModParticles.ROAD_ROLLER_EXPLOSION = ForgeParticles.ROAD_ROLLER_EXPLOSION.get();
+        ModParticles.ROAD_ROLLER_SMOKE = ForgeParticles.ROAD_ROLLER_SMOKE.get();
+        ModParticles.TUSK_HOLE = ForgeParticles.TUSK_HOLE.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
 
         ModEffects.BLEED = ForgeEffects.BLEED.get();
         ModEffects.HEX = ForgeEffects.HEX.get();
+        ModEffects.BANISH = ForgeEffects.BANISH.get();
         ModEffects.STAND_VIRUS = ForgeEffects.STAND_VIRUS.get();
         ModEffects.CAPTURING_LOVE = ForgeEffects.CAPTURING_LOVE.get();
         ModEffects.FACELESS = ForgeEffects.FACELESS.get();
         ModEffects.MELTING = ForgeEffects.MELTING.get();
         ModEffects.GRAVITY_FLIP = ForgeEffects.GRAVITY_FLIP.get();
+        ModEffects.WARDING = ForgeEffects.WARDING.get();
+        ModEffects.VAMPIRE_BLOOD = ForgeEffects.VAMPIRE_BLOOD.get();
+        ModEffects.UNBALANCED = ForgeEffects.UNBALANCED.get();
+        ModEffects.SWITCH = ForgeEffects.SWITCH.get();
+        ModEffects.MOLD = ForgeEffects.MOLD.get();
 
 
+        ModEntities.VAN_GOUGH_PAINTING = ForgeEntities.VAN_GOUGH_PAINTING.get();
+        ModEntities.MONA_LISA_PAINTING = ForgeEntities.MONA_LISA_PAINTING.get();
+        ModEntities.BIRTH_OF_VENUS_PAINTING = ForgeEntities.BIRTH_OF_VENUS_PAINTING.get();
         ModEntities.THE_WORLD = ForgeEntities.THE_WORLD.get();
         ModEntities.THE_WORLD_ULTIMATE = ForgeEntities.THE_WORLD_ULTIMATE.get();
         ModEntities.TERRIER_DOG = ForgeEntities.TERRIER_DOG.get();
+        ModEntities.ZOMBIEFISH = ForgeEntities.ZOMBIEFISH.get();
+        ModEntities.ANUBIS_GUARDIAN = ForgeEntities.ANUBIS_GUARDIAN.get();
         ModEntities.STAR_PLATINUM = ForgeEntities.STAR_PLATINUM.get();
         ModEntities.JUSTICE = ForgeEntities.JUSTICE.get();
         ModEntities.MAGICIANS_RED = ForgeEntities.MAGICIANS_RED.get();
         ModEntities.MAGICIANS_RED_OVA = ForgeEntities.MAGICIANS_RED_OVA.get();
         ModEntities.SURVIVOR = ForgeEntities.SURVIVOR.get();
         ModEntities.D4C = ForgeEntities.D4C.get();
+        ModEntities.CREAM = ForgeEntities.CREAM.get();
         ModEntities.GREEN_DAY = ForgeEntities.GREEN_DAY.get();
         ModEntities.RATT = ForgeEntities.RATT.get();
+        ModEntities.REDD = ForgeEntities.REDD.get();
+        ModEntities.CHAIR_RATT = ForgeEntities.CHAIR_RAT.get();
         ModEntities.FLESH_PILE = ForgeEntities.FLESH_PILE.get();
         ModEntities.SOFT_AND_WET = ForgeEntities.SOFT_AND_WET.get();
         ModEntities.SOFT_AND_WET_KING = ForgeEntities.SOFT_AND_WET_KING.get();
@@ -365,26 +570,47 @@ public class ForgeEvents {
         ModEntities.SOFT_AND_WET_DEBUT = ForgeEntities.SOFT_AND_WET_DEBUT.get();
         ModEntities.SOFT_AND_WET_KILLER_QUEEN = ForgeEntities.SOFT_AND_WET_KILLER_QUEEN.get();
         ModEntities.KILLER_QUEEN = ForgeEntities.KILLER_QUEEN.get();
+        ModEntities.BLOCK_BOMB = ForgeEntities.BLOCK_BOMB.get();
         ModEntities.CINDERELLA = ForgeEntities.CINDERELLA.get();
+        ModEntities.MANHATTAN_TRANSFER = ForgeEntities.MANHATTAN_TRANSFER.get();
+        ModEntities.POLLINATION_TRANSFER = ForgeEntities.POLLINATION_TRANSFER.get();
         ModEntities.WALKING_HEART = ForgeEntities.WALKING_HEART.get();
         ModEntities.JUSTICE_PIRATE = ForgeEntities.JUSTICE_PIRATE.get();
         ModEntities.DARK_MIRAGE = ForgeEntities.DARK_MIRAGE.get();
+        ModEntities.TUSK_A1 = ForgeEntities.TUSK_A1.get();
+        ModEntities.TUSK_A2 = ForgeEntities.TUSK_A2.get();
+        ModEntities.TUSK_A3 = ForgeEntities.TUSK_A3.get();
+        ModEntities.TUSK_A4 = ForgeEntities.TUSK_A4.get();
         ModEntities.STAR_PLATINUM_BASEBALL = ForgeEntities.STAR_PLATINUM_BASEBALL.get();
         ModEntities.DIVER_DOWN = ForgeEntities.DIVER_DOWN.get();
         ModEntities.GRATEFUL_DEAD = ForgeEntities.GRATEFUL_DEAD.get();
         ModEntities.THROWN_HARPOON = ForgeEntities.THROWN_HARPOON.get();
+        ModEntities.BLADED_BOWLER_HAT = ForgeEntities.BLADED_BOWLER_HAT.get();
+        ModEntities.ROUNDABOUT_BULLET_ENTITY = ForgeEntities.ROUNDABOUT_BULLET_ENTITY.get();
         ModEntities.THROWN_KNIFE = ForgeEntities.THROWN_KNIFE.get();
+        ModEntities.METALLICA_KNIFE = ForgeEntities.METALLICA_KNIFE.get();
         ModEntities.RATT_DART = ForgeEntities.RATT_DART.get();
         ModEntities.THROWN_MATCH = ForgeEntities.THROWN_MATCH.get();
         ModEntities.THROWN_WATER_BOTTLE = ForgeEntities.THROWN_WATER_BOTTLE.get();
         ModEntities.CROSSFIRE_HURRICANE = ForgeEntities.CROSSFIRE_HURRICANE.get();
         ModEntities.LIFE_TRACKER = ForgeEntities.LIFE_TRACKER.get();
         ModEntities.STAND_FIREBALL = ForgeEntities.STAND_FIREBALL.get();
+        ModEntities.EVIL_AURA_PROJECTILE = ForgeEntities.EVIL_AURA_PROJECTILE.get();
+        ModEntities.RIPPER_EYES_PROJECTILE = ForgeEntities.RIPPER_EYES_PROJECTILE.get();
         ModEntities.GASOLINE_CAN = ForgeEntities.GASOLINE_CAN.get();
         ModEntities.GASOLINE_SPLATTER = ForgeEntities.GASOLINE_SPLATTER.get();
+        ModEntities.BLOOD_SPLATTER = ForgeEntities.BLOOD_SPLATTER.get();
         ModEntities.STAND_ARROW = ForgeEntities.STAND_ARROW.get();
+        ModEntities.ROAD_ROLLER_ENTITY = ForgeEntities.ROAD_ROLLER_ENTITY.get();
+        ModEntities.SEPERATED_LEGS = ForgeEntities.SEPERATED_LEGS.get();
+        ModEntities.SEPERATED_ARM = ForgeEntities.SEPERATED_ARM.get();
+        ModEntities.SEPERATED_ARM_SLIM = ForgeEntities.SEPERATED_ARM_SLIM.get();
+        ModEntities.LEFT_SEPERATED_ARM = ForgeEntities.LEFT_SEPERATED_ARM.get();
+        ModEntities.LEFT_SEPERATED_ARM_SLIM = ForgeEntities.LEFT_SEPERATED_ARM_SLIM.get();
+        ModEntities.MOLD_SPORES = ForgeEntities.MOLD_SPORE.get();
 
         ModEntities.THROWN_OBJECT = ForgeEntities.THROWN_OBJECT.get();
+        ModEntities.THROWN_ANUBIS = ForgeEntities.THROWN_ANUBIS.get();
         ModEntities.CONCEALED_FLAME_OBJECT = ForgeEntities.CONCEALED_FLAME_OBJECT.get();
         ModEntities.GROUND_HURRICANE = ForgeEntities.GROUND_HURRICANE.get();
         ModEntities.GROUND_BUBBLE = ForgeEntities.GROUND_BUBBLE.get();
@@ -394,12 +620,25 @@ public class ForgeEvents {
         ModEntities.GO_BEYOND = ForgeEntities.GO_BEYOND.get();
         ModEntities.ENCASEMENT_BUBBLE = ForgeEntities.ENCASEMENT_BUBBLE.get();
         ModEntities.CINDERELLA_VISAGE_DISPLAY = ForgeEntities.CINDERELLA_VISAGE_DISPLAY.get();
+        ModEntities.ANUBIS_POSSESSOR = ForgeEntities.ANUBIS_POSSESSOR.get();
+        ModEntities.ANUBIS_SLIPSTREAM = ForgeEntities.ANUBIS_SLIPSTREAM.get();
+        ModEntities.TUSK_NAIL = ForgeEntities.TUSK_NAIL.get();
+        ModEntities.TUSK_HOLE = ForgeEntities.TUSK_HOLE.get();
+
         ModEntities.FALLEN_ZOMBIE = ForgeEntities.FALLEN_ZOMBIE.get();
         ModEntities.FALLEN_SKELETON = ForgeEntities.FALLEN_SKELETON.get();
         ModEntities.FALLEN_SPIDER = ForgeEntities.FALLEN_SPIDER.get();
         ModEntities.FALLEN_VILLAGER = ForgeEntities.FALLEN_VILLAGER.get();
         ModEntities.FALLEN_CREEPER = ForgeEntities.FALLEN_CREEPER.get();
         ModEntities.FALLEN_PHANTOM = ForgeEntities.FALLEN_PHANTOM.get();
+
+        ModEntities.VILLAGER_MINION = ForgeEntities.VILLAGER_MINION.get();
+        ModEntities.OCELOT_MINION = ForgeEntities.OCELOT_MINION.get();
+        ModEntities.DOG_MINION = ForgeEntities.DOG_MINION.get();
+        ModEntities.PARROT_MINION = ForgeEntities.PARROT_MINION.get();
+        ModEntities.CHICKEN_MINION = ForgeEntities.CHICKEN_MINION.get();
+        ModEntities.AXOLOTL_MINION = ForgeEntities.AXOLOTL_MINION.get();
+
 
         ModEntities.OVA_ENYA = ForgeEntities.OVA_ENYA.get();
         ModEntities.ENYA = ForgeEntities.ENYA.get();
@@ -416,6 +655,7 @@ public class ForgeEvents {
         ModEntities.RINGO = ForgeEntities.RINGO.get();
         ModEntities.HATO = ForgeEntities.HATO.get();
         ModEntities.SHIZUKA = ForgeEntities.SHIZUKA.get();
+        ModEntities.CHAKA = ForgeEntities.CHAKA.get();
         ModEntities.VALENTINE = ForgeEntities.VALENTINE.get();
         ModEntities.STEVE_NPC = ForgeEntities.STEVE_NPC.get();
         ModEntities.ALEX_NPC = ForgeEntities.ALEX_NPC.get();

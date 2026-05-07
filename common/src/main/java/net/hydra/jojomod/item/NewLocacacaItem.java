@@ -1,7 +1,9 @@
 package net.hydra.jojomod.item;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -131,6 +133,7 @@ public class NewLocacacaItem extends Item {
                         SoundEvent $$6 = ModSounds.LOCACACA_FUSION_EVENT;
                         level.playSound(null,entity,$$6, SoundSource.PLAYERS, 1.0F, 1F);
                     } else {
+                        entity.removeEffect(ModEffects.MELTING);
                         float health = entity.getHealth();
                         float maxHealth = entity.getMaxHealth();
                         float exchangeDamage = maxHealth - health;

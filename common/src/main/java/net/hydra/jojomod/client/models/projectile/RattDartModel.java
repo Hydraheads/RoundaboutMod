@@ -23,16 +23,16 @@ public class RattDartModel extends Model {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition dart = partdefinition.addOrReplaceChild("dart", CubeListBuilder.create().texOffs(0, 0).addBox(0.0F, -4.0F, -1.0F, 0.0F, 3.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 2.0F, 1.0F));
+		PartDefinition dart = partdefinition.addOrReplaceChild("dart", CubeListBuilder.create().texOffs(0, 0).addBox(0.0F, -9.0F, 0.0F, 0.0F, 3.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 8.0F, 0.0F));
 
-		PartDefinition cube_r1 = dart.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(4, 4).addBox(-0.0354F, -21.0F, -0.5404F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.1F, 19.0F, -0.45F, 0.0F, -2.3562F, 0.0F));
+		PartDefinition cube_r1 = dart.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(4, 4).addBox(-0.0354F, -24.0F, -0.5404F, 0.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.1F, 16.0F, 0.55F, 0.0F, -2.3562F, 0.0F));
 
-		PartDefinition cube_r2 = dart.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(4, 0).addBox(0.0F, -21.0F, -1.0F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.35F, 19.0F, -0.15F, 0.0F, -0.7854F, 0.0F));
+		PartDefinition cube_r2 = dart.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(4, 0).addBox(0.0F, -24.0F, -1.0F, 0.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.35F, 16.0F, 0.85F, 0.0F, -0.7854F, 0.0F));
 
-		PartDefinition cube_r3 = dart.addOrReplaceChild("cube_r3", CubeListBuilder.create().texOffs(2, 0).addBox(0.0F, -23.0F, -0.5F, 0.0F, 3.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 19.0F, -0.5F, 0.0F, -1.5708F, 0.0F));
+		PartDefinition cube_r3 = dart.addOrReplaceChild("cube_r3", CubeListBuilder.create().texOffs(2, 0).addBox(0.0F, -25.0F, -0.5F, 0.0F, 3.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 16.0F, 0.5F, 0.0F, -1.5708F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 16, 16);
-	}
+    }
 
 
 	@Override

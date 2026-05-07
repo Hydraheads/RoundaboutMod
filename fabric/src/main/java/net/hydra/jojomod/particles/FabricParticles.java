@@ -10,6 +10,10 @@ import net.minecraft.resources.ResourceLocation;
 
 public class FabricParticles {
     public static final SimpleParticleType HIT_IMPACT = FabricParticleTypes.simple();
+    public static final SimpleParticleType PUNCH_MISS = FabricParticleTypes.simple();
+    public static final SimpleParticleType PUNCH_IMPACT_A = FabricParticleTypes.simple();
+    public static final SimpleParticleType PUNCH_IMPACT_B = FabricParticleTypes.simple();
+    public static final SimpleParticleType PUNCH_IMPACT_C = FabricParticleTypes.simple();
     public static final SimpleParticleType MELTING = FabricParticleTypes.simple();
     public static final SimpleParticleType BLOOD = FabricParticleTypes.simple();
     public static final SimpleParticleType POINTER = FabricParticleTypes.simple();
@@ -17,10 +21,15 @@ public class FabricParticles {
     public static final SimpleParticleType BLUE_BLOOD = FabricParticleTypes.simple();
     public static final SimpleParticleType ENDER_BLOOD = FabricParticleTypes.simple();
     public static final SimpleParticleType AIR_CRACKLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType HEARTBEAT = FabricParticleTypes.simple();
     public static final SimpleParticleType STAR = FabricParticleTypes.simple();
     public static final SimpleParticleType HEART_ATTACK_MINI = FabricParticleTypes.simple();
     public static final SimpleParticleType ENERGY_DISTORTION = FabricParticleTypes.simple();
     public static final SimpleParticleType PURPLE_STAR = FabricParticleTypes.simple();
+    public static final SimpleParticleType BLUE_SPARKLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType RED_SPARKLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType ICE_SPARKLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType VAMPIRE_AURA = FabricParticleTypes.simple();
     public static final SimpleParticleType MENACING = FabricParticleTypes.simple();
     public static final SimpleParticleType VACUUM = FabricParticleTypes.simple();
     public static final SimpleParticleType ZAP = FabricParticleTypes.simple();
@@ -41,6 +50,7 @@ public class FabricParticles {
     public static final SimpleParticleType CLOCK = FabricParticleTypes.simple();
     public static final SimpleParticleType CINDERELLA_GLOW = FabricParticleTypes.simple();
     public static final SimpleParticleType PINK_SMOKE = FabricParticleTypes.simple();
+    public static final SimpleParticleType BLOOD_MIST = FabricParticleTypes.simple();
     public static final SimpleParticleType D4C_LINES = FabricParticleTypes.simple();
     public static final SimpleParticleType BUBBLE_POP = FabricParticleTypes.simple();
     public static final SimpleParticleType PLUNDER = FabricParticleTypes.simple();
@@ -48,12 +58,40 @@ public class FabricParticles {
     public static final SimpleParticleType EXCLAMATION = FabricParticleTypes.simple();
     public static final SimpleParticleType BABY_CRACKLE = FabricParticleTypes.simple();
     public static final SimpleParticleType MAGIC_DUST = FabricParticleTypes.simple();
+    public static final SimpleParticleType ROAD_ROLLER_EXPLOSION = FabricParticleTypes.simple();
+    public static final SimpleParticleType ROAD_ROLLER_SMOKE = FabricParticleTypes.simple();
+    public static final SimpleParticleType ROAD_ROLLER_SCRAP = FabricParticleTypes.simple();
+
     public static final SimpleParticleType BRIEF_MAGIC_DUST = FabricParticleTypes.simple();
     public static final SimpleParticleType STITCH = FabricParticleTypes.simple();
     public static final SimpleParticleType MOLD_DUST = FabricParticleTypes.simple();
+    public static final SimpleParticleType OCCULT = FabricParticleTypes.simple();
+    public static final SimpleParticleType HYPNO_SWIRL = FabricParticleTypes.simple();
+    public static final SimpleParticleType TUSK_VORTEX = FabricParticleTypes.simple();
     public static final SimpleParticleType MOLD = FabricParticleTypes.simple();
+    public static final SimpleParticleType RAGING_LIGHT = FabricParticleTypes.simple();
+    public static final SimpleParticleType ALLURING_LIGHT = FabricParticleTypes.simple();
+    public static final SimpleParticleType TUSK_HOLE = FabricParticleTypes.simple();
+
+    public static final SimpleParticleType DUST_CRUMBLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType FIRE_CRUMBLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType SOUL_FIRE_CRUMBLE = FabricParticleTypes.simple();
+
+    public static final SimpleParticleType METALLICA_A = FabricParticleTypes.simple();
+    public static final SimpleParticleType METALLICA_B = FabricParticleTypes.simple();
+    public static final SimpleParticleType METALLICA_C = FabricParticleTypes.simple();
+    public static final SimpleParticleType METALLICA_D = FabricParticleTypes.simple();
+    public static final SimpleParticleType METALLICA_FIELD_PNG = FabricParticleTypes.simple();
+    public static final SimpleParticleType METALLICA_NAIL = FabricParticleTypes.simple();
+    public static final SimpleParticleType METALLICA_RAZOR = FabricParticleTypes.simple();
+    public static final SimpleParticleType METALLICA_SCISSORS = FabricParticleTypes.simple();
+
     public static void registerParticles(){
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("hit_impact"), HIT_IMPACT);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("punch_miss"), PUNCH_MISS);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("punch_impact_a"), PUNCH_IMPACT_A);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("punch_impact_b"), PUNCH_IMPACT_B);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("punch_impact_c"), PUNCH_IMPACT_C);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("melting"), MELTING);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("blood"), BLOOD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("pointer"), POINTER);
@@ -62,9 +100,14 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("heart_attack_mini"), HEART_ATTACK_MINI);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("energy_distortion"), ENERGY_DISTORTION);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("purple_star"), PURPLE_STAR);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("blue_sparkle"), BLUE_SPARKLE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("red_sparkle"), RED_SPARKLE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("ice_sparkle"), ICE_SPARKLE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("vampire_aura"), VAMPIRE_AURA);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("blue_blood"), BLUE_BLOOD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("ender_blood"), ENDER_BLOOD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("air_crackle"), AIR_CRACKLE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("heartbeat"), HEARTBEAT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("menacing"), MENACING);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("vacuum"), VACUUM);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("zap"), ZAP);
@@ -79,6 +122,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("cream_flame"), CREAM_FLAME);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("cinderella_glow"), CINDERELLA_GLOW);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("pink_smoke"), PINK_SMOKE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("blood_mist"), BLOOD_MIST);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("soft_bubble_pop"), BUBBLE_POP);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("plunder"), PLUNDER);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("frictionless"), FRICTIONLESS);
@@ -86,7 +130,13 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("d4c_lines"), D4C_LINES);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("stitch"), STITCH);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("mold_dust"), MOLD_DUST);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("occult"), OCCULT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("mold"), MOLD);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("raging_light"), RAGING_LIGHT);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("alluring_light"), ALLURING_LIGHT);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("tusk_hole"), TUSK_HOLE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("hypno_swirl"), HYPNO_SWIRL);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("tusk_vortex"), TUSK_VORTEX);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("clock"), CLOCK);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("red_clock"), RED_CLOCK);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("blue_clock"), BLUE_CLOCK);
@@ -97,18 +147,44 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("magic_dust"), MAGIC_DUST);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("brief_magic_dust"), BRIEF_MAGIC_DUST);
 
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("road_roller_explosion"), ROAD_ROLLER_EXPLOSION);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("road_roller_smoke"), ROAD_ROLLER_SMOKE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("road_roller_scrap"), ROAD_ROLLER_SCRAP);
+
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("dust_crumble"), DUST_CRUMBLE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("fire_crumble"), FIRE_CRUMBLE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("soul_fire_crumble"), SOUL_FIRE_CRUMBLE);
+
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("metallica_a"), METALLICA_A);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("metallica_b"), METALLICA_B);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("metallica_c"), METALLICA_C);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("metallica_d"), METALLICA_D);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("metallica_field_png"), METALLICA_FIELD_PNG);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("nail"), METALLICA_NAIL);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("razor"), METALLICA_RAZOR);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("scissors"), METALLICA_SCISSORS);
+
         ModParticles.MELTING = MELTING;
         ModParticles.BLOOD = BLOOD;
         ModParticles.BLUE_BLOOD = BLUE_BLOOD;
         ModParticles.ENDER_BLOOD = ENDER_BLOOD;
         ModParticles.HIT_IMPACT = HIT_IMPACT;
         ModParticles.AIR_CRACKLE = AIR_CRACKLE;
+        ModParticles.HEARTBEAT = HEARTBEAT;
         ModParticles.MENACING = MENACING;
+        ModParticles.PUNCH_IMPACT_A = PUNCH_IMPACT_A;
+        ModParticles.PUNCH_IMPACT_B = PUNCH_IMPACT_B;
+        ModParticles.PUNCH_IMPACT_C = PUNCH_IMPACT_C;
+        ModParticles.PUNCH_MISS = PUNCH_MISS;
         ModParticles.VACUUM = VACUUM;
         ModParticles.STAR = STAR;
         ModParticles.HEART_ATTACK_MINI = HEART_ATTACK_MINI;
         ModParticles.ENERGY_DISTORTION = ENERGY_DISTORTION;
         ModParticles.PURPLE_STAR = PURPLE_STAR;
+        ModParticles.BLUE_SPARKLE = BLUE_SPARKLE;
+        ModParticles.RED_SPARKLE = RED_SPARKLE;
+        ModParticles.ICE_SPARKLE = ICE_SPARKLE;
+        ModParticles.VAMPIRE_AURA = VAMPIRE_AURA;
         ModParticles.FOG_CHAIN = FOG_CHAIN;
         ModParticles.BUBBLE_TRAIL = BUBBLE_TRAIL;
         ModParticles.WARDEN_CLOCK = WARDEN_CLOCK;
@@ -130,6 +206,7 @@ public class FabricParticles {
         ModParticles.CINDERELLA_GLOW = CINDERELLA_GLOW;
         ModParticles.D4C_LINES = D4C_LINES;
         ModParticles.PINK_SMOKE = PINK_SMOKE;
+        ModParticles.BLOOD_MIST = BLOOD_MIST;
         ModParticles.BUBBLE_POP = BUBBLE_POP;
         ModParticles.PLUNDER = PLUNDER;
         ModParticles.FRICTIONLESS = FRICTIONLESS;
@@ -139,6 +216,29 @@ public class FabricParticles {
         ModParticles.BRIEF_MAGIC_DUST = BRIEF_MAGIC_DUST;
         ModParticles.STITCH = STITCH;
         ModParticles.MOLD_DUST = MOLD_DUST;
+        ModParticles.OCCULT = OCCULT;
+        ModParticles.HYPNO_SWIRL = HYPNO_SWIRL;
+        ModParticles.TUSK_VORTEX = TUSK_VORTEX;
         ModParticles.MOLD = MOLD;
+        ModParticles.RAGING_LIGHT = RAGING_LIGHT;
+        ModParticles.ALLURING_LIGHT = ALLURING_LIGHT;
+        ModParticles.TUSK_HOLE = TUSK_HOLE;
+
+        ModParticles.ROAD_ROLLER_EXPLOSION = ROAD_ROLLER_EXPLOSION;
+        ModParticles.ROAD_ROLLER_SMOKE = ROAD_ROLLER_SMOKE;
+        ModParticles.ROAD_ROLLER_SCRAP = ROAD_ROLLER_SCRAP;
+
+        ModParticles.DUST_CRUMBLE = DUST_CRUMBLE;
+        ModParticles.FIRE_CRUMBLE = FIRE_CRUMBLE;
+        ModParticles.SOUL_FIRE_CRUMBLE = SOUL_FIRE_CRUMBLE;
+
+        ModParticles.METALLICA_A = METALLICA_A;
+        ModParticles.METALLICA_B = METALLICA_B;
+        ModParticles.METALLICA_C = METALLICA_C;
+        ModParticles.METALLICA_D = METALLICA_D;
+        ModParticles.METALLICA_FIELD_PNG = METALLICA_FIELD_PNG;
+        ModParticles.METALLICA_NAIL = METALLICA_NAIL;
+        ModParticles.METALLICA_RAZOR = METALLICA_RAZOR;
+        ModParticles.METALLICA_SCISSORS = METALLICA_SCISSORS;
     }
 }

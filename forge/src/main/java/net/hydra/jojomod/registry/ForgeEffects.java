@@ -21,6 +21,14 @@ public class ForgeEffects{
             POTION_EFFECTS.register("hex", () ->
                     new Effect(MobEffectCategory.HARMFUL, 11606258)
             );
+    public static final RegistryObject<MobEffect> BANISH =
+            POTION_EFFECTS.register("banish", () ->
+                    new Effect(MobEffectCategory.HARMFUL, 15099838)
+            );
+    public static final RegistryObject<MobEffect> SWITCH =
+            POTION_EFFECTS.register("switch", () ->
+                    new Effect(MobEffectCategory.HARMFUL, 9974431)
+            );
     public static final RegistryObject<MobEffect> STAND_VIRUS =
             POTION_EFFECTS.register("stand_virus", () ->
                     new Effect(MobEffectCategory.HARMFUL, 9979490)
@@ -41,6 +49,18 @@ public class ForgeEffects{
     public static final RegistryObject<MobEffect> GRAVITY_FLIP =
             POTION_EFFECTS.register("gravity_flip", () ->
                     new Effect(MobEffectCategory.HARMFUL, 4906114));
+    public static final RegistryObject<MobEffect> WARDING =
+            POTION_EFFECTS.register("warding", () ->
+                    new Effect(MobEffectCategory.BENEFICIAL, 16760283));
+    public static final RegistryObject<MobEffect> VAMPIRE_BLOOD =
+            POTION_EFFECTS.register("vampire_blood", () ->
+                    new Effect(MobEffectCategory.HARMFUL, 8662571));
+    public static final RegistryObject<MobEffect> UNBALANCED =
+            POTION_EFFECTS.register("unbalanced", () ->
+                    new Effect(MobEffectCategory.HARMFUL, 2738639));
+    public static final RegistryObject<MobEffect> MOLD =
+            POTION_EFFECTS.register("mold", () ->
+                    new Effect(MobEffectCategory.HARMFUL, 0));
 
 
     public static class Effect extends MobEffect{

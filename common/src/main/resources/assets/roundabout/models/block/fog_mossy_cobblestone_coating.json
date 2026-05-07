@@ -1,0 +1,6 @@
+{
+  "parent": "roundabout:block/fog_coating_source",
+  "textures": {
+    "texture": "minecraft:block/mossy_cobblestone"
+  }
+}

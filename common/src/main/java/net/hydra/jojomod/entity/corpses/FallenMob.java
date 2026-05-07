@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.corpses;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -28,10 +29,12 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
@@ -44,6 +47,7 @@ import net.minecraft.world.scores.Team;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 public class FallenMob extends PathfinderMob implements NeutralMob {
     public int ticksThroughPhases = 0;
@@ -119,6 +123,46 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                         11, 0.3, 0.3, 0.3, 0.3);
             }
         }
+    }
+
+    @Override
+    public void setTarget(@Nullable LivingEntity $$0) {
+        if ($$0 != null && controller != null && controller.is($$0)){
+            return;
+        } else {
+            super.setTarget($$0);
+        }
+    }
+    public void setLastHurtByPlayer(@Nullable Player $$0) {
+        if ($$0 != null && controller != null && controller.is($$0)){
+            return;
+        } else {
+            super.setLastHurtByPlayer($$0);
+        }
+    }
+
+    public void setLastHurtByMob(@Nullable LivingEntity $$0) {
+        if ($$0 != null && controller != null && controller.is($$0)){
+            return;
+        } else {
+            super.setLastHurtMob($$0);
+        }
+    }
+
+    public void setLastHurtMob(Entity $$0) {
+        if ($$0 != null && controller != null && controller.is($$0)){
+            return;
+        } else {
+            super.setLastHurtMob($$0);
+        }
+    }
+
+    @Override
+    public double getMyRidingOffset() {
+        if (!getActivated()){
+            return super.getMyRidingOffset()+0.2F;
+        }
+        return super.getMyRidingOffset();
     }
     protected float getEquipmentDropChance(EquipmentSlot $$0) {
         return 0;
@@ -215,7 +259,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
 
     public float getAtkPower(Entity $$0){
         if (((StandUser)this).roundabout$getStandPowers().getReducedDamage($$0)){
-            return getDamageMod((float) ((float) (this.getAttributeValue(Attributes.ATTACK_DAMAGE)/2)
+            return getDamageMod((float) ((float) (this.getAttributeValue(Attributes.ATTACK_DAMAGE)*0.67F)
                                 * (ClientNetworking.getAppropriateConfig().justiceSettings.corpseDamageMultOnPlayers *0.01)));
         }
         return getDamageMod((float) ((float) this.getAttributeValue(Attributes.ATTACK_DAMAGE)
@@ -297,7 +341,9 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                 this.setLastHurtMob($$0);
             }
 
-            getMainHandItem().hurtAndBreak(1, this, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+            if (!level().isClientSide() && !getMainHandItem().isEmpty() && getMainHandItem().getCount() > 0) {
+                getMainHandItem().hurtAndBreak(2, this, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+            }
             return $$4;
         } else {
             /**Otherwise it does stand damage of sorts*/
@@ -336,8 +382,6 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
         this.updateSwingTime();
         super.aiStep();
     }
-
-
 
     @Override
     protected void registerGoals() {
@@ -423,16 +467,23 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     @Override
     public void tick(){
         if (!this.level().isClientSide()) {
+            if (hasEffect(MobEffects.DAMAGE_BOOST)){
+                removeEffect(MobEffects.DAMAGE_BOOST);
+            }
             if (controller != null){
                 controller = this.level().getEntity(getController());
             }
 
-            if (this.getTarget() != null && !(this.getTarget().isAlive() || this.getTarget().isRemoved())){
+            if (this.getTarget() != null && (!this.getTarget().isAlive() || this.getTarget().isRemoved() ||
+                    (controller != null && controller.is(getTarget()))
+            )
+            ){
                 this.setTarget(null);
                 this.setLastHurtByMob(null);
                 this.setPersistentAngerTarget(null);
                 this.setLastHurtByPlayer(null);
                 this.setAggressive(false);
+                ((StandUser)this).roundabout$deeplyRemoveAttackTarget();
             }
 
             IPermaCasting icast = ((IPermaCasting) this.level());
@@ -486,18 +537,22 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                             if (check1 && check2) {
                                 if (autoTarget2 != null && (LE.tickCount - LE.getLastHurtMobTimestamp()) < 200 &&
                                         !(autoTarget2 instanceof Player PE && PE.isCreative())) {
-                                    if (autoTarget2 instanceof Player PL) {
-                                        setLastHurtByPlayer(PL);
+                                    if (!(controller != null && autoTarget2.is(controller))) {
+                                        if (autoTarget2 instanceof Player PL) {
+                                            setLastHurtByPlayer(PL);
+                                        }
+                                        setLastHurtByMob(autoTarget2);
+                                        setTarget(autoTarget2);
                                     }
-                                    setLastHurtByMob(autoTarget2);
-                                    setTarget(autoTarget2);
                                 } else if (autoTarget != null && (LE.tickCount - LE.getLastHurtByMobTimestamp()) < 200 &&
                                         !(autoTarget instanceof Player PE && PE.isCreative())) {
-                                    if (autoTarget instanceof Player PL) {
-                                        setLastHurtByPlayer(PL);
+                                    if (!(controller != null && autoTarget.is(controller))) {
+                                        if (autoTarget instanceof Player PL) {
+                                            setLastHurtByPlayer(PL);
+                                        }
+                                        setLastHurtByMob(autoTarget);
+                                        setTarget(autoTarget);
                                     }
-                                    setLastHurtByMob(autoTarget);
-                                    setTarget(autoTarget);
                                 }
                             }
                         }
@@ -618,6 +673,17 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
         return "zombie";
     }
 
+    public void dropOnDeath(){
+        if (this instanceof FallenZombie && !this.getMainHandItem().isEmpty()){
+            double $$3 = this.getEyeY() - 0.3F;
+            ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), this.getMainHandItem().copyAndClear());
+            $$4.setPickUpDelay(40);
+            $$4.setThrower(this.getUUID());
+            this.level().addFreshEntity($$4);
+            this.setItemInHand(InteractionHand.MAIN_HAND,ItemStack.EMPTY);
+        }
+    }
+
     @Override
     public void playerTouch(Player $$0) {
         if (!getActivated() && (!getTurned() || this.getHealth() >= this.getMaxHealth()) && this.isAlive() && !this.isRemoved() && !getTicksThroughPlacer()) {
@@ -625,12 +691,13 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                 if ($$0.getMainHandItem().getItem() instanceof BodyBagItem BB){
                     if (BB.fillWithBody($$0.getMainHandItem(),this)){
                         this.level().playSound(null, this.blockPosition(), ModSounds.BODY_BAG_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
-
+                        dropOnDeath();
                         this.discard();
                     }
                 } else if ($$0.getOffhandItem().getItem() instanceof BodyBagItem BB){
                     if (BB.fillWithBody($$0.getOffhandItem(),this)){
                         this.level().playSound(null, this.blockPosition(), ModSounds.BODY_BAG_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
+                        dropOnDeath();
                         this.discard();
                     }
                 }
@@ -640,17 +707,19 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
 
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(CONTROLLER, -1);
-        this.entityData.define(TICKS_THROUGH_PLACER, false);
-        this.entityData.define(PHASES_FULL, false);
-        this.entityData.define(IS_ACTIVATED, false);
-        this.entityData.define(IS_TURNED, false);
-        this.entityData.define(FORCED_ROTATION, 0F);
-        this.entityData.define(SELECTED, false);
-        this.entityData.define(TARGET_TACTIC, (byte)0);
-        this.entityData.define(MOVEMENT_TACTIC, (byte)0);
-        this.entityData.define(TEAM_COLOR, (byte)0);
+        if (!this.entityData.hasItem(CONTROLLER)) {
+            super.defineSynchedData();
+            this.entityData.define(CONTROLLER, -1);
+            this.entityData.define(TICKS_THROUGH_PLACER, false);
+            this.entityData.define(PHASES_FULL, false);
+            this.entityData.define(IS_ACTIVATED, false);
+            this.entityData.define(IS_TURNED, false);
+            this.entityData.define(FORCED_ROTATION, 0F);
+            this.entityData.define(SELECTED, false);
+            this.entityData.define(TARGET_TACTIC, (byte) 0);
+            this.entityData.define(MOVEMENT_TACTIC, (byte) 0);
+            this.entityData.define(TEAM_COLOR, (byte) 0);
+        }
     }
     protected FallenMob(EntityType<? extends PathfinderMob> $$0, Level $$1) {
         super($$0, $$1);
@@ -665,6 +734,10 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
         this.setRemainingPersistentAngerTime(PERSISTENT_ANGER_TIME.sample(this.random));
     }
 
+    @Override
+    public boolean isPersistenceRequired() {
+        return true;
+    }
     @Override
     public void setRemainingPersistentAngerTime(int $$0) {
         this.remainingPersistentAngerTime = $$0;

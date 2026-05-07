@@ -259,7 +259,7 @@ public class DispenserRegistry {
             new DefaultDispenseItemBehavior() {
                 private final DefaultDispenseItemBehavior defaultDispenseItemBehavior = new DefaultDispenseItemBehavior();
 
-                public ItemStack execute(BlockSource p_123556_, ItemStack p_123557_) {
+                public ItemStack execute(BlockSource p_123556_, ItemStack stack) {
                     Level level = p_123556_.getLevel();
                     Direction direction = p_123556_.getBlockState().getValue(DispenserBlock.FACING);
                     Position position = DispenserBlock.getDispensePosition(p_123556_);
@@ -270,7 +270,7 @@ public class DispenserRegistry {
                     double d3 = (randomsource.triangle((double) direction.getStepX(), 0.11485000000000001D)*0.9);
                     double d4 = randomsource.triangle((double) direction.getStepY(), 0.11485000000000001D)*0.9;
                     double d5 = randomsource.triangle((double) direction.getStepZ(), 0.11485000000000001D)*0.9;
-                    FleshPileEntity gas = new FleshPileEntity(level, d0, d1, d2);
+                    FleshPileEntity gas = new FleshPileEntity(level, d0, d1, d2,stack.getMaxDamage()-stack.getDamageValue());
                     level.addFreshEntity(Util.make(gas, (p_123552_) -> {
                         p_123552_.setDeltaMovement(d3,d4,d5);
                     }));

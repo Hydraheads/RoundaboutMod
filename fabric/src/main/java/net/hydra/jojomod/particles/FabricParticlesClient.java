@@ -6,6 +6,10 @@ import net.minecraft.client.particle.*;
 public class FabricParticlesClient {
     public static void registerClientParticles(){
         ParticleFactoryRegistry.getInstance().register(FabricParticles.HIT_IMPACT, ExplodeParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.PUNCH_MISS, PunchMissParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.PUNCH_IMPACT_A, PunchImpactParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.PUNCH_IMPACT_B, PunchImpactParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.PUNCH_IMPACT_C, PunchImpactParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.MELTING, BloodParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.BLOOD, BloodParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.BLUE_BLOOD, BloodParticle.Provider::new);
@@ -13,10 +17,15 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.POINTER, PointerParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.POINTER_SOFT, SmallPointerParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.AIR_CRACKLE, AirCrackleParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.HEARTBEAT, HeartbeatParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.STAR, StarParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.HEART_ATTACK_MINI, HeartAttackMini.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.ENERGY_DISTORTION, EnergyDistortionParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.PURPLE_STAR, StarParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.BLUE_SPARKLE, BlueSparkleParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.RED_SPARKLE, RedSparkleParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.ICE_SPARKLE, RedSparkleParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.VAMPIRE_AURA, VampireAuraParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.MENACING, MenacingParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.VACUUM, VacuumParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.ZAP, ZapParticle.Provider::new);
@@ -38,15 +47,37 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.CINDERELLA_GLOW, CinderellaGlowParticle.CinderellaGlowProvider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.D4C_LINES, D4CLinesParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.PINK_SMOKE, CinderellaSmokeParticle.CosyProvider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.BLOOD_MIST, BloodMistParticle.CosyProvider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.BUBBLE_POP, SoftBubblePopParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.PLUNDER, PlunderParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.FRICTIONLESS, PlunderParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.EXCLAMATION, ExclamationParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.STITCH, StitchParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.MOLD_DUST, MoldDustParticle.CosyProvider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.OCCULT, OccultParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.HYPNO_SWIRL, HypnoSwirlParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.TUSK_VORTEX, TuskVortexParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.MOLD, MoldParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.RAGING_LIGHT, AnubisLightParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.ALLURING_LIGHT, AnubisLightParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.TUSK_HOLE, TuskHoleParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.BABY_CRACKLE, BabyCrackleParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.MAGIC_DUST, MagicDustParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.BRIEF_MAGIC_DUST, BriefMagicDustParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.DUST_CRUMBLE, DustCrumbleParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.FIRE_CRUMBLE, FireCrumbleParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.SOUL_FIRE_CRUMBLE, FireCrumbleParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.ROAD_ROLLER_SMOKE, RoadRollerSmokeParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.ROAD_ROLLER_EXPLOSION, RoadRollerExplosionParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.ROAD_ROLLER_SCRAP, RoadRollerScrapParticle.Provider::new);
+
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.METALLICA_A, MetallicaStickParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.METALLICA_B, MetallicaStickParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.METALLICA_C, MetallicaStickParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.METALLICA_D, MetallicaStickParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.METALLICA_FIELD_PNG, MetallicaFieldParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.METALLICA_NAIL, CritParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.METALLICA_RAZOR, CritParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.METALLICA_SCISSORS, CritParticle.Provider::new);
     }
 }

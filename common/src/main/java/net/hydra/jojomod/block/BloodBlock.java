@@ -1,11 +1,16 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.access.AccessFateFoodData;
+import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -127,6 +132,19 @@ public class BloodBlock extends Block {
         $$0.add(LEVEL);
         $$0.add(AGE);
         $$0.add(DECAY);
+    }
+
+    /**Consume blood from blood puddles*/
+    @Override
+    public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
+        if (!entity.isCrouching() && entity instanceof Player PE && !level.isClientSide()) {
+            if (FateTypes.hasBloodHunger(PE)){
+                level.removeBlock(blockPos, false);
+                PE.getFoodData().eat(1,2f);
+                level.playSound(null, blockPos, ModSounds.VAMPIRE_DRAIN_EVENT,
+                        SoundSource.PLAYERS, 1F, (float)(0.9F + Math.random()*0.2));
+            }
+        }
     }
 
 }

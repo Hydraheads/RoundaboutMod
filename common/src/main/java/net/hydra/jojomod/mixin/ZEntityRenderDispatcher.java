@@ -6,9 +6,12 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.ILivingEntityAccess;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.NoHitboxRendering;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.SavedSecond;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -61,40 +64,47 @@ public abstract class ZEntityRenderDispatcher {
             ci.cancel();
             return;
         }
+        if (entity instanceof LivingEntity LE && ((StandUser)LE).rdbt$getHideDeath() && !entity.isAlive()){
+            ci.cancel();
+            return;
+        }
 
         if (entity instanceof LivingEntity LE && !roundabout$recurse){
             byte bt =  ((StandUser)LE).roundabout$getGlow();
-            if (bt > 0){
+            if (bt > 0) {
                 int light2 = light;
-                if (bt ==1){
+                if (bt == 1) {
                     if (entity instanceof Zombie || entity instanceof Player) {
                         light2 = Math.min(light2, 11010048);
                     } else {
-                        light2 = (int)(((float)light2)/2);
+                        light2 = (int) (((float) light2) / 2);
                     }
                     /**
                      * Unfortunately, the light value decrease never seems to never work with ANY amount of variance, just /2
                      *
-                    Roundabout.LOGGER.info("1:"+light2);
-                    Roundabout.LOGGER.info("2:"+((float)light2));
-                    Roundabout.LOGGER.info("3:"+(((float)light2)*0.7F));
-                    Roundabout.LOGGER.info("4:"+Mth.floor(((float)light2)*0.7F));
+                     Roundabout.LOGGER.info("1:"+light2);
+                     Roundabout.LOGGER.info("2:"+((float)light2));
+                     Roundabout.LOGGER.info("3:"+(((float)light2)*0.7F));
+                     Roundabout.LOGGER.info("4:"+Mth.floor(((float)light2)*0.7F));
                      **/
                 } else if (bt == 2){
                     light2 = 15728880;
                 }
                 roundabout$recurse = true;
-                render(entity,$$1,$$2,$$3,$$4,$$5,$$6,$$7,light2);
+                render(entity, $$1, $$2, $$3, $$4, $$5, $$6, $$7, light2);
                 roundabout$recurse = false;
                 ci.cancel();
             }
         }
     }
 
+
+
+
     /**Cancel hitbox rendering for stuff like go beyond*/
     @Inject(method = "renderHitbox(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraft/world/entity/Entity;F)V", at = @At(value = "HEAD"), cancellable = true)
     private static <E extends Entity>  void roundabout$renderHitbox(PoseStack $$0, VertexConsumer $$1, Entity $$2, float $$3, CallbackInfo ci) {
-        if ($$2 instanceof NoHitboxRendering){
+        if ($$2 instanceof NoHitboxRendering || ClientUtil.getThrowFadePercent($$2,$$3) <= 0){
             ci.cancel();
         }
     }
@@ -237,8 +247,24 @@ public abstract class ZEntityRenderDispatcher {
             ci.cancel();
             return;
         }
+        if ($$2 instanceof Player PL){
+            byte playerP = ((IPlayerEntity)PL).roundabout$GetPos();
+
+            /*Dodge makes you lean forward visually*/
+            if (playerP == PlayerPosIndex.SUNLIGHT){
+                ci.cancel();
+                return;
+            }
+        }
 
         if (((TimeStop)$$2.level()).CanTimeStopEntity($$2) && $$2 instanceof LivingEntity) {
+
+
+            float fade = ClientUtil.getThrowFadePercent($$2,$$4);
+            if (fade < 1){
+                ci.cancel();
+                return;
+            }
             $$4 = Minecraft.getInstance().getFrameTime();
             float $$7 = shadowRadius;
             if ($$2 instanceof Mob $$8 && $$8.isBaby()) {

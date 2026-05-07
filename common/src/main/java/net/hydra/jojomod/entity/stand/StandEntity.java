@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.access.NoVibrationEntity;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.util.MainUtil;
@@ -453,14 +454,16 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
      */
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(FADE_OUT, (byte) 0);
-        this.entityData.define(FADE_PERCENT, 100);
-        this.entityData.define(USER_ID, -1);
-        this.entityData.define(ANIMATION, (byte) 0);
-        this.entityData.define(IDLE_ANIMATION, (byte) 0);
-        this.entityData.define(HELD_ITEM, ItemStack.EMPTY);
-        this.entityData.define(SKIN, (byte) 0);
+        if (!this.entityData.hasItem(FADE_OUT)) {
+            super.defineSynchedData();
+            this.entityData.define(FADE_OUT, (byte) 0);
+            this.entityData.define(FADE_PERCENT, 100);
+            this.entityData.define(USER_ID, -1);
+            this.entityData.define(ANIMATION, (byte) 0);
+            this.entityData.define(IDLE_ANIMATION, (byte) 0);
+            this.entityData.define(HELD_ITEM, ItemStack.EMPTY);
+            this.entityData.define(SKIN, (byte) 0);
+        }
     }
 
 
@@ -504,6 +507,11 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         } else {
             return this.User;
         }
+    }
+
+
+    public boolean canBeSeenAsEnemy() {
+        return false;
     }
 
     public UUID validationUUID = null;
@@ -623,7 +631,7 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                     LivingEntity userEntity = this.getUser();
                     if (userEntity != null && !userEntity.isRemoved()) {
                         StandUser user = this.getUserData(userEntity);
-                        boolean userActive = user.roundabout$getActive();
+                        boolean userActive = PowerTypes.hasStandActive(userEntity);
                         LivingEntity thisStand = user.roundabout$getStand();
                         if (isValid(userActive,thisStand, userEntity)) {
 
@@ -711,6 +719,16 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                         this.setHeldItem(ItemStack.EMPTY);
                     }
                 }
+                else if(this instanceof ManhattanTransferEntity ME){
+                    if(!ME.getHeldItemManhattan().isEmpty()){
+                        double $$3 = this.getEyeY() - 0.3F;
+                        ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), ME.getHeldItemManhattan());
+                        $$4.setPickUpDelay(40);
+                        $$4.setThrower(this.getUUID());
+                        this.level().addFreshEntity($$4);
+                        ((ManhattanTransferEntity) this).setHeldItemManhattan(ItemStack.EMPTY);
+                    }
+                }
             }
         }
         if (currFade < 0) {
@@ -742,6 +760,16 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                     this.setHeldItem(ItemStack.EMPTY);
                 }
             }
+            else if(this instanceof ManhattanTransferEntity ME){
+                if(!ME.getHeldItemManhattan().isEmpty()){
+                    double $$3 = this.getEyeY() - 0.3F;
+                    ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), ME.getHeldItemManhattan().copy());
+                    $$4.setPickUpDelay(40);
+                    $$4.setThrower(this.getUUID());
+                    this.level().addFreshEntity($$4);
+                    ME.setHeldItemManhattan(ItemStack.EMPTY);
+                }
+            }
         }
         return super.changeDimension($$0);
     }
@@ -758,6 +786,16 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                     $$4.setThrower(this.getUUID());
                     this.level().addFreshEntity($$4);
                     this.setHeldItem(ItemStack.EMPTY);
+            }
+        }
+        else if(this instanceof ManhattanTransferEntity ME){
+            if(!ME.getHeldItemManhattan().isEmpty()){
+                double $$3 = this.getEyeY() - 0.3F;
+                ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), ME.getHeldItemManhattan().copy());
+                $$4.setPickUpDelay(40);
+                $$4.setThrower(this.getUUID());
+                this.level().addFreshEntity($$4);
+                ME.setHeldItemManhattan(ItemStack.EMPTY);
             }
         }
         super.remove($$0);

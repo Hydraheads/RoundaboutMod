@@ -9,6 +9,7 @@ import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersMandom;
@@ -45,7 +46,7 @@ public class MandomLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                 return;
             StandUser user = ((StandUser) entity);
             boolean hasMandom = (user.roundabout$getStandPowers() instanceof PowersMandom);
-            boolean hasMandomOut = (user.roundabout$getActive() && hasMandom);
+            boolean hasMandomOut = (PowerTypes.hasStandActive(entity) && hasMandom);
             if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
                 if (!entity.isInvisible()) {
                     int mandomTicks = user.roundabout$getMandomVanishTicks();
@@ -84,6 +85,10 @@ public class MandomLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                         float r = isHurt ? 1.0F : 1.0F;
                         float g = isHurt ? 0.4F : 1.0F;
                         float b = isHurt ? 0.4F : 1.0F;
+                        if (entity.isBaby()){
+                            poseStack.scale(0.6F, 0.6F, 0.6F);
+                            poseStack.translate(0.3, 1, -0.3);
+                        }
                         ModStrayModels.MANDOM.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                                 r, g, b, heyFull, skin);
                         ClientUtil.popPoseAndCooperate(poseStack,26);
@@ -125,10 +130,9 @@ public class MandomLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                                               float var9, float var10,
                                               ModelPart handarm, boolean slim) {
 
-        if (entity != null) {
+        if (entity != null && handarm.visible) {
             StandUser user = ((StandUser) entity);
             boolean hasMandom = (user.roundabout$getStandPowers() instanceof PowersMandom);
-            boolean hasMandomOut = (user.roundabout$getActive() && hasMandom);
             if (hasMandom && entity instanceof Player PL) {
                 byte style = ((IPlayerEntity) PL).roundabout$getWatchStyle();
                 if (style != PowersMandom.WATCHLESS) {

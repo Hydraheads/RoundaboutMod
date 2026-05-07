@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -93,6 +94,16 @@ public class PowersSurvivor extends NewDashPreset {
         if (survivorsSpawned == null) {
             survivorsSpawned = new ArrayList<>();
         }
+    }
+    public StandEntity getStandForHUDIfFake(){
+        if (displayStand == null){
+            displayStand = ModEntities.SURVIVOR.create(this.getSelf().level());
+        }
+            if (this.self instanceof Player PL && ((IPlayerEntity) PL).roundabout$getStandSkin() != displayStand.getSkin()) {
+                displayStand = ModEntities.SURVIVOR.create(this.getSelf().level());
+                displayStand.setSkin(((IPlayerEntity) PL).roundabout$getStandSkin());
+            }
+        return displayStand;
     }
 
     public Component getPosName(byte posID){
@@ -310,7 +321,6 @@ public class PowersSurvivor extends NewDashPreset {
         return 11283968;
     }
 
-    public StandEntity displayStand = null;
     @Override
     public boolean returnFakeStandForHud(){
         return true;
@@ -485,14 +495,14 @@ public class PowersSurvivor extends NewDashPreset {
     }
 
     @Override
-    public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
+    public boolean isServerControlledCooldown(byte num){
         if (num == PowerIndex.SKILL_2 && ClientNetworking.getAppropriateConfig().survivorSettings.SummonSurvivorCooldownCooldownUsesServerLatency) {
             return true;
         }
         if (num == PowerIndex.SKILL_4 && ClientNetworking.getAppropriateConfig().survivorSettings.rageCupidCooldownCooldownUsesServerLatency) {
             return true;
         }
-        return super.isServerControlledCooldown(ci, num);
+        return super.isServerControlledCooldown(num);
     }
     @Override
     public boolean tryPower(int move, boolean forced) {
@@ -564,7 +574,10 @@ public class PowersSurvivor extends NewDashPreset {
             GHAST=7,
             ENDER=8,
             CONDUIT=9,
-            CAKE=10;
+            CAKE=10,
+            SPONGE=11,
+            SCULK=12,
+            REDSTONE=13;
 
     @Override
     public List<Byte> getSkinList() {
@@ -578,7 +591,10 @@ public class PowersSurvivor extends NewDashPreset {
                 GHAST,
                 ENDER,
                 CONDUIT,
-                CAKE
+                CAKE,
+                SPONGE,
+                SCULK,
+                REDSTONE
         );
     }
 
@@ -602,6 +618,9 @@ public class PowersSurvivor extends NewDashPreset {
             case ENDER -> Component.translatable("skins.roundabout.survivor.ender");
             case CONDUIT -> Component.translatable("skins.roundabout.survivor.conduit");
             case CAKE -> Component.translatable("skins.roundabout.survivor.cake");
+            case SPONGE -> Component.translatable("skins.roundabout.survivor.sponge");
+            case SCULK -> Component.translatable("skins.roundabout.survivor.sculk");
+            case REDSTONE -> Component.translatable("skins.roundabout.survivor.redstone");
             default -> Component.translatable("skins.roundabout.survivor.base");
         };
     }

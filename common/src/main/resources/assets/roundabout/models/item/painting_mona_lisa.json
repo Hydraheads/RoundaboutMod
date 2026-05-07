@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "roundabout:item/painting_mona_lisa"
+  }
+}

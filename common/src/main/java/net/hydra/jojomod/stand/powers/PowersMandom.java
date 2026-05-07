@@ -20,6 +20,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
@@ -231,6 +232,27 @@ public class PowersMandom extends NewDashPreset {
         return true;
     }
 
+    public void onPowerSwitch(){
+        onStandSwitchInto();
+        super.onPowerSwitch();
+    }
+    @Override
+    public void onStandSwitchInto(){
+        if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative()))) {
+            if (!isClient() || !ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownUsesServerLatency) {
+                if (this.getSelf() instanceof Player) {
+                    if (!isClient()) {
+                        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownv2
+                                + ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownExtraCondition);
+                    }
+                }
+                this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownv2
+                        + ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownExtraCondition);
+            }
+        }
+        super.onStandSwitchInto();
+    }
+
 
     @Override
     public void onPlaceBlock(ServerPlayer $$0, BlockPos $$1, ItemStack $$2){
@@ -437,7 +459,9 @@ public class PowersMandom extends NewDashPreset {
             HAPPY = 11,
             EYE = 12,
             MELON = 13,
-            ESIDISI = 14;
+            ESIDISI = 14,
+            COMMAND = 15,
+            SCULK = 16;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
@@ -454,7 +478,9 @@ public class PowersMandom extends NewDashPreset {
                 HAPPY,
                 EYE,
                 MELON,
-                ESIDISI
+                SCULK,
+                ESIDISI,
+                COMMAND
         );
     }
     @Override public Component getSkinName(byte skinId) {
@@ -473,6 +499,8 @@ public class PowersMandom extends NewDashPreset {
             case PowersMandom.EYE -> Component.translatable("skins.roundabout.mandom.eye");
             case PowersMandom.MELON -> Component.translatable("skins.roundabout.mandom.melon");
             case PowersMandom.ESIDISI -> Component.translatable("skins.roundabout.mandom.esidisi");
+            case PowersMandom.COMMAND -> Component.translatable("skins.roundabout.mandom.command");
+            case PowersMandom.SCULK -> Component.translatable("skins.roundabout.mandom.sculk");
             default -> Component.translatable("skins.roundabout.mandom.manga");
         };
     }
@@ -558,11 +586,11 @@ public class PowersMandom extends NewDashPreset {
     }
 
 
-    public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
+    public boolean isServerControlledCooldown(byte num){
         if (num == PowerIndex.SKILL_2 && ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownUsesServerLatency) {
             return true;
         }
-        return super.isServerControlledCooldown(ci, num);
+        return super.isServerControlledCooldown(num);
     }
 
     /**

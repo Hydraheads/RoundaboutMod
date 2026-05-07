@@ -7,10 +7,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.util.MainUtil;
-import net.hydra.jojomod.util.config.annotation.BooleanOption;
-import net.hydra.jojomod.util.config.annotation.FloatOption;
-import net.hydra.jojomod.util.config.annotation.IntOption;
-import net.hydra.jojomod.util.config.annotation.NestedOption;
+import net.hydra.jojomod.util.config.annotation.*;
 import net.hydra.jojomod.util.option.ConfigOptionReference;
 import net.hydra.jojomod.util.option.Reflection;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -58,27 +55,90 @@ public abstract class ConfigManager {
         loaded = true;
     }
 
-    public static void loadWalkingBlacklist()
+    public static Path getClientConfigPath() {
+        return clientConfigPath;
+    }
+
+    public static void loadBlacklists()
     {
-        if (getAdvancedConfig().walkingHeartWalkOnBlockBlacklist != null)
+        if (getAdvancedConfig().walkingHeartWalkOnBlockBlacklist2 != null)
         {
             MainUtil.walkableBlocks.clear();
-            MainUtil.walkableBlocks.addAll(getAdvancedConfig().walkingHeartWalkOnBlockBlacklist);
+            MainUtil.walkableBlocks.addAll(getAdvancedConfig().walkingHeartWalkOnBlockBlacklist2);
+        }
+        if (getAdvancedConfig().noExpBreakBlocks != null)
+        {
+            MainUtil.expLessBlocks.clear();
+            MainUtil.expLessBlocks.addAll(getAdvancedConfig().noExpBreakBlocks);
         }
         if (getAdvancedConfig().standBlockGrabBlacklist != null)
         {
             MainUtil.standBlockGrabBlacklist.clear();
             MainUtil.standBlockGrabBlacklist.addAll(getAdvancedConfig().standBlockGrabBlacklist);
         }
+        if (getAdvancedConfig().standDestructionBlacklist != null)
+        {
+            MainUtil.standDestructionBlacklist.clear();
+            MainUtil.standDestructionBlacklist.addAll(getAdvancedConfig().standDestructionBlacklist);
+        }
+        if (getAdvancedConfig().occultChargeEffectsToBanishv2 != null)
+        {
+            MainUtil.occultChargeEffectsToBanish.clear();
+            MainUtil.occultChargeEffectsToBanish.addAll(getAdvancedConfig().occultChargeEffectsToBanishv2);
+        }
+        if (getAdvancedConfig().naturalStandUserMobBlacklist != null)
+        {
+            MainUtil.naturalStandUserMobBlacklist.clear();
+            MainUtil.naturalStandUserMobBlacklist.addAll(getAdvancedConfig().naturalStandUserMobBlacklist);
+        }
+        if (getAdvancedConfig().hypnotismMobBlackList != null)
+        {
+            MainUtil.hypnotismMobBlackList.clear();
+            MainUtil.hypnotismMobBlackList.addAll(getAdvancedConfig().hypnotismMobBlackList);
+        }
+        if (getAdvancedConfig().addedMobsWithRedBlood != null)
+        {
+            MainUtil.addedMobsWithRedBlood.clear();
+            MainUtil.addedMobsWithRedBlood.addAll(getAdvancedConfig().addedMobsWithRedBlood);
+        }
+        if (getAdvancedConfig().addedMobsWithBlueBlood != null)
+        {
+            MainUtil.addedMobsWithBlueBlood.clear();
+            MainUtil.addedMobsWithBlueBlood.addAll(getAdvancedConfig().addedMobsWithBlueBlood);
+        }
+        if (getAdvancedConfig().addedMobsWithEnderBlood != null)
+        {
+            MainUtil.addedMobsWithEnderBlood.clear();
+            MainUtil.addedMobsWithEnderBlood.addAll(getAdvancedConfig().addedMobsWithEnderBlood);
+        }
+        if (getAdvancedConfig().removeBloodFromThese != null)
+        {
+            MainUtil.removeBloodFromThese.clear();
+            MainUtil.removeBloodFromThese.addAll(getAdvancedConfig().removeBloodFromThese);
+        }
+        if (getAdvancedConfig().removeFreezableMobs != null)
+        {
+            MainUtil.unfreezableMobs.clear();
+            MainUtil.unfreezableMobs.addAll(getAdvancedConfig().removeFreezableMobs);
+        }
+        if (getAdvancedConfig().foodThatGivesBloodListV4 != null)
+        {
+            MainUtil.foodMap = MainUtil.parseFoodList(getAdvancedConfig().foodThatGivesBloodListV4);
+        }
+        if (getAdvancedConfig().foodThatHasEffectsForVampiresV1 != null)
+        {
+            MainUtil.foodThatHasEffectsForVampires.clear();
+            MainUtil.foodThatHasEffectsForVampires.addAll(getAdvancedConfig().foodThatHasEffectsForVampiresV1);
+        }
     }
 
     public static void loadStandArrowPool()
     {
-        if (getAdvancedConfig().standArrowPoolv3 != null)
+        if (getAdvancedConfig().standArrowPoolv4 != null)
         {
             ModItems.STAND_ARROW_POOL.clear();
 
-            for (String disc : getAdvancedConfig().standArrowPoolv3)
+            for (String disc : getAdvancedConfig().standArrowPoolv4)
             {
                 String[] split = disc.split(":");
 
@@ -218,7 +278,9 @@ public abstract class ConfigManager {
         validateFloatFields(instance);
         validateIntFields(instance);
         validateBooleanFields(instance);
+        validateStringFields(instance);
         validateNestedFields(instance);
+
     }
 
     private static void validateFloatFields(Object instance) {
@@ -244,6 +306,12 @@ public abstract class ConfigManager {
             ConfigOptionReference reference = ConfigOptionReference.of(instance, field);
             setIfNull(reference, annotation.value());
         });
+    }
+
+    private static void validateStringFields(Object instance) {
+        Reflection.forEachFieldByAnnotation(instance, StringOption.class, (field, annotation) -> {
+            ConfigOptionReference reference = ConfigOptionReference.of(instance, field);
+            setIfNull(reference, annotation.value());});
     }
 
     private static void validateNestedFields(Object instance) {
@@ -427,7 +495,9 @@ public abstract class ConfigManager {
 
     public static void resetClient()
     {
-        ClientConfig.updateLocal(ClientConfig.getDefaultInstance().clone());
+        ClientConfig config = ClientConfig.getDefaultInstance().clone();
+        config.anubisMemories = ClientConfig.getLocalInstance().anubisMemories;
+        ClientConfig.updateLocal(config);
     }
 
     public static void resetServer()

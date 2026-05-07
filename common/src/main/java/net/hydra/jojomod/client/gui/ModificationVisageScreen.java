@@ -67,10 +67,12 @@ public class ModificationVisageScreen extends Screen {
         super(GameNarrator.NO_TITLE);
         this.currentlyHovered = null;
     }
-    public ModificationVisageScreen(ItemStack stack) {
+    int slot = 0;
+    public ModificationVisageScreen(ItemStack stack, int slot) {
         super(GameNarrator.NO_TITLE);
         this.currentlyHovered = null;
         visage = stack;
+        slot = slot;
 
         if (stack != null && !stack.isEmpty() && stack.getItem() instanceof ModificationMaskItem){
             if (stack.getOrCreateTagElement("modifications").contains("height")) {
@@ -162,14 +164,17 @@ public class ModificationVisageScreen extends Screen {
                 delStack.removeTagKey("modifications");
             }
 
-            ModMessageEvents.sendToServer(
-                    ClientToServerPackets.StandPowerPackets.MESSAGES.ModVisageConfigure.value,
-                    (byte)chestType, delStack,
-                    new Vector3f(visageHeight,visageWidth,visageHeadSize)
-            );
-            //SAVE
-            this.minecraft.setScreen(null);
-            return true;
+            Player pl = Minecraft.getInstance().player;
+            if (pl != null) {
+                ModMessageEvents.sendToServer(
+                        ClientToServerPackets.StandPowerPackets.MESSAGES.ModVisageConfigure.value,
+                        (byte) chestType,
+                        new Vector3f(visageHeight, visageWidth, visageHeadSize)
+                );
+                //SAVE
+                this.minecraft.setScreen(null);
+                return true;
+            }
         }
         if (isSurelyHovering( this.width / 2-30,  this.height / 2 + 55, 60, 8, mouseX, mouseY)) {
             this.minecraft.setScreen(null);

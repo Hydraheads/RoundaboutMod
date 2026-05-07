@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "entries": [
+        { "type": "minecraft:item", "name": "roundabout:wooden_manor_chair" }
+      ],
+      "conditions": [
+        { "condition": "minecraft:survives_explosion" },
+        {
+          "condition": "minecraft:block_state_property",
+          "block": "roundabout:wooden_manor_chair",
+          "properties": { "half": "lower" }
+        }
+      ]
+    }
+  ]
+}

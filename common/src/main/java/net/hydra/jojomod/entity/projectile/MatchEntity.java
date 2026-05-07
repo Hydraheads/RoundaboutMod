@@ -137,7 +137,7 @@ public class MatchEntity extends ThrowableItemProjectile {
                 Vec3 DM = $$1.getDeltaMovement();
                 if ($$1 instanceof Creeper) {
                     ((Creeper) $$1).ignite();
-                } else if ($$1 instanceof FallenCreeper) {
+                } else if ($$1 instanceof FallenCreeper fc && !fc.getActivated()) {
                     ((FallenCreeper) $$1).ignite();
                 }
                 if ($$1.getType() == EntityType.TNT_MINECART) {
@@ -165,8 +165,10 @@ public class MatchEntity extends ThrowableItemProjectile {
 
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(ROUNDABOUT$SUPER_THROWN, false);
+        if (!this.entityData.hasItem(ROUNDABOUT$SUPER_THROWN)) {
+            super.defineSynchedData();
+            this.entityData.define(ROUNDABOUT$SUPER_THROWN, false);
+        }
     }
 
     @Override

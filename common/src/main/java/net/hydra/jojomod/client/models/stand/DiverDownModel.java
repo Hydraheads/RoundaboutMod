@@ -2,15 +2,12 @@ package net.hydra.jojomod.client.models.stand;
 
 import net.hydra.jojomod.client.models.stand.animations.DiverDownAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
-import net.hydra.jojomod.client.models.stand.animations.StarPlatinumAnimations;
-import net.hydra.jojomod.client.models.stand.animations.TheWorldAnimations;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.stand.powers.PowersDiverDown;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.world.entity.Entity;
 
 public class DiverDownModel<T extends DiverDownEntity> extends StandModel<T>{
     public DiverDownModel(ModelPart root) {
@@ -158,17 +155,15 @@ public class DiverDownModel<T extends DiverDownEntity> extends StandModel<T>{
         super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
         defaultModifiers(pEntity);
         defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
-        this.animate(pEntity.finalKickWindup, TheWorldAnimations.FINAL_KICK_WINDUP, pAgeInTicks, 1f);
-        this.animate(pEntity.finalKick, TheWorldAnimations.FINAL_KICK, pAgeInTicks, 0.8f);
-        this.animate(pEntity.finalPunch, StarPlatinumAnimations.FINAL_PUNCH, pAgeInTicks, 1.4f);
-        this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1F);
 
+        this.animate(pEntity.diverzip, DiverDownAnimations.DIVER_ZIP, pAgeInTicks, 1F);
+        this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1F);
         this.animate(pEntity.miningBarrageAnimationState, DiverDownAnimations.Barrage, pAgeInTicks, 1f);
         this.animate(pEntity.barrageHurtAnimationState, DiverDownAnimations.BarrageDamage, pAgeInTicks, 2.5f);
         this.animate(pEntity.brokenBlockAnimationState, StandAnimations.BLOCKBREAK, pAgeInTicks, 1.8f);
         this.animate(pEntity.idleAnimationState, DiverDownAnimations.Idle, pAgeInTicks, 1f);
         this.animate(pEntity.idleAnimationState2, StandAnimations.FLOATY_IDLE, pAgeInTicks, 1f);
-        this.animate(pEntity.blockAnimationState, StandAnimations.BLOCK, pAgeInTicks, 1f);
+        this.animate(pEntity.blockAnimationState, DiverDownAnimations.BLOCK, pAgeInTicks, 1f);
         this.animate(pEntity.kick_barrage_windup, StandAnimations.KICK_BARRAGE_CHARGE, pAgeInTicks, 1f);
         this.animate(pEntity.kick_barrage, StandAnimations.KICK_BARRAGE, pAgeInTicks, 1.25f);
         this.animate(pEntity.kick_barrage_end, StandAnimations.KICK_BARRAGE_END, pAgeInTicks, 1f);

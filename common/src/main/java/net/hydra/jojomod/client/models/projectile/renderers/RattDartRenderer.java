@@ -8,7 +8,6 @@ import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.projectile.KnifeModel;
 import net.hydra.jojomod.client.models.projectile.RattDartModel;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.RattDartEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;

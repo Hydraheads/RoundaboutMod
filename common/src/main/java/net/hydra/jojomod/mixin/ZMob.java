@@ -1,32 +1,51 @@
 package net.hydra.jojomod.mixin;
 
+import com.google.common.collect.ImmutableMap;
+import com.mojang.serialization.Dynamic;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.ITargetGoal;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
+import net.hydra.jojomod.entity.goals.AnubisAttackGoal;
+import net.hydra.jojomod.entity.goals.RoundaboutFollowGoal;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.ModGamerules;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.AnubisItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.item.StandDiscItem;
+import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -37,14 +56,18 @@ import net.minecraft.world.entity.ai.memory.ExpirableValue;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.sensing.Sensing;
-import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -65,6 +88,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -78,6 +102,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
     @Shadow @Final protected GoalSelector goalSelector;
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$IS_WORTHY = SynchedEntityData.defineId(Mob.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$FATE = SynchedEntityData.defineId(Mob.class, EntityDataSerializers.BYTE);
 
 
     /**Prevent aggro scumming with bubble spam*/
@@ -99,16 +124,26 @@ public abstract class ZMob extends LivingEntity implements IMob {
     public boolean roundabout$isWorthy() {
         return this.getEntityData().get(ROUNDABOUT$IS_WORTHY);
     }
+    @Override
+    @Unique
+    public void roundabout$setWorthy(boolean $$0) {
+        this.getEntityData().set(ROUNDABOUT$IS_WORTHY, $$0);
+    }
+    @Override
+    @Unique
+    public byte roundabout$getFate() {
+        return this.getEntityData().get(ROUNDABOUT$FATE);
+    }
+    @Override
+    @Unique
+    public void roundabout$setFate(byte fate) {
+        this.getEntityData().set(ROUNDABOUT$FATE, fate);
+    }
 
     @Override
     @Unique
     public GoalSelector roundabout$getGoalSelector() {
         return goalSelector;
-    }
-    @Override
-    @Unique
-    public void roundabout$setWorthy(boolean $$0) {
-        this.getEntityData().set(ROUNDABOUT$IS_WORTHY, $$0);
     }
     @Override
     @Unique
@@ -122,13 +157,69 @@ public abstract class ZMob extends LivingEntity implements IMob {
     }
     @Unique
     public boolean roundabout$isNaturalStandUser = false;
+    @Unique
+    public boolean roundabout$isBred = false;
 
+    @Override
+    @Unique
+    public boolean roundabout$getIsBred() {
+        return roundabout$isBred;
+    }
+    @Override
+    @Unique
+    public void roundabout$setIsBred(boolean set) {
+        roundabout$isBred = set;
+    }
+
+    @Unique
+    private LivingEntity roundabout$hypnotizedBy = null;
+    @Unique
+    private int roundabout$hypnosisTime = 0;
+    @Override
+    @Unique
+    public void roundabout$setHypnotizedBy(LivingEntity set, int time) {
+        roundabout$hypnotizedBy = set;
+        roundabout$hypnosisTime = time;
+    }
+    @Override
+    @Unique
+    public void roundabout$setHypnotizedBy(LivingEntity set) {
+        roundabout$setHypnotizedBy(set,10);
+    }
+    @Override
+    @Unique
+    public LivingEntity roundabout$getHypnotizedBy() {
+        return roundabout$hypnotizedBy;
+    }
+
+    //Injects universal behaviors that all mobs can share
+    @Inject(method = "<init>(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;)V", at = @At(value = "RETURN"))
+    private void roundabout$initRegisterCustomGoals(EntityType type, Level level, CallbackInfo ci) {
+        if (level != null && !level.isClientSide) {
+            if (((Mob)(Object)this) instanceof PathfinderMob pm){
+                this.goalSelector.addGoal(2, new RoundaboutFollowGoal(pm, 1));
+            }
+
+            if (((Mob)(Object)this) instanceof AbstractIllager AI) {
+                this.goalSelector.addGoal(0, new AnubisAttackGoal(AI,1.3,true) );
+            }
+        }
+    }
+
+    @Inject(method = "playAmbientSound()V", at = @At(value = "HEAD"), cancellable = true)
+    private void rdbt$playAmbientSound(CallbackInfo ci) {
+        if (((StandUser)this).roundabout$isDazed()){
+            ci.cancel();
+        }
+    }
 
     @Inject(method = "dropCustomDeathLoot", at = @At(value = "HEAD"))
     private void roundabout$dropCustomLoot(DamageSource $$0, int $$1, boolean $$2, CallbackInfo ci) {
         if (roundabout$isNaturalStandUser){
             if ($$0.getEntity() != null) {
-                if (((Mob)(Object)this) instanceof Enemy && ((StandUser)this).roundabout$hasAStand()) {
+                if (((StandUser)this).roundabout$hasAStand() && !roundabout$isBred &&
+                        !(((Mob)(Object)this) instanceof Animal) &&
+                        !(((Mob)(Object)this) instanceof AbstractVillager)) {
                     if ($$0.getEntity() instanceof Player) {
                         if (!this.level().isClientSide()){
                             ExperienceOrb.award((ServerLevel) this.level(), this.position(), 160);
@@ -155,14 +246,35 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
     @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))
     private void initDataTrackerRoundabout(CallbackInfo ci) {
-        this.getEntityData().define(ROUNDABOUT$IS_WORTHY, false);
+        if (!((Mob)(Object)this).getEntityData().hasItem(ROUNDABOUT$IS_WORTHY)) {
+            this.getEntityData().define(ROUNDABOUT$IS_WORTHY, false);
+            this.getEntityData().define(ROUNDABOUT$FATE, (byte)0);
+        }
     }
 
 
+    @Unique
+    @Override
+    public boolean roundabout$isVampire(){
+        return roundabout$getFate() == FateTypes.VAMPIRE.ordinal();
+    }
+    @Unique
+    @Override
+    public void roundabout$setVampire(boolean vampire){
+        if (vampire){
+            roundabout$setFate((byte) FateTypes.VAMPIRE.ordinal());
+        } else {
+            roundabout$setFate((byte) FateTypes.HUMAN.ordinal());
+        }
+    }
     @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
     public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0){
         $$0.putBoolean("roundabout.isWorthy", this.roundabout$isWorthy());
-        $$0.putBoolean("roundabout.isNaturalStandUser", this.roundabout$isWorthy());
+        $$0.putBoolean("roundabout.isNaturalStandUser", this.roundabout$isNaturalStandUser);
+        $$0.putBoolean("roundabout.isBred", roundabout$getIsBred());
+        CompoundTag compoundtag = $$0.getCompound("roundabout");
+        compoundtag.putBoolean("vampire",roundabout$isVampire());
+        $$0.put("roundabout",compoundtag);
         return $$0;
     }
 
@@ -170,6 +282,9 @@ public abstract class ZMob extends LivingEntity implements IMob {
     public void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci){
         this.roundabout$setWorthy($$0.getBoolean("roundabout.isWorthy"));
         this.roundabout$setIsNaturalStandUser($$0.getBoolean("roundabout.isNaturalStandUser"));
+        this.roundabout$setIsBred($$0.getBoolean("roundabout.isBred"));
+        CompoundTag compoundtag = $$0.getCompound("roundabout");
+            roundabout$setVampire(compoundtag.getBoolean("vampire"));
     }
 
     @Shadow
@@ -186,6 +301,9 @@ public abstract class ZMob extends LivingEntity implements IMob {
     private void roundabout$TryAttack(Entity $$0, CallbackInfoReturnable<Boolean> ci) {
             if (MainUtil.forceAggression(this)){
                 float $$1 = 1F;
+                if (roundabout$isVampire()){
+                    $$1 = 3F;
+                }
                 if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)){
                     $$1 = (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE);
                 }
@@ -348,6 +466,10 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
     @Shadow public abstract void setAggressive(boolean $$0);
 
+    @Shadow @org.jetbrains.annotations.Nullable private LivingEntity target;
+
+    @Shadow public abstract void lookAt(Entity entity, float f, float g);
+
     @Unique
     protected int roundabout$unseenMemoryTicks = 300;
 
@@ -457,7 +579,59 @@ public abstract class ZMob extends LivingEntity implements IMob {
             if (this.targetSelector != null) {
                 Stream<WrappedGoal> wrappedGoalStream = this.targetSelector.getRunningGoals();
                 wrappedGoalStream.forEach(this::roundabout$removeGoalTarget);
+
+
+                Optional<? extends ExpirableValue<?>> $$1 = brain.getMemories().get(MemoryModuleType.ATTACK_TARGET);
+                if ($$1 != null) {
+                    if (((LivingEntity)(Object)this) instanceof Piglin) {
+                        brain.eraseMemory(MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLIN);
+                        brain.eraseMemory(MemoryModuleType.AVOID_TARGET);
+                        brain.eraseMemory(MemoryModuleType.HURT_BY_ENTITY);
+                        brain.eraseMemory(MemoryModuleType.ANGRY_AT);
+                        brain.eraseMemory(MemoryModuleType.ATTACK_TARGET);
+                    }
+                    if (((LivingEntity)(Object)this) instanceof PiglinBrute){
+                        brain.eraseMemory(MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLIN);
+                        brain.eraseMemory(MemoryModuleType.HURT_BY_ENTITY);
+                        brain.eraseMemory(MemoryModuleType.ANGRY_AT);
+                        brain.eraseMemory(MemoryModuleType.ATTACK_TARGET);
+                    }
+                }
             }
+    }
+
+    @Unique
+    @Override
+    public void roundabout$purgePiglinAggro(Entity purge){
+        if (purge != null) {
+            Optional<? extends ExpirableValue<?>> $$1 = brain.getMemories().get(MemoryModuleType.ATTACK_TARGET);
+            if ($$1 != null) {
+                if (((LivingEntity)(Object)this) instanceof Piglin) {
+                    if (brain.getMemory(MemoryModuleType.ANGRY_AT).isPresent() &&
+                            brain.getMemory(MemoryModuleType.ANGRY_AT).get() == purge.getUUID()) {
+                        NbtOps nbtOps = NbtOps.INSTANCE;
+                        this.brain = this.makeBrain(new Dynamic<Tag>(nbtOps, nbtOps.createMap(ImmutableMap.of(nbtOps.createString("memories"), (Tag)nbtOps.emptyMap()))));
+                    }
+                    if (brain.getMemory(MemoryModuleType.ATTACK_TARGET).isPresent() &&
+                            brain.getMemory(MemoryModuleType.ATTACK_TARGET).get().getUUID() == purge.getUUID()) {
+                        NbtOps nbtOps = NbtOps.INSTANCE;
+                        this.brain = this.makeBrain(new Dynamic<Tag>(nbtOps, nbtOps.createMap(ImmutableMap.of(nbtOps.createString("memories"), (Tag)nbtOps.emptyMap()))));
+                    }
+                }
+                if (((LivingEntity)(Object)this) instanceof PiglinBrute){
+                    if (brain.getMemory(MemoryModuleType.ANGRY_AT).isPresent() &&
+                            brain.getMemory(MemoryModuleType.ANGRY_AT).get() == purge.getUUID()) {
+                        NbtOps nbtOps = NbtOps.INSTANCE;
+                        this.brain = this.makeBrain(new Dynamic<Tag>(nbtOps, nbtOps.createMap(ImmutableMap.of(nbtOps.createString("memories"), (Tag)nbtOps.emptyMap()))));
+                    }
+                    if (brain.getMemory(MemoryModuleType.ATTACK_TARGET).isPresent() &&
+                            brain.getMemory(MemoryModuleType.ATTACK_TARGET).get().getUUID() == purge.getUUID()) {
+                        NbtOps nbtOps = NbtOps.INSTANCE;
+                        this.brain = this.makeBrain(new Dynamic<Tag>(nbtOps, nbtOps.createMap(ImmutableMap.of(nbtOps.createString("memories"), (Tag)nbtOps.emptyMap()))));
+                    }
+                }
+            }
+        }
     }
     @Unique
     @Override
@@ -570,7 +744,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
                 Mob mb = ((Mob) (Object) this);
                 if (isStandUser) {
                     if (this.getTarget() != null && !this.roundabout$getFightOrFlight()) {
-                        if (!user.roundabout$getActive() &&
+                        if (!PowerTypes.hasStandActive(this) &&
                                 !user.roundabout$isSealed()) {
                             user.roundabout$summonStand(this.level(), true, true);
                         }
@@ -584,7 +758,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
                                     (this.roundabout$getFightOrFlight() && !((Mob) (Object) this instanceof JojoNPC JP &&
                                             JP.canSummonStandThroughFightOrFlightActive()))
                             ) {
-                                if (user.roundabout$getActive()) {
+                                if (PowerTypes.hasStandActive(this)) {
                                     user.roundabout$summonStand(this.level(), false, false);
                                 }
                             }
@@ -687,11 +861,32 @@ public abstract class ZMob extends LivingEntity implements IMob {
         }
     }
 
-    /**Stands that react to aggro like hey ya and wonder of u*/
+    @Inject(method = "tick",
+            at = @At(value = "TAIL"))
+    private void roundabout$tickMob(CallbackInfo ci) {
+        if (!level().isClientSide() && FateTypes.takesSunlightDamage(this)) {
+            if (FateTypes.isInSunlight(this)) {
+                if (((Mob)(Object)this) instanceof BaseMinion bm && bm.canGoHome()){
+                    bm.goHome();
+                } else {
+                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth() * ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick);
+                }
+            }
+        }
+    }
+
     @Inject(method = "setTarget",
-            at = @At(value = "HEAD"))
+            at = @At(value = "HEAD"), cancellable = true)
     private <T extends Mob> void roundabout$setTarget(LivingEntity $$0, CallbackInfo ci) {
         if ($$0 != null) {
+            /**Flesh buds prevent aggro on the planter*/
+            UUID fleshPlanter = (((StandUser)this).rdbt$getFleshBud());
+            if (fleshPlanter != null && ($$0.getUUID().equals(fleshPlanter) ||
+                    (((StandUser)$$0).rdbt$getFleshBud() != null && ((StandUser)$$0).rdbt$getFleshBud().equals(fleshPlanter)))){
+                ci.cancel();
+                return;
+            }
+            /**Stands that react to aggro like hey ya and wonder of u*/
             ((StandUser)$$0).roundabout$getStandPowers().reactToAggro(((Mob) (Object)this));
         }
     }
@@ -711,9 +906,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
         if (value != null) {
             if (!((StandUser)roundabout$Mob).roundabout$getStandDisc().isEmpty()){
                 ((StandUser)value).roundabout$setStandDisc(((StandUser)roundabout$Mob).roundabout$getStandDisc());
-            } if (!((IMob)roundabout$Mob).roundabout$isWorthy()){
-                ((IMob)value).roundabout$setWorthy(true);
             }
+             ((IMob)value).roundabout$setWorthy(((IMob)roundabout$Mob).roundabout$isWorthy());
         }
         return (T) value;
     }
@@ -730,9 +924,71 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private void roundabout$Tick(CallbackInfo ci) {
         if (this.isAlive() && !this.level().isClientSide()) {
+            if (getHealth() < getMaxHealth()){
+                if (roundabout$isVampire()){
+                    if (tickCount % 82 == 0){
+                        AABB $$0 = this.getBoundingBox().inflate(10.0, 8.0, 10.0);
+                        List<? extends LivingEntity> $$1 = this.level().getNearbyEntities(LivingEntity.class, MainUtil.attackTargeting, this, $$0);
+
+                        for (LivingEntity $$3 : $$1) {
+                            if (MainUtil.canDrinkBloodFair($$3,((Mob)(Object)this)) && MainUtil.canDrinkBloodCritAggro($$3,((Mob)(Object)this))){
+                                if (MainUtil.canActuallyHitInvolved(this,$$3) && distanceTo($$3) < 3){
+                                    DamageSource sauce = ModDamageTypes.of(level(),
+                                            ModDamageTypes.BLOOD_DRAIN,((Mob)(Object)this));
+                                    if ($$3.hurt(sauce, 4)) {
+                                        heal(4);
+                                        lookAt($$3, 300, 300);
+                                        ((ServerLevel) level()).sendParticles(ParticleTypes.CRIT,
+                                                $$3.getEyePosition().x,
+                                                $$3.getEyePosition().y,
+                                                $$3.getEyePosition().z,
+                                                15, 0.2, 0.2, 0.2, 0.0);
+                                        level().playSound(null, getX(), getY(), getZ(), ModSounds.BLOOD_SUCK_DRAIN_EVENT, SoundSource.PLAYERS, 1F, 1.4F + (float) (Math.random() * 0.1));
+                                        level().playSound(null, getX(), getY(), getZ(), SoundEvents.PLAYER_ATTACK_CRIT, SoundSource.PLAYERS, 1F, 1F + (float) (Math.random() * 0.1));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            //Flesh Bud sets aggro
+            UUID fleshTarget = ((StandUser) this).rdbt$getFleshBud();
+            if (fleshTarget != null && level() instanceof ServerLevel SL){
+
+                if (getTarget() != null){
+                    if (((StandUser)getTarget()).rdbt$getFleshBud() == fleshTarget){
+                        ((StandUser) this).roundabout$deeplyRemoveAttackTarget();
+                    }
+                }
+
+                Entity fleshTargetEntity = SL.getEntity(fleshTarget);
+                if (fleshTargetEntity instanceof LivingEntity LE){
+                    roundabout$purgePiglinAggro(LE);
+                    LivingEntity hurtMob = LE.getLastHurtMob();
+                    if (hurtMob != null && hurtMob.isAlive() && !hurtMob.is(this) && !hurtMob.is(LE)
+                    && ((StandUser)hurtMob).rdbt$getFleshBud() != fleshTarget){
+                        setTarget(hurtMob);
+                    } else {
+                        LivingEntity hurtByMob = LE.getLastHurtByMob();
+                        if (hurtByMob != null && hurtByMob.isAlive() && !hurtByMob.is(this) && !hurtByMob.is(LE)
+                                && ((StandUser)hurtByMob).rdbt$getFleshBud() != fleshTarget){
+                            setTarget(hurtByMob);
+                        }
+                    }
+                }
+            }
 
             if (roundabout$sightProtectionTicks > 0){
                 roundabout$sightProtectionTicks--;
+            }
+
+            if (roundabout$hypnosisTime > 0){
+                roundabout$hypnosisTime--;
+                if (roundabout$hypnosisTime <= 0) {
+                    roundabout$hypnotizedBy = null;
+                }
             }
 
             if (!((StandUser) this).roundabout$getStandDisc().isEmpty()) {
@@ -795,6 +1051,42 @@ public abstract class ZMob extends LivingEntity implements IMob {
                 }
             }
         }
+
+        StandUser SU = (StandUser) this;
+        if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
+            if (PowersAnubis.shouldDash((Mob)(Object)this)) {
+                if (this.roundabout$ticksUntilNextAttack < 10 && this.roundabout$ticksUntilNextAttack > 1) {
+                    this.roundabout$ticksUntilNextAttack = 1;
+                }
+            }
+        }
+
     }
 
+
+    @Inject(method = "mobInteract",at=@At(value = "HEAD"))
+    private void roundabout$giveAnubis(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
+        if (!$$0.level().isClientSide) {
+            ItemStack stack = $$0.getItemInHand($$1);
+            if (stack.getItem() instanceof AnubisItem) {
+                if (((Mob) (Object) this) instanceof AbstractIllager AI) {
+                    if (!((StandUser) AI).roundabout$hasAStand()) {
+                        $$0.setItemInHand($$1,new ItemStack(Items.AIR));
+                        $$0.level().playSound(null,$$0.blockPosition(), ModSounds.ANUBIS_EXTRA_EVENT, SoundSource.PLAYERS,3F,1F);
+
+                        ItemStack itemStack = new ItemStack(ModItems.STAND_DISC_ANUBIS);
+                        CompoundTag tag = itemStack.getOrCreateTagElement("Special");
+                        tag.putByte("Type",(byte)1);
+
+
+                        StandArrowItem.grantStand(itemStack, AI);
+                        if (!$$0.isCreative()) {
+                            AI.setTarget($$0);
+                        }
+
+                    }
+                }
+            }
+        }
+    }
 }

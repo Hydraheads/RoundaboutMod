@@ -2,27 +2,47 @@ package net.hydra.jojomod.client.hud;
 
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
+import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
+import net.hydra.jojomod.event.VampireData;
+import net.hydra.jojomod.event.index.AnubisMemory;
+import net.hydra.jojomod.event.index.AnubisMoment;
+import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
+import net.hydra.jojomod.fates.powers.VampireFate;
+import net.hydra.jojomod.powers.GeneralPowers;
+import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
+import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
+import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
-import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
+import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+
+import java.util.List;
 
 public class StandHudRender {
     /** Renders the HUD for stand attacks/abilities.
@@ -30,10 +50,19 @@ public class StandHudRender {
 
 
     private static final int guiSize = 174;
-    private static float animated = 0;
+    private static float presentX = 0;
+
+    public static boolean configIsLoaded(){
+        return ConfigManager.getClientConfig() != null;
+    }
+
     public static void renderStandHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                       int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                       float flashAlpha, float otherFlashAlpha) {
+        if (!configIsLoaded())
+            return;
+        if (ConfigManager.getClientConfig() == null || ConfigManager.getClientConfig().dynamicSettings == null)
+                return;
         if (playerEntity != null) {
             RenderSystem.enableBlend();
             int x = 0;
@@ -47,20 +76,31 @@ public class StandHudRender {
 
             int iconHeight = 18;
             int iconWidth = 18;
-            x = (int) (-20-guiSize+animated);
+            x = (int) (-20-guiSize+ presentX);
             //x = (int) (-20);
-            y = 5;
+            y = ConfigManager.getClientConfig().abilityIconHudY;
             Minecraft mc = Minecraft.getInstance();
             float tickDelta = mc.getDeltaFrameTime();
 
-            boolean standOn = ((StandUser) playerEntity).roundabout$getActive();
-            if (standOn || animated > 0.1){
-                if (!standOn){
-                    animated = Math.max(controlledLerp(tickDelta, animated,0,0.5f),0);
+            boolean powerOn = ((StandUser) playerEntity).roundabout$getActive();
+            boolean standOn = PowerTypes.hasStandActive(playerEntity);
+            boolean renderIcons = (powerOn || !FateTypes.isHuman(playerEntity)) && !ConfigManager.getClientConfig().dynamicSettings.hideGUI
+                    && !(ConfigManager.getClientConfig().enablePickyIconRendering && !((StandUser) playerEntity).roundabout$getStandPowers().hasCooldowns());
+            if (renderIcons || presentX > 0.1){
+                if (!renderIcons){
+                    if (ConfigManager.getClientConfig().abilityIconHudIsAnimated){
+                        presentX = Math.max(controlledLerp(tickDelta, presentX,0,0.5f),0);
+                    } else {
+                        presentX = 0;
+                    }
                 } else {
-                    if (animated < guiSize) {
-                        animated++;
-                        animated = Math.min(controlledLerp(tickDelta, animated,guiSize,0.5f),guiSize);
+                    if (ConfigManager.getClientConfig().abilityIconHudIsAnimated) {
+                        if (presentX < ConfigManager.getClientConfig().abilityIconHudX) {
+                            presentX++;
+                            presentX = Math.min(controlledLerp(tickDelta, presentX, ConfigManager.getClientConfig().abilityIconHudX, 0.5f), ConfigManager.getClientConfig().abilityIconHudX);
+                        }
+                    } else {
+                        presentX = ConfigManager.getClientConfig().abilityIconHudX;
                     }
                 }
                 context.setColor(1.0f, 1.0f, 1.0f, 0.9f);
@@ -68,7 +108,13 @@ public class StandHudRender {
                 //context.drawTexture(ARROW_ICON,x,y-2,0, 0, textureWidth, textureHeight, textureWidth, textureHeight);
 
 
-                ((StandUser) playerEntity).roundabout$getStandPowers().renderIcons(context, x, y);
+                if ((standOn || FateTypes.isHuman(playerEntity)) && PowerTypes.hasStandActivelyEquipped(playerEntity)) {
+                    ((StandUser) playerEntity).roundabout$getStandPowers().renderIcons(context, x, y);
+                }else if ((powerOn || FateTypes.isHuman(playerEntity)) && !PowerTypes.hasStandActivelyEquipped(playerEntity)){
+                    ((IPowersPlayer) playerEntity).rdbt$getPowers().renderIcons(context, x, y);
+                } else {
+                    ((IFatePlayer) playerEntity).rdbt$getFatePowers().renderIcons(context, x, y);
+                }
 
 
                 context.setColor(1.0f, 1.0f, 1.0f, 1f);
@@ -106,7 +152,162 @@ public class StandHudRender {
         if (playerEntity != null) {
             ((StandUser) playerEntity).roundabout$getStandPowers().renderAttackHud(context,playerEntity,
                     scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
+            ((IFatePlayer) playerEntity).rdbt$getFatePowers().renderAttackHud(context,playerEntity,
+                    scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
+            ((IPowersPlayer) playerEntity).rdbt$getPowers().renderAttackHud(context,playerEntity,
+                    scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
         }
+    }
+
+    public static void renderRoadRollerHud(GuiGraphics context, Minecraft client, Player playerEntity, int scaledWidth, int scaledHeight, int ticks, int x, float flashAlpha, float otherFlashAlpha, RoadRollerEntity RRE) {
+        ResourceLocation itemID = BuiltInRegistries.ITEM.getKey(RRE.getConcreteColour().getItem());
+        if (itemID == null) return;
+
+        String fixedString = itemID.getPath().replace("_powder", "");
+        ResourceLocation blockID = new ResourceLocation(itemID.getNamespace(), fixedString);
+        Block actualConcrete = BuiltInRegistries.BLOCK.getOptional(blockID).orElse(Blocks.BLACK_CONCRETE);
+
+        int l = scaledHeight - 32 + 3;
+        int k = (int) (182 - ((float)182/800)*((float)RRE.getPavingTimer()));
+
+        int vOffset;
+        if (actualConcrete.equals(Blocks.BLACK_CONCRETE)) vOffset = 45;
+        else if (actualConcrete.equals(Blocks.BLUE_CONCRETE)) vOffset = 65;
+        else if (actualConcrete.equals(Blocks.BROWN_CONCRETE)) vOffset = 50;
+        else if (actualConcrete.equals(Blocks.PURPLE_CONCRETE)) vOffset = 70;
+        else if (actualConcrete.equals(Blocks.PINK_CONCRETE)) vOffset = 20;
+        else if (actualConcrete.equals(Blocks.CYAN_CONCRETE)) vOffset = 15;
+        else if (actualConcrete.equals(Blocks.MAGENTA_CONCRETE)) vOffset = 25;
+        else if (actualConcrete.equals(Blocks.YELLOW_CONCRETE)) vOffset = 5;
+        else if (actualConcrete.equals(Blocks.RED_CONCRETE)) vOffset = 10;
+        else if (actualConcrete.equals(Blocks.GRAY_CONCRETE)) vOffset = 40;
+        else if (actualConcrete.equals(Blocks.LIGHT_BLUE_CONCRETE)) vOffset = 75;
+        else if (actualConcrete.equals(Blocks.LIGHT_GRAY_CONCRETE)) vOffset = 35;
+        else if (actualConcrete.equals(Blocks.GREEN_CONCRETE)) vOffset = 60;
+        else if (actualConcrete.equals(Blocks.LIME_CONCRETE)) vOffset = 0;
+        else if (actualConcrete.equals(Blocks.WHITE_CONCRETE)) vOffset = 30;
+        else if (actualConcrete.equals(Blocks.ORANGE_CONCRETE)) vOffset = 55;
+        else vOffset = 0;
+
+        context.blit(StandIcons.VEHICLE_ICONS, x, l, 0, 0, 182, 5);
+
+        if (k > 0) {
+            context.blit(StandIcons.VEHICLE_ICONS, x, l, 0, vOffset + 5, k, 5);
+        }
+
+        int iconU = 193;
+        int iconV = 40;
+        int iconW = 9;
+        int iconH = 9;
+        int iconX = scaledWidth / 2 - 5;
+        int iconY = scaledHeight - 31 - 10;
+
+        context.blit(StandIcons.VEHICLE_ICONS, iconX, iconY, iconU, iconV, iconW, iconH);
+
+        int overlayU = 193;
+        int overlayV = 141;
+        if (actualConcrete.equals(Blocks.BLACK_CONCRETE)) overlayV = 140;
+        else if (actualConcrete.equals(Blocks.BLUE_CONCRETE)) {
+            overlayV = 60;
+            overlayU = 209;
+        }
+        else if (actualConcrete.equals(Blocks.BROWN_CONCRETE)) overlayV = 150;
+        else if (actualConcrete.equals(Blocks.PURPLE_CONCRETE)) {
+            overlayV = 70;
+            overlayU = 209;
+        }
+        else if (actualConcrete.equals(Blocks.PINK_CONCRETE)) overlayV = 90;
+        else if (actualConcrete.equals(Blocks.CYAN_CONCRETE)) overlayV = 80;
+        else if (actualConcrete.equals(Blocks.MAGENTA_CONCRETE)) overlayV = 100;
+        else if (actualConcrete.equals(Blocks.YELLOW_CONCRETE)) overlayV = 60;
+        else if (actualConcrete.equals(Blocks.RED_CONCRETE)) overlayV = 70;
+        else if (actualConcrete.equals(Blocks.GRAY_CONCRETE)) overlayV = 130;
+        else if (actualConcrete.equals(Blocks.LIGHT_BLUE_CONCRETE)) {
+            overlayV = 80;
+            overlayU = 209;
+        }
+        else if (actualConcrete.equals(Blocks.LIGHT_GRAY_CONCRETE)) overlayV = 120;
+        else if (actualConcrete.equals(Blocks.GREEN_CONCRETE)) {
+            overlayV = 50;
+            overlayU = 209;
+        }
+        else if (actualConcrete.equals(Blocks.LIME_CONCRETE)) overlayV = 50;
+        else if (actualConcrete.equals(Blocks.WHITE_CONCRETE)) overlayV = 110;
+        else if (actualConcrete.equals(Blocks.ORANGE_CONCRETE)) overlayV = 160;
+        else {
+            overlayV = 141;
+            overlayU = 193;
+        }
+        context.blit(StandIcons.VEHICLE_ICONS, iconX, iconY, overlayU, overlayV, iconW, iconH);
+    }
+
+    public static void renderRoadRollerPickupHud(GuiGraphics context, Minecraft client, Player playerEntity, int scaledWidth, int scaledHeight, int ticks, int x, float flashAlpha, float otherFlashAlpha, RoadRollerEntity RRE) {
+        int l = scaledHeight - 32 + 3;
+        int k = (int)(((float) 182 / 100f) * (float) RRE.getPickupTimer());
+
+        context.blit(StandIcons.VEHICLE_ICONS, x, l, 0, 90, 182, 5);
+
+        if (k > 0) {
+            context.blit(StandIcons.VEHICLE_ICONS, x, l, 0, 85, k, 5);
+        }
+
+        int iconU = 183;
+        int iconV = 0;
+        int iconW = 9;
+        int iconH = 9;
+        int iconX = scaledWidth / 2 - 5;
+        int iconY = scaledHeight - 31 - 10;
+
+        context.blit(StandIcons.VEHICLE_ICONS, iconX, iconY, iconU, iconV, iconW, iconH);
+    }
+
+    public static void renderCreamVoidTimerHud(GuiGraphics context, Minecraft client, Player playerEntity,
+                                         int scaledWidth, int scaledHeight, int x,
+                                         PowersCream PC) {
+        int l = scaledHeight - 32 + 3;
+        int k = (int)(((float) 182 / 400f) * (400 - (float) PC.getVoidTime()));
+
+        context.blit(StandIcons.CREAM_ICONS, x, l, 0, 90, 182, 5);
+
+        if (k > 0) {
+            context.blit(StandIcons.CREAM_ICONS, x, l, 0, 5, k, 5);
+        }
+
+        int iconU = 183;
+        int iconV = 0;
+        int iconW = 9;
+        int iconH = 9;
+        int iconX = scaledWidth / 2 - 5;
+        int iconY = scaledHeight - 31 - 5;
+
+        context.blit(StandIcons.CREAM_ICONS, iconX, iconY, iconU, iconV, iconW, iconH);
+    }
+
+    public static void renderCreamTransformTimerHud(GuiGraphics context, Minecraft client, Player playerEntity,
+                                               int scaledWidth, int scaledHeight, int x,
+                                               PowersCream PC) {
+        int l = scaledHeight - 32 + 3;
+        int k;
+        if (PC.getTransformDirection() == 1) {
+            k = (int)(((float) 182 / 100f) * (float) PC.getTransformTimer());
+        } else {
+            k = (int)(((float) 182 / 20f) * (float) PC.getTransformTimer());
+        }
+
+        context.blit(StandIcons.CREAM_ICONS, x, l, 0, 90, 182, 5);
+
+        if (k > 0) {
+            context.blit(StandIcons.CREAM_ICONS, x, l, 0, 5, k, 5);
+        }
+
+        int iconU = 183;
+        int iconV = 10;
+        int iconW = 9;
+        int iconH = 9;
+        int iconX = scaledWidth / 2 - 5;
+        int iconY = scaledHeight - 31 - 5;
+
+        context.blit(StandIcons.CREAM_ICONS, iconX, iconY, iconU, iconV, iconW, iconH);
     }
 
     private static int getFinalATimeInt(StandUser standUser) {
@@ -229,6 +430,39 @@ public class StandHudRender {
 
     }
 
+    public static void renderBloodExp(GuiGraphics context, Player playerEntity,
+                                             int scaledWidth, int scaledHeight, int x) {
+
+        int l;
+        VampireData vdata = ((IPlayerEntity)playerEntity).rdbt$getVampireData();
+        int gb = VampireFate.getLevelUpExpCost();
+        int gc = vdata.bloodExp;  gc= Mth.clamp(gc,0,gb);
+        int gc2 = vdata.vampireLevel+1;
+        l = scaledHeight - 32 + 3;
+        StandUser standUser = ((StandUser)playerEntity);
+        int blt = (int) Math.floor(((double) 182 /gb)*(gc));
+        context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 40, 182, 5);
+        if (blt > 0) {
+            context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 45, blt, 5);
+        }
+
+        Minecraft minecraft = Minecraft.getInstance();
+        int y = 11284539;
+        Font renderer = minecraft.font;
+        String $$6 = gc2 + "";
+        if (gc2 >= 41){
+            $$6 = "C";
+        }
+        int $$7 = (scaledWidth - renderer.width($$6)) / 2;
+        int $$8 = scaledHeight - 31 - 4;
+        context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7 - 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8, y, false);
+
+    }
+
     public static void renderShootModeSoftAndWet(GuiGraphics context, Minecraft client, Player playerEntity,
                                     int scaledWidth, int scaledHeight, int x,
                                     PowersSoftAndWet PW) {
@@ -292,6 +526,51 @@ public class StandHudRender {
         }
     }
 
+    private static final ResourceLocation FIRE_0 =
+            new ResourceLocation("minecraft", "textures/block/fire_0.png");
+    public static void renderComboHudNumber(GuiGraphics context, Minecraft client, Player playerEntity,
+                                                      int scaledWidth, int scaledHeight, int x,
+                                                      PunchingGeneralPowers pgp) {
+
+        int l;
+        int k;
+        k = scaledWidth/2 - 5;
+        l = scaledHeight - 31 - 5;
+
+        int comboAmt = pgp.getComboAmt();
+        int comboTime = pgp.getComboExpireTicks();
+
+        int locX = - 1;
+        int locY = - 9;
+        int comboTier = pgp.getComboTier();
+
+
+        if (comboTier == 1) {
+            RenderSystem.enableBlend();
+            context.blit(StandIcons.JOJO_ICONS_2, k + locX, l+locY, 223, 153, 13, 15);
+        } else if (comboTier == 2){
+            RenderSystem.enableBlend();
+            context.blit(StandIcons.JOJO_ICONS_2, k + locX, l+locY, 223, 135, 13, 15);
+        } else if (comboTier == 3){
+            RenderSystem.enableBlend();
+            context.blit(StandIcons.JOJO_ICONS_2, k + locX, l+locY, 240, 135, 13, 15);
+        } else {
+            RenderSystem.enableBlend();
+            context.blit(StandIcons.JOJO_ICONS_2, k + locX, l+locY, 240, 153, 13, 15);
+        }
+
+        int y = 16766790;
+        Font renderer = client.font;
+        String $$6 = comboAmt + "";
+        int $$7 = (scaledWidth - renderer.width($$6)) / 2;
+        int $$8 = scaledHeight - 31 - 4;
+        context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7 - 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8, y, false);
+    }
+
     public static void renderExpHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                            int scaledWidth, int scaledHeight, int ticks, int x,
                                            float flashAlpha, float otherFlashAlpha, boolean removeNum) {
@@ -329,6 +608,31 @@ public class StandHudRender {
         }
     }
 
+
+    public static void renderRipperHud(GuiGraphics context, Player playerEntity,
+                                    int scaledWidth, int scaledHeight, int x,
+                                    boolean removeNum) {
+        if (((IPowersPlayer)playerEntity).rdbt$getPowers() instanceof VampireGeneralPowers vgp) {
+            int l;
+            StandUser standUser = ((StandUser) playerEntity);
+            int ripper = vgp.getRipperEyesCharge();
+            int maxXP = vgp.getMaxRipperEyesWait();
+            int blt = (int) Math.floor(((double) 182 / maxXP) * (ripper));
+            l = scaledHeight - 32 + 3;
+            context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 61, 182, 5);
+            if (blt > 0) {
+                context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 66, blt, 5);
+            }
+
+            if (!removeNum) {
+                int u = 183;
+                int k = scaledWidth / 2 - 5;
+                l = scaledHeight - 31 - 5;
+                context.blit(StandIcons.JOJO_ICONS_2, k, l, u, 62, 9, 9);
+            }
+        }
+    }
+
     private static final ResourceLocation GUI_ICONS_LOCATION = new ResourceLocation("textures/gui/icons.png");
     public static void renderExperienceBar(Minecraft client,int scaledWidth, int scaledHeight, GuiGraphics $$0) {
         int $$2 = client.player.getXpNeededForNextLevel();
@@ -343,6 +647,36 @@ public class StandHudRender {
             }
         }
 
+    }
+
+    // basic function which displays a xp bar with a min and a max, feel free to change around if needed
+    // bar is the y function of
+    public static void renderNumberHUD(GuiGraphics context, Minecraft client, int scaledWidth, int scaledHeight,
+                                       int x, double value, double max, ResourceLocation file, int bx, int by, int color) {
+        int l;
+        int k;
+        int v;
+        int blt = (int) Math.floor(((double) 182 / max)*(value));
+        l = scaledHeight - 32 + 3;
+        context.blit(file, x, l, bx, by, 182, 5);
+        if (blt > 0) {
+            context.blit(file, x, l, bx, by+5, blt, 5);
+        }
+
+        int u = 183;
+        k = scaledWidth/2 - 5;
+        l = scaledHeight - 31 - 5;
+
+        int y = color;
+        Font renderer = client.font;
+        String $$6 = (int)value + "";
+        int $$7 = (scaledWidth - renderer.width($$6)) / 2;
+        int $$8 = scaledHeight - 31 - 4;
+        context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7 - 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8, y, false);
     }
 
     public static void renderDistanceHUDJustice(GuiGraphics context, Minecraft client, Player playerEntity,
@@ -384,7 +718,7 @@ public class StandHudRender {
     }
     public static void renderGuardHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                       int scaledWidth, int scaledHeight, int ticks, int x,
-                                      float flashAlpha, float otherFlashAlpha) {
+                                      float flashAlpha, float otherFlashAlpha, boolean removeThing) {
         int l;
         int k;
         int v;
@@ -395,7 +729,13 @@ public class StandHudRender {
         } else {
             v = 0;
         }
-        k = (int) Math.floor((182/standUser.roundabout$getMaxGuardPoints())*standUser.roundabout$getGuardPoints());
+
+        float maxP = standUser.roundabout$getMaxGuardPoints();
+        float gP = standUser.roundabout$getGuardPoints();
+        if (gP > maxP){
+            gP = maxP;
+        }
+        k = (int) Math.floor((182/maxP)*gP);
         context.blit(StandIcons.JOJO_ICONS, x, l, 0, v, 182, 5);
         if (k > 0) {
            context.blit(StandIcons.JOJO_ICONS, x, l, 0, v+5, k, 5);
@@ -404,7 +744,74 @@ public class StandHudRender {
         int u = 183;
         k = scaledWidth/2 - 5;
         l = scaledHeight - 31 - 5;
-        context.blit(StandIcons.JOJO_ICONS, k, l, u, v, 9, 9);
+        if (!removeThing) {
+            context.blit(StandIcons.JOJO_ICONS, k, l, u, v, 9, 9);
+        }
+    }
+
+    public static void renderPossessionHud(GuiGraphics context, Minecraft client, Player playerEntity,
+                                      int scaledWidth, int scaledHeight, int x) {
+        int l = scaledHeight - 32 + 3;
+        AnubisPossessorEntity poss = (AnubisPossessorEntity) ((StandUser)playerEntity).roundabout$getPossessor();
+        if (poss != null && poss.getTarget() != null) {
+            int k = (int) ((182.0F / poss.getTarget().getMaxHealth()) * poss.getTarget().getHealth()) ;
+
+            context.blit(StandIcons.JOJO_ICONS, x, l, 0, 161, 182, 5);
+
+            if (k > 0) {
+                context.blit(StandIcons.JOJO_ICONS, x, l, 0, 166, k, 5);
+            }
+
+            int iconX = scaledWidth / 2 - 5;
+            int iconY = scaledHeight - 32 - 4;
+
+            context.blit(StandIcons.JOJO_ICONS, iconX, iconY, 182, 161, 11, 9);
+        }
+    }
+    public static void renderRecordingHud(GuiGraphics context, Minecraft client, Player playerEntity,
+                                           int scaledWidth, int scaledHeight, int x) {
+        int l = scaledHeight - 32 + 3;
+        StandUser SU = (StandUser) playerEntity;
+        StandPowers p = SU.roundabout$getStandPowers();
+        PowersAnubis PA = (PowersAnubis) p;
+        int max = PA.maxPlayTime;
+        int inc = PA.playTime;
+
+        if (SU.roundabout$getUniqueStandModeToggle()) {
+            AnubisMemory memory = PA.getUsedMemory();
+            if (memory != null) {
+
+                int sTime = memory.getFirstTime();
+                int eTime = memory.getLastTime();
+
+
+
+                int time = PA.getMaxPlayTime()-PA.playTime-sTime;
+                int maxTime = eTime-sTime;
+            //    Roundabout.LOGGER.info("{}/{}",time,maxTime);
+
+                inc = maxTime-time;
+                max = maxTime;
+
+            }
+        }
+
+        int k = (int) (((float) 182 ) *  ((float) inc/ max) );
+
+        context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 30, 182, 5);
+
+        if (k > 0) {
+            context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 35, k, 5);
+        }
+
+        int iconX = scaledWidth / 2 - 5;
+        int iconY = scaledHeight - 32 - 4;
+
+        context.blit(StandIcons.JOJO_ICONS_2, iconX, iconY, 182, 29, 11, 10);
+    }
+    public static void renderTuskHud(GuiGraphics context, Minecraft client, Player playerEntity,
+                                     int scaledWidth, int scaledHeight, int x, Font font) {
+
     }
 
     public static void renderTSHud(GuiGraphics context, Minecraft client, Player playerEntity,
@@ -491,44 +898,29 @@ public class StandHudRender {
         }
     }
 
-/**
-    public static void renderGuardHud(DrawContext context, MinecraftClient client, PlayerEntity playerEntity,
-                                       int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
-                                       float flashAlpha, float otherFlashAlpha) {
-        if (playerEntity != null){
 
-            int x = 0;
-            int y = 0;
+    public static void renderHeatHud(GuiGraphics context, Minecraft client, Player playerEntity,
+                                  int scaledWidth, int scaledHeight, int ticks, int x,
+                                  float flashAlpha, float otherFlashAlpha, float c) {
 
-            int width = scaledWidth;
-            int height = scaledHeight;
-            int twidth = 51;
-            x = width/2;
-            y = height;
-            boolean standOn = MyComponents.STAND_USER.get(playerEntity).getActive();
-            NbtCompound pd = ((IEntityDataSaver) playerEntity).getPersistentData();
-            if (standOn){
-                int age = Math.toIntExact(pd.getLong("guard") - Math.round(playerEntity.getWorld().getTime()));
-                if (age <=0 || age > 201){age=0;}
-                //1000 -> 10
-                //1200
-                int twidth2 = (twidth*(200-age))/200;
-                //Draws the empty bar
-                context.drawTexture(GUARD_EMPTY,x-20,y-67,0, 0, twidth, 5, twidth, 5);
-                //Draws the full bar over it. Scales to age.
-                context.drawTexture(GUARD_FILLED,x-20,y-67,0, 0, twidth2, 5, twidth, 5);
-                //Draws the little shield icon
-                context.drawTexture(GUARD_ICON,x-30,y-68,0, 0, 7, 7, 7, 7);
+        int l;
+        int k;
+        l = scaledHeight - 32 + 3;
 
-                //TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
-                //drawContext.drawText(renderer, DEBUG_TEXT_1,x-50,y-50,0xffffff,true);
-            } else {
-                //TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
-                //drawContext.drawText(renderer, ""+StandData.isActive((IEntityDataSaver) MinecraftClient.getInstance().player),x-50,y-50,0xffffff,true);
+        x-=7;
+        l+=8;
+        StandUser standUser = ((StandUser) playerEntity);
+        if (HeatUtil.isCold(playerEntity) || HeatUtil.isHot(playerEntity)) {
+            context.blit(StandIcons.JOJO_ICONS_2, x, l, 217, 51, 7, 20);
+            if (HeatUtil.isCold(playerEntity)) {
+                int heat = Mth.clamp(HeatUtil.getHeat(playerEntity) * -1, 0, 100);
+                k = Math.min((int) Math.floor(((float)19 / 100F) * (float) heat), 19);
+                context.blit(StandIcons.JOJO_ICONS_2, x, l+(20-k), 205, 52+(19-k), 7, k);
+            } else if (HeatUtil.isHot(playerEntity)) {
+                int heat = Mth.clamp(HeatUtil.getHeat(playerEntity), 0, 100);
+                k = Math.min((int) Math.floor(((float)19 / 100F) * (float) heat), 19);
+                context.blit(StandIcons.JOJO_ICONS_2, x, l+(20-k), 211, 52+(19-k), 7, k);
             }
-
-
-
         }
-    }*/
+    }
 }

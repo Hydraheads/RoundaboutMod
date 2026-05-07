@@ -87,6 +87,9 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
                 ci.cancel();
                 this.discard();
                 return;
+            } else if (entityPowers.dealWithProjectileNoDiscard(this,$$0)){
+                ci.cancel();
+                return;
             }
         }
 

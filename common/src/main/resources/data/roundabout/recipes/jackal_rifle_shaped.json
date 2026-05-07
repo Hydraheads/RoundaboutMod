@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "minecraft:nether_brick"
+    },
+    "I":
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    "P":
+    {
+      "item": "minecraft:white_wool"
+    },
+    "F":
+    {
+      "item": "minecraft:blaze_powder"
+    }
+  },
+  "pattern": [
+    "  I",
+    "BFI",
+    "PB "
+  ],
+  "result": {
+    "count": 1,
+    "item": "roundabout:jackal_rifle"
+  },
+  "show_notification": true
+}

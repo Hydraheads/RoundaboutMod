@@ -3,9 +3,11 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -53,7 +55,11 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
         StandUserClient userClient = ((StandUserClient) entity);
         if (entityAndData.roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() && ClientNetworking.getAppropriateConfig() != null &&
         ClientNetworking.getAppropriateConfig().achtungSettings != null &&
-                ClientNetworking.getAppropriateConfig().achtungSettings.hidesHeldItems){
+                ClientNetworking.getAppropriateConfig().achtungSettings.hidesHeldItems && !ClientUtil.checkIfClientCanSeeMobsForWindVision()){
+            ci.cancel();
+            return;
+        }
+        if (entityAndData.roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()){
             ci.cancel();
             return;
         }
@@ -91,6 +97,11 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
             host = jnpc.host;
         }
         if (host != null && ((StandUser)host).roundabout$getEffectiveCombatMode() && !host.isUsingItem()){
+            ci.cancel();
+            return;
+        }
+
+        if (entity instanceof Player pl && PlayerPosIndex.isHidingHeldItem(((IPlayerEntity)pl).roundabout$GetPos2())){
             ci.cancel();
             return;
         }

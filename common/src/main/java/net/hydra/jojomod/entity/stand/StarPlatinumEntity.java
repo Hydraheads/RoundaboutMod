@@ -43,7 +43,13 @@ public class StarPlatinumEntity extends FollowingStandEntity {
             VOLUME_39 = 18,
             JUMP_13 = 19,
             ARCADE_2 = 20,
-            TREE = 21;
+            TREE = 21,
+            NETHER = 22,
+            PHANTOM = 23,
+            LIGHT = 24,
+            PART_4_LIVE = 25,
+            FINISHER = 26,
+            KING = 27;
 
 
 
@@ -216,9 +222,11 @@ public class StarPlatinumEntity extends FollowingStandEntity {
     }
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(FINGER_LENGTH, 1F);
-        this.entityData.define(IS_SCOPING, false);
+        if (!this.entityData.hasItem(FINGER_LENGTH)) {
+            super.defineSynchedData();
+            this.entityData.define(FINGER_LENGTH, 1F);
+            this.entityData.define(IS_SCOPING, false);
+        }
     }
 
     public int tsReleaseTime = 0;

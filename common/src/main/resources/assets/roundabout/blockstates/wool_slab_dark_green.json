@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "roundabout:block/wool_slab_dark_green"
+    },
+    "type=double": {
+      "model": "minecraft:block/green_wool"
+    },
+    "type=top": {
+      "model": "roundabout:block/wool_slab_dark_green_top"
+    }
+  }
+}

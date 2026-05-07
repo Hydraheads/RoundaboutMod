@@ -23,5 +23,9 @@ public class FabricGamerules {
                 GameRules.Category.MOBS, GameRuleFactory.createBooleanRule(true));
         ModGamerules.ROUNDABOUT_STAND_USER_MOB_SPAWNS = GameRuleRegistry.register("roundaboutSpawnStandUserMobs",
                 GameRules.Category.MOBS, GameRuleFactory.createBooleanRule(true));
+        ModGamerules.ROUNDABOUT_ROAD_ROLLER_BREAK_ICE = GameRuleRegistry.register("roundaboutRoadRollerBreakIce",
+                GameRules.Category.MOBS, GameRuleFactory.createBooleanRule(true));
+        ModGamerules.ROUNDABOUT_LOSE_FATE_ON_DEATH = GameRuleRegistry.register("roundaboutLoseFateOnDeath",
+                GameRules.Category.PLAYER, GameRuleFactory.createBooleanRule(false));
     }
 }

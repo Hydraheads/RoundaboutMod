@@ -1,14 +1,23 @@
 package net.hydra.jojomod;
 
+import net.hydra.jojomod.access.IFatePlayer;
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.event.VampireData;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.fates.powers.ZombieFate;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.stand.powers.PowersTheWorld;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
+import net.hydra.jojomod.util.HeatUtil;
+import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -16,6 +25,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -56,10 +66,14 @@ public class RoundaboutCommands {
         }
         return targets.size();
     }
+    public static int roundaboutSetHeat(CommandSourceStack source, Collection<? extends Entity> targets, int level) {
+        for (Entity entity : targets) {
+            HeatUtil.setHeat(entity,level);
+        }
+        return targets.size();
+    }
     public static int roundaboutSetStand(CommandSourceStack source, Collection<? extends Entity> targets,
                                          String standType, int level, byte skin, byte pose, boolean hiddenUnlocked) {
-
-
         String name = "";
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity LE) {
@@ -81,22 +95,22 @@ public class RoundaboutCommands {
                 if (disc != ItemStack.EMPTY && disc.getItem() instanceof StandDiscItem SD) {
                     SD.generateStandPowers(LE);
 
+                    user.roundabout$setStandSkin(skin);
+                    user.roundabout$setIdlePosX(pose);
                     if (entity instanceof Player PE) {
                         ItemStack standDisc = user.roundabout$getStandDisc();
                         IPlayerEntity ipe = ((IPlayerEntity)PE);
                         int standLevel = ipe.roundabout$getStandLevel();
+                        ipe.roundabout$setUnlockedBonusSkin(hiddenUnlocked);
                         if (!standDisc.isEmpty() && !(standDisc.getItem() instanceof MaxStandDiscItem)){
                             ipe.roundabout$setStandExp(0);
                             level = (byte) Mth.clamp(level, 1, SD.standPowers.getMaxLevel());
                             ipe.roundabout$setStandLevel((byte) level);
+                            user.roundabout$setStandDisc(MainUtil.saveToDiscData(PE,((StandUser)PE).roundabout$getStandDisc()));
                         }
-                        ipe.roundabout$setUnlockedBonusSkin(hiddenUnlocked);
                     }
 
-                    user.roundabout$setStandSkin(skin);
-                    user.roundabout$setIdlePosX(pose);
-
-                    if (user.roundabout$getActive()){
+                    if (PowerTypes.hasStandActive(entity)){
                         ((StandUser) entity).roundabout$summonStand(entity.level(), true,false);
                     }
                 }
@@ -115,6 +129,206 @@ public class RoundaboutCommands {
         }
         return targets.size();
     }
+
+
+    public static int roundaboutSetFate(CommandSourceStack source, Collection<? extends Entity> targets,
+                                         String fate, int level, int experience) {
+
+        for (Entity entity : targets) {
+            if (entity instanceof LivingEntity LE) {
+                if (fate.equalsIgnoreCase("vampire")){
+                    if (LE instanceof Player PL){
+                        ((IPlayerEntity)PL).roundabout$setFate((byte) FateTypes.VAMPIRE.ordinal());
+                        ((IPlayerEntity)PL).rdbt$getVampireData().vampireLevel = Mth.clamp(level,0,40);
+                        ((IPlayerEntity)PL).rdbt$getVampireData().bloodExp = experience;
+                        S2CPacketUtil.beamVampireData(PL);
+                    } else if (LE instanceof Mob mb){
+                        ((IMob)mb).roundabout$setVampire(true);
+                    }
+                } else if (fate.equalsIgnoreCase("zombie")){
+                    if (LE instanceof Player PL){
+                        ((IPlayerEntity)PL).roundabout$setFate((byte) FateTypes.ZOMBIE.ordinal());
+                    }
+                } else if (fate.equalsIgnoreCase("human") || fate.equalsIgnoreCase("none")){
+                    if (LE instanceof Player PL){
+                        ((IPlayerEntity)PL).roundabout$setFate((byte) FateTypes.HUMAN.ordinal());
+                    } else if (LE instanceof Mob mb){
+                        ((IMob)mb).roundabout$setVampire(false);
+                    }
+                } else {
+                    source.sendFailure(Component.translatable("commands.roundabout.argument.fate_type.invalid", fate.toLowerCase()));
+                    return targets.size();
+                }
+            }
+        }
+
+        if (targets.size() == 1) {
+            source.sendSuccess(() -> Component.translatable("commands.roundabout.argument.fate_type.valid_2", ((Entity)targets.iterator().next()).getDisplayName(),fate), true);
+        } else {
+            source.sendSuccess(() -> Component.translatable(  "commands.roundabout.argument.fate_type.valid", targets.size(), fate), true);
+        }
+        return targets.size();
+    }
+
+    public static int roundaboutClearFateSkills(CommandSourceStack source, Collection<? extends Entity> targets) {
+        for (Entity entity : targets) {
+            if (entity instanceof LivingEntity LE) {
+                if (FateTypes.isVampire(LE)){
+                    if (LE instanceof Player PL){
+                        VampireData vdata = ((IPlayerEntity)PL).rdbt$getVampireData();
+                        vdata.npcExp = 0;
+                        vdata.animalExp = 0;
+                        vdata.monsterEXP = 0;
+                        vdata.timeSinceMonster = 0;
+                        vdata.timeSinceAnimal = 0;
+                        vdata.timeSinceNpc = 0;
+                        vdata.strengthLevel = 0;
+                        vdata.dexterityLevel = 0;
+                        vdata.resilienceLevel = 0;
+                        vdata.hypnotismLevel = 0;
+                        vdata.superHearingLevel = 0;
+                        vdata.bloodSpeedLevel = 0;
+                        vdata.graftingLevel = 0;
+                        vdata.fleshBudLevel = 0;
+                        vdata.daggerSplatterLevel = 0;
+                        vdata.jumpLevel = 0;
+                        vdata.ripperEyesLevel = 0;
+                        vdata.freezeLevel = 0;
+                        S2CPacketUtil.beamVampireData(PL);
+                    }
+                }
+            }
+        }
+        return targets.size();
+    }
+    public static int roundaboutResetVampireData(CommandSourceStack source, Collection<? extends Entity> targets) {
+        for (Entity entity : targets) {
+            if (entity instanceof LivingEntity LE) {
+                    if (LE instanceof Player PL){
+                        VampireData vdata = ((IPlayerEntity)PL).rdbt$getVampireData();
+                        vdata.vampireLevel = 0;
+                        vdata.bloodExp = 0;
+                        vdata.npcExp = 0;
+                        vdata.animalExp = 0;
+                        vdata.monsterEXP = 0;
+                        vdata.timeSinceMonster = 0;
+                        vdata.timeSinceAnimal = 0;
+                        vdata.timeSinceNpc = 0;
+                        vdata.strengthLevel = 0;
+                        vdata.dexterityLevel = 0;
+                        vdata.resilienceLevel = 0;
+                        vdata.hypnotismLevel = 0;
+                        vdata.superHearingLevel = 0;
+                        vdata.bloodSpeedLevel = 0;
+                        vdata.graftingLevel = 0;
+                        vdata.fleshBudLevel = 0;
+                        vdata.daggerSplatterLevel = 0;
+                        vdata.jumpLevel = 0;
+                        vdata.ripperEyesLevel = 0;
+                        vdata.freezeLevel = 0;
+                        S2CPacketUtil.beamVampireData(PL);
+                    }
+            }
+        }
+        return targets.size();
+    }
+    public static int roundaboutMaxFateSkills(CommandSourceStack source, Collection<? extends Entity> targets) {
+        for (Entity entity : targets) {
+            if (entity instanceof LivingEntity LE) {
+                if (FateTypes.isVampire(LE)){
+                    if (LE instanceof Player PL){
+                        VampireData vdata = ((IPlayerEntity)PL).rdbt$getVampireData();
+                        vdata.strengthLevel = VampireData.strengthMaxLevel;
+                        vdata.dexterityLevel = VampireData.dexterityMaxLevel;
+                        vdata.resilienceLevel = VampireData.reslienceMaxLevel;
+                        vdata.hypnotismLevel = VampireData.hypnotismMaxLevel;
+                        vdata.superHearingLevel = VampireData.superHearingMaxLevel;
+                        vdata.bloodSpeedLevel = VampireData.bloodSpeedMaxLevel;
+                        vdata.graftingLevel = VampireData.graftingMaxLevel;
+                        vdata.fleshBudLevel = VampireData.fleshBudMaxLevel;
+                        vdata.daggerSplatterLevel = VampireData.daggerSplatterMaxLevel;
+                        vdata.jumpLevel = VampireData.jumpMaxLevel;
+                        vdata.ripperEyesLevel = VampireData.ripperEyesMaxLevel;
+                        vdata.freezeLevel = VampireData.freezeMaxLevel;
+                        S2CPacketUtil.beamVampireData(PL);
+                    }
+                }
+            }
+        }
+        return targets.size();
+    }
+
+    public static int roundaboutSetVampireSkills(CommandSourceStack source, Collection<? extends Entity> targets,
+                                                 int strengthLevel, int dexterityLevel, int resilienceLevel,
+                                                 int hypnotismLevel, int superHearingLevel, int bloodSpeedLevel,
+                                                 int graftingLevel, int fleshBudLevel, int daggerSplatterLevel,
+                                                 int jumpLevel, int ripperEyesLevel, int freezeLevel) {
+        for (Entity entity : targets) {
+            if (entity instanceof LivingEntity LE) {
+                if (FateTypes.isVampire(LE)){
+                    if (LE instanceof Player PL){
+                        VampireData vdata = ((IPlayerEntity)PL).rdbt$getVampireData();
+                        vdata.setStrengthLevel(strengthLevel);
+                        vdata.setDexterityLevel(dexterityLevel);
+                        vdata.setResilienceLevel(resilienceLevel);
+                        vdata.setHypnotismLevel(hypnotismLevel);
+                        vdata.setSuperHearingLevel(superHearingLevel);
+                        vdata.setBloodSpeedLevel(bloodSpeedLevel);
+                        vdata.setGraftingLevel(graftingLevel);
+                        vdata.setFleshBudLevel(fleshBudLevel);
+                        vdata.setDaggerSplatterLevel(daggerSplatterLevel);
+                        vdata.setJumpLevel(jumpLevel);
+                        vdata.setRipperEyesLevel(ripperEyesLevel);
+                        vdata.setFreezeLevel(freezeLevel);
+                        S2CPacketUtil.beamVampireData(PL);
+                    }
+                }
+            }
+        }
+        return targets.size();
+    }
+
+    public static int roundaboutSetVampireSkill(CommandSourceStack source, Collection<? extends Entity> targets,
+                                                 int number, int value) {
+        for (Entity entity : targets) {
+            if (entity instanceof LivingEntity LE) {
+                if (FateTypes.isVampire(LE)){
+                    if (LE instanceof Player PL){
+                        VampireData vdata = ((IPlayerEntity)PL).rdbt$getVampireData();
+                        if (number == 0){
+                            vdata.setStrengthLevel(value);
+                        } else if (number == 1){
+                            vdata.setDexterityLevel(value);
+                        } else if (number == 2){
+                            vdata.setResilienceLevel(value);
+                        } else if (number == 3){
+                            vdata.setHypnotismLevel(value);
+                        } else if (number == 4){
+                            vdata.setSuperHearingLevel(value);
+                        } else if (number == 5){
+                            vdata.setBloodSpeedLevel(value);
+                        } else if (number == 6){
+                            vdata.setGraftingLevel(value);
+                        } else if (number == 7){
+                            vdata.setFleshBudLevel(value);
+                        } else if (number == 8){
+                            vdata.setDaggerSplatterLevel(value);
+                        } else if (number == 9){
+                            vdata.setJumpLevel(value);
+                        } else if (number == 10){
+                            vdata.setFreezeLevel(value);
+                        } else if (number == 11){
+                            vdata.setDexterityLevel(value);
+                        }
+                        S2CPacketUtil.beamVampireData(PL);
+                    }
+                }
+            }
+        }
+        return targets.size();
+    }
+
+
     public static int roundaboutSetStandLevel(CommandSourceStack source, Collection<? extends Entity> targets, int level) {
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity) {
@@ -125,7 +339,8 @@ public class RoundaboutCommands {
                     int standLevel = ipe.roundabout$getStandLevel();
                     if (!standDisc.isEmpty() && !(standDisc.getItem() instanceof MaxStandDiscItem)){
                         ipe.roundabout$setStandExp(0);
-                        ipe.roundabout$setStandLevel((byte) level);
+                        ipe.roundabout$setStandLevel((byte) Math.min(user.roundabout$getStandPowers().getMaxLevel(),level));
+                        user.roundabout$setStandDisc(MainUtil.saveToDiscData(PE,standDisc).copy());
                     }
                 }
             }
@@ -139,12 +354,20 @@ public class RoundaboutCommands {
     }
     public static int executeReplenish(CommandSourceStack source, Collection<? extends Entity> targets) {
         for (Entity entity : targets) {
-            if (entity instanceof LivingEntity) {
+            if (entity instanceof LivingEntity LE) {
+                LE.removeAllEffects();
                 ((LivingEntity) entity).setHealth(((LivingEntity) entity).getMaxHealth());
                 if (entity instanceof Player PE){
+                    ((StandUser) PE).roundabout$setLocacacaCurse((byte) -1);
                     PE.getFoodData().setFoodLevel(20);
                     PE.getFoodData().setSaturation(14.4F);
+                    if (((IFatePlayer)PE).rdbt$getFatePowers() instanceof ZombieFate zf){
+                        zf.setZombieFishCount(5);
+                    }
+                    ((StandUser) PE).roundabout$setHeat(0);
+                    MainUtil.clearCooldowns(PE);
                 }
+
             }
         }
         if (targets.size() == 1) {

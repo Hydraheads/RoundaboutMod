@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.stand.CinderellaEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
@@ -459,10 +460,7 @@ public class PowersCinderella extends NewDashPreset {
         if (attackTarget != null && attackTarget.isAlive()){
             if ((this.getActivePower() != PowerIndex.NONE
                     || attackTarget.distanceTo(this.getSelf()) <= 5)){
-                this.getSelf().setXRot(getLookAtEntityPitch(this.getSelf(), attackTarget));
-                float yrot = getLookAtEntityYaw(this.getSelf(), attackTarget);
-                this.getSelf().setYRot(yrot);
-                this.getSelf().setYHeadRot(yrot);
+                rotateMobHead(attackTarget);
             }
 
             Entity targetEntity = getTargetEntity(this.self, 5);
@@ -483,9 +481,9 @@ public class PowersCinderella extends NewDashPreset {
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.visages",
-                "instruction.roundabout.passive", StandIcons.CINDERELLA_VISAGES,0,level,bypass));
+                "instruction.roundabout.shop_item", StandIcons.CINDERELLA_VISAGES,0,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.lucky_lipstick",
-                "instruction.roundabout.passive", StandIcons.CINDERELLA_LIPSTICK,0,level,bypass));
+                "instruction.roundabout.shop_item", StandIcons.CINDERELLA_LIPSTICK,0,level,bypass));
         return $$1;
     }
     @Override
@@ -530,19 +528,25 @@ public class PowersCinderella extends NewDashPreset {
     public void defaceImpact(Entity entity){
         this.setAttackTimeDuring(-20);
         if (entity != null) {
+            hitParticlesCenter(entity);
             float pow;
             float knockbackStrength;
             pow = getDefaceStrength(entity);
             knockbackStrength = getDefaceKnockback();
             if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
                 if (entity instanceof LivingEntity LE) {
-                    addEXP(5, LE);
+                    MobEffectInstance instance = LE.getEffect(ModEffects.FACELESS);
+                    int lvlFace = -1;
+                    if (instance != null) {
+                        lvlFace = instance.getAmplifier(); // 0-based (0 = level I)
+                    }
+
                     if (MainUtil.getMobBleed(entity)) {
-                        int bleedlevel = ((StandUser)LE).roundabout$getBleedLevel();
-                        if (bleedlevel < 0){
+
+                        if (lvlFace < 0){
                             MainUtil.makeFaceless(entity, 200, 0, this.getSelf());
                             MainUtil.makeBleed(entity, 0, 200, this.getSelf());
-                        } else if (bleedlevel == 0){
+                        } else if (lvlFace == 0){
                             MainUtil.makeFaceless(entity, 250, 1, this.getSelf());
                             MainUtil.makeBleed(entity, 1, 250, this.getSelf());
                         } else {
@@ -554,7 +558,7 @@ public class PowersCinderella extends NewDashPreset {
                         MainUtil.makeFaceless(entity, 200, 0, this.getSelf());
                     }
                 }
-                this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
+                takeDeterminedKnockback(this.self, entity, knockbackStrength);
             }
         }
 

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/door_top_right",
+  "textures": {
+    "bottom": "roundabout:block/glass_door_bottom",
+    "top": "roundabout:block/glass_door_top"
+  },
+  "render_type": "translucent"
+}

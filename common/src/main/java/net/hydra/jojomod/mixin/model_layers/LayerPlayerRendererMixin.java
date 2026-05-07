@@ -1,7 +1,9 @@
 package net.hydra.jojomod.mixin.model_layers;
 
 import net.hydra.jojomod.client.FacelessLayer;
+import net.hydra.jojomod.client.models.layers.CenturyBoyLayer;
 import net.hydra.jojomod.client.models.layers.*;
+import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;
@@ -27,10 +29,21 @@ public abstract class LayerPlayerRendererMixin<T extends LivingEntity, M extends
         this.addLayer(new StoneLayer<>($$0, this));
         this.addLayer(new FacelessLayer<>($$0, this));
         this.addLayer(new ShootingArmLayer<>($$0, this));
+        this.addLayer(new EmperorArmLayer<>($$0, this));
+        this.addLayer(new TuskLayer<>($$0, this));
         this.addLayer(new HeyYaLayer<>($$0, this));
         this.addLayer(new MandomLayer<>($$0, this));
+        this.addLayer(new CenturyBoyLayer<>($$0, this));
         this.addLayer(new RattShoulderLayer<>($$0, this));
+        this.addLayer(new AnubisLayer<>($$0, this));
         this.addLayer(new VisagePartLayer<>($$0, this));
+        this.addLayer(new BowlerHatLayer<>($$0, this));
+        this.addLayer(new FirearmLayer<>($$0, this));
+        this.addLayer(new RoadRollerLayer<>($$0, this));
+        this.addLayer(new WornStoneMaskLayer<>($$0, this));
+        this.addLayer(new MoldSpineLayer<>($$0, this));
+        this.addLayer(new MoldRightArmLayer<>($$0, this));
+        this.addLayer(new MoldLeftArmLayer<>($$0, this));
     }
 
     /**Shadows, ignore

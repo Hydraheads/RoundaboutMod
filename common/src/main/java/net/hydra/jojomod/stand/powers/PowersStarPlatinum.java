@@ -7,11 +7,10 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.RattDartEntity;
+import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
+import net.hydra.jojomod.entity.projectile.ThrownAnubisEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
-import net.hydra.jojomod.entity.stand.JusticeEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumBaseballEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
@@ -67,6 +66,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
@@ -124,6 +124,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             }
         }
     }
+
 
     @Override
     public float getMiningMultiplier() {
@@ -352,6 +353,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             playSoundsIfNearby(TIME_STOP_NOISE, 100, true);
         }
     }
+
+    public static final byte POWER_STAR_FINGER = PowerIndex.POWER_1;
+    public static final byte POWER_EARLY_STAR_FINGER = PowerIndex.POWER_1_SNEAK;
+    public static final byte POWER_INHALE = PowerIndex.POWER_3;
+
     boolean letServerKnowScopeCatchIsReady = false;
     @Override
     public void tickPower() {
@@ -368,6 +374,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 }
             }
         } else {
+            if (((TimeStop) this.self.level()).inTimeStopRange(self)){
+                canFingerBleed = false;
+            }
             StandEntity stand = getStandEntity(this.self);
             if (!(Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE && this.self instanceof ServerPlayer PE && SE.getScoping() &&
                     SE.level().dimensionTypeId() == this.self.level().dimensionTypeId())) {
@@ -381,7 +390,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         }
         super.tickPower();
         if (this.self.isAlive() && !this.self.isRemoved()) {
-            if (this.getActivePower() != PowerIndex.POWER_1){
+            if (this.getActivePower() != POWER_STAR_FINGER){
                 StandEntity stand = getStandEntity(this.self);
                 if (Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE && SE.getFingerLength() > 1.01) {
                     if (this.getSelf() instanceof Player && isPacketPlayer()) {
@@ -415,27 +424,37 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
        ))));
     }
     public float inputSpeedModifiers(float basis){
+        //Scope Slows You down
         if (this.scopeLevel > -1){
             basis *= 0.85f;
         }
-        if (this.activePower == PowerIndex.POWER_1 && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
-            basis *= 0.74f;
+        //Star Finger Slows You down
+        if (this.activePower == POWER_STAR_FINGER && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
+            basis *= 0.54f;
         }
-        if (this.activePower == PowerIndex.POWER_3 && !(this.getSelf() instanceof Creeper)){
+        //Inhale Slows You down
+        if (this.activePower == POWER_INHALE && !(this.getSelf() instanceof Creeper)){
             basis *= 0.5f;
         }
         return super.inputSpeedModifiers(basis);
     }
 
     @Override
+    public boolean cancelJump(){
+        if (this.activePower == POWER_STAR_FINGER && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26)
+            return true;
+        return false;
+    }
+
+    @Override
     public void updateIntMove(int in){
-        if (activePower == PowerIndex.POWER_1) {
+        if (activePower == POWER_STAR_FINGER) {
             ticksForFinger = in;
             stopSoundsIfNearby(STAR_FINGER, 100, false);
             stopSoundsIfNearby(STAR_FINGER_2, 100, false);
             stopSoundsIfNearby(STAR_FINGER_3, 100, false);
             stopSoundsIfNearby(STAR_FINGER_SILENT, 100, false);
-            if (this.getActivePower() == PowerIndex.POWER_1) {
+            if (this.getActivePower() == POWER_STAR_FINGER) {
                 this.animateStand(StarPlatinumEntity.STAR_FINGER_2);
             }
             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.DSP_SUMMON_EVENT, SoundSource.PLAYERS,
@@ -446,12 +465,12 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public int ticksForFinger = 0;
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
-        if (keyIsDown && this.getActivePower() == PowerIndex.POWER_1_SNEAK && this.attackTimeDuring < 24 && attackTimeDuring > 2) {
+        if (keyIsDown && this.getActivePower() == POWER_EARLY_STAR_FINGER && this.attackTimeDuring < 24 && attackTimeDuring > 2) {
             holdDownClick = true;
             animateStand(StarPlatinumEntity.IMPALE_2);
             this.attackTimeDuring = -8;
             tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK_2,getTargetEntityId2(impaleRange));
-        } else if ((this.getActivePower() != PowerIndex.POWER_1 || this.attackTimeDuring >= 26)) {
+        } else if ((this.getActivePower() != POWER_STAR_FINGER || this.attackTimeDuring >= 26)) {
             super.buttonInputAttack(keyIsDown,options);
         } else {
             if (keyIsDown && ticksForFinger == 100) {
@@ -506,10 +525,10 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
 
     public void tryInhaleClient(){
-        if (this.activePower != PowerIndex.POWER_3 && !this.getSelf().isUnderWater()) {
+        if (this.activePower != POWER_INHALE && !this.getSelf().isUnderWater()) {
             if (canExecuteMoveWithLevel(getInhaleLevel())) {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
-                tryPowerPacket(PowerIndex.POWER_3);
+                ((StandUser) this.getSelf()).roundabout$tryPower(POWER_INHALE, true);
+                tryPowerPacket(POWER_INHALE);
             }
         }
     }
@@ -537,10 +556,10 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             return;
         if (!this.onCooldown(PowerIndex.SKILL_1)) {
             if (canExecuteMoveWithLevel(getFingerLevel())) {
-                if (this.activePower != PowerIndex.POWER_1) {
+                if (this.activePower != POWER_STAR_FINGER) {
                     ticksForFinger = 0;
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
-                    tryPowerPacket(PowerIndex.POWER_1);
+                    ((StandUser) this.getSelf()).roundabout$tryPower(POWER_STAR_FINGER, true);
+                    tryPowerPacket(POWER_STAR_FINGER);
                 }
             }
         }
@@ -574,7 +593,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (currentLevel == 1){
             amt = 25;
         } else {
-            amt = (100+((currentLevel-1)*50));
+            amt = (100+((currentLevel-1)*100));
         }
         amt= (int) (amt*(getLevelMultiplier()));
         return amt;
@@ -582,9 +601,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public void updateUniqueMoves() {
         /*Tick through Time Stop Charge*/
-        if (this.getActivePower() == PowerIndex.POWER_1) {
+        if (this.getActivePower() == POWER_STAR_FINGER) {
             this.updateStarFinger();
-        } else if (this.getActivePower() == PowerIndex.POWER_3) {
+        } else if (this.getActivePower() == POWER_INHALE) {
             this.updateInhale();
         }
         super.updateUniqueMoves();
@@ -708,6 +727,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public void impaleImpact2(Entity entity){
         this.setAttackTimeDuring(-7);
         if (entity != null) {
+            hitParticles(entity);
             float pow;
             float knockbackStrength;
             pow = getStarBlitzStrength(entity);
@@ -716,7 +736,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 if (entity instanceof LivingEntity LE) {
                     addEXP(1, LE);
                 }
-                this.takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
+                takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
                 entity.setDeltaMovement(entity.getDeltaMovement().add(0,0.3,0));
             } else {
                 knockShield2(entity, 30);
@@ -748,10 +768,10 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
     @Override
     public void handleStandAttack2(Player player, Entity target){
-        if (activePower == PowerIndex.POWER_1_SNEAK) {
+        if (activePower == POWER_EARLY_STAR_FINGER) {
             impaleImpact2(target);
         }
-        if (this.getActivePower() == PowerIndex.POWER_1){
+        if (this.getActivePower() == POWER_STAR_FINGER){
             fingerDamage(target);
         }
     }
@@ -780,7 +800,17 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             } else if (ent instanceof RattDartEntity RD) {
                                 success = true;
                                 RD.applyEffect(this.getSelf());
+                            } else if (ent instanceof RoundaboutBulletEntity BE) {
+                                success = true;
+                                SE.canAcquireHeldItem = true;
+                                ItemStack bulletItem = BE.getBulletItemStack();
+                                SE.setHeldItem(bulletItem);
                             }
+                        } else if (ent instanceof ThrownAnubisEntity TAE) {
+                            success = true;
+                            SE.canAcquireHeldItem = true;
+                            ItemStack anubisItem = TAE.getItem();
+                            SE.setHeldItem(anubisItem);
                         } else if (ent instanceof ThrownObjectEntity TO) {
                             ItemStack ii = TO.getItem();
                             if (!ii.isEmpty()) {
@@ -841,7 +871,30 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 }
             }
         }
-        return false;
+        return super.dealWithProjectile(ent,res);
+    }
+
+    @Override
+    public Vec3 getTSColor(){
+        byte skin = ((StandUser) self).roundabout$getStandSkin();
+        if (skin == StarPlatinumEntity.OVA_SKIN)
+            return new Vec3(1.7f, 0.4f, 0.4f);
+        if (skin == StarPlatinumEntity.ARCADE || skin == StarPlatinumEntity.ARCADE_2)
+            return Vec3.ZERO;
+        if (skin == StarPlatinumEntity.MANGA_SKIN || skin == StarPlatinumEntity.MANGA_PURPLE_SKIN
+                || skin == StarPlatinumEntity.FIRST_SKIN)
+            return new Vec3(1.5,0.5,1.5);
+        if (skin == StarPlatinumEntity.LIGHT)
+            return new Vec3(1.5,1.5,0.5);
+        if (skin == StarPlatinumEntity.BASEBALL_SKIN)
+            return new Vec3(0.5f, 0.5f, 1.5f);
+        if (skin == StarPlatinumEntity.GREEN_SKIN || skin == StarPlatinumEntity.TREE || skin == StarPlatinumEntity.GREEN_2)
+            return new Vec3(0.5,1.5,0.5);
+        if (skin == StarPlatinumEntity.NETHER)
+            return new Vec3(1.5,1.0,0.5);
+        if (skin == StarPlatinumEntity.ATOMIC_SKIN || skin == StarPlatinumEntity.PHANTOM)
+            return new Vec3(0.5,0.5,0.5);
+        return super.getTSColor();
     }
 
     public void doFingerHit(List<Entity> entities){
@@ -883,28 +936,34 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             pow*=(1 - ((float) (26-ticksForFinger) /26));
         }
 
+        hitParticlesCenter(entity);
         if(ticksForFinger < 26){
             if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
-                this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
+                takeDeterminedKnockback(this.self, entity, knockbackStrength);
                 if (entity instanceof LivingEntity LE){
                     addEXP(1, LE);
                     if (ticksForFinger >13){
-                        MainUtil.makeBleed(LE,0,200,this.self);
+                        if (canFingerBleed) {
+                            MainUtil.makeBleed(LE, 0, 200, this.self);
+                        }
                     }
                 }
             }
         } else {
             if (StarFingerDamageEntityAttack(entity, pow, 0, this.self)) {
-                this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
+                takeDeterminedKnockback(this.self, entity, knockbackStrength);
                 if (entity instanceof LivingEntity LE){
                     addEXP(2, LE);
-                    MainUtil.makeBleed(LE,1,200,this.self);
+                    if (canFingerBleed) {
+                        MainUtil.makeBleed(LE, 1, 200, this.self);
+                    }
                 }
             } else {
                 knockShield2(entity, 40);
             }
         }
     }
+    public boolean canFingerBleed = true;
 
     public boolean StarFingerDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker){
         if (attacker instanceof TamableAnimal TA){
@@ -931,18 +990,18 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 1.75* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod((float) ((float) 1.525* (ClientNetworking.getAppropriateConfig().
                     starPlatinumSettings.starPlatinumAttackMultOnPlayers*0.01)));
         } else {
-            return levelupDamageMod((float) ((float) 5* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod((float) ((float) 4.9* (ClientNetworking.getAppropriateConfig().
                     starPlatinumSettings.starPlatinumAttackMultOnMobs*0.01)));
         }
     } public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 2.5* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod((float) ((float) 2.17* (ClientNetworking.getAppropriateConfig().
                     starPlatinumSettings.starPlatinumAttackMultOnPlayers*0.01)));
         } else {
-            return levelupDamageMod((float) ((float) 6* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod((float) ((float) 5.9* (ClientNetworking.getAppropriateConfig().
                     starPlatinumSettings.starPlatinumAttackMultOnMobs*0.01)));
         }
     }
@@ -965,7 +1024,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             || (value instanceof StandEntity SE && SE.getUser() !=null && SE.getUser().getUUID() == this.self.getUUID())){
                 hitEntities.remove(value);
             } else {
-                int angle = 14;
+                int angle = 18;
                 Vec2 lookVec = new Vec2(getLookAtEntityYaw(self, value), getLookAtEntityPitch(self, value));
                 if (gravD != Direction.DOWN) {
                     lookVec = RotationUtil.rotPlayerToWorld(lookVec.x, lookVec.y, gravD);
@@ -1057,9 +1116,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
     @Override
     public boolean cancelSprintJump(){
-        if (this.getActivePower() == PowerIndex.POWER_1  && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
+        if (this.getActivePower() == POWER_STAR_FINGER  && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
             return true;
-        } else if (this.getActivePower() == PowerIndex.POWER_3){
+        } else if (this.getActivePower() == POWER_INHALE){
             return true;
         }
         return super.cancelSprintJump();
@@ -1075,7 +1134,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     @Override
     public boolean canInterruptPower(){
-        if (this.getActivePower() == PowerIndex.POWER_1 && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
+        if (this.getActivePower() == POWER_STAR_FINGER && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
             int cdr = ClientNetworking.getAppropriateConfig().starPlatinumSettings.starFingerInterruptCooldown;
             if (this.getSelf() instanceof Player) {
                 S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, cdr);
@@ -1091,7 +1150,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
-        if (this.getActivePower() == PowerIndex.POWER_1){
+        if (this.getActivePower() == POWER_STAR_FINGER){
             float distanceOut = 8;
             BlockHitResult dd = getAheadVec(distanceOut);
             List<Entity> fingerTargets = doFinger((float) Math.sqrt(dd.distanceTo(this.getSelf())));
@@ -1116,28 +1175,34 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass){
                 $$1.add(StarPlatinumEntity.MANGA_SKIN);
+                $$1.add(StarPlatinumEntity.FIRST_SKIN);
                 $$1.add(StarPlatinumEntity.OVA_SKIN);
                 $$1.add(StarPlatinumEntity.FOUR_DEE);
             } if (Level > 2 || bypass){
                 $$1.add(StarPlatinumEntity.JOJOVELLER);
                 $$1.add(StarPlatinumEntity.VOLUME_39);
                 $$1.add(StarPlatinumEntity.GREEN_SKIN);
-            } if (Level > 3 || bypass){
                 $$1.add(StarPlatinumEntity.GREEN_2);
+            } if (Level > 3 || bypass){
                 $$1.add(StarPlatinumEntity.ARCADE);
                 $$1.add(StarPlatinumEntity.ARCADE_2);
-            } if (Level > 4 || bypass){
                 $$1.add(StarPlatinumEntity.BASEBALL_SKIN);
+            } if (Level > 4 || bypass){
+                $$1.add(StarPlatinumEntity.LIGHT);
                 $$1.add(StarPlatinumEntity.TREE);
+                $$1.add(StarPlatinumEntity.NETHER);
                 $$1.add(StarPlatinumEntity.JUMP_13);
             } if (Level > 5 || bypass){
                 $$1.add(StarPlatinumEntity.JOJONIUM_SKIN);
                 $$1.add(StarPlatinumEntity.PART_4_SKIN);
+                $$1.add(StarPlatinumEntity.PART_4_LIVE);
                 $$1.add(StarPlatinumEntity.CROP);
             } if (Level > 6 || bypass){
                 $$1.add(StarPlatinumEntity.PART_6_SKIN);
                 $$1.add(StarPlatinumEntity.MANGA_PURPLE_SKIN);
-                $$1.add(StarPlatinumEntity.FIRST_SKIN);
+                $$1.add(StarPlatinumEntity.PHANTOM);
+                $$1.add(StarPlatinumEntity.FINISHER);
+                $$1.add(StarPlatinumEntity.KING);
                 $$1.add(StarPlatinumEntity.BETA);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
                 $$1.add(StarPlatinumEntity.ATOMIC_SKIN);
@@ -1164,10 +1229,10 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             double dist = attackTarget.distanceTo(this.getSelf());
             boolean isCreeper = this.getSelf() instanceof Creeper;
             if (isCreeper) {
-                boolean inhaling = this.getActivePower() == PowerIndex.POWER_3;
+                boolean inhaling = this.getActivePower() == POWER_INHALE;
                 if (dist <= 8) {
                     if (!inhaling){
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+                        ((StandUser) this.getSelf()).roundabout$tryPower(POWER_INHALE, true);
                     }
                 } else {
                     if (inhaling){
@@ -1178,10 +1243,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
                 if ((this.getActivePower() != PowerIndex.NONE)
                         || dist <= 5){
-                    this.getSelf().setXRot(getLookAtEntityPitch(this.getSelf(), attackTarget));
-                    float yrot = getLookAtEntityYaw(this.getSelf(), attackTarget);
-                    this.getSelf().setYRot(yrot);
-                    this.getSelf().setYHeadRot(yrot);
+                    rotateMobHead(attackTarget);
                 }
 
                 if (this.attackTimeDuring == -1 || (this.attackTimeDuring < -1 && this.activePower == PowerIndex.ATTACK)) {
@@ -1202,7 +1264,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                                 wentForCharge = false;
                             } else {
                                 if (!onCooldown(PowerIndex.SKILL_1_SNEAK) && RNG >= 0.85 && dist <= 3 && !wentForCharge) {
-                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(POWER_EARLY_STAR_FINGER, true);
                                     wentForCharge = true;
                                 } else {
                                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.ATTACK, true);
@@ -1214,7 +1276,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             || this.getSelf() instanceof JotaroNPC
                             || this.getSelf() instanceof AbstractVillager) && dist <= 8 && dist >= 5) {
                         if (!onCooldown(PowerIndex.SKILL_1)) {
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                            ((StandUser) this.getSelf()).roundabout$tryPower(POWER_STAR_FINGER, true);
                         }
                     } else if ((this.getSelf() instanceof Spider || this.getSelf() instanceof Slime
                             || this.getSelf() instanceof JotaroNPC
@@ -1244,7 +1306,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public boolean tryPower(int move, boolean forced) {
 
-        if (this.getActivePower() == PowerIndex.POWER_1){
+        if (this.getActivePower() == POWER_STAR_FINGER){
             stopSoundsIfNearby(STAR_FINGER, 100, false);
             stopSoundsIfNearby(STAR_FINGER_2, 100, false);
             stopSoundsIfNearby(STAR_FINGER_3, 100, false);
@@ -1285,7 +1347,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 "instruction.roundabout.press_skill", StandIcons.STAR_PLATINUM_GRAB_BLOCK,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,0, "ability.roundabout.item_grab",
                 "instruction.roundabout.press_skill_crouch", StandIcons.STAR_PLATINUM_GRAB_ITEM,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,0, "ability.roundabout.mob_grab",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,0, "ability.roundabout.mob_grab_sp",
                 "instruction.roundabout.press_skill_near_mob", StandIcons.STAR_PLATINUM_GRAB_MOB,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,0, "ability.roundabout.phase_grab",
                 "instruction.roundabout.press_skill_block", StandIcons.STAR_PLATINUM_PHASE_GRAB,2,level,bypas));
@@ -1456,7 +1518,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     @Override
     public boolean clickRelease(){
-        if (this.getActivePower() == PowerIndex.POWER_3){
+        if (this.getActivePower() == POWER_INHALE){
             return true;
         }
         return super.clickRelease();
@@ -1467,7 +1529,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (suspendGuard) {
             return false;
         }
-        if (this.activePower == PowerIndex.POWER_3) {
+        if (this.activePower == POWER_INHALE) {
             return false;
         }
         return super.buttonInputGuard(keyIsDown,options);
@@ -1475,9 +1537,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     @Override
     public boolean setPowerOther(int move, int lastMove) {
-        if (move == PowerIndex.POWER_1) {
+        if (move == POWER_STAR_FINGER) {
             return this.starFinger();
-        } else if (move == PowerIndex.POWER_3) {
+        } else if (move == POWER_INHALE) {
             return this.inhale();
         }
         return super.setPowerOther(move,lastMove);
@@ -1492,7 +1554,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (Objects.nonNull(stand) && !((TimeStop)this.getSelf().level()).inTimeStopRange(this.self))
         {
             this.setAttackTimeDuring(0);
-            this.setActivePower(PowerIndex.POWER_3);
+            this.setActivePower(POWER_INHALE);
             this.animateStand((byte)15);
             this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
             return true;
@@ -1516,7 +1578,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         ticksForFinger = 100;
         if (Objects.nonNull(stand)){
             this.setAttackTimeDuring(0);
-            this.setActivePower(PowerIndex.POWER_1);
+            this.setActivePower(POWER_STAR_FINGER);
+            canFingerBleed  = true;
             double rand = Math.random();
             byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
             if (skn == StarPlatinumEntity.OVA_SKIN ||
@@ -1579,8 +1642,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
 
     public void setChargeTicksMult(){
-        this.setChargedTSTicks(this.getChargedTSTicks()*(1+
-                (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum -100)/100));
+        this.setChargedTSTicks(this.getChargedTSTicks());
     }
     @Override
     public int setCurrentMaxTSTime(int chargedTSSeconds){
@@ -1783,7 +1845,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public float getImpalePunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(((float) ((float) 3* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod(((float) ((float) 3F* (ClientNetworking.getAppropriateConfig().
                     starPlatinumSettings.starPlatinumAttackMultOnPlayers*0.01) * (ClientNetworking.getAppropriateConfig().
                     generalStandSettings.generalImpaleAttackMultiplier *0.01))));
         } else {
@@ -1859,6 +1921,18 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             return Component.translatable(  "skins.roundabout.star_platinum.arcade_2");
         } else if (skinId == StarPlatinumEntity.TREE){
             return Component.translatable(  "skins.roundabout.star_platinum.tree");
+        } else if (skinId == StarPlatinumEntity.NETHER){
+            return Component.translatable(  "skins.roundabout.star_platinum.nether");
+        } else if (skinId == StarPlatinumEntity.LIGHT){
+            return Component.translatable(  "skins.roundabout.star_platinum.light");
+        } else if (skinId == StarPlatinumEntity.PHANTOM){
+            return Component.translatable(  "skins.roundabout.star_platinum.phantom");
+        } else if (skinId == StarPlatinumEntity.PART_4_LIVE){
+            return Component.translatable(  "skins.roundabout.star_platinum.part_4_live");
+        } else if (skinId == StarPlatinumEntity.KING){
+            return Component.translatable(  "skins.roundabout.star_platinum.king");
+        } else if (skinId == StarPlatinumEntity.FINISHER){
+            return Component.translatable(  "skins.roundabout.star_platinum.finisher");
         }
         return Component.translatable(  "skins.roundabout.star_platinum.base");
     }

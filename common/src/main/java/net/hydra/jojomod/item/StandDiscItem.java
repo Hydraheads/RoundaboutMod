@@ -60,8 +60,13 @@ public class StandDiscItem extends Item {
                 ((StandUser) $$1).roundabout$setActive(false);
                 ((StandUser) $$1).roundabout$setStandDisc($$3.copy());
                 SI.generateStandPowers($$1);
+                ((StandUser) $$1).roundabout$getStandPowers().onStandSwitchInto();
             }
             $$3.shrink(1);
+        } else {
+            if ($$1 !=  null){
+                ((StandUser)$$1).roundabout$setInteractedWithDisc(true);
+            }
         }
         return InteractionResultHolder.consume($$3);
     }
@@ -113,8 +118,8 @@ public class StandDiscItem extends Item {
 
 
     public void addItem(Player player, ItemStack stack){
-            ItemEntity $$4 = new ItemEntity(player.level(), player.getX(),
-                    player.getY() + player.getEyeHeight(), player.getZ(),
+            ItemEntity $$4 = new ItemEntity(player.level(), player.getEyePosition().x,
+                    player.getEyePosition().y, player.getEyePosition().z,
                     stack);
             $$4.setPickUpDelay(0);
             $$4.setThrower(player.getUUID());

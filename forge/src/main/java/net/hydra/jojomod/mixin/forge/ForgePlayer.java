@@ -1,9 +1,15 @@
 package net.hydra.jojomod.mixin.forge;
 
+import net.hydra.jojomod.access.IFatePlayer;
+import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.powers.GeneralPowers;
+import net.hydra.jojomod.util.HeatUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
@@ -67,17 +73,43 @@ public abstract class ForgePlayer extends LivingEntity {
 
 
 
-        boolean standActive = ((StandUser) this).roundabout$getActive();
-        if (standActive){
+        if (HeatUtil.isArmsFrozen(this)){
+            f*=0.25f;
+        }
+
+
+        boolean standActive = PowerTypes.hasStandActive(this);
+        if (standActive && PowerTypes.hasStandActivelyEquipped(this)){
             float bpow = ((StandUser)this).roundabout$getStandPowers().getBonusPassiveMiningSpeed();
                     if (bpow != 1){
                         f*= bpow;
                         overwrite = true;
                     }
+        } else if (standActive){
+            float bpow = ((IPowersPlayer)this).rdbt$getPowers().getBonusPassiveMiningSpeed();
+            if (bpow != 1){
+                f*= bpow;
+                overwrite = true;
+            }
+        }
 
+        StandPowers powers = ((StandUser) this).roundabout$getStandPowers();
+        if (!(PowerTypes.hasStandActive(this) && ((((StandUser) this).roundabout$getStandPowers().canUseMiningStand())))) {
+            float bpow = ((IFatePlayer) this).rdbt$getFatePowers().getBonusPassiveMiningSpeed();
+            if (bpow != 1) {
+                f *= bpow;
+                overwrite = true;
+            }
         }
 
         if (overwrite){
+            if (f > 1.0F) {
+                int i = EnchantmentHelper.getBlockEfficiency(this);
+                ItemStack itemstack = this.getMainHandItem();
+                if (i > 0 && !itemstack.isEmpty()) {
+                    f += (float)(i * i + 1);
+                }
+            }
             if (MobEffectUtil.hasDigSpeed(this)) {
                 f *= 1.0F + (float)(MobEffectUtil.getDigSpeedAmplification(this) + 1) * 0.2F;
             }
@@ -124,40 +156,16 @@ public abstract class ForgePlayer extends LivingEntity {
     /**stand mining intercepts mining speed as well*/
     @Inject(method = "getDigSpeed", at = @At(value = "HEAD"), cancellable = true, remap = false)
     protected void roundabout$getForgeDestroySpeed2(BlockState $$0, BlockPos pos, CallbackInfoReturnable<Float> cir) {
-        boolean standActive = ((StandUser) this).roundabout$getActive();
         StandPowers powers = ((StandUser) this).roundabout$getStandPowers();
-        if (standActive) {
-            if (((StandUser) this).roundabout$getStandPowers().canUseMiningStand()) {
-                float mspeed;
-                if (!$$0.is(BlockTags.MINEABLE_WITH_PICKAXE)){
-                    if ($$0.is(BlockTags.MINEABLE_WITH_SHOVEL)) {
-                        mspeed = powers.getShovelMiningSpeed() / 2;
+        GeneralPowers gp = ((IPowersPlayer)this).rdbt$getPowers();
+        if (PowerTypes.hasStandActive(this) && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()) {
 
-                    } else if ($$0.is(BlockTags.MINEABLE_WITH_AXE)){
-                            mspeed= powers.getAxeMiningSpeed()/2;
-                    } else {
-                        mspeed= powers.getSwordMiningSpeed()/4;
-                    }
-                } else {
-                    mspeed= powers.getPickMiningSpeed()*3;
-                }
-
-
-                if (this.isEyeInFluid(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(this)) {
-                    mspeed /= 5.0F;
-                }
-
-                if (!this.onGround()) {
-                    mspeed /= 5.0F;
-                }
-
-                if (this.isCrouching() && $$0.getBlock() instanceof DropExperienceBlock && ClientNetworking.getAppropriateConfig().generalStandSettings.crouchingStopsStandsFromMiningOres) {
-                    mspeed = 0.0F;
-                }
-
-                mspeed *= powers.getMiningMultiplier();
-                cir.setReturnValue(mspeed);
-            }
+            cir.setReturnValue(((IPlayerEntity)this).rdbt$mutualMiningSpeedFunction($$0,powers));
+            return;
+        }
+        if (PowerTypes.isUsingPower(this) && ((IPowersPlayer)this).rdbt$getPowers().isMining()){
+            cir.setReturnValue(((IPlayerEntity)this).rdbt$mutualMiningSpeedFunction2($$0,gp));
+            return;
         }
     }
 

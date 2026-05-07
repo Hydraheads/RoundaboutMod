@@ -37,8 +37,10 @@ public class CloneEntity extends PathfinderMob {
     }
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(PLAYER, Optional.empty());
+        if (!this.entityData.hasItem(PLAYER)) {
+            super.defineSynchedData();
+            this.entityData.define(PLAYER, Optional.empty());
+        }
     }
 
     public final Optional<UUID> getPlayerUUID() {

@@ -9,6 +9,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -46,6 +47,23 @@ public class FallenZombie extends FallenMob{
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.23).add(Attributes.MAX_HEALTH, 20)
                 .add(Attributes.ATTACK_DAMAGE, 3).
                 add(Attributes.FOLLOW_RANGE, 48.0D);
+    }
+
+    @Override
+    protected InteractionResult mobInteract(Player $$0, InteractionHand $$1) {
+        ItemStack $$2 = $$0.getItemInHand($$1);
+        if ($$2.is(Items.ROTTEN_FLESH) && this.getHealth() < this.getMaxHealth()
+                && !getActivated()) {
+            if (!$$0.level().isClientSide()) {
+                if (!$$0.getAbilities().instabuild) {
+                    $$2.shrink(1);
+                }
+
+                this.heal(getMaxHealth() / 4);
+                return InteractionResult.SUCCESS;
+            }
+        }
+        return super.mobInteract($$0,$$1);
     }
     @Override
     public InteractionResult interactAt(Player player, Vec3 location, InteractionHand intHand) {
@@ -122,6 +140,9 @@ public class FallenZombie extends FallenMob{
 
     @Override
     public double getMyRidingOffset() {
+        if (!getActivated()){
+            return (this.isBaby() ? 0.0 : -0.45) +0.65F;
+        }
         return this.isBaby() ? 0.0 : -0.45;
     }
     @Override

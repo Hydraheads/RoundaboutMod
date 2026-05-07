@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.stand.StandModel;
+import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -53,12 +54,17 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
 
     @Override
     public void render(T mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
+
         LocalPlayer lp = Minecraft.getInstance().player;
         float maxfade = 100;
         LivingEntity User = mobEntity.getUser();
 
         if ((User != null && ((IEntityAndData)User).roundabout$getTrueInvisibility() > -1) ||
                 ((IEntityAndData)mobEntity).roundabout$getTrueInvisibility() > -1){
+            return;
+        }
+
+        if (User != null && !mobEntity.getUser().is(lp) && ((IEntityAndData)User).roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()){
             return;
         }
 

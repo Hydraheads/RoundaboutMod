@@ -1,5 +1,6 @@
 package net.hydra.jojomod.util.config;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.util.config.annotation.*;
 
 @Groups({
@@ -24,17 +25,29 @@ public class ClientConfig implements Cloneable {
 
 
 
-
+    @CommentedOption(comment = "FILE FORM OF ANUBIS MEMORIES, SCROLL DOWN")
+    @Hidden
+    @NestedOption(group = "modded")
+    public ClientConfig.AnubisMemories anubisMemories;
+    @CommentedOption(comment = "FILE FORM OF GREEN DAY'S ALLY LIST, SCROLL DOWN")
+    @Hidden
+    @NestedOption(group = "modded")
+    public ClientConfig.GreenDayAllyList greenDayAllyList;
+    @CommentedOption(comment = "THE ACTUAL SETTINGS")
     @NestedOption(group = "modded")
     public ClientConfig.GeneralSettings generalSettings;
     @BooleanOption(group = "inherit", value = true)
     public Boolean pressingAbilityKeysSummonsStands;
+    @BooleanOption(group = "inherit", value = false)
+    public Boolean enablePickyIconRendering;
     @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
     public Integer maxMirrorRendersAtOnceSetToZeroToDisable;
     @BooleanOption(group = "inherit", value = false)
     public Boolean mirrorFlipsRendering;
     @BooleanOption(group = "inherit", value = false)
     public Boolean renderGasSplatterOverlay;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean vampireOSTChange;
     @BooleanOption(group = "inherit", value = true)
     public Boolean showCreativeTextOnWorthinessArrow;
     @IntOption(group = "inherit", value = 190)
@@ -43,6 +56,8 @@ public class ClientConfig implements Cloneable {
     public Boolean renderJusticeHandsWhilePiloting;
     @BooleanOption(group = "inherit", value = true)
     public Boolean renderArmorOnPlayerCloneAbilities;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean blinkWithCamo;
     @BooleanOption(group = "inherit", value = true)
     public Boolean magiciansRedTexturesMakeItEmmissive;
     @BooleanOption(group = "inherit", value = false)
@@ -53,11 +68,28 @@ public class ClientConfig implements Cloneable {
     public Boolean mandomRewindShowsVisualEffectsToNonMandomUsers;
     @BooleanOption(group = "inherit", value = true)
     public Boolean mandomRewindAttemptsToSkipInterpolation;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean tuskUsesShootMode;
 
     @FloatOption(group = "inherit", value = 0.44F, min = 0, max = 1)
     public Float invisibleBlockDepthF;
     @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
     public Integer invisibleBlocksDistanceAwaySeenI;
+
+
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean abilityIconHudIsAnimated;
+    @IntOption(group = "inherit", value = 174, min = 0, max = 72000)
+    public Integer abilityIconHudX;
+    @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
+    public Integer abilityIconHudY;
+
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean enableBowlerHatRender;
+
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean enableRoadRollerRender;
+
     @NestedOption(group = "modded")
     public ClientConfig.ConfigSettings configSettings;
     @NestedOption(group = "modded")
@@ -69,7 +101,11 @@ public class ClientConfig implements Cloneable {
     @NestedOption(group = "modded")
     public ClientConfig.VanillaMCTweaks vanillaMinecraftTweaks;
     @NestedOption(group = "modded")
+    public ClientConfig.AnubisSettings anubisSettings;
+    @NestedOption(group = "modded")
     public ClientConfig.TimeStopSettings timeStopSettings;
+  /*  @NestedOption(group = "modded")
+    public ClientConfig.StandTweakSettings standTweakSettings; */
 
 
 
@@ -117,7 +153,12 @@ public class ClientConfig implements Cloneable {
         public Integer bodyBagHoldingParticlesPerFiveTicks;
         @FloatOption(group = "inherit", value = 0.01F, min = 0, max = 1)
         public Float magiciansRedFirestormEmbersRate;
-
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean meteorsEmitParticles;
+        @FloatOption(group = "inherit", value = 0.46F, min = 0, max = 10)
+        public Float punchImpactSize;
+        @FloatOption(group = "inherit", value = 0.82F, min = 0, max = 1)
+        public Float punchImpactOpacity;
     }
 
     public static class OpacitySettings {
@@ -127,11 +168,25 @@ public class ClientConfig implements Cloneable {
         public Float opacityWhileAttacking;
         @FloatOption(group = "inherit", value = 100, min = 0, max = 100)
         public Float opacityOfOthers;
+        @FloatOption(group = "inherit", value = 0.5F, min = 0, max = 1)
+        public Float opacityOfPlayerBarrageArms;
 
     }
     public static class DynamicSettings {
         @IntOption(group = "inherit", value = 1, min = 1, max = 8)
         public Integer SoftAndWetCurrentlySelectedBubble;
+        @IntOption(group = "inherit", value = 1, min = 1, max = 4)
+        public Integer TuskAct;
+        @BooleanOption(group = "inherit",value = false)
+        public Boolean rattFiringMode;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean hideGUI;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean vampireVisionMode;
+        @IntOption(group = "inherit", value = 1, min = 1, max = 8)
+        public Integer currentPowerInventoryTab;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean  windVisionMode;
     }
     public static class VanillaMCTweaks {
         @BooleanOption(group = "inherit", value = true)
@@ -147,7 +202,73 @@ public class ClientConfig implements Cloneable {
         @BooleanOption(group = "inherit", value = true)
         public Boolean tsStandsSeeTSTeleportAndDontFreeze;
         @BooleanOption(group = "inherit", value = true)
+        public Boolean advancedTimeStopShader;
+        @BooleanOption(group = "inherit", value = true)
         public Boolean simpleTimeStopShader;
+    }
+    public static class AnubisSettings {
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean anubisPogoCounter;
+    }
+    public static class AnubisMemories {
+        @StringOption(group = "inherit", value = "")
+        public String mem1;
+        @StringOption(group = "inherit", value = "")
+        public String mem2;
+        @StringOption(group = "inherit", value = "")
+        public String mem3;
+        @StringOption(group = "inherit", value = "")
+        public String mem4;
+        @StringOption(group = "inherit", value = "")
+        public String mem5;
+        @StringOption(group = "inherit", value = "")
+        public String mem6;
+        @StringOption(group = "inherit", value = "")
+        public String mem7;
+        @StringOption(group = "inherit", value = "")
+        public String mem8;
+
+        public void     saveToMemory(int index, String id) {
+            switch (index) {
+                case 1 -> mem1 = id;
+                case 2 -> mem2 = id;
+                case 3 -> mem3 = id;
+                case 4 -> mem4 = id;
+                case 5 -> mem5 = id;
+                case 6 -> mem6 = id;
+                case 7 -> mem7 = id;
+                case 8 -> mem8 = id;
+                default -> Roundabout.LOGGER.warn("Invalid Memory Save Id " + index);
+            }
+        }
+        public String getFromMemory(int index) {
+            if (index > 0 && index < 9) {
+                return switch (index) {
+                    case 1 -> mem1;
+                    case 2 -> mem2;
+                    case 3 -> mem3;
+                    case 4 -> mem4;
+                    case 5 -> mem5;
+                    case 6 -> mem6;
+                    case 7 -> mem7;
+                    case 8 -> mem8;
+                    default -> mem1;
+                };
+            } else {
+                Roundabout.LOGGER.warn("Invalid Memory Load Id " + index);
+                return "";
+            }
+        }
+    }
+    public static class GreenDayAllyList {
+        @StringOption(group = "inherit", value = "")
+        public String AllyListUUIDS;
+        public void saveToMemory(String id) {
+            AllyListUUIDS  = id;
+        }
+        public String getFromMemory() {
+            return AllyListUUIDS;
+        }
     }
 
     //CommentedOption(comment = "Should use the hue shift shader to symbolize being in an alternate world?")

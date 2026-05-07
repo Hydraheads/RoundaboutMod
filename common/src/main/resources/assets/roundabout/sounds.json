@@ -17,6 +17,150 @@
       "roundabout:summon_diver_down"
     ]
   },
+  "summon_green_day": {
+    "subtitle": "sounds.roundabout.summon_green_day",
+    "sounds": [
+      "roundabout:summon_green_day"
+    ]
+  },
+  "summon_anubis": {
+    "subtitle": "sounds.roundabout.summon_anubis",
+    "sounds": [
+      "roundabout:summon_anubis"
+    ]
+  },
+  "banish": {
+    "subtitle": "sounds.roundabout.banish",
+    "sounds": [
+      "roundabout:banish"
+    ]
+  },
+  "anubis_unsheathe": {
+    "subtitle": "sounds.roundabout.anubis_unsheathe",
+    "sounds": [
+      "roundabout:anubis_unsheathe"
+    ]
+  },
+  "vampire_dash": {
+    "subtitle": "sounds.roundabout.vampire_dash",
+    "sounds": [
+      "roundabout:vampire_dash"
+    ]
+  },
+  "vampire_camo": {
+    "subtitle": "sounds.roundabout.vampire_camo",
+    "sounds": [
+      "roundabout:vampire_camo"
+    ]
+  },
+  "zombie_charge": {
+    "subtitle": "sounds.roundabout.zombie_charge",
+    "sounds": [
+      "roundabout:zombie_charge"
+    ]
+  },
+  "goat_charge": {
+    "subtitle": "sounds.roundabout.goat_charge",
+    "sounds": [
+      "roundabout:goat_charge"
+    ]
+  },
+  "goat_dash": {
+    "subtitle": "sounds.roundabout.goat_dash",
+    "sounds": [
+      "roundabout:goat_dash"
+    ]
+  },
+  "ripper_eyes_beam": {
+    "subtitle": "sounds.roundabout.ripper_eyes_beam",
+    "sounds": [
+      "roundabout:ripper_eyes_beam"
+    ]
+  },
+  "ripper_eyes_charge": {
+    "subtitle": "sounds.roundabout.ripper_eyes_charge",
+    "sounds": [
+      "roundabout:ripper_eyes_charge"
+    ]
+  },
+  "ripper_eyes_short": {
+    "subtitle": "sounds.roundabout.ripper_eyes_short",
+    "sounds": [
+      "roundabout:ripper_eyes_short"
+    ]
+  },
+  "evil_aura_blast": {
+    "subtitle": "sounds.roundabout.evil_aura_blast",
+    "sounds": [
+      "roundabout:evil_aura_blast"
+    ]
+  },
+  "aura_impact": {
+    "subtitle": "sounds.roundabout.aura_impact",
+    "sounds": [
+      "roundabout:aura_impact"
+    ]
+  },
+  "vampire_gleam": {
+    "subtitle": "sounds.roundabout.vampire_gleam",
+    "sounds": [
+      "roundabout:vampire_gleam"
+    ]
+  },
+  "full_freeze": {
+    "subtitle": "sounds.roundabout.full_freeze",
+    "sounds": [
+      "roundabout:full_freeze"
+    ]
+  },
+  "ice_breaker": {
+    "subtitle": "sounds.roundabout.ice_breaker",
+    "sounds": [
+      "roundabout:ice_breaker"
+    ]
+  },
+  "sha_moving": {
+    	"subtitle": "sounds.roundabout.sha_moving",
+    	"sounds": [
+    	"roundabout:sha_moving"
+    ]
+	},
+  "summon_sha": {
+    "subtitle": "sounds.roundabout.summon_sha",
+    "sounds": [
+        "roundabout:summon_sha"
+    ]
+    },
+  "killer_queen_bubble_launch": {
+    "subtitle": "sounds.roundabout.killer_queen_bubble_launch",
+    "sounds": [
+        "roundabout:killer_queen_bubble_launch"
+    ]
+	},
+  "killer_queen_explosion": {
+    "subtitle": "sounds.roundabout.killer_queen_explosion",
+    "sounds": [
+        "roundabout:killer_queen_explosion"
+    ]
+   },
+  "killer_queen_bomb_detonate": {
+      "subtitle": "sounds.roundabout.killer_queen_bomb_detonate",
+      "sounds": [
+        "roundabout:killer_queen_bomb_detonate"
+      ]
+  },
+  "killer_queen_barrage": {
+    "subtitle": "sounds.roundabout.killer_queen_barrage",
+    "sounds": [
+      "roundabout:killer_queen_barrage"
+    ]
+  },
+  "summon_killer_queen": {
+      "subtitle": "sounds.roundabout.summon_killer_queen",
+      "sounds": [
+        "roundabout:summon_killer_queen"
+      ]
+    },
   "summon_magician": {
     "subtitle": "sounds.roundabout.summon_magician",
     "sounds": [
@@ -27,6 +171,222 @@
     "subtitle": "sounds.roundabout.summon_mandom",
     "sounds": [
       "roundabout:summon_mandom"
+    ]
+  },
+  "cream_summon": {
+    "subtitle": "sounds.roundabout.summon_cream",
+    "sounds": [
+      "roundabout:cream_summon"
+    ]
+  },
+  "blood_regen": {
+    "subtitle": "sounds.roundabout.blood_regen",
+    "sounds": [
+      "roundabout:blood_regen"
+    ]
+  },
+  "blood_regen_finish": {
+    "subtitle": "sounds.roundabout.blood_regen_finish",
+    "sounds": [
+      "roundabout:blood_regen_finish"
+    ]
+  },
+  "cream_void_attack": {
+    "subtitle": "sounds.roundabout.cream_void_attack",
+    "sounds": [
+      "roundabout:cream_void_attack"
+    ]
+  },
+  "manhattan_rain_dodging": {
+    "subtitle": "sounds.roundabout.manhattan_rain_dodging",
+    "sounds": [
+        "roundabout:manhattan_rain_dodging"
+    ]
+  },
+  "manhattan_summoning": {
+    "subtitle": "sounds.roundabout.manhattan_summoning",
+    "sounds": [
+      "roundabout:manhattan_summoning"
+    ]
+  },
+  "manhattan_vision": {
+    "subtitle": "sounds.roundabout.manhattan_vision",
+    "sounds": [
+      "roundabout:manhattan_vision"
+    ]
+  },
+  "manhattan_deflection": {
+    "subtitle": "sounds.roundabout.manhattan_deflection",
+    "sounds": [
+      "roundabout:manhattan_deflection"
+    ]
+  },
+  "snubnose_fire": {
+    "subtitle": "sounds.roundabout.snubnose_fire",
+    "sounds": [
+      "roundabout:snubnose_fire"
+    ]
+  },
+  "snubnose_dry_fire": {
+    "subtitle": "sounds.roundabout.snubnose_dry_fire",
+    "sounds": [
+      "roundabout:snubnose_dry_fire"
+    ]
+  },
+  "snubnose_reload": {
+    "subtitle": "sounds.roundabout.snubnose_reload",
+    "sounds": [
+      "roundabout:snubnose_reload"
+    ]
+  },
+  "tommy_fire": {
+    "subtitle": "sounds.roundabout.tommy_gun_fire",
+    "sounds": [
+      "roundabout:tommy_gun_fire"
+    ]
+  },
+  "hair_sharpen": {
+    "subtitle": "sounds.roundabout.hair_sharpen",
+    "sounds": [
+      "roundabout:hair_sharpen"
+    ]
+  },
+  "tommy_reload": {
+    "subtitle": "sounds.roundabout.tommy_reload",
+    "sounds": [
+      "roundabout:tommy_reload"
+    ]
+  },
+  "jackal_fire": {
+    "subtitle": "sounds.roundabout.jackal_fire",
+    "sounds": [
+      "roundabout:jackal_fire"
+    ]
+  },
+  "jackal_reload": {
+    "subtitle": "sounds.roundabout.jackal_reload",
+    "sounds": [
+      "roundabout:jackal_reload"
+    ]
+  },
+  "colt_fire": {
+    "subtitle": "sounds.roundabout.colt_fire",
+    "sounds": [
+      "roundabout:colt_fire"
+    ]
+  },
+  "colt_reload": {
+    "subtitle": "sounds.roundabout.colt_reload",
+    "sounds": [
+      "roundabout:colt_reload"
+    ]
+  },
+  "bullet_penetration": {
+    "subtitle": "sounds.roundabout.bullet_penetration",
+    "sounds": [
+      "roundabout:bullet_penetration"
+    ]
+  },
+  "bullet_ricochet": {
+    "subtitle": "sounds.roundabout.bullet_ricochet",
+    "sounds": [
+      "roundabout:bullet_ricochet"
+    ]
+  },
+  "road_roller_ambient": {
+    "subtitle": "sounds.roundabout.road_roller_ambient",
+    "sounds": [
+      "roundabout:road_roller_ambient"
+    ]
+  },
+  "blood_suck": {
+    "subtitle": "sounds.roundabout.blood_suck",
+    "sounds": [
+      "roundabout:blood_suck"
+    ]
+  },
+  "blood_suck_crit": {
+    "subtitle": "sounds.roundabout.blood_suck_crit",
+    "sounds": [
+      "roundabout:blood_suck_crit"
+    ]
+  },
+  "vampire_speed": {
+    "subtitle": "sounds.roundabout.vampire_speed",
+    "sounds": [
+      "roundabout:vampire_speed"
+    ]
+  },
+  "vampire_awaken": {
+    "subtitle": "sounds.roundabout.vampire_awaken",
+    "sounds": [
+      "roundabout:vampire_awaken"
+    ]
+  },
+  "vampire_wall_grip": {
+    "subtitle": "sounds.roundabout.vampire_wall_grip",
+    "sounds": [
+      "roundabout:vampire_wall_grip"
+    ]
+  },
+  "vampire_message": {
+    "subtitle": "sounds.roundabout.vampire_message",
+    "sounds": [
+      "roundabout:vampire_message"
+    ]
+  },
+  "heartbeat": {
+    "subtitle": "sounds.roundabout.heartbeat",
+    "sounds": [
+      "roundabout:heartbeat"
+    ]
+  },
+  "heartbeat2": {
+    "subtitle": "sounds.roundabout.heartbeat2",
+    "sounds": [
+      "roundabout:heartbeat2"
+    ]
+  },
+  "heartbeat3": {
+    "subtitle": "sounds.roundabout.heartbeat3",
+    "sounds": [
+      "roundabout:heartbeat3"
+    ]
+  },
+  "hypnosis": {
+    "subtitle": "sounds.roundabout.hypnosis",
+    "sounds": [
+      "roundabout:hypnosis"
+    ]
+  },
+  "flesh_bud_goes": {
+    "subtitle": "sounds.roundabout.flesh_bud_goes",
+    "sounds": [
+      "roundabout:flesh_bud_goes"
+    ]
+  },
+  "hair_toggle": {
+    "subtitle": "sounds.roundabout.hair_toggle",
+    "sounds": [
+      "roundabout:hair_toggle"
+    ]
+  },
+  "flesh_bud_removal": {
+    "subtitle": "sounds.roundabout.flesh_bud_removal",
+    "sounds": [
+      "roundabout:flesh_bud_removal"
+    ]
+  },
+  "road_roller_explosion": {
+    "subtitle": "sounds.roundabout.road_roller_explosion",
+    "sounds": [
+      "roundabout:road_roller_explosion"
+    ]
+  },
+  "road_roller_mixing": {
+    "subtitle": "sounds.roundabout.road_roller_mixing",
+    "sounds": [
+      "roundabout:road_roller_mixing"
     ]
   },
   "survivor_summon": {
@@ -117,6 +477,12 @@
     "subtitle": "sounds.roundabout.firestorm",
     "sounds": [
       "roundabout:firestorm"
+    ]
+  },
+  "stone_mask_activate": {
+    "subtitle": "sounds.roundabout.stone_mask_activate",
+    "sounds": [
+      "roundabout:stone_mask_activate"
     ]
   },
   "go_beyond_hit": {
@@ -239,6 +605,36 @@
       "roundabout:dio_hoho_2"
     ]
   },
+  "melee_guard": {
+    "subtitle": "sounds.roundabout.melee_guard",
+    "sounds": [
+      "roundabout:melee_guard"
+    ]
+  },
+  "timestop_resume_theworld2": {
+    "subtitle": "sounds.roundabout.timestop_resume_theworld2",
+    "sounds": [
+      "roundabout:timestop_resume_theworld2"
+    ]
+  },
+  "diego_kono_diego": {
+    "subtitle": "sounds.roundabout.diego_kono_diego",
+    "sounds": [
+      "roundabout:diego_kono_diego"
+    ]
+  },
+  "diego_hoho": {
+    "subtitle": "sounds.roundabout.diego_hoho",
+    "sounds": [
+      "roundabout:diego_hoho"
+    ]
+  },
+  "diego_hoho_2": {
+    "subtitle": "sounds.roundabout.diego_hoho_2",
+    "sounds": [
+      "roundabout:diego_hoho_2"
+    ]
+  },
   "bubble_hover_over": {
     "subtitle": "sounds.roundabout.bubble_hover_over",
     "sounds": [
@@ -285,6 +681,18 @@
     "subtitle": "sounds.roundabout.air_bubble",
     "sounds": [
       "roundabout:air_bubble"
+    ]
+  },
+  "vampire_drain": {
+    "subtitle": "sounds.roundabout.vampire_drain",
+    "sounds": [
+      "roundabout:vampire_drain"
+    ]
+  },
+  "vampire_crumble": {
+    "subtitle": "sounds.roundabout.vampire_crumble",
+    "sounds": [
+      "roundabout:vampire_crumble"
     ]
   },
   "dio_kurei": {
@@ -441,6 +849,156 @@
     "subtitle": "sounds.roundabout.dio_jotaro_2",
     "sounds": [
       "roundabout:dio_jotaro_2"
+    ]
+  },
+  "diego_attack": {
+    "subtitle": "sounds.roundabout.diego_attack",
+    "sounds": [
+      "roundabout:diego_attack"
+    ]
+  },
+  "diego_attack_2": {
+    "subtitle": "sounds.roundabout.diego_attack_2",
+    "sounds": [
+      "roundabout:diego_attack_2"
+    ]
+  },
+  "diego_checkmate": {
+    "subtitle": "sounds.roundabout.diego_checkmate",
+    "sounds": [
+      "roundabout:diego_checkmate"
+    ]
+  },
+  "diego_death": {
+    "subtitle": "sounds.roundabout.diego_death",
+    "sounds": [
+      "roundabout:diego_death"
+    ]
+  },
+  "diego_death_2": {
+    "subtitle": "sounds.roundabout.diego_death_2",
+    "sounds": [
+      "roundabout:diego_death_2"
+    ]
+  },
+  "diego_ho": {
+    "subtitle": "sounds.roundabout.diego_ho",
+    "sounds": [
+      "roundabout:diego_ho"
+    ]
+  },
+  "diego_ho_2": {
+    "subtitle": "sounds.roundabout.diego_ho_2",
+    "sounds": [
+      "roundabout:diego_ho_2"
+    ]
+  },
+  "diego_hurt_1": {
+    "subtitle": "sounds.roundabout.diego_hurt_1",
+    "sounds": [
+      "roundabout:diego_hurt_1"
+    ]
+  },
+  "diego_hurt_2": {
+    "subtitle": "sounds.roundabout.diego_hurt_2",
+    "sounds": [
+      "roundabout:diego_hurt_2"
+    ]
+  },
+  "diego_hurt_3": {
+    "subtitle": "sounds.roundabout.diego_hurt_3",
+    "sounds": [
+      "roundabout:diego_hurt_3"
+    ]
+  },
+  "diego_hurt_4": {
+    "subtitle": "sounds.roundabout.diego_hurt_4",
+    "sounds": [
+      "roundabout:diego_hurt_4"
+    ]
+  },
+  "diego_interesting": {
+    "subtitle": "sounds.roundabout.diego_interesting",
+    "sounds": [
+      "roundabout:diego_interesting"
+    ]
+  },
+  "diego_kata": {
+    "subtitle": "sounds.roundabout.diego_kata",
+    "sounds": [
+      "roundabout:diego_kata"
+    ]
+  },
+  "diego_kurei": {
+    "subtitle": "sounds.roundabout.diego_kurei",
+    "sounds": [
+      "roundabout:diego_kurei"
+    ]
+  },
+  "diego_kureit": {
+    "subtitle": "sounds.roundabout.diego_kureit",
+    "sounds": [
+      "roundabout:diego_kureit"
+    ]
+  },
+  "diego_laugh": {
+    "subtitle": "sounds.roundabout.diego_laugh",
+    "sounds": [
+      "roundabout:diego_laugh"
+    ]
+  },
+  "diego_nani": {
+    "subtitle": "sounds.roundabout.diego_nani",
+    "sounds": [
+      "roundabout:diego_nani"
+    ]
+  },
+  "diego_no_way": {
+    "subtitle": "sounds.roundabout.diego_no_way",
+    "sounds": [
+      "roundabout:diego_no_way"
+    ]
+  },
+  "diego_shine": {
+    "subtitle": "sounds.roundabout.diego_shine",
+    "sounds": [
+      "roundabout:diego_shine"
+    ]
+  },
+  "diego_taunt": {
+    "subtitle": "sounds.roundabout.diego_taunt",
+    "sounds": [
+      "roundabout:diego_taunt"
+    ]
+  },
+  "diego_the_world": {
+    "subtitle": "sounds.roundabout.diego_the_world",
+    "sounds": [
+      "roundabout:diego_the_world"
+    ]
+  },
+  "diego_the_world_2": {
+    "subtitle": "sounds.roundabout.diego_the_world_2",
+    "sounds": [
+      "roundabout:diego_the_world_2"
+    ]
+  },
+  "diego_the_world_3": {
+    "subtitle": "sounds.roundabout.diego_the_world_3",
+    "sounds": [
+      "roundabout:diego_the_world_3"
+    ]
+  },
+  "diego_the_world_4": {
+    "subtitle": "sounds.roundabout.diego_the_world_4",
+    "sounds": [
+      "roundabout:diego_the_world_4"
+    ]
+  },
+  "diego_wry": {
+    "subtitle": "sounds.roundabout.diego_wry",
+    "sounds": [
+      "roundabout:diego_wry"
     ]
   },
   "jotaro_yare_yare": {
@@ -762,6 +1320,12 @@
       "roundabout:ratt_place"
     ]
   },
+  "ratt_deplace": {
+    "subtitle": "sounds.roundabout.ratt_deplace",
+    "sounds": [
+      "roundabout:ratt_deplace"
+    ]
+  },
   "ratt_scope": {
     "subtitle": "sounds.roundabout.ratt_scope",
     "sounds": [
@@ -798,6 +1362,130 @@
       "roundabout:ratt_firing"
     ]
   },
+  "ratt_leap": {
+    "subtitle": "sounds.roundabout.ratt_leap",
+    "sounds": [
+      "roundabout:ratt_leap"
+    ]
+  },
+  "ratt_mode_change": {
+    "subtitle": "sounds.roundabout.ratt_mode_change",
+    "sounds": [
+      "roundabout:ratt_mode_change"
+    ]
+  },
+
+
+  "anubis_possession": {
+    "subtitle": "sounds.roundabout.anubis_possession",
+    "sounds": [
+      "roundabout:anubis_possession"
+    ]
+  },
+  "anubis_alluring": {
+    "subtitle": "sounds.roundabout.anubis_alluring",
+    "sounds": [
+      "roundabout:anubis_alluring"
+    ]
+  },
+  "anubis_raging": {
+    "subtitle": "sounds.roundabout.anubis_raging",
+    "sounds": [
+      "roundabout:anubis_raging"
+    ]
+  },
+  "anubis_backflip": {
+    "subtitle": "sounds.roundabout.anubis_backflip",
+    "sounds": [
+      "roundabout:anubis_backflip"
+    ]
+  },
+  "anubis_summon": {
+    "subtitle": "sounds.roundabout.anubis_summon",
+    "sounds": [
+      "roundabout:anubis_summon"
+    ]
+  },
+  "anubis_pogo_launch": {
+    "subtitle": "sounds.roundabout.anubis_pogo_launch",
+    "sounds": [
+      "roundabout:anubis_pogo_launch"
+    ]
+  },
+  "anubis_pogo_hit": {
+    "subtitle": "sounds.roundabout.anubis_pogo_hit",
+    "sounds": [
+      "roundabout:anubis_pogo_hit"
+    ]
+  },
+  "anubis_barrage_1": {
+    "subtitle": "sounds.roundabout.anubis_barrage_1",
+    "sounds": [
+      "roundabout:anubis_barrage_1"
+    ]
+  },
+  "anubis_barrage_1_hit": {
+    "subtitle": "sounds.roundabout.anubis_barrage_1_hit",
+    "sounds": [
+      "roundabout:anubis_barrage_1_hit"
+    ]
+  },
+  "anubis_barrage_end": {
+    "subtitle": "sounds.roundabout.anubis_barrage_end",
+    "sounds": [
+      "roundabout:anubis_barrage_end"
+    ]
+  },
+  "anubis_swing": {
+    "subtitle": "sounds.roundabout.anubis_swing",
+    "sounds": [
+      "roundabout:anubis_swing"
+    ]
+  },
+  "anubis_crouch_swing": {
+    "subtitle": "sounds.roundabout.anubis_crouch_swing",
+    "sounds": [
+      "roundabout:anubis_crouch_swing"
+    ]
+  },
+  "anubis_double_cut": {
+    "subtitle": "sounds.roundabout.anubis_double_cut",
+    "sounds": [
+      "roundabout:anubis_double_cut"
+    ]
+  },
+  "anubis_thrust_cut": {
+    "subtitle": "sounds.roundabout.anubis_thrust_cut",
+    "sounds": [
+      "roundabout:anubis_thrust_cut"
+    ]
+  },
+  "anubis_thrust_miss": {
+    "subtitle": "sounds.roundabout.anubis_thrust_miss",
+    "sounds": [
+      "roundabout:anubis_thrust_miss"
+    ]
+  },
+  "anubis_uppercut": {
+    "subtitle": "sounds.roundabout.anubis_uppercut",
+    "sounds": [
+      "roundabout:anubis_uppercut"
+    ]
+  },
+  "anubis_shieldbreak": {
+    "subtitle": "sounds.roundabout.anubis_shieldbreak",
+    "sounds": [
+      "roundabout:anubis_shieldbreak"
+    ]
+  },
+  "anubis_extra": {
+    "subtitle": "sounds.roundabout.anubis_extra",
+    "sounds": [
+      "roundabout:anubis_extra"
+    ]
+  },
+
+
 
   "ova_summon": {
     "subtitle": "sounds.roundabout.ova_summon",
@@ -1243,6 +1931,12 @@
       "roundabout:stand_guard"
     ]
   },
+  "vampire_dive": {
+    "subtitle": "sounds.roundabout.vampire_dive",
+    "sounds": [
+      "roundabout:vampire_dive"
+    ]
+  },
   "timestop_the_world": {
     "subtitle": "sounds.roundabout.timestop_the_world",
     "sounds": [
@@ -1657,6 +2351,18 @@
       "roundabout:harpoon_crit"
     ]
   },
+  "bowler_hat_aim": {
+    "subtitle": "sounds.roundabout.bowler_hat_aim",
+    "sounds": [
+      "roundabout:bowler_hat_aim"
+    ]
+  },
+  "bowler_hat_fly": {
+    "subtitle": "sounds.roundabout.bowler_hat_fly",
+    "sounds": [
+      "roundabout:bowler_hat_fly"
+    ]
+  },
   "glaive_charge": {
     "subtitle": "sounds.roundabout.glaive_charge",
     "sounds": [
@@ -1681,6 +2387,30 @@
       "roundabout:fog_clone"
     ]
   },
+  "combat_punch_1": {
+    "subtitle": "sounds.roundabout.combat_punch_1",
+    "sounds": [
+      "roundabout:combat_punch_1"
+    ]
+  },
+  "combat_punch_2": {
+    "subtitle": "sounds.roundabout.combat_punch_2",
+    "sounds": [
+      "roundabout:combat_punch_2"
+    ]
+  },
+  "combat_punch_3": {
+    "subtitle": "sounds.roundabout.combat_punch_3",
+    "sounds": [
+      "roundabout:combat_punch_3"
+    ]
+  },
+  "combat_punch_4": {
+    "subtitle": "sounds.roundabout.combat_punch_4",
+    "sounds": [
+      "roundabout:combat_punch_4"
+    ]
+  },
   "hallelujah": {
     "subtitle": "sounds.roundabout.hallelujah",
     "sounds": [
@@ -1695,6 +2425,87 @@
     "sounds": [
       {
         "name":"roundabout:torture_dance",
+        "stream": true
+      }
+    ]
+  },
+  "vsong_silent_reveries": {
+    "subtitle": "sounds.roundabout.vsong_silent_reveries",
+    "sounds": [
+      {
+        "name":"roundabout:vsong_silent_reveries",
+        "stream": true
+      }
+    ]
+  },
+  "vsong_twisted": {
+    "subtitle": "sounds.roundabout.vsong_twisted",
+    "sounds": [
+      {
+        "name":"roundabout:vsong_twisted",
+        "stream": true
+      }
+    ]
+  },
+  "vsong_bloodcurdling_moments": {
+    "subtitle": "sounds.roundabout.vsong_bloodcurdling_moments",
+    "sounds": [
+      {
+        "name":"roundabout:vsong_bloodcurdling_moments",
+        "stream": true
+      }
+    ]
+  },
+  "vsong_damnable_ceremony": {
+    "subtitle": "sounds.roundabout.vsong_damnable_ceremony",
+    "sounds": [
+      {
+        "name":"roundabout:vsong_damnable_ceremony",
+        "stream": true
+      }
+    ]
+  },
+  "vsong_gothic_organ": {
+    "subtitle": "sounds.roundabout.vsong_gothic_organ",
+    "sounds": [
+      {
+        "name":"roundabout:vsong_gothic_organ",
+        "stream": true
+      }
+    ]
+  },
+  "green_day_arm_spin": {
+    "subtitle": "sounds.roundabout.green_day_arm_spin",
+    "sounds": [
+      {
+        "name":"roundabout:green_day_arm_spin",
+        "stream": true
+      }
+    ]
+  },
+  "green_day_split": {
+    "subtitle": "sounds.roundabout.green_day_split",
+    "sounds": [
+      {
+        "name":"roundabout:green_day_split",
+        "stream": true
+      }
+    ]
+  },
+  "green_day_mold_spread": {
+    "subtitle": "sounds.roundabout.green_day_mold_spread",
+    "sounds": [
+      {
+        "name":"roundabout:green_day_mold_spread",
+        "stream": true
+      }
+    ]
+  },
+  "green_day_stitch": {
+    "subtitle": "sounds.roundabout.green_day_stitch",
+    "sounds": [
+      {
+        "name":"roundabout:green_day_stitch",
         "stream": true
       }
     ]

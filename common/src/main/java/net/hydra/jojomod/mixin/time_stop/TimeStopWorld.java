@@ -2,9 +2,11 @@ package net.hydra.jojomod.mixin.time_stop;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IBlockEntityAccess;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.projectile.GoBeyondEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
@@ -31,6 +33,7 @@ import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -48,6 +51,15 @@ public class TimeStopWorld implements TimeStop {
 
     private ImmutableList<LivingEntity> roundabout$timeStoppingEntities = ImmutableList.of();
     private ImmutableList<TimeStopInstance> roundabout$timeStoppingEntitiesClient = ImmutableList.of();
+
+    @Unique
+    public ImmutableList<TimeStopInstance> rdbt$getTimeStoppingEntitiesClient(){
+        if (this.roundabout$timeStoppingEntities == null) {
+            this.roundabout$timeStoppingEntities = ImmutableList.of();
+        }
+        return roundabout$timeStoppingEntitiesClient;
+    }
+
 
     /**Adds an entity to the list of time stopping entities*/
     @Override
@@ -75,12 +87,19 @@ public class TimeStopWorld implements TimeStop {
             } else {
                 List<TimeStopInstance> $$0 = Lists.newArrayList(this.roundabout$timeStoppingEntitiesClient);
                 List<TimeStopInstance> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntitiesClient);
+                int durationInterpolation = 0;
+                int firstDuration = duration;
                 for (int i = $$0.size() - 1; i >= 0; --i) {
                     if ($$0.get(i).id == id) {
+                        durationInterpolation = $$0.get(i).durationInterpolation;
+                        firstDuration = $$0.get(i).firstDuration;
                         $$1.remove($$0.get(i));
                     }
                 }
-                $$1.add(new TimeStopInstance(id, x, y, z, range, duration, maxDuration));
+                TimeStopInstance tsi = new TimeStopInstance(id, x, y, z, range, duration, maxDuration);
+                tsi.durationInterpolation = durationInterpolation;
+                tsi.firstDuration = firstDuration;
+                $$1.add(tsi);
                 this.roundabout$timeStoppingEntitiesClient = ImmutableList.copyOf($$1);
             }
         }
@@ -132,12 +151,13 @@ public class TimeStopWorld implements TimeStop {
                         Entity TSI = $$1.get(i);
                         /*You only need data of time stopping mobs that are relatively close by*/
                         if ((ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1) ||
-                                MainUtil.cheapDistanceTo2(TSI.getX(),TSI.getZ(),serverPlayer.getX(),serverPlayer.getZ()) <
+                                MainUtil.timeStopDistanceTo(TSI.getX(),TSI.getY(),TSI.getZ(),serverPlayer.getX(),serverPlayer.getY(),serverPlayer.getZ()) <
                                         Math.max(250,ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite)){
                             S2CPacketUtil.addTSEntity(serverPlayer, TSI.getId(), TSI.getX(),
                                     TSI.getY(),TSI.getZ(),((StandUser) TSI).roundabout$getStandPowers().getTimestopRange(),
                                     ((StandUser) TSI).roundabout$getStandPowers().getChargedTSTicks(),
                                     ((StandUser) TSI).roundabout$getStandPowers().getMaxChargeTSTime());
+
                         }
                     }
                 }
@@ -188,19 +208,28 @@ public class TimeStopWorld implements TimeStop {
     /**Ticks through time stop entities list, and then removes them from the list if they are dead or gone*/
     @Override
     public void tickAllTimeStops() {
-        if (!this.roundabout$timeStoppingEntities.isEmpty()) {
-            List<LivingEntity> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntities);
-            for (int i = $$1.size() - 1; i >= 0; --i) {
-                if ($$1.get(i).isRemoved() || !$$1.get(i).isAlive() || $$1.get(i).level().dimensionTypeId() != this.dimensionTypeId){
-                    if ($$1.get(i).level().dimensionTypeId() != this.dimensionTypeId &&
-                            (((StandUser)$$1.get(i)).roundabout$getStandPowers()) instanceof TWAndSPSharedPowers TP
-                    ){
-                        TP.resumeTime(((Level) (Object) this));
+        if (!((Level) (Object) this).isClientSide) {
+            if (!this.roundabout$timeStoppingEntities.isEmpty()) {
+                List<LivingEntity> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntities);
+                for (int i = $$1.size() - 1; i >= 0; --i) {
+                    if ($$1.get(i).isRemoved() || !$$1.get(i).isAlive() || $$1.get(i).level().dimensionTypeId() != this.dimensionTypeId) {
+                        if ($$1.get(i).level().dimensionTypeId() != this.dimensionTypeId &&
+                                (((StandUser) $$1.get(i)).roundabout$getStandPowers()) instanceof TWAndSPSharedPowers TP
+                        ) {
+                            TP.resumeTime(((Level) (Object) this));
+                        } else {
+                            removeTimeStoppingEntity($$1.get(i));
+                        }
                     } else {
-                        removeTimeStoppingEntity($$1.get(i));
+                        ((StandUser) $$1.get(i)).roundabout$getStandPowers().timeTickStopPower();
                     }
-                } else if (!((Level) (Object) this).isClientSide) {
-                    ((StandUser)$$1.get(i)).roundabout$getStandPowers().timeTickStopPower();
+                }
+            }
+        } else {
+            if (this.roundabout$timeStoppingEntitiesClient != null && !this.roundabout$timeStoppingEntitiesClient.isEmpty()) {
+                List<TimeStopInstance> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntitiesClient);
+                for (int i = $$1.size() - 1; i >= 0; --i) {
+                    $$1.get(i).durationInterpolation +=1;
                 }
             }
         }
@@ -230,7 +259,7 @@ public class TimeStopWorld implements TimeStop {
                 List<LivingEntity> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntities);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     LivingEntity it = $$1.get(i);
-                    if ((ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1) || MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).roundabout$getStandPowers().getTimestopRange()) {
+                    if ((ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1) || MainUtil.timeStopDistanceTo(pos.getX(), pos.getY(), pos.getZ(), it.getX(), it.getY(), it.getZ()) <= ((StandUser) it).roundabout$getStandPowers().getTimestopRange()) {
                         return true;
                     }
                 }
@@ -240,7 +269,7 @@ public class TimeStopWorld implements TimeStop {
                 List<TimeStopInstance> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntitiesClient);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     TimeStopInstance it = $$1.get(i);
-                        if ((ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1) || MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.x, it.z) <= it.range) {
+                        if ((ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1) || MainUtil.timeStopDistanceTo(pos.getX(), pos.getY(), pos.getZ(), it.x, it.y, it.z) <= it.range) {
                             return true;
                         }
                 }
@@ -263,7 +292,7 @@ public class TimeStopWorld implements TimeStop {
             for (int i = $$1.size() - 1; i >= 0; --i) {
                 TimeStopInstance it = $$1.get(i);
                 if ((ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1) ||
-                        MainUtil.cheapDistanceTo2(pos.x(), pos.z(), it.x, it.z) <= it.range) {
+                        MainUtil.timeStopDistanceTo(pos.x(), pos.y(), pos.z(), it.x, it.y, it.z) <= it.range) {
                     return it;
                 }
             }
@@ -278,7 +307,7 @@ public class TimeStopWorld implements TimeStop {
                 List<LivingEntity> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntities);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     LivingEntity it = $$1.get(i);
-                    if ((ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1) || MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).roundabout$getStandPowers().getTimestopRange()) {
+                    if ((ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1) || MainUtil.timeStopDistanceTo(pos.getX(), pos.getY(), pos.getZ(), it.getX(), it.getY(), it.getZ()) <= ((StandUser) it).roundabout$getStandPowers().getTimestopRange()) {
                         return it;
                     }
                 }
@@ -288,7 +317,7 @@ public class TimeStopWorld implements TimeStop {
                 List<TimeStopInstance> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntitiesClient);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     TimeStopInstance it = $$1.get(i);
-                    if ((ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1) || MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.x, it.z) <= it.range) {
+                    if ((ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1) || MainUtil.timeStopDistanceTo(pos.getX(), pos.getY(), pos.getZ(), it.x, it.y, it.z) <= it.range) {
                         Entity it2 = ((Level) (Object) this).getEntity(it.id);
                         if (it2 instanceof LivingEntity){
                             return (LivingEntity) it2;
@@ -309,6 +338,9 @@ public class TimeStopWorld implements TimeStop {
     /**Code this to check if they are able to use powers mid TS*/
     @Override
     public boolean CanTimeStopEntity(Entity entity){
+        if (entity instanceof AnubisPossessorEntity APE && APE.getUser() != null && !this.CanTimeStopEntity(APE.getUser()) ) {
+            return false;
+        }
         if (entity instanceof Player && ((Player) entity).isCreative() || entity.isSpectator()) {
             return false;
         } else if (entity instanceof Warden && ClientNetworking.getAppropriateConfig().timeStopSettings.wardenMovesInStoppedTime) {
@@ -381,7 +413,7 @@ public class TimeStopWorld implements TimeStop {
                     List<LivingEntity> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntities);
                         /*Streams updates to nearby players*/
                         if ((ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1) ||
-                                MainUtil.cheapDistanceTo2(blockPos.getX(), blockPos.getZ(),serverPlayer.getX(),serverPlayer.getZ()) < Math.max(250,ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite)){
+                                MainUtil.timeStopDistanceTo(blockPos.getX(), blockPos.getY(), blockPos.getZ(),serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ()) < Math.max(250,ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite)){
                             S2CPacketUtil.resumeTileEntityTSPacket(serverPlayer, new Vec3i(blockPos.getX(), blockPos.getY(), blockPos.getZ()));
                         }
                 }

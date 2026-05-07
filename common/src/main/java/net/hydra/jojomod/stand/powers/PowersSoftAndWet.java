@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.BubbleScaffoldBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
@@ -50,6 +51,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.FlyingMob;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Sheep;
@@ -90,6 +92,10 @@ public class PowersSoftAndWet extends NewPunchingStand {
         return ClientNetworking.getAppropriateConfig().softAndWetSettings.enableSoftAndWet;
     }
 
+    @Override
+    public boolean isMiningStand() {
+        return super.isMiningStand() && !this.getStandUserSelf().roundabout$getEffectiveCombatMode();
+    }
 
     public List<SoftAndWetBubbleEntity> bubbleList = new ArrayList<>();
     @Override
@@ -163,7 +169,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
                     tryIntPowerPacket(PowerIndex.SPECIAL_TRACKER, getGoBeyondTarget().getId());
                     this.setGoBeyondTarget(null);
                     this.setGoBeyondChargeTicks(0);
-                    this.setShootTicks(0);
+                    this.setShootTicks(getMaxShootTicks());
                 }
             }
             return true;
@@ -425,18 +431,24 @@ public class PowersSoftAndWet extends NewPunchingStand {
             $$1.add(SoftAndWetEntity.MANGA_SKIN);
             if (Level > 1 || bypass){
                 $$1.add(SoftAndWetEntity.DEBUT);
+                $$1.add(SoftAndWetEntity.MORIOH);
+                $$1.add(SoftAndWetEntity.ART);
             } if (Level > 2 || bypass){
                 $$1.add(SoftAndWetEntity.GREEN);
+                $$1.add(SoftAndWetEntity.NATURE);
                 $$1.add(SoftAndWetEntity.STRIPED);
             } if (Level > 3 || bypass){
                 $$1.add(SoftAndWetEntity.FIGURE_SKIN);
                 $$1.add(SoftAndWetEntity.COLORS);
             } if (Level > 4 || bypass){
-                $$1.add(SoftAndWetEntity.KNIGHT);
+                $$1.add(SoftAndWetEntity.ACTION);
+                $$1.add(SoftAndWetEntity.MELON);
+                $$1.add(SoftAndWetEntity.WHEEL);
             } if (Level > 5 || bypass){
                 $$1.add(SoftAndWetEntity.DROWNED_SKIN);
                 $$1.add(SoftAndWetEntity.DROWNED_SKIN_2);
             } if (Level > 6 || bypass){
+                $$1.add(SoftAndWetEntity.KNIGHT);
                 $$1.add(SoftAndWetEntity.KING_SKIN);
                 $$1.add(SoftAndWetEntity.BETA_SKIN);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
@@ -477,7 +489,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
             return true;
         }
         if (slot == 3 && (!canVault() && !canFallBrace() && isGuarding() && !canBigBubble())){
-            return false;
+            return true;
         }
 
         return super.isAttackIneptVisually(activeP,slot);
@@ -657,7 +669,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
         if (currentLevel == 1){
             amt = 100;
         } else {
-            amt = (100+((currentLevel-1)*55));
+            amt = (100+((currentLevel-1)*65));
         }
         amt= (int) (amt*getLevelMultiplier());
         return amt;
@@ -668,8 +680,8 @@ public class PowersSoftAndWet extends NewPunchingStand {
         ItemStack stack2 = this.getSelf().getOffhandItem();
         return ((!stack.isEmpty() && stack.getItem() instanceof PotionItem PI && PotionUtils.getPotion(stack) == Potions.WATER)
         || (!stack2.isEmpty() && stack2.getItem() instanceof PotionItem PI2 && PotionUtils.getPotion(stack2) == Potions.WATER)
-        ||(!stack.isEmpty() && stack.getItem() instanceof BucketItem BI && ((IBucketItem)BI).roundabout$getContents().is(FluidTags.WATER))
-                || (!stack2.isEmpty() && stack2.getItem() instanceof BucketItem BI2 && ((IBucketItem)BI2).roundabout$getContents().is(FluidTags.WATER)));
+        ||(!stack.isEmpty() && stack.getItem() instanceof BucketItem BI && ((IBucketItem)BI).roundabout$getContents() != null && ((IBucketItem)BI).roundabout$getContents().is(FluidTags.WATER))
+                || (!stack2.isEmpty() && stack2.getItem() instanceof BucketItem BI2  && ((IBucketItem)BI2).roundabout$getContents() != null  && ((IBucketItem)BI2).roundabout$getContents().is(FluidTags.WATER)));
     }
 
     /**For mob ai, change the bubbleType before trypower to set what kind of plunder it has*/
@@ -839,7 +851,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
 
         StandUser standUser = ((StandUser) playerEntity);
         StandPowers powers = standUser.roundabout$getStandPowers();
-        boolean standOn = standUser.roundabout$getActive();
+        boolean standOn = PowerTypes.hasStandActive(playerEntity);;
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
         if (standOn && this.getActivePower() == PowerIndex.BARRAGE_2 && attackTimeDuring > -1) {
@@ -1135,7 +1147,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
     }
 
     public boolean inShootingMode(){
-        return getStandUserSelf().roundabout$getCombatMode();
+        return getStandUserSelf().roundabout$getCombatMode() && PowerTypes.hasStandActivelyEquipped(self);
     }
     public boolean shootExplosiveBubble(){
         this.setCooldown(PowerIndex.SKILL_4, 3);
@@ -1158,43 +1170,42 @@ public class PowersSoftAndWet extends NewPunchingStand {
     }
     @SuppressWarnings("deprecation")
     public boolean useWaterShield(){
-        if (this.self instanceof Player PL && !PL.level().isClientSide()) {
+
+        boolean isBucketSpawned = false;
+        if (this.self instanceof Player PL) {
             ItemStack stack = this.getSelf().getMainHandItem();
+            ItemStack stack2 = this.getSelf().getOffhandItem();
             if ((!stack.isEmpty() && stack.getItem() instanceof PotionItem PI && PotionUtils.getPotion(stack) == Potions.WATER)) {
                 if (!PL.getAbilities().instabuild) {
                     stack.shrink(1);
                     PL.getInventory().add(new ItemStack(Items.GLASS_BOTTLE));
                 }
-                splashWaterShield();
-                return true;
-            }
-            if ((!stack.isEmpty() && stack.getItem() instanceof BucketItem BI && ((IBucketItem)BI).roundabout$getContents().is(FluidTags.WATER))) {
-                if (!PL.getAbilities().instabuild) {
-                    stack.shrink(1);
-                    PL.getInventory().add(new ItemStack(Items.BUCKET));
-                }
-                splashWaterShield();
-                return true;
-            }
-            ItemStack stack2 = this.getSelf().getOffhandItem();
-            if ((!stack2.isEmpty() && stack2.getItem() instanceof PotionItem PI2 && PotionUtils.getPotion(stack2) == Potions.WATER)) {
+                if (!PL.level().isClientSide())
+                    splashWaterShield();
+            } else if ((!stack.isEmpty() && stack.getItem() instanceof BucketItem BI && ((IBucketItem)BI).roundabout$getContents() != null && ((IBucketItem)BI).roundabout$getContents().is(FluidTags.WATER))) {
+                isBucketSpawned = true;
+                if (!PL.level().isClientSide())
+                    splashWaterShield();
+            } else if ((!stack2.isEmpty() && stack2.getItem() instanceof PotionItem PI2 && PotionUtils.getPotion(stack2) == Potions.WATER)) {
                 if (!PL.getAbilities().instabuild) {
                     stack2.shrink(1);
                     PL.getInventory().add(new ItemStack(Items.GLASS_BOTTLE));
                 }
-                splashWaterShield();
-            }
-            if ((!stack2.isEmpty() && stack2.getItem() instanceof BucketItem BI && ((IBucketItem)BI).roundabout$getContents().is(FluidTags.WATER))) {
-                if (!PL.getAbilities().instabuild) {
-                    stack2.shrink(1);
-                    PL.getInventory().add(new ItemStack(Items.BUCKET));
-                }
-                splashWaterShield();
-                return true;
+                if (!PL.level().isClientSide())
+                    splashWaterShield();
+            } else if ((!stack2.isEmpty() && stack2.getItem() instanceof BucketItem BI && ((IBucketItem)BI).roundabout$getContents() != null && ((IBucketItem)BI).roundabout$getContents().is(FluidTags.WATER))) {
+
+                isBucketSpawned = true;
+                if (!PL.level().isClientSide())
+                    splashWaterShield();
             }
         }
 
-        this.setCooldown(PowerIndex.SKILL_4_SNEAK, ClientNetworking.getAppropriateConfig().softAndWetSettings.waterShieldCooldown);
+        if (isBucketSpawned){
+            this.setCooldown(PowerIndex.SKILL_4_SNEAK, ClientNetworking.getAppropriateConfig().softAndWetSettings.waterShieldBucketCooldown);
+        } else {
+            this.setCooldown(PowerIndex.SKILL_4_SNEAK, ClientNetworking.getAppropriateConfig().softAndWetSettings.waterShieldCooldown);
+        }
 
         return true;
     }
@@ -1224,6 +1235,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
         this.setWaterShieldTicks(ClientNetworking.getAppropriateConfig().softAndWetSettings.waterShieldDurationInTicks);
     }
     public boolean switchModes(){
+        if (this.getActivePower() == PowerIndex.MINING) {this.setPowerNone();}
         if (getStandUserSelf().roundabout$getCombatMode()){
             getStandUserSelf().roundabout$setCombatMode(false);
             if (this.self.level().isClientSide()){
@@ -1256,7 +1268,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
                     this.bubbleList.add(bubble);
                     this.getSelf().level().addFreshEntity(bubble);
 
-                        this.self.level().playSound(bubble, bubble.blockPosition(), ModSounds.GO_BEYOND_LAUNCH_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+                    this.self.level().playSound(bubble, bubble.blockPosition(), ModSounds.GO_BEYOND_LAUNCH_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
 
 
                     Vec3 vector = Vec3.directionFromRotation(new Vec2(-52, this.self.yBodyRot - 90));
@@ -1293,8 +1305,11 @@ public class PowersSoftAndWet extends NewPunchingStand {
     /**Explosive Item Bubble Shooting*/
     public boolean itemBubbleShot() {
         ItemStack stack = ((Player) this.getSelf()).getInventory().getItem(this.grabInventorySlot);
-        if (!stack.isEmpty() && !(stack.getItem() instanceof BlockItem &&
-                ((BlockItem) stack.getItem()).getBlock() instanceof ShulkerBoxBlock)) {
+        if (!stack.isEmpty() &&
+                !(MainUtil.isItemGrabBlacklisted(stack)) &&
+                !(stack.getItem() instanceof BlockItem
+                        && (MainUtil.isBlockBlacklisted(((BlockItem)stack.getItem()).getBlock().defaultBlockState()) ||
+                        ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock))) {
             this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().softAndWetSettings.itemBubbleShotCooldown);
             if (!this.self.level().isClientSide()) {
 
@@ -1547,8 +1562,8 @@ public class PowersSoftAndWet extends NewPunchingStand {
     }
 
     @Override
-    public boolean hasShootingModeVisually(){
-        return true;
+    public boolean hasShootingModeVisually(HumanoidArm arm){
+        return arm == this.getSelf().getMainArm();
     }
     public float getBubbleSpeed(){
         if (bubbleType == PlunderTypes.OXYGEN.id){
@@ -1635,7 +1650,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
             yavec = RotationUtil.rotPlayerToWorld(yavec.y, yavec.x, direction);
         }
 
-        ankh.shootFromRotationDeltaAgnosticR(this.getSelf(),yavec.y, yavec.x, 1.0F, 0.25F, 0);
+        ankh.shootFromRotationDeltaAgnosticR(this.getSelf(),yavec.x, yavec.y, 1.0F, 0.25F, 0);
     }
 
     public boolean setPowerBubbleBarrage() {
@@ -2103,7 +2118,7 @@ public void unlockSkin(){
         return (((float)this.chargedFinal/(float)maxSuperHitTime)*2.2F);
     }
     public float getKickAttackStrength(Entity entity){
-        float punchD = this.getPunchStrength(entity)*1.8F+this.getHeavyPunchStrength(entity);
+        float punchD = this.getPunchStrength(entity)*1.9F+this.getHeavyPunchStrength(entity);
         /**Full charge does much less damage because it's more for moving mobs*/
 
         if (this.chargedFinal >= maxSuperHitTime){
@@ -2119,6 +2134,10 @@ public void unlockSkin(){
     public void kickAttackImpact(Entity entity){
         this.setAttackTimeDuring(-20);
         if (entity != null) {
+            if (chargedFinal < maxSuperHitTime) {
+                hitParticlesCenter(entity);
+            }
+
             float pow;
             float knockbackStrength;
             pow = getKickAttackStrength(entity);
@@ -2131,7 +2150,7 @@ public void unlockSkin(){
                         addEXP(1, LE);
                     }
                 }
-                this.takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
+                takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
             } else {
                 if (chargedFinal >= maxSuperHitTime) {
                     knockShield2(entity, getKickAttackKnockShieldTime());
@@ -2191,7 +2210,7 @@ public void unlockSkin(){
             float halfReach = (float) (distMax * 0.5);
             Vec3 pointVec = DamageHandler.getRayPoint(self, halfReach);
             if (!this.self.level().isClientSide) {
-                ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.EXPLOSION, pointVec.x, pointVec.y, pointVec.z,
+                ((ServerLevel) this.self.level()).sendParticles(ModParticles.PUNCH_MISS, pointVec.x, pointVec.y, pointVec.z,
                         1, 0.0, 0.0, 0.0, 1);
             }
         }
@@ -2465,7 +2484,7 @@ public void unlockSkin(){
                 }
             }
         }
-        return false;
+        return super.dealWithProjectile(ent,res);
     }
 
     public boolean waterShieldBlockProjectile(Projectile projectile)
@@ -2475,6 +2494,9 @@ public void unlockSkin(){
 
 
     public boolean canDoBubbleItemLaunch(){
+        if (this.getSelf() instanceof Player P) {
+            return !((IPlayerEntity)P).roundabout$getForRealMainHand().isEmpty();
+        }
         ItemStack stack = this.getSelf().getMainHandItem();
         return !stack.isEmpty();
     }
@@ -2530,6 +2552,12 @@ public void unlockSkin(){
             case SoftAndWetEntity.KIRA -> Component.translatable("skins.roundabout.soft_and_wet.kira");
             case SoftAndWetEntity.GREEN -> Component.translatable("skins.roundabout.soft_and_wet.green");
             case SoftAndWetEntity.KNIGHT -> Component.translatable("skins.roundabout.soft_and_wet.knight");
+            case SoftAndWetEntity.MELON -> Component.translatable("skins.roundabout.soft_and_wet.melon");
+            case SoftAndWetEntity.MORIOH -> Component.translatable("skins.roundabout.soft_and_wet.morioh");
+            case SoftAndWetEntity.ART -> Component.translatable("skins.roundabout.soft_and_wet.art");
+            case SoftAndWetEntity.NATURE -> Component.translatable("skins.roundabout.soft_and_wet.nature");
+            case SoftAndWetEntity.WHEEL -> Component.translatable("skins.roundabout.soft_and_wet.wheel");
+            case SoftAndWetEntity.ACTION -> Component.translatable("skins.roundabout.soft_and_wet.action");
             default -> Component.translatable("skins.roundabout.soft_and_wet.light");
         };
     }

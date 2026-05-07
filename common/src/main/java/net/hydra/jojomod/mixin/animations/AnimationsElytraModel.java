@@ -40,18 +40,13 @@ public abstract class AnimationsElytraModel<T extends LivingEntity> extends Agea
     }
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "TAIL"))
     public void roundabout$SetupAnim5(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
-        if ($$0 instanceof Player) {
+        if ($$0 instanceof Player P) {
             IPlayerEntity ipe = ((IPlayerEntity) $$0);
-            this.roundabout$animate(ipe.getWry(), Poses.WRY.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getGiorno(), Poses.GIORNO.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getJoseph(), Poses.JOSEPH.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getKoichi(), Poses.KOICHI.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getOhNo(), Poses.OH_NO.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getTortureDance(), Poses.TORTURE_DANCE.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getWamuu(), Poses.WAMUU.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getJotaro(), Poses.JOTARO.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getJonathan(), Poses.JONATHAN.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getWatch(), Poses.WATCH.ad, $$3, 1f);
+            if (!P.isPassenger() && !$$0.isVisuallySwimming() && !$$0.isFallFlying()) {
+                if (Poses.getAnimation(P) != null) {
+                    this.roundabout$animate(ipe.getStyleAnimation(), Poses.getAnimation(P), $$3, 1f);
+                }
+            }
         }
     }
 

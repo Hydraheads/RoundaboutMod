@@ -1,30 +1,27 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.client.models.layers.*;
-import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer;
+import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.mobs.*;
-import net.hydra.jojomod.event.index.LocacacaCurseIndex;
-import net.hydra.jojomod.event.index.Poses;
-import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ModificationMaskItem;
-import net.hydra.jojomod.stand.powers.PowersRatt;
-import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
-import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
+import net.hydra.jojomod.stand.powers.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.*;
@@ -71,11 +68,14 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         super($$0, $$1, $$2);
     }
 
+    public boolean originalArms;
+
     @Inject(method="<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Z)V", at = @At(value = "RETURN"))
-    private void roundaboutRenderKnives(EntityRendererProvider.Context $$0, boolean $$1, CallbackInfo ci) {
+    private void roundabout$initRend(EntityRendererProvider.Context $$0, boolean $$1, CallbackInfo ci) {
         /**Access to slim and not slim models simultaneously*/
         roundabout$otherModel = new PlayerModel<>($$0.bakeLayer($$1 ? ModelLayers.PLAYER : ModelLayers.PLAYER_SLIM), !$$1);
         roundabout$mainModel = this.model;
+        originalArms = $$1;
     }
     @Unique
     protected PlayerModel roundabout$otherModel;
@@ -246,14 +246,24 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         IH = $$1;
 
         // ratt scope spyglass hand position
+        StandUser SU = ((StandUser) $$0);
         if ($$1.equals(InteractionHand.MAIN_HAND)) {
-            if (((StandUser) (Player) $$0).roundabout$getStandPowers() instanceof PowersRatt) {
-                if (((StandUser) (Player) $$0).roundabout$getStandPowers().scopeLevel != 0) {
+            if (SU.roundabout$getStandPowers() instanceof PowersRatt && PowerTypes.hasStandActive($$0)) {
+                if (SU.roundabout$getStandPowers().getStandUserSelf().roundabout$getCombatMode()) {
                     ci.setReturnValue(HumanoidModel.ArmPose.SPYGLASS);
+                    return;
                 }
             }
+
+            if (((IPlayerEntity)$$0).roundabout$GetPos2() == PlayerPosIndex.BLOOD_SUCK){
+                ci.setReturnValue(HumanoidModel.ArmPose.SPYGLASS);
+                return;
+            }
         }
+
     }
+
+
     @ModifyVariable(method = "getArmPose", at = @At(value = "STORE"),ordinal = 0)
     private static ItemStack roundabout$GetArmPose2(ItemStack $$0) {
         if (IH == InteractionHand.MAIN_HAND && ((StandUserClient)ACP).roundabout$getRoundaboutRenderMainHand() != null){
@@ -264,12 +274,158 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         return $$0;
     }
 
+
+   @Inject(method = "renderHand",at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/player/PlayerRenderer;setModelProperties(Lnet/minecraft/client/player/AbstractClientPlayer;)V",shift = At.Shift.AFTER))
+    private void roundabout$hideAnubisArm(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, ModelPart $$4, ModelPart $$5, CallbackInfo ci) {
+        HumanoidArm arm = null;
+        if (AnubisLayer.shouldRender($$3) != null) {
+            arm = AnubisLayer.shouldRender($$3);
+        }
+        StandUser SU = (StandUser) $$3;
+        if (SU.roundabout$getStandPowers() instanceof PowersTusk && PowerTypes.isUsingStand($$3)) {
+            arm = $$3.getMainArm();
+        }
+
+        if (arm == HumanoidArm.RIGHT) {
+            this.getModel().rightArm.visible = false;
+            this.getModel().rightSleeve.visible = false;
+        } else if (arm == HumanoidArm.LEFT)  {
+            this.getModel().leftArm.visible = false;
+            this.getModel().leftSleeve.visible = false;
+        }
+    }
+
+    @Inject(method = "setModelProperties", at = @At(value = "TAIL"))
+    private void roundabout$setModelProperties(AbstractClientPlayer $$0, CallbackInfo ci) {
+        if ($$0 instanceof StandUser standUser) {
+            PlayerModel<AbstractClientPlayer> playerModel = this.getModel();
+            if (standUser.roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+
+                if (PGD.legGoneTicks > 0) {
+                    playerModel.leftLeg.visible = false;
+                    playerModel.leftPants.visible = false;
+                    playerModel.rightLeg.visible = false;
+                    playerModel.rightPants.visible = false;
+                }
+
+                if (ClientUtil.hasChangedLegs($$0)){
+                    playerModel.rightArm.visible = false;
+                    playerModel.rightSleeve.visible = false;
+                    playerModel.leftArm.visible = false;
+                    playerModel.leftSleeve.visible = false;
+                }
+
+                if(!PGD.HasMainArm && (PGD.self.getMainArm() ==HumanoidArm.RIGHT)){
+                    playerModel.rightArm.visible=false;
+                    playerModel.rightSleeve.visible=false;
+                }
+                if(!PGD.HasOffHand && (PGD.self.getMainArm() ==HumanoidArm.RIGHT)){
+                    playerModel.leftArm.visible=false;
+                    playerModel.leftSleeve.visible=false;
+                }
+                if(!PGD.HasMainArm && (PGD.self.getMainArm() ==HumanoidArm.LEFT)){
+                    playerModel.leftArm.visible=false;
+                    playerModel.leftSleeve.visible=false;
+                }
+                if(!PGD.HasOffHand && (PGD.self.getMainArm() ==HumanoidArm.LEFT)){
+                    playerModel.rightArm.visible=false;
+                    playerModel.rightSleeve.visible=false;
+                }
+            }
+
+
+            if (!(ClientUtil.checkIfFirstPerson() && $$0.is(ClientUtil.getPlayer()))
+            || !((IEntityAndData)$$0).roundabout$getExclusiveLayers()){
+                if (ClientUtil.hasChangedArms($$0)){
+                    playerModel.rightArm.visible = false;
+                    playerModel.rightSleeve.visible = false;
+                    playerModel.leftArm.visible = false;
+                    playerModel.leftSleeve.visible = false;
+                }
+                if (ClientUtil.hasChangedLegs($$0)){
+                    playerModel.rightLeg.visible = false;
+                    playerModel.rightPants.visible = false;
+                    playerModel.leftLeg.visible = false;
+                    playerModel.leftPants.visible = false;
+                }
+                if (ClientUtil.hasChangedBody($$0)){
+                    playerModel.body.visible = false;
+                    playerModel.jacket.visible = false;
+                }
+                if (ClientUtil.hasChangedHead($$0)){
+                    playerModel.head.visible = false;
+                    playerModel.hat.visible = false;
+                }
+                if (ClientUtil.hideCapeAndEars($$0)){
+                    IPlayerModel iPlayerModel = ((IPlayerModel) playerModel);
+                    iPlayerModel.roundabout$getEar().visible = false;
+                    iPlayerModel.roundabout$getCloak().visible = false;
+                }
+            }
+
+        }
+    }
+
+    @Inject(method = "setModelProperties", at = @At(value = "TAIL"))
+    private void roundabout$setModelPropertiesCream(AbstractClientPlayer $$0, CallbackInfo ci) {
+        if ($$0 instanceof StandUser standUser) {
+            if (standUser.roundabout$getStandPowers() instanceof PowersCream PC) {
+                PlayerModel<AbstractClientPlayer> playerModel = this.getModel();
+                int transformTimer = PC.getTransformTimer();
+
+                if (PC.getTransformDirection() == 1) {
+                    if (transformTimer == 10) {
+                        playerModel.head.visible = false;
+                        playerModel.hat.visible = false;
+                    } else if (transformTimer == 15) {
+                        playerModel.leftArm.visible = false;
+                        playerModel.rightArm.visible = false;
+                        playerModel.body.visible = false;
+                        playerModel.leftSleeve.visible = false;
+                        playerModel.rightSleeve.visible = false;
+                        playerModel.jacket.visible = false;
+                    } else if (transformTimer == 20) {
+                        playerModel.leftLeg.visible = false;
+                        playerModel.rightLeg.visible = false;
+                        playerModel.leftPants.visible = false;
+                        playerModel.rightPants.visible = false;
+                    }
+                } else if (PC.getTransformDirection() == 2) { ///  Note to Chlope here: the limbs are visible by default so I'm not sure why you'd have to force this to be visible and it may lead to mod incompa
+                    if (transformTimer == 10) {
+                        playerModel.leftLeg.visible = true;
+                        playerModel.rightLeg.visible = true;
+                        playerModel.leftPants.visible = true;
+                        playerModel.rightPants.visible = true;
+                    } else if (transformTimer == 15) {
+                        playerModel.leftArm.visible = true;
+                        playerModel.rightArm.visible = true;
+                        playerModel.body.visible = true;
+                        playerModel.leftSleeve.visible = true;
+                        playerModel.rightSleeve.visible = true;
+                        playerModel.jacket.visible = true;
+                    } else if (transformTimer == 20) {
+                        playerModel.head.visible = true;
+                        playerModel.hat.visible = true;
+                    }
+                }
+            }
+        }
+    }
+
+
+
     /**Render external layers like soft and wet shooting mode out of context. This particular inject is for Achtung Baby*/
     @Inject(method = "renderHand", at = @At(value = "HEAD"), cancellable = true)
     private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderHandHEAD(PoseStack stack, MultiBufferSource buffer, int integer,
                                                                                                 AbstractClientPlayer acl, ModelPart $$4, ModelPart $$5,
                                                                                                 CallbackInfo ci) {
-        if (ClientUtil.getThrowFadeToTheEther() != 1){
+        ((IEntityAndData)acl).roundabout$setExclusiveLayers(true);
+        boolean shouldRenderArms = true; // make this an AbilityScapeBasis thing at some point idk
+        StandUser standUser = (StandUser) acl;
+        if (AnubisLayer.shouldRender(acl) != null) {shouldRenderArms = false;}
+        if (standUser.roundabout$getStandPowers() instanceof PowersTusk && PowerTypes.isUsingStand(acl)) {shouldRenderArms = false;}
+
+        if ( (ClientUtil.getThrowFadeToTheEther() != 1 || ClientUtil.hasChangedArms(acl)) && shouldRenderArms ){
             ci.cancel();
             PlayerModel<AbstractClientPlayer> $$6 = this.getModel();
             this.setModelProperties(acl);
@@ -284,12 +440,18 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                 return;
             }
             $$4.xRot = 0.0F;
-            $$4.render(stack, buffer.getBuffer(RenderType.entityTranslucentCull(acl.getSkinTextureLocation())), integer, OverlayTexture.NO_OVERLAY);
+            RenderType tl = RenderType.entityTranslucentCull(acl.getSkinTextureLocation());
+            if (ClientUtil.hasChangedArms(acl)){
+                tl = RenderType.entityTranslucent(ClientUtil.getChangedArmTexture(acl));
+            }
+            $$4.render(stack, buffer.getBuffer(tl), integer, OverlayTexture.NO_OVERLAY);
             $$5.xRot = 0.0F;
-            $$5.render(stack, buffer.getBuffer(RenderType.entityTranslucent(acl.getSkinTextureLocation())), integer, OverlayTexture.NO_OVERLAY);
+            $$5.render(stack, buffer.getBuffer(tl), integer, OverlayTexture.NO_OVERLAY);
             roundabout$renderHandLayers2(stack,buffer,integer,acl,$$4,$$5);
+            ((IEntityAndData)acl).roundabout$setExclusiveLayers(false);
         }
     }
+    
 
     /**Render external layers like soft and wet shooting mode out of context*/
     @Inject(method = "renderHand", at = @At(value = "TAIL"))
@@ -299,6 +461,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         //PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity,
         // float var5, float var6, float var7, float partialTicks, float var9, float var10)
         roundabout$renderHandLayers2(stack,buffer,integer,acl,$$4,$$5);
+        ((IEntityAndData)acl).roundabout$setExclusiveLayers(false);
     }
     @Unique
     public void rdbt$copyTo(ModelPart $$0, ModelPart $$1) {
@@ -317,6 +480,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderHandAnimations(PoseStack stack, MultiBufferSource buffer, int integer,
                                                                                                 AbstractClientPlayer acl, ModelPart $$4, ModelPart $$5,
                                                                                                 CallbackInfo ci) {
+
         PlayerModel<AbstractClientPlayer> $$6 = this.getModel();
         if (((IPlayerModel)$$6).roundabout$setupFirstPersonAnimations(acl, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F,$$4,$$5,
                 buffer,integer,stack)){
@@ -325,7 +489,8 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             return;
         }
 
-        if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.inCombatMode()) {
+        if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.inCombatMode()
+        ) {
 
             $$6.rightLeg.copyFrom($$6.rightArm);
             $$6.rightLeg.zRot -= 0.8F;
@@ -412,6 +577,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         }
         ShootingArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,yes,
                 0,0,$$4);
+        AnubisLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,yes,$$4);
         if ($$4 != null && $$4.equals(this.model.rightArm)) {
             MandomLayer.renderWatchFirstPerson(stack, buffer, getPackedLightCoords(acl, 1F), acl, 1, 1, 1, yes,
                     0, 0, $$4, ((IPlayerModel) this.model).roundabout$getSlim()
@@ -548,8 +714,11 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         }
     }
     @Unique
+    @Override
     public Mob roundabout$getShapeShift(Player pe){
         if (pe instanceof AbstractClientPlayer lpe){
+            rdbt$loadModel(ShapeShifts.getShiftFromByte(((IPlayerEntity)pe).roundabout$getShapeShift()),
+                    lpe,((IPlayerEntity)pe));
             return ((IPlayerEntityAbstractClient)lpe).roundabout$getShapeShiftTemp();
         }
         return null;
@@ -593,6 +762,36 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         }
         return null;
     }
+
+    public void rdbt$loadModel(ShapeShifts shift, AbstractClientPlayer acl, IPlayerEntity ipe){
+
+        Mob shapeTemp = ((IPlayerEntityAbstractClient)ipe).roundabout$getShapeShiftTemp();
+        if (shift != ShapeShifts.PLAYER && shift != ShapeShifts.EERIE && shift != ShapeShifts.OVA) {
+            if (shift == ShapeShifts.ZOMBIE) {
+                if (Minecraft.getInstance().level != null && (!(shapeTemp instanceof Zombie))) {
+                    roundabout$setShapeShift(acl, EntityType.ZOMBIE.create(Minecraft.getInstance().level));
+                }
+            } else if (shift == ShapeShifts.VILLAGER) {
+                if (Minecraft.getInstance().level != null && (!(shapeTemp instanceof Villager))) {
+                    roundabout$setShapeShift(acl, roundabout$getVillager(Minecraft.getInstance().level, ipe));
+                }
+            } else if (shift == ShapeShifts.SKELETON) {
+                if (Minecraft.getInstance().level != null && (!(shapeTemp instanceof Skeleton))) {
+                    roundabout$setShapeShift(acl, roundabout$getSkeleton(Minecraft.getInstance().level, ipe));
+                }
+            } else if (shift == ShapeShifts.WITHER_SKELETON) {
+                if (Minecraft.getInstance().level != null && (!(shapeTemp instanceof WitherSkeleton))) {
+                    roundabout$setShapeShift(acl, roundabout$getWither(Minecraft.getInstance().level, ipe));
+                }
+            } else if (shift == ShapeShifts.STRAY) {
+                if (Minecraft.getInstance().level != null && (!(shapeTemp instanceof Stray))) {
+                    roundabout$setShapeShift(acl, roundabout$getStray(Minecraft.getInstance().level, ipe));
+                }
+            }
+        }
+    }
+
+
     @Unique
     private <T extends LivingEntity, M extends EntityModel<T>>boolean roundabout$renderHandX(PoseStack stack,
                                                                                           MultiBufferSource buffer,
@@ -738,7 +937,8 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
             ShootingArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,yes,
                     0,0,$$5);
-    }
+            AnubisLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,yes,$$4);
+        }
 
     @Unique
     public void roundabout$corpseShowName(AbstractClientPlayer $$0, PoseStack $$3, MultiBufferSource $$4, int $$5){
@@ -760,44 +960,39 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     }
     boolean roundabout$switched = false;
     public void roundabout$changeTheModel(AbstractClientPlayer player, ItemStack visage, ShapeShifts shifts){
-        if (shifts == ShapeShifts.EERIE) {
-            if (((IPlayerModel) this.model).roundabout$getSlim()) {
-                if (!((IPlayerEntityAbstractClient)player).roundabout$getSwitched()) {
-                    ((IPlayerEntityAbstractClient)player).roundabout$setOGModel(this.model);
-                    ((IPlayerEntityAbstractClient)player).roundabout$setSwitched(true);
-                    model = roundabout$otherModel;
-                }
-            }
-            return;
-        }
+
+        IPlayerEntity pl = ((IPlayerEntity) player);
+        visage = pl.roundabout$getMaskSlot();
         if (shifts == ShapeShifts.OVA) {
-            if (!((IPlayerModel) this.model).roundabout$getSlim()) {
-                if (!((IPlayerEntityAbstractClient)player).roundabout$getSwitched()) {
-                    ((IPlayerEntityAbstractClient)player).roundabout$setOGModel(this.model);
-                    ((IPlayerEntityAbstractClient)player).roundabout$setSwitched(true);
-                    model = roundabout$otherModel;
-                }
-            }
-            return;
+            visage = ModItems.ENYA_OVA_MASK.getDefaultInstance();
+        } else if (shifts == ShapeShifts.EERIE) {
+            visage = null;
         }
 
         if (visage != null && !visage.isEmpty()) {
             if (visage.getItem() instanceof MaskItem MI) {
                 if (MI.visageData.isCharacterVisage()) {
                     if (((IPlayerModel)this.model).roundabout$getSlim() != MI.visageData.isSlim()){
-                        if (!((IPlayerEntityAbstractClient)player).roundabout$getSwitched()) {
-                            ((IPlayerEntityAbstractClient)player).roundabout$setOGModel(this.model);
-                            ((IPlayerEntityAbstractClient)player).roundabout$setSwitched(true);
+                        if (MI.visageData.isSlim() != originalArms){
                             model = roundabout$otherModel;
+                        } else {
+                            model = roundabout$mainModel;
                         }
                     }
                     return;
+                } else if (visage.is(ModItems.RAT_MASK)){
+                    if (((IPlayerModel) this.model).roundabout$getSlim()){
+                        if (originalArms){
+                            model = roundabout$otherModel;
+                        } else {
+                            model = roundabout$mainModel;
+                        }
+                    }
                 }
             }
         }
-        if (((IPlayerEntityAbstractClient)player).roundabout$getSwitched()) {
-            ((IPlayerEntityAbstractClient)player).roundabout$setSwitched(false);
-            model = ((IPlayerEntityAbstractClient)player).roundabout$getOGModel();
+        if (((IPlayerModel)this.model).roundabout$getSlim() != originalArms) {
+            model = roundabout$mainModel;
         }
     }
     @Inject(method = "render(Lnet/minecraft/client/player/AbstractClientPlayer;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
@@ -809,6 +1004,15 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         ItemStack visage = ipe.roundabout$getMaskSlot();
         ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift());
         roundabout$changeTheModel($$0,visage,shift);
+
+            byte playerP = ((IPlayerEntity)$$0).roundabout$GetPos();
+
+            /*When you die to the sun you don't appear*/
+            if (playerP == PlayerPosIndex.SUNLIGHT){
+                ci.cancel();
+                return;
+            }
+
 
         if (!ClientUtil.checkIfIsFirstPerson($$0)) {
             Poses pose = Poses.getPosFromByte(ipe.roundabout$GetPoseEmote());
@@ -976,6 +1180,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         jj.TORTURE_DANCE.stop();
         jj.OH_NO.stop();
         jj.WAMUU.stop();
+            jj.VAMPIRE.stop();
     }
 
     @Unique
@@ -1162,6 +1367,14 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     public void roundabout$scale(AbstractClientPlayer $$0, PoseStack $$1, float $$2, CallbackInfo ci) {
         IPlayerEntity ple = ((IPlayerEntity) $$0);
         ItemStack visage = ple.roundabout$getMaskSlot();
+        ShapeShifts shift = ShapeShifts.getShiftFromByte(ple.roundabout$getShapeShift());
+        if (shift == ShapeShifts.OVA) {
+            visage = ModItems.ENYA_OVA_MASK.getDefaultInstance();
+        } else if (shift == ShapeShifts.EERIE) {
+            visage = null;
+        }
+
+
         if (visage != null && !visage.isEmpty()) {
             if (visage.getItem() instanceof MaskItem MI) {
                 if (MI instanceof ModificationMaskItem MD){

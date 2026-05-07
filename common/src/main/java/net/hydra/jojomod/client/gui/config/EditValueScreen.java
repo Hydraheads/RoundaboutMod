@@ -30,6 +30,7 @@ public class EditValueScreen extends Screen {
     @Override
     protected void init() {
         this.inputBox = new EditBox(this.font, this.width / 2 - 100, this.height / 2 - 10, 200, 20, Component.translatable("config.roundabout.major.value"));
+        this.inputBox.setMaxLength(256);
         try {
             this.inputBox.setValue(String.valueOf(field.get(instance)));
         } catch (IllegalAccessException e) {
@@ -46,6 +47,8 @@ public class EditValueScreen extends Screen {
                     field.set(instance, Integer.parseInt(text));
                 } else if (type == float.class || type == Float.class) {
                     field.set(instance, Float.parseFloat(text));
+                } else if (type == String.class) {
+                    field.set(instance, text);
                 } else {
                     throw new RuntimeException("Unsupported type caught while creating EditValueScreen!");
                 }

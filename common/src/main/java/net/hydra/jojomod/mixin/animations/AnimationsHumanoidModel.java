@@ -105,7 +105,6 @@ public class AnimationsHumanoidModel<T extends LivingEntity> extends AgeableList
                }
            }
        }
-
     }
 
     @Unique

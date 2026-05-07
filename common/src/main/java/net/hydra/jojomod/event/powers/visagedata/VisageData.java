@@ -2,6 +2,7 @@ package net.hydra.jojomod.event.powers.visagedata;
 
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
+import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
@@ -43,7 +44,9 @@ public class VisageData {
     public VoiceData voiceData(LivingEntity realSelf){
         return new VoiceData(realSelf);
     }
-
+    public Vec3i getHairColor(){
+        return new Vec3i(1,1,1);
+    }
 
     public String skinPathName;
 
@@ -66,6 +69,9 @@ public class VisageData {
     public boolean rendersBigHair(){
         return false;
     }
+    public boolean rendersKakyoinHair(){
+        return false;
+    }
     public boolean rendersJosukeDecals(){
         return false;
     }
@@ -85,6 +91,9 @@ public class VisageData {
         return false;
     }
     public boolean rendersDiegoHat(){
+        return false;
+    }
+    public boolean rendersSpeedwagonFoundationHat(){
         return false;
     }
     public boolean rendersBasicHat(){

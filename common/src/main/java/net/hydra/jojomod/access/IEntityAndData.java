@@ -1,9 +1,7 @@
 package net.hydra.jojomod.access;
 
 import net.hydra.jojomod.event.SavedSecond;
-import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,12 +9,21 @@ import java.util.ArrayDeque;
 
 public interface IEntityAndData {
 
+    int roundabout$getBleedLevel();
+    void roundabout$setBleedLevel(int val);
+
+
+    void roundabout$setLastDamageTaken(float amount);
+    float roundabout$getLastDamageTaken();
+    void rdbt$forceDeltaMovement(Vec3 $$0);
     float roundabout$getPreTSTick();
     void roundabout$setExclusiveLayers(boolean exclusive);
     boolean roundabout$getExclusiveLayers();
-
+    boolean rdbt$returnPickup();
     void roundabout$setNoGravTicks(int ticks);
     int roundabout$getNoGravTicks();
+
+    float roundabout$getStepHeight();
 
     void roundabout$setNoAAB();
 
@@ -56,6 +63,10 @@ public interface IEntityAndData {
     void roundabout$setDeltaMovementRaw(Vec3 ec);
     ArrayDeque<SavedSecond> roundabout$getSecondQue();
 
+    SavedSecond roundabout$getFirstSavedSecond();
+
+    // the one above is always something related to mandom, but it's actual purpose is for movement detectors
+
     SavedSecond roundabout$getLastSavedSecond();
     void roundabout$addSecondToQueue();
 
@@ -64,6 +75,12 @@ public interface IEntityAndData {
     /**Achtung*/
     void roundabout$setTrueInvisibility(int only);
     int roundabout$getTrueInvisibility();
+
+    /**Manhattan Transfer*/
+    void roundabout$setTrueInvisibilityManhattan(int manhattanticking);
+    int roundabout$getTrueInvisibilityManhattan();
+
+    void rdbt$doWindVisionDetection();
 
 
     void roundabout$universalTick();

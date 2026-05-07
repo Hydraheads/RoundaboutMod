@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "Y": {
+      "item": "minecraft:ender_pearl"
+    },
+    "X": {
+      "item": "minecraft:lapis_lazuli"
+    }
+  },
+  "pattern": [
+    " X ",
+    "XYX",
+    " X "
+  ],
+  "result": {
+    "item": "roundabout:occult_charge"
+  },
+  "show_notification": true
+}

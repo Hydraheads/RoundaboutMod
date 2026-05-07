@@ -36,7 +36,7 @@ public class ZServerGamePacketListenerImpl implements IClientNetworking {
         ServerboundPlayerActionPacket.Action serverboundplayeractionpacket$action = $$0.getAction();
         switch (serverboundplayeractionpacket$action) {
             case SWAP_ITEM_WITH_OFFHAND:
-                if (((StandUser)this.player).roundabout$getEffectiveCombatMode()){
+                if (((StandUser)this.player).roundabout$getEffectiveCombatMode() || ((StandUser) this.player).roundabout$isPossessed()){
                     ci.cancel();
                 }
         }

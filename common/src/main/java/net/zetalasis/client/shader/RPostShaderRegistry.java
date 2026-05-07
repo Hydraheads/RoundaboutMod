@@ -18,6 +18,7 @@ public class RPostShaderRegistry {
 
     public static IPostChainAccessor D4C_DIMENSION_TRANSITION = null;
     public static IPostChainAccessor D4C_ALT_DIMENSION = null;
+    public static IPostChainAccessor TIMESTOP = register("timestop");
 
     /** Super Secret Shaders */
     public static IPostChainAccessor DESATURATE = null;
