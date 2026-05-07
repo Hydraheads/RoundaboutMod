@@ -2497,7 +2497,9 @@ public class MainUtil {
             player.containerMenu = new FogInventoryMenu(player.getInventory(), !player.level().isClientSide, player);
             ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);
         } else if (context == PacketDataIndex.SINGLE_BYTE_GLAIVE_START_SOUND) {
-            ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.GLAIVE_CHARGE, 10, false);
+            if (player.getUseItem() != null && player.getUseItem().getItem() instanceof GlaiveItem) {
+                ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.GLAIVE_CHARGE, 10, false);
+            }
         } else if (context == PacketDataIndex.SINGLE_BYTE_ITEM_STOP_SOUND) {
             ((StandUser) player).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 30,false);
         } else if (context == PacketDataIndex.SINGLE_BYTE_STAND_ARROW_START_SOUND) {
@@ -2602,6 +2604,17 @@ public class MainUtil {
                 queryNumber = powerTypes.size()-1;
             }
             ((IPlayerEntity) player).roundabout$setPowerWithPenalty((byte)powerTypes.get(queryNumber).ordinal());
+        } else if (context == PacketDataIndex.FIX_COOLDOWN_FOR_SERVER) {
+            StandUser user = ((StandUser) player);
+            int attackTimeMax = user.roundabout$getAttackTimeMax();
+            if (attackTimeMax > 0) {
+                float attackTime = user.roundabout$getAttackTime();
+                float finalATime = attackTime / attackTimeMax;
+                if (finalATime <= 1) {
+                    user.roundabout$getStandPowers().setAttackTime((attackTimeMax+1));
+                    user.roundabout$getStandPowers().setActivePowerPhase((byte) 0);
+                }
+            }
         }
     }
 

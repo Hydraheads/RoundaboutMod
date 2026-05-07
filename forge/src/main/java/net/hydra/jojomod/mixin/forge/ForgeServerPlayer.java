@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.forge;
 
 import com.mojang.authlib.GameProfile;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -46,6 +47,18 @@ public abstract class ForgeServerPlayer extends Player {
                         $$4.setThrower(stand.getUUID());
                         this.level().addFreshEntity($$4);
                         stand.setHeldItem(ItemStack.EMPTY);
+                    }
+                }
+                if(stand instanceof ManhattanTransferEntity ME){
+                    if(!ME.getHeldItemManhattan().isEmpty()){
+                        if (ME.canAcquireHeldItem) {
+                            double $$3 = this.getEyeY();
+                            ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), ME.getHeldItemManhattan().copy());
+                            $$4.setPickUpDelay(40);
+                            $$4.setThrower(stand.getUUID());
+                            this.level().addFreshEntity($$4);
+                            ME.setHeldItemManhattan(ItemStack.EMPTY);
+                        }
                     }
                 }
             }

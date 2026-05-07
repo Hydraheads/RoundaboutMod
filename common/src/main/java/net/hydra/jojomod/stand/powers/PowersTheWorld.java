@@ -721,7 +721,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (this.getReducedDamage(entity)){
             ret = (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD);
             if (this.chargedFinal >= maxSuperHitTime){
-                ret +=1;
+                ret +=0.5F;
             }
         } else {
             ret = (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD)+3;

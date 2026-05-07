@@ -4,6 +4,7 @@ import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -217,6 +218,9 @@ public class Zombiefish extends PathfinderMob {
         if (!this.level().isClientSide()) {
             lifespan++;
             if (lifespan > 1200){
+                ((ServerLevel) this.level()).sendParticles(ParticleTypes.POOF, this.getEyePosition().x,
+                        this.getEyePosition().y, this.getEyePosition().z,
+                        5, 0.1, 0.1, 0.1, 0.01);
                 discard();
             }
             if (controller != null){

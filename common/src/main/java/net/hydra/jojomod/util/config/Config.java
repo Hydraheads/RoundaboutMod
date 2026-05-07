@@ -174,6 +174,8 @@ public class Config implements Cloneable {
         public Integer gasolineExplosionDamage;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer matchDamage;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean noGlaiveDuringPunchRecharge;
     }
     public static class WorldGenSettings {
         @IntOption(group = "inherit", value = 55, min = 0, max = 4096)

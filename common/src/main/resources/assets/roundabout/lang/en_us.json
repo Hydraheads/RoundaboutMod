@@ -2279,6 +2279,8 @@
   "config.roundabout.blinkWithCamo.name": "Blink With Camo",
   "config.roundabout.blinkWithCamo.desc": "Turn off to make the vampire camo move not blink if it somehow makes you uncomfortable in some way.",
 
+  "config.roundabout.noGlaiveDuringPunchRecharge.name": "Punch Charge Anti-Glaive",
+  "config.roundabout.noGlaiveDuringPunchRecharge.desc": "Makes glaives not work while on punch cooldown. This prevents the scuffed strategy of applying pressure to melee users to recharge stand punches.",
 
   "config.roundabout.mountingHorsesInCreativeTamesThem.name": "Creative Mount To Tame",
   "config.roundabout.mountingHorsesInCreativeTamesThem.desc": "If you mount a horse in creative mode, you instantly tame it.",
