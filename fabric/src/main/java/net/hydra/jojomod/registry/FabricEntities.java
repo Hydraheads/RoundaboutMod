@@ -32,6 +32,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.projectile.LlamaSpit;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.Heightmap;
 
@@ -561,6 +562,14 @@ public class FabricEntities {
                         EntityType.Builder.<RattDartEntity>of(RattDartEntity::new, MobCategory.MISC).
                                 sized(0.5f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":ratt_dart")
                 );
+
+    public static final EntityType<PoisonLlamaSpit> POISON_LLAMA_SPIT =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "poison_llama_spit"),
+                    EntityType.Builder.<PoisonLlamaSpit>of(PoisonLlamaSpit::new, MobCategory.MISC).
+                            sized(0.5f, 0.5f).clientTrackingRange(4).updateInterval(10).build(Roundabout.MOD_ID+":poison_llama_spit")
+            );
         public static final EntityType<MatchEntity> THROWN_MATCH =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -879,6 +888,7 @@ public class FabricEntities {
                 ModEntities.ROUNDABOUT_BULLET_ENTITY = ROUNDABOUT_BULLET_ENTITY;
                 ModEntities.THROWN_KNIFE = THROWN_KNIFE;
                 ModEntities.RATT_DART = RATT_DART;
+                ModEntities.POISON_LLAMA_SPIT = POISON_LLAMA_SPIT;
                 ModEntities.THROWN_MATCH = THROWN_MATCH;
                 ModEntities.THROWN_WATER_BOTTLE = THROWN_WATER_BOTTLE;
                 ModEntities.CROSSFIRE_HURRICANE = CROSSFIRE_HURRICANE;
