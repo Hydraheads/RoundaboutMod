@@ -5,6 +5,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.goals.*;
+import net.hydra.jojomod.entity.projectile.PoisonLlamaSpit;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
@@ -42,6 +43,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.LlamaSpit;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ShearsItem;
@@ -649,10 +651,23 @@ public class BaseMinion extends PathfinderMob {
             z2.discard();
         }
     }
-    public Zombiefish zfish(){
+    private void spit(LivingEntity $$0) {
+        PoisonLlamaSpit $$1 = new PoisonLlamaSpit(this.level(), this);
+        double $$2 = $$0.getX() - this.getX();
+        double $$3 = $$0.getY(0.3333333333333333) - $$1.getY();
+        double $$4 = $$0.getZ() - this.getZ();
+        double $$5 = Math.sqrt($$2 * $$2 + $$4 * $$4) * (double)0.2F;
+        $$1.shoot($$2, $$3 + $$5, $$4, 1.5F, 10.0F);
+        if (!this.isSilent()) {
+            this.level().playSound((Player)null, this.getX(), this.getY(), this.getZ(), SoundEvents.LLAMA_SPIT, this.getSoundSource(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
+        }
 
-        return null;
+        this.level().addFreshEntity($$1);
     }
+    public void performRangedAttack(LivingEntity $$0, float $$1) {
+        this.spit($$0);
+    }
+
     @Override
     public void tick(){
         if (!this.level().isClientSide()) {

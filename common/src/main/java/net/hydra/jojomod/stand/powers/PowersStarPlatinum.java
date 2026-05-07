@@ -419,6 +419,12 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
+
+        if (slot == 1){
+            if (!canImpale()){
+                return true;
+            }
+        }
         return this.isDazed(this.getSelf()) || (slot == 3 && this.isGuarding() && ((TimeStop)this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) || (activeP != PowerIndex.SKILL_4 && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))
                 || ((((this.getActivePower() == PowerIndex.POWER_2_SNEAK && this.getAttackTimeDuring() >= 0) && slot != 1) || ((hasBlock() || hasEntity()) && slot != 1
        ))));
@@ -553,6 +559,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             return;
         }
         if (hasBlock() || hasEntity())
+            return;
+        if (!canImpale())
             return;
         if (!this.onCooldown(PowerIndex.SKILL_1)) {
             if (canExecuteMoveWithLevel(getFingerLevel())) {

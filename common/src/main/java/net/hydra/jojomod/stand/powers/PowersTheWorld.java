@@ -254,6 +254,11 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
+        if (slot == 1){
+            if (!canImpale()){
+                return true;
+            }
+        }
         if (this.getActivePower() == PowerIndex.POWER_1 && this.getAttackTimeDuring() >= 0 && slot != 2 && slot != 1){
             return true;
         } else if (this.getActivePower() == PowerIndex.POWER_1_BONUS && this.getAttackTimeDuring() >= 0 && slot != 1){
@@ -990,6 +995,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (clientForwardBarrage())
             return;
         if (hasBlock() || hasEntity())
+            return;
+        if (!canImpale())
             return;
         if (!this.onCooldown(PowerIndex.SKILL_1)) {
             if (!this.isGuarding()) {
