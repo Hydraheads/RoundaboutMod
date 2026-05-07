@@ -107,7 +107,7 @@ public class ZombieFate extends VampiricFate {
         if (canTargetEnter()){
             tryPowerPacket(ENTER);
         } else {
-            dash();
+            dashOrWallWalk();
         }
     }
 
@@ -370,6 +370,11 @@ public class ZombieFate extends VampiricFate {
 
     @Override
     public boolean tryPower(int move, boolean forced) {
+        switch (move) {
+            case WALL_WALK -> {
+                wallLatch();
+            }
+        }
         return super.tryPower(move,forced);
     }
     @Override
@@ -579,8 +584,12 @@ public class ZombieFate extends VampiricFate {
             }
         }
         setSkillIcon(context, x, y, 2, StandIcons.ZOMBIE_DRINK, PowerIndex.FATE_2);
-        if (canTargetEnter()){
+
+
+        if (canTargetEnter()) {
             setSkillIcon(context, x, y, 3, StandIcons.ZOMBIE_ENTER, PowerIndex.NO_CD);
+        } else if ((canLatchOntoWall() || (isPlantedInWall() && !isHoldingSneak())) && canWallWalkConfig()) {
+            setSkillIcon(context, x, y, 3, StandIcons.WALL_WALK_VAMP, PowerIndex.FATE_3);
         } else {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         }
@@ -627,11 +636,13 @@ public class ZombieFate extends VampiricFate {
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.zombie_enter",
                 "instruction.roundabout.press_skill", StandIcons.ZOMBIE_ENTER,4,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.zombie_disguise",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.wall_walk_vamp",
+                "instruction.roundabout.press_skill_air", StandIcons.WALL_WALK_VAMP,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.zombie_disguise",
                 "instruction.roundabout.press_skill", StandIcons.ZOMBIE_DISGUISE_ON,4,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.zombie_passive",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.zombie_passive",
                 "instruction.roundabout.passive", StandIcons.ZOMBIE_DISGUISE_OFF,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.zombie_passive_2",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.roundabout.zombie_passive_2",
                 "instruction.roundabout.passive", StandIcons.VAMPIRE_STRENGTH,0,level,bypas));
 
 
