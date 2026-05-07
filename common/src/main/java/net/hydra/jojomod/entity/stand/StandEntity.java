@@ -721,12 +721,14 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                 }
                 else if(this instanceof ManhattanTransferEntity ME){
                     if(!ME.getHeldItemManhattan().isEmpty()){
-                        double $$3 = this.getEyeY() - 0.3F;
-                        ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), ME.getHeldItemManhattan());
-                        $$4.setPickUpDelay(40);
-                        $$4.setThrower(this.getUUID());
-                        this.level().addFreshEntity($$4);
-                        ((ManhattanTransferEntity) this).setHeldItemManhattan(ItemStack.EMPTY);
+                        if(ME.canAcquireHeldItem) {
+                            double $$3 = this.getEyeY() - 0.3F;
+                            ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), ME.getHeldItemManhattan());
+                            $$4.setPickUpDelay(40);
+                            $$4.setThrower(this.getUUID());
+                            this.level().addFreshEntity($$4);
+                            ((ManhattanTransferEntity) this).setHeldItemManhattan(ItemStack.EMPTY);
+                        }
                     }
                 }
             }
@@ -762,12 +764,14 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
             }
             else if(this instanceof ManhattanTransferEntity ME){
                 if(!ME.getHeldItemManhattan().isEmpty()){
-                    double $$3 = this.getEyeY() - 0.3F;
-                    ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), ME.getHeldItemManhattan().copy());
-                    $$4.setPickUpDelay(40);
-                    $$4.setThrower(this.getUUID());
-                    this.level().addFreshEntity($$4);
-                    ME.setHeldItemManhattan(ItemStack.EMPTY);
+                    if (this.canAcquireHeldItem) {
+                        double $$3 = this.getEyeY() - 0.3F;
+                        ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), ME.getHeldItemManhattan().copy());
+                        $$4.setPickUpDelay(40);
+                        $$4.setThrower(this.getUUID());
+                        this.level().addFreshEntity($$4);
+                        ME.setHeldItemManhattan(ItemStack.EMPTY);
+                    }
                 }
             }
         }
@@ -790,12 +794,14 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         }
         else if(this instanceof ManhattanTransferEntity ME){
             if(!ME.getHeldItemManhattan().isEmpty()){
-                double $$3 = this.getEyeY() - 0.3F;
-                ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), ME.getHeldItemManhattan().copy());
-                $$4.setPickUpDelay(40);
-                $$4.setThrower(this.getUUID());
-                this.level().addFreshEntity($$4);
-                ME.setHeldItemManhattan(ItemStack.EMPTY);
+                if(this.canAcquireHeldItem) {
+                    double $$3 = this.getEyeY() - 0.3F;
+                    ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), ME.getHeldItemManhattan().copy());
+                    $$4.setPickUpDelay(40);
+                    $$4.setThrower(this.getUUID());
+                    this.level().addFreshEntity($$4);
+                    ME.setHeldItemManhattan(ItemStack.EMPTY);
+                }
             }
         }
         super.remove($$0);

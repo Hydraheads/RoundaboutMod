@@ -201,6 +201,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 if(this.getStandEntity(this.getSelf()) != null && this.getStandEntity(this.getSelf()) instanceof  ManhattanTransferEntity ME){
                     ME.setHeldItemManhattan(ItemStack.EMPTY);
                     ME.hasItem = false;
+                    ME.canAcquireHeldItem = false;
                 }
             }
         }
