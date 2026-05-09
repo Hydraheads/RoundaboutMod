@@ -144,7 +144,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             StandUser sus = ((StandUser) player);
             StandPowers powers = sus.roundabout$getStandPowers();
             if (powers.isPiloting()) {
-                StandEntity piloting = powers.getPilotingStand();
+                LivingEntity piloting = powers.getPilotingStand();
                 if (piloting != null && piloting.isAlive() && !piloting.isRemoved()) {
                     MultiBufferSource.BufferSource $$20 = this.renderBuffers.bufferSource();
                     if (this.minecraft.level != null) {

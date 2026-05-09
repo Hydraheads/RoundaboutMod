@@ -246,7 +246,7 @@ public class StandPowers extends AbilityScapeBasis {
     }
     /**Returns the stand entity that is going to be controlled, you most likely will not need to override this
      * unless you are doing a multi stand type like bad company*/
-    public StandEntity getPilotingStand(){
+    public LivingEntity getPilotingStand(){
         return getStandEntity(this.self);
     }
     /**If the passed in entity id matches that of getPilotingStand (consider passing in that function directly),
