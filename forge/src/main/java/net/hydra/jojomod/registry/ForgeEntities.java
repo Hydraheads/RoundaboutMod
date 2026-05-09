@@ -483,6 +483,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "ratt_dart").toString())
             );
+    public static final RegistryObject<EntityType<PoisonLlamaSpit>> POISON_LLAMA_SPIT =
+            ENTITY_TYPES.register("poison_llama_spit", () ->
+                    EntityType.Builder.<PoisonLlamaSpit>of(PoisonLlamaSpit::new, MobCategory.MISC).
+                            sized(0.5f, 0.5f).clientTrackingRange(4).updateInterval(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "poison_llama_spit").toString())
+            );
     public static final RegistryObject<EntityType<HarpoonEntity>> THROWN_HARPOON =
             ENTITY_TYPES.register("harpoon", () ->
                     EntityType.Builder.<HarpoonEntity>of(HarpoonEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).

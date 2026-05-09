@@ -115,7 +115,7 @@ public class Zombiefish extends PathfinderMob {
 
     @Override
     public MobType getMobType() {
-        return MobType.ARTHROPOD;
+        return MobType.UNDEAD;
     }
 
     @Override

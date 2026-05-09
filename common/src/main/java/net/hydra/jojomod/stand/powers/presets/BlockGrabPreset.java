@@ -311,6 +311,10 @@ public class BlockGrabPreset extends NewPunchingStand {
 
     public int hardBlocker = 0;
 
+    public int ticksUntilCanImpale = 0;
+    public boolean canImpale(){
+        return ticksUntilCanImpale <= 0;
+    }
     @SuppressWarnings("deprecation")
     @Override
     public boolean setPowerAttack(){
@@ -618,6 +622,8 @@ public class BlockGrabPreset extends NewPunchingStand {
                                 (this.getActivePower() == PowerIndex.POWER_2_EXTRA)
                                 && this.getAttackTimeDuring() < 3) {
                             return;
+                        } else if (standEntity.getFirstPassenger() != null){
+                            ticksUntilCanImpale = 10;
                         }
                     }
 

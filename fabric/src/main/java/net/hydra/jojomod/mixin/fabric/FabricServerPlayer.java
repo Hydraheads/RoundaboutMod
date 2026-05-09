@@ -50,12 +50,14 @@ public abstract class FabricServerPlayer extends Player {
                 }
                 if(stand instanceof ManhattanTransferEntity ME){
                     if(!ME.getHeldItemManhattan().isEmpty()){
-                        double $$3 = this.getEyeY();
-                        ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), ME.getHeldItemManhattan().copy());
-                        $$4.setPickUpDelay(40);
-                        $$4.setThrower(stand.getUUID());
-                        this.level().addFreshEntity($$4);
-                        ME.setHeldItemManhattan(ItemStack.EMPTY);
+                        if(ME.canAcquireHeldItem) {
+                            double $$3 = this.getEyeY();
+                            ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), ME.getHeldItemManhattan().copy());
+                            $$4.setPickUpDelay(40);
+                            $$4.setThrower(stand.getUUID());
+                            this.level().addFreshEntity($$4);
+                            ME.setHeldItemManhattan(ItemStack.EMPTY);
+                        }
                     }
                 }
             }

@@ -538,12 +538,14 @@ public abstract class EntityAndData implements IEntityAndData {
                     }
                     if(stand instanceof ManhattanTransferEntity ME){
                         if(!ME.getHeldItemManhattan().isEmpty()){
-                            double $$3 = stand.getEyeY() - 0.3F;
-                            ItemEntity $$4 = new ItemEntity(this.level(), stand.getX(), $$3, stand.getZ(), ME.getHeldItemManhattan().copy());
-                            $$4.setPickUpDelay(40);
-                            $$4.setThrower(stand.getUUID());
-                            this.level().addFreshEntity($$4);
-                            ME.setHeldItemManhattan(ItemStack.EMPTY);
+                            if(ME.canAcquireHeldItem) {
+                                double $$3 = stand.getEyeY() - 0.3F;
+                                ItemEntity $$4 = new ItemEntity(this.level(), stand.getX(), $$3, stand.getZ(), ME.getHeldItemManhattan().copy());
+                                $$4.setPickUpDelay(40);
+                                $$4.setThrower(stand.getUUID());
+                                this.level().addFreshEntity($$4);
+                                ME.setHeldItemManhattan(ItemStack.EMPTY);
+                            }
                         }
                     }
                 }

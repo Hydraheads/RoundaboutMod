@@ -722,6 +722,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     @Override
     public void tickPower(){
         super.tickPower();
+        if (ticksUntilCanImpale > 0){
+            ticksUntilCanImpale--;
+        }
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
 
             if (isBarrageAttacking() && !this.self.level().isClientSide()){
@@ -774,6 +777,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             return;
         if (clientForwardBarrage())
             return;
+        if (!canImpale()){
+            return;
+        }
         if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
             if (canExecuteMoveWithLevel(getImpaleLevel())) {
                 if (this.activePower == PowerIndex.POWER_1_SNEAK) {
@@ -1939,6 +1945,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
+
         return this.isDazed(this.getSelf()) || (activeP != PowerIndex.SKILL_4 && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))
                 || ((this.getActivePower() == PowerIndex.POWER_2_SNEAK && this.getAttackTimeDuring() >= 0)) || hasBlock() || hasEntity());
     }
