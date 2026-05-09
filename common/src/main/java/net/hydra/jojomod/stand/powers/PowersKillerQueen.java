@@ -96,6 +96,9 @@ public class PowersKillerQueen extends NewPunchingStand {
 	// TODO Skins Translations
 	// TODO Audio Translations
 	
+	// TODO-FIX pls someone make the block bomb rotation fixed
+	// TODO-FIX Audio
+	
 	private static final byte
 		PLANTED=52,
 		DETONATE=54,
@@ -128,7 +131,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 	public boolean wentForCharge = false;
 	
 	private static int detonateMaxTicks = 8;
-	private int detonateTicks = -1;
+	private static int blockPlantMaxTicks = 5;
+	private int ticksCount = -1;
     
     @Override
     public int getMaxGuardPoints(){ return 15; }
@@ -272,12 +276,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override
     public void tickPower(){
     	
-    	if(Objects.nonNull(this.getStandEntity(this.self))) {
-            if (this.getStandEntity(this.self).getAnimation() == KillerQueenEntity.DETONATE && this.detonateTicks == 0) {
-                this.animateStand(StandEntity.IDLE);
-                this.poseStand(OffsetIndex.FOLLOW);
-            }
-        }
+    	
     	
     	if (currentBombStatus == BOMB_BLOCK) {
     		//Vec3 iconPos = new Vec3(this.bombBlock.getX(), this.bombBlock.getY(), this.bombBlock.getZ());
@@ -289,10 +288,21 @@ public class PowersKillerQueen extends NewPunchingStand {
     				if (this.bombBlock.blockGotDestroyed()) {
     					this.defuseServer();
     				}
+    				if(Objects.nonNull(this.getStandEntity(this.self))) {
+    		    		byte currentAnim = this.getStandEntity(this.self).getAnimation();
+    		            if ((currentAnim == KillerQueenEntity.DETONATE || currentAnim == KillerQueenEntity.BLOCK_PLANT) && this.ticksCount == 0) {
+    		                this.animateStand(StandEntity.IDLE);
+    		                this.poseStand(OffsetIndex.FOLLOW);
+    		                
+    		    			if (currentAnim == KillerQueenEntity.DETONATE) {
+    		    				this.explode();
+    		    			}
+    		    			
+    		            }
+    		        }
     			}
     			
-    			if (this.detonateTicks == 0) { this.explode();}
-    			if (this.detonateTicks >= 0) { this.detonateTicks--;}
+    			if (this.ticksCount >= 0) { this.ticksCount--;}
     			
     		}
     	}
@@ -328,18 +338,15 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     @Override
     public boolean tryPower(int move, boolean forced) {
-    	
         return super.tryPower(move, forced);
     }
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime) {
-
     	return super.tryIntPower(move, forced, chargeTime);
     }
 
     @Override
     public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos){
-
     	return super.tryBlockPosPower(move, forced, blockPos);
     }
     
@@ -442,11 +449,11 @@ public class PowersKillerQueen extends NewPunchingStand {
 		    		this.currentBombStatus = BOMB_BLOCK;
 		    		
 		    		this.syncBombStatus(BOMB_BLOCK);
-		    		//this.poseStand(OffsetIndex.ATTACK);
 		    		
 		    		this.animateStand(KillerQueenEntity.BLOCK_PLANT);
 		    		this.poseStand(OffsetIndex.ATTACK);
-
+		    		this.ticksCount = blockPlantMaxTicks;
+		    		
 		    	}
 		    }
     	}
@@ -578,7 +585,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     @Override
     public SoundEvent getSoundFromByte(byte soundChoice){
-       Roundabout.LOGGER.info(""+soundChoice);
+       //Roundabout.LOGGER.info(""+soundChoice);
         /*switch (soundChoice)
         {
             case SoundIndex.BARRAGE_CRY_SOUND -> {
@@ -753,7 +760,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     		this.animateStand(KillerQueenEntity.DETONATE);
     		this.poseStand(OffsetIndex.ATTACK);
     		
-    		this.detonateTicks = detonateMaxTicks;
+    		this.ticksCount = detonateMaxTicks;
     	}
     	
     	return true;

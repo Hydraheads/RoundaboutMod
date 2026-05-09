@@ -5,6 +5,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.goals.*;
+import net.hydra.jojomod.entity.projectile.PoisonLlamaSpit;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
@@ -39,9 +40,11 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.LlamaSpit;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ShearsItem;
@@ -147,6 +150,8 @@ public class BaseMinion extends PathfinderMob {
     }
     @Override
     public boolean canAttack(LivingEntity $$0) {
+        if (($$0 instanceof WitherBoss))
+            return false;
         if (shouldPanic() || this.getTargetTactic() == Tactics.PEACEFUL.id){
             return false;
         }
@@ -477,7 +482,7 @@ public class BaseMinion extends PathfinderMob {
 
     @Override
     public void setTarget(@Nullable LivingEntity $$0) {
-        if ($$0 != null && controller != null && controller.is($$0)){
+        if (($$0 != null && controller != null && controller.is($$0)) || ($$0 instanceof WitherBoss)){
             return;
         } else {
             super.setTarget($$0);
@@ -492,7 +497,7 @@ public class BaseMinion extends PathfinderMob {
     }
 
     public void setLastHurtByMob(@Nullable LivingEntity $$0) {
-        if ($$0 != null && controller != null && controller.is($$0)){
+        if (($$0 != null && controller != null && controller.is($$0)) || ($$0 instanceof WitherBoss)){
             return;
         } else {
             super.setLastHurtByMob($$0);
@@ -635,16 +640,37 @@ public class BaseMinion extends PathfinderMob {
     int cd2 = 0;
 
     public void discardBoth(){
-        if (z1 != null){
+        if (z1 != null && !z1.isRemoved()){
+
+            ((ServerLevel) this.level()).sendParticles(ParticleTypes.POOF, z1.getEyePosition().x,
+                    z1.getEyePosition().y, z1.getEyePosition().z,
+                    5, 0.1, 0.1, 0.1, 0.01);
             z1.discard();
-        } if (z2 != null){
+        } if (z2 != null&& !z2.isRemoved()){
+
+            ((ServerLevel) this.level()).sendParticles(ParticleTypes.POOF, z2.getEyePosition().x,
+                    z2.getEyePosition().y, z2.getEyePosition().z,
+                    5, 0.1, 0.1, 0.1, 0.01);
             z2.discard();
         }
     }
-    public Zombiefish zfish(){
+    private void spit(LivingEntity $$0) {
+        PoisonLlamaSpit $$1 = new PoisonLlamaSpit(this.level(), this);
+        double $$2 = $$0.getX() - this.getX();
+        double $$3 = $$0.getY(0.3333333333333333) - $$1.getY();
+        double $$4 = $$0.getZ() - this.getZ();
+        double $$5 = Math.sqrt($$2 * $$2 + $$4 * $$4) * (double)0.2F;
+        $$1.shoot($$2, $$3 + $$5, $$4, 0.45F, 10.0F);
+        if (!this.isSilent()) {
+            this.level().playSound((Player)null, this.getX(), this.getY(), this.getZ(), SoundEvents.LLAMA_SPIT, this.getSoundSource(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
+        }
 
-        return null;
+        this.level().addFreshEntity($$1);
     }
+    public void performRangedAttack(LivingEntity $$0, float $$1) {
+        this.spit($$0);
+    }
+
     @Override
     public void tick(){
         if (!this.level().isClientSide()) {
@@ -761,62 +787,73 @@ public class BaseMinion extends PathfinderMob {
                 }
             }
 
+            if (getHeadItem() != null) {
+                if (getHeadItem().is(ModItems.LLAMA_REMAINS)) {
+                    if (spitChargeAmt > 0){
+                        spitChargeAmt--;
+                    }
+                    LivingEntity targ = getTarget();
+                    if (spitChargeAmt == 0 && targ != null && targ.isAlive()){
+                        spit(targ);
+                        spitChargeAmt = 60;
+                    }
+                } else if (getHeadItem().is(ModItems.GOAT_REMAINS)) {
+                    LivingEntity targ = getTarget();
+                    if (headChargeAmt > 0)
+                        headChargeAmt--;
+                    if (targ != null && canAttack(targ) && headChargeAmt <= 0) {
+                        headChargeAmt = 200;
+                        headChargeAmt2 = 15;
+                        Vec3 $$0 = this.getDeltaMovement();
+                        Vec3 $$1 = new Vec3((targ.getX() - this.getX()) * -1, (double) 0.0F, (targ.getZ() - this.getZ()) * -1);
+                        $$1 = $$1.normalize().scale(0.75).add($$0.scale(0.2));
+                        this.level().playSound(null, this.blockPosition(), ModSounds.GOAT_CHARGE_EVENT, SoundSource.NEUTRAL, 1F, 1);
 
-            if (getHeadItem() != null && getHeadItem().is(ModItems.GOAT_REMAINS)) {
-                LivingEntity targ = getTarget();
-                if (headChargeAmt > 0)
-                    headChargeAmt--;
-                if (targ != null && canAttack(targ) && headChargeAmt <= 0) {
-                    headChargeAmt = 200;
-                    headChargeAmt2 = 15;
-                    Vec3 $$0 = this.getDeltaMovement();
-                    Vec3 $$1 = new Vec3((targ.getX() - this.getX())*-1, (double)0.0F, (targ.getZ() - this.getZ())*-1);
-                    $$1 = $$1.normalize().scale(0.75).add($$0.scale(0.2));
-                    this.level().playSound(null, this.blockPosition(), ModSounds.GOAT_CHARGE_EVENT, SoundSource.NEUTRAL, 1F, 1);
+                        this.setDeltaMovement($$1.x, (double) 0.4F, $$1.z);
+                    }
+                    if (headChargeAmt2 > 0) {
+                        headChargeAmt2--;
 
-                    this.setDeltaMovement($$1.x, (double)0.4F, $$1.z);
-                }
-                if (headChargeAmt2 > 0){
-                    headChargeAmt2--;
-
-                    if (headChargeAmt2 == 0){
-                        if (targ != null) {
-                            headChargeAmt3 = 14;
-                            Vec3 $$1 = new Vec3((targ.getX() - this.getX()), (double) 0.0F, (targ.getZ() - this.getZ()));
-                            $$1 = $$1.normalize().scale(0.85);
-                            speedVec = new Vec3($$1.x, $$1.y, $$1.z);
+                        if (headChargeAmt2 == 0) {
+                            if (targ != null) {
+                                headChargeAmt3 = 14;
+                                Vec3 $$1 = new Vec3((targ.getX() - this.getX()), (double) 0.0F, (targ.getZ() - this.getZ()));
+                                $$1 = $$1.normalize().scale(0.85);
+                                speedVec = new Vec3($$1.x, $$1.y, $$1.z);
+                                setDeltaMovement(speedVec.x, getDeltaMovement().y, speedVec.z);
+                                this.level().playSound(null, this.blockPosition(), ModSounds.GOAT_DASH_EVENT,
+                                        SoundSource.NEUTRAL, 1F, 1);
+                            }
+                        }
+                    }
+                    if (headChargeAmt3 > 0) {
+                        headChargeAmt3--;
+                        if (getBodyItem() != null && getBodyItem().is(ModItems.PARROT_REMAINS)) {
+                            if (targ != null) {
+                                Vec3 $$1 = new Vec3((targ.getX() - this.getX()), (targ.getY() - this.getY()), (targ.getZ() - this.getZ()));
+                                $$1 = $$1.normalize().scale(0.95);
+                                setDeltaMovement(speedVec.x, $$1.y, speedVec.z);
+                            }
+                        } else {
                             setDeltaMovement(speedVec.x, getDeltaMovement().y, speedVec.z);
-                            this.level().playSound(null, this.blockPosition(), ModSounds.GOAT_DASH_EVENT,
-                                    SoundSource.NEUTRAL, 1F, 1);
+                        }
+                        if (!this.level().isClientSide()) {
+                            Vec3 pos = getPosition(1);
+                            ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
+                                            level().getBlockState(getOnPos())),
+                                    pos.x, pos.y, pos.z,
+                                    4, 0.2, 0, 0.2, 0.5);
+                            pos = getEyePosition(1);
+                            ((ServerLevel) this.level()).sendParticles(ModParticles.STAR,
+                                    pos.x, pos.y, pos.z,
+                                    1, 0.2, 0.2, 0.2, 0.02);
                         }
                     }
-                } if (headChargeAmt3 > 0){
-                    headChargeAmt3--;
-                    if (getBodyItem() != null && getBodyItem().is(ModItems.PARROT_REMAINS)){
-                        if (targ != null) {
-                            Vec3 $$1 = new Vec3((targ.getX() - this.getX()), (targ.getY() - this.getY()), (targ.getZ() - this.getZ()));
-                            $$1 = $$1.normalize().scale(0.95);
-                            setDeltaMovement(speedVec.x, $$1.y, speedVec.z);
-                        }
-                    } else {
-                        setDeltaMovement(speedVec.x,getDeltaMovement().y,speedVec.z);
-                    }
-                    if (!this.level().isClientSide()) {
-                        Vec3 pos = getPosition(1);
-                        ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
-                                        level().getBlockState(getOnPos())),
-                                pos.x, pos.y, pos.z,
-                                4, 0.2, 0, 0.2, 0.5);
-                        pos = getEyePosition(1);
-                        ((ServerLevel) this.level()).sendParticles(ModParticles.STAR,
-                                pos.x, pos.y, pos.z,
-                                1, 0.2, 0.2, 0.2, 0.02);
-                    }
+                } else {
+                    headChargeAmt = 0;
+                    headChargeAmt2 = 0;
+                    headChargeAmt3 = 0;
                 }
-            } else {
-                headChargeAmt = 0;
-                headChargeAmt2 = 0;
-                headChargeAmt3 = 0;
             }
 
 
@@ -839,6 +876,7 @@ public class BaseMinion extends PathfinderMob {
     int headChargeAmt = 0;
     int headChargeAmt2 = 0;
     int headChargeAmt3 = 0;
+    int spitChargeAmt = 0;
     public Vec3 speedVec = Vec3.ZERO;
 
     @Override

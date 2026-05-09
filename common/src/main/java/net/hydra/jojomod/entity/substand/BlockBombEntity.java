@@ -111,7 +111,7 @@ public class BlockBombEntity extends StandEntity {
             }
 		
         }
-        super.tick();
+        //super.tick();
     }
 	
 	public void detectInside() {

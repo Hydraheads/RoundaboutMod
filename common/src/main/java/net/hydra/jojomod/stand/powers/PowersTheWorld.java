@@ -254,6 +254,11 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
+        if (slot == 1){
+            if (!canImpale()){
+                return true;
+            }
+        }
         if (this.getActivePower() == PowerIndex.POWER_1 && this.getAttackTimeDuring() >= 0 && slot != 2 && slot != 1){
             return true;
         } else if (this.getActivePower() == PowerIndex.POWER_1_BONUS && this.getAttackTimeDuring() >= 0 && slot != 1){
@@ -721,7 +726,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (this.getReducedDamage(entity)){
             ret = (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD);
             if (this.chargedFinal >= maxSuperHitTime){
-                ret +=1;
+                ret +=0.5F;
             }
         } else {
             ret = (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD)+3;
@@ -762,7 +767,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.55F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.35F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(5));
         }
@@ -770,7 +775,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.2F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.89F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(6F));
         }
@@ -990,6 +995,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (clientForwardBarrage())
             return;
         if (hasBlock() || hasEntity())
+            return;
+        if (!canImpale())
             return;
         if (!this.onCooldown(PowerIndex.SKILL_1)) {
             if (!this.isGuarding()) {

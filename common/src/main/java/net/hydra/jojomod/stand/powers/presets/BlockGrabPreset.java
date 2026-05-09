@@ -311,6 +311,10 @@ public class BlockGrabPreset extends NewPunchingStand {
 
     public int hardBlocker = 0;
 
+    public int ticksUntilCanImpale = 0;
+    public boolean canImpale(){
+        return ticksUntilCanImpale <= 0;
+    }
     @SuppressWarnings("deprecation")
     @Override
     public boolean setPowerAttack(){
@@ -618,6 +622,8 @@ public class BlockGrabPreset extends NewPunchingStand {
                                 (this.getActivePower() == PowerIndex.POWER_2_EXTRA)
                                 && this.getAttackTimeDuring() < 3) {
                             return;
+                        } else if (standEntity.getFirstPassenger() != null){
+                            ticksUntilCanImpale = 10;
                         }
                     }
 
@@ -895,7 +901,7 @@ public class BlockGrabPreset extends NewPunchingStand {
             StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
                 Entity entity = this.getSelf().level().getEntity(this.grabEntity);
-                if (entity != null && this.canGrab(entity)) {
+                if (entity != null && this.canGrab(entity) && entity.distanceTo(self) < 3.5 && entity.invulnerableTime <= 10) {
                     if (entity instanceof RoadRollerEntity RRE && RRE.getExploded()) {
                         this.setPowerNone();
                         return false;

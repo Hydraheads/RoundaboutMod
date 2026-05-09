@@ -205,6 +205,17 @@ public class AbilityScapeBasis {
     }
 
 
+    public boolean isInAttackString(){
+        int attackTimeMax = getStandUserSelf().roundabout$getAttackTimeMax();
+        if (attackTimeMax > 0) {
+            float attackTime = getStandUserSelf().roundabout$getAttackTime();
+            float finalATime = attackTime / attackTimeMax;
+            if (finalATime < 1) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
     public void hitParticles(Entity entity){
@@ -698,7 +709,12 @@ public class AbilityScapeBasis {
                 }
                 this.attackTime++;
                 if (this.attackTime > this.attackTimeMax) {
-                    this.setActivePowerPhase((byte) 0);
+                    if (activePowerPhase != 0){
+                        if (this.self.level().isClientSide()){
+                            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.FIX_COOLDOWN_FOR_SERVER);
+                        }
+                        this.setActivePowerPhase((byte) 0);
+                    }
                 }
                 if (this.interruptCD > 0) {
                     this.interruptCD--;

@@ -1,9 +1,12 @@
 package net.hydra.jojomod.stand.powers;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.models.layers.animations.CenturyBoyAnimations;
+import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -11,6 +14,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ServerPacketListener;
@@ -196,6 +200,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     public void toggleInvincibility(){
 
         if (!invincibleState) {
+            /** PS: honestly why tf am i creating 300 bools when i already have a mode int? fix later*/
             invincibleState = true;
             switch (mode) {
                 case 1 -> {
@@ -282,4 +287,26 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             invincibleState = false;
         }
     }
-}
+
+    /** animation thingy **/
+    public static AnimationDefinition getAnimation(StandUser SU){
+        AnimationDefinition anim = null;
+        if (SU.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.invincibleState){
+            switch (PCB.mode){
+                case 1 -> anim = CenturyBoyAnimations.ground;
+                case 2 -> anim = CenturyBoyAnimations.neutral;
+                case 3 -> anim = CenturyBoyAnimations.knockback;
+                case 4 -> anim = CenturyBoyAnimations.redstone;
+            }
+        }
+        return anim;
+    }
+    public void setAnimation(byte b){
+            if (this.getSelf() instanceof Player P && this.isClient()) {
+                ((IPlayerEntity) P).roundabout$SetPoseEmote(Poses.NONE.id);
+            }
+            this.getStandUserSelf().roundabout$setStandAnimation(b);
+            this.getStandUserSelf().roundabout$getWornStandAnimation().stop();
+            this.getStandUserSelf().roundabout$getWornStandAnimation().startIfStopped(this.getSelf().tickCount);
+        }
+    }

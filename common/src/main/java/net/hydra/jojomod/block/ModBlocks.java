@@ -81,6 +81,8 @@ public class ModBlocks {
     public static Block BLOOD_SPLATTER;
     public static Block BLUE_BLOOD_SPLATTER;
     public static Block ENDER_BLOOD_SPLATTER;
+    public static Block ACID_PUDDLE;
+
     public static Block WIRE_TRAP;
 
     public static Block BARBED_WIRE;
@@ -465,6 +467,15 @@ public class ModBlocks {
     public static BloodBlock BLOOD_SPLATTER_PROPERTIES = new BloodBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_RED)
+                    .instrument(NoteBlockInstrument.SNARE)
+                    .strength(0.01F, 0.5F)
+                    .sound(SoundType.EMPTY)
+                    .replaceable()
+                    .pushReaction(PushReaction.DESTROY)
+    );
+    public static AcidBlock ACID_PUDDLE_PROPERTIES = new AcidBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_GREEN)
                     .instrument(NoteBlockInstrument.SNARE)
                     .strength(0.01F, 0.5F)
                     .sound(SoundType.EMPTY)

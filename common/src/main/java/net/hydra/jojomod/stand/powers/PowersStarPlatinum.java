@@ -419,6 +419,12 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
+
+        if (slot == 1){
+            if (!canImpale()){
+                return true;
+            }
+        }
         return this.isDazed(this.getSelf()) || (slot == 3 && this.isGuarding() && ((TimeStop)this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) || (activeP != PowerIndex.SKILL_4 && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))
                 || ((((this.getActivePower() == PowerIndex.POWER_2_SNEAK && this.getAttackTimeDuring() >= 0) && slot != 1) || ((hasBlock() || hasEntity()) && slot != 1
        ))));
@@ -553,6 +559,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             return;
         }
         if (hasBlock() || hasEntity())
+            return;
+        if (!canImpale())
             return;
         if (!this.onCooldown(PowerIndex.SKILL_1)) {
             if (canExecuteMoveWithLevel(getFingerLevel())) {
@@ -990,7 +998,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 1.525* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod((float) ((float) 1.33F* (ClientNetworking.getAppropriateConfig().
                     starPlatinumSettings.starPlatinumAttackMultOnPlayers*0.01)));
         } else {
             return levelupDamageMod((float) ((float) 4.9* (ClientNetworking.getAppropriateConfig().
@@ -998,7 +1006,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         }
     } public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 2.17* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod((float) ((float) 1.88F* (ClientNetworking.getAppropriateConfig().
                     starPlatinumSettings.starPlatinumAttackMultOnPlayers*0.01)));
         } else {
             return levelupDamageMod((float) ((float) 5.9* (ClientNetworking.getAppropriateConfig().
