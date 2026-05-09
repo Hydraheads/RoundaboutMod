@@ -141,23 +141,26 @@ public class PowersGratefulDead extends NewPunchingStand {
 
     public static final byte
             ANIME_GRATEFUL_DEAD = 0,
-            MANGA_GRATEFUL_DEAD = 1;
+            MANGA_GRATEFUL_DEAD = 1,
+            ANGEL_GRATEFUL_DEAD = 2;
 
     @Override
     public List<Byte> getSkinList(){
         return Arrays.asList(
                 ANIME_GRATEFUL_DEAD,
-                MANGA_GRATEFUL_DEAD
+                MANGA_GRATEFUL_DEAD,
+                ANGEL_GRATEFUL_DEAD
         );
     }
 
     @Override
     public Component getSkinName(byte skinId){
-        if(skinId==MANGA_GRATEFUL_DEAD){
-            return Component.translatable("skins.roundabout.grateful_dead.manga");
-        }else{
-            return Component.translatable("skins.roundabout.grateful_dead.anime");
-        }
+        return switch (skinId) {
+            case (ANIME_GRATEFUL_DEAD) -> Component.translatable("skins.roundabout.grateful_dead.anime");
+            case (MANGA_GRATEFUL_DEAD) -> Component.translatable("skins.roundabout.grateful_dead.manga");
+            case (ANGEL_GRATEFUL_DEAD) -> Component.translatable("skins.roundabout.grateful_dead.angel");
+            default -> Component.translatable("skins.roundabout.grateful_dead.anime");
+        };
     }
 
     @Override

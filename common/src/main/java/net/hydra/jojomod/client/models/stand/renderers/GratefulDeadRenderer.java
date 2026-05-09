@@ -16,6 +16,7 @@ import javax.annotation.Nullable;
 public class GratefulDeadRenderer extends StandRenderer<GratefulDeadEntity>{
     private static final ResourceLocation ANIME = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/grateful_dead/anime.png");
     private static final ResourceLocation MANGA = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/grateful_dead/manga.png");
+    private static final ResourceLocation ANGEL = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/grateful_dead/angel.png");
 
     public GratefulDeadRenderer(EntityRendererProvider.Context context) {
         super(context, new GratefulDeadModel<>(context.bakeLayer(ModEntityRendererClient.GRATEFUL_DEAD_LAYER)), 0f);
@@ -23,7 +24,7 @@ public class GratefulDeadRenderer extends StandRenderer<GratefulDeadEntity>{
     @Override
     public ResourceLocation getTextureLocation(GratefulDeadEntity entity){
         return switch (entity.getSkin()) {
-            case (GratefulDeadEntity.ANIME) -> ANIME;
+            case (GratefulDeadEntity.ANGEL) -> ANGEL;
             case (GratefulDeadEntity.MANGA) -> MANGA;
             default -> ANIME;
         };
