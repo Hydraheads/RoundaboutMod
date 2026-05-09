@@ -40,6 +40,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.player.Player;
@@ -149,6 +150,8 @@ public class BaseMinion extends PathfinderMob {
     }
     @Override
     public boolean canAttack(LivingEntity $$0) {
+        if (($$0 instanceof WitherBoss))
+            return false;
         if (shouldPanic() || this.getTargetTactic() == Tactics.PEACEFUL.id){
             return false;
         }
@@ -479,7 +482,7 @@ public class BaseMinion extends PathfinderMob {
 
     @Override
     public void setTarget(@Nullable LivingEntity $$0) {
-        if ($$0 != null && controller != null && controller.is($$0)){
+        if (($$0 != null && controller != null && controller.is($$0)) || ($$0 instanceof WitherBoss)){
             return;
         } else {
             super.setTarget($$0);
@@ -494,7 +497,7 @@ public class BaseMinion extends PathfinderMob {
     }
 
     public void setLastHurtByMob(@Nullable LivingEntity $$0) {
-        if ($$0 != null && controller != null && controller.is($$0)){
+        if (($$0 != null && controller != null && controller.is($$0)) || ($$0 instanceof WitherBoss)){
             return;
         } else {
             super.setLastHurtByMob($$0);
