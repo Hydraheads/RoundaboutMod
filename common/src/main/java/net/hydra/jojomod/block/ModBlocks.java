@@ -473,7 +473,7 @@ public class ModBlocks {
                     .replaceable()
                     .pushReaction(PushReaction.DESTROY)
     );
-    public static BloodBlock ACID_PUDDLE_PROPERTIES = new BloodBlock(
+    public static AcidBlock ACID_PUDDLE_PROPERTIES = new AcidBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_GREEN)
                     .instrument(NoteBlockInstrument.SNARE)

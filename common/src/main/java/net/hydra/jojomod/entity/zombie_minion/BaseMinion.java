@@ -787,62 +787,73 @@ public class BaseMinion extends PathfinderMob {
                 }
             }
 
+            if (getHeadItem() != null) {
+                if (getHeadItem().is(ModItems.LLAMA_REMAINS)) {
+                    if (spitChargeAmt > 0){
+                        spitChargeAmt--;
+                    }
+                    LivingEntity targ = getTarget();
+                    if (spitChargeAmt == 0 && targ != null && targ.isAlive()){
+                        spit(targ);
+                        spitChargeAmt = 60;
+                    }
+                } else if (getHeadItem().is(ModItems.GOAT_REMAINS)) {
+                    LivingEntity targ = getTarget();
+                    if (headChargeAmt > 0)
+                        headChargeAmt--;
+                    if (targ != null && canAttack(targ) && headChargeAmt <= 0) {
+                        headChargeAmt = 200;
+                        headChargeAmt2 = 15;
+                        Vec3 $$0 = this.getDeltaMovement();
+                        Vec3 $$1 = new Vec3((targ.getX() - this.getX()) * -1, (double) 0.0F, (targ.getZ() - this.getZ()) * -1);
+                        $$1 = $$1.normalize().scale(0.75).add($$0.scale(0.2));
+                        this.level().playSound(null, this.blockPosition(), ModSounds.GOAT_CHARGE_EVENT, SoundSource.NEUTRAL, 1F, 1);
 
-            if (getHeadItem() != null && getHeadItem().is(ModItems.GOAT_REMAINS)) {
-                LivingEntity targ = getTarget();
-                if (headChargeAmt > 0)
-                    headChargeAmt--;
-                if (targ != null && canAttack(targ) && headChargeAmt <= 0) {
-                    headChargeAmt = 200;
-                    headChargeAmt2 = 15;
-                    Vec3 $$0 = this.getDeltaMovement();
-                    Vec3 $$1 = new Vec3((targ.getX() - this.getX())*-1, (double)0.0F, (targ.getZ() - this.getZ())*-1);
-                    $$1 = $$1.normalize().scale(0.75).add($$0.scale(0.2));
-                    this.level().playSound(null, this.blockPosition(), ModSounds.GOAT_CHARGE_EVENT, SoundSource.NEUTRAL, 1F, 1);
+                        this.setDeltaMovement($$1.x, (double) 0.4F, $$1.z);
+                    }
+                    if (headChargeAmt2 > 0) {
+                        headChargeAmt2--;
 
-                    this.setDeltaMovement($$1.x, (double)0.4F, $$1.z);
-                }
-                if (headChargeAmt2 > 0){
-                    headChargeAmt2--;
-
-                    if (headChargeAmt2 == 0){
-                        if (targ != null) {
-                            headChargeAmt3 = 14;
-                            Vec3 $$1 = new Vec3((targ.getX() - this.getX()), (double) 0.0F, (targ.getZ() - this.getZ()));
-                            $$1 = $$1.normalize().scale(0.85);
-                            speedVec = new Vec3($$1.x, $$1.y, $$1.z);
+                        if (headChargeAmt2 == 0) {
+                            if (targ != null) {
+                                headChargeAmt3 = 14;
+                                Vec3 $$1 = new Vec3((targ.getX() - this.getX()), (double) 0.0F, (targ.getZ() - this.getZ()));
+                                $$1 = $$1.normalize().scale(0.85);
+                                speedVec = new Vec3($$1.x, $$1.y, $$1.z);
+                                setDeltaMovement(speedVec.x, getDeltaMovement().y, speedVec.z);
+                                this.level().playSound(null, this.blockPosition(), ModSounds.GOAT_DASH_EVENT,
+                                        SoundSource.NEUTRAL, 1F, 1);
+                            }
+                        }
+                    }
+                    if (headChargeAmt3 > 0) {
+                        headChargeAmt3--;
+                        if (getBodyItem() != null && getBodyItem().is(ModItems.PARROT_REMAINS)) {
+                            if (targ != null) {
+                                Vec3 $$1 = new Vec3((targ.getX() - this.getX()), (targ.getY() - this.getY()), (targ.getZ() - this.getZ()));
+                                $$1 = $$1.normalize().scale(0.95);
+                                setDeltaMovement(speedVec.x, $$1.y, speedVec.z);
+                            }
+                        } else {
                             setDeltaMovement(speedVec.x, getDeltaMovement().y, speedVec.z);
-                            this.level().playSound(null, this.blockPosition(), ModSounds.GOAT_DASH_EVENT,
-                                    SoundSource.NEUTRAL, 1F, 1);
+                        }
+                        if (!this.level().isClientSide()) {
+                            Vec3 pos = getPosition(1);
+                            ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
+                                            level().getBlockState(getOnPos())),
+                                    pos.x, pos.y, pos.z,
+                                    4, 0.2, 0, 0.2, 0.5);
+                            pos = getEyePosition(1);
+                            ((ServerLevel) this.level()).sendParticles(ModParticles.STAR,
+                                    pos.x, pos.y, pos.z,
+                                    1, 0.2, 0.2, 0.2, 0.02);
                         }
                     }
-                } if (headChargeAmt3 > 0){
-                    headChargeAmt3--;
-                    if (getBodyItem() != null && getBodyItem().is(ModItems.PARROT_REMAINS)){
-                        if (targ != null) {
-                            Vec3 $$1 = new Vec3((targ.getX() - this.getX()), (targ.getY() - this.getY()), (targ.getZ() - this.getZ()));
-                            $$1 = $$1.normalize().scale(0.95);
-                            setDeltaMovement(speedVec.x, $$1.y, speedVec.z);
-                        }
-                    } else {
-                        setDeltaMovement(speedVec.x,getDeltaMovement().y,speedVec.z);
-                    }
-                    if (!this.level().isClientSide()) {
-                        Vec3 pos = getPosition(1);
-                        ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
-                                        level().getBlockState(getOnPos())),
-                                pos.x, pos.y, pos.z,
-                                4, 0.2, 0, 0.2, 0.5);
-                        pos = getEyePosition(1);
-                        ((ServerLevel) this.level()).sendParticles(ModParticles.STAR,
-                                pos.x, pos.y, pos.z,
-                                1, 0.2, 0.2, 0.2, 0.02);
-                    }
+                } else {
+                    headChargeAmt = 0;
+                    headChargeAmt2 = 0;
+                    headChargeAmt3 = 0;
                 }
-            } else {
-                headChargeAmt = 0;
-                headChargeAmt2 = 0;
-                headChargeAmt3 = 0;
             }
 
 
@@ -865,6 +876,7 @@ public class BaseMinion extends PathfinderMob {
     int headChargeAmt = 0;
     int headChargeAmt2 = 0;
     int headChargeAmt3 = 0;
+    int spitChargeAmt = 0;
     public Vec3 speedVec = Vec3.ZERO;
 
     @Override
