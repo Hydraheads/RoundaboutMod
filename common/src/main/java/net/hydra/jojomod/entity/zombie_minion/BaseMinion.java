@@ -660,7 +660,7 @@ public class BaseMinion extends PathfinderMob {
         double $$3 = $$0.getY(0.3333333333333333) - $$1.getY();
         double $$4 = $$0.getZ() - this.getZ();
         double $$5 = Math.sqrt($$2 * $$2 + $$4 * $$4) * (double)0.2F;
-        $$1.shoot($$2, $$3 + $$5, $$4, 1.5F, 10.0F);
+        $$1.shoot($$2, $$3 + $$5, $$4, 0.45F, 10.0F);
         if (!this.isSilent()) {
             this.level().playSound((Player)null, this.getX(), this.getY(), this.getZ(), SoundEvents.LLAMA_SPIT, this.getSoundSource(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
         }

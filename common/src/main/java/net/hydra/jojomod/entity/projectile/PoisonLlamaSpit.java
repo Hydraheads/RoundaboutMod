@@ -5,6 +5,8 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.horse.Llama;
@@ -25,7 +27,9 @@ public class PoisonLlamaSpit extends LlamaSpit {
     }
 
     protected void onHitEntity(EntityHitResult $$0) {
-
+        if (!level().isClientSide() && $$0.getEntity() instanceof LivingEntity LE){
+            LE.addEffect(new MobEffectInstance(MobEffects.POISON, 300, 0));
+        }
     }
     protected void onHitBlock(BlockHitResult $$0) {
 

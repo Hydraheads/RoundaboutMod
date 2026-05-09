@@ -1,12 +1,16 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -133,7 +137,9 @@ public class AcidBlock extends Block {
     @Override
     public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
         if (!level.isClientSide()) {
-
+            if (entity instanceof LivingEntity LE && !FateTypes.isVampire(LE) && !FateTypes.isZombie(LE)) {
+                LE.addEffect(new MobEffectInstance(MobEffects.POISON, 300, 0));
+            }
         }
     }
 
