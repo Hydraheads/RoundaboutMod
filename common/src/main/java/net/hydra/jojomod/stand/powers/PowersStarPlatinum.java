@@ -998,7 +998,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 1.525* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod((float) ((float) 1.37F* (ClientNetworking.getAppropriateConfig().
                     starPlatinumSettings.starPlatinumAttackMultOnPlayers*0.01)));
         } else {
             return levelupDamageMod((float) ((float) 4.9* (ClientNetworking.getAppropriateConfig().
@@ -1006,7 +1006,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         }
     } public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 2.17* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod((float) ((float) 1.94F* (ClientNetworking.getAppropriateConfig().
                     starPlatinumSettings.starPlatinumAttackMultOnPlayers*0.01)));
         } else {
             return levelupDamageMod((float) ((float) 5.9* (ClientNetworking.getAppropriateConfig().
