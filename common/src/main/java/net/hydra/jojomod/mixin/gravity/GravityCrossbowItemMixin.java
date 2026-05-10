@@ -1,5 +1,7 @@
 package net.hydra.jojomod.mixin.gravity;
 
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.sounds.SoundEvents;
@@ -10,6 +12,8 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
@@ -21,6 +25,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(CrossbowItem.class)
 public abstract class GravityCrossbowItemMixin extends ProjectileWeaponItem implements Vanishable {
@@ -33,6 +38,13 @@ public abstract class GravityCrossbowItemMixin extends ProjectileWeaponItem impl
         super($$0);
     }
 
+    @Inject(method = "getChargeDuration", at = @At(value = "HEAD"), cancellable = true)
+    private static void roundabout$getChargeDuration(ItemStack $$0, CallbackInfoReturnable<Integer> cir) {
+        if ($$0 != null && $$0.is(ModItems.IRON_BALL_CROSSBOW)){
+            int $$1 = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.QUICK_CHARGE, $$0);
+            cir.setReturnValue($$1 == 0 ? 25 : 25 - 2 * $$1);
+        }
+    }
     @Inject(
             method = "shootProjectile(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;FZFFF)V",
             at = @At(
