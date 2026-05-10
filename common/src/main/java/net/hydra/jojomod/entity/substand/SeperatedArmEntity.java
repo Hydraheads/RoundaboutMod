@@ -46,10 +46,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.AirBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.WebBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
@@ -319,6 +316,11 @@ public class SeperatedArmEntity extends StandEntity {
 
     public void doSpin(){
         if(SpinTicks > 0){
+            if(IsArmContactingBlock() != null) {
+                if (level().getBlockState(IsArmContactingBlock()).getBlock() instanceof LeverBlock) {
+                    ((LeverBlock) level().getBlockState(IsArmContactingBlock()).getBlock()).pull(level().getBlockState(IsArmContactingBlock()), this.level(), IsArmContactingBlock());
+                }
+            }
             for(int i = 0; i < 1; i = i + 1) {
                 double randX = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
                 double randY = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
@@ -421,8 +423,8 @@ public class SeperatedArmEntity extends StandEntity {
                                 this.setItemInHand(InteractionHand.MAIN_HAND,IE.getItem());
                                 IE.discard();
                             }else{
-                                itemStack.setCount(itemStack.getCount() + IE.getItem().getCount());
-                                IE.discard();
+                                itemStack.setCount(itemStack.getCount() + 1);
+                                IE.getItem().setCount(IE.getItem().getCount() - 1);
                             }
                         }
 
@@ -608,5 +610,10 @@ public class SeperatedArmEntity extends StandEntity {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         return false;
+    }
+
+    @Override
+    public boolean isOnPortalCooldown() {
+        return true;
     }
 }

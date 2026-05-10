@@ -153,10 +153,10 @@ public class PowersGreenDay extends NewPunchingStand {
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         if(slot == 1){
-            return (this.self.isCrouching() && HasMainArm);
+            return ((this.self.isCrouching() || isHoldingSneak()) && HasMainArm);
         }
         if(slot == 2){
-            return (this.self.isCrouching() && HasOffHand);
+            return ((this.self.isCrouching() || isHoldingSneak()) && HasOffHand);
         }
         return super.isAttackIneptVisually(activeP, slot);
     }
@@ -205,7 +205,7 @@ public class PowersGreenDay extends NewPunchingStand {
         else if(isGuarding() || isBarrageAttacking()) {
             if (isGuarding() || isBarrageAttacking())
                 if (canExecuteMoveWithLevel(5)) {
-                    setSkillIcon(context, x, y, 2, StandIcons.GREEN_DAY_MOLD_SPIN_LEFT, PowerIndex.SKILL_2_GUARD);
+                    setSkillIcon(context, x, y, 2, StandIcons.GREEN_DAY_MOLD_SPIN_LEFT, PowerIndex.SKILL_2);
                 } else {
                     setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD, true);
                 }
@@ -235,7 +235,7 @@ public class PowersGreenDay extends NewPunchingStand {
         }
         if (isHoldingSneak())
             if (canExecuteMoveWithLevel(4)) {
-                setSkillIcon(context, x, y, 1, StandIcons.GREEN_DAY_ARM_RETURN_RIGHT, PowerIndex.SKILL_1);
+                setSkillIcon(context, x, y, 1, StandIcons.GREEN_DAY_ARM_RETURN_RIGHT, PowerIndex.SKILL_1_SNEAK);
             } else {
                 setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
             }
@@ -375,7 +375,12 @@ public class PowersGreenDay extends NewPunchingStand {
 
     @Override
     public void tickPower() {
-
+        if(this.self instanceof Player) {
+            if (!this.self.level().isClientSide) {
+                this.updatePowerInt(PowerIndex.POWER_3, legGoneTicks);
+                S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowerIndex.POWER_3, legGoneTicks);
+            }
+        }
 
         handleSecretSkinThinking();
         moldShenanigans();
@@ -404,6 +409,7 @@ public class PowersGreenDay extends NewPunchingStand {
 
             }
             legGoneTicks = legGoneTicks - 1;
+
         }
         if(!(currentlegs == null)) {
 
@@ -418,7 +424,6 @@ public class PowersGreenDay extends NewPunchingStand {
                         this.self.level().playSound(null, this.self.blockPosition(), ModSounds.GREEN_DAY_STITCH_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                         ((StandUser) this.self).rdbt$SetCrawlTicks(0);
                         setActivePower(PowerIndex.POWER_3_BONUS);
-                        this.updatePowerInt(PowerIndex.POWER_3_BONUS,0);
                         S2CPacketUtil.sendIntPowerDataPacket((Player)this.getSelf(),PowerIndex.POWER_3_BONUS,0);
 
                         double Xangle = Math.toRadians(this.self.getLookAngle().x);
@@ -456,9 +461,12 @@ public class PowersGreenDay extends NewPunchingStand {
     @Override
     public void updatePowerInt(byte activePower, int data) {
         switch (activePower) {
-            case PowerIndex.POWER_3_BONUS -> {
+            case PowerIndex.POWER_3 -> {
                 ((StandUser)this.self).rdbt$SetCrawlTicks(data);
                 legGoneTicks = data;
+                if(this.self.level().isClientSide) {
+                    Roundabout.LOGGER.info(String.valueOf(legGoneTicks));
+                }
             }
 
         }
@@ -468,6 +476,8 @@ public class PowersGreenDay extends NewPunchingStand {
     /**
       Secret skin
      */
+
+
 
 
     public int secretSkinObtainmentTimer = 0;
@@ -672,7 +682,7 @@ public class PowersGreenDay extends NewPunchingStand {
             if(isBarrageAttacking() && !HasOffHand){
                 OffHandSpin();
             }else {
-                if (HasOffHandCharge) {
+                if (HasOffHandCharge && !HasOffHand) {
                     HasOffHandCharge = false;
                 } else {
                     this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().greenDaySettings.armThrowCooldown);
@@ -814,7 +824,7 @@ public class PowersGreenDay extends NewPunchingStand {
             if(isBarrageAttacking() && !HasMainArm){
                 MainArmSpin();
             }else {
-                if (HasMainArmCharge) {
+                if (HasMainArmCharge && !HasMainArm) {
                     HasMainArmCharge = false;
                 } else {
                     this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().greenDaySettings.armThrowCooldown);
@@ -1049,7 +1059,7 @@ public class PowersGreenDay extends NewPunchingStand {
     }
     public int bonusLeapCount = -1;
     public void bigLeap(LivingEntity entity,float range, float mult){
-
+        //legGoneTicks = 240;
         Vec3 vec3d = entity.getEyePosition(0);
         Vec3 vec3d2 = entity.getViewVector(0);
         Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
@@ -1080,7 +1090,7 @@ public class PowersGreenDay extends NewPunchingStand {
                                 //this.setCooldown(PowerIndex.SNEAK_MOVEMENT, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
                             }
                             setcrawlserver(this.self);
-                            legGoneTicks = 240;
+                            //legGoneTicks = 240;
                             ((StandUser) this.self).rdbt$SetCrawlTicks(240);
                             getBarrageWindup();
                             addEXP(3);
@@ -1099,6 +1109,8 @@ public class PowersGreenDay extends NewPunchingStand {
                 }
             }
     }
+
+    public boolean legsAreGone = false;
     public int legGoneTicks = 0;
     public SeperatedLegsEntity currentlegs;
     public boolean moldLeapServer() {
