@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.visages.mobs.*;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
+import net.hydra.jojomod.item.IronBallCrossbowItem;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ModificationMaskItem;
@@ -39,8 +40,10 @@ import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.Score;
@@ -258,6 +261,16 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             if (((IPlayerEntity)$$0).roundabout$GetPos2() == PlayerPosIndex.BLOOD_SUCK){
                 ci.setReturnValue(HumanoidModel.ArmPose.SPYGLASS);
                 return;
+            }
+        }
+
+        ItemStack $$2 = $$0.getItemInHand($$1);
+        if (!$$2.isEmpty()) {
+
+            if (!($$0.getUsedItemHand() == $$1 && $$0.getUseItemRemainingTicks() > 0)) {
+                if (!$$0.swinging && $$2.is(ModItems.IRON_BALL_CROSSBOW) && IronBallCrossbowItem.isCharged($$2)) {
+                    ci.setReturnValue(HumanoidModel.ArmPose.CROSSBOW_HOLD);
+                }
             }
         }
 

@@ -528,6 +528,9 @@ public class PowersCinderella extends NewDashPreset {
     public void defaceImpact(Entity entity){
         this.setAttackTimeDuring(-20);
         if (entity != null) {
+            if (entity.distanceTo(self) > 6){
+                return;
+            }
             hitParticlesCenter(entity);
             float pow;
             float knockbackStrength;

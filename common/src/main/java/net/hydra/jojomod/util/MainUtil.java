@@ -1806,6 +1806,12 @@ public class MainUtil {
         }
         return id;
     }
+
+    // damage types which shouldn't be normally blocked at all
+    public static boolean isSpecialDamage(DamageSource source) {
+        return source.is(ModDamageTypes.GO_BEYOND) || source.is(DamageTypes.FELL_OUT_OF_WORLD) || source.is(DamageTypes.GENERIC_KILL);
+    }
+
     public static boolean isStandDamage(DamageSource sauce){
         if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.PENETRATING_STAND) || sauce.is(ModDamageTypes.STAR_FINGER)
                 || sauce.is(ModDamageTypes.STAND_RUSH)|| sauce.is(ModDamageTypes.CROSSFIRE)|| sauce.is(ModDamageTypes.EXPLOSIVE_STAND)

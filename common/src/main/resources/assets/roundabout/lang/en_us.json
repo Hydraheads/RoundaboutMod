@@ -82,6 +82,7 @@
   "item.roundabout.cherries": "Cherries",
   "item.roundabout.hairspray": "Hairspray",
   "item.roundabout.occult_charge": "Occult Charge",
+  "item.roundabout.iron_ball_crossbow": "Iron Ball Crossbow",
 
   "roundabout.coffin_sleep": "Leave Coffin",
 
@@ -695,6 +696,8 @@
   "death.attack.martial_arts.item": "%1$s was shown no mercy by %2$s",
   "death.attack.ripper_eyes": "%1$s was ripped apart by %2$s",
   "death.attack.ripper_eyes.item": "%1$s was ripped apart by %2$s",
+  "death.attack.iron_ball": "%1$s was blown away by %2$s",
+  "death.attack.iron_ball.item": "%1$s was blown away by %2$s",
 
   "item.glaive.charge_power": "Charge Attack",
 
