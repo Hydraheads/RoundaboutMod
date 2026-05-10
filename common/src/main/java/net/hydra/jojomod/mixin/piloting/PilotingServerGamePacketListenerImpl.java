@@ -21,6 +21,7 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -43,7 +44,7 @@ public abstract class PilotingServerGamePacketListenerImpl {
         if (this.player != null) {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
-            StandEntity piloting = powers.getPilotingStand();
+            LivingEntity piloting = powers.getPilotingStand();
             if (powers.isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved() && powers instanceof PowersJustice
             && MainUtil.getIsGamemodeApproriateForGrief(player)) {
                 InteractionHand $$2 = $$0.getHand();

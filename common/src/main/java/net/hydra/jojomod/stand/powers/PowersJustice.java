@@ -948,7 +948,7 @@ public class PowersJustice extends NewDashPreset {
             if (icast.roundabout$isPermaCastingEntity(this.getSelf())) {
                 int cdr = ClientNetworking.getAppropriateConfig().justiceSettings.fogChainCooldown;
                 this.setCooldown(PowerIndex.SKILL_2, cdr);
-                StandEntity piloting = getPilotingStand();
+                LivingEntity piloting = getPilotingStand();
                 if (isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved()) {
                     Vec3 vec3d = piloting.getEyePosition(0);
                     Vec3 vec3d2 = piloting.getViewVector(0);

@@ -114,7 +114,7 @@ public abstract class ZItemInHandRenderer {
 
 
             if (powers.isPiloting()){
-                StandEntity stand = powers.getPilotingStand();
+                LivingEntity stand = powers.getPilotingStand();
                 float aan = localPlayer.getAttackAnim(partialTick);
                 InteractionHand hando = MoreObjects.firstNonNull(localPlayer.swingingArm, InteractionHand.MAIN_HAND);
                 float sev = Mth.lerp(partialTick, localPlayer.xRotO, localPlayer.getXRot());

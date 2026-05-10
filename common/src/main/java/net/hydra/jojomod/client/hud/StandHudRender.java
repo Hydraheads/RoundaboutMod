@@ -680,7 +680,7 @@ public class StandHudRender {
     }
 
     public static void renderDistanceHUDJustice(GuiGraphics context, Minecraft client, Player playerEntity,
-                                                int scaledWidth, int scaledHeight, int ticks, int x, StandEntity stand) {
+                                                int scaledWidth, int scaledHeight, int ticks, int x, LivingEntity stand) {
         int l;
         int k;
         int v;

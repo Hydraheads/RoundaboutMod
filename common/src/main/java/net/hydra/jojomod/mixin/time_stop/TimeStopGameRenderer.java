@@ -87,7 +87,7 @@ public class TimeStopGameRenderer {
         if (player != null) {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
-            StandEntity piloting = powers.getPilotingStand();
+            LivingEntity piloting = powers.getPilotingStand();
             if (powers.isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved()) {
                 Vec3 camPos = camera.getPosition();
 

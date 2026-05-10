@@ -15,10 +15,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.powers.GeneralPowers;
-import net.hydra.jojomod.stand.powers.PowersAnubis;
-import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
-import net.hydra.jojomod.stand.powers.PowersTusk;
-import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
+import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.animation.AnimationChannel;
 import net.minecraft.client.animation.AnimationDefinition;
@@ -288,6 +285,23 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         SU.roundabout$getWornStandAnimation().stop();
                     }
 
+                }
+                if (SU.roundabout$getStandPowers() instanceof Powers20thCenturyBoy && PowerTypes.hasStandActive(P)){
+                    AnimationDefinition anim = Powers20thCenturyBoy.getAnimation(SU);
+                    if (anim != null){
+                        this.leftArm.xRot = 0;
+                        this.leftArm.yRot = 0;
+                        this.rightArm.xRot = 0;
+                        this.rightArm.yRot = 0;
+                        this.leftLeg.xRot = 0;
+                        this.leftLeg.yRot = 0;
+                        this.rightLeg.xRot = 0;
+                        this.rightLeg.yRot = 0;
+                        SU.roundabout$getWornStandAnimation().startIfStopped($$0.tickCount);
+                        this.roundabout$animate(SU.roundabout$getWornStandAnimation(),anim,$$3,1F);
+                    } else {
+                        SU.roundabout$getWornStandAnimation().stop();
+                    }
                 }
 
 
