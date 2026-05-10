@@ -61,6 +61,14 @@ public class ModItemModels {
 
     public static ModelResourceLocation DREAD_BOOK =
             new ModelResourceLocation(Roundabout.MOD_ID, "dread_book", "inventory");
+    public static ModelResourceLocation IRON_BALL_CROSSBOW_LOADED =
+            new ModelResourceLocation(Roundabout.MOD_ID, "iron_ball_crossbow_loaded", "inventory");
+    public static ModelResourceLocation IRON_BALL_CROSSBOW_PULLING_0 =
+            new ModelResourceLocation(Roundabout.MOD_ID, "iron_ball_crossbow_pulling_0", "inventory");
+    public static ModelResourceLocation IRON_BALL_CROSSBOW_PULLING_1 =
+            new ModelResourceLocation(Roundabout.MOD_ID, "iron_ball_crossbow_pulling_1", "inventory");
+    public static ModelResourceLocation IRON_BALL_CROSSBOW_PULLING_2 =
+            new ModelResourceLocation(Roundabout.MOD_ID, "iron_ball_crossbow_pulling_2", "inventory");
 
     public static HarpoonModel HARPOON_MODEL;
     public static SnubnoseRevolverModel SNUBNOSE_MODEL;
