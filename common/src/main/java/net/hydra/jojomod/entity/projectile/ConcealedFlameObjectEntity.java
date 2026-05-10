@@ -261,19 +261,20 @@ public class ConcealedFlameObjectEntity extends ThrowableItemProjectile implemen
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
         Entity $$1 = $$0.getEntity();
-        if ($$1 instanceof LivingEntity LE){
-        }
 
         if (!this.level().isClientSide) {
-            Entity $$4 = this.getOwner();
+            LivingEntity user = this.getUser();
+            if (user != null &&
+                    ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+                burst(PMR);
+                if ($$1 instanceof LivingEntity LE){
+                    PMR.addEXP(7,LE);
 
-            DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.THROWN_OBJECT, $$4);
-
-
-            if ($$1.hurt($$5, 10)) {
-                if ($$1.getType() == EntityType.ENDERMAN) {
-                    return;
+                    MainUtil.knockShieldPlusStand($$1, 20);
                 }
+
+                CrossfireHurricaneEntity.blastEntity($$1, this,
+                        this.getSize(), user, true, PMR,fireStormCreated, 1F);
             }
             this.discard();
         }
