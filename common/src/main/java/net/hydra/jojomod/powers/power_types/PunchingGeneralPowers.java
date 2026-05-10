@@ -569,6 +569,9 @@ public class PunchingGeneralPowers extends GeneralPowers {
             attackTargetId = 0;
             self.swing(InteractionHand.MAIN_HAND, true);
             if (entity != null) {
+                if (entity.distanceTo(self) > 3.8){
+                    return;
+                }
                 float pow;
                 float knockbackStrength;
                 pow = getPunchStrength(entity);
