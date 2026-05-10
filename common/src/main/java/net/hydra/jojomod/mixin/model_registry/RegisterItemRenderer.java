@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.IItemRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ModItemModels;
 import net.hydra.jojomod.event.powers.visagedata.MistaVisage;
+import net.hydra.jojomod.item.IronBallCrossbowItem;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.util.MainUtil;
@@ -54,7 +55,26 @@ public abstract class RegisterItemRenderer implements IItemRenderer {
             } else if (CrossbowItem.containsChargedProjectile($$0,ModItems.WORTHY_ARROW)){
                 return this.itemModelShaper.getModelManager().getModel(ModItemModels.STAND_WORTHY_CROSSBOW);
             }
-        }if ($$0.is(Items.BOOK)){
+        }
+        if ($$0.is(ModItems.IRON_BALL_CROSSBOW)){
+            if ($$2 != null) {
+                if (IronBallCrossbowItem.isCharged($$0)){
+                    return this.itemModelShaper.getModelManager().getModel(ModItemModels.IRON_BALL_CROSSBOW_LOADED);
+                } else {
+                    if ($$2.isUsingItem() && $$2.getUseItem() == $$0){
+                        float charge = (float) ($$0.getUseDuration() - $$2.getUseItemRemainingTicks()) / (float) IronBallCrossbowItem.getChargeDuration($$0);
+                        if (charge > 1.0) {
+                            return this.itemModelShaper.getModelManager().getModel(ModItemModels.IRON_BALL_CROSSBOW_PULLING_2);
+                        } else if (charge > 0.58) {
+                            return this.itemModelShaper.getModelManager().getModel(ModItemModels.IRON_BALL_CROSSBOW_PULLING_1);
+                        } else if (charge > 0) {
+                            return this.itemModelShaper.getModelManager().getModel(ModItemModels.IRON_BALL_CROSSBOW_PULLING_0);
+                        }
+                    }
+                }
+            }
+        }
+        if ($$0.is(Items.BOOK)){
             if (MainUtil.isDreadBook($$0)){
                 return this.itemModelShaper.getModelManager().getModel(ModItemModels.DREAD_BOOK);
             }
