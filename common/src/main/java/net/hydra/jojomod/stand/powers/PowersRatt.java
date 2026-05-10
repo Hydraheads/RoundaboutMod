@@ -611,6 +611,9 @@ public class PowersRatt extends NewDashPreset {
         super.updateUniqueMoves();
     }
 
+    static final float balancingSpeed = 0.85F;
+    static final float balancingSpeedCharged = 1F;
+
     public void placeBurst() {
         this.animateStand(RattEntity.FIRE);
         this.setPowerNone();
@@ -621,7 +624,8 @@ public class PowersRatt extends NewDashPreset {
                 Vec3 v = this.getRotations(this.getShootTarget());
                 float rand = 0.84F;
                 if (isAutoMining()){e.setBlockBreak(true); rand = 0.74F;}
-                e.shootFromRotation(RE, (float) v.x * 180 / (float) Math.PI + 180, (float) v.y * 180 / (float) Math.PI, -0.5F, ShotPowerFloats[1], rand);
+                e.shootFromRotation(RE, (float) v.x * 180 / (float) Math.PI + 180, (float) v.y * 180 / (float) Math.PI,
+                        -0.5F, ShotPowerFloats[1]*balancingSpeed, rand);
                 e.setSuperthrowTicks(50);
                 RE.level().addFreshEntity(e);
             }
@@ -768,9 +772,9 @@ public class PowersRatt extends NewDashPreset {
     }
 
 
-    public void FireDart(byte type, float accuracy) {
+    public void FireDart(byte type, float accuracy, float modifier) {
         RattDartEntity e = new RattDartEntity(this.getSelf().level(),this.getSelf(), type );
-        e.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0.5F, ShotPowerFloats[1], accuracy);
+        e.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0.5F, ShotPowerFloats[1]*modifier, accuracy);
         e.setSuperthrowTicks(50);
         if (isAutoMining()){e.setBlockBreak(true);}
         this.getSelf().level().addFreshEntity(e);
@@ -785,7 +789,7 @@ public class PowersRatt extends NewDashPreset {
             }
         }
         RattDartEntity e = new RattDartEntity(this.getSelf().level(),this.getSelf(),i >PowersRatt.MaxThreshold ? RattDartEntity.CHARGED : RattDartEntity.BASIC );
-        e.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0.5F, power, accuracy);
+        e.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0.5F, power*balancingSpeed, accuracy);
         e.setSuperthrowTicks(50);
         if (isAutoMining()){e.setBlockBreak(true);}
         this.getSelf().level().addFreshEntity(e);
@@ -846,9 +850,9 @@ public class PowersRatt extends NewDashPreset {
                 chargeTime -= 30;
                 if (!isClient()) {
                     if (this.chargeTime < 30) {
-                        FireDart(RattDartEntity.BURST_CHARGED, 0.2F);
+                        FireDart(RattDartEntity.BURST_CHARGED, 0.2F, balancingSpeedCharged);
                     } else {
-                        FireDart(RattDartEntity.BURST, 0.4F);
+                        FireDart(RattDartEntity.BURST, 0.4F, balancingSpeed);
                     }
                 }
             }
@@ -916,8 +920,6 @@ public class PowersRatt extends NewDashPreset {
         }
         return super.tryPower(move, forced);
     }
-
-
 
     @Override
     public float inputSpeedModifiers(float basis) {

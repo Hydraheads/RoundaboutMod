@@ -83,6 +83,7 @@ public class ModItems {
     public static Item ANUBIS_GUARDIAN_SPAWN_EGG;
     public static Item ROAD_ROLLER;
 
+    public static Item IRON_BALL_CROSSBOW;
 
     public static Item CAT_REMAINS;
     public static Item OCELOT_REMAINS;
