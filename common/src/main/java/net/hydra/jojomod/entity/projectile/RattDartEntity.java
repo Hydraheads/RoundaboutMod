@@ -63,12 +63,12 @@ public class RattDartEntity extends AbstractArrow {
         }
         return BASIC;
     }
+
     public void setShotType(byte b) {
         if (this.getEntityData().hasItem(ROUNDABOUT$TYPE)) {
             this.getEntityData().set(ROUNDABOUT$TYPE,b);
         }
     }
-
 
     public int getBounces() {
         if (this.getEntityData().hasItem(ROUNDABOUT$BOUNCES)) {
@@ -76,6 +76,7 @@ public class RattDartEntity extends AbstractArrow {
         }
         return 0;
     }
+
     public void setBounces(int i) {
         if (this.getEntityData().hasItem(ROUNDABOUT$BOUNCES)) {
             this.getEntityData().set(ROUNDABOUT$BOUNCES,i);
@@ -88,6 +89,7 @@ public class RattDartEntity extends AbstractArrow {
         }
         return 0;
     }
+
     public void setSuperthrowTicks(int i) {
         if (this.getEntityData().hasItem(ROUNDABOUT$SUPER_THROWN)) {
             this.getEntityData().set(ROUNDABOUT$SUPER_THROWN,i);
@@ -100,6 +102,7 @@ public class RattDartEntity extends AbstractArrow {
         }
         return false;
     }
+
     public void setParticle(boolean b) {
         if (this.getEntityData().hasItem(ROUNDABOUT$PARTICLES)) {
             this.getEntityData().set(ROUNDABOUT$PARTICLES,b);
@@ -112,15 +115,12 @@ public class RattDartEntity extends AbstractArrow {
         }
         return false;
     }
+
     public void setBlockBreak(boolean b) {
         if (this.getEntityData().hasItem(ROUNDABOUT$BREAKS_BLOCKS)) {
             this.getEntityData().set(ROUNDABOUT$BREAKS_BLOCKS,b);
         }
     }
-
-
-
-
 
     public static byte
                 BASIC = (byte) 1,

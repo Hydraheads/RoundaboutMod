@@ -246,7 +246,7 @@ public class StandPowers extends AbilityScapeBasis {
     }
     /**Returns the stand entity that is going to be controlled, you most likely will not need to override this
      * unless you are doing a multi stand type like bad company*/
-    public StandEntity getPilotingStand(){
+    public LivingEntity getPilotingStand(){
         return getStandEntity(this.self);
     }
     /**If the passed in entity id matches that of getPilotingStand (consider passing in that function directly),
@@ -671,7 +671,7 @@ public class StandPowers extends AbilityScapeBasis {
     /**The amount of exp you gain from mining blocks*/
     public void gainExpFromSpecialMining(BlockState $$1, BlockPos $$2) {
         if (!($$1.getBlock() instanceof IceBlock) && !$$1.is(Blocks.PACKED_ICE) &&
-                !($$1.getDestroySpeed(this.self.level(),$$2) < 0.1) && MainUtil.isBlockExpAble($$1)) {
+                !($$1.getDestroySpeed(this.self.level(),$$2) < 0.5) && MainUtil.isBlockExpAble($$1)) {
             if (Math.random() > 0.62) {
                 addEXP(1);
             }

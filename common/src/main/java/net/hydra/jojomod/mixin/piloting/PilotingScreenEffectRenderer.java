@@ -43,7 +43,7 @@ public class PilotingScreenEffectRenderer {
         if ($$2 != null) {
             StandUser standComp = ((StandUser) $$2);
             StandPowers powers = standComp.roundabout$getStandPowers();
-            StandEntity piloting = powers.getPilotingStand();
+            LivingEntity piloting = powers.getPilotingStand();
             if (powers.isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved() ) {
 
                 Minecraft mc = Minecraft.getInstance();

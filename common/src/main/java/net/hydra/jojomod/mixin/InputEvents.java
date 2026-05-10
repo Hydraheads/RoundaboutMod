@@ -336,7 +336,7 @@ public abstract class InputEvents implements IInputEvents {
         }
         StandUser standComp = ((StandUser) player);
         StandPowers powers = standComp.roundabout$getStandPowers();
-        StandEntity piloting = powers.getPilotingStand();
+        LivingEntity piloting = powers.getPilotingStand();
         HitResult $$47 = null;
         if (piloting != null && piloting.isAlive() && !piloting.isRemoved()){
             if (level != null) {
@@ -582,7 +582,7 @@ public abstract class InputEvents implements IInputEvents {
         if (this.rightClickDelay == 0 && this.player != null && !this.player.isUsingItem() && this.level != null) {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
-            StandEntity piloting = powers.getPilotingStand();
+            LivingEntity piloting = powers.getPilotingStand();
             HitResult $$47 = null;
             if (piloting != null && piloting.isAlive() && !piloting.isRemoved()){
                 if (level != null) {

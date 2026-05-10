@@ -423,7 +423,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     @Override
     public boolean cancelSprintJump(){
         if (this.hasHurricane() || isChargingCrossfire() || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE
-                || this.getActivePower() == PowerIndex.POWER_1
+                || this.getActivePower() == PowerIndex.POWER_1 || isUsingFirestorm() || hasHurricane()
                 || this.getActivePower() == PowerIndex.RANGED_BARRAGE_2 || this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE_2
                 || this.getActivePower() == PowerIndex.RANGED_BARRAGE || this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE
                 || this.getActivePower() == PowerIndex.POWER_4_BONUS){
@@ -904,6 +904,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         }
 
         switch (context) {
+            //s
             case SKILL_1_NORMAL -> {
                 tryRedBindClient();
             }
@@ -944,6 +945,9 @@ public class PowersMagiciansRed extends NewPunchingStand {
     }
 
     public void selfBurnClient(){
+
+        if (hasHurricaneSpecial())
+            return;
         if (isChargingCrossfireSpecial() || this.activePower == PowerIndex.POWER_1_BLOCK)
             return;
         if (isBusy() || isLockedByWater())
@@ -1029,6 +1033,8 @@ public class PowersMagiciansRed extends NewPunchingStand {
         return false;
     }
     public void tryRedBindClient(){
+        if (hasHurricaneSpecial())
+            return;
         if (isChargingCrossfireSpecial() || this.activePower == PowerIndex.POWER_1_BLOCK)
             return;
         if (isBusy() || isLockedByWater())
@@ -1049,6 +1055,9 @@ public class PowersMagiciansRed extends NewPunchingStand {
     }
 
     public void tryIgnitionClient() {
+
+        if (hasHurricaneSpecial())
+            return;
         if (isChargingCrossfireSpecial() || this.activePower == PowerIndex.POWER_1_BLOCK)
             return;
         if (isBusy() || isLockedByWater())
@@ -1072,6 +1081,9 @@ public class PowersMagiciansRed extends NewPunchingStand {
     }
 
     public void tryLifeTrackerClient() {
+
+        if (hasHurricaneSpecial())
+            return;
         if (isChargingCrossfireSpecial())
             return;
         if (isBusy() || isLockedByWater())
@@ -1117,6 +1129,8 @@ public class PowersMagiciansRed extends NewPunchingStand {
         return false;
     }
     public void tryToDashClient(){
+        if (hasHurricaneSpecial())
+            return;
         if (isChargingCrossfireSpecial())
             return;
         if (isBusy())
@@ -1128,6 +1142,9 @@ public class PowersMagiciansRed extends NewPunchingStand {
         }
     }
     public void destroyProjectilesClient(){
+
+        if (hasHurricaneSpecial())
+            return;
         if (isChargingCrossfireSpecial())
             return;
         if (isBusy() || isLockedByWater())
@@ -1144,6 +1161,9 @@ public class PowersMagiciansRed extends NewPunchingStand {
         }
     }
     public void tryToSnapFireAway(){
+
+        if (hasHurricaneSpecial())
+            return;
         if (this.isChargingCrossfireSpecial())
             return;
         if (isBusy())
@@ -1157,6 +1177,9 @@ public class PowersMagiciansRed extends NewPunchingStand {
     }
 
     public void bigHurricaneClient(){
+
+        if (hasHurricaneSpecial())
+            return;
         if (isChargingCrossfire() || hasHurricaneSingle())
             return;
         if (isBusy())
@@ -1167,6 +1190,9 @@ public class PowersMagiciansRed extends NewPunchingStand {
         }
     }
     public void cawFireSlamClientCaw(){
+
+        if (hasHurricaneSpecial())
+            return;
         if (isChargingCrossfire())
             return;
         if (isBusy() || isLockedByWater())
@@ -2187,6 +2213,8 @@ public class PowersMagiciansRed extends NewPunchingStand {
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (!consumeClickInput) {
+            if (hasHurricaneSpecial())
+                return;
             if (holdDownClick) {
                 if (keyIsDown) {
 
@@ -2923,7 +2951,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.2F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.04F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(3.5F));
         }
@@ -2931,7 +2959,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     @Override
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.55F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.35F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(4.5F));
         }
@@ -3327,6 +3355,8 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 return true;
             }
         }
+        if (hasHurricaneSpecial() && slot != 2)
+            return true;
         if (this.isChargingCrossfireSpecial() || (slot != 2 && slot != 3 && (isChargingCrossfireSingle() || hasHurricaneSingle()))){
             if (canShootConcealedCrossfire() && slot == 1){
                 return false;

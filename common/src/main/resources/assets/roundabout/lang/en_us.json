@@ -360,6 +360,7 @@
   "entity.roundabout.harpoon": "Harpoon",
   "entity.roundabout.match": "Match",
   "entity.roundabout.knife": "Knife",
+  "entity.roundabout.poison_llama_spit": "Poison Llama Spit",
   "entity.roundabout.gasoline_can": "Gasoline Can",
   "entity.roundabout.gasoline_splatter": "Gasoline Splatter",
   "entity.roundabout.blood_splatter": "Blood Splatter",
@@ -516,6 +517,7 @@
   "block.roundabout.cultivated_oak_sapling": "Cultivated Oak Sapling",
   "block.roundabout.cultivated_locacaca": "Cultivated Locacaca",
   "block.roundabout.melon_parfait": "Melon Parfait",
+  "block.roundabout.acid_puddle": "Acid Puddle",
 
   "itemgroup.jojo": "Roundabout",
   "itemgroup.jojo_discs": "Stand Discs",
