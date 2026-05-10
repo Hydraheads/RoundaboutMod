@@ -155,6 +155,8 @@ public class FabricItems {
     public static Item JACKAL_RIFLE = registerItem("jackal_rifle", new JackalRifleItem(new Item.Properties().stacksTo(1)));
     public static Item SNIPER_AMMO = registerItem("sniper_ammo", new SniperAmmoItem(new Item.Properties().stacksTo(64)));
 
+    public static Item IRON_BALL_CROSSBOW = registerItem("iron_ball_crossbow", new IronBallCrossbowItem(new Item.Properties().stacksTo(1)));
+
     public static Item WOODEN_GLAIVE = registerItem("wooden_glaive", new GlaiveItem(Tiers.WOOD, 4F, -2.9F, new Item.Properties(),4));
     public static Item STONE_GLAIVE = registerItem("stone_glaive", new GlaiveItem(Tiers.STONE, 4F, -2.9F, new Item.Properties(),6));
     public static Item IRON_GLAIVE = registerItem("iron_glaive", new GlaiveItem(Tiers.IRON, 4F, -2.9F, new Item.Properties(),7));
@@ -305,6 +307,7 @@ public class FabricItems {
                         entries.accept(STAND_DISC);
                         entries.accept(LUCK_UPGRADE);
                         entries.accept(LUCK_SWORD);
+                        entries.accept(IRON_BALL_CROSSBOW);
                         entries.accept(WOODEN_GLAIVE);
                         entries.accept(STONE_GLAIVE);
                         entries.accept(IRON_GLAIVE);
@@ -662,6 +665,7 @@ public class FabricItems {
         ModItems.METEORITE = METEORITE;
         ModItems.ROAD_ROLLER = ROAD_ROLLER;
         ModItems.METEORITE_INGOT = METEORITE_INGOT;
+        ModItems.IRON_BALL_CROSSBOW = IRON_BALL_CROSSBOW;
         ModItems.LOCACACA_PIT = LOCACACA_PIT;
 
 

@@ -47,6 +47,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ItemInHandRenderer.class)
 public abstract class ZItemInHandRenderer {
@@ -69,6 +70,14 @@ public abstract class ZItemInHandRenderer {
     @Shadow private float oMainHandHeight;
 
     @Shadow private float mainHandHeight;
+
+    @Shadow
+    protected abstract void applyItemArmAttackTransform(PoseStack $$0, HumanoidArm $$1, float $$2);
+
+    @Shadow
+    private static boolean isChargedCrossbow(ItemStack $$0) {
+        return false;
+    }
 
     @Inject(method = "renderHandsWithItems", at = @At(value = "HEAD"), cancellable = true)
     public<T extends LivingEntity, M extends EntityModel<T>>
@@ -199,8 +208,20 @@ public abstract class ZItemInHandRenderer {
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$tick(CallbackInfo ci) {
     }
-    @Inject(method = "renderArmWithItem", at = @At(value = "HEAD"), cancellable = true)
-    public void roundabout$renderArmWithItemAbstractClientPlayer(AbstractClientPlayer abstractClientPlayer, float partialTick, float g, InteractionHand interactionHand, float h, ItemStack itemStack, float attackProg, PoseStack poseStack, MultiBufferSource multiBufferSource, int j, CallbackInfo ci) {
+    @Inject(method = "isChargedCrossbow", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    private static void roundabout$charge(ItemStack $$0, CallbackInfoReturnable<Boolean> cir) {
+        if ($$0.is(ModItems.IRON_BALL_CROSSBOW) && IronBallCrossbowItem.isCharged($$0)){
+            cir.setReturnValue(true);
+        }
+    }
+    @Inject(method = "renderArmWithItem", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    public void roundabout$renderArmWithItemAbstractClientPlayer(AbstractClientPlayer abstractClientPlayer,
+                                                                 float partialTick, float g,
+                                                                 InteractionHand interactionHand, float h,
+                                                                 ItemStack itemStack, float attackProg,
+                                                                 PoseStack poseStack,
+                                                                 MultiBufferSource multiBufferSource,
+                                                                 int j, CallbackInfo ci) {
         if (abstractClientPlayer.isScoping()) {
             return;
         }
@@ -256,8 +277,60 @@ public abstract class ZItemInHandRenderer {
         }
 
 
-
         if (!itemStack.isEmpty()) {
+
+            if (itemStack.is(ModItems.IRON_BALL_CROSSBOW)){
+                poseStack.pushPose();
+                boolean $$10 = interactionHand == InteractionHand.MAIN_HAND;
+                HumanoidArm $$11 = $$10 ? abstractClientPlayer.getMainArm() : abstractClientPlayer.getMainArm().getOpposite();
+
+
+                boolean $$12 = IronBallCrossbowItem.isCharged(itemStack);
+                boolean $$13 = $$11 == HumanoidArm.RIGHT;
+                int $$14 = $$13 ? 1 : -1;
+                if (abstractClientPlayer.isUsingItem() && abstractClientPlayer.getUseItemRemainingTicks() > 0 && abstractClientPlayer.getUsedItemHand() == interactionHand) {
+                    this.applyItemArmTransform(poseStack, $$11, attackProg);
+                    poseStack.translate((float)$$14 * -0.4785682F, -0.094387F, 0.05731531F);
+                    poseStack.mulPose(Axis.XP.rotationDegrees(-11.935F));
+                    poseStack.mulPose(Axis.YP.rotationDegrees((float)$$14 * 65.3F));
+                    poseStack.mulPose(Axis.ZP.rotationDegrees((float)$$14 * -9.785F));
+                    float $$15 = (float)itemStack.getUseDuration() - ((float)this.minecraft.player.getUseItemRemainingTicks() - partialTick + 1.0F);
+                    float $$16 = $$15 / (float)IronBallCrossbowItem.getChargeDuration(itemStack);
+                    if ($$16 > 1.0F) {
+                        $$16 = 1.0F;
+                    }
+
+                    if ($$16 > 0.1F) {
+                        float $$17 = Mth.sin(($$15 - 0.1F) * 1.3F);
+                        float $$18 = $$16 - 0.1F;
+                        float $$19 = $$17 * $$18;
+                        poseStack.translate($$19 * 0.0F, $$19 * 0.004F, $$19 * 0.0F);
+                    }
+
+                    poseStack.translate($$16 * 0.0F, $$16 * 0.0F, $$16 * 0.04F);
+                    poseStack.scale(1.0F, 1.0F, 1.0F + $$16 * 0.2F);
+                    poseStack.mulPose(Axis.YN.rotationDegrees((float)$$14 * 45.0F));
+                } else {
+                    float $$20 = -0.4F * Mth.sin(Mth.sqrt(h) * (float)Math.PI);
+                    float $$21 = 0.2F * Mth.sin(Mth.sqrt(h) * ((float)Math.PI * 2F));
+                    float $$22 = -0.2F * Mth.sin(h * (float)Math.PI);
+                    poseStack.translate((float)$$14 * $$20, $$21, $$22);
+                    this.applyItemArmTransform(poseStack, $$11, attackProg);
+                    this.applyItemArmAttackTransform(poseStack, $$11, h);
+                    if ($$12 && h < 0.001F && $$10) {
+                        poseStack.translate((float)$$14 * -0.641864F, 0.0F, 0.0F);
+                        poseStack.mulPose(Axis.YP.rotationDegrees((float)$$14 * 10.0F));
+                    }
+                }
+
+                this.renderItem(abstractClientPlayer, itemStack, $$13 ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND : ItemDisplayContext.FIRST_PERSON_LEFT_HAND, !$$13, poseStack, multiBufferSource, j);
+
+
+                poseStack.popPose();
+                ci.cancel();
+                return;
+            }
+
             float shakeMod = 0F;
             if (abstractClientPlayer.isUsingItem() && abstractClientPlayer.getUseItemRemainingTicks() > 0 && abstractClientPlayer.getUsedItemHand() == interactionHand) {
 
