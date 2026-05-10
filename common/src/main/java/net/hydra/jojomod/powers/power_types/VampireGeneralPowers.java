@@ -329,7 +329,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public float inputSpeedModifiers(float basis){
         if (getActivePower() == POWER_SPIKE) {
             basis*=0.2f;
-        } else if (isSweeping() && !self.isCrouching()){
+        } else if (isSweeping()){
             basis*=0.1f;
         } else if (getActivePower() == BLOOD_CLUTCH){
             basis*=0.1f;
