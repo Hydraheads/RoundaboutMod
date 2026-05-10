@@ -42,6 +42,7 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:soft_and_wet_disc",
                     "roundabout:walking_heart_disc",
                     "roundabout:ratt_disc"
+                    //"roundabout:green_day_disc"
             )
     );
     public Set<String> standArrowSecondaryPoolv5 = new HashSet<>(
@@ -64,6 +65,7 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:achtung_baby_disc",
                     "roundabout:walking_heart_disc",
                     "roundabout:ratt_disc"
+                   // "roundabout:green_day_disc"
             )
     );
 
