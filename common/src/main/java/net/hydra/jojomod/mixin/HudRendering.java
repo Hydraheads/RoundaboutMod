@@ -19,7 +19,6 @@ import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.JackalRifleItem;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.stand.powers.*;
@@ -50,8 +49,6 @@ import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.Objects;
 
 
 @Mixin(value =Gui.class, priority = 99)
@@ -637,7 +634,7 @@ public abstract class HudRendering implements IHudAccess {
                 return true;
             } else if (((StandUser)minecraft.player).roundabout$getStandPowers().isPiloting()){
                 if (this.getCameraPlayer() != null) {
-                    StandHudRender.renderDistanceHUDJustice(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, ((StandUser) minecraft.player).roundabout$getStandPowers().getPilotingStand());
+                    StandHudRender.renderDistanceHUDPiloting(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, ((StandUser) minecraft.player).roundabout$getStandPowers().getPilotingStand());
                 }
                 return true;
             } else if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && user.roundabout$getEffectiveCombatMode() &&  PowerTypes.hasStandActivelyEquipped(minecraft.player)){
