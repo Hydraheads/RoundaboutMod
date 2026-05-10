@@ -326,11 +326,15 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             }
         }
     }
+    public int impaleTicks = 0;
     public boolean holdDownClick = false;
 
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (!consumeClickInput) {
+            if (impaleTicks > 0){
+                return;
+            }
             if (holdDownClick) {
                 if (keyIsDown) {
 
@@ -442,6 +446,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (this.self instanceof Player){
             if (isPacketPlayer()){
                 this.setAttackTimeDuring(-20);
+                impaleTicks = 15;
                 tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK,getTargetEntityId2(impaleRange));
             }
         } else {
@@ -724,6 +729,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         super.tickPower();
         if (ticksUntilCanImpale > 0){
             ticksUntilCanImpale--;
+        }
+        if (impaleTicks > 0){
+            impaleTicks--;
         }
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
 
