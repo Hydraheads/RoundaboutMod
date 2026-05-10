@@ -16,15 +16,12 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.ZombieFate;
+import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
-import net.hydra.jojomod.item.MaskItem;
-import net.hydra.jojomod.item.ScissorItem;
-import net.hydra.jojomod.item.StandArrowItem;
-import net.hydra.jojomod.item.WorthyArrowItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
@@ -1059,6 +1056,23 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                     this.setShiftKeyDown(false);
                     ci.cancel();
                 }
+            }
+        }
+    }
+    @Inject(method = "getProjectile(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/item/ItemStack;",
+            at = @At(value = "HEAD"),
+            cancellable = true)
+    public void roundabout$getProjectileHead(ItemStack $$0, CallbackInfoReturnable<ItemStack> cir) {
+        if ($$0.getItem() instanceof ProjectileWeaponItem pi) {
+            if (pi instanceof IronBallCrossbowItem ibci){
+                for (int $$3 = 0; $$3 < this.inventory.getContainerSize(); $$3++) {
+                    ItemStack $$4 = this.inventory.getItem($$3);
+                    if ($$4.is(Items.IRON_INGOT)) {
+                        cir.setReturnValue($$4);
+                        return;
+                    }
+                }
+                cir.setReturnValue(ItemStack.EMPTY);
             }
         }
     }
