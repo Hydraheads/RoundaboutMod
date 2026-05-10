@@ -2,7 +2,6 @@ package net.hydra.jojomod.client.hud;
 
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -11,18 +10,15 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.AnubisMemory;
-import net.hydra.jojomod.event.index.AnubisMoment;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.VampireFate;
-import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.stand.powers.*;
@@ -41,8 +37,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-
-import java.util.List;
 
 public class StandHudRender {
     /** Renders the HUD for stand attacks/abilities.
@@ -679,8 +673,8 @@ public class StandHudRender {
         context.drawString(renderer, $$6, $$7, $$8, y, false);
     }
 
-    public static void renderDistanceHUDJustice(GuiGraphics context, Minecraft client, Player playerEntity,
-                                                int scaledWidth, int scaledHeight, int ticks, int x, LivingEntity stand) {
+    public static void renderDistanceHUDPiloting(GuiGraphics context, Minecraft client, Player playerEntity,
+                                                 int scaledWidth, int scaledHeight, int ticks, int x, LivingEntity stand) {
         int l;
         int k;
         int v;
