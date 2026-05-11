@@ -47,23 +47,28 @@ public class IronBallEntity extends AbstractArrow {
 
     public IronBallEntity(Level $$0, LivingEntity $$1) {
         super(ModEntities.IRON_BALL, $$1, $$0);
+        this.pickup = Pickup.DISALLOWED;
     }
     public IronBallEntity(EntityType<? extends IronBallEntity> $$0, Level $$1) {
         super($$0, $$1);
+        this.pickup = Pickup.DISALLOWED;
     }
 
     public IronBallEntity(Level $$0, double $$1, double $$2, double $$3) {
         super(ModEntities.IRON_BALL, $$1, $$2, $$3, $$0);
+        this.pickup = Pickup.DISALLOWED;
     }
 
     public IronBallEntity(Level $$0, LivingEntity $$1, ItemStack $$2, double p_36862_, double p_36863_, double p_36864_) {
         super(ModEntities.IRON_BALL, p_36862_, p_36863_, p_36864_, $$0);
         this.setArrow($$2.copy());
+        this.pickup = Pickup.DISALLOWED;
     }
 
     int falloff = 12;
     @Override
     public void tick() {
+        this.pickup = Pickup.DISALLOWED;
         Vec3 deltamovement = getDeltaMovement();
         this.inGround = false;
         int bounceC = bounceCount;
