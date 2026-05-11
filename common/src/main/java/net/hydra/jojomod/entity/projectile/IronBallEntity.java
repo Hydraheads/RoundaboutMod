@@ -91,7 +91,6 @@ public class IronBallEntity extends AbstractArrow {
     protected void onHitEntity(EntityHitResult entityHitResult) {
         DamageSource damageSource;
         Entity entity2;
-        super.onHitEntity(entityHitResult);
         Entity entity = entityHitResult.getEntity();
         float f = (float)this.getDeltaMovement().length();
         IAbstractArrowAccess iarrow = ((IAbstractArrowAccess) this);
@@ -133,6 +132,9 @@ public class IronBallEntity extends AbstractArrow {
             if (bl) {
                 return;
             }
+
+            this.level().playSound(null, this.blockPosition(), ModSounds.IRON_BALL_IMPACT_EVENT, SoundSource.PLAYERS,
+                    2F, (float)(1.03F+ Math.random()*0.2F));
             if (entity instanceof LivingEntity) {
                 LivingEntity livingEntity = (LivingEntity)entity;
 
@@ -168,9 +170,8 @@ public class IronBallEntity extends AbstractArrow {
                 }
             }
 
-            this.level().playSound(null, this.blockPosition(), ModSounds.IRON_BALL_IMPACT_EVENT, SoundSource.PLAYERS,
-                    2F, (float)(0.95F+ Math.random()*1F));
 
+            setPierceLevel(pl);
             if (this.getPierceLevel() <= 0) {
                 this.discard();
             }
