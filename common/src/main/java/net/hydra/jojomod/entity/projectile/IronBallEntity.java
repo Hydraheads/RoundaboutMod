@@ -183,14 +183,16 @@ public class IronBallEntity extends AbstractArrow {
                 }
             }
 
-            float knockbackStrength = 1.65F;
-            if (getOwner() instanceof Player PE && PE.distanceTo(this) < 5.5){
-                knockbackStrength = 3.3F;
+            if (!(getOwner() instanceof Player PE && entity.getUUID() == PE.getUUID())) {
+                float knockbackStrength = 1.65F;
+                if (getOwner() instanceof Player PE && PE.distanceTo(this) < 5.5) {
+                    knockbackStrength = 3.3F;
+                }
+                MainUtil.takeKnockback(entity, knockbackStrength,
+                        between.x,
+                        -0.1F,
+                        between.z);
             }
-            MainUtil.takeKnockbackWithY(entity, knockbackStrength,
-                    between.x,
-                    -0.1F,
-                    between.z);
 
             setPierceLevel(pl);
             if (this.getPierceLevel() <= 0) {
@@ -199,24 +201,22 @@ public class IronBallEntity extends AbstractArrow {
         } else {
             if (pl > 0 && !bl) {
                 //reduced kb
-
-                float knockbackStrength = 0.75F;
-                if (getOwner() instanceof Player PE && PE.distanceTo(this) < 5.5){
-                    knockbackStrength = 1.5F;
+                if (!(getOwner() instanceof Player PE && entity.getUUID() == PE.getUUID())) {
+                    float knockbackStrength = 0.75F;
+                    if (getOwner() instanceof Player PE && PE.distanceTo(this) < 5.5) {
+                        knockbackStrength = 1.5F;
+                    }
+                    MainUtil.takeKnockback(entity, knockbackStrength,
+                            between.x,
+                            -0.1F,
+                            between.z);
                 }
-                MainUtil.takeKnockbackWithY(entity, knockbackStrength,
-                        between.x,
-                        -0.1F,
-                        between.z);
             }
             entity.setRemainingFireTicks(j);
             this.setDeltaMovement(this.getDeltaMovement().scale(-0.1));
             this.setYRot(this.getYRot() + 180.0f);
             this.yRotO += 180.0f;
             if (!this.level().isClientSide && this.getDeltaMovement().lengthSqr() < 1.0E-7) {
-                if (this.pickup == Pickup.ALLOWED) {
-                    this.spawnAtLocation(this.getPickupItem(), 0.1f);
-                }
                 this.discard();
             }
         }
@@ -295,9 +295,6 @@ public class IronBallEntity extends AbstractArrow {
 
     @Override
     public void remove(Entity.RemovalReason $$0) {
-        if (this.pickup == AbstractArrow.Pickup.ALLOWED) {
-            this.spawnAtLocation(this.getPickupItem().copy(), 0.1F);
-        }
         this.setRemoved($$0);
     }
     public IronBallEntity(Level $$0, LivingEntity $$1, ItemStack stack) {
