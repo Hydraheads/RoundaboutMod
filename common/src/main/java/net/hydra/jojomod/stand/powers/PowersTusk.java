@@ -94,8 +94,8 @@ public class PowersTusk extends NewDashPreset {
         DRILL_FINISH = PowerIndex.POWER_2_SNEAK_EXTRA,
         BRUSHING = PowerIndex.POWER_2_BLOCK,
 
-        WARP = PowerIndex.BARRAGE_CHARGE,
-        GRAB = PowerIndex.BARRAGE_CHARGE_2,
+        WARP = PowerIndex.BARRAGE_CHARGE_2,
+        GRAB = PowerIndex.RANGED_BARRAGE_CHARGE,
         FLATTEN = PowerIndex.RANGED_BARRAGE_2;
 
     @Override
@@ -338,6 +338,8 @@ public class PowersTusk extends NewDashPreset {
             }
 
             case PowersTusk.WARP -> {
+                this.setActivePower(PowersTusk.WARP);
+                this.setAttackTime(0);
                 if (!isClient()) {
                     Vec3 pos = this.getPilotingStand().getPosition(0);
                     this.getSelf().teleportTo(pos.x,pos.y,pos.z);
