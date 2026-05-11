@@ -647,6 +647,13 @@ public class FabricEntities {
                         EntityType.Builder.<StandArrowEntity>of(StandArrowEntity::new, MobCategory.MISC).
                                 sized(0.7f, 0.7f).clientTrackingRange(6).build(Roundabout.MOD_ID+":stand_arrow")
                 );
+    public static final EntityType<IronBallEntity> IRON_BALL =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "iron_ball"),
+                    EntityType.Builder.<IronBallEntity>of(IronBallEntity::new, MobCategory.MISC).
+                            sized(0.7f, 0.7f).clientTrackingRange(6).build(Roundabout.MOD_ID+":iron_ball")
+            );
         public static final EntityType<ThrownObjectEntity> THROWN_OBJECT =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -906,6 +913,7 @@ public class FabricEntities {
                 ModEntities.GASOLINE_SPLATTER = GASOLINE_SPLATTER;
                 ModEntities.BLOOD_SPLATTER = BLOOD_SPLATTER;
                 ModEntities.STAND_ARROW = STAND_ARROW;
+                ModEntities.IRON_BALL = IRON_BALL;
 
                 ModEntities.THROWN_OBJECT = THROWN_OBJECT;
                 ModEntities.THROWN_ANUBIS = THROWN_ANUBIS;

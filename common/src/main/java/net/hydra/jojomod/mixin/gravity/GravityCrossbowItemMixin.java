@@ -1,15 +1,22 @@
 package net.hydra.jojomod.mixin.gravity;
 
+import net.hydra.jojomod.entity.projectile.IronBallEntity;
+import net.hydra.jojomod.entity.projectile.StandArrowEntity;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
@@ -21,6 +28,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(CrossbowItem.class)
 public abstract class GravityCrossbowItemMixin extends ProjectileWeaponItem implements Vanishable {
@@ -33,6 +41,31 @@ public abstract class GravityCrossbowItemMixin extends ProjectileWeaponItem impl
         super($$0);
     }
 
+    @Inject(method = "getChargeDuration", at = @At(value = "HEAD"), cancellable = true)
+    private static void roundabout$getChargeDuration(ItemStack $$0, CallbackInfoReturnable<Integer> cir) {
+        if ($$0 != null && $$0.is(ModItems.IRON_BALL_CROSSBOW)){
+            int $$1 = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.QUICK_CHARGE, $$0);
+            cir.setReturnValue($$1 == 0 ? 25 : 25 - 2 * $$1);
+        }
+    }
+    @Inject(method = "getArrow", at = @At(value = "HEAD"), cancellable = true)
+    private static void roundabout$getArrow(Level $$0, LivingEntity $$1, ItemStack $$2, ItemStack $$3, CallbackInfoReturnable<AbstractArrow> cir) {
+        if ($$2 != null && $$2.is(ModItems.IRON_BALL_CROSSBOW)){
+            IronBallEntity ironBallEntity = new IronBallEntity($$0, $$1);
+            ironBallEntity.setArrow($$3.copy());
+            if ($$1 instanceof Player) {
+                ironBallEntity.setCritArrow(true);
+            }
+
+            ironBallEntity.setSoundEvent(SoundEvents.CROSSBOW_HIT);
+            ironBallEntity.setShotFromCrossbow(true);
+            int $$6 = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PIERCING, $$2);
+            if ($$6 > 0) {
+                ironBallEntity.setPierceLevel((byte)$$6);
+            }
+            cir.setReturnValue(ironBallEntity);
+        }
+    }
     @Inject(
             method = "shootProjectile(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;FZFFF)V",
             at = @At(
