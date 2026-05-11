@@ -20,14 +20,14 @@ public class GratefulDeadEntity extends FollowingStandEntity{
     public static final byte
         ANIME = 0,
         MANGA = 1,
-        ANGEL = 2;
+        ANGEL = 2,
+        DREADFUL = 3;
+    private boolean isGrounded = true;
 
     public final AnimationState idleAnimationState2 = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState openHands = new AnimationState();
     public final AnimationState closeHands = new AnimationState();
-    public final AnimationState closeRight = new AnimationState();
-    public final AnimationState closeLeft = new AnimationState();
 
     @Override
     public void setupAnimationStates() {
@@ -39,25 +39,12 @@ public class GratefulDeadEntity extends FollowingStandEntity{
             }else{
                 this.hideFists.stop();
             }
-            if(animation==BARRAGE || animation==MINING_BARRAGE){
-                this.closeHands.startIfStopped(this.tickCount);
-            }else{
+            if(animation!=BARRAGE && animation!=BARRAGE_CHARGE && animation!=BARRAGE_FINISHER && animation!=MINING_BARRAGE && animation!=FIRST_PUNCH && animation!=SECOND_PUNCH && animation!=THIRD_PUNCH && animation!=BLOCK){
                 this.closeHands.stop();
-            }
-            if(animation!=BARRAGE && animation!=MINING_BARRAGE && animation!=FIRST_PUNCH && animation!=SECOND_PUNCH && animation!=THIRD_PUNCH){
                 this.openHands.startIfStopped(this.tickCount);
             }else{
                 this.openHands.stop();
-            }
-            if(animation==FIRST_PUNCH || animation==THIRD_PUNCH){
-                this.closeRight.startIfStopped(this.tickCount);
-            }else{
-                this.closeRight.stop();
-            }
-            if(animation==SECOND_PUNCH){
-                this.closeLeft.startIfStopped(this.tickCount);
-            }else{
-                this.closeLeft.stop();
+                this.closeHands.startIfStopped(this.tickCount);
             }
             super.setupAnimationStates();
         }
@@ -65,31 +52,43 @@ public class GratefulDeadEntity extends FollowingStandEntity{
 
     @Override
     public boolean lockPos(){
-        return !(this.getGrounded());
+        return !(getGrounded());
     }
     @Override
     public boolean hasNoPhysics(){
-        return !(this.getGrounded());
+        return !(getGrounded());
     }
     @Override
     public boolean standHasGravity() {
-        return this.getGrounded();
+        return getGrounded();
     }
 
     public boolean getGrounded(){
+        return isGrounded;
+    }
+    public void setGrounded(boolean value){
+        this.isGrounded = value;
+    }
+    public void checkGrounded(){
         if (this.getUser() == null){
-            return false;
+            this.setGrounded(false);
         }else{ //check try on level
             BlockPos blockBelowPosStand = this.blockPosition().below();
             Block blockBelowStand = this.level().getBlockState(blockBelowPosStand).getBlock();
             BlockPos blockBelowPos = this.getUser().blockPosition().below();
             Block blockBelow = this.getUser().level().getBlockState(blockBelowPos).getBlock();
-            return (getIdleAnimation() == 0)&&!(blockBelowStand==Blocks.AIR || blockBelowStand==Blocks.WATER || blockBelowStand==Blocks.LAVA)&&!(blockBelow==Blocks.AIR || blockBelow==Blocks.WATER || blockBelow==Blocks.LAVA)&&!(this.getUser().isSwimming());
+            this.setGrounded(!(blockBelowStand==Blocks.AIR || blockBelowStand==Blocks.WATER || blockBelowStand==Blocks.LAVA)&&!(blockBelow==Blocks.AIR || blockBelow==Blocks.WATER || blockBelow==Blocks.LAVA)&&!(this.isVisuallyCrawling()));
         }
     }
+
+
     @Override
-    public boolean isVisuallyCrawling(){
-        return false;
+    public void tick(){
+        super.tick();
+
+        if (getIdleAnimation()==0){
+            checkGrounded();
+        }
     }
 
     @Override

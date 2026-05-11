@@ -26,6 +26,9 @@ public class PowersGratefulDead extends NewPunchingStand {
         super(self);
     }
 
+    private boolean MiasmaField = false;
+    private boolean UserDisguised = false;
+
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
         return new PowersGratefulDead(entity);
@@ -94,11 +97,11 @@ public class PowersGratefulDead extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.barrage",
                 "instruction.roundabout.barrage", StandIcons.GRATEFUL_DEAD_BARRAGE,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.miasma",
-                "instruction.roundabout.miasma", StandIcons.MIASMA_ACTIVE,1,level,bypas));
+                "instruction.roundabout.press_skill", StandIcons.MIASMA_ACTIVE,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.age_grab",
-                "instruction.roundabout.age_grab", StandIcons.AGE_GRAB,2,level,bypas));
+                "instruction.roundabout.press_skill", StandIcons.AGE_GRAB,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.age_punch",
-                "instruction.roundabout.age_punch", StandIcons.AGE_PUNCH,2,level,bypas));
+                "instruction.roundabout.press_skill_crouch", StandIcons.AGE_PUNCH,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.age_disguise",
@@ -107,9 +110,9 @@ public class PowersGratefulDead extends NewPunchingStand {
     }
 
 
-    public boolean isMiasmaActive() {return false;}
+    public boolean isMiasmaActive() {return MiasmaField;}
 
-    public boolean isDisguised() {return false;}
+    public boolean isDisguised() {return UserDisguised;}
 
     @Override
     public boolean isWip(){
@@ -140,25 +143,27 @@ public class PowersGratefulDead extends NewPunchingStand {
     }
 
     public static final byte
-            ANIME_GRATEFUL_DEAD = 0,
-            MANGA_GRATEFUL_DEAD = 1,
-            ANGEL_GRATEFUL_DEAD = 2;
+            ANIME = 0,
+            MANGA = 1,
+            ANGEL = 2,
+            DREADFUL = 3;
 
     @Override
     public List<Byte> getSkinList(){
         return Arrays.asList(
-                ANIME_GRATEFUL_DEAD,
-                MANGA_GRATEFUL_DEAD,
-                ANGEL_GRATEFUL_DEAD
+                ANIME,
+                MANGA,
+                ANGEL,
+                DREADFUL
         );
     }
 
     @Override
     public Component getSkinName(byte skinId){
         return switch (skinId) {
-            case (ANIME_GRATEFUL_DEAD) -> Component.translatable("skins.roundabout.grateful_dead.anime");
-            case (MANGA_GRATEFUL_DEAD) -> Component.translatable("skins.roundabout.grateful_dead.manga");
-            case (ANGEL_GRATEFUL_DEAD) -> Component.translatable("skins.roundabout.grateful_dead.angel");
+            case (MANGA) -> Component.translatable("skins.roundabout.grateful_dead.manga");
+            case (ANGEL) -> Component.translatable("skins.roundabout.grateful_dead.angel");
+            case (DREADFUL) -> Component.translatable("skins.roundabout.grateful_dead.dreadful");
             default -> Component.translatable("skins.roundabout.grateful_dead.anime");
         };
     }

@@ -179,8 +179,6 @@ public class GratefulDeadModel<T extends GratefulDeadEntity> extends StandModel<
         defaultModifiers(pEntity);
 
         this.animate(pEntity.openHands, GratefulDeadAnimations.OPEN_HANDS, pAgeInTicks, 1F);
-        this.animate(pEntity.closeLeft, GratefulDeadAnimations.CLOSE_LEFT, pAgeInTicks, 1F);
-        this.animate(pEntity.closeRight, GratefulDeadAnimations.CLOSE_RIGHT, pAgeInTicks, 1F);
         this.animate(pEntity.closeHands, GratefulDeadAnimations.CLOSE_HANDS, pAgeInTicks, 1F);
         this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1F);
     }
