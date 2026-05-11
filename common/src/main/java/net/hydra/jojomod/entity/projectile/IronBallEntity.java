@@ -67,7 +67,11 @@ public class IronBallEntity extends AbstractArrow {
         this.inGround = false;
         int bounceC = bounceCount;
         super.tick();
-        this.inGround = false;
+        if (!level().isClientSide()){
+            if (inGround){
+                discard();
+            }
+        }
         falloff--;
         if (falloff > 0 && bounceC == bounceCount) {
             setDeltaMovement(deltamovement);
@@ -111,7 +115,7 @@ public class IronBallEntity extends AbstractArrow {
         }
         float pow = 9;
         if (this.isCritArrow()) {
-            pow = 10;
+            pow = 11;
         }
         if ((entity2 = this.getOwner()) == null) {
             damageSource = ModDamageTypes.of(this.level(), ModDamageTypes.IRON_BALL, this, this);
