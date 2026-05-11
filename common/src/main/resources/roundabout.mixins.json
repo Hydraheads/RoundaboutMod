@@ -400,6 +400,7 @@
     "time_stop.TimeStopParticle",
     "time_stop.TimeStopParticleEngine",
     "time_stop.TimeStopTextureManager",
+    "tusk.TuskFlattenMixin",
     "vanilla_tweaks.SBRHorseMarkingLayer",
     "vanilla_tweaks.SBRHorseRenderer",
     "vanilla_tweaks.VanillaGhostMobRenderer"
