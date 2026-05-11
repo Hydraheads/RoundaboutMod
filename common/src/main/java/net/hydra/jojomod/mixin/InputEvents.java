@@ -23,6 +23,7 @@ import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.FirearmItem;
 import net.hydra.jojomod.item.SnubnoseRevolverItem;
+import net.hydra.jojomod.mixin.access.MinecraftAccessor;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.stand.powers.*;
@@ -553,7 +554,7 @@ public abstract class InputEvents implements IInputEvents {
 
 
                     if (this.overlay == null && this.screen == null) {
-                        this.handleKeybinds();
+                        ((MinecraftAccessor) this).roundabout$invokeHandleKeybinds();
                         if (this.missTime > 0) {
                             this.missTime--;
                         }
@@ -569,10 +570,6 @@ public abstract class InputEvents implements IInputEvents {
         if (!ClientUtil.getScreenFreeze() && ClientUtil.getWasFrozen()) {
             ClientUtil.wasFrozen -= 1;
         }
-    }
-
-    @Shadow
-    public void setScreen(@javax.annotation.Nullable Screen $$0) {
     }
 
 
@@ -925,9 +922,6 @@ public abstract class InputEvents implements IInputEvents {
     @Shadow
     private Overlay overlay;
 
-    @Shadow
-    private void handleKeybinds() {
-    }
 
     @Shadow private static Minecraft instance;
 
@@ -947,7 +941,7 @@ public abstract class InputEvents implements IInputEvents {
     @Inject(method = "tick", at = @At(value = "INVOKE",target = "Lnet/minecraft/client/gui/screens/Screen;wrapScreenError(Ljava/lang/Runnable;Ljava/lang/String;Ljava/lang/String;)V",shift = At.Shift.BEFORE), cancellable = true)
     public void roundabout$forceGUI(CallbackInfo ci){
         if (this.screen instanceof NoCancelInputScreen) {
-            this.handleKeybinds();
+            ((MinecraftAccessor) this).roundabout$invokeHandleKeybinds();
             if (this.missTime > 0) {
                 this.missTime--;
             }
@@ -992,7 +986,9 @@ public abstract class InputEvents implements IInputEvents {
         }
     }
 
-    @Inject(method = "handleKeybinds", at = @At("HEAD"), cancellable = true)
+    //This is required
+
+    @Inject(method = "handleKeybinds", at = @At("HEAD"), cancellable = true, require = 0)
     public void roundabout$Input(CallbackInfo ci){
         if (player != null) {
 

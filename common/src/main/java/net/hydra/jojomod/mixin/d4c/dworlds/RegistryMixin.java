@@ -7,15 +7,16 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(MappedRegistry.class)
 public abstract class RegistryMixin implements DynamicWorldAccessor {
-    @Shadow private boolean frozen;
+    //Shadow private boolean frozen;
 
-    @Override
+    //Override
     public void roundabout$setFrozen(boolean frozen) {
-        this.frozen = frozen;
+        //this.frozen = frozen;
     }
 
-    @Override
+    //Override
     public boolean roundabout$isFrozen() {
-        return this.frozen;
+        //return this.frozen;
+        return false;
     }
 }
