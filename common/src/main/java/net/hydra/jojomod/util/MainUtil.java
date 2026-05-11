@@ -1376,6 +1376,14 @@ public class MainUtil {
         e.hasImpulse = true;
     }
 
+    public static void takeDeterminedKnockbackWithY(Entity user, Entity target, float knockbackStrength){
+        float xRot; if (!target.onGround()){xRot=user.getXRot();} else {xRot = -15;}
+        takeKnockbackWithY(target, knockbackStrength,
+                Mth.sin(user.getYRot() * ((float) Math.PI / 180)),
+                Mth.sin(xRot * ((float) Math.PI / 180)),
+                -Mth.cos(user.getYRot() * ((float) Math.PI / 180)));
+
+    }
     public static void takeKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
 
         if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {

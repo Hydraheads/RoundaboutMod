@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -132,6 +133,9 @@ public class IronBallEntity extends AbstractArrow {
         }
         byte pl = getPierceLevel();
         setPierceLevel((byte) 0);
+
+        Vec3 between = this.getPosition(1).subtract(entity.getPosition(1f)).normalize();
+
         if (entity.hurt(damageSource, pow)) {
             if (bl) {
                 return;
@@ -174,12 +178,27 @@ public class IronBallEntity extends AbstractArrow {
                 }
             }
 
+            float knockbackStrength = 3;
+
+
+            MainUtil.takeKnockbackWithY(entity, knockbackStrength,
+                    between.x,
+                    -0.2F,
+                    between.z);
 
             setPierceLevel(pl);
             if (this.getPierceLevel() <= 0) {
                 this.discard();
             }
         } else {
+            if (pl > 0 && !bl) {
+                //reduced kb
+                float knockbackStrength = 1.5F;
+                MainUtil.takeKnockbackWithY(entity, knockbackStrength,
+                        between.x,
+                        -0.2F,
+                        between.z);
+            }
             entity.setRemainingFireTicks(j);
             this.setDeltaMovement(this.getDeltaMovement().scale(-0.1));
             this.setYRot(this.getYRot() + 180.0f);
