@@ -71,6 +71,10 @@ public class ForgeSounds {
             register(ModSounds.BUBBLE_POP, ModSounds.BUBBLE_POP_ID);
     public static final RegistryObject<SoundEvent> BANISH_EVENT =
             register(ModSounds.BANISH, ModSounds.BANISH_ID);
+    public static final RegistryObject<SoundEvent> IRON_BALL_BOUNCE_EVENT =
+            register(ModSounds.IRON_BALL_BOUNCE, ModSounds.IRON_BALL_BOUNCE_ID);
+    public static final RegistryObject<SoundEvent> IRON_BALL_IMPACT_EVENT =
+            register(ModSounds.IRON_BALL_IMPACT, ModSounds.IRON_BALL_IMPACT_ID);
     public static final RegistryObject<SoundEvent> EXPLOSIVE_BUBBLE_POP_EVENT =
             register(ModSounds.EXPLOSIVE_BUBBLE_POP, ModSounds.EXPLOSIVE_BUBBLE_POP_ID);
     public static final RegistryObject<SoundEvent> EXPLOSIVE_BUBBLE_SHOT_EVENT =

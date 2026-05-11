@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin.access;
 
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.PenetratableWithProjectile;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -21,9 +22,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 @Mixin(AbstractArrow.class)
 public abstract class AccessAbstractArrow extends Entity implements IAbstractArrowAccess {
+
+    @Shadow
+    private int knockback;
+
     /**Allows access to abstract arrow functions and adds logic for dealing with arrows*/
 
     @Override
@@ -35,6 +41,26 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
         lastState = last;
     }
 
+    @Override
+    public IntOpenHashSet rdbt$piercingIgnoreEntityIds(){
+        return piercingIgnoreEntityIds;
+    }
+    @Override
+    public List<Entity> rdbt$piercedAndKilledEntities(){
+        return piercedAndKilledEntities;
+    }
+    @Override
+    public int rdbt$knockback(){
+        return knockback;
+    }
+    @Override
+    public void rdbt$piercingIgnoreEntityIds(IntOpenHashSet mp){
+        piercingIgnoreEntityIds = mp;
+    }
+    @Override
+    public void rdbt$piercedAndKilledEntities(List<Entity> ent){
+        piercedAndKilledEntities = ent;
+    }
 
     @Override
     public ItemStack roundabout$GetPickupItem(){
@@ -91,7 +117,13 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
      * -------------------------------------------------------------------------------------------------------------
      * */
 
+    @Shadow
+    @Nullable
+    private IntOpenHashSet piercingIgnoreEntityIds;
 
+    @Shadow
+    @Nullable
+    private List<Entity> piercedAndKilledEntities;
     @Shadow
     @Nullable
     private BlockState lastState;
