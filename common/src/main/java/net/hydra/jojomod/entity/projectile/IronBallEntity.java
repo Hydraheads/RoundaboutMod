@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.Direction;
@@ -94,7 +95,6 @@ public class IronBallEntity extends AbstractArrow {
         Entity entity = entityHitResult.getEntity();
         float f = (float)this.getDeltaMovement().length();
         IAbstractArrowAccess iarrow = ((IAbstractArrowAccess) this);
-        int i = Mth.ceil(Mth.clamp((double)f * baseDamage2, 0.0, 2.147483647E9));
         if (this.getPierceLevel() > 0) {
             if (iarrow.rdbt$piercingIgnoreEntityIds() == null) {
                 iarrow.rdbt$piercingIgnoreEntityIds(new IntOpenHashSet(5));
@@ -109,14 +109,14 @@ public class IronBallEntity extends AbstractArrow {
                 return;
             }
         }
+        float pow = 9;
         if (this.isCritArrow()) {
-            long l = this.random.nextInt(i / 2 + 2);
-            i = (int)Math.min(l + (long)i, Integer.MAX_VALUE);
+            pow = 10;
         }
         if ((entity2 = this.getOwner()) == null) {
-            damageSource = this.damageSources().arrow(this, this);
+            damageSource = ModDamageTypes.of(this.level(), ModDamageTypes.IRON_BALL, this, this);
         } else {
-            damageSource = this.damageSources().arrow(this, entity2);
+            damageSource = ModDamageTypes.of(this.level(), ModDamageTypes.IRON_BALL, this, entity2);
             if (entity2 instanceof LivingEntity) {
                 ((LivingEntity)entity2).setLastHurtMob(entity);
             }
@@ -128,7 +128,7 @@ public class IronBallEntity extends AbstractArrow {
         }
         byte pl = getPierceLevel();
         setPierceLevel((byte) 0);
-        if (entity.hurt(damageSource, i)) {
+        if (entity.hurt(damageSource, pow)) {
             if (bl) {
                 return;
             }
