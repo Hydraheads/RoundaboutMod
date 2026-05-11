@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
@@ -106,6 +107,14 @@ public abstract class ZEntityRenderDispatcher {
     private static <E extends Entity>  void roundabout$renderHitbox(PoseStack $$0, VertexConsumer $$1, Entity $$2, float $$3, CallbackInfo ci) {
         if ($$2 instanceof NoHitboxRendering || ClientUtil.getThrowFadePercent($$2,$$3) <= 0){
             ci.cancel();
+            return;
+        }
+        if ($$2 instanceof Player P) {
+            if (((StandUser)P).roundabout$getStandPowers() instanceof PowersTusk PT) {
+                if (PT.getActivePower() == PowersTusk.FLATTEN) {
+                    ci.cancel();
+                }
+            }
         }
     }
 

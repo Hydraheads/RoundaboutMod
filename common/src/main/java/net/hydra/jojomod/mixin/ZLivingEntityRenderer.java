@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.ILivingEntityRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -19,6 +20,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
+import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -145,7 +147,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
     @Unique
 
     @Inject(method = "setupRotations(Lnet/minecraft/world/entity/LivingEntity;Lcom/mojang/blaze3d/vertex/PoseStack;FFF)V", at = @At(value = "TAIL"), cancellable = true)
-    private void roundabout$rotations(T $$0, PoseStack $$1, float $$2, float $$3, float $$4, CallbackInfo ci) {
+    private void roundabout$rotations(T $$0, PoseStack poseStack, float $$2, float $$3, float $$4, CallbackInfo ci) {
         if ($$0 instanceof Player P) {
 
             StandUser SU = (StandUser) P;
@@ -153,13 +155,20 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
                 float backflip = PA.getAttackTimeDuring()+$$4;
                 if (SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_MOVEMENT) {
                     if (backflip < 16) {
-                        $$1.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,360 * ((backflip)/15F)), 0, P.getEyeHeight()*0.6F, 0 );
+                        poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,360 * ((backflip)/15F)), 0, P.getEyeHeight()*0.6F, 0 );
                     }
                 } else if (SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_ATTACK_CHARGE) {
-                    $$1.translate(0,0.5,0.5);
+                    poseStack.translate(0,0.5,0.5);
                     float time =  Math.min(1,(backflip)/(PowersAnubis.PogoDelay-2) );
                     float end = -100-P.getViewXRot(0F);
-                    $$1.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0, time*end  ), 0, P.getEyeHeight()*0.4F, 0 );
+                    poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0, time*end  ), 0, P.getEyeHeight()*0.4F, 0 );
+                }
+            } else if (SU.roundabout$getStandPowers() instanceof PowersTusk PT) {
+                float time = PT.getAttackTime() + $$4;
+                float scale = Math.min(1,time/7.0F);
+                if (PT.getActivePower() == PowersTusk.WARP && scale < 1) {
+                    poseStack.scale(scale,scale,scale);
+                    poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,scale*360),0,0,0);
                 }
             }
 
@@ -184,7 +193,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
                         $$5 *= -1;
                     }
 
-                    $$1.mulPose(Axis.XP.rotationDegrees($$5 * 45));
+                    poseStack.mulPose(Axis.XP.rotationDegrees($$5 * 45));
                 }
             }
         }
