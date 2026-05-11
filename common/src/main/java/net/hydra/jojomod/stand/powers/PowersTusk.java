@@ -1097,31 +1097,34 @@ public class PowersTusk extends NewDashPreset {
 
     public TuskHoleEntity targetHole = null;
     public void buttonInputWarp(boolean keyIsDown, Options options) {
-        if (keyIsDown) {
+        if (keyIsDown && !isInHole() && this.getAttackTime() > 5) {
             if (targetHole != null) {
                 if (isHoleNearby()) {
+                    this.setAttackTime(0);
                     this.setPiloting(targetHole.getId());
-                    tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT,targetHole.getId());
+                    tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, targetHole.getId());
                 } else {
                     if (this.getSelf() instanceof Player P) {
                         P.displayClientMessage(Component.translatable("message.tusk.nearby_hole").withStyle(ChatFormatting.RED), true);
                     }
                 }
             }
+
+        }
+    }
+
+    @Override
+    public void pilotInputAttack() {
+        if (this.getAttackTime() > 5) {
+            this.setPiloting(0);
+            this.setAttackTime(0);
+            tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
         }
     }
 
     @Override
     public boolean pilotInputInteract() {
-        this.setPiloting(0);
-        tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT,0);
         return true;
-    }
-
-    @Override
-    public void pilotInputAttack() {
-        Roundabout.LOGGER.info("ATTACK");
-        super.pilotInputAttack();
     }
 
     public void synchToCamera() {
