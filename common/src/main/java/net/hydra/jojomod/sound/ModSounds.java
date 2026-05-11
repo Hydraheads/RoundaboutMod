@@ -167,6 +167,14 @@ public class ModSounds {
     public static final ResourceLocation BANISH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BANISH);
     public static SoundEvent BANISH_EVENT = SoundEvent.createVariableRangeEvent(BANISH_ID);
 
+    public static final String IRON_BALL_BOUNCE = "iron_ball_bounce";
+    public static final ResourceLocation IRON_BALL_BOUNCE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+IRON_BALL_BOUNCE);
+    public static SoundEvent IRON_BALL_BOUNCE_EVENT = SoundEvent.createVariableRangeEvent(IRON_BALL_BOUNCE_ID);
+
+    public static final String IRON_BALL_IMPACT = "iron_ball_impact";
+    public static final ResourceLocation IRON_BALL_IMPACT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+IRON_BALL_IMPACT);
+    public static SoundEvent IRON_BALL_IMPACT_EVENT = SoundEvent.createVariableRangeEvent(IRON_BALL_IMPACT_ID);
+
 
     public static final String EXPLOSIVE_BUBBLE_POP = "explosive_bubble_pop";
     public static final ResourceLocation EXPLOSIVE_BUBBLE_POP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EXPLOSIVE_BUBBLE_POP);

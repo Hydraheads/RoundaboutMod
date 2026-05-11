@@ -65,6 +65,18 @@
       "roundabout:goat_dash"
     ]
   },
+  "iron_ball_bounce": {
+    "subtitle": "sounds.roundabout.iron_ball_bounce",
+    "sounds": [
+      "roundabout:iron_ball_bounce"
+    ]
+  },
+  "iron_ball_impact": {
+    "subtitle": "sounds.roundabout.iron_ball_impact",
+    "sounds": [
+      "roundabout:iron_ball_impact"
+    ]
+  },
   "ripper_eyes_beam": {
     "subtitle": "sounds.roundabout.ripper_eyes_beam",
     "sounds": [
