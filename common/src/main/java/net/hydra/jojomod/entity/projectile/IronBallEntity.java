@@ -23,7 +23,7 @@ public class IronBallEntity extends AbstractArrow {
     public IronBallEntity(Level $$0, LivingEntity $$1) {
         super(ModEntities.IRON_BALL, $$1, $$0);
     }
-    public IronBallEntity(EntityType<? extends StandArrowEntity> $$0, Level $$1) {
+    public IronBallEntity(EntityType<? extends IronBallEntity> $$0, Level $$1) {
         super($$0, $$1);
     }
 
