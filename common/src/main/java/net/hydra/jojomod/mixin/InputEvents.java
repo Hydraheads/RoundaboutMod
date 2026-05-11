@@ -641,10 +641,6 @@ public abstract class InputEvents implements IInputEvents {
                     }
                 }
             }
-            if (powers.isPiloting()){
-                if (powers.pilotInputInteract()){
-                }
-            }
         }
     }
 
@@ -688,6 +684,8 @@ public abstract class InputEvents implements IInputEvents {
                 ci.cancel();
                 if (powers instanceof PowersJustice){
                     roundabout$doItemUseWithJustice();
+                } else {
+                    powers.pilotInputInteract();
                 }
                 return;
             }
