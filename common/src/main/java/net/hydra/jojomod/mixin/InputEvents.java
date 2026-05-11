@@ -1,6 +1,5 @@
 package net.hydra.jojomod.mixin;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -10,8 +9,6 @@ import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.gui.NoCancelInputScreen;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryScreen;
-import net.hydra.jojomod.entity.D4CCloneEntity;
-import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -22,16 +19,11 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.FirearmItem;
-import net.hydra.jojomod.item.SnubnoseRevolverItem;
+import net.hydra.jojomod.mixin.access.MinecraftAccessor;
 import net.hydra.jojomod.powers.GeneralPowers;
-import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.item.FogBlockItem;
-import net.hydra.jojomod.networking.ModPacketHandler;
-import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.C2SPacketUtil;
-import net.hydra.jojomod.util.config.ClientConfig;
-import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.*;
 import net.minecraft.client.gui.Gui;
@@ -101,17 +93,6 @@ public abstract class InputEvents implements IInputEvents {
             StandPowers powers = standComp.roundabout$getStandPowers();
             FatePowers fatePowers = ((IFatePlayer)player).rdbt$getFatePowers();
 
-            if (standComp.roundabout$getStand() instanceof D4CEntity)
-            {
-                if (entity instanceof D4CCloneEntity clone)
-                {
-                    if (player.isCrouching() && clone.player != null && clone.player.equals(player))
-                    {
-                        ci.setReturnValue(true);
-                        return;
-                    }
-                }
-            }
             if (powers.getGoBeyondTarget() != null && powers.getGoBeyondTarget().is(entity)) {
                 ci.setReturnValue(true);
                 return;
@@ -553,7 +534,7 @@ public abstract class InputEvents implements IInputEvents {
 
 
                     if (this.overlay == null && this.screen == null) {
-                        this.handleKeybinds();
+                        ((MinecraftAccessor) this).roundabout$invokeHandleKeybinds();
                         if (this.missTime > 0) {
                             this.missTime--;
                         }
@@ -569,10 +550,6 @@ public abstract class InputEvents implements IInputEvents {
         if (!ClientUtil.getScreenFreeze() && ClientUtil.getWasFrozen()) {
             ClientUtil.wasFrozen -= 1;
         }
-    }
-
-    @Shadow
-    public void setScreen(@javax.annotation.Nullable Screen $$0) {
     }
 
 
@@ -641,10 +618,6 @@ public abstract class InputEvents implements IInputEvents {
                     }
                 }
             }
-            if (powers.isPiloting()){
-                if (powers.pilotInputInteract()){
-                }
-            }
         }
     }
 
@@ -688,6 +661,8 @@ public abstract class InputEvents implements IInputEvents {
                 ci.cancel();
                 if (powers instanceof PowersJustice){
                     roundabout$doItemUseWithJustice();
+                } else {
+                    powers.pilotInputInteract();
                 }
                 return;
             }
@@ -925,9 +900,6 @@ public abstract class InputEvents implements IInputEvents {
     @Shadow
     private Overlay overlay;
 
-    @Shadow
-    private void handleKeybinds() {
-    }
 
     @Shadow private static Minecraft instance;
 
@@ -947,7 +919,7 @@ public abstract class InputEvents implements IInputEvents {
     @Inject(method = "tick", at = @At(value = "INVOKE",target = "Lnet/minecraft/client/gui/screens/Screen;wrapScreenError(Ljava/lang/Runnable;Ljava/lang/String;Ljava/lang/String;)V",shift = At.Shift.BEFORE), cancellable = true)
     public void roundabout$forceGUI(CallbackInfo ci){
         if (this.screen instanceof NoCancelInputScreen) {
-            this.handleKeybinds();
+            ((MinecraftAccessor) this).roundabout$invokeHandleKeybinds();
             if (this.missTime > 0) {
                 this.missTime--;
             }
@@ -992,7 +964,9 @@ public abstract class InputEvents implements IInputEvents {
         }
     }
 
-    @Inject(method = "handleKeybinds", at = @At("HEAD"), cancellable = true)
+    //This is required
+
+    @Inject(method = "handleKeybinds", at = @At("HEAD"), cancellable = true, require = 0)
     public void roundabout$Input(CallbackInfo ci){
         if (player != null) {
 

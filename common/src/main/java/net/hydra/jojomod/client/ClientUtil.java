@@ -16,7 +16,6 @@ import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerMixingSound;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
-import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -26,7 +25,6 @@ import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
-import net.hydra.jojomod.fates.powers.ZombieFate;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
 import net.hydra.jojomod.powers.GeneralPowers;
@@ -52,7 +50,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.util.C2SPacketUtil;
@@ -61,7 +58,6 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -69,12 +65,8 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.TooltipFlag;
-import net.zetalasis.client.shader.D4CShaderFX;
-import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
-import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
-import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -87,30 +79,24 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.zetalasis.networking.packet.api.IClientNetworking;
-import net.zetalasis.world.DynamicWorld;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Unique;
 
-import java.nio.file.Path;
 import java.util.*;
 
-import static net.hydra.jojomod.util.MainUtil.getUserData;
-import static oshi.util.UserGroupInfo.getUser;
 
 
 public class ClientUtil {
@@ -676,18 +662,7 @@ public class ClientUtil {
                     ClientUtil.handleEntityResumeTsPacket(new Vec3i(x,y,z));
                 }
 
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SendNewDynamicWorld.value)) {
-                    String name = (String) vargs[0];
-                    ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(name));
-                    dimensionSynch(LEVEL_KEY);
-                }
 
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.EjectPRunning.value)) {
-                    if (((StandUser)player).roundabout$getStandPowers() instanceof PowersD4C d4c)
-                    {
-                        d4c.ejectParallelRunning();
-                    }
-                }
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.HeelExtend.value)) {
                     int entityID = (int) vargs[0];
                     Entity ent = player.level().getEntity(entityID);
@@ -1133,20 +1108,6 @@ public class ClientUtil {
                 //15974080
                 return 11559774;
             }
-
-            if (standComp.roundabout$getStand() instanceof D4CEntity)
-            {
-                if (entity instanceof D4CCloneEntity clone && clone.player != null && clone.player.equals(player) && player.isCrouching())
-                {
-                    if (clone.isSelected())
-                    {
-                        return 16701501;
-                    }
-                    else {
-                        return 16777215;
-                    }
-                }
-            }
         }
 
         if (entity instanceof LivingEntity LE){
@@ -1485,55 +1446,7 @@ public class ClientUtil {
 
         return true;
     }
-    public static void dimensionSynch(ResourceKey<Level> LEVEL_KEY){
-        Roundabout.LOGGER.info("Got packet for dimension {}", LEVEL_KEY.toString());
-        if (Objects.equals(ModPacketHandler.PLATFORM_ACCESS.getPlatformName(), "Forge")) {
-            if (ClientUtil.packetLocPlayCheck()) {
-                ClientUtil.dimensionSynchForge(LEVEL_KEY);
-            }
-        } else {
-            ClientUtil.dimensionSynchFabric(Minecraft.getInstance(),LEVEL_KEY);
-        }
-    }
-    public static void dimensionSynchForge(ResourceKey<Level> LEVEL_KEY){
-        if (ClientUtil.packetLocPlayCheck()) {
-            LocalPlayer localPlayer = Minecraft.getInstance().player;
-            if (localPlayer != null) {
-                localPlayer.connection.levels().add(LEVEL_KEY);
-                C2SPacketUtil.d4cDimensionHopRegistryPacket();
-            } else {
-                packetLocPlayCheck();
-            }
-        }
-    }
-    public static void dimensionSynchFabric(Minecraft client, ResourceKey<Level> LEVEL_KEY) {
-        LocalPlayer player = client.player;
-        player.connection.levels().add(LEVEL_KEY);
 
-        ModMessageEvents.sendToServer(
-                DynamicWorld.DynamicWorldNetMessages.MESSAGES.ADD_WORLD.value
-                );
-    }
-
-    public static void d4cEjectParralelRunningForge(){
-        Minecraft client = Minecraft.getInstance();
-
-        if (client.player != null)
-        {
-            if (((StandUser)client.player).roundabout$getStandPowers() instanceof PowersD4C d4c)
-            {
-                d4c.ejectParallelRunning();
-            }
-        }
-    }
-
-
-    public static D4CShaderFX fx;
-
-    static {
-        fx = new D4CShaderFX();
-        RenderCallbackRegistry.register(fx);
-    }
     public static float getFrameTime() {
         Minecraft mc = Minecraft.getInstance();
         return mc.getFrameTime();
@@ -2066,16 +1979,6 @@ public class ClientUtil {
             }
         }
         return new Vec3(0.969F,0.569F,0.102F);
-    }
-
-
-
-
-    public static void sendPositionalDataToServer(Minecraft client) {
-
-        ModMessageEvents.sendToServer(
-                DynamicWorld.DynamicWorldNetMessages.MESSAGES.ADD_WORLD.value
-        );
     }
 
     public static void handleBowlerHatFlySound(Entity entity) {

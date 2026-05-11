@@ -4,7 +4,6 @@ import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.PenetratableWithProjectile;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -66,22 +65,8 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
 
         if (entity instanceof LivingEntity LE){
             StandUser user = ((StandUser) entity);
-            if (user.roundabout$isParallelRunning())
-            {
-                ci.cancel();
-                return;
-            }
 
             StandPowers entityPowers = user.roundabout$getStandPowers();
-            if (!this.level().isClientSide && entityPowers instanceof PowersD4C d4cPowers)
-            {
-                if (d4cPowers.meltDodgeTicks >= 0)
-                {
-                    d4cPowers.meltDodge((AbstractArrow)(Object)this);
-                    ci.cancel();
-                    return;
-                }
-            }
 
             if (entityPowers.dealWithProjectile(this,$$0)){
                 ci.cancel();

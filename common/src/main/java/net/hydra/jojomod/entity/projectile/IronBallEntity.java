@@ -1,20 +1,33 @@
 package net.hydra.jojomod.entity.projectile;
 
+import com.google.common.collect.Lists;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.hydra.jojomod.entity.ModEntities;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.Arrays;
 
 public class IronBallEntity extends AbstractArrow {
     private static final EntityDataAccessor<ItemStack> IRON_BALL = SynchedEntityData.defineId(IronBallEntity.class,
@@ -23,7 +36,7 @@ public class IronBallEntity extends AbstractArrow {
     public IronBallEntity(Level $$0, LivingEntity $$1) {
         super(ModEntities.IRON_BALL, $$1, $$0);
     }
-    public IronBallEntity(EntityType<? extends StandArrowEntity> $$0, Level $$1) {
+    public IronBallEntity(EntityType<? extends IronBallEntity> $$0, Level $$1) {
         super($$0, $$1);
     }
 
@@ -54,6 +67,7 @@ public class IronBallEntity extends AbstractArrow {
 
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
+
     }
 
     @Override

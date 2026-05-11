@@ -4,7 +4,6 @@ import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Zombiefish;
@@ -206,13 +205,6 @@ public class FabricEntities {
                         EntityType.Builder.of(FogCloneEntity::new, MobCategory.MISC).
                                 sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":fog_clone")
                 );
-        public static final EntityType<D4CCloneEntity> D4C_CLONE =
-                Registry.register(
-                        BuiltInRegistries.ENTITY_TYPE,
-                        new ResourceLocation(Roundabout.MOD_ID, "d4c_clone"),
-                        EntityType.Builder.of(D4CCloneEntity::new, MobCategory.MISC).
-                                sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":d4c_clone")
-                );
         public static final EntityType<FallenZombie> FALLEN_ZOMBIE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -339,13 +331,6 @@ public class FabricEntities {
                         new ResourceLocation(Roundabout.MOD_ID, "magicians_red_ova"),
                         EntityType.Builder.of(MagiciansRedEntity::new, MobCategory.MISC).
                                 sized(0.75F, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":magicians_red")
-                );
-        public static final EntityType<D4CEntity> D4C =
-                Registry.register(
-                        BuiltInRegistries.ENTITY_TYPE,
-                        Roundabout.location("d4c"),
-                        EntityType.Builder.of(D4CEntity::new, MobCategory.MISC).
-                                sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":d4c")
                 );
 
         public static final EntityType<CreamEntity> CREAM =
@@ -647,6 +632,13 @@ public class FabricEntities {
                         EntityType.Builder.<StandArrowEntity>of(StandArrowEntity::new, MobCategory.MISC).
                                 sized(0.7f, 0.7f).clientTrackingRange(6).build(Roundabout.MOD_ID+":stand_arrow")
                 );
+    public static final EntityType<IronBallEntity> IRON_BALL =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "iron_ball"),
+                    EntityType.Builder.<IronBallEntity>of(IronBallEntity::new, MobCategory.MISC).
+                            sized(0.7f, 0.7f).clientTrackingRange(6).build(Roundabout.MOD_ID+":iron_ball")
+            );
         public static final EntityType<ThrownObjectEntity> THROWN_OBJECT =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -857,7 +849,6 @@ public class FabricEntities {
                 ModEntities.MAGICIANS_RED = MAGICIANS_RED;
                 ModEntities.MAGICIANS_RED_OVA = MAGICIANS_RED_OVA;
                 ModEntities.ROAD_ROLLER_ENTITY = ROAD_ROLLER_ENTITY;
-                ModEntities.D4C = D4C;
                 ModEntities.CREAM = CREAM;
                 ModEntities.GREEN_DAY = GREEN_DAY;
                 ModEntities.RATT = RATT;
@@ -906,6 +897,7 @@ public class FabricEntities {
                 ModEntities.GASOLINE_SPLATTER = GASOLINE_SPLATTER;
                 ModEntities.BLOOD_SPLATTER = BLOOD_SPLATTER;
                 ModEntities.STAND_ARROW = STAND_ARROW;
+                ModEntities.IRON_BALL = IRON_BALL;
 
                 ModEntities.THROWN_OBJECT = THROWN_OBJECT;
                 ModEntities.THROWN_ANUBIS = THROWN_ANUBIS;
@@ -1015,7 +1007,6 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(STAR_PLATINUM_BASEBALL, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(MAGICIANS_RED, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(MAGICIANS_RED_OVA, StandEntity.createStandAttributes());
-                FabricDefaultAttributeRegistry.register(D4C, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(CREAM, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(GREEN_DAY, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(RATT, StandEntity.createStandAttributes());
@@ -1054,7 +1045,6 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(LEFT_SEPERATED_ARM, SeperatedArmEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(LEFT_SEPERATED_ARM_SLIM, SeperatedArmEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(MOLD_SPORE, MoldSporesEntity.createStandAttributes());
-                FabricDefaultAttributeRegistry.register(D4C_CLONE, D4CCloneEntity.createAttributes());
 
                 /*Spawn Weights and Biomes*/
                 BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.DESERT), MobCategory.CREATURE,

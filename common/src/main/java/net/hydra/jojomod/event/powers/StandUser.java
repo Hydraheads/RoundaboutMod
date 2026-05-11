@@ -341,10 +341,6 @@ public interface StandUser {
     void rdbt$adjGravTrav();
     void roundabout$adjustGravity();
 
-    /** D4C */
-    void roundabout$setParallelRunning(boolean value);
-    boolean roundabout$isParallelRunning();
-
     boolean GoingDown();
 
     /** Green Day stuff**/

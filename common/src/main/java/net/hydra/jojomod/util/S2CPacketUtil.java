@@ -330,14 +330,6 @@ public class S2CPacketUtil {
             );
         }
     }
-    public static void sendNewDyanmicWorldPacket(Player player, String name){
-        if (player instanceof ServerPlayer SP) {
-            ModMessageEvents.sendToPlayer(SP,
-                    ServerToClientPackets.S2CPackets.MESSAGES.SendNewDynamicWorld.value,
-                    name
-            );
-        }
-    }
     public static void ejectParallelRunningPacket(Player player){
         if (player instanceof ServerPlayer SP) {
             ModMessageEvents.sendToPlayer(SP,

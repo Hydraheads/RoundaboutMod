@@ -91,7 +91,7 @@ public class ScopeGameRenderer {
                 return;
             }
             StandPowers SP = ((StandUser) player).roundabout$getStandPowers();
-            if (SP.scopeLevel > 0 && (!((StandUser)player).roundabout$isParallelRunning())) {
+            if (SP.scopeLevel > 0) {
                 ci.cancel();
             }
         }

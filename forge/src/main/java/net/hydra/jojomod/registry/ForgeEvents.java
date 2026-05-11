@@ -5,7 +5,6 @@ import net.hydra.jojomod.Utils.ForgeBrewingRecipes;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StreetSignBlock;
-import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
@@ -18,7 +17,6 @@ import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
-import net.hydra.jojomod.entity.stand.CreamEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
@@ -56,7 +54,6 @@ public class ForgeEvents {
         event.put(ForgeEntities.STAR_PLATINUM_BASEBALL.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.JUSTICE.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.JUSTICE_PIRATE.get(), StandEntity.createStandAttributes().build());
-        event.put(ForgeEntities.D4C.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.GREEN_DAY.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.RATT.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.REDD.get(), StandEntity.createStandAttributes().build());
@@ -120,7 +117,6 @@ public class ForgeEvents {
         event.put(ForgeEntities.ANUBIS_POSSESSOR.get(), AnubisPossessorEntity.createStandAttributes().build());
         event.put(ForgeEntities.GROUND_BUBBLE.get(), GroundBubbleEntity.createStandAttributes().build());
         event.put(ForgeEntities.LIFE_TRACKER.get(), LifeTrackerEntity.createStandAttributes().build());
-        event.put(ForgeEntities.D4C_CLONE.get(), D4CCloneEntity.createAttributes().build());
         event.put(ForgeEntities.ROAD_ROLLER_ENTITY.get(), RoadRollerEntity.createAttributes().build());
         event.put(ForgeEntities.SEPERATED_LEGS.get(), SeperatedLegsEntity.createStandAttributes().build());
         event.put(ForgeEntities.SEPERATED_ARM.get(), SeperatedArmEntity.createStandAttributes().build());
@@ -228,7 +224,6 @@ public class ForgeEvents {
         ModBlocks.STAND_FIRE = ForgeBlocks.STAND_FIRE.get();
         ModBlocks.BUBBLE_SCAFFOLD = ForgeBlocks.BUBBLE_SCAFFOLD.get();
         ModBlocks.INVISIBLOCK = ForgeBlocks.INVISIBLOCK.get();
-        ModBlocks.D4C_LIGHT_BLOCK = ForgeBlocks.D4C_LIGHT_BLOCK.get();
         ModBlocks.MELON_PARFAIT = ForgeBlocks.MELON_PARFAIT.get();
 
         ModBlocks.ORANGE_FIRE = ForgeBlocks.ORANGE_FIRE.get();
@@ -243,7 +238,6 @@ public class ForgeEvents {
         ModBlocks.STAND_FIRE_BLOCK_ENTITY = ForgeBlocks.STAND_FIRE_BLOCK_ENTITY.get();
         ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY = ForgeBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY.get();
         ModBlocks.INVISIBLE_BLOCK_ENTITY = ForgeBlocks.INVISIBLE_BLOCK_ENTITY.get();
-        ModBlocks.D4C_LIGHT_BLOCK_ENTITY = ForgeBlocks.D4C_LIGHT_BLOCK_ENTITY.get();
         ModBlocks.FOG_TRAP_BLOCK_ENTITY = ForgeBlocks.FOG_TRAP_BLOCK_ENTITY.get();
         ModBlocks.COFFIN_BLOCK_ENTITY = ForgeBlocks.COFFIN_BLOCK_ENTITY.get();
 
@@ -555,7 +549,6 @@ public class ForgeEvents {
         ModEntities.MAGICIANS_RED = ForgeEntities.MAGICIANS_RED.get();
         ModEntities.MAGICIANS_RED_OVA = ForgeEntities.MAGICIANS_RED_OVA.get();
         ModEntities.SURVIVOR = ForgeEntities.SURVIVOR.get();
-        ModEntities.D4C = ForgeEntities.D4C.get();
         ModEntities.CREAM = ForgeEntities.CREAM.get();
         ModEntities.GREEN_DAY = ForgeEntities.GREEN_DAY.get();
         ModEntities.RATT = ForgeEntities.RATT.get();
@@ -599,6 +592,7 @@ public class ForgeEvents {
         ModEntities.GASOLINE_SPLATTER = ForgeEntities.GASOLINE_SPLATTER.get();
         ModEntities.BLOOD_SPLATTER = ForgeEntities.BLOOD_SPLATTER.get();
         ModEntities.STAND_ARROW = ForgeEntities.STAND_ARROW.get();
+        ModEntities.IRON_BALL = ForgeEntities.IRON_BALL.get();
         ModEntities.ROAD_ROLLER_ENTITY = ForgeEntities.ROAD_ROLLER_ENTITY.get();
         ModEntities.SEPERATED_LEGS = ForgeEntities.SEPERATED_LEGS.get();
         ModEntities.SEPERATED_ARM = ForgeEntities.SEPERATED_ARM.get();
@@ -660,7 +654,6 @@ public class ForgeEvents {
         ModEntities.MODIFIED_NPC = ForgeEntities.MODIFIED_NPC.get();
         ModEntities.MODIFIED_NPC = ForgeEntities.MODIFIED_NPC.get();
         ModEntities.FOG_CLONE = ForgeEntities.FOG_CLONE.get();
-        ModEntities.D4C_CLONE = ForgeEntities.D4C_CLONE.get();
 
         ForgeItems.assignStupidForge();
     }

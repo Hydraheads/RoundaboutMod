@@ -546,7 +546,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 } else if (getActivePower() == RIPPER_EYES) {
                     if (attackTimeDuring == getMaxRipperEyesWait()) {
 
-                        setCooldown(PowerIndex.GENERAL_4,getRipperCooldown());
+                        setCooldown(PowerIndex.GENERAL_4,getRipperMaxCooldown());
                         tryPowerPacket(RIPPER_EYES_ACTIVATED);
                         ripperEyesLeft = ripperBeamTime;
                     }
@@ -814,8 +814,11 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public int getRipperCooldown(){
         return 240;
     }
+    public int getRipperMaxCooldown(){
+        return 400;
+    }
     public int getRipperInterruptCooldown(){
-        return 60;
+        return 200;
     }
 
 

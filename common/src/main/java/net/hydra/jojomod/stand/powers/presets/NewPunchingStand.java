@@ -233,11 +233,6 @@ public class NewPunchingStand extends NewDashPreset {
 
     @Override
     public boolean setPowerBarrageCharge() {
-        if (((StandUser)this.getSelf()).roundabout$isParallelRunning())
-        {
-            return false;
-        }
-
         animateStand(StandEntity.BARRAGE_CHARGE);
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE_CHARGE);
@@ -260,11 +255,6 @@ public class NewPunchingStand extends NewDashPreset {
 
     @Override
     public void setPowerBarrage() {
-        if (((StandUser)this.getSelf()).roundabout$isParallelRunning())
-        {
-            return;
-        }
-
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE);
         this.poseStand(OffsetIndex.ATTACK);
