@@ -163,8 +163,6 @@ public class PowersGreenDay extends NewPunchingStand {
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        ClientUtil.fx.roundabout$onGUI(context);
-
         boolean isSculk = false;
         if (this.getSelf() instanceof Player PE) {
             ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();

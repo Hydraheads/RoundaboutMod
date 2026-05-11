@@ -18,9 +18,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.ZombieFate;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.powers.GeneralPowers;
-import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
-import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersRatt;
@@ -1801,12 +1799,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Inject(method = "interactOn(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;", at=@At("HEAD"), cancellable = true)
     private void roundabout$interactOn(Entity $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir)
     {
-        if (((StandUser)(Player)(Object)this).roundabout$isParallelRunning())
-        {
-            cir.setReturnValue(InteractionResult.PASS);
-            cir.cancel();
-        }
-
         if (!$$0.level().isClientSide()) {
             if (!this.isSpectator()) {
                 ItemStack $$2 = this.getItemInHand($$1);
@@ -1851,32 +1843,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
     @Shadow
     public abstract boolean isCreative();
-
-    @Inject(method = "canHarmPlayer", at=@At("HEAD"), cancellable = true)
-    private void roundabout$canHarmPlayer(Player player, CallbackInfoReturnable<Boolean> cir)
-    {
-        if (player.level().isClientSide)
-            return;
-
-        if (((StandUser)player).roundabout$getStandPowers() instanceof PowersD4C powers)
-        {
-            if (powers.meltDodgeTicks != -1 || ((StandUser)player).roundabout$isParallelRunning())
-            {
-                cir.setReturnValue(false);
-                cir.cancel();
-            }
-        }
-    }
-
-    @Inject(method = "blockActionRestricted", at = @At("HEAD"), cancellable = true)
-    private void roundabout$disableBlockBreaking(Level level, BlockPos pos, GameType gameType, CallbackInfoReturnable<Boolean> cir)
-    {
-        if (((StandUser)(Player)(Object)this).roundabout$isParallelRunning())
-        {
-            cir.setReturnValue(true);
-            cir.cancel();
-        }
-    }
 
 
     @Inject(method = "killedEntity", at = @At(value = "HEAD"), cancellable = true)

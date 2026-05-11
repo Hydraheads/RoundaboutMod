@@ -377,12 +377,6 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
     {
         if (Minecraft.getInstance().player == null)
             return;
-
-        if (((StandUser)Minecraft.getInstance().player).roundabout$isParallelRunning())
-        {
-            cir.setReturnValue(null);
-            cir.cancel();
-        }
     }
 
     @Inject(method = "renderChunkLayer", at = @At("HEAD"))

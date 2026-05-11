@@ -142,7 +142,6 @@ public class ModBlocks {
     public static BlockEntityType<InvisiBlockEntity> INVISIBLE_BLOCK_ENTITY;
     public static BlockEntityType<CoffinBlockEntity> COFFIN_BLOCK_ENTITY;
     public static BlockEntityType<FogTrapBlockEntity> FOG_TRAP_BLOCK_ENTITY;
-    public static BlockEntityType<D4CLightBlockEntity> D4C_LIGHT_BLOCK_ENTITY;
     public static BlockEntityType<ProtectionBlockEntity> PROTECTION_BLOCK_ENTITY;
     public static Block ANCIENT_METEOR_PROPERTIES = new AncientMeteorBlock(
             BlockBehaviour.Properties.of()
@@ -645,10 +644,6 @@ public class ModBlocks {
                     .sound(SoundType.HONEY_BLOCK)
     );
     public static BubbleScaffoldBlock BUBBLE_SCAFFOLD_BLOCK_PROPERTIES = new BubbleScaffoldBlock(
-            BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).noCollission().dynamicShape().speedFactor(0.7F).replaceable().instabreak().lightLevel((p_152607_) -> {
-                return 1;
-            }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));
-    public static D4CLightBlock D4C_LIGHT_BLOCK_PROPERTIES = new D4CLightBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).noCollission().dynamicShape().speedFactor(0.7F).replaceable().instabreak().lightLevel((p_152607_) -> {
                 return 1;
             }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));

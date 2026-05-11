@@ -152,7 +152,6 @@ public class FabricBlocks {
     public static final Block MIRROR = registerBlock("mirror",ModBlocks.getMirrorBlockProperties());
     public static final Block BUBBLE_SCAFFOLD = registerBlockItemless("bubble_scaffold",ModBlocks.BUBBLE_SCAFFOLD_BLOCK_PROPERTIES);
     public static final Block INVISIBLOCK = registerBlockItemless("invisible_block",ModBlocks.INVISIBLE_BLOCK_PROPERTIES);
-    public static final Block D4C_LIGHT_BLOCK = registerBlockItemless("d4c_light_block",ModBlocks.D4C_LIGHT_BLOCK_PROPERTIES);
 
     public static final Block STEREO = registerBlock("stereo",ModBlocks.STEREO_PROPERTIES);
     public static final Block CULTIVATION_POT = registerBlock("cultivation_pot",ModBlocks.cultivationPot(Blocks.AIR));
@@ -194,8 +193,6 @@ public class FabricBlocks {
             registerBE("fog_trap",BlockEntityType.Builder.of(FogTrapBlockEntity::new, FOG_TRAP) );
     public static final BlockEntityType<CoffinBlockEntity> COFFIN_BLOCK_ENTITY =
             registerBE("coffin_block",BlockEntityType.Builder.of(CoffinBlockEntity::new, COFFIN_BLOCK) );
-    public static final BlockEntityType<D4CLightBlockEntity> D4C_LIGHT_BLOCK_ENTITY =
-            registerBE("d4c_light_block",BlockEntityType.Builder.of(D4CLightBlockEntity::new, D4C_LIGHT_BLOCK));
 
 
     private static <T extends BlockEntity> BlockEntityType<T> registerBE(String $$0, BlockEntityType.Builder<T> $$1) {
@@ -348,8 +345,6 @@ public class FabricBlocks {
         ModBlocks.INVISIBLE_BLOCK_ENTITY = INVISI_BLOCK_ENTITY;
         ModBlocks.FOG_TRAP_BLOCK_ENTITY = FOGTRAP_BLOCKENTITY;
         ModBlocks.COFFIN_BLOCK_ENTITY = COFFIN_BLOCK_ENTITY;
-        ModBlocks.D4C_LIGHT_BLOCK_ENTITY = D4C_LIGHT_BLOCK_ENTITY;
-        ModBlocks.D4C_LIGHT_BLOCK = D4C_LIGHT_BLOCK;
         ModBlocks.FOG_DIRT = FOG_DIRT;
         ModBlocks.FOG_DIRT_COATING = FOG_DIRT_COATING;
         ModBlocks.FOG_TRAP = FOG_TRAP;
