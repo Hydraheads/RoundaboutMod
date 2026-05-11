@@ -42,6 +42,7 @@ public class IronBallCrossbowItem extends CrossbowItem {
         boolean $$4 = $$0 instanceof Player && ((Player)$$0).getAbilities().instabuild;
         ItemStack $$5 = $$0.getProjectile($$1);
         ItemStack $$6 = $$5.copy();
+        $$6.setCount(1);
 
         for(int $$7 = 0; $$7 < $$3; ++$$7) {
             if ($$7 > 0) {
