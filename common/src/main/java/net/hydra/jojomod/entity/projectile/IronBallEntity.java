@@ -178,12 +178,13 @@ public class IronBallEntity extends AbstractArrow {
                 }
             }
 
-            float knockbackStrength = 3;
-
-
+            float knockbackStrength = 1.65F;
+            if (getOwner() instanceof Player PE && PE.distanceTo(this) < 5.5){
+                knockbackStrength = 3.3F;
+            }
             MainUtil.takeKnockbackWithY(entity, knockbackStrength,
                     between.x,
-                    -0.2F,
+                    -0.1F,
                     between.z);
 
             setPierceLevel(pl);
@@ -193,10 +194,14 @@ public class IronBallEntity extends AbstractArrow {
         } else {
             if (pl > 0 && !bl) {
                 //reduced kb
-                float knockbackStrength = 1.5F;
+
+                float knockbackStrength = 0.75F;
+                if (getOwner() instanceof Player PE && PE.distanceTo(this) < 5.5){
+                    knockbackStrength = 1.5F;
+                }
                 MainUtil.takeKnockbackWithY(entity, knockbackStrength,
                         between.x,
-                        -0.2F,
+                        -0.1F,
                         between.z);
             }
             entity.setRemainingFireTicks(j);

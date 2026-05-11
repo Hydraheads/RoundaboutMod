@@ -6,6 +6,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -48,6 +49,14 @@ public abstract class GravityCrossbowItemMixin extends ProjectileWeaponItem impl
             cir.setReturnValue($$1 == 0 ? 30 : 30 - 2 * $$1);
         }
     }
+    @Inject(method = "onCrossbowShot", at = @At(value = "HEAD"), cancellable = true)
+    private static void roundabout$getChargeDuration(Level $$0, LivingEntity $$1, ItemStack $$2, CallbackInfo ci) {
+        if ($$1 instanceof ServerPlayer pe && !(pe.isCreative()) && $$2 != null && $$2.is(ModItems.IRON_BALL_CROSSBOW)){
+            pe.getCooldowns().addCooldown($$2.getItem(), 180);
+        }
+    }
+
+
     @Inject(method = "getArrow", at = @At(value = "HEAD"), cancellable = true)
     private static void roundabout$getArrow(Level $$0, LivingEntity $$1, ItemStack $$2, ItemStack $$3, CallbackInfoReturnable<AbstractArrow> cir) {
         if ($$2 != null && $$2.is(ModItems.IRON_BALL_CROSSBOW)){
