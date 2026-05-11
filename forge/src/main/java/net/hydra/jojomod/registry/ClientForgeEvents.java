@@ -69,7 +69,6 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.MAGICIANS_RED_OVA.get(), MagiciansRedOVARenderer::new);
         event.registerEntityRenderer(ForgeEntities.SURVIVOR.get(), SurvivorRenderer::new);
         event.registerEntityRenderer(ForgeEntities.KILLER_QUEEN.get(), KillerQueenRenderer::new);
-        event.registerEntityRenderer(ForgeEntities.D4C.get(), D4CRenderer::new);
         event.registerEntityRenderer(ForgeEntities.CREAM.get(), CreamRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GREEN_DAY.get(), GreenDayRenderer::new);
         event.registerEntityRenderer(ForgeEntities.RATT.get(), RattRenderer::new);
@@ -155,7 +154,6 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.STEVE_NPC.get(), PlayerNPCRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ALEX_NPC.get(), PlayerAlexRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FOG_CLONE.get(), FogCloneRenderer::new);
-        event.registerEntityRenderer(ForgeEntities.D4C_CLONE.get(), D4CCloneRenderer::new);
         event.registerEntityRenderer(ForgeEntities.MODIFIED_NPC.get(), PlayerModifiedRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FALLEN_ZOMBIE.get(), FallenZombieRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FALLEN_SKELETON.get(), FallenSkeletonRenderer::new);
@@ -178,7 +176,6 @@ public class ClientForgeEvents {
         event.registerBlockEntityRenderer(ForgeBlocks.COFFIN_BLOCK_ENTITY.get(), CoffinRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY.get(), BubbleScaffoldBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.INVISIBLE_BLOCK_ENTITY.get(), InvisiBlockEntityRenderer::new);
-        event.registerBlockEntityRenderer(ForgeBlocks.D4C_LIGHT_BLOCK_ENTITY.get(), D4CLightBlockEntityRenderer::new);
     }
 
     @SubscribeEvent
@@ -206,7 +203,6 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.MAGICIANS_RED_LAYER, MagiciansRedModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.MAGICIANS_RED_OVA_LAYER, MagiciansRedOVAModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.JUSTICE_PIRATE_LAYER, JusticePirateModel::getTexturedModelData);
-        event.registerLayerDefinition(ModEntityRendererClient.D4C_LAYER, D4CModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.WALKING_HEART_LAYER, WalkingHeartModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.CREAM_LAYER, CreamModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.SOFT_AND_WET_LAYER, SoftAndWetModel::getTexturedModelData);

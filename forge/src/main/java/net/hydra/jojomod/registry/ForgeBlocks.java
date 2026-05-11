@@ -257,8 +257,6 @@ public class ForgeBlocks {
             () -> ModBlocks.BUBBLE_SCAFFOLD_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> INVISIBLOCK = BLOCKS.register("invisible_block",
             () -> ModBlocks.INVISIBLE_BLOCK_PROPERTIES);
-    public static final RegistryObject<Block> D4C_LIGHT_BLOCK = BLOCKS.register("d4c_light_block",
-            () -> ModBlocks.D4C_LIGHT_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> ORANGE_FIRE = BLOCKS.register("colored_fire_orange",
             () -> ModBlocks.ORANGE_FIRE_PROPERTIES);
     public static final RegistryObject<Block> BLUE_FIRE = BLOCKS.register("colored_fire_blue",
@@ -285,8 +283,6 @@ public class ForgeBlocks {
             () -> BlockEntityType.Builder.of(FogTrapBlockEntity::new, FOG_TRAP.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "fog_trap")));
     public static final RegistryObject<BlockEntityType<CoffinBlockEntity>> COFFIN_BLOCK_ENTITY = BLOCK_ENTITIES.register("coffin_block",
             () -> BlockEntityType.Builder.of(CoffinBlockEntity::new, COFFIN_BLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "coffin_block")));
-    public static final RegistryObject<BlockEntityType<D4CLightBlockEntity>> D4C_LIGHT_BLOCK_ENTITY = BLOCK_ENTITIES.register("d4c_light_block",
-            () -> BlockEntityType.Builder.of(D4CLightBlockEntity::new, D4C_LIGHT_BLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "d4c_light_block")));
 
     static boolean genned = false;
 

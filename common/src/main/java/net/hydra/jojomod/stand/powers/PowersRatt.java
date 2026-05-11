@@ -260,8 +260,6 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        ClientUtil.fx.roundabout$onGUI(context);
-
         if (isPlaced()) {
             if (!isHoldingSneak()) {
                 LockedOrNot(context,x,y,1,StandIcons.RATT_BURST,PowersRatt.PLACE_BURST,0);

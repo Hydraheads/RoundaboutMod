@@ -1,8 +1,6 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.client.models.stand.renderers.ChairRattRenderer;
-import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Zombiefish;
@@ -23,8 +21,6 @@ import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
 import net.hydra.jojomod.entity.zombie_minion.*;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -181,12 +177,6 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "fog_clone").toString())
             );
-    public static final RegistryObject<EntityType<D4CCloneEntity>> D4C_CLONE =
-            ENTITY_TYPES.register("d4c_clone", () ->
-                    EntityType.Builder.of(D4CCloneEntity::new, MobCategory.MISC).sized(0.6f, 1.8f).
-                            clientTrackingRange(10).
-                            build(new ResourceLocation(Roundabout.MOD_ID, "d4c_clone").toString())
-            );
     public static final RegistryObject<EntityType<FallenZombie>> FALLEN_ZOMBIE =
             ENTITY_TYPES.register("fallen_zombie", () ->
                     EntityType.Builder.of(FallenZombie::new, MobCategory.MISC).sized(0.6F, 1.95F).clientTrackingRange(8).
@@ -304,12 +294,6 @@ public class ForgeEntities {
                     EntityType.Builder.of(SurvivorEntity::new, MobCategory.MISC).sized(0.5F, 0.3f).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "survivor").toString())
-            );
-    public static final RegistryObject<EntityType<D4CEntity>> D4C =
-            ENTITY_TYPES.register("d4c", () ->
-                    EntityType.Builder.of(D4CEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
-                            clientTrackingRange(14).
-                            build(new ResourceLocation(Roundabout.MOD_ID, "d4c").toString())
             );
     public static final RegistryObject<EntityType<CreamEntity>> CREAM =
             ENTITY_TYPES.register("cream", () ->

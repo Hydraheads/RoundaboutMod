@@ -1,15 +1,10 @@
 package net.hydra.jojomod.networking;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
-import net.hydra.jojomod.advancement.criteria.ModCriteria;
-import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
-import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.index.Corpses;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -19,7 +14,6 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
-import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.BlockPos;
@@ -27,20 +21,14 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.zetalasis.networking.message.impl.IMessageEvent;
-import net.zetalasis.world.DynamicWorld;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
@@ -613,18 +601,6 @@ public class ClientToServerPackets {
                     InteractionHand hand = sender.getUsedItemHand();
                     if (itemStack.getItem() instanceof FirearmItem) {
                         ((FirearmItem) itemStack.getItem()).fireBullet(level, sender, hand);
-                    }
-                }
-
-                /**Request a d4c dimension hop*/
-                if (message.equals(MESSAGES.DimensionHopD4C.value)) {
-                    if (((StandUser) sender).roundabout$getStand() instanceof D4CEntity) {
-                        DynamicWorld world = PowersD4C.queuedWorldTransports.remove(sender.getId());
-                        if (world != null && world.getLevel() != null) {
-                            sender.teleportTo(world.getLevel(), sender.getX(), sender.getY(), sender.getZ(), sender.getYRot(), sender.getXRot());
-                            ((StandUser) sender).roundabout$summonStand(world.getLevel(), true, false);
-                            //ModCriteria.DIMENSION_HOP_TRIGGER.trigger(sender);
-                        }
                     }
                 }
             }

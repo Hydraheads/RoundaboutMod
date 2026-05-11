@@ -46,7 +46,7 @@ public class IronBallRenderer extends EntityRenderer<IronBallEntity> {
             $$3.translate(0,-0.2f,0);
             $$3.scale(1.45f, 1.45f, 1.45f);
             VertexConsumer $$6 = $$4.getBuffer(RenderType.entityTranslucent(getTextureLocation($$0)));
-            this.model.renderToBuffer($$3, $$6, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1f);
+            this.model.renderToBuffer($$3, $$6, $$5, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1f);
             $$3.popPose();
             super.render($$0, $$1, $$2, $$3, $$4, 15728880);
         }

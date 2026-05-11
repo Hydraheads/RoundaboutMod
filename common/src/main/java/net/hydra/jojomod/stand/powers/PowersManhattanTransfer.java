@@ -90,7 +90,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         // code for advanced icons
-        ClientUtil.fx.roundabout$onGUI(context);
         if (switchShootingMode()) {
             setSkillIcon(context, x, y, 1, StandIcons.MANUAL_SHOOTING_ON, PowerIndex.SKILL_1);
         }
