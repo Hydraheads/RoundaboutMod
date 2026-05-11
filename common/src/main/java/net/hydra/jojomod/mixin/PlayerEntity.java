@@ -51,6 +51,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -1062,7 +1063,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             cancellable = true)
     public void roundabout$getProjectileHead(ItemStack $$0, CallbackInfoReturnable<ItemStack> cir) {
         if ($$0.getItem() instanceof ProjectileWeaponItem pi) {
-            if (pi instanceof IronBallCrossbowItem ibci){
+            if ($$0.is(ModItems.IRON_BALL_CROSSBOW)){
                 for (int $$3 = 0; $$3 < this.inventory.getContainerSize(); $$3++) {
                     ItemStack $$4 = this.inventory.getItem($$3);
                     if ($$4.is(Items.IRON_INGOT)) {
@@ -1070,7 +1071,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                         return;
                     }
                 }
-                cir.setReturnValue(ItemStack.EMPTY);
+                cir.setReturnValue(this.getAbilities().instabuild ? new ItemStack(Items.IRON_INGOT) : ItemStack.EMPTY);
             }
         }
     }
@@ -1844,6 +1845,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Shadow
     public abstract boolean isCreative();
 
+
+    @Shadow
+    public abstract Abilities getAbilities();
 
     @Inject(method = "killedEntity", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$hasLineOfSight(ServerLevel $$0, LivingEntity $$1, CallbackInfoReturnable<Boolean> cir) {
