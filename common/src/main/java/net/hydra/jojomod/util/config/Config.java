@@ -848,8 +848,10 @@ public class Config implements Cloneable {
         public Integer heatGainedPerShot;
         @IntOption(group = "inherit", value = 3, min = 0, max = 72000)
         public Integer heatTickDownRate;
-        @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
         public Integer bulletShootSpeedMultiplier;
+        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
+        public Integer emperorBulletRange;
     }
 
     public static class TheWorldSettings {

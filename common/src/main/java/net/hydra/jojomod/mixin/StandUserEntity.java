@@ -536,12 +536,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 this.roundabout$setGlow(glow);
             }
 
-            if (this.getHealth() > this.getMaxHealth()) {
-                this.setHealth(this.getMaxHealth());
-            }
+
             if (this.getEffect(ModEffects.MELTING) != null) {
+                if (this.getHealth() > this.getMaxHealth()) {
+                    this.setHealth(this.getMaxHealth());
+                }
                 if (Math.abs(1.0-this.getMaxHealth()) <=0.2) {
-                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.MELTING), 200);
+                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.MELTING), 10);
                 }
             }
 
@@ -5009,11 +5010,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
 
-        if (this.hasEffect(ModEffects.MELTING)) {
-            if (!this.level().isClientSide() && this.isAlive()) {
-                // put code here?
-            }
-        }
+
 
         if (this.hasEffect(ModEffects.STAND_VIRUS)) {
             if (this.tickCount % 20 == 0) {

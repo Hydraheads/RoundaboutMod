@@ -43,6 +43,7 @@ public class ModDamageTypes {
         public static final ResourceKey<DamageType> STAND_VIRUS = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "stand_virus"));
         public static final ResourceKey<DamageType> STAND_FIRE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "stand_fire"));
         public static final ResourceKey<DamageType> DISINTEGRATION = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "disintegration"));
+    public static final ResourceKey<DamageType> IRON_BALL = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "iron_ball"));
         public static final ResourceKey<DamageType> MELTING = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "melting"));
         public static final ResourceKey<DamageType> HEEL_SPIKE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "heel_spike"));
         public static final ResourceKey<DamageType> DAGGER = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "dagger"));
