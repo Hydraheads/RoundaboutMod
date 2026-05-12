@@ -100,9 +100,6 @@ public class IronBallEntity extends AbstractArrow {
 
     @Override
     protected void onHitEntity(EntityHitResult entityHitResult) {
-        if (!this.level().isClientSide()){
-            return;
-        }
         DamageSource damageSource;
         Entity entity2;
         Entity entity = entityHitResult.getEntity();
