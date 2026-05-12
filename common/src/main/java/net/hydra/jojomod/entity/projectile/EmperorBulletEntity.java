@@ -104,11 +104,10 @@ public class EmperorBulletEntity extends AbstractArrow {
             boolean isFlying = getDeltaMovement().lengthSqr() > 1;
 
             if (isFlying) {
-                ((ServerLevel) this.level()).sendParticles(
-                        new DustParticleOptions(new Vector3f(0.2F, 0.2F, 0.2F), 1f),
+                ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
                         this.getX(), this.getY(), this.getZ(),
-                        0, 0, 0, 0, 0
-                );
+                        0, 0, 0, 0, 0.0F);
+
             }
         }
     }
