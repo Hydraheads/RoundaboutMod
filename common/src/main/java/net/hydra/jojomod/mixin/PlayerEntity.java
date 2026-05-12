@@ -16,15 +16,10 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.ZombieFate;
+import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.powers.GeneralPowers;
-import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
-import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
-import net.hydra.jojomod.item.MaskItem;
-import net.hydra.jojomod.item.ScissorItem;
-import net.hydra.jojomod.item.StandArrowItem;
-import net.hydra.jojomod.item.WorthyArrowItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
@@ -56,6 +51,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -1063,6 +1059,23 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
     }
     @Inject(method = "getProjectile(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/item/ItemStack;",
+            at = @At(value = "HEAD"),
+            cancellable = true)
+    public void roundabout$getProjectileHead(ItemStack $$0, CallbackInfoReturnable<ItemStack> cir) {
+        if ($$0.getItem() instanceof ProjectileWeaponItem pi) {
+            if ($$0.is(ModItems.IRON_BALL_CROSSBOW)){
+                for (int $$3 = 0; $$3 < this.inventory.getContainerSize(); $$3++) {
+                    ItemStack $$4 = this.inventory.getItem($$3);
+                    if ($$4.is(Items.IRON_INGOT)) {
+                        cir.setReturnValue($$4);
+                        return;
+                    }
+                }
+                cir.setReturnValue(this.getAbilities().instabuild ? new ItemStack(Items.IRON_INGOT) : ItemStack.EMPTY);
+            }
+        }
+    }
+    @Inject(method = "getProjectile(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/item/ItemStack;",
             at = @At(value = "INVOKE",
                     target="Lnet/minecraft/world/item/ProjectileWeaponItem;getAllSupportedProjectiles()Ljava/util/function/Predicate;",
             shift= At.Shift.AFTER),
@@ -1787,12 +1800,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Inject(method = "interactOn(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;", at=@At("HEAD"), cancellable = true)
     private void roundabout$interactOn(Entity $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir)
     {
-        if (((StandUser)(Player)(Object)this).roundabout$isParallelRunning())
-        {
-            cir.setReturnValue(InteractionResult.PASS);
-            cir.cancel();
-        }
-
         if (!$$0.level().isClientSide()) {
             if (!this.isSpectator()) {
                 ItemStack $$2 = this.getItemInHand($$1);
@@ -1838,32 +1845,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Shadow
     public abstract boolean isCreative();
 
-    @Inject(method = "canHarmPlayer", at=@At("HEAD"), cancellable = true)
-    private void roundabout$canHarmPlayer(Player player, CallbackInfoReturnable<Boolean> cir)
-    {
-        if (player.level().isClientSide)
-            return;
 
-        if (((StandUser)player).roundabout$getStandPowers() instanceof PowersD4C powers)
-        {
-            if (powers.meltDodgeTicks != -1 || ((StandUser)player).roundabout$isParallelRunning())
-            {
-                cir.setReturnValue(false);
-                cir.cancel();
-            }
-        }
-    }
-
-    @Inject(method = "blockActionRestricted", at = @At("HEAD"), cancellable = true)
-    private void roundabout$disableBlockBreaking(Level level, BlockPos pos, GameType gameType, CallbackInfoReturnable<Boolean> cir)
-    {
-        if (((StandUser)(Player)(Object)this).roundabout$isParallelRunning())
-        {
-            cir.setReturnValue(true);
-            cir.cancel();
-        }
-    }
-
+    @Shadow
+    public abstract Abilities getAbilities();
 
     @Inject(method = "killedEntity", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$hasLineOfSight(ServerLevel $$0, LivingEntity $$1, CallbackInfoReturnable<Boolean> cir) {

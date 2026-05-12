@@ -52,6 +52,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation STAR_PLATINUM_BASEBALL_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "star_platinum_baseball"), "main");
     public static final ModelLayerLocation DIVER_DOWN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "diver_down"), "main");
     public static final ModelLayerLocation HARPOON_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "harpoon"), "main");
+
     public static final ModelLayerLocation BLADED_BOWLER_HAT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "bladed_bowler_hat"), "main");
     public static final ModelLayerLocation TUSK_HOLE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk_hole"), "main");
     public static final ModelLayerLocation ROUNDABOUT_BULLET_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "roundabout_bullet_entity"), "main");
@@ -62,6 +63,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation CROSSFIRE_FIRESTORM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "crossfire_firestorm"), "main");
     public static final ModelLayerLocation LIFE_DETECTOR = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "life_detector"), "main");
     public static final ModelLayerLocation STAND_FIREBALL_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "stand_fireball"), "main");
+    public static final ModelLayerLocation IRON_BALL_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "iron_ball"), "main");
     public static final ModelLayerLocation RIPPER_EYES_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "ripper_eyes"), "main");
     public static final ModelLayerLocation GASOLINE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "gasoline_can"), "main");
     public static final ModelLayerLocation ZOMBIE_AESTHETICIAN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "zombie_aesthetician"), "main");

@@ -25,13 +25,7 @@ public abstract class OffBalanceMixin extends Entity implements TraceableEntity 
         if (this.getOwner() != null) {
             if (this.getOwner() instanceof LivingEntity LE) {
                 if (LE.hasEffect(ModEffects.UNBALANCED)) {
-                    MobEffectInstance mobEffectInstance = LE.getEffect(ModEffects.UNBALANCED);
-                    if (!mobEffectInstance.isInfiniteDuration()) {
-                        int duration = mobEffectInstance.getDuration();
-                        LE.removeEffect(ModEffects.UNBALANCED);
-                        LE.addEffect(new MobEffectInstance(ModEffects.UNBALANCED, duration - 5)); // might not be the smartest but wtv
-                    }
-                    return h * 3;
+                    return h * (3 * (LE.getEffect(ModEffects.UNBALANCED).getAmplifier()+1) );
                 }
             }
         }

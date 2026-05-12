@@ -1986,12 +1986,6 @@ public class AbilityScapeBasis {
             targetEntity = EDP.parentMob;
         }
 
-        if (targetEntity instanceof LivingEntity LE)
-        {
-            if (((StandUser)LE).roundabout$isParallelRunning())
-                return null;
-        }
-
         return targetEntity;
     }
 
@@ -2027,11 +2021,6 @@ public class AbilityScapeBasis {
             targetEntity = EDP.parentMob;
         }
 
-        if (targetEntity instanceof LivingEntity LE)
-        {
-            if (((StandUser)LE).roundabout$isParallelRunning())
-                return null;
-        }
         storeEnt = targetEntity;
 
         if (!listE.contains(targetEntity) && targetEntity != null)
@@ -2074,12 +2063,6 @@ public class AbilityScapeBasis {
         }
         if (targetEntity instanceof EnderDragonPart EDP){
             targetEntity = EDP.parentMob;
-        }
-
-        if (targetEntity instanceof LivingEntity LE)
-        {
-            if (((StandUser)LE).roundabout$isParallelRunning())
-                return null;
         }
 
         return targetEntity;

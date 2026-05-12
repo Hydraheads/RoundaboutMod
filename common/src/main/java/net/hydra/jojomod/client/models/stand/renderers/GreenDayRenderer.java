@@ -79,9 +79,6 @@ public class GreenDayRenderer extends StandRenderer<GreenDayEntity> {
         if (!entity.hasUser())
             return base;
 
-        if (((StandUser)entity.getUser()).roundabout$isParallelRunning())
-            return base/2f;
-        else
-            return base;
+        return base;
     }
 }

@@ -25,6 +25,7 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -43,6 +44,10 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
     }
 
 
+    private int timeInHole = 0;
+    public int getTimeInHole() {
+        return timeInHole;
+    }
     private static final EntityDataAccessor<Boolean> VORTEX = SynchedEntityData.defineId(TuskHoleEntity.class, EntityDataSerializers.BOOLEAN);
     @Override
     protected void defineSynchedData() {
@@ -130,6 +135,13 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
         LivingEntity $$0 = this.getUser();
         super.tick();
 
+        if (this.level().isClientSide()) {
+            if (isPiloted()) {
+                this.timeInHole += 1;
+            } else {
+                this.timeInHole = 0;
+            }
+        }
 
         if (this.getUser() != null) { // doubles lifespan during act 3
             if (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersTusk PT) {
@@ -239,6 +251,36 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
     protected boolean updateInWaterStateAndDoFluidPushing() {return this.isInWater();}
     @Override
     public boolean isNoGravity() {return super.isNoGravity() || this.isVortex();}
+
+    private boolean isPiloted() {
+        if (this.getUser() instanceof Player P) {
+            StandUser SU = (StandUser) this.getUser();
+            if (SU.roundabout$getStandPowers() instanceof PowersTusk PT && PT.isPiloting() && PT.getPilotingStand().equals(this)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean canPickUpLoot() {
+        if (isPiloted() && this.getUser() instanceof Player P) {
+            return P.getInventory().getFreeSlot() != -1;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean wantsToPickUp(ItemStack $$0) {
+        return true;
+    }
+
+    @Override
+    protected void pickUpItem(ItemEntity $$0) {
+       if (isPiloted() && this.getUser() instanceof Player P) {
+           P.getInventory().add($$0.getItem());
+       }
+    }
 }
 
 class TuskHoleAttackGoal extends MeleeAttackGoal {

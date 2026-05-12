@@ -318,21 +318,4 @@ public class ZLevel implements ILevelAccess {
         }
     }
 
-    @Inject(method = "getEntities(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/AABB;Ljava/util/function/Predicate;)Ljava/util/List;", at = @At("RETURN"), cancellable = true)
-    private void roundabout$getEntities(Entity entity, AABB area, Predicate<? super Entity> predicate, CallbackInfoReturnable<List<Entity>> cir)
-    {
-        List<Entity> entities = cir.getReturnValue();
-
-        Iterator<Entity> iterator = entities.iterator();
-        while (iterator.hasNext()) {
-            Entity e = iterator.next();
-            if (e instanceof LivingEntity LE) {
-                if (((StandUser) LE).roundabout$isParallelRunning()) {
-                    iterator.remove();
-                }
-            }
-        }
-
-        cir.setReturnValue(entities);
-    }
 }

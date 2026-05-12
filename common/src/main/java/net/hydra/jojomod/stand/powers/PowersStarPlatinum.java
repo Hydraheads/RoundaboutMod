@@ -1,7 +1,6 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
@@ -27,7 +26,6 @@ import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.JotaroVoice;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
@@ -66,7 +64,6 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
@@ -78,8 +75,6 @@ import net.minecraft.world.phys.Vec3;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import static net.hydra.jojomod.event.index.PacketDataIndex.FLOAT_STAR_FINGER_SIZE;
 
 public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public PowersStarPlatinum(LivingEntity self) {
@@ -355,7 +350,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
 
     public static final byte POWER_STAR_FINGER = PowerIndex.POWER_1;
-    public static final byte POWER_EARLY_STAR_FINGER = PowerIndex.POWER_1_SNEAK;
+    public static final byte POWER_EARLY_IMPALE = PowerIndex.POWER_1_SNEAK;
     public static final byte POWER_INHALE = PowerIndex.POWER_3;
 
     boolean letServerKnowScopeCatchIsReady = false;
@@ -471,7 +466,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public int ticksForFinger = 0;
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
-        if (keyIsDown && this.getActivePower() == POWER_EARLY_STAR_FINGER && this.attackTimeDuring < 24 && attackTimeDuring > 2) {
+        if (keyIsDown && this.getActivePower() == POWER_EARLY_IMPALE && this.attackTimeDuring < 24 && attackTimeDuring > 2) {
+            impaleTicks = 15;
             holdDownClick = true;
             animateStand(StarPlatinumEntity.IMPALE_2);
             this.attackTimeDuring = -8;
@@ -776,7 +772,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
     @Override
     public void handleStandAttack2(Player player, Entity target){
-        if (activePower == POWER_EARLY_STAR_FINGER) {
+        if (activePower == POWER_EARLY_IMPALE) {
             impaleImpact2(target);
         }
         if (this.getActivePower() == POWER_STAR_FINGER){
@@ -1272,7 +1268,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                                 wentForCharge = false;
                             } else {
                                 if (!onCooldown(PowerIndex.SKILL_1_SNEAK) && RNG >= 0.85 && dist <= 3 && !wentForCharge) {
-                                    ((StandUser) this.getSelf()).roundabout$tryPower(POWER_EARLY_STAR_FINGER, true);
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(POWER_EARLY_IMPALE, true);
                                     wentForCharge = true;
                                 } else {
                                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.ATTACK, true);

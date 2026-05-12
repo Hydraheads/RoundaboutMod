@@ -7,7 +7,6 @@ import net.minecraft.advancements.CriterionTrigger;
 import java.lang.reflect.Method;
 
 public class ModCriteria {
-    public static DimensionHopCriterion DIMENSION_HOP_TRIGGER;
 
     @SuppressWarnings("unchecked")
     public static <T extends CriterionTrigger<?>> T register(T trigger)

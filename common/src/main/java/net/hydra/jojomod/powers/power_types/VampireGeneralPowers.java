@@ -546,7 +546,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 } else if (getActivePower() == RIPPER_EYES) {
                     if (attackTimeDuring == getMaxRipperEyesWait()) {
 
-                        setCooldown(PowerIndex.GENERAL_4,getRipperCooldown());
+                        setCooldown(PowerIndex.GENERAL_4,getRipperMaxCooldown());
                         tryPowerPacket(RIPPER_EYES_ACTIVATED);
                         ripperEyesLeft = ripperBeamTime;
                     }
@@ -792,6 +792,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public void hairPullEntity(Entity entity) {
         if (!this.self.level().isClientSide()) {
             if (entity != null) {
+                if (entity.distanceTo(self) > 5.8){
+                    return;
+                }
                 if (!(MainUtil.resistsKnockBack(entity))) {
                     if (entity.isPassenger() && !(entity instanceof Player pl && pl.isCreative()))
                         entity.removeVehicle();
@@ -811,8 +814,11 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public int getRipperCooldown(){
         return 240;
     }
+    public int getRipperMaxCooldown(){
+        return 400;
+    }
     public int getRipperInterruptCooldown(){
-        return 60;
+        return 200;
     }
 
 
@@ -1091,6 +1097,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public void suckImpact(Entity entity){
         if (!this.self.level().isClientSide() && getActivePower() == BLOOD_CLUTCH_ATTACK) {
             if (entity != null) {
+                if (entity.distanceTo(self) > 3){
+                    return;
+                }
                 attackTargetId = 0;
                 float pow;
                 float knockbackStrength;
@@ -1162,6 +1171,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public void iceImpact(Entity entity){
         if (!this.self.level().isClientSide() && getActivePower() == ICE_CLUTCH_ATTACK) {
             if (entity != null) {
+                if (entity.distanceTo(self) > 3){
+                    return;
+                }
                 attackTargetId = 0;
                 float pow;
                 float knockbackStrength;
@@ -1699,6 +1711,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         if (!onCooldown(PowerIndex.GENERAL_1)) {
             if (!this.self.level().isClientSide()) {
                 if (entity != null) {
+                    if (entity.distanceTo(self) > 3.5){
+                        return;
+                    }
                     attackTargetId = 0;
                     float pow;
                     float knockbackStrength;

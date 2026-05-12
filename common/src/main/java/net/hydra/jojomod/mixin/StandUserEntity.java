@@ -4592,43 +4592,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
 
-        if (((StandUser)this).roundabout$getStandPowers() instanceof PowersD4C powers)
-        {
-            if (((StandUser)this).roundabout$isParallelRunning())
-            {
-                if (damageSource.is(DamageTypes.IN_FIRE) ||
-                        damageSource.is(DamageTypes.ON_FIRE) ||
-                        damageSource.is(DamageTypes.LAVA) ||
-                        damageSource.is(DamageTypes.MAGIC) ||
-                        damageSource.is(DamageTypes.STARVE) ||
-                        damageSource.is(DamageTypes.WITHER) ||
-                        damageSource.is(DamageTypes.DROWN) ||
-                        damageSource.is(DamageTypes.SWEET_BERRY_BUSH) ||
-                        damageSource.is(DamageTypes.CACTUS) ||
-                        damageSource.is(DamageTypes.FALL)
-                )
-                {
-                    if (damageSource.is(DamageTypes.MAGIC))
-                    {
-                        if (hasEffect(MobEffects.POISON))
-                            return;
-                    }
-                    else
-                        return;
-                }
-
-                ci.setReturnValue(false);
-                ci.cancel();
-            }
-
-            if (powers.meltDodgeTicks >= 0)
-            {
-                ci.setReturnValue(false);
-                ci.cancel();
-                return;
-            }
-        }
-
         if (roundabout$gasolineIFRAMES > 0 && damageSource.is(ModDamageTypes.GASOLINE_EXPLOSION)){
             ci.setReturnValue(false);
             return;
@@ -5345,25 +5308,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Shadow public abstract void setItemInHand(InteractionHand interactionHand, ItemStack itemStack);
 
-    @Unique private boolean roundabout$isPRunning = false;
-
-    @Override
-    public void roundabout$setParallelRunning(boolean value) {
-        this.roundabout$isPRunning = value;
-    }
-
-    @Override
-    public boolean roundabout$isParallelRunning() {
-        if (roundabout$getStandPowers() instanceof PowersD4C)
-        {
-            return this.roundabout$isPRunning;
-        }
-        else
-        {
-            roundabout$isPRunning = false;
-            return false;
-        }
-    }
     public double previousYpos = 0.0;
 
 

@@ -45,7 +45,6 @@ public class ModEntities {
     public static EntityType<ReddEntity> REDD;
     public static EntityType<ChairRattEntity> CHAIR_RATT;
     public static EntityType<FleshPileEntity> FLESH_PILE;
-    public static EntityType<D4CEntity> D4C;
     public static EntityType<CreamEntity> CREAM;
     public static EntityType<SurvivorEntity> SURVIVOR;
     public static EntityType<GreenDayEntity> GREEN_DAY;
@@ -103,6 +102,7 @@ public class ModEntities {
     public static EntityType<BloodSplatterEntity> BLOOD_SPLATTER;
 
     public static EntityType<StandArrowEntity> STAND_ARROW;
+    public static EntityType<IronBallEntity> IRON_BALL;
     public static EntityType<ThrownObjectEntity> THROWN_OBJECT;
     public static EntityType<ThrownAnubisEntity> THROWN_ANUBIS;
     public static EntityType<CinderellaVisageDisplayEntity> CINDERELLA_VISAGE_DISPLAY;
@@ -147,7 +147,6 @@ public class ModEntities {
     public static EntityType<PlayerAlexNPC> ALEX_NPC;
     public static EntityType<PlayerModifiedNPC> MODIFIED_NPC;
     public static EntityType<FogCloneEntity> FOG_CLONE;
-    public static EntityType<D4CCloneEntity> D4C_CLONE;
     public static EntityType<FallenZombie> FALLEN_ZOMBIE;
     public static EntityType<FallenSkeleton> FALLEN_SKELETON;
     public static EntityType<FallenSpider> FALLEN_SPIDER;
