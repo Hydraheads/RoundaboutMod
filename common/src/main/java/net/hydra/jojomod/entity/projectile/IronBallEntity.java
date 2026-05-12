@@ -183,16 +183,24 @@ public class IronBallEntity extends AbstractArrow {
                 }
             }
 
-            if (!(getOwner() instanceof Player PE && entity.getUUID() == PE.getUUID())) {
+
                 float knockbackStrength = 1.65F;
                 if (getOwner() instanceof Player PE && PE.distanceTo(this) < 5.5) {
                     knockbackStrength = 3.3F;
                 }
+                if (getOwner() instanceof Player PE && entity.getUUID() == PE.getUUID()){
+                    if (PE.onGround()){
+                        knockbackStrength = 2F;
+                    } else {
+                        knockbackStrength = 0.5F;
+                    }
+                }
+
                 MainUtil.takeKnockback(entity, knockbackStrength,
                         between.x,
                         -0.2F,
                         between.z);
-            }
+
 
             setPierceLevel(pl);
             if (this.getPierceLevel() <= 0) {
