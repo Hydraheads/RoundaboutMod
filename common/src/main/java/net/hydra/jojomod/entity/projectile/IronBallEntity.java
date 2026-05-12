@@ -100,6 +100,9 @@ public class IronBallEntity extends AbstractArrow {
 
     @Override
     protected void onHitEntity(EntityHitResult entityHitResult) {
+        if (!this.level().isClientSide()){
+            return;
+        }
         DamageSource damageSource;
         Entity entity2;
         Entity entity = entityHitResult.getEntity();
@@ -184,22 +187,22 @@ public class IronBallEntity extends AbstractArrow {
             }
 
 
-                float knockbackStrength = 1.65F;
-                if (getOwner() instanceof Player PE && PE.distanceTo(this) < 5.5) {
-                    knockbackStrength = 3.3F;
+            float knockbackStrength = 2.9F;
+            if (getOwner() instanceof Player PE && PE.distanceTo(this) < 5.5) {
+                knockbackStrength = 3.3F;
+            }
+            if (getOwner() instanceof Player PE && entity.getUUID() == PE.getUUID()){
+                if (PE.onGround()){
+                    knockbackStrength = 2F;
+                } else {
+                    knockbackStrength = 0.5F;
                 }
-                if (getOwner() instanceof Player PE && entity.getUUID() == PE.getUUID()){
-                    if (PE.onGround()){
-                        knockbackStrength = 2F;
-                    } else {
-                        knockbackStrength = 0.5F;
-                    }
-                }
+            }
 
-                MainUtil.takeKnockback(entity, knockbackStrength,
-                        between.x,
-                        -0.2F,
-                        between.z);
+            MainUtil.takeKnockback(entity, knockbackStrength,
+                    between.x,
+                    -0.2F,
+                    between.z);
 
 
             setPierceLevel(pl);
@@ -224,13 +227,20 @@ public class IronBallEntity extends AbstractArrow {
             this.setDeltaMovement(this.getDeltaMovement().scale(-0.1));
             this.setYRot(this.getYRot() + 180.0f);
             this.yRotO += 180.0f;
-            if (!this.level().isClientSide && this.getDeltaMovement().lengthSqr() < 1.0E-7) {
+            if (!this.level().isClientSide) {
                 this.discard();
             }
         }
         if (!this.isRemoved()){
             setPierceLevel(pl);
         }
+    }
+
+    public float multiplyOnNetherite(Entity entity){
+        if (entity instanceof Player){
+
+        }
+        return 1F;
     }
 
     private int bounceCount = 0;
