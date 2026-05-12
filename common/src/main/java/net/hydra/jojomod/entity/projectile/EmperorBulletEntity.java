@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.projectile;
 
 import com.mojang.authlib.yggdrasil.response.User;
 import net.hydra.jojomod.access.IEnderMan;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -53,6 +54,8 @@ public class EmperorBulletEntity extends AbstractArrow {
     }
 
     public LivingEntity standUser;
+    private Vec3 startPos;
+    private boolean initialized = false;
 
     private float getBulletDamage() {
         LivingEntity owner = (LivingEntity) this.getOwner();
@@ -76,20 +79,36 @@ public class EmperorBulletEntity extends AbstractArrow {
     public void tick() {
         super.tick();
 
-        if (this.tickCount > 200) {
+        if (!initialized) {
+            startPos = this.position();
+            initialized = true;
+        }
+
+        double distance = this.position().distanceTo(startPos);
+        double maxRange = ClientNetworking.getAppropriateConfig().emperorSettings.emperorBulletRange;
+
+        if (distance >= maxRange) {
             this.discard();
             return;
         }
 
         this.setNoGravity(true);
 
-        this.setDeltaMovement(this.getDeltaMovement().scale(0.995));
+        double t = distance / maxRange;
+        double slowFactor = 2.0 - (t * t);
+        slowFactor = Math.max(0.05, slowFactor);
+
+        this.setDeltaMovement(this.getDeltaMovement().scale(slowFactor));
 
         if (!level().isClientSide && !this.inGround) {
             boolean isFlying = getDeltaMovement().lengthSqr() > 1;
 
             if (isFlying) {
-                ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0.2F, 0.2F, 0.2F), 1f), this.getX(), this.getY(), this.getZ(), 0, 0, 0, 0, 0);
+                ((ServerLevel) this.level()).sendParticles(
+                        new DustParticleOptions(new Vector3f(0.2F, 0.2F, 0.2F), 1f),
+                        this.getX(), this.getY(), this.getZ(),
+                        0, 0, 0, 0, 0
+                );
             }
         }
     }
