@@ -1388,27 +1388,13 @@ public class MainUtil {
 
 
     public static float getNetheriteMultiplier(Entity entity) {
-        float multiplier = 1.0F;
-
         if (entity instanceof LivingEntity LE) {
-            // Check each armor slot
-            for (EquipmentSlot slot : EquipmentSlot.values()) {
-                if (slot.getType() == EquipmentSlot.Type.ARMOR) {
-                    ItemStack stack = LE.getItemBySlot(slot);
+            float resistance = (float) LE
+                    .getAttributeValue(Attributes.KNOCKBACK_RESISTANCE);
 
-                    // Check if the armor piece is netherite
-                    if (stack.is(Items.NETHERITE_HELMET)
-                            || stack.is(Items.NETHERITE_CHESTPLATE)
-                            || stack.is(Items.NETHERITE_LEGGINGS)
-                            || stack.is(Items.NETHERITE_BOOTS)) {
-
-                        multiplier += 0.1F;
-                    }
-                }
-            }
+            return 1.0F / (1.0F - resistance);
         }
-
-        return multiplier;
+        return 1;
     }
     public static void takeKnockback(Entity entity, double strength, double x, double y, double z) {
 
