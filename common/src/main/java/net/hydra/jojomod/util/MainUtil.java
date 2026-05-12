@@ -1376,6 +1376,51 @@ public class MainUtil {
         e.hasImpulse = true;
     }
 
+    public static void takeDeterminedKnockbackWithY(Entity user, Entity target, float knockbackStrength){
+        float xRot; if (!target.onGround()){xRot=user.getXRot();} else {xRot = -15;}
+        takeKnockbackWithY(target, knockbackStrength,
+                Mth.sin(user.getYRot() * ((float) Math.PI / 180)),
+                Mth.sin(xRot * ((float) Math.PI / 180)),
+                -Mth.cos(user.getYRot() * ((float) Math.PI / 180)));
+
+    }
+
+
+
+    public static float getNetheriteMultiplier(Entity entity) {
+        float multiplier = 1.0F;
+
+        if (entity instanceof LivingEntity LE) {
+            // Check each armor slot
+            for (EquipmentSlot slot : EquipmentSlot.values()) {
+                if (slot.getType() == EquipmentSlot.Type.ARMOR) {
+                    ItemStack stack = LE.getItemBySlot(slot);
+
+                    // Check if the armor piece is netherite
+                    if (stack.is(Items.NETHERITE_HELMET)
+                            || stack.is(Items.NETHERITE_CHESTPLATE)
+                            || stack.is(Items.NETHERITE_LEGGINGS)
+                            || stack.is(Items.NETHERITE_BOOTS)) {
+
+                        multiplier += 0.1F;
+                    }
+                }
+            }
+        }
+
+        return multiplier;
+    }
+    public static void takeKnockback(Entity entity, double strength, double x, double y, double z) {
+
+        if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+            return;
+        }
+
+        if (MainUtil.isKnockbackImmune(entity)){
+            return;
+        }
+        takeUnresistableKnockback(entity,strength,x,y,z);
+    }
     public static void takeKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
 
         if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
@@ -1385,6 +1430,7 @@ public class MainUtil {
         if (MainUtil.isKnockbackImmune(entity)){
             return;
         }
+
         takeUnresistableKnockbackWithY(entity,strength,x,y,z);
     }
     public static void takeNoKnockback(Entity entity) {
@@ -1394,8 +1440,20 @@ public class MainUtil {
                 0);
         entity.hasImpulse = true;
     }
+
+    public static void takeUnresistableKnockback(Entity entity, double strength, double x, double y, double z) {
+        entity.hurtMarked = true;
+        strength*=getNetheriteMultiplier(entity);
+        Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
+        entity.setDeltaMovement(- vec3d2.x,
+                0.4F,
+                - vec3d2.z);
+        entity.hasImpulse = true;
+    }
     public static void takeUnresistableKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
         entity.hurtMarked = true;
+
+        strength*=getNetheriteMultiplier(entity);
         Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
         entity.setDeltaMovement(- vec3d2.x,
                 -vec3d2.y,
@@ -1404,6 +1462,10 @@ public class MainUtil {
     }
     public static void takeLiteralUnresistableKnockbackWithY(Entity entity,  double x, double y, double z) {
         entity.hurtMarked = true;
+        float multi = getNetheriteMultiplier(entity);
+        x*=multi;
+        y*=multi;
+        z*=multi;
         entity.setDeltaMovement(x,
                 y,
                z);
@@ -1411,6 +1473,7 @@ public class MainUtil {
     }
     public static void takeUnresistableKnockbackWithYBias(Entity entity, double strength, double x, double y, double z, float yBias) {
         entity.hurtMarked = true;
+        strength*=getNetheriteMultiplier(entity);
         Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
         Vec3 vec3d3 = vec3d2.multiply(yBias,1,yBias);
         entity.setDeltaMovement(- vec3d3.x,
@@ -1420,6 +1483,10 @@ public class MainUtil {
     }
     public static void takeUnresistableKnockbackWithY2(Entity entity,double x, double y, double z) {
         entity.hurtMarked = true;
+        float multi = getNetheriteMultiplier(entity);
+        x*=multi;
+        y*=multi;
+        z*=multi;
         entity.setDeltaMovement( x,
                 y,
                 z);

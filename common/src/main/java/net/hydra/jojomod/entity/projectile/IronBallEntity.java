@@ -4,7 +4,9 @@ import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -45,28 +47,37 @@ public class IronBallEntity extends AbstractArrow {
 
     public IronBallEntity(Level $$0, LivingEntity $$1) {
         super(ModEntities.IRON_BALL, $$1, $$0);
+        this.pickup = Pickup.DISALLOWED;
     }
     public IronBallEntity(EntityType<? extends IronBallEntity> $$0, Level $$1) {
         super($$0, $$1);
+        this.pickup = Pickup.DISALLOWED;
     }
 
     public IronBallEntity(Level $$0, double $$1, double $$2, double $$3) {
         super(ModEntities.IRON_BALL, $$1, $$2, $$3, $$0);
+        this.pickup = Pickup.DISALLOWED;
     }
 
     public IronBallEntity(Level $$0, LivingEntity $$1, ItemStack $$2, double p_36862_, double p_36863_, double p_36864_) {
         super(ModEntities.IRON_BALL, p_36862_, p_36863_, p_36864_, $$0);
         this.setArrow($$2.copy());
+        this.pickup = Pickup.DISALLOWED;
     }
 
     int falloff = 12;
     @Override
     public void tick() {
+        this.pickup = Pickup.DISALLOWED;
         Vec3 deltamovement = getDeltaMovement();
         this.inGround = false;
         int bounceC = bounceCount;
         super.tick();
-        this.inGround = false;
+        if (!level().isClientSide()){
+            if (inGround){
+                discard();
+            }
+        }
         falloff--;
         if (falloff > 0 && bounceC == bounceCount) {
             setDeltaMovement(deltamovement);
@@ -94,7 +105,6 @@ public class IronBallEntity extends AbstractArrow {
         Entity entity = entityHitResult.getEntity();
         float f = (float)this.getDeltaMovement().length();
         IAbstractArrowAccess iarrow = ((IAbstractArrowAccess) this);
-        int i = Mth.ceil(Mth.clamp((double)f * baseDamage2, 0.0, 2.147483647E9));
         if (this.getPierceLevel() > 0) {
             if (iarrow.rdbt$piercingIgnoreEntityIds() == null) {
                 iarrow.rdbt$piercingIgnoreEntityIds(new IntOpenHashSet(5));
@@ -109,14 +119,14 @@ public class IronBallEntity extends AbstractArrow {
                 return;
             }
         }
+        float pow = 9;
         if (this.isCritArrow()) {
-            long l = this.random.nextInt(i / 2 + 2);
-            i = (int)Math.min(l + (long)i, Integer.MAX_VALUE);
+            pow = 11;
         }
         if ((entity2 = this.getOwner()) == null) {
-            damageSource = this.damageSources().arrow(this, this);
+            damageSource = ModDamageTypes.of(this.level(), ModDamageTypes.IRON_BALL, this, this);
         } else {
-            damageSource = this.damageSources().arrow(this, entity2);
+            damageSource = ModDamageTypes.of(this.level(), ModDamageTypes.IRON_BALL, this, entity2);
             if (entity2 instanceof LivingEntity) {
                 ((LivingEntity)entity2).setLastHurtMob(entity);
             }
@@ -128,7 +138,10 @@ public class IronBallEntity extends AbstractArrow {
         }
         byte pl = getPierceLevel();
         setPierceLevel((byte) 0);
-        if (entity.hurt(damageSource, i)) {
+
+        Vec3 between = this.getPosition(1).subtract(entity.getPosition(1f)).normalize();
+
+        if (entity.hurt(damageSource, pow)) {
             if (bl) {
                 return;
             }
@@ -171,19 +184,47 @@ public class IronBallEntity extends AbstractArrow {
             }
 
 
+            float knockbackStrength = 2.9F;
+            if (getOwner() instanceof Player PE && PE.distanceTo(this) < 10) {
+                knockbackStrength = 3.3F;
+            }
+            if (getOwner() instanceof Player PE && entity.getUUID() == PE.getUUID()){
+                if (PE.onGround()){
+                    knockbackStrength = 2F;
+                } else {
+                    knockbackStrength = 0.5F;
+                }
+            }
+
+            MainUtil.takeKnockback(entity, knockbackStrength,
+                    between.x,
+                    -0.2F,
+                    between.z);
+
+
             setPierceLevel(pl);
             if (this.getPierceLevel() <= 0) {
                 this.discard();
             }
         } else {
+            if (pl > 0 && !bl) {
+                //reduced kb
+                if (!(getOwner() instanceof Player PE && entity.getUUID() == PE.getUUID())) {
+                    float knockbackStrength = 0.9F;
+                    if (getOwner() instanceof Player PE && PE.distanceTo(this) < 10) {
+                        knockbackStrength = 1.8F;
+                    }
+                    MainUtil.takeKnockback(entity, knockbackStrength,
+                            between.x,
+                            -0.1F,
+                            between.z);
+                }
+            }
             entity.setRemainingFireTicks(j);
             this.setDeltaMovement(this.getDeltaMovement().scale(-0.1));
             this.setYRot(this.getYRot() + 180.0f);
             this.yRotO += 180.0f;
-            if (!this.level().isClientSide && this.getDeltaMovement().lengthSqr() < 1.0E-7) {
-                if (this.pickup == Pickup.ALLOWED) {
-                    this.spawnAtLocation(this.getPickupItem(), 0.1f);
-                }
+            if (!this.level().isClientSide) {
                 this.discard();
             }
         }
@@ -191,6 +232,7 @@ public class IronBallEntity extends AbstractArrow {
             setPierceLevel(pl);
         }
     }
+
 
     private int bounceCount = 0;
     private int critBounceCount = 0;
@@ -262,9 +304,6 @@ public class IronBallEntity extends AbstractArrow {
 
     @Override
     public void remove(Entity.RemovalReason $$0) {
-        if (this.pickup == AbstractArrow.Pickup.ALLOWED) {
-            this.spawnAtLocation(this.getPickupItem().copy(), 0.1F);
-        }
         this.setRemoved($$0);
     }
     public IronBallEntity(Level $$0, LivingEntity $$1, ItemStack stack) {
