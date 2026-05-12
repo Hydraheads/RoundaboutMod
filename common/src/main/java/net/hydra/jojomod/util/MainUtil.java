@@ -1418,7 +1418,7 @@ public class MainUtil {
         entity.hurtMarked = true;
         Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
         entity.setDeltaMovement(- vec3d2.x,
-                -0.2F,
+                0.4F,
                 - vec3d2.z);
         entity.hasImpulse = true;
     }

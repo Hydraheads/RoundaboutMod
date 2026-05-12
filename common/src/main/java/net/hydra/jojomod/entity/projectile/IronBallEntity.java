@@ -190,7 +190,7 @@ public class IronBallEntity extends AbstractArrow {
                 }
                 MainUtil.takeKnockback(entity, knockbackStrength,
                         between.x,
-                        -0.1F,
+                        -0.2F,
                         between.z);
             }
 
