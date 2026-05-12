@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -19,12 +20,15 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.FirearmItem;
+import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.WarhammerItem;
 import net.hydra.jojomod.mixin.access.MinecraftAccessor;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.item.FogBlockItem;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.*;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.screens.Overlay;
@@ -46,6 +50,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
@@ -54,6 +59,7 @@ import net.minecraft.world.level.block.WebBlock;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -307,6 +313,102 @@ public abstract class InputEvents implements IInputEvents {
             }
             //while (this.options.attackKey.wasPressed()) {
             //}
+
+
+            // War Hammer Ability
+            ItemStack $$0 = this.player.getItemInHand(InteractionHand.MAIN_HAND);
+            if ($$0 != null && $$0.getItem() instanceof WarhammerItem wh){
+                if (this.player.getAttackStrengthScale(1) >= 1F) {
+
+                    if (this.missTime > 0) {
+                        ci.setReturnValue(false);
+                        return;
+                    } else if (this.hitResult == null) {
+                        if (this.gameMode.hasMissTime()) {
+                            this.missTime = 10;
+                        }
+
+                        ci.setReturnValue(false);
+                        return;
+                    } else if (this.player.isHandsBusy()) {
+                        ci.setReturnValue(false);
+                        return;
+                    } else {
+                        ItemStack stack = this.player.getItemInHand(InteractionHand.MAIN_HAND);
+                        if (!stack.isItemEnabled(this.level.enabledFeatures())) {
+                            ci.setReturnValue(false);
+                            return;
+                        } else {
+                            boolean $$1 = false;
+                            switch (this.hitResult.getType()) {
+                                case ENTITY:
+                                    this.gameMode.attack(this.player, ((EntityHitResult)this.hitResult).getEntity());
+                                    break;
+                                case BLOCK:
+                                    BlockHitResult $$2 = (BlockHitResult)this.hitResult;
+                                    BlockPos $$3 = $$2.getBlockPos();
+                                    this.gameMode.startDestroyBlock($$3, $$2.getDirection());
+                                    if (!this.level.getBlockState($$3).isAir()) {
+                                        $$1 = true;
+                                        Vec3 vec3d = this.player.getEyePosition(1);
+
+                                        Direction gravD = ((IGravityEntity) this.player).roundabout$getGravityDirection();
+                                        Vec3 vec3d2 = this.player.getViewVector(1);
+                                        float reach = 1.5F;
+                                        Vec3 vec3d3 = vec3d.add(vec3d2.x * reach, vec3d2.y * reach, vec3d2.z * reach);
+                                        BlockHitResult blockHit = this.player.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.player));
+
+
+                                        boolean logicCheck = blockHit.getBlockPos().getY() + 1 > this.player.getY();
+                                        BlockPos aboveCheck = blockHit.getBlockPos().above();
+                                        if (gravD != Direction.DOWN) {
+                                            BlockPos abv = blockHit.getBlockPos().relative(gravD.getOpposite());
+                                            BlockPos att = blockHit.getBlockPos();
+
+                                            Vec3 blockHitVec = RotationUtil.vecPlayerToWorld(new Vec3(abv.getX(), att.getY(), att.getZ()), gravD);
+                                            Vec3 playerVec = RotationUtil.vecPlayerToWorld(this.player.position(), gravD);
+                                            aboveCheck = abv;
+                                            logicCheck = blockHitVec.y + 1 > playerVec.y;
+                                        }
+
+                                        if (this.player.level().getBlockState(blockHit.getBlockPos()).isSolid() && logicCheck
+                                                && !this.player.level().getBlockState(aboveCheck).isSolid()) {
+                                            double mag = player.getPosition(0).distanceTo(
+                                                    new Vec3(blockHit.getLocation().x, blockHit.getLocation().y, blockHit.getLocation().z)) * 1.68 + 1;
+                                            Vec3 vec3 = new Vec3(
+                                                    (blockHit.getLocation().x - player.getX()) / mag,
+                                                    (blockHit.getLocation().y - player.getY()) / mag,
+                                                    (blockHit.getLocation().z - player.getZ()) / mag
+                                            );
+                                            mag*=0.8F;
+                                            if (gravD != Direction.DOWN){
+                                                vec3 = RotationUtil.vecWorldToPlayer(vec3,gravD);
+                                            }
+
+                                            MainUtil.takeUnresistableKnockbackWithY2(player,
+                                                    vec3.x,
+                                                    0.35 + Math.max(vec3.y, 0),
+                                                    vec3.z
+                                            );
+                                        }
+                                        break;
+                                    }
+                                case MISS:
+                                    if (this.gameMode.hasMissTime()) {
+                                        this.missTime = 10;
+                                    }
+
+                                    this.player.resetAttackStrengthTicker();
+                            }
+
+                            this.player.swing(InteractionHand.MAIN_HAND);
+                            ci.setReturnValue($$1);
+                            return;
+                        }
+                    }
+
+                }
+            }
         }
     }
 

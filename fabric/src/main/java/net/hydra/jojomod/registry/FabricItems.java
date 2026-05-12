@@ -165,12 +165,12 @@ public class FabricItems {
     public static Item NETHERITE_GLAIVE = registerItem("netherite_glaive", new GlaiveItem(Tiers.NETHERITE, 4F, -2.9F, new Item.Properties().fireResistant(),12));
     public static Item EXECUTIONER_AXE = registerItem("executioner_axe", new ExecutionerAxeItem(Tiers.IRON, 7F, -3.3F, new Item.Properties(),12));
 
-    public static Item WOODEN_WAR_HAMMER = registerItem("wooden_war_hammer", new WarhammerItem(Tiers.WOOD, 6.0F, -3.2F, new Item.Properties()));
-    public static Item STONE_WAR_HAMMER = registerItem("stone_war_hammer", new WarhammerItem(Tiers.STONE, 7.0F, -3.2F, new Item.Properties()));
-    public static Item IRON_WAR_HAMMER = registerItem("iron_war_hammer", new WarhammerItem(Tiers.IRON, 6.0F, -3.2F, new Item.Properties()));
-    public static Item GOLDEN_WAR_HAMMER = registerItem("golden_war_hammer", new WarhammerItem(Tiers.GOLD, 6.0F, -3.2F, new Item.Properties()));
-    public static Item DIAMOND_WAR_HAMMER = registerItem("diamond_war_hammer", new WarhammerItem(Tiers.DIAMOND, 5.0F, -3.2F, new Item.Properties()));
-    public static Item NETHERITE_WAR_HAMMER = registerItem("netherite_war_hammer", new WarhammerItem(Tiers.NETHERITE, 5.0F, -3.2F, new Item.Properties().fireResistant()));
+    public static Item WOODEN_WAR_HAMMER = registerItem("wooden_war_hammer", new WarhammerItem(Tiers.WOOD, 6.0F, -3.6F, new Item.Properties()));
+    public static Item STONE_WAR_HAMMER = registerItem("stone_war_hammer", new WarhammerItem(Tiers.STONE, 7.0F, -3.6F, new Item.Properties()));
+    public static Item IRON_WAR_HAMMER = registerItem("iron_war_hammer", new WarhammerItem(Tiers.IRON, 6.0F, -3.5F, new Item.Properties()));
+    public static Item GOLDEN_WAR_HAMMER = registerItem("golden_war_hammer", new WarhammerItem(Tiers.GOLD, 6.0F, -3.5F, new Item.Properties()));
+    public static Item DIAMOND_WAR_HAMMER = registerItem("diamond_war_hammer", new WarhammerItem(Tiers.DIAMOND, 5.0F, -3.4F, new Item.Properties()));
+    public static Item NETHERITE_WAR_HAMMER = registerItem("netherite_war_hammer", new WarhammerItem(Tiers.NETHERITE, 5.0F, -3.3F, new Item.Properties().fireResistant()));
 
     public static Item BODY_BAG = registerItem("body_bag", new BodyBagItem(new Item.Properties().stacksTo(1)));
     public static Item CREATIVE_BODY_BAG = registerItem("creative_body_bag", new BodyBagItem(new Item.Properties().stacksTo(1)));
