@@ -188,7 +188,7 @@ public class IronBallEntity extends AbstractArrow {
 
 
             float knockbackStrength = 2.9F;
-            if (getOwner() instanceof Player PE && PE.distanceTo(this) < 5.5) {
+            if (getOwner() instanceof Player PE && PE.distanceTo(this) < 10) {
                 knockbackStrength = 3.3F;
             }
             if (getOwner() instanceof Player PE && entity.getUUID() == PE.getUUID()){
@@ -213,9 +213,9 @@ public class IronBallEntity extends AbstractArrow {
             if (pl > 0 && !bl) {
                 //reduced kb
                 if (!(getOwner() instanceof Player PE && entity.getUUID() == PE.getUUID())) {
-                    float knockbackStrength = 0.75F;
-                    if (getOwner() instanceof Player PE && PE.distanceTo(this) < 5.5) {
-                        knockbackStrength = 1.5F;
+                    float knockbackStrength = 0.9F;
+                    if (getOwner() instanceof Player PE && PE.distanceTo(this) < 10) {
+                        knockbackStrength = 1.8F;
                     }
                     MainUtil.takeKnockback(entity, knockbackStrength,
                             between.x,
@@ -236,12 +236,6 @@ public class IronBallEntity extends AbstractArrow {
         }
     }
 
-    public float multiplyOnNetherite(Entity entity){
-        if (entity instanceof Player){
-
-        }
-        return 1F;
-    }
 
     private int bounceCount = 0;
     private int critBounceCount = 0;
