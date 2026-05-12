@@ -125,6 +125,14 @@ public class ModItems {
     public static Item GOLDEN_GLAIVE;
     public static Item DIAMOND_GLAIVE;
     public static Item NETHERITE_GLAIVE;
+
+    public static Item WOODEN_WAR_HAMMER;
+    public static Item STONE_WAR_HAMMER;
+    public static Item IRON_WAR_HAMMER;
+    public static Item GOLDEN_WAR_HAMMER;
+    public static Item DIAMOND_WAR_HAMMER;
+    public static Item NETHERITE_WAR_HAMMER;
+
     public static Item MUSIC_DISC_TORTURE_DANCE;
     public static Item MUSIC_DISC_HALLELUJAH;
     public static Item LUCKY_LIPSTICK;

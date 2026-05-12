@@ -165,6 +165,13 @@ public class FabricItems {
     public static Item NETHERITE_GLAIVE = registerItem("netherite_glaive", new GlaiveItem(Tiers.NETHERITE, 4F, -2.9F, new Item.Properties().fireResistant(),12));
     public static Item EXECUTIONER_AXE = registerItem("executioner_axe", new ExecutionerAxeItem(Tiers.IRON, 7F, -3.3F, new Item.Properties(),12));
 
+    public static Item WOODEN_WAR_HAMMER = registerItem("wooden_war_hammer", new WarhammerItem(Tiers.WOOD, 6.0F, -3.2F, new Item.Properties()));
+    public static Item STONE_WAR_HAMMER = registerItem("stone_war_hammer", new WarhammerItem(Tiers.STONE, 7.0F, -3.2F, new Item.Properties()));
+    public static Item IRON_WAR_HAMMER = registerItem("iron_war_hammer", new WarhammerItem(Tiers.IRON, 6.0F, -3.2F, new Item.Properties()));
+    public static Item GOLDEN_WAR_HAMMER = registerItem("golden_war_hammer", new WarhammerItem(Tiers.GOLD, 6.0F, -3.2F, new Item.Properties()));
+    public static Item DIAMOND_WAR_HAMMER = registerItem("diamond_war_hammer", new WarhammerItem(Tiers.DIAMOND, 5.0F, -3.2F, new Item.Properties()));
+    public static Item NETHERITE_WAR_HAMMER = registerItem("netherite_war_hammer", new WarhammerItem(Tiers.NETHERITE, 5.0F, -3.2F, new Item.Properties().fireResistant()));
+
     public static Item BODY_BAG = registerItem("body_bag", new BodyBagItem(new Item.Properties().stacksTo(1)));
     public static Item CREATIVE_BODY_BAG = registerItem("creative_body_bag", new BodyBagItem(new Item.Properties().stacksTo(1)));
     public static Item KNIFE = registerItem("knife", new KnifeItem(new Item.Properties().stacksTo(64)));
@@ -314,6 +321,12 @@ public class FabricItems {
                         entries.accept(GOLDEN_GLAIVE);
                         entries.accept(DIAMOND_GLAIVE);
                         entries.accept(NETHERITE_GLAIVE);
+                        entries.accept(WOODEN_WAR_HAMMER);
+                        entries.accept(STONE_WAR_HAMMER);
+                        entries.accept(IRON_WAR_HAMMER);
+                        entries.accept(GOLDEN_WAR_HAMMER);
+                        entries.accept(DIAMOND_WAR_HAMMER);
+                        entries.accept(NETHERITE_WAR_HAMMER);
                         entries.accept(SACRIFICIAL_DAGGER);
                         entries.accept(SCISSORS);
                         entries.accept(EXECUTION_UPGRADE);
@@ -635,11 +648,17 @@ public class FabricItems {
         ModItems.SCISSORS = SCISSORS;
         ModItems.SACRIFICIAL_DAGGER = SACRIFICIAL_DAGGER;
         ModItems.WOODEN_GLAIVE = WOODEN_GLAIVE;
+        ModItems.WOODEN_WAR_HAMMER = WOODEN_WAR_HAMMER;
         ModItems.STONE_GLAIVE = STONE_GLAIVE;
+        ModItems.STONE_WAR_HAMMER = STONE_WAR_HAMMER;
         ModItems.IRON_GLAIVE = IRON_GLAIVE;
+        ModItems.IRON_WAR_HAMMER = IRON_WAR_HAMMER;
         ModItems.GOLDEN_GLAIVE = GOLDEN_GLAIVE;
+        ModItems.GOLDEN_WAR_HAMMER = GOLDEN_WAR_HAMMER;
         ModItems.DIAMOND_GLAIVE = DIAMOND_GLAIVE;
+        ModItems.DIAMOND_WAR_HAMMER = DIAMOND_WAR_HAMMER;
         ModItems.NETHERITE_GLAIVE = NETHERITE_GLAIVE;
+        ModItems.NETHERITE_WAR_HAMMER = NETHERITE_WAR_HAMMER;
         ModItems.EXECUTIONER_AXE = EXECUTIONER_AXE;
         ModItems.BODY_BAG = BODY_BAG;
         ModItems.CREATIVE_BODY_BAG = CREATIVE_BODY_BAG;

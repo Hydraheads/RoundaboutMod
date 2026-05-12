@@ -255,6 +255,12 @@ public class ForgeEvents {
         ModItems.GOLDEN_GLAIVE = ForgeItems.GOLDEN_GLAIVE.get();
         ModItems.DIAMOND_GLAIVE = ForgeItems.DIAMOND_GLAIVE.get();
         ModItems.NETHERITE_GLAIVE = ForgeItems.NETHERITE_GLAIVE.get();
+        ModItems.WOODEN_WAR_HAMMER = ForgeItems.WOODEN_WAR_HAMMER.get();
+        ModItems.STONE_WAR_HAMMER = ForgeItems.STONE_WAR_HAMMER.get();
+        ModItems.IRON_WAR_HAMMER = ForgeItems.IRON_WAR_HAMMER.get();
+        ModItems.GOLDEN_WAR_HAMMER = ForgeItems.GOLDEN_WAR_HAMMER.get();
+        ModItems.DIAMOND_WAR_HAMMER = ForgeItems.DIAMOND_WAR_HAMMER.get();
+        ModItems.NETHERITE_WAR_HAMMER = ForgeItems.NETHERITE_WAR_HAMMER.get();
         ModItems.SCISSORS = ForgeItems.SCISSORS.get();
         ModItems.SACRIFICIAL_DAGGER = ForgeItems.SACRIFICIAL_DAGGER.get();
         ModItems.EXECUTIONER_AXE = ForgeItems.EXECUTIONER_AXE.get();
