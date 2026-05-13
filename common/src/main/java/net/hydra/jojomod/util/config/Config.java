@@ -109,6 +109,8 @@ public class Config implements Cloneable {
     public static class VanillaMCTweaks {
         @BooleanOption(group = "inherit", value = true)
         public Boolean mountingHorsesInCreativeTamesThem;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean fixModLoaderCreatedBugs;
     }
 
     public static class GeneralStandUserMobSettings {

@@ -26,11 +26,13 @@ public abstract class FixForgeBreakingWardenShieldBreak extends LivingEntity  {
 
     @Inject(method = "blockUsingShield(Lnet/minecraft/world/entity/LivingEntity;)V", at = @At(value = "HEAD"), cancellable = true)
     private void rdbt$blockUsingShield(LivingEntity p_36295_, CallbackInfo ci) {
-        super.blockUsingShield(p_36295_);
-        if (p_36295_.getMainHandItem().canDisableShield(this.useItem, this, p_36295_)
-     || p_36295_.canDisableShield()) {
-            this.disableShield(true);
+        if (ClientNetworking.getAppropriateConfig().vanillaMinecraftTweaks.fixModLoaderCreatedBugs) {
+            super.blockUsingShield(p_36295_);
+            if (p_36295_.getMainHandItem().canDisableShield(this.useItem, this, p_36295_)
+                    || p_36295_.canDisableShield()) {
+                this.disableShield(true);
+            }
+            ci.cancel();
         }
-        ci.cancel();
     }
 }
