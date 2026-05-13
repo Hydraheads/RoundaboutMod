@@ -1507,7 +1507,7 @@ public class PowersJustice extends NewDashPreset {
                                                 vector.y+random2,
                                                 vector.z+random3,
                                                 0.15);
-
+                                        vector = vector.scale(MainUtil.getNetheriteMultiplier(LE));
                                         LE.setDeltaMovement(LE.getDeltaMovement().add(vector.x,vector.y*0.55+0.2F,vector.z
                                         ));
                                         LE.hurtMarked = true;

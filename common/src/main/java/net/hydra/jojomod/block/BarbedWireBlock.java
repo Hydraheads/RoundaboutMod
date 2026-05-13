@@ -79,6 +79,7 @@ public class BarbedWireBlock extends RotatedPillarBlock
                     if (power > 0) {
                         power*= 15;
                         power*= this.wirePower;
+                        power = Math.min(power,19F);
                         /**Velocity for players is clientside so it requires additional packet*/
                         if (!level.isClientSide && !(entity instanceof Player) && !(entity.getControllingPassenger() != null && entity.getControllingPassenger() instanceof Player)) {
                             if (!(entity instanceof LivingEntity LE && MainUtil.isBossMob(LE))) {
