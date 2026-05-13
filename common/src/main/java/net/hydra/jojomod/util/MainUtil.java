@@ -1399,9 +1399,13 @@ public class MainUtil {
 
 
     public static float getNetheriteMultiplier(Entity entity) {
-        if (entity instanceof LivingEntity LE) {
-            float resistance = (float) LE
+        if (entity instanceof Player pl){
+            float resistance = (float) pl
                     .getAttributeValue(Attributes.KNOCKBACK_RESISTANCE);
+
+            if (resistance <= 0){
+                return 1;
+            }
 
             return 1.0F / (1.0F - resistance);
         }
