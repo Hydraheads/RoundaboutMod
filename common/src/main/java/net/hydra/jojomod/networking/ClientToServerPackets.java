@@ -292,9 +292,11 @@ public class ClientToServerPackets {
                             }
                             sender.level().playSound(null, b, ModSounds.HAMMER_CLINK_EVENT, SoundSource.PLAYERS,
                                     1F, (float) (0.99F+Math.random()*0.02F));
-                            MainUtil.blockBreakParticles(sender.level(),
-                                    sender.level().getBlockState(b).getBlock(),
-                                    new Vec3(a.x, a.y, a.z), 100);
+                            if (c < 0) {
+                                MainUtil.blockBreakParticles(sender.level(),
+                                        sender.level().getBlockState(b).getBlock(),
+                                        new Vec3(a.x, a.y, a.z), 100);
+                            }
                         }
                     });
                 }

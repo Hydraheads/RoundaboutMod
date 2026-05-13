@@ -343,7 +343,23 @@ public abstract class InputEvents implements IInputEvents {
                             boolean $$1 = false;
                             switch (this.hitResult.getType()) {
                                 case ENTITY:
-                                    this.gameMode.attack(this.player, ((EntityHitResult)this.hitResult).getEntity());
+                                    EntityHitResult res = ((EntityHitResult)this.hitResult);
+                                    Entity ent = res.getEntity();
+                                    this.gameMode.attack(this.player, ent);
+                                    if (!this.player.onGround()) {
+                                        double mag = 1;
+                                        Vec3 vec3 = new Vec3(
+                                                (ent.getX() - player.getX()) / mag,
+                                                (ent.getY() - player.getY()) / mag,
+                                                (ent.getZ() - player.getZ()) / mag
+                                        ).normalize().scale(0.7F);
+                                        MainUtil.takeUnresistableKnockbackWithY2(player,
+                                                vec3.x,
+                                                0.35 + Math.max(vec3.y, 0),
+                                                vec3.z
+                                        );
+                                        C2SPacketUtil.warHammerPacket(res.getLocation(), BlockPos.containing(Vec3.ZERO), ent.getId());
+                                    }
                                     break;
                                 case BLOCK:
                                     BlockHitResult $$2 = (BlockHitResult)this.hitResult;
@@ -353,6 +369,7 @@ public abstract class InputEvents implements IInputEvents {
                                         if (this.level.getBlockState($$3).isAir()) {
                                             $$1 = true;
                                         }
+                                        if (!this.player.onGround()){
                                         Vec3 vec3d = this.player.getEyePosition(1);
 
                                         Direction gravD = ((IGravityEntity) this.player).roundabout$getGravityDirection();
@@ -395,6 +412,7 @@ public abstract class InputEvents implements IInputEvents {
                                             );
 
                                             C2SPacketUtil.warHammerPacket($$2.getLocation(), $$3, -1);
+                                        }
                                         }
                                         break;
                                     }
