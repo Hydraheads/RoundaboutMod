@@ -348,16 +348,11 @@ public abstract class InputEvents implements IInputEvents {
                                     this.gameMode.attack(this.player, ent);
                                     if (!this.player.onGround()) {
                                         double mag = 1;
-                                        Vec3 vec3 = new Vec3(
-                                                (ent.getX() - player.getX()) / mag,
-                                                (ent.getY() - player.getY()) / mag,
-                                                (ent.getZ() - player.getZ()) / mag
-                                        ).normalize().scale(0.33F);
-                                        ent.fallDistance = 0;
+                                        player.fallDistance = 0;
                                         MainUtil.takeUnresistableKnockbackWithY2(player,
-                                                vec3.x/4,
+                                                player.getDeltaMovement().x,
                                                 0.6F,
-                                                vec3.z/4
+                                                player.getDeltaMovement().z
                                         );
                                         C2SPacketUtil.warHammerPacket(res.getLocation(), BlockPos.containing(Vec3.ZERO), ent.getId());
                                     }
@@ -412,6 +407,7 @@ public abstract class InputEvents implements IInputEvents {
                                                     vec3.z
                                             );
 
+                                            player.fallDistance = 0;
                                             C2SPacketUtil.warHammerPacket($$2.getLocation(), $$3, -1);
                                         }
                                         }
