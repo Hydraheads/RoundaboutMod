@@ -2370,6 +2370,8 @@
 
   "config.roundabout.anubisChance.name": "Mysterious Sword Chance",
   "config.roundabout.anubisChance.desc": "Changes the weighting of the loot. Think of it like adding an extra, identical, item to the possible options.",
+  "config.roundabout.anubisChanceDry.name": "Dry Mysterious Sword",
+  "config.roundabout.anubisChanceDry.desc": "The above but in dry locations. Default is none.",
   "config.roundabout.beetleArrowChanceDry.name": "Beetle Arrow Chance",
   "config.roundabout.beetleArrowChanceDry.desc": "Changes the weighting of the loot. Think of it like adding an extra, identical, item to the possible options. Stand Arrows appear in drier locations, such as desert wells, pyramids, and warm ocean ruins.",
   "config.roundabout.beetleArrowChanceNotDry.name": "Not Dry Beetle Arrows",
