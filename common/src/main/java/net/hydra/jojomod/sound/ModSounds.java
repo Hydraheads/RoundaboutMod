@@ -156,7 +156,6 @@ public class ModSounds {
     public static final ResourceLocation GO_BEYOND_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GO_BEYOND_HIT);
     public static SoundEvent GO_BEYOND_HIT_EVENT = SoundEvent.createVariableRangeEvent(GO_BEYOND_HIT_ID);
 
-
     public static final String HAMMER_CLINK = "hammer_clink";
     public static final ResourceLocation HAMMER_CLINK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HAMMER_CLINK);
     public static SoundEvent HAMMER_CLINK_EVENT = SoundEvent.createVariableRangeEvent(HAMMER_CLINK_ID);
