@@ -61,6 +61,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -347,9 +348,11 @@ public abstract class InputEvents implements IInputEvents {
                                 case BLOCK:
                                     BlockHitResult $$2 = (BlockHitResult)this.hitResult;
                                     BlockPos $$3 = $$2.getBlockPos();
-                                    this.gameMode.startDestroyBlock($$3, $$2.getDirection());
                                     if (!this.level.getBlockState($$3).isAir()) {
-                                        $$1 = true;
+                                        this.gameMode.startDestroyBlock($$3, $$2.getDirection());
+                                        if (this.level.getBlockState($$3).isAir()) {
+                                            $$1 = true;
+                                        }
                                         Vec3 vec3d = this.player.getEyePosition(1);
 
                                         Direction gravD = ((IGravityEntity) this.player).roundabout$getGravityDirection();
@@ -390,6 +393,8 @@ public abstract class InputEvents implements IInputEvents {
                                                     0.35 + Math.max(vec3.y, 0),
                                                     vec3.z
                                             );
+
+                                            C2SPacketUtil.warHammerPacket($$2.getLocation(), $$3, -1);
                                         }
                                         break;
                                     }
