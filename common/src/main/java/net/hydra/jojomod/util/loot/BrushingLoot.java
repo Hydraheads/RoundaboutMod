@@ -22,11 +22,9 @@ public class BrushingLoot {
 
         LOOT.add(new Pair<>(cf.anubisChance, ModItems.ANUBIS_ITEM.getDefaultInstance()));
 
-        LOOT.add(new Pair<>(cf.standArrowChance, ModItems.STAND_ARROW.getDefaultInstance()));
-        LOOT.add(new Pair<>(cf.beetleArrowChance, ModItems.STAND_BEETLE_ARROW.getDefaultInstance()));
+        LOOT.add(new Pair<>(cf.beetleArrowChance, ModItems.STAND_ARROW.getDefaultInstance()));
 
-        DRY_LOOT.add(new Pair<>(cf.standArrowChance*cf.dryLootMultiplier, ModItems.STAND_ARROW.getDefaultInstance()));
-        DRY_LOOT.add(new Pair<>(cf.beetleArrowChance* cf.dryLootMultiplier, ModItems.STAND_BEETLE_ARROW.getDefaultInstance()));
+        DRY_LOOT.add(new Pair<>(cf.beetleArrowChanceDry, ModItems.STAND_BEETLE_ARROW.getDefaultInstance()));
 
     }
 }

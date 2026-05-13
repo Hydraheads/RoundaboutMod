@@ -218,12 +218,9 @@ public class Config implements Cloneable {
         @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)
         public Float anubisChance;
         @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)
-        public Float standArrowChance;
-        @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)
         public Float beetleArrowChance;
-        @FloatOption(group = "inherit", value = 2F, min = 0, max = 100)
-        public Float dryLootMultiplier;
-
+        @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)
+        public Float beetleArrowChanceDry;
     }
 
 

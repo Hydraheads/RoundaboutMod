@@ -2369,13 +2369,11 @@
 
 
   "config.roundabout.anubisChance.name": "Mysterious Sword Chance",
-  "config.roundabout.anubisChance.desc": "Changes the weighting of the loot. Think of it like adding an extra, identical, item to the possible options ",
-  "config.roundabout.standArrowChance.name": "Stand Arrow Chance",
-  "config.roundabout.standArrowChance.desc": "Changes the weighting of the loot. Think of it like adding an extra, identical, item to the possible options ",
+  "config.roundabout.anubisChance.desc": "Changes the weighting of the loot. Think of it like adding an extra, identical, item to the possible options.",
   "config.roundabout.beetleArrowChance.name": "Beetle Arrow Chance",
-  "config.roundabout.beetleArrowChance.desc": "Changes the weighting of the loot. Think of it like adding an extra, identical, item to the possible options ",
+  "config.roundabout.beetleArrowChance.desc": "Changes the weighting of the loot. Think of it like adding an extra, identical, item to the possible options.",
   "config.roundabout.dryLootMultiplier.name": "Dry Loot Multiplier",
-  "config.roundabout.dryLootMultiplier.desc": "Stand Arrows are more common in drier locations, such as desert wells, pyramids, and warm ocean ruins ",
+  "config.roundabout.dryLootMultiplier.desc": "Stand Arrows are more common in drier locations, such as desert wells, pyramids, and warm ocean ruins.",
 
 
   "config.roundabout.disableMeleeWhileStandActive.name": "Disable Melee With Stands",
