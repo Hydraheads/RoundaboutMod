@@ -22,6 +22,7 @@ import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.*;
 import net.minecraft.ChatFormatting;
@@ -1419,6 +1420,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             } else {
                 cir.setReturnValue(!$$0.requiresCorrectToolForDrops());
             }
+            return;
+        }
+        if (this.inventory.getSelected().getItem() instanceof WarhammerItem) {
+            cir.setReturnValue(!$$0.requiresCorrectToolForDrops());
+            return;
         }
     }
 
@@ -1877,4 +1883,14 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
 
     } */
+
+    @Inject(method = "canBeSeenAsEnemy",at = @At("HEAD"),cancellable = true)
+    private void roundabout$canBeSeenAsEnemy(CallbackInfoReturnable<Boolean> cir) {
+        StandUser user = (StandUser) this;
+        if (user.roundabout$getStandPowers() instanceof PowersTusk PT) {
+            if (PT.getActivePower() == PowersTusk.FLATTEN) {
+                cir.setReturnValue(false);
+            }
+        }
+    }
 }

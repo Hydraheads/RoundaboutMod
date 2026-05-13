@@ -11,6 +11,12 @@
       "roundabout:summon_diver_down"
     ]
   },
+  "hammer_clink": {
+    "subtitle": "sounds.roundabout.hammer_clink",
+    "sounds": [
+      "roundabout:hammer_clink"
+    ]
+  },
   "summon_green_day": {
     "subtitle": "sounds.roundabout.summon_green_day",
     "sounds": [

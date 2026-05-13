@@ -586,6 +586,7 @@
   "sounds.roundabout.vsong_bloodcurdling_moments": "Bloodcurdling Moments",
   "sounds.roundabout.vsong_damnable_ceremony": "Damnable Ceremony",
   "sounds.roundabout.vsong_gothic_organ": "Gothic Organ",
+  "sounds.roundabout.hammer_clink": "Hammer Clink",
 
   "sounds.roundabout.iron_ball_impact": "Iron ball impact",
   "sounds.roundabout.iron_ball_bounce": "Iron ball bounce",
@@ -2254,6 +2255,9 @@
   "config_translatiors_note_2": "of everything beneath this being translated, it is a lot of work. But if you really",
   "config_translatiors_note_3": "have the time and drive to do so, you deserve a cookie. :)",
 
+  "config.roundabout.fixModLoaderCreatedBugs.name": "Fix Modloader Bugs",
+  "config.roundabout.fixModLoaderCreatedBugs.desc": "Forge especially replaces a lot of vanilla code with its own creating new bugs. For instance, on forge you can block the warden without your shield being disabled (this is not true of vanilla). Turning on this setting fixes any bug I find like that which is actively causing the mod problems.",
+
 
   "config.roundabout.enableMagiciansRed.name": "Enable Stand",
   "config.roundabout.enableMagiciansRed.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
@@ -3040,7 +3044,6 @@
 
   "config.roundabout.classicGasoline.name": "Classic Gasoline",
   "config.roundabout.classicGasoline.desc": "Turn on for gasoline to be super oppressive in pvp like it used to be.",
-
 
   "config.roundabout.canThrowVisagesOntoOtherPlayers.name": "Visages Vs Other Players",
   "config.roundabout.canThrowVisagesOntoOtherPlayers.desc": "Whether or not stand item throws with visages can apply the visages on players. Mostly exists for debug testing.",

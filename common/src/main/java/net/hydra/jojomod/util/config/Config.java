@@ -109,6 +109,8 @@ public class Config implements Cloneable {
     public static class VanillaMCTweaks {
         @BooleanOption(group = "inherit", value = true)
         public Boolean mountingHorsesInCreativeTamesThem;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean fixModLoaderCreatedBugs;
     }
 
     public static class GeneralStandUserMobSettings {
@@ -142,6 +144,8 @@ public class Config implements Cloneable {
         public Integer levelsToRerollStandWithArrow;
         @BooleanOption(group = "inherit", value = false)
         public Boolean canAwakenOtherPlayersWithArrows;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean nerfedGasolineSpread;
         @BooleanOption(group = "inherit", value = false)
         public Boolean classicGasoline;
         @BooleanOption(group = "inherit", value = false)

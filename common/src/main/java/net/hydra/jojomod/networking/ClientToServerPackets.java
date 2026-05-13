@@ -14,18 +14,24 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.zetalasis.networking.message.impl.IMessageEvent;
@@ -74,6 +80,7 @@ public class ClientToServerPackets {
             ItemContext("item_context"),
             GuardCancel("guard_cancel"),
             HairColor("hair_color"),
+            WarHammer("war_hammer"),
             FinishSucking("finish_sucking"),
             CancelSucking("cancel_sucking"),
             HandshakeCooldowns("handshake_cooldowns"),
@@ -271,6 +278,29 @@ public class ClientToServerPackets {
                     });
                 }
 
+                /**War Hammer Packet*/
+                if (message.equals(MESSAGES.WarHammer.value)) {
+                    server.execute(() -> {
+                        Vector3f a = (Vector3f) vargs[0];
+                        BlockPos b = (BlockPos) vargs[1];
+                        int c = (int) vargs[2];
+                        ItemStack stack = sender.getMainHandItem();
+                        if (stack != null && stack.getItem() instanceof WarhammerItem wi){
+                            if (!sender.isCreative()) {
+                                stack.hurtAndBreak(1, sender, ($$1x) ->
+                                        $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                            }
+                            sender.level().playSound(null, b, ModSounds.HAMMER_CLINK_EVENT, SoundSource.PLAYERS,
+                                    1F, (float) (0.99F+Math.random()*0.02F));
+                            sender.fallDistance = 0;
+                            if (c < 0) {
+                                MainUtil.blockBreakParticles(sender.level(),
+                                        sender.level().getBlockState(b).getBlock(),
+                                        new Vec3(a.x, a.y, a.z), 100);
+                            }
+                        }
+                    });
+                }
 
                 /**Generic int to server packet*/
                 if (message.equals(MESSAGES.IntToServer.value)) {

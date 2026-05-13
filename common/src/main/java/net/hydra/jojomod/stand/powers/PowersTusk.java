@@ -370,7 +370,7 @@ public class PowersTusk extends NewDashPreset {
 
         if (this.self instanceof Player P) {
 
-            if (this.getActivePower() == FLATTEN) {
+            if (this.getActivePower() == FLATTEN || this.getActivePower() == PowersTusk.WARP) {
                 this.flattenTicks = this.getAttackTimeDuring();
             } else if (this.flattenTicks > 0) {
                 flattenTicks--;

@@ -49,6 +49,7 @@ import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.SkinManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -134,6 +135,16 @@ public class MainUtil {
             }
         }
     }
+
+    public static void blockBreakParticles(Level level, Block block, Vec3 pos, int blockmt){
+        if (!level.isClientSide()) {
+            ((ServerLevel) level).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
+                            block.defaultBlockState()),
+                    pos.x, pos.y, pos.z,
+                    blockmt, 0.2, 0.2, 0.2, 0.3);
+        }
+    }
+
 
 
     public static final Map<DyeColor, ItemLike> SHEEP_DYE;
@@ -1661,7 +1672,7 @@ public class MainUtil {
                         if (value instanceof LivingEntity && ((LivingEntity)value).hasEffect(MobEffects.FIRE_RESISTANCE)){
                             MobEffectInstance instance = ((LivingEntity)value).getEffect(MobEffects.FIRE_RESISTANCE);
                             ((LivingEntity)value).removeEffect(MobEffects.FIRE_RESISTANCE);
-                            value.hurt($$5,np);
+                            value.hurt($$5,np/4);
                             ((LivingEntity)value).addEffect(instance);
                         } else {
                             value.hurt($$5,np);

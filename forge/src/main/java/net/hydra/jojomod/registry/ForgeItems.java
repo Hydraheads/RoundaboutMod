@@ -330,22 +330,22 @@ public class ForgeItems {
 
 
     public static final RegistryObject<Item> WOODEN_WAR_HAMMER = addToTab(ITEMS.register("wooden_war_hammer",
-            () -> new WarhammerItem(Tiers.STONE, 6.0F, -3.2F, new Item.Properties())
+            () -> new WarhammerItem(Tiers.STONE, 6.0F, -3.6F, new Item.Properties())
     ));
     public static final RegistryObject<Item> STONE_WAR_HAMMER = addToTab(ITEMS.register("stone_war_hammer",
-            () -> new WarhammerItem(Tiers.STONE, 7.0F, -3.2F, new Item.Properties())
+            () -> new WarhammerItem(Tiers.STONE, 7.0F, -3.6F, new Item.Properties())
     ));
     public static final RegistryObject<Item> IRON_WAR_HAMMER = addToTab(ITEMS.register("iron_war_hammer",
-            () -> new WarhammerItem(Tiers.IRON, 6.0F, -3.2F, new Item.Properties())
+            () -> new WarhammerItem(Tiers.IRON, 6.0F, -3.5F, new Item.Properties())
     ));
     public static final RegistryObject<Item> GOLDEN_WAR_HAMMER = addToTab(ITEMS.register("golden_war_hammer",
-            () -> new WarhammerItem(Tiers.GOLD, 6.0F, -3.2F, new Item.Properties())
+            () -> new WarhammerItem(Tiers.GOLD, 6.0F, -3.5F, new Item.Properties())
     ));
     public static final RegistryObject<Item> DIAMOND_WAR_HAMMER = addToTab(ITEMS.register("diamond_war_hammer",
-            () -> new WarhammerItem(Tiers.DIAMOND, 5.0F, -3.2F, new Item.Properties())
+            () -> new WarhammerItem(Tiers.DIAMOND, 5.0F, -3.4F, new Item.Properties())
     ));
     public static final RegistryObject<Item> NETHERITE_WAR_HAMMER = addToTab(ITEMS.register("netherite_war_hammer",
-            () -> new WarhammerItem(Tiers.NETHERITE, 5.0F, -3.2F, new Item.Properties().fireResistant())
+            () -> new WarhammerItem(Tiers.NETHERITE, 5.0F, -3.3F, new Item.Properties().fireResistant())
     ));
 
     public static final RegistryObject<Item> SACRIFICIAL_DAGGER = addToTab(ITEMS.register("sacrificial_dagger",

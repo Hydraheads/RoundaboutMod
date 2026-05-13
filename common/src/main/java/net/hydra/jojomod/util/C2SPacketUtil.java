@@ -7,6 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.zetalasis.networking.message.api.ModMessageEvents;
+import org.joml.Vector3f;
 
 /**it is okay to have client only classes here
  *  This is where we send packets from the client to the server :O
@@ -53,6 +54,14 @@ public class C2SPacketUtil {
         );
     }
 
+    public static void warHammerPacket(Vec3 vec, BlockPos pos, int entity){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.WarHammer.value,
+                new Vector3f((float) vec.x, (float) vec.y, (float) vec.z),
+                pos,
+                entity
+        );
+    }
 
     public static void tryTripleIntPacket(byte packet, int in1, int in2, int in3){
         ModMessageEvents.sendToServer(

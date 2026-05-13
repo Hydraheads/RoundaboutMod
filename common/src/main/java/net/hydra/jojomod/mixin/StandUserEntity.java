@@ -4409,6 +4409,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+
+    //War Hammer disables shields
+    @Inject(method = "canDisableShield", at = @At("HEAD"), cancellable = true)
+    protected void rdbt$canDisableShield(CallbackInfoReturnable<Boolean> cir){
+        if (this.getMainHandItem().getItem() instanceof WarhammerItem)
+            cir.setReturnValue(true);
+    }
+
     @Inject(method = "die", at = @At("HEAD"))
     protected void roundabout$die(DamageSource $$0, CallbackInfo ci){
         if ($$0.getEntity() instanceof FallenMob fm){
@@ -5305,6 +5313,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Shadow public abstract void setItemInHand(InteractionHand interactionHand, ItemStack itemStack);
 
+    @Shadow
+    public abstract ItemStack getMainHandItem();
+
     public double previousYpos = 0.0;
 
 
@@ -5594,6 +5605,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "travel", at = @At(value = "TAIL"),cancellable = true, require = 0)
     public void   MoldDetection(Vec3 movement,CallbackInfo info) {
         rdbt$doMoldDetection(movement);
+    }
+
+    @Inject(method = "attackable",at = @At("HEAD"),cancellable = true)
+    private void roundabout$attackable(CallbackInfoReturnable<Boolean> cir) {
+        if (this.roundabout$getStandPowers() instanceof PowersTusk PT) {
+            if (PT.getActivePower() == PowersTusk.FLATTEN) {
+                cir.setReturnValue(false);
+            }
+        }
     }
 
 }
