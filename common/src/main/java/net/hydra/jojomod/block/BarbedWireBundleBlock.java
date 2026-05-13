@@ -53,6 +53,7 @@ public class BarbedWireBundleBlock extends Block {
                 if (!entity.isInvulnerable() && entity.isAlive()){
                     Vec3 dm = entity.getDeltaMovement();
                     float power = 3 + 15*((float) (Math.abs(dm.x) + Math.abs(dm.y) + Math.abs(dm.z)));
+                    power = Math.min(power,19F);
                     if (power > 0) {
                         /**Velocity for players is clientside so it requires additional packet*/
                         if (!level.isClientSide && !(entity instanceof Player) && !(entity.getControllingPassenger() != null && entity.getControllingPassenger() instanceof Player)) {
