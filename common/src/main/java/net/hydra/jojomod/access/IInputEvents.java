@@ -7,4 +7,6 @@ public interface IInputEvents {
     boolean roundabout$sameKeyTwo(KeyMapping key1);
 
     boolean roundabout$sameKeyUseOverride(KeyMapping key1);
+
+    int getSwitchTick();
 }
