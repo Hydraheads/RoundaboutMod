@@ -5596,4 +5596,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         rdbt$doMoldDetection(movement);
     }
 
+    @Inject(method = "attackable",at = @At("HEAD"),cancellable = true)
+    private void roundabout$attackable(CallbackInfoReturnable<Boolean> cir) {
+        if (this.roundabout$getStandPowers() instanceof PowersTusk PT) {
+            if (PT.getActivePower() == PowersTusk.FLATTEN) {
+                cir.setReturnValue(false);
+            }
+        }
+    }
+
 }
