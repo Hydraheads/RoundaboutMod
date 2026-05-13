@@ -24,7 +24,8 @@ public class GratefulDeadEntity extends FollowingStandEntity{
         DREADFUL = 3;
     private boolean isGrounded = true;
 
-    public final AnimationState idleAnimationState2 = new AnimationState();
+    public final AnimationState idleGround = new AnimationState();
+    public final AnimationState idleFloat = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState openHands = new AnimationState();
     public final AnimationState closeHands = new AnimationState();
@@ -34,6 +35,16 @@ public class GratefulDeadEntity extends FollowingStandEntity{
         if (this.getUser() != null) {
             byte idle = getIdleAnimation();
             byte animation = getAnimation();
+            if(animation == IDLE && idle == 0 && this.getGrounded()){
+                this.idleGround.startIfStopped(this.tickCount);
+            }else{
+                this.idleGround.stop();
+            }
+            if(animation == IDLE && (idle == 1 || !this.getGrounded())){
+                this.idleFloat.startIfStopped(this.tickCount);
+            }else{
+                this.idleFloat.stop();
+            }
             if(animation != BARRAGE){
                 this.hideFists.startIfStopped(this.tickCount);
             }else{

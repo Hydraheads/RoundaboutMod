@@ -156,8 +156,8 @@ public class GratefulDeadModel<T extends GratefulDeadEntity> extends StandModel<
 
     @Override
     public void defaultAnimations(T entity, float animationProgress, float windupLength){
-        this.animate(entity.idleAnimationState, GratefulDeadAnimations.IDLE_GROUND, animationProgress, 1f);
-        this.animate(entity.idleAnimationState2, GratefulDeadAnimations.IDLE_FLOAT, animationProgress, 1f);
+        this.animate(entity.idleGround, GratefulDeadAnimations.IDLE_GROUND, animationProgress, 1f);
+        this.animate(entity.idleFloat, GratefulDeadAnimations.IDLE_FLOAT, animationProgress, 1f);
         this.animate(entity.punchState1, StandAnimations.COMBO1, animationProgress, 1.4f);
         this.animate(entity.punchState2, StandAnimations.COMBO2, animationProgress, 1.16666f); /*1.1666 for 6 ticks, 1.4 for 5*/
         this.animate(entity.punchState3, StandAnimations.COMBO3, animationProgress, 1.16666f);
