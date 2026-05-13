@@ -107,6 +107,7 @@ public class ClientUtil {
     public static int checkthisdat = 0;
     public static int renderBloodTicks = 0;
     public static boolean skipInterpolation = false;
+    public int carryingTime = 0;
 
     /**Fallback in case the client exits the range and can't be fed the packet anymore.
      * Not a perfect solution but it should help.*/

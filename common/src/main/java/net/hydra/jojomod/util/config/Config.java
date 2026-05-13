@@ -145,6 +145,8 @@ public class Config implements Cloneable {
         @BooleanOption(group = "inherit", value = false)
         public Boolean canAwakenOtherPlayersWithArrows;
         @BooleanOption(group = "inherit", value = false)
+        public Boolean nerfedGasolineSpread;
+        @BooleanOption(group = "inherit", value = false)
         public Boolean classicGasoline;
         @BooleanOption(group = "inherit", value = false)
         public Boolean canThrowVisagesOntoOtherPlayers;

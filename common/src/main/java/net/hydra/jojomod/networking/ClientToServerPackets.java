@@ -292,6 +292,7 @@ public class ClientToServerPackets {
                             }
                             sender.level().playSound(null, b, ModSounds.HAMMER_CLINK_EVENT, SoundSource.PLAYERS,
                                     1F, (float) (0.99F+Math.random()*0.02F));
+                            sender.fallDistance = 0;
                             if (c < 0) {
                                 MainUtil.blockBreakParticles(sender.level(),
                                         sender.level().getBlockState(b).getBlock(),

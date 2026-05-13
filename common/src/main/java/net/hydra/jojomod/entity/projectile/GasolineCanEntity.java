@@ -248,7 +248,7 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
 
     public void scatterGoo(BlockPos pos){
         if (!this.level().isClientSide) {
-            if (ClientNetworking.getAppropriateConfig().itemSettings.classicGasoline) {
+            if (!ClientNetworking.getAppropriateConfig().itemSettings.nerfedGasolineSpread) {
                 int splashRadius = 2;
                 if (bounces == 2 || bounces == 1) {
 

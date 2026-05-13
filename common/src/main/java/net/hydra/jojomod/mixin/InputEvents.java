@@ -352,11 +352,12 @@ public abstract class InputEvents implements IInputEvents {
                                                 (ent.getX() - player.getX()) / mag,
                                                 (ent.getY() - player.getY()) / mag,
                                                 (ent.getZ() - player.getZ()) / mag
-                                        ).normalize().scale(0.7F);
+                                        ).normalize().scale(0.33F);
+                                        ent.fallDistance = 0;
                                         MainUtil.takeUnresistableKnockbackWithY2(player,
-                                                vec3.x,
-                                                0.35 + Math.max(vec3.y, 0),
-                                                vec3.z
+                                                vec3.x/4,
+                                                0.6F,
+                                                vec3.z/4
                                         );
                                         C2SPacketUtil.warHammerPacket(res.getLocation(), BlockPos.containing(Vec3.ZERO), ent.getId());
                                     }
