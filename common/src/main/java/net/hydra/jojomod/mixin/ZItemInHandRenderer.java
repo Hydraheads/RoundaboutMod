@@ -107,7 +107,7 @@ public abstract class ZItemInHandRenderer {
            //     }
            // }
 
-            if (user.roundabout$getStandPowers() instanceof PowersEmperor && user.roundabout$getCombatMode()){
+            if (user.roundabout$getStandPowers() instanceof PowersEmperor emperor && user.roundabout$getCombatMode() && !emperor.emperorZoomActive()) {
 
                 poseStack.pushPose();
                 poseStack.translate(0.3, -0.25, -0.7);
@@ -119,6 +119,9 @@ public abstract class ZItemInHandRenderer {
                 poseStack.popPose();
 
                 poseStack.scale(0.0F, 0.0F, 0.0F);
+
+            } else if (user.roundabout$getStandPowers() instanceof PowersEmperor emperor && user.roundabout$getCombatMode() && emperor.emperorZoomActive()){
+                ci.cancel();
             }
 
 
