@@ -1419,6 +1419,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             } else {
                 cir.setReturnValue(!$$0.requiresCorrectToolForDrops());
             }
+            return;
+        }
+        if (this.inventory.getSelected().getItem() instanceof WarhammerItem) {
+            cir.setReturnValue(!$$0.requiresCorrectToolForDrops());
+            return;
         }
     }
 
