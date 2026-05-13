@@ -2058,4 +2058,11 @@ public class ClientUtil {
             }
         }
     }
+
+    public static boolean hasAttributeSwapped(Minecraft m) {
+        if (m.player != null) {
+            return ((IInputEvents) m).getSwitchTick() == m.player.tickCount;
+        }
+        return false;
+    }
 }

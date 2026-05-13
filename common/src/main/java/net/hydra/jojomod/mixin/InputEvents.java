@@ -319,7 +319,7 @@ public abstract class InputEvents implements IInputEvents {
             // War Hammer Ability
             ItemStack $$0 = this.player.getInventory().getSelected();
             if ($$0 != null && $$0.getItem() instanceof WarhammerItem wh){
-                if (this.player.getAttackStrengthScale(1) >= 1F) {
+                if (this.player.getAttackStrengthScale(1) >= 1F && !ClientUtil.hasAttributeSwapped((Minecraft)(Object)this) ) {
 
                     if (this.missTime > 0) {
                         ci.setReturnValue(false);
@@ -1399,6 +1399,15 @@ public abstract class InputEvents implements IInputEvents {
                 }
             }
                 //this.handleStandRush(this.currentScreen == null && this.options.attackKey.isPressed());
+        }
+    }
+
+    private int switchTick = 0;
+    public int getSwitchTick() {return switchTick;}
+    @Inject(method = "handleKeybinds",at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getInventory()Lnet/minecraft/world/entity/player/Inventory;"))
+    private void roundaboutTickSwitch(CallbackInfo ci) {
+        if (this.player != null) {
+            this.switchTick = this.player.tickCount;
         }
     }
 
