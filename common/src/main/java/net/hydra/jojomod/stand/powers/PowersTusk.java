@@ -352,8 +352,6 @@ public class PowersTusk extends NewDashPreset {
                     this.setActivePower(PowersTusk.FLATTEN);
                     this.setAttackTime(0);
                     this.setAttackTimeDuring(0);
-
-
                 } else {
                     this.setAttackTimeDuring(PowersTusk.flattenTime); // automatically triggers the end of flattening
                     this.updateUniqueMoves();
