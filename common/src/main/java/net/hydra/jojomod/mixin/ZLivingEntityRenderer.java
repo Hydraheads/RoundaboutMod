@@ -169,6 +169,11 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
                 if (PT.getActivePower() == PowersTusk.WARP && scale < 1) {
                     poseStack.scale(scale,scale,scale);
                     poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,scale*360),0,0,0);
+                } else if (PT.flattenTicks > 0) {
+                    if (PT.getActivePower() != PowersTusk.FLATTEN) {$$4 *= -1;}
+
+                    scale = Math.min(1,(PT.flattenTicks+$$4) / 7.0F);
+                    poseStack.scale(1.0F+scale,Math.max(0.1F,1-scale),1.0F+scale);
                 }
             }
 
