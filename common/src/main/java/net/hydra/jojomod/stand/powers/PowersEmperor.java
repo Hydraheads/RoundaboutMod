@@ -14,6 +14,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -117,6 +118,22 @@ public class PowersEmperor extends NewDashPreset {
         if (shootTicks > 0) {
             shootTicks -= getLowerTicks();
             shootTicks = Math.max(0, shootTicks);
+        }
+
+        if (self.level().isClientSide) {
+
+            Minecraft mc = Minecraft.getInstance();
+
+            holdingRightClick =
+                    mc.options.keyUse.isDown() &&
+                            ((StandUser) self).roundabout$getActive() &&
+                            ((StandUser) self).roundabout$getStandPowers() instanceof PowersEmperor;
+
+            if (holdingRightClick) {
+                self.setDeltaMovement(
+                        self.getDeltaMovement().multiply(0.6D, 1.0D, 0.85D)
+                );
+            }
         }
 
         if (controlMode) {
@@ -265,6 +282,12 @@ public class PowersEmperor extends NewDashPreset {
         } else {
             setSkillIcon(context, x, y, 4, StandIcons.EMPEROR_SPEED_UP, PowerIndex.SKILL_4);
         }
+    }
+
+    private boolean holdingRightClick;
+    
+    public boolean emperorZoomActive() {
+        return holdingRightClick;
     }
 
     public boolean isWip() {

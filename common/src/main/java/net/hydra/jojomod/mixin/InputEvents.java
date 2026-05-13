@@ -317,7 +317,7 @@ public abstract class InputEvents implements IInputEvents {
 
 
             // War Hammer Ability
-            ItemStack $$0 = this.player.getItemInHand(InteractionHand.MAIN_HAND);
+            ItemStack $$0 = this.player.getInventory().getSelected();
             if ($$0 != null && $$0.getItem() instanceof WarhammerItem wh){
                 if (this.player.getAttackStrengthScale(1) >= 1F) {
 

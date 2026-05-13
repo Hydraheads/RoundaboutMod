@@ -22,12 +22,21 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class WarhammerItem extends DiggerItem  {
-    /**Glaives inspired by the Harken Scythe mod, with sound design from the Hexxit modpack.
-     * I like the way it functioned there, but I added my own bleed effect as a part of
-     * the mechanism of how it works*/
+    /**The hammer joseph uses against wamuu in the chariot fight
+     * inputevents contains its code to vault up blocks and entities*/
     public WarhammerItem(Tier $$0, float $$1, float $$2, Item.Properties $$3) {
         super($$1, $$2, $$0, BlockTags.MINEABLE_WITH_PICKAXE, $$3);
+    }
+
+    @Override
+    public float getDestroySpeed(ItemStack itemStack, BlockState blockState) {
+        float spd = super.getDestroySpeed(itemStack,blockState);
+        if (spd > 1){
+            spd*=3f;
+        }
+        return spd;
     }
 }
