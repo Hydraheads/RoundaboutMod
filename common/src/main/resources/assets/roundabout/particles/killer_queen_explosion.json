@@ -1,10 +1,10 @@
 {
 	"textures": [
-		"roundabout:killer_queen_esplosion_0",
-		"roundabout:killer_queen_esplosion_1",
-		"roundabout:killer_queen_esplosion_2",
-		"roundabout:killer_queen_esplosion_3",
-		"roundabout:killer_queen_esplosion_4",
-		"roundabout:killer_queen_esplosion_5"
+		"roundabout:killer_queen_explosion_0",
+		"roundabout:killer_queen_explosion_1",
+		"roundabout:killer_queen_explosion_2",
+		"roundabout:killer_queen_explosion_3",
+		"roundabout:killer_queen_explosion_4",
+		"roundabout:killer_queen_explosion_5"
 	]
 }
