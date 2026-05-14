@@ -1563,7 +1563,7 @@
   "ability.roundabout.blood_speed.locked.desc": "Use consumed life force to amplify your speed...",
 
   "ability.roundabout.grafting": "Zombie Grafting",
-  "ability.roundabout.grafting.desc": "Certain mobs drop parts which can be applied to your zombie minions through interaction with this upgrade. Changes their properties and/or grants new abilities.",
+  "ability.roundabout.grafting.desc": "When killed by vampires, certain mobs drop parts which can be applied to your zombie minions through interaction with this upgrade. Changes their properties and/or grants new abilities.",
   "ability.roundabout.grafting.locked": "???",
   "ability.roundabout.grafting.locked.desc": "Give your undead army an upgrade...",
 

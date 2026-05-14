@@ -88,6 +88,10 @@ public class BarbedWireBundleBlock extends Block {
     @SuppressWarnings("deprecation")
     @Override
     public boolean canSurvive(BlockState $$0, LevelReader $$1, BlockPos $$2) {
+        BlockState blockstate = $$1.getBlockState($$2.below());
+        if (blockstate.is(ModBlocks.INVISIBLOCK)){
+            return true;
+        }
         BlockPos $$3 = $$2.below();
         return $$1.getBlockState($$3).isFaceSturdy($$1, $$3, Direction.UP);
     }

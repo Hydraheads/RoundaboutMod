@@ -52,6 +52,10 @@ public class LocacacaBlock extends BushBlock
 
     @Override
     public boolean canSurvive(BlockState $$0, LevelReader $$1, BlockPos $$2) {
+        BlockState blockstate = $$1.getBlockState($$2.below());
+        if (blockstate.is(ModBlocks.INVISIBLOCK)){
+            return true;
+        }
         BlockPos $$3 = $$2.below();
         return this.mayPlaceOn($$1.getBlockState($$3), $$1, $$3);
     }
