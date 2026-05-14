@@ -219,6 +219,10 @@ public class ForgeParticles {
             "tusk_vortex",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> KILLER_QUEEN_EXPLOSION = PARTICLES.register(
+            "killer_queen_explosion",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> MOLD_DUST = PARTICLES.register(
             "mold_dust",
             () -> new SimpleParticleType(true)

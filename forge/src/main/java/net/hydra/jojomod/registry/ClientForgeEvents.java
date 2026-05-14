@@ -403,5 +403,6 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.ROAD_ROLLER_EXPLOSION.get(), RoadRollerExplosionParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.ROAD_ROLLER_SMOKE.get(), RoadRollerSmokeParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.TUSK_HOLE.get(), TuskHoleParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.KILLER_QUEEN_EXPLOSION.get(), KQExplosionParticle.Provider::new);
     }
 }

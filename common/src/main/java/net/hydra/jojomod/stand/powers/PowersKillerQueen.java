@@ -689,11 +689,11 @@ public class PowersKillerQueen extends NewPunchingStand {
     public void explodeEffects(Vec3 pos) {
     	float range = 0.9f;
     	
-    	((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE,
+    	((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.KILLER_QUEEN_EXPLOSION,
                 pos.x,
                 pos.y+1.0f,
                 pos.z,
-                18, range, range+0.5f, range, 0.01);
+                18, range, range+0.5f, range, 1.0);
     	
     	((ServerLevel) this.getSelf().level()).sendParticles(new DustParticleOptions(new Vector3f(0.02F, 0.02F, 0.04F), 2f),
     			pos.x,
