@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.zombie_minion;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientUtil;
@@ -13,6 +14,7 @@ import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.Tactics;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.item.BodyRemainsItem;
 import net.hydra.jojomod.item.HeadRemainsItem;
 import net.hydra.jojomod.item.MaskItem;
@@ -205,67 +207,82 @@ public class BaseMinion extends PathfinderMob {
     protected InteractionResult mobInteract(Player player, InteractionHand $$1) {
         EquipmentSlot slot = $$1 == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
         if (player.isCreative() || player.getId() == getController()){
-            ItemStack stack = player.getItemBySlot(slot);
-            if (stack !=null && !stack.isEmpty()) {
-                if (stack.getItem() instanceof HeadRemainsItem) {
-                    if (!level().isClientSide()) {
-                        dropHead(player);
-                        setHeadItem(stack.copyWithCount(1));
-                        if (!player.getAbilities().instabuild) {
-                            stack.shrink(1);
+            if (player.isCreative() || ((IFatePlayer)player).rdbt$getFatePowers() instanceof VampireFate vp
+                            && vp.getVampireData().graftingLevel > 0) {
+                ItemStack stack = player.getItemBySlot(slot);
+                if (stack != null && !stack.isEmpty()) {
+                    if (stack.getItem() instanceof HeadRemainsItem) {
+                        if (!level().isClientSide()) {
+                            dropHead(player);
+                            setHeadItem(stack.copyWithCount(1));
+                            if (!player.getAbilities().instabuild) {
+                                stack.shrink(1);
+                            }
+                            this.level().playSound(null, this.blockPosition(), SoundEvents.ZOMBIE_INFECT, SoundSource.PLAYERS, 1F, 1);
                         }
-                        this.level().playSound(null, this.blockPosition(), SoundEvents.ZOMBIE_INFECT, SoundSource.PLAYERS, 1F, 1);
-                    }
-                    return InteractionResult.CONSUME;
-                } else if (stack.getItem() instanceof BodyRemainsItem) {
-                    if (!level().isClientSide()) {
-                        dropBody(player);
-                        setBodyItem(stack.copyWithCount(1));
-                        if (getMainHandItem() != null && !getMainHandItem().isEmpty()){
-                            ItemEntity itemEntity = new ItemEntity(level(),getX(), getY(), getZ(), getMainHandItem());
-                            level().addFreshEntity(itemEntity);
-                            setItemSlot(EquipmentSlot.MAINHAND,ItemStack.EMPTY);
-                        }
-                        if (stack.is(ModItems.AXOLOTL_REMAINS)){
-                            BaseMinion bm = convertTo(ModEntities.AXOLOTL_MINION, false);
-                            if (bm != null){convertToMega(bm);}
-                        } else if (stack.is(ModItems.DOG_REMAINS)){
-                            BaseMinion bm = convertTo(ModEntities.DOG_MINION, false);
-                            if (bm != null){convertToMega(bm);}
-                        } else if (stack.is(ModItems.CHICKEN_REMAINS)){
-                            BaseMinion bm = convertTo(ModEntities.CHICKEN_MINION, false);
-                            if (bm != null){convertToMega(bm);}
-                        } else if (stack.is(ModItems.OCELOT_REMAINS)){
-                            BaseMinion bm = convertTo(ModEntities.OCELOT_MINION, false);
-                            if (bm != null){convertToMega(bm);}
-                        } else if (stack.is(ModItems.PARROT_REMAINS)){
-                            BaseMinion bm = convertTo(ModEntities.PARROT_MINION, false);
-                            if (bm != null){convertToMega(bm);}
-                        }
-                        if (!player.getAbilities().instabuild) {
-                            stack.shrink(1);
-                        }
-                        this.level().playSound(null, this.blockPosition(), SoundEvents.ZOMBIE_INFECT, SoundSource.PLAYERS, 1F, 1);
+                        return InteractionResult.CONSUME;
+                    } else if (stack.getItem() instanceof BodyRemainsItem) {
+                        if (!level().isClientSide()) {
+                            dropBody(player);
+                            setBodyItem(stack.copyWithCount(1));
+                            if (getMainHandItem() != null && !getMainHandItem().isEmpty()) {
+                                ItemEntity itemEntity = new ItemEntity(level(), getX(), getY(), getZ(), getMainHandItem());
+                                level().addFreshEntity(itemEntity);
+                                setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+                            }
+                            if (stack.is(ModItems.AXOLOTL_REMAINS)) {
+                                BaseMinion bm = convertTo(ModEntities.AXOLOTL_MINION, false);
+                                if (bm != null) {
+                                    convertToMega(bm);
+                                }
+                            } else if (stack.is(ModItems.DOG_REMAINS)) {
+                                BaseMinion bm = convertTo(ModEntities.DOG_MINION, false);
+                                if (bm != null) {
+                                    convertToMega(bm);
+                                }
+                            } else if (stack.is(ModItems.CHICKEN_REMAINS)) {
+                                BaseMinion bm = convertTo(ModEntities.CHICKEN_MINION, false);
+                                if (bm != null) {
+                                    convertToMega(bm);
+                                }
+                            } else if (stack.is(ModItems.OCELOT_REMAINS)) {
+                                BaseMinion bm = convertTo(ModEntities.OCELOT_MINION, false);
+                                if (bm != null) {
+                                    convertToMega(bm);
+                                }
+                            } else if (stack.is(ModItems.PARROT_REMAINS)) {
+                                BaseMinion bm = convertTo(ModEntities.PARROT_MINION, false);
+                                if (bm != null) {
+                                    convertToMega(bm);
+                                }
+                            }
+                            if (!player.getAbilities().instabuild) {
+                                stack.shrink(1);
+                            }
+                            this.level().playSound(null, this.blockPosition(), SoundEvents.ZOMBIE_INFECT, SoundSource.PLAYERS, 1F, 1);
 
-                    }
-                    return InteractionResult.CONSUME;
-                } else if (stack.getItem() instanceof ShearsItem) {
-                    if (!level().isClientSide()) {
-                        ItemStack stackk = getBodyItem().copy();
-                        ItemStack stackk2 = getHeadItem().copy();
-                        dropHead(player);
-                        dropBody(player);
-                        if (!stackk.isEmpty()){
-                            BaseMinion bm = convertTo(ModEntities.VILLAGER_MINION, false);
-                            if (bm != null){convertToMega(bm);}
                         }
-                        if (!stackk.isEmpty() || !stackk2.isEmpty()) {
-                            this.level().playSound(null, this.blockPosition(), SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1F, 1);
-                            stack.hurtAndBreak(1, player, ($$1x) -> $$1x.broadcastBreakEvent($$1));
+                        return InteractionResult.CONSUME;
+                    } else if (stack.getItem() instanceof ShearsItem) {
+                        if (!level().isClientSide()) {
+                            ItemStack stackk = getBodyItem().copy();
+                            ItemStack stackk2 = getHeadItem().copy();
+                            dropHead(player);
+                            dropBody(player);
+                            if (!stackk.isEmpty()) {
+                                BaseMinion bm = convertTo(ModEntities.VILLAGER_MINION, false);
+                                if (bm != null) {
+                                    convertToMega(bm);
+                                }
+                            }
+                            if (!stackk.isEmpty() || !stackk2.isEmpty()) {
+                                this.level().playSound(null, this.blockPosition(), SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1F, 1);
+                                stack.hurtAndBreak(1, player, ($$1x) -> $$1x.broadcastBreakEvent($$1));
+                            }
                         }
-                    }
 
-                    return InteractionResult.CONSUME;
+                        return InteractionResult.CONSUME;
+                    }
                 }
             }
         }
