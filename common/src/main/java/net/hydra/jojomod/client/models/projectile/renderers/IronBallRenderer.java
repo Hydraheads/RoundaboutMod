@@ -33,7 +33,7 @@ public class IronBallRenderer extends EntityRenderer<IronBallEntity> {
 
 
     public void render(IronBallEntity $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
-        if (ClientUtil.canSeeStands(Minecraft.getInstance().player)) {
+
             if (((TimeStop) $$0.level()).inTimeStopRange($$0)) {
                 $$2 = 0;
             }
@@ -49,7 +49,6 @@ public class IronBallRenderer extends EntityRenderer<IronBallEntity> {
             this.model.renderToBuffer($$3, $$6, $$5, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1f);
             $$3.popPose();
             super.render($$0, $$1, $$2, $$3, $$4, 15728880);
-        }
     }
 
 

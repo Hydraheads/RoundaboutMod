@@ -1,5 +1,6 @@
 package net.hydra.jojomod.block;
 
+import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.world.flag.FeatureFlag;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -82,6 +83,7 @@ public class ModBlocks {
     public static Block BLUE_BLOOD_SPLATTER;
     public static Block ENDER_BLOOD_SPLATTER;
     public static Block ACID_PUDDLE;
+    public static Block POISON_TRAIL_MUSHROOM;
 
     public static Block WIRE_TRAP;
 
@@ -236,6 +238,10 @@ public class ModBlocks {
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
+
+    public static Block POISON_TRAIL_MUSHROOM_PROPERTIES = new PoisonTrailMushroomBlock(BlockBehaviour.Properties.of()
+            .mapColor(MapColor.COLOR_RED).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).
+            pushReaction(PushReaction.DESTROY));
     public static Block WOOL_SLAB_BROWN_PROPERTIES = new SlabBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)

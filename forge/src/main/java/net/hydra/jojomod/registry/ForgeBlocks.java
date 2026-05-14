@@ -202,7 +202,9 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> BLOOD_SPLATTER = BLOCKS.register("blood_splatter",
             () -> ModBlocks.BLOOD_SPLATTER_PROPERTIES);
     public static final RegistryObject<Block> ACID_PUDDLE = BLOCKS.register("acid_puddle",
-            () -> ACID_PUDDLE_PROPERTIES);
+            () -> ModBlocks.ACID_PUDDLE_PROPERTIES);
+    public static final RegistryObject<Block> POISON_TRAIL_MUSHROOM = BLOCKS.register("poison_trail_mushroom",
+            () -> ModBlocks.POISON_TRAIL_MUSHROOM_PROPERTIES);
     public static final RegistryObject<Block> BLUE_BLOOD_SPLATTER = BLOCKS.register("blue_blood_splatter",
             () -> ModBlocks.BLUE_BLOOD_SPLATTER_PROPERTIES);
     public static final RegistryObject<Block> ENDER_BLOOD_SPLATTER = BLOCKS.register("ender_blood_splatter",
