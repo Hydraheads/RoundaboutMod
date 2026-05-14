@@ -1,15 +1,23 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.event.index.FateTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -63,7 +71,11 @@ public class PoisonTrailMushroomBlock extends BushBlock {
         }
 
     }
-
+    public void entityInside(BlockState $$0, Level $$1, BlockPos $$2, Entity $$3) {
+        if ($$3 instanceof LivingEntity LE && !FateTypes.isZombie(LE)&& !FateTypes.isVampire(LE)) {
+            LE.addEffect(new MobEffectInstance(MobEffects.POISON, 200, 0));
+        }
+    }
     protected boolean mayPlaceOn(BlockState $$0, BlockGetter $$1, BlockPos $$2) {
         return $$0.isSolidRender($$1, $$2);
     }

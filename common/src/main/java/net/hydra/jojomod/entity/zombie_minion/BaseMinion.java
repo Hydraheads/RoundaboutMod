@@ -793,10 +793,11 @@ public class BaseMinion extends PathfinderMob {
                 if (getHeadItem().is(ModItems.MOOSHROOM_REMAINS)) {
                     // Poison Trail Mushroom Trail
                     if (mushroomSpawnTime <= 0){
-                        mushroomSpawnTime = 5;
-                        //if (canPlaceShroom()) {
-                            //this.level().setBlockAndUpdate(bPos, ModBlocks.GASOLINE_SPLATTER.defaultBlockState().setValue(ModBlocks.GAS_CAN_LEVEL, Integer.valueOf(2)));
-                        //}
+                        mushroomSpawnTime = 10;
+                        if (canPlaceShroom(getOnPos().above())) {
+                            this.level().setBlockAndUpdate(getOnPos().above(), ModBlocks.POISON_TRAIL_MUSHROOM.defaultBlockState());
+                            this.level().scheduleTick(getOnPos().above(), ModBlocks.POISON_TRAIL_MUSHROOM, 200);
+                        }
                     } else {
                         mushroomSpawnTime--;
                     }

@@ -121,7 +121,7 @@ public class FabricBlocks {
     );
     public static final Block ACID_PUDDLE = registerBlockItemless("acid_puddle", ModBlocks.ACID_PUDDLE_PROPERTIES
     );
-    public static final Block POISON_TRAIL_MUSHROOM = registerBlockItemless("poison_trail_mushroom_properties", ModBlocks.POISON_TRAIL_MUSHROOM_PROPERTIES
+    public static final Block POISON_TRAIL_MUSHROOM = registerBlockItemless("poison_trail_mushroom", ModBlocks.POISON_TRAIL_MUSHROOM_PROPERTIES
     );
     public static final Block BLUE_BLOOD_SPLATTER = registerBlockItemless("blue_blood_splatter", ModBlocks.BLUE_BLOOD_SPLATTER_PROPERTIES
     );

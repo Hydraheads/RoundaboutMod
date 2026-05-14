@@ -351,7 +351,7 @@ public abstract class InputEvents implements IInputEvents {
                                         player.fallDistance = 0;
                                         MainUtil.takeUnresistableKnockbackWithY2(player,
                                                 player.getDeltaMovement().x,
-                                                0.4F,
+                                                0.45F,
                                                 player.getDeltaMovement().z
                                         );
                                         C2SPacketUtil.warHammerPacket(res.getLocation(), BlockPos.containing(Vec3.ZERO), ent.getId());
