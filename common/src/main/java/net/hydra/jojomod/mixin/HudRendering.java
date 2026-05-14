@@ -19,6 +19,7 @@ import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.JackalRifleItem;
+import net.hydra.jojomod.item.WarhammerItem;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.stand.powers.*;
@@ -28,22 +29,28 @@ import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PlayerRideableJumping;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
@@ -723,12 +730,71 @@ public abstract class HudRendering implements IHudAccess {
         }
     }
 
+    public Entity rdbt$tempEnt = null;
     @Inject(method = "renderCrosshair", at = @At(value = "HEAD"))
-    private void renderCrosshairMixin(GuiGraphics $$0, CallbackInfo info) {
+    private void rdbt$renderCrosshairMixin(GuiGraphics $$0, CallbackInfo info) {
         //See ForgeForgeGui
         RenderSystem.defaultBlendFunc();
-            StandHudRender.renderAttackHud($$0, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), roundabout$flashAlpha, roundabout$otherFlashAlpha);
+        StandHudRender.renderAttackHud($$0, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), roundabout$flashAlpha, roundabout$otherFlashAlpha);
 
+
+        if (this.minecraft.player != null) {
+            boolean shouldForceRender = false;
+            //This makes the war hammer forcefully render the attack indicator
+            ItemStack stack = this.minecraft.player.getInventory().getSelected();
+            if (stack != null && stack.getItem() instanceof WarhammerItem wh) {
+                if (this.minecraft.player.getAttackStrengthScale(1) >= 1F &&
+                        !ClientUtil.hasAttributeSwapped(this.minecraft)) {
+                    if (this.minecraft.hitResult instanceof BlockHitResult bhr) {
+                        BlockPos $$3 = bhr.getBlockPos();
+                        if (!this.minecraft.player.level().getBlockState($$3).isAir()) {
+                            if (!this.minecraft.player.onGround()) {
+                                Vec3 vec3d = this.minecraft.player.getEyePosition(1);
+
+                                Direction gravD = ((IGravityEntity) this.minecraft.player).roundabout$getGravityDirection();
+                                Vec3 vec3d2 = this.minecraft.player.getViewVector(1);
+                                float reach = 1.5F;
+                                Vec3 vec3d3 = vec3d.add(vec3d2.x * reach, vec3d2.y * reach, vec3d2.z * reach);
+                                BlockHitResult blockHit = this.minecraft.player.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.minecraft.player));
+
+
+                                boolean logicCheck = blockHit.getBlockPos().getY() + 1 > this.minecraft.player.getY();
+                                BlockPos aboveCheck = blockHit.getBlockPos().above();
+                                if (gravD != Direction.DOWN) {
+                                    BlockPos abv = blockHit.getBlockPos().relative(gravD.getOpposite());
+                                    BlockPos att = blockHit.getBlockPos();
+
+                                    Vec3 blockHitVec = RotationUtil.vecPlayerToWorld(new Vec3(abv.getX(), att.getY(), att.getZ()), gravD);
+                                    Vec3 playerVec = RotationUtil.vecPlayerToWorld(this.minecraft.player.position(), gravD);
+                                    aboveCheck = abv;
+                                    logicCheck = blockHitVec.y + 1 > playerVec.y;
+                                }
+
+                                if (this.minecraft.player.level().getBlockState(blockHit.getBlockPos()).isSolid() && logicCheck
+                                        && !this.minecraft.player.level().getBlockState(aboveCheck).isSolid()) {
+                                    shouldForceRender = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (shouldForceRender) {
+                rdbt$tempEnt = this.minecraft.crosshairPickEntity;
+                this.minecraft.crosshairPickEntity = this.minecraft.player;
+            }
+        }
+
+    }
+
+    @Inject(method = "renderCrosshair", at = @At(value = "TAIL"))
+    private void rdbt$renderCrosshairMixinTail(GuiGraphics $$0, CallbackInfo info) {
+        //See ForgeForgeGui
+        if (rdbt$tempEnt !=null){
+            this.minecraft.crosshairPickEntity = rdbt$tempEnt;
+            rdbt$tempEnt = null;
+        }
     }
 
     @Shadow

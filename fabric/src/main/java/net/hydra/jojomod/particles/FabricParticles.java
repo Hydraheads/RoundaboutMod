@@ -72,6 +72,7 @@ public class FabricParticles {
     public static final SimpleParticleType RAGING_LIGHT = FabricParticleTypes.simple();
     public static final SimpleParticleType ALLURING_LIGHT = FabricParticleTypes.simple();
     public static final SimpleParticleType TUSK_HOLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType KILLER_QUEEN_EXPLOSION = FabricParticleTypes.simple();
 
     public static final SimpleParticleType DUST_CRUMBLE = FabricParticleTypes.simple();
     public static final SimpleParticleType FIRE_CRUMBLE = FabricParticleTypes.simple();
@@ -146,7 +147,8 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("baby_crackle"), BABY_CRACKLE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("magic_dust"), MAGIC_DUST);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("brief_magic_dust"), BRIEF_MAGIC_DUST);
-
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("killer_queen_explosion"), KILLER_QUEEN_EXPLOSION);
+        
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("road_roller_explosion"), ROAD_ROLLER_EXPLOSION);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("road_roller_smoke"), ROAD_ROLLER_SMOKE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("road_roller_scrap"), ROAD_ROLLER_SCRAP);
@@ -223,6 +225,7 @@ public class FabricParticles {
         ModParticles.RAGING_LIGHT = RAGING_LIGHT;
         ModParticles.ALLURING_LIGHT = ALLURING_LIGHT;
         ModParticles.TUSK_HOLE = TUSK_HOLE;
+        ModParticles.KILLER_QUEEN_EXPLOSION = KILLER_QUEEN_EXPLOSION;
 
         ModParticles.ROAD_ROLLER_EXPLOSION = ROAD_ROLLER_EXPLOSION;
         ModParticles.ROAD_ROLLER_SMOKE = ROAD_ROLLER_SMOKE;

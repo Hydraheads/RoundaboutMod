@@ -526,6 +526,7 @@
   "block.roundabout.cultivated_locacaca": "Cultivated Locacaca",
   "block.roundabout.melon_parfait": "Melon Parfait",
   "block.roundabout.acid_puddle": "Acid Puddle",
+  "block.roundabout.poison_trail_mushroom": "Poison Trail Mushroom",
 
   "itemgroup.jojo": "Roundabout",
   "itemgroup.jojo_discs": "Stand Discs",
@@ -1562,7 +1563,7 @@
   "ability.roundabout.blood_speed.locked.desc": "Use consumed life force to amplify your speed...",
 
   "ability.roundabout.grafting": "Zombie Grafting",
-  "ability.roundabout.grafting.desc": "Makes certain mobs drop parts which can be applied to your zombie minions through interaction. Changes their properties and/or grants new abilities.",
+  "ability.roundabout.grafting.desc": "When killed by vampires, certain mobs drop parts which can be applied to your zombie minions through interaction with this upgrade. Changes their properties and/or grants new abilities.",
   "ability.roundabout.grafting.locked": "???",
   "ability.roundabout.grafting.locked.desc": "Give your undead army an upgrade...",
 
@@ -2333,6 +2334,9 @@
   "config.roundabout.enableBowlerHatRender.desc": "Whether or not the bowler hat renders on your head while holding it.",
   "config.roundabout.vampireLeveling.name": "Enable Vampire Leveling",
   "config.roundabout.vampireLeveling.desc": "If this config is set to false, vampires start with everything.",
+
+  "config.roundabout.mobsDropParts.name": "Chimera Parts Drop",
+  "config.roundabout.mobsDropParts.desc": "By default, killing certain mobs as a vampire gives you their grafting parts.",
 
 
   "config.roundabout.cinderellaSpacing.name": "Cinderella Salon Spacing",

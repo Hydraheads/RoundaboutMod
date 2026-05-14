@@ -3,6 +3,7 @@ package net.hydra.jojomod.event.index;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.Zombiefish;
@@ -13,13 +14,22 @@ import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.fates.powers.ZombieFate;
+import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.animal.*;
+import net.minecraft.world.entity.animal.axolotl.Axolotl;
+import net.minecraft.world.entity.animal.goat.Goat;
+import net.minecraft.world.entity.animal.horse.Llama;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Silverfish;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
 public enum FateTypes {
@@ -248,6 +258,44 @@ public enum FateTypes {
         return 0;
     }
 
+
+    public static void vampireKillDropAnimal(Entity vamp, Entity animal){
+        if (ClientNetworking.getAppropriateConfig().vampireSettings.mobsDropParts) {
+            if (vamp instanceof Player PE && isVampire(PE) && animal instanceof LivingEntity AE &&
+                    ((IFatePlayer)PE).rdbt$getFatePowers() instanceof VampireFate vp
+                    ) {
+                ItemStack stack = ItemStack.EMPTY;
+                if (animal instanceof MushroomCow){
+                    stack= ModItems.MOOSHROOM_REMAINS.getDefaultInstance().copy();}
+                else if (animal instanceof Parrot){
+                    stack= ModItems.PARROT_REMAINS.getDefaultInstance().copy();}
+                else if (animal instanceof Silverfish){
+                    stack= ModItems.SILVERFISH_REMAINS.getDefaultInstance().copy();}
+                else if (animal instanceof Cat){
+                    stack= ModItems.CAT_REMAINS.getDefaultInstance().copy();}
+                else if (animal instanceof Wolf){
+                    stack= ModItems.DOG_REMAINS.getDefaultInstance().copy();}
+                else if (animal instanceof Ocelot){
+                    stack= ModItems.OCELOT_REMAINS.getDefaultInstance().copy();}
+                else if (animal instanceof Chicken){
+                    stack= ModItems.CHICKEN_REMAINS.getDefaultInstance().copy();}
+                else if (animal instanceof Axolotl){
+                    stack= ModItems.AXOLOTL_REMAINS.getDefaultInstance().copy();}
+                else if (animal instanceof PolarBear){
+                    stack= ModItems.POLAR_BEAR_REMAINS.getDefaultInstance().copy();}
+                else if (animal instanceof Goat){
+                    stack= ModItems.GOAT_REMAINS.getDefaultInstance().copy();}
+                else if (animal instanceof Llama){
+                    stack= ModItems.LLAMA_REMAINS.getDefaultInstance().copy();}
+                if (!stack.isEmpty()){
+                    ItemEntity drop = new ItemEntity(animal.level(),
+                            animal.getX(), animal.getY(), animal.getZ(),
+                            stack);
+                    animal.level().addFreshEntity(drop);
+                }
+            }
+        }
+    }
 
     public static boolean isInSunlight(LivingEntity ent) {
         //You don't take sun damage in stopped time (like the ova)

@@ -61,6 +61,7 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.RAGING_LIGHT, AnubisLightParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.ALLURING_LIGHT, AnubisLightParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.TUSK_HOLE, TuskHoleParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.KILLER_QUEEN_EXPLOSION, KQExplosionParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.BABY_CRACKLE, BabyCrackleParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.MAGIC_DUST, MagicDustParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.BRIEF_MAGIC_DUST, BriefMagicDustParticle.Provider::new);

@@ -3256,6 +3256,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
     }
+    //Vampire remains mob drops
+    @Inject(method = "dropAllDeathLoot", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    private void roundabout$dropAllDeathLoot(DamageSource $$0, CallbackInfo ci) {
+        FateTypes.vampireKillDropAnimal($$0.getEntity(),this);
+    }
     @Inject(method = "isBlocking", at = @At(value = "HEAD"), cancellable = true, require = 0)
     private void roundabout$isBlockingRoundabout(CallbackInfoReturnable<Boolean> ci) {
         if (this.roundabout$isGuarding()){
