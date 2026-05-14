@@ -13,6 +13,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -21,6 +23,10 @@ public class GroundHurricaneEntity extends GroundPathfindingStandAttackEntity {
         super($$0, $$1);
     }
 
+    public static AttributeSupplier.Builder createStandAttributes() {
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,
+                0.25F).add(Attributes.MAX_HEALTH, 20.0).add(Attributes.ATTACK_DAMAGE, 2.0);
+    }
     public GroundHurricaneEntity(EntityType<? extends GroundPathfindingStandAttackEntity> $$0, Level $$1, LivingEntity user) {
         super($$0, $$1);
         this.setUser(user);

@@ -217,13 +217,12 @@ public class Config implements Cloneable {
     public static class BrushingLootSettings {
         @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)
         public Float anubisChance;
+        @FloatOption(group = "inherit", value = 0F, min = 0, max = 100)
+        public Float anubisChanceDry;
+        @FloatOption(group = "inherit", value = 0F, min = 0, max = 100)
+        public Float beetleArrowChanceNotDry;
         @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)
-        public Float standArrowChance;
-        @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)
-        public Float beetleArrowChance;
-        @FloatOption(group = "inherit", value = 2F, min = 0, max = 100)
-        public Float dryLootMultiplier;
-
+        public Float beetleArrowChanceDry;
     }
 
 

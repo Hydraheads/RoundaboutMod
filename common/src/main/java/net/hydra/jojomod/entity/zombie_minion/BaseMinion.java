@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.zombie_minion;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Zombiefish;
@@ -18,6 +19,7 @@ import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -788,7 +790,18 @@ public class BaseMinion extends PathfinderMob {
             }
 
             if (getHeadItem() != null) {
-                if (getHeadItem().is(ModItems.LLAMA_REMAINS)) {
+                if (getHeadItem().is(ModItems.MOOSHROOM_REMAINS)) {
+                    // Poison Trail Mushroom Trail
+                    if (mushroomSpawnTime <= 0){
+                        mushroomSpawnTime = 10;
+                        if (canPlaceShroom(getOnPos().above())) {
+                            this.level().setBlockAndUpdate(getOnPos().above(), ModBlocks.POISON_TRAIL_MUSHROOM.defaultBlockState());
+                            this.level().scheduleTick(getOnPos().above(), ModBlocks.POISON_TRAIL_MUSHROOM, 200);
+                        }
+                    } else {
+                        mushroomSpawnTime--;
+                    }
+                } else if (getHeadItem().is(ModItems.MOOSHROOM_REMAINS)) {
                     if (spitChargeAmt > 0){
                         spitChargeAmt--;
                     }
@@ -872,11 +885,24 @@ public class BaseMinion extends PathfinderMob {
     public boolean isCharging(){
         return headChargeAmt3 > 0;
     }
+    public boolean canPlaceShroom(BlockPos pos){
+        BlockPos blk =  new BlockPos(pos.getX(), pos.getY(), pos.getZ());
+
+        if (this.level().isEmptyBlock(blk)) {
+            BlockPos $$8 = blk.below();
+            if (this.level().getBlockState($$8).isFaceSturdy(this.level(), $$8, Direction.UP)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     int headChargeAmt = 0;
     int headChargeAmt2 = 0;
     int headChargeAmt3 = 0;
     int spitChargeAmt = 0;
+    int mushroomSpawnTime = 0;
     public Vec3 speedVec = Vec3.ZERO;
 
     @Override
