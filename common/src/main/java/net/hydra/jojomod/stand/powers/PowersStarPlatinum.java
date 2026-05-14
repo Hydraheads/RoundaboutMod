@@ -426,7 +426,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
     public float inputSpeedModifiers(float basis){
         //Scope Slows You down
-        if (this.scopeLevel > -1){
+        if (this.scopeLevel > 0){
             basis *= 0.85f;
         }
         //Star Finger Slows You down
