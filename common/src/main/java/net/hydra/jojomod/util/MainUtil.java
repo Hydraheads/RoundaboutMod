@@ -1679,7 +1679,7 @@ public class MainUtil {
                             value.hurt($$5,np/4);
                             ((LivingEntity)value).addEffect(instance);
                         } else {
-                            value.hurt($$5,np);
+                            value.hurt($$5,np/4);
                         }
                     }
                 }
