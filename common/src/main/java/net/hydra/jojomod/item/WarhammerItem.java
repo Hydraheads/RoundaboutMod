@@ -1,5 +1,6 @@
 package net.hydra.jojomod.item;
 
+import net.hydra.jojomod.block.StoneMaskBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -34,7 +35,7 @@ public class WarhammerItem extends DiggerItem  {
     @Override
     public float getDestroySpeed(ItemStack itemStack, BlockState blockState) {
         float spd = super.getDestroySpeed(itemStack,blockState);
-        if (spd > 1){
+        if (spd > 1 || blockState.getBlock() instanceof StoneMaskBlock){
             spd*=3f;
         }
         return spd;

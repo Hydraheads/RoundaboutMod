@@ -1,27 +1,69 @@
 package net.hydra.jojomod.mixin.century_boy;
 
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-
 @Mixin(LivingEntity.class)
-public class CenturyBoyRedstone {
-    LevelAccessor accessor;
+public abstract class CenturyBoyStances {
 
+
+    @Shadow public abstract void knockback(double $$0, double $$1, double $$2);
+
+    @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
+    private void knockbackBoost(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir){
+        if((Object)this instanceof StandUser user) {
+            if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB){
+
+                Player player = (Player) (Object)this;
+
+                if (PCB.staticMode == 3){
+                    if (source.is(DamageTypes.FELL_OUT_OF_WORLD) ||
+                            source.is(DamageTypes.WITHER) ||
+                            source.is(DamageTypes.DRAGON_BREATH) ||
+                            source.is(ModDamageTypes.GO_BEYOND) ||
+                            source.is(DamageTypes.GENERIC_KILL)
+                    ) { cir.setReturnValue(true);}
+
+                   player.hurtMarked = true;
+
+                    Entity entity = source.getEntity();
+                    if (entity != null) {
+                        double x = entity.getX() - player.getX();
+                        double z;
+                        for(z = entity.getZ() - player.getZ(); x* x + z * z < 1.0E-4; z = (Math.random() - Math.random()) * 0.01) {
+                            x = (Math.random() - Math.random()) * 0.01;
+                        }
+
+                        if (entity.getType() == EntityType.IRON_GOLEM){
+                            knockback((double) 2.8F,x*2,z*2);
+                        }else {
+                            knockback((double) 0.8F,x*2,z*2);
+                        }
+                    }
+
+                    cir.setReturnValue(false);
+                }
+            }
+        }
+    }
 
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     private void redstoneActivate(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir){
@@ -30,7 +72,13 @@ public class CenturyBoyRedstone {
                 Player player = (Player)(Object)this;
 
 
-                if (PCB.redstoneStance){
+                if (PCB.staticMode == 4){
+                    if (source.is(DamageTypes.FELL_OUT_OF_WORLD) ||
+                            source.is(DamageTypes.WITHER) ||
+                            source.is(DamageTypes.DRAGON_BREATH) ||
+                            source.is(ModDamageTypes.GO_BEYOND) ||
+                            source.is(DamageTypes.GENERIC_KILL)
+                    ) { cir.setReturnValue(true);}
 
                     player.hurtMarked = true;
                     BlockPos playerPos = player.getOnPos();
