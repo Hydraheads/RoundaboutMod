@@ -146,7 +146,9 @@ public class PowersGratefulDead extends NewPunchingStand {
             ANIME = 0,
             MANGA = 1,
             ANGEL = 2,
-            DREADFUL = 3;
+            DREADFUL = 3,
+            CREAKING = 4,
+            WATCHLING = 5;
 
     @Override
     public List<Byte> getSkinList(){
@@ -154,7 +156,9 @@ public class PowersGratefulDead extends NewPunchingStand {
                 ANIME,
                 MANGA,
                 ANGEL,
-                DREADFUL
+                DREADFUL,
+                CREAKING,
+                WATCHLING
         );
     }
 
@@ -164,6 +168,8 @@ public class PowersGratefulDead extends NewPunchingStand {
             case (MANGA) -> Component.translatable("skins.roundabout.grateful_dead.manga");
             case (ANGEL) -> Component.translatable("skins.roundabout.grateful_dead.angel");
             case (DREADFUL) -> Component.translatable("skins.roundabout.grateful_dead.dreadful");
+            case (CREAKING) -> Component.translatable("skins.roundabout.grateful_dead.creaking");
+            case (WATCHLING) -> Component.translatable("skins.roundabout.grateful_dead.watchling");
             default -> Component.translatable("skins.roundabout.grateful_dead.anime");
         };
     }

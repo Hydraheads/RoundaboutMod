@@ -21,7 +21,9 @@ public class GratefulDeadEntity extends FollowingStandEntity{
         ANIME = 0,
         MANGA = 1,
         ANGEL = 2,
-        DREADFUL = 3;
+        DREADFUL = 3,
+        CREAKING = 4,
+        WATCHLING = 5;
     private boolean isGrounded = true;
 
     public final AnimationState idleGround = new AnimationState();

@@ -18,6 +18,8 @@ public class GratefulDeadRenderer extends StandRenderer<GratefulDeadEntity>{
     private static final ResourceLocation MANGA = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/grateful_dead/manga.png");
     private static final ResourceLocation ANGEL = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/grateful_dead/angel.png");
     private static final ResourceLocation DREADFUL = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/grateful_dead/dreadful.png");
+    private static final ResourceLocation CREAKING = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/grateful_dead/creaking.png");
+    private static final ResourceLocation WATCHLING = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/grateful_dead/watchling.png");
 
     public GratefulDeadRenderer(EntityRendererProvider.Context context) {
         super(context, new GratefulDeadModel<>(context.bakeLayer(ModEntityRendererClient.GRATEFUL_DEAD_LAYER)), 0f);
@@ -28,6 +30,8 @@ public class GratefulDeadRenderer extends StandRenderer<GratefulDeadEntity>{
             case (GratefulDeadEntity.ANGEL) -> ANGEL;
             case (GratefulDeadEntity.MANGA) -> MANGA;
             case (GratefulDeadEntity.DREADFUL) -> DREADFUL;
+            case (GratefulDeadEntity.CREAKING) -> CREAKING;
+            case (GratefulDeadEntity.WATCHLING) -> WATCHLING;
             default -> ANIME;
         };
     }
