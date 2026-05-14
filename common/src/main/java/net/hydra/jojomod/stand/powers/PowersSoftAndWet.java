@@ -265,7 +265,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
             }
         } else {
             if (canExecuteMoveWithLevel(getItemShootingLevel())) {
-                if (!this.onCooldown(PowerIndex.SKILL_2)) {
+                if (!this.onCooldown(PowerIndex.SKILL_1)) {
                     if (canDoBubbleItemLaunch()) {
 
                         this.tryIntPower(PowerIndex.POWER_2_BONUS, true, ((Player) this.getSelf()).getInventory().selected);
@@ -610,7 +610,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
                 setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE_POP, PowerIndex.SKILL_2_SNEAK);
             } else {
                 if (canExecuteMoveWithLevel(getItemShootingLevel())) {
-                    setSkillIcon(context, x, y, 2, StandIcons.ITEM_BUBBLE, PowerIndex.SKILL_2);
+                    setSkillIcon(context, x, y, 2, StandIcons.ITEM_BUBBLE, PowerIndex.SKILL_1);
                 } else {
                     setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                 }
@@ -1310,7 +1310,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
                 !(stack.getItem() instanceof BlockItem
                         && (MainUtil.isBlockBlacklisted(((BlockItem)stack.getItem()).getBlock().defaultBlockState()) ||
                         ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock))) {
-            this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().softAndWetSettings.itemBubbleShotCooldown);
+            this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().softAndWetSettings.itemBubbleShotCooldown);
             if (!this.self.level().isClientSide()) {
 
                 SoftAndWetItemLaunchingBubbleEntity bubble = getItemLaunchingBubble();
