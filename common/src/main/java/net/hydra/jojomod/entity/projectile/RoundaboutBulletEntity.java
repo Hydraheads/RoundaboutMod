@@ -234,6 +234,8 @@ public class RoundaboutBulletEntity extends AbstractArrow {
                 livingEntity.invulnerableTime = 10;
                 livingEntity.hurtTime = 10;
             }
+        } else {
+            entity.hurt(ModDamageTypes.of(level(), ModDamageTypes.BULLET, this, this.getOwner()), 1);
         }
 
         Entity $$2 = this.getOwner();
