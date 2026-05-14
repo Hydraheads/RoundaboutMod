@@ -36,9 +36,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     public Powers20thCenturyBoy(LivingEntity self){super(self);}
 
     public boolean invincibleState = false;
-    public boolean defenseStance = false;
-    public boolean knockbackStance = false;
-    public boolean redstoneStance = false;
+    public int staticMode = 0;
     public int mode = 1;
 
     /** general definition stuff **/
@@ -200,29 +198,26 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     public void toggleInvincibility(){
 
         if (!invincibleState) {
-            /** PS: honestly why tf am i creating 300 bools when i already have a mode int? fix later*/
             invincibleState = true;
             switch (mode) {
                 case 1 -> {
-                    Roundabout.LOGGER.info("i'll cook something later guys don't worry1");
+                    staticMode = 1;
                 }
                 case 2 -> {
-                    defenseMode();
+                    staticMode = 2;
                 }
                 case 3 -> {
-                    knockbackMode();
+                    staticMode = 3;
                 }
                 case 4 -> {
-                    redstoneMode();
+                    staticMode = 4;
                 }
             }
             this.self.stopUsingItem();
             ClientUtil.stopDestroyingBlock();
         } else {
             invincibleState = false;
-            defenseStance = false;
-            knockbackStance = false;
-            redstoneStance = false;
+            staticMode = 0;
         }
     }
 
@@ -230,7 +225,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
 
     @Override
     public boolean interceptDamageEvent(DamageSource damageSource, float amount) {
-        if(knockbackStance){
+        if(staticMode == 3){
             if (ClientNetworking.getAppropriateConfig().centuryBoySettings.oldKnockbackStance){
                 if(damageSource.getEntity() != null){
                     this.self.setDeltaMovement(
@@ -244,7 +239,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
 
 
         }
-        if (redstoneStance){
+        if (staticMode == 4){
             return false;
         }
         if(invincibleState){
@@ -252,7 +247,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             if (damageSource.is(DamageTypes.FELL_OUT_OF_WORLD) ||
                     damageSource.is(DamageTypes.WITHER) ||
                     damageSource.is(DamageTypes.DRAGON_BREATH) ||
-                    damageSource.is(ModDamageTypes.GO_BEYOND)
+                    damageSource.is(ModDamageTypes.GO_BEYOND) ||
+                    damageSource.is(DamageTypes.GENERIC_KILL)
             ) {
                 return false;
             } else {
@@ -262,13 +258,6 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             return super.interceptDamageEvent(damageSource, amount);
         }
     }
-
-    public void defenseMode(){defenseStance = true;}
-
-    public void knockbackMode(){knockbackStance = true;}
-
-
-    public void redstoneMode(){redstoneStance = true;}
 
     @Override
     public float inputSpeedModifiers(float basis) {
@@ -292,7 +281,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     public static AnimationDefinition getAnimation(StandUser SU){
         AnimationDefinition anim = null;
         if (SU.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.invincibleState){
-            switch (PCB.mode){
+            switch (PCB.staticMode){
                 case 1 -> anim = CenturyBoyAnimations.ground;
                 case 2 -> anim = CenturyBoyAnimations.neutral;
                 case 3 -> anim = CenturyBoyAnimations.knockback;
