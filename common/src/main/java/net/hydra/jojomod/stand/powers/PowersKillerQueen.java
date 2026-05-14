@@ -90,14 +90,13 @@ public class PowersKillerQueen extends NewPunchingStand {
 	// TODO Make bomb entity
 	// TODO Make bomb item
 	// TODO Make bomb block (FINISHED) -- Adjust damage
-	// TODO Make Visual Effects
 	// TODO Bites The Dust
 	
 	// TODO Skins Translations
 	// TODO Audio Translations
 	
 	// TODO-FIX pls someone make the block bomb rotation fixed
-	// TODO-FIX Audio
+	// TODO-ADD Explosion Audio
 	
 	private static final byte
 		PLANTED=52,
@@ -687,13 +686,13 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
     
     public void explodeEffects(Vec3 pos) {
-    	float range = 0.9f;
+    	float range = 0.6f;
     	
     	((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.KILLER_QUEEN_EXPLOSION,
                 pos.x,
                 pos.y+1.0f,
                 pos.z,
-                18, range, range+0.5f, range, 1.0);
+                18, range, range+0.3f, range, 1.0);
     	
     	((ServerLevel) this.getSelf().level()).sendParticles(new DustParticleOptions(new Vector3f(0.02F, 0.02F, 0.04F), 2f),
     			pos.x,

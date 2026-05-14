@@ -21,8 +21,8 @@ public class KQExplosionParticle extends SimpleAnimatedParticle {
             this.zd = 0;
             this.friction = 0.96F;
             this.gravity = 0;
-            this.quadSize *= 0.75f;
-            this.lifetime = 10 + this.random.nextInt(12);
+            this.quadSize *= 3.5f + ((float)this.random.nextInt(5) / 10.0f);
+            this.lifetime = 8 + this.random.nextInt(12);
             this.setFadeColor(15916745);
             this.setSpriteFromAge(spriteSet);
         }
