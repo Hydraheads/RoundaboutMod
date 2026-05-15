@@ -1,24 +1,39 @@
 package net.hydra.jojomod.mixin.access;
 
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.PenetratableWithProjectile;
+import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.networking.ServerToClientPackets;
+import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.WaterFluid;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nullable;
@@ -85,6 +100,19 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
         return this.findHitEntity($$0,$$1);
     }
 
+    /**Manhattan Transfer*/
+    @Override
+    public boolean roundabout$GetIsManhattan(){
+        return this.inGround;
+    }
+
+    @Override
+    public void roundabout$SetIsManhattan(boolean isManhattanProjectile){
+        this.isManhattanProjectile = isManhattanProjectile;
+    }
+
+    public boolean isManhattanProjectile;
+
     @Inject(method = "onHitEntity", at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$onHitEntity(EntityHitResult $$0, CallbackInfo ci) {
         Entity entity = $$0.getEntity();
@@ -110,6 +138,33 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
                 ci.cancel();
             }
         }
+
+    }
+
+    @Inject(method = "onHitEntity", at = @At(value = "TAIL"),cancellable = true)
+    private void roundabout$onHitEntityHattan(EntityHitResult $$0, CallbackInfo ci) {
+        Entity entity = $$0.getEntity();
+        AbstractArrow ABA = (AbstractArrow) (Object) this;
+        Projectile ABC = (AbstractArrow) (Object) this;
+        if(isManhattanProjectile){
+            ABA.setDeltaMovement(0.001, 0.001, 0.001);
+            entity.hurt(damageSources().arrow(ABA, entity), roundabout$lastHattanDamage);
+        }
+    }
+
+    @Unique
+    public float roundabout$lastHattanDamage = 0;
+
+    @Unique
+    @Override
+    public void roundabout$setHattanDamage(float manhattanDmg){
+            roundabout$lastHattanDamage = manhattanDmg;
+    }
+
+    @Unique
+    @Override
+    public float roundabout$getHattanDamage(){
+        return  roundabout$lastHattanDamage;
     }
 
 
