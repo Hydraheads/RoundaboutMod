@@ -103,7 +103,7 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
     /**Manhattan Transfer*/
     @Override
     public boolean roundabout$GetIsManhattan(){
-        return this.inGround;
+        return this.isManhattanProjectile;
     }
 
     @Override
@@ -116,6 +116,7 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
     @Inject(method = "onHitEntity", at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$onHitEntity(EntityHitResult $$0, CallbackInfo ci) {
         Entity entity = $$0.getEntity();
+        AbstractArrow ABA = (AbstractArrow) (Object) this;
 
         if (entity instanceof LivingEntity LE){
             StandUser user = ((StandUser) entity);
@@ -139,6 +140,11 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
             }
         }
 
+        if(isManhattanProjectile){
+            ABA.setDeltaMovement(0.0001, 0.0001, 0.0001);
+            /** It's important to keep it here, because it should slow the arrow when it lands and then apply the damage at the very end*/
+        }
+
     }
 
     @Inject(method = "onHitEntity", at = @At(value = "TAIL"),cancellable = true)
@@ -147,7 +153,6 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
         AbstractArrow ABA = (AbstractArrow) (Object) this;
         Projectile ABC = (AbstractArrow) (Object) this;
         if(isManhattanProjectile){
-            ABA.setDeltaMovement(0.001, 0.001, 0.001);
             entity.hurt(damageSources().arrow(ABA, entity), roundabout$lastHattanDamage);
         }
     }
