@@ -97,6 +97,8 @@ public class ModItems {
     public static Item LLAMA_REMAINS;
     public static Item SILVERFISH_REMAINS;
 
+    public static Item AJA;
+
     public static Item KNIFE;
     public static Item KNIFE_BUNDLE;
 

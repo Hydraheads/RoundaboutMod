@@ -189,6 +189,8 @@ public class ForgeEvents {
         ModBlocks.CULTIVATED_OAK_SAPLING = ForgeBlocks.CULTIVATED_OAK_SAPLING.get();
         ModBlocks.CULTIVATED_LOCACACA = ForgeBlocks.CULTIVATED_LOCACACA.get();
         ModBlocks.ANCIENT_METEOR = ForgeBlocks.ANCIENT_METEOR.get();
+        ModBlocks.AJA_ORE = ForgeBlocks.AJA_ORE.get();
+        ModBlocks.DEEPSLATE_AJA_ORE = ForgeBlocks.DEEPSLATE_AJA_ORE.get();
         ModBlocks.SHINY_QUARTZ = ForgeBlocks.SHINY_QUARTZ.get();
         ModBlocks.SHINY_QUARTZ_TILES = ForgeBlocks.SHINY_QUARTZ_TILES.get();
         ModBlocks.LOCACACA_CACTUS = ForgeBlocks.LOCACACA_CACTUS.get();
@@ -376,6 +378,7 @@ public class ForgeEvents {
         ModItems.STREET_SIGN_DANGER_BLOCK_ITEM = ForgeItems.STREET_SIGN_DANGER_BLOCK_ITEM.get();
         ModItems.METEORITE = ForgeItems.METEORITE.get();
         ModItems.METEORITE_INGOT = ForgeItems.METEORITE_INGOT.get();
+        ModItems.AJA = ForgeItems.AJA.get();
         ModItems.LOCACACA_PIT = ForgeItems.LOCACACA_PIT.get();
         ModItems.LIGHT_BULB = ForgeItems.LIGHT_BULB.get();
         ModItems.LOCACACA = ForgeItems.LOCACACA.get();

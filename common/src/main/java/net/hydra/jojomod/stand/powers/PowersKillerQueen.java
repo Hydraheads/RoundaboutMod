@@ -49,6 +49,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -102,6 +103,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 		PLANTED=52,
 		DETONATE=54,
 		DEFUSE = 57,
+		EXPLOSION = 58,
 	
 		BOMB_NONE=0,
 		BOMB_BLOCK=1,
@@ -123,8 +125,9 @@ public class PowersKillerQueen extends NewPunchingStand {
 	public Entity bombBubble = null;
 	
 	private boolean destroyTerrain = true;
-	private boolean explodeOnContact = false;
+	private boolean explodeOnContact = true;
 	private boolean BitesTheDustMode = false;
+	private boolean hasStrayCat = false;
 	
 	public float standReach = 5;
 	public boolean wentForCharge = false;
@@ -302,6 +305,16 @@ public class PowersKillerQueen extends NewPunchingStand {
     			}
     			
     			if (this.ticksCount >= 0) { this.ticksCount--;}
+    			
+    			if (this.explodeOnContact) {
+    				if (this.currentBombStatus == BOMB_BLOCK) {
+    					if(Objects.nonNull(this.bombBlock)) {
+    						if (this.bombBlock.detectContact()) {
+    							this.detonate();
+    						}
+    					}
+    				}
+    			}
     			
     		}
     	}
@@ -584,19 +597,6 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     @Override
     public SoundEvent getSoundFromByte(byte soundChoice){
-       //Roundabout.LOGGER.info(""+soundChoice);
-        /*switch (soundChoice)
-        {
-            case SoundIndex.BARRAGE_CRY_SOUND -> {
-                return ModSounds.KILLER_QUEEN_BARRAGE_EVENT;
-            }
-            case SoundIndex.SUMMON_SOUND -> {
-                return ModSounds.KILLER_QUEEN_SUMMON_EVENT;
-            }
-            case PowersKillerQueen.DETONATE -> {
-            	return ModSounds.KILLER_QUEEN_DETONATE_EVENT;
-            }
-        }*/
        
        if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND) {
     	   return ModSounds.KILLER_QUEEN_BARRAGE_EVENT;
@@ -604,6 +604,8 @@ public class PowersKillerQueen extends NewPunchingStand {
     	   return ModSounds.KILLER_QUEEN_SUMMON_EVENT;
        }else if (soundChoice == PowersKillerQueen.DETONATE) {
     	   return ModSounds.KILLER_QUEEN_DETONATE_EVENT;
+       }else if (soundChoice == PowersKillerQueen.EXPLOSION) {
+    	   return ModSounds.KILLER_QUEEN_EXPLOSION_EVENT;
        }
        
         return super.getSoundFromByte(soundChoice);
@@ -699,6 +701,32 @@ public class PowersKillerQueen extends NewPunchingStand {
                 pos.y+1.0f,
                 pos.z,
                 12, range, range+1.2f, range, 0.001);
+    	
+    	// Sound Emitter:
+    	
+    	 explosionSFX(pos, 10);
+    	
+    }
+    
+    public void explosionSFX(Vec3 pos, float range) {
+    	if (!this.self.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(pos, range)) {
+                
+                    S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, serverPlayerEntity.getId(), EXPLOSION);
+                   
+                }
+            }
+        }
     }
     
     
@@ -725,6 +753,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 			BlockState info = this.getSelf().level().getBlockState(pos);
 			if (isBlockBlackListed(info)) {continue;}
 			
+			
+			
 			Double explosionDistance = 2.0 + ((double) this.getSelf().getRandom().nextIntBetweenInclusive(-2, 2) / 10.0);
 			
 			Double dist2 = center.distanceToSqr(pos.getX(), pos.getY(), pos.getZ());
@@ -749,15 +779,18 @@ public class PowersKillerQueen extends NewPunchingStand {
     	}
     	
 		this.syncBombStatus(BOMB_NONE);
+		this.setActivePower(NONE);
 		
     	return true;
     }
     
     public boolean detonate() {
-    	if (!this.isClient()) {
+    	if (!this.isClient() && this.getActivePower() == NONE) {
     		this.playSoundsIfNearby(DETONATE, 27, true);
     		this.animateStand(KillerQueenEntity.DETONATE);
     		this.poseStand(OffsetIndex.ATTACK);
+    		
+    		this.setActivePower(DETONATE);
     		
     		this.ticksCount = detonateMaxTicks;
     	}

@@ -740,6 +740,7 @@ public abstract class InputEvents implements IInputEvents {
                     }
                 }
             }
+            powers.pilotInputInteract();
         }
     }
 

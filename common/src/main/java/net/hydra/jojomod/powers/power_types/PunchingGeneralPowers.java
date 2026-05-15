@@ -354,6 +354,11 @@ public class PunchingGeneralPowers extends GeneralPowers {
         }
     }
 
+    @Override
+    public float getRushDistance(){
+        return 3;
+    }
+
     public float getBarrageFinisherKnockback(){
         return 1.0F;
     }
