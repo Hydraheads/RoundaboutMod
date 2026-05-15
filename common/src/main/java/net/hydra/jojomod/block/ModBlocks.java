@@ -87,6 +87,9 @@ public class ModBlocks {
 
     public static Block WIRE_TRAP;
 
+    public static Block AJA_ORE;
+    public static Block DEEPSLATE_AJA_ORE;
+
     public static Block BARBED_WIRE;
     public static Block BARBED_WIRE_BUNDLE;
     public static Block GODDESS_STATUE_BLOCK;
@@ -711,6 +714,16 @@ public class ModBlocks {
                     .noOcclusion()
                     .pushReaction(PushReaction.BLOCK)
     );
+
+    public static Block AJA_ORE_PROPERTIES = new DropExperienceBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.STONE).
+                    instrument(NoteBlockInstrument.BASEDRUM).
+                    requiresCorrectToolForDrops().strength(3.0F, 3.0F));
+    public static Block DEEPSLATE_AJA_ORE_PROPERTIES = new DropExperienceBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.DEEPSLATE).
+                    instrument(NoteBlockInstrument.BASEDRUM).
+                    requiresCorrectToolForDrops().strength(4.5F, 3.0F).
+            sound(SoundType.DEEPSLATE));
 
     public static CultivationPotBlock cultivationPot(Block $$0, FeatureFlag... $$1) {
         BlockBehaviour.Properties $$2 = BlockBehaviour.Properties.of().instabreak().noOcclusion().pushReaction(PushReaction.DESTROY);

@@ -190,6 +190,7 @@ public class FabricItems {
     public static Item STAND_DISC = registerItem("stand_disc", new EmptyStandDiscItem(new Item.Properties().stacksTo(1)));
     public static Item COFFEE_GUM = registerItem("coffee_gum", new Item(new Item.Properties().food(ModFoodComponents.COFFEE_GUM)));
     public static Item METEORITE = registerItem("meteorite", new Item(new Item.Properties()));
+    public static Item AJA = registerItem("aja", new Item(new Item.Properties()));
     public static Item METEORITE_INGOT = registerItem("meteorite_ingot", new Item(new Item.Properties()));
     public static Item STREET_SIGN_DIO_BLOCK_ITEM = registerItem("street_sign_dio_item", (Item) new SignBlockItem(ModBlocks.STREET_SIGN_DIO, new Item.Properties().stacksTo(1)));
     public static Item STREET_SIGN_RIGHT_BLOCK_ITEM = registerItem("street_sign_right_item", (Item) new SignBlockItem(ModBlocks.STREET_SIGN_RIGHT, new Item.Properties().stacksTo(1)));
@@ -363,6 +364,7 @@ public class FabricItems {
                         entries.accept(CHERRIES);
                         entries.accept(METEORITE);
                         entries.accept(METEORITE_INGOT);
+                        entries.accept(AJA);
                         entries.accept(ANUBIS_ITEM);
 
                         entries.accept(MUSIC_DISC_TORTURE_DANCE);
@@ -441,8 +443,11 @@ public class FabricItems {
                         entries.accept(ModBlocks.WOOL_STAIRS_PINK);
                         entries.accept(ModBlocks.WOOL_STAIRS_RED);
                         entries.accept(ModBlocks.WOOL_STAIRS_YELLOW);
+                        entries.accept(ModBlocks.ANCIENT_METEOR);
                         entries.accept(ModBlocks.METEOR_BLOCK);
                         entries.accept(ModBlocks.IMPACT_MOUND);
+                        entries.accept(ModBlocks.AJA_ORE);
+                        entries.accept(ModBlocks.DEEPSLATE_AJA_ORE);
                         entries.accept(ModBlocks.SHINY_QUARTZ);
                         entries.accept(ModBlocks.SHINY_QUARTZ_TILES);
                         entries.accept(ModBlocks.REGAL_FLOOR);
@@ -462,7 +467,6 @@ public class FabricItems {
                         entries.accept(ModBlocks.CEILING_LIGHT);
                         entries.accept(ModBlocks.WALL_LANTERN);
                         entries.accept(ModBlocks.MIRROR);
-                        entries.accept(ModBlocks.ANCIENT_METEOR);
                         entries.accept(ModBlocks.BARBED_WIRE);
                         entries.accept(PAINTING_VAN_GOUGH);
                         entries.accept(PAINTING_MONA_LISA);
@@ -682,6 +686,7 @@ public class FabricItems {
         ModItems.STAND_DISC = STAND_DISC;
         ModItems.COFFEE_GUM = COFFEE_GUM;
         ModItems.METEORITE = METEORITE;
+        ModItems.AJA = AJA;
         ModItems.ROAD_ROLLER = ROAD_ROLLER;
         ModItems.METEORITE_INGOT = METEORITE_INGOT;
         ModItems.IRON_BALL_CROSSBOW = IRON_BALL_CROSSBOW;
@@ -745,6 +750,7 @@ public class FabricItems {
      //   ModItems.INTERDIMENSIONAL_KEY = INTERDIMENSIONAL_KEY;
         ModItems.FLESH_BUCKET = FLESH_BUCKET;
         ModItems.CHERRIES = CHERRIES;
+
 
         ModItems.CAT_REMAINS = CAT_REMAINS;
         ModItems.OCELOT_REMAINS = OCELOT_REMAINS;
