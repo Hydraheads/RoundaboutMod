@@ -292,6 +292,8 @@ public class ManhattanTransferEntity extends StandEntity {
                                     TH.discard();
                                 }
                         }
+                    } else if(directEntityWho.is(this)){
+                        this.markHurt();
                     } else {
                         success = false;
                         if (direct instanceof AbstractArrow AA) {
@@ -389,8 +391,6 @@ public class ManhattanTransferEntity extends StandEntity {
                         new Vec3(0, this.getEyeHeight() - 0.1F, 0
                         ), gravD);
                 pos = new Vec3(this.getX() + pos.x, this.getY() + pos.y, this.getZ() + pos.z);
-
-                this.level().playSound(null, this.blockPosition(), ModSounds.MANHATTAN_DEFLECTION_EVENT, SoundSource.PLAYERS, 0.5F, 1F);
             }
 
             return manhattanShoot(this, canSnipe(), getHeldItemManhattan(), getShotAccuracy(), getBundleAccuracy(), getThrowAngle(),
@@ -405,7 +405,7 @@ public class ManhattanTransferEntity extends StandEntity {
                                          float getThrowAngle1, float getThrowAngle2, float getThrowAngle3,
                                          boolean getCanPlace, float xRot, float yRot,Vec3 pos,
                                          boolean playSounds, float mult, boolean canGiveYouItem){
-
+        thrower.playSound(ModSounds.MANHATTAN_DEFLECTION_EVENT, 1.0F, (thrower.random.nextFloat() * 0.2F + 0.7F));
      if(!thrower.level().isClientSide) {
          if (item.getItem() instanceof ArrowItem && !(item.getItem() instanceof RoundaboutArrowItem)) {
              ArrowItem $$10 = (ArrowItem) item.getItem();
@@ -424,7 +424,6 @@ public class ManhattanTransferEntity extends StandEntity {
                  }
              }
              thrower.level().addFreshEntity($$11);
-                 thrower.level().playSound(null, $$11, ModSounds.MANHATTAN_DEFLECTION_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
          }
          if (item.getItem() instanceof AmmoItem) {
              AmmoItem $$10 = (AmmoItem) item.getItem();
