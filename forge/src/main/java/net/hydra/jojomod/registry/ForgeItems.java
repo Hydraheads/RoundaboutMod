@@ -85,6 +85,14 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.METEOR_BLOCK.get(),
                     new Item.Properties()
             )));
+    public static final RegistryObject<BlockItem> AJA_ORE_ITEM = addToBuildingTab(ITEMS.register("aja_ore",
+            () -> new BlockItem(ForgeBlocks.AJA_ORE.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> DEEPSLATE_AJA_ORE_ITEM = addToBuildingTab(ITEMS.register("deepslate_aja_ore",
+            () -> new BlockItem(ForgeBlocks.DEEPSLATE_AJA_ORE.get(),
+                    new Item.Properties()
+            )));
     public static final RegistryObject<BlockItem> SHINY_QUARTZ_ITEM = addToBuildingTab(ITEMS.register("shiny_quartz",
             () -> new BlockItem(ForgeBlocks.SHINY_QUARTZ.get(),
                     new Item.Properties()
@@ -418,6 +426,8 @@ public class ForgeItems {
     public static final RegistryObject<Item> METEORITE = addToTab(ITEMS.register("meteorite",
             () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> METEORITE_INGOT = addToTab(ITEMS.register("meteorite_ingot",
+            () -> new Item(new Item.Properties())));
+    public static final RegistryObject<Item> AJA = addToTab(ITEMS.register("aja",
             () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> WALL_STREET_SIGN_DIO_BLOCK_ITEM = addToBuildingTab(ITEMS.register("wall_street_sign_dio",
     () -> new BlockItem(ForgeBlocks.WALL_STREET_SIGN_DIO.get(),

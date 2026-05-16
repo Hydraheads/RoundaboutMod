@@ -65,9 +65,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
         super(self);
     }
     public static final byte
-            STAND_BLOCKED = 78,
-
-
             MANHATTAN_VISION = 82,
             MANHATTAN_DODGE = 83,
             DEFLECT_PROJECTILE = 84;
@@ -86,35 +83,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 return ModEntities.POLLINATION_TRANSFER.create(this.getSelf().level());
             }
             return ModEntities.MANHATTAN_TRANSFER.create(this.getSelf().level());
-    }
-    @Override
-    public void renderIcons(GuiGraphics context, int x, int y) {
-        // code for advanced icons
-        if (switchShootingMode()) {
-            setSkillIcon(context, x, y, 1, StandIcons.MANUAL_SHOOTING_ON, PowerIndex.SKILL_1);
-        }
-        else
-            setSkillIcon(context, x, y, 1, StandIcons.MANUAL_SHOOTING_OFF, PowerIndex.SKILL_1);
-
-        if (isPiloting())
-            setSkillIcon(context, x, y, 2, StandIcons.CONTROL_MODE_OFF, PowerIndex.SKILL_2);
-        else
-            setSkillIcon(context, x, y, 2, StandIcons.CONTROL_MODE_ON, PowerIndex.SKILL_2);
-
-        if (visionModeClient) {
-            setSkillIcon(context, x, y, 4, StandIcons.WIND_VISION_ON, PowerIndex.SKILL_4);
-        }
-        else
-            setSkillIcon(context, x, y, 4, StandIcons.WIND_VISION_OFF, PowerIndex.SKILL_4);
-
-        if(isPiloting()){
-            setSkillIcon(context, x, y, 3, StandIcons.MANHATTAN_DODGE, PowerIndex.GLOBAL_DASH);
-        }
-        else{
-            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
-        }
-
-        super.renderIcons(context, x, y);
     }
     public Component getPosName(byte posID){
         return Component.empty();
@@ -195,12 +163,10 @@ public class PowersManhattanTransfer extends NewDashPreset {
               //  this.getStandEntity(this.getSelf()).level().playSound(null,this.getSelf().blockPosition(),ModSounds.VAMPIRE_DASH_EVENT, SoundSource.PLAYERS, 1F,1.2F);
             }
             case PowersManhattanTransfer.DEFLECT_PROJECTILE -> {
-              Roundabout.LOGGER.info("PEW!");
-
                 if(this.getStandEntity(this.getSelf()) != null && this.getStandEntity(this.getSelf()) instanceof  ManhattanTransferEntity ME){
+                    ME.shootHattan();
                     ME.setHeldItemManhattan(ItemStack.EMPTY);
                     ME.hasItem = false;
-                    ME.canAcquireHeldItem = false;
                 }
             }
         }
@@ -258,44 +224,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 }
             }
         }
-    }
-
-    @Override
-    public boolean highlightsEntity(Entity ent,Player player){
-        IEntityAndData entityAndData = ((IEntityAndData) ent);
-        if(visionModeClient) {
-            if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) && ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
-                if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent) && !player.hasLineOfSight(ent)) {
-                    return true;
-                }
-            }
-        }
-        if(isPiloting()){
-            if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) & ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
-                if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
-                    return true;
-                }
-            }
-        }
-        if (ent instanceof ManhattanTransferEntity ME) {
-            if (this.getSelf() == ME.getUser()) {
-                if (this.isHoldingSneak()) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    @Override
-    public int highlightsEntityColor(Entity ent, Player player){
-        if (ent instanceof ManhattanTransferEntity ME) {
-            if (this.getSelf() == ME.getUser()) {
-                if (this.isHoldingSneak() && !isPiloting()) {
-                    return 12379556;
-                }
-            }
-        }
-        return 12379456;
     }
     public boolean switchShootingMode(){
         return getStandUserSelf().roundabout$getUniqueStandModeToggle();
@@ -534,6 +462,44 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
 
     @Override
+    public boolean highlightsEntity(Entity ent,Player player){
+        IEntityAndData entityAndData = ((IEntityAndData) ent);
+        if(visionModeClient) {
+            if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) && ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
+                if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent) && !player.hasLineOfSight(ent)) {
+                    return true;
+                }
+            }
+        }
+        if(isPiloting()){
+            if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) & ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
+                if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
+                    return true;
+                }
+            }
+        }
+        if (ent instanceof ManhattanTransferEntity ME) {
+            if (this.getSelf() == ME.getUser()) {
+                if (this.isHoldingSneak()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    @Override
+    public int highlightsEntityColor(Entity ent, Player player){
+        if (ent instanceof ManhattanTransferEntity ME) {
+            if (this.getSelf() == ME.getUser()) {
+                if (this.isHoldingSneak() && !isPiloting()) {
+                    return 12379556;
+                }
+            }
+        }
+        return 12379456;
+    }
+
+    @Override
     public int getDisplayPowerInventoryScale() {
         return 45;
     }
@@ -599,6 +565,35 @@ public class PowersManhattanTransfer extends NewDashPreset {
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.bonus_damage",
                 "instruction.roundabout.passive",  StandIcons.MANHATTAN_DAMAGE_BOOST, 1, level, bypass));
         return $$1;
+    }
+    @Override
+    public void renderIcons(GuiGraphics context, int x, int y) {
+        // code for advanced icons
+        if (switchShootingMode()) {
+            setSkillIcon(context, x, y, 1, StandIcons.MANUAL_SHOOTING_ON, PowerIndex.SKILL_1);
+        }
+        else
+            setSkillIcon(context, x, y, 1, StandIcons.MANUAL_SHOOTING_OFF, PowerIndex.SKILL_1);
+
+        if (isPiloting())
+            setSkillIcon(context, x, y, 2, StandIcons.CONTROL_MODE_OFF, PowerIndex.SKILL_2);
+        else
+            setSkillIcon(context, x, y, 2, StandIcons.CONTROL_MODE_ON, PowerIndex.SKILL_2);
+
+        if (visionModeClient) {
+            setSkillIcon(context, x, y, 4, StandIcons.WIND_VISION_ON, PowerIndex.SKILL_4);
+        }
+        else
+            setSkillIcon(context, x, y, 4, StandIcons.WIND_VISION_OFF, PowerIndex.SKILL_4);
+
+        if(isPiloting()){
+            setSkillIcon(context, x, y, 3, StandIcons.MANHATTAN_DODGE, PowerIndex.GLOBAL_DASH);
+        }
+        else{
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        }
+
+        super.renderIcons(context, x, y);
     }
     @Override
     public void onActuallyHurt(DamageSource $$0, float $$1) {

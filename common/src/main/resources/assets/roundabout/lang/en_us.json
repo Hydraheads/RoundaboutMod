@@ -41,6 +41,7 @@
   "item.roundabout.luck_sword": "Luck Sword",
   "item.roundabout.luck_upgrade": "Smithing Template",
   "item.roundabout.scissors": "Scissors",
+  "item.roundabout.aja": "Aja",
   "item.roundabout.wooden_glaive": "Wooden Glaive",
   "item.roundabout.stone_glaive": "Stone Glaive",
   "item.roundabout.golden_glaive": "Golden Glaive",
@@ -443,6 +444,8 @@
   "entity.roundabout.parrot_minion": "Zombie Minion",
 
   "block.roundabout.meteor_block": "Meteorite Block",
+  "block.roundabout.aja_ore": "Aja Ore",
+  "block.roundabout.deepslate_aja_ore": "Deepslate Aja Ore",
   "block.roundabout.coffin_block": "Coffin",
   "block.roundabout.shiny_quartz": "Shiny Quartz",
   "block.roundabout.shiny_quartz_tiles": "Shiny Quartz Tiles",
@@ -1666,6 +1669,7 @@
   "leveling.roundabout.levelup.max.both": "Max Development: New Ability & Skin!",
   "leveling.roundabout.disc_wip": "Work in Progress, Not Obtainable",
   "leveling.roundabout.disc_wip_2": "Abilities are not complete or ready",
+  "leveling.roundabout.disc_wip_3": "Use at your own risk",
 
   "leveling.roundabout.levelup.memory": "Stand Development: New Memory Slot!",
   "leveling.roundabout.levelup.memory_and_ability": "Stand Development: New Ability and Memory Slot!",

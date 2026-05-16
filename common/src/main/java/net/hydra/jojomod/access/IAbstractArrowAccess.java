@@ -2,6 +2,7 @@ package net.hydra.jojomod.access;
 
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.EntityHitResult;
@@ -24,6 +25,13 @@ public interface IAbstractArrowAccess {
     byte roundabout$GetPierceLevel();
     ItemStack roundabout$GetPickupItem();
 
+    /**Manhattan Transfer Values*/
+    boolean roundabout$GetIsManhattan();
+    void roundabout$SetIsManhattan(boolean isManhattanProjectile);
+    float roundabout$getHattanDamage();
+    void roundabout$setHattanDamage(float manhattanDmg);
+
     @Nullable
     EntityHitResult roundabout$FindHitEntity(Vec3 $$0, Vec3 $$1);
+
 }

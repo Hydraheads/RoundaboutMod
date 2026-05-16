@@ -227,10 +227,22 @@
       "roundabout:manhattan_vision"
     ]
   },
-  "manhattan_deflection": {
-    "subtitle": "sounds.roundabout.manhattan_deflection",
+  "manhattan_bullet_deflect": {
+    "subtitle": "sounds.roundabout.manhattan_bullet_deflect",
     "sounds": [
-      "roundabout:manhattan_deflection"
+      "roundabout:manhattan_bullet_deflect"
+    ]
+  },
+  "century_boy_summon": {
+    "subtitle": "sounds.roundabout.century_boy_summon",
+    "sounds": [
+      "roundabout:century_boy_summon"
+    ]
+  },
+  "century_boy_hit": {
+    "subtitle": "sounds.roundabout.century_boy_hit",
+    "sounds": [
+      "roundabout:century_boy_hit"
     ]
   },
   "snubnose_fire": {
