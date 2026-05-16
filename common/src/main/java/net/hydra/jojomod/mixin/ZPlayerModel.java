@@ -289,6 +289,9 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 if (SU.roundabout$getStandPowers() instanceof Powers20thCenturyBoy && PowerTypes.hasStandActive(P)){
                     AnimationDefinition anim = Powers20thCenturyBoy.getAnimation(SU);
                     if (anim != null){
+                        if (ipe.roundabout$GetPoseEmote() != Poses.NONE.id) {
+                            ipe.roundabout$SetPoseEmote(Poses.NONE.id);
+                        }
                         this.leftArm.xRot = 0;
                         this.leftArm.yRot = 0;
                         this.rightArm.xRot = 0;

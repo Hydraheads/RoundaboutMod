@@ -8,9 +8,11 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.layers.animations.CenturyBoyAnimations;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.minecraft.ChatFormatting;
@@ -18,6 +20,8 @@ import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ServerPacketListener;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
@@ -107,7 +111,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         LEMON = 10,
         BLUE = 11,
         GRAPE = 12,
-        STRAWBERRY = 13;
+        STRAWBERRY = 13,
+        CHICKEN = 14;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
@@ -123,7 +128,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                 LEMON,
                 BLUE,
                 GRAPE,
-                STRAWBERRY
+                STRAWBERRY,
+                CHICKEN
 
         );
     }
@@ -143,6 +149,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             case Powers20thCenturyBoy.BLUE -> Component.translatable("skins.roundabout.20_centuryboy.blue");
             case Powers20thCenturyBoy.GRAPE -> Component.translatable("skins.roundabout.20_centuryboy.grape");
             case Powers20thCenturyBoy.STRAWBERRY -> Component.translatable("skins.roundabout.20_centuryboy.strawberry");
+            case Powers20thCenturyBoy.CHICKEN -> Component.translatable("skins.roundabout.20_centuryboy.chicken");
             default -> Component.translatable("skins.roundabout.20_centuryboy.manga");
         };
     }
@@ -252,6 +259,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             ) {
                 return false;
             } else {
+                this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_HIT_EVENT, SoundSource.PLAYERS, 3F, 1.0F);
                 return true;
             }
         } else {
@@ -290,12 +298,25 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         }
         return anim;
     }
-    public void setAnimation(byte b){
-            if (this.getSelf() instanceof Player P && this.isClient()) {
-                ((IPlayerEntity) P).roundabout$SetPoseEmote(Poses.NONE.id);
-            }
-            this.getStandUserSelf().roundabout$setStandAnimation(b);
-            this.getStandUserSelf().roundabout$getWornStandAnimation().stop();
-            this.getStandUserSelf().roundabout$getWornStandAnimation().startIfStopped(this.getSelf().tickCount);
+    public void setAnimation(byte b) {
+        if (this.getSelf() instanceof Player P && this.isClient()) {
+            ((IPlayerEntity) P).roundabout$SetPoseEmote(Poses.NONE.id);
         }
+        this.getStandUserSelf().roundabout$setStandAnimation(b);
+        this.getStandUserSelf().roundabout$getWornStandAnimation().stop();
+        this.getStandUserSelf().roundabout$getWornStandAnimation().startIfStopped(this.getSelf().tickCount);
+
     }
+
+    /** sounds **/
+    protected Byte getSummonSound() {return SoundIndex.SUMMON_SOUND;}
+    @Override
+    public SoundEvent getSoundFromByte(byte soundChoice) {
+        switch (soundChoice){
+            case SoundIndex.SUMMON_SOUND -> {
+                return ModSounds.CENTURY_BOY_SUMMON_EVENT;
+            }
+        }
+        return super.getSoundFromByte(soundChoice);
+    }
+}

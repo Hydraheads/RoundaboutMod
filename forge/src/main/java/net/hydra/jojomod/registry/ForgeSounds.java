@@ -2,11 +2,10 @@ package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.sound.ModSounds;
-import net.minecraft.commands.Commands;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.item.CreativeModeTab;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -115,6 +114,11 @@ public class ForgeSounds {
             register(ModSounds.MANHATTAN_VISION, ModSounds.MANHATTAN_VISION_ID);
     public static final RegistryObject<SoundEvent> MANHATTAN_DEFLECTION_EVENT =
             register(ModSounds.MANHATTAN_DEFLECTION, ModSounds.MANHATTAN_DEFLECTION_ID);
+
+    public static final RegistryObject<SoundEvent> CENTURY_BOY_SUMMON_EVENT =
+            register(ModSounds.CENTURY_BOY_SUMMON, ModSounds.CENTURY_BOY_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> CENTURY_BOY_HIT_EVENT =
+            register(ModSounds.CENTURY_BOY_HIT, ModSounds.CENTURY_BOY_HIT_ID);
 
     public static final RegistryObject<SoundEvent> SNUBNOSE_FIRE_EVENT =
             register(ModSounds.SNUBNOSE_FIRE, ModSounds.SNUBNOSE_FIRE_ID);
