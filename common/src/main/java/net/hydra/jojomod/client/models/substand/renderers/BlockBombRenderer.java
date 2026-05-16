@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.SkinManager;
@@ -40,13 +41,12 @@ public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
         return PART_4_KILLER_QUEEN;
     }
     
-    public void render(BlockBombEntity blockBombEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
+    public void render(BlockBombEntity blockBombEntity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         Player ClientPlayer = Minecraft.getInstance().player;
     	if (ClientUtil.canSeeStands(ClientPlayer)) {
         	Player UserPlayer =((Player)blockBombEntity.getUser());
         	if (UserPlayer == ClientPlayer) {
-        		
-        		super.render(blockBombEntity, f, g, matrixStack, vertexConsumerProvider, i);	
+        		super.render(blockBombEntity, 0, partialTicks, matrixStack, vertexConsumerProvider, i);	
         	}
         }
     }
@@ -68,5 +68,4 @@ public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
 	   */   
 	   return 15;
    }
-    
 }

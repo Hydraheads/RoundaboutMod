@@ -47,6 +47,7 @@ public class BlockBombEntity extends StandEntity {
 	private BlockState originalState;
 	private static final int maxTickIndicator = 6;
 	private int tickIndicator = maxTickIndicator;
+	private Vec3 blockSize = new Vec3(1.0f, 1.0f, 1.0f);
 	
 	public BlockBombEntity(EntityType<? extends StandEntity> $$0, Level $$1) {
 		
@@ -63,7 +64,7 @@ public class BlockBombEntity extends StandEntity {
 			this.bombPos = pos;
 			this.originalState = this.level().getBlockState(pos);
 			Vec3 positionInWorld = this.bombPos.getCenter().add(0.0F, -0.5F, 0.0F);
-			
+			this.getBlockSize();
 			
 			this.setPos(positionInWorld);
 			
@@ -118,12 +119,11 @@ public class BlockBombEntity extends StandEntity {
 	
 	public boolean detectContact() {
 		Vec3 pos = this.bombPos.getCenter();
-		BlockState info = this.level().getBlockState(this.bombPos);
-		AABB shape = info.getCollisionShape(getCommandSenderWorld(), bombPos, null).bounds();
-		Roundabout.LOGGER.info("sizes - X: " + shape.maxX + " Y: " + shape.maxY + " Z: " + shape.maxZ);
+		float skinSize = 0.10f;
 		
 		List<Entity> entitiesDetect = MainUtil.genHitbox(this.level(), pos.x(), pos.y(), pos.z(),
-				shape.maxX + 0.10f, shape.maxY + 0.10f, shape.maxZ + 0.10f);
+				this.blockSize.x() + skinSize, this.blockSize.y() + skinSize, this.blockSize.z() + skinSize);
+		
 		
 		for(int j = 0;j<entitiesDetect.size();j++) {
             Entity entity = entitiesDetect.get(j);
@@ -135,6 +135,19 @@ public class BlockBombEntity extends StandEntity {
         }
 		
 		return false;
+	}
+	
+	public void getBlockSize() {
+		AABB shape;
+		VoxelShape voxShape = this.originalState.getCollisionShape(getCommandSenderWorld(), bombPos, null);
+		
+		if (voxShape.isEmpty()) {
+			voxShape = this.originalState.getVisualShape(getCommandSenderWorld(), bombPos, null);
+		}
+		if (!voxShape.isEmpty()) {
+			shape = voxShape.bounds();
+			this.blockSize = new Vec3(shape.maxX, shape.maxY, shape.maxZ);
+		}
 	}
 	
 	/*
