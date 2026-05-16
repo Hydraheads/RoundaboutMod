@@ -221,7 +221,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                 }
             }
             this.self.stopUsingItem();
-            ClientUtil.stopDestroyingBlock();
+            ///ClientUtil.stopDestroyingBlock();
         } else {
             invincibleState = false;
             staticMode = 0;
