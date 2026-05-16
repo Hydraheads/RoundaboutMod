@@ -31,7 +31,8 @@ import org.lwjgl.opengl.GL11;
 public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
 	private static final ResourceLocation PART_4_KILLER_QUEEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbomb.png");
 
-
+	
+	
     public BlockBombRenderer(EntityRendererProvider.Context context) {
         super(context, new BlockBombModel<>(context.bakeLayer(ModEntityRendererClient.KILLER_QUEEN_BLOCKBOMB)), 0f);
     }
