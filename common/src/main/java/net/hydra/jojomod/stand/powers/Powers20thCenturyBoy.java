@@ -259,7 +259,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             ) {
                 return false;
             } else {
-                this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_HIT_EVENT, SoundSource.PLAYERS, 3F, 1.0F);
+                this.self.level().playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_HIT_EVENT, SoundSource.PLAYERS, 3F, 1.0F);
                 return true;
             }
         } else {
