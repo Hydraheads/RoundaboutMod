@@ -25,13 +25,17 @@ import static net.hydra.jojomod.block.ModBlocks.*;
 public class FabricBlocks {
     public static final Block ANCIENT_METEOR = registerBlock("ancient_meteor", ModBlocks.ANCIENT_METEOR_PROPERTIES
     );
-    public static final Block IMPACT_MOUND = registerBlock("impact_mound", IMPACT_MOUND_PROPERTIES
+    public static final Block IMPACT_MOUND = registerBlock("impact_mound", ModBlocks.IMPACT_MOUND_PROPERTIES
     );
     public static final Block METEOR_BLOCK = registerBlock("meteor_block", ModBlocks.METEOR_BLOCK_PROPERTIES
     );
-    public static final Block SHINY_QUARTZ = registerBlock("shiny_quartz", SHINY_QUARTZ_PROPERTIES
+    public static final Block AJA_ORE = registerBlock("aja_ore", ModBlocks.AJA_ORE_PROPERTIES
     );
-    public static final Block SHINY_QUARTZ_TILES = registerBlock("shiny_quartz_tiles", SHINY_QUARTZ_TILES_PROPERTIES
+    public static final Block DEEPSLATE_AJA_ORE = registerBlock("deepslate_aja_ore", ModBlocks.DEEPSLATE_AJA_ORE_PROPERTIES
+    );
+    public static final Block SHINY_QUARTZ = registerBlock("shiny_quartz", ModBlocks.SHINY_QUARTZ_PROPERTIES
+    );
+    public static final Block SHINY_QUARTZ_TILES = registerBlock("shiny_quartz_tiles", ModBlocks.SHINY_QUARTZ_TILES_PROPERTIES
     );
     public static final Block REGAL_FLOOR = registerBlock("regal_floor", ModBlocks.REGAL_FLOOR_PROPERTIES
     );
@@ -258,6 +262,8 @@ public class FabricBlocks {
         ModBlocks.ANCIENT_METEOR = ANCIENT_METEOR;
         ModBlocks.IMPACT_MOUND = IMPACT_MOUND;
         ModBlocks.METEOR_BLOCK = METEOR_BLOCK;
+        ModBlocks.AJA_ORE = AJA_ORE;
+        ModBlocks.DEEPSLATE_AJA_ORE = DEEPSLATE_AJA_ORE;
         ModBlocks.SHINY_QUARTZ = SHINY_QUARTZ;
         ModBlocks.SHINY_QUARTZ_TILES = SHINY_QUARTZ_TILES;
         ModBlocks.REGAL_FLOOR = REGAL_FLOOR;

@@ -713,6 +713,8 @@ public class PowersWalkingHeart extends NewDashPreset {
             if (target instanceof AbstractVillager){
                 return false;
             }
+        } else if (target.distanceTo(attacker) > 8){
+            return false;
         }
         if (DamageHandler.HeelSpikeStandDamageEntity(target,pow, attacker)){
             if (attacker instanceof LivingEntity LE){

@@ -29,7 +29,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.joml.Vector3f;
@@ -114,6 +116,28 @@ public class BlockBombEntity extends StandEntity {
         //super.tick();
     }
 	
+	public boolean detectContact() {
+		Vec3 pos = this.bombPos.getCenter();
+		BlockState info = this.level().getBlockState(this.bombPos);
+		AABB shape = info.getCollisionShape(getCommandSenderWorld(), bombPos, null).bounds();
+		Roundabout.LOGGER.info("sizes - X: " + shape.maxX + " Y: " + shape.maxY + " Z: " + shape.maxZ);
+		
+		List<Entity> entitiesDetect = MainUtil.genHitbox(this.level(), pos.x(), pos.y(), pos.z(),
+				shape.maxX + 0.10f, shape.maxY + 0.10f, shape.maxZ + 0.10f);
+		
+		for(int j = 0;j<entitiesDetect.size();j++) {
+            Entity entity = entitiesDetect.get(j);
+            if (entity.isAlive()) {
+            	if (!entity.equals(this.getUser()) && !entity.equals(((StandUser)this.getUser()).roundabout$getStand()) && !entity.equals(this)) {
+            		return true;
+            	}
+            }
+        }
+		
+		return false;
+	}
+	
+	/*
 	public void detectInside() {
 		BlockState test = this.level().getBlockState(this.bombPos);
 		if (test.hasBlockEntity() && !test.equals(this.originalState)) {
@@ -126,7 +150,7 @@ public class BlockBombEntity extends StandEntity {
 			}
 		}
 		
-	}
+	}*/
 	
 
 	

@@ -227,10 +227,10 @@
       "roundabout:manhattan_vision"
     ]
   },
-  "manhattan_deflection": {
-    "subtitle": "sounds.roundabout.manhattan_deflection",
+  "manhattan_bullet_deflect": {
+    "subtitle": "sounds.roundabout.manhattan_bullet_deflect",
     "sounds": [
-      "roundabout:manhattan_deflection"
+      "roundabout:manhattan_bullet_deflect"
     ]
   },
   "snubnose_fire": {

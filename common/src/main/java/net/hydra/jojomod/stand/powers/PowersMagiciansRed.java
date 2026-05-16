@@ -2886,6 +2886,11 @@ public class PowersMagiciansRed extends NewPunchingStand {
     }
 
     @Override
+    public float getRushDistance(){
+        return 7;
+    }
+
+    @Override
     public void tickStandRejection(MobEffectInstance effect){
         if (!this.getSelf().level().isClientSide()) {
             if (effect.getDuration() == 15) {

@@ -36,6 +36,12 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> ANCIENT_METEOR = BLOCKS.register("ancient_meteor",
             () -> ModBlocks.ANCIENT_METEOR_PROPERTIES
     );
+    public static final RegistryObject<Block> AJA_ORE = BLOCKS.register("aja_ore",
+            () -> AJA_ORE_PROPERTIES
+    );
+    public static final RegistryObject<Block> DEEPSLATE_AJA_ORE = BLOCKS.register("deepslate_aja_ore",
+            () -> DEEPSLATE_AJA_ORE_PROPERTIES
+    );
     public static final RegistryObject<Block> METEOR_BLOCK = BLOCKS.register("meteor_block",
             () -> ModBlocks.METEOR_BLOCK_PROPERTIES
             );

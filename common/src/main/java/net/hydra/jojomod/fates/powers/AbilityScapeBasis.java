@@ -2525,6 +2525,10 @@ public class AbilityScapeBasis {
         }
         return false;
     }
+
+    public float getRushDistance(){
+        return getReach();
+    }
     public boolean StandRushDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker){
         if (attacker instanceof TamableAnimal TA){
             if (target instanceof TamableAnimal TT && TT.getOwner() != null
@@ -2535,6 +2539,9 @@ public class AbilityScapeBasis {
             if (target instanceof AbstractVillager){
                 return false;
             }
+        }
+        if (target.distanceTo(attacker) > getRushDistance()+1){
+            return false;
         }
         if (DamageHandler.StandRushDamageEntity(target,pow, attacker)){
             if (attacker instanceof LivingEntity LE){
