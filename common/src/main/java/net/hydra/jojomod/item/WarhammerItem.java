@@ -40,4 +40,9 @@ public class WarhammerItem extends DiggerItem  {
         }
         return spd;
     }
+
+    @Override
+    public boolean isCorrectToolForDrops(BlockState blockState) {
+        return false;
+    }
 }
