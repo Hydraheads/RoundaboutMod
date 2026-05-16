@@ -286,7 +286,7 @@ public class PowersTusk extends NewDashPreset {
             case FIRE_NAIL -> {
                 expendNails();
 
-                if (this.getAct() < 3 && this.nailCharge > 5) {
+                if (this.getAct() == 1 && this.nailCharge > 5) {
                     this.setAnimation(PowersTusk.FIRE_BOTH_NAILS);
                 } else {
                     this.setAnimation(PowersTusk.FIRE_NAIL);
@@ -294,15 +294,14 @@ public class PowersTusk extends NewDashPreset {
 
                 this.setActivePower(PowersTusk.FIRE_NAIL);
                 this.setAttackTimeDuring(0);
-                this.setAttackTime(0);
                 if (!isClient()) {
-                    if (this.getAct() > 2) {
+                    if (this.getAct() > 1) {
                         this.shootNail(this.getAct() == 3 ? 1.3F : 0.85F, 0.1F);
                     } else {
                         shootNailBurst();
                     }
                 }
-                nailFireDelay = this.getAct() == 3 ? 5 : 10;
+                nailFireDelay = this.getAct() == 3 ? 5 : 7;
             }
             case PowersTusk.FIRE_EXTRA_NAILS -> {
                 if (!isClient()) {
@@ -340,6 +339,8 @@ public class PowersTusk extends NewDashPreset {
             case PowersTusk.WARP -> {
                 this.setActivePower(PowersTusk.WARP);
                 this.setAttackTime(0);
+                this.setCooldown(PowerIndex.GLOBAL_DASH,120);
+                this.setAnimation(PowersTusk.WARP);
                 if (!isClient()) {
                     Vec3 pos = this.getPilotingStand().getPosition(0);
                     this.getSelf().teleportTo(pos.x,pos.y,pos.z);
@@ -350,6 +351,7 @@ public class PowersTusk extends NewDashPreset {
             case PowersTusk.FLATTEN -> {
                 if (this.getActivePower() != PowersTusk.FLATTEN) {
                     this.setActivePower(PowersTusk.FLATTEN);
+                    this.setAnimation(PowersTusk.FLATTEN);
                     this.setAttackTime(0);
                     this.setAttackTimeDuring(0);
                 } else {
@@ -368,9 +370,10 @@ public class PowersTusk extends NewDashPreset {
         this.tickNails();
 
 
-        if (this.self instanceof Player P) {
 
-            if (this.getActivePower() == FLATTEN || this.getActivePower() == PowersTusk.WARP) {
+        if (this.getSelf() instanceof Player P) {
+
+            if (this.getStandUserSelf().roundabout$getStandAnimation() == PowersTusk.FLATTEN) {
                 this.flattenTicks = this.getAttackTimeDuring();
             } else if (this.flattenTicks > 0) {
                 flattenTicks--;
@@ -489,6 +492,9 @@ public class PowersTusk extends NewDashPreset {
 
             case PowerIndex.POWER_4 -> {
                 if (value != this.act) {
+                    if (this.isInHole()) {
+                        this.setPiloting(0);
+                    }
                     this.setAct(value,true);
                     this.setCooldown(PowerIndex.SKILL_4, 120);
                 }
@@ -900,7 +906,7 @@ public class PowersTusk extends NewDashPreset {
     }
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
-        if (this.isGunMode() && (this.getActivePower() == PowersTusk.SHOOT_MODE || isCharging())) {
+        if (this.isGunMode() && (options.keyUse.isDown())) {
             if (keyIsDown) {
                 buttonInputShoot(keyIsDown, options, this.getAct());
             } else {
@@ -1061,7 +1067,7 @@ public class PowersTusk extends NewDashPreset {
     public boolean canWarpHoles() {
         if (this.getAct() == 3) {
             if (isInHole() && this.getPilotingStand() instanceof TuskHoleEntity THE) {
-                if (THE.getTimeInHole() > 20 + THE.distanceTo(this.getSelf()) * 5) {
+                if (THE.getTimeInHole() > 20 + THE.distanceTo(this.getSelf()) * 3) {
                     return THE.level().getBlockState(THE.blockPosition()).isAir();
                 }
             }
@@ -1170,8 +1176,8 @@ public class PowersTusk extends NewDashPreset {
                 return true;
             }
 
-            if (this.getAct() == 3) {
-                return ent.equals(this.targetHole) || (this.isHoldingSneak() && ent instanceof TuskHoleEntity);
+            if (this.getAct() == 3 && !this.isPiloting()) {
+                return ent.equals(this.targetHole) || (this.isHoldingSneak() && ent instanceof TuskHoleEntity) && ent.distanceTo(player) < 25;
             }
         }
         return false;
@@ -1264,8 +1270,8 @@ public class PowersTusk extends NewDashPreset {
         }
     }
     public void buttonInputShoot(boolean keyIsDown, Options options, int act) {
-        if (keyIsDown) {
-            if (this.act == 1 || this.act == 2) {
+        if (keyIsDown && this.getActivePower() != PowersTusk.FLATTEN) {
+            if (this.getAct() == 1) {
                 if (this.nailCharge == 0 && this.extraCharge != 0 && this.getActivePower() != PowersTusk.CHARGE_EXTRA) {
                     tryPower(PowersTusk.FIRE_EXTRA_NAILS);
                     tryPowerPacket(PowersTusk.FIRE_EXTRA_NAILS);
@@ -1287,7 +1293,7 @@ public class PowersTusk extends NewDashPreset {
                 }
 
 
-            } else if ( this.getAct() == 3 && hasNail() && nailFireDelay == 0) {
+            } else if ( (this.getAct() == 2 || this.getAct() == 3)   && hasNail() && nailFireDelay == 0) {
                 tryPower(FIRE_NAIL);
                 tryPowerPacket(FIRE_NAIL);
             }
@@ -1350,10 +1356,21 @@ public class PowersTusk extends NewDashPreset {
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
 
-        int barTexture = 0;
+        int barTexture = 12;
         Entity TE = standUser.roundabout$getStandPowers().getTargetEntity(playerEntity, 3, this.getSelf().getYRot());
         float attackTimeMax = standUser.roundabout$getAttackTimeMax();
-        if (attackTimeMax > 0) {
+
+        if (this.getAct() == 3 && isPiloting() && this.getPilotingStand() instanceof TuskHoleEntity THE) {
+            float dist = this.getSelf().distanceTo(this.getPilotingStand());
+            int count = (int) ( THE.getTimeInHole()/(20+3*dist) *15);
+
+            if (count > 15) {
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 24, 15, 6);
+            } else {
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, barTexture, count, 6);
+            }
+        } else if (attackTimeMax > 0) {
             float attackTime = standUser.roundabout$getAttackTime();
             float finalATime = attackTime / attackTimeMax;
             if (finalATime <= 1) {

@@ -149,7 +149,6 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
     @Inject(method = "setupRotations(Lnet/minecraft/world/entity/LivingEntity;Lcom/mojang/blaze3d/vertex/PoseStack;FFF)V", at = @At(value = "TAIL"), cancellable = true)
     private void roundabout$rotations(T $$0, PoseStack poseStack, float $$2, float $$3, float $$4, CallbackInfo ci) {
         if ($$0 instanceof Player P) {
-
             StandUser SU = (StandUser) P;
             if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
                 float backflip = PA.getAttackTimeDuring()+$$4;
@@ -164,16 +163,23 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
                     poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0, time*end  ), 0, P.getEyeHeight()*0.4F, 0 );
                 }
             } else if (SU.roundabout$getStandPowers() instanceof PowersTusk PT) {
-                float time = PT.getAttackTime() + $$4;
-                float scale = Math.min(1,time/7.0F);
-                if (PT.getActivePower() == PowersTusk.WARP && scale < 1) {
-                    poseStack.scale(scale,scale,scale);
-                    poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,scale*360),0,0,0);
-                } else if (PT.flattenTicks > 0) {
-                    if (PT.getActivePower() != PowersTusk.FLATTEN) {$$4 *= -1;}
+               // Roundabout.LOGGER.info(Minecraft.getInstance().player.getName().getString() + " " + SU.roundabout$getStandAnimation() +  " " + $$0.getName().getString());
+                if (SU.roundabout$getStandAnimation() != PowersTusk.NONE) {
+                    float scale = Math.min(1,PT.getAttackTime()/7.0F+$$4);
 
-                    scale = Math.min(1,(PT.flattenTicks+$$4) / 7.0F);
-                    poseStack.scale(1.0F+scale,Math.max(0.1F,1-scale),1.0F+scale);
+                    if (SU.roundabout$getStandAnimation() == PowersTusk.WARP) {
+                        if (scale < 1) {
+                            poseStack.scale(scale, scale, scale);
+                            poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0, 1, 0, scale * 360), 0, 0, 0);
+                        }
+                    }
+
+                }
+                if (PT.flattenTicks > 0) {
+                    if (SU.roundabout$getStandAnimation() != PowersTusk.FLATTEN) {$$4 *= -1;}
+
+                    float scale = Math.min(1, (PT.flattenTicks + $$4) / 7.0F);
+                    poseStack.scale(1.0F + scale, Math.max(0.1F, 1 - scale), 1.0F + scale);
                 }
             }
 
