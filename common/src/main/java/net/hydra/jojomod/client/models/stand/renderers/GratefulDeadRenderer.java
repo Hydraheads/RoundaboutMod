@@ -23,6 +23,7 @@ public class GratefulDeadRenderer extends StandRenderer<GratefulDeadEntity>{
 
     public GratefulDeadRenderer(EntityRendererProvider.Context context) {
         super(context, new GratefulDeadModel<>(context.bakeLayer(ModEntityRendererClient.GRATEFUL_DEAD_LAYER)), 0f);
+        this.addLayer(new GratefulDeadWatchlingEyeLayer<>(this));
     }
     @Override
     public ResourceLocation getTextureLocation(GratefulDeadEntity entity){
