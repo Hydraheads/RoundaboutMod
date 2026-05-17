@@ -118,6 +118,17 @@ public class ManhattanTransferEntity extends StandEntity {
     }
     @Override
     protected float getFlyingSpeed() {
+        if(this.getUserData(this.getUser()) != null && this.getUser() != null) {
+            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                if(PM.XtraSpdTick > 7) {
+                    return 0.30F;
+                }else if(PM.XtraSpdTick > 4) {
+                    return 0.25F;
+                } else if(PM.XtraSpdTick > 1) {
+                    return 0.20F;
+                }
+            }
+        }
         return 0.10F;
     }
     @Override
