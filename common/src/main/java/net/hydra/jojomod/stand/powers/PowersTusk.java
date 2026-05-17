@@ -160,7 +160,7 @@ public class PowersTusk extends NewDashPreset {
                 this.heavyCooldown += this.nailCharge;
             }
         } else {
-            if (this.getAct() > 2) {
+            if (this.getAct() > 1) {
                 this.heavyCooldown += 1;
             }
         }

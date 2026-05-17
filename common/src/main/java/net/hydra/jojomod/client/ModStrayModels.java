@@ -17,6 +17,7 @@ public class ModStrayModels {
     public static EmperorShootingArmModel EMPEROR_SHOOTING_ARM;
     public static TuskDrillModel TUSK_DRILL;
     public static TuskNailModel TUSK_NAIL;
+    public static TuskDrillNailModel TUSK_DRILL_NAIL;
     public static FirstPersonArmsModel FirstPersonArmsModel;
     public static FirstPersonArmsSlimModel FirstPersonArmsSlimModel;
     public static FirstPersonSnubnoseModel FirstPersonSnubnoseModel;
