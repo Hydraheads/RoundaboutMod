@@ -512,16 +512,6 @@ public class ManhattanTransferEntity extends StandEntity {
 
           if(this.getUserData(this.getUser()) != null) {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-                    if (isInRain()) {
-                        if (DodgeRainTicks > 0) {
-                            DodgeRainTicks--;
-
-                        } else {
-                            setDodgeRainTicks(440);
-                          //  Roundabout.LOGGER.info("bwaah");
-                          //  this.level().playSound(null, this.blockPosition(), ModSounds.MANHATTAN_DODGING_EVENT, SoundSource.NEUTRAL, 1F, (float) (0.9F + (Math.random() * 0.2F)));
-                        }
-                    }
                 if (stupidTicks >= 1) {
                     //setMaster(this.getUser());
                     stupidTicks--;
