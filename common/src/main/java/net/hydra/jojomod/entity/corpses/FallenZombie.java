@@ -69,6 +69,19 @@ public class FallenZombie extends FallenMob{
     public InteractionResult interactAt(Player player, Vec3 location, InteractionHand intHand) {
         if (!player.level().isClientSide()) {
             ItemStack plrItem = player.getItemInHand(intHand);
+
+            if (plrItem.is(Items.ROTTEN_FLESH) && this.getHealth() < this.getMaxHealth()
+                    && !getActivated()) {
+                if (!player.level().isClientSide()) {
+                    if (!player.getAbilities().instabuild) {
+                        plrItem.shrink(1);
+                    }
+
+                    this.heal(getMaxHealth() / 4);
+                    return InteractionResult.SUCCESS;
+                }
+            }
+
             ItemStack corpseItem = this.getMainHandItem();
             if (player.isCrouching() && ClientNetworking.getAppropriateConfig().justiceSettings.zombieCorpsesCanBeGivenItems) {
 

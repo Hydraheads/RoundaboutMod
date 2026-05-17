@@ -409,6 +409,7 @@ public abstract class InputEvents implements IInputEvents {
 
                                             player.fallDistance = 0;
                                             C2SPacketUtil.warHammerPacket($$2.getLocation(), $$3, -1);
+                                            this.player.resetAttackStrengthTicker();
                                         }
                                         }
                                         break;
