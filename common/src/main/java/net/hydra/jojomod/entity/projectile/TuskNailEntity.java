@@ -144,8 +144,10 @@ public class TuskNailEntity extends AbstractArrow {
             }
             if (isInWater() && (this.getAct() == 2 || this.getAct() == 3)) {
                 TuskHoleEntity THE = this.createHole();
-                THE.vortexify();
-                this.discard();
+                if (THE != null) {
+                    THE.vortexify();
+                    this.discard();
+                }
             }
         }
     }

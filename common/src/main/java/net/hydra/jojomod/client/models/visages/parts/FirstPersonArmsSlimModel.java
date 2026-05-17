@@ -312,6 +312,7 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                             poseStack.popPose();
                         }
                     } */
+                    boolean rh = player.getMainArm() == HumanoidArm.RIGHT;
                     if (renderLeft) {
                         poseStack.pushPose();
                         this.transform.translateAndRotate(poseStack);
@@ -321,16 +322,14 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,0,1,90),0,0,0);
                         for(int i=4;i>=1;i--) {
                             if (PT.getLeftHandNails() >= 5-i) {
-                                ModStrayModels.TUSK_NAIL.render(player, partialTicks, poseStack, bufferSource, light,
-                                        r, g, b, 1, i);
+                                ModStrayModels.TUSK_NAIL.firstPersonTuskNail(player, partialTicks, poseStack, bufferSource, light, i, rh ? 10-i : 5-i);
                             }
                             poseStack.translate(0,0,-0.075);
                         }
                         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,90),0,0,0);
                         poseStack.translate(0,0.05,-0.1); // BACKWARD LEFT
-                        if (PT.getLeftHandNails() == 5) {
-                            ModStrayModels.TUSK_NAIL.render(player, partialTicks, poseStack, bufferSource, light,
-                                    r, g, b, 1, 5);
+                        if (PT.getLeftHandNails() >= 5) {
+                            ModStrayModels.TUSK_NAIL.firstPersonTuskNail(player, partialTicks, poseStack, bufferSource, light, 5,rh ? 10 : 5);
                         }
 
                         poseStack.popPose();
@@ -344,16 +343,14 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,0,1,-90),0,0,0);
                         for(int i=4;i>=1;i--) {
                             if (PT.getRightHandNails() >= 5-i) {
-                                ModStrayModels.TUSK_NAIL.render(player, partialTicks, poseStack, bufferSource, light,
-                                        r, g, b, 1, i);
+                                ModStrayModels.TUSK_NAIL.firstPersonTuskNail(player, partialTicks, poseStack, bufferSource, light, i,rh ? 5-i : 10-i);
                             }
                             poseStack.translate(0,0,-0.075);
                         }
                         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,90),0,0,0);
                         poseStack.translate(-0.05,0.1,-0.1); // FORWARD, RIGHT, UP
                         if (PT.getRightHandNails() >= 5) {
-                            ModStrayModels.TUSK_NAIL.render(player, partialTicks, poseStack, bufferSource, light,
-                                    r, g, b, 1, 5);
+                            ModStrayModels.TUSK_NAIL.firstPersonTuskNail(player, partialTicks, poseStack, bufferSource, light, 5,rh ? 5 : 10);
                         }
 
                         poseStack.popPose();

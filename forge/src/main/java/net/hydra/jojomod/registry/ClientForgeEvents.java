@@ -256,6 +256,7 @@ public class ClientForgeEvents {
         ModStrayModels.EMPEROR_MODEL = new EmperorModel();
         ModStrayModels.TUSK_DRILL = new TuskDrillModel();
         ModStrayModels.TUSK_NAIL = new TuskNailModel();
+        ModStrayModels.TUSK_DRILL_NAIL = new TuskDrillNailModel();
         ModStrayModels.HEY_YA = new HeyYaModel();
         ModStrayModels.CENTURY_BOY = new CenturyBoyModel();
         ModStrayModels.BOWLER_HAT = new BowlerHatModel();
