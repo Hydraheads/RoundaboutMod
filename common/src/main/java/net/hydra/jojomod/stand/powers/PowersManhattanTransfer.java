@@ -67,7 +67,8 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public static final byte
             MANHATTAN_VISION = 82,
             MANHATTAN_DODGE = 83,
-            DEFLECT_PROJECTILE = 84;
+            DEFLECT_PROJECTILE = 84,
+            MANHATTAN_IN_RAIN = 85;
 
     public boolean isStandEnabled() {
         return ClientNetworking.getAppropriateConfig().manhattanTransferSettings.enableManhattanTransfer;
@@ -542,11 +543,10 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
     @Override
     public SoundEvent getSoundFromByte(byte soundChoice){
-        switch (soundChoice)
-        {
-            case SoundIndex.SUMMON_SOUND -> {
-                return ModSounds.MANHATTAN_SUMMON_EVENT;
-            }
+        if (soundChoice == SoundIndex.SUMMON_SOUND) {
+            return ModSounds.MANHATTAN_SUMMON_EVENT;
+        } else if (soundChoice == MANHATTAN_IN_RAIN) {
+            return ModSounds.MANHATTAN_DODGING_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -621,4 +621,8 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
     //COMMAND TO QUICKLY PUT MANHATTAN TRANSFER INTO ALL MOBS: /roundaboutSetStand @e manhattan_transfer 1 "from 1 to 8" 0 false
 
+    /**Ignore*/
+    @Override
+    public void tickMobAI(LivingEntity attackTarget){
+    }
 }
