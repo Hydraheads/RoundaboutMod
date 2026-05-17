@@ -151,7 +151,6 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
     private void roundabout$onHitEntityHattan(EntityHitResult $$0, CallbackInfo ci) {
         Entity entity = $$0.getEntity();
         AbstractArrow ABA = (AbstractArrow) (Object) this;
-        Projectile ABC = (AbstractArrow) (Object) this;
         if(isManhattanProjectile){
             entity.hurt(damageSources().arrow(ABA, entity), roundabout$lastHattanDamage);
         }

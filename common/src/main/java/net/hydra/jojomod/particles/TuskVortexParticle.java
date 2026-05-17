@@ -15,14 +15,14 @@ public class TuskVortexParticle extends SimpleAnimatedParticle {
         this.xd = this.xd * 0.01F + g;
         this.yd = this.yd * 0.01F + h;
         this.zd = this.zd * 0.01F + i;
-        this.lifetime = 15;
+        this.lifetime = 20;
         this.setFadeColor(15916745);
         this.setAlpha(0.7f);
         this.setSpriteFromAge(spriteSet);
     }
 
     public ParticleRenderType getRenderType() {
-        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
     @Override
     public void move(double d, double e, double f) {

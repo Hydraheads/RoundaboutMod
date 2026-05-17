@@ -467,7 +467,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (keyIsDown && this.getActivePower() == POWER_EARLY_IMPALE && this.attackTimeDuring < 24 && attackTimeDuring > 2) {
-            impaleTicks = 15;
+            //impaleTicks = 4;
             holdDownClick = true;
             animateStand(StarPlatinumEntity.IMPALE_2);
             this.attackTimeDuring = -8;

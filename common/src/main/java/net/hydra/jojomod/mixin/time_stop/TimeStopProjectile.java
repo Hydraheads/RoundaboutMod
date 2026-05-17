@@ -1,8 +1,10 @@
 package net.hydra.jojomod.mixin.time_stop;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.MainUtil;
@@ -13,9 +15,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -71,6 +75,26 @@ public abstract class TimeStopProjectile extends Entity implements IProjectileAc
             ci.cancel();
         }
     }
+
+    /*new things regarding manhattan transfer don't work atm, it's for later :)*/
+
+    @Inject(method = "onHitEntity", at = @At(value = "TAIL"),cancellable = true)
+    private void roundabout$onHitEntityHattanExtra(EntityHitResult $$0, CallbackInfo ci) {
+        Entity entity = $$0.getEntity();
+        Projectile PRJ = (Projectile) (Object) this;
+        doExtraDamageManhattan($$0);
+    }
+
+    private void doExtraDamageManhattan(EntityHitResult $$0){
+        Entity entity = $$0.getEntity();
+        Projectile PRJ = (Projectile) (Object) this;
+        if(isManhattanProjectile && !(PRJ instanceof AbstractArrow)) {
+           // entity.hurt(damageSources().generic(/*PRJ, entity*/), 1);
+            Roundabout.LOGGER.info("PROJECTILE HITTIN HARD");
+        }
+    }
+
+
     @Unique
     private boolean roundabout$IsTimeStopCreated = false;
     @Unique
@@ -118,11 +142,27 @@ public abstract class TimeStopProjectile extends Entity implements IProjectileAc
         this.checkInsideBlocks();
     }
 
+    @Unique
+    @Override
+    public boolean roundabout$getManhattanProjectile(){
+        return isManhattanProjectile;
+    }
+    @Unique
+    @Override
+    public void roundabout$setManhattanProjectile(boolean manhattanProjectile){
+        isManhattanProjectile = manhattanProjectile;
+    }
+
+    public boolean isManhattanProjectile;
+
 
     /**Shadows, ignore
      * -------------------------------------------------------------------------------------------------------------
      * */
 
+    @Shadow
+    public void setOwner(Entity $$0){
+    }
 
     @Shadow
     public void shoot(double $$0, double $$1, double $$2, float $$3, float $$4) {

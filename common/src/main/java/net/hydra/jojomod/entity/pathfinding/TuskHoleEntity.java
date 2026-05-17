@@ -115,7 +115,7 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
     public void onEnd() {
         if (this.isVortex()) {
             Vec3 pos = this.getPosition(0);
-            List<Entity> targets = MainUtil.genHitbox(this.level(), pos.x - 1, pos.y - 1, pos.z - 1, pos.x + 1, pos.y + 1, pos.z + 1);
+            List<Entity> targets = MainUtil.genHitbox(this.level(), pos.x, pos.y, pos.z, 1, 1, 1);
             targets.removeIf(entity -> !entity.isAttackable() || entity.isInvulnerable() || entity.equals(this.getUser()));
 
             for (Entity target : targets) {
@@ -156,6 +156,7 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
 
         if (!client) {
             if (!isVortex()) {
+                Roundabout.LOGGER.info(""+this.isInWater());
                 if (isInWater()) {
                     vortexify();
                 }
@@ -192,23 +193,13 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
                 }
             } else {
                 Vec3 pos = this.getPosition(0);
-            /*    for (int i=0;i<10;i++) {
-                    Vec3 rPos = pos.offsetRandom(this.random,3);
-                    Vec3 vel = rPos.subtract(pos).normalize();
-                    ((ServerLevel) this.level()).sendParticles(ParticleTypes.BUBBLE, rPos.x,
-                            rPos.y + 0.02, rPos.z,
-                            0, // ignore
-                            vel.x, // x,y,z
-                            vel.y,
-                            vel.z,
-                            0.1); // idk
-                } */
+
 
                 if (this.tickCount % 2 == 0) {
                     float radius = 7.5F;
                     List<Entity> targets = MainUtil.genHitbox(this.level(),
-                            pos.x - radius, pos.y - radius, pos.z - radius,
-                            pos.x + radius, pos.y + radius, pos.z + radius);
+                            pos.x, pos.y, pos.z,
+                            radius, radius, radius);
                     targets.removeIf(target -> {
                         if (target instanceof Player P && P.getAbilities().flying) {return true;}
                         if (target.equals(this) || target.equals(this.getUser())) {return true;}
@@ -247,8 +238,6 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
 
     @Override
     protected void goDownInWater() {}
-    @Override
-    protected boolean updateInWaterStateAndDoFluidPushing() {return this.isInWater();}
     @Override
     public boolean isNoGravity() {return super.isNoGravity() || this.isVortex();}
 
