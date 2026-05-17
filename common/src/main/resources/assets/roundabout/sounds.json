@@ -233,6 +233,18 @@
       "roundabout:manhattan_bullet_deflect"
     ]
   },
+  "century_boy_summon": {
+    "subtitle": "sounds.roundabout.century_boy_summon",
+    "sounds": [
+      "roundabout:century_boy_summon"
+    ]
+  },
+  "century_boy_hit": {
+    "subtitle": "sounds.roundabout.century_boy_hit",
+    "sounds": [
+      "roundabout:century_boy_hit"
+    ]
+  },
   "snubnose_fire": {
     "subtitle": "sounds.roundabout.snubnose_fire",
     "sounds": [

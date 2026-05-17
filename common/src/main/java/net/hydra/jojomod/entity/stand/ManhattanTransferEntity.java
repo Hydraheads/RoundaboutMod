@@ -118,6 +118,17 @@ public class ManhattanTransferEntity extends StandEntity {
     }
     @Override
     protected float getFlyingSpeed() {
+        if(this.getUserData(this.getUser()) != null && this.getUser() != null) {
+            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                if(PM.XtraSpdTick > 7) {
+                    return 0.30F;
+                }else if(PM.XtraSpdTick > 4) {
+                    return 0.25F;
+                } else if(PM.XtraSpdTick > 1) {
+                    return 0.20F;
+                }
+            }
+        }
         return 0.10F;
     }
     @Override
@@ -512,16 +523,6 @@ public class ManhattanTransferEntity extends StandEntity {
 
           if(this.getUserData(this.getUser()) != null) {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-                    if (isInRain()) {
-                        if (DodgeRainTicks > 0) {
-                            DodgeRainTicks--;
-
-                        } else {
-                            setDodgeRainTicks(440);
-                          //  Roundabout.LOGGER.info("bwaah");
-                          //  this.level().playSound(null, this.blockPosition(), ModSounds.MANHATTAN_DODGING_EVENT, SoundSource.NEUTRAL, 1F, (float) (0.9F + (Math.random() * 0.2F)));
-                        }
-                    }
                 if (stupidTicks >= 1) {
                     //setMaster(this.getUser());
                     stupidTicks--;

@@ -217,6 +217,13 @@ public class ModSounds {
     public static final ResourceLocation MANHATTAN_DEFLECTION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+MANHATTAN_DEFLECTION);
     public static SoundEvent MANHATTAN_DEFLECTION_EVENT = SoundEvent.createVariableRangeEvent(MANHATTAN_DEFLECTION_ID);
 
+    public static final String CENTURY_BOY_SUMMON = "century_boy_summon";
+    public static final ResourceLocation CENTURY_BOY_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CENTURY_BOY_SUMMON);
+    public static SoundEvent CENTURY_BOY_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(CENTURY_BOY_SUMMON_ID);
+    public static final String CENTURY_BOY_HIT = "century_boy_hit";
+    public static final ResourceLocation CENTURY_BOY_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CENTURY_BOY_HIT);
+    public static SoundEvent CENTURY_BOY_HIT_EVENT = SoundEvent.createVariableRangeEvent(CENTURY_BOY_HIT_ID);
+
     public static final String SNUBNOSE_FIRE = "snubnose_fire";
     public static final ResourceLocation SNUBNOSE_FIRE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SNUBNOSE_FIRE);
     public static SoundEvent SNUBNOSE_FIRE_EVENT = SoundEvent.createVariableRangeEvent(SNUBNOSE_FIRE_ID);
