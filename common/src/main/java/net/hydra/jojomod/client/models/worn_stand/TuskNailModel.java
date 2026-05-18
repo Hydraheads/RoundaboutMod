@@ -66,12 +66,12 @@ public class TuskNailModel extends PsuedoHierarchicalModel {
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(context)));
         root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
     }
-    public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,int i) {
+    public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,int i,boolean animated) {
         if (context instanceof LivingEntity LE) {
             this.root().getAllParts().forEach(ModelPart::resetPose);
             StandUser user = ((StandUser) LE);
             user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount+i*3);
-            this.animate(user.roundabout$getWornStandIdleAnimation(), TuskAnimations.NAIL_FLOAT,partialTicks+i*3,1.0F);
+            this.animate(user.roundabout$getWornStandIdleAnimation(), TuskAnimations.NAIL_FLOAT,animated ? (partialTicks+i*3) : 0,1.0F);
 
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
             //The number at the end is inversely proportional so 2 is half speed
@@ -100,7 +100,7 @@ public class TuskNailModel extends PsuedoHierarchicalModel {
                 ModStrayModels.TUSK_DRILL_NAIL.render(livingEntity, partialTicks, poseStack, bufferSource, time);
                 poseStack.popPose();
             } else {
-                this.render(livingEntity, PT.getAct() == 1 ? partialTicks : 0, poseStack, bufferSource, time);
+                this.render(livingEntity,partialTicks, poseStack, bufferSource, time,PT.getAct() == 1);
             }
         }
     }
@@ -122,7 +122,7 @@ public class TuskNailModel extends PsuedoHierarchicalModel {
                 ModStrayModels.TUSK_DRILL_NAIL.render(livingEntity, partialTicks, poseStack, bufferSource, time);
                 poseStack.popPose();
             } else {
-                this.render(livingEntity, PT.getAct() == 1 ? partialTicks : 0, poseStack, bufferSource, time);
+                this.render(livingEntity,partialTicks, poseStack, bufferSource, time,PT.getAct() == 1);
             }
         }
     }
