@@ -126,13 +126,13 @@ public class PowersKillerQueen extends NewPunchingStand {
 	
 	private boolean destroyTerrain = true;
 	private boolean explodeOnContact = true;
-	
+	/*
 	public boolean getExplodeOnContact() {return explodeOnContact;}
 	public void setExplodeOnContact(boolean value) {explodeOnContact = value;}
 	
 	public boolean getDestroyTerrain() {return destroyTerrain;}
 	public void setDestroyTerrain(boolean value) {destroyTerrain = value;}
-	
+	*/
 	private boolean BitesTheDustMode = false;
 	private boolean hasStrayCat = false;
 	
@@ -202,12 +202,12 @@ public class PowersKillerQueen extends NewPunchingStand {
     	if (inBitesTheDustMode() == true) {
     		setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_BTD_DAY, PowerIndex.SKILL_1);
     	} else if (isGuarding()) {
-            setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_BOMB_SETIINGS, PowerIndex.SKILL_1_SNEAK);
+            setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_BOMB_SETIINGS, PowerIndex.SKILL_1_GUARD);
         } else if (this.currentBombStatus != BOMB_NONE) {
         	
     		setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_BOMB_DETONATE, PowerIndex.NO_CD);
     	} else if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_PLANT_BOMB_MOB, PowerIndex.SKILL_1_GUARD);
+            setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_PLANT_BOMB_MOB, PowerIndex.SKILL_1_SNEAK);
         } else {
         	setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_PLANT_BOMB_BLOCK, PowerIndex.SKILL_1);
         }
@@ -252,6 +252,9 @@ public class PowersKillerQueen extends NewPunchingStand {
 	        		}
         		}
         	}
+        	case SKILL_1_GUARD -> {
+        		this.tryBombConfig();
+        	}
         	case SKILL_2_NORMAL -> {
         		if (!this.inBitesTheDustMode()) {
         			
@@ -285,8 +288,6 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override
     public void tickPower(){
     	
-    	
-    	
     	if (currentBombStatus == BOMB_BLOCK) {
     		//Vec3 iconPos = new Vec3(this.bombBlock.getX(), this.bombBlock.getY(), this.bombBlock.getZ());
     		
@@ -313,7 +314,11 @@ public class PowersKillerQueen extends NewPunchingStand {
     			
     			if (this.ticksCount >= 0) { this.ticksCount--;}
     			
-    			if (this.explodeOnContact) {
+    			ClientConfig clientConfig = ConfigManager.getClientConfig();
+    	    	int bombConf = clientConfig.dynamicSettings.KillerQueenCurrentBombConfig;
+    	    	
+    			
+    			if (bombConf >= 2) {
     				if (this.currentBombStatus == BOMB_BLOCK) {
     					if(Objects.nonNull(this.bombBlock)) {
     						if (this.bombBlock.detectContact()) {
@@ -392,6 +397,12 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (vaultOrFallBraceFails()){
             dash();
         }
+    }
+    
+    public void tryBombConfig() {
+    	if (!this.BitesTheDustMode ) {
+    		ClientUtil.openBombConfigScreen();
+    	}
     }
     
     public void defuseClient() {   	
@@ -774,10 +785,18 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
     
     public boolean explode() {
+    	ClientConfig clientConfig = ConfigManager.getClientConfig();
+    	int bombConf = clientConfig.dynamicSettings.KillerQueenCurrentBombConfig;
+    	
+    	// 1 % 2 == 1
+    	// 3 % 2 == 1
+    	// 2 % 2 == 0
+    	// 0 % 2 == 0
+    	
 		if (!this.isClient() && this.currentBombStatus == PowersKillerQueen.BOMB_BLOCK) {
 			BlockPos pos = this.bombBlock.getBlockPos();
 			if (!isClient()) {
-				if (this.destroyTerrain) {explodeBlocks(pos);}
+				if (bombConf % 2 == 1) {explodeBlocks(pos);}
 				this.explosionHurt(pos.getCenter());
 				this.explodeEffects(pos.getCenter());
 			}
