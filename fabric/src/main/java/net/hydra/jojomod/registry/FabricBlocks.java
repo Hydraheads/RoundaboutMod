@@ -33,6 +33,8 @@ public class FabricBlocks {
     );
     public static final Block DEEPSLATE_AJA_ORE = registerBlock("deepslate_aja_ore", ModBlocks.DEEPSLATE_AJA_ORE_PROPERTIES
     );
+    public static final Block AJA_BLOCK = registerBlock("aja_block", AJA_BLOCK_PROPERTIES
+    );
     public static final Block SHINY_QUARTZ = registerBlock("shiny_quartz", ModBlocks.SHINY_QUARTZ_PROPERTIES
     );
     public static final Block SHINY_QUARTZ_TILES = registerBlock("shiny_quartz_tiles", ModBlocks.SHINY_QUARTZ_TILES_PROPERTIES
@@ -264,6 +266,7 @@ public class FabricBlocks {
         ModBlocks.METEOR_BLOCK = METEOR_BLOCK;
         ModBlocks.AJA_ORE = AJA_ORE;
         ModBlocks.DEEPSLATE_AJA_ORE = DEEPSLATE_AJA_ORE;
+        ModBlocks.AJA_BLOCK = AJA_BLOCK;
         ModBlocks.SHINY_QUARTZ = SHINY_QUARTZ;
         ModBlocks.SHINY_QUARTZ_TILES = SHINY_QUARTZ_TILES;
         ModBlocks.REGAL_FLOOR = REGAL_FLOOR;

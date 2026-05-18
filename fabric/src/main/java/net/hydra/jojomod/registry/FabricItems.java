@@ -448,6 +448,7 @@ public class FabricItems {
                         entries.accept(ModBlocks.IMPACT_MOUND);
                         entries.accept(ModBlocks.AJA_ORE);
                         entries.accept(ModBlocks.DEEPSLATE_AJA_ORE);
+                        entries.accept(ModBlocks.AJA_BLOCK);
                         entries.accept(ModBlocks.SHINY_QUARTZ);
                         entries.accept(ModBlocks.SHINY_QUARTZ_TILES);
                         entries.accept(ModBlocks.REGAL_FLOOR);

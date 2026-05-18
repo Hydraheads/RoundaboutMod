@@ -7,6 +7,9 @@
     "roundabout:barbed_wire_bundle",
     "roundabout:shiny_quartz",
     "roundabout:shiny_quartz_tiles",
-    "roundabout:goddess_statue"
+    "roundabout:goddess_statue",
+    "roundabout:aja_ore",
+    "roundabout:deepslate_aja_ore",
+    "roundabout:aja_block"
   ]
 }

@@ -51,7 +51,7 @@ public class AjaOreBlock extends DropExperienceBlock {
                 .setValue(LIT, hasLitNeighbor(level, pos));
     }
 
-    private boolean hasLitNeighbor(Level level, BlockPos pos) {
+    public boolean hasLitNeighbor(Level level, BlockPos pos) {
 
         for (Direction direction : Direction.values()) {
 
