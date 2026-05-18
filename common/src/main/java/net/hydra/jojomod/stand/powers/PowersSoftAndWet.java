@@ -1145,6 +1145,14 @@ public class PowersSoftAndWet extends NewPunchingStand {
         return (float) (0.54F*(ClientNetworking.getAppropriateConfig().
                 softAndWetSettings.explosiveBubbleShootSpeedMultiplier*0.01));
     }
+    public float getExplosiveSpeed2(){
+        if (getInExplosiveSpinMode()){
+            return (float) (0.8F*(ClientNetworking.getAppropriateConfig().
+                    softAndWetSettings.explosiveBubbleShootSpeedMultiplier*0.01));
+        }
+        return (float) (0.7F*(ClientNetworking.getAppropriateConfig().
+                softAndWetSettings.explosiveBubbleShootSpeedMultiplier*0.01));
+    }
 
     public boolean inShootingMode(){
         return getStandUserSelf().roundabout$getCombatMode() && PowerTypes.hasStandActivelyEquipped(self);
@@ -1158,7 +1166,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
             this.poseStand(OffsetIndex.FOLLOW);
             this.setAttackTimeDuring(-10);
             this.setActivePower(PowerIndex.POWER_4_EXTRA);
-            shootExplosiveBubbleSpeed(bubble,getExplosiveSpeed());
+            shootExplosiveBubbleSpeed(bubble,getExplosiveSpeed2());
             bubbleListInit();
             this.bubbleList.add(bubble);
             this.getSelf().level().addFreshEntity(bubble);
@@ -1311,6 +1319,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
                         && (MainUtil.isBlockBlacklisted(((BlockItem)stack.getItem()).getBlock().defaultBlockState()) ||
                         ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock))) {
             this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().softAndWetSettings.itemBubbleShotCooldown);
+            this.setCooldown(PowerIndex.SKILL_2_SNEAK, ClientNetworking.getAppropriateConfig().softAndWetSettings.itemBubblePopCooldown);
             if (!this.self.level().isClientSide()) {
 
                 SoftAndWetItemLaunchingBubbleEntity bubble = getItemLaunchingBubble();
@@ -1469,6 +1478,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
                                plunder.popBubble();
                             }
                         } else if (value instanceof SoftAndWetExplosiveBubbleEntity SBE){
+                            SBE.setReady(true);
                             SBE.popWithForce();
                         } else if (value instanceof SoftAndWetItemLaunchingBubbleEntity GBE){
                             GBE.popWithForce(savedPos);
@@ -2103,7 +2113,23 @@ public void unlockSkin(){
         if (this.getReducedDamage(entity)){
             return levelupDamageMod(multiplyPowerByStandConfigShooting(multiplyPowerByStandConfigPlayers(1.4F)));
         } else {
-            return levelupDamageMod(multiplyPowerByStandConfigShooting(multiplyPowerByStandConfigMobs(3F)));
+            return levelupDamageMod(multiplyPowerByStandConfigShooting(multiplyPowerByStandConfigMobs(4F)));
+        }
+    }
+
+    public float getItemBubbleStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigShooting(multiplyPowerByStandConfigPlayers(0.2F)));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigShooting(multiplyPowerByStandConfigMobs(2F)));
+        }
+    }
+
+    public float getPointBlankBubbleStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigShooting(multiplyPowerByStandConfigPlayers(0.5F)));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigShooting(multiplyPowerByStandConfigMobs(2F)));
         }
     }
     public float getGoBeyondStrength(Entity entity){

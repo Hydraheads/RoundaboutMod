@@ -84,6 +84,7 @@ public class GroundBubbleEntity extends GroundPathfindingStandAttackEntity {
                 if ($$0 != null && ((StandUser) $$0).roundabout$getStandPowers() instanceof PowersSoftAndWet PWW) {
                     SoftAndWetExplosiveBubbleEntity bubble = PWW.getExplosiveBubble();
                     if (bubble != null){
+                        bubble.setReady(true);
                         bubble.setSped(PWW.getExplosiveSpeed());
                         bubble.setPos(this.position().add(0,0.1F,0));
                         bubble.setMadeWithBarrage(true);
