@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.access.IEnderMan;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
@@ -119,7 +120,17 @@ public class TuskNailEntity extends AbstractArrow {
             this.discard();
         }
         if (!this.level().isClientSide()) {
-            ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(40/255F,214/255F,1F),1F),
+
+            float r = 0;
+            float g = 206/255.0F;
+            float b = 228/255.0F;
+            if (this.getOwner() instanceof Player P) {
+                IPlayerEntity IPE = (IPlayerEntity) P;
+                r = IPE.rdbt$getHairColorX();
+                g = IPE.rdbt$getHairColorY();
+                b = IPE.rdbt$getHairColorZ();
+            }
+            ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(r,g,b),1F),
                     this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(),
                     0, 0, 0, 0, 0.015);
 
