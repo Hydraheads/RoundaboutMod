@@ -1397,7 +1397,7 @@
   "ability.roundabout.plunder_bubble": "Plunder Bubble",
   "ability.roundabout.plunder_bubble.desc": "Creates a bubble that takes things away when it makes contact. Use bubble selection to choose what these things are. The bubble follows your cursor as it moves forward.",
   "ability.roundabout.bubble_pop": "Bubble Pop",
-  "ability.roundabout.bubble_pop.desc": "Pops all of your active bubbles. Applies to almost all bubble types.",
+  "ability.roundabout.bubble_pop.desc": "Pops all of your active bubbles. Applies to almost all bubble types, including shooting mode bubbles which deal knockback around them when popped.",
   "ability.roundabout.bubble_redirect": "Bubble Redirect",
   "ability.roundabout.bubble_redirect.desc": "Redirects plunder bubbles that have already taken something away towards the block or entity you are facing.",
   "ability.roundabout.item_launching_bubble": "Item Launching Bubble",

@@ -151,10 +151,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
                 tryToBigBubbleClient();
             }
 
-            case SKILL_4_NORMAL -> {
-                shootingModeToggleClient();
-            }
-            case SKILL_4_CROUCH -> {
+            case SKILL_4_NORMAL, SKILL_4_CROUCH -> {
                 waterShieldAttemptClient();
             }
         }
@@ -292,13 +289,17 @@ public class PowersSoftAndWet extends NewPunchingStand {
 
     public void waterShieldAttemptClient(){
         if (!inShootingMode()){
-            if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
-                if (canExecuteMoveWithLevel(getWaterShieldLevel())) {
-                    if (canUseWaterShield()) {
-                        this.tryPower(PowerIndex.POWER_4_SNEAK, true);
-                        tryPowerPacket(PowerIndex.POWER_4_SNEAK);
+            if (canUseWaterShield()) {
+                if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
+                    if (canExecuteMoveWithLevel(getWaterShieldLevel())) {
+                        if (canUseWaterShield()) {
+                            this.tryPower(PowerIndex.POWER_4_SNEAK, true);
+                            tryPowerPacket(PowerIndex.POWER_4_SNEAK);
+                        }
                     }
                 }
+            } else {
+                shootingModeToggleClient();
             }
         } else {
             shootingModeToggleClient();
@@ -477,12 +478,6 @@ public class PowersSoftAndWet extends NewPunchingStand {
             if (slot == 2 && ((!canDoBubbleRedirect() && isGuarding()))) {
                 return true;
             }
-
-            if (slot == 4 && isHoldingSneak()){
-                if (!canUseWaterShield()){
-                    return true;
-                }
-            }
         }
 
         if (slot == 3 && (!canVault() && !canFallBrace() && !isGuarding() && isHoldingSneak()) && !canBridge()){
@@ -553,7 +548,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+80,getShootingModeLevel(), "ability.roundabout.shooting_mode",
                 "instruction.roundabout.press_skill", StandIcons.SOFT_SHOOTING_MODE,4,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99,getWaterShieldLevel(), "ability.roundabout.water_shield",
-                "instruction.roundabout.press_skill_crouch", StandIcons.WATER_SHIELD,4,level,bypas));
+                "instruction.roundabout.press_skill", StandIcons.WATER_SHIELD,4,level,bypas));
         return $$1;
     }
 
@@ -642,8 +637,8 @@ public class PowersSoftAndWet extends NewPunchingStand {
         if (inShootingMode()) {
             setSkillIcon(context, x, y, 4, StandIcons.SOFT_SHOOTING_MODE_EXIT, PowerIndex.SKILL_4);
         } else {
-            if (isHoldingSneak()) {
-                if (canExecuteMoveWithLevel(getWaterShieldLevel())) {
+            if (canUseWaterShield()) {
+                if (canExecuteMoveWithLevel(getWaterShieldLevel())){
                     setSkillIcon(context, x, y, 4, StandIcons.WATER_SHIELD, PowerIndex.SKILL_4_SNEAK);
                 } else {
                     setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
