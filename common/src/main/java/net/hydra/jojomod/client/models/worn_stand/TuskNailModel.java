@@ -3,6 +3,7 @@ package net.hydra.jojomod.client.models.worn_stand;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
@@ -14,6 +15,7 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -21,6 +23,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import org.joml.Quaternionf;
 
 
@@ -63,7 +66,7 @@ public class TuskNailModel extends PsuedoHierarchicalModel {
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(context)));
         root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
     }
-    public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int light, float r, float g, float b, float alpha,int i) {
+    public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,int i) {
         if (context instanceof LivingEntity LE) {
             this.root().getAllParts().forEach(ModelPart::resetPose);
             StandUser user = ((StandUser) LE);
@@ -73,10 +76,19 @@ public class TuskNailModel extends PsuedoHierarchicalModel {
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
             //The number at the end is inversely proportional so 2 is half speed
             float scale = 0.05F;
-            r = r*(1-scale) +  (float)Math.sin(partialTicks+i) * scale;
-            g = g*(1-scale) +  (float)Math.sin(partialTicks+i*2) * scale;
-            b = b*(1-scale) +  (float)Math.sin(partialTicks+i*3) * scale;
-            root().render(poseStack, consumer, 15728880, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
+            float r = 0;
+            float g = 206/255.0F;
+            float b = 228/255.0F;
+            if (context instanceof Player P) {
+                IPlayerEntity IPE = (IPlayerEntity) P;
+                r = IPE.rdbt$getHairColorX();
+                g = IPE.rdbt$getHairColorY();
+                b = IPE.rdbt$getHairColorZ();
+            }
+            r *= (1-scale) + (float)Math.sin(partialTicks+i) *  scale;
+            g *= (1-scale) +  (float)Math.sin(partialTicks+i*2) * scale;
+            b *= (1-scale) +  (float)Math.sin(partialTicks+i*3) * scale;
+            root().render(poseStack, consumer, 15728880, OverlayTexture.NO_OVERLAY, r, g, b, 1.0F);
         }
     }
 
@@ -85,10 +97,10 @@ public class TuskNailModel extends PsuedoHierarchicalModel {
         if (SU.roundabout$getStandPowers() instanceof PowersTusk PT) {
             if (PT.getAct() > 1 && ( (nailCount == 4 && PT.getMaxActiveNails() > 5) || (PT.getMaxActiveNails() == nailCount && PT.getMaxActiveNails() <= 5)  ) ) {
                 poseStack.pushPose();
-                ModStrayModels.TUSK_DRILL_NAIL.render(livingEntity, partialTicks, poseStack, bufferSource, packedLight, 1,1,1, 1.0F, time);
+                ModStrayModels.TUSK_DRILL_NAIL.render(livingEntity, partialTicks, poseStack, bufferSource, time);
                 poseStack.popPose();
             } else {
-                this.render(livingEntity, PT.getAct() == 1 ? partialTicks : 0, poseStack, bufferSource, packedLight, 1,1,1, 1.0F, time);
+                this.render(livingEntity, PT.getAct() == 1 ? partialTicks : 0, poseStack, bufferSource, time);
             }
         }
     }
@@ -107,10 +119,10 @@ public class TuskNailModel extends PsuedoHierarchicalModel {
                     poseStack.translate(-0.02,0.1,0); // RIGHT BACKWARD, LEFT FORWARD, U/D, L/R
                 }
                 poseStack.rotateAround(new Quaternionf(0, 1, 0, nailCount > 5 ? -1 : 1), 0, 0, 0);
-                ModStrayModels.TUSK_DRILL_NAIL.render(livingEntity, partialTicks, poseStack, bufferSource, packedLight, 1,1,1, 1.0F, time);
+                ModStrayModels.TUSK_DRILL_NAIL.render(livingEntity, partialTicks, poseStack, bufferSource, time);
                 poseStack.popPose();
             } else {
-                this.render(livingEntity, PT.getAct() == 1 ? partialTicks : 0, poseStack, bufferSource, packedLight, 1,1,1, 1.0F, time);
+                this.render(livingEntity, PT.getAct() == 1 ? partialTicks : 0, poseStack, bufferSource, time);
             }
         }
     }
