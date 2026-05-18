@@ -126,6 +126,13 @@ public class PowersKillerQueen extends NewPunchingStand {
 	
 	private boolean destroyTerrain = true;
 	private boolean explodeOnContact = true;
+	
+	public boolean getExplodeOnContact() {return explodeOnContact;}
+	public void setExplodeOnContact(boolean value) {explodeOnContact = value;}
+	
+	public boolean getDestroyTerrain() {return destroyTerrain;}
+	public void setDestroyTerrain(boolean value) {destroyTerrain = value;}
+	
 	private boolean BitesTheDustMode = false;
 	private boolean hasStrayCat = false;
 	
