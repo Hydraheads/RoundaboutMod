@@ -435,8 +435,10 @@ public class Config implements Cloneable {
         public Integer heatTickDownRate;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer heatTickDownPauseLength;
-        @IntOption(group = "inherit", value = 800, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 650, min = 0, max = 72000)
         public Integer explosiveSpinMeterGainedPerShot;
+        @IntOption(group = "inherit", value = 800, min = 0, max = 72000)
+        public Integer explosiveSpinMeterGainedPerHit;
         @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
         public Integer explosiveSpinMeterTickDownRate;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)

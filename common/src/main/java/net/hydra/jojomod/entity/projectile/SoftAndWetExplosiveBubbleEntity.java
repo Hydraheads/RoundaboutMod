@@ -1,16 +1,21 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -24,6 +29,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
@@ -188,6 +194,7 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity {
         }
     }
 
+    public boolean spinMode = false;
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
         if (!this.level().isClientSide()) {
@@ -215,6 +222,12 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity {
                             if (ent instanceof LivingEntity LIVE) {
                                 LE.setLastHurtMob(LIVE);
                                 PW.addEXP(1);
+                                if (getReady() && LE instanceof Player pl && !spinMode
+                                && !(LIVE instanceof FogCloneEntity) && !(LIVE instanceof FallenMob)){
+                                    S2CPacketUtil.sendSimpleByteToClientPacket(pl,
+                                            PacketDataIndex.S2C_SOFT);
+
+                                }
                             }
                             //You don't need to hurt them to launch them
                         }

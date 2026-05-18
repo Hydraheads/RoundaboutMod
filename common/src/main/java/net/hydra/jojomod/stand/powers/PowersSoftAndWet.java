@@ -704,8 +704,9 @@ public class PowersSoftAndWet extends NewPunchingStand {
     }
     public int getGoBeyondUseTicks(){
         return ClientNetworking.getAppropriateConfig().softAndWetSettings.explosiveSpinMeterGainedPerShot;
-
-}
+    } public int getGoBeyondUseTicks2(){
+        return ClientNetworking.getAppropriateConfig().softAndWetSettings.explosiveSpinMeterGainedPerHit;
+    }
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (!consumeClickInput) {
@@ -1166,6 +1167,9 @@ public class PowersSoftAndWet extends NewPunchingStand {
             this.poseStand(OffsetIndex.FOLLOW);
             this.setAttackTimeDuring(-10);
             this.setActivePower(PowerIndex.POWER_4_EXTRA);
+            if (getInExplosiveSpinMode()){
+                bubble.spinMode = true;
+            }
             shootExplosiveBubbleSpeed(bubble,getExplosiveSpeed2());
             bubbleListInit();
             this.bubbleList.add(bubble);
