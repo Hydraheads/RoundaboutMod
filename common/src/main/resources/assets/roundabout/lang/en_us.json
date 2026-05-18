@@ -1410,6 +1410,8 @@
   "ability.roundabout.shooting_mode.desc": "Toggles shooting mode. You stop holding items, and instead you fire off explosive bubbles when you press the attack button. Once the red bar on the bottom reaches the top, you cannot shoot, and need to wait for it to decrease. Fill the blue bar by shooting to enter explosive spin mode where you temporarily can shoot infinitely and potentially fire off go beyond.",
   "ability.roundabout.water_shield": "Water Shield",
   "ability.roundabout.water_shield.desc": "Uses up water in a held water bottle to shield you from many projectile types for a short while. If they make contact, they instead turn into explosive item bubbles which you can pop to launch back at foes. Also puts out fires on you.",
+  "ability.roundabout.plug_wound": "Plug Wound",
+  "ability.roundabout.plug_wound.desc": "Restores a tiny amount of health and cures up to 1 level of bleed. Amidst this process, you are slowed.",
 
   "ability.roundabout.danger_yap": "Lookout Mode",
   "ability.roundabout.danger_yap.desc": "Hey Ya will watch out for mobs that target you, and bring them to your attention.",
@@ -2683,6 +2685,8 @@
   "config.roundabout.waterShieldBucketCooldown.name": "Water Shield Bucket Cooldown",
   "config.roundabout.waterShieldBucketCooldown.desc": "The cooldown of the situational water shield ability, if you have a bucket to use. The default is 40 ticks, or 2 seconds.",
 
+  "config.roundabout.woundPlugCooldown.name": "Wound Plug Cooldown",
+  "config.roundabout.woundPlugCooldown.desc": "The cooldown of wound plug.",
 
   "config.roundabout.emperorShootingModePower.name": "Bullet power",
   "config.roundabout.emperorShootingModePower.desc": "[PLACEHOLDER]",

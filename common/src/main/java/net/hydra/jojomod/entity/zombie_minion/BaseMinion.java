@@ -743,14 +743,15 @@ public class BaseMinion extends PathfinderMob {
                 }
             }
 
-            if (this.getTarget() != null && (!this.getTarget().isAlive() || this.getTarget().isRemoved() ||
+            if (this.getTarget() != null && (((!this.getTarget().isAlive() || this.getTarget().isRemoved() ||
                     (controller != null && controller.is(getTarget()))
-                    )
+                    )) || (getTargetTactic() == Tactics.PEACEFUL.id))
             ){
                 this.setTarget(null);
                 this.setLastHurtByMob(null);
                 this.setLastHurtByPlayer(null);
                 this.setAggressive(false);
+                //Perform a lobotomy because mobs can't follow their aggro rules
                 ((StandUser)this).roundabout$deeplyRemoveAttackTarget();
             }
 
@@ -760,7 +761,7 @@ public class BaseMinion extends PathfinderMob {
                 if (controller.getId() != this.getController()){
                     this.setController(controller.getId());
                 }
-                if (controller instanceof LivingEntity LE) {
+                if (controller instanceof LivingEntity LE && !(getTargetTactic() == Tactics.PEACEFUL.id)) {
                     autoTarget = LE.getLastHurtByMob();
                     autoTarget2 = LE.getLastHurtMob();
                     if (autoTarget instanceof BaseMinion fm && fm.getController() == this.getController()){
