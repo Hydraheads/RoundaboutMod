@@ -7,14 +7,10 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
-import net.hydra.jojomod.client.gui.MemoryRecordScreen.PoseSlot;
-import net.hydra.jojomod.client.gui.MemoryRecordScreen.memoryIcon;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.index.AnubisMemory;
-import net.hydra.jojomod.item.MaxStandDiscItem;
-import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
+import net.hydra.jojomod.util.config.ClientConfig;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -36,10 +32,12 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
     static final ResourceLocation KILLER_QUEEN_BOMB_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/killer_queen_bomb.png");
     
-    public BombConfigScreen(boolean recording) {
+    public BombConfigScreen() {
         super(GameNarrator.NO_TITLE);
     }
-    
+
+    @Override
+    public boolean isPauseScreen() { return false;}
 
     public byte currentlyHovered;
     private int firstMouseX;
@@ -82,21 +80,25 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
             this.yoff = yoff;
         }
         
-        public int getMode() {
+        public int getMode() {return getMode(false);}
+        
+        public int getMode(boolean invert) {
+        	ClientConfig clientConfig = ConfigManager.getClientConfig();
             Player p = Minecraft.getInstance().player;
             StandUser SU = (StandUser) p;
             if (SU.roundabout$getStandPowers() instanceof PowersKillerQueen PA) {
+            	int conf = clientConfig.dynamicSettings.KillerQueenCurrentBombConfig;
             	if (this.context == 0) {
-	                if (PA.getExplodeOnContact()) {
-	                	return 1;
+            		if (conf == 1 || conf == 3) {
+	                	return (invert) ? 0 : 1;
 	                }
             	}else {
-            		if (PA.getDestroyTerrain()) {
-	                	return 1;
+            		if (conf == 2 || conf == 3) {
+	                	return (invert) ? 0 : 1;
 	                }
             	}
             }
-            return 0;
+            return (invert) ? 1 : 0;
         }
 
 		@Override
@@ -107,9 +109,6 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 			
 	        this.drawSlot(guiGraphics, status);
 	        this.drawIcon(guiGraphics);
-	        //guiGraphics.setColor(1f, 1f, 1f, 1f);
-	        //guiGraphics.renderItem(this.icon.item.getDefaultInstance(),this.getX() + 5, this.getY() + 5);
-	        
 		    
 		}
 		
@@ -121,7 +120,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 		
 		@Override
 		public boolean isHoveredOrFocused() {
-		    return super.isHoveredOrFocused() || this.isSelected;
+		    return super.isHoveredOrFocused();
 		}
 		
 		public void setSelected(boolean bl) {
@@ -145,7 +144,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
     public boolean mouseReleased(double $$0, double $$1, int $$2) {
         this.switchToHoveredGameMode();
         this.minecraft.setScreen(null);
-        return true;
+        return super.mouseReleased($$0, $$1, $$2);
     }
 
     @Override
@@ -155,12 +154,12 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
         }*/
 
 
-        guiGraphics.pose().pushPose();
-        RenderSystem.enableBlend();
+        //guiGraphics.pose().pushPose();
+        //RenderSystem.enableBlend();
        /* int k = this.width / 2 - 62;
         int l = this.height / 2 - 31 - 39;
         guiGraphics.blit(MEMORY_LOCATION, k, l, 0.0f, 0.0f, 125, 24 , 256, 256);*/
-        guiGraphics.pose().popPose();
+       // guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
 
 
@@ -173,7 +172,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
             this.firstMouseY = j;
             this.setFirstMousePos = true;
         }
-        
+       
         boolean bl = this.firstMouseX == i && this.firstMouseY == j;
         /*
         for (int[] pos : this.positions) {
@@ -181,12 +180,15 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
             int y = this.height/2 - 5 + pos[1];
             guiGraphics.blit(MEMORY_LOCATION,x,y,196,0,12,12,256,256);
         }*/
+        this.currentlyHovered = -1;
+        if (this.slots.get(0).isHoveredOrFocused()) {this.currentlyHovered = 0;}
+        if (this.slots.get(1).isHoveredOrFocused()) {this.currentlyHovered = 1;}
         
         for (ToggableIcon MobSlot : this.slots) {
             MobSlot.render(guiGraphics, i, j, f);
             MobSlot.setSelected(this.currentlyHovered == MobSlot.context);
-            if (bl || !MobSlot.isHoveredOrFocused()) continue;
-            this.currentlyHovered = MobSlot.context;
+            //if (bl || !MobSlot.isHoveredOrFocused()) continue;
+            //this.currentlyHovered = MobSlot.context;
             /*
             Player player = Minecraft.getInstance().player;
             StandUser SU = (StandUser) player;
@@ -197,7 +199,9 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
     }
 
     private void switchToHoveredGameMode() {
-       switchToHoveredGameMode(this.minecraft,slots.get(this.currentlyHovered));
+    	if (this.currentlyHovered != -1) {
+    		switchToHoveredGameMode(this.minecraft,slots.get(this.currentlyHovered));
+       }
     }
 
     private void switchToHoveredGameMode(Minecraft minecraft, ToggableIcon pIcon) {
@@ -208,12 +212,52 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
         StandUser SU = (StandUser) pl;
         
         if (SU.roundabout$getStandPowers() instanceof PowersKillerQueen PA) {
-            if (pIcon.context == 0) {
-            	PA.setExplodeOnContact(!PA.getExplodeOnContact());
-            }else {
-            	PA.setDestroyTerrain(!PA.getDestroyTerrain());
-            }
+            
+            ClientConfig clientConfig = ConfigManager.getClientConfig();
+            int conf = this.slots.get(0).getMode(this.currentlyHovered == 0);
+            conf += this.slots.get(1).getMode(this.currentlyHovered == 1)*2;
+            //if (clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble != (int) swap) {
+            clientConfig.dynamicSettings.KillerQueenCurrentBombConfig = (int) conf;
+            ConfigManager.saveClientConfig();
+            //}
         }
     }
     
+    public boolean roundabout$sameKeyOne(KeyMapping key1){
+        return (key1.isDown() || (key1.same(this.minecraft.options.keyLoadHotbarActivator) && this.minecraft.options.keyLoadHotbarActivator.isDown())
+                || (key1.same(this.minecraft.options.keySaveHotbarActivator) && this.minecraft.options.keySaveHotbarActivator.isDown())
+        );
+    }
+    
+    @Override
+    public boolean keyReleased(int $$0, int $$1, int $$2) {
+        if (this.minecraft != null && !roundabout$sameKeyOne(KeyInputRegistry.abilityOneKey)) {
+            this.switchToHoveredGameMode();
+            this.minecraft.setScreen(null);
+            if (this.minecraft.player != null){
+                StandUser SU = ((StandUser) this.minecraft.player);
+                if (SU.roundabout$getStandPowers().isBarraging()){
+                    //This prevents barrage canceling
+                } else {
+                    this.minecraft.options.keyUse.setDown(false);
+                }
+            }
+        }
+        return false;
+    }
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        // Prevent the screen from handling WASD, space, shift, etc.
+        if (Minecraft.getInstance().options.keyUp.matches(keyCode, scanCode) ||
+                Minecraft.getInstance().options.keyDown.matches(keyCode, scanCode) ||
+                Minecraft.getInstance().options.keyLeft.matches(keyCode, scanCode) ||
+                Minecraft.getInstance().options.keyRight.matches(keyCode, scanCode) ||
+                Minecraft.getInstance().options.keyJump.matches(keyCode, scanCode) ||
+                Minecraft.getInstance().options.keyShift.matches(keyCode, scanCode)) {
+            return false; // Let these go through to the player
+        }
+
+        return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
 }
