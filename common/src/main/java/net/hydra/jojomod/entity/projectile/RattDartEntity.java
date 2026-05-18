@@ -13,6 +13,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.Direction;
@@ -418,14 +419,20 @@ public class RattDartEntity extends AbstractArrow {
         if ($$1 instanceof Mob) {
             force /= 2;
         } else if ($$1 instanceof Player P) {
-            if (P.isCreative()) {
+            if (P.isCreative()){
                 force = 0;
             }
         }
-        MainUtil.takeUnresistableKnockbackWithY($$1, force,
-                Mth.sin(degrees * ((float) Math.PI / 180)),
-                Mth.sin(-23 * ((float) Math.PI / 180)),
-                -Mth.cos(degrees * ((float) Math.PI / 180)));
+        if ($$1 instanceof LivingEntity LE && MainUtil.isKnockbackResilient(LE)) {
+            force = 0;
+        }
+
+        if (force > 0) {
+            MainUtil.takeUnresistableKnockbackWithY($$1, force,
+                    Mth.sin(degrees * ((float) Math.PI / 180)),
+                    Mth.sin(-23 * ((float) Math.PI / 180)),
+                    -Mth.cos(degrees * ((float) Math.PI / 180)));
+        }
 
         this.discard();
 

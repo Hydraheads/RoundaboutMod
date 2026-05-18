@@ -2024,6 +2024,14 @@ public class MainUtil {
                 || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.STAND_VIRUS) ||
                 value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING) || value.equals(ModEffects.MOLD);
     }
+
+
+    public static boolean isKnockbackResilient(LivingEntity LE){
+        if (((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking()){
+            return true;
+        }
+        return false;
+    }
     public static boolean canHaveFrictionTaken(LivingEntity LE){
         if (LE.onClimbable()){
             return false;
