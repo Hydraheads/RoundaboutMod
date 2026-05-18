@@ -55,7 +55,7 @@ public class PowersCream extends NewPunchingStand {
     @Override
     /**Override to add disable config*/
     public boolean isStandEnabled(){
-        return ClientNetworking.getAppropriateConfig().creamSettings.enableCream;
+        return true;
     }
 
     @Override
@@ -107,18 +107,18 @@ public class PowersCream extends NewPunchingStand {
 
     @Override
     public int getMaxGuardPoints(){
-        return ClientNetworking.getAppropriateConfig().creamSettings.creamGuardPoints;
+        return 15;
     }
 
     @Override
     public float getMiningMultiplier() {
-        return (float) (1F*(ClientNetworking.getAppropriateConfig().
-                creamSettings.miningSpeedMultiplierCream *0.01));
+        return (float) (1F*(
+                100 *0.01));
     }
 
     @Override
     public int getMiningLevel() {
-        return ClientNetworking.getAppropriateConfig().creamSettings.getMiningTierCream;
+        return 0;
     }
 
     public int transformDirection = 0;
@@ -334,11 +334,11 @@ public class PowersCream extends NewPunchingStand {
 
     public float getVoidDamage(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 2.7* (ClientNetworking.getAppropriateConfig().
-                    creamSettings.creamAttackMultOnPlayers*0.01)));
+            return levelupDamageMod((float) ((float) 2.7* (
+                    100*0.01)));
         } else {
-            return levelupDamageMod((float) ((float) 10* (ClientNetworking.getAppropriateConfig().
-                    creamSettings.creamAttackMultOnMobs*0.01)));
+            return levelupDamageMod((float) ((float) 10* (
+                    100*0.01)));
         }
     }
 

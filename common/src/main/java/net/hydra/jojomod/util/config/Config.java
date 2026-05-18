@@ -92,8 +92,6 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public RattSettings rattSettings;
     @NestedOption(group = "modded")
-    public CreamSettings creamSettings;
-    @NestedOption(group = "modded")
     public AnubisSettings anubisSettings;
     @NestedOption(group = "modded")
     public EmperorSettings emperorSettings;
@@ -814,26 +812,6 @@ public class Config implements Cloneable {
         @BooleanOption(group = "inherit", value = true)
         public Boolean invisiBurstAlertsMobs;
     }
-
-
-
-    public static class CreamSettings {
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean enableCream;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer creamAttackMultOnMobs;
-        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
-        public Integer creamAttackMultOnPlayers;
-        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
-        public Integer creamGuardPoints;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer miningSpeedMultiplierCream;
-        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
-        public Integer getMiningTierCream;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer creamVoidTime;
-    }
-
 
 
     public static class AnubisSettings {
