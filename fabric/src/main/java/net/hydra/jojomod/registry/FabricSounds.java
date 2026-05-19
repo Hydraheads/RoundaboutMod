@@ -244,6 +244,10 @@ public class FabricSounds {
 
         addSound(ModSounds.CENTURY_BOY_SUMMON_ID, ModSounds.CENTURY_BOY_SUMMON_EVENT);
         addSound(ModSounds.CENTURY_BOY_HIT_ID, ModSounds.CENTURY_BOY_HIT_EVENT);
+        addSound(ModSounds.CENTURY_BOY_NORMAL_STANCE_ID, ModSounds.CENTURY_BOY_NORMAL_STANCE_EVENT);
+        addSound(ModSounds.CENTURY_BOY_PROPEL_STANCE_ID, ModSounds.CENTURY_BOY_PROPEL_STANCE_EVENT);
+        addSound(ModSounds.CENTURY_BOY_OUTPUT_STANCE_ID, ModSounds.CENTURY_BOY_OUTPUT_STANCE_EVENT);
+        addSound(ModSounds.CENTURY_BOY_GROUND_STANCE_ID, ModSounds.CENTURY_BOY_GROUND_STANCE_EVENT);
 
 
         addSound(ModSounds.RATT_SUMMON_ID, ModSounds.RATT_SUMMON_EVENT);
