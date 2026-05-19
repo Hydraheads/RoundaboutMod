@@ -552,11 +552,10 @@ public class FabricItems {
                         entries.accept(CHICKEN_REMAINS);
                         entries.accept(DOG_REMAINS);
                         entries.accept(AXOLOTL_REMAINS);
-
-                        entries.accept(STAND_DISC_20_CENTURY_BOY);
-                        entries.accept(STAND_DISC_MANHATTAN_TRANSFER);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
+                        entries.accept(STAND_DISC_20_CENTURY_BOY);
+                        entries.accept(STAND_DISC_MANHATTAN_TRANSFER);
                         entries.accept(STAND_DISC_TUSK);
                         entries.accept(MAX_STAND_DISC_TUSK);
                         //entries.accept(STAND_DISC_DIVER_DOWN);

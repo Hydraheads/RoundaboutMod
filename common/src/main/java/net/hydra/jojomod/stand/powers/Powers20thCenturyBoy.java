@@ -209,19 +209,23 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             switch (mode) {
                 case 1 -> {
                     staticMode = 1;
+                    this.self.level().playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_GROUND_STANCE_EVENT, SoundSource.PLAYERS, 3.0F, 1.0F);
                 }
                 case 2 -> {
                     staticMode = 2;
+                    this.self.level().playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_NORMAL_STANCE_EVENT, SoundSource.PLAYERS, 3.0F, 1.0F);
                 }
                 case 3 -> {
                     staticMode = 3;
+                    this.self.level().playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_PROPEL_STANCE_EVENT, SoundSource.PLAYERS, 3.0F, 1.0F);
                 }
                 case 4 -> {
                     staticMode = 4;
+                    this.self.level().playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_OUTPUT_STANCE_EVENT, SoundSource.PLAYERS, 3.0F, 1.0F);
                 }
             }
             this.self.stopUsingItem();
-            ///ClientUtil.stopDestroyingBlock();
+            if(this.isClient()){ClientUtil.stopDestroyingBlock();}
         } else {
             invincibleState = false;
             staticMode = 0;
@@ -235,18 +239,20 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         if(staticMode == 3){
             if (ClientNetworking.getAppropriateConfig().centuryBoySettings.oldKnockbackStance){
                 if(damageSource.getEntity() != null){
+                    this.self.level().playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_HIT_EVENT, SoundSource.PLAYERS, 3F, 1.0F);
                     this.self.setDeltaMovement(
                             this.self.position().subtract(
                                     damageSource.getSourcePosition()).multiply(new Vec3(amount/7.5, amount/7.5, amount/7.5)));
                 }
             }else{
-                /// to do: make an exception for iron golems in CenturyBoyKnockback
+                this.self.level().playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_HIT_EVENT, SoundSource.PLAYERS, 3F, 1.0F);
                 return false;
             }
 
 
         }
         if (staticMode == 4){
+            this.self.level().playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_HIT_EVENT, SoundSource.PLAYERS, 3F, 1.0F);
             return false;
         }
         if(invincibleState){

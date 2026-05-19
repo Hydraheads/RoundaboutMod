@@ -245,6 +245,30 @@
       "roundabout:century_boy_hit"
     ]
   },
+  "century_boy_normal_stance": {
+  "subtitle": "sounds.roundabout.century_boy_normal_stance",
+  "sounds": [
+    "roundabout:century_boy_normal_stance"
+  ]
+},
+  "century_boy_propel_stance": {
+    "subtitle": "sounds.roundabout.century_boy_propel_stance",
+    "sounds": [
+      "roundabout:century_boy_propel_stance"
+    ]
+  },
+  "century_boy_output_stance": {
+    "subtitle": "sounds.roundabout.century_boy_output_stance",
+    "sounds": [
+      "roundabout:century_boy_output_stance"
+    ]
+  },
+  "century_boy_ground_stance": {
+    "subtitle": "sounds.roundabout.century_boy_ground_stance",
+    "sounds": [
+      "roundabout:century_boy_ground_stance"
+    ]
+  },
   "snubnose_fire": {
     "subtitle": "sounds.roundabout.snubnose_fire",
     "sounds": [
