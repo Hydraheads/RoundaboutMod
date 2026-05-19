@@ -252,9 +252,8 @@ public class RattDartEntity extends AbstractArrow {
                 onHitBlock2($$0);
                 this.setParticle(false);
             }
-            this.setSuperthrowTicks(0);
-
         }
+        this.setSuperthrowTicks(0);
     }
 
     public void shootWithVariance(double $$0, double $$1, double $$2, float $$3, float $$4) {
@@ -346,9 +345,9 @@ public class RattDartEntity extends AbstractArrow {
         }
 
         float degrees = MainUtil.getLookAtEntityYaw(this, $$1);
-        float force = 0.8F;
+        float force = 0.6F;
         if (this.getShotType() == CHARGED) {
-            force = 1;
+            force = 0.9F;
         }
 
 
@@ -430,7 +429,7 @@ public class RattDartEntity extends AbstractArrow {
         if (force > 0) {
             MainUtil.takeUnresistableKnockbackWithY($$1, force,
                     Mth.sin(degrees * ((float) Math.PI / 180)),
-                    Mth.sin(-23 * ((float) Math.PI / 180)),
+                    Mth.sin(-20 * ((float) Math.PI / 180)),
                     -Mth.cos(degrees * ((float) Math.PI / 180)));
         }
 

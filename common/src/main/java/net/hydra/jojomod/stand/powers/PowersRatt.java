@@ -484,7 +484,7 @@ public class PowersRatt extends NewDashPreset {
         StandEntity SE = this.getStandEntity(this.getSelf());
 
 
-        if (isPlaced() && !(this.getSelf() instanceof Mob)) {
+        if (SE instanceof RattEntity RE && !(this.getSelf() instanceof Mob)) {
 
 
 
@@ -541,7 +541,7 @@ public class PowersRatt extends NewDashPreset {
                     }
                 }
             }
-            if (isPacketPlayer()) {
+            if (isPacketPlayer() && !RE.isSafe() ) {
                 if (isAutoMining()) {
                     if (isClient()) {
                         BurstFire();
@@ -938,7 +938,7 @@ public class PowersRatt extends NewDashPreset {
         switch (activeP) {
             case PowersRatt.AUTO -> {
                 if (getShootTarget() == null && isHoldingSneak() && !isAuto() && isPlaced()) {
-                    return true;
+                    return !((RattEntity)this.getStandEntity(this.getSelf())).isSafe();
                 }
             }
             case PowersRatt.SETPLACE -> {
@@ -952,7 +952,7 @@ public class PowersRatt extends NewDashPreset {
             }
             case PowersRatt.PLACE_BURST -> {
                 if (shotcooldown != 0 || shieldDelay >= 20) {
-                    return true;
+                    return !((RattEntity)this.getStandEntity(this.getSelf())).isSafe();
                 }
             }
             case PowersRatt.CHANGE_MODE -> {
