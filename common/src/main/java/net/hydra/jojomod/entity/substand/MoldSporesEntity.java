@@ -105,7 +105,7 @@ public class MoldSporesEntity extends StandEntity {
                 //boolean down = previousYpos > entity.getY() + 0.1;
 
                 boolean isStand = (entity instanceof StandEntity);
-                boolean playerBalanceDetection = ((entity.getY() < this.getUser().getY() && this.getUser() instanceof Player) || (!(entity instanceof Player)));
+                boolean playerBalanceDetection = ((entity.getY() - 2 < this.getUser().getY() && this.getUser() instanceof Player) || (!(entity instanceof Player)));
                 if(!playerBalanceDetection){
                     playerBalanceDetection = (entity instanceof Player && ((StandUser)entity).getStaringYPos()-1 > entity.getY());
                 }
