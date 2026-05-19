@@ -1349,7 +1349,7 @@
   "ability.roundabout.projectile_burn": "Flame Guard",
   "ability.roundabout.projectile_burn.desc": "Burns away incoming projectiles, and ignites incoming gasoline projectiles. Destroys flesh buds.",
   "ability.roundabout.crossfire_firestorm": "Crossfire Firestorm",
-  "ability.roundabout.crossfire_firestorm.desc": "Creates a large ankh which scatters tiny flames everywhere, buffing your crossfire hurricane abilities and allowing you to use them in rain. The massive toll on stand energy, however, increases their cooldowns.",
+  "ability.roundabout.crossfire_firestorm.desc": "Creates a large ankh which scatters tiny flames everywhere, increasing the power of your standard crossfire hurricanes and allowing you to use them in rain. The massive toll on stand energy, however, increases their cooldowns. This does not enhance hurricane special.",
   "ability.roundabout.fire_slam": "Maximum Flame Crash",
   "ability.roundabout.fire_slam.desc": "Launches Magician's Red forward, turning it into a ball of fire. It collides with extreme force and lots of flames, but in doing so your stand is sealed for a while. Only use as a last resort.",
 
