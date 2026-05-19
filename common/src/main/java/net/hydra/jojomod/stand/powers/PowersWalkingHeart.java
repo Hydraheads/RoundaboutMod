@@ -84,6 +84,9 @@ public class PowersWalkingHeart extends NewDashPreset {
     public int walkingCDPerHit(){
         return ClientNetworking.getAppropriateConfig().walkingHeartSettings.walkingHeartCooldownPerHit;
     }
+    public int walkingCDBase(){
+        return ClientNetworking.getAppropriateConfig().walkingHeartSettings.walkingHeartCooldownBase;
+    }
     public int walkingMaxHits(){
         return ClientNetworking.getAppropriateConfig().walkingHeartSettings.walkingHeartMaxHits;
     }
@@ -287,7 +290,10 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public int getHeelUnattachCooldown(){
-        return hitsSinceAttached*walkingCDPerHit();
+        if (hitsSinceAttached > 0){
+            return hitsSinceAttached*walkingCDPerHit() + walkingCDBase();
+        }
+        return 0;
     }
     public void hitHeelExtendedState(){
         if (hasExtendedHeelsForWalking()) {

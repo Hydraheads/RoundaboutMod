@@ -3301,6 +3301,8 @@
   "config.roundabout.walkingHeartMaxHits.desc": "How many hits can you take in heel planted/wall walking mode before you are knocked out of that state.",
   "config.roundabout.walkingHeartCooldownPerHit.name": "Cooldown Per Hit",
   "config.roundabout.walkingHeartCooldownPerHit.desc": "How many cooldown ticks per hit in heel planted/wall walking mode.",
+  "config.roundabout.walkingHeartCooldownBase.name": "Cooldown Base",
+  "config.roundabout.walkingHeartCooldownBase.desc": "How many cooldown ticks when hit at least once in planted/wall walking mode.",
 
   "config.roundabout.usePreciseMath.name": "Use Precise Sphere Math",
   "config.roundabout.usePreciseMath.desc": "If you want the bubble of time stop to accurately cover the radius of the completed sphere rather than just being a simple box calculation. By default it is true because time stop prevents lots of things from ticking and saves performance as is.",
