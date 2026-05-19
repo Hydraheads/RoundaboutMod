@@ -2692,6 +2692,8 @@
   "config.roundabout.emperorShootingModePower.desc": "[PLACEHOLDER]",
   "config.roundabout.bulletShootSpeedMultiplier.name": "Speed multiplier",
   "config.roundabout.bulletShootSpeedMultiplier.desc": "[PLACEHOLDER]",
+  "config.roundabout.emperorBulletRange.name": "Bullet Range",
+  "config.roundabout.emperorBulletRange.desc": "[PLACEHOLDER]",
 
 
   "config.roundabout.meteorsEmitParticles.name": "Meteors Emit Particles",
@@ -3138,10 +3140,26 @@
   "config.roundabout.percentOfZombieVillagersThatBecomeZombieAestheticians.name": "Zombie Aesthetician Rate",
   "config.roundabout.percentOfZombieVillagersThatBecomeZombieAestheticians.desc": "The percentage of zombie villagers that become zombie aestheticians instead.",
 
-  "config.roundabout.generalDetectionGoThroughDoorsAndCorners.name": "Detection Through Walls",
-  "config.roundabout.generalDetectionGoThroughDoorsAndCorners.desc": "Some of the mod's area of affect or line of sight mechanics stop when they hit a block, turning  this off lets you hit past corners and doors with certain things. Not recommended.",
   "config.roundabout.disableBleedingAndBloodSplatters.name": "Disable Blood",
   "config.roundabout.disableBleedingAndBloodSplatters.desc": "If you are sensitive to blood, this setting might help.",
+
+  "config.roundabout.CBHasDurability.name": "[WIP]",
+  "config.roundabout.CBHasDurability.desc": "[WIP]",
+  "config.roundabout.CBDurability.name": "[WIP]",
+  "config.roundabout.CBDurability.desc": "[WIP]",
+  "config.roundabout.CBchangesFOV.name": "[WIP]",
+  "config.roundabout.CBchangesFOV.desc": "[WIP]",
+  "config.roundabout.CBCanMoveCamera.name": "[WIP]",
+  "config.roundabout.CBCanMoveCamera.desc": "[WIP]",
+  "config.roundabout.enableCenturyBoy.name": "[WIP]",
+  "config.roundabout.enableCenturyBoy.desc": "[WIP]",
+  "config.roundabout.oldKnockbackStance.name": "[WIP]",
+  "config.roundabout.oldKnockbackStance.desc": "[WIP]",
+
+
+  "config.roundabout.generalDetectionGoThroughDoorsAndCorners.name": "Detection Through Walls",
+  "config.roundabout.generalDetectionGoThroughDoorsAndCorners.desc": "Some of the mod's area of affect or line of sight mechanics stop when they hit a block, turning  this off lets you hit past corners and doors with certain things. Not recommended.",
+
 
   "config.roundabout.major.done": "Done",
   "config.roundabout.major.reset": "Reset",
@@ -3168,12 +3186,13 @@
   "config.roundabout.softAndWetSettings.name": "Soft And Wet",
   "config.roundabout.magiciansRedSettings.name": "Magician's Red",
   "config.roundabout.walkingHeartSettings.name": "Walking Heart",
+  "config.roundabout.greenDaySettings.name": "Green Day",
   "config.roundabout.rattSettings.name": "Ratt",
   "config.roundabout.standTweak.name": "Ratt",
   "config.roundabout.justiceSettings.name": "Justice",
   "config.roundabout.cinderellaSettings.name": "Cinderella",
   "config.roundabout.manhattanTransferSettings.name": "Manhattan Transfer",
-  "config.roundabout.centuryBoySettings.name": "20cb Transfer",
+  "config.roundabout.centuryBoySettings.name": "20cb",
   "config.roundabout.heyYaSettings.name": "Hey Ya",
   "config.roundabout.mandomSettings.name": "Mandom",
   "config.roundabout.survivorSettings.name": "Survivor",
