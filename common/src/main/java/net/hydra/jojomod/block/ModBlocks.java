@@ -728,8 +728,8 @@ public class ModBlocks {
             sound(SoundType.DEEPSLATE));
 
     public static Block AJA_BLOCK_PROPERTIES = new AjaBlock(
-            BlockBehaviour.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).lightLevel(litBlockEmission(15)).
-    requiresCorrectToolForDrops().strength(3.0F, 3.0F));
+            BlockBehaviour.Properties.of().mapColor(MapColor.STONE).noOcclusion().instrument(NoteBlockInstrument.BASEDRUM).lightLevel(litBlockEmission(15)).
+    requiresCorrectToolForDrops().strength(3.5F, 6.0F));
 
     public static CultivationPotBlock cultivationPot(Block $$0, FeatureFlag... $$1) {
         BlockBehaviour.Properties $$2 = BlockBehaviour.Properties.of().instabreak().noOcclusion().pushReaction(PushReaction.DESTROY);
