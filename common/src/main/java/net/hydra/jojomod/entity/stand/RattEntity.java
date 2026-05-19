@@ -205,12 +205,11 @@ public class RattEntity extends StandEntity {
                     }
                     PR.active = false;
                     this.forceDespawnSet = true;
-                    PR.setCooldown(PowersRatt.SETPLACE, 60);
+                    PR.setCooldown(PowersRatt.SETPLACE, 140);
                     if (this.getUser() instanceof Player P && !this.level().isClientSide()) {
-                        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) P), PowersRatt.SETPLACE, 80);
+                        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) P), PowersRatt.SETPLACE, 140);
 
                     }
-                    PR.setCooldown(PowersRatt.SETPLACE, 80);
                     this.level().playSound(null, this.blockPosition(), ModSounds.RATT_DEPLACE_EVENT, SoundSource.PLAYERS, 0.5F, 1F);
                     this.getUser().hurt(ModDamageTypes.of(this.level(),ModDamageTypes.STAND,source.getEntity()),(float)Mth.clamp(amount*0.5,0,0.5));
                     return true;
