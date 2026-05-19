@@ -2067,6 +2067,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     }
     public boolean crossfireSpecial(){
         if (!hasHurricaneSpecial()) {
+            clearLeaded();
             ticksUntilHurricaneEnds = -1;
             this.animateStand((byte)15);
             addEXP(4);
