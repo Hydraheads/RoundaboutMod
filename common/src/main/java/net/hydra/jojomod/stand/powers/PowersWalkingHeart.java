@@ -514,8 +514,6 @@ public class PowersWalkingHeart extends NewDashPreset {
         } else if (hasExtendedHeelsForWalking()){
             if (canCutCorners() || slowHeelTicks > 0) {
                 basis *= 0.8F;
-            } else if (self.hurtTime > 0){
-                basis *= 0.2F;
             }
         }
         return super.inputSpeedModifiers(basis);
