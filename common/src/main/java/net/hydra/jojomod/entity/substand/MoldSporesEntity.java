@@ -97,7 +97,7 @@ public class MoldSporesEntity extends StandEntity {
     }
 
     public void tickeffect(){
-        List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),range,range,range);
+        List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),range * 2,range * 2,range * 2);
         for(int j = 0;j<damages.size();j++) {
             if (Objects.nonNull(this.getUser())) {
                 Entity entity = damages.get(j);
@@ -106,6 +106,9 @@ public class MoldSporesEntity extends StandEntity {
 
                 boolean isStand = (entity instanceof StandEntity);
                 boolean playerBalanceDetection = ((entity.getY() < this.getUser().getY() && this.getUser() instanceof Player) || (!(entity instanceof Player)));
+                if(!playerBalanceDetection){
+                    playerBalanceDetection = (entity instanceof Player && ((StandUser)entity).getStaringYPos()-1 > entity.getY());
+                }
                 if (entity instanceof LivingEntity) {
 
                     if (!((StandUser) entity).roundabout$getStandPowers().isStoppingTime()
@@ -134,9 +137,9 @@ public class MoldSporesEntity extends StandEntity {
                             //     range += 4;
                             //}
                             if (entity instanceof Player) {
-                                entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), 4);
+                                entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), 4 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGPlayersMultiplier / 100F));
                             } else {
-                                entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), 7);
+                                entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), 8 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGMobsMultiplier / 100F));
                             }
                             ((StandUser) User).roundabout$getStandPowers().addEXP(1);
                         }

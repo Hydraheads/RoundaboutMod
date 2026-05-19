@@ -130,7 +130,13 @@ public interface StandUser {
 
     int getJumpImmunityTicks();
 
+    boolean rdbt$hasLeftHandGone();
+
+    double getStaringYPos();
+
     void rdbt$doMoldDetection(Vec3 movement);
+
+    boolean rdbt$hasRightHandGone();
 
     void rdbt$doWindVisionDetection();
 

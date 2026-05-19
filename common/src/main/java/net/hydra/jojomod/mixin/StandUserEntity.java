@@ -13,7 +13,6 @@ import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
-import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
@@ -5403,8 +5402,31 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     }
 
+    @Override
+    public boolean rdbt$hasRightHandGone() {
+        if(roundabout$getStandPowers() instanceof PowersGreenDay PGD){
+            return !PGD.HasMainArm;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean rdbt$hasLeftHandGone() {
+        if(roundabout$getStandPowers() instanceof PowersGreenDay PGD){
+            return !PGD.HasOffHand;
+        }
+        return false;
+    }
+
     public float MoldLevel = 0.0f;
     public int jumpImmunityTicks = 0;
+
+    public double StartingYPos = 0;
+
+    @Override
+    public double getStaringYPos() {
+        return StartingYPos;
+    }
 
     @Override
     public int getJumpImmunityTicks(){
@@ -5432,14 +5454,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         }
         if (previousYpos < this.getY()){
-            jumpImmunityTicks = 6;
+            jumpImmunityTicks = 4;
         }
         else{
             jumpImmunityTicks = jumpImmunityTicks -1;
 
         }
         movingDown = (previousYpos-0.1 > this.getY());
+        if(!movingDown){
+         StartingYPos = this.getY();
+        }
         previousYpos = this.getY();
+
     }
     public int CrawlTicks = 0;
     boolean movingDown = false;

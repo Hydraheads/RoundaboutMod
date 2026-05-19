@@ -320,6 +320,9 @@ public class SeperatedArmEntity extends StandEntity {
                 if (level().getBlockState(IsArmContactingBlock()).getBlock() instanceof LeverBlock) {
                     ((LeverBlock) level().getBlockState(IsArmContactingBlock()).getBlock()).pull(level().getBlockState(IsArmContactingBlock()), this.level(), IsArmContactingBlock());
                 }
+                if (level().getBlockState(IsArmContactingBlock()).getBlock() instanceof ButtonBlock) {
+                    ((ButtonBlock) level().getBlockState(IsArmContactingBlock()).getBlock()).press(level().getBlockState(IsArmContactingBlock()), this.level(), IsArmContactingBlock());
+                }
             }
             for(int i = 0; i < 1; i = i + 1) {
                 double randX = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
@@ -449,7 +452,9 @@ public class SeperatedArmEntity extends StandEntity {
         for(int j = 0;j<damages.size();j++){
 
             Entity entity = damages.get(j);
-            ((StandUser)user).roundabout$getStandPowers().addEXP(1);
+            if(!(SpinTicks > 0)) {
+                ((StandUser) user).roundabout$getStandPowers().addEXP(1);
+            }
 
             if(!((entity.equals(this) ||entity.equals((Object)user)) || entity instanceof StandEntity || entity instanceof ItemEntity)) {
                 if (flyingTicks > 2 && SpinTicks >0) {

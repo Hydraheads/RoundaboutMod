@@ -292,10 +292,14 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
                 if (ClientUtil.hasChangedArms(entity)) {
                     if (getParentModel() instanceof PlayerModel<?> pm) {
-                        pm.rightArm.visible = true;
-                        pm.rightSleeve.visible = true;
-                        pm.leftArm.visible = true;
-                        pm.leftSleeve.visible = true;
+                        if(!((StandUser)entity).rdbt$hasRightHandGone()) {
+                            pm.rightArm.visible = true;
+                            pm.rightSleeve.visible = true;
+                        }
+                        if(!((StandUser)entity).rdbt$hasLeftHandGone()) {
+                            pm.leftArm.visible = true;
+                            pm.leftSleeve.visible = true;
+                        }
                         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(ClientUtil.getChangedArmTexture(entity)));
                         ClientUtil.pushPoseAndCooperate(poseStack, 46);
                         pm.rightArm.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY, r,

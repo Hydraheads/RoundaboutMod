@@ -2958,6 +2958,11 @@
   "config.roundabout.armSpinDuration.desc": "How long your seperated arms spin for after using the move, default is 30 ticks, or 1.5 seconds",
   "config.roundabout.armSpinCooldown.name": "Arm Spin Cooldown",
   "config.roundabout.armSpinCooldown.desc": "Default is 120 ticks, or 6 seconds",
+  "config,roundabout.moldDMGMobsMultiplier.name": "Mold Damage Multiplier (Mobs)",
+  "config,roundabout.moldDMGMobsMultiplier.desc": "Controls the damage mobs take when they fall in green days mold fields",
+  "config,roundabout.moldDMGPlayersMultiplier.name": "Mold Damage Multiplier (Players)",
+  "config,roundabout.moldDMGPlayersMultiplier.desc": "Controls the damage players take when they fall in green days mold fields",
+
 
   "config.roundabout.theWorldAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.theWorldAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
