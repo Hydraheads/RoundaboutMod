@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StandFireBlock;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -107,7 +108,7 @@ public class BloodSplatterEntity extends ThrowableProjectile {
             SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;
             this.playSound($$6, 1F, 1.5F);
             if ($$0.getEntity() instanceof LivingEntity LE && (MainUtil.getMobBleed(LE) ||
-            LE instanceof Player pl)) {
+            LE instanceof Player pl || LE instanceof BaseMinion bm)) {
                 LE.setHealth(Math.min(LE.getMaxHealth(),LE.getHealth()+healthAmt));
                 if ((LE instanceof Mob mb && !((IMob)mb).roundabout$isVampire() && MainUtil.canMobResurrectWithBlood(mb))
                 || (LE instanceof Player pl && FateTypes.isHuman(pl))){
