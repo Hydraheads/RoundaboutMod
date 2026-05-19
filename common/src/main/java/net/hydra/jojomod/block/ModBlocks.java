@@ -90,6 +90,7 @@ public class ModBlocks {
 
     public static Block AJA_ORE;
     public static Block DEEPSLATE_AJA_ORE;
+    public static Block AJA_BLOCK;
 
     public static Block BARBED_WIRE;
     public static Block BARBED_WIRE_BUNDLE;
@@ -725,6 +726,10 @@ public class ModBlocks {
                     instrument(NoteBlockInstrument.BASEDRUM).lightLevel(litBlockEmission(15)).
                     requiresCorrectToolForDrops().strength(4.5F, 3.0F).
             sound(SoundType.DEEPSLATE));
+
+    public static Block AJA_BLOCK_PROPERTIES = new AjaBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).lightLevel(litBlockEmission(15)).
+    requiresCorrectToolForDrops().strength(3.0F, 3.0F));
 
     public static CultivationPotBlock cultivationPot(Block $$0, FeatureFlag... $$1) {
         BlockBehaviour.Properties $$2 = BlockBehaviour.Properties.of().instabreak().noOcclusion().pushReaction(PushReaction.DESTROY);

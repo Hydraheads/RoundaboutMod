@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.projectile.RattDartModel;
@@ -18,6 +19,7 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
 
 public class TuskNailRenderer extends EntityRenderer<TuskNailEntity> {
     private final Tusk1NailModel model;
@@ -44,7 +46,21 @@ public class TuskNailRenderer extends EntityRenderer<TuskNailEntity> {
         poseStack.scale(1.6F,1.6F,1.6F);
         poseStack.translate(0,-1.3,0);
         this.model.setupAnim($$0,$$0.tickCount+$$2);
-        this.model.renderToBuffer(poseStack, $$6, $$5, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+
+        float scale = 0.05F;
+        float r = 0;
+        float g = 206/255.0F;
+        float b = 228/255.0F;
+        if ($$0.getOwner() instanceof Player P) {
+            IPlayerEntity IPE = (IPlayerEntity) P;
+            r = IPE.rdbt$getHairColorX();
+            g = IPE.rdbt$getHairColorY();
+            b = IPE.rdbt$getHairColorZ();
+        }
+        r *= (1-scale) + (float)Math.sin($$2+1) *  scale;
+        g *= (1-scale) +  (float)Math.sin($$2+2) * scale;
+        b *= (1-scale) +  (float)Math.sin($$2+3) * scale;
+        this.model.renderToBuffer(poseStack, $$6, $$5, OverlayTexture.NO_OVERLAY, r, g, b, 1.0F);
         poseStack.popPose();
         super.render($$0, $$1, $$2, poseStack, $$4, $$5);
     }

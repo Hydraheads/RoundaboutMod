@@ -93,6 +93,10 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.DEEPSLATE_AJA_ORE.get(),
                     new Item.Properties()
             )));
+    public static final RegistryObject<BlockItem> AJA_BLOCK_ITEM = addToBuildingTab(ITEMS.register("aja_block",
+            () -> new BlockItem(ForgeBlocks.AJA_BLOCK.get(),
+                    new Item.Properties()
+            )));
     public static final RegistryObject<BlockItem> SHINY_QUARTZ_ITEM = addToBuildingTab(ITEMS.register("shiny_quartz",
             () -> new BlockItem(ForgeBlocks.SHINY_QUARTZ.get(),
                     new Item.Properties()

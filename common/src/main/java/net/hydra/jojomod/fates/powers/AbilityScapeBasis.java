@@ -217,6 +217,9 @@ public class AbilityScapeBasis {
         return false;
     }
 
+    public boolean preventItemUsage(){
+        return false;
+    }
 
     public void hitParticles(Entity entity){
         Vec3 vec = getRandPos(entity);

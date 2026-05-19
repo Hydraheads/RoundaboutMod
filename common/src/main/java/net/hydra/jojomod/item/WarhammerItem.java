@@ -9,6 +9,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -41,6 +42,10 @@ public class WarhammerItem extends DiggerItem  {
         return spd;
     }
 
+    @Override
+    public boolean canAttackBlock(BlockState $$0, Level $$1, BlockPos $$2, Player $$3) {
+        return !$$3.isCreative();
+    }
     @Override
     public boolean isCorrectToolForDrops(BlockState blockState) {
         return false;

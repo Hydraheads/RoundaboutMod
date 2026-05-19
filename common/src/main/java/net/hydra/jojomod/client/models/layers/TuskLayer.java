@@ -30,7 +30,7 @@ public class TuskLayer<T extends LivingEntity, A extends HumanoidModel<T>> exten
     }
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
-        if (ClientUtil.canSeeStands(ClientUtil.getPlayer()) && !entity.isUsingItem()) {
+        if (!entity.isUsingItem()) {
             if (!entity.isInvisible()) {
                 StandUser user = ((StandUser) entity);
                 if (PowerTypes.isUsingStand(entity)) {

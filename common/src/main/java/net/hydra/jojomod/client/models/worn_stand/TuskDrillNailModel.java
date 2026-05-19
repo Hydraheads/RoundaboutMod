@@ -3,6 +3,7 @@ package net.hydra.jojomod.client.models.worn_stand;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.TuskAnimations;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -15,6 +16,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import org.joml.Quaternionf;
 
 public class TuskDrillNailModel extends PsuedoHierarchicalModel {
@@ -57,7 +59,7 @@ public class TuskDrillNailModel extends PsuedoHierarchicalModel {
      //   nail2.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
-    public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int light, float r, float g, float b, float alpha, int i) {
+    public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int i) {
         if (context instanceof LivingEntity LE) {
             this.root().getAllParts().forEach(ModelPart::resetPose);
             StandUser user = ((StandUser) LE);
@@ -72,10 +74,19 @@ public class TuskDrillNailModel extends PsuedoHierarchicalModel {
             poseStack.translate(0,-1.3,0);//BACK, DOWN
 
             float scale = 0.05F;
-            r = r*(1-scale) +  (float)Math.sin(partialTicks+i) * scale;
-            g = g*(1-scale) +  (float)Math.sin(partialTicks+i*2) * scale;
-            b = b*(1-scale) +  (float)Math.sin(partialTicks+i*3) * scale;
-            root().render(poseStack, consumer, 15728880, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
+            float r = 0;
+            float g = 206/255.0F;
+            float b = 228/255.0F;
+            if (context instanceof Player P) {
+                IPlayerEntity IPE = (IPlayerEntity) P;
+                r = IPE.rdbt$getHairColorX();
+                g = IPE.rdbt$getHairColorY();
+                b = IPE.rdbt$getHairColorZ();
+            }
+            r *= (1-scale) + (float)Math.sin(partialTicks+i) *  scale;
+            g *= (1-scale) +  (float)Math.sin(partialTicks+i*2) * scale;
+            b *= (1-scale) +  (float)Math.sin(partialTicks+i*3) * scale;
+            root().render(poseStack, consumer, 15728880, OverlayTexture.NO_OVERLAY, r, g, b, 1);
         }
     }
 

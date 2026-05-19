@@ -1241,6 +1241,7 @@ public class ClientUtil {
     public static void openHairspryUI(){
         Minecraft.getInstance().setScreen(new HairColorChangeScreen());
     }
+    public static void openBombConfigScreen() {Minecraft.getInstance().setScreen(new BombConfigScreen());}
     public static void openMemoryRecordScreen(boolean recording){Minecraft.getInstance().setScreen(new MemoryRecordScreen(recording));}
     public static void openTuskActScreen(){Minecraft.getInstance().setScreen(new TuskActScreen());}
     public static void strikePose(Player player, Minecraft C, boolean keyIsDown, Options option) {
@@ -1623,6 +1624,10 @@ public class ClientUtil {
             }
         } else if (context == PacketDataIndex.S2C_RESPAWN){
             Minecraft.getInstance().player.respawn();
+        } else if (context == PacketDataIndex.S2C_SOFT){
+            if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
+                PW.setGoBeyondChargeTicks(PW.goBeyondChargeTicks+PW.getGoBeyondUseTicks2());
+            }
         }
     } public static void handleSimpleBytePacketS2C(byte context){
         LocalPlayer player = Minecraft.getInstance().player;

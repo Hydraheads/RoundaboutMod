@@ -84,6 +84,9 @@ public class PowersWalkingHeart extends NewDashPreset {
     public int walkingCDPerHit(){
         return ClientNetworking.getAppropriateConfig().walkingHeartSettings.walkingHeartCooldownPerHit;
     }
+    public int walkingCDBase(){
+        return ClientNetworking.getAppropriateConfig().walkingHeartSettings.walkingHeartCooldownBase;
+    }
     public int walkingMaxHits(){
         return ClientNetworking.getAppropriateConfig().walkingHeartSettings.walkingHeartMaxHits;
     }
@@ -287,7 +290,10 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public int getHeelUnattachCooldown(){
-        return hitsSinceAttached*walkingCDPerHit();
+        if (hitsSinceAttached > 0){
+            return hitsSinceAttached*walkingCDPerHit() + walkingCDBase();
+        }
+        return 0;
     }
     public void hitHeelExtendedState(){
         if (hasExtendedHeelsForWalking()) {
@@ -511,8 +517,10 @@ public class PowersWalkingHeart extends NewDashPreset {
     public float inputSpeedModifiers(float basis){
         if (inCombatMode()) {
             return 0;
-        } else if (hasExtendedHeelsForWalking() && (canCutCorners() || slowHeelTicks > 0)){
-            return basis*0.8F;
+        } else if (hasExtendedHeelsForWalking()){
+            if (canCutCorners() || slowHeelTicks > 0) {
+                basis *= 0.8F;
+            }
         }
         return super.inputSpeedModifiers(basis);
     }
@@ -685,7 +693,7 @@ public class PowersWalkingHeart extends NewDashPreset {
 
     public float getSpikeDamage(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 1.8F* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod((float) ((float) 1.6F* (ClientNetworking.getAppropriateConfig().
                     walkingHeartSettings.walkingHeartAttackMultOnPlayers*0.01)));
         } else {
             return levelupDamageMod((float) ((float) 3* (ClientNetworking.getAppropriateConfig().

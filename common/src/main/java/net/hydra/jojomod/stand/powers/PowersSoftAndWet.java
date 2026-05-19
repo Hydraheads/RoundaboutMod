@@ -16,6 +16,7 @@ import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.mobs.AvdolNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
@@ -118,6 +119,9 @@ public class PowersSoftAndWet extends NewPunchingStand {
 
     @Override
     public void powerActivate(PowerContext context) {
+        if (isOuchie()) {
+            return;
+        }
         switch (context)
         {
 
@@ -152,13 +156,14 @@ public class PowersSoftAndWet extends NewPunchingStand {
             }
 
             case SKILL_4_NORMAL -> {
-                shootingModeToggleClient();
+                waterShieldAttemptClient();
             }
             case SKILL_4_CROUCH -> {
-                waterShieldAttemptClient();
+                plugAttemptClient();
             }
         }
     }
+
 
 
     public boolean goBeyondClient(){
@@ -289,16 +294,59 @@ public class PowersSoftAndWet extends NewPunchingStand {
         }
     }
 
+    public int ouchieTicks = 0;
+    public boolean isOuchie(){
+        return ouchieTicks > 0;
+    }
+
+    public void plugAttemptClient(){
+        if (!inShootingMode()){
+            if (canUseWaterShield()) {
+                if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
+                    if (canExecuteMoveWithLevel(getWaterShieldLevel())) {
+                        if (canUseWaterShield()) {
+                            this.tryPower(PowerIndex.POWER_4_SNEAK, true);
+                            tryPowerPacket(PowerIndex.POWER_4_SNEAK);
+                        }
+                    }
+                }
+            } else {
+                if (getActivePower() == PowerIndex.NONE){
+                    if (!onCooldown(PowerIndex.SKILL_4_SNEAK)) {
+                        if (canUseWoundPlug() && !self.isUsingItem()) {
+                            ouchieTicks = 32;
+                            tryPowerPacket(PowerIndex.POWER_1_BLOCK);
+                        }
+                    }
+                }
+                //
+            }
+        } else {
+            shootingModeToggleClient();
+        }
+    }
+
+
+    public boolean preventItemUsage(){
+        if (isOuchie()){
+            return true;
+        }
+        return super.preventItemUsage();
+    }
 
     public void waterShieldAttemptClient(){
         if (!inShootingMode()){
-            if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
-                if (canExecuteMoveWithLevel(getWaterShieldLevel())) {
-                    if (canUseWaterShield()) {
-                        this.tryPower(PowerIndex.POWER_4_SNEAK, true);
-                        tryPowerPacket(PowerIndex.POWER_4_SNEAK);
+            if (canUseWaterShield()) {
+                if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
+                    if (canExecuteMoveWithLevel(getWaterShieldLevel())) {
+                        if (canUseWaterShield()) {
+                            this.tryPower(PowerIndex.POWER_4_SNEAK, true);
+                            tryPowerPacket(PowerIndex.POWER_4_SNEAK);
+                        }
                     }
                 }
+            } else {
+                shootingModeToggleClient();
             }
         } else {
             shootingModeToggleClient();
@@ -462,6 +510,9 @@ public class PowersSoftAndWet extends NewPunchingStand {
         return getInExplosiveSpinMode() || (this.self instanceof Player PE && PE.isCreative());
     }
     public boolean isAttackIneptVisually(byte activeP, int slot) {
+        if (isOuchie()){
+            return true;
+        }
         if (inShootingMode()){
             if (slot == 1 && (!goBeyondCharged() || getGoBeyondTarget() == null)){
                 return true;
@@ -477,18 +528,15 @@ public class PowersSoftAndWet extends NewPunchingStand {
             if (slot == 2 && ((!canDoBubbleRedirect() && isGuarding()))) {
                 return true;
             }
-
-            if (slot == 4 && isHoldingSneak()){
-                if (!canUseWaterShield()){
-                    return true;
-                }
-            }
         }
 
         if (slot == 3 && (!canVault() && !canFallBrace() && !isGuarding() && isHoldingSneak()) && !canBridge()){
             return true;
         }
         if (slot == 3 && (!canVault() && !canFallBrace() && isGuarding() && !canBigBubble())){
+            return true;
+        }
+        if (slot == 4 && !inShootingMode() && isHoldingSneak() && !canUseWoundPlug()){
             return true;
         }
 
@@ -553,7 +601,9 @@ public class PowersSoftAndWet extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+80,getShootingModeLevel(), "ability.roundabout.shooting_mode",
                 "instruction.roundabout.press_skill", StandIcons.SOFT_SHOOTING_MODE,4,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99,getWaterShieldLevel(), "ability.roundabout.water_shield",
-                "instruction.roundabout.press_skill_crouch", StandIcons.WATER_SHIELD,4,level,bypas));
+                "instruction.roundabout.press_skill", StandIcons.WATER_SHIELD,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+118,0, "ability.roundabout.plug_wound",
+                "instruction.roundabout.press_skill_crouch", StandIcons.PLUG_WOUND,4,level,bypas));
         return $$1;
     }
 
@@ -642,21 +692,30 @@ public class PowersSoftAndWet extends NewPunchingStand {
         if (inShootingMode()) {
             setSkillIcon(context, x, y, 4, StandIcons.SOFT_SHOOTING_MODE_EXIT, PowerIndex.SKILL_4);
         } else {
-            if (isHoldingSneak()) {
-                if (canExecuteMoveWithLevel(getWaterShieldLevel())) {
+            if (canUseWaterShield()) {
+                if (canExecuteMoveWithLevel(getWaterShieldLevel())){
                     setSkillIcon(context, x, y, 4, StandIcons.WATER_SHIELD, PowerIndex.SKILL_4_SNEAK);
                 } else {
                     setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                 }
             } else {
-                if (canExecuteMoveWithLevel(getShootingModeLevel())) {
-                    setSkillIcon(context, x, y, 4, StandIcons.SOFT_SHOOTING_MODE, PowerIndex.SKILL_4);
+                if (isHoldingSneak()){
+                    setSkillIcon(context, x, y, 4, StandIcons.PLUG_WOUND, PowerIndex.SKILL_4_SNEAK);
                 } else {
-                    setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                    if (canExecuteMoveWithLevel(getShootingModeLevel())) {
+                        setSkillIcon(context, x, y, 4, StandIcons.SOFT_SHOOTING_MODE, PowerIndex.SKILL_4);
+                    } else {
+                        setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                    }
                 }
             }
         }
 
+    }
+
+    public boolean canUseWoundPlug(){
+        return (self.getHealth() < self.getMaxHealth() || self.hasEffect(ModEffects.BLEED)) ||
+                (self instanceof Player PE && PE.isCreative());
     }
 
     @Override
@@ -704,10 +763,21 @@ public class PowersSoftAndWet extends NewPunchingStand {
     }
     public int getGoBeyondUseTicks(){
         return ClientNetworking.getAppropriateConfig().softAndWetSettings.explosiveSpinMeterGainedPerShot;
-
-}
+    } public int getGoBeyondUseTicks2(){
+        return ClientNetworking.getAppropriateConfig().softAndWetSettings.explosiveSpinMeterGainedPerHit;
+    }
+    @Override
+    public boolean buttonInputGuard(boolean keyIsDown, Options options) {
+        if (isOuchie()) {
+            return false;
+        }
+        return super.buttonInputGuard(keyIsDown,options);
+    }
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
+        if (isOuchie()){
+            return;
+        }
         if (!consumeClickInput) {
             if (holdDownClick) {
                 if (keyIsDown) {
@@ -770,6 +840,9 @@ public class PowersSoftAndWet extends NewPunchingStand {
     }
     @Override
     public void buttonInputBarrage(boolean keyIsDown, Options options){
+        if (isOuchie()) {
+            return;
+        }
         if (keyIsDown) {
             if (!isBubbleBarraging()) {
                 if (!inShootingMode()) {
@@ -888,7 +961,13 @@ public class PowersSoftAndWet extends NewPunchingStand {
     public boolean clickRelease(){
         return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2 || this.getActivePower() == PowerIndex.POWER_2_BLOCK);
     }
-
+    @Override
+    public boolean isServerControlledCooldown(byte num){
+        if (num == PowerIndex.SKILL_4_SNEAK) {
+            return true;
+        }
+        return super.isServerControlledCooldown(num);
+    }
 
     @Override
     public void tickStandRejection(MobEffectInstance effect){
@@ -934,9 +1013,22 @@ public class PowersSoftAndWet extends NewPunchingStand {
             }
         }
     }
+    public boolean cancelSprintParticles(){
+        if (isOuchie()){
+            return true;
+        }
+        return super.cancelSprintParticles();
+    }
+    /**Cancel all sprinting*/
+    public boolean cancelSprint(){
+        if (isOuchie()){
+            return true;
+        }
+        return super.cancelSprint();
+    }
 
     int bubbleMax = 0;
-    int bubbleCd = 20;
+    int bubbleCd = 30;
     @Override
     public void tickMobAI(LivingEntity attackTarget){
 
@@ -1145,6 +1237,14 @@ public class PowersSoftAndWet extends NewPunchingStand {
         return (float) (0.54F*(ClientNetworking.getAppropriateConfig().
                 softAndWetSettings.explosiveBubbleShootSpeedMultiplier*0.01));
     }
+    public float getExplosiveSpeed2(){
+        if (getInExplosiveSpinMode()){
+            return (float) (0.8F*(ClientNetworking.getAppropriateConfig().
+                    softAndWetSettings.explosiveBubbleShootSpeedMultiplier*0.01));
+        }
+        return (float) (0.7F*(ClientNetworking.getAppropriateConfig().
+                softAndWetSettings.explosiveBubbleShootSpeedMultiplier*0.01));
+    }
 
     public boolean inShootingMode(){
         return getStandUserSelf().roundabout$getCombatMode() && PowerTypes.hasStandActivelyEquipped(self);
@@ -1158,7 +1258,10 @@ public class PowersSoftAndWet extends NewPunchingStand {
             this.poseStand(OffsetIndex.FOLLOW);
             this.setAttackTimeDuring(-10);
             this.setActivePower(PowerIndex.POWER_4_EXTRA);
-            shootExplosiveBubbleSpeed(bubble,getExplosiveSpeed());
+            if (getInExplosiveSpinMode()){
+                bubble.spinMode = true;
+            }
+            shootExplosiveBubbleSpeed(bubble,getExplosiveSpeed2());
             bubbleListInit();
             this.bubbleList.add(bubble);
             this.getSelf().level().addFreshEntity(bubble);
@@ -1167,6 +1270,40 @@ public class PowersSoftAndWet extends NewPunchingStand {
 
         }
         return true;
+    }
+
+    public void useWoundPlug(){
+        if (!self.level().isClientSide() && !onCooldown(PowerIndex.SKILL_4_SNEAK)){
+             this.setCooldown(PowerIndex.SKILL_4_SNEAK, ClientNetworking.getAppropriateConfig().softAndWetSettings.woundPlugCooldown);
+             self.heal(1f);
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.CINDERELLA_SPARKLE_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
+
+            ((ServerLevel) self.level()).sendParticles(ModParticles.SMALL_EXPLOSION, self.getEyePosition().x,
+                    self.getEyePosition().y, self.getEyePosition().z,
+                    0, 0, 0, 0, 0.2);
+
+            byte sk = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+            if (sk == SoftAndWetEntity.KIRA) {
+                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.HEART_ATTACK_MINI,
+                       this.self.getEyePosition().x,this.self.getEyePosition().y,this.self.getEyePosition().z,
+                        10, 0.25F,0.1F, 0.25F, 0.02);
+            } else {
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 1F, 0.8F);
+                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PURPLE_STAR,
+                        this.self.getEyePosition().x,this.self.getEyePosition().y,this.self.getEyePosition().z,
+                        10, 0.25F,0.1F, 0.25F, 0.02);
+            }
+            MobEffectInstance bleed = self.getEffect(ModEffects.BLEED);
+             if (bleed != null){
+                 if (bleed.getAmplifier() > 0){
+                    int amp = bleed.getAmplifier()-1;
+                    self.removeEffect(bleed.getEffect());
+                    self.addEffect(new MobEffectInstance(ModEffects.BLEED, bleed.getDuration(), amp));
+                 } else {
+                     self.removeEffect(bleed.getEffect());
+                 }
+             }
+        }
     }
     @SuppressWarnings("deprecation")
     public boolean useWaterShield(){
@@ -1201,10 +1338,12 @@ public class PowersSoftAndWet extends NewPunchingStand {
             }
         }
 
-        if (isBucketSpawned){
-            this.setCooldown(PowerIndex.SKILL_4_SNEAK, ClientNetworking.getAppropriateConfig().softAndWetSettings.waterShieldBucketCooldown);
-        } else {
-            this.setCooldown(PowerIndex.SKILL_4_SNEAK, ClientNetworking.getAppropriateConfig().softAndWetSettings.waterShieldCooldown);
+        if (!self.level().isClientSide()){
+            if (isBucketSpawned){
+                this.setCooldown(PowerIndex.SKILL_4_SNEAK, ClientNetworking.getAppropriateConfig().softAndWetSettings.waterShieldBucketCooldown);
+            } else {
+                this.setCooldown(PowerIndex.SKILL_4_SNEAK, ClientNetworking.getAppropriateConfig().softAndWetSettings.waterShieldCooldown);
+            }
         }
 
         return true;
@@ -1311,6 +1450,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
                         && (MainUtil.isBlockBlacklisted(((BlockItem)stack.getItem()).getBlock().defaultBlockState()) ||
                         ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock))) {
             this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().softAndWetSettings.itemBubbleShotCooldown);
+            this.setCooldown(PowerIndex.SKILL_2_SNEAK, ClientNetworking.getAppropriateConfig().softAndWetSettings.itemBubblePopCooldown);
             if (!this.self.level().isClientSide()) {
 
                 SoftAndWetItemLaunchingBubbleEntity bubble = getItemLaunchingBubble();
@@ -1469,6 +1609,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
                                plunder.popBubble();
                             }
                         } else if (value instanceof SoftAndWetExplosiveBubbleEntity SBE){
+                            SBE.setReady(true);
                             SBE.popWithForce();
                         } else if (value instanceof SoftAndWetItemLaunchingBubbleEntity GBE){
                             GBE.popWithForce(savedPos);
@@ -1716,6 +1857,8 @@ public class PowersSoftAndWet extends NewPunchingStand {
             return this.clusterBubblePop();
         } else if (move == PowerIndex.SPECIAL_TRACKER){
             return this.goBeyond();
+        } else if (move == PowerIndex.POWER_1_BLOCK){
+            useWoundPlug();
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -1780,8 +1923,18 @@ public class PowersSoftAndWet extends NewPunchingStand {
        } else if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2
                 || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
             return true;
+       } else if (isOuchie()){
+           return true;
        }
         return super.cancelSprintJump();
+    }
+
+    @Override
+    public boolean cancelJump(){
+        if (isOuchie()){
+            return true;
+        }
+        return super.cancelJump();
     }
 
 public void unlockSkin(){
@@ -1837,6 +1990,9 @@ public void unlockSkin(){
                 basis *= g;
             }
             basis *= 0.6f;
+        }
+        if (isOuchie()){
+            basis *= 0.2f;
         }
         return super.inputSpeedModifiers(basis);
     }
@@ -2103,7 +2259,23 @@ public void unlockSkin(){
         if (this.getReducedDamage(entity)){
             return levelupDamageMod(multiplyPowerByStandConfigShooting(multiplyPowerByStandConfigPlayers(1.4F)));
         } else {
-            return levelupDamageMod(multiplyPowerByStandConfigShooting(multiplyPowerByStandConfigMobs(3F)));
+            return levelupDamageMod(multiplyPowerByStandConfigShooting(multiplyPowerByStandConfigMobs(4F)));
+        }
+    }
+
+    public float getItemBubbleStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigShooting(multiplyPowerByStandConfigPlayers(0.2F)));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigShooting(multiplyPowerByStandConfigMobs(2F)));
+        }
+    }
+
+    public float getPointBlankBubbleStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigShooting(multiplyPowerByStandConfigPlayers(0.5F)));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigShooting(multiplyPowerByStandConfigMobs(2F)));
         }
     }
     public float getGoBeyondStrength(Entity entity){
@@ -2373,6 +2545,9 @@ public void unlockSkin(){
 
         tickWaterShield();
 
+        if (ouchieTicks > 0){
+            ouchieTicks--;
+        }
         /**tick down the shooting animtation*/
         if (this.self.level().isClientSide()){
             if (this.self instanceof Player PE) {

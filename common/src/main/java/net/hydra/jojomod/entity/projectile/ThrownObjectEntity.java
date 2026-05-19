@@ -790,10 +790,12 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     }
                 }
 
-                if (this.getItem().isDamageableItem()){
-                    if (!this.getItem().hurt(1,this.level().getRandom(),null)){
+                if (this.getItem().isDamageableItem()) {
+                    if (!this.getItem().hurt(1, this.level().getRandom(), null)) {
                         this.dropItem($$1.getOnPos());
                     }
+                } else if (this.getItem().getItem() instanceof TieredItem){
+                    this.dropItem($$1.getOnPos());
                 } else if (this.getItem().getItem() instanceof BlockItem){
                     blockBreakParticles((((BlockItem) this.getItem().getItem()).getBlock()),$$0.getEntity().getPosition(0F).add(0,$$0.getEntity().getEyeHeight(),0));
                 }

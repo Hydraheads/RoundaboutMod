@@ -93,7 +93,7 @@ public class DogMinion extends BaseMinion{
     private float shakeAnim;
     private float shakeAnimO;
     public float getTailAngle() {
-        return (0.55F - (this.getMaxHealth() - this.getHealth()) * 0.02F) * (float)Math.PI;
+        return 1;
 
     }
     public boolean isInSittingPose() {

@@ -90,6 +90,7 @@ public class PacketDataIndex {
     public static final byte S2C_SIMPLE_SUSPEND_RIGHT_CLICK = 3;
     public static final byte S2C_SIMPLE_CLOSE_THE_RELLA = 4;
     public static final byte S2C_RESPAWN = 5;
+    public static final byte S2C_SOFT = 6;
 
 
     /**S2C Int packets*/
