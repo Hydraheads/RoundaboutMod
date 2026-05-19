@@ -92,8 +92,6 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public RattSettings rattSettings;
     @NestedOption(group = "modded")
-    public CreamSettings creamSettings;
-    @NestedOption(group = "modded")
     public AnubisSettings anubisSettings;
     @NestedOption(group = "modded")
     public EmperorSettings emperorSettings;
@@ -435,8 +433,10 @@ public class Config implements Cloneable {
         public Integer heatTickDownRate;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer heatTickDownPauseLength;
-        @IntOption(group = "inherit", value = 800, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 700, min = 0, max = 72000)
         public Integer explosiveSpinMeterGainedPerShot;
+        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
+        public Integer explosiveSpinMeterGainedPerHit;
         @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
         public Integer explosiveSpinMeterTickDownRate;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
@@ -455,10 +455,14 @@ public class Config implements Cloneable {
         public Integer bubbleScaffoldingCooldown;
         @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
         public Integer waterShieldCooldown;
+        @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
+        public Integer woundPlugCooldown;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         public Integer waterShieldBucketCooldown;
-        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer itemBubbleShotCooldown;
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
+        public Integer itemBubblePopCooldown;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer basicBubbleShotCooldown;
         @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
@@ -747,6 +751,8 @@ public class Config implements Cloneable {
         public Integer walkingHeartAttackMultOnPlayers;
         @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
         public Integer walkingHeartCooldownPerHit;
+        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
+        public Integer walkingHeartCooldownBase;
         @IntOption(group = "inherit", value = 5, min = -1, max = 72000)
         public Integer walkingHeartMaxHits;
         @BooleanOption(group = "inherit", value = false)
@@ -810,26 +816,6 @@ public class Config implements Cloneable {
         @BooleanOption(group = "inherit", value = true)
         public Boolean invisiBurstAlertsMobs;
     }
-
-
-
-    public static class CreamSettings {
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean enableCream;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer creamAttackMultOnMobs;
-        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
-        public Integer creamAttackMultOnPlayers;
-        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
-        public Integer creamGuardPoints;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer miningSpeedMultiplierCream;
-        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
-        public Integer getMiningTierCream;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer creamVoidTime;
-    }
-
 
 
     public static class AnubisSettings {

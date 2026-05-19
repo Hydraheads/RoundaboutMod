@@ -20,6 +20,7 @@ public class FabricParticles {
     public static final SimpleParticleType POINTER_SOFT = FabricParticleTypes.simple();
     public static final SimpleParticleType BLUE_BLOOD = FabricParticleTypes.simple();
     public static final SimpleParticleType ENDER_BLOOD = FabricParticleTypes.simple();
+    public static final SimpleParticleType SMALL_EXPLOSION = FabricParticleTypes.simple();
     public static final SimpleParticleType AIR_CRACKLE = FabricParticleTypes.simple();
     public static final SimpleParticleType HEARTBEAT = FabricParticleTypes.simple();
     public static final SimpleParticleType STAR = FabricParticleTypes.simple();
@@ -107,6 +108,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("vampire_aura"), VAMPIRE_AURA);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("blue_blood"), BLUE_BLOOD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("ender_blood"), ENDER_BLOOD);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("small_explosion"), SMALL_EXPLOSION);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("air_crackle"), AIR_CRACKLE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("heartbeat"), HEARTBEAT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("menacing"), MENACING);
@@ -170,6 +172,7 @@ public class FabricParticles {
         ModParticles.BLOOD = BLOOD;
         ModParticles.BLUE_BLOOD = BLUE_BLOOD;
         ModParticles.ENDER_BLOOD = ENDER_BLOOD;
+        ModParticles.SMALL_EXPLOSION = SMALL_EXPLOSION;
         ModParticles.HIT_IMPACT = HIT_IMPACT;
         ModParticles.AIR_CRACKLE = AIR_CRACKLE;
         ModParticles.HEARTBEAT = HEARTBEAT;

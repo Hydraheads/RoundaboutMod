@@ -459,6 +459,7 @@ public class ForgeEvents {
         ModParticles.MELTING = ForgeParticles.MELTING.get();
         ModParticles.BLOOD = ForgeParticles.BLOOD.get();
         ModParticles.BLUE_BLOOD = ForgeParticles.BLUE_BLOOD.get();
+        ModParticles.SMALL_EXPLOSION = ForgeParticles.SMALL_EXPLOSION.get();
         ModParticles.ENDER_BLOOD = ForgeParticles.ENDER_BLOOD.get();
         ModParticles.POINTER = ForgeParticles.POINTER.get();
         ModParticles.POINTER_SOFT = ForgeParticles.POINTER_SOFT.get();

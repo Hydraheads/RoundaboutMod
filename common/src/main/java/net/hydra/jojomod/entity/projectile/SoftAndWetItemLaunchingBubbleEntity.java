@@ -238,7 +238,7 @@ public class SoftAndWetItemLaunchingBubbleEntity extends SoftAndWetBubbleEntity{
                     if (!(MainUtil.isMobOrItsMounts(ent, getOwner())) && !MainUtil.isCreativeOrInvincible(ent)) {
 
                         if (ent.hurt(ModDamageTypes.of(ent.level(), ModDamageTypes.EXPLOSIVE_STAND, this.getOwner()),
-                                PW.getExplosiveBubbleStrength(ent))) {
+                                PW.getItemBubbleStrength(ent))) {
                             //You don't need to hurt them to launch them
                         }
 

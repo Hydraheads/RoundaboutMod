@@ -120,7 +120,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 		
 		@Override
 		public boolean isHoveredOrFocused() {
-		    return super.isHoveredOrFocused() || this.isSelected;
+		    return super.isHoveredOrFocused();
 		}
 		
 		public void setSelected(boolean bl) {
@@ -144,7 +144,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
     public boolean mouseReleased(double $$0, double $$1, int $$2) {
         this.switchToHoveredGameMode();
         this.minecraft.setScreen(null);
-        return true;
+        return super.mouseReleased($$0, $$1, $$2);
     }
 
     @Override

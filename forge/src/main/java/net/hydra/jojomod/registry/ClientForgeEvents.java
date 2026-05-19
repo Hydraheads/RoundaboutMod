@@ -340,6 +340,7 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.BLOOD.get(), BloodParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.BLUE_BLOOD.get(), BloodParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.ENDER_BLOOD.get(), BloodParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.SMALL_EXPLOSION.get(), SmallExplosionParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.POINTER.get(), PointerParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.POINTER_SOFT.get(), SmallPointerParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.AIR_CRACKLE.get(), AirCrackleParticle.Provider::new);
