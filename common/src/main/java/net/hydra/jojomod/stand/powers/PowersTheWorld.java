@@ -16,6 +16,7 @@ import net.hydra.jojomod.entity.visages.mobs.DIONPC;
 import net.hydra.jojomod.entity.visages.mobs.DiegoNPC;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.event.powers.visagedata.DiegoVisage;
@@ -611,6 +612,28 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
             if (this.getActivePower() == PowerIndex.POWER_1 || this.getActivePower() == PowerIndex.POWER_1_BONUS) {
                 if (!this.getSelf().level().isClientSide()) {
+
+                    if (!(this.getActivePower() == PowerIndex.POWER_1_BONUS)){
+                        if (attackTimeDuring == 80){
+                            this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.FIREWORK_ROCKET_LAUNCH,
+                                    SoundSource.PLAYERS, 0.95F, 1.3F);
+
+                            StandEntity stand = getStandEntity(this.self);
+                            if (Objects.nonNull(stand)) {
+                                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.AIR_CRACKLE,
+                                        stand.getX(), stand.getY() + 0.3, stand.getZ(),
+                                        0, 0, 0, 0, 0.4);
+                            }
+                        } else if (attackTimeDuring > 80){
+                            StandEntity stand = getStandEntity(this.self);
+                            if (Objects.nonNull(stand)) {
+                                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.AIR_CRACKLE,
+                                        stand.getX(), stand.getY() + 0.3, stand.getZ(),
+                                        0, 0, 0, 0, 0.4);
+                            }
+                        }
+                    }
+
                     if (this.attackTimeDuring == 108) {
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                     } else if (this.attackTimeDuring >= 0) {
@@ -863,11 +886,19 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
                     hitParticlesCenter(LE);
 
+                    if (getAttackTimeDuring() > 80){
+                        MainUtil.knockShieldPlusStand($$5,40);
+                    }
 
                     if (this.StandDamageEntityAttack($$5,getAssaultStrength($$5), 0.4F, this.self)){
                         addEXP(3,LE);
-                        if (!getAssaultEarlyTime()) {
-                            MainUtil.makeBleed($$5, 0, 90, null);
+                        if (getAttackTimeDuring() > 80) {
+                            MainUtil.makeBleed($$5, 0, 300, null);
+                            MainUtil.makeMobBleed(LE);
+                        } else if (getAttackTimeDuring() > 50) {
+                            MainUtil.makeBleed($$5, 0, 200, null);
+                        } else if (!getAssaultEarlyTime()) {
+                            MainUtil.makeBleed($$5, 0, 120, null);
                         } else {
                             MainUtil.makeBleed($$5, 0, 50, null);
                         }
@@ -906,11 +937,21 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         float mult = 1;
         boolean isReduced = this.getReducedDamage(entity);
         if (getAttackTimeDuring() > 95){
-            mult = 2.0F;
+            mult = 3.5F;
+        } else if (getAttackTimeDuring() > 90){
+            mult =3.2F;
+        } else if (getAttackTimeDuring() > 80){
+            mult =2.8F;
         } else if (getAttackTimeDuring() > 70){
-            mult = 1.5F;
+            mult =2.2F;
+        } else if (getAttackTimeDuring() > 60){
+            mult = 1.8F;
         } else if (getAttackTimeDuring() > 45){
-            mult = 1.25F;
+            mult = 1.4F;
+        } else if (getAttackTimeDuring() > 30){
+            mult = 1F;
+        } else if (getAttackTimeDuring() > 25){
+            mult = 0.9F;
         } else if (getAssaultEarlyTime() && isReduced){
             mult = 0.75F;
         }

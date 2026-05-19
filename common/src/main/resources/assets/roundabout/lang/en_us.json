@@ -949,7 +949,7 @@
   "sounds.roundabout.harpoon_ground":  "Projectile collides",
   "sounds.roundabout.harpoon_return":  "Projectile returns",
   "sounds.roundabout.harpoon_throw":  "Projectile thrown",
-  "sounds.roundabout.glaive_charge":  "Glaive charge",
+  "sounds.roundabout.glaive_charge":  "Powerful charge",
   "sounds.roundabout.glaive_attack":  "Glaive attack",
   "sounds.roundabout.block_grab":  "Power Grab",
   "sounds.roundabout.block_throw":  "Power Throw",
@@ -1280,7 +1280,7 @@
   "ability.roundabout.final_kick.desc": "Hold and release to throw a super powerful kick! The longer you hold it down, the stronger it is.",
 
   "ability.roundabout.assault": "Assault",
-  "ability.roundabout.assault.desc": "The World floats forwards in front of you, attacking whatever it touches and inflicting bleed! Pressing grab while this moves is active allows it to pick up blocks instead.",
+  "ability.roundabout.assault.desc": "The World floats forwards in front of you, attacking whatever it touches and inflicting bleed! Pressing grab while this moves is active allows it to pick up blocks instead. For the attack, it becomes more powerful the longer it charges, so spinning it around like a flail lets it reach maximum power.",
   "ability.roundabout.air_tanks": "Oxygen Tanks",
   "ability.roundabout.air_tanks.desc": "The tanks on The World's back provide you with extra air, so you can swim underwater for much longer.",
 
