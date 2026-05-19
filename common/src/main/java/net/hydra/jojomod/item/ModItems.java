@@ -189,6 +189,7 @@ public class ModItems {
     public static Item PAINTING_MONA_LISA;
     public static Item PAINTING_BIRTH_OF_VENUS;
 
+    public static Item ULTRAVIOLET_BLASTER;
     public static Item FLESH_BUCKET;
     public static Item CHERRIES;
 
