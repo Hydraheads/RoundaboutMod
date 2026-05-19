@@ -455,7 +455,7 @@ public class Config implements Cloneable {
         public Integer bubbleScaffoldingCooldown;
         @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
         public Integer waterShieldCooldown;
-        @IntOption(group = "inherit", value = 500, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
         public Integer woundPlugCooldown;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         public Integer waterShieldBucketCooldown;

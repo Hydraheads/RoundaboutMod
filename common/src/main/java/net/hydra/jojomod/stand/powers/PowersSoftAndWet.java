@@ -119,6 +119,9 @@ public class PowersSoftAndWet extends NewPunchingStand {
 
     @Override
     public void powerActivate(PowerContext context) {
+        if (isOuchie()) {
+            return;
+        }
         switch (context)
         {
 
@@ -310,8 +313,8 @@ public class PowersSoftAndWet extends NewPunchingStand {
             } else {
                 if (getActivePower() == PowerIndex.NONE){
                     if (!onCooldown(PowerIndex.SKILL_4_SNEAK)) {
-                        if (canUseWoundPlug()) {
-                            ouchieTicks = 20;
+                        if (canUseWoundPlug() && !self.isUsingItem()) {
+                            ouchieTicks = 24;
                             tryPowerPacket(PowerIndex.POWER_1_BLOCK);
                         }
                     }
@@ -321,6 +324,14 @@ public class PowersSoftAndWet extends NewPunchingStand {
         } else {
             shootingModeToggleClient();
         }
+    }
+
+
+    public boolean preventItemUsage(){
+        if (isOuchie()){
+            return true;
+        }
+        return super.preventItemUsage();
     }
 
     public void waterShieldAttemptClient(){
@@ -499,6 +510,9 @@ public class PowersSoftAndWet extends NewPunchingStand {
         return getInExplosiveSpinMode() || (this.self instanceof Player PE && PE.isCreative());
     }
     public boolean isAttackIneptVisually(byte activeP, int slot) {
+        if (isOuchie()){
+            return true;
+        }
         if (inShootingMode()){
             if (slot == 1 && (!goBeyondCharged() || getGoBeyondTarget() == null)){
                 return true;
@@ -753,7 +767,17 @@ public class PowersSoftAndWet extends NewPunchingStand {
         return ClientNetworking.getAppropriateConfig().softAndWetSettings.explosiveSpinMeterGainedPerHit;
     }
     @Override
+    public boolean buttonInputGuard(boolean keyIsDown, Options options) {
+        if (isOuchie()) {
+            return false;
+        }
+        return super.buttonInputGuard(keyIsDown,options);
+    }
+    @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
+        if (isOuchie()){
+            return;
+        }
         if (!consumeClickInput) {
             if (holdDownClick) {
                 if (keyIsDown) {
@@ -816,6 +840,9 @@ public class PowersSoftAndWet extends NewPunchingStand {
     }
     @Override
     public void buttonInputBarrage(boolean keyIsDown, Options options){
+        if (isOuchie()) {
+            return;
+        }
         if (keyIsDown) {
             if (!isBubbleBarraging()) {
                 if (!inShootingMode()) {
@@ -1249,17 +1276,29 @@ public class PowersSoftAndWet extends NewPunchingStand {
         if (!self.level().isClientSide() && !onCooldown(PowerIndex.SKILL_4_SNEAK)){
              this.setCooldown(PowerIndex.SKILL_4_SNEAK, ClientNetworking.getAppropriateConfig().softAndWetSettings.woundPlugCooldown);
              self.heal(1f);
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 1F, 0.8F);
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.CINDERELLA_SPARKLE_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
 
             ((ServerLevel) self.level()).sendParticles(ModParticles.SMALL_EXPLOSION, self.getEyePosition().x,
                     self.getEyePosition().y, self.getEyePosition().z,
                     0, 0, 0, 0, 0.2);
+
+            byte sk = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+            if (sk == SoftAndWetEntity.KIRA) {
+                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.HEART_ATTACK_MINI,
+                       this.self.getEyePosition().x,this.self.getEyePosition().y,this.self.getEyePosition().z,
+                        10, 0.25F,0.1F, 0.25F, 0.02);
+            } else {
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 1F, 0.8F);
+                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PURPLE_STAR,
+                        this.self.getEyePosition().x,this.self.getEyePosition().y,this.self.getEyePosition().z,
+                        10, 0.25F,0.1F, 0.25F, 0.02);
+            }
             MobEffectInstance bleed = self.getEffect(ModEffects.BLEED);
              if (bleed != null){
                  if (bleed.getAmplifier() > 0){
                     int amp = bleed.getAmplifier()-1;
                     self.removeEffect(bleed.getEffect());
-                    self.addEffect(new MobEffectInstance(ModEffects.BLEED, bleed.getDuration(), bleed.getAmplifier()));
+                    self.addEffect(new MobEffectInstance(ModEffects.BLEED, bleed.getDuration(), amp));
                  } else {
                      self.removeEffect(bleed.getEffect());
                  }

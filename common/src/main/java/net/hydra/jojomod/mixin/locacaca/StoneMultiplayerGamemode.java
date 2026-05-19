@@ -17,7 +17,9 @@ public class StoneMultiplayerGamemode {
     /**While your offhand is frozen in stone, you cannot use it*/
     @Inject(method = "useItem", at = @At("HEAD"), cancellable = true)
     public void roundabout$useItem(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
-
+        if (((StandUser)$$0).roundabout$getStandPowers().preventItemUsage()){
+            cir.setReturnValue(InteractionResult.FAIL);
+        }
         byte curse = ((StandUser)$$0).roundabout$getLocacacaCurse();
         if (curse > -1) {
             if ((curse == LocacacaCurseIndex.LEFT_HAND && $$0.getMainArm() == HumanoidArm.RIGHT && $$1 == InteractionHand.OFF_HAND)
