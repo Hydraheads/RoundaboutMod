@@ -511,8 +511,12 @@ public class PowersWalkingHeart extends NewDashPreset {
     public float inputSpeedModifiers(float basis){
         if (inCombatMode()) {
             return 0;
-        } else if (hasExtendedHeelsForWalking() && (canCutCorners() || slowHeelTicks > 0)){
-            return basis*0.8F;
+        } else if (hasExtendedHeelsForWalking()){
+            if (canCutCorners() || slowHeelTicks > 0) {
+                basis *= 0.8F;
+            } else if (self.hurtTime > 0){
+                basis *= 0.2F;
+            }
         }
         return super.inputSpeedModifiers(basis);
     }
