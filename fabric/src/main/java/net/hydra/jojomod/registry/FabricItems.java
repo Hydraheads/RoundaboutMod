@@ -157,6 +157,8 @@ public class FabricItems {
 
     public static Item IRON_BALL_CROSSBOW = registerItem("iron_ball_crossbow", new IronBallCrossbowItem(new Item.Properties().stacksTo(1).durability(565)));
 
+    public static Item ULTRAVIOLET_BLASTER = registerItem("ultraviolet_blaster", new UltravioletBlasterItem(new Item.Properties().stacksTo(1)));
+
     public static Item WOODEN_GLAIVE = registerItem("wooden_glaive", new GlaiveItem(Tiers.WOOD, 4F, -2.9F, new Item.Properties(),4));
     public static Item STONE_GLAIVE = registerItem("stone_glaive", new GlaiveItem(Tiers.STONE, 4F, -2.9F, new Item.Properties(),6));
     public static Item IRON_GLAIVE = registerItem("iron_glaive", new GlaiveItem(Tiers.IRON, 4F, -2.9F, new Item.Properties(),7));
@@ -365,6 +367,7 @@ public class FabricItems {
                         entries.accept(METEORITE);
                         entries.accept(METEORITE_INGOT);
                         entries.accept(AJA);
+                        entries.accept(ULTRAVIOLET_BLASTER);
                         entries.accept(ANUBIS_ITEM);
 
                         entries.accept(MUSIC_DISC_TORTURE_DANCE);
@@ -752,6 +755,7 @@ public class FabricItems {
         ModItems.FLESH_BUCKET = FLESH_BUCKET;
         ModItems.CHERRIES = CHERRIES;
 
+        ModItems.ULTRAVIOLET_BLASTER = ULTRAVIOLET_BLASTER;
 
         ModItems.CAT_REMAINS = CAT_REMAINS;
         ModItems.OCELOT_REMAINS = OCELOT_REMAINS;
