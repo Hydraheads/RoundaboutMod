@@ -20,6 +20,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -118,6 +119,11 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
         Entity entity = $$0.getEntity();
         AbstractArrow ABA = (AbstractArrow) (Object) this;
 
+        if (ABA.getPierceLevel() > 0){
+            return;
+            //Unfortunately, piercing crossbows crash with basically any prevention of their methods because they are
+            // coded very poorly
+        }
         if (entity instanceof LivingEntity LE){
             StandUser user = ((StandUser) entity);
 
