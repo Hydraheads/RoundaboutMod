@@ -2128,6 +2128,13 @@ public class MainUtil {
         return basis;
     }
 
+    public static boolean allowThruWalls(Entity entity){
+        if (MainUtil.isBossMob(entity) &&
+                !ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxesOnBosses)
+            return false;
+        return ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxes;
+    }
+
     //Walls corners and doors check
     public static boolean canActuallyHitInvolved(Entity self, Entity entity){
         if (entity instanceof SoftAndWetPlunderBubbleEntity){

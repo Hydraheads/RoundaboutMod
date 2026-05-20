@@ -1349,7 +1349,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             MainUtil.playPop(self);
             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXTEND_SPIKES_EVENT, SoundSource.PLAYERS, 1F, (float) (1.05f + Math.random() * 0.05f));
             List<Entity> hitbox = StandGrabHitbox(self,DamageHandler.genHitbox(self, self.getX(), self.getY(),
-                    self.getZ(), 4, 4, 4), 4, 360);
+                    self.getZ(), 4, 4, 4), 4, 360,true);
             if (hitbox != null) {
                 boolean combo = false;
                 for (Entity value : hitbox) {

@@ -2370,8 +2370,14 @@ public class AbilityScapeBasis {
                 if (!(angleDistance(lookVec.x, (User.getYHeadRot()%360f)) <= angle && angleDistance(lookVec.y, User.getXRot()) <= angle)){
 
                     hitEntities.remove(value);
-                } else if (!canActuallyHit(value) && !throughWalls){
-                    hitEntities.remove(value);
+                } else if (!canActuallyHit(value)){
+                    if (throughWalls) {
+                        if (!MainUtil.allowThruWalls(value)){
+                            hitEntities.remove(value);
+                        }
+                    } else {
+                        hitEntities.remove(value);
+                    }
                 }
             }
         }
