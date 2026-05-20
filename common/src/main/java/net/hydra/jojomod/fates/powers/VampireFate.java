@@ -136,7 +136,7 @@ public class VampireFate extends VampiricFate {
     @Override
     public void drawOtherGUIElements(Font font, GuiGraphics context, float delta, int mouseX, int mouseY, int i, int j, ResourceLocation rl){
 
-        VampireData vdata = getVampireData();
+        VampireData vdata = getVampireData2();
 
         int blt = 0;
         if (vdata.vampireLevel >= 40){
@@ -268,7 +268,7 @@ public class VampireFate extends VampiricFate {
                     ClientUtil.openHairspryUI();
             }
 
-            VampireData vdata = getVampireData();
+            VampireData vdata = getVampireData2();
             if (vdata.getPoints() > 0) {
                 int level = vdata.vampireLevel;
 
@@ -624,7 +624,7 @@ public class VampireFate extends VampiricFate {
     }
     @Override
     public void addBloodExp(int amt, Entity target){
-        VampireData vdata = getVampireData();
+        VampireData vdata = getVampireData2();
         if (vdata.vampireLevel < 40 && self instanceof Player pl){
             int exp = vdata.bloodExp;
 
@@ -965,7 +965,34 @@ public class VampireFate extends VampiricFate {
     }
 
 
+    VampireData creativeData = null;
+
     public VampireData getVampireData(){
+        if (self instanceof Player pl){
+            if (pl.isCreative()){
+                if (creativeData == null){
+                    creativeData = new VampireData(self.level());
+                    creativeData.strengthLevel = VampireData.strengthMaxLevel;
+                    creativeData.dexterityLevel = VampireData.dexterityMaxLevel;
+                    creativeData.resilienceLevel = VampireData.reslienceMaxLevel;
+                    creativeData.hypnotismLevel = VampireData.hypnotismMaxLevel;
+                    creativeData.superHearingLevel = VampireData.superHearingMaxLevel;
+                    creativeData.bloodSpeedLevel = VampireData.bloodSpeedMaxLevel;
+                    creativeData.graftingLevel = VampireData.graftingMaxLevel;
+                    creativeData.fleshBudLevel = VampireData.fleshBudMaxLevel;
+                    creativeData.daggerSplatterLevel = VampireData.daggerSplatterMaxLevel;
+                    creativeData.jumpLevel = VampireData.jumpMaxLevel;
+                    creativeData.ripperEyesLevel = VampireData.ripperEyesMaxLevel;
+                    creativeData.freezeLevel = VampireData.freezeMaxLevel;
+                }
+                return creativeData;
+            }
+            return ((IPlayerEntity)pl).rdbt$getVampireData();
+        } else {
+            return new VampireData(self.level());
+        }
+    }
+    public VampireData getVampireData2(){
         if (self instanceof Player pl){
             return ((IPlayerEntity)pl).rdbt$getVampireData();
         } else {
@@ -990,7 +1017,7 @@ public class VampireFate extends VampiricFate {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.vampire_vision",
                 "instruction.roundabout.press_skill_crouch", StandIcons.VAMP_VISION_ON,4,level,bypas));
 
-        VampireData data = getVampireData();
+        VampireData data = getVampireData2();
 
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+67,topPos+80,
                 data.strengthLevel, VampireData.strengthMaxLevel, "ability.roundabout.vamp_strength",
