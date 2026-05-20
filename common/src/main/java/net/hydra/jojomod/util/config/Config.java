@@ -290,6 +290,10 @@ public class Config implements Cloneable {
         public Integer ripperEyesPartialCooldown;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         public Integer ripperEyesMaxCooldown;
+        @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
+        public Integer bloodRegenCooldown;
+        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        public Integer bloodSpeedCooldown;
         @BooleanOption(group = "inherit", value = true)
         public Boolean antiCheapShot;
     }

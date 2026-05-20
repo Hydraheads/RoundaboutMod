@@ -604,7 +604,7 @@ public class VampireFate extends VampiricFate {
                     PE.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 1), PE);
                     PE.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 200, 0), PE);
                     getStandUserSelf().roundabout$setDazed((byte)0);
-                    this.setCooldown(PowerIndex.FATE_2_SNEAK, 600);
+                    this.setCooldown(PowerIndex.FATE_2_SNEAK, ClientNetworking.getAppropriateConfig().vampireSettings.bloodRegenCooldown);
                     xTryPower(BLOOD_REGEN,true);
                     self.level().playSound(null, self.blockPosition(), ModSounds.VAMPIRE_AWAKEN_EVENT,
                             SoundSource.PLAYERS, 1F, 1F);

@@ -545,7 +545,7 @@ public int speedActivated = 0;
             playSoundsIfNearby(SoundIndex.BLOOD_REGEN, 27, false);
             this.setCooldown(PowerIndex.FATE_2_SNEAK, 600);
             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.FATE_2_SNEAK,
-                    600
+                    ClientNetworking.getAppropriateConfig().vampireSettings.bloodRegenCooldown
             );
 
         }
@@ -557,13 +557,14 @@ public int speedActivated = 0;
                 PE.getFoodData().setFoodLevel(foodLevel-10);
             }
 
-            this.setCooldown(PowerIndex.GLOBAL_DASH, 180);
+            int bloodSpeed = ClientNetworking.getAppropriateConfig().vampireSettings.bloodSpeedCooldown;
+            this.setCooldown(PowerIndex.GLOBAL_DASH, bloodSpeed);
             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.GLOBAL_DASH,
-                    600
+                    bloodSpeed
             );
-            this.setCooldown(PowerIndex.FATE_3_SNEAK, 180);
+            this.setCooldown(PowerIndex.FATE_3_SNEAK, bloodSpeed);
             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.FATE_3_SNEAK,
-                    600
+                    bloodSpeed
             );
             setFast();
             self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SPEED_EVENT, SoundSource.PLAYERS, 1F, 0.95F+(float)(Math.random()*0.1));
