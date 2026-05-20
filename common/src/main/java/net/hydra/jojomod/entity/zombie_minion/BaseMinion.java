@@ -161,7 +161,7 @@ public class BaseMinion extends PathfinderMob {
         if (shouldPanic() || this.getTargetTactic() == Tactics.PEACEFUL.id){
             return false;
         }
-        if ($$0 != null && controller != null && controller.is($$0)){
+        if ($$0 != null && controller != null && controller.getUUID() == $$0.getUUID()){
             return false;
         }
         return super.canAttack($$0);
@@ -518,14 +518,14 @@ public class BaseMinion extends PathfinderMob {
 
     @Override
     public void setTarget(@Nullable LivingEntity $$0) {
-        if (($$0 != null && controller != null && controller.is($$0)) || ($$0 instanceof WitherBoss)){
+        if (($$0 != null && controller != null && controller.getUUID() == $$0.getUUID()) || ($$0 instanceof WitherBoss)){
             return;
         } else {
             super.setTarget($$0);
         }
     }
     public void setLastHurtByPlayer(@Nullable Player $$0) {
-        if ($$0 != null && controller != null && controller.is($$0)){
+        if ($$0 != null && controller != null && controller.getUUID() == $$0.getUUID()){
             return;
         } else {
             super.setLastHurtByPlayer($$0);
