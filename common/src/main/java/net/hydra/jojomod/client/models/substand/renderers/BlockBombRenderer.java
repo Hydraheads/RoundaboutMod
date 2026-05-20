@@ -44,7 +44,8 @@ public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
     
     public void render(BlockBombEntity blockBombEntity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         Player ClientPlayer = Minecraft.getInstance().player;
-    	if (ClientUtil.canSeeStands(ClientPlayer)) {
+        
+    	if (ClientUtil.canSeeStands(ClientPlayer) && Minecraft.getInstance().options.hideGui == false) {
         	Player UserPlayer =((Player)blockBombEntity.getUser());
         	if (UserPlayer == ClientPlayer) {
         		super.render(blockBombEntity, 0, partialTicks, matrixStack, vertexConsumerProvider, i);	
