@@ -3730,6 +3730,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (rdbt$this() instanceof Mob lent) {
                 VillagerMinion villagerMinion = lent.convertTo(ModEntities.VILLAGER_MINION, false);
                 villagerMinion.setController(ent);
+                if (level() instanceof ServerLevel SL) {
+                    SL.sendParticles(ModParticles.BLUE_SPARKLE,
+                            this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
+                            50, 0, 0, 0, 0.2);
+                }
                 villagerMinion.setMovementTactic(Tactics.FOLLOW.id);
                 villagerMinion.setHomePosition(new Vec3(lent.getX(), lent.getY(), lent.getZ()));
             }
