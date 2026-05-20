@@ -70,25 +70,23 @@ public class TuskNailModel extends PsuedoHierarchicalModel {
         if (context instanceof LivingEntity LE) {
             this.root().getAllParts().forEach(ModelPart::resetPose);
             StandUser user = ((StandUser) LE);
-            user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount+i*3);
-            this.animate(user.roundabout$getWornStandIdleAnimation(), TuskAnimations.NAIL_FLOAT,animated ? (partialTicks+i*3) : 0,1.0F);
+            if (user.roundabout$getStandPowers() instanceof  PowersTusk PT) {
+                user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount + i * 3);
+                this.animate(user.roundabout$getWornStandIdleAnimation(), TuskAnimations.NAIL_FLOAT, animated ? (partialTicks + i * 3) : 0, 1.0F);
 
-            VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
-            //The number at the end is inversely proportional so 2 is half speed
-            float scale = 0.05F;
-            float r = 0;
-            float g = 206/255.0F;
-            float b = 228/255.0F;
-            if (context instanceof Player P) {
-                IPlayerEntity IPE = (IPlayerEntity) P;
-                r = IPE.rdbt$getHairColorX();
-                g = IPE.rdbt$getHairColorY();
-                b = IPE.rdbt$getHairColorZ();
+                VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
+                //The number at the end is inversely proportional so 2 is half speed
+                float scale = 0.05F;
+                float r = PT.getNailColor().x;
+                float g = PT.getNailColor().y;
+                float b = PT.getNailColor().z;
+
+
+                r *= (1 - scale) + (float) Math.sin(partialTicks + i) * scale;
+                g *= (1 - scale) + (float) Math.sin(partialTicks + i * 2) * scale;
+                b *= (1 - scale) + (float) Math.sin(partialTicks + i * 3) * scale;
+                root().render(poseStack, consumer, 15728880, OverlayTexture.NO_OVERLAY, r, g, b, 1.0F);
             }
-            r *= (1-scale) + (float)Math.sin(partialTicks+i) *  scale;
-            g *= (1-scale) +  (float)Math.sin(partialTicks+i*2) * scale;
-            b *= (1-scale) +  (float)Math.sin(partialTicks+i*3) * scale;
-            root().render(poseStack, consumer, 15728880, OverlayTexture.NO_OVERLAY, r, g, b, 1.0F);
         }
     }
 

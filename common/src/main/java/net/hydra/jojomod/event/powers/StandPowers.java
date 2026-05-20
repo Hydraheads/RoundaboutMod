@@ -23,6 +23,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -2165,7 +2166,12 @@ public class StandPowers extends AbilityScapeBasis {
         return Component.empty();
     }
 
+    public void addAdditionalSaveData(CompoundTag $$0) {
 
+    }
+    public void readAdditionalSaveData(CompoundTag $$0) {
+
+    }
 
     /**You don't really need this*/
     public boolean setPowerSpecial(int lastMove) {return false;}

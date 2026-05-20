@@ -7,19 +7,16 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
-import net.hydra.jojomod.event.powers.VisageStoreEntry;
-import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ClientToServerPackets;
+import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.*;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
-import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.zetalasis.networking.message.api.ModMessageEvents;
@@ -27,8 +24,6 @@ import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class NailColorChangeScreen extends Screen {
     //Check out GamemodeSwitcherScreen
@@ -51,25 +46,22 @@ public class NailColorChangeScreen extends Screen {
 
     Player pl;
 
-    public float hairColorX = 1;
-    public float hairColorY = 1;
-    public float hairColorZ = 1;
-    public float baseHairColorX = 1;
-    public float baseHairColorY = 1;
-    public float baseHairColorZ = 1;
+    public float nailColorX = 1;
+    public float nailColorY = 1;
+    public float nailColorZ = 1;
+    public float baseNailColorX = 1;
+    public float baseNailColorY = 1;
+    public float baseNailColorZ = 1;
 
     @Override
     protected void init() {
         super.init();
         zHeld = true;
         pl = Minecraft.getInstance().player;
-        if (pl != null){
-            hairColorX = ((IPlayerEntity)pl).rdbt$getHairColorX();
-            baseHairColorX = hairColorX;
-            hairColorY = ((IPlayerEntity)pl).rdbt$getHairColorY();
-            baseHairColorY = hairColorY;
-            hairColorZ = ((IPlayerEntity)pl).rdbt$getHairColorZ();
-            baseHairColorZ = hairColorZ;
+        if (((StandUser)pl).roundabout$getStandPowers() instanceof PowersTusk PT){
+            baseNailColorX = nailColorX = PT.getNailColor().x;
+            baseNailColorY = nailColorY = PT.getNailColor().y;
+            baseNailColorZ = nailColorZ = PT.getNailColor().z;
         }
 
     }
@@ -93,10 +85,13 @@ public class NailColorChangeScreen extends Screen {
 
             this.minecraft.setScreen(null);
 
-            ModMessageEvents.sendToServer(
-                    ClientToServerPackets.StandPowerPackets.MESSAGES.HairColor.value,
-                    hairColorX,hairColorY,hairColorZ
-            );
+            if (((StandUser)pl).roundabout$getStandPowers() instanceof PowersTusk PT) {
+                PT.setNailColor(nailColorX,nailColorY,nailColorZ);
+                ModMessageEvents.sendToServer(
+                        ClientToServerPackets.StandPowerPackets.MESSAGES.NailColor.value,
+                        nailColorX, nailColorY, nailColorZ
+                );
+            }
             //SAVE
             return true;
         }
@@ -105,13 +100,16 @@ public class NailColorChangeScreen extends Screen {
             return true;
         }
         if (isSurelyHovering( this.width / 2-30,  this.height / 2 + 70, 60, 8, mouseX, mouseY)) {
-            hairColorX = baseHairColorX;
-            hairColorY = baseHairColorY;
-            hairColorZ = baseHairColorZ;
-            ModMessageEvents.sendToServer(
-                    ClientToServerPackets.StandPowerPackets.MESSAGES.HairColor.value,
-                    hairColorX,hairColorY,hairColorZ
-            );
+            nailColorX = 110/255F;
+            nailColorY = 230/255F;
+            nailColorZ = 255/255F;
+            if (((StandUser)pl).roundabout$getStandPowers() instanceof PowersTusk PT) {
+                PT.setNailColor(nailColorX,nailColorY,nailColorZ);
+                ModMessageEvents.sendToServer(
+                        ClientToServerPackets.StandPowerPackets.MESSAGES.NailColor.value,
+                        nailColorX, nailColorY, nailColorZ
+                );
+            }
             return true;
         }
 
@@ -150,19 +148,19 @@ public class NailColorChangeScreen extends Screen {
             if (sliderHeld == 1) {
                 float initialX = (float) ($$0 - i);
                 initialX =  (((float) maxRed / 118) * initialX);
-                hairColorX = initialX;
+                nailColorX = initialX;
                 return true;
             }
             if (sliderHeld == 2) {
                 float initialX = (float) ($$0 - i);
                 initialX = (((float) maxGreen / 118) * initialX);
-                hairColorY = initialX;
+                nailColorY = initialX;
                 return true;
             }
             if (sliderHeld == 3) {
                 float initialX = (float) ($$0 - i);
                 initialX = (((float) maxBlue / 118) * initialX);
-                hairColorZ = initialX;
+                nailColorZ = initialX;
                 sliderHeld = 3;
                 return true;
             }
@@ -179,21 +177,21 @@ public class NailColorChangeScreen extends Screen {
             if (isSurelyHovering(i, j, 118, 11, $$0, $$1)) {
                 float initialX = (float) ($$0 - i);
                 initialX = (((float) maxRed / 118) * initialX);
-                hairColorX = initialX;
+                nailColorX = initialX;
                 sliderHeld = 1;
                 return true;
             }
             if (isSurelyHovering(i, j + 22, 118, 11, $$0, $$1)) {
                 float initialX = (float) ($$0 - i);
                 initialX = (((float) maxGreen / 118) * initialX);
-                hairColorY = initialX;
+                nailColorY = initialX;
                 sliderHeld = 2;
                 return true;
             }
             if (isSurelyHovering(i, j + 44, 118, 11, $$0, $$1)) {
                 float initialX = (float) ($$0 - i);
                 initialX = (((float) maxBlue / 118) * initialX);
-                hairColorZ = initialX;
+                nailColorZ = initialX;
                 sliderHeld = 3;
                 return true;
             }
@@ -228,28 +226,28 @@ public class NailColorChangeScreen extends Screen {
 
         int i = this.width / 2 - 30;
         int j = this.height / 2 - 70;
-        guiGraphics.drawString(this.font, Component.translatable("roundabout.hairspray.red").withStyle(ChatFormatting.GRAY).append(Component.literal(" "+Math.round(hairColorX * 100.0) / 100.0).withStyle(ChatFormatting.DARK_GRAY)), i +1, j - 9, 4210752, false);
+        guiGraphics.drawString(this.font, Component.translatable("roundabout.hairspray.red").withStyle(ChatFormatting.GRAY).append(Component.literal(" "+Math.round(nailColorX * 100.0) / 100.0).withStyle(ChatFormatting.DARK_GRAY)), i +1, j - 9, 4210752, false);
         guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i, j, 11, 173, 118, 11);
-        int renderSpot1 = (int) Math.floor(((double) 114 / maxRed) * (hairColorX));
+        int renderSpot1 = (int) Math.floor(((double) 114 / maxRed) * (nailColorX));
         if (isSurelyHovering(i, j, 118, 11, mouseX, mouseY) || sliderHeld == 1) {
             guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i + renderSpot1, j, 5, 185, 5, 11);
         } else {
             guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i + renderSpot1, j, 5, 173, 5, 11);
         }
 
-        guiGraphics.drawString(this.font, Component.translatable("roundabout.hairspray.green").withStyle(ChatFormatting.GRAY).append(Component.literal(" "+Math.round(hairColorY * 100.0) / 100.0).withStyle(ChatFormatting.DARK_GRAY)), i+1, j + 13, 4210752, false);
+        guiGraphics.drawString(this.font, Component.translatable("roundabout.hairspray.green").withStyle(ChatFormatting.GRAY).append(Component.literal(" "+Math.round(nailColorY * 100.0) / 100.0).withStyle(ChatFormatting.DARK_GRAY)), i+1, j + 13, 4210752, false);
         guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i, j + 22, 11, 173, 118, 11);
 
-        int renderSpot2 =(int) Math.floor(((double) 114 / maxGreen) * (hairColorY));
+        int renderSpot2 =(int) Math.floor(((double) 114 / maxGreen) * (nailColorY));
         if (isSurelyHovering(i, j + 22, 118, 11, mouseX, mouseY) || sliderHeld == 2) {
             guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i + renderSpot2, j + 22, 5, 185, 5, 11);
         } else {
             guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i+ renderSpot2, j + 22, 5, 173, 5, 11);
         }
 
-        guiGraphics.drawString(this.font, Component.translatable("roundabout.hairspray.blue").withStyle(ChatFormatting.GRAY).append(Component.literal(" "+Math.round(hairColorZ * 100.0) / 100.0).withStyle(ChatFormatting.DARK_GRAY)), i +1, j + 35, 4210752, false);
+        guiGraphics.drawString(this.font, Component.translatable("roundabout.hairspray.blue").withStyle(ChatFormatting.GRAY).append(Component.literal(" "+Math.round(nailColorZ * 100.0) / 100.0).withStyle(ChatFormatting.DARK_GRAY)), i +1, j + 35, 4210752, false);
         guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i, j + 44, 11, 173, 118, 11);
-        int renderSpot3 = (int) Math.floor(((double) 114 / maxBlue) * (hairColorZ));
+        int renderSpot3 = (int) Math.floor(((double) 114 / maxBlue) * (nailColorZ));
         if (isSurelyHovering(i , j + 44, 118, 11, mouseX, mouseY) || sliderHeld == 3) {
             guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i + renderSpot3, j + 44, 5, 185, 5, 11);
         } else {
@@ -259,17 +257,12 @@ public class NailColorChangeScreen extends Screen {
 
         k = this.width / 2 - 75;
         l = this.height / 2 +17;
-        ((IPlayerEntity)pl).rdbt$setHairColorX(hairColorX);
-        ((IPlayerEntity)pl).rdbt$setHairColorY(hairColorY);
-        ((IPlayerEntity)pl).rdbt$setHairColorZ(hairColorZ);
-        byte pos2 = ((IPlayerEntity)pl).roundabout$GetPos2();
-        ((IPlayerEntity)pl).roundabout$SetPos2(PlayerPosIndex.HAIR_EXTENSION);
-        renderEntityInInventoryFollowsMouse(guiGraphics, k, l, 30,
-                (float) k - mouseX, (float) l - 50 - mouseY, pl);
-        ((IPlayerEntity)pl).roundabout$SetPos2(pos2);
-        ((IPlayerEntity)pl).rdbt$setHairColorX(baseHairColorX);
-        ((IPlayerEntity)pl).rdbt$setHairColorY(baseHairColorY);
-        ((IPlayerEntity)pl).rdbt$setHairColorZ(baseHairColorZ);
+        if (((StandUser)pl).roundabout$getStandPowers() instanceof PowersTusk PT) {
+            PT.setNailColor(nailColorX,nailColorY,nailColorZ);
+            renderEntityInInventoryFollowsMouse(guiGraphics, k, l, 30,
+                    (float) k - mouseX, (float) l - 50 - mouseY, pl);
+            PT.setNailColor(baseNailColorX,baseNailColorY,baseNailColorZ);
+        }
 
         k = this.width / 2 - 110;
         l = this.height / 2 - 75;

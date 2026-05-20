@@ -1244,6 +1244,7 @@ public class ClientUtil {
     public static void openBombConfigScreen() {Minecraft.getInstance().setScreen(new BombConfigScreen());}
     public static void openMemoryRecordScreen(boolean recording){Minecraft.getInstance().setScreen(new MemoryRecordScreen(recording));}
     public static void openTuskActScreen(){Minecraft.getInstance().setScreen(new TuskActScreen());}
+    public static void openNailScreen(){Minecraft.getInstance().setScreen(new NailColorChangeScreen());}
     public static void strikePose(Player player, Minecraft C, boolean keyIsDown, Options option) {
         if (keyIsDown){
             if (!poseHeld){
