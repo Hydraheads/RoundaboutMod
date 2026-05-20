@@ -571,9 +571,11 @@ public class VampireFate extends VampiricFate {
                                     ((StandUser)mb).roundabout$deeplyRemoveAttackTarget();
                                 }
                             } else {
-                                if (!canPlantHealth(TE)) {
-                                    if (self instanceof Player PE) {
+                                if (self instanceof Player PE) {
+                                    if (TE instanceof Monster){
                                         PE.displayClientMessage(Component.translatable("text.roundabout.vampire.flesh_bud_fail").withStyle(ChatFormatting.RED), true);
+                                    } else {
+                                        PE.displayClientMessage(Component.translatable("text.roundabout.vampire.flesh_bud_fail_2").withStyle(ChatFormatting.RED), true);
                                     }
                                 }
                             }
