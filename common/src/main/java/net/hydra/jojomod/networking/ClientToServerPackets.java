@@ -80,6 +80,7 @@ public class ClientToServerPackets {
             ItemContext("item_context"),
             GuardCancel("guard_cancel"),
             HairColor("hair_color"),
+            NailColor("nail_color"),
             WarHammer("war_hammer"),
             FinishSucking("finish_sucking"),
             CancelSucking("cancel_sucking"),
@@ -490,6 +491,13 @@ public class ClientToServerPackets {
                     float green = (float)vargs[1];
                     float blue = (float)vargs[2];
                     MainUtil.updateHairColor(sender,red,green,blue);
+                }
+                /**Change Nail Color*/
+                if (message.equals(MESSAGES.NailColor.value)) {
+                    float red = (float)vargs[0];
+                    float green = (float)vargs[1];
+                    float blue = (float)vargs[2];
+                    MainUtil.updateNailColor(sender,red,green,blue);
                 }
                 /**Update Piloting Stand*/
                 if (message.equals(MESSAGES.UpdatePilot.value)) {

@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.TuskAnimations;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
@@ -63,30 +64,27 @@ public class TuskDrillNailModel extends PsuedoHierarchicalModel {
         if (context instanceof LivingEntity LE) {
             this.root().getAllParts().forEach(ModelPart::resetPose);
             StandUser user = ((StandUser) LE);
-            user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount+i*3);
-            VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
+            if (user.roundabout$getStandPowers() instanceof PowersTusk PT) {
+                user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount + i * 3);
+                VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
 
-            nail1.yRot = partialTicks * 100;
-            nail2.yRot = (partialTicks-50) * -100;
+                nail1.yRot = partialTicks * 100;
+                nail2.yRot = (partialTicks - 50) * -100;
 
-            poseStack.scale(0.5F,0.5F,0.5F);
-            poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,-90),0,0,0);
-            poseStack.translate(0,-1.3,0);//BACK, DOWN
+                poseStack.scale(0.5F, 0.5F, 0.5F);
+                poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1, 0, 0, -90), 0, 0, 0);
+                poseStack.translate(0, -1.3, 0);//BACK, DOWN
 
-            float scale = 0.05F;
-            float r = 0;
-            float g = 206/255.0F;
-            float b = 228/255.0F;
-            if (context instanceof Player P) {
-                IPlayerEntity IPE = (IPlayerEntity) P;
-                r = IPE.rdbt$getHairColorX();
-                g = IPE.rdbt$getHairColorY();
-                b = IPE.rdbt$getHairColorZ();
+                float scale = 0.05F;
+                float r = PT.getNailColor().x;
+                float g = PT.getNailColor().y;
+                float b = PT.getNailColor().z;
+
+                r *= (1 - scale) + (float) Math.sin(partialTicks + i) * scale;
+                g *= (1 - scale) + (float) Math.sin(partialTicks + i * 2) * scale;
+                b *= (1 - scale) + (float) Math.sin(partialTicks + i * 3) * scale;
+                root().render(poseStack, consumer, 15728880, OverlayTexture.NO_OVERLAY, r, g, b, 1);
             }
-            r *= (1-scale) + (float)Math.sin(partialTicks+i) *  scale;
-            g *= (1-scale) +  (float)Math.sin(partialTicks+i*2) * scale;
-            b *= (1-scale) +  (float)Math.sin(partialTicks+i*3) * scale;
-            root().render(poseStack, consumer, 15728880, OverlayTexture.NO_OVERLAY, r, g, b, 1);
         }
     }
 

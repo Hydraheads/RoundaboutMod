@@ -27,6 +27,7 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -40,6 +41,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -78,6 +80,8 @@ public class PowersTusk extends NewDashPreset {
 
 
     public static final byte
+        SYNC_NAILS = PowerIndex.FALL_BRACE_FINISH,
+
         SHOOT_MODE = PowerIndex.ATTACK,
         CHARGE_NAILS = PowerIndex.SNEAK_ATTACK_CHARGE,
         FIRE_NAIL = PowerIndex.SNEAK_ATTACK,
@@ -95,7 +99,7 @@ public class PowersTusk extends NewDashPreset {
         BRUSHING = PowerIndex.POWER_2_BLOCK,
 
         WARP = PowerIndex.BARRAGE_CHARGE_2,
-        GRAB = PowerIndex.RANGED_BARRAGE_CHARGE,
+        GRAB = PowerIndex.BARRAGE_CLASH,
         FLATTEN = PowerIndex.RANGED_BARRAGE_2;
 
     @Override
@@ -369,8 +373,6 @@ public class PowersTusk extends NewDashPreset {
         super.tickPower();
         this.tickNails();
 
-
-
         if (this.getSelf() instanceof Player P) {
 
             if (this.getStandUserSelf().roundabout$getStandAnimation() == PowersTusk.FLATTEN) {
@@ -502,6 +504,19 @@ public class PowersTusk extends NewDashPreset {
             case PowerIndex.EXTRA -> this.nailCharge = value;
         }
         return super.tryIntPower(move, forced, value);
+    }
+
+    @Override
+    public void updatePowerInt(byte activePower, int data) {
+        switch (activePower) {
+            case PowersTusk.SYNC_NAILS -> {
+                int x = data/1000000;
+                int y = (data/1000)%1000;
+                int z = data%1000;
+                this.setNailColor(x/255.0F,y/255.0F,z/255.0F);
+            }
+        }
+        super.updatePowerInt(activePower, data);
     }
 
     @Override
@@ -1496,6 +1511,8 @@ public class PowersTusk extends NewDashPreset {
         if (desummon && this.isCharging()) {
             this.setPowerNone();
             this.nailCharge = 0;
+        } else if (!desummon) {
+            this.setNailColor(this.nailColor.x,this.nailColor.y,this.nailColor.z);
         }
         super.onStandSummon(desummon);
     }
@@ -1561,7 +1578,39 @@ public class PowersTusk extends NewDashPreset {
 
     @Override
     public Vector3f getLeapColor() {
-        return new Vector3f(127/255F,194/255F,249/255F);
+        return getNailColor();
+    }
+
+
+
+    private Vector3f nailColor = new Vector3f(127/255F,194/255F,249/255F);
+    public Vector3f getNailColor() {
+        return nailColor;
+    }
+    public void setNailColor(float x, float y, float z) {
+        this.nailColor.x = x;
+        this.nailColor.y = y;
+        this.nailColor.z = z;
+        if (this.getSelf() != null && !this.isClient() && this.getSelf() instanceof Player P) {
+            S2CPacketUtil.sendIntPowerDataPacket(P,PowersTusk.SYNC_NAILS,(int)(this.nailColor.x*255)*1000000 + (int)(this.nailColor.y*255)*1000 + (int)(this.nailColor.z*255) );
+        }
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag $$0) {
+        $$0.putFloat("nailColorX",this.getNailColor().x);
+        $$0.putFloat("nailColorY",this.getNailColor().y);
+        $$0.putFloat("nailColorZ",this.getNailColor().z);
+    }
+    @Override
+    public void readAdditionalSaveData(CompoundTag $$0) {
+        if ($$0.contains("nailColorX")) {
+            this.setNailColor(
+                    $$0.getFloat("nailColorX"),
+                    $$0.getFloat("nailColorY"),
+                    $$0.getFloat("nailColorZ")
+            );
+        }
     }
 
     @Override

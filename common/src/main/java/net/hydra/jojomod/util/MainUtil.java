@@ -34,13 +34,10 @@ import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.powers.GeneralPowers;
-import net.hydra.jojomod.stand.powers.PowersAnubis;
-import net.hydra.jojomod.stand.powers.PowersJustice;
+import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.stand.powers.PowersMetallica;
-import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -682,6 +679,9 @@ public class MainUtil {
         }
         stack.getOrCreateTagElement("Memory").putByte("Skin",((StandUser)ent).roundabout$getStandSkin());
         stack.getOrCreateTagElement("Memory").putByte("Pose",((StandUser)ent).roundabout$getIdlePos());
+        if (stack.getItem() instanceof StandDiscItem SD) {
+            ((StandUser)ent).roundabout$getStandPowers().addAdditionalSaveData(stack.getOrCreateTagElement("Memory"));
+        }
         return stack;
     }
 
@@ -870,6 +870,7 @@ public class MainUtil {
         StandUser user = ((StandUser)ent);
         CompoundTag $$4 = stack.getTagElement("Memory");
         if ($$4 != null) {
+            ((StandUser)ent).roundabout$getStandPowers().readAdditionalSaveData($$4);
             if (SD instanceof MaxStandDiscItem) {
                 if (ent instanceof Player PE) {
                     IPlayerEntity IPE = ((IPlayerEntity) PE);
@@ -1132,6 +1133,13 @@ public class MainUtil {
             iplayer.rdbt$setHairColorX(red);
             iplayer.rdbt$setHairColorY(green);
             iplayer.rdbt$setHairColorZ(blue);
+        }
+    }
+    public static void updateNailColor(Player player,float red, float green, float blue){
+        if (player != null){
+            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersTusk PT) {
+                PT.setNailColor(red,green,blue);
+            }
         }
     }
 

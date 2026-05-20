@@ -119,17 +119,11 @@ public class TuskNailEntity extends AbstractArrow {
         if (this.life > 200) {
             this.discard();
         }
-        if (!this.level().isClientSide()) {
+        if (!this.level().isClientSide() && this.getOwner() != null && this.getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersTusk PT) {
 
-            float r = 0;
-            float g = 206/255.0F;
-            float b = 228/255.0F;
-            if (this.getOwner() instanceof Player P) {
-                IPlayerEntity IPE = (IPlayerEntity) P;
-                r = IPE.rdbt$getHairColorX();
-                g = IPE.rdbt$getHairColorY();
-                b = IPE.rdbt$getHairColorZ();
-            }
+            float r = PT.getNailColor().x;
+            float g = PT.getNailColor().y;
+            float b = PT.getNailColor().z;
             ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(r,g,b),1F),
                     this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(),
                     0, 0, 0, 0, 0.015);

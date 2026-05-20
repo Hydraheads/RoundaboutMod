@@ -26,6 +26,7 @@ import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.powers.GeneralPowers;
+import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -577,10 +578,19 @@ public class PowerInventoryScreen
                     }
                 }
 
+                if (PowerTypes.getPowerType(pl) == PowerTypes.STAND.ordinal()  && ((StandUser)pl).roundabout$getStandPowers() instanceof PowersTusk PT ) {
+                    if (isSurelyHovering( i +100, j + 40,19,18,mouseX,mouseY)){
+                        context.blit(POWER_INVENTORY_LOCATION, i +100, j + 40, 236, 131, 19, 18);
+                        List<Component> compList = Lists.newArrayList();
+                        compList.add(Component.translatable("text.roundabout.tusk_nail_color").withStyle(ChatFormatting.WHITE));
+                        context.renderTooltip(Minecraft.getInstance().font, compList, Optional.empty(), mouseX, mouseY);
+                    } else {
+                        context.blit(POWER_INVENTORY_LOCATION, i +100, j + 40, 236, 112, 19, 18);
+                    }
+                }
 
                 drawIcons(context,mouseX,mouseY);
                 context.drawString(this.font, gp.getPowerTagName(), this.titleLabelX + 25 + leftPos, this.titleLabelY + 18 + topPos, 16777215, false);
-
             }
         }
 
@@ -1054,6 +1064,13 @@ public class PowerInventoryScreen
                                     C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_LEFT_POWERS);
                             }
                             return true;
+                        }
+                    }
+                    if (PowerTypes.getPowerType(pl)==PowerTypes.STAND.ordinal()) {
+                        if (standUser.roundabout$getStandPowers() instanceof PowersTusk) {
+                            if (isSurelyHovering(i +100, j + 40,19,18,mouseX,mouseY)){
+                                ClientUtil.openNailScreen();
+                            }
                         }
                     }
                 }

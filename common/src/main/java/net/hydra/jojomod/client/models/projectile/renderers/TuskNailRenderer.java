@@ -12,6 +12,8 @@ import net.hydra.jojomod.client.models.projectile.Tusk1NailModel;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.RattDartEntity;
 import net.hydra.jojomod.entity.projectile.TuskNailEntity;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -19,6 +21,7 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
 public class TuskNailRenderer extends EntityRenderer<TuskNailEntity> {
@@ -41,28 +44,24 @@ public class TuskNailRenderer extends EntityRenderer<TuskNailEntity> {
     }
 
     public void render(TuskNailEntity $$0, float $$1, float $$2, PoseStack poseStack, MultiBufferSource $$4, int $$5) {
-        VertexConsumer $$6 = ItemRenderer.getFoilBufferDirect($$4, this.model.renderType(this.getTextureLocation($$0)), false, false);// $$0.isFoil());
-        poseStack.pushPose();
-        poseStack.scale(1.6F,1.6F,1.6F);
-        poseStack.translate(0,-1.3,0);
-        this.model.setupAnim($$0,$$0.tickCount+$$2);
+        if ($$0.getOwner() != null && $$0.getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersTusk PT) {
+            VertexConsumer $$6 = ItemRenderer.getFoilBufferDirect($$4, this.model.renderType(this.getTextureLocation($$0)), false, false);// $$0.isFoil());
+            poseStack.pushPose();
+            poseStack.scale(1.6F, 1.6F, 1.6F);
+            poseStack.translate(0, -1.3, 0);
+            this.model.setupAnim($$0, $$0.tickCount + $$2);
 
-        float scale = 0.05F;
-        float r = 0;
-        float g = 206/255.0F;
-        float b = 228/255.0F;
-        if ($$0.getOwner() instanceof Player P) {
-            IPlayerEntity IPE = (IPlayerEntity) P;
-            r = IPE.rdbt$getHairColorX();
-            g = IPE.rdbt$getHairColorY();
-            b = IPE.rdbt$getHairColorZ();
+            float scale = 0.05F;
+            float r = PT.getNailColor().x;
+            float g = PT.getNailColor().y;
+            float b = PT.getNailColor().z;
+            r *= (1 - scale) + (float) Math.sin($$2 + 1) * scale;
+            g *= (1 - scale) + (float) Math.sin($$2 + 2) * scale;
+            b *= (1 - scale) + (float) Math.sin($$2 + 3) * scale;
+            this.model.renderToBuffer(poseStack, $$6, $$5, OverlayTexture.NO_OVERLAY, r, g, b, 1.0F);
+            poseStack.popPose();
+            super.render($$0, $$1, $$2, poseStack, $$4, $$5);
         }
-        r *= (1-scale) + (float)Math.sin($$2+1) *  scale;
-        g *= (1-scale) +  (float)Math.sin($$2+2) * scale;
-        b *= (1-scale) +  (float)Math.sin($$2+3) * scale;
-        this.model.renderToBuffer(poseStack, $$6, $$5, OverlayTexture.NO_OVERLAY, r, g, b, 1.0F);
-        poseStack.popPose();
-        super.render($$0, $$1, $$2, poseStack, $$4, $$5);
     }
 
 }
