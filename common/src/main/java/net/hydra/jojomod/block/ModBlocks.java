@@ -706,7 +706,7 @@ public class ModBlocks {
                     .noCollission()
                     .instabreak()
                     .instrument(NoteBlockInstrument.HARP)
-                    .strength(2.0F).sound(SoundType.WOOD).ignitedByLava()
+                    .pushReaction(PushReaction.DESTROY).sound(SoundType.WOOD)
                     .lightLevel(state -> 14)
                     .noOcclusion()
     );
