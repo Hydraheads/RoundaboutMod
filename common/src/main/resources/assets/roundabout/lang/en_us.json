@@ -3077,7 +3077,7 @@
   "config.roundabout.drownSpeedModifier.name": "Vampire Oxygen Swim Slowdown",
   "config.roundabout.drownSpeedModifier.desc": "When drowning, instead of taking damage, vampiric players are slowed down using this multiplier. Lower = slower.",
   "config.roundabout.sunDamagePercentPerDamageTick.name": "Sun Damage Per Dose",
-  "config.roundabout.sunDamagePercentPerDamageTick.desc": "How much of your health is drained, percentage wise of max health, per hit under the sun as a vampiric player?",
+  "config.roundabout.sunDamagePercentPerDamageTick.desc": "How much of your health is drained, percentage wise of max health, per hit under the sun as a vampiric player? If you set this to 0, you will be fully immune to sunlight. Be warned that removing this drawback just makes vampires objectively better, and not vampires.",
   "config.roundabout.vampireUsesInternalSaturation.name": "Internal Saturation",
   "config.roundabout.vampireUsesInternalSaturation.desc": "Set to false to make forge appleskin render golden meat sticks over blood bar.",
 

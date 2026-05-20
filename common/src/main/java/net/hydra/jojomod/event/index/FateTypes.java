@@ -180,8 +180,9 @@ public enum FateTypes {
             if (PE.isCreative()){
                 return false;
             }
-            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal() ||
-                    ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.ordinal();
+            return (((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal() ||
+                    ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.ordinal()) &&
+                    ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick > 0;
         }
         if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire())
             return true;
