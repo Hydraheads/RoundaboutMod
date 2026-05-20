@@ -11,6 +11,7 @@
     "MilkBucketMixin"
   ],
   "client": [
+    "ExperimentalFixD4CFabric",
     "FabricTerrainRenderContext",
     "SaddleLayerManhattan"
   ],
