@@ -34,12 +34,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -50,23 +47,15 @@ import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.LlamaSpit;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ShearsItem;
-import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.InfestedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -400,8 +389,10 @@ public class BaseMinion extends PathfinderMob {
     public boolean doHurtTarget(Entity $$0) {
         boolean yeah = super.doHurtTarget($$0);
         if (yeah){
-            if (!level().isClientSide() && !getMainHandItem().isEmpty() && getMainHandItem().getCount() > 0) {
-                getMainHandItem().hurtAndBreak(2, this, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+            if (!level().isClientSide()){
+                if (!getMainHandItem().isEmpty() && getMainHandItem().getCount() > 0) {
+                    getMainHandItem().hurtAndBreak(2, this, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                }
             }
         }
         return yeah;

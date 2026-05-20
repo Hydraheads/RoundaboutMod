@@ -3683,15 +3683,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         if (rdbt$this() instanceof Player pl && (dsource.is(ModDamageTypes.BLOOD_DRAIN)
         ) && FateTypes.isHuman(pl)){
-            pl.setHealth(pl.getMaxHealth()/2);
-            cir.setReturnValue(true);
-            FateTypes.setZombie(pl);
-            pl.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireZombie1").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD), true);
+            if (ClientNetworking.getAppropriateConfig().vampireSettings.enableZombification) {
+                pl.setHealth(pl.getMaxHealth() / 2);
+                cir.setReturnValue(true);
+                FateTypes.setZombie(pl);
+                pl.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireZombie1").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD), true);
 
-            if (level() instanceof ServerLevel SL) {
-                SL.sendParticles(ModParticles.BLOOD_MIST,
-                        this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
-                        10, 0.4, 0.4, 0.4, 0.025);
+                if (level() instanceof ServerLevel SL) {
+                    SL.sendParticles(ModParticles.BLOOD_MIST,
+                            this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
+                            10, 0.4, 0.4, 0.4, 0.025);
+                }
             }
         } else if ( (rdbt$this() instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers().cheatDeath(dsource))
                 || roundabout$getStandPowers().cheatDeath(dsource)){
@@ -3699,10 +3701,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         } else if (hasEffect(ModEffects.VAMPIRE_BLOOD)){
             removeEffect(ModEffects.VAMPIRE_BLOOD);
             if (rdbt$this() instanceof Player pl){
-                if (FateTypes.isHuman(pl)) {
-                    ((IFatePlayer) pl).rdbt$startVampireTransformation(false);
-                    pl.setHealth(1);
-                    cir.setReturnValue(true);
+                if (ClientNetworking.getAppropriateConfig().vampireSettings.enableBloodVampirizing) {
+                    if (FateTypes.isHuman(pl)) {
+                        ((IFatePlayer) pl).rdbt$startVampireTransformation(false);
+                        pl.setHealth(1);
+                        cir.setReturnValue(true);
+                    }
                 }
             } else {
                 if (rdbt$this() instanceof Mob mb && !((IMob)mb).roundabout$isVampire()){

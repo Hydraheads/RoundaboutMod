@@ -2882,6 +2882,16 @@
   "config.roundabout.antiCheapShot.name": "Anti Cheap Shot",
   "config.roundabout.antiCheapShot.desc": "Prevents using clutch moves right after daze moves. Otherwise, you can easily guarantee instakill progress.",
 
+  "config.roundabout.enableStoneMask.name": "Enable Mask Vampires",
+  "config.roundabout.enableStoneMask.desc": "If disabled, the stone mask can no longer make vampires.",
+
+  "config.roundabout.enableBloodVampirizing.name": "Blood Vampires",
+  "config.roundabout.enableBloodVampirizing.desc": "If disabled, vampire blood can no longer make players vampires.",
+
+  "config.roundabout.enableZombification.name": "Zombification",
+  "config.roundabout.enableZombification.desc": "If disabled, vampires and zombies can no longer make players zombies.",
+
+
   "config.roundabout.SummonSurvivorCooldownV2.name": "Summon Cooldown",
   "config.roundabout.SummonSurvivorCooldownV2.desc": "The cooldown between survivor stands being placed.",
   "config.roundabout.SummonSurvivorCooldownCooldownUsesServerLatency.name": "Summon Cooldown Uses Latency",

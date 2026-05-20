@@ -776,6 +776,9 @@ public class MainUtil {
     }
 
     public static void activateStoneMask(Entity ent){
+        if (!ClientNetworking.getAppropriateConfig().vampireSettings.enableStoneMask)
+            return;
+
         if (ent instanceof LivingEntity LE && !ent.isInWater() && !ent.level().isClientSide()){
             ItemStack stack = LE.getItemBySlot(EquipmentSlot.HEAD);
             if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem())){

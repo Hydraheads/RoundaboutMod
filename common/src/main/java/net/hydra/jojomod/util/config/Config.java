@@ -242,6 +242,12 @@ public class Config implements Cloneable {
         public Boolean hexTwoSealsPotions;
     }
     public static class VampireSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableStoneMask;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableBloodVampirizing;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableZombification;
         @BooleanOption(group = "inherit", value = false)
         public Boolean vampireUsesPotionEffectForNightVision;
         @BooleanOption(group = "inherit", value = true)
