@@ -213,6 +213,7 @@ public class MainUtil {
     public static ArrayList<String> removeBloodFromThese = Lists.newArrayList();
     public static ArrayList<String> unfreezableMobs = Lists.newArrayList();
     public static ArrayList<String> foodThatHasEffectsForVampires = Lists.newArrayList();
+    public static ArrayList<String> vampireSunDamageWorlds = Lists.newArrayList();
     public static Set<String> foodThatGivesBloodList = Set.of();
     Map<String, FoodBloodStats> foodThatGivesBloodMap;
 
@@ -315,7 +316,14 @@ public class MainUtil {
         }
         return false;
     }
-
+    public static boolean isSunDamageWorld(String string){
+        if (string == null || string.isEmpty())
+            return false;
+        if (vampireSunDamageWorlds != null && !vampireSunDamageWorlds.isEmpty() && vampireSunDamageWorlds.contains(string)){
+            return true;
+        }
+        return false;
+    }
     public static boolean isEdibleToVampires(ItemStack stack){
         if (stack == null || stack.isEmpty())
             return false;

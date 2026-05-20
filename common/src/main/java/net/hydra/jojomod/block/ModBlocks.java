@@ -703,6 +703,8 @@ public class ModBlocks {
     public static Block WALL_LANTERN_PROPERTIES = new LanternWallBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOD)
+                    .noCollission()
+                    .instabreak()
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(2.0F).sound(SoundType.WOOD).ignitedByLava()
                     .lightLevel(state -> 14)

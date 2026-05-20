@@ -121,6 +121,11 @@ public abstract class ConfigManager {
             MainUtil.unfreezableMobs.clear();
             MainUtil.unfreezableMobs.addAll(getAdvancedConfig().removeFreezableMobs);
         }
+        if (getAdvancedConfig().vampireSunDamageWorlds != null)
+        {
+            MainUtil.vampireSunDamageWorlds.clear();
+            MainUtil.vampireSunDamageWorlds.addAll(getAdvancedConfig().vampireSunDamageWorlds);
+        }
         if (getAdvancedConfig().foodThatGivesBloodListV4 != null)
         {
             MainUtil.foodMap = MainUtil.parseFoodList(getAdvancedConfig().foodThatGivesBloodListV4);

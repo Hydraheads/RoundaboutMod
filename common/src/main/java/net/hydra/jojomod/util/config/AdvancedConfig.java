@@ -199,4 +199,9 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:allay"
             )
     );
+    public Set<String> vampireSunDamageWorlds = new HashSet<>(
+            Arrays.asList(
+                    "overworld"
+            )
+    );
 }
