@@ -1162,6 +1162,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
                         if (self instanceof Player pl) {
                             if (MainUtil.canDrinkBloodCritAggro(entity,self) && !(entity instanceof Player)){
+                                if (((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
+                                    vp.addBloodExp(15, entity);
+                                }
                                 ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CRIT,
                                         entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
                                         10,
@@ -1179,6 +1182,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                                     }
                                 }
                             } else {
+
+                                if (((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
+                                    vp.addBloodExp(5, entity);
+                                }
                                 pl.getFoodData().eat(2, 0.0F);
                             }
                         }
