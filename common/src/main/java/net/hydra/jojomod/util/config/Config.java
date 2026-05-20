@@ -258,8 +258,14 @@ public class Config implements Cloneable {
         public Integer expInterval;
         @FloatOption(group = "inherit", value = 0.75F, min = 0, max = 1F)
         public Float drownSpeedModifier;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer vampireAttackMultOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer  vampireAttackMultOnPlayers;
         @IntOption(group = "inherit", value = 3, min = 0, max = 72000)
         public Integer powerGuardDelayTicks;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierVampire;
         @FloatOption(group = "inherit", value = 0.4F, min = 0, max = 100F)
         public Float sunDamagePercentPerDamageTick;
         @BooleanOption(group = "inherit", value = true)

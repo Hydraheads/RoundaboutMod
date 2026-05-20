@@ -729,7 +729,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             MainUtil.makeMobBleed(LE);
         }
     }
-
+    @Override
+    public int getMiningLevel() {
+        return ClientNetworking.getAppropriateConfig().vampireSettings.getMiningTierVampire;
+    }
 
     public List<LivingEntity> alreadyBeamed = new ArrayList<>();
 
@@ -822,12 +825,19 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     }
 
 
+    public float mobDmgMult(float dmg){
+        return (float) (dmg*(((float)ClientNetworking.getAppropriateConfig().vampireSettings.vampireAttackMultOnMobs)*0.01));
+    }
+    public float playerDmgMult(float dmg){
+        return (float) (dmg*(((float)ClientNetworking.getAppropriateConfig().vampireSettings.vampireAttackMultOnPlayers)*0.01));
+    }
+
     public float getPunchStrength(Entity entity){
         if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
             if (this.getReducedDamage(entity)){
-                return 0.6F * (1+ (vp.getVampireData().strengthLevel * 0.05F));
+                return playerDmgMult(0.6F * (1+ (vp.getVampireData().strengthLevel * 0.05F)));
             } else {
-                return 2.1F * (1+ (vp.getVampireData().strengthLevel * 0.1F));
+                return mobDmgMult(2.1F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             }
         } else {
             return super.getPunchStrength(entity);
@@ -838,9 +848,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public float getDiveStrength(Entity entity){
         if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
             if (this.getReducedDamage(entity)){
-                return 0.9F * (1+ (vp.getVampireData().strengthLevel * 0.1F));
+                return playerDmgMult(0.9F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             } else {
-                return 3F * (1+ (vp.getVampireData().strengthLevel * 0.1F));
+                return mobDmgMult(3F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             }
         } else {
             return super.getPunchStrength(entity);
@@ -850,9 +860,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public float getRipperEyeStrength(Entity entity){
         if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
             if (this.getReducedDamage(entity)) {
-                return 5F  * (0.8F+ (vp.getVampireData().ripperEyesLevel * 0.05F));
+                return playerDmgMult(5F  * (0.8F+ (vp.getVampireData().ripperEyesLevel * 0.05F)));
             } else {
-                return 17F  * (0.8F+ (vp.getVampireData().ripperEyesLevel * 0.05F));
+                return mobDmgMult(17F  * (0.8F+ (vp.getVampireData().ripperEyesLevel * 0.05F)));
             }
         }
         return 0;
@@ -860,9 +870,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public float getRipperEyeStrayStrength(Entity entity, int chargeAmt){
         if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
             if (this.getReducedDamage(entity)) {
-                return 0.5F + 0.02F * (1 +chargeAmt) * (0.8F + (vp.getVampireData().ripperEyesLevel * 0.05F));
+                return playerDmgMult(0.5F + 0.02F * (1 +chargeAmt) * (0.8F + (vp.getVampireData().ripperEyesLevel * 0.05F)));
             } else {
-                return 1F + 0.15F * (1+chargeAmt) * (0.8F + (vp.getVampireData().ripperEyesLevel * 0.05F));
+                return mobDmgMult(1F + 0.15F * (1+chargeAmt) * (0.8F + (vp.getVampireData().ripperEyesLevel * 0.05F)));
             }
         }
         return 0;
@@ -872,9 +882,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public float getSweepStrength(Entity entity){
         if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
             if (this.getReducedDamage(entity)){
-                return 1.3F * (1+ (vp.getVampireData().strengthLevel * 0.1F));
+                return playerDmgMult(1.3F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             } else {
-                return 3F * (1+ (vp.getVampireData().strengthLevel * 0.1F));
+                return mobDmgMult(3F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             }
         } else {
             return super.getPunchStrength(entity);
@@ -887,9 +897,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public float getSuckStrength(Entity entity) {
         if (self instanceof Player pl && ((IFatePlayer) pl).rdbt$getFatePowers() instanceof VampireFate vp) {
             if (this.getReducedDamage(entity)) {
-                return 2F;
+                return playerDmgMult(2F);
             } else {
-                return 5F;
+                return mobDmgMult(5F);
             }
         }
         return 1;
@@ -897,9 +907,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public float getIceStrength(Entity entity) {
         if (self instanceof Player pl && ((IFatePlayer) pl).rdbt$getFatePowers() instanceof VampireFate vp) {
             if (this.getReducedDamage(entity)) {
-                return 1F;
+                return playerDmgMult(2F);
             } else {
-                return 2F;
+                return mobDmgMult(2F);
             }
         }
         return 1;
@@ -1322,9 +1332,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public float getSpikeStrength(Entity entity){
         if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
             if (this.getReducedDamage(entity)){
-                return 2.7F * (1+ (vp.getVampireData().strengthLevel * 0.1F));
+                return playerDmgMult(2.7F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             } else {
-                return 3.4F * (1+ (vp.getVampireData().strengthLevel * 0.1F));
+                return mobDmgMult(3.4F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             }
         } else {
             return super.getPunchStrength(entity);
@@ -1705,6 +1715,35 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 }
             }
         }
+    }
+
+    @Override
+    public float getBarrageFinisherStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return playerDmgMult(applyComboDamage(2));
+        } else {
+            return mobDmgMult(applyComboDamage(4));
+        }
+    }
+    public float getBarrageHitStrength(Entity entity){
+        float barrageLength = this.getBarrageLength();
+        float power;
+        if (this.getReducedDamage(entity)){
+            power = playerDmgMult(getBarrageDamagePlayer()/barrageLength);
+        } else {
+            power = mobDmgMult(getBarrageDamageMob()/barrageLength);
+        }
+        /*Barrage hits are incapable of killing their target until the last hit.*/
+        if (entity instanceof LivingEntity){
+            if (power >= ((LivingEntity) entity).getHealth() && ClientNetworking.getAppropriateConfig().generalStandSettings.barragesOnlyKillOnLastHit){
+                if (entity instanceof Player) {
+                    power = 0.00001F;
+                } else {
+                    power = 0F;
+                }
+            }
+        }
+        return power;
     }
 
     public void diveImpact(Entity entity) {

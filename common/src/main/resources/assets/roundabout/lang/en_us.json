@@ -2854,6 +2854,8 @@
   "config.roundabout.timeRewindStopsSuffocation.desc": "Prevent rewinding into a block, so you don't clip through anything or suffocate, or force anyone else you rewind to do the same. On by default. Rewinding time still rewinds their other aspects when this triggers, just not position related things.",
   "config.roundabout.timeRewindStopsDeviousStrategies.name": "Rewind Anti-Cheese",
   "config.roundabout.timeRewindStopsDeviousStrategies.desc": "Hinges on Anti-suffocate also being on, but additionally stops rewinding into cobwebs and lava. On by default.",
+  "config.roundabout.getMiningTierVampire.name": "Mining Tier",
+  "config.roundabout.getMiningTierVampire.desc": "Tier 0 is the default, it does not replace tools for harvesting blocks. Tier 1 is wood tier, tier 2 is stone tier, tier 3 is iron tier, and tier 4 is diamond tier.",
 
 
   "config.roundabout.SummonSurvivorCooldownV2.name": "Summon Cooldown",
@@ -3041,6 +3043,11 @@
   "config.roundabout.timestopCancelsFood.name": "Time Stop Cancels Food",
   "config.roundabout.timestopCancelsFood.desc": "While in stopped time, you cannot gain healing from food",
 
+
+  "config.roundabout.vampireAttackMultOnPlayers.name": "Player Damage Multiplier",
+  "config.roundabout.vampireAttackMultOnPlayers.desc": "How much damage vampires deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
+  "config.roundabout.vampireAttackMultOnMobs.name": "Mob Damage Multiplier",
+  "config.roundabout.vampireAttackMultOnMobs.desc": "How much damage vampires deals to every other mob, same math as above.",
 
   "config.roundabout.starPlatinumAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.starPlatinumAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
