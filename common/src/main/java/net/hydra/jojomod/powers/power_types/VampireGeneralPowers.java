@@ -1015,12 +1015,28 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         int k = scaledWidth / 2 - 8;
 
         float attackTimeDuring = getAttackTimeDuring();
+        if (powerOn && !hasRendered) {
         Entity TE2 = getTargetEntity(playerEntity, 5, getPunchAngle());
-        if (powerOn && !hasRendered && (getActivePower() == NONE || attackTimeDuring <= -1)  &&
-                TE2 != null && TE2.isAlive()) {
-            int barTexture = 89;
-            context.blit(StandIcons.JOJO_ICONS, k, j, 193, barTexture, 15, 6);
-            hasRendered = true;
+            if ((getActivePower() == NONE || attackTimeDuring <= -1) &&
+                    TE2 != null && TE2.isAlive()) {
+
+                int barTexture = 89;
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, barTexture, 15, 6);
+                if (self.isCrouching() && canUseAirAttack()) {
+                    if (!onCooldown(PowerIndex.GENERAL_1)) {
+                        barTexture = 95;
+                        context.blit(StandIcons.JOJO_ICONS, k, j - 3, 193, barTexture, 15, 6);
+                    }
+                }
+                hasRendered = true;
+            } else {
+                if (self.isCrouching() && canUseAirAttack()) {
+                    if (!onCooldown(PowerIndex.GENERAL_1)) {
+                        context.blit(StandIcons.JOJO_ICONS, k, j - 3, 193, 95, 15, 6);
+                        hasRendered = true;
+                    }
+                }
+            }
         }
     }
 
