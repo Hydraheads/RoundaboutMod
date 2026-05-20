@@ -68,6 +68,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public GeneralStandSettings generalStandSettings;
     @NestedOption(group = "modded")
+    public KillerQueenSettings killerQueenSettings;
+    @NestedOption(group = "modded")
     public SoftAndWetSettings softAndWetSettings;
     @NestedOption(group = "modded")
     public MagiciansRedSettings magiciansRedSettings;
@@ -417,7 +419,13 @@ public class Config implements Cloneable {
         public Boolean bypassAllNametagHidesInCreativeMode;
     }
 
-
+    public static class KillerQueenSettings {
+    	@BooleanOption(group = "inherit", value = true)
+        public Boolean enableKillerQueen;
+    	@BooleanOption(group = "inherit", value = false)
+        public Boolean enableBitesTheDustDayMode;
+    }
+    
     public static class SoftAndWetSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableSoftAndWet;
