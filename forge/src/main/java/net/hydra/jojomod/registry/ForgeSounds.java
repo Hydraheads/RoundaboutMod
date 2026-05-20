@@ -22,6 +22,8 @@ public class ForgeSounds {
             register(ModSounds.INHALE, ModSounds.INHALE_ID);
     public static final RegistryObject<SoundEvent> SIGN_HIT_EVENT =
             register(ModSounds.SIGN_HIT, ModSounds.SIGN_HIT_ID);
+    public static final RegistryObject<SoundEvent> BONE_CHOMP_EVENT =
+            register(ModSounds.BONE_CHOMP, ModSounds.BONE_CHOMP_ID);
     public static final RegistryObject<SoundEvent> TERRIER_SOUND_EVENT =
             register(ModSounds.TERRIER_SOUND, ModSounds.TERRIER_SOUND_ID);
     public static final RegistryObject<SoundEvent> WORLD_SUMMON_SOUND_EVENT =

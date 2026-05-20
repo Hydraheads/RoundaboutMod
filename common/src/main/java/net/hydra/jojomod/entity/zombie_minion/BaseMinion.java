@@ -20,6 +20,7 @@ import net.hydra.jojomod.item.HeadRemainsItem;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -46,6 +47,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShearsItem;
@@ -397,6 +399,7 @@ public class BaseMinion extends PathfinderMob {
         }
         return yeah;
     }
+
 
     @Override
     protected Entity.MovementEmission getMovementEmission() {
@@ -965,6 +968,20 @@ public class BaseMinion extends PathfinderMob {
 
     @Override
     public boolean killedEntity(ServerLevel $$0, LivingEntity $$1) {
+        if (MainUtil.getMobBleed($$1)){
+            if (!($$1 instanceof AbstractIllager || $$1 instanceof AbstractVillager)) {
+                if ($$1 instanceof Monster){
+                    heal(4);
+                } else {
+                    heal(10);
+                }
+                this.level().playSound(null, this.blockPosition(), ModSounds.BONE_CHOMP_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95F + Math.random() * 0.1F));
+
+                $$0.sendParticles(ModParticles.BLOOD_MIST,
+                        $$1.getX(), $$1.getY() + this.getBbHeight() * 0.5, $$1.getZ(),
+                        3, 0.3, 0.3, 0.3, 0.025);
+            }
+        }
         if (controller != null)
             return controller.killedEntity($$0,$$1);
         return true;

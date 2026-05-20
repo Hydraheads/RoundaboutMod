@@ -29,6 +29,10 @@ public class ModSounds {
     public static final String SIGN_HIT = "sign_hit";
     public static final ResourceLocation SIGN_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SIGN_HIT);
     public static SoundEvent SIGN_HIT_EVENT = SoundEvent.createVariableRangeEvent(SIGN_HIT_ID);
+    public static final String BONE_CHOMP = "bone_chomp";
+    public static final ResourceLocation BONE_CHOMP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BONE_CHOMP);
+    public static SoundEvent BONE_CHOMP_EVENT = SoundEvent.createVariableRangeEvent(BONE_CHOMP_ID);
+
 
     public static final String OVA_THE_WORLD = "ova_the_world";
     public static final ResourceLocation OVA_THE_WORLD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+OVA_THE_WORLD);

@@ -11,6 +11,12 @@
       "roundabout:summon_diver_down"
     ]
   },
+  "bone_chomp": {
+    "subtitle": "sounds.roundabout.bone_chomp",
+    "sounds": [
+      "roundabout:bone_chomp"
+    ]
+  },
   "hammer_clink": {
     "subtitle": "sounds.roundabout.hammer_clink",
     "sounds": [

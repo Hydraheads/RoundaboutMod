@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
 import net.hydra.jojomod.event.*;
 import net.hydra.jojomod.event.index.*;
@@ -3674,15 +3675,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
         if (rdbt$this() instanceof AbstractVillager || rdbt$this() instanceof AbstractIllager) {
-            if (dsource.is(ModDamageTypes.BLOOD_DRAIN)){
-                spawnZombieMinion(dsource.getEntity());
+            if (dsource.is(ModDamageTypes.BLOOD_DRAIN)|| (dsource.getDirectEntity() instanceof BaseMinion)){
+                Entity ent = dsource.getEntity();
+
+                if (dsource.getEntity() instanceof BaseMinion bm && bm.getController() > 0) {
+                    rdbt$spawnZombieMinion2(bm.getController());
+                } else {
+                    rdbt$spawnZombieMinion(dsource.getEntity());
+                }
                 cir.setReturnValue(true);
                 return;
             }
         }
 
-        if (rdbt$this() instanceof Player pl && (dsource.is(ModDamageTypes.BLOOD_DRAIN)
-        ) && FateTypes.isHuman(pl)){
+        if (rdbt$this() instanceof Player pl && ((dsource.is(ModDamageTypes.BLOOD_DRAIN)
+        ) || (dsource.getDirectEntity() instanceof BaseMinion)) && FateTypes.isHuman(pl)){
             if (ClientNetworking.getAppropriateConfig().vampireSettings.enableZombification) {
                 pl.setHealth(pl.getMaxHealth() / 2);
                 cir.setReturnValue(true);
@@ -3729,7 +3736,25 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
-    public void spawnZombieMinion(Entity ent){
+    @Unique
+    public void rdbt$spawnZombieMinion(Entity ent){
+        if (!this.level().isClientSide()) {
+            if (rdbt$this() instanceof Mob lent) {
+                VillagerMinion villagerMinion = lent.convertTo(ModEntities.VILLAGER_MINION, false);
+                villagerMinion.setController(ent);
+                if (level() instanceof ServerLevel SL) {
+                    SL.sendParticles(ModParticles.BLUE_SPARKLE,
+                            this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
+                            50, 0, 0, 0, 0.2);
+                }
+                villagerMinion.setMovementTactic(Tactics.FOLLOW.id);
+                villagerMinion.setHomePosition(new Vec3(lent.getX(), lent.getY(), lent.getZ()));
+            }
+        }
+    }
+
+    @Unique
+    public void rdbt$spawnZombieMinion2(int ent){
         if (!this.level().isClientSide()) {
             if (rdbt$this() instanceof Mob lent) {
                 VillagerMinion villagerMinion = lent.convertTo(ModEntities.VILLAGER_MINION, false);
