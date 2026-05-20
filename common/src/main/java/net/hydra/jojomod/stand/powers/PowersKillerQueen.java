@@ -248,8 +248,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public boolean isAttackIneptVisually(byte activeP, int slot) {
     	if (slot == 1) {
     		if(inBitesTheDustMode()) {
-    			ClientConfig clientConfig = ConfigManager.getClientConfig();
-    			return !clientConfig.killerQueenSettings.canBitesTheDustDayMode;
+    			return ClientNetworking.getAppropriateConfig().killerQueenSettings.enableBitesTheDustDayMode;
     		}
     	}
     	if (slot == 2 && !this.BitesTheDustMode) {
