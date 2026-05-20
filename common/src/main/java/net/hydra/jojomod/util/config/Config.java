@@ -258,12 +258,40 @@ public class Config implements Cloneable {
         public Integer expInterval;
         @FloatOption(group = "inherit", value = 0.75F, min = 0, max = 1F)
         public Float drownSpeedModifier;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer vampireAttackMultOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer  vampireAttackMultOnPlayers;
         @IntOption(group = "inherit", value = 3, min = 0, max = 72000)
         public Integer powerGuardDelayTicks;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierVampire;
         @FloatOption(group = "inherit", value = 0.4F, min = 0, max = 100F)
         public Float sunDamagePercentPerDamageTick;
-        @BooleanOption(group = "inherit", value = true)
+        @BooleanOption(group = "inherit", value = false)
         public Boolean vampireUsesInternalSaturation;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer diveAttackCooldown;
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        public Integer spikeAttackCooldown;
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        public Integer hairGrabCooldown;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer clutchCooldown;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer auraBlastCooldown;
+        @IntOption(group = "inherit", value = 160, min = 0, max = 72000)
+        public Integer deflectionCooldown;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer ripperEyesInterruptCooldown;
+        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        public Integer flowerHealCooldown;
+        @IntOption(group = "inherit", value = 240, min = 0, max = 72000)
+        public Integer ripperEyesPartialCooldown;
+        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
+        public Integer ripperEyesMaxCooldown;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean antiCheapShot;
     }
     public static class StandLevelingSettings {
         @BooleanOption(group = "inherit", value = true)
