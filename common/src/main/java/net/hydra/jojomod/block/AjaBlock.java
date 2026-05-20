@@ -152,7 +152,7 @@ public class AjaBlock extends AjaOreBlock {
             // Check if neighbor has a LIT property
             if (!(neighborState.getBlock() instanceof AjaOreBlock) &&
                     !(neighborState.is(Blocks.REDSTONE_WIRE)) &&
-                    neighborState.hasProperty(BlockStateProperties.LIT)) {
+                    neighborState.getLightEmission() > 0) {
 
                 if (neighborState.getValue(BlockStateProperties.LIT)) {
                     return true;
