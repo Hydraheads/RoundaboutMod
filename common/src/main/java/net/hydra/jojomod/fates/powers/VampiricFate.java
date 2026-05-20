@@ -543,9 +543,9 @@ public int speedActivated = 0;
             setAttackTimeDuring(0);
             setActivePower(BLOOD_REGEN);
             playSoundsIfNearby(SoundIndex.BLOOD_REGEN, 27, false);
-            this.setCooldown(PowerIndex.FATE_2_SNEAK, 600);
+            this.setCooldown(PowerIndex.FATE_2_SNEAK, ClientNetworking.getAppropriateConfig().vampireSettings.bloodRegenCooldown);
             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.FATE_2_SNEAK,
-                    600
+                    ClientNetworking.getAppropriateConfig().vampireSettings.bloodRegenCooldown
             );
 
         }
@@ -557,13 +557,14 @@ public int speedActivated = 0;
                 PE.getFoodData().setFoodLevel(foodLevel-10);
             }
 
-            this.setCooldown(PowerIndex.GLOBAL_DASH, 180);
+            int bloodSpeed = ClientNetworking.getAppropriateConfig().vampireSettings.bloodSpeedCooldown;
+            this.setCooldown(PowerIndex.GLOBAL_DASH, bloodSpeed);
             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.GLOBAL_DASH,
-                    600
+                    bloodSpeed
             );
-            this.setCooldown(PowerIndex.FATE_3_SNEAK, 180);
+            this.setCooldown(PowerIndex.FATE_3_SNEAK, bloodSpeed);
             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.FATE_3_SNEAK,
-                    600
+                    bloodSpeed
             );
             setFast();
             self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SPEED_EVENT, SoundSource.PLAYERS, 1F, 0.95F+(float)(Math.random()*0.1));
@@ -832,7 +833,7 @@ public int speedActivated = 0;
     }
 
     @Override
-    public void renderAttackHud(GuiGraphics context, Player playerEntity,
+    public boolean renderAttackHud2(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
         StandUser standUser = ((StandUser) playerEntity);
@@ -852,16 +853,19 @@ public int speedActivated = 0;
                     int test = (int) ((17F/20F) * Mth.clamp(this.attackTimeDuring,0,20));
                     context.blit(StandIcons.JOJO_ICONS, k, j, 192, 36, 17, 8);
                     context.blit(StandIcons.JOJO_ICONS, k, j, 192, 44, 17-test, 8);
+                    return true;
                 } else {
                     if (TE instanceof LivingEntity LE && LE.getHealth()-getSuckDamage() <= 0){
                         context.blit(StandIcons.JOJO_ICONS, k, j, 192, 52, 17, 8);
                     } else {
                         context.blit(StandIcons.JOJO_ICONS, k, j, 192, 44, 17, 8);
                     }
+                    return true;
                 }
 
             }
         }
+        return super.renderAttackHud2(context,playerEntity,scaledWidth,scaledHeight,ticks,vehicleHeartCount,flashAlpha,otherFlashAlpha);
     }
 
     public float getSuckDamage(){

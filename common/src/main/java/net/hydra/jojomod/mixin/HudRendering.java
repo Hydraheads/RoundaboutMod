@@ -142,7 +142,7 @@ public abstract class HudRendering implements IHudAccess {
                     long timeOfDay = this.minecraft.level.getDayTime() % 24000L;
                     boolean isDay = timeOfDay < 12555L || timeOfDay > 23200; // 0–12000 = day, 12000–24000 = night
 
-                    if (this.minecraft.player.level().dimension().location().getPath().equals("overworld") &&
+                    if (MainUtil.isSunDamageWorld(this.minecraft.player.level().dimension().location().getPath()) &&
                             isDay) {
                         Vec3 yes = this.minecraft.player.getEyePosition();
                         int range = 3;

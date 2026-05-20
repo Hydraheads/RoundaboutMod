@@ -18,6 +18,7 @@ public class FabricSounds {
         addSound(ModSounds.STAND_ARROW_CHARGE_ID, ModSounds.STAND_ARROW_CHARGE_EVENT);
         addSound(ModSounds.STAND_ARROW_USE_ID, ModSounds.STAND_ARROW_USE_EVENT);
         addSound(ModSounds.SIGN_HIT_ID, ModSounds.SIGN_HIT_EVENT);
+        addSound(ModSounds.BONE_CHOMP_ID, ModSounds.BONE_CHOMP_EVENT);
         addSound(ModSounds.TERRIER_SOUND_ID, ModSounds.TERRIER_SOUND_EVENT);
         addSound(ModSounds.STAR_SUMMON_SOUND_ID, ModSounds.STAR_SUMMON_SOUND_EVENT);
         addSound(ModSounds.SUMMON_MANDOM_ID, ModSounds.SUMMON_MANDOM_EVENT);
@@ -244,6 +245,10 @@ public class FabricSounds {
 
         addSound(ModSounds.CENTURY_BOY_SUMMON_ID, ModSounds.CENTURY_BOY_SUMMON_EVENT);
         addSound(ModSounds.CENTURY_BOY_HIT_ID, ModSounds.CENTURY_BOY_HIT_EVENT);
+        addSound(ModSounds.CENTURY_BOY_NORMAL_STANCE_ID, ModSounds.CENTURY_BOY_NORMAL_STANCE_EVENT);
+        addSound(ModSounds.CENTURY_BOY_PROPEL_STANCE_ID, ModSounds.CENTURY_BOY_PROPEL_STANCE_EVENT);
+        addSound(ModSounds.CENTURY_BOY_OUTPUT_STANCE_ID, ModSounds.CENTURY_BOY_OUTPUT_STANCE_EVENT);
+        addSound(ModSounds.CENTURY_BOY_GROUND_STANCE_ID, ModSounds.CENTURY_BOY_GROUND_STANCE_EVENT);
 
 
         addSound(ModSounds.RATT_SUMMON_ID, ModSounds.RATT_SUMMON_EVENT);

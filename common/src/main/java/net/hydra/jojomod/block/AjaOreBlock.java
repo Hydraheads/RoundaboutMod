@@ -60,11 +60,8 @@ public class AjaOreBlock extends DropExperienceBlock {
 
             // Check if neighbor has a LIT property
             if (!(neighborState.getBlock() instanceof AjaOreBlock) &&
-                    neighborState.hasProperty(BlockStateProperties.LIT)) {
-
-                if (neighborState.getValue(BlockStateProperties.LIT)) {
+                    neighborState.getLightEmission() > 0) {
                     return true;
-                }
             }
         }
 

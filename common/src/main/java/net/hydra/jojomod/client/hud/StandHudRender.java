@@ -144,12 +144,14 @@ public class StandHudRender {
                                        int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                        float flashAlpha, float otherFlashAlpha){
         if (playerEntity != null) {
-            ((StandUser) playerEntity).roundabout$getStandPowers().renderAttackHud(context,playerEntity,
-                    scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
-            ((IFatePlayer) playerEntity).rdbt$getFatePowers().renderAttackHud(context,playerEntity,
-                    scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
-            ((IPowersPlayer) playerEntity).rdbt$getPowers().renderAttackHud(context,playerEntity,
-                    scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
+            if (
+                    !((IFatePlayer) playerEntity).rdbt$getFatePowers().renderAttackHud2(context,playerEntity,
+                    scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha)) {
+                ((StandUser) playerEntity).roundabout$getStandPowers().renderAttackHud(context, playerEntity,
+                        scaledWidth, scaledHeight, ticks, vehicleHeartCount, flashAlpha, otherFlashAlpha);
+                ((IPowersPlayer) playerEntity).rdbt$getPowers().renderAttackHud(context, playerEntity,
+                        scaledWidth, scaledHeight, ticks, vehicleHeartCount, flashAlpha, otherFlashAlpha);
+            }
         }
     }
 

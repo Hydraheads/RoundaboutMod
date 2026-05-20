@@ -16,6 +16,7 @@ import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.fates.powers.ZombieFate;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -180,8 +181,9 @@ public enum FateTypes {
             if (PE.isCreative()){
                 return false;
             }
-            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal() ||
-                    ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.ordinal();
+            return (((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal() ||
+                    ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.ordinal()) &&
+                    ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick > 0;
         }
         if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire())
             return true;
@@ -320,7 +322,7 @@ public enum FateTypes {
             BlockPos atVec = BlockPos.containing(yes);
             BlockPos atVec2 = BlockPos.containing(yes2);
             if ((ent.level().canSeeSky(atVec) || ent.level().canSeeSky(atVec2)) &&
-                    ent.level().dimension().location().getPath().equals("overworld") &&
+                    MainUtil.isSunDamageWorld(ent.level().dimension().location().getPath()) &&
                     isDay
             ) {
                 return true;

@@ -61,6 +61,8 @@
     "blocks.CoffinSleepAtDayMixin",
     "century_boy.CenturyBoyHeal",
     "century_boy.CenturyBoyStances",
+    "century_boy.CenturyBoyPotionHeal",
+    "century_boy.CenturyBoyPotionDuration",
     "cinderella.CinderellaVillager",
     "cinderella.ZCreeper",
     "cream.CreamCancelHealthRegenMixin",

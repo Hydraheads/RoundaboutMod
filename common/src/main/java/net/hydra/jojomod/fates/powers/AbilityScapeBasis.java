@@ -826,6 +826,11 @@ public class AbilityScapeBasis {
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha){
     }
+    public boolean renderAttackHud2(GuiGraphics context,  Player playerEntity,
+                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
+                                float flashAlpha, float otherFlashAlpha){
+        return false;
+    }
 
     /**A basic function called to draw stand icons*/
     public void setSkillIcon(GuiGraphics context, int x, int y, int slot, ResourceLocation rl, byte CDI){
@@ -2370,8 +2375,14 @@ public class AbilityScapeBasis {
                 if (!(angleDistance(lookVec.x, (User.getYHeadRot()%360f)) <= angle && angleDistance(lookVec.y, User.getXRot()) <= angle)){
 
                     hitEntities.remove(value);
-                } else if (!canActuallyHit(value) && !throughWalls){
-                    hitEntities.remove(value);
+                } else if (!canActuallyHit(value)){
+                    if (throughWalls) {
+                        if (!MainUtil.allowThruWalls(value)){
+                            hitEntities.remove(value);
+                        }
+                    } else {
+                        hitEntities.remove(value);
+                    }
                 }
             }
         }

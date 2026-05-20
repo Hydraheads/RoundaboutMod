@@ -314,7 +314,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
                 if (getActivePower() == PowerIndex.NONE){
                     if (!onCooldown(PowerIndex.SKILL_4_SNEAK)) {
                         if (canUseWoundPlug() && !self.isUsingItem()) {
-                            ouchieTicks = 24;
+                            ouchieTicks = 32;
                             tryPowerPacket(PowerIndex.POWER_1_BLOCK);
                         }
                     }

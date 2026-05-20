@@ -20,24 +20,24 @@ import net.hydra.jojomod.item.HeadRemainsItem;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -47,24 +47,17 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.LlamaSpit;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ShearsItem;
-import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.InfestedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -157,6 +150,9 @@ public class BaseMinion extends PathfinderMob {
         if (($$0 instanceof WitherBoss))
             return false;
         if (shouldPanic() || this.getTargetTactic() == Tactics.PEACEFUL.id){
+            return false;
+        }
+        if ($$0 != null && controller != null && controller.getUUID() == $$0.getUUID()){
             return false;
         }
         return super.canAttack($$0);
@@ -285,14 +281,26 @@ public class BaseMinion extends PathfinderMob {
                     }
                 }
             }
+
         }
+
         if (!player.isCrouching()){
-            if (getController() == player.getId()){
-                if (player.level().isClientSide()){
-                    ClientUtil.setZombieMinionScreen(getId());
+            if (getController() == player.getId()) {
+                if (FateTypes.isVampire(player)){
+                    if (player.level().isClientSide()) {
+                        ClientUtil.setZombieMinionScreen(getId());
+                    }
+                    return InteractionResult.CONSUME;
                 }
-                return InteractionResult.CONSUME;
             }
+        }
+        if (getController() <= 0) {
+            if (player instanceof ServerPlayer sp && FateTypes.isVampire(sp)) {
+                sp.displayClientMessage(Component.translatable("text.roundabout.stole_minion"), true);
+                setController(sp);
+                this.level().playSound(null, this.blockPosition(), ModSounds.LEVELUP_EVENT, SoundSource.PLAYERS, 1F, 1);
+            }
+            return InteractionResult.CONSUME;
         }
         return super.mobInteract(player,$$1);
     }
@@ -383,12 +391,15 @@ public class BaseMinion extends PathfinderMob {
     public boolean doHurtTarget(Entity $$0) {
         boolean yeah = super.doHurtTarget($$0);
         if (yeah){
-            if (!level().isClientSide() && !getMainHandItem().isEmpty() && getMainHandItem().getCount() > 0) {
-                getMainHandItem().hurtAndBreak(2, this, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+            if (!level().isClientSide()){
+                if (!getMainHandItem().isEmpty() && getMainHandItem().getCount() > 0) {
+                    getMainHandItem().hurtAndBreak(2, this, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                }
             }
         }
         return yeah;
     }
+
 
     @Override
     protected Entity.MovementEmission getMovementEmission() {
@@ -501,14 +512,14 @@ public class BaseMinion extends PathfinderMob {
 
     @Override
     public void setTarget(@Nullable LivingEntity $$0) {
-        if (($$0 != null && controller != null && controller.is($$0)) || ($$0 instanceof WitherBoss)){
+        if (($$0 != null && controller != null && controller.getUUID() == $$0.getUUID()) || ($$0 instanceof WitherBoss)){
             return;
         } else {
             super.setTarget($$0);
         }
     }
     public void setLastHurtByPlayer(@Nullable Player $$0) {
-        if ($$0 != null && controller != null && controller.is($$0)){
+        if ($$0 != null && controller != null && controller.getUUID() == $$0.getUUID()){
             return;
         } else {
             super.setLastHurtByPlayer($$0);
@@ -758,49 +769,51 @@ public class BaseMinion extends PathfinderMob {
             if (controller == null || controller.isRemoved() || !controller.isAlive()){
                 this.setController(null);
             } else {
-                if (controller.getId() != this.getController()){
-                    this.setController(controller.getId());
-                }
-                if (controller instanceof LivingEntity LE && !(getTargetTactic() == Tactics.PEACEFUL.id)) {
-                    autoTarget = LE.getLastHurtByMob();
-                    autoTarget2 = LE.getLastHurtMob();
-                    if (autoTarget instanceof BaseMinion fm && fm.getController() == this.getController()){
-                        autoTarget = null;
+                if (controller instanceof LivingEntity LE && FateTypes.isVampire(LE)) {
+                    if (controller.getId() != this.getController()) {
+                        this.setController(controller.getId());
                     }
-                    if (autoTarget != null && (autoTarget.isRemoved() || !autoTarget.isAlive()))
-                        autoTarget = null;
-                    if (autoTarget2 instanceof BaseMinion fm && fm.getController() == this.getController()){
-                        autoTarget2 = null;
-                    }
-                    if (autoTarget2 != null && (autoTarget2.isRemoved() || !autoTarget2.isAlive()))
-                        autoTarget2 = null;
-                    if (autoTarget == null && autoTarget2 == null){
-                        if (getLastHurtByMob() != null && getLastHurtByMob().isAlive()
-                                && !getLastHurtByMob().isRemoved()){
-                            setTarget(autoTarget);
+                    if (!(getTargetTactic() == Tactics.PEACEFUL.id)) {
+                        autoTarget = LE.getLastHurtByMob();
+                        autoTarget2 = LE.getLastHurtMob();
+                        if (autoTarget instanceof BaseMinion fm && fm.getController() == this.getController()) {
+                            autoTarget = null;
                         }
-                    }
-                    boolean check1 = (this.getTarget() != autoTarget) || autoTarget == null;
-                    boolean check2 = (this.getTarget() != autoTarget2) || autoTarget2 == null;
-
-                    if (check1 && check2) {
-                        if (autoTarget2 != null && (LE.tickCount - LE.getLastHurtMobTimestamp()) < 200 &&
-                                !(autoTarget2 instanceof Player PE && PE.isCreative())) {
-                            if (!(controller != null && autoTarget2.is(controller))) {
-                                if (autoTarget2 instanceof Player PL) {
-                                    setLastHurtByPlayer(PL);
-                                }
-                                setLastHurtByMob(autoTarget2);
-                                setTarget(autoTarget2);
-                            }
-                        } else if (autoTarget != null && (LE.tickCount - LE.getLastHurtByMobTimestamp()) < 200 &&
-                                !(autoTarget instanceof Player PE && PE.isCreative())) {
-                            if (!(controller != null && autoTarget.is(controller))) {
-                                if (autoTarget instanceof Player PL) {
-                                    setLastHurtByPlayer(PL);
-                                }
-                                setLastHurtByMob(autoTarget);
+                        if (autoTarget != null && (autoTarget.isRemoved() || !autoTarget.isAlive()))
+                            autoTarget = null;
+                        if (autoTarget2 instanceof BaseMinion fm && fm.getController() == this.getController()) {
+                            autoTarget2 = null;
+                        }
+                        if (autoTarget2 != null && (autoTarget2.isRemoved() || !autoTarget2.isAlive()))
+                            autoTarget2 = null;
+                        if (autoTarget == null && autoTarget2 == null) {
+                            if (getLastHurtByMob() != null && getLastHurtByMob().isAlive()
+                                    && !getLastHurtByMob().isRemoved()) {
                                 setTarget(autoTarget);
+                            }
+                        }
+                        boolean check1 = (this.getTarget() != autoTarget) || autoTarget == null;
+                        boolean check2 = (this.getTarget() != autoTarget2) || autoTarget2 == null;
+
+                        if (check1 && check2) {
+                            if (autoTarget2 != null && (LE.tickCount - LE.getLastHurtMobTimestamp()) < 200 &&
+                                    !(autoTarget2 instanceof Player PE && PE.isCreative())) {
+                                if (!(controller != null && autoTarget2.is(controller))) {
+                                    if (autoTarget2 instanceof Player PL) {
+                                        setLastHurtByPlayer(PL);
+                                    }
+                                    setLastHurtByMob(autoTarget2);
+                                    setTarget(autoTarget2);
+                                }
+                            } else if (autoTarget != null && (LE.tickCount - LE.getLastHurtByMobTimestamp()) < 200 &&
+                                    !(autoTarget instanceof Player PE && PE.isCreative())) {
+                                if (!(controller != null && autoTarget.is(controller))) {
+                                    if (autoTarget instanceof Player PL) {
+                                        setLastHurtByPlayer(PL);
+                                    }
+                                    setLastHurtByMob(autoTarget);
+                                    setTarget(autoTarget);
+                                }
                             }
                         }
                     }
@@ -955,6 +968,20 @@ public class BaseMinion extends PathfinderMob {
 
     @Override
     public boolean killedEntity(ServerLevel $$0, LivingEntity $$1) {
+        if (MainUtil.getMobBleed($$1)){
+            if (!($$1 instanceof AbstractIllager || $$1 instanceof AbstractVillager)) {
+                if ($$1 instanceof Monster){
+                    heal(4);
+                } else {
+                    heal(10);
+                }
+                this.level().playSound(null, this.blockPosition(), ModSounds.BONE_CHOMP_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95F + Math.random() * 0.1F));
+
+                $$0.sendParticles(ModParticles.BLOOD_MIST,
+                        $$1.getX(), $$1.getY() + this.getBbHeight() * 0.5, $$1.getZ(),
+                        3, 0.3, 0.3, 0.3, 0.025);
+            }
+        }
         if (controller != null)
             return controller.killedEntity($$0,$$1);
         return true;

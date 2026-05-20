@@ -13,9 +13,9 @@ import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
-import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
 import net.hydra.jojomod.event.*;
 import net.hydra.jojomod.event.index.*;
@@ -3675,24 +3675,32 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
         if (rdbt$this() instanceof AbstractVillager || rdbt$this() instanceof AbstractIllager) {
-            if (dsource.is(ModDamageTypes.BLOOD_DRAIN)){
-                spawnZombieMinion(dsource.getEntity());
+            if (dsource.is(ModDamageTypes.BLOOD_DRAIN)|| (dsource.getDirectEntity() instanceof BaseMinion)){
+                Entity ent = dsource.getEntity();
+
+                if (dsource.getEntity() instanceof BaseMinion bm && bm.getController() > 0) {
+                    rdbt$spawnZombieMinion2(bm.getController());
+                } else {
+                    rdbt$spawnZombieMinion(dsource.getEntity());
+                }
                 cir.setReturnValue(true);
                 return;
             }
         }
 
-        if (rdbt$this() instanceof Player pl && (dsource.is(ModDamageTypes.BLOOD_DRAIN)
-        ) && FateTypes.isHuman(pl)){
-            pl.setHealth(pl.getMaxHealth()/2);
-            cir.setReturnValue(true);
-            FateTypes.setZombie(pl);
-            pl.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireZombie1").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD), true);
+        if (rdbt$this() instanceof Player pl && ((dsource.is(ModDamageTypes.BLOOD_DRAIN)
+        ) || (dsource.getDirectEntity() instanceof BaseMinion)) && FateTypes.isHuman(pl)){
+            if (ClientNetworking.getAppropriateConfig().vampireSettings.enableZombification) {
+                pl.setHealth(pl.getMaxHealth() / 2);
+                cir.setReturnValue(true);
+                FateTypes.setZombie(pl);
+                pl.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireZombie1").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD), true);
 
-            if (level() instanceof ServerLevel SL) {
-                SL.sendParticles(ModParticles.BLOOD_MIST,
-                        this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
-                        10, 0.4, 0.4, 0.4, 0.025);
+                if (level() instanceof ServerLevel SL) {
+                    SL.sendParticles(ModParticles.BLOOD_MIST,
+                            this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
+                            10, 0.4, 0.4, 0.4, 0.025);
+                }
             }
         } else if ( (rdbt$this() instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers().cheatDeath(dsource))
                 || roundabout$getStandPowers().cheatDeath(dsource)){
@@ -3700,10 +3708,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         } else if (hasEffect(ModEffects.VAMPIRE_BLOOD)){
             removeEffect(ModEffects.VAMPIRE_BLOOD);
             if (rdbt$this() instanceof Player pl){
-                if (FateTypes.isHuman(pl)) {
-                    ((IFatePlayer) pl).rdbt$startVampireTransformation(false);
-                    pl.setHealth(1);
-                    cir.setReturnValue(true);
+                if (ClientNetworking.getAppropriateConfig().vampireSettings.enableBloodVampirizing) {
+                    if (FateTypes.isHuman(pl)) {
+                        ((IFatePlayer) pl).rdbt$startVampireTransformation(false);
+                        pl.setHealth(1);
+                        cir.setReturnValue(true);
+                    }
                 }
             } else {
                 if (rdbt$this() instanceof Mob mb && !((IMob)mb).roundabout$isVampire()){
@@ -3726,11 +3736,34 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
-    public void spawnZombieMinion(Entity ent){
+    @Unique
+    public void rdbt$spawnZombieMinion(Entity ent){
         if (!this.level().isClientSide()) {
             if (rdbt$this() instanceof Mob lent) {
                 VillagerMinion villagerMinion = lent.convertTo(ModEntities.VILLAGER_MINION, false);
                 villagerMinion.setController(ent);
+                if (level() instanceof ServerLevel SL) {
+                    SL.sendParticles(ModParticles.BLUE_SPARKLE,
+                            this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
+                            50, 0, 0, 0, 0.2);
+                }
+                villagerMinion.setMovementTactic(Tactics.FOLLOW.id);
+                villagerMinion.setHomePosition(new Vec3(lent.getX(), lent.getY(), lent.getZ()));
+            }
+        }
+    }
+
+    @Unique
+    public void rdbt$spawnZombieMinion2(int ent){
+        if (!this.level().isClientSide()) {
+            if (rdbt$this() instanceof Mob lent) {
+                VillagerMinion villagerMinion = lent.convertTo(ModEntities.VILLAGER_MINION, false);
+                villagerMinion.setController(ent);
+                if (level() instanceof ServerLevel SL) {
+                    SL.sendParticles(ModParticles.BLUE_SPARKLE,
+                            this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
+                            50, 0, 0, 0, 0.2);
+                }
                 villagerMinion.setMovementTactic(Tactics.FOLLOW.id);
                 villagerMinion.setHomePosition(new Vec3(lent.getX(), lent.getY(), lent.getZ()));
             }
@@ -5403,8 +5436,31 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     }
 
+    @Override
+    public boolean rdbt$hasRightHandGone() {
+        if(roundabout$getStandPowers() instanceof PowersGreenDay PGD){
+            return !PGD.HasMainArm;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean rdbt$hasLeftHandGone() {
+        if(roundabout$getStandPowers() instanceof PowersGreenDay PGD){
+            return !PGD.HasOffHand;
+        }
+        return false;
+    }
+
     public float MoldLevel = 0.0f;
     public int jumpImmunityTicks = 0;
+
+    public double StartingYPos = 0;
+
+    @Override
+    public double getStaringYPos() {
+        return StartingYPos;
+    }
 
     @Override
     public int getJumpImmunityTicks(){
@@ -5432,14 +5488,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         }
         if (previousYpos < this.getY()){
-            jumpImmunityTicks = 6;
+            jumpImmunityTicks = 4;
         }
         else{
             jumpImmunityTicks = jumpImmunityTicks -1;
 
         }
         movingDown = (previousYpos-0.1 > this.getY());
+        if(!movingDown){
+         StartingYPos = this.getY();
+        }
         previousYpos = this.getY();
+
     }
     public int CrawlTicks = 0;
     boolean movingDown = false;

@@ -54,7 +54,7 @@ public class MoldSporesEntity extends StandEntity {
         LivingEntity user = this.getUser();
         StandUser StandUU = (StandUser)user;
         if (!client) {
-            tickeffect();
+
             if (user == null) {
                 spawnAtLocation(this.getMainHandItem());
                 this.discard();
@@ -75,6 +75,7 @@ public class MoldSporesEntity extends StandEntity {
                 range += 0.09 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldGrowthRate / 100);
                 //this.setDeltaMovement(0,-0.4,0);
             }
+            tickeffect();
                 ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST,
                         this.getX(),
                         this.getY(),
@@ -96,7 +97,7 @@ public class MoldSporesEntity extends StandEntity {
     }
 
     public void tickeffect(){
-        List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),range,range,range);
+        List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),range * 2,range * 2,range * 2);
         for(int j = 0;j<damages.size();j++) {
             if (Objects.nonNull(this.getUser())) {
                 Entity entity = damages.get(j);
@@ -104,7 +105,10 @@ public class MoldSporesEntity extends StandEntity {
                 //boolean down = previousYpos > entity.getY() + 0.1;
 
                 boolean isStand = (entity instanceof StandEntity);
-                boolean playerBalanceDetection = ((entity.getY() < this.getUser().getY() && this.getUser() instanceof Player) || (!(entity instanceof Player)));
+                boolean playerBalanceDetection = ((entity.getY() - 2 < this.getUser().getY() && this.getUser() instanceof Player) || (!(entity instanceof Player)));
+                if(!playerBalanceDetection){
+                    playerBalanceDetection = (entity instanceof Player && ((StandUser)entity).getStaringYPos()-1 > entity.getY());
+                }
                 if (entity instanceof LivingEntity) {
 
                     if (!((StandUser) entity).roundabout$getStandPowers().isStoppingTime()
@@ -133,9 +137,9 @@ public class MoldSporesEntity extends StandEntity {
                             //     range += 4;
                             //}
                             if (entity instanceof Player) {
-                                entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), 4);
+                                entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), 4 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGPlayersMultiplier / 100F));
                             } else {
-                                entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), 7);
+                                entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), 8 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGMobsMultiplier / 100F));
                             }
                             ((StandUser) User).roundabout$getStandPowers().addEXP(1);
                         }

@@ -223,113 +223,91 @@ public class ManhattanTransferEntity extends StandEntity {
         return 0.0F;
     }
 
+    public boolean isFromHattan = false;
+
     @Override
     public boolean hurt(DamageSource source, float amount) {
         Entity direct = source.getDirectEntity();
         Entity directEntityWho = source.getEntity();
-        if(User != null){
+        if(User != null) {
             if (directEntityWho != null && direct != null) {
-                if (direct instanceof Projectile PR && !source.is(ModDamageTypes.STAND)) {
+                //  if (direct instanceof Projectile PR && !source.is(ModDamageTypes.STAND)) {
+                if (directEntityWho != this) {
                     if (directEntityWho.is(User) && !hasItem) {
-                            hasItemTwo = false;
-                            if (direct instanceof AbstractArrow AA && !(AA instanceof StandArrowEntity)) {
-                                ItemStack ii = ((IAbstractArrowAccess) AA).roundabout$GetPickupItem();
-                                if (!ii.isEmpty() && !ii.isDamageableItem()) {
-                                    hasItem = true;
-                                    success = true;
+                        hasItemTwo = false;
+                        if (direct instanceof AbstractArrow AA) {
+                            ItemStack ii = ((IAbstractArrowAccess) direct).roundabout$GetPickupItem();
+                            if (!ii.isEmpty()) {
+                                hasItem = true;
+                                success = true;
+                                if (AA.pickup.equals(AbstractArrow.Pickup.ALLOWED)) {
+                                    this.canAcquireHeldItem = true;
+                                } else {
+                                    this.canAcquireHeldItem = false;
+                                }
+                                this.setHeldItemManhattan(ii.copyAndClear());
+                                AA.discard();
+                            } else if (AA instanceof RoundaboutBulletEntity BE) {
+                                hasItem = true;
+                                success = true;
+                                this.canAcquireHeldItem = true;
+                                ItemStack bulletItem = BE.getBulletItemStack();
+                                this.setHeldItemManhattan(bulletItem);
+                                if (BE.getAmmoType() == RoundaboutBulletEntity.SNUBNOSE) {
+                                    isSnubnose = true;
+                                } else if (BE.getAmmoType() == RoundaboutBulletEntity.COLT) {
+                                    isSnubnose = false;
+                                }
+                                AA.discard();
+                            }
+                        } else if (direct instanceof ThrowableItemProjectile TO) {
+                            ItemStack ii = TO.getItem();
+                            if (!ii.isEmpty()) {
+                                hasItem = true;
+                                success = true;
+                                this.canAcquireHeldItem = true;
 
-                                    if (AA.pickup.equals(AbstractArrow.Pickup.ALLOWED)) {
-                                        this.canAcquireHeldItem = true;
-                                    } else {
-                                        this.canAcquireHeldItem = false;
-                                    }
-                                    this.setHeldItemManhattan(ii.copyAndClear());
-                                    PR.discard();
-                                } else if (AA instanceof RoundaboutBulletEntity BE) {
-                                    hasItem = true;
-                                    success = true;
+                                this.setHeldItemManhattan(ii.copyAndClear());
+                                TO.discard();
+                            }
+                        } else if (direct instanceof ThrownPotion TP) {
+                            TP.discard();
+                            ItemStack ii = TP.getItem();
+                            if (!ii.isEmpty()) {
+                                hasItem = true;
+                                success = true;
+                                if (TP.getOwner() == null || TP.getOwner() instanceof Player) {
                                     this.canAcquireHeldItem = true;
-                                    ItemStack bulletItem = BE.getBulletItemStack();
-                                    this.setHeldItemManhattan(bulletItem);
-                                   if(BE.getAmmoType() == RoundaboutBulletEntity.SNUBNOSE){
-                                       isSnubnose = true;
-                                   } else if(BE.getAmmoType() == RoundaboutBulletEntity.COLT){
-                                      isSnubnose = false;
-                                   }
-                                    PR.discard();
                                 }
-                                /*else if (direct instanceof  IronBallEntity IE){
-                                    hasItem = true;
-                                    success = true;
-                                    this.setHeldItemManhattan(ItemStack.iron);
-                                    this.canAcquireHeldItem = true;
-                                    this.setHeldItemManhattan();
-                                    PR.discard();
-                                }*/
-                            } else if (direct instanceof ThrownObjectEntity TO) {
-                                ItemStack ii = TO.getItem();
-                                if (!ii.isEmpty()) {
-                                    hasItem = true;
-                                    success = true;
-                                    if (TO.places) {
-                                        this.canAcquireHeldItem = true;
-                                    } else {
-                                        this.canAcquireHeldItem = false;
-                                    }
-                                    this.setHeldItemManhattan(ii.copyAndClear());
-                                    TO.discard();
-                                }
-                            } else if (direct instanceof ThrownPotion TP) {
+                                this.setHeldItemManhattan(ii.copyAndClear());
                                 TP.discard();
-                                ItemStack ii = TP.getItem();
-                                if (!ii.isEmpty()) {
-                                    hasItem = true;
-                                    success = true;
-                                    if (TP.getOwner() == null || TP.getOwner() instanceof Player) {
-                                        this.canAcquireHeldItem = true;
-                                    } else {
-                                        this.canAcquireHeldItem = false;
-                                    }
-                                    this.setHeldItemManhattan(ii.copyAndClear());
-                                    TP.discard();
-                                }
-                            }/* else if (direct instanceof FireworkRocketEntity RE) {
+                            }
+                        }/* else if (direct instanceof FireworkRocketEntity RE) {
                             ItemStack ii = RE.getItem();
                             if (!ii.isEmpty()) {
                                 hasItem = true;
                                 this.setHeldItemManhattan(ii.copyAndClear());
                                 RE.getItem().shrink(1);
                                 RE.discard();
-                            }
-                        }*/ else if (direct instanceof ThrowableItemProjectile TH) {
-                                ItemStack ii = TH.getItem();
-                                if (!ii.isEmpty()) {
-                                    hasItem = true;
-                                    success = true;
-                                    this.canAcquireHeldItem = true;
-                                    this.setHeldItemManhattan(ii.copyAndClear());
-                                    TH.discard();
-                                }
-                        }
-                    } else if(directEntityWho.is(this)){
-                        this.markHurt();
+                            }*/
+
                     } else {
                         success = false;
                         if (direct instanceof AbstractArrow AA) {
                             ItemStack ii = ((IAbstractArrowAccess) AA).roundabout$GetPickupItem();
-                            if (!ii.isEmpty() && !ii.isDamageableItem()) {
+                            if (!ii.isEmpty()) {
                                 if (AA.pickup.equals(AbstractArrow.Pickup.ALLOWED)) {
                                     this.setHeldItemManhattanFull(ii.copyAndClear());
                                     hasItemTwo = true;
-                                    PR.discard();
+                                    AA.discard();
                                 } else {
-                                    PR.discard();
+                                    AA.discard();
                                 }
                             } else if (AA instanceof RoundaboutBulletEntity BE) {
                                 ItemStack bulletItem = BE.getBulletItemStack();
                                 this.setHeldItemManhattanFull(bulletItem);
                                 hasItemTwo = true;
-                                PR.discard();
+                                AA.discard();
                             }
                         } else if (direct instanceof ThrownObjectEntity TO) {
                             ItemStack ii = TO.getItem();
@@ -358,7 +336,6 @@ public class ManhattanTransferEntity extends StandEntity {
                         }*/ else if (direct instanceof ThrowableItemProjectile TH) {
                             ItemStack ii = TH.getItem();
                             if (!ii.isEmpty()) {
-                                hasItem = true;
                                 this.setHeldItemManhattanFull(ii.copyAndClear());
                                 hasItemTwo = true;
                                 TH.discard();
@@ -367,7 +344,6 @@ public class ManhattanTransferEntity extends StandEntity {
                     }
                 }
             }
-
             if(hasItem && this.canAcquireHeldItem){
                 if(!this.getHeldItemManhattanFull().isEmpty() && !this.getHeldItemManhattanFull().isEmpty()){
                     double $$3 = this.getEyeY() - 0.3F;
@@ -481,7 +457,25 @@ public class ManhattanTransferEntity extends StandEntity {
              $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
              $$4.setOwner(thrower.getUser());
              thrower.level().addFreshEntity($$4);
-         }else {
+         }else if(item.getItem() instanceof TridentItem || item.getItem() instanceof HarpoonItem){
+             if(item.getItem() instanceof TridentItem){
+                 ThrownTrident $$7 = new ThrownTrident(thrower.level(), thrower, item);
+                 $$7.setPos(pos);
+               //  $$7.setItem(item);
+                 $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
+                 $$7.setOwner(thrower.getUser());
+                 thrower.level().addFreshEntity($$7);
+             }
+             else{
+                 HarpoonEntity $$7 = new HarpoonEntity(thrower.level(), thrower, item);
+                 $$7.setPos(pos);
+               //  $$7.setItem(item);
+                 $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
+                 $$7.setOwner(thrower.getUser());
+                 thrower.level().addFreshEntity($$7);
+             }
+         }
+             else {
             getCanPlace = false;
              ThrownObjectEntity $$14 = new ThrownObjectEntity(thrower, thrower.level(), item, getCanPlace);
              $$14.setPos(pos);

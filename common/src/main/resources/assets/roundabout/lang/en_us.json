@@ -7,6 +7,7 @@
   "text.roundabout.riding_flying_creature.dimension": "Cannot fly in this dimension.",
   "text.roundabout.warn_trap_triggered": " has been triggered!",
   "text.roundabout.warn_unnamed_trap_triggered": "A fog trap has been triggered!",
+  "text.roundabout.stole_minion": "Claimed Minion",
 
   "text.roundabout.powers.stand": "Stand User",
   "text.roundabout.powers.stand_select": "Yuhamon",
@@ -41,6 +42,7 @@
   "item.roundabout.luck_sword": "Luck Sword",
   "item.roundabout.luck_upgrade": "Smithing Template",
   "item.roundabout.scissors": "Scissors",
+  "item.roundabout.ultraviolet_blaster": "Ultraviolet Blasters",
   "item.roundabout.aja": "Aja",
   "item.roundabout.wooden_glaive": "Wooden Glaive",
   "item.roundabout.stone_glaive": "Stone Glaive",
@@ -336,6 +338,7 @@
   "item.roundabout.aesthetician_spawn_egg": "Aesthetician Spawn Egg",
   "item.roundabout.zombie_aesthetician_spawn_egg": "Zombie Aesthetician Spawn Egg",
   "item.roundabout.anubis_guardian_spawn_egg": "Anubis Guardian Spawn Egg",
+  "item.roundabout.zombie_minion_spawn_egg": "Zombie Minion Spawn Egg",
 
   "item.roundabout.painting_van_gough": "Van Gogh's Self-Portrait",
   "item.roundabout.painting_mona_lisa": "Mona Lisa",
@@ -418,6 +421,7 @@
   "entity.roundabout.seperated_arm_slim": "Seperated Arm Slim",
   "entity.roundabout.left_seperated_arm": "Left Seperated Arm",
   "entity.roundabout.left_seperated_arm_slim": "Left Aeperated Arm Slim",
+  "entity.roundabout.zombiefish": "Zombiefish",
 
 
   "entity.roundabout.water_bottle": "Water Bottle",
@@ -593,6 +597,7 @@
   "sounds.roundabout.vsong_damnable_ceremony": "Damnable Ceremony",
   "sounds.roundabout.vsong_gothic_organ": "Gothic Organ",
   "sounds.roundabout.hammer_clink": "Hammer Clink",
+  "sounds.roundabout.bone_chomp": "Devour",
 
   "sounds.roundabout.iron_ball_impact": "Iron ball impact",
   "sounds.roundabout.iron_ball_bounce": "Iron ball bounce",
@@ -950,7 +955,7 @@
   "sounds.roundabout.harpoon_ground":  "Projectile collides",
   "sounds.roundabout.harpoon_return":  "Projectile returns",
   "sounds.roundabout.harpoon_throw":  "Projectile thrown",
-  "sounds.roundabout.glaive_charge":  "Glaive charge",
+  "sounds.roundabout.glaive_charge":  "Powerful charge",
   "sounds.roundabout.glaive_attack":  "Glaive attack",
   "sounds.roundabout.block_grab":  "Power Grab",
   "sounds.roundabout.block_throw":  "Power Throw",
@@ -1281,7 +1286,7 @@
   "ability.roundabout.final_kick.desc": "Hold and release to throw a super powerful kick! The longer you hold it down, the stronger it is.",
 
   "ability.roundabout.assault": "Assault",
-  "ability.roundabout.assault.desc": "The World floats forwards in front of you, attacking whatever it touches and inflicting bleed! Pressing grab while this moves is active allows it to pick up blocks instead.",
+  "ability.roundabout.assault.desc": "The World floats forwards in front of you, attacking whatever it touches and inflicting bleed! Pressing grab while this moves is active allows it to pick up blocks instead. For the attack, it becomes more powerful the longer it charges, so spinning it around like a flail lets it reach maximum power.",
   "ability.roundabout.air_tanks": "Oxygen Tanks",
   "ability.roundabout.air_tanks.desc": "The tanks on The World's back provide you with extra air, so you can swim underwater for much longer.",
 
@@ -2264,7 +2269,8 @@
   "text.roundabout.manhattan_transfer.wind_vision": "Wind Vision On",
   "text.roundabout.manhattan_transfer.wind_vision_off": "Wind Vision Off",
 
-  "text.roundabout.vampire.flesh_bud_fail": "The victim is not weakened, or is agitated",
+  "text.roundabout.vampire.flesh_bud_fail": "The victim is not weakened!",
+  "text.roundabout.vampire.flesh_bud_fail_2": "The victim is agitated!",
   "text.roundabout.vampire.flesh_bud_fail_already": "A flesh bud is already planted",
 
   "text.roundabout.vampire.coffin_occupied": "This coffin is already occupied",
@@ -2693,6 +2699,8 @@
   "config.roundabout.emperorShootingModePower.desc": "[PLACEHOLDER]",
   "config.roundabout.bulletShootSpeedMultiplier.name": "Speed multiplier",
   "config.roundabout.bulletShootSpeedMultiplier.desc": "[PLACEHOLDER]",
+  "config.roundabout.emperorBulletRange.name": "Bullet Range",
+  "config.roundabout.emperorBulletRange.desc": "[PLACEHOLDER]",
 
 
   "config.roundabout.meteorsEmitParticles.name": "Meteors Emit Particles",
@@ -2848,6 +2856,42 @@
   "config.roundabout.timeRewindStopsSuffocation.desc": "Prevent rewinding into a block, so you don't clip through anything or suffocate, or force anyone else you rewind to do the same. On by default. Rewinding time still rewinds their other aspects when this triggers, just not position related things.",
   "config.roundabout.timeRewindStopsDeviousStrategies.name": "Rewind Anti-Cheese",
   "config.roundabout.timeRewindStopsDeviousStrategies.desc": "Hinges on Anti-suffocate also being on, but additionally stops rewinding into cobwebs and lava. On by default.",
+  "config.roundabout.getMiningTierVampire.name": "Mining Tier",
+  "config.roundabout.getMiningTierVampire.desc": "Tier 0 is the default, it does not replace tools for harvesting blocks. Tier 1 is wood tier, tier 2 is stone tier, tier 3 is iron tier, and tier 4 is diamond tier.",
+
+  "config.roundabout.diveAttackCooldown.name": "Dive Cooldown",
+  "config.roundabout.diveAttackCooldown.desc": "The cooldown of vampire powers dive attack.",
+  "config.roundabout.hairGrabCooldown.name": "Hair Grab Cooldown",
+  "config.roundabout.hairGrabCooldown.desc": "The cooldown of vampire hair grab.",
+  "config.roundabout.spikeAttackCooldown.name": "Spike Attack Cooldown",
+  "config.roundabout.spikeAttackCooldown.desc": "The cooldown of vampire hair spike attack.",
+  "config.roundabout.auraBlastCooldown.name": "Aura Blast Cooldown",
+  "config.roundabout.auraBlastCooldown.desc": "The cooldown of vampire dark aura blast.",
+  "config.roundabout.deflectionCooldown.name": "Deflection Cooldown",
+  "config.roundabout.deflectionCooldown.desc": "The cooldown of vampire deflection.",
+  "config.roundabout.flowerHealCooldown.name": "Flower Heal Cooldown",
+  "config.roundabout.flowerHealCooldown.desc": "The cooldown of absorbing flowers.",
+  "config.roundabout.bloodRegenCooldown.name": "Blood Regen Cooldown",
+  "config.roundabout.bloodRegenCooldown.desc": "The cooldown of blood regeneration.",
+  "config.roundabout.bloodSpeedCooldown.name": "Blood Speed Cooldown",
+  "config.roundabout.bloodSpeedCooldown.desc": "The cooldown of blood speed.",
+  "config.roundabout.ripperEyesPartialCooldown.name": "Ripper Early Cooldown",
+  "config.roundabout.ripperEyesPartialCooldown.desc": "The cooldown of partially charged space ripper stingy eyes.",
+  "config.roundabout.ripperEyesMaxCooldown.name": "Ripper Max Cooldown",
+  "config.roundabout.ripperEyesMaxCooldown.desc": "The cooldown of fully charged space ripper stingy eyes.",
+  "config.roundabout.ripperEyesInterruptCooldown.name": "Ripper Interrupt CD",
+  "config.roundabout.ripperEyesInterruptCooldown.desc": "The cooldown of interrupted space ripper stingy eyes.",
+  "config.roundabout.antiCheapShot.name": "Anti Cheap Shot",
+  "config.roundabout.antiCheapShot.desc": "Prevents using clutch moves right after daze moves. Otherwise, you can easily guarantee instakill progress.",
+
+  "config.roundabout.enableStoneMask.name": "Enable Mask Vampires",
+  "config.roundabout.enableStoneMask.desc": "If disabled, the stone mask can no longer make vampires.",
+
+  "config.roundabout.enableBloodVampirizing.name": "Blood Vampires",
+  "config.roundabout.enableBloodVampirizing.desc": "If disabled, vampire blood can no longer make players vampires.",
+
+  "config.roundabout.enableZombification.name": "Zombification",
+  "config.roundabout.enableZombification.desc": "If disabled, vampires and zombies can no longer make players zombies.",
 
 
   "config.roundabout.SummonSurvivorCooldownV2.name": "Summon Cooldown",
@@ -2957,6 +3001,11 @@
   "config.roundabout.armSpinDuration.desc": "How long your seperated arms spin for after using the move, default is 30 ticks, or 1.5 seconds",
   "config.roundabout.armSpinCooldown.name": "Arm Spin Cooldown",
   "config.roundabout.armSpinCooldown.desc": "Default is 120 ticks, or 6 seconds",
+  "config,roundabout.moldDMGMobsMultiplier.name": "Mold Damage Multiplier (Mobs)",
+  "config,roundabout.moldDMGMobsMultiplier.desc": "Controls the damage mobs take when they fall in green days mold fields",
+  "config,roundabout.moldDMGPlayersMultiplier.name": "Mold Damage Multiplier (Players)",
+  "config,roundabout.moldDMGPlayersMultiplier.desc": "Controls the damage players take when they fall in green days mold fields",
+
 
   "config.roundabout.theWorldAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.theWorldAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
@@ -3031,6 +3080,11 @@
   "config.roundabout.timestopCancelsFood.desc": "While in stopped time, you cannot gain healing from food",
 
 
+  "config.roundabout.vampireAttackMultOnPlayers.name": "Player Damage Multiplier",
+  "config.roundabout.vampireAttackMultOnPlayers.desc": "How much damage vampires deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
+  "config.roundabout.vampireAttackMultOnMobs.name": "Mob Damage Multiplier",
+  "config.roundabout.vampireAttackMultOnMobs.desc": "How much damage vampires deals to every other mob, same math as above.",
+
   "config.roundabout.starPlatinumAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.starPlatinumAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
   "config.roundabout.starPlatinumAttackMultOnMobs.name": "Mob Damage Multiplier",
@@ -3060,6 +3114,8 @@
   "config.roundabout.expPerVampLevelUp.desc": "Increase to make leveling take longer, decrease to make shorter.",
   "config.roundabout.expTypeCapPerDay.name": "Blood Experience Per Type",
   "config.roundabout.expTypeCapPerDay.desc": "Increase to let you get more blood exp from each mob type daily. it is kept low to prevent the need for massive animal farm hording.",
+  "config.roundabout.expInterval.name": "Blood Experience Intervals",
+  "config.roundabout.expInterval.desc": "Change how many ticks between vampire leveling exp.",
 
 
   "config.roundabout.sunDamageUnderwaterReach.name": "Underwater Sun Damage Reach",
@@ -3067,7 +3123,7 @@
   "config.roundabout.drownSpeedModifier.name": "Vampire Oxygen Swim Slowdown",
   "config.roundabout.drownSpeedModifier.desc": "When drowning, instead of taking damage, vampiric players are slowed down using this multiplier. Lower = slower.",
   "config.roundabout.sunDamagePercentPerDamageTick.name": "Sun Damage Per Dose",
-  "config.roundabout.sunDamagePercentPerDamageTick.desc": "How much of your health is drained, percentage wise of max health, per hit under the sun as a vampiric player?",
+  "config.roundabout.sunDamagePercentPerDamageTick.desc": "How much of your health is drained, percentage wise of max health, per hit under the sun as a vampiric player? If you set this to 0, you will be fully immune to sunlight. Be warned that removing this drawback just makes vampires objectively better, and not vampires.",
   "config.roundabout.vampireUsesInternalSaturation.name": "Internal Saturation",
   "config.roundabout.vampireUsesInternalSaturation.desc": "Set to false to make forge appleskin render golden meat sticks over blood bar.",
 
@@ -3139,10 +3195,26 @@
   "config.roundabout.percentOfZombieVillagersThatBecomeZombieAestheticians.name": "Zombie Aesthetician Rate",
   "config.roundabout.percentOfZombieVillagersThatBecomeZombieAestheticians.desc": "The percentage of zombie villagers that become zombie aestheticians instead.",
 
-  "config.roundabout.generalDetectionGoThroughDoorsAndCorners.name": "Detection Through Walls",
-  "config.roundabout.generalDetectionGoThroughDoorsAndCorners.desc": "Some of the mod's area of affect or line of sight mechanics stop when they hit a block, turning  this off lets you hit past corners and doors with certain things. Not recommended.",
   "config.roundabout.disableBleedingAndBloodSplatters.name": "Disable Blood",
   "config.roundabout.disableBleedingAndBloodSplatters.desc": "If you are sensitive to blood, this setting might help.",
+
+  "config.roundabout.CBHasDurability.name": "[WIP]",
+  "config.roundabout.CBHasDurability.desc": "[WIP]",
+  "config.roundabout.CBDurability.name": "[WIP]",
+  "config.roundabout.CBDurability.desc": "[WIP]",
+  "config.roundabout.CBchangesFOV.name": "[WIP]",
+  "config.roundabout.CBchangesFOV.desc": "[WIP]",
+  "config.roundabout.CBCanMoveCamera.name": "[WIP]",
+  "config.roundabout.CBCanMoveCamera.desc": "[WIP]",
+  "config.roundabout.enableCenturyBoy.name": "[WIP]",
+  "config.roundabout.enableCenturyBoy.desc": "[WIP]",
+  "config.roundabout.oldKnockbackStance.name": "[WIP]",
+  "config.roundabout.oldKnockbackStance.desc": "[WIP]",
+
+
+  "config.roundabout.generalDetectionGoThroughDoorsAndCorners.name": "Detection Through Walls",
+  "config.roundabout.generalDetectionGoThroughDoorsAndCorners.desc": "Some of the mod's area of affect or line of sight mechanics stop when they hit a block, turning  this off lets you hit past corners and doors with certain things. Not recommended.",
+
 
   "config.roundabout.major.done": "Done",
   "config.roundabout.major.reset": "Reset",
@@ -3169,12 +3241,13 @@
   "config.roundabout.softAndWetSettings.name": "Soft And Wet",
   "config.roundabout.magiciansRedSettings.name": "Magician's Red",
   "config.roundabout.walkingHeartSettings.name": "Walking Heart",
+  "config.roundabout.greenDaySettings.name": "Green Day",
   "config.roundabout.rattSettings.name": "Ratt",
   "config.roundabout.standTweak.name": "Ratt",
   "config.roundabout.justiceSettings.name": "Justice",
   "config.roundabout.cinderellaSettings.name": "Cinderella",
   "config.roundabout.manhattanTransferSettings.name": "Manhattan Transfer",
-  "config.roundabout.centuryBoySettings.name": "20cb Transfer",
+  "config.roundabout.centuryBoySettings.name": "20cb",
   "config.roundabout.heyYaSettings.name": "Hey Ya",
   "config.roundabout.mandomSettings.name": "Mandom",
   "config.roundabout.survivorSettings.name": "Survivor",
@@ -3302,6 +3375,8 @@
   "config.roundabout.walkingHeartMaxHits.desc": "How many hits can you take in heel planted/wall walking mode before you are knocked out of that state.",
   "config.roundabout.walkingHeartCooldownPerHit.name": "Cooldown Per Hit",
   "config.roundabout.walkingHeartCooldownPerHit.desc": "How many cooldown ticks per hit in heel planted/wall walking mode.",
+  "config.roundabout.walkingHeartCooldownBase.name": "Cooldown Base",
+  "config.roundabout.walkingHeartCooldownBase.desc": "How many cooldown ticks when hit at least once in planted/wall walking mode.",
 
   "config.roundabout.usePreciseMath.name": "Use Precise Sphere Math",
   "config.roundabout.usePreciseMath.desc": "If you want the bubble of time stop to accurately cover the radius of the completed sphere rather than just being a simple box calculation. By default it is true because time stop prevents lots of things from ticking and saves performance as is.",

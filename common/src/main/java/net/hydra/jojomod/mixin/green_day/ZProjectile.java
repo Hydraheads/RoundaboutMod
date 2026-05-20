@@ -14,7 +14,6 @@ import net.minecraft.world.entity.*;
 
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
-;
 import net.minecraft.world.entity.projectile.SpectralArrow;
 import net.minecraft.world.entity.projectile.ThrownEgg;
 import net.minecraft.world.level.Level;

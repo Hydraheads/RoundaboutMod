@@ -157,6 +157,8 @@ public class FabricItems {
 
     public static Item IRON_BALL_CROSSBOW = registerItem("iron_ball_crossbow", new IronBallCrossbowItem(new Item.Properties().stacksTo(1).durability(565)));
 
+    public static Item ULTRAVIOLET_BLASTER = registerItem("ultraviolet_blaster", new UltravioletBlasterItem(new Item.Properties().stacksTo(1)));
+
     public static Item WOODEN_GLAIVE = registerItem("wooden_glaive", new GlaiveItem(Tiers.WOOD, 4F, -2.9F, new Item.Properties(),4));
     public static Item STONE_GLAIVE = registerItem("stone_glaive", new GlaiveItem(Tiers.STONE, 4F, -2.9F, new Item.Properties(),6));
     public static Item IRON_GLAIVE = registerItem("iron_glaive", new GlaiveItem(Tiers.IRON, 4F, -2.9F, new Item.Properties(),7));
@@ -277,6 +279,8 @@ public class FabricItems {
 
     public static final Item TERRIER_SPAWN_EGG = registerItem("terrier_spawn_egg", new SpawnEggItem(FabricEntities.TERRIER_DOG,
             0xc9c071, 0xfffded, new Item.Properties()));
+    public static final Item ZOMBIE_MINION_SPAWN_EGG = registerItem("zombie_minion_spawn_egg", new SpawnEggItem(FabricEntities.VILLAGER_MINION,
+            0xC1FF4F, 0x53A667, new Item.Properties()));
 
     public static final Item AESTHETICIAN_SPAWN_EGG = registerItem("aesthetician_spawn_egg", new SpawnEggItem(FabricEntities.AESTHETICIAN,
             0xfffef2, 0xffa8e8, new Item.Properties()));
@@ -355,6 +359,7 @@ public class FabricItems {
                         entries.accept(ZOMBIE_AESTHETICIAN_SPAWN_EGG);
                         entries.accept(TERRIER_SPAWN_EGG);
                         entries.accept(ANUBIS_GUARDIAN_SPAWN_EGG);
+                        entries.accept(ZOMBIE_MINION_SPAWN_EGG);
                         entries.accept(COFFEE_GUM);
                         entries.accept(LIGHT_BULB);
                         entries.accept(LOCACACA_PIT.asItem());
@@ -365,6 +370,7 @@ public class FabricItems {
                         entries.accept(METEORITE);
                         entries.accept(METEORITE_INGOT);
                         entries.accept(AJA);
+                        entries.accept(ULTRAVIOLET_BLASTER);
                         entries.accept(ANUBIS_ITEM);
 
                         entries.accept(MUSIC_DISC_TORTURE_DANCE);
@@ -549,11 +555,10 @@ public class FabricItems {
                         entries.accept(CHICKEN_REMAINS);
                         entries.accept(DOG_REMAINS);
                         entries.accept(AXOLOTL_REMAINS);
-
-                        entries.accept(STAND_DISC_20_CENTURY_BOY);
-                        entries.accept(STAND_DISC_MANHATTAN_TRANSFER);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
+                        entries.accept(STAND_DISC_20_CENTURY_BOY);
+                        entries.accept(STAND_DISC_MANHATTAN_TRANSFER);
                         entries.accept(STAND_DISC_TUSK);
                         entries.accept(MAX_STAND_DISC_TUSK);
                         //entries.accept(STAND_DISC_DIVER_DOWN);
@@ -742,6 +747,7 @@ public class FabricItems {
         ModItems.AESTHETICIAN_MASK_5 = AESTHETICIAN_MASK_5;
         ModItems.AESTHETICIAN_MASK_ZOMBIE = AESTHETICIAN_MASK_ZOMBIE;
         ModItems.TERRIER_SPAWN_EGG = TERRIER_SPAWN_EGG;
+        ModItems.ZOMBIE_MINION_SPAWN_EGG = ZOMBIE_MINION_SPAWN_EGG;
         ModItems.AESTHETICIAN_SPAWN_EGG = AESTHETICIAN_SPAWN_EGG;
         ModItems.ZOMBIE_AESTHETICIAN_SPAWN_EGG = ZOMBIE_AESTHETICIAN_SPAWN_EGG;
         ModItems.ANUBIS_GUARDIAN_SPAWN_EGG = ANUBIS_GUARDIAN_SPAWN_EGG;
@@ -752,6 +758,7 @@ public class FabricItems {
         ModItems.FLESH_BUCKET = FLESH_BUCKET;
         ModItems.CHERRIES = CHERRIES;
 
+        ModItems.ULTRAVIOLET_BLASTER = ULTRAVIOLET_BLASTER;
 
         ModItems.CAT_REMAINS = CAT_REMAINS;
         ModItems.OCELOT_REMAINS = OCELOT_REMAINS;

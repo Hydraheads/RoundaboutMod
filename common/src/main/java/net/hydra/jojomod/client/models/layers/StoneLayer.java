@@ -56,9 +56,13 @@ public class StoneLayer<T extends LivingEntity, M extends HumanoidModel<T>, A ex
             } else if (curse == LocacacaCurseIndex.RIGHT_LEG){
                 rl = StandIcons.STONE_RIGHT_LEG;
             } else if (curse == LocacacaCurseIndex.LEFT_HAND){
-                rl = StandIcons.STONE_LEFT_ARM;
+                if(!((StandUser)var4).rdbt$hasLeftHandGone()) {
+                    rl = StandIcons.STONE_LEFT_ARM;
+                }
             } else if (curse == LocacacaCurseIndex.RIGHT_HAND){
-                rl = StandIcons.STONE_RIGHT_ARM;
+                if(!((StandUser)var4).rdbt$hasRightHandGone()) {
+                    rl = StandIcons.STONE_RIGHT_ARM;
+                }
             } else if (curse == LocacacaCurseIndex.CHEST){
                 rl = StandIcons.STONE_CHEST;
             } else if (curse == LocacacaCurseIndex.HEAD){

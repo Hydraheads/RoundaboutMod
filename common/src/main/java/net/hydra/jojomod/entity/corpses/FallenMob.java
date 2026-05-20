@@ -136,14 +136,14 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
 
     @Override
     public void setTarget(@Nullable LivingEntity $$0) {
-        if ($$0 != null && controller != null && controller.is($$0)){
+        if ($$0 != null && controller != null && controller.getUUID() == $$0.getUUID()){
             return;
         } else {
             super.setTarget($$0);
         }
     }
     public void setLastHurtByPlayer(@Nullable Player $$0) {
-        if ($$0 != null && controller != null && controller.is($$0)){
+        if ($$0 != null && controller != null && controller.getUUID() == $$0.getUUID()){
             return;
         } else {
             super.setLastHurtByPlayer($$0);
@@ -151,7 +151,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     }
 
     public void setLastHurtByMob(@Nullable LivingEntity $$0) {
-        if ($$0 != null && controller != null && controller.is($$0)){
+        if ($$0 != null && controller != null && controller.getUUID() == $$0.getUUID()){
             return;
         } else {
             super.setLastHurtMob($$0);
@@ -159,7 +159,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     }
 
     public void setLastHurtMob(Entity $$0) {
-        if ($$0 != null && controller != null && controller.is($$0)){
+        if ($$0 != null && controller != null && controller.getUUID() == $$0.getUUID()){
             return;
         } else {
             super.setLastHurtMob($$0);
@@ -419,6 +419,9 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     @Override
     public boolean canAttack(LivingEntity $$0){
         if (this.getTargetTactic() == Tactics.PEACEFUL.id || !this.getActivated()){
+            return false;
+        }
+        if ($$0 != null && controller != null && controller.is($$0)){
             return false;
         }
         return super.canAttack($$0);

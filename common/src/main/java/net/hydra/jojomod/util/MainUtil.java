@@ -210,6 +210,7 @@ public class MainUtil {
     public static ArrayList<String> removeBloodFromThese = Lists.newArrayList();
     public static ArrayList<String> unfreezableMobs = Lists.newArrayList();
     public static ArrayList<String> foodThatHasEffectsForVampires = Lists.newArrayList();
+    public static ArrayList<String> vampireSunDamageWorlds = Lists.newArrayList();
     public static Set<String> foodThatGivesBloodList = Set.of();
     Map<String, FoodBloodStats> foodThatGivesBloodMap;
 
@@ -312,7 +313,14 @@ public class MainUtil {
         }
         return false;
     }
-
+    public static boolean isSunDamageWorld(String string){
+        if (string == null || string.isEmpty())
+            return false;
+        if (vampireSunDamageWorlds != null && !vampireSunDamageWorlds.isEmpty() && vampireSunDamageWorlds.contains(string)){
+            return true;
+        }
+        return false;
+    }
     public static boolean isEdibleToVampires(ItemStack stack){
         if (stack == null || stack.isEmpty())
             return false;
@@ -768,6 +776,9 @@ public class MainUtil {
     }
 
     public static void activateStoneMask(Entity ent){
+        if (!ClientNetworking.getAppropriateConfig().vampireSettings.enableStoneMask)
+            return;
+
         if (ent instanceof LivingEntity LE && !ent.isInWater() && !ent.level().isClientSide()){
             ItemStack stack = LE.getItemBySlot(EquipmentSlot.HEAD);
             if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem())){
@@ -2028,7 +2039,7 @@ public class MainUtil {
     }
     public static boolean isSpecialEffect(MobEffect value){
         return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS)
-                || value.equals(ModEffects.BANISH)
+                || value.equals(ModEffects.BANISH) || value.equals(ModEffects.WARDING) || value.equals(ModEffects.HEX)
                 || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.STAND_VIRUS) ||
                 value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING) || value.equals(ModEffects.MOLD);
     }
@@ -2134,6 +2145,13 @@ public class MainUtil {
             basis *=0.4F;
         }
         return basis;
+    }
+
+    public static boolean allowThruWalls(Entity entity){
+        if (MainUtil.isBossMob(entity) &&
+                !ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxesOnBosses)
+            return false;
+        return ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxes;
     }
 
     //Walls corners and doors check

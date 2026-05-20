@@ -652,7 +652,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public Component ifWipListDev(){
         return Component.literal(  "14Kacper").withStyle(ChatFormatting.BLUE);
     }
-    //COMMAND TO QUICKLY PUT MANHATTAN TRANSFER INTO ALL MOBS: /roundaboutSetStand @e manhattan_transfer 1 "from 1 to 8" 0 false
+    //COMMAND TO QUICKLY PUT MANHATTAN TRANSFER INTO ALL MOBS: /roundaboutSetStand @e manhattan_transfer 1 1 0 false
 
     /**Ignore*/
     @Override

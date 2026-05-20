@@ -29,6 +29,10 @@ public class ModSounds {
     public static final String SIGN_HIT = "sign_hit";
     public static final ResourceLocation SIGN_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SIGN_HIT);
     public static SoundEvent SIGN_HIT_EVENT = SoundEvent.createVariableRangeEvent(SIGN_HIT_ID);
+    public static final String BONE_CHOMP = "bone_chomp";
+    public static final ResourceLocation BONE_CHOMP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BONE_CHOMP);
+    public static SoundEvent BONE_CHOMP_EVENT = SoundEvent.createVariableRangeEvent(BONE_CHOMP_ID);
+
 
     public static final String OVA_THE_WORLD = "ova_the_world";
     public static final ResourceLocation OVA_THE_WORLD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+OVA_THE_WORLD);
@@ -223,6 +227,18 @@ public class ModSounds {
     public static final String CENTURY_BOY_HIT = "century_boy_hit";
     public static final ResourceLocation CENTURY_BOY_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CENTURY_BOY_HIT);
     public static SoundEvent CENTURY_BOY_HIT_EVENT = SoundEvent.createVariableRangeEvent(CENTURY_BOY_HIT_ID);
+    public static final String CENTURY_BOY_NORMAL_STANCE = "century_boy_normal_stance";
+    public static final ResourceLocation CENTURY_BOY_NORMAL_STANCE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CENTURY_BOY_NORMAL_STANCE);
+    public static SoundEvent CENTURY_BOY_NORMAL_STANCE_EVENT = SoundEvent.createVariableRangeEvent(CENTURY_BOY_NORMAL_STANCE_ID);
+    public static final String CENTURY_BOY_PROPEL_STANCE = "century_boy_propel_stance";
+    public static final ResourceLocation CENTURY_BOY_PROPEL_STANCE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CENTURY_BOY_PROPEL_STANCE);
+    public static SoundEvent CENTURY_BOY_PROPEL_STANCE_EVENT = SoundEvent.createVariableRangeEvent(CENTURY_BOY_PROPEL_STANCE_ID);
+    public static final String CENTURY_BOY_OUTPUT_STANCE = "century_boy_output_stance";
+    public static final ResourceLocation CENTURY_BOY_OUTPUT_STANCE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CENTURY_BOY_OUTPUT_STANCE);
+    public static SoundEvent CENTURY_BOY_OUTPUT_STANCE_EVENT = SoundEvent.createVariableRangeEvent(CENTURY_BOY_OUTPUT_STANCE_ID);
+    public static final String CENTURY_BOY_GROUND_STANCE = "century_boy_ground_stance";
+    public static final ResourceLocation CENTURY_BOY_GROUND_STANCE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CENTURY_BOY_GROUND_STANCE);
+    public static SoundEvent CENTURY_BOY_GROUND_STANCE_EVENT = SoundEvent.createVariableRangeEvent(CENTURY_BOY_GROUND_STANCE_ID);
 
     public static final String SNUBNOSE_FIRE = "snubnose_fire";
     public static final ResourceLocation SNUBNOSE_FIRE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SNUBNOSE_FIRE);
