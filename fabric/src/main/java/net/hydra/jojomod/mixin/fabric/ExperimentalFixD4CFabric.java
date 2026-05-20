@@ -9,8 +9,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(value= WorldOpenFlows.class, priority = 100)
 public abstract class ExperimentalFixD4CFabric {
-
-
     //Skip experimental warning
     //Ignore the squiggly lines,the compiler literally does not know how to count local variables
     @ModifyVariable(method = "doLoadLevel(Lnet/minecraft/client/gui/screens/Screen;Ljava/lang/String;ZZ)V", at = @At(value = "STORE"),
