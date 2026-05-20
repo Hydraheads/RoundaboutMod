@@ -1010,7 +1010,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
         super.renderAttackHud(context,playerEntity,scaledWidth,scaledHeight,ticks,vehicleHeartCount,flashAlpha,otherFlashAlpha);
-        boolean powerOn = PowerTypes.hasPowerActive(playerEntity);
+        boolean powerOn = PowerTypes.hasStandActive(playerEntity) || PowerTypes.hasPowerActive(playerEntity);
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
 

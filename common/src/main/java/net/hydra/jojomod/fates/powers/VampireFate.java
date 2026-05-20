@@ -895,7 +895,7 @@ public class VampireFate extends VampiricFate {
                                 float flashAlpha, float otherFlashAlpha) {
 
         StandUser standUser = ((StandUser) playerEntity);
-        boolean standOn = PowerTypes.hasStandActive(playerEntity);
+        boolean standOn = PowerTypes.hasStandActive(playerEntity) || PowerTypes.hasPowerActive(playerEntity);
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
         if (!standOn){
