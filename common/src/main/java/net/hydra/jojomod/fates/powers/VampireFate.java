@@ -639,7 +639,7 @@ public class VampireFate extends VampiricFate {
                         vdata.bloodExp+=change;
                         vdata.npcExp = npcExp;
                         if (vdata.timeSinceNpc == 0){
-                            vdata.timeSinceNpc = 24000;
+                            vdata.timeSinceNpc = ClientNetworking.getAppropriateConfig().vampireSettings.expInterval;
                         }
                     }
                 }
@@ -652,7 +652,7 @@ public class VampireFate extends VampiricFate {
                         vdata.bloodExp+=change;
                         vdata.animalExp = animalExp;
                         if (vdata.timeSinceAnimal == 0){
-                            vdata.timeSinceAnimal = 24000;
+                            vdata.timeSinceAnimal = ClientNetworking.getAppropriateConfig().vampireSettings.expInterval;;
                         }
                     }
                 }
@@ -665,7 +665,7 @@ public class VampireFate extends VampiricFate {
                         vdata.bloodExp+=change;
                         vdata.monsterEXP = monsterEXP;
                         if (vdata.timeSinceMonster == 0){
-                            vdata.timeSinceMonster = 24000;
+                            vdata.timeSinceMonster = ClientNetworking.getAppropriateConfig().vampireSettings.expInterval;;
                         }
                     }
                 }

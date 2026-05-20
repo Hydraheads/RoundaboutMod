@@ -254,6 +254,8 @@ public class Config implements Cloneable {
         public Integer expPerVampLevelUp;
         @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
         public Integer expTypeCapPerDay;
+        @IntOption(group = "inherit", value = 24000, min = 1, max = 99999)
+        public Integer expInterval;
         @FloatOption(group = "inherit", value = 0.75F, min = 0, max = 1F)
         public Float drownSpeedModifier;
         @IntOption(group = "inherit", value = 3, min = 0, max = 72000)

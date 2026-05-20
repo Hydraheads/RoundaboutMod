@@ -3071,6 +3071,8 @@
   "config.roundabout.expPerVampLevelUp.desc": "Increase to make leveling take longer, decrease to make shorter.",
   "config.roundabout.expTypeCapPerDay.name": "Blood Experience Per Type",
   "config.roundabout.expTypeCapPerDay.desc": "Increase to let you get more blood exp from each mob type daily. it is kept low to prevent the need for massive animal farm hording.",
+  "config.roundabout.expInterval.name": "Blood Experience Intervals",
+  "config.roundabout.expInterval.desc": "Change how many ticks between vampire leveling exp.",
 
 
   "config.roundabout.sunDamageUnderwaterReach.name": "Underwater Sun Damage Reach",
