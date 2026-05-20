@@ -693,7 +693,7 @@ public class PowersGreenDay extends NewPunchingStand {
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.GREEN_DAY_SPLIT_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
             }
             HasOffHand = false;
-            this.self.getOffhandItem().setCount(0);
+            this.self.getItemInHand(InteractionHand.OFF_HAND).setCount(0);
             Vec3 location = getRayBlock(this.self, 1f);
 
             // ((ServerLevel) this.self.level()).sendParticles(ModParticles.MOLD_DUST, location.x,
@@ -831,6 +831,7 @@ public class PowersGreenDay extends NewPunchingStand {
 
     public boolean MainArmThrowServer(SeperatedArmEntity SAE){
         if (Main_arm == null) {
+
             if (SAE != null) {
                 HasMainArm = false;
                 Main_arm = SAE;
@@ -844,7 +845,8 @@ public class PowersGreenDay extends NewPunchingStand {
                 Main_arm = SAE;
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.GREEN_DAY_SPLIT_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
             }
-            this.self.getMainHandItem().setCount(0);
+            this.self.getItemInHand(InteractionHand.MAIN_HAND).setCount(0);
+
             Vec3 location = getRayBlock(this.self, 1f);
 
            // ((ServerLevel) this.self.level()).sendParticles(ModParticles.MOLD_DUST, location.x,
