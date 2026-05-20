@@ -25,10 +25,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -159,6 +161,9 @@ public class BaseMinion extends PathfinderMob {
         if (shouldPanic() || this.getTargetTactic() == Tactics.PEACEFUL.id){
             return false;
         }
+        if ($$0 != null && controller != null && controller.is($$0)){
+            return false;
+        }
         return super.canAttack($$0);
     }
 
@@ -285,14 +290,26 @@ public class BaseMinion extends PathfinderMob {
                     }
                 }
             }
+
         }
+
         if (!player.isCrouching()){
-            if (getController() == player.getId()){
-                if (player.level().isClientSide()){
-                    ClientUtil.setZombieMinionScreen(getId());
+            if (getController() == player.getId()) {
+                if (FateTypes.isVampire(player)){
+                    if (player.level().isClientSide()) {
+                        ClientUtil.setZombieMinionScreen(getId());
+                    }
+                    return InteractionResult.CONSUME;
                 }
-                return InteractionResult.CONSUME;
             }
+        }
+        if (getController() <= 0) {
+            if (player instanceof ServerPlayer sp && FateTypes.isVampire(sp)) {
+                sp.displayClientMessage(Component.translatable("text.roundabout.stole_minion"), true);
+                setController(sp);
+                this.level().playSound(null, this.blockPosition(), ModSounds.LEVELUP_EVENT, SoundSource.PLAYERS, 1F, 1);
+            }
+            return InteractionResult.CONSUME;
         }
         return super.mobInteract(player,$$1);
     }
@@ -758,49 +775,51 @@ public class BaseMinion extends PathfinderMob {
             if (controller == null || controller.isRemoved() || !controller.isAlive()){
                 this.setController(null);
             } else {
-                if (controller.getId() != this.getController()){
-                    this.setController(controller.getId());
-                }
-                if (controller instanceof LivingEntity LE && !(getTargetTactic() == Tactics.PEACEFUL.id)) {
-                    autoTarget = LE.getLastHurtByMob();
-                    autoTarget2 = LE.getLastHurtMob();
-                    if (autoTarget instanceof BaseMinion fm && fm.getController() == this.getController()){
-                        autoTarget = null;
+                if (controller instanceof LivingEntity LE && FateTypes.isVampire(LE)) {
+                    if (controller.getId() != this.getController()) {
+                        this.setController(controller.getId());
                     }
-                    if (autoTarget != null && (autoTarget.isRemoved() || !autoTarget.isAlive()))
-                        autoTarget = null;
-                    if (autoTarget2 instanceof BaseMinion fm && fm.getController() == this.getController()){
-                        autoTarget2 = null;
-                    }
-                    if (autoTarget2 != null && (autoTarget2.isRemoved() || !autoTarget2.isAlive()))
-                        autoTarget2 = null;
-                    if (autoTarget == null && autoTarget2 == null){
-                        if (getLastHurtByMob() != null && getLastHurtByMob().isAlive()
-                                && !getLastHurtByMob().isRemoved()){
-                            setTarget(autoTarget);
+                    if (!(getTargetTactic() == Tactics.PEACEFUL.id)) {
+                        autoTarget = LE.getLastHurtByMob();
+                        autoTarget2 = LE.getLastHurtMob();
+                        if (autoTarget instanceof BaseMinion fm && fm.getController() == this.getController()) {
+                            autoTarget = null;
                         }
-                    }
-                    boolean check1 = (this.getTarget() != autoTarget) || autoTarget == null;
-                    boolean check2 = (this.getTarget() != autoTarget2) || autoTarget2 == null;
-
-                    if (check1 && check2) {
-                        if (autoTarget2 != null && (LE.tickCount - LE.getLastHurtMobTimestamp()) < 200 &&
-                                !(autoTarget2 instanceof Player PE && PE.isCreative())) {
-                            if (!(controller != null && autoTarget2.is(controller))) {
-                                if (autoTarget2 instanceof Player PL) {
-                                    setLastHurtByPlayer(PL);
-                                }
-                                setLastHurtByMob(autoTarget2);
-                                setTarget(autoTarget2);
-                            }
-                        } else if (autoTarget != null && (LE.tickCount - LE.getLastHurtByMobTimestamp()) < 200 &&
-                                !(autoTarget instanceof Player PE && PE.isCreative())) {
-                            if (!(controller != null && autoTarget.is(controller))) {
-                                if (autoTarget instanceof Player PL) {
-                                    setLastHurtByPlayer(PL);
-                                }
-                                setLastHurtByMob(autoTarget);
+                        if (autoTarget != null && (autoTarget.isRemoved() || !autoTarget.isAlive()))
+                            autoTarget = null;
+                        if (autoTarget2 instanceof BaseMinion fm && fm.getController() == this.getController()) {
+                            autoTarget2 = null;
+                        }
+                        if (autoTarget2 != null && (autoTarget2.isRemoved() || !autoTarget2.isAlive()))
+                            autoTarget2 = null;
+                        if (autoTarget == null && autoTarget2 == null) {
+                            if (getLastHurtByMob() != null && getLastHurtByMob().isAlive()
+                                    && !getLastHurtByMob().isRemoved()) {
                                 setTarget(autoTarget);
+                            }
+                        }
+                        boolean check1 = (this.getTarget() != autoTarget) || autoTarget == null;
+                        boolean check2 = (this.getTarget() != autoTarget2) || autoTarget2 == null;
+
+                        if (check1 && check2) {
+                            if (autoTarget2 != null && (LE.tickCount - LE.getLastHurtMobTimestamp()) < 200 &&
+                                    !(autoTarget2 instanceof Player PE && PE.isCreative())) {
+                                if (!(controller != null && autoTarget2.is(controller))) {
+                                    if (autoTarget2 instanceof Player PL) {
+                                        setLastHurtByPlayer(PL);
+                                    }
+                                    setLastHurtByMob(autoTarget2);
+                                    setTarget(autoTarget2);
+                                }
+                            } else if (autoTarget != null && (LE.tickCount - LE.getLastHurtByMobTimestamp()) < 200 &&
+                                    !(autoTarget instanceof Player PE && PE.isCreative())) {
+                                if (!(controller != null && autoTarget.is(controller))) {
+                                    if (autoTarget instanceof Player PL) {
+                                        setLastHurtByPlayer(PL);
+                                    }
+                                    setLastHurtByMob(autoTarget);
+                                    setTarget(autoTarget);
+                                }
                             }
                         }
                     }

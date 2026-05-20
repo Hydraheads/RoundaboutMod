@@ -279,6 +279,8 @@ public class FabricItems {
 
     public static final Item TERRIER_SPAWN_EGG = registerItem("terrier_spawn_egg", new SpawnEggItem(FabricEntities.TERRIER_DOG,
             0xc9c071, 0xfffded, new Item.Properties()));
+    public static final Item ZOMBIE_MINION_SPAWN_EGG = registerItem("zombie_minion_spawn_egg", new SpawnEggItem(FabricEntities.VILLAGER_MINION,
+            0xC1FF4F, 0x53A667, new Item.Properties()));
 
     public static final Item AESTHETICIAN_SPAWN_EGG = registerItem("aesthetician_spawn_egg", new SpawnEggItem(FabricEntities.AESTHETICIAN,
             0xfffef2, 0xffa8e8, new Item.Properties()));
@@ -357,6 +359,7 @@ public class FabricItems {
                         entries.accept(ZOMBIE_AESTHETICIAN_SPAWN_EGG);
                         entries.accept(TERRIER_SPAWN_EGG);
                         entries.accept(ANUBIS_GUARDIAN_SPAWN_EGG);
+                        entries.accept(ZOMBIE_MINION_SPAWN_EGG);
                         entries.accept(COFFEE_GUM);
                         entries.accept(LIGHT_BULB);
                         entries.accept(LOCACACA_PIT.asItem());
@@ -744,6 +747,7 @@ public class FabricItems {
         ModItems.AESTHETICIAN_MASK_5 = AESTHETICIAN_MASK_5;
         ModItems.AESTHETICIAN_MASK_ZOMBIE = AESTHETICIAN_MASK_ZOMBIE;
         ModItems.TERRIER_SPAWN_EGG = TERRIER_SPAWN_EGG;
+        ModItems.ZOMBIE_MINION_SPAWN_EGG = ZOMBIE_MINION_SPAWN_EGG;
         ModItems.AESTHETICIAN_SPAWN_EGG = AESTHETICIAN_SPAWN_EGG;
         ModItems.ZOMBIE_AESTHETICIAN_SPAWN_EGG = ZOMBIE_AESTHETICIAN_SPAWN_EGG;
         ModItems.ANUBIS_GUARDIAN_SPAWN_EGG = ANUBIS_GUARDIAN_SPAWN_EGG;

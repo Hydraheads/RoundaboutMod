@@ -421,6 +421,9 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
         if (this.getTargetTactic() == Tactics.PEACEFUL.id || !this.getActivated()){
             return false;
         }
+        if ($$0 != null && controller != null && controller.is($$0)){
+            return false;
+        }
         return super.canAttack($$0);
     }
 

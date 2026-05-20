@@ -515,6 +515,9 @@ public class ForgeItems {
     public static final RegistryObject<ForgeSpawnEggItem> ANUBIS_GUARDIAN_SPAWN_EGG = addToTab(ITEMS.register("anubis_guardian_spawn_egg",
             () -> new ForgeSpawnEggItem(ForgeEntities.ANUBIS_GUARDIAN,
                     0x8E9393, 0x24395E, new Item.Properties())));
+    public static final RegistryObject<ForgeSpawnEggItem> ZOMBIE_MINION_SPAWN_EGG = addToTab(ITEMS.register("zombie_minion_spawn_egg",
+            () -> new ForgeSpawnEggItem(ForgeEntities.VILLAGER_MINION,
+                    0xC1FF4F, 0x53A667, new Item.Properties())));
     public static final RegistryObject<Potion> HEX_POTION = POTIONS.register("roundabout.hex",
             () -> new Potion(new MobEffectInstance(ForgeEffects.HEX.get(), 9600, 0)));
     public static final RegistryObject<Potion> HEX_POTION_EXTENDED = POTIONS.register("roundabout.long_hex",

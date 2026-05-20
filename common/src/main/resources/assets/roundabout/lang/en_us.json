@@ -7,6 +7,7 @@
   "text.roundabout.riding_flying_creature.dimension": "Cannot fly in this dimension.",
   "text.roundabout.warn_trap_triggered": " has been triggered!",
   "text.roundabout.warn_unnamed_trap_triggered": "A fog trap has been triggered!",
+  "text.roundabout.stole_minion": "Claimed Minion",
 
   "text.roundabout.powers.stand": "Stand User",
   "text.roundabout.powers.stand_select": "Yuhamon",
@@ -336,6 +337,7 @@
   "item.roundabout.aesthetician_spawn_egg": "Aesthetician Spawn Egg",
   "item.roundabout.zombie_aesthetician_spawn_egg": "Zombie Aesthetician Spawn Egg",
   "item.roundabout.anubis_guardian_spawn_egg": "Anubis Guardian Spawn Egg",
+  "item.roundabout.zombie_minion_spawn_egg": "Zombie Minion Spawn Egg",
 
   "item.roundabout.painting_van_gough": "Van Gogh's Self-Portrait",
   "item.roundabout.painting_mona_lisa": "Mona Lisa",
