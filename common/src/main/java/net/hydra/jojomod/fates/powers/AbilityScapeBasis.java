@@ -826,6 +826,11 @@ public class AbilityScapeBasis {
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha){
     }
+    public boolean renderAttackHud2(GuiGraphics context,  Player playerEntity,
+                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
+                                float flashAlpha, float otherFlashAlpha){
+        return false;
+    }
 
     /**A basic function called to draw stand icons*/
     public void setSkillIcon(GuiGraphics context, int x, int y, int slot, ResourceLocation rl, byte CDI){

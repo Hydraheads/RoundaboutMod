@@ -833,7 +833,7 @@ public int speedActivated = 0;
     }
 
     @Override
-    public void renderAttackHud(GuiGraphics context, Player playerEntity,
+    public boolean renderAttackHud2(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
         StandUser standUser = ((StandUser) playerEntity);
@@ -853,16 +853,19 @@ public int speedActivated = 0;
                     int test = (int) ((17F/20F) * Mth.clamp(this.attackTimeDuring,0,20));
                     context.blit(StandIcons.JOJO_ICONS, k, j, 192, 36, 17, 8);
                     context.blit(StandIcons.JOJO_ICONS, k, j, 192, 44, 17-test, 8);
+                    return true;
                 } else {
                     if (TE instanceof LivingEntity LE && LE.getHealth()-getSuckDamage() <= 0){
                         context.blit(StandIcons.JOJO_ICONS, k, j, 192, 52, 17, 8);
                     } else {
                         context.blit(StandIcons.JOJO_ICONS, k, j, 192, 44, 17, 8);
                     }
+                    return true;
                 }
 
             }
         }
+        return super.renderAttackHud2(context,playerEntity,scaledWidth,scaledHeight,ticks,vehicleHeartCount,flashAlpha,otherFlashAlpha);
     }
 
     public float getSuckDamage(){

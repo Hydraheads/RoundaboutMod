@@ -890,7 +890,7 @@ public class VampireFate extends VampiricFate {
     }
 
     @Override
-    public void renderAttackHud(GuiGraphics context, Player playerEntity,
+    public boolean renderAttackHud2(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
 
@@ -911,10 +911,10 @@ public class VampireFate extends VampiricFate {
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
                 int finalATimeInt = Math.round(finalATime * 15);
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, barTexture, finalATimeInt, 6);
-                return;
+                return true;
             }
         }
-        super.renderAttackHud(context,playerEntity,scaledWidth,scaledHeight,ticks,vehicleHeartCount,flashAlpha,otherFlashAlpha);
+        return super.renderAttackHud2(context,playerEntity,scaledWidth,scaledHeight,ticks,vehicleHeartCount,flashAlpha,otherFlashAlpha);
     }
 
     public AbilityIconInstance drawSingleGUIIconVamp(GuiGraphics context, int size, int startingLeft, int startingTop, int currentLevel, int maxLevel,

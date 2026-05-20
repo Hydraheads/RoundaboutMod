@@ -615,10 +615,10 @@ public class ZombieFate extends VampiricFate {
     }
 
     @Override
-    public void renderAttackHud(GuiGraphics context, Player playerEntity,
+    public boolean renderAttackHud2(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
-        super.renderAttackHud(context,playerEntity,scaledWidth,scaledHeight,ticks,vehicleHeartCount,flashAlpha,otherFlashAlpha);
+        return super.renderAttackHud2(context,playerEntity,scaledWidth,scaledHeight,ticks,vehicleHeartCount,flashAlpha,otherFlashAlpha);
     }
 
     @Override
