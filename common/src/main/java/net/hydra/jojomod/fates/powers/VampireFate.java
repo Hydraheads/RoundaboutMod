@@ -430,7 +430,7 @@ public class VampireFate extends VampiricFate {
                         stack.shrink(1);
                     }
                     self.heal(1f);
-                    setCooldown(PowerIndex.FATE_EXTRA, 200);
+                    setCooldown(PowerIndex.FATE_EXTRA, ClientNetworking.getAppropriateConfig().vampireSettings.flowerHealCooldown);
                     self.level().playSound(null, self.blockPosition(), ModSounds.VAMPIRE_CAMO_EVENT,
                             SoundSource.PLAYERS, 1F, 1.8F);
                     setPowerNone();
