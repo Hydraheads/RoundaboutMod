@@ -82,15 +82,17 @@ public abstract class TimeStopProjectile extends Entity implements IProjectileAc
     private void roundabout$onHitEntityHattanExtra(EntityHitResult $$0, CallbackInfo ci) {
         Entity entity = $$0.getEntity();
         Projectile PRJ = (Projectile) (Object) this;
+        if(isManhattanProjectile) {
+           // Roundabout.LOGGER.info("PROJECTILE HITTIN HARD");
+        }
         doExtraDamageManhattan($$0);
     }
 
     private void doExtraDamageManhattan(EntityHitResult $$0){
         Entity entity = $$0.getEntity();
         Projectile PRJ = (Projectile) (Object) this;
-        if(isManhattanProjectile && !(PRJ instanceof AbstractArrow)) {
-           // entity.hurt(damageSources().generic(/*PRJ, entity*/), 1);
-            Roundabout.LOGGER.info("PROJECTILE HITTIN HARD");
+        if(isManhattanProjectile) {
+
         }
     }
 
@@ -176,6 +178,10 @@ public abstract class TimeStopProjectile extends Entity implements IProjectileAc
     protected boolean canHitEntity(Entity $$0){
         return false;
     }
+
+/*    @Shadow
+    protected void onHitEntity(EntityHitResult $$0){
+    }*/
 
     public TimeStopProjectile(EntityType<?> $$0, Level $$1) {
         super($$0, $$1);
