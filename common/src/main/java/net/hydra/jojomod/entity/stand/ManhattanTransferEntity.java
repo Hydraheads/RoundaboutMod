@@ -9,6 +9,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -401,7 +402,7 @@ public class ManhattanTransferEntity extends StandEntity {
                                          boolean playSounds, float mult, boolean canGiveYouItem){
         thrower.playSound(ModSounds.MANHATTAN_DEFLECTION_EVENT, 1.0F, (thrower.random.nextFloat() * 0.2F + 0.7F));
      if(!thrower.level().isClientSide) {
-         if (item.getItem() instanceof ArrowItem && !(item.getItem() instanceof RoundaboutArrowItem)) {
+         if (item.getItem() instanceof ArrowItem) {
              ArrowItem $$10 = (ArrowItem) item.getItem();
              AbstractArrow $$11 = $$10.createArrow(thrower.level(), item, thrower);
              $$11.setPos(pos);
@@ -469,7 +470,6 @@ public class ManhattanTransferEntity extends StandEntity {
              else{
                  HarpoonEntity $$7 = new HarpoonEntity(thrower.level(), thrower, item);
                  $$7.setPos(pos);
-               //  $$7.setItem(item);
                  $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
                  $$7.setOwner(thrower.getUser());
                  thrower.level().addFreshEntity($$7);

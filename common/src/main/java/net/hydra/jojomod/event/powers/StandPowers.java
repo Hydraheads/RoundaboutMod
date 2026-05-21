@@ -778,6 +778,8 @@ public class StandPowers extends AbilityScapeBasis {
             return ModSounds.GLAIVE_CHARGE_EVENT;
         } else if (soundChoice == SoundIndex.SWORD_UNSHEATHE) {
             return ModSounds.ANUBIS_UNSHEATHE_EVENT;
+        }else if (soundChoice == SoundIndex.MANHATTAN_RAIN) {
+            return ModSounds.MANHATTAN_DODGING_EVENT;
         } else if (soundChoice == SoundIndex.REVOLVER_RELOAD) {
             return ModSounds.SNUBNOSE_RELOAD_EVENT;
         } else if (soundChoice == SoundIndex.SNIPER_RELOAD) {

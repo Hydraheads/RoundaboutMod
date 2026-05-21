@@ -59,6 +59,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static net.hydra.jojomod.client.ClientUtil.playSound;
+import static net.hydra.jojomod.event.index.SoundIndex.MANHATTAN_RAIN;
 
 public class PowersManhattanTransfer extends NewDashPreset {
     public PowersManhattanTransfer(LivingEntity self) {
@@ -322,11 +323,30 @@ public class PowersManhattanTransfer extends NewDashPreset {
         }
     }
 
+    public boolean isSoundRainInterrupted = false;
+
     @Override
     public void tickPower() {
         super.tickPower();
         if(XtraSpdTick > 1){
             XtraSpdTick--;
+        }
+        if(this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME){
+            System.out.println(ME.DodgeRainTicks);
+            if(ME.isInRain()) {
+                if(isSoundRainInterrupted){
+                    isSoundRainInterrupted = false;
+                }
+                    if (ME.DodgeRainTicks >= 1) {
+                        ME.DodgeRainTicks--;
+                    } else if (ME.DodgeRainTicks < 1) {
+                        ME.setDodgeRainTicks(440);
+                        ((StandUser) ME).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.MANHATTAN_RAIN, 12, false);
+                    }
+            } if(!ME.isInRain()){
+                ME.setDodgeRainTicks(0);
+                ((StandUser) ME).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 100, false);
+            }
         }
         if (this.getStandEntity(this.getSelf()) != null) {
             Vec3 vec3 = new Vec3(walkingSpeed, 0, walkingSpeed);
@@ -576,7 +596,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public SoundEvent getSoundFromByte(byte soundChoice){
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
             return ModSounds.MANHATTAN_SUMMON_EVENT;
-        } else if (soundChoice == MANHATTAN_IN_RAIN) {
+        } else if (soundChoice == MANHATTAN_RAIN) {
             return ModSounds.MANHATTAN_DODGING_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
