@@ -2288,7 +2288,8 @@
   "config.roundabout.fixModLoaderCreatedBugs.name": "Fix Modloader Bugs",
   "config.roundabout.fixModLoaderCreatedBugs.desc": "Forge especially replaces a lot of vanilla code with its own creating new bugs. For instance, on forge you can block the warden without your shield being disabled (this is not true of vanilla). Turning on this setting fixes any bug I find like that which is actively causing the mod problems.",
 
-
+  "config.roundabout.enableKillerQueen.name": "Enable Stand",
+  "config.roundabout.enableKillerQueen.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableMagiciansRed.name": "Enable Stand",
   "config.roundabout.enableMagiciansRed.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableSoftAndWet.name": "Enable Stand",
@@ -3006,6 +3007,10 @@
   "config,roundabout.moldDMGPlayersMultiplier.name": "Mold Damage Multiplier (Players)",
   "config,roundabout.moldDMGPlayersMultiplier.desc": "Controls the damage players take when they fall in green days mold fields",
 
+  "config,roundabout.enableBitesTheDustDayMode.name": "Enable Bites the dust (Day Mode)",
+  "config,roundabout.enableBitesTheDustDayMode.desc": "Turn on/off the Bites the Dust Day mode, that restart the day of the game when detonating (disabled by default)",
+  "config,roundabout.bombOverlayHideOnF1.name": "Bomb Overlays hides on F1",
+  "config,roundabout.bombOverlayHideOnF1.desc": "Turn on/off the action of hiding the bomb overlay when pressing F1",
 
   "config.roundabout.theWorldAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.theWorldAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
@@ -3239,6 +3244,7 @@
   "config.roundabout.standLevelingSettings.name": "Stand Leveling",
   "config.roundabout.anubisSettings.name": "Anubis",
   "config.roundabout.softAndWetSettings.name": "Soft And Wet",
+  "config.roundabout.killerQueenSettings.name": "Killer Queen (W.I.P)",
   "config.roundabout.magiciansRedSettings.name": "Magician's Red",
   "config.roundabout.walkingHeartSettings.name": "Walking Heart",
   "config.roundabout.greenDaySettings.name": "Green Day",

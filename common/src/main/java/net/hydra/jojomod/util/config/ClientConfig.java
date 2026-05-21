@@ -104,8 +104,8 @@ public class ClientConfig implements Cloneable {
     public ClientConfig.AnubisSettings anubisSettings;
     @NestedOption(group = "modded")
     public ClientConfig.TimeStopSettings timeStopSettings;
-    /*@NestedOption(group = "modded")
-    public ClientConfig.KillerQueenSettings killerQueenSettings;*/
+    @NestedOption(group = "modded")
+    public ClientConfig.KillerQueenSettings killerQueenSettings;
   /*  @NestedOption(group = "modded")
     public ClientConfig.StandTweakSettings standTweakSettings; */
 
@@ -210,10 +210,10 @@ public class ClientConfig implements Cloneable {
         @BooleanOption(group = "inherit", value = true)
         public Boolean simpleTimeStopShader;
     }
-    /*public static class KillerQueenSettings {
-    	@BooleanOption(group = "inherit", value = false)
-        public Boolean canBitesTheDustDayMode;
-    }*/
+    public static class KillerQueenSettings {
+    	@BooleanOption(group = "inherit", value = true)
+        public Boolean bombOverlayHideOnF1;
+    }
     public static class AnubisSettings {
         @BooleanOption(group = "inherit", value = false)
         public Boolean anubisPogoCounter;

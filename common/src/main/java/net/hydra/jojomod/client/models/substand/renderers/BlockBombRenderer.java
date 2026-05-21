@@ -10,8 +10,8 @@ import net.hydra.jojomod.client.models.stand.renderers.StandRenderer;
 import net.hydra.jojomod.client.models.substand.BlockBombModel;
 import net.hydra.jojomod.client.models.substand.LeftSeperatedArmSlimModel;
 import net.hydra.jojomod.entity.substand.BlockBombEntity;
-import net.hydra.jojomod.entity.substand.LeftSeperatedArmSlimEntity;
-import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
+import net.hydra.jojomod.util.config.ClientConfig;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -44,8 +44,10 @@ public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
     
     public void render(BlockBombEntity blockBombEntity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         Player ClientPlayer = Minecraft.getInstance().player;
+        boolean hidesOnF1 = ConfigManager.getClientConfig().killerQueenSettings.bombOverlayHideOnF1;
         
-    	if (ClientUtil.canSeeStands(ClientPlayer) && Minecraft.getInstance().options.hideGui == false) {
+        
+    	if (ClientUtil.canSeeStands(ClientPlayer) && !(Minecraft.getInstance().options.hideGui && hidesOnF1)) {
         	Player UserPlayer =((Player)blockBombEntity.getUser());
         	if (UserPlayer == ClientPlayer) {
         		super.render(blockBombEntity, 0, partialTicks, matrixStack, vertexConsumerProvider, i);	
