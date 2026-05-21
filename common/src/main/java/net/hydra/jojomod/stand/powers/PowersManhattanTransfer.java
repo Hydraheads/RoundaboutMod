@@ -332,7 +332,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
             XtraSpdTick--;
         }
         if(this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME){
-            System.out.println(ME.DodgeRainTicks);
             if(ME.isInRain()) {
                 if(isSoundRainInterrupted){
                     isSoundRainInterrupted = false;

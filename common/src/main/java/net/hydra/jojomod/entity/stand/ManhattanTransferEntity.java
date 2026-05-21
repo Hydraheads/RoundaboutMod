@@ -344,29 +344,29 @@ public class ManhattanTransferEntity extends StandEntity {
                         }
                     }
                 }
-            }
-            if(hasItem && this.canAcquireHeldItem){
-                if(!this.getHeldItemManhattanFull().isEmpty() && !this.getHeldItemManhattanFull().isEmpty()){
+                //
+            if (hasItem && this.canAcquireHeldItem) {
+                    if (!this.getHeldItemManhattanFull().isEmpty() && !this.getHeldItemManhattanFull().isEmpty()) {
+                        double $$3 = this.getEyeY() - 0.3F;
+                        ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), this.getHeldItemManhattanFull());
+                        $$4.setThrower(this.getUUID());
+                        this.level().addFreshEntity($$4);
+                        this.setHeldItemManhattanFull(ItemStack.EMPTY);
+                    }
+                } else if (!this.canAcquireHeldItem) {}
+                if (hasItemTwo) {
                     double $$3 = this.getEyeY() - 0.3F;
                     ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), this.getHeldItemManhattanFull());
                     $$4.setThrower(this.getUUID());
                     this.level().addFreshEntity($$4);
                     this.setHeldItemManhattanFull(ItemStack.EMPTY);
+                    hasItemTwo = false;
                 }
-            }
-            else if(!this.canAcquireHeldItem){}
-            if(hasItemTwo){
-                double $$3 = this.getEyeY() - 0.3F;
-                ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), this.getHeldItemManhattanFull());
-                $$4.setThrower(this.getUUID());
-                this.level().addFreshEntity($$4);
-                this.setHeldItemManhattanFull(ItemStack.EMPTY);
-                hasItemTwo = false;
-            }
 
-            if(success) {
-                if(direct instanceof AbstractArrow AA) {
-                    manhattanDamageIncipit = amount;
+                if (success) {
+                    if (direct instanceof AbstractArrow AA) {
+                        manhattanDamageIncipit = amount;
+                    }
                 }
             }
         }
