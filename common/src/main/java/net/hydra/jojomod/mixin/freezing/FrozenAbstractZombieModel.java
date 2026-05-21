@@ -21,7 +21,7 @@ public abstract class FrozenAbstractZombieModel<T extends Monster> extends Human
                     shift = At.Shift.BEFORE), cancellable = true)
     public void roundabout$setupAnimFreeze3(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
         if ($$0 != null && HeatUtil.isBodyFrozen($$0)) {
-            ClientUtil.animateZombieArmsNoBob(this.leftArm, this.rightArm, this.isAggressive($$0), this.attackTime, $$3);
+            ClientUtil.animateZombieArmsNoBob(this.leftArm, this.rightArm, this.isAggressive($$0), 0, $$3);
             ci.cancel();
         }
     }
