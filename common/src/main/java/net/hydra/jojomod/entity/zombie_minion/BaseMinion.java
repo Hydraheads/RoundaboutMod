@@ -103,7 +103,7 @@ public class BaseMinion extends PathfinderMob {
     }
     public void addBehaviourGoals() {
         this.goalSelector.addGoal(1, new AvoidPanicGoal<LivingEntity>(this, LivingEntity.class, 6.0F, (double)1.0F, 1.2));;
-        this.targetSelector.addGoal(3, new HurtByTargetGoal(this).setAlertOthers());
+        this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::canGetMadAt));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false, this::canGetMadAt));
 
@@ -294,7 +294,7 @@ public class BaseMinion extends PathfinderMob {
                 }
             }
         }
-        if (getController() <= 0) {
+        if (getController() <= 0 && controller2 == null) {
             if (player instanceof ServerPlayer sp && FateTypes.isVampire(sp)) {
                 sp.displayClientMessage(Component.translatable("text.roundabout.stole_minion"), true);
                 setController(sp);
