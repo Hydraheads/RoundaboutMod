@@ -291,7 +291,6 @@ public class ManhattanTransferEntity extends StandEntity {
                                 RE.getItem().shrink(1);
                                 RE.discard();
                             }*/
-
                     } else {
                         success = false;
                         if (direct instanceof AbstractArrow AA) {
@@ -309,6 +308,8 @@ public class ManhattanTransferEntity extends StandEntity {
                                 this.setHeldItemManhattanFull(bulletItem);
                                 hasItemTwo = true;
                                 AA.discard();
+                            } else if (AA instanceof IronBallEntity IEE) {
+                                this.getUser().hurt(source, amount / 2);
                             }
                         } else if (direct instanceof ThrownObjectEntity TO) {
                             ItemStack ii = TO.getItem();
