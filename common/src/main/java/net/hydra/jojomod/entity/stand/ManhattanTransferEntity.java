@@ -424,40 +424,40 @@ public class ManhattanTransferEntity extends StandEntity {
          }
          else if (item.getItem() instanceof AmmoItem) {
              AmmoItem $$10 = (AmmoItem) item.getItem();
-             RoundaboutBulletEntity $$8 = new RoundaboutBulletEntity(thrower.level(), thrower);
-             $$8.shootFromRotation(thrower, xRot, yRot, 0.0F,3.5F, 1.3F);
+             RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity(thrower.level(), thrower);
+             $$7.shootFromRotation(thrower, xRot, yRot, 0.0F,3.5F, 1.3F);
 
              if(item.getItem() instanceof SnubnoseAmmoItem){
                  if(thrower.isSnubnose){
-                     $$8.setAmmoType(RoundaboutBulletEntity.SNUBNOSE);
+                     $$7.setAmmoType(RoundaboutBulletEntity.SNUBNOSE);
                  }
                  else{
-                     $$8.setAmmoType(RoundaboutBulletEntity.COLT);
+                     $$7.setAmmoType(RoundaboutBulletEntity.COLT);
                  }
              } else if(item.getItem() instanceof SniperAmmoItem){
-                 $$8.setAmmoType(RoundaboutBulletEntity.SNIPER);
+                 $$7.setAmmoType(RoundaboutBulletEntity.SNIPER);
              } else if(item.getItem() instanceof TommyAmmoItem){
-                 $$8.setAmmoType(RoundaboutBulletEntity.TOMMY_GUN);
+                 $$7.setAmmoType(RoundaboutBulletEntity.TOMMY_GUN);
              }
-             thrower.level().addFreshEntity($$8);
-             $$8.setOwner(thrower.getUser());
+             thrower.level().addFreshEntity($$7);
+             $$7.setOwner(thrower.getUser());
          }
          else if (item.getItem() instanceof EnderpearlItem){
-             ThrownEnderpearl $$2 = new ThrownEnderpearl(thrower.level(), thrower);
-             $$2.setPos(pos);
-             $$2.setItem(item);
-             $$2.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
+             ThrownEnderpearl $$7 = new ThrownEnderpearl(thrower.level(), thrower);
+             $$7.setPos(pos);
+             $$7.setItem(item);
+             $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
 
-             $$2.setOwner(thrower.getUser());
-             thrower.level().addFreshEntity($$2);
+             $$7.setOwner(thrower.getUser());
+             thrower.level().addFreshEntity($$7);
          }
          else if (item.getItem() instanceof SnowballItem){
-             Snowball $$4 = new Snowball(thrower.level(), thrower);
-             $$4.setPos(pos);
-             $$4.setItem(item);
-             $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
-             $$4.setOwner(thrower.getUser());
-             thrower.level().addFreshEntity($$4);
+             Snowball $$7 = new Snowball(thrower.level(), thrower);
+             $$7.setPos(pos);
+             $$7.setItem(item);
+             $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
+             $$7.setOwner(thrower.getUser());
+             thrower.level().addFreshEntity($$7);
          }else if(item.getItem() instanceof TridentItem || item.getItem() instanceof HarpoonItem){
              if(item.getItem() instanceof TridentItem){
                  ThrownTrident $$7 = new ThrownTrident(thrower.level(), thrower, item);
@@ -474,6 +474,12 @@ public class ManhattanTransferEntity extends StandEntity {
                  $$7.setOwner(thrower.getUser());
                  thrower.level().addFreshEntity($$7);
              }
+         }else if (item.is(Items.IRON_INGOT)){
+             IronBallEntity $$7 = new IronBallEntity(thrower.level(), thrower, item);
+             $$7.setPos(pos);
+             $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
+             $$7.setOwner(thrower.getUser());
+             thrower.level().addFreshEntity($$7);
          }
              else {
             getCanPlace = false;
