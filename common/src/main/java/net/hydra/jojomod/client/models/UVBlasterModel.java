@@ -82,9 +82,17 @@ public class UVBlasterModel<T extends Entity> extends PsuedoHierarchicalModel {
         return new ResourceLocation(Roundabout.MOD_ID,
                 "textures/entity/other_layers/uv_blasters.png");
     }
+    public ResourceLocation getTextureLocation2(){
+        return new ResourceLocation(Roundabout.MOD_ID,
+                "textures/entity/other_layers/uv_blasters_overlay.png");
+    }
 
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int light, float r, float g, float b, float heyFull) {
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucentCull(getTextureLocation()));
+        root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+    }
+    public void render2(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int light, float r, float g, float b, float heyFull) {
+        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucentCull(getTextureLocation2()));
         root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
     }
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,

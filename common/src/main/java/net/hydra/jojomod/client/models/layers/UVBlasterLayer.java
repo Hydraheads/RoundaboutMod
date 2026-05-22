@@ -60,6 +60,8 @@ public class UVBlasterLayer<T extends LivingEntity, A extends HumanoidModel<T>> 
         float b = isHurt ? 0.0F : 1.0F;
         ModStrayModels.UV_BLASTER.render(livent, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, heyFull);
+        ModStrayModels.UV_BLASTER.render2(livent, partialTicks, poseStack, bufferSource, 15728880,
+                r, g, b, heyFull);
         poseStack.popPose();
     }
 }
