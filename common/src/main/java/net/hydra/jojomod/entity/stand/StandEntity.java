@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.access.NoVibrationEntity;
+import net.hydra.jojomod.entity.projectile.IronBallEntity;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.ModItems;
@@ -20,7 +21,9 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.Minecart;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
@@ -771,6 +774,13 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                         $$4.setThrower(this.getUUID());
                         this.level().addFreshEntity($$4);
                         ME.setHeldItemManhattan(ItemStack.EMPTY);
+                    } else if (ME.getHeldItemManhattan().is(Items.IRON_INGOT)){
+                        double $$3 = this.getEyeY() - 0.3F;
+                        IronBallEntity $$7 = new IronBallEntity(ME.level(), ME, ME.getHeldItemManhattan());
+                        $$7.shootFromRotation(ME, ME.getXRot(), ME.getYRot(), -3.0F, 0.025F, 0.0F);
+                        $$7.setPos(ME.position());
+                        $$7.setOwner(ME.getUser());
+                        ME.level().addFreshEntity($$7);
                     }
                 }
             }
@@ -801,6 +811,13 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                     $$4.setThrower(this.getUUID());
                     this.level().addFreshEntity($$4);
                     ME.setHeldItemManhattan(ItemStack.EMPTY);
+                } else if (ME.getHeldItemManhattan().is(Items.IRON_INGOT)){
+                    double $$3 = this.getEyeY() - 0.3F;
+                    IronBallEntity $$7 = new IronBallEntity(ME.level(), ME, ME.getHeldItemManhattan());
+                    $$7.setPos(ME.position());
+                    $$7.shootFromRotation(ME, ME.getXRot(), ME.getYRot(), -3.0F, 0.025F, 0.0F);
+                    $$7.setOwner(ME.getUser());
+                    ME.level().addFreshEntity($$7);
                 }
             }
         }
