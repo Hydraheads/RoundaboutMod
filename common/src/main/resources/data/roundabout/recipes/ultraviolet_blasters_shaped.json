@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "N": {
+      "item": "roundabout:aja"
+    },
+    "O": {
+      "item": "minecraft:iron_ingot"
+    },
+    "P": {
+      "item": "minecraft:glass_pane"
+    },
+    "Q": {
+      "item": "minecraft:glowstone"
+    }
+  },
+  "pattern": [
+    "P P",
+    "OOO",
+    "NQN"
+  ],
+  "result": {
+    "count": 1,
+    "item": "roundabout:ultraviolet_blaster"
+  },
+  "show_notification": true
+}

@@ -465,8 +465,7 @@ public class ForgeItems {
             () -> new SignBlockItem(ForgeBlocks.STREET_SIGN_YIELD.get(), new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> STREET_SIGN_DANGER_BLOCK_ITEM = addToBuildingTab(ITEMS.register("street_sign_danger_item",
             () -> new SignBlockItem(ForgeBlocks.STREET_SIGN_DANGER.get(), new Item.Properties().stacksTo(1))));
-    public static final RegistryObject<Item> LIGHT_BULB = addToTab(ITEMS.register("light_bulb",
-            () -> new Item(new Item.Properties())));
+
     public static final RegistryObject<Item> CEILING_LIGHT_BLOCK_ITEM = addToBuildingTab(ITEMS.register("ceiling_light",
             () -> new BlockItem(ForgeBlocks.CEILING_LIGHT.get(),
                     new Item.Properties()

@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_redstone_thing": {
+    "has_aja": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:redstone"
+              "roundabout:aja"
             ]
           }
         ]
@@ -15,20 +15,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "roundabout:light_bulb_shapeless"
+        "recipe": "roundabout:ultraviolet_blasters_shaped"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_redstone_thing",
+      "has_aja",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "roundabout:light_bulb_shapeless"
+      "roundabout:ultraviolet_blasters_shaped"
     ]
   },
   "sends_telemetry_event": false

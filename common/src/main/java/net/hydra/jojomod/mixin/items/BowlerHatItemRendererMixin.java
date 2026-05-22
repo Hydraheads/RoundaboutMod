@@ -19,11 +19,9 @@ public class BowlerHatItemRendererMixin {
     @Inject(method = "render(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IILnet/minecraft/client/resources/model/BakedModel;)V", at = @At("HEAD"), cancellable = true)
 
     private void hideHatWhenHeld(ItemStack stack, ItemDisplayContext transformType, boolean leftHanded, PoseStack matrices, MultiBufferSource buffer, int packedLight, int packedOverlay, BakedModel model, CallbackInfo ci) {
-
         if (!stack.isEmpty() &&
                 (stack.getItem() instanceof BowlerHatItem || stack.getItem() instanceof UltravioletBlasterItem)
         ) {
-
             if (transformType == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND || transformType == ItemDisplayContext.THIRD_PERSON_LEFT_HAND) {
                 ci.cancel();
             }
