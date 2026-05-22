@@ -294,6 +294,9 @@ public class ManhattanTransferEntity extends StandEntity {
                     } else {
                         success = false;
                         if (direct instanceof AbstractArrow AA) {
+                            if(AA instanceof  IronBallEntity){
+                                    return this.getUser().hurt(source, amount / 2);
+                            }
                             ItemStack ii = ((IAbstractArrowAccess) AA).roundabout$GetPickupItem();
                             if (!ii.isEmpty()) {
                                 if (AA.pickup.equals(AbstractArrow.Pickup.ALLOWED)) {
@@ -308,8 +311,6 @@ public class ManhattanTransferEntity extends StandEntity {
                                 this.setHeldItemManhattanFull(bulletItem);
                                 hasItemTwo = true;
                                 AA.discard();
-                            } else if (AA instanceof IronBallEntity IEE) {
-                                this.getUser().hurt(source, amount / 2);
                             }
                         } else if (direct instanceof ThrownObjectEntity TO) {
                             ItemStack ii = TO.getItem();
