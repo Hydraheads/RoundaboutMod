@@ -2,6 +2,8 @@ package net.hydra.jojomod.client.models.layers;
 
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.item.BowlerHatItem;
 import net.hydra.jojomod.item.UltravioletBlasterItem;
@@ -36,7 +38,10 @@ public class UVBlasterLayer<T extends LivingEntity, A extends HumanoidModel<T>> 
             if (!$$18) {
                 return;
             }
+
         }
+        if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
+            return;
         LivingEntity livent = entity;
         float heyFull = 1;
 
