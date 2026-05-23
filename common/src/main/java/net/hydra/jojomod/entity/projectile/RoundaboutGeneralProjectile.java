@@ -142,6 +142,14 @@ public class RoundaboutGeneralProjectile extends AbstractHurtingProjectile imple
             this.discard();
         }
     }
+
+    public boolean killAtZero(){
+        return true;
+    }
+
+    public boolean needsStandUser(){
+        return true;
+    }
     public void tick() {
         boolean client = this.level().isClientSide();
         if (!client){
@@ -152,13 +160,15 @@ public class RoundaboutGeneralProjectile extends AbstractHurtingProjectile imple
             if (isEffectivelyInWater()){
                 tickWater();
             }
-            if (this.getStandUser() != null){
-                if (MainUtil.cheapDistanceTo2(this.getX(),this.getZ(),this.standUser.getX(),this.standUser.getZ()) > 80
-                        || !this.getStandUser().isAlive() || this.getStandUser().isRemoved()){
+            if (needsStandUser()) {
+                if (this.getStandUser() != null) {
+                    if (MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), this.standUser.getX(), this.standUser.getZ()) > 80
+                            || !this.getStandUser().isAlive() || this.getStandUser().isRemoved()) {
+                        this.discard();
+                    }
+                } else {
                     this.discard();
                 }
-            } else {
-                this.discard();
             }
         }
 
@@ -170,8 +180,10 @@ public class RoundaboutGeneralProjectile extends AbstractHurtingProjectile imple
             if (isEffectivelyInWater()){
                 tickWater();
             }
-            if (this.getDeltaMovement().equals(Vec3.ZERO)){
-                this.discard();
+            if (killAtZero()) {
+                if (this.getDeltaMovement().equals(Vec3.ZERO)) {
+                    this.discard();
+                }
             }
         }
     }

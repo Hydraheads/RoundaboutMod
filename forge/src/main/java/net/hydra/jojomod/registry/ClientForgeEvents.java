@@ -107,6 +107,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.STAND_FIREBALL.get(), StandFireballRenderer::new);
         event.registerEntityRenderer(ForgeEntities.EVIL_AURA_PROJECTILE.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.RIPPER_EYES_PROJECTILE.get(), RipperEyesRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.ULTRAVIOLET_PROJECTILE.get(), UVBeamRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BLOOD_SPLATTER.get(), BloodSplatterRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GASOLINE_CAN.get(), GasolineCanRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_OBJECT.get(), ThrownObjectRenderer::new);
@@ -236,6 +237,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.STAND_FIREBALL_LAYER, StandFireballModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.IRON_BALL_LAYER, StandFireballModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.RIPPER_EYES_LAYER, RipperEyesModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.UV_LAYER, UVModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.GASOLINE_LAYER, GasolineCanModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.ZOMBIE_AESTHETICIAN_LAYER, ZombieAestheticianModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STEVE_LAYER, PlayerSteveModel::getTexturedModelData);

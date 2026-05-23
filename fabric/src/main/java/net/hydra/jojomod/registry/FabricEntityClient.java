@@ -104,6 +104,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.STAND_FIREBALL, StandFireballRenderer::new);
         EntityRendererRegistry.register(FabricEntities.EVIL_AURA_PROJECTILE, NoRenderer::new);
         EntityRendererRegistry.register(FabricEntities.RIPPER_EYES_PROJECTILE, RipperEyesRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.ULTRAVIOLET_PROJECTILE, UVBeamRenderer::new);
         EntityRendererRegistry.register(FabricEntities.STAND_ARROW, StandArrowRenderer::new);
         EntityRendererRegistry.register(FabricEntities.IRON_BALL, IronBallRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_OBJECT, ThrownObjectRenderer::new);
@@ -229,6 +230,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STAND_FIREBALL_LAYER, StandFireballModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.IRON_BALL_LAYER, StandFireballModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.RIPPER_EYES_LAYER, RipperEyesModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.UV_LAYER, UVModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GASOLINE_LAYER, GasolineCanModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ZOMBIE_AESTHETICIAN_LAYER, ZombieAestheticianModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STEVE_LAYER, PlayerSteveModel::getTexturedModelData);

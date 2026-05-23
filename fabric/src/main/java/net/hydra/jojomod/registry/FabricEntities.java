@@ -611,6 +611,13 @@ public class FabricEntities {
                     EntityType.Builder.<RipperEyesProjectile>of(RipperEyesProjectile::new, MobCategory.MISC).
                             sized(1F, 1F).clientTrackingRange(15).build(Roundabout.MOD_ID+":ripper_eyes")
             );
+    public static final EntityType<UltravioletProjectile> ULTRAVIOLET_PROJECTILE =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "uv"),
+                    EntityType.Builder.<UltravioletProjectile>of(UltravioletProjectile::new, MobCategory.MISC).
+                            sized(1F, 1F).clientTrackingRange(15).build(Roundabout.MOD_ID+":uv")
+            );
         public static final EntityType<GasolineSplatterEntity> GASOLINE_SPLATTER =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -893,6 +900,7 @@ public class FabricEntities {
                 ModEntities.STAND_FIREBALL = STAND_FIREBALL;
                 ModEntities.EVIL_AURA_PROJECTILE = EVIL_AURA_PROJECTILE;
                 ModEntities.RIPPER_EYES_PROJECTILE = RIPPER_EYES_PROJECTILE;
+                ModEntities.ULTRAVIOLET_PROJECTILE = ULTRAVIOLET_PROJECTILE;
                 ModEntities.GASOLINE_CAN = GASOLINE_CAN;
                 ModEntities.GASOLINE_SPLATTER = GASOLINE_SPLATTER;
                 ModEntities.BLOOD_SPLATTER = BLOOD_SPLATTER;
