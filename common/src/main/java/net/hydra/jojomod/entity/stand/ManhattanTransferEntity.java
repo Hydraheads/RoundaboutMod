@@ -24,6 +24,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -584,12 +585,49 @@ public class ManhattanTransferEntity extends StandEntity {
     }
 
     public final AnimationState rain_dodging_manhattan = new AnimationState();
+    public final AnimationState slow_manhattan = new AnimationState();
+    public final AnimationState forward_manhattan_incipit = new AnimationState();
+    public final AnimationState forward_manhattan_loop = new AnimationState();
+    public final AnimationState back_manhattan_incipit = new AnimationState();
+    public final AnimationState back_manhattan_loop = new AnimationState();
+    public final AnimationState back_manhattan_stop = new AnimationState();
+    public final AnimationState forward_manhattan_stop = new AnimationState();
+    public final AnimationState left_manhattan_incipit = new AnimationState();
+    public final AnimationState left_manhattan_loop = new AnimationState();
+    public final AnimationState left_manhattan_stop = new AnimationState();
+    public final AnimationState right_manhattan_incipit = new AnimationState();
+    public final AnimationState right_manhattan_loop = new AnimationState();
+    public final AnimationState right_manhattan_stop = new AnimationState();
+
+    public int animationSetupTicks = 0;
+    public void setAnimationSetupTicks(int vanm){DodgeRainTicks = vanm;}
+
+    public boolean isPressingW = false;
+    public boolean isPressingA = false;
+    public boolean isPressingS = false;
+    public boolean isPressingD = false;
+
 
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
+        Options options = Minecraft.getInstance().options;
         if(this.getUserData(this.getUser()) != null && this.getUser() != null) {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                AnimationState $$0 = this.slow_manhattan;
+                AnimationState $$1 = this.forward_manhattan_incipit;
+                AnimationState $$2 = this.forward_manhattan_loop;
+                AnimationState $$3 = this.back_manhattan_incipit;
+                AnimationState $$4 = this.back_manhattan_loop;
+                AnimationState $$5 = this.back_manhattan_stop;
+                AnimationState $$6 = this.forward_manhattan_stop;
+                AnimationState $$7 = this.left_manhattan_incipit;
+                AnimationState $$8 = this.left_manhattan_stop;
+                AnimationState $$9 = this.left_manhattan_loop;
+                AnimationState $$10 = this.right_manhattan_incipit;
+                AnimationState $$11 = this.right_manhattan_stop;
+                AnimationState $$12 = this.right_manhattan_loop;
+
                 if (!PM.isActive()) {
                     //this.rain_dodging_manhattan.stop();
                 } else {
@@ -598,6 +636,124 @@ public class ManhattanTransferEntity extends StandEntity {
                     }
                     if (!isInRain()) {
                         this.rain_dodging_manhattan.stop();
+
+                        if(PM.isPiloting()) {
+                            if (options.keyUp.isDown()) {
+                                isPressingW = true;
+                            } if (!options.keyUp.isDown()) {
+                                isPressingW = false;
+                            }
+                            if (options.keyDown.isDown()) {
+                                isPressingS = true;
+                            } if (!options.keyDown.isDown()) {
+                                isPressingS = false;
+                            }
+                            if (options.keyLeft.isDown()) {
+                                isPressingA = true;
+                            } if (!options.keyLeft.isDown()) {
+                                isPressingA = false;
+                            }
+                            if (options.keyRight.isDown()) {
+                                isPressingD = true;
+                            } if (!options.keyRight.isDown()) {
+                                isPressingD = false;
+                            }
+
+                            if (isPressingW && !isPressingS) {
+                                $$1.startIfStopped(this.tickCount);
+                                $$2.startIfStopped(this.tickCount);
+                                $$4.stop();
+                                $$6.stop();
+                                $$0.stop();
+                            } else {
+                                $$1.stop();
+                                $$2.stop();
+                                $$6.startIfStopped(this.tickCount);
+                                $$0.startIfStopped(this.tickCount);
+                            }
+                            if (isPressingS && !isPressingW) {
+                                $$3.startIfStopped(this.tickCount);
+                                $$4.startIfStopped(this.tickCount);
+                                $$2.stop();
+                                $$0.stop();
+                                $$5.stop();
+                            } else {
+                                $$3.stop();
+                                $$4.stop();
+                                $$5.startIfStopped(this.tickCount);
+                                $$0.startIfStopped(this.tickCount);
+                            }
+
+                            if(isPressingW && isPressingS){
+                                $$1.stop();
+                                $$2.stop();
+                                $$3.stop();
+                                $$4.stop();
+                                if($$2.isStarted()){
+                                    $$6.startIfStopped(this.tickCount);
+                                }
+                                if($$4.isStarted()){
+                                    $$5.startIfStopped(this.tickCount);
+                                }
+                                $$0.startIfStopped(this.tickCount);
+                            }
+
+                            if (isPressingA && !isPressingD) {
+                                $$7.startIfStopped(this.tickCount);
+                                $$9.startIfStopped(this.tickCount);
+                                $$12.stop();
+                                $$8.stop();
+                                $$0.stop();
+                            } else {
+                                $$8.startIfStopped(this.tickCount);
+                                $$0.startIfStopped(this.tickCount);
+                                $$7.stop();
+                                $$9.stop();
+                            }
+
+                            if (isPressingD && !isPressingA) {
+                                $$10.startIfStopped(this.tickCount);
+                                $$12.startIfStopped(this.tickCount);
+                                $$9.stop();
+                                $$11.stop();
+                                $$0.stop();
+                            } else {
+                                $$11.startIfStopped(this.tickCount);
+                                $$0.startIfStopped(this.tickCount);
+                                $$10.stop();
+                                $$12.stop();
+                            }
+
+                            if (isPressingD && isPressingA) {
+                                $$7.stop();
+                                $$9.stop();
+                                $$10.stop();
+                                $$12.stop();
+                                if($$9.isStarted()){
+                                    $$8.startIfStopped(this.tickCount);
+                                }
+                                if($$12.isStarted()){
+                                    $$11.startIfStopped(this.tickCount);
+                                }
+                                $$0.startIfStopped(this.tickCount);
+                            }
+
+                        } else{
+                            $$0.startIfStopped(this.tickCount);
+                            $$2.stop();
+                            $$1.stop();
+                            $$3.stop();
+                            $$4.stop();
+                            $$5.stop();
+                            $$6.stop();
+                            $$7.stop();
+                            $$8.stop();
+                            $$9.stop();
+                            $$10.stop();
+                            $$11.stop();
+                            $$12.stop();
+                        }
+
                     }
                 }
             }
