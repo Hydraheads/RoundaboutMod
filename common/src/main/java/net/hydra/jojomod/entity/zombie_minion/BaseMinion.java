@@ -574,6 +574,7 @@ public class BaseMinion extends PathfinderMob {
 
 
     public void setHeadItem(ItemStack prog){
+        discardBoth();
         this.entityData.set(HEAD_ITEM, prog);
     }
     public ItemStack getHeadItem() {
