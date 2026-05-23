@@ -57,6 +57,7 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.sensing.Sensing;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.piglin.Piglin;
@@ -389,7 +390,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
     }
 
     @Unique
-    private double roundabout$speedModifier = 1F;
+    private double roundabout$speedModifier = 1.25F;
     @Unique
     private boolean roundabout$followingTargetEvenIfNotSeen;
     @Unique
@@ -489,10 +490,14 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
     @Unique
     public boolean roundabout$canContinueToUse() {
-            LivingEntity $$0 = this.getTarget();
-        if ($$0 == null && ((this.tickCount - this.getLastHurtByMobTimestamp()) < 10)) {
-            $$0 = this.getLastHurtByMob();
+        if (((Mob)(Object)this) instanceof AbstractHorse ah && !ah.getPassengers().isEmpty()) {
+            ((StandUser)this).roundabout$deeplyRemoveAttackTarget();
+            return false;
         }
+            LivingEntity $$0 = this.getTarget();
+            if ($$0 == null && ((this.tickCount - this.getLastHurtByMobTimestamp()) < 10)) {
+                $$0 = this.getLastHurtByMob();
+            }
             if ($$0 == null) {
                 return false;
             } else if (!this.canAttack($$0)) {

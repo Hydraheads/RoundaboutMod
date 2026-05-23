@@ -1260,6 +1260,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.setLastHurtMob(null);
         if (((LivingEntity)(Object)this) instanceof Mob mb){
             mb.setTarget(null);
+            Roundabout.LOGGER.info("4"+mb.getTarget());
             ((IMob)mb).roundabout$deeplyRemoveTargets();
             ((IMob)mb).roundabout$setSightProtectionTicks(ClientNetworking.getAppropriateConfig().softAndWetSettings.ticksBetweenSightStealsOnSameMob);
         }
