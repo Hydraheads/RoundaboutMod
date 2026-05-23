@@ -328,7 +328,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
      * any stand ability slow you down*/
     public float inputSpeedModifiers(float basis){
         if (getActivePower() == POWER_SPIKE) {
-            basis*=0.2f;
+            basis*=0.45f;
         } else if (isSweeping()){
             basis*=0.1f;
         } else if (getActivePower() == BLOOD_CLUTCH){
