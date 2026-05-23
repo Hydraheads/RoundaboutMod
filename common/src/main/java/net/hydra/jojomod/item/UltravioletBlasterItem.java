@@ -8,12 +8,17 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrownEnderpearl;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Vanishable;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UltravioletBlasterItem extends Item implements Vanishable {
     public UltravioletBlasterItem(Properties $$0) {
@@ -37,6 +42,5 @@ public class UltravioletBlasterItem extends Item implements Vanishable {
 
         return InteractionResultHolder.sidedSuccess($$3, $$0.isClientSide());
     }
-
     public static int durability = 100;
 }

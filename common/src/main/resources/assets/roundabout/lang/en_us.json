@@ -721,6 +721,8 @@
   "death.attack.ripper_eyes.item": "%1$s was ripped apart by %2$s",
   "death.attack.iron_ball": "%1$s was blown away by %2$s",
   "death.attack.iron_ball.item": "%1$s was blown away by %2$s",
+  "death.attack.ultraviolet": "%1$s saw things in a new light thanks to %2$s",
+  "death.attack.ultraviolet.item": "%1$s saw things in a new light thanks to %2$s",
 
   "item.glaive.charge_power": "Charge Attack",
 
