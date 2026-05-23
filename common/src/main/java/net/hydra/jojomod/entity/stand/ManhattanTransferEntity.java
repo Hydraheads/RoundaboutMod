@@ -633,6 +633,18 @@ public class ManhattanTransferEntity extends StandEntity {
                 } else {
                     if (isInRain()) {
                         this.rain_dodging_manhattan.startIfStopped(this.tickCount);
+                        $$2.stop();
+                        $$1.stop();
+                        $$3.stop();
+                        $$4.stop();
+                        $$5.stop();
+                        $$6.stop();
+                        $$7.stop();
+                        $$8.stop();
+                        $$9.stop();
+                        $$10.stop();
+                        $$11.stop();
+                        $$12.stop();
                     }
                     if (!isInRain()) {
                         this.rain_dodging_manhattan.stop();
