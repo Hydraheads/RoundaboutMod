@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
@@ -284,6 +285,19 @@ public class RoundaboutGeneralProjectile extends AbstractHurtingProjectile imple
     @Override
     protected boolean shouldBurn() {
         return false;
+    }
+
+
+    public void shootThis(Player player){
+        Vec3 addToPosition = new Vec3(0,player.getBbHeight()*0.7F,0);
+        Direction direction = ((IGravityEntity)player).roundabout$getGravityDirection();
+        if (direction != Direction.DOWN){
+            addToPosition = RotationUtil.vecPlayerToWorld(addToPosition,direction);
+        }
+        this.setPos(player.getX()+addToPosition.x, player.getY()+addToPosition.y, player.getZ()+addToPosition.z);
+        this.shootFromRotationDeltaAgnostic(player, player.getXRot(), player.getYRot(), 1.0F, 0f, 0);
+        this.setYRot(player.getYRot());
+        this.setXRot(player.getXRot());
     }
 }
 

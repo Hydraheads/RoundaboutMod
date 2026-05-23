@@ -157,7 +157,7 @@ public class FabricItems {
 
     public static Item IRON_BALL_CROSSBOW = registerItem("iron_ball_crossbow", new IronBallCrossbowItem(new Item.Properties().stacksTo(1).durability(565)));
 
-    public static Item ULTRAVIOLET_BLASTER = registerItem("ultraviolet_blaster", new UltravioletBlasterItem(new Item.Properties().stacksTo(1)));
+    public static Item ULTRAVIOLET_BLASTER = registerItem("ultraviolet_blaster", new UltravioletBlasterItem(new Item.Properties().stacksTo(1).durability(UltravioletBlasterItem.durability)));
 
     public static Item WOODEN_GLAIVE = registerItem("wooden_glaive", new GlaiveItem(Tiers.WOOD, 4F, -2.9F, new Item.Properties(),4));
     public static Item STONE_GLAIVE = registerItem("stone_glaive", new GlaiveItem(Tiers.STONE, 4F, -2.9F, new Item.Properties(),6));

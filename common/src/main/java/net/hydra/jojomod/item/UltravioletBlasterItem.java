@@ -1,5 +1,7 @@
 package net.hydra.jojomod.item;
 
+import net.hydra.jojomod.entity.projectile.RipperEyesProjectile;
+import net.hydra.jojomod.entity.projectile.UltravioletProjectile;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -22,10 +24,19 @@ public class UltravioletBlasterItem extends Item implements Vanishable {
         $$0.playSound((Player)null, $$1.getX(), $$1.getY(), $$1.getZ(), ModSounds.UV_BLAST_EVENT, SoundSource.NEUTRAL, 1F, (float)(0.96F+Math.random()*0.08f));
         $$1.getCooldowns().addCooldown(this, 30);
         if (!$$0.isClientSide) {
+            $$3.hurtAndBreak(1, $$1, ($$1x) -> $$1x.broadcastBreakEvent($$2));
+            UltravioletProjectile bubble = new UltravioletProjectile($$1,$$1.level());
+            bubble.absMoveTo($$1.getX(), $$1.getY(), $$1.getZ());
+            bubble.setUser($$1);
+            bubble.setOwner($$1);
+            bubble.shootThis($$1);
+            $$1.level().addFreshEntity(bubble);
         }
 
         $$1.awardStat(Stats.ITEM_USED.get(this));
 
         return InteractionResultHolder.sidedSuccess($$3, $$0.isClientSide());
     }
+
+    public static int durability = 100;
 }
