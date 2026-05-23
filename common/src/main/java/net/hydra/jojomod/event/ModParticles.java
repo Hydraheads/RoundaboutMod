@@ -20,6 +20,7 @@ public class ModParticles {
     public static SimpleParticleType HEART_ATTACK_MINI;
     public static SimpleParticleType ENERGY_DISTORTION;
     public static SimpleParticleType PURPLE_STAR;
+    public static SimpleParticleType UV_SPARKLE;
     public static SimpleParticleType BLUE_SPARKLE;
     public static SimpleParticleType RED_SPARKLE;
     public static SimpleParticleType ICE_SPARKLE;

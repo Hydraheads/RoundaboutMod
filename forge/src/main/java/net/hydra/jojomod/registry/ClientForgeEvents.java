@@ -359,6 +359,7 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.ENERGY_DISTORTION.get(), EnergyDistortionParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PURPLE_STAR.get(), StarParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.BLUE_SPARKLE.get(), BlueSparkleParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.UV_SPARKLE.get(), UVSparkleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.RED_SPARKLE.get(), RedSparkleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.ICE_SPARKLE.get(), RedSparkleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.VAMPIRE_AURA.get(), VampireAuraParticle.Provider::new);

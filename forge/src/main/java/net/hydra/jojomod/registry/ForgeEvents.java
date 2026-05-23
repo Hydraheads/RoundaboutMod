@@ -480,6 +480,7 @@ public class ForgeEvents {
         ModParticles.ENERGY_DISTORTION = ForgeParticles.ENERGY_DISTORTION.get();
         ModParticles.PURPLE_STAR = ForgeParticles.PURPLE_STAR.get();
         ModParticles.BLUE_SPARKLE = ForgeParticles.BLUE_SPARKLE.get();
+        ModParticles.UV_SPARKLE = ForgeParticles.UV_SPARKLE.get();
         ModParticles.RED_SPARKLE = ForgeParticles.RED_SPARKLE.get();
         ModParticles.ICE_SPARKLE = ForgeParticles.ICE_SPARKLE.get();
         ModParticles.VAMPIRE_AURA = ForgeParticles.VAMPIRE_AURA.get();
