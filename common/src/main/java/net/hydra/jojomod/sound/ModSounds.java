@@ -183,6 +183,10 @@ public class ModSounds {
     public static final ResourceLocation IRON_BALL_IMPACT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+IRON_BALL_IMPACT);
     public static SoundEvent IRON_BALL_IMPACT_EVENT = SoundEvent.createVariableRangeEvent(IRON_BALL_IMPACT_ID);
 
+    public static final String UV_BLAST = "uv_blast";
+    public static final ResourceLocation UV_BLAST_ID = new ResourceLocation(Roundabout.MOD_ID+":"+UV_BLAST);
+    public static SoundEvent UV_BLAST_EVENT = SoundEvent.createVariableRangeEvent(UV_BLAST_ID);
+
 
     public static final String EXPLOSIVE_BUBBLE_POP = "explosive_bubble_pop";
     public static final ResourceLocation EXPLOSIVE_BUBBLE_POP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EXPLOSIVE_BUBBLE_POP);
