@@ -382,7 +382,6 @@ public class ForgeEvents {
         ModItems.AJA = ForgeItems.AJA.get();
         ModItems.ULTRAVIOLET_BLASTER = ForgeItems.ULTRAVIOLET_BLASTER.get();
         ModItems.LOCACACA_PIT = ForgeItems.LOCACACA_PIT.get();
-        ModItems.LIGHT_BULB = ForgeItems.LIGHT_BULB.get();
         ModItems.LOCACACA = ForgeItems.LOCACACA.get();
         ModItems.LOCACACA_BRANCH = ForgeItems.LOCACACA_BRANCH.get();
         ModItems.NEW_LOCACACA = ForgeItems.NEW_LOCACACA.get();
@@ -481,6 +480,7 @@ public class ForgeEvents {
         ModParticles.ENERGY_DISTORTION = ForgeParticles.ENERGY_DISTORTION.get();
         ModParticles.PURPLE_STAR = ForgeParticles.PURPLE_STAR.get();
         ModParticles.BLUE_SPARKLE = ForgeParticles.BLUE_SPARKLE.get();
+        ModParticles.UV_SPARKLE = ForgeParticles.UV_SPARKLE.get();
         ModParticles.RED_SPARKLE = ForgeParticles.RED_SPARKLE.get();
         ModParticles.ICE_SPARKLE = ForgeParticles.ICE_SPARKLE.get();
         ModParticles.VAMPIRE_AURA = ForgeParticles.VAMPIRE_AURA.get();
@@ -603,6 +603,7 @@ public class ForgeEvents {
         ModEntities.STAND_FIREBALL = ForgeEntities.STAND_FIREBALL.get();
         ModEntities.EVIL_AURA_PROJECTILE = ForgeEntities.EVIL_AURA_PROJECTILE.get();
         ModEntities.RIPPER_EYES_PROJECTILE = ForgeEntities.RIPPER_EYES_PROJECTILE.get();
+        ModEntities.ULTRAVIOLET_PROJECTILE = ForgeEntities.ULTRAVIOLET_PROJECTILE.get();
         ModEntities.GASOLINE_CAN = ForgeEntities.GASOLINE_CAN.get();
         ModEntities.GASOLINE_SPLATTER = ForgeEntities.GASOLINE_SPLATTER.get();
         ModEntities.BLOOD_SPLATTER = ForgeEntities.BLOOD_SPLATTER.get();

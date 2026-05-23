@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "roundabout:end_stone_shaped"
+      "roundabout:road_roller_shaped"
     ]
   },
   "sends_telemetry_event": false

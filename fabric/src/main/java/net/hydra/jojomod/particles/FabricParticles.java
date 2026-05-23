@@ -28,6 +28,7 @@ public class FabricParticles {
     public static final SimpleParticleType ENERGY_DISTORTION = FabricParticleTypes.simple();
     public static final SimpleParticleType PURPLE_STAR = FabricParticleTypes.simple();
     public static final SimpleParticleType BLUE_SPARKLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType UV_SPARKLE = FabricParticleTypes.simple();
     public static final SimpleParticleType RED_SPARKLE = FabricParticleTypes.simple();
     public static final SimpleParticleType ICE_SPARKLE = FabricParticleTypes.simple();
     public static final SimpleParticleType VAMPIRE_AURA = FabricParticleTypes.simple();
@@ -103,6 +104,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("energy_distortion"), ENERGY_DISTORTION);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("purple_star"), PURPLE_STAR);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("blue_sparkle"), BLUE_SPARKLE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("uv_sparkle"), UV_SPARKLE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("red_sparkle"), RED_SPARKLE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("ice_sparkle"), ICE_SPARKLE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("vampire_aura"), VAMPIRE_AURA);
@@ -187,6 +189,7 @@ public class FabricParticles {
         ModParticles.ENERGY_DISTORTION = ENERGY_DISTORTION;
         ModParticles.PURPLE_STAR = PURPLE_STAR;
         ModParticles.BLUE_SPARKLE = BLUE_SPARKLE;
+        ModParticles.UV_SPARKLE = UV_SPARKLE;
         ModParticles.RED_SPARKLE = RED_SPARKLE;
         ModParticles.ICE_SPARKLE = ICE_SPARKLE;
         ModParticles.VAMPIRE_AURA = VAMPIRE_AURA;

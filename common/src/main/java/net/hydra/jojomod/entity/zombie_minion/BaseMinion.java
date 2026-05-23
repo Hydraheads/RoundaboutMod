@@ -315,7 +315,7 @@ public class BaseMinion extends PathfinderMob {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.31).add(Attributes.MAX_HEALTH, 40)
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.31).add(Attributes.MAX_HEALTH, 30)
                 .add(Attributes.ATTACK_DAMAGE, 5).
                 add(Attributes.FOLLOW_RANGE, 48.0D);
     }

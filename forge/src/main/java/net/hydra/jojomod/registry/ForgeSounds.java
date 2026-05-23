@@ -78,6 +78,8 @@ public class ForgeSounds {
             register(ModSounds.IRON_BALL_BOUNCE, ModSounds.IRON_BALL_BOUNCE_ID);
     public static final RegistryObject<SoundEvent> IRON_BALL_IMPACT_EVENT =
             register(ModSounds.IRON_BALL_IMPACT, ModSounds.IRON_BALL_IMPACT_ID);
+    public static final RegistryObject<SoundEvent> UV_BLAST_EVENT =
+            register(ModSounds.UV_BLAST, ModSounds.UV_BLAST_ID);
     public static final RegistryObject<SoundEvent> EXPLOSIVE_BUBBLE_POP_EVENT =
             register(ModSounds.EXPLOSIVE_BUBBLE_POP, ModSounds.EXPLOSIVE_BUBBLE_POP_ID);
     public static final RegistryObject<SoundEvent> EXPLOSIVE_BUBBLE_SHOT_EVENT =

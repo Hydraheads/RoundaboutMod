@@ -67,6 +67,13 @@ public class DamageHandler {
         }
         return bool;
     }
+    public static boolean UVDamage(Entity entity, float power, Entity attacker){
+        boolean bool = entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.ULTRAVIOLET, attacker), power);
+        if (bool && attacker instanceof LivingEntity LE){
+            LE.setLastHurtMob(entity);
+        }
+        return bool;
+    }
     public static boolean RipperEyesDamage(Entity entity, float power, Entity attacker){
         boolean bool = entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.RIPPER_EYES, attacker), power);
         if (bool && attacker instanceof LivingEntity LE){
