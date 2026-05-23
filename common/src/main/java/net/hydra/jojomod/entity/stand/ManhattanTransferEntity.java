@@ -51,10 +51,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
@@ -63,6 +60,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import org.apache.commons.compress.archivers.sevenz.CLI;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -234,6 +232,7 @@ public class ManhattanTransferEntity extends StandEntity {
     public boolean hurt(DamageSource source, float amount) {
         Entity direct = source.getDirectEntity();
         Entity directEntityWho = source.getEntity();
+        this.bizzarreManhattan();
         if(User != null) {
             if (directEntityWho != null && direct != null) {
                 if (direct instanceof Projectile PR && !source.is(ModDamageTypes.STAND)) {
@@ -385,6 +384,11 @@ public class ManhattanTransferEntity extends StandEntity {
         return super.hurt(source, amount);
     }
 
+    public void bizzarreManhattan() {
+        Roundabout.LOGGER.info("aaaaaaa");
+    }
+
+
     public boolean shootHattan(/*ItemStack item*/){
         /***/
         if(!getHeldItemManhattan().isEmpty()) {
@@ -491,6 +495,18 @@ public class ManhattanTransferEntity extends StandEntity {
              $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
              $$7.setOwner(thrower.getUser());
              thrower.level().addFreshEntity($$7);
+         }else if (item.getItem() instanceof KnifeItem){
+             KnifeEntity $$7 = new KnifeEntity(thrower.level(), thrower, item);
+             $$7.setPos(pos);
+             $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
+             $$7.setOwner(thrower.getUser());
+             thrower.level().addFreshEntity($$7);
+         }else if (item.getItem() instanceof MatchItem){
+             KnifeEntity $$7 = new KnifeEntity(thrower.level(), thrower, item);
+             $$7.setPos(pos);
+             $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
+             $$7.setOwner(thrower.getUser());
+             thrower.level().addFreshEntity($$7);
          }
              else {
             getCanPlace = false;
@@ -570,8 +586,6 @@ public class ManhattanTransferEntity extends StandEntity {
 
                 }
             }
-        nextPathfind++;
-        doBasicPathfind();
     }
     int stupidTicks = 1;
     int nextPathfind = 1;

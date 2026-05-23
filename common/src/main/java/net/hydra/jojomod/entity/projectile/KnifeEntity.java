@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -147,6 +148,27 @@ public class KnifeEntity extends AbstractArrow {
                 return;
             } else if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectileNoDiscard(this,$$0)){
                 return;
+            } else if(LE instanceof ManhattanTransferEntity ME){
+                if(!ME.hasItem){
+                    ItemStack ii = this.getPickupItem();
+                    if (!ii.isEmpty()) {
+                        ME.hasItemTwo = false;
+                        ME.hasItem = true;
+                        ME.success = true;
+                        ME.canAcquireHeldItem = true;
+                        ME.setHeldItemManhattan(ii.copyAndClear());
+                        this.discard();
+                    }
+                } else {
+                    ItemStack ii = this.getPickupItem();
+                    if (!ii.isEmpty()) {
+                        ME.canAcquireHeldItem = true;
+                        ME.hasItemTwo = true;
+                        ME.setHeldItemManhattanFull(ii.copyAndClear());
+                        this.discard();
+                    }
+                }
+               // return;
             }
         }
         float $$2;
