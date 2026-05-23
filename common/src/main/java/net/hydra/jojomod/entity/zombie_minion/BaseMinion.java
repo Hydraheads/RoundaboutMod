@@ -833,7 +833,7 @@ public class BaseMinion extends PathfinderMob {
                     } else {
                         mushroomSpawnTime--;
                     }
-                } else if (getHeadItem().is(ModItems.MOOSHROOM_REMAINS)) {
+                } else if (getHeadItem().is(ModItems.LLAMA_REMAINS)) {
                     if (spitChargeAmt > 0){
                         spitChargeAmt--;
                     }
