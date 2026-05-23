@@ -226,6 +226,8 @@ public class ManhattanTransferEntity extends StandEntity {
     }
 
     public boolean isFromHattan = false;
+    public boolean canOthersLoadMT = ClientNetworking.getAppropriateConfig().manhattanTransferSettings.canOtherMobsLoadManhattanTransfer;
+
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
@@ -235,7 +237,7 @@ public class ManhattanTransferEntity extends StandEntity {
             if (directEntityWho != null && direct != null) {
                 //  if (direct instanceof Projectile PR && !source.is(ModDamageTypes.STAND)) {
                 if (directEntityWho != this) {
-                    if (directEntityWho.is(User) && !hasItem) {
+                    if (((directEntityWho.is(User) && !canOthersLoadMT) || canOthersLoadMT)&& !hasItem) {
                         hasItemTwo = false;
                         if (direct instanceof AbstractArrow AA) {
                             ItemStack ii = ((IAbstractArrowAccess) direct).roundabout$GetPickupItem();
