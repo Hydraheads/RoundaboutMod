@@ -150,7 +150,7 @@ public class UltravioletProjectile extends RoundaboutGeneralProjectile{
                         lv.addEffect(new MobEffectInstance(ModEffects.SINGE, 200, 0));
                     }
                 } else {
-                    lv.addEffect(new MobEffectInstance(ModEffects.SINGE, 60, 0));
+                    lv.addEffect(new MobEffectInstance(ModEffects.SINGE, 100, 0));
                 }
             } else if ((lv instanceof Zombie zb && !(zb instanceof Husk)) || lv instanceof Phantom || lv instanceof Skeleton){
                 lv.setSecondsOnFire(8);
