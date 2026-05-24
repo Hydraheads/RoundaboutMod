@@ -1,14 +1,20 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IFatePlayer;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.powers.DamageHandler;
+import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -133,8 +139,14 @@ public class UltravioletProjectile extends RoundaboutGeneralProjectile{
                     FateTypes.isVampire(lv)  ||
                     FateTypes.isZombie(lv)) {
                 float power = 10;
-                if (DamageHandler.UVDamage(entity, power, getOwner())) {
 
+                if (!(entity instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof
+                        VampireFate vf && vf.getVampireData().freezeLevel > 0)){
+                    if (DamageHandler.UVDamage(entity, power, getOwner())) {
+                        lv.addEffect(new MobEffectInstance(ModEffects.SINGE, 200, 0));
+                    }
+                } else {
+                    lv.addEffect(new MobEffectInstance(ModEffects.SINGE, 60, 0));
                 }
             } else if ((lv instanceof Zombie zb && !(zb instanceof Husk)) || lv instanceof Phantom || lv instanceof Skeleton){
                 lv.setSecondsOnFire(8);
