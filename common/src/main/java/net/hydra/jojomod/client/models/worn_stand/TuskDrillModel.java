@@ -23,37 +23,24 @@ import net.minecraft.world.entity.LivingEntity;
 
 
 public class TuskDrillModel extends PsuedoHierarchicalModel {
-    public static ResourceLocation uno = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/stand/tusk/projectiles/drill_spin.png");
-    public static ResourceLocation dos = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/stand/tusk/projectiles/drill_spin_2.png");
-    public static ResourceLocation tres = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/stand/tusk/projectiles/drill_spin_3.png");
-    public static ResourceLocation cuatro = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/stand/tusk/projectiles/drill_spin_4.png");
-    public static ResourceLocation cinco = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/stand/tusk/projectiles/drill_spin_5.png");
-    public static ResourceLocation seis = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/stand/tusk/projectiles/drill_spin_6.png");
+    public static ResourceLocation[] drills = new ResourceLocation[12];
     public ResourceLocation getTextureLocation(Entity context){
-        int state = context.tickCount%12 / 2;
+        if (drills[0] == null) {
+            for(int i=0;i<drills.length-1;i++) {
+                drills[i] = new ResourceLocation(Roundabout.MOD_ID,
+                        "textures/stand/tusk/projectiles/drill_spin_" + (i+1) + ".png");
+            }
+        }
+        int state = context.tickCount%11;
         if (context instanceof LivingEntity LE) {
             StandUser SU = (StandUser) LE;
             if (SU.roundabout$getStandPowers() instanceof PowersTusk PT) {
                 if (PT.isFastSpin()) {
-                    state = context.tickCount % 6;
+               //     state = context.tickCount % 6;
                 }
             }
         }
-        return switch (state) {
-            case 0 ->  uno;
-            case 1-> dos;
-            case 2 -> tres;
-            case 3 -> cuatro;
-            case 4 -> cinco;
-            case 5 -> seis;
-            default -> uno;
-        };
+        return drills[state];
     }
 
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk_drill_spin"), "main");
@@ -90,8 +77,8 @@ public class TuskDrillModel extends PsuedoHierarchicalModel {
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(context)));
         root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
     }
-    public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int light, float r, float g, float b, float alpha) {
-        if (context instanceof LivingEntity LE) {
+    public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, float alpha) {
+        if (context instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersTusk PT) {
             this.root().getAllParts().forEach(ModelPart::resetPose);
             if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
                 partialTicks = 0;
@@ -99,6 +86,9 @@ public class TuskDrillModel extends PsuedoHierarchicalModel {
             StandUser user = ((StandUser) LE);
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
             //The number at the end is inversely proportional so 2 is half speed
+            float r = PT.getNailColor().x;
+            float g = PT.getNailColor().y;
+            float b = PT.getNailColor().z;
             root().render(poseStack, consumer, 15728880, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
         }
     }

@@ -1875,7 +1875,6 @@ public class ClientUtil {
                 FirstPersonArmsSlimModel.player = play;
 
                 if (slimBoolean) {
-                   // ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
                     ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
                 } else {
                     ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
