@@ -699,7 +699,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
     
     public void tryBlockPlantBomb() {
-    	if (!this.onCooldown(PowerIndex.SKILL_1))
+    	if (!this.onCooldown(PowerIndex.SKILL_1)) {
     		((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
         	tryPowerPacket(PowerIndex.POWER_1);
     	}
