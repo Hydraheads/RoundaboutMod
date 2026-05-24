@@ -747,7 +747,7 @@ public class BaseMinion extends PathfinderMob {
             if (digCooldown > 0){
                 digCooldown--;
             }
-            if (controller != null){
+            if (controller != null && !controller.isRemoved() && controller.isAlive()){
                 controller = this.level().getEntity(getController());
             } else {
                 if (controller2 != null){
