@@ -24,12 +24,10 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -177,6 +175,28 @@ public class RoundaboutGeneralProjectile extends AbstractHurtingProjectile imple
         if (forcedDeltaMovement != null){
             setDeltaMovement(forcedDeltaMovement);
         }
+
+
+        if (!client) {
+            if (!isRemoved()) {
+
+                Vec3 currentPos = this.position();
+                Vec3 nextPos = currentPos.add(this.getDeltaMovement());
+                AABB sweptBox = this.getBoundingBox()
+                        .expandTowards(this.getDeltaMovement())
+                        .inflate(this.getBbWidth() * 1 + 0.1); // Adjust as needed
+
+                EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
+                        this.level(), this, currentPos, nextPos, sweptBox,
+                        this::canHitEntity
+                );
+
+                if (entityHitResult != null) {
+                    this.onHitEntity(entityHitResult);
+                }
+            }
+        }
+
         super.tick();
         if (!client){
             if (isEffectivelyInWater()){
@@ -185,6 +205,24 @@ public class RoundaboutGeneralProjectile extends AbstractHurtingProjectile imple
             if (killAtZero()) {
                 if (this.getDeltaMovement().equals(Vec3.ZERO)) {
                     this.discard();
+                }
+            }
+
+            if (!isRemoved()) {
+
+                Vec3 currentPos = this.position();
+                Vec3 nextPos = currentPos.add(this.getDeltaMovement());
+                AABB sweptBox = this.getBoundingBox()
+                        .expandTowards(this.getDeltaMovement())
+                        .inflate(this.getBbWidth() * 1 + 0.1); // Adjust as needed
+
+                EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
+                        this.level(), this, currentPos, nextPos, sweptBox,
+                        this::canHitEntity
+                );
+
+                if (entityHitResult != null) {
+                    this.onHitEntity(entityHitResult);
                 }
             }
         }

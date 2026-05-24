@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
@@ -140,8 +141,11 @@ public class UltravioletProjectile extends RoundaboutGeneralProjectile{
                     FateTypes.isZombie(lv)) {
                 float power = 10;
 
-                if (!(entity instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof
-                        VampireFate vf && vf.getVampireData().freezeLevel > 0)){
+                boolean isFullVampire = entity instanceof Player pl && (((IFatePlayer)pl).rdbt$getFatePowers() instanceof
+                        VampireFate vf && vf.getVampireData().freezeLevel > 0) &&
+                        PowerTypes.hasPowerActivelyEquipped(pl) &&
+                        ((IPowersPlayer)pl).rdbt$getPowers() instanceof VampireGeneralPowers vgp;
+                if (!isFullVampire){
                     if (DamageHandler.UVDamage(entity, power, getOwner())) {
                         lv.addEffect(new MobEffectInstance(ModEffects.SINGE, 200, 0));
                     }
