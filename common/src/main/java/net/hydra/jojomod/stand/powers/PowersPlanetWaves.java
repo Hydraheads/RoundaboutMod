@@ -41,6 +41,7 @@ import java.util.List;
 
 import static net.hydra.jojomod.entity.stand.PlanetWavesEntity.MANGA_SKIN;
 import static net.hydra.jojomod.entity.stand.PlanetWavesEntity.PART_6_SKIN;
+import static net.hydra.jojomod.entity.stand.PlanetWavesEntity.BLUE_SKIN;
 
 public class PowersPlanetWaves extends NewDashPreset {
     public PowersPlanetWaves(LivingEntity self) {super(self);}
@@ -72,7 +73,8 @@ public class PowersPlanetWaves extends NewDashPreset {
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 PART_6_SKIN,
-                MANGA_SKIN
+                MANGA_SKIN,
+                BLUE_SKIN
         );
     }
 
@@ -81,6 +83,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         {
             case PART_6_SKIN -> {return Component.translatable("skins.roundabout.planet_waves.base");}
             case MANGA_SKIN  -> {return Component.translatable("skins.roundabout.planet_waves.manga");}
+            case BLUE_SKIN  -> {return Component.translatable("skins.roundabout.planet_waves.blue");}
         }
         return Component.translatable("skins.roundabout.planet_waves.base");
 
@@ -372,7 +375,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                     this.setCooldown(
                             PowerIndex.SKILL_4,
                             ClientNetworking.getAppropriateConfig()
-                                    .PlanetWavesSettings.usertargetingCooldown
+                                    .PlanetWavesSettings.standtargetingCooldown
                     );
                 }
             }
@@ -497,6 +500,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             // case PlanetWavesEntity.GREEN_SKIN, PlanetWavesEntity.GREEN_ABLAZE -> ModParticles.GREEN_FLAME;
             // case PlanetWavesEntity.DREAD_SKIN, PlanetWavesEntity.DREAD_ABLAZE, PlanetWavesEntity.DREAD_BEAST_SKIN -> ModParticles.DREAD_FLAME;
             //case PlanetWavesEntity.JOJONIUM, PlanetWavesEntity.JOJONIUM_ABLAZE -> ModParticles.CREAM_FLAME;
+            case PlanetWavesEntity.BLUE_SKIN -> ModParticles.BLUE_FLAME;
             case PlanetWavesEntity.MANGA_SKIN -> ModParticles.CREAM_FLAME;
             default -> ModParticles.ORANGE_FLAME;
         };

@@ -608,6 +608,8 @@ public class ForgeEvents {
         ModEntities.CROSSFIRE_HURRICANE = ForgeEntities.CROSSFIRE_HURRICANE.get();
         ModEntities.LIFE_TRACKER = ForgeEntities.LIFE_TRACKER.get();
         ModEntities.STAND_FIREBALL = ForgeEntities.STAND_FIREBALL.get();
+        ModEntities.PW_BIG_METEOR = ForgeEntities.PW_BIG_METEOR.get();
+        ModEntities.PW_METEOR = ForgeEntities.PW_METEOR.get();
         ModEntities.EVIL_AURA_PROJECTILE = ForgeEntities.EVIL_AURA_PROJECTILE.get();
         ModEntities.RIPPER_EYES_PROJECTILE = ForgeEntities.RIPPER_EYES_PROJECTILE.get();
         ModEntities.ULTRAVIOLET_PROJECTILE = ForgeEntities.ULTRAVIOLET_PROJECTILE.get();

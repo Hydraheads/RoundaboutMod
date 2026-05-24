@@ -859,6 +859,12 @@
   "sounds.roundabout.manhattan_vision":  "Wind Reading ON",
   "sounds.roundabout.manhattan_bullet_deflect":  "Manhattan Deflects Bullet",
 
+  "sounds.roundabout.planet_waves_summon":  "Stand Summoned",
+  "sounds.roundabout.planet_waves_meteor_shower":  "Meteors Approaching",
+  "sounds.roundabout.planet_waves_big_meteor":  "Big Meteor Approaching",
+  "sounds.roundabout.planet_waves_target":  "Meteor Target Switched",
+  "sounds.roundabout.planet_waves_disintegration":  "Meteor Disintegrating",
+
   "sounds.roundabout.bullet_ricochet":  "Bullet ricochetted",
 
   "sounds.roundabout.snubnose_fire":  "Gun fired!",
@@ -1633,6 +1639,17 @@
   "ability.roundabout.gd_mold_spread":"Mold Spread",
   "ability.roundabout.gd_mold_spread.desc":"Create a cloud of mold spores, affecting all entities caught in them with mold. These spores drift downwards, increasing in range until they hit the floor",
 
+  "ability.roundabout.meteor_shower":"Meteor Shower",
+  "ability.roundabout.meteor_shower.desc":"Draws meteors from the sky towards you. They are small and cause no terrain damage but pass through blocks and hit anything in between. They inflict bleed and good damage.",
+  "ability.roundabout.big_meteor":"Big Meteor",
+  "ability.roundabout.big_meteor.desc":"Draws a single large meteor from the sky towards you. Does terrain damage as it comes your way. If used in conjunction with Stand Targeting, it creates a bigger blast that could be used to gradually mine down. They inflict bleed 2 and very heavy damage.",
+  "ability.roundabout.stand_targeting":"Stand Targeting",
+  "ability.roundabout.stand_targeting.desc":"Your stand floats very quickly to the spot you are looking at, and buries itself in the ground upon summoning a meteor, so the meteor heads to the stand instead of the user. You can now make meteors mine a designated space on the ground instead of relying on weird angles onto your body. The downside is your body is no longer protected.",
+  "ability.roundabout.stand_retrieving":"Stand Retrieving",
+  "ability.roundabout.stand_retrieving.desc":"Makes your stand comeback, making it so that meteors go back to falling towards you",
+  "ability.roundabout.desintegration":"Meteor Disintegration",
+  "ability.roundabout.desintegration.desc":"This Stand adjusts the angle of entry of countless meteorites floating in space towards its user, drawing them towards Earth. The meteorites burn up just before touching the user, so they can never hit it.",
+
   "ability.roundabout.manual_shooting": "Shooting Mode",
   "ability.roundabout.manual_shooting.desc": "Allows you to press left click with your mouse shoot in the direction you want if you are controlling the stand and it contains any storable projectile. If you decide to keep automatic shooting, the stand will instantly redirect it towards the nearest moving entity when it's able to.",
   "ability.roundabout.control_mode": "Control Mode",
@@ -1875,6 +1892,7 @@
 
   "skins.roundabout.planet_waves.base": "Part 6",
   "skins.roundabout.planet_waves.manga": "Manga",
+  "skins.roundabout.planet_waves.blue": "Blue",
 
   "skins.roundabout.ratt.anime" : "Anime",
   "skins.roundabout.ratt.manga" : "Manga",
@@ -2549,6 +2567,21 @@
   "config.roundabout.emeraldCostCharacterVisage.desc": "Any character themed visage in the Cinderella shop, default 10.",
   "config.roundabout.enableJojoveinVisagesInShop.name": "JoJovein Visages",
   "config.roundabout.enableJojoveinVisagesInShop.desc": "Whether or not visages for designs used in JoJovein (the precursor mod/server/modpack to Roundabout). For example, Shizuka from JoJo Stars, which uses an adapted fan design. This config requires a restart to load.",
+
+  "config.roundabout.enablePlanetWaves.name": "Enable Planet Waves",
+  "config.roundabout.enablePlanetWaves.desc": "Enable Planet Waves",
+  "config.roundabout.meteorshowerCooldown.name": "Meteor Shower Cooldown",
+  "config.roundabout.meteorshowerCooldown.desc": "Planet Waves Meteor Shower move cooldown",
+  "config.roundabout.bigmeteorCooldown.name": "Big Meteor Cooldown",
+  "config.roundabout.bigmeteorCooldown.des": "Planet Waves Big Meteor move cooldown",
+  "config.roundabout.bigmeteorDistance.name": "Big Meteor Distance",
+  "config.roundabout.bigmeteorDistance.desc": "The distance from you where the big meteor appears",
+  "config.roundabout.meteorshowerDistance.name": "Meteor Shower Distance",
+  "config.roundabout.meteorshowerDistance.desc": "The distance from you where the meteor shower appears",
+  "config.roundabout.standtargetingCooldown.name": "Stand Targeting Cooldown",
+  "config.roundabout.standtargetingCooldown.desc": "Stand Targeting move cooldown",
+  "config.roundabout.usertargetingCooldown.name": "User Targeting Cooldown",
+  "config.roundabout.usertargetingCooldown.desc": "User targeting move cooldown",
 
   "config.roundabout.manhattanTransferMaxRange.name": "Manhattan Transfer Max Range",
   "config.roundabout.manhattanTransferMaxRange.desc": "How far you and Manhattan Transfer can distance until it despawns.",
