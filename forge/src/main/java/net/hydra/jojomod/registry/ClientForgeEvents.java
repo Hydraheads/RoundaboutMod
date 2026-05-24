@@ -3,10 +3,7 @@ package net.hydra.jojomod.registry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ModStrayModels;
-import net.hydra.jojomod.client.models.CoffinRenderer;
-import net.hydra.jojomod.client.models.RoadRollerStrayModel;
-import net.hydra.jojomod.client.models.WornBloodyStoneMaskModel;
-import net.hydra.jojomod.client.models.WornStoneMaskModel;
+import net.hydra.jojomod.client.models.*;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
 import net.hydra.jojomod.client.models.minions.*;
 import net.hydra.jojomod.client.models.minions.head_parts.*;
@@ -110,6 +107,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.STAND_FIREBALL.get(), StandFireballRenderer::new);
         event.registerEntityRenderer(ForgeEntities.EVIL_AURA_PROJECTILE.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.RIPPER_EYES_PROJECTILE.get(), RipperEyesRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.ULTRAVIOLET_PROJECTILE.get(), UVBeamRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BLOOD_SPLATTER.get(), BloodSplatterRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GASOLINE_CAN.get(), GasolineCanRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_OBJECT.get(), ThrownObjectRenderer::new);
@@ -239,6 +237,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.STAND_FIREBALL_LAYER, StandFireballModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.IRON_BALL_LAYER, StandFireballModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.RIPPER_EYES_LAYER, RipperEyesModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.UV_LAYER, UVModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.GASOLINE_LAYER, GasolineCanModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.ZOMBIE_AESTHETICIAN_LAYER, ZombieAestheticianModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STEVE_LAYER, PlayerSteveModel::getTexturedModelData);
@@ -260,6 +259,7 @@ public class ClientForgeEvents {
         ModStrayModels.HEY_YA = new HeyYaModel();
         ModStrayModels.CENTURY_BOY = new CenturyBoyModel();
         ModStrayModels.BOWLER_HAT = new BowlerHatModel();
+        ModStrayModels.UV_BLASTER = new UVBlasterModel();
         ModStrayModels.WORN_STONE_MASK = new WornStoneMaskModel();
         ModStrayModels.WORN_BLOODY_STONE_MASK = new WornBloodyStoneMaskModel();
         ModStrayModels.RATT_SHOULDER = new RattShoulderModel();
@@ -359,6 +359,7 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.ENERGY_DISTORTION.get(), EnergyDistortionParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PURPLE_STAR.get(), StarParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.BLUE_SPARKLE.get(), BlueSparkleParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.UV_SPARKLE.get(), UVSparkleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.RED_SPARKLE.get(), RedSparkleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.ICE_SPARKLE.get(), RedSparkleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.VAMPIRE_AURA.get(), VampireAuraParticle.Provider::new);

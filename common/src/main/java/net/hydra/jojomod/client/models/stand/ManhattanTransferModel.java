@@ -233,6 +233,19 @@ public class ManhattanTransferModel<T extends ManhattanTransferEntity> extends S
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         super.setupAnim(pEntity,pLimbSwing,pLimbSwingAmount,pAgeInTicks,pNetHeadYaw,pHeadPitch);
         this.animate(pEntity.rain_dodging_manhattan, ManhattanTransferAnimations.Rain_Dodge, pAgeInTicks, 1f);
+        this.animate(pEntity.slow_manhattan, ManhattanTransferAnimations.Slow_Manhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.forward_manhattan_incipit, ManhattanTransferAnimations.Forward_North_Manhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.forward_manhattan_loop, ManhattanTransferAnimations.Forward_North_Loop_Manhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.back_manhattan_incipit, ManhattanTransferAnimations.Forward_South_Manhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.back_manhattan_loop, ManhattanTransferAnimations.Forward_South_Loop_Manhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.back_manhattan_stop, ManhattanTransferAnimations.Forward_South_Stop_Manhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.forward_manhattan_stop, ManhattanTransferAnimations.Forward_North_Stop_Manhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.left_manhattan_incipit, ManhattanTransferAnimations.Lateral_West_Manhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.left_manhattan_loop, ManhattanTransferAnimations.Lateral_West_Loop_Manhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.left_manhattan_stop, ManhattanTransferAnimations.Lateral_West_Stop_Manhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.right_manhattan_incipit, ManhattanTransferAnimations.Lateral_East_Manhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.right_manhattan_loop, ManhattanTransferAnimations.Lateral_East_Loop_Manhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.right_manhattan_stop, ManhattanTransferAnimations.Lateral_East_Stop_Manhattan, pAgeInTicks, 1f);
     }
 
 

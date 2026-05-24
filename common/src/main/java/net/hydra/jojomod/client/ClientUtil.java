@@ -121,7 +121,7 @@ public class ClientUtil {
         $$0.zRot = 0.0F;
         $$1.yRot = -(0.1F - $$5 * 0.6F);
         $$0.yRot = 0.1F - $$5 * 0.6F;
-        float $$7 = (float) -Math.PI / ($$2 ? 1.5F : 2.25F);
+        float $$7 = (float) -Math.PI / (2.25F);
         $$1.xRot = $$7;
         $$0.xRot = $$7;
         $$1.xRot += $$5 * 1.2F - $$6 * 0.4F;

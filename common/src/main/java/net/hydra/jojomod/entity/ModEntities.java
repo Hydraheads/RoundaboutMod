@@ -94,6 +94,7 @@ public class ModEntities {
     public static EntityType<StandFireballEntity> STAND_FIREBALL;
     public static EntityType<EvilAuraProjectile> EVIL_AURA_PROJECTILE;
     public static EntityType<RipperEyesProjectile> RIPPER_EYES_PROJECTILE;
+    public static EntityType<UltravioletProjectile> ULTRAVIOLET_PROJECTILE;
 
     public static EntityType<GasolineCanEntity> GASOLINE_CAN;
     public static EntityType<RoadRollerEntity> ROAD_ROLLER_ENTITY;

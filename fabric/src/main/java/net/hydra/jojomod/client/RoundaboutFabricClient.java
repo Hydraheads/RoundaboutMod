@@ -56,8 +56,9 @@ public class RoundaboutFabricClient implements ClientModInitializer {
                 ModBlocks.CULTIVATED_LOCACACA,
                 ModBlocks.FOG_TRAP,
                 ModBlocks.POISON_TRAIL_MUSHROOM,
+                ModBlocks.GLASS_DOOR,
                 ModBlocks.MELON_PARFAIT);
-        BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(), ModBlocks.GLASS_DOOR);
+        //BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(), );
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(), ModBlocks.WALL_LANTERN);
         FabricParticlesClient.registerClientParticles();
         FabricEntityClient.register();

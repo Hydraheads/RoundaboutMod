@@ -3,6 +3,7 @@ package net.hydra.jojomod.client.models.substand.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.FacelessLayer;
+import net.hydra.jojomod.client.models.FakeCapeLayer;
 import net.hydra.jojomod.client.models.layers.CenturyBoyLayer;
 import net.hydra.jojomod.client.models.layers.*;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
@@ -20,6 +21,7 @@ import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.*;
+import net.minecraft.client.renderer.entity.layers.CapeLayer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
@@ -54,10 +56,12 @@ public class FogCloneRenderer<T extends FogCloneEntity> extends LivingEntityRend
         this.addLayer(new AnubisLayer<>(context, this));
         this.addLayer(new VisagePartLayer<>(context, this));
         this.addLayer(new BowlerHatLayer<>(context, this));
+        this.addLayer(new UVBlasterLayer<>(context, this));
         this.addLayer(new FirearmLayer<>(context, this));
         this.addLayer(new RoadRollerLayer<>(context, this));
         this.addLayer(new WornStoneMaskLayer<>(context, this));
         this.addLayer(new MoldSpineLayer<>(context, this));
+        this.addLayer(new FakeCapeLayer(this));
         this.addLayer(new ItemInHandLayer<>(this, context.getItemInHandRenderer()));
 
         if (ConfigManager.getClientConfig().renderArmorOnPlayerCloneAbilities) {

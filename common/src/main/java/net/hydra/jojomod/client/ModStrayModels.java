@@ -1,6 +1,7 @@
 package net.hydra.jojomod.client;
 
 import net.hydra.jojomod.client.models.RoadRollerStrayModel;
+import net.hydra.jojomod.client.models.UVBlasterModel;
 import net.hydra.jojomod.client.models.WornBloodyStoneMaskModel;
 import net.hydra.jojomod.client.models.WornStoneMaskModel;
 import net.hydra.jojomod.client.models.minions.head_parts.*;
@@ -27,6 +28,7 @@ public class ModStrayModels {
     public static HeyYaModel HEY_YA;
     public static CenturyBoyModel CENTURY_BOY;
     public static BowlerHatModel BOWLER_HAT;
+    public static UVBlasterModel UV_BLASTER;
     public static WornStoneMaskModel WORN_STONE_MASK;
     public static WornBloodyStoneMaskModel WORN_BLOODY_STONE_MASK;
     public static RattShoulderModel RATT_SHOULDER;

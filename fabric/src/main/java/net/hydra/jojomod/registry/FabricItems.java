@@ -157,7 +157,7 @@ public class FabricItems {
 
     public static Item IRON_BALL_CROSSBOW = registerItem("iron_ball_crossbow", new IronBallCrossbowItem(new Item.Properties().stacksTo(1).durability(565)));
 
-    public static Item ULTRAVIOLET_BLASTER = registerItem("ultraviolet_blaster", new UltravioletBlasterItem(new Item.Properties().stacksTo(1)));
+    public static Item ULTRAVIOLET_BLASTER = registerItem("ultraviolet_blaster", new UltravioletBlasterItem(new Item.Properties().stacksTo(1).durability(UltravioletBlasterItem.durability)));
 
     public static Item WOODEN_GLAIVE = registerItem("wooden_glaive", new GlaiveItem(Tiers.WOOD, 4F, -2.9F, new Item.Properties(),4));
     public static Item STONE_GLAIVE = registerItem("stone_glaive", new GlaiveItem(Tiers.STONE, 4F, -2.9F, new Item.Properties(),6));
@@ -361,7 +361,6 @@ public class FabricItems {
                         entries.accept(ANUBIS_GUARDIAN_SPAWN_EGG);
                         entries.accept(ZOMBIE_MINION_SPAWN_EGG);
                         entries.accept(COFFEE_GUM);
-                        entries.accept(LIGHT_BULB);
                         entries.accept(LOCACACA_PIT.asItem());
                         entries.accept(LOCACACA);
                         entries.accept(LOCACACA_BRANCH.asItem());
@@ -535,13 +534,9 @@ public class FabricItems {
     public static final CreativeModeTab WIP_FEATURE = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
             new ResourceLocation(Roundabout.MOD_ID, "jojo_wip_features"),
             FabricItemGroup.builder().title(Component.translatable("itemgroup.jojo_wip_features"))
-                    .icon(() -> new ItemStack(LIGHT_BULB)).displayItems((displayContext, entries) -> {
+                    .icon(() -> new ItemStack(AJA)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here
 
-                        //entries.accept(STAND_DISC_D4C);
-                        //entries.accept(MAX_STAND_DISC_D4C);
-                        //entries.accept(INTERDIMENSIONAL_KEY);
-                        //entries.accept(STAND_DISC_WALKING_HEART);
                         entries.accept(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK);
                         entries.accept(ModBlocks.BLOODY_STONE_MASK_BLOCK);
                         entries.accept(CAT_REMAINS);
@@ -561,10 +556,6 @@ public class FabricItems {
                         entries.accept(STAND_DISC_MANHATTAN_TRANSFER);
                         entries.accept(STAND_DISC_TUSK);
                         entries.accept(MAX_STAND_DISC_TUSK);
-                        //entries.accept(STAND_DISC_DIVER_DOWN);
-                        //entries.accept(MAX_STAND_DISC_DIVER_DOWN);
-                   //     entries.accept(STAND_DISC_CREAM);
-                   //     entries.accept(MAX_STAND_DISC_CREAM);
                         entries.accept(STAND_DISC_METALLICA);
                         entries.accept(MAX_STAND_DISC_METALLICA);
                         entries.accept(STAND_DISC_KILLER_QUEEN);
@@ -709,7 +700,6 @@ public class FabricItems {
         ModItems.STREET_SIGN_STOP_BLOCK_ITEM = STREET_SIGN_STOP_BLOCK_ITEM;
         ModItems.STREET_SIGN_YIELD_BLOCK_ITEM = STREET_SIGN_YIELD_BLOCK_ITEM;
         ModItems.STREET_SIGN_DANGER_BLOCK_ITEM = STREET_SIGN_DANGER_BLOCK_ITEM;
-        ModItems.LIGHT_BULB = LIGHT_BULB;
         ModItems.LOCACACA = LOCACACA;
         ModItems.LOCACACA_BRANCH = LOCACACA_BRANCH;
         ModItems.NEW_LOCACACA = NEW_LOCACACA;

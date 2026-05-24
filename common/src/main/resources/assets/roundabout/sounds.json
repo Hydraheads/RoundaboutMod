@@ -53,6 +53,12 @@
       "roundabout:vampire_dash"
     ]
   },
+  "uv_blast": {
+    "subtitle": "sounds.roundabout.uv_blast",
+    "sounds": [
+      "roundabout:uv_blast"
+    ]
+  },
   "vampire_camo": {
     "subtitle": "sounds.roundabout.vampire_camo",
     "sounds": [

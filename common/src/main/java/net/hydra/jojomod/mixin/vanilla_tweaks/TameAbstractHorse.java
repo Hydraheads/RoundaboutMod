@@ -1,6 +1,8 @@
 package net.hydra.jojomod.mixin.vanilla_tweaks;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Animal;
@@ -20,10 +22,12 @@ public abstract class TameAbstractHorse extends Animal {
 
     @Inject(method = "doPlayerRide", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$doPlayerRide(Player $$0, CallbackInfo ci) {
-        if (ClientNetworking.getAppropriateConfig().vanillaMinecraftTweaks.mountingHorsesInCreativeTamesThem) {
-            if ($$0 != null && !$$0.level().isClientSide() && $$0.isCreative()) {
-                if (!this.isTamed()) {
-                    this.tameWithName($$0);
+        if ($$0 != null && !$$0.level().isClientSide()) {
+            if (ClientNetworking.getAppropriateConfig().vanillaMinecraftTweaks.mountingHorsesInCreativeTamesThem) {
+                if ($$0.isCreative()) {
+                    if (!this.isTamed()) {
+                        this.tameWithName($$0);
+                    }
                 }
             }
         }

@@ -545,6 +545,12 @@ public class ForgeEntities {
                             clientTrackingRange(15).
                             build(new ResourceLocation(Roundabout.MOD_ID, "ripper_eyes").toString())
             );
+    public static final RegistryObject<EntityType<UltravioletProjectile>> ULTRAVIOLET_PROJECTILE =
+            ENTITY_TYPES.register("uv", () ->
+                    EntityType.Builder.<UltravioletProjectile>of(UltravioletProjectile::new, MobCategory.MISC).sized(1F, 1F).
+                            clientTrackingRange(15).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "uv").toString())
+            );
     public static final RegistryObject<EntityType<GasolineSplatterEntity>> GASOLINE_SPLATTER =
             ENTITY_TYPES.register("gasoline_splatter", () ->
                     EntityType.Builder.<GasolineSplatterEntity>of(GasolineSplatterEntity::new, MobCategory.MISC).sized(0.8f, 0.8f).

@@ -64,10 +64,6 @@ public class PoisonTrailMushroomBlock extends BushBlock {
 
                 $$7 = $$2.offset($$3.nextInt(3) - 1, $$3.nextInt(2) - $$3.nextInt(2), $$3.nextInt(3) - 1);
             }
-
-            if ($$1.isEmptyBlock($$7) && $$0.canSurvive($$1, $$7)) {
-                $$1.setBlock($$7, $$0, 2);
-            }
         }
 
     }

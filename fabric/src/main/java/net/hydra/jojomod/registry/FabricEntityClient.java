@@ -4,10 +4,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ModStrayModels;
-import net.hydra.jojomod.client.models.CoffinRenderer;
-import net.hydra.jojomod.client.models.RoadRollerStrayModel;
-import net.hydra.jojomod.client.models.WornBloodyStoneMaskModel;
-import net.hydra.jojomod.client.models.WornStoneMaskModel;
+import net.hydra.jojomod.client.models.*;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
 import net.hydra.jojomod.client.models.minions.*;
 import net.hydra.jojomod.client.models.minions.head_parts.*;
@@ -107,6 +104,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.STAND_FIREBALL, StandFireballRenderer::new);
         EntityRendererRegistry.register(FabricEntities.EVIL_AURA_PROJECTILE, NoRenderer::new);
         EntityRendererRegistry.register(FabricEntities.RIPPER_EYES_PROJECTILE, RipperEyesRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.ULTRAVIOLET_PROJECTILE, UVBeamRenderer::new);
         EntityRendererRegistry.register(FabricEntities.STAND_ARROW, StandArrowRenderer::new);
         EntityRendererRegistry.register(FabricEntities.IRON_BALL, IronBallRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_OBJECT, ThrownObjectRenderer::new);
@@ -232,6 +230,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STAND_FIREBALL_LAYER, StandFireballModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.IRON_BALL_LAYER, StandFireballModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.RIPPER_EYES_LAYER, RipperEyesModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.UV_LAYER, UVModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GASOLINE_LAYER, GasolineCanModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ZOMBIE_AESTHETICIAN_LAYER, ZombieAestheticianModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STEVE_LAYER, PlayerSteveModel::getTexturedModelData);
@@ -257,6 +256,7 @@ public class FabricEntityClient {
         ModStrayModels.HEY_YA = new HeyYaModel();
         ModStrayModels.CENTURY_BOY = new CenturyBoyModel();
         ModStrayModels.BOWLER_HAT = new BowlerHatModel();
+        ModStrayModels.UV_BLASTER = new UVBlasterModel();
         ModStrayModels.WORN_STONE_MASK = new WornStoneMaskModel<>();
         ModStrayModels.WORN_BLOODY_STONE_MASK = new WornBloodyStoneMaskModel();
         ModStrayModels.MANDOM = new MandomModel();

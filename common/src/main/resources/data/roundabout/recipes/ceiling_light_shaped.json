@@ -5,17 +5,19 @@
     "#": {
       "item": "minecraft:redstone"
     },
+    "D": {
+      "item": "minecraft:glowstone_dust"
+    },
     "B": {
-      "item": "roundabout:light_bulb"
+      "item": "minecraft:glass_pane"
     },
     "N": {
       "item": "minecraft:iron_nugget"
     }
   },
   "pattern": [
-    "###",
-    "NBN",
-    "   "
+    "#D#",
+    "NBN"
   ],
   "result": {
     "count": 1,

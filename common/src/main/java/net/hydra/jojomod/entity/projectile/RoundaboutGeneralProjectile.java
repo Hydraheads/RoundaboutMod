@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
@@ -30,6 +31,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -142,6 +144,14 @@ public class RoundaboutGeneralProjectile extends AbstractHurtingProjectile imple
             this.discard();
         }
     }
+
+    public boolean killAtZero(){
+        return true;
+    }
+
+    public boolean needsStandUser(){
+        return true;
+    }
     public void tick() {
         boolean client = this.level().isClientSide();
         if (!client){
@@ -152,13 +162,15 @@ public class RoundaboutGeneralProjectile extends AbstractHurtingProjectile imple
             if (isEffectivelyInWater()){
                 tickWater();
             }
-            if (this.getStandUser() != null){
-                if (MainUtil.cheapDistanceTo2(this.getX(),this.getZ(),this.standUser.getX(),this.standUser.getZ()) > 80
-                        || !this.getStandUser().isAlive() || this.getStandUser().isRemoved()){
+            if (needsStandUser()) {
+                if (this.getStandUser() != null) {
+                    if (MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), this.standUser.getX(), this.standUser.getZ()) > 80
+                            || !this.getStandUser().isAlive() || this.getStandUser().isRemoved()) {
+                        this.discard();
+                    }
+                } else {
                     this.discard();
                 }
-            } else {
-                this.discard();
             }
         }
 
@@ -170,8 +182,10 @@ public class RoundaboutGeneralProjectile extends AbstractHurtingProjectile imple
             if (isEffectivelyInWater()){
                 tickWater();
             }
-            if (this.getDeltaMovement().equals(Vec3.ZERO)){
-                this.discard();
+            if (killAtZero()) {
+                if (this.getDeltaMovement().equals(Vec3.ZERO)) {
+                    this.discard();
+                }
             }
         }
     }
@@ -272,6 +286,19 @@ public class RoundaboutGeneralProjectile extends AbstractHurtingProjectile imple
     @Override
     protected boolean shouldBurn() {
         return false;
+    }
+
+
+    public void shootThis(Player player){
+        Vec3 addToPosition = new Vec3(0,player.getBbHeight()*0.7F,0);
+        Direction direction = ((IGravityEntity)player).roundabout$getGravityDirection();
+        if (direction != Direction.DOWN){
+            addToPosition = RotationUtil.vecPlayerToWorld(addToPosition,direction);
+        }
+        this.setPos(player.getX()+addToPosition.x, player.getY()+addToPosition.y, player.getZ()+addToPosition.z);
+        this.shootFromRotationDeltaAgnostic(player, player.getXRot(), player.getYRot(), 1.0F, 0f, 0);
+        this.setYRot(player.getYRot());
+        this.setXRot(player.getXRot());
     }
 }
 

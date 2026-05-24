@@ -65,6 +65,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation STAND_FIREBALL_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "stand_fireball"), "main");
     public static final ModelLayerLocation IRON_BALL_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "iron_ball"), "main");
     public static final ModelLayerLocation RIPPER_EYES_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "ripper_eyes"), "main");
+    public static final ModelLayerLocation UV_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "uv"), "main");
     public static final ModelLayerLocation GASOLINE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "gasoline_can"), "main");
     public static final ModelLayerLocation ZOMBIE_AESTHETICIAN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "zombie_aesthetician"), "main");
     public static final ModelLayerLocation STEVE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_steve"), "main");

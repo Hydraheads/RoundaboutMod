@@ -9,6 +9,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -23,6 +24,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -37,6 +39,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -48,10 +51,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
@@ -60,6 +60,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import org.apache.commons.compress.archivers.sevenz.CLI;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -224,106 +225,113 @@ public class ManhattanTransferEntity extends StandEntity {
     }
 
     public boolean isFromHattan = false;
+    public boolean canOthersLoadMT = ClientNetworking.getAppropriateConfig().manhattanTransferSettings.canOtherMobsLoadManhattanTransfer;
+
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
         Entity direct = source.getDirectEntity();
         Entity directEntityWho = source.getEntity();
+        this.bizzarreManhattan();
         if(User != null) {
             if (directEntityWho != null && direct != null) {
-                //  if (direct instanceof Projectile PR && !source.is(ModDamageTypes.STAND)) {
-                if (directEntityWho != this) {
-                    if (directEntityWho.is(User) && !hasItem) {
-                        hasItemTwo = false;
-                        if (direct instanceof AbstractArrow AA) {
-                            ItemStack ii = ((IAbstractArrowAccess) direct).roundabout$GetPickupItem();
-                            if (!ii.isEmpty()) {
-                                hasItem = true;
-                                success = true;
-                                if (AA.pickup.equals(AbstractArrow.Pickup.ALLOWED)) {
+                if (direct instanceof Projectile PR && !source.is(ModDamageTypes.STAND)) {
+                    if (directEntityWho != this) {
+                        if (((directEntityWho.is(User) && !canOthersLoadMT) || canOthersLoadMT) && !hasItem) {
+                            hasItemTwo = false;
+                            if (direct instanceof AbstractArrow AA) {
+                                ItemStack ii = ((IAbstractArrowAccess) direct).roundabout$GetPickupItem();
+                                if (!ii.isEmpty()) {
+                                    hasItem = true;
+                                    success = true;
+                                    if (AA.pickup.equals(AbstractArrow.Pickup.ALLOWED)) {
+                                        this.canAcquireHeldItem = true;
+                                    } else {
+                                        this.canAcquireHeldItem = false;
+                                    }
+                                    this.setHeldItemManhattan(ii.copyAndClear());
+                                    AA.discard();
+                                } else if (AA instanceof RoundaboutBulletEntity BE) {
+                                    hasItem = true;
+                                    success = true;
                                     this.canAcquireHeldItem = true;
-                                } else {
-                                    this.canAcquireHeldItem = false;
+                                    ItemStack bulletItem = BE.getBulletItemStack();
+                                    this.setHeldItemManhattan(bulletItem);
+                                    if (BE.getAmmoType() == RoundaboutBulletEntity.SNUBNOSE) {
+                                        isSnubnose = true;
+                                    } else if (BE.getAmmoType() == RoundaboutBulletEntity.COLT) {
+                                        isSnubnose = false;
+                                    }
+                                    AA.discard();
                                 }
-                                this.setHeldItemManhattan(ii.copyAndClear());
-                                AA.discard();
-                            } else if (AA instanceof RoundaboutBulletEntity BE) {
-                                hasItem = true;
-                                success = true;
-                                this.canAcquireHeldItem = true;
-                                ItemStack bulletItem = BE.getBulletItemStack();
-                                this.setHeldItemManhattan(bulletItem);
-                                if (BE.getAmmoType() == RoundaboutBulletEntity.SNUBNOSE) {
-                                    isSnubnose = true;
-                                } else if (BE.getAmmoType() == RoundaboutBulletEntity.COLT) {
-                                    isSnubnose = false;
-                                }
-                                AA.discard();
-                            }
-                        } else if (direct instanceof ThrowableItemProjectile TO) {
-                            ItemStack ii = TO.getItem();
-                            if (!ii.isEmpty()) {
-                                hasItem = true;
-                                success = true;
-                                this.canAcquireHeldItem = true;
+                            } else if (direct instanceof ThrowableItemProjectile TO) {
+                                ItemStack ii = TO.getItem();
+                                if (!ii.isEmpty()) {
+                                    hasItem = true;
+                                    success = true;
+                                    this.canAcquireHeldItem = true;
 
-                                this.setHeldItemManhattan(ii.copyAndClear());
-                                TO.discard();
-                            }
-                        } else if (direct instanceof ThrownPotion TP) {
-                            TP.discard();
-                            ItemStack ii = TP.getItem();
-                            if (!ii.isEmpty()) {
-                                hasItem = true;
-                                success = true;
-                                if (TP.getOwner() == null || TP.getOwner() instanceof Player) {
-                                    this.canAcquireHeldItem = true;
+                                    this.setHeldItemManhattan(ii.copyAndClear());
+                                    TO.discard();
                                 }
-                                this.setHeldItemManhattan(ii.copyAndClear());
+                            } else if (direct instanceof ThrownPotion TP) {
                                 TP.discard();
-                            }
-                        }/* else if (direct instanceof FireworkRocketEntity RE) {
+                                ItemStack ii = TP.getItem();
+                                if (!ii.isEmpty()) {
+                                    hasItem = true;
+                                    success = true;
+                                    if (TP.getOwner() == null || TP.getOwner() instanceof Player) {
+                                        this.canAcquireHeldItem = true;
+                                    }
+                                    this.setHeldItemManhattan(ii.copyAndClear());
+                                    TP.discard();
+                                }
+                            }/* else if (direct instanceof FireworkRocketEntity RE) {
                             ItemStack ii = RE.getItem();
                             if (!ii.isEmpty()) {
                                 hasItem = true;
                                 this.setHeldItemManhattan(ii.copyAndClear());
                                 RE.getItem().shrink(1);
                                 RE.discard();
-                            }*/
-
-                    } else {
-                        success = false;
-                        if (direct instanceof AbstractArrow AA) {
-                            ItemStack ii = ((IAbstractArrowAccess) AA).roundabout$GetPickupItem();
-                            if (!ii.isEmpty()) {
-                                if (AA.pickup.equals(AbstractArrow.Pickup.ALLOWED)) {
-                                    this.setHeldItemManhattanFull(ii.copyAndClear());
+                            }*/else{
+                              //  Roundabout.LOGGER.info("unstorable projectile");
+                            }
+                        } else {
+                            success = false;
+                            if (direct instanceof AbstractArrow AA) {
+                                if (AA instanceof IronBallEntity) {
+                                    return this.getUser().hurt(source, amount / 2);
+                                }
+                                ItemStack ii = ((IAbstractArrowAccess) AA).roundabout$GetPickupItem();
+                                if (!ii.isEmpty()) {
+                                    if (AA.pickup.equals(AbstractArrow.Pickup.ALLOWED)) {
+                                        this.setHeldItemManhattanFull(ii.copyAndClear());
+                                        hasItemTwo = true;
+                                        AA.discard();
+                                    } else {
+                                        AA.discard();
+                                    }
+                                } else if (AA instanceof RoundaboutBulletEntity BE) {
+                                    ItemStack bulletItem = BE.getBulletItemStack();
+                                    this.setHeldItemManhattanFull(bulletItem);
                                     hasItemTwo = true;
                                     AA.discard();
-                                } else {
-                                    AA.discard();
                                 }
-                            } else if (AA instanceof RoundaboutBulletEntity BE) {
-                                ItemStack bulletItem = BE.getBulletItemStack();
-                                this.setHeldItemManhattanFull(bulletItem);
-                                hasItemTwo = true;
-                                AA.discard();
-                            }
-                        } else if (direct instanceof ThrownObjectEntity TO) {
-                            ItemStack ii = TO.getItem();
-                            if (!ii.isEmpty()) {
-                                this.setHeldItemManhattanFull(ii.copyAndClear());
-                                hasItemTwo = true;
-                                TO.discard();
-                            }
-                        } else if (direct instanceof ThrownPotion TP) {
-                            ItemStack ii = TP.getItem();
-                            if (!ii.isEmpty()) {
-                                this.setHeldItemManhattanFull(ii.copyAndClear());
-                                hasItemTwo = true;
-                                TP.discard();
-                            }
-                        }/* else if (direct instanceof FireworkRocketEntity RE) {
+                            } else if (direct instanceof ThrownObjectEntity TO) {
+                                ItemStack ii = TO.getItem();
+                                if (!ii.isEmpty()) {
+                                    this.setHeldItemManhattanFull(ii.copyAndClear());
+                                    hasItemTwo = true;
+                                    TO.discard();
+                                }
+                            } else if (direct instanceof ThrownPotion TP) {
+                                ItemStack ii = TP.getItem();
+                                if (!ii.isEmpty()) {
+                                    this.setHeldItemManhattanFull(ii.copyAndClear());
+                                    hasItemTwo = true;
+                                    TP.discard();
+                                }
+                            }/* else if (direct instanceof FireworkRocketEntity RE) {
                             ItemStack ii = RE.getItem();
                             if (!ii.isEmpty()) {
                                 success = true;
@@ -334,44 +342,52 @@ public class ManhattanTransferEntity extends StandEntity {
                                 RE.discard();
                             }
                         }*/ else if (direct instanceof ThrowableItemProjectile TH) {
-                            ItemStack ii = TH.getItem();
-                            if (!ii.isEmpty()) {
-                                this.setHeldItemManhattanFull(ii.copyAndClear());
-                                hasItemTwo = true;
-                                TH.discard();
+                                ItemStack ii = TH.getItem();
+                                if (!ii.isEmpty()) {
+                                    this.setHeldItemManhattanFull(ii.copyAndClear());
+                                    hasItemTwo = true;
+                                    TH.discard();
+                                }
+                            }
+                            else{
+                                //Roundabout.LOGGER.info("unstorable projectile");
                             }
                         }
                     }
                 }
-            }
-            if(hasItem && this.canAcquireHeldItem){
-                if(!this.getHeldItemManhattanFull().isEmpty() && !this.getHeldItemManhattanFull().isEmpty()){
+            if (hasItem && this.canAcquireHeldItem) {
+                    if (!this.getHeldItemManhattanFull().isEmpty() && !this.getHeldItemManhattanFull().isEmpty()) {
+                        double $$3 = this.getEyeY() - 0.3F;
+                        ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), this.getHeldItemManhattanFull());
+                        $$4.setThrower(this.getUUID());
+                        this.level().addFreshEntity($$4);
+                        this.setHeldItemManhattanFull(ItemStack.EMPTY);
+                    }
+                } else if (!this.canAcquireHeldItem) {}
+                if (hasItemTwo) {
                     double $$3 = this.getEyeY() - 0.3F;
                     ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), this.getHeldItemManhattanFull());
                     $$4.setThrower(this.getUUID());
                     this.level().addFreshEntity($$4);
                     this.setHeldItemManhattanFull(ItemStack.EMPTY);
+                    hasItemTwo = false;
                 }
-            }
-            else if(!this.canAcquireHeldItem){}
-            if(hasItemTwo){
-                double $$3 = this.getEyeY() - 0.3F;
-                ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), this.getHeldItemManhattanFull());
-                $$4.setThrower(this.getUUID());
-                this.level().addFreshEntity($$4);
-                this.setHeldItemManhattanFull(ItemStack.EMPTY);
-                hasItemTwo = false;
-            }
 
-            if(success) {
-                if(direct instanceof AbstractArrow AA) {
-                    manhattanDamageIncipit = amount;
+                if (success) {
+                    if (direct instanceof AbstractArrow AA) {
+                        manhattanDamageIncipit = amount;
+                    }
                 }
             }
         }
         this.markHurt();
         return super.hurt(source, amount);
     }
+
+    public void bizzarreManhattan() {
+        Roundabout.LOGGER.info("aaaaaaa");
+    }
+
 
     public boolean shootHattan(/*ItemStack item*/){
         /***/
@@ -401,7 +417,7 @@ public class ManhattanTransferEntity extends StandEntity {
                                          boolean playSounds, float mult, boolean canGiveYouItem){
         thrower.playSound(ModSounds.MANHATTAN_DEFLECTION_EVENT, 1.0F, (thrower.random.nextFloat() * 0.2F + 0.7F));
      if(!thrower.level().isClientSide) {
-         if (item.getItem() instanceof ArrowItem && !(item.getItem() instanceof RoundaboutArrowItem)) {
+         if (item.getItem() instanceof ArrowItem) {
              ArrowItem $$10 = (ArrowItem) item.getItem();
              AbstractArrow $$11 = $$10.createArrow(thrower.level(), item, thrower);
              $$11.setPos(pos);
@@ -423,40 +439,40 @@ public class ManhattanTransferEntity extends StandEntity {
          }
          else if (item.getItem() instanceof AmmoItem) {
              AmmoItem $$10 = (AmmoItem) item.getItem();
-             RoundaboutBulletEntity $$8 = new RoundaboutBulletEntity(thrower.level(), thrower);
-             $$8.shootFromRotation(thrower, xRot, yRot, 0.0F,3.5F, 1.3F);
+             RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity(thrower.level(), thrower);
+             $$7.shootFromRotation(thrower, xRot, yRot, 0.0F,3.5F, 1.3F);
 
              if(item.getItem() instanceof SnubnoseAmmoItem){
                  if(thrower.isSnubnose){
-                     $$8.setAmmoType(RoundaboutBulletEntity.SNUBNOSE);
+                     $$7.setAmmoType(RoundaboutBulletEntity.SNUBNOSE);
                  }
                  else{
-                     $$8.setAmmoType(RoundaboutBulletEntity.COLT);
+                     $$7.setAmmoType(RoundaboutBulletEntity.COLT);
                  }
              } else if(item.getItem() instanceof SniperAmmoItem){
-                 $$8.setAmmoType(RoundaboutBulletEntity.SNIPER);
+                 $$7.setAmmoType(RoundaboutBulletEntity.SNIPER);
              } else if(item.getItem() instanceof TommyAmmoItem){
-                 $$8.setAmmoType(RoundaboutBulletEntity.TOMMY_GUN);
+                 $$7.setAmmoType(RoundaboutBulletEntity.TOMMY_GUN);
              }
-             thrower.level().addFreshEntity($$8);
-             $$8.setOwner(thrower.getUser());
+             thrower.level().addFreshEntity($$7);
+             $$7.setOwner(thrower.getUser());
          }
          else if (item.getItem() instanceof EnderpearlItem){
-             ThrownEnderpearl $$2 = new ThrownEnderpearl(thrower.level(), thrower);
-             $$2.setPos(pos);
-             $$2.setItem(item);
-             $$2.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
+             ThrownEnderpearl $$7 = new ThrownEnderpearl(thrower.level(), thrower);
+             $$7.setPos(pos);
+             $$7.setItem(item);
+             $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
 
-             $$2.setOwner(thrower.getUser());
-             thrower.level().addFreshEntity($$2);
+             $$7.setOwner(thrower.getUser());
+             thrower.level().addFreshEntity($$7);
          }
          else if (item.getItem() instanceof SnowballItem){
-             Snowball $$4 = new Snowball(thrower.level(), thrower);
-             $$4.setPos(pos);
-             $$4.setItem(item);
-             $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
-             $$4.setOwner(thrower.getUser());
-             thrower.level().addFreshEntity($$4);
+             Snowball $$7 = new Snowball(thrower.level(), thrower);
+             $$7.setPos(pos);
+             $$7.setItem(item);
+             $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
+             $$7.setOwner(thrower.getUser());
+             thrower.level().addFreshEntity($$7);
          }else if(item.getItem() instanceof TridentItem || item.getItem() instanceof HarpoonItem){
              if(item.getItem() instanceof TridentItem){
                  ThrownTrident $$7 = new ThrownTrident(thrower.level(), thrower, item);
@@ -469,11 +485,28 @@ public class ManhattanTransferEntity extends StandEntity {
              else{
                  HarpoonEntity $$7 = new HarpoonEntity(thrower.level(), thrower, item);
                  $$7.setPos(pos);
-               //  $$7.setItem(item);
                  $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
                  $$7.setOwner(thrower.getUser());
                  thrower.level().addFreshEntity($$7);
              }
+         }else if (item.is(Items.IRON_INGOT)){
+             IronBallEntity $$7 = new IronBallEntity(thrower.level(), thrower, item);
+             $$7.setPos(pos);
+             $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
+             $$7.setOwner(thrower.getUser());
+             thrower.level().addFreshEntity($$7);
+         }else if (item.getItem() instanceof KnifeItem){
+             KnifeEntity $$7 = new KnifeEntity(thrower.level(), thrower, item);
+             $$7.setPos(pos);
+             $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
+             $$7.setOwner(thrower.getUser());
+             thrower.level().addFreshEntity($$7);
+         }else if (item.getItem() instanceof MatchItem){
+             KnifeEntity $$7 = new KnifeEntity(thrower.level(), thrower, item);
+             $$7.setPos(pos);
+             $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
+             $$7.setOwner(thrower.getUser());
+             thrower.level().addFreshEntity($$7);
          }
              else {
             getCanPlace = false;
@@ -553,8 +586,6 @@ public class ManhattanTransferEntity extends StandEntity {
 
                 }
             }
-        nextPathfind++;
-        doBasicPathfind();
     }
     int stupidTicks = 1;
     int nextPathfind = 1;
@@ -576,20 +607,187 @@ public class ManhattanTransferEntity extends StandEntity {
     }
 
     public final AnimationState rain_dodging_manhattan = new AnimationState();
+    public final AnimationState slow_manhattan = new AnimationState();
+    public final AnimationState forward_manhattan_incipit = new AnimationState();
+    public final AnimationState forward_manhattan_loop = new AnimationState();
+    public final AnimationState back_manhattan_incipit = new AnimationState();
+    public final AnimationState back_manhattan_loop = new AnimationState();
+    public final AnimationState back_manhattan_stop = new AnimationState();
+    public final AnimationState forward_manhattan_stop = new AnimationState();
+    public final AnimationState left_manhattan_incipit = new AnimationState();
+    public final AnimationState left_manhattan_loop = new AnimationState();
+    public final AnimationState left_manhattan_stop = new AnimationState();
+    public final AnimationState right_manhattan_incipit = new AnimationState();
+    public final AnimationState right_manhattan_loop = new AnimationState();
+    public final AnimationState right_manhattan_stop = new AnimationState();
+
+    public int animationSetupTicks = 0;
+    public void setAnimationSetupTicks(int vanm){DodgeRainTicks = vanm;}
+
+    public boolean isPressingW = false;
+    public boolean isPressingA = false;
+    public boolean isPressingS = false;
+    public boolean isPressingD = false;
+
 
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
+        Options options = Minecraft.getInstance().options;
         if(this.getUserData(this.getUser()) != null && this.getUser() != null) {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                AnimationState $$0 = this.slow_manhattan;
+                AnimationState $$1 = this.forward_manhattan_incipit;
+                AnimationState $$2 = this.forward_manhattan_loop;
+                AnimationState $$3 = this.back_manhattan_incipit;
+                AnimationState $$4 = this.back_manhattan_loop;
+                AnimationState $$5 = this.back_manhattan_stop;
+                AnimationState $$6 = this.forward_manhattan_stop;
+                AnimationState $$7 = this.left_manhattan_incipit;
+                AnimationState $$8 = this.left_manhattan_stop;
+                AnimationState $$9 = this.left_manhattan_loop;
+                AnimationState $$10 = this.right_manhattan_incipit;
+                AnimationState $$11 = this.right_manhattan_stop;
+                AnimationState $$12 = this.right_manhattan_loop;
+
                 if (!PM.isActive()) {
                     //this.rain_dodging_manhattan.stop();
                 } else {
                     if (isInRain()) {
                         this.rain_dodging_manhattan.startIfStopped(this.tickCount);
+                        $$2.stop();
+                        $$1.stop();
+                        $$3.stop();
+                        $$4.stop();
+                        $$5.stop();
+                        $$6.stop();
+                        $$7.stop();
+                        $$8.stop();
+                        $$9.stop();
+                        $$10.stop();
+                        $$11.stop();
+                        $$12.stop();
                     }
                     if (!isInRain()) {
                         this.rain_dodging_manhattan.stop();
+
+                        if(PM.isPiloting()) {
+                            if (options.keyUp.isDown()) {
+                                isPressingW = true;
+                            } if (!options.keyUp.isDown()) {
+                                isPressingW = false;
+                            }
+                            if (options.keyDown.isDown()) {
+                                isPressingS = true;
+                            } if (!options.keyDown.isDown()) {
+                                isPressingS = false;
+                            }
+                            if (options.keyLeft.isDown()) {
+                                isPressingA = true;
+                            } if (!options.keyLeft.isDown()) {
+                                isPressingA = false;
+                            }
+                            if (options.keyRight.isDown()) {
+                                isPressingD = true;
+                            } if (!options.keyRight.isDown()) {
+                                isPressingD = false;
+                            }
+
+                            if (isPressingW && !isPressingS) {
+                                $$1.startIfStopped(this.tickCount);
+                                $$2.startIfStopped(this.tickCount);
+                                $$4.stop();
+                                $$6.stop();
+                                $$0.stop();
+                            } else {
+                                $$1.stop();
+                                $$2.stop();
+                                $$6.startIfStopped(this.tickCount);
+                                $$0.startIfStopped(this.tickCount);
+                            }
+                            if (isPressingS && !isPressingW) {
+                                $$3.startIfStopped(this.tickCount);
+                                $$4.startIfStopped(this.tickCount);
+                                $$2.stop();
+                                $$0.stop();
+                                $$5.stop();
+                            } else {
+                                $$3.stop();
+                                $$4.stop();
+                                $$5.startIfStopped(this.tickCount);
+                                $$0.startIfStopped(this.tickCount);
+                            }
+
+                            if(isPressingW && isPressingS){
+                                $$1.stop();
+                                $$2.stop();
+                                $$3.stop();
+                                $$4.stop();
+                                if($$2.isStarted()){
+                                    $$6.startIfStopped(this.tickCount);
+                                }
+                                if($$4.isStarted()){
+                                    $$5.startIfStopped(this.tickCount);
+                                }
+                                $$0.startIfStopped(this.tickCount);
+                            }
+
+                            if (isPressingA && !isPressingD) {
+                                $$7.startIfStopped(this.tickCount);
+                                $$9.startIfStopped(this.tickCount);
+                                $$12.stop();
+                                $$8.stop();
+                                $$0.stop();
+                            } else {
+                                $$8.startIfStopped(this.tickCount);
+                                $$0.startIfStopped(this.tickCount);
+                                $$7.stop();
+                                $$9.stop();
+                            }
+
+                            if (isPressingD && !isPressingA) {
+                                $$10.startIfStopped(this.tickCount);
+                                $$12.startIfStopped(this.tickCount);
+                                $$9.stop();
+                                $$11.stop();
+                                $$0.stop();
+                            } else {
+                                $$11.startIfStopped(this.tickCount);
+                                $$0.startIfStopped(this.tickCount);
+                                $$10.stop();
+                                $$12.stop();
+                            }
+
+                            if (isPressingD && isPressingA) {
+                                $$7.stop();
+                                $$9.stop();
+                                $$10.stop();
+                                $$12.stop();
+                                if($$9.isStarted()){
+                                    $$8.startIfStopped(this.tickCount);
+                                }
+                                if($$12.isStarted()){
+                                    $$11.startIfStopped(this.tickCount);
+                                }
+                                $$0.startIfStopped(this.tickCount);
+                            }
+
+                        } else{
+                            $$0.startIfStopped(this.tickCount);
+                            $$2.stop();
+                            $$1.stop();
+                            $$3.stop();
+                            $$4.stop();
+                            $$5.stop();
+                            $$6.stop();
+                            $$7.stop();
+                            $$8.stop();
+                            $$9.stop();
+                            $$10.stop();
+                            $$11.stop();
+                            $$12.stop();
+                        }
+
                     }
                 }
             }

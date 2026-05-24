@@ -432,6 +432,7 @@
   "entity.roundabout.stand_fireball": "Stand Fireball",
   "entity.roundabout.evil_aura_projectile": "Evil Aura",
   "entity.roundabout.ripper_eyes": "Ripper Eyes",
+  "entity.roundabout.uv": "UV Blast",
   "entity.roundabout.thrown_object": "Thrown Object",
   "entity.roundabout.ratt_dart": "Ratt Dart",
   "entity.roundabout.painting_van_gough": "VG Painting",
@@ -591,6 +592,7 @@
   "sounds.roundabout.dsp_summon": "Explosive Stand Summon",
   "sounds.roundabout.vampire_message": "-serrated-",
   "sounds.roundabout.vampire_camo": "Whoosh",
+  "sounds.roundabout.uv_blast": "Energy Ripples",
   "sounds.roundabout.vsong_silent_reveries": "Silent Reveries",
   "sounds.roundabout.vsong_twisted": "Twisted",
   "sounds.roundabout.vsong_bloodcurdling_moments": "Bloodcurdling Moments",
@@ -719,6 +721,8 @@
   "death.attack.ripper_eyes.item": "%1$s was ripped apart by %2$s",
   "death.attack.iron_ball": "%1$s was blown away by %2$s",
   "death.attack.iron_ball.item": "%1$s was blown away by %2$s",
+  "death.attack.ultraviolet": "%1$s saw things in a new light thanks to %2$s",
+  "death.attack.ultraviolet.item": "%1$s saw things in a new light thanks to %2$s",
 
   "item.glaive.charge_power": "Charge Attack",
 
@@ -847,7 +851,7 @@
   "sounds.roundabout.manhattan_summoning":  "Summon Manhattan Transfer",
   "sounds.roundabout.manhattan_rain_dodging":  "Manhattan Transfer Dodging Rain",
   "sounds.roundabout.manhattan_vision":  "Wind Reading ON",
-  "sounds.roundabout.manhattan_deflection":  "Manhattan Deflects Bullet",
+  "sounds.roundabout.manhattan_bullet_deflect":  "Manhattan Deflects Bullet",
 
   "sounds.roundabout.bullet_ricochet":  "Bullet ricochetted",
 
@@ -2290,7 +2294,8 @@
   "config.roundabout.fixModLoaderCreatedBugs.name": "Fix Modloader Bugs",
   "config.roundabout.fixModLoaderCreatedBugs.desc": "Forge especially replaces a lot of vanilla code with its own creating new bugs. For instance, on forge you can block the warden without your shield being disabled (this is not true of vanilla). Turning on this setting fixes any bug I find like that which is actively causing the mod problems.",
 
-
+  "config.roundabout.enableKillerQueen.name": "Enable Stand",
+  "config.roundabout.enableKillerQueen.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableMagiciansRed.name": "Enable Stand",
   "config.roundabout.enableMagiciansRed.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableSoftAndWet.name": "Enable Stand",
@@ -2537,9 +2542,11 @@
   "config.roundabout.manhattanTransferMaxRange.name": "Manhattan Transfer Max Range",
   "config.roundabout.manhattanTransferMaxRange.desc": "How far you and Manhattan Transfer can distance until it despawns.",
   "config.roundabout.getAutoSpeed.name":"Automatic Speed Modifier",
-  "config.roundabout.getAutoSpeed.desc": "Select the velocity of the stand's automatic movement from 1 to 5. The lowest is easier to shoot to the stand, the highest ones are optimal by who has mastered the stand and wants it to move faster.",
+  "config.roundabout.getAutoSpeed.desc": "Select the velocity of the stand's automatic movement from 1 to 5. The lowest is easier to shoot the stand, the highest ones are optimal by who has mastered the stand and wants it to move faster.",
   "config.roundabout.manhattanDashCooldown.name":"Manhattan Transfer Dash Cooldown",
   "config.roundabout.manhattanDashCooldown.desc":"Cooldown for Manhattan Transfer's dash move",
+  "config.roundabout.canOtherMobsLoadManhattanTransfer.name":"Other Mobs Can Load Your Manhattan Transfer",
+  "config.roundabout.canOtherMobsLoadManhattanTransfer.desc":"Decide if other mobs can load your stand. Remember that projectiles shot by your MT become yours, so you can manipulate an another players Enderpearl to teleport you instead of teleporting the other player. It's set to false to simulate how the stand works in the original source, but you can turn it on.",
 
   "config.roundabout.walkingHeartAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.walkingHeartAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
@@ -3008,6 +3015,10 @@
   "config,roundabout.moldDMGPlayersMultiplier.name": "Mold Damage Multiplier (Players)",
   "config,roundabout.moldDMGPlayersMultiplier.desc": "Controls the damage players take when they fall in green days mold fields",
 
+  "config,roundabout.enableBitesTheDustDayMode.name": "Enable Bites the dust (Day Mode)",
+  "config,roundabout.enableBitesTheDustDayMode.desc": "Turn on/off the Bites the Dust Day mode, that restart the day of the game when detonating (disabled by default)",
+  "config,roundabout.bombOverlayHideOnF1.name": "Bomb Overlays hides on F1",
+  "config,roundabout.bombOverlayHideOnF1.desc": "Turn on/off the action of hiding the bomb overlay when pressing F1",
 
   "config.roundabout.theWorldAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.theWorldAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
@@ -3241,6 +3252,7 @@
   "config.roundabout.standLevelingSettings.name": "Stand Leveling",
   "config.roundabout.anubisSettings.name": "Anubis",
   "config.roundabout.softAndWetSettings.name": "Soft And Wet",
+  "config.roundabout.killerQueenSettings.name": "Killer Queen (W.I.P)",
   "config.roundabout.magiciansRedSettings.name": "Magician's Red",
   "config.roundabout.walkingHeartSettings.name": "Walking Heart",
   "config.roundabout.greenDaySettings.name": "Green Day",

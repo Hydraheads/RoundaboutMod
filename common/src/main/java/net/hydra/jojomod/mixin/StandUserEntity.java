@@ -1260,6 +1260,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.setLastHurtMob(null);
         if (((LivingEntity)(Object)this) instanceof Mob mb){
             mb.setTarget(null);
+            Roundabout.LOGGER.info("4"+mb.getTarget());
             ((IMob)mb).roundabout$deeplyRemoveTargets();
             ((IMob)mb).roundabout$setSightProtectionTicks(ClientNetworking.getAppropriateConfig().softAndWetSettings.ticksBetweenSightStealsOnSameMob);
         }
@@ -3679,7 +3680,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 Entity ent = dsource.getEntity();
 
                 if (dsource.getEntity() instanceof BaseMinion bm && bm.getController() > 0) {
-                    rdbt$spawnZombieMinion2(bm.getController());
+                    rdbt$spawnZombieMinion2(bm.getController(), bm.controller2);
                 } else {
                     rdbt$spawnZombieMinion(dsource.getEntity());
                 }
@@ -3754,11 +3755,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Unique
-    public void rdbt$spawnZombieMinion2(int ent){
+    public void rdbt$spawnZombieMinion2(int ent, UUID controller2){
         if (!this.level().isClientSide()) {
             if (rdbt$this() instanceof Mob lent) {
                 VillagerMinion villagerMinion = lent.convertTo(ModEntities.VILLAGER_MINION, false);
-                villagerMinion.setController(ent);
+                villagerMinion.controller2 =controller2;
                 if (level() instanceof ServerLevel SL) {
                     SL.sendParticles(ModParticles.BLUE_SPARKLE,
                             this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
