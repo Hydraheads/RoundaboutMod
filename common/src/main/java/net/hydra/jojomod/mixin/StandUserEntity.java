@@ -515,7 +515,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     MobEffect $$1 = $$0.next();
                     MobEffectInstance $$2 = this.activeEffects.get($$1);
                     if ($$2.isVisible() && !$$2.getEffect().equals(ModEffects.BLEED) && !$$2.getEffect().equals(ModEffects.CAPTURING_LOVE)
-                            && !$$2.getEffect().equals(ModEffects.FACELESS)
+                            && !$$2.getEffect().equals(ModEffects.FACELESS) && !$$2.getEffect().equals(ModEffects.SINGE)
                             && !$$2.getEffect().equals(ModEffects.BANISH) && !$$2.getEffect().equals(ModEffects.SWITCH)) {
                         onlyBleeding = false;
                     }
@@ -580,6 +580,26 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 this.level()
                         .addParticle(
                                 ModParticles.MELTING,
+                                vec3d2.x,
+                                vec3d2.y,
+                                vec3d2.z,
+                                0,
+                                0,
+                                0
+                        );
+            }
+        } if (this.getEffect(ModEffects.SINGE) != null) {
+            int stacks = this.getEffect(ModEffects.SINGE).getAmplifier();
+            int bloodticks = 8;
+            if (stacks == 3) {
+                bloodticks = 6;
+            } else if (stacks > 5) {
+                bloodticks = 4;
+            }
+            if (this.tickCount % bloodticks == 0) {
+                this.level()
+                        .addParticle(
+                                ParticleTypes.LAVA,
                                 vec3d2.x,
                                 vec3d2.y,
                                 vec3d2.z,
