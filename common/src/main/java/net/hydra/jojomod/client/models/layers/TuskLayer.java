@@ -79,13 +79,13 @@ public class TuskLayer<T extends LivingEntity, A extends HumanoidModel<T>> exten
 
 
 
-                       /* if (PT.renderDrill()) {
+                       if (PT.renderDrill()) {
                             if (PT.renderBothArms() || entity.getMainArm() == HumanoidArm.RIGHT) {
                                 poseStack.pushPose(); // DRILL
                                 getParentModel().rightArm.translateAndRotate(poseStack);
                                 poseStack.translate(-0.15, -0.5, 0);
                                 poseStack.scale(0.80F, 0.8F, 0.8F);
-                                ModStrayModels.TUSK_DRILL.render(livent, partialTicks, poseStack, bufferSource, packedLight, r, g, b, 1.0F);
+                                ModStrayModels.TUSK_DRILL.render(entity, partialTicks, poseStack, bufferSource,1.0F);
                                 poseStack.popPose();
                             }
                             if (PT.renderBothArms() || entity.getMainArm() == HumanoidArm.LEFT) {
@@ -93,10 +93,10 @@ public class TuskLayer<T extends LivingEntity, A extends HumanoidModel<T>> exten
                                 getParentModel().leftArm.translateAndRotate(poseStack);
                                 poseStack.translate(-0.05, -0.5, 0);
                                 poseStack.scale(0.80F, 0.8F, 0.8F);
-                                ModStrayModels.TUSK_DRILL.render(livent, partialTicks, poseStack, bufferSource, packedLight, r, g, b, 1.0F);
+                                ModStrayModels.TUSK_DRILL.render(entity, partialTicks, poseStack, bufferSource,1.0F);
                                 poseStack.popPose();
                             }
-                        } */
+                        }
                     }
                 }
             }

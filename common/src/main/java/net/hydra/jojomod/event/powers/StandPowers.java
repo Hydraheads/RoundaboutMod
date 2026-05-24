@@ -2166,6 +2166,8 @@ public class StandPowers extends AbilityScapeBasis {
         return Component.empty();
     }
 
+    // adds additional save data to discs. An example of what this could be used for is mandom watch styles and tusk nail colors
+    // also consider that skins are also saved onto the data, so anything that's cosmetic in that regard would work
     public void addAdditionalSaveData(CompoundTag $$0) {
 
     }

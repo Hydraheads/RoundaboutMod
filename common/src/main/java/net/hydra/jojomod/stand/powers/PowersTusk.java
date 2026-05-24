@@ -18,6 +18,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -140,56 +141,60 @@ public class PowersTusk extends NewDashPreset {
         return super.canUseMiningStand() && !this.isShooting() && this.hasNail();
     }
 
-    public int getMaxActiveNails() {return 10-(int)Math.ceil(getLightNails()+getHeavyNails());}
+
+
+    public static final int flattenTime = 40;
+    public float flattenTicks = 0;
+
+    ArrayList<CooldownInstance> nailCooldowns = new ArrayList<>();
+    public int getUsedNails() {return nailCooldowns.size();}
+    public int getMaxActiveNails() {return 10-getUsedNails();}
 
     private int getMainHandNails() {return Math.min(5, getMaxActiveNails() );}
     private int getOffHandNails() {return Math.max(0,getMaxActiveNails()-5);}
     public int getLeftHandNails() {return this.getSelf().getMainArm() == HumanoidArm.RIGHT ? getOffHandNails() : getMainHandNails();}
     public int getRightHandNails() {return this.getSelf().getMainArm() == HumanoidArm.RIGHT ? getMainHandNails() : getOffHandNails();}
 
-    public static final int flattenTime = 40;
-    public float flattenTicks = 0;
 
     public boolean hasNail() {return getMaxActiveNails() > 0;}
-    private float lightCooldown = 0;
-    public float getLightNails() {return lightCooldown;}
-    private float heavyCooldown = 0;
-    public float getHeavyNails() {return heavyCooldown;}
+
+
+    private void addCooldown(int time) {
+        if (this.nailCooldowns.size() < 10) {
+            this.nailCooldowns.add(new CooldownInstance(time,time));
+        }
+    }
 
     private void expendNails() {
         if (this.nailCharge > 0) {
             if (this.getAct() == 1) {
-                this.lightCooldown += this.nailCharge;
-            } else {
-                this.heavyCooldown += this.nailCharge;
+                for (int i=0;i<this.nailCharge;i++) {
+                  this.addCooldown(10*20);
+                }
             }
         } else {
             if (this.getAct() > 1) {
-                this.heavyCooldown += 1;
+                this.addCooldown(60*20);
             }
         }
     }
 
     private void tickNails() {
-        if (this.lightCooldown > 0) {
-            float lightNailLoss = 1.0F / (5.0F * 20.0F);
-            lightNailLoss *= Math.max(Math.min(10-this.getMaxActiveNails(),3) * 0.8F,1);
-            this.lightCooldown = Mth.clamp(this.lightCooldown- lightNailLoss,0,10);
-        }
-        if (this.heavyCooldown > 0) {
-            float heavyNailLoss = 1.0F / (60.0F * 20.0F);
-            heavyNailLoss *= Math.max((Math.min(10-this.getMaxActiveNails(),5) * 0.8F),1);
-            this.heavyCooldown = Mth.clamp(this.heavyCooldown- heavyNailLoss,0,10);
+        for (int i=0;i<this.nailCooldowns.size();i++) {
+            CooldownInstance cd = this.nailCooldowns.get(i);
+            if (cd.time <= 0) {
+                this.nailCooldowns.remove(cd);
+            } else {
+                cd.time -= 1;
+            }
         }
         if (this.getSelf() instanceof Player P && P.isCreative()) {
-            this.heavyCooldown = 0;
-            this.lightCooldown = 0;
+            this.nailCooldowns = new ArrayList<>();
         }
     }
     @Override
     public void refreshCooldowns() {
-        this.heavyCooldown = 0;
-        this.lightCooldown = 0;
+        this.nailCooldowns = new ArrayList<>();
         this.extraCharge = 0;
         super.refreshCooldowns();
     }
@@ -372,6 +377,8 @@ public class PowersTusk extends NewDashPreset {
     public void tickPower() {
         super.tickPower();
         this.tickNails();
+
+
 
         if (this.getSelf() instanceof Player P) {
 
@@ -923,7 +930,7 @@ public class PowersTusk extends NewDashPreset {
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (this.isGunMode() && (options.keyUse.isDown())) {
             if (keyIsDown) {
-                buttonInputShoot(keyIsDown, options, this.getAct());
+                buttonInputShoot(true, options, this.getAct());
             } else {
                 shootRelease();
             }
@@ -1218,8 +1225,9 @@ public class PowersTusk extends NewDashPreset {
                 pos.x+radius,pos.y,pos.z+radius);
         for (Entity entity : targets) {
             if (entity instanceof TuskHoleEntity THE && entity.distanceTo(this.getSelf()) < radius) {
-                if (this.targetHole == null || targetHole != entity)
-                return THE;
+                if (this.targetHole == null || targetHole != entity) {
+                    return THE;
+                }
             }
         }
         return null;
@@ -1266,7 +1274,7 @@ public class PowersTusk extends NewDashPreset {
                 tryPower(PowersTusk.SHOOT_MODE);
                 tryPowerPacket(PowersTusk.SHOOT_MODE);
             } else {
-                buttonInputShoot(keyIsDown,options,this.getAct());
+                buttonInputShoot(true,options,this.getAct());
             }
         }
         return false;
@@ -1429,20 +1437,18 @@ public class PowersTusk extends NewDashPreset {
             context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 71, 182, 5);
 
             int deltaX = x;
-            if (PT.getHeavyNails() > 0) {
-                int k = (int) (18.2F * PT.getHeavyNails());
-                context.blit(StandIcons.JOJO_ICONS_2, deltaX, l, 0, 81, k, 5);
-                deltaX += k;
+
+            for (CooldownInstance cd : this.nailCooldowns) {
+                int type = cd.maxTime > 10 * 20 ? 81 : 76;
+                context.blit(StandIcons.JOJO_ICONS_2,deltaX,l,0,86,18,5);
+                int size = (int) ( 18.2*cd.time/cd.maxTime);
+                context.blit(StandIcons.JOJO_ICONS_2,deltaX,l,0,type,size,5);
+                deltaX += 18;
             }
-            if (PT.getLightNails() > 0) {
-                int k = (int) (18.2F * PT.getLightNails());
-                context.blit(StandIcons.JOJO_ICONS_2, deltaX, l, 0, 76, k, 5);
-                deltaX += k;
-            }
+
             if (PT.getNailCharge() > 0) {
                 int k = (int) (18.2F * PT.getNailCharge());
                 context.blit(StandIcons.JOJO_ICONS_2, deltaX, l, 0, 86, k, 5);
-                deltaX += k;
             }
 
 
@@ -1588,9 +1594,7 @@ public class PowersTusk extends NewDashPreset {
         return nailColor;
     }
     public void setNailColor(float x, float y, float z) {
-        this.nailColor.x = x;
-        this.nailColor.y = y;
-        this.nailColor.z = z;
+        this.nailColor = new Vector3f(x,y,z);
         if (this.getSelf() != null && !this.isClient() && this.getSelf() instanceof Player P) {
             S2CPacketUtil.sendIntPowerDataPacket(P,PowersTusk.SYNC_NAILS,(int)(this.nailColor.x*255)*1000000 + (int)(this.nailColor.y*255)*1000 + (int)(this.nailColor.z*255) );
         }

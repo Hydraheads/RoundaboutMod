@@ -277,20 +277,19 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                 StandUser user = ((StandUser) player);
 
                 if (user.roundabout$getStandPowers() instanceof PowersTusk PT && PowerTypes.isUsingStand(player)) {
-                  /*  if  (PT.renderDrill()) {
+                  if  (PT.renderDrill()) {
                         if (renderRight) {
                             poseStack.pushPose();
                             this.transform.translateAndRotate(poseStack);
                             this.rform.translateAndRotate(poseStack);
                             this.right_arm.translateAndRotate(poseStack);
-                            poseStack.translate(-0.2, -0.85, 0);
-                            poseStack.scale(0.9F, 0.9F, 0.9F);
+                            poseStack.translate(-0.2, -0.75, 0);
+                            poseStack.scale(0.8F, 0.8F, 0.8F);
                             ModStrayModels.TUSK_DRILL.render(
                                     player, partialTicks,
                                     poseStack,
                                     bufferSource,
-                                    light,
-                                    r, g, b, 1
+                                    1
                             );
                             poseStack.popPose();
                         }
@@ -300,18 +299,17 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                             this.transform.translateAndRotate(poseStack);
                             this.lform.translateAndRotate(poseStack);
                             this.left_arm.translateAndRotate(poseStack);
-                            poseStack.translate(0, -0.8, 0);
-                            poseStack.scale(0.9F, 0.9F, 0.9F);
+                            poseStack.translate(0, -0.7, 0);
+                            poseStack.scale(0.8F, 0.8F, 0.8F);
                             ModStrayModels.TUSK_DRILL.render(
                                     player, partialTicks,
                                     poseStack,
                                     bufferSource,
-                                    light,
-                                    r, g, b, 1
+                                    1
                             );
                             poseStack.popPose();
                         }
-                    } */
+                    }
                     boolean rh = player.getMainArm() == HumanoidArm.RIGHT;
                     if (renderLeft) {
                         poseStack.pushPose();

@@ -25,4 +25,9 @@ public class CooldownInstance {
     {
         return this.frozen;
     }
+
+    @Override
+    public String toString() {
+        return time + "/" + maxTime;
+    }
 }

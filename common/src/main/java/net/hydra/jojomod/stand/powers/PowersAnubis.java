@@ -1795,7 +1795,8 @@ public class PowersAnubis extends NewDashPreset {
             CHAINBLADE = 21,
             CHEF = 22,
             SERPENT = 23,
-            SOULBORN = 24;
+            SOULBORN = 24,
+            BONE_BLADE = 25;
 
 
     @Override
@@ -1810,7 +1811,8 @@ public class PowersAnubis extends NewDashPreset {
             if (Level > 1 || bypass){
                 $$1.add(WOODEN);
                 $$1.add(STONE);
-        //        $$1.add(CHEF);
+                $$1.add(BONE_BLADE);
+                //        $$1.add(CHEF);
             } if (Level > 2 || bypass){
                 $$1.add(ALLURING);
                 $$1.add(RAGING);
@@ -1863,6 +1865,7 @@ public class PowersAnubis extends NewDashPreset {
             case PowersAnubis.CHAINBLADE -> Component.translatable("skins.roundabout.anubis.chainblade");
             case PowersAnubis.CHEF -> Component.translatable("skins.roundabout.anubis.chef");
             case PowersAnubis.SERPENT -> Component.translatable("skins.roundabout.anubis.serpent");
+            case PowersAnubis.BONE_BLADE -> Component.translatable("skins.roundabout.anubis.boneblade");
             case PowersAnubis.SOULBORN -> Component.translatable("skins.roundabout.anubis.soulborn");
 
             default -> Component.translatable("skins.roundabout.anubis.anime");
