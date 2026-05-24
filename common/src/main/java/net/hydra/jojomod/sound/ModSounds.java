@@ -221,9 +221,6 @@ public class ModSounds {
     public static final String MANHATTAN_VISION = "manhattan_vision";
     public static final ResourceLocation MANHATTAN_VISION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+MANHATTAN_VISION);
     public static SoundEvent MANHATTAN_VISION_EVENT = SoundEvent.createVariableRangeEvent(MANHATTAN_VISION_ID);
-    public static final String MANHATTAN_DEFLECTION = "manhattan_bullet_deflect";
-    public static final ResourceLocation MANHATTAN_DEFLECTION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+MANHATTAN_DEFLECTION);
-    public static SoundEvent MANHATTAN_DEFLECTION_EVENT = SoundEvent.createVariableRangeEvent(MANHATTAN_DEFLECTION_ID);
 
     public static final String CENTURY_BOY_SUMMON = "century_boy_summon";
     public static final ResourceLocation CENTURY_BOY_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CENTURY_BOY_SUMMON);

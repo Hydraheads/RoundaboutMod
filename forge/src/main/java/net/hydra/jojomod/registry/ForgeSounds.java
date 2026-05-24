@@ -116,8 +116,6 @@ public class ForgeSounds {
             register(ModSounds.MANHATTAN_DODGING, ModSounds.MANHATTAN_DODGING_ID);
     public static final RegistryObject<SoundEvent> MANHATTAN_VISION_EVENT =
             register(ModSounds.MANHATTAN_VISION, ModSounds.MANHATTAN_VISION_ID);
-    public static final RegistryObject<SoundEvent> MANHATTAN_DEFLECTION_EVENT =
-            register(ModSounds.MANHATTAN_DEFLECTION, ModSounds.MANHATTAN_DEFLECTION_ID);
 
     public static final RegistryObject<SoundEvent> CENTURY_BOY_SUMMON_EVENT =
             register(ModSounds.CENTURY_BOY_SUMMON, ModSounds.CENTURY_BOY_SUMMON_ID);

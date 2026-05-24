@@ -415,7 +415,7 @@ public class ManhattanTransferEntity extends StandEntity {
                                          float getThrowAngle1, float getThrowAngle2, float getThrowAngle3,
                                          boolean getCanPlace, float xRot, float yRot,Vec3 pos,
                                          boolean playSounds, float mult, boolean canGiveYouItem){
-        thrower.playSound(ModSounds.MANHATTAN_DEFLECTION_EVENT, 1.0F, (thrower.random.nextFloat() * 0.2F + 0.7F));
+        thrower.playSound(ModSounds.BULLET_RICOCHET_EVENT, 1.0F, (thrower.random.nextFloat() * 0.2F + 0.7F));
      if(!thrower.level().isClientSide) {
          if (item.getItem() instanceof ArrowItem) {
              ArrowItem $$10 = (ArrowItem) item.getItem();
@@ -501,10 +501,10 @@ public class ManhattanTransferEntity extends StandEntity {
              $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
              $$7.setOwner(thrower.getUser());
              thrower.level().addFreshEntity($$7);
-         }else if (item.getItem() instanceof MatchItem){
+         }else if (item.getItem() instanceof MatchItem) {
              KnifeEntity $$7 = new KnifeEntity(thrower.level(), thrower, item);
              $$7.setPos(pos);
-             $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
+             $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
              $$7.setOwner(thrower.getUser());
              thrower.level().addFreshEntity($$7);
          }
