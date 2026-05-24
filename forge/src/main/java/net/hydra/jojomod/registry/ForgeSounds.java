@@ -659,6 +659,17 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> VSONG_DAMNABLE_CEREMONY =
             register(ModSounds.VSONG_DAMNABLE_CEREMONY, ModSounds.VSONG_DAMNABLE_CEREMONY_ID);
 
+    public static final RegistryObject<SoundEvent> PLANET_WAVES_SUMMON =
+            register(ModSounds.PLANET_WAVES_SUMMON, ModSounds.PLANET_WAVES_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> PLANET_WAVES_METEOR_SHOWER =
+            register(ModSounds.PLANET_WAVES_METEOR_SHOWER, ModSounds.PLANET_WAVES_METEOR_SHOWER_ID);
+    public static final RegistryObject<SoundEvent> PLANET_WAVES_BIG_METEOR=
+            register(ModSounds.PLANET_WAVES_BIG_METEOR, ModSounds.PLANET_WAVES_BIG_METEOR_ID);
+    public static final RegistryObject<SoundEvent> PLANET_WAVES_DISINTEGRTATION=
+            register(ModSounds.PLANET_WAVES_DISINTEGRATION, ModSounds.PLANET_WAVES_DISINTEGRATION_ID);
+    public static final RegistryObject<SoundEvent> PLANET_WAVES_TARGET=
+            register(ModSounds.PLANET_WAVES_TARGET, ModSounds.PLANET_WAVES_TARGET_ID);
+
     public static final RegistryObject<SoundEvent> DIO_HOHO =
             register(ModSounds.DIO_HOHO, ModSounds.DIO_HOHO_ID);
     public static final RegistryObject<SoundEvent> DIO_DEATH =

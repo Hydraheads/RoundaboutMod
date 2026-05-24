@@ -568,6 +568,12 @@ public class ForgeItems {
     public static final RegistryObject<Item> MAX_STAND_DISC_WALKING_HEART = addToDiscTab(ITEMS.register("max_walking_heart_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersWalkingHeart(null))));
 
+    public static final RegistryObject<Item> STAND_DISC_PLANET_WAVES = addToWIPTab(ITEMS.register("planet_waves_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersPlanetWaves(null))));
+    public static final RegistryObject<Item> MAX_STAND_DISC_PLANET_WAVES = addToWIPTab(ITEMS.register("max_planet_waves_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersPlanetWaves(null))))
+            ;
+
     public static final RegistryObject<Item> STAND_DISC_ANUBIS = addToDiscTab(ITEMS.register("anubis_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null))));
     public static final RegistryObject<Item> MAX_STAND_DISC_ANUBIS = addToDiscTab(ITEMS.register("max_anubis_disc",

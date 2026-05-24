@@ -379,6 +379,25 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "cinderella").toString())
             );
+    public static final RegistryObject<EntityType<PlanetWavesEntity>> PLANET_WAVES =
+            ENTITY_TYPES.register("planet_waves", () ->
+                    EntityType.Builder.of(PlanetWavesEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "planet_waves").toString())
+            );
+
+    public static final RegistryObject<EntityType<PWMeteorEntity>> PW_METEOR =
+            ENTITY_TYPES.register("pw_meteor", () ->
+                    EntityType.Builder.<PWMeteorEntity>of(PWMeteorEntity::new, MobCategory.MISC).sized(0.9F, 0.9F).
+                            clientTrackingRange(15).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "pw_meteor").toString())
+            );
+    public static final RegistryObject<EntityType<PWBigMeteorEntity>> PW_BIG_METEOR =
+            ENTITY_TYPES.register("pw_big_meteor", () ->
+                    EntityType.Builder.<PWBigMeteorEntity>of(PWBigMeteorEntity::new, MobCategory.MISC).sized(15.0F, 15.0F).
+                            clientTrackingRange(15).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "pw_big_meteor").toString())
+            );
 
     public static final RegistryObject<EntityType<ManhattanTransferEntity>> MANHATTAN_TRANSFER =
             ENTITY_TYPES.register("manhattan_transfer", () ->

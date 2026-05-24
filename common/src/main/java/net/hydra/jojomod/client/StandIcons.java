@@ -338,6 +338,17 @@ public class StandIcons {
     public static final ResourceLocation KILLER_QUEEN_BTD_DEACTIVATE = new ResourceLocation(Roundabout.MOD_ID,
     		"textures/gui/icons/killer_queen/btd_deactivate.png");
 
+    public static final ResourceLocation PLANET_WAVES_METEOR_SHOWER = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/planet_waves/meteor_shower.png");
+    public static final ResourceLocation PLANET_WAVES_BIG_METEOR = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/planet_waves/big_meteor.png");
+    public static final ResourceLocation PLANET_WAVES_STAND_TARGETING = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/planet_waves/stand_targeting.png");
+    public static final ResourceLocation PLANET_WAVES_STAND_RETRIEVING = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/planet_waves/stand_retrieving.png");
+    public static final ResourceLocation PLANET_WAVES_DESINTEGRATION= new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/planet_waves/desintegration.png");
+
 
     public static final ResourceLocation MANDOM_VISION_ON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/mandom/vision_on.png");

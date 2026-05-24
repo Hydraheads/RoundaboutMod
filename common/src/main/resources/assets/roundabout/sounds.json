@@ -2563,5 +2563,50 @@
         "stream": true
       }
     ]
+  },
+  "planet_waves_summon": {
+    "subtitle": "sounds.roundabout.planet_waves_summon",
+    "sounds": [
+      {
+        "name":"roundabout:planet_waves_summon",
+        "stream": true
+      }
+    ]
+  },
+  "planet_waves_meteor_shower": {
+    "subtitle": "sounds.roundabout.planet_waves_meteor_shower",
+    "sounds": [
+      {
+        "name":"roundabout:planet_waves_meteor_shower",
+        "stream": true
+      }
+    ]
+  },
+  "planet_waves_big_meteor": {
+    "subtitle": "sounds.roundabout.planet_waves_big_meteor",
+    "sounds": [
+      {
+        "name":"roundabout:planet_waves_big_meteor",
+        "stream": true
+      }
+    ]
+  },
+  "planet_waves_disintegration": {
+    "subtitle": "sounds.roundabout.planet_waves_disintegration",
+    "sounds": [
+      {
+        "name":"roundabout:planet_waves_disintegration",
+        "stream": true
+      }
+    ]
+  },
+  "planet_waves_target": {
+    "subtitle": "sounds.roundabout.planet_waves_target",
+    "sounds": [
+      {
+        "name":"roundabout:planet_waves_target",
+        "stream": true
+      }
+    ]
   }
 }
