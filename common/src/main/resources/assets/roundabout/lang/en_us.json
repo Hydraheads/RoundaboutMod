@@ -1629,9 +1629,9 @@
   "ability.roundabout.gd_mold_spread.desc":"Create a cloud of mold spores, affecting all entities caught in them with mold. These spores drift downwards, increasing in range until they hit the floor",
 
   "ability.roundabout.manual_shooting": "Shooting Mode",
-  "ability.roundabout.manual_shooting.desc": "Allows you to press left click with your mouse shoot where you want if you are controlling the stand and it contains any storable projectile. If you decide to keep automatic shooting, the stand will instantly redirect it towards the nearest moving entity when it's able to.",
+  "ability.roundabout.manual_shooting.desc": "Allows you to press left click with your mouse shoot in the direction you want if you are controlling the stand and it contains any storable projectile. If you decide to keep automatic shooting, the stand will instantly redirect it towards the nearest moving entity when it's able to.",
   "ability.roundabout.control_mode": "Control Mode",
-  "ability.roundabout.control_mode.desc": "Lets you control the stand, moving it where you need to have it. If in manual shooting mode, press left click with your mouse if the stand contains a bullet to shoot it into the direction you are watching or the mob you are pointing to. If you don't enter control mode, the stand will slowly float forwards and wander a little bit near moving mobs. The same counts if you don't give any input to the stand's movement.",
+  "ability.roundabout.control_mode.desc": "Lets you control the stand. If in manual shooting mode, press left click with your mouse if the stand contains a bullet to shoot it into the direction you are pointing at. If you don't enter control mode, the stand will slowly float forwards. The same counts if you don't give any input to the stand's movement, although if you're controoling it you can rotate you vision to decide where the stand goes.",
   "ability.roundabout.wind_vision": "Wind Vision",
   "ability.roundabout.wind_vision.desc": "Lets you see your stand's wind reading from your perspective, giving you similar visuals as if you would pilot your stand.",
   "ability.roundabout.bonus_damage": "Bonus Stand Damage",
