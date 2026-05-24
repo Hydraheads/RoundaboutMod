@@ -489,6 +489,14 @@ public void itemEject(){
              ThrownPotion $$4 = new ThrownPotion(thrower.level(), thrower);
              $$4.setPos(pos);
              $$4.setItem(item);
+             $$4.setOwner(thrower.getUser());
+             $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.4F*mult, getShotAccuracy);
+             thrower.level().addFreshEntity($$4);
+         } else if(item.getItem() instanceof BowlerHatItem){
+             BladedBowlerHatEntity $$4 = new BladedBowlerHatEntity(thrower.level(), thrower, item);
+             $$4.setPos(pos);
+             $$4.setItem(item);
+             $$4.setOwner(thrower.getUser());
              $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.4F*mult, getShotAccuracy);
              thrower.level().addFreshEntity($$4);
          }
