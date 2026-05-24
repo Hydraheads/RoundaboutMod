@@ -23,8 +23,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
@@ -184,12 +182,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
         }
        
         boolean bl = this.firstMouseX == i && this.firstMouseY == j;
-        /*
-        for (int[] pos : this.positions) {
-            int x = this.width/2 - 5 + pos[0];
-            int y = this.height/2 - 5 + pos[1];
-            guiGraphics.blit(MEMORY_LOCATION,x,y,196,0,12,12,256,256);
-        }*/
+       
         this.currentlyHovered = -1;
         if (this.slots.get(0).isHoveredOrFocused()) {this.currentlyHovered = 0;}
         if (this.slots.get(1).isHoveredOrFocused()) {this.currentlyHovered = 1;}
@@ -197,12 +190,6 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
         for (ToggableIcon MobSlot : this.slots) {
             MobSlot.render(guiGraphics, i, j, f);
             MobSlot.setSelected(this.currentlyHovered == MobSlot.context);
-            //if (bl || !MobSlot.isHoveredOrFocused()) continue;
-            //this.currentlyHovered = MobSlot.context;
-            /*
-            Player player = Minecraft.getInstance().player;
-            StandUser SU = (StandUser) player;
-           */
 
         }
         
@@ -226,10 +213,10 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
             ClientConfig clientConfig = ConfigManager.getClientConfig();
             int conf = this.slots.get(0).getMode(this.currentlyHovered == 0);
             conf += this.slots.get(1).getMode(this.currentlyHovered == 1)*2;
-            //if (clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble != (int) swap) {
+            
             clientConfig.dynamicSettings.KillerQueenCurrentBombConfig = (int) conf;
             ConfigManager.saveClientConfig();
-            //}
+            
         }
     }
     
