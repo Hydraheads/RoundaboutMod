@@ -426,6 +426,8 @@ public class Config implements Cloneable {
         public Boolean enableKillerQueen;
     	@BooleanOption(group = "inherit", value = false)
         public Boolean enableBitesTheDustDayMode;
+    	@BooleanOption(group = "inherit", value = true)
+        public Boolean blocksDestruction;
     }
     
     public static class SoftAndWetSettings {

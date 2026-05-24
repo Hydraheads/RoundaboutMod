@@ -6,6 +6,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
@@ -32,6 +33,12 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
     static final ResourceLocation KILLER_QUEEN_BOMB_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/killer_queen_bomb.png");
     
+    private static final int
+    	DISABLED=0,
+    	ENABLED=1,
+    	BLOCK_DESTRUCTION=0,
+    	ON_CONTACT=1;
+    
     public BombConfigScreen() {
         super(GameNarrator.NO_TITLE);
     }
@@ -57,8 +64,8 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
         if (SU.roundabout$getStandPowers() instanceof PowersKillerQueen PA) {
             int offsetCenter = 32;
         	
-        	ToggableIcon leftIcon = new ToggableIcon((byte)0, this.width / 2 - 13 - offsetCenter, this.height / 2 + 31 - 44);
-        	ToggableIcon rightIcon = new ToggableIcon((byte)1, this.width / 2 - 13 + offsetCenter, this.height / 2 + 31 - 44);
+        	ToggableIcon leftIcon = new ToggableIcon((byte)BLOCK_DESTRUCTION, this.width / 2 - 13 - offsetCenter, this.height / 2 + 31 - 44);
+        	ToggableIcon rightIcon = new ToggableIcon((byte)ON_CONTACT, this.width / 2 - 13 + offsetCenter, this.height / 2 + 31 - 44);
         	
             this.slots.add(leftIcon);
             this.slots.add(rightIcon);
@@ -88,17 +95,17 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
             StandUser SU = (StandUser) p;
             if (SU.roundabout$getStandPowers() instanceof PowersKillerQueen PA) {
             	int conf = clientConfig.dynamicSettings.KillerQueenCurrentBombConfig;
-            	if (this.context == 0) {
+            	if (this.context == BLOCK_DESTRUCTION) {
             		if (conf == 1 || conf == 3) {
-	                	return (invert) ? 0 : 1;
+	                	return (invert) ? DISABLED : ENABLED;
 	                }
             	}else {
             		if (conf == 2 || conf == 3) {
-	                	return (invert) ? 0 : 1;
+	                	return (invert) ? DISABLED : ENABLED;
 	                }
             	}
             }
-            return (invert) ? 1 : 0;
+            return (invert) ? ENABLED : DISABLED;
         }
 
 		@Override
@@ -106,6 +113,8 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 			guiGraphics.setColor(1f, 1f, 1f, 1f);
 			int status = this.getMode()*2;
 			if (this.isSelected) {status = 1;}
+			
+			if (this.context == 0 && !ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction) {status = 3;}
 			
 	        this.drawSlot(guiGraphics, status);
 	        this.drawIcon(guiGraphics);
@@ -133,6 +142,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 		
 		private void drawIcon(GuiGraphics guiGraphics) {
 			int status = getMode();
+			if (this.context == BLOCK_DESTRUCTION && !ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction) {status = 2;}
 			guiGraphics.blit(KILLER_QUEEN_BOMB_LOCATION, this.getX() + 4, this.getY()+4, status*18, 26+7 + this.context*18, 18, 18, 192, 192);
 
 		}
@@ -154,18 +164,18 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
         }*/
 
 
-        //guiGraphics.pose().pushPose();
-        //RenderSystem.enableBlend();
-       /* int k = this.width / 2 - 62;
+        guiGraphics.pose().pushPose();
+        RenderSystem.enableBlend();
+        int k = this.width / 2 - 62;
         int l = this.height / 2 - 31 - 39;
-        guiGraphics.blit(MEMORY_LOCATION, k, l, 0.0f, 0.0f, 125, 24 , 256, 256);*/
-       // guiGraphics.pose().popPose();
+        guiGraphics.blit(KILLER_QUEEN_BOMB_LOCATION, k, l, 0.0f, 88.0f, 125, 37, 192, 192);
+        guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
 
 
-       //Component str = Component.translatable("roundabout.anubis.playback_title");
-       //if (this.recording) {str = Component.translatable("roundabout.anubis.memory_title");}
-       //guiGraphics.drawCenteredString(this.font, str , this.width / 2, this.height / 2 - 31 - 32, -1);
+       Component str = Component.translatable("roundabout.killer_queen.bomb_config");
+       
+       guiGraphics.drawCenteredString(this.font, str , this.width / 2, this.height / 2 - 31 - 32+8, -1);
 
         if (!this.setFirstMousePos) {
             this.firstMouseX = i;

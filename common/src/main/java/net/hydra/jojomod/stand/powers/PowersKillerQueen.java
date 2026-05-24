@@ -759,7 +759,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 		if (!this.isClient() && this.currentBombStatus == PowersKillerQueen.BOMB_BLOCK) {
 			BlockPos pos = this.bombBlock.getBlockPos();
 			if (!isClient()) {
-				if (bombConf % 2 == 1) {explodeBlocks(pos);}
+				if (bombConf % 2 == 1 && ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction) {explodeBlocks(pos);}
 				this.explosionHurt(pos.getCenter());
 				this.explodeEffects(pos.getCenter());
 			}

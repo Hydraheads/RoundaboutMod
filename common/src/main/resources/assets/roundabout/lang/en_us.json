@@ -2037,6 +2037,8 @@
   "roundabout.anubis.memory_title": "Record Memories",
   "roundabout.anubis.memory_fail": "Memory is too long!",
 
+  "roundabout.killer_queen.bomb_config": "Bomb Config",
+  
   "skins.roundabout.green_day.part_five_green_day": "Part 5",
   "skins.roundabout.green_day.red_day": "Red Day",
   "skins.roundabout.green_day.teal_day": "Teal Day",
@@ -3019,16 +3021,18 @@
   "config.roundabout.armSpinDuration.desc": "How long your seperated arms spin for after using the move, default is 30 ticks, or 1.5 seconds",
   "config.roundabout.armSpinCooldown.name": "Arm Spin Cooldown",
   "config.roundabout.armSpinCooldown.desc": "Default is 120 ticks, or 6 seconds",
-  "config,roundabout.moldDMGMobsMultiplier.name": "Mold Damage Multiplier (Mobs)",
-  "config,roundabout.moldDMGMobsMultiplier.desc": "Controls the damage mobs take when they fall in green days mold fields",
-  "config,roundabout.moldDMGPlayersMultiplier.name": "Mold Damage Multiplier (Players)",
-  "config,roundabout.moldDMGPlayersMultiplier.desc": "Controls the damage players take when they fall in green days mold fields",
+  "config.roundabout.moldDMGMobsMultiplier.name": "Mold Damage Multiplier (Mobs)",
+  "config.roundabout.moldDMGMobsMultiplier.desc": "Controls the damage mobs take when they fall in green days mold fields",
+  "config.roundabout.moldDMGPlayersMultiplier.name": "Mold Damage Multiplier (Players)",
+  "config.roundabout.moldDMGPlayersMultiplier.desc": "Controls the damage players take when they fall in green days mold fields",
 
-  "config,roundabout.enableBitesTheDustDayMode.name": "Enable Bites the dust (Day Mode)",
-  "config,roundabout.enableBitesTheDustDayMode.desc": "Turn on/off the Bites the Dust Day mode, that restart the day of the game when detonating (disabled by default)",
-  "config,roundabout.bombOverlayHideOnF1.name": "Bomb Overlays hides on F1",
-  "config,roundabout.bombOverlayHideOnF1.desc": "Turn on/off the action of hiding the bomb overlay when pressing F1",
-
+  "config.roundabout.enableBitesTheDustDayMode.name": "Enable Bites the dust (Day Mode)",
+  "config.roundabout.enableBitesTheDustDayMode.desc": "Turn on/off the Bites the Dust Day mode, that restart the day of the game when detonating (disabled by default)",
+  "config.roundabout.bombOverlayHideOnF1.name": "Bomb Overlays hides on F1",
+  "config.roundabout.bombOverlayHideOnF1.desc": "Turn on/off the action of hiding the bomb overlay when pressing F1",
+  "config.roundabout.blocksDestruction.name": "Blocks Explode",
+  "config.roundabout.blocksDestruction.desc": "Turn on/off the action of blocks destructions",
+  
   "config.roundabout.theWorldAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.theWorldAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
   "config.roundabout.theWorldAttackMultOnMobs.name": "Mob Damage Multiplier",
