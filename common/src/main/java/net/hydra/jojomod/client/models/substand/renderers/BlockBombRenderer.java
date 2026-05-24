@@ -30,7 +30,6 @@ import org.lwjgl.opengl.GL11;
 
 public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
 	private static final ResourceLocation PART_4_KILLER_QUEEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbomb.png");
-
 	
 	
     public BlockBombRenderer(EntityRendererProvider.Context context) {
@@ -61,15 +60,7 @@ public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
     }
     
    @Override
-    protected int getSkyLightLevel(BlockBombEntity blockBombEntity, BlockPos pos) {
-	   //BlockPos.MutableBlockPos mutPos = pos.mutable();
-	   /* 
-	   int upwards = super.getSkyLightLevel(blockBombEntity, pos.above());
-	   int east = super.getSkyLightLevel(blockBombEntity, pos.east());
-	   int west = super.getSkyLightLevel(blockBombEntity, pos.west());
-	   int north = super.getSkyLightLevel(blockBombEntity, pos.north());
-	   int south = super.getSkyLightLevel(blockBombEntity, pos.south());
-	   */   
+    protected int getSkyLightLevel(BlockBombEntity blockBombEntity, BlockPos pos) {  
 	   return 15;
    }
 }

@@ -2,6 +2,7 @@ package net.hydra.jojomod.block;
 
 import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.floats.Float2FloatFunction;
+import net.hydra.jojomod.Roundabout;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -87,7 +88,7 @@ public class CoffinBlock extends BedBlock {
                 if (sleepResult1 != null) {
                     if (Player.BedSleepingProblem.NOT_POSSIBLE_NOW.equals(sleepResult1)){
                         player.displayClientMessage(Component.translatable("text.roundabout.vampire.coffin_cant_sleep"), true);
-                    } else {
+                    } else if (sleepResult1.getMessage() != null) {
                         player.displayClientMessage(sleepResults.getOrDefault(sleepResult1, sleepResult1.getMessage()), true);
                     }
                 }
