@@ -78,6 +78,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -248,7 +249,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public boolean isAttackIneptVisually(byte activeP, int slot) {
     	if (slot == 1) {
     		if(inBitesTheDustMode()) {
-    			return ClientNetworking.getAppropriateConfig().killerQueenSettings.enableBitesTheDustDayMode;
+    			return !ClientNetworking.getAppropriateConfig().killerQueenSettings.enableBitesTheDustDayMode;
     		}
     	}
     	if (slot == 2 && !this.BitesTheDustMode) {
@@ -716,17 +717,17 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     
     public void explosionHurt(Vec3 pos) {
-    	List<Entity> highDamages = MainUtil.genHitbox(this.getSelf().level(), pos.x(), pos.y(), pos.z(), 1.2, 1.2, 1.2);
-    	List<Entity> lowDamages = MainUtil.genHitbox(this.getSelf().level(), pos.x(), pos.y(), pos.z(), 1.75, 1.75, 1.75);
     	DamageSource dmg = ModDamageTypes.of(this.getSelf().level(), DamageTypes.PLAYER_EXPLOSION, this.getSelf());;
+    	float range = 1.5f;
+    	List<Entity> damages = MainUtil.genHitbox(this.getSelf().level(), pos.x(), pos.y(), pos.z(), range, range, range);
     	
-    	for(int j = 0;j<highDamages.size();j++) {
-            Entity entity = highDamages.get(j);
-            entity.hurt(dmg, 10.0f);
-        }
-    	for(int j = 0;j<lowDamages.size();j++) {
-            Entity entity = lowDamages.get(j);
-            entity.hurt(dmg, 5.0f);
+    	for(int j = 0;j<damages.size();j++) {
+            Entity entity = damages.get(j);
+            double dist = entity.distanceToSqr(pos);
+            float perc = 1.0f - (((float)dist/ (range * range * range))*0.75f); 
+            
+            entity.hurt(dmg, perc*8.0f);
+            Roundabout.LOGGER.info("distance: " + dist + " perc: " + perc + "  maxDist?: " + (range*range*range));
         }
     	
     }
@@ -754,11 +755,6 @@ public class PowersKillerQueen extends NewPunchingStand {
     public boolean explode() {
     	ClientConfig clientConfig = ConfigManager.getClientConfig();
     	int bombConf = clientConfig.dynamicSettings.KillerQueenCurrentBombConfig;
-    	
-    	// 1 % 2 == 1
-    	// 3 % 2 == 1
-    	// 2 % 2 == 0
-    	// 0 % 2 == 0
     	
 		if (!this.isClient() && this.currentBombStatus == PowersKillerQueen.BOMB_BLOCK) {
 			BlockPos pos = this.bombBlock.getBlockPos();
