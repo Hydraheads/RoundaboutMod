@@ -232,7 +232,6 @@ public class ManhattanTransferEntity extends StandEntity {
     public boolean hurt(DamageSource source, float amount) {
         Entity direct = source.getDirectEntity();
         Entity directEntityWho = source.getEntity();
-        this.bizzarreManhattan();
         if(User != null) {
             if (directEntityWho != null && direct != null) {
                 if (direct instanceof Projectile PR && !source.is(ModDamageTypes.STAND)) {
@@ -274,18 +273,6 @@ public class ManhattanTransferEntity extends StandEntity {
                                     this.setHeldItemManhattan(ii.copyAndClear());
                                     TO.discard();
                                 }
-                            } else if (direct instanceof ThrownPotion TP) {
-                                TP.discard();
-                                ItemStack ii = TP.getItem();
-                                if (!ii.isEmpty()) {
-                                    hasItem = true;
-                                    success = true;
-                                    if (TP.getOwner() == null || TP.getOwner() instanceof Player) {
-                                        this.canAcquireHeldItem = true;
-                                    }
-                                    this.setHeldItemManhattan(ii.copyAndClear());
-                                    TP.discard();
-                                }
                             }/* else if (direct instanceof FireworkRocketEntity RE) {
                             ItemStack ii = RE.getItem();
                             if (!ii.isEmpty()) {
@@ -324,13 +311,6 @@ public class ManhattanTransferEntity extends StandEntity {
                                     hasItemTwo = true;
                                     TO.discard();
                                 }
-                            } else if (direct instanceof ThrownPotion TP) {
-                                ItemStack ii = TP.getItem();
-                                if (!ii.isEmpty()) {
-                                    this.setHeldItemManhattanFull(ii.copyAndClear());
-                                    hasItemTwo = true;
-                                    TP.discard();
-                                }
                             }/* else if (direct instanceof FireworkRocketEntity RE) {
                             ItemStack ii = RE.getItem();
                             if (!ii.isEmpty()) {
@@ -355,24 +335,7 @@ public class ManhattanTransferEntity extends StandEntity {
                         }
                     }
                 }
-            if (hasItem && this.canAcquireHeldItem) {
-                    if (!this.getHeldItemManhattanFull().isEmpty() && !this.getHeldItemManhattanFull().isEmpty()) {
-                        double $$3 = this.getEyeY() - 0.3F;
-                        ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), this.getHeldItemManhattanFull());
-                        $$4.setThrower(this.getUUID());
-                        this.level().addFreshEntity($$4);
-                        this.setHeldItemManhattanFull(ItemStack.EMPTY);
-                    }
-                } else if (!this.canAcquireHeldItem) {}
-                if (hasItemTwo) {
-                    double $$3 = this.getEyeY() - 0.3F;
-                    ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), this.getHeldItemManhattanFull());
-                    $$4.setThrower(this.getUUID());
-                    this.level().addFreshEntity($$4);
-                    this.setHeldItemManhattanFull(ItemStack.EMPTY);
-                    hasItemTwo = false;
-                }
-
+            this.itemEject();
                 if (success) {
                     if (direct instanceof AbstractArrow AA) {
                         manhattanDamageIncipit = amount;
@@ -384,10 +347,25 @@ public class ManhattanTransferEntity extends StandEntity {
         return super.hurt(source, amount);
     }
 
-    public void bizzarreManhattan() {
-        Roundabout.LOGGER.info("aaaaaaa");
+public void itemEject(){
+    if (hasItem && this.canAcquireHeldItem) {
+        if (!this.getHeldItemManhattanFull().isEmpty() && !this.getHeldItemManhattanFull().isEmpty()) {
+            double $$3 = this.getEyeY() - 0.3F;
+            ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), this.getHeldItemManhattanFull());
+            $$4.setThrower(this.getUUID());
+            this.level().addFreshEntity($$4);
+            this.setHeldItemManhattanFull(ItemStack.EMPTY);
+        }
+    } else if (!this.canAcquireHeldItem) {}
+    if (hasItemTwo) {
+        double $$3 = this.getEyeY() - 0.3F;
+        ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), this.getHeldItemManhattanFull());
+        $$4.setThrower(this.getUUID());
+        this.level().addFreshEntity($$4);
+        this.setHeldItemManhattanFull(ItemStack.EMPTY);
+        hasItemTwo = false;
     }
-
+}
 
     public boolean shootHattan(/*ItemStack item*/){
         /***/
@@ -507,6 +485,12 @@ public class ManhattanTransferEntity extends StandEntity {
              $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
              $$7.setOwner(thrower.getUser());
              thrower.level().addFreshEntity($$7);
+         } else if(item.getItem() instanceof PotionItem){
+             ThrownPotion $$4 = new ThrownPotion(thrower.level(), thrower);
+             $$4.setPos(pos);
+             $$4.setItem(item);
+             $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.4F*mult, getShotAccuracy);
+             thrower.level().addFreshEntity($$4);
          }
              else {
             getCanPlace = false;

@@ -1,13 +1,20 @@
 package net.hydra.jojomod.mixin.survivor;
 
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
+import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.entity.projectile.ThrownPotion;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
@@ -37,6 +44,43 @@ public abstract class SurvivorThrownPotion extends ThrowableItemProjectile imple
                 } else if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectileNoDiscard(this,$$0)){
                     ci.cancel();
                     return;
+                } else if(LE instanceof ManhattanTransferEntity ME) {
+                    if ((this.getOwner().is(ME.getUser()) && !ME.canOthersLoadMT || ME.canOthersLoadMT) && !ME.hasItem) {
+                        Roundabout.LOGGER.info("empty");
+                             ItemStack ii = this.getItem();
+                             if (!ii.isEmpty()) {
+                                 ci.cancel();
+                                 if(ci.isCancelled()) {
+                                     ME.setHeldItemManhattan(ii.copyAndClear());
+                                     if (this.getOwner() == null || this.getOwner() instanceof Player) {
+                                         ME.canAcquireHeldItem = true;
+                                         ME.hasItemTwo = false;
+                                     } else {
+                                         ME.canAcquireHeldItem = false;
+                                         ME.hasItemTwo = false;
+                                     }
+                                     ME.hasItem = true;
+                                     this.discard();
+                                 }
+                             }
+                    } else {
+                        Roundabout.LOGGER.info("full");
+                        ItemStack ii = this.getItem();
+                        if (!ii.isEmpty()) {
+                            ci.cancel();
+                            if(ci.isCancelled()) {
+                                ME.setHeldItemManhattanFull(ii.copyAndClear());
+                                if (this.getOwner() == null || this.getOwner() instanceof Player) {
+                                    ME.canAcquireHeldItem = true;
+                                } else {
+                                    ME.canAcquireHeldItem = false;
+                                }
+                                ME.hasItemTwo = true;
+                                ME.itemEject();
+                                this.discard();
+                            }
+                        }
+                    }
                 }
             }
         }
