@@ -48,6 +48,8 @@ public class ModItems {
     public static Item MAX_STAND_DISC_TUSK;
     public static Item STAND_DISC_KILLER_QUEEN;
     public static Item MAX_STAND_DISC_KILLER_QUEEN;
+    public static Item STAND_DISC_PLANET_WAVES;
+    public static Item MAX_STAND_DISC_PLANET_WAVES;
     public static Item STAND_DISC_CINDERELLA;
     public static Item STAND_DISC_MANHATTAN_TRANSFER;
     public static Item STAND_DISC_HEY_YA;

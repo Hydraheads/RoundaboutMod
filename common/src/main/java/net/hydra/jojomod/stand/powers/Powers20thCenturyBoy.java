@@ -255,6 +255,10 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             this.self.level().playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_HIT_EVENT, SoundSource.PLAYERS, 3F, 1.0F);
             return false;
         }
+        if (staticMode == 1){
+            this.self.level().playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_HIT_EVENT, SoundSource.PLAYERS, 3F, 1.0F);
+            return false;
+        }
         if(invincibleState){
             /** ps: don't forget to put TA4 shot when it gets added **/
             if (damageSource.is(DamageTypes.FELL_OUT_OF_WORLD) ||
@@ -288,6 +292,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     public void tickPower() {
         if (!hasStandActive(this.getSelf())){
             invincibleState = false;
+            staticMode = 0;
         }
     }
 

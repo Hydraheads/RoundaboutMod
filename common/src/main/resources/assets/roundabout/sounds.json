@@ -239,12 +239,6 @@
       "roundabout:manhattan_vision"
     ]
   },
-  "manhattan_bullet_deflect": {
-    "subtitle": "sounds.roundabout.manhattan_bullet_deflect",
-    "sounds": [
-      "roundabout:manhattan_bullet_deflect"
-    ]
-  },
   "century_boy_summon": {
     "subtitle": "sounds.roundabout.century_boy_summon",
     "sounds": [
@@ -2566,6 +2560,51 @@
     "sounds": [
       {
         "name":"roundabout:green_day_stitch",
+        "stream": true
+      }
+    ]
+  },
+  "planet_waves_summon": {
+    "subtitle": "sounds.roundabout.planet_waves_summon",
+    "sounds": [
+      {
+        "name":"roundabout:planet_waves_summon",
+        "stream": true
+      }
+    ]
+  },
+  "planet_waves_meteor_shower": {
+    "subtitle": "sounds.roundabout.planet_waves_meteor_shower",
+    "sounds": [
+      {
+        "name":"roundabout:planet_waves_meteor_shower",
+        "stream": true
+      }
+    ]
+  },
+  "planet_waves_big_meteor": {
+    "subtitle": "sounds.roundabout.planet_waves_big_meteor",
+    "sounds": [
+      {
+        "name":"roundabout:planet_waves_big_meteor",
+        "stream": true
+      }
+    ]
+  },
+  "planet_waves_disintegration": {
+    "subtitle": "sounds.roundabout.planet_waves_disintegration",
+    "sounds": [
+      {
+        "name":"roundabout:planet_waves_disintegration",
+        "stream": true
+      }
+    ]
+  },
+  "planet_waves_target": {
+    "subtitle": "sounds.roundabout.planet_waves_target",
+    "sounds": [
+      {
+        "name":"roundabout:planet_waves_target",
         "stream": true
       }
     ]

@@ -221,9 +221,6 @@ public class ModSounds {
     public static final String MANHATTAN_VISION = "manhattan_vision";
     public static final ResourceLocation MANHATTAN_VISION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+MANHATTAN_VISION);
     public static SoundEvent MANHATTAN_VISION_EVENT = SoundEvent.createVariableRangeEvent(MANHATTAN_VISION_ID);
-    public static final String MANHATTAN_DEFLECTION = "manhattan_bullet_deflect";
-    public static final ResourceLocation MANHATTAN_DEFLECTION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+MANHATTAN_DEFLECTION);
-    public static SoundEvent MANHATTAN_DEFLECTION_EVENT = SoundEvent.createVariableRangeEvent(MANHATTAN_DEFLECTION_ID);
 
     public static final String CENTURY_BOY_SUMMON = "century_boy_summon";
     public static final ResourceLocation CENTURY_BOY_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CENTURY_BOY_SUMMON);
@@ -769,6 +766,28 @@ public class ModSounds {
     public static final String CINDERELLA_VISAGE_CREATION = "cinderella_visage_creation";
     public static final ResourceLocation CINDERELLA_VISAGE_CREATION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CINDERELLA_VISAGE_CREATION);
     public static SoundEvent CINDERELLA_VISAGE_CREATION_EVENT = SoundEvent.createVariableRangeEvent(CINDERELLA_VISAGE_CREATION_ID);
+
+
+    public static final String PLANET_WAVES_SUMMON = "planet_waves_summon";
+    public static final ResourceLocation PLANET_WAVES_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PLANET_WAVES_SUMMON);
+    public static SoundEvent PLANET_WAVES_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(PLANET_WAVES_SUMMON_ID);
+
+    public static final String PLANET_WAVES_METEOR_SHOWER = "planet_waves_meteor_shower";
+    public static final ResourceLocation PLANET_WAVES_METEOR_SHOWER_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PLANET_WAVES_METEOR_SHOWER);
+    public static SoundEvent PLANET_WAVES_METEOR_SHOWER_EVENT = SoundEvent.createVariableRangeEvent(PLANET_WAVES_METEOR_SHOWER_ID);
+
+    public static final String PLANET_WAVES_BIG_METEOR = "planet_waves_big_meteor";
+    public static final ResourceLocation PLANET_WAVES_BIG_METEOR_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PLANET_WAVES_BIG_METEOR);
+    public static SoundEvent PLANET_WAVES_BIG_METEOR_EVENT = SoundEvent.createVariableRangeEvent(PLANET_WAVES_BIG_METEOR_ID);
+
+    public static final String PLANET_WAVES_DISINTEGRATION = "planet_waves_disintegration";
+    public static final ResourceLocation PLANET_WAVES_DISINTEGRATION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PLANET_WAVES_DISINTEGRATION);
+    public static SoundEvent PLANET_WAVES_DISINTEGRATION_EVENT = SoundEvent.createVariableRangeEvent(PLANET_WAVES_DISINTEGRATION_ID);
+
+    public static final String PLANET_WAVES_TARGET = "planet_waves_target";
+    public static final ResourceLocation PLANET_WAVES_TARGET_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PLANET_WAVES_TARGET);
+    public static SoundEvent PLANET_WAVES_TARGET_EVENT = SoundEvent.createVariableRangeEvent(PLANET_WAVES_TARGET_ID);
+
 
     public static final String RATT_SUMMON = "ratt_summon";
     public static final ResourceLocation RATT_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RATT_SUMMON);
