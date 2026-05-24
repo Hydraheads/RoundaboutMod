@@ -2287,7 +2287,7 @@ public void unlockSkin(){
     }
 
     public float getKickAttackKnockback(){
-        return (((float)this.chargedFinal/(float)maxSuperHitTime)*2.2F);
+        return (((float)this.chargedFinal/(float)maxSuperHitTime)*2.85F);
     }
     public float getKickAttackStrength(Entity entity){
         float punchD = this.getPunchStrength(entity)*1.9F+this.getHeavyPunchStrength(entity);

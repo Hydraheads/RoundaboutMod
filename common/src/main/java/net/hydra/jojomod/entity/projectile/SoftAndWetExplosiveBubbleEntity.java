@@ -216,6 +216,8 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity {
                         float kb = 1.05F;
                         if (getMadeWithBarrage()){
                             kb = 0.1F;
+                        } else if (!getReady()){
+                            kb = 0.5F;
                         }
                         if (ent.hurt(ModDamageTypes.of(ent.level(), ModDamageTypes.EXPLOSIVE_STAND, this.getOwner()),
                                 str)) {
