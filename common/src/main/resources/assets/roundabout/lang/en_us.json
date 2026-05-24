@@ -2776,6 +2776,8 @@
   "config.roundabout.itemBubbleShotCooldown.desc": "The time between creating explosive item bubbles in shooting mode.",
   "config.roundabout.itemBubblePopCooldown.name": "Item Pop Cooldown",
   "config.roundabout.itemBubblePopCooldown.desc": "The delay between popping explosive bubbles in shooting mode.",
+  "config.roundabout.itemBubblePopShotCooldown.name": "Post Pop Cooldown",
+  "config.roundabout.itemBubblePopShotCooldown.desc": "After popping item bubbles, puts the creation on CD.",
 
   "config.roundabout.basicBubbleShotCooldown.name": "Basic Bubble Cooldown",
   "config.roundabout.basicBubbleShotCooldown.desc": "The time between creating normal bubbles. The default is 20 ticks, or 1 second.",

@@ -213,11 +213,11 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity {
                         } else {
                             str = PW.getPointBlankBubbleStrength(ent);
                         }
-                        float kb = 1.05F;
+                        float kb = 0.97F;
                         if (getMadeWithBarrage()){
                             kb = 0.1F;
                         } else if (!getReady()){
-                            kb = 0.5F;
+                            kb = 0.4F;
                         }
                         if (ent.hurt(ModDamageTypes.of(ent.level(), ModDamageTypes.EXPLOSIVE_STAND, this.getOwner()),
                                 str)) {

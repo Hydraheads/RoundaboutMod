@@ -247,6 +247,9 @@ public class PowersSoftAndWet extends NewPunchingStand {
 
             Vec3 pos = MainUtil.getRaytracePointOnMobOrBlock(this.self,30);
 
+            if (!onCooldown(PowerIndex.SKILL_1)) {
+                this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().softAndWetSettings.itemBubblePopShotCooldown);
+            }
             this.tryPosPower(PowerIndex.POWER_2_SNEAK, true, pos);
             tryPosPowerPacket(PowerIndex.POWER_2_SNEAK,pos);
             //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
