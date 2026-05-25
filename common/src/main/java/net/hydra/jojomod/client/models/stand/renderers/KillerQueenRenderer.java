@@ -29,6 +29,12 @@ public class KillerQueenRenderer extends StandRenderer<KillerQueenEntity>{
     private static final ResourceLocation UMBRA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/umbra.png");
     private static final ResourceLocation NIGHTMARE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/nightmare.png");
     private static final ResourceLocation CREEPER_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/creeper.png");
+    private static final ResourceLocation TAMA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/tama.png");
+    private static final ResourceLocation MINESWEEPER_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/minesweeper.png");
+    private static final ResourceLocation NOTW_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/notw.png");
+    private static final ResourceLocation MEMENTO_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/memento.png");
+    private static final ResourceLocation STARDUST_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/stardust.png");
+    
     
     @Override
     public ResourceLocation getTextureLocation(KillerQueenEntity entity) {
@@ -64,6 +70,16 @@ public class KillerQueenRenderer extends StandRenderer<KillerQueenEntity>{
     		return DEADLY_SKIN;
     	} else if (BT == KillerQueenEntity.YELLOW) {
     		return YELLOW_SKIN;
+    	} else if (BT == KillerQueenEntity.TAMA) {
+    		return TAMA_SKIN;
+    	} else if (BT == KillerQueenEntity.MINESWEEPER) {
+    		return MINESWEEPER_SKIN;
+    	} else if (BT == KillerQueenEntity.NOTW) {
+    		return NOTW_SKIN;
+    	} else if (BT == KillerQueenEntity.MEMENTO) {
+    		return MEMENTO_SKIN;
+    	} else if (BT == KillerQueenEntity.STARDUST) {
+    		return STARDUST_SKIN;
     	}
     	
     	

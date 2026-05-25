@@ -37,7 +37,12 @@ public class KillerQueenEntity extends FollowingStandEntity {
     		GUNPOWDER = 11,
     		FINAL = 12,
     		DEADLY = 13,
-    		YELLOW = 14;
+    		YELLOW = 14,
+    		TAMA = 15,
+    		MINESWEEPER = 16,
+    		NOTW = 17,
+    		MEMENTO = 18,
+    		STARDUST = 19;
 
     public final AnimationState lid_open = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
@@ -57,12 +62,14 @@ public class KillerQueenEntity extends FollowingStandEntity {
     public final AnimationState mobBombPlant2 = new AnimationState();
     public final AnimationState bubbleLaunch = new AnimationState();
     public final AnimationState bubbleRedirect= new AnimationState();
+    public final AnimationState heavyStrike = new AnimationState();
     
     public static byte
 		KICK = 25,
 		KICK_CHARGE = 27,
     	DETONATE = 121,
-    	BLOCK_PLANT = 122;
+    	BLOCK_PLANT = 122,
+    	HEAVY_STRIKE = 26;
     
     @Override
     public void setupAnimationStates() {
@@ -118,6 +125,11 @@ public class KillerQueenEntity extends FollowingStandEntity {
             	this.finalKickWindup.startIfStopped(this.tickCount);
             } else {
                 this.finalKickWindup.stop();
+            }
+            if (this.getAnimation() == HEAVY_STRIKE) {
+            	this.heavyStrike.startIfStopped(this.tickCount);
+            } else {
+                this.heavyStrike.stop();
             }
         }
     }
