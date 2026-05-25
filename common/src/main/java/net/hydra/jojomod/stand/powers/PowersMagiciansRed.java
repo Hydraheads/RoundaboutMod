@@ -683,7 +683,14 @@ public class PowersMagiciansRed extends NewPunchingStand {
         if (!this.self.level().isClientSide()) {
             byte barrageCrySound;
             barrageCrySound = FLAMETHROWER_NOISE;
-            playStandUserOnlySoundsIfNearby(barrageCrySound, 32, false,true);
+
+            if (this.getSelf() instanceof Player PE &&
+                    ((IPlayerEntity)PE).roundabout$getMaskInventory().getItem(1).is(ModItems.BLANK_MASK)){
+                PE.level().playSound(null, PE.getX(), PE.getY(),
+                        PE.getZ(), SoundEvents.FIREWORK_ROCKET_BLAST, PE.getSoundSource(), 2.0F, 1.0F);
+            } else {
+                playStandUserOnlySoundsIfNearby(barrageCrySound, 32, false,true);
+            }
         }
     }
     public boolean isRangedBarrageCharging(){
