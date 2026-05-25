@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.PacketDataIndex;
@@ -498,7 +499,11 @@ public class VampireFate extends VampiricFate {
         if (self.level().isClientSide() && !isVisionOn()){
             return super.getJumpHeightAddon();
         }
-        return super.getJumpHeightAddon()+getAddon();
+        float addon = getAddon();
+        if (self.hasEffect(ModEffects.SINGE)){
+            addon = Math.min(addon,1.3f);
+        }
+        return super.getJumpHeightAddon()+addon;
     }
     @Override
     public float getJumpHeightAddonMax(){

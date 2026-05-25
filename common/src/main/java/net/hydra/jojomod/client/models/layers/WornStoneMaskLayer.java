@@ -36,7 +36,7 @@ public class WornStoneMaskLayer<T extends LivingEntity, A extends HumanoidModel<
         boolean stoneMask = (MainUtil.isWearingStoneMask(entity));
         boolean bloodyMask = (MainUtil.isWearingBloodyStoneMask(entity));
         if (stoneMask || bloodyMask) {
-            if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
+            if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() || ((IEntityAndData)entity).roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision())
                 return;
             LivingEntity livent = entity;
             float heyFull = 1;

@@ -55,6 +55,9 @@ public class ForgeEffects{
     public static final RegistryObject<MobEffect> VAMPIRE_BLOOD =
             POTION_EFFECTS.register("vampire_blood", () ->
                     new Effect(MobEffectCategory.HARMFUL, 8662571));
+    public static final RegistryObject<MobEffect> SINGE =
+            POTION_EFFECTS.register("singe", () ->
+                    new Effect(MobEffectCategory.HARMFUL, 15428404));
     public static final RegistryObject<MobEffect> UNBALANCED =
             POTION_EFFECTS.register("unbalanced", () ->
                     new Effect(MobEffectCategory.HARMFUL, 2738639));

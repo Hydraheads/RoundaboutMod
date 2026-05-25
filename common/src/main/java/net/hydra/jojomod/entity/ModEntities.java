@@ -61,6 +61,7 @@ public class ModEntities {
     public static EntityType<KillerQueenEntity> KILLER_QUEEN;
     public static EntityType<BlockBombEntity> BLOCK_BOMB;
     public static EntityType<CinderellaEntity> CINDERELLA;
+    public static EntityType<PlanetWavesEntity> PLANET_WAVES;
     public static EntityType<ManhattanTransferEntity> MANHATTAN_TRANSFER;
     public static EntityType<PollinationTransferEntity> POLLINATION_TRANSFER;
     public static EntityType<WalkingHeartEntity> WALKING_HEART;
@@ -95,6 +96,8 @@ public class ModEntities {
     public static EntityType<EvilAuraProjectile> EVIL_AURA_PROJECTILE;
     public static EntityType<RipperEyesProjectile> RIPPER_EYES_PROJECTILE;
     public static EntityType<UltravioletProjectile> ULTRAVIOLET_PROJECTILE;
+    public static EntityType<PWMeteorEntity> PW_METEOR;
+    public static EntityType<PWBigMeteorEntity> PW_BIG_METEOR;
 
     public static EntityType<GasolineCanEntity> GASOLINE_CAN;
     public static EntityType<RoadRollerEntity> ROAD_ROLLER_ENTITY;

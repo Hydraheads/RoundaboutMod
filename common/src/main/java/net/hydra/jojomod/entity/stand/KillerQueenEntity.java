@@ -107,6 +107,18 @@ public class KillerQueenEntity extends FollowingStandEntity {
             } else {
                 this.blockPlant.stop();
             }
+            
+            if (this.getAnimation() == KICK) {
+            	this.finalKick.startIfStopped(this.tickCount);
+            } else {
+                this.finalKick.stop();
+            }
+            
+            if (this.getAnimation() == KICK_CHARGE) {
+            	this.finalKickWindup.startIfStopped(this.tickCount);
+            } else {
+                this.finalKickWindup.stop();
+            }
         }
     }
 }

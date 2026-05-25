@@ -34,8 +34,10 @@ public class FleshChunkItem extends BlockItem {
         if ( (((StandUser)entity )).roundabout$getStandPowers() instanceof PowersRatt &&
                 !FateTypes.hasBloodHunger(entity)) {
             entity.removeEffect(MobEffects.HUNGER);
-            FoodData f = ((Player)entity).getFoodData();
-            f.eat(4,1);
+            if (entity instanceof Player pl) {
+                FoodData f = pl.getFoodData();
+                f.eat(4, 1);
+            }
         }
         return $$3;
     }

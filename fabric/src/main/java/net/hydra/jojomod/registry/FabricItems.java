@@ -105,7 +105,10 @@ public class FabricItems {
 
     public static Item STAND_DISC_CINDERELLA = registerItem("cinderella_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null)));
-
+    public static Item STAND_DISC_PLANET_WAVES = registerItem("planet_waves_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersPlanetWaves(null)));
+    public static Item MAX_STAND_DISC_PLANET_WAVES= registerItem("max_planet_waves_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersPlanetWaves(null)));
     public static Item STAND_DISC_MANHATTAN_TRANSFER = registerItem("manhattan_transfer_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersManhattanTransfer(null)));
     public static Item STAND_DISC_20_CENTURY_BOY = registerItem("20th_century_boy_disc",
@@ -562,6 +565,8 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_KILLER_QUEEN);
                         entries.accept(STAND_DISC_EMPEROR);
                         entries.accept(MAX_STAND_DISC_EMPEROR);
+                        entries.accept(STAND_DISC_PLANET_WAVES);
+                        entries.accept(MAX_STAND_DISC_PLANET_WAVES);
 
 
                     }).build());
@@ -617,6 +622,9 @@ public class FabricItems {
         ModItems.STAND_DISC_SOFT_AND_WET = STAND_DISC_SOFT_AND_WET;
         ModItems.MAX_STAND_DISC_SOFT_AND_WET = MAX_STAND_DISC_SOFT_AND_WET;
         ((MaxStandDiscItem)MAX_STAND_DISC_SOFT_AND_WET).baseDisc = ((StandDiscItem)STAND_DISC_SOFT_AND_WET);
+        ModItems.STAND_DISC_PLANET_WAVES = STAND_DISC_PLANET_WAVES;
+        ModItems.MAX_STAND_DISC_PLANET_WAVES = MAX_STAND_DISC_PLANET_WAVES;
+        ((MaxStandDiscItem)MAX_STAND_DISC_PLANET_WAVES).baseDisc = ((StandDiscItem)STAND_DISC_PLANET_WAVES);
         ModItems.STAND_DISC_EMPEROR = STAND_DISC_EMPEROR;
         ModItems.MAX_STAND_DISC_EMPEROR = MAX_STAND_DISC_EMPEROR;
         ((MaxStandDiscItem)MAX_STAND_DISC_EMPEROR).baseDisc = ((StandDiscItem)STAND_DISC_EMPEROR);

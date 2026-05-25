@@ -247,6 +247,9 @@ public class PowersSoftAndWet extends NewPunchingStand {
 
             Vec3 pos = MainUtil.getRaytracePointOnMobOrBlock(this.self,30);
 
+            if (!onCooldown(PowerIndex.SKILL_1)) {
+                this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().softAndWetSettings.itemBubblePopShotCooldown);
+            }
             this.tryPosPower(PowerIndex.POWER_2_SNEAK, true, pos);
             tryPosPowerPacket(PowerIndex.POWER_2_SNEAK,pos);
             //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
@@ -2287,7 +2290,7 @@ public void unlockSkin(){
     }
 
     public float getKickAttackKnockback(){
-        return (((float)this.chargedFinal/(float)maxSuperHitTime)*2.2F);
+        return (((float)this.chargedFinal/(float)maxSuperHitTime)*2.85F);
     }
     public float getKickAttackStrength(Entity entity){
         float punchD = this.getPunchStrength(entity)*1.9F+this.getHeavyPunchStrength(entity);

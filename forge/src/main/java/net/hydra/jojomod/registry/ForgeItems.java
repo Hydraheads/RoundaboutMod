@@ -434,7 +434,7 @@ public class ForgeItems {
     public static final RegistryObject<Item> AJA = addToTab(ITEMS.register("aja",
             () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> ULTRAVIOLET_BLASTER = addToTab(ITEMS.register("ultraviolet_blaster",
-            () -> new Item(new Item.Properties().stacksTo(1).durability(UltravioletBlasterItem.durability))));
+            () -> new UltravioletBlasterItem(new Item.Properties().stacksTo(1).durability(UltravioletBlasterItem.durability))));
     public static final RegistryObject<Item> WALL_STREET_SIGN_DIO_BLOCK_ITEM = addToBuildingTab(ITEMS.register("wall_street_sign_dio",
     () -> new BlockItem(ForgeBlocks.WALL_STREET_SIGN_DIO.get(),
                     new Item.Properties()
@@ -567,6 +567,12 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersWalkingHeart(null))));
     public static final RegistryObject<Item> MAX_STAND_DISC_WALKING_HEART = addToDiscTab(ITEMS.register("max_walking_heart_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersWalkingHeart(null))));
+
+    public static final RegistryObject<Item> STAND_DISC_PLANET_WAVES = addToWIPTab(ITEMS.register("planet_waves_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersPlanetWaves(null))));
+    public static final RegistryObject<Item> MAX_STAND_DISC_PLANET_WAVES = addToWIPTab(ITEMS.register("max_planet_waves_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersPlanetWaves(null))))
+            ;
 
     public static final RegistryObject<Item> STAND_DISC_ANUBIS = addToDiscTab(ITEMS.register("anubis_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null))));

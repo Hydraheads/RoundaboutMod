@@ -439,6 +439,14 @@ public class FabricEntities {
                         EntityType.Builder.of(CinderellaEntity::new, MobCategory.MISC).
                                 sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":cinderella")
                 );
+        public static final EntityType<PlanetWavesEntity> PLANET_WAVES =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        Roundabout.location("planet_waves"),
+                        EntityType.Builder.of(PlanetWavesEntity::new, MobCategory.MISC).
+                                sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":planet_waves")
+                );
+
 
     public static final EntityType<ManhattanTransferEntity> MANHATTAN_TRANSFER =
             Registry.register(
@@ -597,6 +605,21 @@ public class FabricEntities {
                         EntityType.Builder.<StandFireballEntity>of(StandFireballEntity::new, MobCategory.MISC).
                                 sized(0.9F, 0.9F).clientTrackingRange(15).build(Roundabout.MOD_ID+":stand_fireball")
                 );
+    public static final EntityType<PWMeteorEntity> PW_METEOR =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "pw_meteor"),
+                    EntityType.Builder.<PWMeteorEntity>of(PWMeteorEntity::new, MobCategory.MISC).
+                            sized(0.9F, 0.9F).clientTrackingRange(15).build(Roundabout.MOD_ID+":pw_meteor")
+            );
+    public static final EntityType<PWBigMeteorEntity> PW_BIG_METEOR =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "pw_big_meteor"),
+                    EntityType.Builder.<PWBigMeteorEntity>of(PWBigMeteorEntity::new, MobCategory.MISC).
+                            sized(15.0F, 15.0F).clientTrackingRange(15).build(Roundabout.MOD_ID+":pw_big_meteor")
+            );
+
     public static final EntityType<EvilAuraProjectile> EVIL_AURA_PROJECTILE =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -871,6 +894,7 @@ public class FabricEntities {
                 ModEntities.KILLER_QUEEN = KILLER_QUEEN;
                 ModEntities.BLOCK_BOMB = BLOCK_BOMB;
                 ModEntities.CINDERELLA = CINDERELLA;
+                ModEntities.PLANET_WAVES = PLANET_WAVES;
                 ModEntities.MANHATTAN_TRANSFER = MANHATTAN_TRANSFER;
                 ModEntities.POLLINATION_TRANSFER = POLLINATION_TRANSFER;
                 ModEntities.WALKING_HEART = WALKING_HEART;
@@ -906,6 +930,8 @@ public class FabricEntities {
                 ModEntities.BLOOD_SPLATTER = BLOOD_SPLATTER;
                 ModEntities.STAND_ARROW = STAND_ARROW;
                 ModEntities.IRON_BALL = IRON_BALL;
+                ModEntities.PW_METEOR = PW_METEOR;
+                ModEntities.PW_BIG_METEOR = PW_BIG_METEOR;
 
                 ModEntities.THROWN_OBJECT = THROWN_OBJECT;
                 ModEntities.THROWN_ANUBIS = THROWN_ANUBIS;
@@ -1036,6 +1062,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(TUSK_A3, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(TUSK_A4, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(CINDERELLA, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(PLANET_WAVES, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(MANHATTAN_TRANSFER, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(POLLINATION_TRANSFER, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(WALKING_HEART, StandEntity.createStandAttributes());

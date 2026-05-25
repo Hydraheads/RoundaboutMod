@@ -78,6 +78,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public CinderellaSettings cinderellaSettings;
     @NestedOption(group = "modded")
+    public PlanetWavesSettings PlanetWavesSettings;
+    @NestedOption(group = "modded")
     public ManhattanTransferSettings manhattanTransferSettings;
     @NestedOption(group = "modded")
     public HeyYaSettings heyYaSettings;
@@ -424,6 +426,8 @@ public class Config implements Cloneable {
         public Boolean enableKillerQueen;
     	@BooleanOption(group = "inherit", value = false)
         public Boolean enableBitesTheDustDayMode;
+    	@BooleanOption(group = "inherit", value = true)
+        public Boolean blocksDestruction;
     }
     
     public static class SoftAndWetSettings {
@@ -511,6 +515,8 @@ public class Config implements Cloneable {
         public Integer itemBubbleShotCooldown;
         @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
         public Integer itemBubblePopCooldown;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer itemBubblePopShotCooldown;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer basicBubbleShotCooldown;
         @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
@@ -676,6 +682,27 @@ public class Config implements Cloneable {
         public Integer emeraldCostCharacterVisage;
         @BooleanOption(group = "inherit", value = false)
         public Boolean enableJojoveinVisagesInShop;
+
+    }
+    public static class PlanetWavesSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enablePlanetWaves;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer meteorshowerCooldown;
+        @IntOption(group = "inherit", value = 360, min = 0, max = 72000)
+        public Integer bigmeteorCooldown;
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
+        public Integer bigmeteorDistance;
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
+        public Integer meteorshowerDistance;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer standtargetingCooldown;
+        @IntOption(group = "inherit", value = 360, min = 0, max = 72000)
+        public Integer usertargetingCooldown;
+
+        ;
+
+
 
     }
     public static class HeyYaSettings {
