@@ -11,7 +11,8 @@ public class PlanetWavesEntity extends FollowingStandEntity {
     public static final byte
             PART_6_SKIN = 1,
             MANGA_SKIN = 2,
-            BLUE_SKIN = 3;
+            BLUE_SKIN = 3,
+            PURPLE_SKIN = 4;
 
 
 
