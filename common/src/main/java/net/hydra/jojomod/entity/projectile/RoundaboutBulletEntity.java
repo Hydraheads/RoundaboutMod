@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.access.IProjectileAccess;
@@ -157,7 +158,8 @@ public class RoundaboutBulletEntity extends AbstractArrow {
         };
     }
 
-
+    public boolean isHattan = false;
+    public float manhattanDamage = 0.0F;
 
     @Override
     public void onHitEntity(EntityHitResult result) {
@@ -204,35 +206,49 @@ public class RoundaboutBulletEntity extends AbstractArrow {
                 livingEntity.hurtTime = 0;
             }
 
-            float damage = getBulletDamage();
+                float damage = getBulletDamage();
+                float damageManhattan = this.manhattanDamage;
 
-            if (getAmmoType() == SNIPER) {
+                if (getAmmoType() == SNIPER) {
                     float multiplier = Math.min(travelTicks / 7.0F, 1.0F);
                     damage = damage * multiplier;
 
-                if (MainUtil.isBossMob(livingEntity)) {
-                    damage = Math.min(damage,ClientNetworking.getAppropriateConfig().itemSettings.rifleDamage/3F);
+                    if (MainUtil.isBossMob(livingEntity)) {
+                        damage = Math.min(damage, ClientNetworking.getAppropriateConfig().itemSettings.rifleDamage / 3F);
+                    }
                 }
-            }
 
-            if (getAmmoType() == SNUBNOSE && !hadIFrames) {
-                damage += 1.0F;
-            }
-            if (livingEntity instanceof Player) {
-                damage = (float) (damage * (ClientNetworking.getAppropriateConfig().itemSettings.gunDamageOnPlayers *0.01));
+                if (getAmmoType() == SNUBNOSE && !hadIFrames) {
+                    damage += 1.0F;
+                }
+                if (livingEntity instanceof Player) {
+                    damage = (float) (damage * (ClientNetworking.getAppropriateConfig().itemSettings.gunDamageOnPlayers * 0.01));
+                } else {
+                    damage = (float) (damage * (ClientNetworking.getAppropriateConfig().itemSettings.gunDamageOnMobs * 0.01));
+                    ;
+                }
+            if(!isHattan) {
+                boolean didDamage = livingEntity.hurt(ModDamageTypes.of(level(), ModDamageTypes.BULLET, this, this.getOwner()), damage);
+
+                if (didDamage) {
+                    applyEffect(livingEntity);
+                }
+
+                if (didDamage && getAmmoType() == SNUBNOSE && outsideOfTimeStop == 0) {
+                    livingEntity.invulnerableTime = 10;
+                    livingEntity.hurtTime = 10;
+                }
             } else {
-                damage = (float) (damage * (ClientNetworking.getAppropriateConfig().itemSettings.gunDamageOnMobs *0.01));;
-            }
+                boolean didDamage = livingEntity.hurt(ModDamageTypes.of(level(), ModDamageTypes.BULLET, this, this.getOwner()), damageManhattan);
 
-            boolean didDamage = livingEntity.hurt(ModDamageTypes.of(level(), ModDamageTypes.BULLET, this, this.getOwner()), damage);
+                if (didDamage) {
+                    applyEffect(livingEntity);
+                }
 
-            if (didDamage) {
-                applyEffect(livingEntity);
-            }
-
-            if (didDamage && getAmmoType() == SNUBNOSE && outsideOfTimeStop == 0) {
-                livingEntity.invulnerableTime = 10;
-                livingEntity.hurtTime = 10;
+                if (didDamage && getAmmoType() == SNUBNOSE && outsideOfTimeStop == 0) {
+                    livingEntity.invulnerableTime = 10;
+                    livingEntity.hurtTime = 10;
+                }
             }
         } else {
             entity.hurt(ModDamageTypes.of(level(), ModDamageTypes.BULLET, this, this.getOwner()), 1);
