@@ -1893,6 +1893,7 @@
   "skins.roundabout.planet_waves.base": "Part 6",
   "skins.roundabout.planet_waves.manga": "Manga",
   "skins.roundabout.planet_waves.blue": "Blue",
+  "skins.roundabout.planet_waves.purple": "Purple",
 
   "skins.roundabout.ratt.anime" : "Anime",
   "skins.roundabout.ratt.manga" : "Manga",
@@ -3317,6 +3318,7 @@
   "config.roundabout.emperorSettings.name": "Emperor",
   "config.roundabout.achtungSettings.name": "Achtung Baby",
   "config.roundabout.greendaySettings.name": "Green Day",
+  "config.roundabout.PlanetWavesSettings.name": "Planet Waves",
   "config.roundabout.theWorldSettings.name": "The World",
   "config.roundabout.starPlatinumSettings.name": "Star Platinum",
   "config.roundabout.timeStopSettings.name": "Time Stop",
