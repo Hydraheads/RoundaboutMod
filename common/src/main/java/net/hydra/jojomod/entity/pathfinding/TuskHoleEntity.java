@@ -18,10 +18,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -70,6 +67,11 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
         this.setUser(user);
     }
 
+
+    @Override
+    protected float getStandingEyeHeight(Pose $$0, EntityDimensions $$1) {
+        return 0.6F;
+    }
 
     @Override
     protected void addBehaviourGoals() {
@@ -156,7 +158,6 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
 
         if (!client) {
             if (!isVortex()) {
-                Roundabout.LOGGER.info(""+this.isInWater());
                 if (isInWater()) {
                     vortexify();
                 }
