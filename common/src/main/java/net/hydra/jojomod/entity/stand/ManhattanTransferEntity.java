@@ -432,6 +432,8 @@ public void itemEject(){
              } else if(item.getItem() instanceof TommyAmmoItem){
                  $$7.setAmmoType(RoundaboutBulletEntity.TOMMY_GUN);
              }
+             $$7.isHattan = true;
+             $$7.manhattanDamage = thrower.manhattanDamageIncipit;
              thrower.level().addFreshEntity($$7);
              $$7.setOwner(thrower.getUser());
          }
