@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -63,6 +64,9 @@ public class UVBlasterLayer<T extends LivingEntity, A extends HumanoidModel<T>> 
         float r = isHurt ? 1.0F : 1.0F;
         float g = isHurt ? 0.0F : 1.0F;
         float b = isHurt ? 0.0F : 1.0F;
+        double rotation = -1* Math.max(Math.toRadians(entity.getXRot())*-1,0.1767F);
+        ModStrayModels.UV_BLASTER.bone1.xRot = (float) rotation;
+        ModStrayModels.UV_BLASTER.bone2.xRot = (float) rotation;
         ModStrayModels.UV_BLASTER.render(livent, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, heyFull);
         ModStrayModels.UV_BLASTER.render2(livent, partialTicks, poseStack, bufferSource, 15728880,

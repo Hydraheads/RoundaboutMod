@@ -22,14 +22,18 @@ import net.minecraft.world.entity.LivingEntity;
 public class UVBlasterModel<T extends Entity> extends PsuedoHierarchicalModel {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "speedwagon_hat_converted"), "main");
-	private final ModelPart backpack;
-    private final ModelPart root;
+    public final ModelPart backpack;
+    public final ModelPart root;
+    public final ModelPart bone1;
+    public final ModelPart bone2;
 
 	public UVBlasterModel() {
         super(RenderType::entityTranslucent);
 
         this.root = createBodyLayer().bakeRoot();
         this.backpack = root.getChild("backpack");
+        this.bone1 = backpack.getChild("bone");
+        this.bone2 = backpack.getChild("bone2");
 	}
 
 	public static LayerDefinition createBodyLayer() {
