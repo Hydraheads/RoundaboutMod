@@ -219,7 +219,7 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
 
             //distance from user
             if (!slowing
-                    && distance <= 10.0     //osea que tanto te perdona
+                    && distance <= 7.2    //osea que tanto te perdona
                     && approachDot > 0.9) {//0.9 = casi golpe directo
                 //0.5 = more forgiving cone
 
@@ -346,6 +346,13 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
                 );
             }
         }
+        LivingEntity user = this.getStandUser();
+
+        if (user instanceof StandUser SU &&
+                SU.roundabout$getStandPowers() instanceof PowersPlanetWaves PPW) {
+
+            PPW.addEXP(10);
+        }
 
         this.discard();
     }
@@ -373,12 +380,10 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
 
         double approachDot = movementDir.dot(toUser);
 
-        // meteor passed player
         if (approachDot <= 0.0D) {
             missedPlayer = true;
         }
 
-        // explode after missing player
         if (missedPlayer) {
             explodeAndIgnite();
             return;
@@ -420,8 +425,8 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
             blocksDisintegrated++;
 
             /*
-             * once block limit is reached,
-             * trigger missed-player explosion
+             once block limit is reached,
+             trigger missed-player explosion
              */
             if (blocksDisintegrated >= MAX_BLOCKS_DISINTEGRATED) {
 
@@ -606,7 +611,7 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
                         Mth.sin(-17 * ((float) Math.PI / 180)),
                         -Mth.cos(degrees * ((float) Math.PI / 180)));
                 if (gotten instanceof LivingEntity LE) {
-                    PPW.addEXP(35, LE);
+                    PPW.addEXP(25, LE);
                     MainUtil.makeBleed(LE, 2, 200, gotten);
                     StandUser userLE = ((StandUser) LE);
                     int ticks = 20;

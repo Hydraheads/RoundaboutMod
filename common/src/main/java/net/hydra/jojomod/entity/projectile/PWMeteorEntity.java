@@ -37,6 +37,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
 
 import java.util.List;
@@ -270,7 +271,7 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
             double approachDot = movementDir.dot(toUser);
             double distance = this.distanceTo(user);
 
-            if (!slowing && distance <= 10.0 && approachDot > 0.9) {
+            if (!slowing && distance <= 7.2 && approachDot > 0.9) {
                 slowing = true;
                 disintegrationSoundPlayed = false;
             }
@@ -329,24 +330,96 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
     private boolean processingExplosion = false;
     @Override
     protected void onHitBlock(BlockHitResult hit) {
+
         if (this.level().isClientSide()) return;
 
-        LivingEntity user = this.standUser;
+        LivingEntity user = this.getStandUser();
 
-        if (user != null) {
+        if (user == null) {
             radialExplosion(null);
-
-            this.level().playSound(
-                    null,
-                    this.getX(),
-                    this.getY(),
-                    this.getZ(),
-                    ModSounds.FIREBALL_HIT_EVENT,
-                    SoundSource.PLAYERS,
-                    2.5F,
-                    1.0F
-            );
+            this.discard();
+            return;
         }
+
+        Vec3 meteorPos = this.position();
+
+        Vec3 toUser = user.position()
+                .add(0, user.getBbHeight() * 0.5, 0)
+                .subtract(meteorPos)
+                .normalize();
+
+        Vec3 movementDir = this.getDeltaMovement().normalize();
+
+        double approachDot = movementDir.dot(toUser);
+
+
+        if (approachDot <= 0.0D) {
+            missedPlayer = true;
+        }
+
+
+        if (!missedPlayer) {
+
+            BlockPos pos = hit.getBlockPos();
+            BlockState state = this.level().getBlockState(pos);
+
+            if (
+                    state.is(Blocks.GLASS) ||
+                            state.is(Blocks.GLASS_PANE) ||
+                            state.is(Blocks.TINTED_GLASS) ||
+
+                            state.is(Blocks.WHITE_STAINED_GLASS) ||
+                            state.is(Blocks.ORANGE_STAINED_GLASS) ||
+                            state.is(Blocks.MAGENTA_STAINED_GLASS) ||
+                            state.is(Blocks.LIGHT_BLUE_STAINED_GLASS) ||
+                            state.is(Blocks.YELLOW_STAINED_GLASS) ||
+                            state.is(Blocks.LIME_STAINED_GLASS) ||
+                            state.is(Blocks.PINK_STAINED_GLASS) ||
+                            state.is(Blocks.GRAY_STAINED_GLASS) ||
+                            state.is(Blocks.LIGHT_GRAY_STAINED_GLASS) ||
+                            state.is(Blocks.CYAN_STAINED_GLASS) ||
+                            state.is(Blocks.PURPLE_STAINED_GLASS) ||
+                            state.is(Blocks.BLUE_STAINED_GLASS) ||
+                            state.is(Blocks.BROWN_STAINED_GLASS) ||
+                            state.is(Blocks.GREEN_STAINED_GLASS) ||
+                            state.is(Blocks.RED_STAINED_GLASS) ||
+                            state.is(Blocks.BLACK_STAINED_GLASS) ||
+
+                            state.is(Blocks.WHITE_STAINED_GLASS_PANE) ||
+                            state.is(Blocks.ORANGE_STAINED_GLASS_PANE) ||
+                            state.is(Blocks.MAGENTA_STAINED_GLASS_PANE) ||
+                            state.is(Blocks.LIGHT_BLUE_STAINED_GLASS_PANE) ||
+                            state.is(Blocks.YELLOW_STAINED_GLASS_PANE) ||
+                            state.is(Blocks.LIME_STAINED_GLASS_PANE) ||
+                            state.is(Blocks.PINK_STAINED_GLASS_PANE) ||
+                            state.is(Blocks.GRAY_STAINED_GLASS_PANE) ||
+                            state.is(Blocks.LIGHT_GRAY_STAINED_GLASS_PANE) ||
+                            state.is(Blocks.CYAN_STAINED_GLASS_PANE) ||
+                            state.is(Blocks.PURPLE_STAINED_GLASS_PANE) ||
+                            state.is(Blocks.BLUE_STAINED_GLASS_PANE) ||
+                            state.is(Blocks.BROWN_STAINED_GLASS_PANE) ||
+                            state.is(Blocks.GREEN_STAINED_GLASS_PANE) ||
+                            state.is(Blocks.RED_STAINED_GLASS_PANE) ||
+                            state.is(Blocks.BLACK_STAINED_GLASS_PANE)
+            ) {
+                this.level().destroyBlock(pos, true);
+            }
+
+            return;
+        }
+
+        radialExplosion(null);
+
+        this.level().playSound(
+                null,
+                this.getX(),
+                this.getY(),
+                this.getZ(),
+                ModSounds.FIREBALL_HIT_EVENT,
+                SoundSource.PLAYERS,
+                2.5F,
+                1.0F
+        );
 
         this.discard();
     }
@@ -507,6 +580,7 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
             }
         }
     }
+    private boolean missedPlayer = false;
 
     @Override
     public boolean fireImmune() {
