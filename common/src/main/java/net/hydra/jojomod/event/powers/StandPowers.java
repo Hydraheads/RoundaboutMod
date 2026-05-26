@@ -159,7 +159,6 @@ public class StandPowers extends AbilityScapeBasis {
     }
     /**Runs this code while pressing R to activate powers*/
     public void onStandSummon(boolean desummon){
-
     }
     /**Runs this code while switching into stand with a disc*/
     public void onStandSwitchInto(){
