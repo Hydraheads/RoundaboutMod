@@ -96,6 +96,7 @@
   "roundabout.coffin_sleep": "Leave Coffin",
 
   "item.roundabout.star_platinum_disc": "Stand Disc",
+  "item.roundabout.white_album_disc": "Stand Disc",
   "item.roundabout.20th_century_boy_disc": "Stand Disc",
   "item.roundabout.the_world_disc": "Stand Disc",
   "item.roundabout.justice_disc": "Stand Disc",
@@ -120,6 +121,7 @@
   "item.roundabout.walking_heart_disc": "Stand Disc",
   "item.roundabout.max_walking_heart_disc": "Stand Disc+",
   "item.roundabout.max_star_platinum_disc": "Stand Disc+",
+  "item.roundabout.max_white_album_disc": "Stand Disc+",
   "item.roundabout.magicians_red_disc": "Stand Disc",
   "item.roundabout.killer_queen_disc": "Stand Disc",
   "item.roundabout.metallica_disc": "Stand Disc",
@@ -169,6 +171,7 @@
   "item.roundabout.diver_down_disc.desc": "Diver Down",
   "item.roundabout.max_diver_down_disc.desc": "Diver Down",
   "item.roundabout.manhattan_transfer_disc.desc": "Manhattan Transfer",
+  "item.roundabout.white_album_disc.desc": "White Album",
   "item.roundabout.none_disc.desc": "None",
 
   "item.roundabout.ocelot_remains": "Ocelot Remains",

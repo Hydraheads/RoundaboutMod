@@ -382,6 +382,12 @@ public class ForgeItems {
     ));
 
 
+    public static final RegistryObject<Item> STAND_DISC_WHITE_ALBUM = addToWIPTab(ITEMS.register("white_album_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersWhiteAlbum(null))));
+    public static final RegistryObject<Item> MAX_STAND_DISC_WHITE_ALBUM = addToWIPTab(ITEMS.register("max_white_album_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersWhiteAlbum(null))));
+
+
     public static final RegistryObject<Item> STAND_DISC_TUSK = addToWIPTab(ITEMS.register("tusk_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersTusk(null))));
     public static final RegistryObject<Item> MAX_STAND_DISC_TUSK = addToWIPTab(ITEMS.register("max_tusk_disc",

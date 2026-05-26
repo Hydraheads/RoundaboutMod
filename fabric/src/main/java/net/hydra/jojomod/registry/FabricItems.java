@@ -73,6 +73,11 @@ public class FabricItems {
     public static Item MAX_STAND_DISC_ANUBIS = registerItem("max_anubis_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null)));
 
+    public static Item STAND_DISC_WHITE_ALBUM = registerItem("white_album_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersWhiteAlbum(null)));
+    public static Item MAX_STAND_DISC_WHITE_ALBUM = registerItem("max_white_album_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersWhiteAlbum(null)));
+
     public static Item STAND_DISC_TUSK = registerItem("tusk_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersTusk(null)));
     public static Item MAX_STAND_DISC_TUSK = registerItem("max_tusk_disc",
@@ -564,6 +569,8 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_KILLER_QUEEN);
                         entries.accept(STAND_DISC_EMPEROR);
                         entries.accept(MAX_STAND_DISC_EMPEROR);
+                        entries.accept(STAND_DISC_WHITE_ALBUM);
+                        entries.accept(MAX_STAND_DISC_WHITE_ALBUM);
                         entries.accept(STAND_DISC_PLANET_WAVES);
                         entries.accept(MAX_STAND_DISC_PLANET_WAVES);
 
@@ -616,6 +623,9 @@ public class FabricItems {
         ModItems.STAND_DISC_ANUBIS = STAND_DISC_ANUBIS;
         ((MaxStandDiscItem)MAX_STAND_DISC_ANUBIS).baseDisc = ((StandDiscItem)STAND_DISC_ANUBIS);
         ModItems.MAX_STAND_DISC_TUSK = MAX_STAND_DISC_TUSK;
+        ModItems.STAND_DISC_WHITE_ALBUM = STAND_DISC_WHITE_ALBUM;
+        ((MaxStandDiscItem)MAX_STAND_DISC_WHITE_ALBUM).baseDisc = ((StandDiscItem)STAND_DISC_WHITE_ALBUM);
+        ModItems.MAX_STAND_DISC_WHITE_ALBUM = MAX_STAND_DISC_WHITE_ALBUM;
         ModItems.STAND_DISC_TUSK = STAND_DISC_TUSK;
         ((MaxStandDiscItem)MAX_STAND_DISC_TUSK).baseDisc = ((StandDiscItem)STAND_DISC_TUSK);
         ModItems.STAND_DISC_SOFT_AND_WET = STAND_DISC_SOFT_AND_WET;
