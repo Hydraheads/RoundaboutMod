@@ -30,6 +30,7 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -229,9 +230,16 @@ public class PowersPlanetWaves extends NewDashPreset {
                 ModSounds.PLANET_WAVES_METEOR_SHOWER_EVENT,
                 net.minecraft.sounds.SoundSource.PLAYERS, 1.0F, 1.0F);
 
-        this.setCooldown(PowerIndex.SKILL_1,
-                ClientNetworking.getAppropriateConfig()
-                        .PlanetWavesSettings.meteorshowerCooldown);
+        int cooldown = ClientNetworking.getAppropriateConfig()
+                .PlanetWavesSettings.meteorshowerCooldown;
+
+        this.setCooldown(PowerIndex.SKILL_1, cooldown);
+
+        S2CPacketUtil.sendCooldownSyncPacket(
+                ((ServerPlayer)this.getSelf()),
+                PowerIndex.SKILL_1,
+                cooldown
+        );
     }
 
     private static class ScheduledMeteor {
@@ -284,6 +292,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         Level level = this.self.level();
         if (level.isClientSide()) return;
         if (this.self.level().dimension() == Level.NETHER) return;
+        if (this.onCooldown(PowerIndex.SKILL_2)) return;
         Vec3 eyePos = this.self.getEyePosition(1.0F);
         Vec3 lookVec = this.self.getViewVector(1.0F).normalize();
 
@@ -320,9 +329,15 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         level.addFreshEntity(meteor);
 
-        this.setCooldown(
+        int cooldown = ClientNetworking.getAppropriateConfig()
+                .PlanetWavesSettings.bigmeteorCooldown;
+
+        this.setCooldown(PowerIndex.SKILL_2, cooldown);
+
+        S2CPacketUtil.sendCooldownSyncPacket(
+                ((ServerPlayer)this.getSelf()),
                 PowerIndex.SKILL_2,
-                ClientNetworking.getAppropriateConfig().PlanetWavesSettings.bigmeteorCooldown
+                cooldown
         );
 
         level.playSound(
@@ -435,7 +450,72 @@ public class PowersPlanetWaves extends NewDashPreset {
             }
         }
     }
+    @Override
+    public void tickMobAI(LivingEntity attackTarget) {
 
+        if (attackTarget != null
+                && attackTarget.isAlive()
+                && !this.isDazed(this.getSelf())) {
+
+            double dist = attackTarget.distanceTo(this.getSelf());
+
+            if (this.getActivePower() != PowerIndex.NONE || dist <= 12) {
+                rotateMobHead(attackTarget);
+            }
+
+            if (!this.onCooldown(PowerIndex.SKILL_1)
+                    && activePower == PowerIndex.NONE
+                    && !this.self.isUnderWater()) {
+
+                ((StandUser) this.getSelf())
+                        .roundabout$tryPower(PowerIndex.POWER_1, true);
+            }
+
+            else if (dist > 8
+                    && dist <= 30
+                    && !this.onCooldown(PowerIndex.SKILL_2)
+                    && activePower == PowerIndex.NONE
+                    && !this.self.isUnderWater()) {
+
+                double RNG = Math.random();
+
+                if (RNG < 0.2) {
+                    ((StandUser) this.getSelf())
+                            .roundabout$tryPower(PowerIndex.POWER_2, true);
+                }
+            }
+
+            if (dist <= 7
+                    && (activePower == PowerIndex.NONE
+                    || activePower == PowerIndex.ATTACK)) {
+
+                Entity targetEntity = getTargetEntity(this.self, -1);
+
+                if (targetEntity != null && targetEntity.is(attackTarget)) {
+
+                    if (this.attackTimeDuring <= -1) {
+
+                        double RNG = Math.random();
+
+                        if (RNG < 0.25
+                                && !this.onCooldown(PowerIndex.SKILL_2)
+                                && activePower == PowerIndex.NONE) {
+
+                            ((StandUser) this.getSelf())
+                                    .roundabout$tryPower(PowerIndex.POWER_2, true);
+
+                        } else {
+
+                            ((StandUser) this.getSelf())
+                                    .roundabout$tryPower(PowerIndex.ATTACK, true);
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+//summon minecraft:creeper ~ ~ ~ {roundabout.StandDisc:{id:"roundabout:max_planet_waves_disc",tag:{Memory:{Pose:0b,Skin:1b}},Count:1b}}
     @Override
     protected Byte getSummonSound() {
         return SoundIndex.SUMMON_SOUND;

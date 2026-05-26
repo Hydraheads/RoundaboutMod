@@ -53,6 +53,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.FlowerBlock;
+import net.minecraft.world.level.block.TallFlowerBlock;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -823,7 +824,8 @@ public class VampireFate extends VampiricFate {
 
     public boolean isPlant(ItemStack stack){
         if (stack != null && !stack.isEmpty()){
-            return (stack.getItem() instanceof BlockItem bi && bi.getBlock() instanceof FlowerBlock);
+            return (stack.getItem() instanceof BlockItem bi && (bi.getBlock() instanceof FlowerBlock ||
+                    bi.getBlock() instanceof TallFlowerBlock));
         }
         return false;
     }
