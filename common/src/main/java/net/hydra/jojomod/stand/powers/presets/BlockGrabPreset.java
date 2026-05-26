@@ -24,6 +24,7 @@ import net.hydra.jojomod.stand.powers.PowersStarPlatinum;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Options;
 import net.minecraft.core.BlockPos;
@@ -567,6 +568,17 @@ public class BlockGrabPreset extends NewPunchingStand {
             }
         }
         return super.canInterruptPower();
+    }
+
+    @Override
+    public void onStandSummon(boolean desummon) {
+        if (hasBlock()) {
+            this.setCooldown(PowerIndex.SKILL_2, ConfigManager.getConfig().generalStandSettings.objectPocketCooldown);
+            if (!self.level().isClientSide()) {
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
+            }
+        }
+        super.onStandSummon(desummon);
     }
     public float inputSpeedModifiers(float basis){
             StandUser standUser = ((StandUser) this.getSelf());

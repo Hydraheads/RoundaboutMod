@@ -4563,7 +4563,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         //Players have their own die event
         if (FateTypes.takesSunlightDamage(rdbt$this())) {
-            if ($$0.is(ModDamageTypes.SUNLIGHT)){
+            if ($$0.is(ModDamageTypes.SUNLIGHT) || $$0.is(ModDamageTypes.ULTRAVIOLET)){
                 if (this.level() instanceof ServerLevel SL){
                     Vec3 position = this.getPosition(1);
                     Vec3 position2 = this.getEyePosition();

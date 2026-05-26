@@ -320,6 +320,9 @@ public class FabricItems {
                         entries.accept(STAND_ARROW);
                         entries.accept(STAND_BEETLE_ARROW);
                         entries.accept(STAND_DISC);
+
+                        entries.accept(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK);
+                        entries.accept(ModBlocks.BLOODY_STONE_MASK_BLOCK);
                         entries.accept(LUCK_UPGRADE);
                         entries.accept(LUCK_SWORD);
                         entries.accept(IRON_BALL_CROSSBOW);
@@ -407,8 +410,17 @@ public class FabricItems {
                         entries.accept(SHIZUKA_MASK);
                         entries.accept(RAT_MASK);
 
-
-
+                        entries.accept(CAT_REMAINS);
+                        entries.accept(POLAR_BEAR_REMAINS);
+                        entries.accept(MOOSHROOM_REMAINS);
+                        entries.accept(GOAT_REMAINS);
+                        entries.accept(LLAMA_REMAINS);
+                        entries.accept(SILVERFISH_REMAINS);
+                        entries.accept(OCELOT_REMAINS);
+                        entries.accept(PARROT_REMAINS);
+                        entries.accept(CHICKEN_REMAINS);
+                        entries.accept(DOG_REMAINS);
+                        entries.accept(AXOLOTL_REMAINS);
 
                     }).build());
 
@@ -540,19 +552,6 @@ public class FabricItems {
                     .icon(() -> new ItemStack(AJA)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here
 
-                        entries.accept(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK);
-                        entries.accept(ModBlocks.BLOODY_STONE_MASK_BLOCK);
-                        entries.accept(CAT_REMAINS);
-                        entries.accept(POLAR_BEAR_REMAINS);
-                        entries.accept(MOOSHROOM_REMAINS);
-                        entries.accept(GOAT_REMAINS);
-                        entries.accept(LLAMA_REMAINS);
-                        entries.accept(SILVERFISH_REMAINS);
-                        entries.accept(OCELOT_REMAINS);
-                        entries.accept(PARROT_REMAINS);
-                        entries.accept(CHICKEN_REMAINS);
-                        entries.accept(DOG_REMAINS);
-                        entries.accept(AXOLOTL_REMAINS);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_20_CENTURY_BOY);

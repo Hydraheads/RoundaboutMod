@@ -41,6 +41,15 @@ public class ForgeItems {
             () -> new StandArrowItem(new Item.Properties().stacksTo(1).durability(5))));
     public static final RegistryObject<Item> STAND_BEETLE_ARROW = addToTab(ITEMS.register("stand_beetle_arrow",
             () -> new StandArrowItem(new Item.Properties().stacksTo(1).durability(5))));
+
+    public static final RegistryObject<BlockItem> EQUIPPABLE_STONE_MASK_ITEM = addToTab(ITEMS.register("stone_mask",
+            () -> new StoneMaskBlockItem(ForgeBlocks.EQUIPPABLE_STONE_MASK_BLOCK.get(),
+                    new Item.Properties().stacksTo(1)
+            )));
+    public static final RegistryObject<BlockItem> BLOODY_STONE_MASK_ITEM = addToTab(ITEMS.register("bloody_stone_mask",
+            () -> new BloodyStoneMaskBlockItem(ForgeBlocks.BLOODY_STONE_MASK_BLOCK.get(),
+                    new Item.Properties().stacksTo(1)
+            )));
     public static final RegistryObject<Item> BODY_BAG = addToTab(ITEMS.register("body_bag",
             () -> new BodyBagItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> CREATIVE_BODY_BAG = addToTab(ITEMS.register("creative_body_bag",
@@ -104,14 +113,6 @@ public class ForgeItems {
     public static final RegistryObject<BlockItem> SHINY_QUARTZ_TILES_ITEM = addToBuildingTab(ITEMS.register("shiny_quartz_tiles",
             () -> new BlockItem(ForgeBlocks.SHINY_QUARTZ_TILES.get(),
                     new Item.Properties()
-            )));
-    public static final RegistryObject<BlockItem> EQUIPPABLE_STONE_MASK_ITEM = addToWIPTab(ITEMS.register("stone_mask",
-            () -> new StoneMaskBlockItem(ForgeBlocks.EQUIPPABLE_STONE_MASK_BLOCK.get(),
-                    new Item.Properties().stacksTo(1)
-            )));
-    public static final RegistryObject<BlockItem> BLOODY_STONE_MASK_ITEM = addToWIPTab(ITEMS.register("bloody_stone_mask",
-            () -> new BloodyStoneMaskBlockItem(ForgeBlocks.BLOODY_STONE_MASK_BLOCK.get(),
-                    new Item.Properties().stacksTo(1)
             )));
     public static final RegistryObject<BlockItem> COFFIN_BLOCK_ITEM = addToBuildingTab(ITEMS.register("coffin_block",
             () -> new CoffinBlockItem(DyeColor.BLACK, ForgeBlocks.COFFIN_BLOCK.get(),
@@ -696,27 +697,27 @@ public class ForgeItems {
    /* public static final RegistryObject<Item> INTERDIMENSIONAL_KEY = ITEMS.register("interdimensional_key",
             () -> new InterdimensionalKeyItem(new Item.Properties().stacksTo(1))); */
 
-    public static final RegistryObject<Item> CAT_REMAINS = addToWIPTab(ITEMS.register("cat_remains",
+    public static final RegistryObject<Item> CAT_REMAINS = addToTab(ITEMS.register("cat_remains",
             () -> new HeadRemainsItem(new Item.Properties().stacksTo(64))));
-    public static final RegistryObject<Item> POLAR_BEAR_REMAINS = addToWIPTab(ITEMS.register("polar_bear_remains",
+    public static final RegistryObject<Item> POLAR_BEAR_REMAINS = addToTab(ITEMS.register("polar_bear_remains",
             () -> new HeadRemainsItem(new Item.Properties().stacksTo(64))));
-    public static final RegistryObject<Item> MOOSHROOM_REMAINS = addToWIPTab(ITEMS.register("mooshroom_remains",
+    public static final RegistryObject<Item> MOOSHROOM_REMAINS = addToTab(ITEMS.register("mooshroom_remains",
             () -> new HeadRemainsItem(new Item.Properties().stacksTo(64))));
-    public static final RegistryObject<Item> GOAT_REMAINS = addToWIPTab(ITEMS.register("goat_remains",
+    public static final RegistryObject<Item> GOAT_REMAINS = addToTab(ITEMS.register("goat_remains",
             () -> new HeadRemainsItem(new Item.Properties().stacksTo(64))));
-    public static final RegistryObject<Item> LLAMA_REMAINS = addToWIPTab(ITEMS.register("llama_remains",
+    public static final RegistryObject<Item> LLAMA_REMAINS = addToTab(ITEMS.register("llama_remains",
             () -> new HeadRemainsItem(new Item.Properties().stacksTo(64))));
-    public static final RegistryObject<Item> SILVERFISH_REMAINS = addToWIPTab(ITEMS.register("silverfish_remains",
+    public static final RegistryObject<Item> SILVERFISH_REMAINS = addToTab(ITEMS.register("silverfish_remains",
             () -> new HeadRemainsItem(new Item.Properties().stacksTo(64))));
-    public static final RegistryObject<Item> OCELOT_REMAINS = addToWIPTab(ITEMS.register("ocelot_remains",
+    public static final RegistryObject<Item> OCELOT_REMAINS = addToTab(ITEMS.register("ocelot_remains",
             () -> new BodyRemainsItem(new Item.Properties().stacksTo(64))));
-    public static final RegistryObject<Item> PARROT_REMAINS = addToWIPTab(ITEMS.register("parrot_remains",
+    public static final RegistryObject<Item> PARROT_REMAINS = addToTab(ITEMS.register("parrot_remains",
             () -> new BodyRemainsItem(new Item.Properties().stacksTo(64))));
-    public static final RegistryObject<Item> CHICKEN_REMAINS = addToWIPTab(ITEMS.register("chicken_remains",
+    public static final RegistryObject<Item> CHICKEN_REMAINS = addToTab(ITEMS.register("chicken_remains",
             () -> new BodyRemainsItem(new Item.Properties().stacksTo(64))));
-    public static final RegistryObject<Item> DOG_REMAINS = addToWIPTab(ITEMS.register("dog_remains",
+    public static final RegistryObject<Item> DOG_REMAINS = addToTab(ITEMS.register("dog_remains",
             () -> new BodyRemainsItem(new Item.Properties().stacksTo(64))));
-    public static final RegistryObject<Item> AXOLOTL_REMAINS = addToWIPTab(ITEMS.register("axolotl_remains",
+    public static final RegistryObject<Item> AXOLOTL_REMAINS = addToTab(ITEMS.register("axolotl_remains",
             () -> new BodyRemainsItem(new Item.Properties().stacksTo(64))));
 
     public static void assignStupidForge(){
