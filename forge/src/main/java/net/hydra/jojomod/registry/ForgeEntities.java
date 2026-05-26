@@ -375,7 +375,7 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<SheerHeartAttackEntity>> SHEER_HEART_ATTACK =
             ENTITY_TYPES.register("sheer_heart_attack", () ->
-                    EntityType.Builder.of(SheerHeartAttackEntity::new, MobCategory.MISC).sized(0.80F, 0.80f).
+                    EntityType.Builder.of(SheerHeartAttackEntity::new, MobCategory.MISC).sized(0.40F, 0.30f).
                             clientTrackingRange(15).
                             build(new ResourceLocation(Roundabout.MOD_ID, "sheer_heart_attack").toString())
             );

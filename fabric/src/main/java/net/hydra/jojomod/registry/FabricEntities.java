@@ -870,7 +870,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "sheer_heart_attack"),
                     EntityType.Builder.of(SheerHeartAttackEntity::new, MobCategory.CREATURE).
-                            sized(0.80f, 0.80f).clientTrackingRange(15).build(Roundabout.MOD_ID+":sheer_heart_attack")
+                            sized(0.40f, 0.30f).clientTrackingRange(15).build(Roundabout.MOD_ID+":sheer_heart_attack")
             );
     
     public static void register() {

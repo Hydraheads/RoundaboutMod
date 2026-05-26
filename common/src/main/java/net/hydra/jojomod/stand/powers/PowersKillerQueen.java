@@ -1021,9 +1021,14 @@ public class PowersKillerQueen extends NewPunchingStand {
             	if (sha != null) {
             		
             		sha.setUser(this.self);
-            		Vec3 bam = new Vec3(0,
-                            (this.self.getBbHeight()/2),
-                            0);
+            		Vec3 dir = new Vec3 (
+            				this.self.getDirection().getStepX(),
+            				this.self.getDirection().getStepY(),
+            				this.self.getDirection().getStepZ()
+    				);
+            		
+            		
+            		Vec3 bam = dir;
                     Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
                     if (gravD != Direction.DOWN){
                         bam = RotationUtil.vecPlayerToWorld(bam,gravD);
@@ -1036,7 +1041,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             	}
             	
             } else {
-            	//SHA.discard();
+            	
+            	SHA.discard();
             }
         }
     	

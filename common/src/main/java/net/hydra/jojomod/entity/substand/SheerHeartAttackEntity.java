@@ -68,11 +68,15 @@ public class SheerHeartAttackEntity extends StandEntity {
                 
                 this.discard();
             }else {
-            	
+            	if (this.getDeltaMovement().y > 0.2){
+                    this.setDeltaMovement(this.getDeltaMovement().add(0,-00.06,0));
+                }else {
+                    this.setDeltaMovement(0, -0.2, 0);
+                }
             }
         }
            
-       // super.tick();
+       //super.tick();
     }
 
 	
@@ -81,18 +85,18 @@ public class SheerHeartAttackEntity extends StandEntity {
 	
     @Override
     public boolean isInvulnerable() { return true;}	
-	
-	@Override
-    public boolean canBeCollidedWith() { return true;}
-
+	/*
+	@Override public boolean canBeCollidedWith() { return true;}
+    @Override public boolean canCollideWith(Entity $$0) { return true;}
+    */
+    
     @Override
     public boolean isPushedByFluid() { return true;}
     
     @Override
     public boolean isNoGravity() { return false;}
 
-    @Override
-    public boolean canCollideWith(Entity $$0) { return true;}
+
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
