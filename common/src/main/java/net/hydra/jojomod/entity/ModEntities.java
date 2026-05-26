@@ -60,6 +60,7 @@ public class ModEntities {
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET_KILLER_QUEEN;
     public static EntityType<KillerQueenEntity> KILLER_QUEEN;
     public static EntityType<BlockBombEntity> BLOCK_BOMB;
+    public static EntityType<SheerHeartAttackEntity> SHEER_HEART_ATTACK;
     public static EntityType<CinderellaEntity> CINDERELLA;
     public static EntityType<PlanetWavesEntity> PLANET_WAVES;
     public static EntityType<ManhattanTransferEntity> MANHATTAN_TRANSFER;

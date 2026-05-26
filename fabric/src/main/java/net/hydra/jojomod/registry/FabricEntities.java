@@ -865,8 +865,15 @@ public class FabricEntities {
                     EntityType.Builder.of(MoldSporesEntity::new, MobCategory.CREATURE).
                             sized(0.01f, 0.01f).clientTrackingRange(50).build(Roundabout.MOD_ID+":molds_pore")
             );
-
-        public static void register() {
+    public static final EntityType<SheerHeartAttackEntity> SHEER_HEART_ATTACK =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "sheer_heart_attack"),
+                    EntityType.Builder.of(SheerHeartAttackEntity::new, MobCategory.CREATURE).
+                            sized(0.80f, 0.80f).clientTrackingRange(15).build(Roundabout.MOD_ID+":sheer_heart_attack")
+            );
+    
+    public static void register() {
                 /*Common Code Bridge*/
                 ModEntities.THE_WORLD = THE_WORLD;
                 ModEntities.THE_WORLD_ULTIMATE = THE_WORLD_ULTIMATE;
@@ -991,6 +998,7 @@ public class FabricEntities {
                 ModEntities.BIRTH_OF_VENUS_PAINTING = VENUS_PAINTING;
 
                 ModEntities.METALLICA_KNIFE = METALLICA_KNIFE;
+                ModEntities.SHEER_HEART_ATTACK = SHEER_HEART_ATTACK;
 
                 /*Attributes*/
                 FabricDefaultAttributeRegistry.register(TERRIER_DOG, Wolf.createAttributes());
@@ -1080,7 +1088,9 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(LEFT_SEPERATED_ARM, SeperatedArmEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(LEFT_SEPERATED_ARM_SLIM, SeperatedArmEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(MOLD_SPORE, MoldSporesEntity.createStandAttributes());
-
+                
+                FabricDefaultAttributeRegistry.register(SHEER_HEART_ATTACK, SheerHeartAttackEntity.createStandAttributes());
+                
                 /*Spawn Weights and Biomes*/
                 BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.DESERT), MobCategory.CREATURE,
                         ModEntities.TERRIER_DOG, 2, 1, 1);
