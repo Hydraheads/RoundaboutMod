@@ -2,6 +2,7 @@ package net.hydra.jojomod.registry;
 
 import net.fabricmc.fabric.api.loot.v2.FabricLootTableBuilder;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
@@ -36,6 +37,8 @@ public class FabricLootTables {
 
     public static final ResourceLocation SHIPWRECK_ID
             = new ResourceLocation("minecraft", "chests/shipwreck_treasure");
+    public static final ResourceLocation SHIPWRECK_SUPPLY_ID
+            = new ResourceLocation("minecraft", "chests/shipwreck_supply");
     public static final ResourceLocation DESERT_HOUSE_ID
             = new ResourceLocation("minecraft", "chests/village/village_desert_house");
     public static final ResourceLocation TAIGA_HOUSE_ID
@@ -63,14 +66,21 @@ public class FabricLootTables {
                                 .add(LootItem.lootTableItem(ModItems.LOCACACA_PIT))
                                 .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 1.0f)).build());
                         tableBuilder.pool(poolBuilder.build());
+
+                        poolBuilder = LootPool.lootPool()
+                                .setRolls(ConstantValue.exactly(1.0F))
+                                .when(LootItemRandomChanceCondition.randomChance(0.1F))
+                                .add(LootItem.lootTableItem(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem()))
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 1.0f)).build());
+                        tableBuilder.pool(poolBuilder.build());
                     }
-            if (SHIPWRECK_ID.equals(id) || BURIED_TREASURE.equals(id)) {
-                LootPool.Builder poolBuilder2 = LootPool.lootPool()
+            if (SHIPWRECK_SUPPLY_ID.equals(id)) {
+                LootPool.Builder poolBuilder = LootPool.lootPool()
                         .setRolls(ConstantValue.exactly(1.0F))
-                        .when(LootItemRandomChanceCondition.randomChance(0.2F))
-                        .add(LootItem.lootTableItem(ModItems.LOCACACA_PIT))
+                        .when(LootItemRandomChanceCondition.randomChance(0.1F))
+                        .add(LootItem.lootTableItem(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem()))
                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 1.0f)).build());
-                tableBuilder.pool(poolBuilder2.build());
+                tableBuilder.pool(poolBuilder.build());
             }
             if (WOODLAND_MANSION.equals(id) || VILLAGE_TEMPLE.equals(id)) {
                 LootPool.Builder poolBuilder2 = LootPool.lootPool()

@@ -1546,7 +1546,7 @@
   "ability.roundabout.wall_walk_vamp": "Wall Walking",
   "ability.roundabout.wall_walk_vamp.desc": "Latches onto walls, allowing you to walk slowly on them. Trigger by facing a wall in the air. Press again while wall walking and facing another wall to switch walls, or to step onto ceilings.",
   "ability.roundabout.vampire_vision": "Vampire Perspective",
-  "ability.roundabout.vampire_vision.desc": "While enabled, allows for passive dark vision as well as a longer jump height while jump is held.",
+  "ability.roundabout.vampire_vision.desc": "While enabled, allows for passive dark vision as well as a longer jump height while jump is held. (The jump height skill indicates how high this currently is)",
 
   "ability.roundabout.zombie_passive": "True Undead",
   "ability.roundabout.zombie_passive.desc": "You are harmed by smite. Some potion effects are nullified or reversed: you are classified as undead.",
