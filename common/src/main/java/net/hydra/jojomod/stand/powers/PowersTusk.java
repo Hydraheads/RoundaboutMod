@@ -33,6 +33,7 @@ import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.gui.Font;
@@ -100,7 +101,7 @@ public class PowersTusk extends NewDashPreset {
         BRUSHING = PowerIndex.POWER_2_BLOCK,
 
         WARP = PowerIndex.BARRAGE_CHARGE_2,
-        GRAB = PowerIndex.BARRAGE_CLASH,
+        GRAB = PowerIndex.EXTRA_2_FINISH,
         FLATTEN = PowerIndex.RANGED_BARRAGE_2;
 
     @Override
@@ -1154,6 +1155,10 @@ public class PowersTusk extends NewDashPreset {
 
     @Override
     public boolean pilotInputInteract() {
+        if (this.hasNail()) {
+            tryPower(PowersTusk.FIRE_NAIL);
+            tryPowerPacket(PowersTusk.FIRE_NAIL);
+        }
         return true;
     }
 
@@ -1308,7 +1313,7 @@ public class PowersTusk extends NewDashPreset {
                         if (nailCharge < getMaxActiveNails()) {
                             tryPower(PowersTusk.CHARGE_NAILS);
                             tryPowerPacket(PowersTusk.CHARGE_NAILS);
-                        } else if (this.getAct() == 1 && this.extraCharge < 10 && !onCooldown(PowerIndex.SKILL_EXTRA)) {
+                        } else if (this.getAct() == 1 && this.extraCharge < 10 && !onCooldown(PowerIndex.SKILL_EXTRA) && this.getSelf().tickCount%3==0) {
                             tryPower(PowersTusk.CHARGE_EXTRA);
                             tryPowerPacket(PowersTusk.CHARGE_EXTRA);
                         }
@@ -1363,10 +1368,19 @@ public class PowersTusk extends NewDashPreset {
         }
 
 
-        tuskNailEntity.shootFromRotation(this.getSelf(),this.getSelf().getXRot(), this.getSelf().getYRot(), -0.5F, force, accuracy);
-        Vec3 firingPos = this.getSelf().getEyePosition(0);
-        if (toes) {
-            firingPos = this.getSelf().getPosition(0).add(0,0.2,0);
+        Vec3 firingPos;
+        if (isInHole()) {
+            firingPos = this.getPilotingStand().getPosition(0);
+            Entity camera = Minecraft.getInstance().cameraEntity;
+            if (camera != null) {
+                tuskNailEntity.shootFromRotation(this.getPilotingStand(), camera.getXRot(), camera.getYRot(), -0.5F, force, accuracy);
+            }
+        } else {
+            tuskNailEntity.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0.5F, force, accuracy);
+            firingPos = this.getSelf().getEyePosition(0);
+            if (toes) {
+                firingPos = this.getSelf().getPosition(0).add(0, 0.2, 0);
+            }
         }
         tuskNailEntity.setPos(firingPos);
         this.getSelf().level().addFreshEntity(tuskNailEntity);
@@ -1426,7 +1440,7 @@ public class PowersTusk extends NewDashPreset {
 
     @Override
     public boolean replaceHudActively() {
-        return this.getMaxActiveNails() != 10 || this.getNailCharge() > 0 || this.getStandUserSelf().roundabout$getStandAnimation() == PowersTusk.SHOOT_MODE;
+        return this.getMaxActiveNails() != 10 || this.getNailCharge() > 0 || this.getStandUserSelf().roundabout$getStandAnimation() == PowersTusk.SHOOT_MODE || this.getExtraCharge() > 0;
     }
 
     @Override
@@ -1451,6 +1465,14 @@ public class PowersTusk extends NewDashPreset {
                 context.blit(StandIcons.JOJO_ICONS_2, deltaX, l, 0, 86, k, 5);
             }
 
+            if (PT.getExtraCharge() > 0 || PT.onCooldown(PowerIndex.SKILL_EXTRA)) {
+                int k = (int) (182 * (PT.getExtraCharge() / 10.0F));
+                if (PT.onCooldown(PowerIndex.SKILL_EXTRA)) {
+                    CooldownInstance cd = this.getCooldown(PowerIndex.SKILL_EXTRA);
+                    k = (int) (182 * (float)cd.time/500);
+                }
+                context.blit(StandIcons.JOJO_ICONS_2, x, l+2, 0, 91, k, 5);
+            }
 
             Font font = ClientUtil.getFont();
             String $$6 = PT.getMaxActiveNails() + "";
