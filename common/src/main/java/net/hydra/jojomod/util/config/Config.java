@@ -214,6 +214,11 @@ public class Config implements Cloneable {
         public Integer brokenArrowCost;
         @BooleanOption(group = "inherit",value = true)
         public Boolean brokenArrowsHaveStands;
+        @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)
+        public Float maskTradeChance;
+        @IntOption(group = "inherit", value = 32, min = 0, max = 64)
+        public Integer maskTradeCost;
+
     }
 
     public static class BrushingLootSettings {
