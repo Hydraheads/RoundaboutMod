@@ -38,6 +38,7 @@
     "achtung.AchtungChorusPlantBlock",
     "achtung.AchtungCropBlock",
     "achtung.AchtungItemEntity",
+    "achtung.AchtungMinecart",
     "achtung.AchtungPortalShapeMixin",
     "achtung.AchtungProjectile",
     "achtung.AchtungSugarCaneBlock",
