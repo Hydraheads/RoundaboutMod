@@ -10,11 +10,8 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
-import net.hydra.jojomod.entity.projectile.SoftAndWetExplosiveBubbleEntity;
-import net.hydra.jojomod.entity.stand.GreenDayEntity;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
-import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
+import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 //import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 //import net.hydra.jojomod.entity.stand.TheWorldEntity;
@@ -104,7 +101,6 @@ public class PowersKillerQueen extends NewPunchingStand {
 	// TODO Make air bubble bomb spawn and entity
 	// TODO Make bomb entity
 	// TODO Make bomb item
-	// TODO Make bomb block (FINISHED) -- Adjust damage
 	// TODO Bites The Dust
 	
 	// TODO Audio Translations
@@ -135,6 +131,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 	public Entity bombEntity = null;
 	public BlockBombEntity bombBlock = null;
 	public Entity bombBubble = null;
+	public SheerHeartAttackEntity SHA = null;
 	
 	private boolean BitesTheDustMode = false;
 	public boolean inBitesTheDustMode() {return this.BitesTheDustMode;}
@@ -306,6 +303,8 @@ public class PowersKillerQueen extends NewPunchingStand {
         	case SKILL_3_CROUCH, SKILL_3_CROUCH_GUARD -> {
         		if (this.BitesTheDustMode) {
         			tryToDashClient();
+        		}else {
+        			tryToSendOrReturnSHA();
         		}
         	}
         	case SKILL_4_NORMAL, SKILL_4_CROUCH, SKILL_4_GUARD -> {
@@ -552,8 +551,8 @@ public class PowersKillerQueen extends NewPunchingStand {
     		return defuseServer();
     	} else if (move == PowerIndex.POWER_2) {
     		//return shootAirBubble();
-    	} else if (move == PowerIndex.POWER_2_SNEAK) {
-    		//return shootAirBubble();
+    	} else if (move == PowerIndex.POWER_3) {
+    		return this.sendOrReturnSHA();
     	} else if (move == PowersKillerQueen.DETONATE) {
     		return detonate();
     	} else if (move == PowerIndex.SNEAK_ATTACK_CHARGE){
@@ -662,6 +661,11 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (vaultOrFallBraceFails()){
             dash();
         }
+    }
+    
+    public void tryToSendOrReturnSHA() {
+    	((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+        tryPowerPacket(PowerIndex.POWER_3);
     }
     
     public void tryBombConfig() {
@@ -915,13 +919,14 @@ public class PowersKillerQueen extends NewPunchingStand {
     	for(int j = 0;j<damages.size();j++) {
             Entity entity = damages.get(j);
             double dist = entity.distanceToSqr(pos);
-            float perc = 1.0f - (((float)dist/ (range * range * range))*0.75f); 
+            float percUnhand = ((float)dist/ (range * range * range));
+            float perc = 1.0f - (percUnhand*0.75f);
+            float percKnockback = 1.0f - (percUnhand*0.5f);
             
             entity.hurt(dmg, perc*ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionDetonateMaxDamage);
             
             Vec3 knockback = new Vec3(entity.getX() - pos.x(), entity.getY() - pos.y(), entity.getZ() - pos.z());
-            knockback.normalize();
-            knockback.multiply(perc*3.0f, perc*3.0f, perc*3.0f);
+            knockback.normalize().scale(percKnockback*1.8f);
             
             MainUtil.takeLiteralUnresistableKnockbackWithY(entity, knockback.x, knockback.y, knockback.z);
             
@@ -972,6 +977,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     public boolean detonate() {
     	if (!this.isClient() && this.getActivePower() == PowerIndex.NONE) {
+    		
     		this.playSoundsIfNearby(DETONATE, 27, true);
     		this.animateStand(KillerQueenEntity.DETONATE);
     		this.poseStand(OffsetIndex.ATTACK);
@@ -1005,6 +1011,37 @@ public class PowersKillerQueen extends NewPunchingStand {
         this.animateStand(KillerQueenEntity.KICK_CHARGE);
         this.poseStand(OffsetIndex.GUARD);
         return true;
+    }
+    
+    public boolean sendOrReturnSHA() {
+//    	this.setActivePower(PowerIndex.POWER_3);
+        if (!this.getSelf().level().isClientSide()) {
+            if (SHA == null || SHA.isRemoved()){
+            	SheerHeartAttackEntity sha = ModEntities.SHEER_HEART_ATTACK.create(this.getSelf().level());
+            	if (sha != null) {
+            		
+            		sha.setUser(this.self);
+            		Vec3 bam = new Vec3(0,
+                            (this.self.getBbHeight()/2),
+                            0);
+                    Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+                    if (gravD != Direction.DOWN){
+                        bam = RotationUtil.vecPlayerToWorld(bam,gravD);
+                    }
+                    sha.absMoveTo(this.self.getX()+bam.x, this.self.getY()+bam.y, this.self.getZ()+bam.z);
+            		
+            		this.self.level().addFreshEntity(sha);
+            		
+            		SHA = sha;
+            	}
+            	
+            } else {
+            	//SHA.discard();
+            }
+        }
+    	
+    	
+    	return true;
     }
    
  }

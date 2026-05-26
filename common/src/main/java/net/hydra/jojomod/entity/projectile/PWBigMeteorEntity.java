@@ -606,7 +606,7 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
                         Mth.sin(-17 * ((float) Math.PI / 180)),
                         -Mth.cos(degrees * ((float) Math.PI / 180)));
                 if (gotten instanceof LivingEntity LE) {
-                    PPW.addEXP(25, LE);
+                    PPW.addEXP(35, LE);
                     MainUtil.makeBleed(LE, 2, 200, gotten);
                     StandUser userLE = ((StandUser) LE);
                     int ticks = 20;

@@ -369,9 +369,15 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<BlockBombEntity>> BLOCK_BOMB =
             ENTITY_TYPES.register("block_bomb", () ->
-                    EntityType.Builder.of(BlockBombEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                    EntityType.Builder.of(BlockBombEntity::new, MobCategory.MISC).sized(0.75F, 0.75f).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "block_bomb").toString())
+            );
+    public static final RegistryObject<EntityType<SheerHeartAttackEntity>> SHEER_HEART_ATTACK =
+            ENTITY_TYPES.register("sheer_heart_attack", () ->
+                    EntityType.Builder.of(SheerHeartAttackEntity::new, MobCategory.MISC).sized(0.80F, 0.80f).
+                            clientTrackingRange(15).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "sheer_heart_attack").toString())
             );
     public static final RegistryObject<EntityType<CinderellaEntity>> CINDERELLA =
             ENTITY_TYPES.register("cinderella", () ->

@@ -520,7 +520,7 @@ public class VampireFate extends VampiricFate {
                 PowerTypes.getPowerType(pl) == PowerTypes.VAMPIRE.ordinal() &&
         getVampireData().jumpLevel > 0){
             if (self.isCrouching() && rechargeJump){
-                return 7;
+                return 8;
             } else {
                 if (jumpedOffWall)
                     return 0;
