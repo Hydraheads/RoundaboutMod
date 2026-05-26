@@ -346,6 +346,11 @@ public class ForgeEvents {
         ModItems.MAX_STAND_DISC_ANUBIS = ForgeItems.MAX_STAND_DISC_ANUBIS.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_ANUBIS.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_ANUBIS.get());
 
+
+        ModItems.STAND_DISC_WHITE_ALBUM = ForgeItems.STAND_DISC_WHITE_ALBUM.get();
+        ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_WHITE_ALBUM.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_WHITE_ALBUM.get());
+        ModItems.MAX_STAND_DISC_WHITE_ALBUM = ForgeItems.MAX_STAND_DISC_WHITE_ALBUM.get();
+
         ModItems.STAND_DISC_TUSK = ForgeItems.STAND_DISC_TUSK.get();
         ModItems.MAX_STAND_DISC_TUSK = ForgeItems.MAX_STAND_DISC_TUSK.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_TUSK.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_TUSK.get());
