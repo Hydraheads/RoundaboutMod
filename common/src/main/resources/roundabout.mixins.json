@@ -72,6 +72,7 @@
     "data_and_structures.DatalessBlock",
     "data_and_structures.DataRandomSpreadStructurePlacement",
     "data_and_structures.DataStructureTemplatePool",
+    "data_and_structures.FishingLootMixin",
     "data_and_structures.LootPoolMixin",
     "effects.bleed.BleedFoodData",
     "effects.bleed.BleedPotionItem",

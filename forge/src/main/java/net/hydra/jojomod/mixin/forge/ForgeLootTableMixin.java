@@ -24,4 +24,8 @@ public abstract class ForgeLootTableMixin implements ILootTable {
         }
         return size;
     }
+    @Override
+    public LootPool[] roundabout$getPools() {
+        return (LootPool[]) pools.toArray();
+    }
 }
