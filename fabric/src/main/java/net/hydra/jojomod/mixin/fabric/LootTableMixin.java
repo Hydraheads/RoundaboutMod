@@ -45,7 +45,7 @@ public abstract class LootTableMixin implements ILootTable {
             locals = LocalCapture.CAPTURE_FAILHARD)
     private void roundabout$lockIn(LootContext lootContext, Consumer<ItemStack> consumer2, CallbackInfo ci, LootContext.VisitedEntry visitedEntry) {
 
-        LootPool.lootPool().add(LootItem.lootTableItem(ModItems.ANUBIS_ITEM)).build().addRandomItems(consumer2, lootContext);
+      //  LootPool.lootPool().add(LootItem.lootTableItem(ModItems.ANUBIS_ITEM)).build().addRandomItems(consumer2, lootContext);
     }
 
 }
