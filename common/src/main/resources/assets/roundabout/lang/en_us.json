@@ -1540,7 +1540,7 @@
   "ability.roundabout.blood_drink_simple": "Blood Suck",
   "ability.roundabout.blood_drink_simple.desc": "Consume blood so long as you remain facing your target, damaging them to restore your blood. If a mob has drinkable blood, the indicator will appear in the middle of the screen. If a mob is not agitated, you can score a critical blood suck.",
   "ability.roundabout.vampire_passive": "Vampiric",
-  "ability.roundabout.vampire_passive.desc": "You evaporate in sunlight. You run on blood instead of hunger, and eating raw foods and monster drops provide blood with no penalties. You cannot die of starvation. Drowning only lowers your speed. Iron Golems detest you, while zombies are neutral with your presence.",
+  "ability.roundabout.vampire_passive.desc": "You evaporate in sunlight. You run on blood instead of hunger, and eating raw foods and monster drops provide blood with no penalties. You cannot die of starvation. Drowning only lowers your speed. Iron Golems detest you, while zombies are neutral with your presence. You take decreased fall damage.",
   "ability.roundabout.mass_heal": "Blood Healing",
   "ability.roundabout.mass_heal.desc": "Funnels all of your blood into health regeneration, temporarily slowing you down. This ability triggers automatically when you die, if possible, providing a last stand.",
   "ability.roundabout.wall_walk_vamp": "Wall Walking",
