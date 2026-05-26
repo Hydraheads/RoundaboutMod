@@ -16,6 +16,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
 
 @Mixin(LootTable.class)
@@ -35,17 +37,22 @@ public abstract class LootTableMixin implements ILootTable {
         return size;
     }
     @Override
-    public LootPool[] roundabout$getPools() {
-        return pools;
+    public List<LootPool> roundabout$getPools() {
+        return Arrays.asList(this.pools);
     }
-
+/*  UNUSED FOR NOW BECAUSE FABRIC IS ACTUALLY FUNCTIONAL
     @Inject(method = "getRandomItemsRaw(Lnet/minecraft/world/level/storage/loot/LootContext;Ljava/util/function/Consumer;)V",
             at = @At(value = "INVOKE",
                 target = "Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;decorate(Ljava/util/function/BiFunction;Ljava/util/function/Consumer;Lnet/minecraft/world/level/storage/loot/LootContext;)Ljava/util/function/Consumer;",shift = At.Shift.AFTER),
             locals = LocalCapture.CAPTURE_FAILHARD)
     private void roundabout$lockIn(LootContext lootContext, Consumer<ItemStack> consumer2, CallbackInfo ci, LootContext.VisitedEntry visitedEntry) {
-
-      //  LootPool.lootPool().add(LootItem.lootTableItem(ModItems.ANUBIS_ITEM)).build().addRandomItems(consumer2, lootContext);
+        if (roundabout$isRightLootTable(lootContext.getLevel(), BuiltInLootTables.ABANDONED_MINESHAFT)) {
+            LootPool.lootPool().add(LootItem.lootTableItem(ModItems.ANUBIS_ITEM)).build().addRandomItems(consumer2, lootContext);
+        }
     }
 
+    @Unique
+    private boolean roundabout$isRightLootTable(Level level, ResourceLocation source) {
+        return this.equals(level.getServer().getLootData().getLootTable(source));
+    } */
 }
