@@ -492,7 +492,7 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
                         Mth.sin(-17 * ((float) Math.PI / 180)),
                         -Mth.cos(degrees * ((float) Math.PI / 180)));
                 if (gotten instanceof LivingEntity LE) {
-                    PPW.addEXP(10, LE);
+                    PPW.addEXP(20, LE);
                     MainUtil.makeBleed(LE, 1, 200, gotten);
                     StandUser userLE = ((StandUser) LE);
                     int ticks = 20;

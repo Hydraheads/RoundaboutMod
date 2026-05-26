@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -130,7 +131,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         } else if (currentLevel == 2){
             amt = 200;
         } else {
-            amt = 400;
+            amt = 300;
         }
         amt= (int) (amt*(getLevelMultiplier()));
         return amt;
@@ -378,6 +379,13 @@ public class PowersPlanetWaves extends NewDashPreset {
 
 
                 targetingstand = true;
+                if (self instanceof ServerPlayer pl) {
+                    S2CPacketUtil.sendGenericIntToClientPacket(
+                            pl,
+                            PacketDataIndex.S2C_INT_STAND_MODE,
+                            1
+                    );
+                }
 
                 this.standTargetPos = hitResult.getLocation();
 
@@ -404,6 +412,13 @@ public class PowersPlanetWaves extends NewDashPreset {
         Level level = this.self.level();
 
         targetingstand = false;
+        if (self instanceof ServerPlayer pl) {
+            S2CPacketUtil.sendGenericIntToClientPacket(
+                    pl,
+                    PacketDataIndex.S2C_INT_STAND_MODE,
+                    0
+            );
+        }
         standTargetPos = null;
 
         if (!level.isClientSide()) {
@@ -528,7 +543,21 @@ public class PowersPlanetWaves extends NewDashPreset {
         }
         return super.getSoundFromByte(soundChoice);
     }
+    @Override
+    public void serverQueried() {
+        if (self instanceof ServerPlayer pl) {
+            S2CPacketUtil.sendGenericIntToClientPacket(
+                    pl,
+                    PacketDataIndex.S2C_INT_STAND_MODE,
+                    targetingstand ? 1 : 0
+            );
+        }
+    }
 
+    @Override
+    public void clientIntUpdated(int integer) {
+        targetingstand = integer == 1;
+    }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.meteor_shower",
