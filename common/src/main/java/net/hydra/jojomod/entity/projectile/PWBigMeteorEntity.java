@@ -324,34 +324,35 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
             this.level().destroyBlock(pos, false);
         }
 
-        // fire spread
+        // fire inside crater
         int fireRadius = 5;
 
-        for (BlockPos groundPos : BlockPos.betweenClosed(
-                center.offset(-fireRadius, -2, -fireRadius),
-                center.offset(fireRadius, 2, fireRadius))) {
+        for (BlockPos pos : BlockPos.betweenClosed(
+                center.offset(-fireRadius, -fireRadius, -fireRadius),
+                center.offset(fireRadius, 1, fireRadius))) {
 
-            BlockState groundState = this.level().getBlockState(groundPos);
-
-            // must be solid ground
-            if (!groundState.isFaceSturdy(this.level(), groundPos, Direction.UP)) {
+            // only random spots
+            if (this.random.nextFloat() > 0.22F) {
                 continue;
             }
 
-            BlockPos firePos = groundPos.above();
-
-            // only place in air
-            if (!this.level().isEmptyBlock(firePos)) {
+            // must be air
+            if (!this.level().isEmptyBlock(pos)) {
                 continue;
             }
 
-            if (this.random.nextFloat() < 0.45F) {
+            BlockPos below = pos.below();
+            BlockState belowState = this.level().getBlockState(below);
 
-                BlockState standFire = ModBlocks.STAND_FIRE.defaultBlockState();
+            // fire needs support
+            if (!belowState.isFaceSturdy(this.level(), below, Direction.UP)) {
+                continue;
+            }
 
-                if (standFire.canSurvive(this.level(), firePos)) {
-                    this.level().setBlock(firePos, standFire, 3);
-                }
+            BlockState fire = Blocks.FIRE.defaultBlockState();
+
+            if (fire.canSurvive(this.level(), pos)) {
+                this.level().setBlock(pos, fire, 3);
             }
         }
         LivingEntity user = this.getStandUser();
