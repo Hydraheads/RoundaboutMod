@@ -607,6 +607,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
 
     int build = 0;
+    int freezeticks = 0;
 
     @Override
     public void tickPowerEnd(){
@@ -620,6 +621,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                         if (build == 80){
                             this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.FIREWORK_ROCKET_LAUNCH,
                                     SoundSource.PLAYERS, 0.95F, 1.3F);
+                            build++;
 
                             StandEntity stand = getStandEntity(this.self);
                             if (Objects.nonNull(stand)) {
@@ -682,8 +684,14 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                             }
 
 
-                            if (post > 0.8) {
-                                build++;
+                            if (post > 1) {
+                                if (freezeticks > 0){
+                                    freezeticks--;
+                                } else {
+                                    build++;
+                                }
+                            } else {
+                                freezeticks = 5;
                             }
 
                             if (this.getActivePower() == PowerIndex.POWER_1_BONUS) {
@@ -906,12 +914,12 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                     if (this.StandDamageEntityAttack($$5,getAssaultStrength($$5), 0.4F, this.self)){
                         addEXP(3,LE);
                         if (getAttackTimeDuring() > 80) {
-                            MainUtil.makeBleed($$5, 0, 300, null);
+                            MainUtil.makeBleed($$5, 0, 400, null);
                             MainUtil.makeMobBleed(LE);
                         } else if (getAttackTimeDuring() > 50) {
-                            MainUtil.makeBleed($$5, 0, 200, null);
+                            MainUtil.makeBleed($$5, 0, 300, null);
                         } else if (!getAssaultEarlyTime()) {
-                            MainUtil.makeBleed($$5, 0, 120, null);
+                            MainUtil.makeBleed($$5, 0, 200, null);
                         } else {
                             MainUtil.makeBleed($$5, 0, 50, null);
                         }
