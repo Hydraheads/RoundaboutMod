@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
@@ -540,6 +541,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public boolean assault(){
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)){
+            build = 0;
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_1);
             playSoundsIfNearby(ASSAULT_NOISE, 27, false);
@@ -604,6 +606,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         super.levelUp();
     }
 
+    int build = 0;
 
     @Override
     public void tickPowerEnd(){
@@ -614,7 +617,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 if (!this.getSelf().level().isClientSide()) {
 
                     if (!(this.getActivePower() == PowerIndex.POWER_1_BONUS)){
-                        if (attackTimeDuring == 80){
+                        if (build == 80){
                             this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.FIREWORK_ROCKET_LAUNCH,
                                     SoundSource.PLAYERS, 0.95F, 1.3F);
 
@@ -624,7 +627,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                                         stand.getX(), stand.getY() + 0.3, stand.getZ(),
                                         0, 0, 0, 0, 0.4);
                             }
-                        } else if (attackTimeDuring > 80){
+                        } else if (build > 80){
                             StandEntity stand = getStandEntity(this.self);
                             if (Objects.nonNull(stand)) {
                                 ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.AIR_CRACKLE,
@@ -636,7 +639,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
                     if (this.attackTimeDuring == 108) {
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                    } else if (this.attackTimeDuring >= 0) {
+                    } else if (build >= 0) {
                         StandEntity stand = getStandEntity(this.self);
                         if (Objects.nonNull(stand)) {
                             AABB BB1 = stand.getBoundingBox();
@@ -645,8 +648,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                             Vec3 vec3d3 = vec3d.add(vec3d2.x * 15, vec3d2.y * 15, vec3d2.z * 15);
                             double mag = 0.05F;
 
-                            if (this.attackTimeDuring > 10) {
-                                mag += Math.pow(attackTimeDuring-10, 1.4) / 1000;
+                            if (build > 10) {
+                                mag += Math.pow(Math.max(build,10)-10, 1.4) / 1000;
                             }
                             BlockHitResult blockHit = this.getSelf().level().clip(
                                     new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
@@ -676,6 +679,11 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                                 stand.setPos(blockHit.getBlockPos().getCenter());
                             } else {
                                 stand.setPos(yes);
+                            }
+
+
+                            if (post > 0.8) {
+                                build++;
                             }
 
                             if (this.getActivePower() == PowerIndex.POWER_1_BONUS) {
@@ -882,7 +890,12 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 Entity $$5 = $$3.get($$4);
                 if ($$5 instanceof LivingEntity LE && !$$5.is(this.getSelf()) && $$5.showVehicleHealth() &&
                         !$$5.isInvulnerable() && $$5.isAlive() && !(this.self.isPassenger() &&
-                        this.self.getVehicle().getUUID() == $$5.getUUID()) && stand.getSensing().hasLineOfSight($$5)){
+                        this.self.getVehicle().getUUID() == $$5.getUUID()) && stand.getSensing().hasLineOfSight($$5)
+
+                        && ($$5.distanceTo(stand) < 3)
+                &&
+                        !($$5 instanceof FollowingStandEntity SE && (OffsetIndex.OffsetStyle(SE.getOffsetType()) == OffsetIndex.FOLLOW_STYLE ||
+                                OffsetIndex.OffsetStyle(SE.getOffsetType()) == OffsetIndex.FIXED_STYLE))){
 
                     hitParticlesCenter(LE);
 
@@ -936,22 +949,24 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public float getAssaultStrength(Entity entity){
         float mult = 1;
         boolean isReduced = this.getReducedDamage(entity);
-        if (getAttackTimeDuring() > 95){
+        if (build > 95){
             mult = 3.5F;
-        } else if (getAttackTimeDuring() > 90){
+        } else if (build > 90){
             mult =3.2F;
-        } else if (getAttackTimeDuring() > 80){
+        } else if (build > 80){
             mult =2.8F;
-        } else if (getAttackTimeDuring() > 70){
+        } else if (build > 70){
             mult =2.2F;
-        } else if (getAttackTimeDuring() > 60){
+        } else if (build > 60){
             mult = 1.8F;
-        } else if (getAttackTimeDuring() > 45){
+        } else if (build > 45){
+            mult = 1.5F;
+        } else if (build > 30){
             mult = 1.4F;
-        } else if (getAttackTimeDuring() > 30){
-            mult = 1F;
-        } else if (getAttackTimeDuring() > 25){
-            mult = 0.9F;
+        } else if (build > 25){
+            mult = 1.3F;
+        } else if (build >= 20){
+            mult = 1.2F;
         } else if (getAssaultEarlyTime() && isReduced){
             mult = 0.75F;
         }
@@ -1319,7 +1334,16 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                         rotateMobHead(attackTarget);
                     }
 
+
                     if (this.attackTimeDuring == -1 || (this.attackTimeDuring < -1 && this.activePower == PowerIndex.ATTACK)) {
+
+                        if (self instanceof Blaze bl){
+                            if (!onCooldown(PowerIndex.SKILL_1)) {
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                            }
+                            return;
+                        }
+
                         Entity targetEntity = getTargetEntity(this.self, -1);
                         if (targetEntity != null && targetEntity.is(attackTarget)) {
                             double RNG = Math.random();
