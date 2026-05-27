@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.loot.v2.FabricLootTableBuilder;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.util.loot.LootAdder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -16,107 +17,32 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class FabricLootTables {
 
-    /** This is where stand arrows are found via archaeology.*/
-
-    public static final ResourceLocation PYRAMID_ID
-            = new ResourceLocation("minecraft", "archaeology/desert_pyramid");
-    public static final ResourceLocation WELL_ID
-            = new ResourceLocation("minecraft", "archaeology/desert_well");
-    public static final ResourceLocation OCEAN_WARM_ID
-            = new ResourceLocation("minecraft", "archaeology/ocean_ruin_warm");
-    public static final ResourceLocation OCEAN_COLD_ID = new ResourceLocation("minecraft", "archaeology/ocean_ruin_cold");
-    public static final ResourceLocation TRAIL_COMMON_ID = new ResourceLocation("minecraft", "archaeology/trail_ruins_common");
-    public static final ResourceLocation TRAIL_RARE_ID = new ResourceLocation("minecraft", "archaeology/trail_ruins_rare");
-
-
-    public static final ResourceLocation SHIPWRECK_ID
-            = new ResourceLocation("minecraft", "chests/shipwreck_treasure");
-    public static final ResourceLocation SHIPWRECK_SUPPLY_ID
-            = new ResourceLocation("minecraft", "chests/shipwreck_supply");
-    public static final ResourceLocation DESERT_HOUSE_ID
-            = new ResourceLocation("minecraft", "chests/village/village_desert_house");
-    public static final ResourceLocation TAIGA_HOUSE_ID
-            = new ResourceLocation("minecraft", "chests/village/village_taiga_house");
-    public static final ResourceLocation BLACKSMITH_ID
-            = new ResourceLocation("minecraft", "chests/village/village_weaponsmith");
-    public static final ResourceLocation NETHER_FORT
-            = new ResourceLocation("minecraft", "chests/nether_bridge");
-    public static final ResourceLocation BASTION_BRIDGE
-            = new ResourceLocation("minecraft", "chests/bastion_bridge");
-    public static final ResourceLocation VILLAGE_TEMPLE
-            = new ResourceLocation("minecraft", "chests/village/village_temple");
-    public static final ResourceLocation WOODLAND_MANSION
-            = new ResourceLocation("minecraft", "chests/village/woodland_mansion");
-    public static final ResourceLocation BURIED_TREASURE
-            = new ResourceLocation("minecraft", "chests/buried_treasure");
 
     public static void modifyLootTables(){
 
         LootTableEvents.MODIFY.register((resourceManager, lootManager, id, tableBuilder, source) -> {
-                    if (SHIPWRECK_ID.equals(id)) {
-                        LootPool.Builder poolBuilder = LootPool.lootPool()
-                                .setRolls(ConstantValue.exactly(1.0F))
-                                .when(LootItemRandomChanceCondition.randomChance(0.15F))
-                                .add(LootItem.lootTableItem(ModItems.LOCACACA_PIT))
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 1.0f)).build());
-                        tableBuilder.pool(poolBuilder.build());
 
-                        poolBuilder = LootPool.lootPool()
-                                .setRolls(ConstantValue.exactly(1.0F))
-                                .when(LootItemRandomChanceCondition.randomChance(0.1F))
-                                .add(LootItem.lootTableItem(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem()))
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 1.0f)).build());
-                        tableBuilder.pool(poolBuilder.build());
+            for (Field field : LootAdder.class.getDeclaredFields()) {
+                try {
+                    if (Modifier.isStatic(field.getModifiers()) && field.get(null) instanceof LootAdder adder) {
+                        if (adder.isValidLocation(id)) {
+                            tableBuilder.pool(adder.getPool());
+                        }
                     }
-            if (SHIPWRECK_SUPPLY_ID.equals(id)) {
-                LootPool.Builder poolBuilder = LootPool.lootPool()
-                        .setRolls(ConstantValue.exactly(1.0F))
-                        .when(LootItemRandomChanceCondition.randomChance(0.1F))
-                        .add(LootItem.lootTableItem(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem()))
-                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 1.0f)).build());
-                tableBuilder.pool(poolBuilder.build());
+                } catch (IllegalAccessException ignored) {}
             }
-            if (WOODLAND_MANSION.equals(id) || VILLAGE_TEMPLE.equals(id)) {
-                LootPool.Builder poolBuilder2 = LootPool.lootPool()
-                        .setRolls(ConstantValue.exactly(1.0F))
-                        .when(LootItemRandomChanceCondition.randomChance(0.15F))
-                        .add(LootItem.lootTableItem(ModItems.LOCACACA_PIT))
-                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 1.0f)).build());
-                tableBuilder.pool(poolBuilder2.build());
-            }
-            if (DESERT_HOUSE_ID.equals(id) || TAIGA_HOUSE_ID.equals(id)) {
-                LootPool.Builder poolBuilder = LootPool.lootPool()
-                        .setRolls(ConstantValue.exactly(3.0F))
-                        .when(LootItemRandomChanceCondition.randomChance(0.5F))
-                        .add(LootItem.lootTableItem(ModItems.COFFEE_GUM))
-                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 30.0f)).build());
-                tableBuilder.pool(poolBuilder.build());
-            }
-            if (BLACKSMITH_ID.equals(id)) {
-                LootPool.Builder poolBuilder = LootPool.lootPool()
-                        .setRolls(ConstantValue.exactly(1.0F))
-                        .when(LootItemRandomChanceCondition.randomChance(0.2F))
-                        .add(LootItem.lootTableItem(ModItems.LUCK_UPGRADE))
-                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 1.0F)).build());
-                tableBuilder.pool(poolBuilder.build());
-            }
-            if (NETHER_FORT.equals(id) || BASTION_BRIDGE.equals(id)) {
-                LootPool.Builder poolBuilder = LootPool.lootPool()
-                        .setRolls(ConstantValue.exactly(1.0F))
-                        .when(LootItemRandomChanceCondition.randomChance(0.6F))
-                        .add(LootItem.lootTableItem(ModItems.HARPOON))
-                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 1.0F)).build());
-                tableBuilder.pool(poolBuilder.build());
-            }
-                });
 
-        }
+        });
+
+    }
 
 
 }
