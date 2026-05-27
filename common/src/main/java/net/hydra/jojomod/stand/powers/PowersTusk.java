@@ -33,6 +33,7 @@ import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.animation.AnimationDefinition;
@@ -347,15 +348,17 @@ public class PowersTusk extends NewDashPreset {
             }
 
             case PowersTusk.WARP -> {
-                this.setActivePower(PowersTusk.WARP);
-                this.setAttackTime(0);
-                this.setCooldown(PowerIndex.GLOBAL_DASH,120);
-                this.setAnimation(PowersTusk.WARP);
-                if (!isClient()) {
-                    Vec3 pos = this.getPilotingStand().getPosition(0);
-                    this.getSelf().teleportTo(pos.x,pos.y,pos.z);
+                if (this.getPilotingStand() != null) {
+                    this.setActivePower(PowersTusk.WARP);
+                    this.setAttackTime(0);
+                    this.setCooldown(PowerIndex.GLOBAL_DASH, 120);
+                    this.setAnimation(PowersTusk.WARP);
+                    if (!isClient()) {
+                        Vec3 pos = this.getPilotingStand().getPosition(0);
+                        this.getSelf().teleportTo(pos.x, pos.y, pos.z);
+                    }
+                    this.setPiloting(0);
                 }
-                this.setPiloting(0);
             }
 
             case PowersTusk.FLATTEN -> {
@@ -424,10 +427,10 @@ public class PowersTusk extends NewDashPreset {
             this.setAnimation(PowerIndex.NONE);
         }
 
-        if (isClient()) {
+        if (isClient() && isPacketPlayer()) {
             this.targetHole = null;
             if (this.getAct() == 3 && PowerTypes.isUsingStand(this.getSelf())) {
-                Entity target = MainUtil.raytraceGroundThingsThroughWalls(this.getSelf().level(),this.getSelf(),25);
+                Entity target = MainUtil.raytraceGroundThingsThroughWalls(this.getSelf().level(),this.getSelf(),40);
                 if (target != null) {
                     if (target instanceof TuskHoleEntity THE && !THE.isVortex()) {
                         this.targetHole = THE;
@@ -1155,7 +1158,7 @@ public class PowersTusk extends NewDashPreset {
 
     @Override
     public boolean pilotInputInteract() {
-        if (this.hasNail()) {
+        if (this.hasNail() && this.nailFireDelay == 0) {
             tryPower(PowersTusk.FIRE_NAIL);
             tryPowerPacket(PowersTusk.FIRE_NAIL);
         }
@@ -1370,11 +1373,9 @@ public class PowersTusk extends NewDashPreset {
 
         Vec3 firingPos;
         if (isInHole()) {
-            firingPos = this.getPilotingStand().getPosition(0);
-            Entity camera = Minecraft.getInstance().cameraEntity;
-            if (camera != null) {
-                tuskNailEntity.shootFromRotation(this.getPilotingStand(), camera.getXRot(), camera.getYRot(), -0.5F, force, accuracy);
-            }
+            firingPos = this.getPilotingStand().getPosition(0).add(0,0.2,0);
+            Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+            tuskNailEntity.shootFromRotation(this.getPilotingStand(), camera.getXRot(), camera.getYRot(), -0.5F, force, accuracy);
         } else {
             tuskNailEntity.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0.5F, force, accuracy);
             firingPos = this.getSelf().getEyePosition(0);

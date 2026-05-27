@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.ILootPool;
 import net.hydra.jojomod.access.ILootTable;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.util.loot.LootAdder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -26,6 +27,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -60,82 +63,15 @@ public abstract class ForgeLootTableMixin implements ILootTable {
             locals = LocalCapture.CAPTURE_FAILHARD)
     private void roundabout$addLoot(LootContext lootContext, Consumer<ItemStack> consumer1, CallbackInfo ci, LootContext.VisitedEntry visitedEntry) {
         Consumer<ItemStack> consumer2 = LootItemFunction.decorate(this.compositeFunction, consumer1, lootContext);
-        if (roundabout$isRightLootTable(lootContext.getLevel(),
-                BuiltInLootTables.SHIPWRECK_SUPPLY)) {
-
-            LootPool pool = LootPool.lootPool()
-                    .setRolls(ConstantValue.exactly(1.0F))
-                    .when(LootItemRandomChanceCondition.randomChance(0.15F))
-                    .add(LootItem.lootTableItem(ModItems.LOCACACA_PIT))
-                    .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
-                    .build();
-            pool.addRandomItems(consumer2, lootContext);
-        } else if (roundabout$isRightLootTable(lootContext.getLevel(),
-                BuiltInLootTables.SHIPWRECK_TREASURE)) {
-
-            LootPool pool = LootPool.lootPool()
-                    .setRolls(ConstantValue.exactly(1.0F))
-                    .when(LootItemRandomChanceCondition.randomChance(0.1F))
-                    .add(LootItem.lootTableItem(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem()))
-                    .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
-                    .build();
-            pool.addRandomItems(consumer2, lootContext);
-        } else if (roundabout$isRightLootTable(lootContext.getLevel(),
-                BuiltInLootTables.WOODLAND_MANSION,
-                BuiltInLootTables.VILLAGE_TEMPLE)) {
-
-            LootPool pool = LootPool.lootPool()
-                    .setRolls(ConstantValue.exactly(1.0F))
-                    .when(LootItemRandomChanceCondition.randomChance(0.15F))
-                    .add(LootItem.lootTableItem(ModItems.LOCACACA_PIT))
-                    .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
-                    .build();
-            pool.addRandomItems(consumer2,lootContext);
-        } else if (roundabout$isRightLootTable(lootContext.getLevel(),
-                BuiltInLootTables.VILLAGE_DESERT_HOUSE,
-                BuiltInLootTables.VILLAGE_TAIGA_HOUSE)) {
-
-            LootPool pool = LootPool.lootPool()
-                    .setRolls(ConstantValue.exactly(3.0F))
-                    .when(LootItemRandomChanceCondition.randomChance(0.5F))
-                    .add(LootItem.lootTableItem(ModItems.COFFEE_GUM))
-                    .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 30.0f)))
-                    .build();
-            pool.addRandomItems(consumer2,lootContext);
-        } else if (roundabout$isRightLootTable(lootContext.getLevel(),
-                BuiltInLootTables.VILLAGE_ARMORER)) {
-
-
-            LootPool pool = LootPool.lootPool()
-                    .setRolls(ConstantValue.exactly(1.0F))
-                    .when(LootItemRandomChanceCondition.randomChance(0.2F))
-                    .add(LootItem.lootTableItem(ModItems.LUCK_UPGRADE))
-                    .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
-                    .build();
-            pool.addRandomItems(consumer2,lootContext);
-        } else if (roundabout$isRightLootTable(lootContext.getLevel(),
-                BuiltInLootTables.NETHER_BRIDGE,
-                BuiltInLootTables.BASTION_BRIDGE)) {
-
-
-
-            LootPool pool = LootPool.lootPool()
-                    .setRolls(ConstantValue.exactly(1.0F))
-                    .when(LootItemRandomChanceCondition.randomChance(0.6F))
-                    .add(LootItem.lootTableItem(ModItems.HARPOON))
-                    .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
-                    .build();
-            pool.addRandomItems(consumer2,lootContext);
+        for (Field field : LootAdder.class.getDeclaredFields()) {
+            try {
+                if (Modifier.isStatic(field.getModifiers()) && field.get(null) instanceof LootAdder adder) {
+                    if (adder.isValidLocation(lootContext.getLevel(),(LootTable)(Object)this)) {
+                        adder.applyPool(consumer2,lootContext);
+                    }
+                }
+            } catch (IllegalAccessException ignored) {}
         }
     }
 
-    @Unique
-    private boolean roundabout$isRightLootTable(Level level, ResourceLocation... sources) {
-        for (ResourceLocation source : sources) {
-            if (this.equals(level.getServer().getLootData().getLootTable(source))) {
-                return true;
-            }
-        }
-        return false;
-    }
 }
