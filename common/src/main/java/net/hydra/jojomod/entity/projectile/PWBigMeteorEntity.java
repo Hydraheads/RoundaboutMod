@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.models.projectile.PWMeteorModel;
 import net.hydra.jojomod.entity.FireProjectile;
 import net.hydra.jojomod.entity.ModEntities;
@@ -320,30 +321,37 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
 
             if (isProtectedBlock(state)) continue;
 
-            this.level().destroyBlock(pos, true);
+            this.level().destroyBlock(pos, false);
         }
 
         // fire spread
         int fireRadius = 5;
 
-        for (BlockPos pos : BlockPos.betweenClosed(
+        for (BlockPos groundPos : BlockPos.betweenClosed(
                 center.offset(-fireRadius, -2, -fireRadius),
                 center.offset(fireRadius, 2, fireRadius))) {
 
-            BlockPos below = pos.below();
+            BlockState groundState = this.level().getBlockState(groundPos);
 
-            if (!this.level().isEmptyBlock(pos)) continue;
+            // must be solid ground
+            if (!groundState.isFaceSturdy(this.level(), groundPos, Direction.UP)) {
+                continue;
+            }
 
-            if (!this.level().getBlockState(below)
-                    .isFaceSturdy(this.level(), below, Direction.UP)) {
+            BlockPos firePos = groundPos.above();
+
+            // only place in air
+            if (!this.level().isEmptyBlock(firePos)) {
                 continue;
             }
 
             if (this.random.nextFloat() < 0.45F) {
-                this.level().setBlockAndUpdate(
-                        pos,
-                        Blocks.FIRE.defaultBlockState()
-                );
+
+                BlockState standFire = ModBlocks.STAND_FIRE.defaultBlockState();
+
+                if (standFire.canSurvive(this.level(), firePos)) {
+                    this.level().setBlock(firePos, standFire, 3);
+                }
             }
         }
         LivingEntity user = this.getStandUser();
@@ -420,7 +428,7 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
                 continue;
             }
 
-            this.level().destroyBlock(pos, true);
+            this.level().destroyBlock(pos, false);
 
             blocksDisintegrated++;
 

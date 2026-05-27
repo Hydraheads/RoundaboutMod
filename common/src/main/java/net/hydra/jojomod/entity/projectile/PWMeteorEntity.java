@@ -36,6 +36,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
@@ -362,46 +363,8 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
 
             BlockPos pos = hit.getBlockPos();
             BlockState state = this.level().getBlockState(pos);
-
-            if (
-                    state.is(Blocks.GLASS) ||
-                            state.is(Blocks.GLASS_PANE) ||
-                            state.is(Blocks.TINTED_GLASS) ||
-
-                            state.is(Blocks.WHITE_STAINED_GLASS) ||
-                            state.is(Blocks.ORANGE_STAINED_GLASS) ||
-                            state.is(Blocks.MAGENTA_STAINED_GLASS) ||
-                            state.is(Blocks.LIGHT_BLUE_STAINED_GLASS) ||
-                            state.is(Blocks.YELLOW_STAINED_GLASS) ||
-                            state.is(Blocks.LIME_STAINED_GLASS) ||
-                            state.is(Blocks.PINK_STAINED_GLASS) ||
-                            state.is(Blocks.GRAY_STAINED_GLASS) ||
-                            state.is(Blocks.LIGHT_GRAY_STAINED_GLASS) ||
-                            state.is(Blocks.CYAN_STAINED_GLASS) ||
-                            state.is(Blocks.PURPLE_STAINED_GLASS) ||
-                            state.is(Blocks.BLUE_STAINED_GLASS) ||
-                            state.is(Blocks.BROWN_STAINED_GLASS) ||
-                            state.is(Blocks.GREEN_STAINED_GLASS) ||
-                            state.is(Blocks.RED_STAINED_GLASS) ||
-                            state.is(Blocks.BLACK_STAINED_GLASS) ||
-
-                            state.is(Blocks.WHITE_STAINED_GLASS_PANE) ||
-                            state.is(Blocks.ORANGE_STAINED_GLASS_PANE) ||
-                            state.is(Blocks.MAGENTA_STAINED_GLASS_PANE) ||
-                            state.is(Blocks.LIGHT_BLUE_STAINED_GLASS_PANE) ||
-                            state.is(Blocks.YELLOW_STAINED_GLASS_PANE) ||
-                            state.is(Blocks.LIME_STAINED_GLASS_PANE) ||
-                            state.is(Blocks.PINK_STAINED_GLASS_PANE) ||
-                            state.is(Blocks.GRAY_STAINED_GLASS_PANE) ||
-                            state.is(Blocks.LIGHT_GRAY_STAINED_GLASS_PANE) ||
-                            state.is(Blocks.CYAN_STAINED_GLASS_PANE) ||
-                            state.is(Blocks.PURPLE_STAINED_GLASS_PANE) ||
-                            state.is(Blocks.BLUE_STAINED_GLASS_PANE) ||
-                            state.is(Blocks.BROWN_STAINED_GLASS_PANE) ||
-                            state.is(Blocks.GREEN_STAINED_GLASS_PANE) ||
-                            state.is(Blocks.RED_STAINED_GLASS_PANE) ||
-                            state.is(Blocks.BLACK_STAINED_GLASS_PANE)
-            ) {
+            Block block = state.getBlock();
+            if (block instanceof net.minecraft.world.level.block.AbstractGlassBlock) {
                 this.level().destroyBlock(pos, true);
             }
 
@@ -466,13 +429,25 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
 
     @Override
     protected void onHitEntity(EntityHitResult hit) {
+
+        if (this.level().isClientSide()) return;
+
         Entity target = hit.getEntity();
         LivingEntity user = this.standUser;
 
         if (target == user) return;
 
-        if (target instanceof LivingEntity living && user != null) {
-            living.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.CROSSFIRE, user), 8F);
+        if (user != null
+                && target instanceof LivingEntity living
+                && ((StandUser) user).roundabout$getStandPowers() instanceof PowersPlanetWaves PPW) {
+
+            // use your full damage method
+            getEntity(living, PPW, user);
+
+            // optional small explosion on impact
+            radialExplosion(living);
+
+            this.discard();
         }
     }
 

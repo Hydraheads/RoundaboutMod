@@ -586,6 +586,9 @@ public class PowersPlanetWaves extends NewDashPreset {
             case PlanetWavesEntity.GREEN_SKIN, PlanetWavesEntity.GREEN_ABLAZE -> StandFireType.GREEN.id;
             case PlanetWavesEntity.DREAD_SKIN, PlanetWavesEntity.DREAD_ABLAZE, PlanetWavesEntity.DREAD_BEAST_SKIN -> StandFireType.DREAD.id;
             case PlanetWavesEntity.JOJONIUM, PlanetWavesEntity.JOJONIUM_ABLAZE -> StandFireType.CREAM.id;*/
+            case PlanetWavesEntity.PURPLE_SKIN -> StandFireType.PURPLE.id;
+            case PlanetWavesEntity.BLUE_SKIN -> StandFireType.BLUE.id;
+            case PlanetWavesEntity.MANGA_SKIN -> StandFireType.CREAM.id;
             default -> StandFireType.ORANGE.id;
         };
     }
