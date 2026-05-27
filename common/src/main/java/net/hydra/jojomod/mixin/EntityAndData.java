@@ -23,6 +23,7 @@ import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
 import net.hydra.jojomod.stand.powers.PowersMetallica;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -538,14 +539,9 @@ public abstract class EntityAndData implements IEntityAndData {
                     }
                     if(stand instanceof ManhattanTransferEntity ME){
                         if(!ME.getHeldItemManhattan().isEmpty()){
-                            if(ME.canAcquireHeldItem) {
-                                double $$3 = stand.getEyeY() - 0.3F;
-                                ItemEntity $$4 = new ItemEntity(this.level(), stand.getX(), $$3, stand.getZ(), ME.getHeldItemManhattan().copy());
-                                $$4.setPickUpDelay(40);
-                                $$4.setThrower(stand.getUUID());
-                                this.level().addFreshEntity($$4);
-                                ME.setHeldItemManhattan(ItemStack.EMPTY);
-                            }
+                            ME.shootHattan();
+                            ME.hasItem = false;
+                            ME.setHeldItemManhattan(ItemStack.EMPTY);
                         }
                     }
                 }

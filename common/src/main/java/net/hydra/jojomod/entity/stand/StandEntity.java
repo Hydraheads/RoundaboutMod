@@ -1,12 +1,15 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.NoVibrationEntity;
 import net.hydra.jojomod.entity.projectile.IronBallEntity;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -723,16 +726,9 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                     }
                 }
                 else if(this instanceof ManhattanTransferEntity ME){
-                    if(!ME.getHeldItemManhattan().isEmpty()){
-                        if(ME.canAcquireHeldItem) {
-                            double $$3 = this.getEyeY() - 0.3F;
-                            ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), ME.getHeldItemManhattan());
-                            $$4.setPickUpDelay(40);
-                            $$4.setThrower(this.getUUID());
-                            this.level().addFreshEntity($$4);
-                            ((ManhattanTransferEntity) this).setHeldItemManhattan(ItemStack.EMPTY);
-                        }
-                    }
+                    ME.shootHattan();
+                    ME.hasItem = false;
+                    ME.setHeldItemManhattan(ItemStack.EMPTY);
                 }
             }
         }

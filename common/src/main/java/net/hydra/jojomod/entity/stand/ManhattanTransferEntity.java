@@ -384,7 +384,7 @@ public void itemEject(){
             }
 
             return manhattanShoot(this, canSnipe(), getHeldItemManhattan(), getShotAccuracy(), getBundleAccuracy(), getThrowAngle(),
-                    getThrowAngle2(), getThrowAngle3(), getCanPlace(), this.getXRot(), this.getYRot(),
+                    getThrowAngle2(), getThrowAngle3(), getCanPlace(), this.rotationXHattan, this.rotationYHattan,
                     new Vec3(pos.x, pos.y, pos.z), true, 1, true);
         }
         return false;
@@ -592,7 +592,12 @@ public void itemEject(){
 
                 }
             }
+        rotationXHattan = this.getXRot();
+        rotationYHattan = this.getYRot();
     }
+    float rotationXHattan = 0;
+    float rotationYHattan = 0;
+
     int stupidTicks = 1;
     int nextPathfind = 1;
 
