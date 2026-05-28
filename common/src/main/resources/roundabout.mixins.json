@@ -111,6 +111,7 @@
     "gravity.GravityExperienceOrbMixin",
     "gravity.GravityExplosionMixin",
     "gravity.GravityFallingBlockEntityMixin",
+    "gravity.GravityFireworkRocketEntity",
     "gravity.GravityFishingHookMixin",
     "gravity.GravityFoxMixin",
     "gravity.GravityGroundPathNavigationMixin",
