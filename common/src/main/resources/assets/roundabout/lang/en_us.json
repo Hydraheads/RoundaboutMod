@@ -1643,9 +1643,9 @@
   "ability.roundabout.gd_mold_spread.desc":"Create a cloud of mold spores, affecting all entities caught in them with mold. These spores drift downwards, increasing in range until they hit the floor",
 
   "ability.roundabout.meteor_shower":"Meteor Shower",
-  "ability.roundabout.meteor_shower.desc":"Draws meteors from the sky towards you. They are small and cause no terrain damage but pass through blocks and hit anything in between. They inflict bleed and good damage.",
+  "ability.roundabout.meteor_shower.desc":"Draws meteors from the sky towards you. They are small and cause no terrain damage but pass through blocks and hit anything in between. They inflict bleed and good damage.If shifting they will go towards your feet.",
   "ability.roundabout.big_meteor":"Big Meteor",
-  "ability.roundabout.big_meteor.desc":"Draws a single large meteor from the sky towards you. Does terrain damage as it comes your way. If used in conjunction with Stand Targeting, it creates a bigger blast that could be used to gradually mine down. They inflict bleed 2 and very heavy damage.",
+  "ability.roundabout.big_meteor.desc":"Draws a single large meteor from the sky towards you. Does terrain damage as it comes your way. If used in conjunction with Stand Targeting, it creates a bigger blast that could be used to gradually mine down. They inflict bleed 2 and very heavy damage.If shifting they will go towards your feet.",
   "ability.roundabout.stand_targeting":"Stand Targeting",
   "ability.roundabout.stand_targeting.desc":"Your stand floats very quickly to the spot you are looking at, and buries itself in the ground upon summoning a meteor, so the meteor heads to the stand instead of the user. You can now make meteors mine a designated space on the ground instead of relying on weird angles onto your body. The downside is your body is no longer protected.",
   "ability.roundabout.stand_retrieving":"Stand Retrieving",

@@ -206,10 +206,21 @@ public class PowersPlanetWaves extends NewDashPreset {
         Vec3 targetPos;
 
         if (instandtargeting() && standTargetPos != null) {
-            // MODE 1: target block
+
             targetPos = standTargetPos;
+
+        } else if (this.self.isShiftKeyDown()) {
+
+
+            targetPos = new Vec3(
+                    this.self.getX(),
+                    this.self.getY() - 1.0D,
+                    this.self.getZ()
+            );
+
         } else {
-            // MODE 2: NORMAL  always come to PLAYER
+
+
             targetPos = this.self.getEyePosition(1.0F);
         }
 
@@ -310,10 +321,19 @@ public class PowersPlanetWaves extends NewDashPreset {
         Vec3 targetPos;
 
         if (instandtargeting() && standTargetPos != null) {
-            // MODE 1: Stand targeting (BLOCK ONLY )
+
             targetPos = standTargetPos;
+
+        } else if (this.self.isShiftKeyDown()) {
+
+            targetPos = new Vec3(
+                    this.self.getX(),
+                    this.self.getY() - 1.0D,
+                    this.self.getZ()
+            );
+
         } else {
-            // MODE 2: Normal mode  (ALWAYS come back to player)
+
             targetPos = this.self.getEyePosition(1.0F);
         }
 
@@ -599,10 +619,14 @@ public class PowersPlanetWaves extends NewDashPreset {
     }
 
     public float getFireballDamage(Entity entity){
+        return 4F;
+    }
+
+    public float getBigMeteorDamage(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.25F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(8F));
         } else {
-            return levelupDamageMod(multiplyPowerByStandConfigMobs(4));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(12F));
         }
     }
 
