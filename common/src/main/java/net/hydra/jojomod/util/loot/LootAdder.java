@@ -71,7 +71,8 @@ public class LootAdder {
             .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
             .build(),
             null,
-            BuiltInLootTables.SHIPWRECK_TREASURE
+            BuiltInLootTables.SHIPWRECK_TREASURE,
+            BuiltInLootTables.SHIPWRECK_SUPPLY
     );
     public static LootAdder MANSION_TEMPLE_LOCA = new LootAdder(LootPool.lootPool()
             .setRolls(ConstantValue.exactly(1.0F))
