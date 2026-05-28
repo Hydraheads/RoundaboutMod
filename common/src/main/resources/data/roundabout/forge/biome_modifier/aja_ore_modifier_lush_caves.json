@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "minecraft:lush_caves",
+  "features": "roundabout:ore_aja",
+  "step": "underground_ores"
+}

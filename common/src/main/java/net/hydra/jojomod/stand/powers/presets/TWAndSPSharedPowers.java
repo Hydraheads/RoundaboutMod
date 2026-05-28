@@ -373,6 +373,10 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     /**Begin Charging Time Stop, also detects activation via release**/
     public void doTSClient(){
+
+        if (hasBlock() || hasEntity())
+            return;
+
         if (!this.onCooldown(PowerIndex.SKILL_4) || (((Player)this.getSelf()).isCreative() && ClientNetworking.getAppropriateConfig().timeStopSettings.creativeModeInfiniteTimeStop)) {
             if ((((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) || !this.isAttackInept(this.getActivePower()))) {
                 boolean exTS = canExecuteMoveWithLevel(getTSLevel());
@@ -385,7 +389,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 } else if (this.getActivePower() == PowerIndex.SPECIAL || (this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative() && ClientNetworking.getAppropriateConfig().timeStopSettings.creativeModeInfiniteTimeStop))) {
                     sendPacket = true;
                 } else {
-                    if (isHoldingSneak() || hasBlock() || hasEntity() || (!exTS &&
+                    if (isHoldingSneak() || (!exTS &&
                             exImpTS)) {
                         if (exImpTS) {
                             this.setChargedTSTicks(ClientNetworking.getAppropriateConfig().timeStopSettings.impulseTimeStopLength);
@@ -1246,7 +1250,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime){
         if (this.canChangePower(move, forced) && this.getActivePower() != PowerIndex.POWER_2
-                && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0)  && !hasBlock()) {
+                && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0)  && !hasBlock() && !hasEntity()) {
             if (move == PowerIndex.SPECIAL_CHARGED) {
                 if (this.getSelf().level().isClientSide() ||
                         !((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {

@@ -1952,7 +1952,8 @@ public class AbilityScapeBasis {
         if (targetEntity instanceof StandEntity SE && SE.redirectKnockbackToUser()){
 
             if (SE.getUser() != null){
-                targetEntity = SE.getUser();
+                //This code doesn't play nicely with server distance checks or countering assault
+                //targetEntity = SE.getUser();
             }
         }
         if (targetEntity instanceof EnderDragonPart EDP){
@@ -1973,6 +1974,7 @@ public class AbilityScapeBasis {
 
         if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
                 || (targetEntity != null && (!targetEntity.isAlive() || targetEntity.isRemoved()))){
+
             targetEntity = null;
         }
 
@@ -1987,7 +1989,8 @@ public class AbilityScapeBasis {
         if (targetEntity instanceof StandEntity SE && SE.redirectKnockbackToUser()){
 
             if (SE.getUser() != null){
-                targetEntity = SE.getUser();
+                //This code doesn't play nicely with server distance checks or countering assault
+                //targetEntity = SE.getUser();
             }
         }
         if (targetEntity instanceof EnderDragonPart EDP){
@@ -2022,7 +2025,8 @@ public class AbilityScapeBasis {
         if (targetEntity instanceof StandEntity SE && SE.redirectKnockbackToUser()){
 
             if (SE.getUser() != null){
-                targetEntity = SE.getUser();
+                //This code doesn't play nicely with server distance checks or countering assault
+                //targetEntity = SE.getUser();
             }
         }
         if (targetEntity instanceof EnderDragonPart EDP){
@@ -2066,7 +2070,8 @@ public class AbilityScapeBasis {
         if (targetEntity instanceof StandEntity SE && SE.redirectKnockbackToUser()){
 
             if (SE.getUser() != null){
-                targetEntity = SE.getUser();
+                //This code doesn't play nicely with server distance checks or countering assault
+                //targetEntity = SE.getUser();
             }
         }
         if (targetEntity instanceof EnderDragonPart EDP){
@@ -2157,7 +2162,8 @@ public class AbilityScapeBasis {
                     if (!(value instanceof StandEntity SE1 && SE1.getUser() != null && SE1.getUser().is(User))) {
                         float distanceTo = value.distanceTo(User);
                         float range = this.getReach();
-                        if (value instanceof FollowingStandEntity SE && OffsetIndex.OffsetStyle(SE.getOffsetType()) == OffsetIndex.FOLLOW_STYLE) {
+                        if (value instanceof FollowingStandEntity SE && (OffsetIndex.OffsetStyle(SE.getOffsetType()) == OffsetIndex.FOLLOW_STYLE
+                        || OffsetIndex.OffsetStyle(SE.getOffsetType()) == OffsetIndex.FIXED_STYLE)) {
                             range = 0;
                         }
                         if ((nearestDistance < 0 || distanceTo < nearestDistance)
