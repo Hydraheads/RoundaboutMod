@@ -580,9 +580,19 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
     }
     public void shootTowardLookTarget(LivingEntity user, float speed) {
 
-        HitResult hit = user.pick(120.0D, 0.0F, false);
+        Vec3 targetPos;
 
-        Vec3 targetPos = hit.getLocation();
+        if (user.isShiftKeyDown()) {
+
+            BlockPos feetPos = user.blockPosition().below();
+
+            targetPos = Vec3.atCenterOf(feetPos);
+
+        } else {
+
+            HitResult hit = user.pick(120.0D, 0.0F, false);
+            targetPos = hit.getLocation();
+        }
 
         Vec3 dir = targetPos.subtract(this.position()).normalize();
 
@@ -602,7 +612,7 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
             return;
         }
         if (gotten != null && gotten.getId() != getUserID()) {
-            float dmg = PPW.getFireballDamage(gotten);
+            float dmg = PPW.getBigMeteorDamage(gotten);
             float strength = 0.85F;
             if (!(user instanceof Player) && !(user instanceof Monster)) {
                 if (!(gotten instanceof Monster)) {
@@ -620,17 +630,10 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
                         Mth.sin(-17 * ((float) Math.PI / 180)),
                         -Mth.cos(degrees * ((float) Math.PI / 180)));
                 if (gotten instanceof LivingEntity LE) {
-                    PPW.addEXP(25, LE);
-                    MainUtil.makeBleed(LE, 2, 200, gotten);
-                    StandUser userLE = ((StandUser) LE);
-                    int ticks = 20;
-                    if (userLE.roundabout$getRemainingFireTicks() > -1) {
-                        ticks += userLE.roundabout$getRemainingFireTicks();
-                    } else {
-                        ticks += 80;
-                    }
-                    userLE.roundabout$setOnStandFire(PPW.getFireColor(), standUser);
-                    userLE.roundabout$setRemainingStandFireTicks(ticks);
+                    PPW.addEXP(35, LE);
+                    MainUtil.makeBleed(LE, 2, 100, gotten);
+
+                    LE.setSecondsOnFire(5);
                 }
             }
         }

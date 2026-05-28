@@ -501,9 +501,20 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
     }
     public void shootTowardLookTarget(LivingEntity user, float speed) {
 
-        HitResult hit = user.pick(120.0D, 0.0F, false);
+        Vec3 targetPos;
 
-        Vec3 targetPos = hit.getLocation();
+        if (user.isShiftKeyDown()) {
+
+            targetPos = new Vec3(
+                    user.getX(),
+                    user.getY() - 2.0D,
+                    user.getZ()
+            );
+        } else {
+
+            HitResult hit = user.pick(120.0D, 0.0F, false);
+            targetPos = hit.getLocation();
+        }
 
         Vec3 dir = targetPos.subtract(this.position()).normalize();
 
@@ -541,16 +552,9 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
                         -Mth.cos(degrees * ((float) Math.PI / 180)));
                 if (gotten instanceof LivingEntity LE) {
                     PPW.addEXP(20, LE);
-                    MainUtil.makeBleed(LE, 1, 200, gotten);
-                    StandUser userLE = ((StandUser) LE);
-                    int ticks = 20;
-                    if (userLE.roundabout$getRemainingFireTicks() > -1) {
-                        ticks += userLE.roundabout$getRemainingFireTicks();
-                    } else {
-                        ticks += 80;
-                    }
-                    userLE.roundabout$setOnStandFire(PPW.getFireColor(), standUser);
-                    userLE.roundabout$setRemainingStandFireTicks(ticks);
+                    MainUtil.makeBleed(LE, 1, 100, gotten);
+
+                    LE.setSecondsOnFire(5);
                 }
             }
         }
