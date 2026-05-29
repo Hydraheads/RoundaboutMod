@@ -137,8 +137,10 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
 
     public void switchShooting(){
-        this.tryPower(PowerIndex.POWER_1, true);
-        tryPowerPacket(PowerIndex.POWER_1);
+        if(!isPiloting()) {
+            this.tryPower(PowerIndex.POWER_1, true);
+            tryPowerPacket(PowerIndex.POWER_1);
+        }
     }
 
     public boolean switchShootingOther(){
@@ -150,6 +152,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
+        if (slot == 1 && isPiloting()){
+            return true;
+        }
         return super.isAttackIneptVisually(activeP, slot);
     }
 
