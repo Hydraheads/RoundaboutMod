@@ -39,6 +39,7 @@ import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.ExplosionUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -851,9 +852,25 @@ public class PowersKillerQueen extends NewPunchingStand {
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
-    	super.renderAttackHud(context, playerEntity,
-                scaledWidth, scaledHeight, ticks, vehicleHeartCount,
-                flashAlpha, otherFlashAlpha);
+    	
+
+
+        StandUser standUser = ((StandUser) playerEntity);
+        StandPowers powers = standUser.roundabout$getStandPowers();
+        boolean standOn = PowerTypes.hasStandActive(playerEntity);;
+        int j = scaledHeight / 2 - 7 - 4;
+        int k = scaledWidth / 2 - 8;
+        if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+            int ClashTime = Math.min(15, Math.round(((float) attackTimeDuring / maxKickTime) * 15));
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+        } else {
+        	super.renderAttackHud(context, playerEntity,
+                    scaledWidth, scaledHeight, ticks, vehicleHeartCount,
+                    flashAlpha, otherFlashAlpha);
+        }
+    	
+    	
         
     }
    
@@ -961,9 +978,20 @@ public class PowersKillerQueen extends NewPunchingStand {
 		if (!this.isClient() && this.currentBombStatus == PowersKillerQueen.BOMB_BLOCK) {
 			BlockPos pos = this.bombBlock.getBlockPos();
 			if (!isClient()) {
-				if (bombConf % 2 == 1 && ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction) {explodeBlocks(pos);}
-				this.explosionHurt(pos.getCenter());
-				this.explodeEffects(pos.getCenter());
+				if (bombConf % 2 == 1 && ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction) {
+					//explodeBlocks(pos);
+					ExplosionUtil.explodeBlocks(pos, this.getSelf().level(), 1.0f);
+				}
+				//this.explosionHurt(pos.getCenter());
+				//this.explodeEffects(pos.getCenter());
+				DamageSource dmg = ModDamageTypes.of(this.getSelf().level(), DamageTypes.PLAYER_EXPLOSION, this.getSelf());;
+				
+				ExplosionUtil.explosionHurt(pos.getCenter(), dmg, this.getSelf().level(), 
+						ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionDetonateMaxDamage, 1.8f, 1.5f);
+				
+				ExplosionUtil.explodeEffects(pos.getCenter(), this.getSelf().level(), ModParticles.KILLER_QUEEN_EXPLOSION, 0.6f);
+				
+				explosionSFX(pos.getCenter(), 10);
 			}
     		this.bombBlock.discard();
     		this.bombBlock = null;
