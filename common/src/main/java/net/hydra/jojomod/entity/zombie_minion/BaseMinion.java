@@ -702,6 +702,8 @@ public class BaseMinion extends PathfinderMob {
         this.spit($$0);
     }
 
+    int generousToRareUnreproducableIssue = 20;
+
     @Override
     public void tick(){
         if (!this.level().isClientSide()) {
@@ -713,6 +715,7 @@ public class BaseMinion extends PathfinderMob {
             }
             if (getHeadItem() != null && getHeadItem().is(ModItems.SILVERFISH_REMAINS)){
                 if (getTarget() != null && getTarget().isAlive()){
+                    generousToRareUnreproducableIssue =20;
                     if ((z1 == null || z1.isRemoved() || !z1.isAlive()) && cd1 <= 0){
                         z1 = ModEntities.ZOMBIEFISH.create(level());
                         if (z1 != null){
@@ -735,7 +738,11 @@ public class BaseMinion extends PathfinderMob {
                         }
                     }
                 } else {
-                    discardBoth();
+                    if (generousToRareUnreproducableIssue > 0){
+                        generousToRareUnreproducableIssue--;
+                    } else {
+                        discardBoth();
+                    }
                 }
             } else {
                 discardBoth();
