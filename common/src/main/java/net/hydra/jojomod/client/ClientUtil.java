@@ -441,13 +441,11 @@ public class ClientUtil {
                         skipInterpolation = true;
                         skipInterpolationFixAccidentTicks = 14;
                     }
-                }
-                /**Generalized packet for resuming interpolation on all mobs*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Interpolate.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Interpolate.value)) {
+                    /**Generalized packet for resuming interpolation on all mobs*/
                     skipInterpolation = false;
-                }
-                /**Mandom Clock Particle*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Chrono.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Chrono.value)) {
+                    /**Mandom Clock Particle*/
                     int id = (int)vargs[0];
                     double x = (double)vargs[1];
                     double y = (double)vargs[2];
@@ -469,18 +467,16 @@ public class ClientUtil {
                                         0
                                 );
                     }
-                }
-                /**The penalty for killing or placing blocks to distort time and raise cooldown*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.MANDOM_PENALTY.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.MANDOM_PENALTY.value)) {
+                    /**The penalty for killing or placing blocks to distort time and raise cooldown*/
                     int altared = (int)vargs[0];
                     StandUser user = ((StandUser)player);
                     StandPowers powers = user.roundabout$getStandPowers();
                     if (powers instanceof PowersMandom PM){
                         PM.setTimeHasBeenAltered(altared);
                     }
-                }
-                /**Invis Psuedo Tracked Data*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.TRUE_INVISIBILITY.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.TRUE_INVISIBILITY.value)) {
+                    /**Invis Psuedo Tracked Data*/
                     int entityID = (int)vargs[0];
                     int altered = (int)vargs[1];
                     Entity ent = player.level().getEntity(entityID);
@@ -488,101 +484,80 @@ public class ClientUtil {
                         ((IEntityAndData)ent).roundabout$setTrueInvisibility(altered);
 
                     }
-                }
-                /**Invis Psuedo Tracked Data*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.MANHATTAN_INVISIBILITY.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.MANHATTAN_INVISIBILITY.value)) {
+                    /**Invis Psuedo Tracked Data*/
                     int entityID = (int)vargs[0];
                     int altered = (int)vargs[1];
                     Entity ent = player.level().getEntity(entityID);
                     if (ent != null){
                         ((IEntityAndData)ent).roundabout$setTrueInvisibilityManhattan(altered);
                     }
-                }
-                /**Daze Packet*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncDaze.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncDaze.value)) {
+                    /**Daze Packet*/
                     byte dazeTime = (byte)vargs[0];
                     ClientUtil.updateDazePacket(dazeTime);
-                }
-
-                /**Guard Sync Packet*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncGuard.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncGuard.value)) {
+                    /**Guard Sync Packet*/
                     float guardPoints = (float)vargs[0];
                     boolean guardBroken = (boolean)vargs[1];
                     ((StandUser) player).roundabout$setGuardPoints(guardPoints);
                     ((StandUser)player).roundabout$setGuardBroken(guardBroken);
-                }
-
-                /**Barrage Clash S2C Packet*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateBarrageClash.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateBarrageClash.value)) {
+                    /**Barrage Clash S2C Packet*/
                     int clashOpID = (int)vargs[0];
                     float progress = (float)vargs[1];
                     ClientUtil.clashUpdatePacket(clashOpID, progress);
-                }
-
-                /**Read in Sent config*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SendConfig.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SendConfig.value)) {
+                    /**Read in Sent config*/
                     String config = (String)vargs[0];
                     ClientNetworking.initialize(config);
-                }
-
-                /**Read in Sent config*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.PlaySound.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.PlaySound.value)) {
+                    /**Read in Sent config*/
                     int entId = (int) vargs[0];
                     byte soundID = (byte) vargs[1];
                     Entity User = player.level().getEntity(entId);
                     if (User instanceof LivingEntity){
                         ((StandUserClient)User).roundabout$clientQueSound(soundID);
                     }
-                }
-                /**Read in Sent config*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.StopSound.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.StopSound.value)) {
+                    /**Read in Sent config*/
                     int entId = (int) vargs[0];
                     byte soundID = (byte) vargs[1];
                     Entity User = player.level().getEntity(entId);
                     if (User instanceof LivingEntity){
                         ((StandUserClient)User).roundabout$clientQueSoundCanceling(soundID);
                     }
-                }
-
-                /**TS Teleport blip*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Blip.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Blip.value)) {
+                    /**TS Teleport blip*/
                     int data = (int) vargs[0];
                     byte activePower = (byte) vargs[1];
                     Vector3f vec = (Vector3f) vargs[2];
                     ClientUtil.handleBlipPacketS2C(data,activePower,vec);
-                }
-
-                /**Syncs cooldowns for skills*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncCooldown.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncCooldown.value)) {
+                    /**Syncs cooldowns for skills*/
                     byte power = (byte) vargs[0];
                     int cooldown = (int) vargs[1];
                     ClientUtil.skillCDSyncPacket(power, cooldown);
-                }
-                /**Syncs cooldowns for skills, includes a maximum to update with*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncCooldownMax.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncCooldownMax.value)) {
+                    /**Syncs cooldowns for skills, includes a maximum to update with*/
                     byte power = (byte) vargs[0];
                     int cooldown = (int) vargs[1];
                     int maxCooldown = (int) vargs[2];
                     ClientUtil.skillMaxCDSyncPacket(power, cooldown, maxCooldown);
-                }
-                /**Syncs the active power the stand is using*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncActivePower.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncActivePower.value)) {
+                    /**Syncs the active power the stand is using*/
                     byte power = (byte) vargs[0];
                     MainUtil.syncActivePower(player,power);
-                }
-                /**Syncs the active power the fate is using*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncActivePowerFate.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncActivePowerFate.value)) {
+                    /**Syncs the active power the fate is using*/
                     byte power = (byte) vargs[0];
                     MainUtil.syncActivePowerFate(player,power);
-                }
-                /**Syncs the active power the powers is using*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncActivePowerPowers.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncActivePowerPowers.value)) {
+                    /**Syncs the active power the powers is using*/
                     byte power = (byte) vargs[0];
                     MainUtil.syncActivePowerPowers(player,power);
-                }
-
-                /**Syncs the power inventory settings*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPowerInventory.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPowerInventory.value)) {
+                    /**Syncs the power inventory settings*/
                     int anchorPlace = (int) vargs[0];
                     float distanceOut = (float) vargs[1];
                     float idleOpacity = (float) vargs[2];
@@ -591,43 +566,32 @@ public class ClientUtil {
                     int anchorPlaceAttack = (int) vargs[5];
                     ClientUtil.handlePowerInventoryOptionsPacketS2C(player,anchorPlace,distanceOut,idleOpacity,combatOpacity,
                             enemyOpacity,anchorPlaceAttack);
-                }
-
-                /**Syncs the active power the stand is using*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.IntPowerData.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.IntPowerData.value)) {
+                    /**Syncs the active power the stand is using*/
                     byte activePower = (byte) vargs[0];
                     int data = (int) vargs[1];
                     ((StandUser) player).roundabout$getStandPowers().updatePowerInt(activePower,data);
-                }
-
-                /**Generic int that is sent to the client*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.IntToClient.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.IntToClient.value)) {
+                    /**Generic int that is sent to the client*/
                     byte context = (byte) vargs[0];
                     int data = (int) vargs[1];
                     ClientUtil.handleIntPacketS2C(player,data,context);
-                }
-                /**Generic double int that is sent to the client*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.DoubleIntToClient.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.DoubleIntToClient.value)) {
+                    /**Generic double int that is sent to the client*/
                     byte context = (byte) vargs[0];
                     int data = (int) vargs[1];
                     int data2 = (int) vargs[2];
                     ClientUtil.handleDoubleIntPacketS2C(player,data,data2,context);
-                }
-                /**Generic byte that is sent to the client*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SimpleByteToClient.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SimpleByteToClient.value)) {
+                    /**Generic byte that is sent to the client*/
                     byte context = (byte) vargs[0];
                     ClientUtil.handleSimpleBytePacketS2C(context);
-                }
-
-
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ByteBundleToClient.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ByteBundleToClient.value)) {
                     byte context = (byte) vargs[0];
                     byte firstByte = (byte) vargs[1];
                     byte secondByte = (byte) vargs[2];
                     ClientUtil.handleBundlePacketS2C(context,firstByte,secondByte);
-                }
-
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AddTSEntity.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AddTSEntity.value)) {
                     int entityID = (int) vargs[0];
                     double x = (double) vargs[1];
                     double y = (double) vargs[2];
@@ -636,12 +600,10 @@ public class ClientUtil {
                     int duration = (int) vargs[5];
                     int maxDuration = (int) vargs[6];
                     ClientUtil.handleTimeStoppingEntityPacket(entityID,x,y,z,range,duration,maxDuration);
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.RemoveTSEntity.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.RemoveTSEntity.value)) {
                     int entityID = (int) vargs[0];
                     ClientUtil.processTSRemovePacket(entityID);
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AddPCEntity.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AddPCEntity.value)) {
                     int entityID = (int) vargs[0];
                     double x = (double) vargs[1];
                     double y = (double) vargs[2];
@@ -649,48 +611,36 @@ public class ClientUtil {
                     double range = (double) vargs[4];
                     byte ctext = (byte) vargs[5];
                     ClientUtil.handlePermaCastingEntityPacket(entityID,x,y,z,range,ctext);
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.RemovePCEntity.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.RemovePCEntity.value)) {
                     int entityID = (int) vargs[0];
                     ClientUtil.handlePermaCastingRemovePacket(entityID);
-                }
-
-
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ResumeTileEntityTS.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ResumeTileEntityTS.value)) {
                     int x = (int) vargs[0];
                     int y = (int) vargs[1];
                     int z = (int) vargs[2];
                     ClientUtil.handleEntityResumeTsPacket(new Vec3i(x,y,z));
-                }
-
-
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.HeelExtend.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.HeelExtend.value)) {
                     int entityID = (int) vargs[0];
                     Entity ent = player.level().getEntity(entityID);
                     if (ent instanceof LivingEntity LE &&
                             ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW){
                         PW.setHeelExtension(3);
                     }
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.RefreshAllCooldowns.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.RefreshAllCooldowns.value)) {
                     MainUtil.clearCooldowns(player);
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AffirmAllCooldowns.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AffirmAllCooldowns.value)) {
                     ((IPlayerEntity)player).rdbt$setCooldownQuery(true);
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTimer.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTimer.value)) {
                     int sigmaTime = (int) vargs[0];
                     if (((StandUser)player).roundabout$getStandPowers() instanceof PowersCream PC) {
                         PC.setVoidTime(sigmaTime);
                     }
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTransformTimer.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTransformTimer.value)) {
                     int sigmaTime = (int) vargs[0];
                     if (((StandUser)player).roundabout$getStandPowers() instanceof PowersCream PC) {
                         PC.setTransformTimer(sigmaTime);
                     }
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTransformDirection.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTransformDirection.value)) {
                     int sigmaDirection = (int) vargs[0];
                     if (((StandUser)player).roundabout$getStandPowers() instanceof PowersCream PC) {
                         PC.setTransformDirection(sigmaDirection);
@@ -698,8 +648,7 @@ public class ClientUtil {
                 }
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.VampireMessage.value)) {
                     playSound(ModSounds.VAMPIRE_MESSAGE_EVENT,player,2,1);
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData.value)) {
                     VampireData vdata = ((IPlayerEntity)player).rdbt$getVampireData();
                     vdata.vampireLevel = (int) vargs[0];
                     vdata.bloodExp = (int) vargs[1];
@@ -725,8 +674,7 @@ public class ClientUtil {
                     vdata.jumpLevel = (byte) vargs[17];
                     vdata.ripperEyesLevel = (byte) vargs[18];
                     vdata.freezeLevel = (byte) vargs[19];
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData2.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData2.value)) {
                     VampireData vdata = ((IPlayerEntity)player).rdbt$getVampireData();
                     vdata.vampireLevel = (int) vargs[0];
                     vdata.bloodExp = (int) vargs[1];
@@ -737,33 +685,27 @@ public class ClientUtil {
                     vdata.timeSinceMonster = (int) vargs[6];
                     vdata.timeSinceNpc = (int) vargs[7];
                     renderBloodTicks = 60;
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData3.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData3.value)) {
                     VampireData vdata = ((IPlayerEntity)player).rdbt$getVampireData();
                     vdata.timeSinceAnimal = (int) vargs[0];
                     vdata.timeSinceMonster = (int) vargs[1];
                     vdata.timeSinceNpc = (int) vargs[2];
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ZombieFish.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ZombieFish.value)) {
                     ((IPlayerEntity)player).rdbt$setZombieFish((int) vargs[0]);
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.GunRecoil.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.GunRecoil.value)) {
                     String sigmaString = (String) vargs[0];
                     ClientUtil.applyClientRecoil(player, sigmaString);
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPossessor.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPossessor.value)) {
                     Player possessed = (Player) player.level().getEntity((int)vargs[0]);
                     LivingEntity target = (LivingEntity) player.level().getEntity((int)vargs[1]);
                     ((StandUser)possessed).roundabout$getPossessor().setTarget(target);
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ShatterIce.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ShatterIce.value)) {
                     int i = (int) vargs[0];
                     Entity target = player.level().getEntity(i);
                     if (target instanceof LivingEntity LE) {
                         ((StandUser)LE).rdbt$setHideDeath(true);
                     }
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncAllies.value)) {;
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncAllies.value)) {;
                     String data = (String) vargs[0];
                     if(((StandUser) player).roundabout$getStandPowers() instanceof PowersGreenDay PGD){
                         PGD.allies = PGD.allyListParser(data);
