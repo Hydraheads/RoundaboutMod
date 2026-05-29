@@ -4174,16 +4174,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 if (stack != null && !stack.isEmpty()) {
                     if (stack.is(ModItems.SCISSORS) && ($$0.is(DamageTypes.PLAYER_ATTACK) || $$0.is(DamageTypes.MOB_ATTACK))) {
                         if (MainUtil.getMobBleed(this)) {
-                            roundabout$setBleedLevel(0);
-                            addEffect(new MobEffectInstance(ModEffects.BLEED, 300, 0), LE);
+                            MainUtil.makeBleed(this, 0, 300, LE);
                         }
                         stack.hurtAndBreak(1, LE, $$0x -> $$0x.broadcastBreakEvent(EquipmentSlot.MAINHAND));
                     }
 
                     if (stack.is(ModItems.SACRIFICIAL_DAGGER) && ($$0.is(DamageTypes.PLAYER_ATTACK) || $$0.is(DamageTypes.MOB_ATTACK))) {
                         if (MainUtil.getMobBleed(this)) {
-                            roundabout$setBleedLevel(0);
-                            addEffect(new MobEffectInstance(ModEffects.BLEED, 300, 0), LE);
+                            MainUtil.makeBleed(this, 0, 300, LE);
                         }
                         stack.hurtAndBreak(1, LE, $$0x -> $$0x.broadcastBreakEvent(EquipmentSlot.MAINHAND));
                     }

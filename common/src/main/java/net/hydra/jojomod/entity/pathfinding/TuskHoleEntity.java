@@ -124,7 +124,7 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
                 if (target.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.STAND), 2)) {
                     if (target instanceof LivingEntity LE) {
                         LE.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 2, 20));
-                        LE.addEffect(new MobEffectInstance(ModEffects.BLEED, 20));
+                        MainUtil.makeBleed(LE,0,20,getUser());
                     }
                 }
             }
