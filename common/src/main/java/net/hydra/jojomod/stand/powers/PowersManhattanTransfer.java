@@ -346,16 +346,23 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 ME.setDodgeRainTicks(0);
                 ((StandUser) ME).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 100, false);
             }
+
+            if (!hasStandActive(this.getSelf())) {
+                ME.hasItem = false;
+                ME.hasItemTwo = false;
+            }
         }
+
         if (this.getStandEntity(this.getSelf()) != null) {
             Vec3 vec3 = new Vec3(walkingSpeed, 0, walkingSpeed);
+            if(switchShootingMode()){
             if (!isPiloting()) {
                 if(this.getStandEntity(this.getSelf()).isInWaterOrRain()){
                     this.getStandEntity(this.getSelf()).setDeltaMovement(this.getStandEntity(this.getSelf()).getForward().scale(0.010 * configSpeed() * extraSpeedEmergencyHattan()));
                 }
                 else{
                 this.getStandEntity(this.getSelf()).setDeltaMovement(this.getStandEntity(this.getSelf()).getForward().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan()));
-            }}
+            }}}
             if (isActive()) {
                 DimensionType t = this.getStandEntity(this.getSelf()).level().dimensionType();
                 DimensionType T = this.getSelf().level().dimensionType();
@@ -447,18 +454,19 @@ public class PowersManhattanTransfer extends NewDashPreset {
         if (entity instanceof ManhattanTransferEntity ME) {
             LivingEntity ent = getPilotingStand();
             IEntityAndData entityAndData = ((IEntityAndData) ent);
-            entity.xxa = kpi.leftImpulse;
-            entity.zza = kpi.forwardImpulse;
-            Vec3 delta = entity.getDeltaMovement();
-            if (kpi.shiftKeyDown) {
-                $$13--;
-            }
-            if (kpi.jumping) {
-                $$13++;
-            }
-            if (ent != null) {
-                Entity TE = MainUtil.getTargetEntity(ent, 300, 10);
-                if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible()) {
+            if(switchShootingMode()) {
+                entity.xxa = kpi.leftImpulse;
+                entity.zza = kpi.forwardImpulse;
+                Vec3 delta = entity.getDeltaMovement();
+                if (kpi.shiftKeyDown) {
+                    $$13--;
+                }
+                if (kpi.jumping) {
+                    $$13++;
+                }
+                if (ent != null) {
+                    Entity TE = MainUtil.getTargetEntity(ent, 300, 10);
+                    if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible()) {
                         if (ME.isInRain()) {
                             if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
                                 entity.setDeltaMovement(entity.getForward());
@@ -482,8 +490,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                                 }
                             }
                         }
-                }
-                else {
+                    } else {
                         if (!ME.isInRain()) {
                             if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
                                 entity.setDeltaMovement(entity.getForward());
@@ -508,6 +515,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                             }
                         }
                     }
+                }
             }
         }
     }

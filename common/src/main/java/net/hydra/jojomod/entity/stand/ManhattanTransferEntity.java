@@ -568,7 +568,7 @@ public void itemEject(){
                     if (!PM.isPiloting()) {
                         this.setXRot(pitch + 25);
 
-                        this.setYBodyRot(pitch + 25);
+                        this.setYBodyRot(yaw + 25);
 
                         this.setYRot(yaw);
 
@@ -595,6 +595,11 @@ public void itemEject(){
         rotationXHattan = this.getXRot();
         rotationYHattan = this.getYRot();
     }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes().add(Attributes.KNOCKBACK_RESISTANCE, 1.0D);
+    }
+
     float rotationXHattan = 0;
     float rotationYHattan = 0;
 
