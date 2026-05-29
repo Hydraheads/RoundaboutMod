@@ -375,8 +375,7 @@ public class BladedBowlerHatEntity extends AbstractArrow {
                 float healthAfter = livingEntity.getHealth();
 
                 if (didHurt && healthAfter < healthBefore) {
-                    ((StandUser) target).roundabout$setBleedLevel(1);
-                    livingEntity.addEffect(new MobEffectInstance(ModEffects.BLEED, 400, 0), this);
+                    MainUtil.makeBleed(target,0,400,getOwner());
                 }
             }
 
