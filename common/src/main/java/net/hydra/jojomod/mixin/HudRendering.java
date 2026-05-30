@@ -275,6 +275,14 @@ public abstract class HudRendering implements IHudAccess {
         RenderSystem.enableBlend();
     }
 
+    @Inject(method = "renderTextureOverlay", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$renderOverlaysHttan(GuiGraphics $$0, ResourceLocation $$1, float $$2, CallbackInfo info) {
+        if (((StandUser) this.minecraft.player ).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+            if (PM.isPiloting()) {
+                info.cancel();
+            }
+        }
+    }
 
     private void roundabout$renderTextureOverlay(GuiGraphics $$0, ResourceLocation $$1, float opacity, float r, float g, float b) {
         RenderSystem.disableDepthTest();
