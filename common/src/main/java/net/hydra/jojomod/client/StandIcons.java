@@ -348,7 +348,8 @@ public class StandIcons {
             "textures/gui/icons/planet_waves/stand_retrieving.png");
     public static final ResourceLocation PLANET_WAVES_DESINTEGRATION= new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/planet_waves/desintegration.png");
-
+    public static final ResourceLocation PLANET_WAVES_METEOR_TRACKING= new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/planet_waves/meteor_tracking.png");
 
     public static final ResourceLocation MANDOM_VISION_ON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/mandom/vision_on.png");
