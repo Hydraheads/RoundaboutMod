@@ -987,7 +987,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 				DamageSource dmg = ModDamageTypes.of(this.getSelf().level(), DamageTypes.PLAYER_EXPLOSION, this.getSelf());;
 				
 				ExplosionUtil.explosionHurt(pos.getCenter(), dmg, this.getSelf().level(), 
-						ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionDetonateMaxDamage, 1.8f, 1.5f);
+						ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionDetonateMaxDamage, 0.4f, 1.5f);
 				
 				ExplosionUtil.explodeEffects(pos.getCenter(), this.getSelf().level(), ModParticles.KILLER_QUEEN_EXPLOSION, 0.6f);
 				
