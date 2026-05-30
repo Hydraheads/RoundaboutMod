@@ -131,6 +131,54 @@ public class RoundaboutCommands {
     }
 
 
+    public static int roundaboutSetLevelupStand(CommandSourceStack source, Collection<? extends Entity> targets) {
+        for (Entity entity : targets) {
+            if (entity instanceof LivingEntity) {
+                if (entity instanceof Player PE) {
+                    IPlayerEntity ipe = ((IPlayerEntity)PE);
+                    StandUser user = ((StandUser) PE);
+                    ItemStack standDisc = user.roundabout$getStandDisc();
+                    int standLevel = ipe.roundabout$getStandLevel();
+                    if (!standDisc.isEmpty() && !(standDisc.getItem() instanceof MaxStandDiscItem)){
+                        ipe.roundabout$setStandExp(0);
+                        ipe.roundabout$setStandLevel((byte) Math.min(user.roundabout$getStandPowers().getMaxLevel(),standLevel+1));
+                        user.roundabout$setStandDisc(MainUtil.saveToDiscData(PE,standDisc).copy());
+                    }
+                }
+            }
+        }
+        if (targets.size() == 1) {
+            source.sendSuccess(() -> Component.translatable(  "commands.roundabout.levelup_specific.single", ((Entity)targets.iterator().next()).getDisplayName()), true);
+        } else {
+            source.sendSuccess(() -> Component.translatable(  "commands.roundabout.levelup_specific.multiple", targets.size()), true);
+        }
+        return targets.size();
+    }
+
+    public static int roundaboutSetLeveldownStand(CommandSourceStack source, Collection<? extends Entity> targets) {
+        for (Entity entity : targets) {
+            if (entity instanceof LivingEntity) {
+                if (entity instanceof Player PE) {
+                    IPlayerEntity ipe = ((IPlayerEntity)PE);
+                    StandUser user = ((StandUser) PE);
+                    ItemStack standDisc = user.roundabout$getStandDisc();
+                    int standLevel = ipe.roundabout$getStandLevel();
+                    if (!standDisc.isEmpty() && !(standDisc.getItem() instanceof MaxStandDiscItem)){
+                        ipe.roundabout$setStandExp(0);
+                        ipe.roundabout$setStandLevel((byte) Math.max(0,standLevel-1));
+                        user.roundabout$setStandDisc(MainUtil.saveToDiscData(PE,standDisc).copy());
+                    }
+                }
+            }
+        }
+        if (targets.size() == 1) {
+            source.sendSuccess(() -> Component.translatable(  "commands.roundabout.levelup_specific.single", ((Entity)targets.iterator().next()).getDisplayName()), true);
+        } else {
+            source.sendSuccess(() -> Component.translatable(  "commands.roundabout.levelup_specific.multiple", targets.size()), true);
+        }
+        return targets.size();
+    }
+
     public static int roundaboutSetFate(CommandSourceStack source, Collection<? extends Entity> targets,
                                          String fate, int level, int experience) {
 
