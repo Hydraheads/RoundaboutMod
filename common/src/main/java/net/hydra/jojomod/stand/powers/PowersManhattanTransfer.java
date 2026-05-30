@@ -360,14 +360,13 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
         if (this.getStandEntity(this.getSelf()) != null) {
             Vec3 vec3 = new Vec3(walkingSpeed, 0, walkingSpeed);
-            if(switchShootingMode()){
             if (!isPiloting()) {
                 if(this.getStandEntity(this.getSelf()).isInWaterOrRain()){
                     this.getStandEntity(this.getSelf()).setDeltaMovement(this.getStandEntity(this.getSelf()).getForward().scale(0.010 * configSpeed() * extraSpeedEmergencyHattan()));
                 }
                 else{
                 this.getStandEntity(this.getSelf()).setDeltaMovement(this.getStandEntity(this.getSelf()).getForward().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan()));
-            }}}
+            }}
             if (isActive()) {
                 DimensionType t = this.getStandEntity(this.getSelf()).level().dimensionType();
                 DimensionType T = this.getSelf().level().dimensionType();
@@ -459,7 +458,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
         if (entity instanceof ManhattanTransferEntity ME) {
             LivingEntity ent = getPilotingStand();
             IEntityAndData entityAndData = ((IEntityAndData) ent);
-            if(switchShootingMode()) {
                 entity.xxa = kpi.leftImpulse;
                 entity.zza = kpi.forwardImpulse;
                 Vec3 delta = entity.getDeltaMovement();
@@ -520,7 +518,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
                             }
                         }
                     }
-                }
             }
         }
     }
