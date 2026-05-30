@@ -32,7 +32,6 @@ import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -103,7 +102,11 @@ public class PowersTusk extends NewDashPreset {
 
         WARP = PowerIndex.BARRAGE_CHARGE_2,
         GRAB = PowerIndex.EXTRA_2_FINISH,
-        FLATTEN = PowerIndex.RANGED_BARRAGE_2;
+        FLATTEN = PowerIndex.RANGED_BARRAGE_2,
+        PILOT = PowerIndex.BOUNCE;
+
+    public static final int ACT_ONE_CD = 10*20;
+    public static final int ACT_TWO_CD = 60*20;
 
     @Override
     public StandEntity getNewStandEntity() {
@@ -161,22 +164,23 @@ public class PowersTusk extends NewDashPreset {
     public boolean hasNail() {return getMaxActiveNails() > 0;}
 
 
-    private void addCooldown(int time) {
+    private void addNailCooldown(int time) {
         if (this.nailCooldowns.size() < 10) {
             this.nailCooldowns.add(new CooldownInstance(time,time));
         }
+
     }
 
     private void expendNails() {
         if (this.nailCharge > 0) {
             if (this.getAct() == 1) {
                 for (int i=0;i<this.nailCharge;i++) {
-                  this.addCooldown(10*20);
+                  this.addNailCooldown(ACT_ONE_CD);
                 }
             }
         } else {
             if (this.getAct() > 1) {
-                this.addCooldown(60*20);
+                this.addNailCooldown(ACT_TWO_CD);
             }
         }
     }
@@ -363,6 +367,18 @@ public class PowersTusk extends NewDashPreset {
 
             case PowersTusk.FLATTEN -> {
                 if (this.getActivePower() != PowersTusk.FLATTEN) {
+
+                    if (isInHole()) {
+                        this.setCooldown(PowerIndex.SKILL_1, 140);
+                    } else {
+                        addNailCooldown(ACT_TWO_CD);
+                        if (!isClient()) {
+                            TuskHoleEntity tuskHoleEntity = new TuskHoleEntity(this.getSelf().level(), this.getSelf());
+                            tuskHoleEntity.setPos(this.getSelf().getPosition(0));
+                            this.getSelf().level().addFreshEntity(tuskHoleEntity);
+                        }
+                    }
+
                     this.setActivePower(PowersTusk.FLATTEN);
                     this.setAnimation(PowersTusk.FLATTEN);
                     this.setAttackTime(0);
@@ -370,6 +386,15 @@ public class PowersTusk extends NewDashPreset {
                 } else {
                     this.setAttackTimeDuring(PowersTusk.flattenTime); // automatically triggers the end of flattening
                     this.updateUniqueMoves();
+                }
+            }
+
+            case PowersTusk.PILOT -> {
+                addNailCooldown(ACT_TWO_CD);
+                if (!isClient()) {
+                    TuskHoleEntity tuskHoleEntity = new TuskHoleEntity(this.getSelf().level(), this.getSelf());
+                    tuskHoleEntity.setPos(this.getSelf().getPosition(0));
+                    this.getSelf().level().addFreshEntity(tuskHoleEntity);
                 }
             }
 
@@ -400,7 +425,7 @@ public class PowersTusk extends NewDashPreset {
 
                     if (LE.isRemoved() || !LE.isAlive() ||
                             MainUtil.cheapDistanceTo2(LE.getX(), LE.getZ(), P.getX(), P.getZ())
-                                    > getMaxPilotRange() || !this.isHoleNearby()) {
+                                    > getMaxPilotRange()) {
                         IPlayerEntity ipe = ((IPlayerEntity) P);
                         ipe.roundabout$setIsControlling(0);
                         tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
@@ -465,7 +490,6 @@ public class PowersTusk extends NewDashPreset {
                 if (this.getAttackTimeDuring() > flattenTime) {
                     this.setPowerNone();
                     flattenTicks = 5;
-                    this.setCooldown(PowerIndex.SKILL_1,100);
                 }
             }
         }
@@ -717,7 +741,7 @@ public class PowersTusk extends NewDashPreset {
             }
 
             float halfReach = (float) 2.5;
-            Vec3 pointVec = DamageHandler.getRayPoint(self, halfReach);
+            Vec3 pointVec = this.getSelf().getPosition(0).add(new Vec3(Math.cos(this.getSelf().getViewYRot(0)),0,Math.sin(this.getSelf().getViewYRot(0))).multiply(halfReach,halfReach,halfReach));
             List<Entity> targets = ShockwaveHitbox(DamageHandler.genHitbox(self, pointVec.x, pointVec.y,
                     pointVec.z, halfReach, halfReach, halfReach));
 
@@ -1104,7 +1128,7 @@ public class PowersTusk extends NewDashPreset {
         if (this.getAct() == 3) {
             if (isInHole() && this.getPilotingStand() instanceof TuskHoleEntity THE) {
                 if (THE.getTimeInHole() > 20) {
-                    return this.getGrabEntity() != null;
+                    return this.getGrabEntity() instanceof LivingEntity;
                 }
             }
         }
@@ -1112,7 +1136,7 @@ public class PowersTusk extends NewDashPreset {
     }
 
     public boolean canFlatten() {
-        return this.isHoleNearby() && !this.getSelf().isPassenger() || this.getActivePower() == PowersTusk.FLATTEN;
+        return this.getSelf().onGround() && canUseHole() && !this.getSelf().isPassenger() || this.getActivePower() == PowersTusk.FLATTEN;
     }
 
     public Entity getGrabEntity() {
@@ -1129,19 +1153,23 @@ public class PowersTusk extends NewDashPreset {
         return null;
     }
 
+    public boolean canUseHole() {
+        return this.hasNail() || this.isInHole() || this.getActivePower() == PowersTusk.FLATTEN;
+    }
+
     public TuskHoleEntity targetHole = null;
     public void buttonInputWarp(boolean keyIsDown, Options options) {
-        if (keyIsDown && !isInHole() && this.getAttackTime() > 5) {
+        if (keyIsDown && !isInHole() && this.getAttackTime() > 5 && canUseHole()) {
             if (targetHole != null) {
-                if (isHoleNearby()) {
-                    this.setAttackTime(0);
-                    this.setPiloting(targetHole.getId());
-                    tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, targetHole.getId());
-                } else {
-                    if (this.getSelf() instanceof Player P) {
-                        P.displayClientMessage(Component.translatable("message.tusk.nearby_hole").withStyle(ChatFormatting.RED), true);
-                    }
+
+                if (!isInHole()) {
+                    tryPower(PowersTusk.PILOT);
+                    tryPowerPacket(PowersTusk.PILOT);
                 }
+
+                this.setAttackTime(0);
+                this.setPiloting(targetHole.getId());
+                tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, targetHole.getId());
             }
 
         }
@@ -1149,19 +1177,31 @@ public class PowersTusk extends NewDashPreset {
 
     @Override
     public void pilotInputAttack() {
-        if (this.getAttackTime() > 5) {
-            this.setPiloting(0);
-            this.setAttackTime(0);
-            tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
+        if (isGunMode() && (this.getActivePower() == PowersTusk.SHOOT_MODE || this.getActivePower() == PowersTusk.FIRE_NAIL)) {
+            tryPower(PowersTusk.FIRE_NAIL);
+            tryPowerPacket(PowersTusk.FIRE_NAIL);
+
+        } else {
+            if (this.getAttackTime() > 5) {
+                this.setPiloting(0);
+                this.setAttackTime(0);
+                tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
+            }
         }
     }
 
     @Override
     public boolean pilotInputInteract() {
-        if (this.hasNail() && this.nailFireDelay == 0) {
+
+        if (isGunMode() ) {
+            tryPower(PowersTusk.SHOOT_MODE);
+            tryPowerPacket(PowersTusk.SHOOT_MODE);
+        } else if (this.hasNail() && this.nailFireDelay == 0) {
             tryPower(PowersTusk.FIRE_NAIL);
             tryPowerPacket(PowersTusk.FIRE_NAIL);
         }
+
+
         return true;
     }
 
@@ -1217,7 +1257,7 @@ public class PowersTusk extends NewDashPreset {
     public int highlightsEntityColor(Entity ent, Player player) {
         if (this.getAct() == 3) {
             if (ent.equals(this.targetHole)) {
-                return isHoleNearby() ? 2676479 : 16755200;
+                return 2676479;
             } else if (this.isHoldingSneak()) {
                 return 16777215;
             }
@@ -1241,9 +1281,7 @@ public class PowersTusk extends NewDashPreset {
         return null;
     }
 
-    public boolean isHoleNearby() {
-        return getNearbyHole() != null;
-    }
+
 
     public boolean isInHole() {
         return isPiloting();
@@ -1439,6 +1477,8 @@ public class PowersTusk extends NewDashPreset {
         super.renderAttackHud(context, playerEntity, scaledWidth, scaledHeight, ticks, vehicleHeartCount, flashAlpha, otherFlashAlpha);
     }
 
+    @Override
+    public boolean shouldRenderPilotingHud() {return false;}
     @Override
     public boolean replaceHudActively() {
         return this.getMaxActiveNails() != 10 || this.getNailCharge() > 0 || this.getStandUserSelf().roundabout$getStandAnimation() == PowersTusk.SHOOT_MODE || this.getExtraCharge() > 0;
