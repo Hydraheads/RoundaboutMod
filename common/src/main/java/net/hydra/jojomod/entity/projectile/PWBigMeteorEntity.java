@@ -360,7 +360,7 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
         if (user instanceof StandUser SU &&
                 SU.roundabout$getStandPowers() instanceof PowersPlanetWaves PPW) {
 
-            PPW.addEXP(10);
+            PPW.addEXP(7);
         }
 
         this.discard();
@@ -630,7 +630,7 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
                         Mth.sin(-17 * ((float) Math.PI / 180)),
                         -Mth.cos(degrees * ((float) Math.PI / 180)));
                 if (gotten instanceof LivingEntity LE) {
-                    PPW.addEXP(35, LE);
+                    PPW.addEXP(15, LE);
                     MainUtil.makeBleed(LE, 2, 100, gotten);
 
                     LE.setSecondsOnFire(5);

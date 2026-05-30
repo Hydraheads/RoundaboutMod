@@ -3867,7 +3867,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     if (sped < 1){
                         $$0 = $$0.scale(sped);
                     }
-                    if (roundabout$cancelsprintJump()){
+                    if (this.roundabout$getStandPowers().cancelSprintJump() || roundabout$cancelsprintJump()){
                         $$0 = $$0.scale(0.6F);
                     }
 
