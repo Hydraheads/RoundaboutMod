@@ -831,6 +831,8 @@ public class Config implements Cloneable {
         public Boolean CBCanMoveCamera;
         @BooleanOption(group = "inherit", value = false)
         public Boolean oldKnockbackStance;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean buffedGroundStance;
     }
 
     public static class WalkingHeartSettings {
