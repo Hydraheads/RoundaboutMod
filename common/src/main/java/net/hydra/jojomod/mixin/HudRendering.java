@@ -587,7 +587,7 @@ public abstract class HudRendering implements IHudAccess {
             if (displayCombatTicks) {
                 removeNum = true;
             } else {
-                if (((IPowersPlayer)minecraft.player).rdbt$getPowers() instanceof PunchingGeneralPowers pgp){
+                if (powers instanceof PunchingGeneralPowers pgp){
                     if (pgp.getComboExpireTicks() > 0){
                         showComboAmt = true;
                         removeNum = true;
@@ -616,18 +616,18 @@ public abstract class HudRendering implements IHudAccess {
             } else if (((StandUserClientPlayer) minecraft.player).roundabout$getClashDisplayExtraTimestamp() >= minecraft.player.tickCount - 20) {
                 StandHudRender.renderClashHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, ((StandUserClientPlayer) minecraft.player).roundabout$getLastClashPower());
                 return true;
-            } else if (((StandUser) minecraft.player).roundabout$isGuarding()) {
+            } else if (user.roundabout$isGuarding()) {
                 if (!(user.roundabout$getStandPowers() instanceof PowersRatt && PowerTypes.hasStandActivelyEquipped(minecraft.player))) {
                     StandHudRender.renderGuardHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha,showComboAmt);
                     if (showComboAmt){
-                        if (((IPowersPlayer)minecraft.player).rdbt$getPowers() instanceof PunchingGeneralPowers pgp) {
+                        if (powers instanceof PunchingGeneralPowers pgp) {
                             StandHudRender.renderComboHudNumber(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, pgp);
                         }
                     }
                     return true;
                 }
-            } else if (isTSEntity || (((StandUser) minecraft.player).roundabout$getStandPowers().getMaxTSTime() > 0
-                    && (((StandUser) minecraft.player).roundabout$getStandPowers().getActivePower() == PowerIndex.SPECIAL) ||  ((StandUser) minecraft.player).roundabout$getStandPowers().getActivePower() == PowerIndex.LEAD_IN)) {
+            } else if (isTSEntity || (user.roundabout$getStandPowers().getMaxTSTime() > 0
+                    && (user.roundabout$getStandPowers().getActivePower() == PowerIndex.SPECIAL) ||  user.roundabout$getStandPowers().getActivePower() == PowerIndex.LEAD_IN)) {
 
                 StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, true, this.getFont());
                 return true;
@@ -635,13 +635,13 @@ public abstract class HudRendering implements IHudAccess {
 
                 StandHudRender.renderGrabbedHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha);
                 return true;
-            } else if (((StandUser)minecraft.player).roundabout$isSealed()){
+            } else if (user.roundabout$isSealed()){
 
                 StandHudRender.renderSealedDiscHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha);
                 return true;
-            } else if (((StandUser)minecraft.player).roundabout$getStandPowers().isPiloting()){
+            } else if (user.roundabout$getStandPowers().isPiloting() && user.roundabout$getStandPowers().shouldRenderPilotingHud()){
                 if (this.getCameraPlayer() != null) {
-                    StandHudRender.renderDistanceHUDPiloting(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, ((StandUser) minecraft.player).roundabout$getStandPowers().getPilotingStand());
+                    StandHudRender.renderDistanceHUDPiloting(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, user.roundabout$getStandPowers().getPilotingStand());
                 }
                 return true;
             } else if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && user.roundabout$getEffectiveCombatMode() &&  PowerTypes.hasStandActivelyEquipped(minecraft.player)){
@@ -661,7 +661,7 @@ public abstract class HudRendering implements IHudAccess {
                             StandHudRender.renderShootModeLightSoftAndWet(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PW);
                         }
                     } else if (showComboAmt){
-                        if (((IPowersPlayer)minecraft.player).rdbt$getPowers() instanceof PunchingGeneralPowers pgp) {
+                        if (powers instanceof PunchingGeneralPowers pgp) {
                             StandHudRender.renderComboHudNumber(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, pgp);
                         }
                     }
@@ -676,10 +676,10 @@ public abstract class HudRendering implements IHudAccess {
             } else if (((IEntityAndData)minecraft.player).roundabout$getTrueInvisibility() > -1){
                 StandHudRender.renderInvisibilityHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x);
                 return true;
-            } else if (((StandUser) minecraft.player).roundabout$getGuardPoints() < ((StandUser) minecraft.player).roundabout$getMaxGuardPoints()){
+            } else if (user.roundabout$getGuardPoints() < user.roundabout$getMaxGuardPoints()){
                 StandHudRender.renderGuardHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha,showComboAmt);
                 if (showComboAmt){
-                    if (((IPowersPlayer)minecraft.player).rdbt$getPowers() instanceof PunchingGeneralPowers pgp) {
+                    if (powers instanceof PunchingGeneralPowers pgp) {
                         StandHudRender.renderComboHudNumber(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, pgp);
                     }
                 }
@@ -690,7 +690,7 @@ public abstract class HudRendering implements IHudAccess {
             } else if (ClientUtil.getRoadRollerPickingRRE() != null && ClientUtil.getRoadRollerPickingRRE() instanceof RoadRollerEntity && ClientUtil.getRoadRollerPickingRRE().getPickupBoolean()==minecraft.player.getId()) {
                 StandHudRender.renderRoadRollerPickupHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha,  ClientUtil.getRoadRollerPickingRRE());
                 return true;
-            } else if (((IPlayerEntity)minecraft.player).roundabout$getDisplayExp() && ((StandUser)minecraft.player).roundabout$hasAStand()){
+            } else if (((IPlayerEntity)minecraft.player).roundabout$getDisplayExp() && user.roundabout$hasAStand()){
 
                 StandHudRender.renderExpHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha,removeNum);
                 if (displayCombatTicks){
