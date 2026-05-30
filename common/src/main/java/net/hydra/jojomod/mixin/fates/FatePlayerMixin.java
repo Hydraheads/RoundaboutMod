@@ -134,8 +134,10 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
         if (FateTypes.takesSunlightDamage(this)){
             if (FateTypes.isInSunlight(this)){
                 if (!FateTypes.isHidden(this)) {
-                    this.addEffect(new MobEffectInstance(ModEffects.SINGE, 200, 0));
-                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth() * ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick);
+                    if (this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT),
+                            this.getMaxHealth() * ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick)){
+                        this.addEffect(new MobEffectInstance(ModEffects.SINGE, 200, 0));
+                    }
                 }
             }
         } else if (FateTypes.isHuman(this)){

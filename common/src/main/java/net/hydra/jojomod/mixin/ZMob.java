@@ -876,8 +876,10 @@ public abstract class ZMob extends LivingEntity implements IMob {
                 if (((Mob)(Object)this) instanceof BaseMinion bm && bm.canGoHome()){
                     bm.goHome();
                 } else {
-                    this.addEffect(new MobEffectInstance(ModEffects.SINGE, 200, 0));
-                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth() * ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick);
+                    if (this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth() *
+                            ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick)){
+                        this.addEffect(new MobEffectInstance(ModEffects.SINGE, 200, 0));
+                    }
                 }
             }
         }
