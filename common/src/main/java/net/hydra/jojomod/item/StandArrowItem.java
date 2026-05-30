@@ -328,9 +328,15 @@ public class StandArrowItem extends RoundaboutArrowItem {
                             Component.translatable("item.roundabout.stand_arrow.roll").withStyle(ChatFormatting.GRAY)
                     );
                 } else if (itemstack.getItem() instanceof StandDiscItem de) {
-                    $$2.add(
-                            de.getDisplayName2().withStyle(ChatFormatting.AQUA)
-                    );
+                    if (ClientNetworking.getAppropriateConfig().itemSettings.standArrowsHideResults){
+                        $$2.add(
+                                Component.translatable("item.roundabout.stand_arrow.roll").withStyle(ChatFormatting.GRAY)
+                        );
+                    } else {
+                        $$2.add(
+                                de.getDisplayName2().withStyle(ChatFormatting.AQUA)
+                        );
+                    }
                     //Component.translatable("item.roundabout.stand_arrow.reroll", Minecraft.getInstance().options.keyShift.getDefaultKey().getName())
                     $$2.add(
                             Component.empty()

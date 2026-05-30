@@ -3216,6 +3216,8 @@
   "config.roundabout.levelsToRerollStandWithArrow.desc": "By default, it costs 1 level to change the stand charged on a stand arrow. Keep in mind using the arrow on a mob also rerolls it (and uses 1 durability).",
   "config.roundabout.canAwakenOtherPlayersWithArrows.name": "Arrows Vs Other Players",
   "config.roundabout.canAwakenOtherPlayersWithArrows.desc": "By default, shooting another player with a stand arrow does not awaken their stand to prevent forcing someone to be stuck with something bad.",
+  "config.roundabout.standArrowsHideResults.name": "Arrows Hide Results",
+  "config.roundabout.standArrowsHideResults.desc": "Enable to make the stand on an arrow a mystery. You may become \"stuck\" with a stand you don't like or waste extra levels on duplicates.",
 
   "config.roundabout.classicGasoline.name": "Classic Gasoline",
   "config.roundabout.classicGasoline.desc": "Turn on for gasoline to be super oppressive in pvp like it used to be.",
