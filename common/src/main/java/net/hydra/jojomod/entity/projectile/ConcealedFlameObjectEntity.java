@@ -266,15 +266,17 @@ public class ConcealedFlameObjectEntity extends ThrowableItemProjectile implemen
             LivingEntity user = this.getUser();
             if (user != null &&
                     ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
-                burst(PMR);
-                if ($$1 instanceof LivingEntity LE){
-                    PMR.addEXP(7,LE);
+                if (!$$1.is(getUser())) {
+                    burst(PMR);
+                    if ($$1 instanceof LivingEntity LE) {
+                        PMR.addEXP(7, LE);
 
-                    MainUtil.knockShieldPlusStand($$1, 20);
+                        MainUtil.knockShieldPlusStand($$1, 20);
+                    }
+
+                    CrossfireHurricaneEntity.blastEntity($$1, this,
+                            this.getSize(), user, true, PMR, fireStormCreated, 1F);
                 }
-
-                CrossfireHurricaneEntity.blastEntity($$1, this,
-                        this.getSize(), user, true, PMR,fireStormCreated, 1F);
             }
             this.discard();
         }
