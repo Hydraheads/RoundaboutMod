@@ -104,7 +104,11 @@ public class PowersPlanetWaves extends NewDashPreset {
                 setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_STAND_TARGETING, PowerIndex.SKILL_4);
             } else setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_STAND_RETRIEVING, PowerIndex.SKILL_4);
         }else setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4);
+        if(canExecuteMoveWithLevel(MeteorTrackingLevel())) {
+            if (isHoldingSneak())
 
+                setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_METEOR_TRACKING, PowerIndex.SKILL_4_SNEAK);
+        }else setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4_SNEAK);
 
     }
 
@@ -115,9 +119,11 @@ public class PowersPlanetWaves extends NewDashPreset {
     }
 
     public int StandTargetingLevel(){
+        return 3;
+    }
+    public int MeteorTrackingLevel(){
         return 4;
     }
-
     @Override
     public byte getMaxLevel(){
         return 4;
@@ -131,7 +137,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         } else if (currentLevel == 2){
             amt = 200;
         } else {
-            amt = 300;
+            amt = 400;
         }
         amt= (int) (amt*(getLevelMultiplier()));
         return amt;
@@ -145,19 +151,25 @@ public class PowersPlanetWaves extends NewDashPreset {
             if (level == 4) {
                 ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.both").
                         withStyle(ChatFormatting.AQUA), true);
-            } else {
-                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.skins").
+            } else { if(level== 3){
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.both").
                         withStyle(ChatFormatting.AQUA), true);
+                }else ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.skins").
+                    withStyle(ChatFormatting.AQUA), true);
             }
         }
         super.levelUp();
     }
 
     private boolean targetingstand = false;
+    private boolean tracking = false;
     private Vec3 standTargetPos = null;
     private Vec3 standTargetLook = null;
     public boolean instandtargeting(){
         return this.targetingstand;
+    }
+    public boolean inmeteortracking(){
+        return this.tracking;
     }
 
 
@@ -177,6 +189,14 @@ public class PowersPlanetWaves extends NewDashPreset {
                     standtargeting();
                 } else {
                     usertargeting();
+                }
+                return true;
+            }
+            case PowerIndex.POWER_4_SNEAK -> { // Meteor Tracking
+                if (!inmeteortracking()) {
+                    meteortracking();
+                } else {
+                    meteornottracking();
                 }
                 return true;
             }
@@ -230,6 +250,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         meteor.setTargetPos(targetPos);
         meteor.setUser(this.self);
         meteor.setOwner(this.self);
+        meteor.setTrackingUser(inmeteortracking());
 
         meteor.absMoveTo(spawnPos.x, spawnPos.y, spawnPos.z);
         meteor.shoot(direction.x, direction.y, direction.z, 1.8F, 0.0F);
@@ -458,7 +479,33 @@ public class PowersPlanetWaves extends NewDashPreset {
                 1.0F
         );
     }
+    private void meteortracking() {
+        tracking = true;
+        if (!isClient() && this.self instanceof ServerPlayer PE) {
+                PE.displayClientMessage(Component.translatable("text.roundabout.planet_waves.meteor_tracking_message").withStyle(ChatFormatting.RED), true);
+        }
+        if (self instanceof ServerPlayer pl) {
+            S2CPacketUtil.sendGenericIntToClientPacket(
+                    pl,
+                    PacketDataIndex.S2C_INT_STAND_MODE,
+                    2
+            );
+        }
+    }
 
+    private void meteornottracking() {
+        tracking = false;
+        if (!isClient() && this.self instanceof ServerPlayer PE) {
+            PE.displayClientMessage(Component.translatable("text.roundabout.planet_waves.meteor_tracking_message_off").withStyle(ChatFormatting.RED), true);
+        }
+        if (self instanceof ServerPlayer pl) {
+            S2CPacketUtil.sendGenericIntToClientPacket(
+                    pl,
+                    PacketDataIndex.S2C_INT_STAND_MODE,
+                    0
+            );
+        }
+    }
     @Override
     public void powerActivate(PowerContext context) {
         switch (context) {
@@ -479,8 +526,12 @@ public class PowersPlanetWaves extends NewDashPreset {
             }
 
             // Skill 4 → Stand Targeting or Stand Retrieving
-            case SKILL_4_NORMAL, SKILL_4_CROUCH, SKILL_4_GUARD, SKILL_4_CROUCH_GUARD -> {
+            case SKILL_4_NORMAL, SKILL_4_GUARD, SKILL_4_CROUCH_GUARD -> {
                 this.tryPowerPacket(PowerIndex.POWER_4);
+
+            }
+            case SKILL_4_CROUCH-> {
+                this.tryPowerPacket(PowerIndex.POWER_4_SNEAK);
 
             }
         }
@@ -586,11 +637,13 @@ public class PowersPlanetWaves extends NewDashPreset {
                 "instruction.roundabout.press_skill", StandIcons.PLANET_WAVES_BIG_METEOR,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 4, "ability.roundabout.stand_targeting",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 3, "ability.roundabout.stand_targeting",
                 "instruction.roundabout.press_skill", StandIcons.PLANET_WAVES_STAND_TARGETING, 4, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 4, "ability.roundabout.stand_retrieving",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 3, "ability.roundabout.stand_retrieving",
                 "instruction.roundabout.press_skill", StandIcons.PLANET_WAVES_STAND_RETRIEVING, 4, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.desintegration",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 4, "ability.roundabout.meteor_tracking",
+                "instruction.roundabout.press_skill_crouch", StandIcons.PLANET_WAVES_METEOR_TRACKING, 4, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.desintegration",
                 "instruction.roundabout.passive", StandIcons.PLANET_WAVES_DESINTEGRATION, 4, level, bypass));
 
         return $$1;
@@ -623,11 +676,7 @@ public class PowersPlanetWaves extends NewDashPreset {
     }
 
     public float getBigMeteorDamage(Entity entity){
-        if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(8F));
-        } else {
-            return levelupDamageMod(multiplyPowerByStandConfigMobs(12F));
-        }
+        return 8F;
     }
 
     public SimpleParticleType getFlameParticle(){

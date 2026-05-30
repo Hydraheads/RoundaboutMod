@@ -169,8 +169,7 @@ public class EmperorBulletEntity extends AbstractArrow {
     public void applyEffect(LivingEntity target) {
         if (!MainUtil.isBossMob(target) && !(target instanceof RoadRollerEntity)) {
             if (MainUtil.getMobBleed(target)) {
-                ((StandUser) target).roundabout$setBleedLevel(1);
-                target.addEffect(new MobEffectInstance(ModEffects.BLEED, 400, 0), this);
+                MainUtil.makeBleed(target,0,400,getOwner());
             }
         }
     }

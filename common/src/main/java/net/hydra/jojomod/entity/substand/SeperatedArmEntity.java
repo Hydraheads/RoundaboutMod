@@ -495,8 +495,7 @@ public class SeperatedArmEntity extends StandEntity {
                             LE.setLastHurtMob($$1);
                         }
                         if (MainUtil.getMobBleed($$1)){
-                            ((StandUser)$$1).roundabout$setBleedLevel(0);
-                            ((LivingEntity)$$1).addEffect(new MobEffectInstance(ModEffects.BLEED, 400, 0), this);
+                            MainUtil.makeBleed($$1,0,400,getUser());
                         }
                         if ($$1.getType() == EntityType.ENDERMAN) {
                             return;

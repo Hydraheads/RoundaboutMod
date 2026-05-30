@@ -4,6 +4,8 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
+import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.config.Config;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -149,15 +151,10 @@ public abstract class CenturyBoyStances {
                 Player player = (Player) (Object) this;
                 if (PCB.staticMode == 1) {
                     if (source.is(DamageTypes.FELL_OUT_OF_WORLD) ||
-
                             source.is(DamageTypes.WITHER) ||
-
                             source.is(DamageTypes.DRAGON_BREATH) ||
-
                             source.is(ModDamageTypes.GO_BEYOND) ||
-
                             source.is(DamageTypes.GENERIC_KILL)
-
                     ) {cir.setReturnValue(true);}
 
                     player.hurtMarked = true;

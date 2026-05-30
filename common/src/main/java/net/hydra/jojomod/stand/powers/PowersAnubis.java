@@ -1377,7 +1377,7 @@ public class PowersAnubis extends NewDashPreset {
                 if (entity instanceof LivingEntity LE) {
                     addEXP(range ? 2 : 1);
                     if (MainUtil.getMobBleed(LE)) {
-                    LE.addEffect(new MobEffectInstance(ModEffects.BLEED,200,1));
+                        MainUtil.makeBleed(LE,1,200,self);
                     }
                 }
 

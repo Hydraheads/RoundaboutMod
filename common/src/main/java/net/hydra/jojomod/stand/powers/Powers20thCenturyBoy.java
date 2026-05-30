@@ -18,14 +18,21 @@ import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ServerPacketListener;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
@@ -239,24 +246,32 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         if(staticMode == 3){
             if (ClientNetworking.getAppropriateConfig().centuryBoySettings.oldKnockbackStance){
                 if(damageSource.getEntity() != null){
-                    this.self.level().playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_HIT_EVENT, SoundSource.PLAYERS, 3F, 1.0F);
+                    deflect();
                     this.self.setDeltaMovement(
                             this.self.position().subtract(
                                     damageSource.getSourcePosition()).multiply(new Vec3(amount/7.5, amount/7.5, amount/7.5)));
                 }
             }else{
-                this.self.level().playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_HIT_EVENT, SoundSource.PLAYERS, 3F, 1.0F);
+                deflect();
                 return false;
             }
 
 
         }
         if (staticMode == 4){
-            this.self.level().playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_HIT_EVENT, SoundSource.PLAYERS, 3F, 1.0F);
+            deflect();
             return false;
         }
         if (staticMode == 1){
-            this.self.level().playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_HIT_EVENT, SoundSource.PLAYERS, 3F, 1.0F);
+            deflect();
+
+            if (!ClientNetworking.getAppropriateConfig().centuryBoySettings.buffedGroundStance){
+                if (damageSource.is(DamageTypes.STARVE) || damageSource.is(DamageTypes.IN_FIRE) ||
+                        damageSource.is(DamageTypes.LAVA) || damageSource.is(DamageTypes.DROWN) ||
+                        damageSource.is(ModDamageTypes.SUNLIGHT)){
+                    return true;
+                }
+            }
             return false;
         }
         if(invincibleState){
@@ -269,7 +284,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             ) {
                 return false;
             } else {
-                this.self.level().playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_HIT_EVENT, SoundSource.PLAYERS, 3F, 1.0F);
+                deflect();
                 return true;
             }
         } else {
@@ -329,5 +344,24 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             }
         }
         return super.getSoundFromByte(soundChoice);
+    }
+
+    /** particles **/
+    private void deflect(){
+        Level level = this.self.level();
+        BlockPos playerpos = this.self.getOnPos();
+        BlockState state = level.getBlockState(playerpos);
+
+        if (!state.isAir()){
+            double x = this.self.getX();
+            double y = this.self.getY();
+            double z = this.self.getZ();
+
+            if (!level.isClientSide() && level instanceof ServerLevel serverLevel) {
+                Roundabout.LOGGER.info("UAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), x, y, z,10,.2,.3, 0.3, .3);
+            }
+            level.playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_HIT_EVENT, SoundSource.PLAYERS, 3F, 1.0F);
+        }
     }
 }
