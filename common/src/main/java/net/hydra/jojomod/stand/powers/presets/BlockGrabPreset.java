@@ -953,6 +953,7 @@ public class BlockGrabPreset extends NewPunchingStand {
         if (entity.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_ALLOW_ENTITY_GRAB)
                 && !(entity instanceof LivingEntity ent && MainUtil.isBossMob(ent))
                 && !(entity instanceof Player pl && pl.isCreative())
+                && !(entity instanceof Player ple && ple.isSleeping())
                 && !(entity instanceof MinecartCommandBlock)
                 && !(entity instanceof MinecartSpawner)
                 && ((entity != null && ((IEntityAndData)entity).rdbt$returnPickup()))
