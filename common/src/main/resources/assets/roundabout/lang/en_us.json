@@ -1652,6 +1652,8 @@
   "ability.roundabout.stand_retrieving.desc":"Makes your stand comeback, making it so that meteors go back to falling towards you",
   "ability.roundabout.desintegration":"Meteor Disintegration",
   "ability.roundabout.desintegration.desc":"This Stand adjusts the angle of entry of countless meteorites floating in space towards its user, drawing them towards Earth. The meteorites burn up just before touching the user, so they can never hit it.",
+  "ability.roundabout.meteor_tracking":"Meteor Tracking",
+  "ability.roundabout.meteor_tracking.desc":"Toggle between meteor tracking on/off. When meteor tracking is on all meteors in the meteor shower will follow you.",
 
   "ability.roundabout.manual_shooting": "Shooting Mode",
   "ability.roundabout.manual_shooting.desc": "Allows you to press left click with your mouse shoot in the direction you want if you are controlling the stand and it contains any storable projectile. If you decide to keep automatic shooting, the stand will instantly redirect it towards the nearest moving entity when it's able to.",
@@ -2323,8 +2325,8 @@
   "text.roundabout.vampire.coffin_too_far": "You may not rest now; the coffin is too far away",
   "text.roundabout.vampire.coffin_obstructed": "This coffin is obstructed",
 
-
-
+  "text.roundabout.planet_waves.meteor_tracking_message": "Meteor Tracking On",
+  "text.roundabout.planet_waves.meteor_tracking_message_off": "Meteor Tracking Off",
 
   "config_translatiors_note": "(Text of this string not ingame): Hello, translators of the mod! I have no expectations",
   "config_translatiors_note_2": "of everything beneath this being translated, it is a lot of work. But if you really",

@@ -206,7 +206,48 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
             this.discard();
             return;
         }
+        if (trackingUser && user != null && !slowing) {
 
+            Vec3 velocity = this.getDeltaMovement();
+
+            if (velocity.lengthSqr() > 0.0001) {
+
+                Vec3 offset = this.position().subtract(
+                        user.position().add(0, user.getBbHeight() * 0.5, 0)
+                );
+
+                double distance = offset.length();
+
+                Vec3 towardUser = offset.scale(-1).normalize();
+
+                Vec3 tangent = new Vec3(
+                        -offset.z,
+                        0,
+                        offset.x
+                ).normalize();
+
+                Vec3 force;
+
+                if (distance > 10.0) {
+                    force = towardUser.scale(0.35);
+                } else {
+                    force = towardUser.scale(0.015)
+                            .add(tangent.scale(0.04)); // mientras mas grande mas targeting fuerte
+
+                    if (velocity.y < 0) {
+                        force = force.add(0, 0.015, 0);
+                    }
+                }
+
+                Vec3 newVelocity = velocity.add(force);
+
+                double speed = velocity.length();
+
+                this.setDeltaMovement(
+                        newVelocity.normalize().scale(speed)
+                );
+            }
+        }
 
         if (isChainStarter && !spawnedChildren) {
 
@@ -231,7 +272,7 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
 
                 extra.setUser(this.standUser);
                 extra.setOwner(this.standUser);
-
+                extra.setTrackingUser(this.trackingUser);
                 extra.setChain(i, false);
 
 
@@ -529,7 +570,15 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
                 Math.sqrt(dir.x * dir.x + dir.z * dir.z)
         ) * (180F / Math.PI)));
     }
+    private boolean trackingUser = false;
 
+    public void setTrackingUser(boolean trackingUser) {
+        this.trackingUser = trackingUser;
+    }
+
+    public boolean isTrackingUser() {
+        return trackingUser;
+    }
     public void getEntity(Entity gotten, PowersPlanetWaves PPW, LivingEntity user) {
         if (gotten != null && gotten.getId() != getUserID()) {
             float dmg = PPW.getFireballDamage(gotten);
@@ -551,7 +600,7 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
                         Mth.sin(-17 * ((float) Math.PI / 180)),
                         -Mth.cos(degrees * ((float) Math.PI / 180)));
                 if (gotten instanceof LivingEntity LE) {
-                    PPW.addEXP(20, LE);
+                    PPW.addEXP(5, LE);
                     MainUtil.makeBleed(LE, 1, 100, gotten);
 
                     LE.setSecondsOnFire(5);
