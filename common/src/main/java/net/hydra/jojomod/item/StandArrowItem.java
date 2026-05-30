@@ -123,8 +123,10 @@ public class StandArrowItem extends RoundaboutArrowItem {
                 return;
             }
 
-            if (stack.getItem() instanceof StandDiscItem SD){
-                player.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.rerollOutcome").withStyle(ChatFormatting.WHITE).append(SD.getDisplayName2()).withStyle(ChatFormatting.AQUA), true);
+            if (!ClientNetworking.getAppropriateConfig().itemSettings.standArrowsHideResults) {
+                if (stack.getItem() instanceof StandDiscItem SD) {
+                    player.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.rerollOutcome").withStyle(ChatFormatting.WHITE).append(SD.getDisplayName2()).withStyle(ChatFormatting.AQUA), true);
+                }
             }
         }
     }
