@@ -51,6 +51,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.boss.EnderDragonPart;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
@@ -2056,7 +2057,8 @@ public class AbilityScapeBasis {
         Entity targetEntity = this.rayCastEntity(User,distMax);
 
         if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
-                || (targetEntity != null && (!targetEntity.isAlive() || targetEntity.isRemoved()))){
+                || (targetEntity != null && (!targetEntity.isAlive() || targetEntity.isRemoved()))
+        || targetEntity instanceof ArmorStand){
             targetEntity = null;
         }
 
@@ -2160,17 +2162,19 @@ public class AbilityScapeBasis {
             for (Entity value : entities) {
                 if (!value.isInvulnerable() && value.isAlive() && value.getUUID() != User.getUUID() && (MainUtil.isStandPickable(value) || value instanceof StandEntity)){
                     if (!(value instanceof StandEntity SE1 && SE1.getUser() != null && SE1.getUser().is(User))) {
-                        float distanceTo = value.distanceTo(User);
-                        float range = this.getReach();
-                        if (value instanceof FollowingStandEntity SE && (OffsetIndex.OffsetStyle(SE.getOffsetType()) == OffsetIndex.FOLLOW_STYLE
-                        || OffsetIndex.OffsetStyle(SE.getOffsetType()) == OffsetIndex.FIXED_STYLE)) {
-                            range = 0;
-                        }
-                        if ((nearestDistance < 0 || distanceTo < nearestDistance)
-                                && distanceTo <= range) {
-                            if (canActuallyHit(value) || throughWalls) {
-                                nearestDistance = distanceTo;
-                                nearestMob = value;
+                        if (!(value instanceof ArmorStand)) {
+                            float distanceTo = value.distanceTo(User);
+                            float range = this.getReach();
+                            if (value instanceof FollowingStandEntity SE && (OffsetIndex.OffsetStyle(SE.getOffsetType()) == OffsetIndex.FOLLOW_STYLE
+                                    || OffsetIndex.OffsetStyle(SE.getOffsetType()) == OffsetIndex.FIXED_STYLE)) {
+                                range = 0;
+                            }
+                            if ((nearestDistance < 0 || distanceTo < nearestDistance)
+                                    && distanceTo <= range) {
+                                if (canActuallyHit(value) || throughWalls) {
+                                    nearestDistance = distanceTo;
+                                    nearestMob = value;
+                                }
                             }
                         }
                     }
