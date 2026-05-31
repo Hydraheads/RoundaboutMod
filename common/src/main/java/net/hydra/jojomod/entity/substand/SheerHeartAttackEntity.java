@@ -6,6 +6,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.goals.TerrierBegGoal;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian.AnubisAttacks;
+import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -21,7 +22,9 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -35,11 +38,14 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.FireworkRocketItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.world.phys.Vec3;
@@ -54,9 +60,17 @@ public class SheerHeartAttackEntity extends StandEntity {
 	
 	protected static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(SheerHeartAttackEntity .class,
             EntityDataSerializers.INT);
+	protected static final EntityDataAccessor<Float> ROTATION = SynchedEntityData.defineId(SheerHeartAttackEntity.class,
+            EntityDataSerializers.FLOAT);
 	
+	@Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(ROTATION, 0.0f);
+    }
+	 
 	int tickTargetFindCount = 0;
-	static final int tickTargetFindMax = 10;
+	static final int tickTargetFindMax = 5;
 	
 	int attackTick = 0;
 	static final int attackTickMax = 8;
@@ -81,7 +95,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	
 	public static AttributeSupplier.Builder createStandAttributes() {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,
-                0.4F).add(Attributes.MAX_HEALTH, 20.0).add(Attributes.ATTACK_DAMAGE, 5.0);
+                0.5F).add(Attributes.MAX_HEALTH, 20.0).add(Attributes.ATTACK_DAMAGE, 5.0);
     }
 	
 	
@@ -110,27 +124,11 @@ public class SheerHeartAttackEntity extends StandEntity {
             		this.attackTick--;
             	}
             	
-            	
+            	this.updateRotation();
             }
             
         }
         
-        if (this.getDeltaMovement() != Vec3.ZERO) {
-    		Vec3 dir = this.getDeltaMovement().normalize();
-    		
-    		float yaw = MainUtil.getLookAtEntityYawWithAngles(Vec3.ZERO, dir);
-    		/*
-    		yaw /= 3.14;
-    		yaw *= 360.0;
-    		*/
-    		//this.setHeadRotationX((float)this.lookControl.getWantedX());
-    		/*this.setHeadRotationY(yaw);
-    		this.setBodyRotationY(yaw);*/
-    		//Roundabout.LOGGER.info("YAW: " + this.getStandRotationY());
-    		this.setYRot(yaw);
-    		//this.setBodyRotationY(yaw);
-    		//this.setHeadRotationY(yaw);
-    	}
       this.aiStep();
       this.getNavigation().tick();
       //this.moveControl.tick();
@@ -152,6 +150,176 @@ public class SheerHeartAttackEntity extends StandEntity {
     }
 	
 	
+	
+	public boolean hasTarget() {
+		
+		return this.currentTarget != NONE;
+	}
+	
+	public void updateRotation() {
+		//if (this.hasTarget()) {
+		
+		if (this.getDeltaMovement().equals(Vec3.ZERO) && this.onGround()) {
+			Vec3 dir = this.getDeltaMovement().normalize();
+			//Vec3 tPos = this.getTargetPosition();
+			//Vec3 tPos = this.getDeltaMovement();
+			//Vec3 dir = (tPos.subtract(this.position())).normalize();
+			//Vec3 result = new Vec3(this.getX(), this.getY(), this.getZ());
+			//result.add(tPos);
+			
+			float yaw = MainUtil.getLookAtEntityYawWithAngles(Vec3.ZERO, dir) + 180;
+			yaw *= Mth.DEG_TO_RAD;
+			float result = Mth.rotLerp(this.entityData.get(ROTATION), yaw, 0.5f);
+			
+			this.entityData.set(ROTATION, result);
+			
+			
+		}
+	}
+	
+	public void findTarget() {
+		List<Entity> entities = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), viewRange , viewRange , viewRange );
+		int harmest = 0;
+		double harmestDistance = -1;
+
+		Entity targetEnt = null;
+		
+		for(int j = 0;j<entities.size();j++) {
+            Entity entity = entities.get(j);
+            double dist = entity.distanceToSqr(this.position());
+            int points = 0;
+            
+            if (entity instanceof StandEntity || entity.is(this.getUser())){
+            	continue;
+            }
+            
+            
+            if (entity instanceof LivingEntity LE) {
+            	if (LE.isDeadOrDying()) { continue; }
+            	points += 20;
+            	 
+            	
+            	points += HeatUtil.getHeat(LE);
+            	
+            	if (LE.isOnFire() || LE.wasOnFire || HeatUtil.isHot(LE)) {
+            		points += 70;
+            	}
+            	if (LE.isFullyFrozen()) {
+            		points -= 80;
+            	}else if (LE.isFreezing()) {
+            		points -= 40;
+            	}
+            	MobType mobType = LE.getMobType();
+            	if (mobType.equals(MobType.UNDEAD)) {
+            		points -= 30;
+            		
+            	}else {
+            		
+            	}
+            	
+            }
+            
+            if (points <= 0) {continue; }
+            
+            if (points > harmest) {
+            	points = harmest;
+            	harmestDistance = dist;
+            	targetEnt = entity;
+            }else if (points == harmest ) {
+            	if (harmestDistance == -1 || dist < harmestDistance) {
+            		harmestDistance = dist;
+            		targetEnt = entity;
+            	}
+            }
+		}
+		
+		if (targetEnt != null) {
+			this.entityTarget = targetEnt;
+			this.currentTarget = ENTITY;
+		}else {
+			this.entityTarget = null;
+			this.currentTarget = NONE;
+		}
+	}
+	
+	public byte getTargetType() {
+		
+		return this.currentTarget;
+	}
+	
+	public Vec3 getTargetPosition() {
+		byte type = this.getTargetType();
+		
+		if (type != NONE) {
+    		Vec3 targetPos;
+	    	if (type == BLOCK) {
+	    		targetPos = this.blockTarget;
+	    	}else {
+	    		targetPos = this.entityTarget.position();
+	    	}
+	    	
+	    	return targetPos;
+		}
+		return null;
+	}
+	
+	public Vec3 getRotations() {
+		
+		
+		return new Vec3(0, this.entityData.get(ROTATION), 0);
+
+    }
+	
+	public void attack(Vec3 position) {
+		//Roundabout.LOGGER.info("LOOK BEHIND YOU!");
+		
+		this.jump(position);
+		
+		Vec3 dir = position.subtract(this.position()).normalize().scale(1.3);
+		Vec3 result = new Vec3(this.getX(), this.getY(), this.getZ()).add(dir);
+		
+		
+		DamageSource dmg = ModDamageTypes.of(this.level(), DamageTypes.PLAYER_EXPLOSION, this);;
+		
+		ExplosionUtil.explosionHurt(result, dmg, this.level(), 
+				ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionDetonateMaxDamage, 0.3f, 1.3f);
+		
+		ExplosionUtil.explodeEffects(result, this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, 0.3f, 12);
+		
+		this.attackTick = attackTickMax;
+	}
+	
+	 public void jump(Vec3 jumpT0Pos){
+	        //Vec3 location = new Vec3(this.getX(),this.getY(),this.getZ());
+	        
+	        //this.setDeltaMovement(jumpT0Pos);
+	        this.lookAt(EntityAnchorArgument.Anchor.EYES,jumpT0Pos);
+	        
+	        this.setDeltaMovement((this.getLookAngle().multiply(1.5,1.5,1.5)).add(0,0.5,0));
+	        
+
+	        
+	        
+	    }
+	
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+    	Entity entity = source.getEntity();
+    	
+    	if (this.equals(entity)) {
+    		return false;
+    	}
+    	if (entity instanceof StandEntity SE) {
+    		if (SE.getUser().equals(this.getUser())) {
+    			return false;
+    		}
+    	}
+    	
+    	return super.hurt(source, amount*0.1f);
+    }
+	
+
 	static class WarmestSeek extends TargetGoal {
 		protected final SheerHeartAttackEntity mob;
 		
@@ -229,14 +397,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 	        
 	        byte type = this.mob.getTargetType();
 	    	if (type != NONE) {
-	    		Vec3 targetPos;
-		    	if (type == BLOCK) {
-		    		targetPos = this.mob.blockTarget;
-		    	}else {
-		    		targetPos = this.mob.entityTarget.position();
-		    	}
-		    	
-		    	
+	    		Vec3 targetPos = this.mob.getTargetPosition();
+
 		    	if (!this.canAttack(targetPos)) {
 		    		this.move(targetPos);
 		    	}else {
@@ -257,107 +419,15 @@ public class SheerHeartAttackEntity extends StandEntity {
 	    }
 		
 	}
-	
-	public boolean hasTarget() {
-		
-		return this.currentTarget != NONE;
-	}
-	
-	public void findTarget() {
-		List<Entity> entities = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), viewRange , viewRange , viewRange );
-		int harmest = 0;
-		double harmestDistance = -1;
-
-		Entity targetEnt = null;
-		
-		for(int j = 0;j<entities.size();j++) {
-            Entity entity = entities.get(j);
-            double dist = entity.distanceToSqr(this.position());
-            int points = 0;
-            
-            if (entity instanceof StandEntity || entity.is(this.getUser())){
-            	continue;
-            }
-            
-            
-            if (entity instanceof LivingEntity LE) {
-            	if (LE.isDeadOrDying()) { continue; }
-            	points += 20;
-            	 
-            	
-            	points += HeatUtil.getHeat(LE);
-            	
-            	if (LE.isOnFire() || LE.wasOnFire || HeatUtil.isHot(LE)) {
-            		points += 70;
-            	}
-            	if (LE.isFullyFrozen()) {
-            		points -= 80;
-            	}else if (LE.isFreezing()) {
-            		points -= 40;
-            	}
-            	MobType mobType = LE.getMobType();
-            	if (mobType.equals(MobType.UNDEAD)) {
-            		points -= 30;
-            		
-            	}else {
-            		
-            	}
-            	
-            }
-            
-            if (points <= 0) {continue; }
-            
-            if (points > harmest) {
-            	points = harmest;
-            	harmestDistance = dist;
-            	targetEnt = entity;
-            }else if (points == harmest ) {
-            	if (harmestDistance == -1 || dist < harmestDistance) {
-            		harmestDistance = dist;
-            		targetEnt = entity;
-            	}
-            }
-		}
-		
-		if (targetEnt != null) {
-			this.entityTarget = targetEnt;
-			this.currentTarget = ENTITY;
-		}else {
-			this.entityTarget = null;
-			this.currentTarget = NONE;
-		}
-	}
-	
-	public byte getTargetType() {
-		
-		return this.currentTarget;
-	}
-	
-	public void attack(Vec3 position) {
-		//Roundabout.LOGGER.info("LOOK BEHIND YOU!");
-		
-		position = this.position();
-		
-		DamageSource dmg = ModDamageTypes.of(this.level(), DamageTypes.PLAYER_EXPLOSION, this);;
-		
-		ExplosionUtil.explosionHurt(position, dmg, this.level(), 
-				ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionDetonateMaxDamage, 0.4f, 1.5f);
-		
-		ExplosionUtil.explodeEffects(position, this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, 0.4f, 12);
-		
-		this.attackTick = attackTickMax;
-	}
-	
-	@Override
-    public boolean isPickable() { return true;}
+    
+	@Override public boolean isPickable() { return true;}
 	
 	/*
 	@Override public boolean canBeCollidedWith() { return true;}
     @Override public boolean canCollideWith(Entity $$0) { return true;}
     */
     
-    @Override
-    public boolean isPushedByFluid() { return true;}
+    @Override public boolean isPushedByFluid() { return true;}
     
     @Override
     public boolean isNoGravity() { return false;}
@@ -370,23 +440,12 @@ public class SheerHeartAttackEntity extends StandEntity {
     public boolean isAttackable() {
         return true;
     }
-
-    @Override
-    public boolean hurt(DamageSource source, float amount) {
-    	if (this.equals(source.getEntity())) {
-    		return false;
-    	}
-    	return super.hurt(source, amount*0.1f);
-    }
 	
-    @Override
-    public boolean canBeHitByProjectile() { return true;}
+    @Override public boolean canBeHitByProjectile() { return true;}
     
-    @Override
-    public boolean canBeHitByStands() { return true;}
+    @Override public boolean canBeHitByStands() { return true;}
     
-    @Override
-    public boolean mayInteract(Level $$0, BlockPos pos) { return false;}
+    @Override public boolean mayInteract(Level $$0, BlockPos pos) { return false;}
     
     @Override public boolean forceVisualRotation() { return true; }
   

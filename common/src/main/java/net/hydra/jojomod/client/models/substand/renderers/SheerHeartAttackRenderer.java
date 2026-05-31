@@ -25,6 +25,7 @@ import net.minecraft.world.entity.player.Player;
 
 
 public class SheerHeartAttackRenderer extends StandRenderer<SheerHeartAttackEntity> {
+	private static final ResourceLocation PART_4 = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/sheer_heart_attack/anime.png");
 	private static final ResourceLocation PART_4_KILLER_QUEEN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/sheer_heart_attack/anime.png");
 	
 	
@@ -34,16 +35,18 @@ public class SheerHeartAttackRenderer extends StandRenderer<SheerHeartAttackEnti
     
     @Override
     public ResourceLocation getTextureLocation(SheerHeartAttackEntity SheerHeartAttackEntity) {
-        return PART_4_KILLER_QUEEN;
+        return PART_4;
     }
     
     public void render(SheerHeartAttackEntity SheerHeartAttackEntity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
-        Player ClientPlayer = Minecraft.getInstance().player;
+        //Player ClientPlayer = Minecraft.getInstance().player;
         
-    	if (ClientUtil.canSeeStands(ClientPlayer)) {        	
+    	//if (ClientUtil.canSeeStands(ClientPlayer)) {        	
+    		this.model.setupAnim(SheerHeartAttackEntity, 1, 0.0F, 0.0F, SheerHeartAttackEntity.getYRot(), SheerHeartAttackEntity.getXRot());
+    		
     		super.render(SheerHeartAttackEntity, 0, partialTicks, matrixStack, vertexConsumerProvider, i);	
         	
-        }
+        //}
     }
     
     

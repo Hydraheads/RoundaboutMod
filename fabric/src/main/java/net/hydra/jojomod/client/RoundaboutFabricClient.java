@@ -51,6 +51,7 @@ public class RoundaboutFabricClient implements ClientModInitializer {
                 ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK,
                 ModBlocks.BLOODY_STONE_MASK_BLOCK,
                 ModBlocks.COFFIN_BLOCK,
+                //ModBlocks.CHESSBOARD_BLOCK,
                 ModBlocks.CULTIVATED_CHERRY_SAPLING,
                 ModBlocks.CULTIVATED_OAK_SAPLING,
                 ModBlocks.CULTIVATED_LOCACACA,

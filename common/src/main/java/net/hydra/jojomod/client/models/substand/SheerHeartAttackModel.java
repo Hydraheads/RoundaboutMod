@@ -2,17 +2,25 @@ package net.hydra.jojomod.client.models.substand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.stand.StandModel;
+import net.hydra.jojomod.client.models.stand.animations.RattAnimations;
 import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
+import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 
 public class SheerHeartAttackModel<T extends SheerHeartAttackEntity> extends StandModel<T> {
@@ -55,10 +63,43 @@ public class SheerHeartAttackModel<T extends SheerHeartAttackEntity> extends Sta
 	}
 
 	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		
-	}
+	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+		Minecraft mc = Minecraft.getInstance();
 
+        Vec3 rots = new Vec3(this.head.xRot,this.stand.yRot,0);
+
+        super.setupAnim(pEntity,pLimbSwing,pLimbSwingAmount,pAgeInTicks,pNetHeadYaw,pHeadPitch);
+
+        
+        if (!mc.isPaused() && !(((TimeStop) pEntity.level()).CanTimeStopEntity(pEntity.getUser())) && !(pEntity.getDeltaMovement() == Vec3.ZERO)) {
+            //Entity target = PR.getShootTarget();
+            //Vec3 v = pEntity.getTargetPosition();
+        	Vec3 v = pEntity.getRotations();
+        		
+        	Roundabout.LOGGER.info("SetupAnim called! " + v.x + " " + v.y + " " + v.z);
+            v = new Vec3( 360-(v.x-Math.PI/2+0.3F),v.y+(float)Math.PI,0);
+
+            //this.head.xRot = Mth.lerp(this.head.xRot, (float) v.x, 0.85F);
+            this.stand.yRot = Mth.lerp(this.stand.yRot, (float) v.y, 0.35F);
+            Roundabout.LOGGER.info("rotation server: " + this.stand.yRot  + " should be " + v.y);
+            
+        } else {
+        	
+            //this.head.xRot = (float)rots.x;
+            this.stand.yRot =(float)rots.y;
+        }
+        //pEntity.setHeadRotationX(this.head.xRot);
+        pEntity.setStandRotationY(this.stand.yRot);
+            
+     
+	}
+	
+	@Override
+    public ModelPart root() {
+        return stand;
+    }
+
+	
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
 		stand.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);

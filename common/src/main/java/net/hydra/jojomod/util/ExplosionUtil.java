@@ -71,8 +71,8 @@ public class ExplosionUtil {
             
             entity.hurt(dmgSource, perc*damage);
             
-            Vec3 knockback = new Vec3(entity.getX() - pos.x(), entity.getY() - pos.y(), entity.getZ() - pos.z());
-            knockback.normalize().scale(Math.min(knockBack, percKnockback*knockBack));
+            Vec3 knockbackUnhand = new Vec3(entity.getX() - pos.x(), entity.getY() - pos.y(), entity.getZ() - pos.z());
+            Vec3 knockback = knockbackUnhand.normalize().scale(Math.min(knockBack, percKnockback*knockBack));
             
             MainUtil.takeLiteralUnresistableKnockbackWithY(entity, knockback.x, knockback.y, knockback.z);
             
