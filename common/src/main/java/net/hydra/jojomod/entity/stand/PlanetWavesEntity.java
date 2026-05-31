@@ -12,7 +12,8 @@ public class PlanetWavesEntity extends FollowingStandEntity {
             PART_6_SKIN = 1,
             MANGA_SKIN = 2,
             BLUE_SKIN = 3,
-            PURPLE_SKIN = 4;
+            PURPLE_SKIN = 4,
+            GREEN_SKIN = 5;
 
 
 
