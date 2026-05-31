@@ -95,7 +95,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	
 	public static AttributeSupplier.Builder createStandAttributes() {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,
-                0.4F).add(Attributes.MAX_HEALTH, 20.0).add(Attributes.ATTACK_DAMAGE, 5.0);
+                0.5F).add(Attributes.MAX_HEALTH, 20.0).add(Attributes.ATTACK_DAMAGE, 5.0);
     }
 	
 	
@@ -157,18 +157,21 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 	
 	public void updateRotation() {
-		if (this.hasTarget()) {
-			//Vec3 dir = this.getDeltaMovement().normalize();
-			Vec3 tPos = this.getTargetPosition();
-			
-			Vec3 dir = (tPos.subtract(this.position())).normalize();
+		//if (this.hasTarget()) {
+		
+		if (this.getDeltaMovement().equals(Vec3.ZERO) && this.onGround()) {
+			Vec3 dir = this.getDeltaMovement().normalize();
+			//Vec3 tPos = this.getTargetPosition();
+			//Vec3 tPos = this.getDeltaMovement();
+			//Vec3 dir = (tPos.subtract(this.position())).normalize();
 			//Vec3 result = new Vec3(this.getX(), this.getY(), this.getZ());
 			//result.add(tPos);
 			
 			float yaw = MainUtil.getLookAtEntityYawWithAngles(Vec3.ZERO, dir) + 180;
 			yaw *= Mth.DEG_TO_RAD;
+			float result = Mth.rotLerp(this.entityData.get(ROTATION), yaw, 0.5f);
 			
-			this.entityData.set(ROTATION, yaw);
+			this.entityData.set(ROTATION, result);
 			
 			
 		}

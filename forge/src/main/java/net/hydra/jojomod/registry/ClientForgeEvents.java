@@ -176,6 +176,7 @@ public class ClientForgeEvents {
         event.registerBlockEntityRenderer(ForgeBlocks.STAND_FIRE_BLOCK_ENTITY.get(), StandFireRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.MIRROR_BLOCK_ENTITY.get(), MirrorBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.COFFIN_BLOCK_ENTITY.get(), CoffinRenderer::new);
+        //event.registerBlockEntityRenderer(ForgeBlocks.CHESSBOARD_BLOCK_ENTITY.get(), ChessBoardRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY.get(), BubbleScaffoldBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.INVISIBLE_BLOCK_ENTITY.get(), InvisiBlockEntityRenderer::new);
     }
@@ -198,7 +199,8 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.STAR_PLATINUM_LAYER, StarPlatinumModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.COFFIN_LEFT_LAYER, CoffinRenderer::createDoubleBodyLeftLayer);
         event.registerLayerDefinition(ModEntityRendererClient.COFFIN_RIGHT_LAYER, CoffinRenderer::createDoubleBodyRightLayer);
-
+        //event.registerLayerDefinition(ModEntityRendererClient.CHESSBOARD_LAYER, ChessBoardRenderer::createBodyLayer);
+        
         event.registerLayerDefinition(ModEntityRendererClient.SURVIVOR_LAYER, SurvivorModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STAR_PLATINUM_BASEBALL_LAYER, StarPlatinumBaseballModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.JUSTICE_LAYER, JusticeModel::getTexturedModelData);

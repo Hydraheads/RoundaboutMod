@@ -137,7 +137,7 @@ public class ModBlocks {
     public static Block EQUIPPABLE_STONE_MASK_BLOCK;
     public static Block BLOODY_STONE_MASK_BLOCK;
     public static Block COFFIN_BLOCK;
-    public static Block CHESSBOARD_BLOCK;
+    //public static Block CHESSBOARD_BLOCK;
 
     public static Block D4C_LIGHT_BLOCK;
 
@@ -151,7 +151,7 @@ public class ModBlocks {
     public static BlockEntityType<CoffinBlockEntity> COFFIN_BLOCK_ENTITY;
     public static BlockEntityType<FogTrapBlockEntity> FOG_TRAP_BLOCK_ENTITY;
     public static BlockEntityType<ProtectionBlockEntity> PROTECTION_BLOCK_ENTITY;
-    public static BlockEntityType<ChessBoardBlockEntity> CHESSBOARD_BLOCK_ENTITY;
+    //public static BlockEntityType<ChessBoardBlockEntity> CHESSBOARD_BLOCK_ENTITY;
     
     public static Block ANCIENT_METEOR_PROPERTIES = new AncientMeteorBlock(
             BlockBehaviour.Properties.of()
@@ -702,10 +702,10 @@ public class ModBlocks {
             DyeColor.BLACK, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(0.35F).sound(SoundType.STONE).pushReaction(PushReaction.DESTROY).lightLevel((L) -> {
                 return 1;
             }));
-    public static ChessBoardBlock CHESS_BLOCK_PROPERTIES = new ChessBoardBlock(
+    /*public static ChessBoardBlock CHESSBOARD_BLOCK_PROPERTIES = new ChessBoardBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(0.35F).sound(SoundType.WOOD).pushReaction(PushReaction.DESTROY).lightLevel((L) -> {
                 return 1;
-            }));
+            }));*/
 
     public static Block WALL_LANTERN_PROPERTIES = new LanternWallBlock(
             BlockBehaviour.Properties.of()

@@ -14,6 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoubleBlockCombiner;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
@@ -24,7 +25,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class ChessBoardBlock extends BaseEntityBlock  {
+public class ChessBoardBlock extends Block implements EntityBlock {
 	public ChessBoardBlock(Properties $$0) {
         super($$0);
     }
@@ -33,5 +34,10 @@ public class ChessBoardBlock extends BaseEntityBlock  {
     public BlockEntity newBlockEntity(BlockPos $$0, BlockState $$1) {
         return new ChessBoardBlockEntity($$0, $$1);
     }
+	
+	@Override
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+		return InteractionResult.SUCCESS;
+	}
 	
 }

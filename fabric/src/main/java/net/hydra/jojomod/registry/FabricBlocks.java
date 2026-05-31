@@ -185,6 +185,7 @@ public class FabricBlocks {
     public static final Block EQUIPPABLE_STONE_MASK = registerStoneMask("stone_mask", ModBlocks.EQUIPPABLE_STONE_MASK_PROPERTIES);
     public static final Block BLOODY_STONE_MASK = registerStoneMaskBloody("bloody_stone_mask", BLOODY_STONE_MASK_PROPERTIES);
     public static final Block COFFIN_BLOCK = registerCoffinBlock("coffin_block", COFFIN_BLOCK_PROPERTIES);
+    //public static final Block CHESSBOARD_BLOCK = registerChessBoardBlock("chessboard_block", CHESSBOARD_BLOCK_PROPERTIES);
 
 
     public static final BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY =
@@ -201,6 +202,8 @@ public class FabricBlocks {
             registerBE("fog_trap",BlockEntityType.Builder.of(FogTrapBlockEntity::new, FOG_TRAP) );
     public static final BlockEntityType<CoffinBlockEntity> COFFIN_BLOCK_ENTITY =
             registerBE("coffin_block",BlockEntityType.Builder.of(CoffinBlockEntity::new, COFFIN_BLOCK) );
+    /*public static final BlockEntityType<ChessBoardBlockEntity> CHESSBOARD_BLOCK_ENTITY =
+            registerBE("chessboard_block",BlockEntityType.Builder.of(ChessBoardBlockEntity::new, CHESSBOARD_BLOCK) );*/
 
 
     private static <T extends BlockEntity> BlockEntityType<T> registerBE(String $$0, BlockEntityType.Builder<T> $$1) {
@@ -259,6 +262,9 @@ public class FabricBlocks {
     private static Block registerCoffinBlock(String name, Block block){
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
     }
+    /*private static Block registerChessBoardBlock(String name, Block block){
+        return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
+    }*/
 
     public static void register(){
         ModBlocks.ANCIENT_METEOR = ANCIENT_METEOR;
@@ -363,6 +369,7 @@ public class FabricBlocks {
         ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK = EQUIPPABLE_STONE_MASK;
         ModBlocks.BLOODY_STONE_MASK_BLOCK = BLOODY_STONE_MASK;
         ModBlocks.COFFIN_BLOCK = COFFIN_BLOCK;
+        //ModBlocks.CHESSBOARD_BLOCK = CHESSBOARD_BLOCK;
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
