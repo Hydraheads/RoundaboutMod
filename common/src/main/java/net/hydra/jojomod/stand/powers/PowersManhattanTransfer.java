@@ -52,7 +52,51 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
     public static final byte
             MANHATTAN_DODGE = 82,
-            DEFLECT_PROJECTILE = 83;
+            DEFLECT_PROJECTILE = 83,
+
+         UNLOADED_HATTAN =84,
+         LOADED_HATTAN =85,
+         LOAD_CHECK = 86;
+
+    private byte currentHattanStatus = UNLOADED_HATTAN;
+
+    @Override
+    public void updatePowerInt(byte activePower, int data) {
+        switch (activePower) {
+            case PowersManhattanTransfer.LOAD_CHECK-> {
+                this.currentHattanStatus = (byte)data;
+                if (data == LOADED_HATTAN) {
+                    //this.setPowerNone();
+                }
+            }
+
+        }
+        super.updatePowerInt(activePower,data);
+    }
+
+    public void syncHattanStatus(byte status) {
+        this.currentHattanStatus = status;
+        this.updatePowerInt(PowersManhattanTransfer.LOAD_CHECK, status);
+        S2CPacketUtil.sendIntPowerDataPacket((Player)this.getSelf(),PowersManhattanTransfer.LOAD_CHECK, status);
+    }
+
+
+    public boolean isLoaded(){
+        if(!this.isClient()) {
+            this.currentHattanStatus = LOADED_HATTAN;
+
+            this.syncHattanStatus(LOADED_HATTAN);
+        }
+        return  true;
+    }
+
+    public boolean isNotLoaded(){
+        if(!this.isClient()) {
+            this.currentHattanStatus = UNLOADED_HATTAN;
+            this.syncHattanStatus(UNLOADED_HATTAN);
+        }
+        return  true;
+    }
 
     public boolean isStandEnabled() {
         return ClientNetworking.getAppropriateConfig().manhattanTransferSettings.enableManhattanTransfer;
@@ -313,8 +357,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
     public boolean isSoundRainInterrupted = false;
 
-    //TODO: SEND A S2C MESSAGE TO CHECK IF IT HAS AN ITEM.
-    //TODO: BECAUSE IT USES THE SERVER TO CHECK IF IT HAS AN ITEM, AND THE CLIENT TO DO THE MOVEMENT
 
     @Override
     public void tickPower() {
@@ -344,28 +386,22 @@ public class PowersManhattanTransfer extends NewDashPreset {
             }
 
             if(this.isClient()){
-                if(ME.hasItem){
-                    Roundabout.LOGGER.info("aaaaaaa");
-                } else {
-                    Roundabout.LOGGER.info("zzzzzzzz");
-                }
-            }
-
-          //  if(!this.isClient()){
                 if (!isPiloting()) {
-                  //  if (!ME.hasItem) {
+                    if (this.currentHattanStatus == UNLOADED_HATTAN) {
                         if(this.getStandEntity(this.getSelf()).isInWaterOrRain()){
                             this.getStandEntity(this.getSelf()).setDeltaMovement(this.getStandEntity(this.getSelf()).getForward().scale(0.010 * configSpeed() * extraSpeedEmergencyHattan()));
                         }
                         else{
                             this.getStandEntity(this.getSelf()).setDeltaMovement(this.getStandEntity(this.getSelf()).getForward().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan()));
                         }
-                  /*  } else {
-                        Roundabout.LOGGER.info("bbbbb");
-                        this.getStandEntity(this.getSelf()).setDeltaMovement(0, 0, 0);
-                    }*/
+                    }
                 }
-          //  }
+                if(this.currentHattanStatus == LOADED_HATTAN){
+                    ME.stopsManhattanAnimationsWhenHeldItem = true;
+                } else {
+                    ME.stopsManhattanAnimationsWhenHeldItem = false;
+                }
+            }
 
             Vec3 vec3 = new Vec3(walkingSpeed, 0, walkingSpeed);
 
@@ -460,6 +496,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
         if (entity instanceof ManhattanTransferEntity ME) {
             LivingEntity ent = getPilotingStand();
             IEntityAndData entityAndData = ((IEntityAndData) ent);
+            if(this.isClient() && this.currentHattanStatus == UNLOADED_HATTAN){
                 entity.xxa = kpi.leftImpulse;
                 entity.zza = kpi.forwardImpulse;
                 Vec3 delta = entity.getDeltaMovement();
@@ -520,6 +557,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                             }
                         }
                     }
+                }
             }
         }
     }
