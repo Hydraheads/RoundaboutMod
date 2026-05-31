@@ -1369,4 +1369,16 @@ public class PowersRatt extends NewDashPreset {
     public boolean canUseMelt() {
         return ClientNetworking.getAppropriateConfig().rattSettings.enableRattBlockMelt;
     }
+
+    @Override
+    public int getExpForLevelUp(int currentLevel){
+        int amt;
+        if (currentLevel == 1){
+            amt = 25;
+        } else {
+            amt = (100+((currentLevel-1)*50));
+        }
+        amt= (int) (amt*(getLevelMultiplier()));
+        return amt;
+    }
 }

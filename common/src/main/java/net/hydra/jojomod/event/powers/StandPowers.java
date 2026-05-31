@@ -240,6 +240,8 @@ public class StandPowers extends AbilityScapeBasis {
 
 
 
+    /**Returns if the stand should render the pilot distance hud*/
+    public boolean shouldRenderPilotingHud() {return true;}
     /**Returns if the stand is in control/pilot mode right now*/
     public boolean isPiloting(){
         return false;

@@ -2587,5 +2587,17 @@ public class PowersAnubis extends NewDashPreset {
     public Vector3f getLeapColor() {
         return new Vector3f(171F/255F,141F/255F,230F/255F);
     }
+
+    @Override
+    public int getExpForLevelUp(int currentLevel){
+        int amt;
+        if (currentLevel == 1){
+            amt = 25;
+        } else {
+            amt = (100+((currentLevel-1)*75));
+        }
+        amt= (int) (amt*(getLevelMultiplier()));
+        return amt;
+    }
 }
 
