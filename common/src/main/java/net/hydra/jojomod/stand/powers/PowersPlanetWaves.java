@@ -4,7 +4,10 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -45,6 +48,7 @@ import static net.hydra.jojomod.entity.stand.PlanetWavesEntity.MANGA_SKIN;
 import static net.hydra.jojomod.entity.stand.PlanetWavesEntity.PART_6_SKIN;
 import static net.hydra.jojomod.entity.stand.PlanetWavesEntity.BLUE_SKIN;
 import static net.hydra.jojomod.entity.stand.PlanetWavesEntity.PURPLE_SKIN;
+import static net.hydra.jojomod.entity.stand.PlanetWavesEntity.GREEN_SKIN;
 
 public class PowersPlanetWaves extends NewDashPreset {
     public PowersPlanetWaves(LivingEntity self) {super(self);}
@@ -71,15 +75,46 @@ public class PowersPlanetWaves extends NewDashPreset {
     public Component ifWipListDev(){
         return Component.literal(  "Lloyd10").withStyle(ChatFormatting.YELLOW);
     }
-
     @Override
-    public List<Byte> getSkinList() {
-        return Arrays.asList(
-                PART_6_SKIN,
-                MANGA_SKIN,
-                BLUE_SKIN,
-                PURPLE_SKIN
-        );
+    public List<Byte> getSkinList(){
+        List<Byte> $$1 = Lists.newArrayList();
+        $$1.add(PlanetWavesEntity.PART_6_SKIN);
+        $$1.add(PlanetWavesEntity.MANGA_SKIN);
+        if (this.getSelf() instanceof Player PE){
+            byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
+            ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
+            boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+            if (Level > 1 || bypass){
+                $$1.add(PlanetWavesEntity.BLUE_SKIN);
+                $$1.add(PlanetWavesEntity.PURPLE_SKIN);
+                $$1.add(PlanetWavesEntity.GREEN_SKIN);
+            }/* if (Level > 2 || bypass){
+                $$1.add(MagiciansRedEntity.OVA_SKIN);
+                $$1.add(MagiciansRedEntity.SIDEKICK);
+            } if (Level > 3 || bypass){
+                $$1.add(MagiciansRedEntity.PURPLE_SKIN);
+                $$1.add(MagiciansRedEntity.PURPLE_ABLAZE);
+            } if (Level > 4 || bypass){
+                $$1.add(MagiciansRedEntity.GREEN_SKIN);
+                $$1.add(MagiciansRedEntity.GREEN_ABLAZE);
+            } if (Level > 5 || bypass){
+                $$1.add(MagiciansRedEntity.BLUE_SKIN);
+                $$1.add(MagiciansRedEntity.BLUE_ABLAZE);
+                $$1.add(MagiciansRedEntity.BLUE_ACE_SKIN);
+                $$1.add(MagiciansRedEntity.SKELETAL);
+            } if (Level > 6 || bypass){
+                $$1.add(MagiciansRedEntity.JOJONIUM);
+                $$1.add(MagiciansRedEntity.JOJONIUM_ABLAZE);
+                $$1.add(MagiciansRedEntity.MAGMA_SKIN);
+                $$1.add(MagiciansRedEntity.DEBUT_SKIN);
+                $$1.add(MagiciansRedEntity.BETA);
+            } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
+                $$1.add(MagiciansRedEntity.DREAD_BEAST_SKIN);
+                $$1.add(MagiciansRedEntity.DREAD_SKIN);
+                $$1.add(MagiciansRedEntity.DREAD_ABLAZE);
+            }*/
+        }
+        return $$1;
     }
 
     @Override public Component getSkinName(byte skinId) {
@@ -89,6 +124,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             case MANGA_SKIN  -> {return Component.translatable("skins.roundabout.planet_waves.manga");}
             case BLUE_SKIN  -> {return Component.translatable("skins.roundabout.planet_waves.blue");}
             case PURPLE_SKIN  -> {return Component.translatable("skins.roundabout.planet_waves.purple");}
+            case GREEN_SKIN  -> {return Component.translatable("skins.roundabout.planet_waves.green");}
         }
         return Component.translatable("skins.roundabout.planet_waves.base");
 
@@ -234,7 +270,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
             targetPos = new Vec3(
                     this.self.getX(),
-                    this.self.getY() - 1.0D,
+                    this.self.getY() - 0.5D,
                     this.self.getZ()
             );
 
@@ -267,7 +303,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                 .PlanetWavesSettings.meteorshowerCooldown;
 
         this.setCooldown(PowerIndex.SKILL_1, cooldown);
-
+        System.out.println("SKILL_1 cooldown set: " + cooldown);
         S2CPacketUtil.sendCooldownSyncPacket(
                 ((ServerPlayer)this.getSelf()),
                 PowerIndex.SKILL_1,
@@ -688,6 +724,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             // case PlanetWavesEntity.GREEN_SKIN, PlanetWavesEntity.GREEN_ABLAZE -> ModParticles.GREEN_FLAME;
             // case PlanetWavesEntity.DREAD_SKIN, PlanetWavesEntity.DREAD_ABLAZE, PlanetWavesEntity.DREAD_BEAST_SKIN -> ModParticles.DREAD_FLAME;
             //case PlanetWavesEntity.JOJONIUM, PlanetWavesEntity.JOJONIUM_ABLAZE -> ModParticles.CREAM_FLAME;
+            case PlanetWavesEntity.GREEN_SKIN-> ModParticles.GREEN_FLAME;
             case PlanetWavesEntity.PURPLE_SKIN -> ModParticles.PURPLE_FLAME;
             case PlanetWavesEntity.BLUE_SKIN -> ModParticles.BLUE_FLAME;
             case PlanetWavesEntity.MANGA_SKIN -> ModParticles.CREAM_FLAME;
