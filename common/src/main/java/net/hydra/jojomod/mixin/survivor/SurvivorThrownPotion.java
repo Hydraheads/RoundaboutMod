@@ -64,7 +64,6 @@ public abstract class SurvivorThrownPotion extends ThrowableItemProjectile imple
                                  }
                              }
                     } else {
-                        Roundabout.LOGGER.info("full");
                         ItemStack ii = this.getItem();
                         if (!ii.isEmpty()) {
                             ci.cancel();
