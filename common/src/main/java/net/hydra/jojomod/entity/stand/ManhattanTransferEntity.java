@@ -230,10 +230,7 @@ public class ManhattanTransferEntity extends StandEntity {
                                     TO.discard();
                                 }
                             }
-
-                            if(this.getUserData(this.getUser()) != null && this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM){
-                                PM.isLoaded();
-                            }
+                            this.changeMovementState();
                         } else {
                             success = false;
                             if (direct instanceof AbstractArrow AA) {
@@ -461,6 +458,12 @@ public void itemEject(){
          }
      }
         return  true;
+    }
+
+    public void changeMovementState(){
+        if(this.getUserData(this.getUser()) != null && this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM){
+            PM.isLoaded();
+        }
     }
 
     @Override

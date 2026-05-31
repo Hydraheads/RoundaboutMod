@@ -157,6 +157,7 @@ public class KnifeEntity extends AbstractArrow {
                         ME.success = true;
                         ME.canAcquireHeldItem = true;
                         ME.fireTicksPrj = this.getRemainingFireTicks();
+                        ME.changeMovementState();
                         ME.setHeldItemManhattan(ii.copyAndClear());
                         this.discard();
                     }
