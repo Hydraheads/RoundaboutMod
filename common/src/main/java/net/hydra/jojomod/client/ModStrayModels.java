@@ -51,6 +51,7 @@ public class ModStrayModels {
     public static SpeedwagonFoundationHatPart SpeedwagonFoundationHatPart;
     public static BasicHatPart BasicHatPart;
     public static SpikeyHairPart SpikeyHairPart;
+    public static LucyHairPart LucyHairPart;
     public static AvdolHairPart AvdolHairPart;
     public static JosukeDecalsPart JosukeDecalsPart;
     public static TasselHatPart TasselHatPart;
