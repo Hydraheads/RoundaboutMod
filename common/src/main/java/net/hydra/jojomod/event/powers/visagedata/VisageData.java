@@ -23,7 +23,7 @@ public class VisageData {
         return new Vec3(1.0F,1.0F,1.0F);
     }
     public Vector3f scale(){
-        return new Vector3f(0.9375F, 0.9375F, 0.9375F);
+        return new Vector3f(0.8463F, 0.8463F, 0.8463F);
     }
     public Vector3f scaleHead(){
         return new Vector3f(1F, 1F, 1F);
@@ -94,6 +94,9 @@ public class VisageData {
         return false;
     }
     public boolean rendersDiegoHat(){
+        return false;
+    }
+    public boolean rendersJohnnyHat(){
         return false;
     }
     public boolean rendersSpeedwagonFoundationHat(){
