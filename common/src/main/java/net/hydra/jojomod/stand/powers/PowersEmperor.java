@@ -115,9 +115,12 @@ public class PowersEmperor extends NewDashPreset {
     public void tickPower() {
         super.tickPower();
 
-        if (shootTicks > 0) {
-            shootTicks -= getLowerTicks();
-            shootTicks = Math.max(0, shootTicks);
+        if (this.self instanceof Player PE && PE.isCreative()) {
+            setShootTicks(0);
+        } else {
+            if (getShootTicks() > 0) {
+                setShootTicks(getShootTicks() - getLowerTicks());
+            }
         }
 
         if (self.level().isClientSide) {
@@ -426,10 +429,13 @@ public class PowersEmperor extends NewDashPreset {
         return false;
     }
 
+    public boolean canShoot() {
+        return canShootBullet(getUseTicks());
+    }
+
     public boolean confirmShot(int useTicks){
-        if (canShootBullet(useTicks)){
-            //int pauseGrowthTicks = pauseTicks();
-            setShootTicks((shootTicks+useTicks));
+        if (canShootBullet(getUseTicks())){
+            setShootTicks((shootTicks+getUseTicks()));
             return true;
         }
         return false;
@@ -441,11 +447,10 @@ public class PowersEmperor extends NewDashPreset {
             return levelupDamageMod(multiplyPowerByStandConfigShooting(multiplyPowerByStandConfigMobs(3F)));
         }
     }
-
-    public int shootTicks = 1000;
+    public int shootTicks = 0;
     public int getShootTicks(){return shootTicks;}
     public void setShootTicks(int shootTicks){this.shootTicks = Mth.clamp(shootTicks,0,getMaxShootTicks());}
-    public int getMaxShootTicks(){return 1000;}
+    public int getMaxShootTicks(){return 5000;}
     public int getLowerTicks(){return ClientNetworking.getAppropriateConfig().emperorSettings.heatTickDownRate;}
 
     private float getSpeedMultiplier() {
