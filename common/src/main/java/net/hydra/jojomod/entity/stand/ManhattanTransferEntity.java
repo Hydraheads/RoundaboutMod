@@ -536,9 +536,6 @@ public void itemEject(){
 
                 }
             }
-            if(target != null){
-                System.out.println(target);
-            }
             searchTarget();
         rotationXHattan = this.getXRot();
         rotationYHattan = this.getYRot();

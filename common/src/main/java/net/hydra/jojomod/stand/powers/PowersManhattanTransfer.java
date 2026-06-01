@@ -600,7 +600,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 }
             }
         }
-        if(!this.switchShootingMode()) {
+        if(this.switchShootingMode()) {
             if (targetOther != null && ent == targetOther) {
                 if (this.isActive() && this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
                     return true;
@@ -616,12 +616,19 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public int highlightsEntityColor(Entity ent, Player player){
         if (ent instanceof ManhattanTransferEntity ME) {
             if (this.getSelf() == ME.getUser()) {
-                if (this.isHoldingSneak() && !isPiloting()) {
-                    return 12379556;
+                if (this.isHoldingSneak()/* && !isPiloting()*/) {
+                    return 65425;
                 }
             }
         }
-        return 12379456;
+        if(this.switchShootingMode()) {
+            if (targetOther != null && ent == targetOther) {
+                if (this.isActive() && this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
+                    return 3407755;
+                }
+            }
+        }
+        return 29960;
     }
 
     @Override
