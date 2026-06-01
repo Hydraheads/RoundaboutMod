@@ -1770,6 +1770,10 @@
   "idle.roundabout.anubis_3": "Back",
   "idle.roundabout.anubis_4": "None",
 
+  "idle.roundabout.century_boy1": "latched",
+  "idle.roundabout.century_boy2": "unlatched",
+  "idle.roundabout.century_boy3": "hat",
+
 
   "skins.roundabout.star_platinum.base": "Part 3",
   "skins.roundabout.star_platinum.manga": "Manga",
@@ -2014,6 +2018,21 @@
   "skins.roundabout.diver_down.treasurediver": "Treasurer",
   "skins.roundabout.diver_down.birthdaydiver": "Birthday!",
   "skins.roundabout.diver_down.firediver": "Fire Down",
+
+  "skins.roundabout.20_centuryboy.manga": "manga",
+  "skins.roundabout.20_centuryboy.bedrock": "bedrock",
+  "skins.roundabout.20_centuryboy.bee": "bee",
+  "skins.roundabout.20_centuryboy.biker": "biker",
+  "skins.roundabout.20_centuryboy.retro": "retro",
+  "skins.roundabout.20_centuryboy.gold": "gold",
+  "skins.roundabout.20_centuryboy.19th_century_boy": "19th century",
+  "skins.roundabout.20_centuryboy.shulker": "shulker",
+  "skins.roundabout.20_centuryboy.sulfur": "sulfur",
+  "skins.roundabout.20_centuryboy.lemon": "lemon",
+  "skins.roundabout.20_centuryboy.blue": "blue",
+  "skins.roundabout.20_centuryboy.grape": "grape",
+  "skins.roundabout.20_centuryboy.strawberry": "strawberry",
+  "skins.roundabout.20_centuryboy.chicken": "chicken",
 
   "skins.roundabout.manhattan_transfer.manhattan_part_6": "Anime",
   "skins.roundabout.manhattan_transfer.manhattan_manga_part_6": "Manga",
