@@ -329,6 +329,10 @@ public class ClientForgeEvents {
         ModStrayModels.WhiteAlbumBody = new WhiteAlbumBodyPart();
         ModStrayModels.WhiteAlbumLeftLeg = new WhiteAlbumLeftLegPart();
         ModStrayModels.WhiteAlbumRightLeg = new WhiteAlbumRightLegPart();
+        ModStrayModels.WhiteAlbumRightArm = new WhiteAlbumRightArmPart();
+        ModStrayModels.WhiteAlbumSlimRightArm = new WhiteAlbumSlimRightArmPart();
+        ModStrayModels.WhiteAlbumLeftArm = new WhiteAlbumLeftArmPart();
+        ModStrayModels.WhiteAlbumSlimLeftArm = new WhiteAlbumSlimLeftArmPart();
 
         ModStrayModels.VampireHairOne = new VampireHairOnePart();
         ModStrayModels.VampireHairTwo = new VampireHairTwoPart();

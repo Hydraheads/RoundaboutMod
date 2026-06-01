@@ -163,6 +163,18 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     renderWhiteAlbumLeftLegPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
                             partialTicks, path, r, g, b, 1);
 
+                    if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
+                        renderWhiteAlbumSlimRightArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                partialTicks, path, r, g, b, 1);
+                        renderWhiteAlbumSlimLeftArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                partialTicks, path, r, g, b, 1);
+                    } else {
+                        renderWhiteAlbumRightArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                partialTicks, path, r, g, b, 1);
+                        renderWhiteAlbumLeftArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                partialTicks, path, r, g, b, 1);
+                    }
+
 
                     if (visage.getItem() instanceof MaskItem MI) {
                         VisageData vd = MI.visageData.generateVisageData(entity);
@@ -617,6 +629,42 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ClientUtil.pushPoseAndCooperate(poseStack,36);
         getParentModel().leftLeg.translateAndRotate(poseStack);
         ModStrayModels.WhiteAlbumLeftLeg.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderWhiteAlbumLeftArmPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                            float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().leftArm.translateAndRotate(poseStack);
+        ModStrayModels.WhiteAlbumLeftArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderWhiteAlbumSlimLeftArmPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                            float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().leftArm.translateAndRotate(poseStack);
+        ModStrayModels.WhiteAlbumSlimLeftArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderWhiteAlbumRightArmPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                            float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().rightArm.translateAndRotate(poseStack);
+        ModStrayModels.WhiteAlbumRightArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderWhiteAlbumSlimRightArmPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                                float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().rightArm.translateAndRotate(poseStack);
+        ModStrayModels.WhiteAlbumSlimRightArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, alpha, path);
         ClientUtil.popPoseAndCooperate(poseStack,36);
     }

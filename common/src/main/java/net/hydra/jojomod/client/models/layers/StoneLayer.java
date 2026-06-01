@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.visages.mobs.JosukePartEightNPC;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -45,6 +46,11 @@ public class StoneLayer<T extends LivingEntity, M extends HumanoidModel<T>, A ex
                        float var5, float var6, float var7, float var8, float var9, float var10) {
         if (((IEntityAndData)var4).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() || ((IEntityAndData)var4).roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision() )
             return;
+
+        if (((StandUser)var4).roundabout$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet()
+        && ClientUtil.canSeeStands(ClientUtil.getPlayer())){
+            return;
+        }
 
         transformedModel = livingEntityRenderer.getModel();
         byte curse = ((StandUser)var4).roundabout$getLocacacaCurse();

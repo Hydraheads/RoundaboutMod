@@ -94,6 +94,10 @@ public class ModStrayModels {
     public static WhiteAlbumLeftLegPart WhiteAlbumLeftLeg;
     public static WhiteAlbumRightLegPart WhiteAlbumRightLeg;
 
+    public static WhiteAlbumLeftArmPart WhiteAlbumLeftArm;
+    public static WhiteAlbumRightArmPart WhiteAlbumRightArm;
+    public static WhiteAlbumSlimLeftArmPart WhiteAlbumSlimLeftArm;
+    public static WhiteAlbumSlimRightArmPart WhiteAlbumSlimRightArm;
 
     public static MoldSpineModel MoldSpine;
     public static MoldRightArm MoldRightArm;
