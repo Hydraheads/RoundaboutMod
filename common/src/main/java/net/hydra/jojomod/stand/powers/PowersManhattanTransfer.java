@@ -466,6 +466,10 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 setPowerNone();
             }
         }
+        if(this.targetOther != null && switchShootingMode()){
+            tryPower(PowersManhattanTransfer.DEFLECT_PROJECTILE, true);
+            tryPowerPacket(PowersManhattanTransfer.DEFLECT_PROJECTILE);
+        }
         StandEntity SE = this.getStandEntity(this.getSelf());
     }
     public void synchToCamera(){
