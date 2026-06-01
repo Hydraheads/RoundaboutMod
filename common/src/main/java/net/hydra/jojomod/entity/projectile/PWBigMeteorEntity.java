@@ -172,8 +172,11 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
 
     public void tickWater() {
         inWaterTicks++;
-        if (inWaterTicks > 40) {
-            this.discard();
+
+        if (inWaterTicks >= 5 && !slowing) {
+            slowing = true;
+            disintegrationSoundPlayed = false;
+            stopParticles = true;
         }
     }
 
@@ -193,7 +196,11 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
         super.tick();
 
         if (this.level().isClientSide()) return;
-
+        if (this.isEffectivelyInWater()) {
+            tickWater();
+        } else {
+            inWaterTicks = 0;
+        }
         LivingEntity user = this.standUser;
         if (user == null || !user.isAlive()) {
             this.discard();
@@ -501,7 +508,17 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
             living.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.CROSSFIRE, user), 8F);
         }
     }
+    public void forceDisintegrate() {
+        if (this.slowing) return;
 
+        this.slowing = true;
+        this.disintegrationSoundPlayed = false;
+        this.stopParticles = false;
+
+        if (this.getDeltaMovement().lengthSqr() < 0.01) {
+            this.setDeltaMovement(this.getDeltaMovement().scale(0.5));
+        }
+    }
     public void radialExplosion(Entity mainTarget) {
 
         if (processingExplosion) return;
