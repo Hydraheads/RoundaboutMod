@@ -175,7 +175,7 @@ public class EmperorBulletEntity extends AbstractArrow {
             livingOwner.setLastHurtMob(entity);
         }
 
-        this.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), ModSounds.BULLET_PENTRATION_EVENT, this.getSoundSource(), 1.0F, 1.0F);
+        this.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), ModSounds.EMPEROR_IMPACT_EVENT, this.getSoundSource(), 1.0F, 1.0F);
         this.discard();
     }
 

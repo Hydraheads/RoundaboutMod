@@ -626,6 +626,10 @@
   "sounds.roundabout.aura_impact": "Aura Impact",
   "sounds.roundabout.banish": "Banish",
 
+  "sounds.roundabout.emperor_summon": "Summon Stand",
+  "sounds.roundabout.emperor_shoot": "Shoot the emperor",
+  "sounds.roundabout.emperor_impact": "Emperor bullet impact",
+
   "sounds.roundabout.goat_dash": "Burst",
   "sounds.roundabout.zombie_charge": "Zombie Charge",
   "sounds.roundabout.goat_charge": "Goat Charge",
