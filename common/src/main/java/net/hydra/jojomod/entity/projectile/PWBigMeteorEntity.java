@@ -318,6 +318,7 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
             if (state.isAir()) continue;
 
             if (state.is(Blocks.BEDROCK)) continue;
+            if (state.is(Blocks.BARRIER)) continue;
 
             if (isProtectedBlock(state)) continue;
 
@@ -423,7 +424,10 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
                 explodeAndIgnite();
                 return;
             }
-
+            if (state.is(Blocks.BARRIER)) {
+                explodeAndIgnite();
+                return;
+            }
             // preserve ores
             if (isProtectedBlock(state)) {
                 continue;
