@@ -132,7 +132,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
         /**Making dash usable on both key presses*/
         switch (context) {
             case SKILL_1_NORMAL, SKILL_1_CROUCH-> {
-                switchShooting();
+                if (this.currentHattanStatus != LOADED_HATTAN){
+                    switchShooting();
+            }
             }
                 case SKILL_2_NORMAL, SKILL_2_CROUCH -> {
                 toggleControlModeClient();
@@ -142,7 +144,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
                     dash();
                 }
                 else{
-                    manhattanDodge();
+                    if (this.currentHattanStatus != LOADED_HATTAN){
+                        manhattanDodge();
+                    }
                 }
             }
             case SKILL_4_NORMAL, SKILL_4_CROUCH -> {
@@ -181,6 +185,12 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         if (slot == 1 && isPiloting()){
             return true;
+        }
+        if(slot == 1 &&  this.currentHattanStatus == LOADED_HATTAN){
+            return true;
+        }
+        if(slot == 3 && this.currentHattanStatus == LOADED_HATTAN && isPiloting()){
+            return  true;
         }
         return super.isAttackIneptVisually(activeP, slot);
     }
@@ -413,6 +423,10 @@ public class PowersManhattanTransfer extends NewDashPreset {
                     sealStand(true);
                 }
             }
+
+            if(this.getStandEntity(self) instanceof ManhattanTransferEntity){
+                targetOther = ME.target;
+            }
         }
         if (this.self instanceof Player PL) {
 
@@ -586,8 +600,18 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 }
             }
         }
+        if(!this.switchShootingMode()) {
+            if (targetOther != null && ent == targetOther) {
+                if (this.isActive() && this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
+
+    LivingEntity targetOther = null;
+
     @Override
     public int highlightsEntityColor(Entity ent, Player player){
         if (ent instanceof ManhattanTransferEntity ME) {
