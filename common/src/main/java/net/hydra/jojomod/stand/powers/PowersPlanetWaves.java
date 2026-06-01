@@ -274,10 +274,15 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         Vec3 spawnPos = eyePos.add(lookVec.scale(spawnDistance));
 
-        if (spawnPos.y < this.self.getY() + 5.0) {
-            spawnPos = new Vec3(spawnPos.x, this.self.getY() + 5.0, spawnPos.z);
+        if (this.self.level().dimension() != Level.END) {
+            if (spawnPos.y < this.self.getY() + 5.0) {
+                spawnPos = new Vec3(
+                        spawnPos.x,
+                        this.self.getY() + 5.0,
+                        spawnPos.z
+                );
+            }
         }
-
         Vec3 targetPos;
 
         if (instandtargeting() && standTargetPos != null) {
@@ -380,6 +385,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         if (level.isClientSide()) return;
         if (this.self.level().dimension() == Level.NETHER) return;
         if (this.onCooldown(PowerIndex.SKILL_2)) return;
+
         Vec3 eyePos = this.self.getEyePosition(1.0F);
         Vec3 lookVec = this.self.getViewVector(1.0F).normalize();
 
@@ -388,10 +394,16 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         Vec3 spawnPos = eyePos.add(lookVec.scale(spawnDistance));
 
-        if (spawnPos.y < this.self.getY() + 5.0) {
-            spawnPos = new Vec3(spawnPos.x, this.self.getY() + 5.0, spawnPos.z);
-        }
 
+        if (this.self.level().dimension() != Level.END) {
+            if (spawnPos.y < this.self.getY() + 5.0) {
+                spawnPos = new Vec3(
+                        spawnPos.x,
+                        this.self.getY() + 5.0,
+                        spawnPos.z
+                );
+            }
+        }
 
         Vec3 targetPos;
 
@@ -412,15 +424,21 @@ public class PowersPlanetWaves extends NewDashPreset {
             targetPos = this.self.getEyePosition(1.0F);
         }
 
-
         Vec3 direction = targetPos.subtract(spawnPos).normalize();
 
         PWBigMeteorEntity meteor = new PWBigMeteorEntity(this.self, level);
+
+        meteor.absMoveTo(spawnPos.x, spawnPos.y, spawnPos.z);
+
+
+        if (!level.noCollision(meteor)) {
+            return;
+        }
+
         meteor.setTargetPos(targetPos);
         meteor.setUser(this.self);
         meteor.setOwner(this.self);
 
-        meteor.absMoveTo(spawnPos.x, spawnPos.y, spawnPos.z);
         meteor.shoot(direction.x, direction.y, direction.z, 1.8F, 0.0F);
 
         level.addFreshEntity(meteor);
@@ -431,7 +449,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         this.setCooldown(PowerIndex.SKILL_2, cooldown);
 
         S2CPacketUtil.sendCooldownSyncPacket(
-                ((ServerPlayer)this.getSelf()),
+                ((ServerPlayer) this.getSelf()),
                 PowerIndex.SKILL_2,
                 cooldown
         );
