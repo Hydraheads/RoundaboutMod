@@ -70,7 +70,7 @@ public class SheerHeartAttackEntity extends StandEntity {
     }
 	 
 	int tickTargetFindCount = 0;
-	static final int tickTargetFindMax = 5;
+	static final int tickTargetFindMax = 4;
 	
 	int attackTick = 0;
 	static final int attackTickMax = 8;
@@ -124,13 +124,19 @@ public class SheerHeartAttackEntity extends StandEntity {
             		this.attackTick--;
             	}
             	
+            	/*if (this.hasTarget()) {
+            		this.lookAt(EntityAnchorArgument.Anchor.FEET,this.getTargetPosition());
+            	}*/
+            	
             	this.updateRotation();
             }
             
         }
         
       this.aiStep();
+      this.getNavigation().setCanFloat(true);;
       this.getNavigation().tick();
+      
       //this.moveControl.tick();
      
       
@@ -159,7 +165,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public void updateRotation() {
 		//if (this.hasTarget()) {
 		
-		if (this.getDeltaMovement().equals(Vec3.ZERO) && this.onGround()) {
+		if (!this.getDeltaMovement().equals(Vec3.ZERO)) {
 			Vec3 dir = this.getDeltaMovement().normalize();
 			//Vec3 tPos = this.getTargetPosition();
 			//Vec3 tPos = this.getDeltaMovement();
@@ -169,9 +175,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 			
 			float yaw = MainUtil.getLookAtEntityYawWithAngles(Vec3.ZERO, dir) + 180;
 			yaw *= Mth.DEG_TO_RAD;
-			float result = Mth.rotLerp(this.entityData.get(ROTATION), yaw, 0.5f);
+			//float result = Mth.lerp(this.entityData.get(ROTATION), yaw, 0.5f);
 			
-			this.entityData.set(ROTATION, result);
+			this.entityData.set(ROTATION, yaw);
 			
 			
 		}
@@ -277,6 +283,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		
 		Vec3 dir = position.subtract(this.position()).normalize().scale(1.3);
 		Vec3 result = new Vec3(this.getX(), this.getY(), this.getZ()).add(dir);
+		this.setDeltaMovement((dir.multiply(1.5,1.5,1.5)).add(0,0.75,0));
 		
 		
 		DamageSource dmg = ModDamageTypes.of(this.level(), DamageTypes.PLAYER_EXPLOSION, this);;
@@ -295,7 +302,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	        //this.setDeltaMovement(jumpT0Pos);
 	        this.lookAt(EntityAnchorArgument.Anchor.EYES,jumpT0Pos);
 	        
-	        this.setDeltaMovement((this.getLookAngle().multiply(1.5,1.5,1.5)).add(0,0.5,0));
+	        this.setDeltaMovement((this.getLookAngle().multiply(1.5,1.5,1.5)).add(0,0.75,0));
 	        
 
 	        

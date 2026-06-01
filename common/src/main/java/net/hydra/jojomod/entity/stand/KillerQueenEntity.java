@@ -35,7 +35,7 @@ public class KillerQueenEntity extends FollowingStandEntity {
 	        case KillerQueenEntity.TAMA -> {return Component.translatable("skins.roundabout.killer_queen.tama");}
 	        case KillerQueenEntity.MINESWEEPER -> {return Component.translatable("skins.roundabout.killer_queen.minesweeper");}
 	        case KillerQueenEntity.NOTW -> {return Component.translatable("skins.roundabout.killer_queen.notw");}
-	        case KillerQueenEntity.MEMENTO -> {return Component.translatable("skins.roundabout.killer_queen.final");}
+	        case KillerQueenEntity.MEMENTO -> {return Component.translatable("skins.roundabout.killer_queen.memento");}
 	        case KillerQueenEntity.STARDUST -> {return Component.translatable("skins.roundabout.killer_queen.stardust");}
 	    }
         return Component.translatable("skins.roundabout.killer_queen.anime");
