@@ -173,8 +173,11 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
 
     public void tickWater() {
         inWaterTicks++;
-        if (inWaterTicks > 40) {
-            this.discard();
+
+        if (inWaterTicks >= 5 && !slowing) {
+            slowing = true;
+            disintegrationSoundPlayed = false;
+            stopParticles = true;
         }
     }
     private boolean playedDisintegrationSound = false;
@@ -200,7 +203,11 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
         super.tick();
 
         if (this.level().isClientSide()) return;
-
+        if (this.isEffectivelyInWater()) {
+            tickWater();
+        } else {
+            inWaterTicks = 0;
+        }
         LivingEntity user = this.standUser;
         if (user == null || !user.isAlive()) {
             this.discard();

@@ -7,6 +7,9 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
@@ -145,7 +148,9 @@ public class PowersPlanetWaves extends NewDashPreset {
 
                 setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_METEOR_TRACKING, PowerIndex.SKILL_4_SNEAK);
         }else setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4_SNEAK);
+        if (isHoldingSneak())
 
+            setSkillIcon(context, x, y, 2, StandIcons.PLANET_WAVES_DESINTEGRATION, PowerIndex.SKILL_2_SNEAK);
     }
 
     @Override
@@ -234,6 +239,10 @@ public class PowersPlanetWaves extends NewDashPreset {
                 } else {
                     attemptMeteorNotTracking();
                 }
+                return true;
+            }
+            case PowerIndex.POWER_2_SNEAK -> { // Meteor Dissapearence
+                meteorDisappearance();
                 return true;
             }
         }
@@ -567,9 +576,25 @@ public class PowersPlanetWaves extends NewDashPreset {
 
     private void meteornottracking() {
         tracking = false;
-        if (!isClient() && this.self instanceof ServerPlayer PE) {
-            PE.displayClientMessage(Component.translatable("text.roundabout.planet_waves.meteor_tracking_message_off").withStyle(ChatFormatting.RED), true);
+
+        for (PWMeteorEntity meteor : this.self.level().getEntitiesOfClass(
+                PWMeteorEntity.class,
+                this.self.getBoundingBox().inflate(256))) {
+
+            if (meteor.getStandUser() == this.self) {
+                meteor.setTrackingUser(false);
+            }
         }
+
+        if (!isClient() && this.self instanceof ServerPlayer PE) {
+            PE.displayClientMessage(
+                    Component.translatable(
+                                    "text.roundabout.planet_waves.meteor_tracking_message_off")
+                            .withStyle(ChatFormatting.RED),
+                    true
+            );
+        }
+
         if (self instanceof ServerPlayer pl) {
             S2CPacketUtil.sendGenericIntToClientPacket(
                     pl,
@@ -577,6 +602,41 @@ public class PowersPlanetWaves extends NewDashPreset {
                     0
             );
         }
+    }
+    private void meteorDisappearance() {
+        if (this.self.level().isClientSide()) return;
+
+        Level level = this.self.level();
+
+        List<PWBigMeteorEntity> meteors = level.getEntitiesOfClass(
+                PWBigMeteorEntity.class,
+                this.self.getBoundingBox().inflate(256)
+        );
+
+        for (PWBigMeteorEntity meteor : meteors) {
+
+            if (meteor.getStandUser() == this.self) {
+
+                meteor.forceDisintegrate();
+
+                ((ServerLevel) level).sendParticles(
+                        ParticleTypes.SMOKE,
+                        meteor.getX(), meteor.getY(), meteor.getZ(),
+                        10,
+                        0.2, 0.2, 0.2,
+                        0.01
+                );
+            }
+        }
+
+        level.playSound(
+                null,
+                this.self.blockPosition(),
+                ModSounds.PLANET_WAVES_DISINTEGRATION_EVENT,
+                SoundSource.PLAYERS,
+                1.5F,
+                1.0F
+        );
     }
     @Override
     public void powerActivate(PowerContext context) {
@@ -588,7 +648,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             }
 
             // Skill 2 → Big Meteor
-            case SKILL_2_NORMAL, SKILL_2_CROUCH, SKILL_2_GUARD, SKILL_2_CROUCH_GUARD -> {
+            case SKILL_2_NORMAL, SKILL_2_GUARD, SKILL_2_CROUCH_GUARD -> {
                 this.tryPowerPacket(PowerIndex.POWER_2);
             }
 
@@ -604,6 +664,10 @@ public class PowersPlanetWaves extends NewDashPreset {
             }
             case SKILL_4_CROUCH-> {
                 this.tryPowerPacket(PowerIndex.POWER_4_SNEAK);
+
+            }
+            case SKILL_2_CROUCH-> {
+                this.tryPowerPacket(PowerIndex.POWER_2_SNEAK);
 
             }
         }
