@@ -52,7 +52,7 @@ public class EmperorBulletEntity extends AbstractArrow {
     public EmperorBulletEntity(Level $$0, LivingEntity $$1, ItemStack $$2, double p_36862_, double p_36863_, double p_36864_) {
         super(ModEntities.ROUNDABOUT_BULLET_ENTITY, p_36862_, p_36863_, p_36864_, $$0);
     }
-
+    private double baseSpeed;
     public LivingEntity standUser;
     private Vec3 startPos;
     private boolean initialized = false;
@@ -81,6 +81,7 @@ public class EmperorBulletEntity extends AbstractArrow {
 
         if (!initialized) {
             startPos = this.position();
+            baseSpeed = this.getDeltaMovement().length();
             initialized = true;
         }
 
@@ -145,9 +146,21 @@ public class EmperorBulletEntity extends AbstractArrow {
 
             float damage = getBulletDamage();
 
+            double eyeY = livingEntity.getEyeY();
+            double hitY = result.getLocation().y;
 
-            boolean didDamage = livingEntity.hurt(ModDamageTypes.of(level(), ModDamageTypes.BULLET, this, this.getOwner()), damage);
+            double diff = Math.abs(hitY - eyeY);
 
+            boolean headshot = diff < 0.3;
+
+            if (headshot) {
+                damage *= 1.5F;
+            }
+
+            boolean didDamage = livingEntity.hurt(
+                    ModDamageTypes.of(level(), ModDamageTypes.BULLET, this, this.getOwner()),
+                    damage
+            );
             if (didDamage) {
                 applyEffect(livingEntity);
             }
@@ -162,7 +175,7 @@ public class EmperorBulletEntity extends AbstractArrow {
             livingOwner.setLastHurtMob(entity);
         }
 
-        this.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), ModSounds.BULLET_PENTRATION_EVENT, this.getSoundSource(), 1.0F, 1.0F);
+        this.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), ModSounds.EMPEROR_IMPACT_EVENT, this.getSoundSource(), 1.0F, 1.0F);
         this.discard();
     }
 

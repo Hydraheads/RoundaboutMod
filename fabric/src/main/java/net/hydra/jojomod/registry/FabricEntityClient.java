@@ -319,6 +319,12 @@ public class FabricEntityClient {
         ModStrayModels.MooshroomHeadPart = new MooshroomHeadPart();
         ModStrayModels.SilverfishHeadPart = new SilverfishHeadPart();
 
+        ModStrayModels.WhiteAlbumHead = new WhiteAlbumHeadPart();
+        ModStrayModels.WhiteAlbumChest = new WhiteAlbumChestPart();
+        ModStrayModels.WhiteAlbumBody = new WhiteAlbumBodyPart();
+        ModStrayModels.WhiteAlbumLeftLeg = new WhiteAlbumLeftLegPart();
+        ModStrayModels.WhiteAlbumRightLeg = new WhiteAlbumRightLegPart();
+
         ModStrayModels.VampireHairOne = new VampireHairOnePart();
         ModStrayModels.VampireHairTwo = new VampireHairTwoPart();
         ModStrayModels.VampireHairFlesh = new VampireHairFleshBudLayer();

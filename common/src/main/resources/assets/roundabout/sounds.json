@@ -11,6 +11,24 @@
       "roundabout:summon_diver_down"
     ]
   },
+  "emperor_summon": {
+    "subtitle": "sounds.roundabout.emperor_summon",
+    "sounds": [
+      "roundabout:emperor_summon"
+    ]
+  },
+  "emperor_shoot": {
+    "subtitle": "sounds.roundabout.emperor_shoot",
+    "sounds": [
+      "roundabout:emperor_shoot"
+    ]
+  },
+  "emperor_impact": {
+    "subtitle": "sounds.roundabout.emperor_impact",
+    "sounds": [
+      "roundabout:emperor_impact"
+    ]
+  },
   "bone_chomp": {
     "subtitle": "sounds.roundabout.bone_chomp",
     "sounds": [

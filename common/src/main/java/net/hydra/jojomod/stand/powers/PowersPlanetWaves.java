@@ -222,24 +222,43 @@ public class PowersPlanetWaves extends NewDashPreset {
             }
             case PowerIndex.POWER_4 -> { // Stand Targeting or Stand Retrieving
                 if (!instandtargeting()) {
-                    standtargeting();
+                    attemptStandTargeting();
                 } else {
-                    usertargeting();
+                    attemptStandRetrieving();
                 }
                 return true;
             }
             case PowerIndex.POWER_4_SNEAK -> { // Meteor Tracking
                 if (!inmeteortracking()) {
-                    meteortracking();
+                    attemptMeteorTracking();
                 } else {
-                    meteornottracking();
+                    attemptMeteorNotTracking();
                 }
                 return true;
             }
         }
         return super.setPowerOther(move, lastMove);
     }
-
+    public void attemptStandTargeting(){
+        if(canExecuteMoveWithLevel(StandTargetingLevel())) {
+            standtargeting();
+        }
+    }
+    public void attemptStandRetrieving(){
+        if(canExecuteMoveWithLevel(StandTargetingLevel())) {
+            usertargeting();
+        }
+    }
+    public void attemptMeteorTracking(){
+        if(canExecuteMoveWithLevel(MeteorTrackingLevel())) {
+            meteortracking();
+        }
+    }
+    public void attemptMeteorNotTracking(){
+        if(canExecuteMoveWithLevel(MeteorTrackingLevel())) {
+            meteornottracking();
+        }
+    }
     private void meteorshower() {
         if (this.onCooldown(PowerIndex.SKILL_1)) return;
         if (this.self.level().dimension() == Level.NETHER) return;
@@ -303,7 +322,6 @@ public class PowersPlanetWaves extends NewDashPreset {
                 .PlanetWavesSettings.meteorshowerCooldown;
 
         this.setCooldown(PowerIndex.SKILL_1, cooldown);
-        System.out.println("SKILL_1 cooldown set: " + cooldown);
         S2CPacketUtil.sendCooldownSyncPacket(
                 ((ServerPlayer)this.getSelf()),
                 PowerIndex.SKILL_1,

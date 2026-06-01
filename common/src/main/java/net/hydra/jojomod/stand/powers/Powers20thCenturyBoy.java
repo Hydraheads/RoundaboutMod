@@ -34,6 +34,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.apache.commons.compress.utils.Lists;
 
 import java.util.Arrays;
 import java.util.List;
@@ -189,8 +190,13 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                 tryPowerPacket(PowerIndex.POWER_1);
             }
             case SKILL_2_NORMAL,SKILL_2_CROUCH -> {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
-                tryPowerPacket(PowerIndex.POWER_2);
+                if (!this.onCooldown(PowerIndex.SKILL_2)) {
+                    tryPower(PowerIndex.POWER_2, true);
+                    this.tryPowerPacket(PowerIndex.POWER_2);
+                    if (!this.invincibleState){
+                        this.setCooldown(PowerIndex.SKILL_2, 80);
+                    }
+                }
             }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 if (!invincibleState){dash();}
@@ -334,6 +340,24 @@ public class Powers20thCenturyBoy extends NewDashPreset {
 
     }
 
+    @Override
+    public Component getPosName(byte posID) {
+        switch (posID){
+            case 1 -> {return Component.translatable("idle.roundabout.century_boy2"); }
+            case 2 -> {return Component.translatable("idle.roundabout.century_boy3"); }
+        }
+        return Component.translatable("idle.roundabout.century_boy1");
+    }
+
+    @Override
+    public List<Byte> getPosList() {
+        List<Byte> listy = Lists.newArrayList();
+        listy.add((byte) 0);
+        listy.add((byte) 1);
+        listy.add((byte) 2);
+        return listy;
+    }
+
     /** sounds **/
     protected Byte getSummonSound() {return SoundIndex.SUMMON_SOUND;}
     @Override
@@ -358,7 +382,6 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             double z = this.self.getZ();
 
             if (!level.isClientSide() && level instanceof ServerLevel serverLevel) {
-                Roundabout.LOGGER.info("UAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), x, y, z,10,.2,.3, 0.3, .3);
             }
             level.playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_HIT_EVENT, SoundSource.PLAYERS, 3F, 1.0F);

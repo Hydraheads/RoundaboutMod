@@ -160,6 +160,20 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     @Override
     public int getMaxGuardPoints(){ return 15; }
+
+    @Override
+    public float getPickMiningSpeed() { return 12F;}
+    @Override
+    public float getAxeMiningSpeed() { return 8F;}
+    @Override
+    public float getSwordMiningSpeed() { return 8F;}
+    @Override
+    public float getShovelMiningSpeed() {return 8F;}
+
+    @Override public float getBarrageDamagePlayer(){ return 8; }
+    @Override public float getBarrageDamageMob(){ return 18;}
+    
+    
     
     public static final byte
 	    PART_4 = 0,
@@ -294,10 +308,13 @@ public class PowersKillerQueen extends NewPunchingStand {
 	        		}
         		}
         	}
-        	case SKILL_1_GUARD -> {
+        	case SKILL_1_CROUCH -> {
+        		
+        	}
+        	case SKILL_1_GUARD, SKILL_1_CROUCH_GUARD -> {
         		this.tryBombConfig();
         	}
-        	case SKILL_2_NORMAL -> {
+        	case SKILL_2_NORMAL, SKILL_2_GUARD -> {
         		if (!this.inBitesTheDustMode()) {
         			
 	        		if (this.currentBombStatus == BOMB_NONE) {
@@ -307,7 +324,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 	        		}
         		}
         	}
-        	case SKILL_2_CROUCH -> {
+        	case SKILL_2_CROUCH, SKILL_2_CROUCH_GUARD -> {
         		if (!this.inBitesTheDustMode()) {
         			//tryShootAirBubbleClient();
         		}
@@ -552,7 +569,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public boolean setPowerOther(int move, int lastMove) {
 
     	if (move == PowerIndex.POWER_1) {
-    		this.blockPlantBomb();
+    		return this.blockPlantBomb();
     	} else if (move == PowerIndex.POWER_4) {
     		return switchModes();
     	} else if (move == PowersKillerQueen.DEFUSE) {
@@ -567,6 +584,12 @@ public class PowersKillerQueen extends NewPunchingStand {
             return this.setPowerKickWindup();
         } else if (move == PowerIndex.SNEAK_ATTACK){
             return this.setPowerKick();
+        } else if (move == PowerIndex.EXTRA){
+            return this.fallBraceInit();
+        } else if (move == PowerIndex.FALL_BRACE_FINISH){
+            return this.fallBrace();
+        } else if (move == PowerIndex.VAULT){
+            return this.vault();
         }
     	
     	return super.setPowerOther(move,  lastMove);
@@ -717,7 +740,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
     
     public void tryBlockPlantBomb() {
-    	if (!this.onCooldown(PowerIndex.SKILL_1)) {
+    	if (!this.onCooldown(PowerIndex.SKILL_1) && this.canAttack2()) {
     		((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
         	tryPowerPacket(PowerIndex.POWER_1);
     	}
@@ -952,14 +975,14 @@ public class PowersKillerQueen extends NewPunchingStand {
             case KillerQueenEntity.TAMA -> {return Component.translatable("skins.roundabout.killer_queen.tama");}
             case KillerQueenEntity.MINESWEEPER -> {return Component.translatable("skins.roundabout.killer_queen.minesweeper");}
             case KillerQueenEntity.NOTW -> {return Component.translatable("skins.roundabout.killer_queen.notw");}
-            case KillerQueenEntity.MEMENTO -> {return Component.translatable("skins.roundabout.killer_queen.final");}
+            case KillerQueenEntity.MEMENTO -> {return Component.translatable("skins.roundabout.killer_queen.memento");}
             case KillerQueenEntity.STARDUST -> {return Component.translatable("skins.roundabout.killer_queen.stardust");}
         }
         return Component.translatable("skins.roundabout.killer_queen.anime");
     }
     
     // Explosion related stuff
-    
+    /*
     public void explodeEffects(Vec3 pos) {
     	float range = 0.6f;
     	
@@ -1026,7 +1049,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 			}
 		}
     }
-    
+    */
     public boolean explode() {
     	ClientConfig clientConfig = ConfigManager.getClientConfig();
     	int bombConf = clientConfig.dynamicSettings.KillerQueenCurrentBombConfig;

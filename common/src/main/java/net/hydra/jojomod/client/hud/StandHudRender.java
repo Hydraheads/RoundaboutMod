@@ -504,6 +504,47 @@ public class StandHudRender {
 
     }
 
+    public static void renderShootModeEmperor(
+            GuiGraphics context,
+            Minecraft client,
+            Player playerEntity,
+            int scaledWidth,
+            int scaledHeight,
+            int x,
+            PowersEmperor PE
+    ) {
+        int l = scaledHeight - 32 + 3;
+
+        int max = PE.getMaxShootTicks();
+        int current = Mth.clamp(PE.getShootTicks(), 0, max);
+
+        // background bar
+        context.blit(StandIcons.JOJO_ICONS, x, l, 0, 151, 182, 5);
+
+        if (max > 0) {
+            int fill = 182 - (int) Math.floor(((double)182 / max) * current);
+            fill = Mth.clamp(fill, 0, 182);
+
+            if (fill > 0) {
+                context.blit(StandIcons.JOJO_ICONS, x, l, 0, 156, fill, 5);
+            }
+        }
+
+        int u = 183;
+        int k = scaledWidth / 2 - 5;
+        l = scaledHeight - 31 - 5;
+
+        // IMPORTANT: fix shoot state logic (don’t rely on ticks alone)
+        if (PE.emperorZoomActive()) {
+            context.blit(StandIcons.JOJO_ICONS, k, l, u, 80, 9, 9);
+        } else if (PE.canShoot()) {
+            context.blit(StandIcons.JOJO_ICONS, k, l, u, 70, 9, 9);
+        } else {
+            context.blit(StandIcons.JOJO_ICONS, k, l, u, 90, 9, 9);
+        }
+    }
+
+
     public static void renderShootModeLightSoftAndWet(GuiGraphics context, Minecraft client, Player playerEntity,
                                                  int scaledWidth, int scaledHeight, int x,
                                                  PowersSoftAndWet PW) {
@@ -520,6 +561,36 @@ public class StandHudRender {
         } else {
             context.blit(StandIcons.JOJO_ICONS, k, l, u, 90, 9, 9);
         }
+    }
+
+    public static void renderShootModeLightEmperor(
+            GuiGraphics context,
+            Minecraft minecraft,
+            Player player,
+            int scaledWidth,
+            int scaledHeight,
+            int x,
+            PowersEmperor PE
+    ) {
+
+        int k = scaledWidth / 2 + 91;
+        int l = scaledHeight - 32 + 3;
+
+        int u = 0;
+
+        if (PE.canShoot()) {
+            u = 9;
+        }
+
+        context.blit(
+                StandIcons.JOJO_ICONS_2,
+                k,
+                l,
+                u,
+                180,
+                9,
+                9
+        );
     }
 
     private static final ResourceLocation FIRE_0 =

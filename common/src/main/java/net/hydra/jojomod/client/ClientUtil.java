@@ -243,6 +243,7 @@ public class ClientUtil {
         }
         return false;
     }
+
     public static int getFrozenLevel(){
         return frozenLevel;
     }
