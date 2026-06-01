@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.blocks;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.CoffinBlock;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceKey;
@@ -26,7 +27,7 @@ import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
-@Mixin(ServerLevel.class)
+@Mixin(value = ServerLevel.class, priority = 99)
 public abstract class CoffinSetTimeToNightMixin extends Level {
 
     @Shadow
@@ -64,17 +65,14 @@ public abstract class CoffinSetTimeToNightMixin extends Level {
         int sleepPercentage = this.getGameRules().getInt(GameRules.RULE_PLAYERS_SLEEPING_PERCENTAGE);
         int amountRequiredToSleep = Math.max(1, Mth.ceil((float)(activePlayers.size() * sleepPercentage) / 100.0F));
 
-        long dayTime = level.getDayTime() % 24000L;
-        boolean isThundering = level.isThundering();
-
         coffinSleepDelayTicks++;
         if (coffinSleepDelayTicks < TIMER_CAP) return;
 
-        if (dayTime < 13000L) {
+        if (isDay() || isThundering()) {
             if (coffinSleepers.size() >= amountRequiredToSleep) {
                 if (this.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
-                    long timeToNight = 13000L - dayTime;
-                    level.setDayTime(level.getDayTime() + timeToNight);
+                    long $$3 = this.levelData.getDayTime() + 24000L;
+                    level.setDayTime($$3 - $$3 % 24000L + 13000L);
                 }
 
                 for (ServerPlayer player : coffinSleepers) {

@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
 
-@Mixin(ForgeEventFactory.class)
+@Mixin(value = ForgeEventFactory.class, priority = 99)
 public abstract class ForgeCoffinSleepAtDayMixin {
 
     @Inject(method = "fireSleepingTimeCheck(Lnet/minecraft/world/entity/player/Player;Ljava/util/Optional;)Z", at = @At(value = "HEAD"), cancellable = true, remap = false)
