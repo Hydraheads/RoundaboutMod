@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.projectile.IronBallEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
@@ -42,6 +43,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -539,9 +541,22 @@ public abstract class EntityAndData implements IEntityAndData {
                     }
                     if(stand instanceof ManhattanTransferEntity ME){
                         if(!ME.getHeldItemManhattan().isEmpty()){
-                            ME.shootHattan();
-                            ME.hasItem = false;
-                            ME.setHeldItemManhattan(ItemStack.EMPTY);
+                            if(ME.canAcquireHeldItem) {
+                                double $$3 = stand.getEyeY() - 0.3F;
+                                ItemEntity $$4 = new ItemEntity(this.level(), stand.getX(), $$3, stand.getZ(), ME.getHeldItemManhattan().copy());
+                                $$4.setPickUpDelay(40);
+                                $$4.setThrower(stand.getUUID());
+                                this.level().addFreshEntity($$4);
+                                ME.setHeldItemManhattan(ItemStack.EMPTY);
+                            } else if (ME.getHeldItemManhattan().is(Items.IRON_INGOT)) {
+                                double $$3 = ME.getEyeY() - 0.3F;
+                                IronBallEntity $$7 = new IronBallEntity(ME.level(), ME, ME.getHeldItemManhattan());
+                                $$7.shootFromRotation(ME, ME.getXRot(), ME.getYRot(), -3.0F, 0.025F, 0.0F);
+                                $$7.setPos(ME.position());
+                                $$7.setOwner(ME.getUser());
+                                ME.level().addFreshEntity($$7);
+                                ME.setHeldItemManhattan(ItemStack.EMPTY);
+                            }
                         }
                     }
                 }

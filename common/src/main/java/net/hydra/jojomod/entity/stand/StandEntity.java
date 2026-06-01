@@ -725,10 +725,25 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                         this.setHeldItem(ItemStack.EMPTY);
                     }
                 }
-                else if(this instanceof ManhattanTransferEntity ME){
-                    ME.shootHattan();
-                    ME.hasItem = false;
-                    ME.setHeldItemManhattan(ItemStack.EMPTY);
+                else if(this instanceof ManhattanTransferEntity ME) {
+                    if (!ME.getHeldItemManhattan().isEmpty()) {
+                        if (ME.canAcquireHeldItem) {
+                            double $$3 = this.getEyeY() - 0.3F;
+                            ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), ME.getHeldItemManhattan());
+                            $$4.setPickUpDelay(40);
+                            $$4.setThrower(this.getUUID());
+                            this.level().addFreshEntity($$4);
+                            ((ManhattanTransferEntity) this).setHeldItemManhattan(ItemStack.EMPTY);
+                        } else if (ME.getHeldItemManhattan().is(Items.IRON_INGOT)) {
+                            double $$3 = ME.getEyeY() - 0.3F;
+                            IronBallEntity $$7 = new IronBallEntity(ME.level(), ME, ME.getHeldItemManhattan());
+                            $$7.shootFromRotation(ME, ME.getXRot(), ME.getYRot(), -3.0F, 0.025F, 0.0F);
+                            $$7.setPos(ME.position());
+                            $$7.setOwner(ME.getUser());
+                            ME.level().addFreshEntity($$7);
+                            ME.setHeldItemManhattan(ItemStack.EMPTY);
+                        }
+                    }
                 }
             }
         }
