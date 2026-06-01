@@ -212,6 +212,16 @@ public class ModSounds {
     public static final ResourceLocation CREAM_VOID_ATTACK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CREAM_VOID_ATTACK);
     public static SoundEvent CREAM_VOID_ATTACK_EVENT = SoundEvent.createVariableRangeEvent(CREAM_VOID_ATTACK_ID);
 
+    public static final String EMPEROR_SUMMON = "emperor_summon";
+    public static final ResourceLocation EMPEROR_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EMPEROR_SUMMON);
+    public static SoundEvent EMPEROR_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(EMPEROR_SUMMON_ID);
+    public static final String EMPEROR_SHOOT = "emperor_shoot";
+    public static final ResourceLocation EMPEROR_SHOOT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EMPEROR_SHOOT);
+    public static SoundEvent EMPEROR_SHOOT_EVENT = SoundEvent.createVariableRangeEvent(EMPEROR_SHOOT_ID);
+    public static final String EMPEROR_IMPACT = "emperor_impact";
+    public static final ResourceLocation EMPEROR_IMPACT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EMPEROR_IMPACT);
+    public static SoundEvent EMPEROR_IMPACT_EVENT = SoundEvent.createVariableRangeEvent(EMPEROR_IMPACT_ID);
+
     public static final String MANHATTAN_SUMMON = "manhattan_summoning";
     public static final ResourceLocation MANHATTAN_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+MANHATTAN_SUMMON);
     public static SoundEvent MANHATTAN_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(MANHATTAN_SUMMON_ID);

@@ -937,9 +937,9 @@ public class Config implements Cloneable {
         public Boolean enableEmperor;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer emperorShootingModePower;
-        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 0, min = 0, max = 72000)
         public Integer heatGainedPerShot;
-        @IntOption(group = "inherit", value = 3, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer heatTickDownRate;
         @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
         public Integer bulletShootSpeedMultiplier;

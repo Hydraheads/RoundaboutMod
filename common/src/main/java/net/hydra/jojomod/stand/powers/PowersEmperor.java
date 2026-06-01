@@ -8,6 +8,7 @@ import net.hydra.jojomod.entity.projectile.EmperorBulletEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
@@ -18,6 +19,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -115,9 +117,12 @@ public class PowersEmperor extends NewDashPreset {
     public void tickPower() {
         super.tickPower();
 
-        if (shootTicks > 0) {
-            shootTicks -= getLowerTicks();
-            shootTicks = Math.max(0, shootTicks);
+        if (this.self instanceof Player PE && PE.isCreative()) {
+            setShootTicks(0);
+        } else {
+            if (getShootTicks() > 0) {
+                setShootTicks(getShootTicks() - getLowerTicks());
+            }
         }
 
         if (self.level().isClientSide) {
@@ -131,7 +136,7 @@ public class PowersEmperor extends NewDashPreset {
 
             if (holdingRightClick) {
                 self.setDeltaMovement(
-                        self.getDeltaMovement().multiply(0.6D, 1.0D, 0.85D)
+                        self.getDeltaMovement().multiply(0.4D, 1.0D, 0.65D)
                 );
             }
         }
@@ -426,10 +431,13 @@ public class PowersEmperor extends NewDashPreset {
         return false;
     }
 
+    public boolean canShoot() {
+        return canShootBullet(getUseTicks());
+    }
+
     public boolean confirmShot(int useTicks){
-        if (canShootBullet(useTicks)){
-            //int pauseGrowthTicks = pauseTicks();
-            setShootTicks((shootTicks+useTicks));
+        if (canShootBullet(getUseTicks())){
+            setShootTicks((shootTicks+getUseTicks()));
             return true;
         }
         return false;
@@ -441,11 +449,10 @@ public class PowersEmperor extends NewDashPreset {
             return levelupDamageMod(multiplyPowerByStandConfigShooting(multiplyPowerByStandConfigMobs(3F)));
         }
     }
-
-    public int shootTicks = 1000;
+    public int shootTicks = 0;
     public int getShootTicks(){return shootTicks;}
     public void setShootTicks(int shootTicks){this.shootTicks = Mth.clamp(shootTicks,0,getMaxShootTicks());}
-    public int getMaxShootTicks(){return 1000;}
+    public int getMaxShootTicks(){return 5000;}
     public int getLowerTicks(){return ClientNetworking.getAppropriateConfig().emperorSettings.heatTickDownRate;}
 
     private float getSpeedMultiplier() {
@@ -460,6 +467,19 @@ public class PowersEmperor extends NewDashPreset {
 
             default -> 1.0F;
         };
+    }
+
+    @Override
+    protected Byte getSummonSound() {
+        return SoundIndex.SUMMON_SOUND;
+    }
+
+    @Override
+    public SoundEvent getSoundFromByte(byte soundChoice){
+        if (soundChoice == SoundIndex.SUMMON_SOUND) {
+            return ModSounds.EMPEROR_SUMMON_EVENT;
+        }
+        return super.getSoundFromByte(soundChoice);
     }
 
     public float getBulletSpeed() {
@@ -532,7 +552,7 @@ public class PowersEmperor extends NewDashPreset {
         this.self.level().playSound(
                 null,
                 this.self.blockPosition(),
-                ModSounds.EXPLOSIVE_BUBBLE_SHOT_EVENT,
+                ModSounds.EMPEROR_SHOOT_EVENT,
                 SoundSource.PLAYERS,
                 2F,
                 (float) (0.98 + (Math.random() * 0.04))

@@ -275,6 +275,14 @@ public abstract class HudRendering implements IHudAccess {
         RenderSystem.enableBlend();
     }
 
+    @Inject(method = "renderTextureOverlay", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$renderOverlaysHttan(GuiGraphics $$0, ResourceLocation $$1, float $$2, CallbackInfo info) {
+        if (((StandUser) this.minecraft.player ).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+            if (PM.isPiloting()) {
+                info.cancel();
+            }
+        }
+    }
 
     private void roundabout$renderTextureOverlay(GuiGraphics $$0, ResourceLocation $$1, float opacity, float r, float g, float b) {
         RenderSystem.disableDepthTest();
@@ -577,13 +585,21 @@ public abstract class HudRendering implements IHudAccess {
         if (minecraft.player != null && minecraft.level != null) {
 
             StandUser user = ((StandUser) minecraft.player);
-            FatePowers fate = ((IFatePlayer)minecraft.player).rdbt$getFatePowers();
-            GeneralPowers powers = ((IPowersPlayer)minecraft.player).rdbt$getPowers();
+            FatePowers fate = ((IFatePlayer) minecraft.player).rdbt$getFatePowers();
+            GeneralPowers powers = ((IPowersPlayer) minecraft.player).rdbt$getPowers();
 
             boolean removeNum = false;
             boolean showComboAmt = false;
-                    boolean displayCombatTicks = (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && !user.roundabout$getEffectiveCombatMode() && PowerTypes.hasStandActivelyEquipped(minecraft.player) &&
-                            (PW.getShootTicks() > 0));
+            boolean displayCombatTicks =
+                    (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW &&
+                            !user.roundabout$getEffectiveCombatMode() &&
+                            PowerTypes.hasStandActivelyEquipped(minecraft.player) &&
+                            (PW.getShootTicks() > 0))
+
+                            ||
+
+                            (user.roundabout$getStandPowers() instanceof PowersEmperor &&
+                                    PowerTypes.hasStandActivelyEquipped(minecraft.player));
             if (displayCombatTicks) {
                 removeNum = true;
             } else {
@@ -658,7 +674,26 @@ public abstract class HudRendering implements IHudAccess {
                 if (removeNum){
                     if (displayCombatTicks){
                         if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
-                            StandHudRender.renderShootModeLightSoftAndWet(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PW);
+                            StandHudRender.renderShootModeLightSoftAndWet(
+                                    context,
+                                    minecraft,
+                                    this.getCameraPlayer(),
+                                    screenWidth,
+                                    screenHeight,
+                                    x,
+                                    PW
+                            );
+                        } else if (user.roundabout$getStandPowers() instanceof PowersEmperor PE) {
+
+                            StandHudRender.renderShootModeEmperor(
+                                    context,
+                                    minecraft,
+                                    this.getCameraPlayer(),
+                                    screenWidth,
+                                    screenHeight,
+                                    x,
+                                    PE
+                            );
                         }
                     } else if (showComboAmt){
                         if (powers instanceof PunchingGeneralPowers pgp) {
@@ -692,18 +727,60 @@ public abstract class HudRendering implements IHudAccess {
                 return true;
             } else if (((IPlayerEntity)minecraft.player).roundabout$getDisplayExp() && user.roundabout$hasAStand()){
 
-                StandHudRender.renderExpHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha,removeNum);
-                if (displayCombatTicks){
-                    if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
-                        StandHudRender.renderShootModeLightSoftAndWet(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PW);
+                StandHudRender.renderExpHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, removeNum);
+                if (displayCombatTicks) {
+
+                    if (displayCombatTicks) {
+
+                        if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
+                            StandHudRender.renderShootModeLightSoftAndWet(
+                                    context,
+                                    minecraft,
+                                    this.getCameraPlayer(),
+                                    screenWidth,
+                                    screenHeight,
+                                    x,
+                                    PW
+                            );
+                        } else if (user.roundabout$getStandPowers() instanceof PowersEmperor PE) {
+
+                            StandHudRender.renderShootModeEmperor(
+                                    context,
+                                    minecraft,
+                                    this.getCameraPlayer(),
+                                    screenWidth,
+                                    screenHeight,
+                                    x,
+                                    PE
+                            );
+                        }
                     }
                 }
                 return true;
-            } else if (removeNum){
-                StandHudRender.renderExperienceBar(minecraft,screenWidth, screenHeight,context);
-                if (displayCombatTicks){
+            } else if (removeNum) {
+                StandHudRender.renderExperienceBar(minecraft, screenWidth, screenHeight, context);
+                if (displayCombatTicks) {
                     if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
-                        StandHudRender.renderShootModeLightSoftAndWet(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PW);
+                        StandHudRender.renderShootModeLightSoftAndWet(
+                                context,
+                                minecraft,
+                                this.getCameraPlayer(),
+                                screenWidth,
+                                screenHeight,
+                                x,
+                                PW
+                        );
+                    } else if (user.roundabout$getStandPowers() instanceof PowersEmperor PE) {
+
+                        StandHudRender.renderShootModeEmperor(
+                                context,
+                                minecraft,
+                                this.getCameraPlayer(),
+                                screenWidth,
+                                screenHeight,
+                                x,
+                                PE
+                        );
                     }
                 } else if (showComboAmt){
                     if (((IPowersPlayer)minecraft.player).rdbt$getPowers() instanceof PunchingGeneralPowers pgp) {

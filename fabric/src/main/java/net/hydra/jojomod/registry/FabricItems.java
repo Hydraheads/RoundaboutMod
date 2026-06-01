@@ -244,6 +244,8 @@ public class FabricItems {
 
     public static Item COFFIN_BLOCK_ITEM = registerItem("coffin_block",
             new CoffinBlockItem(DyeColor.BLACK, FabricBlocks.COFFIN_BLOCK, new Item.Properties().stacksTo(1)));
+    /*public static Item CHESSBOARD_BLOCK_ITEM = registerItem("chessboard_block",
+            new ChessBoardBlockItem(FabricBlocks.CHESSBOARD_BLOCK, new Item.Properties().stacksTo(1)));*/
 
 
     public static Item CAT_REMAINS = registerItem("cat_remains", new HeadRemainsItem(new Item.Properties().stacksTo(64)));
@@ -560,7 +562,7 @@ public class FabricItems {
             FabricItemGroup.builder().title(Component.translatable("itemgroup.jojo_wip_features"))
                     .icon(() -> new ItemStack(AJA)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here
-
+                    	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_20_CENTURY_BOY);
@@ -709,7 +711,7 @@ public class FabricItems {
         ModItems.METEORITE_INGOT = METEORITE_INGOT;
         ModItems.IRON_BALL_CROSSBOW = IRON_BALL_CROSSBOW;
         ModItems.LOCACACA_PIT = LOCACACA_PIT;
-
+        
 
         ((StreetSignBlock)FabricBlocks.STREET_SIGN_DIO).referenceItem = STREET_SIGN_DIO_BLOCK_ITEM.getDefaultInstance();
         ((StreetSignBlock)FabricBlocks.STREET_SIGN_RIGHT).referenceItem = STREET_SIGN_RIGHT_BLOCK_ITEM.getDefaultInstance();

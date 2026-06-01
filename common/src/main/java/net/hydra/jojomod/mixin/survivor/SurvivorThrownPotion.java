@@ -46,7 +46,6 @@ public abstract class SurvivorThrownPotion extends ThrowableItemProjectile imple
                     return;
                 } else if(LE instanceof ManhattanTransferEntity ME) {
                     if ((this.getOwner().is(ME.getUser()) && !ME.canOthersLoadMT || ME.canOthersLoadMT) && !ME.hasItem) {
-                        Roundabout.LOGGER.info("empty");
                              ItemStack ii = this.getItem();
                              if (!ii.isEmpty()) {
                                  ci.cancel();
@@ -60,11 +59,11 @@ public abstract class SurvivorThrownPotion extends ThrowableItemProjectile imple
                                          ME.hasItemTwo = false;
                                      }
                                      ME.hasItem = true;
+                                     ME.changeMovementState();
                                      this.discard();
                                  }
                              }
                     } else {
-                        Roundabout.LOGGER.info("full");
                         ItemStack ii = this.getItem();
                         if (!ii.isEmpty()) {
                             ci.cancel();

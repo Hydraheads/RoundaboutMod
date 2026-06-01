@@ -1,7 +1,6 @@
 package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -9,18 +8,15 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
-import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.mixin.EntityAndData;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -28,24 +24,16 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.*;
@@ -56,9 +44,6 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-
-import static net.hydra.jojomod.client.ClientUtil.playSound;
 import static net.hydra.jojomod.event.index.SoundIndex.MANHATTAN_RAIN;
 
 public class PowersManhattanTransfer extends NewDashPreset {
@@ -66,10 +51,52 @@ public class PowersManhattanTransfer extends NewDashPreset {
         super(self);
     }
     public static final byte
-            MANHATTAN_VISION = 82,
-            MANHATTAN_DODGE = 83,
-            DEFLECT_PROJECTILE = 84,
-            MANHATTAN_IN_RAIN = 85;
+            MANHATTAN_DODGE = 82,
+            DEFLECT_PROJECTILE = 83,
+
+         UNLOADED_HATTAN =84,
+         LOADED_HATTAN =85,
+         LOAD_CHECK = 86;
+
+    private byte currentHattanStatus = UNLOADED_HATTAN;
+
+    @Override
+    public void updatePowerInt(byte activePower, int data) {
+        switch (activePower) {
+            case PowersManhattanTransfer.LOAD_CHECK-> {
+                this.currentHattanStatus = (byte)data;
+                if (data == LOADED_HATTAN) {
+                    //this.setPowerNone();
+                }
+            }
+
+        }
+        super.updatePowerInt(activePower,data);
+    }
+
+    public void syncHattanStatus(byte status) {
+        this.currentHattanStatus = status;
+        this.updatePowerInt(PowersManhattanTransfer.LOAD_CHECK, status);
+        S2CPacketUtil.sendIntPowerDataPacket((Player)this.getSelf(),PowersManhattanTransfer.LOAD_CHECK, status);
+    }
+
+
+    public boolean isLoaded(){
+        if(!this.isClient()) {
+            this.currentHattanStatus = LOADED_HATTAN;
+
+            this.syncHattanStatus(LOADED_HATTAN);
+        }
+        return  true;
+    }
+
+    public boolean isNotLoaded(){
+        if(!this.isClient()) {
+            this.currentHattanStatus = UNLOADED_HATTAN;
+            this.syncHattanStatus(UNLOADED_HATTAN);
+        }
+        return  true;
+    }
 
     public boolean isStandEnabled() {
         return ClientNetworking.getAppropriateConfig().manhattanTransferSettings.enableManhattanTransfer;
@@ -137,8 +164,10 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
 
     public void switchShooting(){
-        this.tryPower(PowerIndex.POWER_1, true);
-        tryPowerPacket(PowerIndex.POWER_1);
+        if(!isPiloting()) {
+            this.tryPower(PowerIndex.POWER_1, true);
+            tryPowerPacket(PowerIndex.POWER_1);
+        }
     }
 
     public boolean switchShootingOther(){
@@ -150,6 +179,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
+        if (slot == 1 && isPiloting()){
+            return true;
+        }
         return super.isAttackIneptVisually(activeP, slot);
     }
 
@@ -325,6 +357,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
     public boolean isSoundRainInterrupted = false;
 
+
     @Override
     public void tickPower() {
         super.tickPower();
@@ -346,16 +379,32 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 ME.setDodgeRainTicks(0);
                 ((StandUser) ME).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 100, false);
             }
-        }
-        if (this.getStandEntity(this.getSelf()) != null) {
-            Vec3 vec3 = new Vec3(walkingSpeed, 0, walkingSpeed);
-            if (!isPiloting()) {
-                if(this.getStandEntity(this.getSelf()).isInWaterOrRain()){
-                    this.getStandEntity(this.getSelf()).setDeltaMovement(this.getStandEntity(this.getSelf()).getForward().scale(0.010 * configSpeed() * extraSpeedEmergencyHattan()));
+
+            if (!hasStandActive(this.getSelf())) {
+                ME.hasItem = false;
+                ME.hasItemTwo = false;
+            }
+
+            if(this.isClient()){
+                if (!isPiloting()) {
+                    if (this.currentHattanStatus == UNLOADED_HATTAN) {
+                        if(this.getStandEntity(this.getSelf()).isInWaterOrRain()){
+                            this.getStandEntity(this.getSelf()).setDeltaMovement(this.getStandEntity(this.getSelf()).getForward().scale(0.010 * configSpeed() * extraSpeedEmergencyHattan()));
+                        }
+                        else{
+                            this.getStandEntity(this.getSelf()).setDeltaMovement(this.getStandEntity(this.getSelf()).getForward().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan()));
+                        }
+                    }
                 }
-                else{
-                this.getStandEntity(this.getSelf()).setDeltaMovement(this.getStandEntity(this.getSelf()).getForward().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan()));
-            }}
+                if(this.currentHattanStatus == LOADED_HATTAN){
+                    ME.stopsManhattanAnimationsWhenHeldItem = true;
+                } else {
+                    ME.stopsManhattanAnimationsWhenHeldItem = false;
+                }
+            }
+
+            Vec3 vec3 = new Vec3(walkingSpeed, 0, walkingSpeed);
+
             if (isActive()) {
                 DimensionType t = this.getStandEntity(this.getSelf()).level().dimensionType();
                 DimensionType T = this.getSelf().level().dimensionType();
@@ -447,25 +496,26 @@ public class PowersManhattanTransfer extends NewDashPreset {
         if (entity instanceof ManhattanTransferEntity ME) {
             LivingEntity ent = getPilotingStand();
             IEntityAndData entityAndData = ((IEntityAndData) ent);
-            entity.xxa = kpi.leftImpulse;
-            entity.zza = kpi.forwardImpulse;
-            Vec3 delta = entity.getDeltaMovement();
-            if (kpi.shiftKeyDown) {
-                $$13--;
-            }
-            if (kpi.jumping) {
-                $$13++;
-            }
-            if (ent != null) {
-                Entity TE = MainUtil.getTargetEntity(ent, 300, 10);
-                if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible()) {
+            if(this.isClient() && this.currentHattanStatus == UNLOADED_HATTAN){
+                entity.xxa = kpi.leftImpulse;
+                entity.zza = kpi.forwardImpulse;
+                Vec3 delta = entity.getDeltaMovement();
+                if (kpi.shiftKeyDown) {
+                    $$13--;
+                }
+                if (kpi.jumping) {
+                    $$13++;
+                }
+                if (ent != null) {
+                    Entity TE = MainUtil.getTargetEntity(ent, 300, 10);
+                    if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible()) {
                         if (ME.isInRain()) {
                             if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
                                 entity.setDeltaMovement(entity.getForward());
                                 entity.setDeltaMovement(entity.getForward().scale(0.04 * configSpeed() * extraSpeedEmergencyHattan()));
                             } else {
                                 if ($$13 != 0) {
-                                    entity.setDeltaMovement(delta.x / 1.4, $$13 * flyingSpeed * 2.5F, delta.z / 1.4);
+                                    entity.setDeltaMovement(delta.x / 1.4, $$13 * flyingSpeed * 2.5F * extraSpeedEmergencyHattan(), delta.z / 1.4);
                                 } else {
                                     entity.setDeltaMovement(delta.x / 1.4, 0, delta.z / 1.4);
                                 }
@@ -476,21 +526,20 @@ public class PowersManhattanTransfer extends NewDashPreset {
                                 entity.setDeltaMovement(entity.getForward().scale(0.06 * configSpeed() * extraSpeedEmergencyHattan()));
                             } else {
                                 if ($$13 != 0) {
-                                    entity.setDeltaMovement(delta.x / 1.1, $$13 * flyingSpeed * 3F, delta.z / 1.1);
+                                    entity.setDeltaMovement(delta.x / 1.1, $$13 * flyingSpeed * 3F * extraSpeedEmergencyHattan(), delta.z / 1.1);
                                 } else {
                                     entity.setDeltaMovement(delta.x / 1.1, 0, delta.z / 1.1);
                                 }
                             }
                         }
-                }
-                else {
+                    } else {
                         if (!ME.isInRain()) {
                             if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
                                 entity.setDeltaMovement(entity.getForward());
                                 entity.setDeltaMovement(entity.getForward().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan()));
                             } else {
                                 if ($$13 != 0) {
-                                    entity.setDeltaMovement(delta.x / 1.6, $$13 * flyingSpeed * 2.7F, delta.z / 1.6);
+                                    entity.setDeltaMovement(delta.x / 1.6, $$13 * flyingSpeed * 2.7F * extraSpeedEmergencyHattan(), delta.z / 1.6);
                                 } else {
                                     entity.setDeltaMovement(delta.x / 1.6, 0, delta.z / 1.6);
                                 }
@@ -501,13 +550,14 @@ public class PowersManhattanTransfer extends NewDashPreset {
                                 entity.setDeltaMovement(entity.getForward().scale(0.012 * configSpeed() * extraSpeedEmergencyHattan()));
                             } else {
                                 if ($$13 != 0) {
-                                    entity.setDeltaMovement(delta.x / 2.2, $$13 * flyingSpeed * 2F, delta.z / 2.2);
+                                    entity.setDeltaMovement(delta.x / 2.2, $$13 * flyingSpeed * 2F * extraSpeedEmergencyHattan(), delta.z / 2.2);
                                 } else {
                                     entity.setDeltaMovement(delta.x / 2.2, 0, delta.z / 2.2);
                                 }
                             }
                         }
                     }
+                }
             }
         }
     }

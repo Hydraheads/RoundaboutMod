@@ -1,47 +1,22 @@
 package net.hydra.jojomod.entity.stand;
 
-import com.mojang.authlib.minecraft.client.MinecraftClient;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.*;
-import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.OffsetIndex;
-import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.*;
-import net.hydra.jojomod.mixin.access.AccessAbstractArrow;
-import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
-import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.C2SPacketUtil;
-import net.hydra.jojomod.util.MainUtil;
-import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
-import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -57,15 +32,8 @@ import net.minecraft.world.entity.*;
 import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import org.apache.commons.compress.archivers.sevenz.CLI;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 public class ManhattanTransferEntity extends StandEntity {
-    private Entity Projectile;
 
     public ManhattanTransferEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
@@ -92,21 +60,10 @@ public class ManhattanTransferEntity extends StandEntity {
     public boolean forceVisualRotation() {
         return true;
     }
-    public boolean canBeHitByStands() {
-        return true;
-    }
     @Override
     public boolean canBeHitByProjectile() {return true;}
     @Override
     public boolean hasNoPhysics() {
-        return false;
-    }
-    @Override
-    public boolean standHasGravity() {
-        return false;
-    }
-    @Override
-    public boolean isInvulnerable() {
         return false;
     }
     @Override
@@ -197,8 +154,6 @@ public class ManhattanTransferEntity extends StandEntity {
     public boolean hasItem = false;
     public boolean hasItemTwo = false;
     public boolean success = false;
-    public float projectileDamage = 0;
-    public void setProjectileDamage(float val){projectileDamage = val;};
     public boolean isSnubnose = false;
     public float manhattanDamageIncipit = 0;
     public boolean canAcquireHeldItem = false;
@@ -224,7 +179,6 @@ public class ManhattanTransferEntity extends StandEntity {
         return 0.0F;
     }
 
-    public boolean isFromHattan = false;
     public boolean canOthersLoadMT = ClientNetworking.getAppropriateConfig().manhattanTransferSettings.canOtherMobsLoadManhattanTransfer;
     public int fireTicksPrj = 0;
 
@@ -275,16 +229,8 @@ public class ManhattanTransferEntity extends StandEntity {
                                     this.setHeldItemManhattan(ii.copyAndClear());
                                     TO.discard();
                                 }
-                            }/* else if (direct instanceof FireworkRocketEntity RE) {
-                            ItemStack ii = RE.getItem();
-                            if (!ii.isEmpty()) {
-                                hasItem = true;
-                                this.setHeldItemManhattan(ii.copyAndClear());
-                                RE.getItem().shrink(1);
-                                RE.discard();
-                            }*/else{
-                              //  Roundabout.LOGGER.info("unstorable projectile");
                             }
+                            this.changeMovementState();
                         } else {
                             success = false;
                             if (direct instanceof AbstractArrow AA) {
@@ -313,26 +259,13 @@ public class ManhattanTransferEntity extends StandEntity {
                                     hasItemTwo = true;
                                     TO.discard();
                                 }
-                            }/* else if (direct instanceof FireworkRocketEntity RE) {
-                            ItemStack ii = RE.getItem();
-                            if (!ii.isEmpty()) {
-                                success = true;
-                                hasItem = true;
-                                this.setHeldItemManhattanFull(ii.copyAndClear());
-                                RE.getItem().shrink(1);
-                                 hasItemTwo = true;
-                                RE.discard();
-                            }
-                        }*/ else if (direct instanceof ThrowableItemProjectile TH) {
+                            } else if (direct instanceof ThrowableItemProjectile TH) {
                                 ItemStack ii = TH.getItem();
                                 if (!ii.isEmpty()) {
                                     this.setHeldItemManhattanFull(ii.copyAndClear());
                                     hasItemTwo = true;
                                     TH.discard();
                                 }
-                            }
-                            else{
-                                //Roundabout.LOGGER.info("unstorable projectile");
                             }
                         }
                     }
@@ -397,6 +330,9 @@ public void itemEject(){
                                          boolean playSounds, float mult, boolean canGiveYouItem){
         thrower.playSound(ModSounds.BULLET_RICOCHET_EVENT, 1.0F, (thrower.random.nextFloat() * 0.2F + 0.7F));
      if(!thrower.level().isClientSide) {
+         if(thrower.getUserData(thrower.getUser()) != null && thrower.getUserData(thrower.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM){
+             PM.isNotLoaded();
+         }
          if (item.getItem() instanceof ArrowItem) {
              ArrowItem $$10 = (ArrowItem) item.getItem();
              AbstractArrow $$11 = $$10.createArrow(thrower.level(), item, thrower);
@@ -419,15 +355,13 @@ public void itemEject(){
              $$11.setOwner(thrower.getUser());
          }
          else if (item.getItem() instanceof AmmoItem) {
-             AmmoItem $$10 = (AmmoItem) item.getItem();
              RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity(thrower.level(), thrower);
              $$7.shootFromRotation(thrower, xRot, yRot, 0.0F,3.5F, 1.3F);
 
              if(item.getItem() instanceof SnubnoseAmmoItem){
                  if(thrower.isSnubnose){
                      $$7.setAmmoType(RoundaboutBulletEntity.SNUBNOSE);
-                 }
-                 else{
+                 } else{
                      $$7.setAmmoType(RoundaboutBulletEntity.COLT);
                  }
              } else if(item.getItem() instanceof SniperAmmoItem){
@@ -440,8 +374,7 @@ public void itemEject(){
              $$7.manhattanDamage = thrower.manhattanDamageIncipit;
              thrower.level().addFreshEntity($$7);
              $$7.setOwner(thrower.getUser());
-         }
-         else if (item.getItem() instanceof EnderpearlItem){
+         } else if (item.getItem() instanceof EnderpearlItem){
              ThrownEnderpearl $$7 = new ThrownEnderpearl(thrower.level(), thrower);
              $$7.setPos(pos);
              $$7.setItem(item);
@@ -449,8 +382,7 @@ public void itemEject(){
              $$7.setRemainingFireTicks(thrower.fireTicksPrj);
              $$7.setOwner(thrower.getUser());
              thrower.level().addFreshEntity($$7);
-         }
-         else if (item.getItem() instanceof SnowballItem){
+         } else if (item.getItem() instanceof SnowballItem){
              Snowball $$7 = new Snowball(thrower.level(), thrower);
              $$7.setPos(pos);
              $$7.setItem(item);
@@ -462,13 +394,11 @@ public void itemEject(){
              if(item.getItem() instanceof TridentItem){
                  ThrownTrident $$7 = new ThrownTrident(thrower.level(), thrower, item);
                  $$7.setPos(pos);
-               //  $$7.setItem(item);
                  $$7.setRemainingFireTicks(thrower.fireTicksPrj);
                  $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
                  $$7.setOwner(thrower.getUser());
                  thrower.level().addFreshEntity($$7);
-             }
-             else{
+             } else{
                  HarpoonEntity $$7 = new HarpoonEntity(thrower.level(), thrower, item);
                  $$7.setPos(pos);
                  $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
@@ -513,8 +443,7 @@ public void itemEject(){
              $$4.setOwner(thrower.getUser());
              $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.4F*mult, getShotAccuracy);
              thrower.level().addFreshEntity($$4);
-         }
-             else {
+         } else {
             getCanPlace = false;
              ThrownObjectEntity $$14 = new ThrownObjectEntity(thrower, thrower.level(), item, getCanPlace);
              $$14.setPos(pos);
@@ -526,10 +455,15 @@ public void itemEject(){
              $$14.setRemainingFireTicks(thrower.fireTicksPrj);
              $$14.setOwner(thrower.getUser());
              thrower.level().addFreshEntity($$14);
-
          }
      }
         return  true;
+    }
+
+    public void changeMovementState(){
+        if(this.getUserData(this.getUser()) != null && this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM){
+            PM.isLoaded();
+        }
     }
 
     @Override
@@ -568,7 +502,7 @@ public void itemEject(){
                     if (!PM.isPiloting()) {
                         this.setXRot(pitch + 25);
 
-                        this.setYBodyRot(pitch + 25);
+                        this.setYBodyRot(yaw + 25);
 
                         this.setYRot(yaw);
 
@@ -595,27 +529,23 @@ public void itemEject(){
         rotationXHattan = this.getXRot();
         rotationYHattan = this.getYRot();
     }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes().add(Attributes.KNOCKBACK_RESISTANCE, 1.0D);
+    }
+
     float rotationXHattan = 0;
     float rotationYHattan = 0;
 
     int stupidTicks = 1;
-    int nextPathfind = 1;
-
-    public void doBasicPathfind() {
-
-        Vec3 vec3d = this.getEyePosition(0);
-        Vec3 vec3d2 = this.getViewVector(0);
-        Vec3 vec3d3 = vec3d.add(vec3d2.x, vec3d2.y, vec3d2.z);
-        BlockHitResult blockHit = this.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
-        BlockPos pos = blockHit.getBlockPos();
-        this.navigation.moveTo(pos.getX(), pos.getY(), pos.getZ(), 0);
-    }
 
     public boolean isInRain() {
         BlockPos $$0 = this.blockPosition();
         return this.level().isRainingAt($$0)
                 || this.level().isRainingAt(BlockPos.containing((double)$$0.getX(), this.getBoundingBox().maxY, (double)$$0.getZ()));
     }
+
+    public boolean stopsManhattanAnimationsWhenHeldItem = false;
 
     public final AnimationState rain_dodging_manhattan = new AnimationState();
     public final AnimationState slow_manhattan = new AnimationState();
@@ -632,14 +562,10 @@ public void itemEject(){
     public final AnimationState right_manhattan_loop = new AnimationState();
     public final AnimationState right_manhattan_stop = new AnimationState();
 
-    public int animationSetupTicks = 0;
-    public void setAnimationSetupTicks(int vanm){DodgeRainTicks = vanm;}
-
     public boolean isPressingW = false;
     public boolean isPressingA = false;
     public boolean isPressingS = false;
     public boolean isPressingD = false;
-
 
     @Override
     public void setupAnimationStates() {
@@ -682,109 +608,129 @@ public void itemEject(){
                     if (!isInRain()) {
                         this.rain_dodging_manhattan.stop();
 
-                        if(PM.isPiloting()) {
-                            if (options.keyUp.isDown()) {
-                                isPressingW = true;
-                            } if (!options.keyUp.isDown()) {
-                                isPressingW = false;
-                            }
-                            if (options.keyDown.isDown()) {
-                                isPressingS = true;
-                            } if (!options.keyDown.isDown()) {
-                                isPressingS = false;
-                            }
-                            if (options.keyLeft.isDown()) {
-                                isPressingA = true;
-                            } if (!options.keyLeft.isDown()) {
-                                isPressingA = false;
-                            }
-                            if (options.keyRight.isDown()) {
-                                isPressingD = true;
-                            } if (!options.keyRight.isDown()) {
-                                isPressingD = false;
-                            }
+                        if (PM.isClient() && !this.stopsManhattanAnimationsWhenHeldItem) {
+                            if (PM.isPiloting()) {
+                                if (options.keyUp.isDown()) {
+                                    isPressingW = true;
+                                }
+                                if (!options.keyUp.isDown()) {
+                                    isPressingW = false;
+                                }
+                                if (options.keyDown.isDown()) {
+                                    isPressingS = true;
+                                }
+                                if (!options.keyDown.isDown()) {
+                                    isPressingS = false;
+                                }
+                                if (options.keyLeft.isDown()) {
+                                    isPressingA = true;
+                                }
+                                if (!options.keyLeft.isDown()) {
+                                    isPressingA = false;
+                                }
+                                if (options.keyRight.isDown()) {
+                                    isPressingD = true;
+                                }
+                                if (!options.keyRight.isDown()) {
+                                    isPressingD = false;
+                                }
 
-                            if (isPressingW && !isPressingS) {
-                                $$1.startIfStopped(this.tickCount);
-                                $$2.startIfStopped(this.tickCount);
-                                $$4.stop();
-                                $$6.stop();
-                                $$0.stop();
-                            } else {
-                                $$1.stop();
-                                $$2.stop();
-                                $$6.startIfStopped(this.tickCount);
-                                $$0.startIfStopped(this.tickCount);
-                            }
-                            if (isPressingS && !isPressingW) {
-                                $$3.startIfStopped(this.tickCount);
-                                $$4.startIfStopped(this.tickCount);
-                                $$2.stop();
-                                $$0.stop();
-                                $$5.stop();
-                            } else {
-                                $$3.stop();
-                                $$4.stop();
-                                $$5.startIfStopped(this.tickCount);
-                                $$0.startIfStopped(this.tickCount);
-                            }
-
-                            if(isPressingW && isPressingS){
-                                $$1.stop();
-                                $$2.stop();
-                                $$3.stop();
-                                $$4.stop();
-                                if($$2.isStarted()){
+                                if (isPressingW && !isPressingS) {
+                                    $$1.startIfStopped(this.tickCount);
+                                    $$2.startIfStopped(this.tickCount);
+                                    $$4.stop();
+                                    $$6.stop();
+                                    $$0.stop();
+                                } else {
+                                    $$1.stop();
+                                    $$2.stop();
                                     $$6.startIfStopped(this.tickCount);
+                                    $$0.startIfStopped(this.tickCount);
                                 }
-                                if($$4.isStarted()){
+                                if (isPressingS && !isPressingW) {
+                                    $$3.startIfStopped(this.tickCount);
+                                    $$4.startIfStopped(this.tickCount);
+                                    $$2.stop();
+                                    $$0.stop();
+                                    $$5.stop();
+                                } else {
+                                    $$3.stop();
+                                    $$4.stop();
                                     $$5.startIfStopped(this.tickCount);
+                                    $$0.startIfStopped(this.tickCount);
                                 }
-                                $$0.startIfStopped(this.tickCount);
-                            }
 
-                            if (isPressingA && !isPressingD) {
-                                $$7.startIfStopped(this.tickCount);
-                                $$9.startIfStopped(this.tickCount);
-                                $$12.stop();
-                                $$8.stop();
-                                $$0.stop();
-                            } else {
-                                $$8.startIfStopped(this.tickCount);
-                                $$0.startIfStopped(this.tickCount);
-                                $$7.stop();
-                                $$9.stop();
-                            }
+                                if (isPressingW && isPressingS) {
+                                    $$1.stop();
+                                    $$2.stop();
+                                    $$3.stop();
+                                    $$4.stop();
+                                    if ($$2.isStarted()) {
+                                        $$6.startIfStopped(this.tickCount);
+                                    }
+                                    if ($$4.isStarted()) {
+                                        $$5.startIfStopped(this.tickCount);
+                                    }
+                                    $$0.startIfStopped(this.tickCount);
+                                }
 
-                            if (isPressingD && !isPressingA) {
-                                $$10.startIfStopped(this.tickCount);
-                                $$12.startIfStopped(this.tickCount);
-                                $$9.stop();
-                                $$11.stop();
-                                $$0.stop();
-                            } else {
-                                $$11.startIfStopped(this.tickCount);
-                                $$0.startIfStopped(this.tickCount);
-                                $$10.stop();
-                                $$12.stop();
-                            }
-
-                            if (isPressingD && isPressingA) {
-                                $$7.stop();
-                                $$9.stop();
-                                $$10.stop();
-                                $$12.stop();
-                                if($$9.isStarted()){
+                                if (isPressingA && !isPressingD) {
+                                    $$7.startIfStopped(this.tickCount);
+                                    $$9.startIfStopped(this.tickCount);
+                                    $$12.stop();
+                                    $$8.stop();
+                                    $$0.stop();
+                                } else {
                                     $$8.startIfStopped(this.tickCount);
+                                    $$0.startIfStopped(this.tickCount);
+                                    $$7.stop();
+                                    $$9.stop();
                                 }
-                                if($$12.isStarted()){
-                                    $$11.startIfStopped(this.tickCount);
-                                }
-                                $$0.startIfStopped(this.tickCount);
-                            }
 
-                        } else{
-                            $$0.startIfStopped(this.tickCount);
+                                if (isPressingD && !isPressingA) {
+                                    $$10.startIfStopped(this.tickCount);
+                                    $$12.startIfStopped(this.tickCount);
+                                    $$9.stop();
+                                    $$11.stop();
+                                    $$0.stop();
+                                } else {
+                                    $$11.startIfStopped(this.tickCount);
+                                    $$0.startIfStopped(this.tickCount);
+                                    $$10.stop();
+                                    $$12.stop();
+                                }
+
+                                if (isPressingD && isPressingA) {
+                                    $$7.stop();
+                                    $$9.stop();
+                                    $$10.stop();
+                                    $$12.stop();
+                                    if ($$9.isStarted()) {
+                                        $$8.startIfStopped(this.tickCount);
+                                    }
+                                    if ($$12.isStarted()) {
+                                        $$11.startIfStopped(this.tickCount);
+                                    }
+                                    $$0.startIfStopped(this.tickCount);
+                                }
+
+                            } else {
+                                $$0.startIfStopped(this.tickCount);
+                                $$2.stop();
+                                $$1.stop();
+                                $$3.stop();
+                                $$4.stop();
+                                $$5.stop();
+                                $$6.stop();
+                                $$7.stop();
+                                $$8.stop();
+                                $$9.stop();
+                                $$10.stop();
+                                $$11.stop();
+                                $$12.stop();
+                            }
+                        } else {
+                            $$0.stop();
                             $$2.stop();
                             $$1.stop();
                             $$3.stop();
@@ -798,11 +744,9 @@ public void itemEject(){
                             $$11.stop();
                             $$12.stop();
                         }
-
                     }
                 }
             }
         }
     }
-
 }
