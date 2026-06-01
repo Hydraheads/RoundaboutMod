@@ -18,6 +18,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class ManhattanTransferModel<T extends ManhattanTransferEntity> extends StandModel<T> {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "manhattan_transfer"), "main");
+    private final ModelPart head;
     private final ModelPart stand2;
     private final ModelPart core;
     private final ModelPart mangacores;
@@ -70,6 +71,8 @@ public class ManhattanTransferModel<T extends ManhattanTransferEntity> extends S
         this.core = stand.getChild("stand2").getChild("core");
 
         this.mangacores = stand.getChild("stand2").getChild("core").getChild("mangacores");
+
+        this.head = stand.getChild("stand2").getChild("core").getChild("head");
 
         this.key_string1 = stand.getChild("stand2").getChild("key_string1");
         this.key = stand.getChild("stand2").getChild("key_string1").getChild("key");
@@ -125,6 +128,8 @@ public class ManhattanTransferModel<T extends ManhattanTransferEntity> extends S
         PartDefinition upper_core_r1 = mangacores.addOrReplaceChild("upper_core_r1", CubeListBuilder.create().texOffs(25, 3).mirror().addBox(-1.5F, -4.5F, 1.6F, 3.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
 
         PartDefinition upper_core_r2 = mangacores.addOrReplaceChild("upper_core_r2", CubeListBuilder.create().texOffs(25, 3).addBox(-1.5F, -4.5F, 1.6F, 3.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
+
+        PartDefinition head = core.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 11).addBox(0.0F, -1.0F, -1.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(-0.5F, -0.75F, 0.5F));
 
         PartDefinition key_string1 = stand2.addOrReplaceChild("key_string1", CubeListBuilder.create().texOffs(61, 7).addBox(-0.5F, 0.0F, 0.0F, 1.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(1.5F, 2.5F, -1.5F));
 
