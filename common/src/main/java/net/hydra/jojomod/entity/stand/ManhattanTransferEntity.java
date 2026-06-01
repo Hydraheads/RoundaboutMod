@@ -1,6 +1,5 @@
 package net.hydra.jojomod.entity.stand;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.MirrorBlock;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -11,7 +10,6 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -526,16 +524,6 @@ public void itemEject(){
                         }
                     }
                 }
-            if(PM.switchShootingMode() || target != null){
-                rotationXHattan = this.headRotationX;
-                rotationYHattan = this.headRotationY;
-                Roundabout.LOGGER.info("a");
-            } else {
-                rotationXHattan = this.getXRot();
-                rotationYHattan = this.getYRot();
-                Roundabout.LOGGER.info("b");
-            }
-
             }
         }
             if (!this.level().isClientSide()) {
@@ -548,14 +536,9 @@ public void itemEject(){
 
                 }
             }
-          //  System.out.println("headRotationY = " + this.headRotationY);
-          //  System.out.println("headRotationX = " + this.headRotationX);
             searchTarget();
-
-    }
-
-    public Vec3 getEyeP(float d) {
-        return this.getPosition(d).add(0,0.20,0);
+        rotationXHattan = this.getXRot();
+        rotationYHattan = this.getYRot();
     }
 
     public LivingEntity target = null;

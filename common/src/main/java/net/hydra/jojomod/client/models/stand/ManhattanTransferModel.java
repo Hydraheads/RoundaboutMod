@@ -1,17 +1,12 @@
 package net.hydra.jojomod.client.models.stand;
 
-import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.models.stand.animations.CinderellaAnimations;
 import net.hydra.jojomod.client.models.stand.animations.ManhattanTransferAnimations;
 import net.hydra.jojomod.client.models.stand.animations.RattAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
-import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
-import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.stand.powers.PowersStarPlatinum;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -19,11 +14,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
 
 public class ManhattanTransferModel<T extends ManhattanTransferEntity> extends StandModel<T> {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "manhattan_transfer"), "main");
@@ -260,41 +251,6 @@ public class ManhattanTransferModel<T extends ManhattanTransferEntity> extends S
         this.animate(pEntity.right_manhattan_incipit, ManhattanTransferAnimations.Lateral_East_Manhattan, pAgeInTicks, 1f);
         this.animate(pEntity.right_manhattan_loop, ManhattanTransferAnimations.Lateral_East_Loop_Manhattan, pAgeInTicks, 1f);
         this.animate(pEntity.right_manhattan_stop, ManhattanTransferAnimations.Lateral_East_Stop_Manhattan, pAgeInTicks, 1f);
-
-
-        Vec3 rots = new Vec3(this.head.xRot,this.head.yRot,0);
-        Minecraft mc = Minecraft.getInstance();
-
-        StandUser SU = (StandUser) pEntity.getUser();
-        if (SU != null) {
-            if (SU.roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-                if (!mc.isPaused() && !(((TimeStop) pEntity.level()).CanTimeStopEntity(pEntity.getUser()))) {
-                    Entity target = PM.targetOther;
-                    Vec3 v = PM.rotateForAuto(target);
-
-
-                    float fade = (float) pEntity.getFadeOut() / pEntity.getMaxFade();
-                    if (fade != 1) {
-                        v = new Vec3((float) (Mth.lerp(fade, 0, v.x)), v.y, 0);
-                    }
-                    if (pEntity.getUser() != null) {
-                        if (pEntity.getUser() instanceof Player P) {
-                            if (((IPlayerEntity) P).roundabout$GetPoseEmote() != Poses.NONE.id) {
-                                v = new Vec3(Mth.lerp(0.2, pEntity.getHeadRotationX(), 0), v.y, 0);
-                            }
-                        }
-                    }
-
-                    this.head.xRot = Mth.lerp(this.head.xRot, (float) v.x, 0.85F);
-                    this.head.yRot = Mth.lerp(this.head.yRot, (float) v.y, 0.85F);
-                } else {
-                    this.head.xRot = (float) rots.x;
-                    this.head.yRot = (float) rots.y;
-                }
-                pEntity.setHeadRotationX(this.head.xRot);
-                pEntity.setHeadRotationY(this.head.yRot);
-            }
-        }
     }
 
 

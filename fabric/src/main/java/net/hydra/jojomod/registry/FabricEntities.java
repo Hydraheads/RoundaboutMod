@@ -453,7 +453,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     Roundabout.location("manhattan_transfer"),
                     EntityType.Builder.of(ManhattanTransferEntity::new, MobCategory.MISC).
-                            sized(0.70f, 0.50f).clientTrackingRange(14).build(Roundabout.MOD_ID+":manhattan_transfer")
+                            sized(0.70f, 0.40f).clientTrackingRange(14).build(Roundabout.MOD_ID+":manhattan_transfer")
             );
 
     public static final EntityType<PollinationTransferEntity> POLLINATION_TRANSFER =
@@ -461,7 +461,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "pollination_transfer"),
                     EntityType.Builder.of(PollinationTransferEntity::new, MobCategory.MISC).
-                            sized(0.70f, 0.50f).clientTrackingRange(14).build(Roundabout.MOD_ID+":pollination_transfer")
+                            sized(0.85f, 0.50f).clientTrackingRange(14).build(Roundabout.MOD_ID+":pollination_transfer")
             );
 
         public static final EntityType<WalkingHeartEntity> WALKING_HEART =
