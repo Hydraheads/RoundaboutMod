@@ -10,7 +10,9 @@ import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -87,6 +89,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
         super.renderIcons(context, x, y);
     }
 
+    public boolean renderHelmet(){
+        return PowerTypes.hasStandActive(self);
+    }
 
     public List<SurvivorEntity> survivorsSpawned = new ArrayList<>();
 

@@ -40,7 +40,6 @@ public class StoneLayer<T extends LivingEntity, M extends HumanoidModel<T>, A ex
         this.livingEntityRenderer = livingEntityRenderer;
     }
 
-
     @Override
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int integ, T var4,
                        float var5, float var6, float var7, float var8, float var9, float var10) {
