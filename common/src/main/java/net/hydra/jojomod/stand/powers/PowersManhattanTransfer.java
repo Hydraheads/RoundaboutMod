@@ -84,8 +84,8 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public boolean isLoaded(){
         if(!this.isClient()) {
             this.currentHattanStatus = LOADED_HATTAN;
-
             this.syncHattanStatus(LOADED_HATTAN);
+            this.changeLookinMode = true;
         }
         return  true;
     }
@@ -94,9 +94,12 @@ public class PowersManhattanTransfer extends NewDashPreset {
         if(!this.isClient()) {
             this.currentHattanStatus = UNLOADED_HATTAN;
             this.syncHattanStatus(UNLOADED_HATTAN);
+            changeLookinMode = false;
         }
         return  true;
     }
+
+    public boolean changeLookinMode = false;
 
     public boolean isStandEnabled() {
         return ClientNetworking.getAppropriateConfig().manhattanTransferSettings.enableManhattanTransfer;
@@ -132,7 +135,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
         /**Making dash usable on both key presses*/
         switch (context) {
             case SKILL_1_NORMAL, SKILL_1_CROUCH-> {
-                switchShooting();
+                if (this.currentHattanStatus != LOADED_HATTAN){
+                    switchShooting();
+            }
             }
                 case SKILL_2_NORMAL, SKILL_2_CROUCH -> {
                 toggleControlModeClient();
@@ -142,7 +147,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
                     dash();
                 }
                 else{
-                    manhattanDodge();
+                    if (this.currentHattanStatus != LOADED_HATTAN){
+                        manhattanDodge();
+                    }
                 }
             }
             case SKILL_4_NORMAL, SKILL_4_CROUCH -> {
@@ -181,6 +188,12 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         if (slot == 1 && isPiloting()){
             return true;
+        }
+        if(slot == 1 &&  this.currentHattanStatus == LOADED_HATTAN){
+            return true;
+        }
+        if(slot == 3 && this.currentHattanStatus == LOADED_HATTAN && isPiloting()){
+            return  true;
         }
         return super.isAttackIneptVisually(activeP, slot);
     }
@@ -413,6 +426,15 @@ public class PowersManhattanTransfer extends NewDashPreset {
                     sealStand(true);
                 }
             }
+
+            if(this.getStandEntity(self) instanceof ManhattanTransferEntity){
+                targetOther = ME.target;
+            }
+
+            if(targetOther != null && switchShootingMode()){
+                tryPower(PowersManhattanTransfer.DEFLECT_PROJECTILE, true);
+                tryPowerPacket(PowersManhattanTransfer.DEFLECT_PROJECTILE);
+            }
         }
         if (this.self instanceof Player PL) {
 
@@ -454,6 +476,52 @@ public class PowersManhattanTransfer extends NewDashPreset {
         }
         StandEntity SE = this.getStandEntity(this.getSelf());
     }
+
+    public BlockHitResult getTargetPos() {
+        Vec3 vec3d = this.getSelf().getEyePosition(0);
+        Vec3 vec3d2 = this.getSelf().getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * 60, vec3d2.y * 60, vec3d2.z * 60);
+        return this.getSelf().level().clip(new ClipContext(vec3d, vec3d3,
+                ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
+
+    }
+
+    public Vec3 rotateForAuto(Entity autoTarget){
+        ManhattanTransferEntity ME = (ManhattanTransferEntity) this.getStandEntity(this.getSelf());
+
+        if (ME != null) {
+            Vec3 targetPos = getTargetPos().getLocation();
+             if (autoTarget != null) {
+                targetPos = autoTarget.getEyePosition(1);
+                if (switchShootingMode()) {
+                    double dist = targetPos.distanceTo(ME.getPosition(1));
+                    double time = dist;
+                    time *= 1.4;
+                    Vec3 vec = autoTarget.getDeltaMovement();
+                    if (autoTarget instanceof Player) {
+                        if(Math.abs(vec.y) < 3 ) {vec = new Vec3(vec.x,0,vec.z);}
+                    }
+                    targetPos = targetPos.add(vec.multiply(time, time, time));
+                }
+            }
+            double x = (targetPos.x() - ME.getPosition(0).x());
+            double z = (targetPos.z() - ME.getPosition(0).z());
+            float rot = (float) (Math.atan2(z, x) - Math.PI / 2);
+
+            double hy = (targetPos.y() - (ME.getEyeP(0).y() ));
+            double hd = Math.sqrt(Math.pow(x, 2) + Math.pow(z, 2));
+
+            float hrot = (float) (Math.atan2(hd, hy) + Math.PI/2); // flip the sign if you want it to be not armed
+
+            return new Vec3(hrot, rot, 0);
+
+            // HEAD ROTATION X = VERTICAL ROTATION OF HEAD
+            // STAND ROTATION Y = HORIZONTAL ROTATION OF WHOLE
+
+        }
+        return new Vec3(0,0,0);
+    }
+
     public void synchToCamera(){
         if (isPiloting()) {
             LivingEntity ent = getPilotingStand();
@@ -586,18 +654,35 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 }
             }
         }
+        if(this.switchShootingMode()) {
+            if (targetOther != null && ent == targetOther) {
+                if (this.isActive() && this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
+
+    public LivingEntity targetOther = null;
+
     @Override
     public int highlightsEntityColor(Entity ent, Player player){
         if (ent instanceof ManhattanTransferEntity ME) {
             if (this.getSelf() == ME.getUser()) {
-                if (this.isHoldingSneak() && !isPiloting()) {
-                    return 12379556;
+                if (this.isHoldingSneak()/* && !isPiloting()*/) {
+                    return 65425;
                 }
             }
         }
-        return 12379456;
+        if(this.switchShootingMode()) {
+            if (targetOther != null && ent == targetOther) {
+                if (this.isActive() && this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
+                    return 3407755;
+                }
+            }
+        }
+        return 29960;
     }
 
     @Override

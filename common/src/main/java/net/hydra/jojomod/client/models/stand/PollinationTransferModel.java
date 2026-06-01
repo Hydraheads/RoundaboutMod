@@ -22,6 +22,7 @@ import net.minecraft.client.model.EntityModel;
 public class PollinationTransferModel <T extends ManhattanTransferEntity> extends StandModel<T> {
 
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "pollination_transfer"), "main");
+    private final ModelPart head;
     private final ModelPart core;
     private final ModelPart stem;
     private final ModelPart greenrod;
@@ -60,6 +61,8 @@ public class PollinationTransferModel <T extends ManhattanTransferEntity> extend
 
         this.core = stand.getChild("core");
 
+        this.head = stand.getChild("core").getChild("head");
+
         this.stem = stand.getChild("stem");
 
         this.greenrod = stand.getChild("stem").getChild("greenrod");
@@ -97,6 +100,8 @@ public class PollinationTransferModel <T extends ManhattanTransferEntity> extend
         PartDefinition stand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
 
         PartDefinition core = stand.addOrReplaceChild("core", CubeListBuilder.create().texOffs(1, 28).addBox(-3.0F, -6.0F, -3.0F, 6.0F, 3.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition head = core.addOrReplaceChild("head", CubeListBuilder.create().texOffs(58, 1).addBox(-0.5F, -3.75F, -0.5F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition stem = stand.addOrReplaceChild("stem", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 

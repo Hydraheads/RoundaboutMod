@@ -1,13 +1,19 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
+import net.hydra.jojomod.block.MirrorBlock;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.*;
+import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -19,7 +25,10 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.item.*;
@@ -32,6 +41,9 @@ import net.minecraft.world.entity.*;
 import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ManhattanTransferEntity extends StandEntity {
 
@@ -514,6 +526,16 @@ public void itemEject(){
                         }
                     }
                 }
+            if(PM.switchShootingMode() || target != null){
+                rotationXHattan = this.headRotationX;
+                rotationYHattan = this.headRotationY;
+                Roundabout.LOGGER.info("a");
+            } else {
+                rotationXHattan = this.getXRot();
+                rotationYHattan = this.getYRot();
+                Roundabout.LOGGER.info("b");
+            }
+
             }
         }
             if (!this.level().isClientSide()) {
@@ -526,8 +548,49 @@ public void itemEject(){
 
                 }
             }
-        rotationXHattan = this.getXRot();
-        rotationYHattan = this.getYRot();
+          //  System.out.println("headRotationY = " + this.headRotationY);
+          //  System.out.println("headRotationX = " + this.headRotationX);
+            searchTarget();
+
+    }
+
+    public Vec3 getEyeP(float d) {
+        return this.getPosition(d).add(0,0.20,0);
+    }
+
+    public LivingEntity target = null;
+
+    public float manhattanDetectionRange = ClientNetworking.getAppropriateConfig().manhattanTransferSettings.manhattanAutoShootingRange;
+
+    public void searchTarget(){
+        if (this.level() != null) {
+            List<LivingEntity> lvent = this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(this.manhattanDetectionRange), (livingEntity) -> {
+                return true;
+            });
+            if (lvent != null && !lvent.isEmpty()) {
+                List<LivingEntity> rement = new ArrayList<>(lvent);
+                for (LivingEntity value : lvent) {
+                    IEntityAndData entityAndData = ((IEntityAndData) value);
+                    if (value instanceof StandEntity || value.is(this.getUser())) {
+                        rement.remove(value);
+                        target = null;
+                    }
+                    if(entityAndData.roundabout$getTrueInvisibilityManhattan() < 1){
+                        rement.remove(value);
+                        target = null;
+                    }
+                }
+
+                lvent = rement;
+            }
+            LivingEntity lv = this.level().getNearestEntity(lvent,
+                    MainUtil.OFFER_TARGER_CONTEXT, null,
+                    this.getX(), this.getY(), this.getZ());
+
+            if(lv != null) {
+                target = lv;
+            }
+        }
     }
 
     public static AttributeSupplier.Builder createAttributes() {

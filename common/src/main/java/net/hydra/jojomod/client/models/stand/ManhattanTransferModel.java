@@ -1,12 +1,17 @@
 package net.hydra.jojomod.client.models.stand;
 
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.models.stand.animations.CinderellaAnimations;
 import net.hydra.jojomod.client.models.stand.animations.ManhattanTransferAnimations;
 import net.hydra.jojomod.client.models.stand.animations.RattAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
+import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
+import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.stand.powers.PowersStarPlatinum;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -14,10 +19,15 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 
 public class ManhattanTransferModel<T extends ManhattanTransferEntity> extends StandModel<T> {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "manhattan_transfer"), "main");
+    private final ModelPart head;
     private final ModelPart stand2;
     private final ModelPart core;
     private final ModelPart mangacores;
@@ -70,6 +80,8 @@ public class ManhattanTransferModel<T extends ManhattanTransferEntity> extends S
         this.core = stand.getChild("stand2").getChild("core");
 
         this.mangacores = stand.getChild("stand2").getChild("core").getChild("mangacores");
+
+        this.head = stand.getChild("stand2").getChild("core").getChild("head");
 
         this.key_string1 = stand.getChild("stand2").getChild("key_string1");
         this.key = stand.getChild("stand2").getChild("key_string1").getChild("key");
@@ -125,6 +137,8 @@ public class ManhattanTransferModel<T extends ManhattanTransferEntity> extends S
         PartDefinition upper_core_r1 = mangacores.addOrReplaceChild("upper_core_r1", CubeListBuilder.create().texOffs(25, 3).mirror().addBox(-1.5F, -4.5F, 1.6F, 3.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
 
         PartDefinition upper_core_r2 = mangacores.addOrReplaceChild("upper_core_r2", CubeListBuilder.create().texOffs(25, 3).addBox(-1.5F, -4.5F, 1.6F, 3.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
+
+        PartDefinition head = core.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 11).addBox(0.0F, -1.0F, -1.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(-0.5F, -0.75F, 0.5F));
 
         PartDefinition key_string1 = stand2.addOrReplaceChild("key_string1", CubeListBuilder.create().texOffs(61, 7).addBox(-0.5F, 0.0F, 0.0F, 1.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(1.5F, 2.5F, -1.5F));
 
@@ -246,6 +260,41 @@ public class ManhattanTransferModel<T extends ManhattanTransferEntity> extends S
         this.animate(pEntity.right_manhattan_incipit, ManhattanTransferAnimations.Lateral_East_Manhattan, pAgeInTicks, 1f);
         this.animate(pEntity.right_manhattan_loop, ManhattanTransferAnimations.Lateral_East_Loop_Manhattan, pAgeInTicks, 1f);
         this.animate(pEntity.right_manhattan_stop, ManhattanTransferAnimations.Lateral_East_Stop_Manhattan, pAgeInTicks, 1f);
+
+
+        Vec3 rots = new Vec3(this.head.xRot,this.head.yRot,0);
+        Minecraft mc = Minecraft.getInstance();
+
+        StandUser SU = (StandUser) pEntity.getUser();
+        if (SU != null) {
+            if (SU.roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                if (!mc.isPaused() && !(((TimeStop) pEntity.level()).CanTimeStopEntity(pEntity.getUser()))) {
+                    Entity target = PM.targetOther;
+                    Vec3 v = PM.rotateForAuto(target);
+
+
+                    float fade = (float) pEntity.getFadeOut() / pEntity.getMaxFade();
+                    if (fade != 1) {
+                        v = new Vec3((float) (Mth.lerp(fade, 0, v.x)), v.y, 0);
+                    }
+                    if (pEntity.getUser() != null) {
+                        if (pEntity.getUser() instanceof Player P) {
+                            if (((IPlayerEntity) P).roundabout$GetPoseEmote() != Poses.NONE.id) {
+                                v = new Vec3(Mth.lerp(0.2, pEntity.getHeadRotationX(), 0), v.y, 0);
+                            }
+                        }
+                    }
+
+                    this.head.xRot = Mth.lerp(this.head.xRot, (float) v.x, 0.85F);
+                    this.head.yRot = Mth.lerp(this.head.yRot, (float) v.y, 0.85F);
+                } else {
+                    this.head.xRot = (float) rots.x;
+                    this.head.yRot = (float) rots.y;
+                }
+                pEntity.setHeadRotationX(this.head.xRot);
+                pEntity.setHeadRotationY(this.head.yRot);
+            }
+        }
     }
 
 
