@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -34,6 +35,12 @@ public abstract class VisageHumanoidArmorLayer<T extends LivingEntity, M extends
             if (!((IPlayerEntity)PE).roundabout$getMaskSlot().isEmpty()
                     && ((IPlayerEntity)PE).roundabout$getMaskSlot().getItem() instanceof MaskItem ME
                     && !ME.visageData.generateVisageData(PE).rendersArmor() &&
+                    !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)
+            ){
+                ci.cancel();
+                return;
+            } else if (((StandUser)PE).roundabout$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet()
+                    && ClientUtil.canSeeStands(ClientUtil.getPlayer()) &&
                     !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)
             ){
                 ci.cancel();
