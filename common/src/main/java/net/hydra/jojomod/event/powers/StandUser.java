@@ -46,7 +46,6 @@ public interface StandUser {
     void roundabout$setGlow(byte glow);
     byte roundabout$getGlow();
     void roundabout$updateStandOutPosition(FollowingStandEntity passenger);
-
     void roundabout$setHeat(int e);
     int roundabout$getHeat();
 
@@ -127,6 +126,8 @@ public interface StandUser {
     void roundabout$setAnubisVanishTicks(int set);
     int roundabout$getCBVanishTicks();
     void roundabout$setCBVanishTicks(int set);
+    int roundabout$getWhiteAlbumVanishTicks();
+    void roundabout$setWhiteAlbumVanishTicks(int set);
 
     int getJumpImmunityTicks();
 
