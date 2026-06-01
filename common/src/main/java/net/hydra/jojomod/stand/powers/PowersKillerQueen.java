@@ -121,6 +121,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 		BOMB_BUBBLE=4;
 	
 	private byte currentBombStatus = BOMB_NONE;
+	private boolean shaReleased = false;
 	
 	 public void syncBombStatus(byte status) {
     	this.currentBombStatus = status;
@@ -144,6 +145,11 @@ public class PowersKillerQueen extends NewPunchingStand {
 	public boolean inBitesTheDustMode() {return this.BitesTheDustMode;}
 	public boolean switchModes(){
     	this.BitesTheDustMode = !(this.BitesTheDustMode);
+    	
+    	if (!this.isClient() && this.BitesTheDustMode && this.shaReleased) {
+    		this.SHA.discard();
+    	}
+    	
         return true;
     }
 	
@@ -240,27 +246,46 @@ public class PowersKillerQueen extends NewPunchingStand {
         	
     		setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_BOMB_DETONATE, PowerIndex.NO_CD);
     	} else if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_PLANT_BOMB_MOB, PowerIndex.SKILL_1_SNEAK);
+            setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_PLANT_BOMB_ITEM, PowerIndex.SKILL_1_SNEAK);
         } else {
         	setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_PLANT_BOMB_BLOCK, PowerIndex.SKILL_1);
         }
         
     	if (inBitesTheDustMode()) {
     		setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BTD_COMBAT, PowerIndex.SKILL_EXTRA_2);
-    	} else if (this.currentBombStatus != BOMB_NONE && this.currentBombStatus != BOMB_BUBBLE) {
+    	} else if (this.currentBombStatus != BOMB_NONE) {
         	setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BOMB_DEFUSE, PowerIndex.NO_CD);
-        } else if (this.currentBombStatus == BOMB_BUBBLE) {
-    		setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BUBBLE_REDIRECT, PowerIndex.SKILL_2_GUARD);
+        } else if (isGuarding()) {
+        	if (this.currentBombStatus == BOMB_BUBBLE) {
+        		setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BUBBLE_REDIRECT, PowerIndex.NO_CD);
+        	} else {
+        		 setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BUBBLE_LAUNCH, PowerIndex.SKILL_2_GUARD);
+        	}
     	} else if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BUBBLE_LAUNCH, PowerIndex.SKILL_2_SNEAK);
+    		 setSkillIcon(context, x, y, 2, StandIcons.STAR_PLATINUM_IMPALE, PowerIndex.SKILL_2_SNEAK);
         } else {
-        	setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_PLANT_BOMB_ITEM, PowerIndex.SKILL_2);
+        	setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_PLANT_BOMB_MOB, PowerIndex.SKILL_2);
         }
         
         if (isHoldingSneak() && !(inBitesTheDustMode())){
-            setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_SUMMON, PowerIndex.SKILL_3);
-        } else {
-            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        	if (this.shaReleased) {
+        		setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_SUMMON, PowerIndex.NO_CD);
+        	}else {
+        		setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_SUMMON, PowerIndex.SKILL_3);
+        	}
+        } else if (isGuarding() && !(inBitesTheDustMode())){
+        	setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_SUMMON, PowerIndex.SKILL_3);
+    	}	else {
+
+            if (canVault() ) {
+                setSkillIcon(context, x, y, 3, StandIcons.SOFT_AND_WET_VAULT, PowerIndex.GLOBAL_DASH);
+            } else if (canFallBrace()) {
+                setSkillIcon(context, x, y, 3, StandIcons.SOFT_AND_WET_FALL_CATCH, PowerIndex.NONE);
+            } else {
+                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+            }
+        	
+        	setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         }
         
         if (inBitesTheDustMode()) {
@@ -272,7 +297,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
-    	if (slot == 1) {
+    	if (slot == 1) {	
     		if(inBitesTheDustMode()) {
     			return !ClientNetworking.getAppropriateConfig().killerQueenSettings.enableBitesTheDustDayMode;
     		}else if (this.currentBombStatus == BOMB_NONE && !isGuarding()) {
@@ -723,14 +748,10 @@ public class PowersKillerQueen extends NewPunchingStand {
 	    	if (currentBombStatus != BOMB_NONE) {
 	    		((StandUser) this.getSelf()).roundabout$tryPower(PowersKillerQueen.DETONATE, true);
 	            tryPowerPacket(PowersKillerQueen.DETONATE);
-	            
-	            if (currentBombStatus == BOMB_BLOCK) {
-	            	this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().killerQueenSettings.blockPlantCooldown);
-	            }
-	            
+ 
 	    	}
 	    	
-	    	this.currentBombStatus = BOMB_NONE;
+	    	//this.currentBombStatus = BOMB_NONE;
     	}
     }
 
@@ -1084,6 +1105,10 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     public boolean detonate() {
     	if (!this.isClient() && this.getActivePower() == PowerIndex.NONE) {
+    		
+    		 if (this.currentBombStatus == BOMB_BLOCK) {
+            	this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().killerQueenSettings.blockPlantCooldown);
+            }
     		
     		this.playSoundsIfNearby(DETONATE, 27, true);
     		this.animateStand(KillerQueenEntity.DETONATE);
