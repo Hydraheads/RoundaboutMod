@@ -1,11 +1,13 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.MirrorBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.*;
@@ -21,6 +23,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.*;
@@ -85,7 +89,7 @@ public class ManhattanTransferEntity extends StandEntity {
         return false;
     }
     @Override
-    protected float getFlyingSpeed() {
+    public float getFlyingSpeed() {
         if(this.getUserData(this.getUser()) != null && this.getUser() != null) {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
                 if(PM.XtraSpdTick > 7) {
@@ -285,11 +289,20 @@ public class ManhattanTransferEntity extends StandEntity {
                     if (direct instanceof AbstractArrow AA) {
                         manhattanDamageIncipit = amount;
                     }
+                    soundForPlayer();
                 }
             }
         }
         this.markHurt();
         return super.hurt(source, amount);
+    }
+
+    public void soundForPlayer(){
+        if(this.getUserData(this.getUser()) != null) {
+            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                PM.getSelf().level().playSound(null,PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS,1.0F,1.0F);
+            }
+        }
     }
 
 public void itemEject(){
@@ -327,7 +340,7 @@ public void itemEject(){
             }
 
             return manhattanShoot(this, canSnipe(), getHeldItemManhattan(), getShotAccuracy(), getBundleAccuracy(), getThrowAngle(),
-                    getThrowAngle2(), getThrowAngle3(), getCanPlace(), this.rotationXHattan, this.rotationYHattan,
+                    getThrowAngle2(), getThrowAngle3(), getCanPlace(), this.shootRotationXHattan, this.shootRotationYHattan,
                     new Vec3(pos.x, pos.y, pos.z), true, 1, true);
         }
         return false;
@@ -539,7 +552,19 @@ public void itemEject(){
             searchTarget();
         rotationXHattan = this.getXRot();
         rotationYHattan = this.getYRot();
+        rotationHeadXHattan = this.getHeadRotationX();
+        rotationHeadYHattan = this.getHeadRotationY();
+
+        System.out.println(this.getHeadRotationX());
+        System.out.println(this.getHeadRotationY());
     }
+    public float rotationXHattan = 0;
+    public float rotationYHattan = 0;
+    public float rotationHeadXHattan = 0;
+    public float rotationHeadYHattan = 0;
+
+   public float shootRotationXHattan = 0;
+   public float shootRotationYHattan = 0;
 
     public LivingEntity target = null;
 
@@ -579,9 +604,6 @@ public void itemEject(){
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.KNOCKBACK_RESISTANCE, 1.0D);
     }
-
-    float rotationXHattan = 0;
-    float rotationYHattan = 0;
 
     int stupidTicks = 1;
 
