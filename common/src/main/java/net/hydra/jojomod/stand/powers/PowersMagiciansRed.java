@@ -2534,6 +2534,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                     CrossfireHurricaneEntity cfh = hurricaneSpecial2.get(0);
                     if (cfh != null && !cfh.isRemoved() && cfh.isAlive()){
                         cfh.setCrossNumber(0);
+                        cfh.isSpecial = true;
                         hurricaneSpecial2.remove(0);
                         shootAnkh(cfh);
                         this.self.level().playSound(null, this.self.blockPosition(),  ModSounds.CROSSFIRE_SHOOT_EVENT,

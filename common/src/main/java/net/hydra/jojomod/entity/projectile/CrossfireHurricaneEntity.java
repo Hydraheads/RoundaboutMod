@@ -464,6 +464,9 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         }
     }
 
+    public boolean isSpecial = false;
+
+
     public static void blastEntity(Entity gotten, Entity proj, int size, LivingEntity user, boolean direct, PowersMagiciansRed PMR,
                                    boolean fireStorm, float multi){
         if (!(user instanceof Player) && !(user instanceof Monster)){
@@ -518,7 +521,9 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
     public void getEntity(Entity gotten, boolean direct,PowersMagiciansRed PMR){
         if (gotten !=null && !MainUtil.isMobOrItsMounts(gotten,getUser())) {
             int size = this.getSize();
-            blastEntity(gotten,this,size,this.standUser,direct,PMR,fireStormCreated,1);
+            float special = 1;
+            if (isSpecial){special*=1.2f;}
+            blastEntity(gotten,this,size,this.standUser,direct,PMR,fireStormCreated,special);
         }
     }
 
