@@ -53,6 +53,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public static final byte
             MANHATTAN_DODGE = 82,
             DEFLECT_PROJECTILE = 83,
+            HIT_SUCCESS = 87,
 
          UNLOADED_HATTAN =84,
          LOADED_HATTAN =85,
@@ -218,6 +219,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                     ME.hasItem = false;
                 }
             }
+            case PowersManhattanTransfer.HIT_SUCCESS -> this.self.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP);
         }
         return super.tryPower(move, forced);
     }
@@ -404,6 +406,8 @@ public class PowersManhattanTransfer extends NewDashPreset {
                         else{
                             this.getStandEntity(this.getSelf()).setDeltaMovement(this.getStandEntity(this.getSelf()).getForward().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan()));
                         }
+                    } else {
+                        this.getStandEntity(this.getSelf()).setDeltaMovement(Vec3.ZERO);
                     }
                 }
                 if(this.currentHattanStatus == LOADED_HATTAN){
@@ -595,7 +599,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
         IEntityAndData entityAndData = ((IEntityAndData) ent);
         if(visionModeClient) {
             if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) && ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
-                if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent) && !player.hasLineOfSight(ent)) {
+                if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
                     return true;
                 }
             }
