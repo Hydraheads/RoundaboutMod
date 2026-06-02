@@ -636,6 +636,9 @@ public class VampireFate extends VampiricFate {
         if (vdata.vampireLevel < 40 && self instanceof Player pl){
             int exp = vdata.bloodExp;
 
+            if (target instanceof  LivingEntity LE && LE.hasEffect(ModEffects.VAMPIRE_BLOOD)){
+                return;
+            }
             if (target instanceof Npc) {
                 int npcExp = vdata.npcExp;
                 if (npcExp < getEXPcap()){
