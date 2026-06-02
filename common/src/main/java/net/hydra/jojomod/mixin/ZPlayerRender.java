@@ -95,7 +95,34 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     public void roundabout$renderRightHand(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, AbstractClientPlayer player, CallbackInfo ci) {
 
         byte curse = ((StandUser) player).roundabout$getLocacacaCurse();
-        if (curse == LocacacaCurseIndex.RIGHT_HAND) {
+        float delta = ClientUtil.getDelta();
+        if (((TimeStop) player.level()).CanTimeStopEntity(player)) {
+            delta = 0;
+        }
+        float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(player, delta);
+        if (whiteAmt > 0) {
+            boolean isHurt = player.hurtTime > 0;
+            float r = isHurt ? 1.0F : 1.0F;
+            float g = isHurt ? 0.6F : 1.0F;
+            float b = isHurt ? 0.6F : 1.0F;
+            String path = "main";
+            if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+                path = "ice";
+            }
+                ClientUtil.pushPoseAndCooperate(poseStack,8);
+
+                model.rightArm.translateAndRotate(poseStack);
+            if (((IPlayerModel) this.model).roundabout$getSlim()) {
+                ModStrayModels.WhiteAlbumSlimRightArm.render(
+                        player, delta, poseStack, bufferSource, packedLight,
+                        r, g, b, whiteAmt, path);
+            } else {
+                ModStrayModels.WhiteAlbumRightArm.render(
+                        player, delta, poseStack, bufferSource, packedLight,
+                        r, g, b, whiteAmt, path);
+            }
+                ClientUtil.popPoseAndCooperate(poseStack,8);
+        } else if (curse == LocacacaCurseIndex.RIGHT_HAND) {
             this.model.rightSleeve.xScale += 0.04F;
             this.model.rightSleeve.zScale += 0.04F;
             this.model.rightSleeve.render(poseStack, bufferSource.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_RIGHT_ARM)), packedLight, OverlayTexture.NO_OVERLAY);
@@ -113,7 +140,6 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             if (muscle > -1) {
                 float scale = 1.055F;
                 float alpha = 0.6F;
-                float delta = ClientUtil.getDelta();
                 if (((TimeStop) player.level()).CanTimeStopEntity(player)) {
                     delta = 0;
                 }
@@ -136,7 +162,33 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     @Inject(method = "renderLeftHand", at = @At(value = "TAIL"))
     public void roundabout$renderLeftHand(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, AbstractClientPlayer player, CallbackInfo ci) {
         byte curse = ((StandUser) player).roundabout$getLocacacaCurse();
-        if (curse == LocacacaCurseIndex.LEFT_HAND) {
+        float delta = ClientUtil.getDelta();
+        if (((TimeStop) player.level()).CanTimeStopEntity(player)) {
+            delta = 0;
+        }
+        float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(player, delta);
+        if (whiteAmt > 0) {
+            boolean isHurt = player.hurtTime > 0;
+            float r = isHurt ? 1.0F : 1.0F;
+            float g = isHurt ? 0.6F : 1.0F;
+            float b = isHurt ? 0.6F : 1.0F;
+            String path = "main";
+            if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+                path = "ice";
+            }
+            ClientUtil.pushPoseAndCooperate(poseStack,8);
+            model.leftArm.translateAndRotate(poseStack);
+            if (((IPlayerModel) this.model).roundabout$getSlim()) {
+                ModStrayModels.WhiteAlbumSlimLeftArm.render(
+                        player, delta, poseStack, bufferSource, packedLight,
+                        r, g, b, whiteAmt, path);
+            } else {
+                ModStrayModels.WhiteAlbumLeftArm.render(
+                        player, delta, poseStack, bufferSource, packedLight,
+                        r, g, b, whiteAmt, path);
+            }
+            ClientUtil.popPoseAndCooperate(poseStack,8);
+        } else if (curse == LocacacaCurseIndex.LEFT_HAND) {
             this.model.leftSleeve.xScale += 0.04F;
             this.model.leftSleeve.zScale += 0.04F;
             this.model.leftSleeve.render(poseStack, bufferSource.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_LEFT_ARM)), packedLight, OverlayTexture.NO_OVERLAY);
@@ -153,10 +205,6 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             if (muscle > -1) {
                 float scale = 1.055F;
                 float alpha = 0.6F;
-                float delta = ClientUtil.getDelta();
-                if (((TimeStop) player.level()).CanTimeStopEntity(player)) {
-                    delta = 0;
-                }
                 float oscillation = Math.abs(((player.tickCount % 10) + (delta % 1)) - 5) * 0.04F;
                 alpha += oscillation;
                 if (player.getMainArm() == HumanoidArm.LEFT) {

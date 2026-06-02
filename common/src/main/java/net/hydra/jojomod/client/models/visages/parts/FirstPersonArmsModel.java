@@ -21,6 +21,7 @@ import net.hydra.jojomod.item.SnubnoseRevolverItem;
 import net.hydra.jojomod.item.TommyGunItem;
 import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.hydra.jojomod.stand.powers.PowersTusk;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.model.HumanoidModel;
@@ -357,7 +358,24 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
                 }
 
                 if (rightSleeve != null) {
-                    if (bt == LocacacaCurseIndex.RIGHT_HAND) {
+                    float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(context, partialTicks);
+                    if (whiteAmt > 0) {
+
+                        poseStack.pushPose();
+
+                        this.transform.translateAndRotate(poseStack);
+                        this.rform.translateAndRotate(poseStack);
+                        this.right_arm.translateAndRotate(poseStack);
+
+                        String path = "main";
+                        if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+                            path = "ice";
+                        }
+                        ModStrayModels.WhiteAlbumRightArm.render(
+                                context, partialTicks, poseStack, bufferSource, light,
+                                r, g, b, whiteAmt, path);
+                        poseStack.popPose();
+                    } else if (bt == LocacacaCurseIndex.RIGHT_HAND) {
                         poseStack.pushPose();
 
                         this.transform.translateAndRotate(poseStack);
@@ -450,7 +468,25 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
                     }
                 }
                 if (leftSleeve != null) {
-                    if (bt == LocacacaCurseIndex.LEFT_HAND) {
+
+                    float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(context, partialTicks);
+                    if (whiteAmt > 0){
+
+                        poseStack.pushPose();
+
+                        this.transform.translateAndRotate(poseStack);
+                        this.lform.translateAndRotate(poseStack);
+                        this.left_arm.translateAndRotate(poseStack);
+
+                        String path = "main";
+                        if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())){
+                            path = "ice";
+                        }
+                        ModStrayModels.WhiteAlbumLeftArm.render(
+                                context, partialTicks, poseStack, bufferSource, light,
+                                r, g, b, whiteAmt, path);
+                        poseStack.popPose();
+                    } else if (bt == LocacacaCurseIndex.LEFT_HAND) {
                         poseStack.pushPose();
 
                         this.transform.translateAndRotate(poseStack);

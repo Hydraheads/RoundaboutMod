@@ -251,6 +251,33 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return true;
     }
 
+    public static float getWhiteAlbumAmt(Entity entity,float partialTicks){
+        float heyFull = 0;
+        if (entity instanceof LivingEntity LE) {
+            StandUser user = ((StandUser) LE);
+            boolean hasWhiteAlbumOut = user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet();
+            int whiteAlbumTicks = user.roundabout$getWhiteAlbumVanishTicks();
+            if (hasWhiteAlbumOut || whiteAlbumTicks > 0) {
+                byte skin = user.roundabout$getStandSkin();
+                if (user.roundabout$getLastStandSkin() != skin) {
+                    user.roundabout$setLastStandSkin(skin);
+                    whiteAlbumTicks = 0;
+                    user.roundabout$setWhiteAlbumVanishTicks(0);
+                }
+
+                float partialTicks2 = partialTicks % 1;
+                if (hasWhiteAlbumOut) {
+                    heyFull = whiteAlbumTicks + partialTicks2;
+                    heyFull = Math.min(heyFull / 10, 1f);
+                } else {
+                    heyFull = whiteAlbumTicks - partialTicks2;
+                    heyFull = Math.max(heyFull / 10, 0);
+                }
+            }
+        }
+        return heyFull;
+    }
+
     @Override
     public boolean tryTripleIntPower(int move, boolean forced, int chargeTime, int move2, int move3){
         switch (move)

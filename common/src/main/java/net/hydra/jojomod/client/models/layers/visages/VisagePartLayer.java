@@ -17,7 +17,6 @@ import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
@@ -380,6 +379,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 b = isHurt ? 0.6F : 1.0F;
 
                 if (ClientUtil.hasChangedArms(entity)) {
+
                     if (getParentModel() instanceof PlayerModel<?> pm) {
                         if(!((StandUser)entity).rdbt$hasRightHandGone()) {
                             pm.rightArm.visible = true;
