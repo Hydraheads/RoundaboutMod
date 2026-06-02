@@ -427,6 +427,14 @@ public class PowersManhattanTransfer extends NewDashPreset {
             if(this.getStandEntity(self) instanceof ManhattanTransferEntity){
                 targetOther = ME.target;
             }
+
+            if(!switchShootingMode() || targetOther == null){
+                ME.shootRotationXHattan = ME.rotationXHattan;
+                ME.shootRotationYHattan = ME.rotationYHattan;
+            } else {
+                ME.shootRotationXHattan = ME.rotationHeadXHattan;
+                ME.shootRotationYHattan = ME.rotationHeadYHattan;
+            }
         }
         if (this.self instanceof Player PL) {
 

@@ -327,7 +327,7 @@ public void itemEject(){
             }
 
             return manhattanShoot(this, canSnipe(), getHeldItemManhattan(), getShotAccuracy(), getBundleAccuracy(), getThrowAngle(),
-                    getThrowAngle2(), getThrowAngle3(), getCanPlace(), this.rotationXHattan, this.rotationYHattan,
+                    getThrowAngle2(), getThrowAngle3(), getCanPlace(), this.shootRotationXHattan, this.shootRotationYHattan,
                     new Vec3(pos.x, pos.y, pos.z), true, 1, true);
         }
         return false;
@@ -545,10 +545,13 @@ public void itemEject(){
         System.out.println(this.getHeadRotationX());
         System.out.println(this.getHeadRotationY());
     }
-    float rotationXHattan = 0;
-    float rotationYHattan = 0;
-    float rotationHeadXHattan = 0;
-    float rotationHeadYHattan = 0;
+    public float rotationXHattan = 0;
+    public float rotationYHattan = 0;
+    public float rotationHeadXHattan = 0;
+    public float rotationHeadYHattan = 0;
+
+   public float shootRotationXHattan = 0;
+   public float shootRotationYHattan = 0;
 
     public LivingEntity target = null;
 
