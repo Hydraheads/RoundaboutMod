@@ -1,6 +1,7 @@
 package net.hydra.jojomod.registry;
 
 import com.mojang.datafixers.types.Type;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.*;
