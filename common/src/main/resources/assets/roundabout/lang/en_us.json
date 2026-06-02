@@ -2972,6 +2972,8 @@
   "config.roundabout.hairGrabCooldown.desc": "The cooldown of vampire hair grab.",
   "config.roundabout.spikeAttackCooldown.name": "Spike Attack Cooldown",
   "config.roundabout.spikeAttackCooldown.desc": "The cooldown of vampire hair spike attack.",
+  "config.roundabout.clutchCooldown.name": "Clutch Cooldown",
+  "config.roundabout.clutchCooldown.desc": "The cooldown of vampire clutch abilities.",
   "config.roundabout.auraBlastCooldown.name": "Aura Blast Cooldown",
   "config.roundabout.auraBlastCooldown.desc": "The cooldown of vampire dark aura blast.",
   "config.roundabout.deflectionCooldown.name": "Deflection Cooldown",
