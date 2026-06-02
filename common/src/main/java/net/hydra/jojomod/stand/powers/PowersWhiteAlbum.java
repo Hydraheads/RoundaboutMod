@@ -65,9 +65,16 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public boolean angerSelectionMode(){
         return getStandUserSelf().roundabout$getUniqueStandModeToggle();
     }
+
+    @Override
     public boolean canSummonStandAsEntity(){
         return false;
     }
+    @Override
+    public boolean rendersPlayer(){
+        return true;
+    }
+
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         // code for advanced icons
@@ -100,17 +107,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
             survivorsSpawned = new ArrayList<>();
         }
     }
-    public StandEntity getStandForHUDIfFake(){
-        if (displayStand == null){
-            displayStand = ModEntities.SURVIVOR.create(this.getSelf().level());
-        }
-        if (this.self instanceof Player PL && ((IPlayerEntity) PL).roundabout$getStandSkin() != displayStand.getSkin()) {
-            displayStand = ModEntities.SURVIVOR.create(this.getSelf().level());
-            displayStand.setSkin(((IPlayerEntity) PL).roundabout$getStandSkin());
-        }
-        return displayStand;
-    }
-
     public Component getPosName(byte posID){
         return Component.empty();
     }
@@ -326,10 +322,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return 11283968;
     }
 
-    @Override
-    public boolean returnFakeStandForHud(){
-        return true;
-    }
     public SurvivorEntity SurvivorTarget = null;
     public Entity EntityTargetOne = null;
     public Entity EntityTargetTwo = null;
