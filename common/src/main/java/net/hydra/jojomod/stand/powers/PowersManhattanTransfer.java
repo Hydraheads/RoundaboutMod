@@ -575,6 +575,8 @@ public class PowersManhattanTransfer extends NewDashPreset {
                             }
                         }
                     }
+                }else {
+                    entity.setDeltaMovement(Vec3.ZERO);
                 }
             }
         }

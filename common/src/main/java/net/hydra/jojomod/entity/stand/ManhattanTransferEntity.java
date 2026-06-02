@@ -539,7 +539,16 @@ public void itemEject(){
             searchTarget();
         rotationXHattan = this.getXRot();
         rotationYHattan = this.getYRot();
+        rotationHeadXHattan = this.getHeadRotationX();
+        rotationHeadYHattan = this.getHeadRotationY();
+
+        System.out.println(this.getHeadRotationX());
+        System.out.println(this.getHeadRotationY());
     }
+    float rotationXHattan = 0;
+    float rotationYHattan = 0;
+    float rotationHeadXHattan = 0;
+    float rotationHeadYHattan = 0;
 
     public LivingEntity target = null;
 
@@ -579,9 +588,6 @@ public void itemEject(){
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.KNOCKBACK_RESISTANCE, 1.0D);
     }
-
-    float rotationXHattan = 0;
-    float rotationYHattan = 0;
 
     int stupidTicks = 1;
 
