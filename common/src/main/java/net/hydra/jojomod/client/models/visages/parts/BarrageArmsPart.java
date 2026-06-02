@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.access.IPlayerRenderer;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.visages.BarrageArmAnimation;
@@ -14,6 +15,7 @@ import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
@@ -468,7 +470,30 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                                    int light, float r, float g, float b, byte bt, int muscle, float barrageAlpha,
                                    Player player, float partialTicks, PlayerModel plm){
         if (barrageAlpha > 0) {
-            if (bt == LocacacaCurseIndex.RIGHT_HAND) {
+            float delta = ClientUtil.getDelta();
+            if (((TimeStop) player.level()).CanTimeStopEntity(player)) {
+                delta = 0;
+            }
+            float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(player, delta);
+            if (whiteAmt > 0) {
+                String path = "main";
+                if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+                    path = "ice";
+                }
+                ClientUtil.pushPoseAndCooperate(poseStack, 8);
+
+                rsleeve.translateAndRotate(poseStack);
+                if (((IPlayerModel) plm).roundabout$getSlim()) {
+                    ModStrayModels.WhiteAlbumSlimRightArm.render(
+                            player, delta, poseStack, bSource, light,
+                            r, g, b, whiteAmt, path);
+                } else {
+                    ModStrayModels.WhiteAlbumRightArm.render(
+                            player, delta, poseStack, bSource, light,
+                            r, g, b, whiteAmt, path);
+                }
+                ClientUtil.popPoseAndCooperate(poseStack, 8);
+            } else if (bt == LocacacaCurseIndex.RIGHT_HAND) {
                 poseStack.pushPose();
                 VertexConsumer consumerX = bSource.getBuffer
                         (RenderType.entityTranslucent(StandIcons.STONE_RIGHT_ARM));
@@ -529,7 +554,30 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                                    Player player, float partialTicks, PlayerModel plm){
 
         if (barrageAlpha > 0) {
-            if (bt == LocacacaCurseIndex.LEFT_HAND) {
+            float delta = ClientUtil.getDelta();
+            if (((TimeStop) player.level()).CanTimeStopEntity(player)) {
+                delta = 0;
+            }
+            float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(player, delta);
+            if (whiteAmt > 0) {
+                String path = "main";
+                if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+                    path = "ice";
+                }
+                ClientUtil.pushPoseAndCooperate(poseStack, 8);
+
+                rsleeve.translateAndRotate(poseStack);
+                if (((IPlayerModel) plm).roundabout$getSlim()) {
+                    ModStrayModels.WhiteAlbumSlimLeftArm.render(
+                            player, delta, poseStack, bSource, light,
+                            r, g, b, whiteAmt, path);
+                } else {
+                    ModStrayModels.WhiteAlbumLeftArm.render(
+                            player, delta, poseStack, bSource, light,
+                            r, g, b, whiteAmt, path);
+                }
+                ClientUtil.popPoseAndCooperate(poseStack, 8);
+            } else if (bt == LocacacaCurseIndex.LEFT_HAND) {
                 poseStack.pushPose();
                 VertexConsumer consumerX = bSource.getBuffer
                         (RenderType.entityTranslucent(StandIcons.STONE_LEFT_ARM));

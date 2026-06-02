@@ -130,6 +130,10 @@ public class ModSounds {
     public static final ResourceLocation SUMMON_MANDOM_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_MANDOM);
     public static SoundEvent SUMMON_MANDOM_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_MANDOM_ID);
 
+    public static final String WHITE_ALBUM_SUMMON = "white_album_summon";
+    public static final ResourceLocation WHITE_ALBUM_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+WHITE_ALBUM_SUMMON);
+    public static SoundEvent WHITE_ALBUM_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(WHITE_ALBUM_SUMMON_ID);
+
     public static final String MANDOM_REWIND = "mandom_rewind";
     public static final ResourceLocation MANDOM_REWIND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+MANDOM_REWIND);
     public static SoundEvent MANDOM_REWIND_EVENT = SoundEvent.createVariableRangeEvent(MANDOM_REWIND_ID);

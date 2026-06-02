@@ -2376,6 +2376,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Unique
+    public int roundabout$whiteAlbumVanishTicks = 0;
+
+    @Unique
+    @Override
+    public int roundabout$getWhiteAlbumVanishTicks(){
+        return roundabout$whiteAlbumVanishTicks;
+    }
+    @Unique
+    @Override
+    public void roundabout$setWhiteAlbumVanishTicks(int set){
+        roundabout$whiteAlbumVanishTicks = Mth.clamp(set,0,10);
+    }
+    @Unique
     public int roundabout$RattShoulderVanishTicks = 0;
 
     @Unique
@@ -3332,9 +3345,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             return;
         }
 
-        //Right after a gravity flip you are briefly immune to suffocation
+        //Right after a gravity flip you are briefly immune to suffocation, and if zombie hiding in horse
         if ($$0.is(DamageTypes.IN_WALL)){
-            if (((IGravityEntity)rdbt$this()).roundabout$getSuffocationTicks() > 0){
+            if (((IGravityEntity)rdbt$this()).roundabout$getSuffocationTicks() > 0 ||
+            FateTypes.isHidden(rdbt$this())){
                 ci.setReturnValue(false);
                 return;
             }
@@ -5034,6 +5048,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$setHeyYaVanishTicks(roundabout$getHeyYaVanishTicks()+1);
         } else {
             roundabout$setHeyYaVanishTicks(roundabout$getHeyYaVanishTicks()-1);
+        }
+
+        if (roundabout$getStandPowers() instanceof PowersWhiteAlbum && active){
+            roundabout$setWhiteAlbumVanishTicks(roundabout$getWhiteAlbumVanishTicks()+1);
+        } else {
+            roundabout$setWhiteAlbumVanishTicks(roundabout$getWhiteAlbumVanishTicks()-1);
         }
 
         if (roundabout$getStandPowers() instanceof PowersMandom && active){

@@ -161,6 +161,9 @@ public class ClientUtil {
     }
 
     public static boolean hasChangedArms(Entity ent){
+        if (cancelWithSuitStand(ent)){
+            return false;
+        }
         if (HeatUtil.isArmsFrozen(ent)){
             return true;
         }
@@ -174,6 +177,9 @@ public class ClientUtil {
     }
 
     public static boolean hasChangedLegs(Entity ent){
+        if (cancelWithSuitStand(ent)){
+            return false;
+        }
         if (HeatUtil.isLegsFrozen(ent)){
             return true;
         }
@@ -186,6 +192,9 @@ public class ClientUtil {
         return StandIcons.ICICLE_LAYER;
     }
     public static boolean hasChangedHead(Entity ent){
+        if (cancelWithSuitStand(ent)){
+            return false;
+        }
         if (HeatUtil.isBodyFrozen(ent)){
             return true;
         }
@@ -198,6 +207,9 @@ public class ClientUtil {
         return StandIcons.ICICLE_LAYER;
     }
     public static boolean hasChangedBody(Entity ent){
+        if (cancelWithSuitStand(ent)){
+            return false;
+        }
         if (HeatUtil.isBodyFrozen(ent)){
             return true;
         }
@@ -1423,6 +1435,19 @@ public class ClientUtil {
             MainUtil.syncCooldownsForAttacks(attackTime, attackTimeMax, attackTimeDuring,
                     activePower, activePowerPhase, player);
         }
+    }
+
+    public static boolean cancelWithSuitStand(Entity entity){
+
+        float delta = ClientUtil.getDelta();
+        if (((TimeStop) entity.level()).CanTimeStopEntity(entity)) {
+            delta = 0;
+        }
+        float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(entity, delta);
+        if (whiteAmt > 0){
+            return true;
+        }
+        return false;
     }
 
     public static void skillCDSyncPacket(byte power, int cooldown){
