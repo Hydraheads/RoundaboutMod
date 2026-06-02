@@ -317,6 +317,8 @@ public class MainUtil {
         if (string == null || string.isEmpty())
             return false;
         if (vampireSunDamageWorlds != null && !vampireSunDamageWorlds.isEmpty() && vampireSunDamageWorlds.contains(string)){
+
+            Roundabout.LOGGER.info("test");
             return true;
         }
         return false;

@@ -52,6 +52,7 @@ public abstract class ConfigManager {
         loadLocalConfig();
         loadServerConfig();
         loadAdvancedConfig();
+        ConfigManager.loadBlacklists();
         loaded = true;
     }
 

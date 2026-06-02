@@ -10,7 +10,6 @@ public class RoundaboutLoadServer {
     {
         Networking.setServer(server);
         ConfigManager.loadStandArrowPool();
-        ConfigManager.loadBlacklists();
         //DynamicWorld.loadDynamicWorlds(server);
     }
 }
