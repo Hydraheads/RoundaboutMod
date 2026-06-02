@@ -642,7 +642,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         switch (soundChoice)
         {
             case SoundIndex.SUMMON_SOUND -> {
-                return ModSounds.SURVIVOR_SUMMON_EVENT;
+                return ModSounds.WHITE_ALBUM_SUMMON_EVENT;
             }
             case PLACE -> {
                 return ModSounds.SURVIVOR_PLACE_EVENT;

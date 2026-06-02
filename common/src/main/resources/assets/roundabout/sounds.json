@@ -11,6 +11,12 @@
       "roundabout:summon_diver_down"
     ]
   },
+  "white_album_summon": {
+    "subtitle": "sounds.roundabout.white_album_summon",
+    "sounds": [
+      "roundabout:white_album_summon"
+    ]
+  },
   "emperor_summon": {
     "subtitle": "sounds.roundabout.emperor_summon",
     "sounds": [

@@ -32,6 +32,8 @@ public class ForgeSounds {
             register(ModSounds.STAR_SUMMON_SOUND, ModSounds.STAR_SUMMON_SOUND_ID);
     public static final RegistryObject<SoundEvent> SUMMON_MANDOM_EVENT =
             register(ModSounds.SUMMON_MANDOM, ModSounds.SUMMON_MANDOM_ID);
+    public static final RegistryObject<SoundEvent> WHITE_ALBUM_SUMMON_EVENT =
+            register(ModSounds.WHITE_ALBUM_SUMMON, ModSounds.WHITE_ALBUM_SUMMON_ID);
     public static final RegistryObject<SoundEvent> MANDOM_REWIND_EVENT =
             register(ModSounds.MANDOM_REWIND, ModSounds.MANDOM_REWIND_ID);
     public static final RegistryObject<SoundEvent> KNIFE_THROW_SOUND_EVENT =
