@@ -630,10 +630,10 @@ public void itemEject(){
     public final AnimationState right_manhattan_loop = new AnimationState();
     public final AnimationState right_manhattan_stop = new AnimationState();
 
-    public boolean isPressingW = false;
-    public boolean isPressingA = false;
-    public boolean isPressingS = false;
-    public boolean isPressingD = false;
+    private boolean isPressingW = false;
+    private boolean isPressingA = false;
+    private boolean isPressingS = false;
+    private boolean isPressingD = false;
 
     @Override
     public void setupAnimationStates() {

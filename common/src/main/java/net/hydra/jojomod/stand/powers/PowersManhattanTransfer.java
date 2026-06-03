@@ -23,6 +23,8 @@ import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -469,7 +471,8 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 } else {
                     ClientUtil.setCameraEntity(null);
                 }
-
+                System.out.println("is Up:  " + isPressingW);
+                System.out.println("is Down:  " + isPressingS);
             }
         }
         /*forceDespawnSet*/
@@ -592,7 +595,36 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 }
             }
         }
+        keyInputForManhattan();
     }
+
+    public void keyInputForManhattan() {
+        Options options = Minecraft.getInstance().options;
+        if (isPiloting()) {
+            if (options.keyUp.isDown()) {
+                isPressingW = true;
+                isPressingS = false;
+            }
+            if (options.keyDown.isDown()) {
+                isPressingS = true;
+                isPressingW = false;
+            }
+            if (options.keyLeft.isDown()) {
+                isPressingA = true;
+                isPressingD = false;
+            }
+            if (options.keyRight.isDown()) {
+                isPressingD = true;
+                isPressingA = false;
+            }
+
+        }
+    }
+
+    public boolean isPressingW = true;
+    public boolean isPressingA = false;
+    public boolean isPressingS = false;
+    public boolean isPressingD = false;
 
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
