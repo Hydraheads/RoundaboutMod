@@ -788,6 +788,24 @@ public class BaseMinion extends PathfinderMob {
                         if (autoTarget instanceof BaseMinion fm && fm.getController() == this.getController()) {
                             autoTarget = null;
                         }
+                        if (autoTarget instanceof Zombiefish fm && fm.getController() == this.getController()) {
+                            autoTarget = null;
+                        }
+                        if (autoTarget2 instanceof BaseMinion fm && fm.getController() == this.getController()) {
+                            autoTarget2 = null;
+                        }
+                        if (autoTarget2 instanceof Zombiefish fm && fm.getController() == this.getController()) {
+                            autoTarget2 = null;
+                        }
+                        if (autoTarget instanceof Mob fm && ((StandUser)fm).rdbt$getFleshBud() != null
+                                && ((StandUser)fm).rdbt$getFleshBud().equals(controller2)){
+                            autoTarget = null;
+                        }
+                        if (autoTarget2 instanceof Mob fm && ((StandUser)fm).rdbt$getFleshBud() != null
+                                && ((StandUser)fm).rdbt$getFleshBud().equals(controller2)){
+                            autoTarget2 = null;
+                        }
+
                         if (autoTarget != null && (autoTarget.isRemoved() || !autoTarget.isAlive()))
                             autoTarget = null;
                         if (autoTarget2 instanceof BaseMinion fm && fm.getController() == this.getController()) {

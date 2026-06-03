@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.core.BlockPos;
@@ -256,6 +257,20 @@ public class Zombiefish extends PathfinderMob {
                         autoTarget = null;
                     }
                     if (autoTarget2 instanceof Zombiefish fm && fm.getController() == this.getController()){
+                        autoTarget2 = null;
+                    }
+                    if (autoTarget instanceof BaseMinion fm && fm.getController() == this.getController()){
+                        autoTarget = null;
+                    }
+                    if (autoTarget2 instanceof BaseMinion fm && fm.getController() == this.getController()){
+                        autoTarget2 = null;
+                    }
+                    if (autoTarget instanceof Mob fm && ((StandUser)fm).rdbt$getFleshBud() != null
+                            && ((StandUser)fm).rdbt$getFleshBud().equals(controller2)){
+                        autoTarget = null;
+                    }
+                    if (autoTarget2 instanceof Mob fm && ((StandUser)fm).rdbt$getFleshBud() != null
+                            && ((StandUser)fm).rdbt$getFleshBud().equals(controller2)){
                         autoTarget2 = null;
                     }
                     boolean check1 = (this.getTarget() != autoTarget) || autoTarget == null;
