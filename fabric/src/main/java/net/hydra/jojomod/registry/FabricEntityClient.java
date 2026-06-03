@@ -324,6 +324,7 @@ public class FabricEntityClient {
         ModStrayModels.WhiteAlbumBody = new WhiteAlbumBodyPart();
         ModStrayModels.WhiteAlbumLeftLeg = new WhiteAlbumLeftLegPart();
         ModStrayModels.WhiteAlbumRightLeg = new WhiteAlbumRightLegPart();
+        ModStrayModels.WhiteAlbumSkate = new WhiteAlbumSkatePart();
         ModStrayModels.WhiteAlbumRightArm = new WhiteAlbumRightArmPart();
         ModStrayModels.WhiteAlbumSlimRightArm = new WhiteAlbumSlimRightArmPart();
         ModStrayModels.WhiteAlbumLeftArm = new WhiteAlbumLeftArmPart();
