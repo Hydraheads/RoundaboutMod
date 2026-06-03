@@ -3,9 +3,12 @@ package net.hydra.jojomod.client.models;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.models.substand.renderers.FogCloneRenderer;
 import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
+import net.hydra.jojomod.item.MaskItem;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -29,6 +32,17 @@ public class FakeCapeLayer<T extends LivingEntity, M extends EntityModel<T>> ext
     public void render(PoseStack $$0, MultiBufferSource $$1, int $$2, LivingEntity liv, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9) {
         if (liv instanceof CloneEntity ce && ce.getPlayer() instanceof AbstractClientPlayer $$3){
 
+            ItemStack visage;
+            IPlayerEntity pl = ((IPlayerEntity) $$3);
+            visage = pl.roundabout$getMaskSlot();
+            if (visage != null && !visage.isEmpty()) {
+                if (visage.getItem() instanceof MaskItem MI) {
+                    VisageData vd = MI.visageData.generateVisageData($$3);
+                    if (vd.isCharacterVisage()) {
+                        return;
+                    }
+                }
+            }
             if ($$3.isCapeLoaded() && !$$3.isInvisible() && $$3.isModelPartShown(PlayerModelPart.CAPE) && $$3.getCloakTextureLocation() != null) {
                 ItemStack $$10 = $$3.getItemBySlot(EquipmentSlot.CHEST);
                 if (!$$10.is(Items.ELYTRA)) {
