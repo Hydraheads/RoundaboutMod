@@ -84,9 +84,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
         if (!isHoldingSneak()){
             if (hasSkatesActivated()){
-                setSkillIcon(context, x, y, 1, StandIcons.SKATE_INACTIVE, PowerIndex.SKILL_1);
-            } else {
                 setSkillIcon(context, x, y, 1, StandIcons.SKATE_ACTIVE, PowerIndex.SKILL_1);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.SKATE_INACTIVE, PowerIndex.SKILL_1);
             }
         } else {
             setSkillIcon(context, x, y, 1, StandIcons.FREEZE_CANCEL, PowerIndex.SKILL_1);
