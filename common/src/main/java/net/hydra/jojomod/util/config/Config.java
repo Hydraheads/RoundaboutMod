@@ -715,7 +715,7 @@ public class Config implements Cloneable {
         public Integer standtargetingCooldown;
         @IntOption(group = "inherit", value = 360, min = 0, max = 72000)
         public Integer usertargetingCooldown;
-        @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer meteorTrackingPower;
 
         ;

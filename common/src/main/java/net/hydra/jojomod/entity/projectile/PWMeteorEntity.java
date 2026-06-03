@@ -240,7 +240,7 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
                     force = towardUser.scale(0.35);
                 } else {
                     force = towardUser.scale((double) (ClientNetworking.getAppropriateConfig()
-                                    .PlanetWavesSettings.meteorTrackingPower) /2)// mientras mas grande mas targeting fuerte
+                                    .PlanetWavesSettings.meteorTrackingPower) /200)// mientras mas grande mas targeting fuerte
                             .add(tangent.scale(0.04)); // mientras mas grande orbiting mas fuerte
 
                     if (velocity.y < 0) {
