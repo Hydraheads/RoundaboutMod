@@ -75,22 +75,41 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return true;
     }
 
+    public boolean hasSkatesActivated(){
+        return false;
+    }
+
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         // code for advanced icons
-        setSkillIcon(context, x, y, 1, StandIcons.BOTTLE, PowerIndex.SKILL_1);
 
-        if (isHoldingSneak())
-            setSkillIcon(context, x, y, 2, StandIcons.DESPAWN, PowerIndex.NO_CD);
-        else
-            setSkillIcon(context, x, y, 2, StandIcons.SPAWN, PowerIndex.SKILL_2);
-        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        if (!isHoldingSneak()){
+            if (hasSkatesActivated()){
+                setSkillIcon(context, x, y, 1, StandIcons.SKATE_INACTIVE, PowerIndex.SKILL_1);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.SKATE_ACTIVE, PowerIndex.SKILL_1);
+            }
+        } else {
+            setSkillIcon(context, x, y, 1, StandIcons.FREEZE_CANCEL, PowerIndex.SKILL_1);
+        }
 
-        if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {
-            if (angerSelectionMode())
-                setSkillIcon(context, x, y, 4, StandIcons.CUPID_ON, PowerIndex.SKILL_4);
-            else
-                setSkillIcon(context, x, y, 4, StandIcons.RAGE_SELECTION, PowerIndex.SKILL_4);
+        if (!isHoldingSneak()){
+            setSkillIcon(context, x, y, 2, StandIcons.TWISTER, PowerIndex.NO_CD);
+        } else {
+            setSkillIcon(context, x, y, 2, StandIcons.GENTLY_WEEPS, PowerIndex.NO_CD);
+        }
+
+
+        if (!isHoldingSneak()) {
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        } else {
+            setSkillIcon(context, x, y, 3, StandIcons.ICE_WALL, PowerIndex.GLOBAL_DASH);
+        }
+
+        if (!isHoldingSneak()){
+            setSkillIcon(context, x, y, 4, StandIcons.SUIT_COMBAT, PowerIndex.NO_CD);
+        } else {
+            setSkillIcon(context, x, y, 4, StandIcons.FREEZE_BLOCKS, PowerIndex.NO_CD);
         }
 
         super.renderIcons(context, x, y);
@@ -649,10 +668,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
         };
     }
 
-    @Override
-    public boolean isSecondaryStand(){
-        return true;
-    }
     protected Byte getSummonSound() {
         return SoundIndex.SUMMON_SOUND;
     }
@@ -686,10 +701,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 && !(PI2 instanceof SplashPotionItem)));
     }
     public boolean isAttackIneptVisually(byte activeP, int slot) {
-        if (slot == 1 && !canUseWaterBottleThrow()){
-            return true;
-        }
-
         return super.isAttackIneptVisually(activeP,slot);
     }
 
@@ -714,17 +725,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return $$1;
     }
 
-    /**
-     public boolean isWip(){
-     return true;
-     }
-     public Component ifWipListDevStatus(){
-     return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
-     }
-     public Component ifWipListDev(){
-     return Component.literal(  "Hydra").withStyle(ChatFormatting.YELLOW);
-     }
-     **/
 
 
     public boolean switchAngerSelectionMode(){

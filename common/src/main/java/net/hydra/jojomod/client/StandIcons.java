@@ -668,6 +668,27 @@ public class StandIcons {
     public static final ResourceLocation CUPID_ON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/survivor/cupid_on.png");
 
+    public static final ResourceLocation SKATE_ACTIVE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/white_album/skate_active.png");
+    public static final ResourceLocation SKATE_INACTIVE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/white_album/skate_inactive.png");
+    public static final ResourceLocation TWISTER = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/white_album/twister.png");
+    public static final ResourceLocation FREEZE_CANCEL = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/white_album/freeze_cancel.png");
+    public static final ResourceLocation SUIT_COMBAT = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/white_album/suit_combat.png");
+    public static final ResourceLocation GENTLY_WEEPS = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/white_album/gently_weeps.png");
+    public static final ResourceLocation FREEZE_BLOCKS = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/white_album/freeze_blocks.png");
+    public static final ResourceLocation ICE_BUCKET = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/white_album/ice_bucket.png");
+    public static final ResourceLocation PASSIVE_GUARD = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/white_album/passive_guard.png");
+    public static final ResourceLocation ICE_WALL = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/white_album/ice_wall.png");
+
     public static final ResourceLocation SELF_INVIS = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/achtung_baby/self_invis.png");
     public static final ResourceLocation BURST_INVIS = new ResourceLocation(Roundabout.MOD_ID,
