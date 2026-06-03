@@ -514,7 +514,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 while ($$0.hasNext()) {
                     MobEffect $$1 = $$0.next();
                     MobEffectInstance $$2 = this.activeEffects.get($$1);
-                    if ($$2.isVisible() && MainUtil.hidesPotionEffectSwirl($$2.getEffect())) {
+                    if ($$2.isVisible() && !MainUtil.hidesPotionEffectSwirl($$2.getEffect())) {
                         onlyBleeding = false;
                     }
                 }
