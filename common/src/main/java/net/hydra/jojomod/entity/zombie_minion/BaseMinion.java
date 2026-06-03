@@ -638,6 +638,7 @@ public class BaseMinion extends PathfinderMob {
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0){
+        super.readAdditionalSaveData($$0);
         UUID $$2;
         if ($$0.hasUUID("Controller")) {
             $$2 = $$0.getUUID("Controller");
