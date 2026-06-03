@@ -1,20 +1,17 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.ThrownWaterBottleEntity;
-import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
-import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
-import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
@@ -24,6 +21,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -75,8 +73,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return true;
     }
 
+    public boolean skatesActive = false;
     public boolean hasSkatesActivated(){
-        return false;
+        return skatesActive;
     }
 
     @Override
@@ -137,61 +136,35 @@ public class PowersWhiteAlbum extends NewDashPreset {
     @Override
 
     public void tickPowerEnd() {
-        if (survivorsSpawned != null && !survivorsSpawned.isEmpty()) {
-            offloadSurvivors();
-        }
-    }
-    public void addSurvivorToList(SurvivorEntity che){
-        listInit();
-        survivorsSpawned.add(che);
-        List<SurvivorEntity> survivorsList2 = new ArrayList<>(survivorsSpawned) {
-        };
-        int scount = ClientNetworking.getAppropriateConfig().survivorSettings.maxSurvivorsCount;
-        if (!survivorsList2.isEmpty() && survivorsList2.size() > scount) {
-            survivorsList2.get(0).forceDespawn(true);
-            survivorsSpawned.remove(0);
-        }
+        //Roundabout.LOGGER.info("skates: "+skatesActive);
     }
 
-    public void offloadSurvivors(){
-        listInit();
-        List<SurvivorEntity> survivorsList2 = new ArrayList<>(survivorsSpawned) {
-        };
-        if (!survivorsList2.isEmpty()) {
-            for (SurvivorEntity value : survivorsList2) {
-                if (value.isRemoved() || !value.isAlive() || (this.self.level().isClientSide() && this.self.level().getEntity(value.getId()) == null)) {
-                    survivorsSpawned.remove(value);
-                }
-            }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag $$0) {
+        $$0.putBoolean("skatesActive",skatesActive);
+    }
+    @Override
+    public void readAdditionalSaveData(CompoundTag $$0) {
+        if ($$0.contains("skatesActive")) {
+            skatesActive = $$0.getBoolean("skatesActive");
         }
     }
-    public boolean removeAllSurvivors(){
-        listInit();
 
-        boolean success = false;
-        List<SurvivorEntity> survivorsList2 = new ArrayList<>(survivorsSpawned) {
-        };
-        if (!survivorsList2.isEmpty()) {
-            for (SurvivorEntity value : survivorsList2) {
-                value.forceDespawn(true);
-                success = true;
-                survivorsSpawned.remove(value);
-            }
+
+    public void toggleSkatesClient(){
+        if (!this.onCooldown(PowerIndex.SKILL_1)) {
+           ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+           tryPowerPacket(PowerIndex.POWER_1);
         }
-
-        if (success)
-            playStandUserOnlySoundsIfNearby(RETRACT, 100, false, false);
-
-        return true;
     }
-
     @Override
     public void powerActivate(PowerContext context) {
         /**Making dash usable on both key presses*/
         switch (context)
         {
-            case SKILL_1_NORMAL, SKILL_1_CROUCH-> {
-                throwBottleClient();
+            case SKILL_1_NORMAL-> {
+                toggleSkatesClient();
             }
             case SKILL_2_NORMAL-> {
                 summonSurvivorClient();
@@ -217,14 +190,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
-    public void throwBottleClient(){
-        if (!this.onCooldown(PowerIndex.SKILL_1)) {
-            if (canUseWaterBottleThrow()) {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
-                tryPowerPacket(PowerIndex.POWER_1);
-            }
-        }
-    }
 
     public void throwBottleActually(ItemStack stack){
 
@@ -244,28 +209,17 @@ public class PowersWhiteAlbum extends NewDashPreset {
         this.self.level().addFreshEntity($$4);
     }
 
-    public boolean throwWaterBottle(){
+    public boolean toggleSkates(){
         int cooldown = 5;
         this.setCooldown(PowerIndex.SKILL_1, cooldown);
         if (!this.self.level().isClientSide() && this.self instanceof Player PL){
-            ItemStack stack = this.getSelf().getMainHandItem();
-            if ((!stack.isEmpty() && stack.getItem() instanceof PotionItem PI && PotionUtils.getPotion(stack) == Potions.WATER)
-                    && !(stack.getItem() instanceof SplashPotionItem )) {
-                throwBottleActually(stack.copy());
-                if (!PL.getAbilities().instabuild) {
-                    stack.shrink(1);
-                }
-                return true;
+            skatesActive = !skatesActive;
+            if (skatesActive){
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SKATE_EQUIP_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+            } else {
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SKATE_RETRACT_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
             }
-            ItemStack stack2 = this.getSelf().getOffhandItem();
-            if ((!stack2.isEmpty() && stack2.getItem() instanceof PotionItem PI && PotionUtils.getPotion(stack2) == Potions.WATER)
-                    && !(stack2.getItem() instanceof SplashPotionItem )) {
-                throwBottleActually(stack2.copy());
-                if (!PL.getAbilities().instabuild) {
-                    stack2.shrink(1);
-                }
-                return true;
-            }
+            this.getStandUserSelf().roundabout$setStandDisc(MainUtil.saveToDiscData(self,((StandUser)self).roundabout$getStandDisc().copy()));
         }
         return true;
     }
@@ -323,10 +277,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         switch (move)
         {
             case PowerIndex.POWER_1 -> {
-                return throwWaterBottle();
-            }
-            case PowerIndex.POWER_2_SNEAK -> {
-                return removeAllSurvivors();
+                return toggleSkates();
             }
             case PowerIndex.POWER_4 -> {
                 return switchAngerSelectionMode();
@@ -423,14 +374,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
 
-    public int lastPlacementTime = -1;
     @Override
     public void tickMobAI(LivingEntity attackTarget){
-        lastPlacementTime--;
-        if (lastPlacementTime <= -1){
-            lastPlacementTime = 600;
-            createSurvivor(this.self.getPosition(1),true);
-        }
     }
 
     public void despawnSurvivorClient(){
@@ -438,31 +383,12 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
     @Override
     public boolean tryPosPower(int move, boolean forced, Vec3 pos) {
-        if (move == PowerIndex.POWER_2) {
-            createSurvivor(pos,false);
-            return true;
-        }
         return tryPower(move, forced);
     }
 
-    boolean thisistheend=false;
     @Override
     public void tickStandRejection(MobEffectInstance effect) {
         if (!this.getSelf().level().isClientSide()) {
-            if (effect.getDuration() == 50) {
-                createSurvivor(this.self.getPosition(1F),true);
-                if (tempstand != null) {
-                    List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.self.level(), this.self.blockPosition(), ClientNetworking.getAppropriateConfig().survivorSettings.survivorRange, this.self);
-                    LivingEntity firstTarget = null;
-                    if (!mobsInRange.isEmpty()) {
-                        for (Entity ent : mobsInRange) {
-                            if (SurvivorEntity.canZapEntity(ent) && canUseZap(ent) && ent instanceof LivingEntity LE) {
-                                tempstand.matchEntities(this.self,LE);
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 
@@ -479,17 +405,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return true;
     }
 
-    public void createSurvivor(Vec3 pos, boolean activated){
-
-        if (isClient() || (!this.onCooldown(PowerIndex.SKILL_2) || !ClientNetworking.getAppropriateConfig().survivorSettings.SummonSurvivorCooldownCooldownUsesServerLatency)) {
-            int cooldown = ClientNetworking.getAppropriateConfig().survivorSettings.SummonSurvivorCooldownV2;
-            this.setCooldown(PowerIndex.SKILL_2, cooldown);
-            if (!isClient()) {
-                blipStand(pos,activated);
-
-            }
-        }
-    }
 
     public void setRageCupidCooldown(){
         int cooldown = ClientNetworking.getAppropriateConfig().survivorSettings.rageCupidCooldown;
@@ -524,7 +439,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
             stand.setSkin(user.roundabout$getStandSkin());
             stand.setIdleAnimation(user.roundabout$getIdlePos());
             stand.setMaster(this.self);
-            addSurvivorToList(SE);
             SE.setRandomSize((float) (Math.random()*0.4F));
             SE.setYRot(this.self.getYHeadRot() % 360);
             if (activated){

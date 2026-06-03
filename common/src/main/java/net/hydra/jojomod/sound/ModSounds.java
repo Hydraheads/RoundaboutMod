@@ -134,6 +134,13 @@ public class ModSounds {
     public static final ResourceLocation WHITE_ALBUM_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+WHITE_ALBUM_SUMMON);
     public static SoundEvent WHITE_ALBUM_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(WHITE_ALBUM_SUMMON_ID);
 
+    public static final String SKATE_EQUIP = "skate_equip";
+    public static final ResourceLocation SKATE_EQUIP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SKATE_EQUIP);
+    public static SoundEvent SKATE_EQUIP_EVENT = SoundEvent.createVariableRangeEvent(SKATE_EQUIP_ID);
+    public static final String SKATE_RETRACT = "skate_retract";
+    public static final ResourceLocation SKATE_RETRACT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SKATE_RETRACT);
+    public static SoundEvent SKATE_RETRACT_EVENT = SoundEvent.createVariableRangeEvent(SKATE_RETRACT_ID);
+
     public static final String MANDOM_REWIND = "mandom_rewind";
     public static final ResourceLocation MANDOM_REWIND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+MANDOM_REWIND);
     public static SoundEvent MANDOM_REWIND_EVENT = SoundEvent.createVariableRangeEvent(MANDOM_REWIND_ID);

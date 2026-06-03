@@ -23,6 +23,8 @@ public class FabricSounds {
         addSound(ModSounds.STAR_SUMMON_SOUND_ID, ModSounds.STAR_SUMMON_SOUND_EVENT);
         addSound(ModSounds.SUMMON_MANDOM_ID, ModSounds.SUMMON_MANDOM_EVENT);
         addSound(ModSounds.WHITE_ALBUM_SUMMON_ID, ModSounds.WHITE_ALBUM_SUMMON_EVENT);
+        addSound(ModSounds.SKATE_EQUIP_ID, ModSounds.SKATE_EQUIP_EVENT);
+        addSound(ModSounds.SKATE_RETRACT_ID, ModSounds.SKATE_RETRACT_EVENT);
         addSound(ModSounds.MANDOM_REWIND_ID, ModSounds.MANDOM_REWIND_EVENT);
         addSound(ModSounds.WORLD_SUMMON_SOUND_ID, ModSounds.WORLD_SUMMON_SOUND_EVENT);
         addSound(ModSounds.PUNCH_1_SOUND_ID, ModSounds.PUNCH_1_SOUND_EVENT);

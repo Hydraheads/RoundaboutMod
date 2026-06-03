@@ -48,6 +48,11 @@ public class NewLocacacaItem extends Item {
                 ((TimeStop) $$1.level()).isTimeStoppingEntity($$1)) {
             $$1.stopUsingItem();
         } else {
+            if ($$1.isPassenger()){
+                $$1.stopUsingItem();
+                return;
+            }
+
             LivingEntity ent = MainUtil.getStoneTarget($$0, $$1);
             if (ent != null) {
                 float scale = ($$2.getUseDuration() - $$1.getUseItemRemainingTicks());

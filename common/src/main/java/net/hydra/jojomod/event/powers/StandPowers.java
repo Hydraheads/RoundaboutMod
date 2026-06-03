@@ -236,9 +236,9 @@ public class StandPowers extends AbilityScapeBasis {
         return false;
     }
 
+    public void writeToDisc(){
 
-
-
+    }
 
     /**Returns if the stand should render the pilot distance hud*/
     public boolean shouldRenderPilotingHud() {return true;}

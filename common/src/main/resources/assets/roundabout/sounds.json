@@ -17,6 +17,18 @@
       "roundabout:white_album_summon"
     ]
   },
+  "skate_equip": {
+    "subtitle": "sounds.roundabout.skate_equip",
+    "sounds": [
+      "roundabout:skate_equip"
+    ]
+  },
+  "skate_retract": {
+    "subtitle": "sounds.roundabout.skate_retract",
+    "sounds": [
+      "roundabout:skate_retract"
+    ]
+  },
   "emperor_summon": {
     "subtitle": "sounds.roundabout.emperor_summon",
     "sounds": [

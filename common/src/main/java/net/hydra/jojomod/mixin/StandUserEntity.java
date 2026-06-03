@@ -2910,6 +2910,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 if (standDisc.getItem() instanceof StandDiscItem SE){
                     SE.generateStandPowers((LivingEntity)(Object)this);
                     roundabout$itemParityClient = standDisc;
+
+                    if (this.roundabout$Powers != null) {
+                        CompoundTag $$4 = standDisc.getTagElement("Memory");
+                        if ($$4 != null) {
+                            this.roundabout$Powers.readAdditionalSaveData($$4);
+                        }
+                    }
+
                 } else {
                     this.roundabout$setStandPowers(null);
                     roundabout$itemParityClient = ItemStack.EMPTY;
