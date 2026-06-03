@@ -219,7 +219,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             } else {
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SKATE_RETRACT_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
             }
-            this.getStandUserSelf().roundabout$setStandDisc(MainUtil.saveToDiscData(self,((StandUser)self).roundabout$getStandDisc().copy()));
+            saveDiscAndSync();
         }
         return true;
     }
