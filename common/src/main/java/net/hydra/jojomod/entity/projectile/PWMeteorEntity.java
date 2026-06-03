@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.models.projectile.PWMeteorModel;
 import net.hydra.jojomod.entity.FireProjectile;
 import net.hydra.jojomod.entity.ModEntities;
@@ -238,8 +239,9 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
                 if (distance > 10.0) {
                     force = towardUser.scale(0.35);
                 } else {
-                    force = towardUser.scale(0.015)
-                            .add(tangent.scale(0.04)); // mientras mas grande mas targeting fuerte
+                    force = towardUser.scale((double) (ClientNetworking.getAppropriateConfig()
+                                    .PlanetWavesSettings.meteorTrackingPower) /2)// mientras mas grande mas targeting fuerte
+                            .add(tangent.scale(0.04)); // mientras mas grande orbiting mas fuerte
 
                     if (velocity.y < 0) {
                         force = force.add(0, 0.015, 0);
@@ -489,10 +491,8 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
                 && target instanceof LivingEntity living
                 && ((StandUser) user).roundabout$getStandPowers() instanceof PowersPlanetWaves PPW) {
 
-            // use your full damage method
             getEntity(living, PPW, user);
 
-            // optional small explosion on impact
             radialExplosion(living);
 
             this.discard();
