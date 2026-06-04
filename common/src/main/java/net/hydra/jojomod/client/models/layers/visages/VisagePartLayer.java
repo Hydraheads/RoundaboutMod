@@ -153,8 +153,8 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 int whiteAlbumTicks = user.roundabout$getWhiteAlbumVanishTicks();
                 boolean hideExtraPartsWithSuit = false;
                 float heyFull = 0;
+                byte skin = user.roundabout$getStandSkin();
                 if (hasWhiteAlbumOut || whiteAlbumTicks > 0){
-                    byte skin = user.roundabout$getStandSkin();
                     if (user.roundabout$getLastStandSkin() != skin){
                         user.roundabout$setLastStandSkin(skin);
                         whiteAlbumTicks = 0;
@@ -282,7 +282,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 if (hasWhiteAlbumOut || whiteAlbumTicks > 0){
 
 
-                    String path = "main";
+                    String path = PowersWhiteAlbum.getSkinString(skin);
                     if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())){
                         path = "ice";
                     }
