@@ -339,12 +339,10 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
                 center.offset(-fireRadius, -fireRadius, -fireRadius),
                 center.offset(fireRadius, 1, fireRadius))) {
 
-            // only random spots
             if (this.random.nextFloat() > 0.22F) {
                 continue;
             }
 
-            // must be air
             if (!this.level().isEmptyBlock(pos)) {
                 continue;
             }
@@ -352,7 +350,6 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
             BlockPos below = pos.below();
             BlockState belowState = this.level().getBlockState(below);
 
-            // fire needs support
             if (!belowState.isFaceSturdy(this.level(), below, Direction.UP)) {
                 continue;
             }
@@ -435,7 +432,6 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
                 explodeAndIgnite();
                 return;
             }
-            // preserve ores
             if (isProtectedBlock(state)) {
                 continue;
             }
