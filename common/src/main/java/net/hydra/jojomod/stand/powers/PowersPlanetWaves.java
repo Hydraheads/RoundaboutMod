@@ -138,14 +138,20 @@ public class PowersPlanetWaves extends NewDashPreset {
         setSkillIcon(context, x, y, 1, StandIcons.PLANET_WAVES_METEOR_SHOWER, PowerIndex.SKILL_1);
         setSkillIcon(context, x, y, 2, StandIcons.PLANET_WAVES_BIG_METEOR, PowerIndex.SKILL_2);
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
-        if(canExecuteMoveWithLevel(StandTargetingLevel())){
+        /*if(canExecuteMoveWithLevel(StandTargetingLevel())){
             if (!instandtargeting()) {
                 setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_STAND_TARGETING, PowerIndex.SKILL_4);
             } else setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_STAND_RETRIEVING, PowerIndex.SKILL_4);
+        }else setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4);*/
+        if(canExecuteMoveWithLevel(StandTargetingLevel())){
+            if(!isHoldingSneak()) {
+                if(targetingstand) {
+                    setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_STAND_RETRIEVING, PowerIndex.SKILL_4);
+                } else setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_STAND_TARGETING, PowerIndex.SKILL_4);
+            }
         }else setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4);
         if(canExecuteMoveWithLevel(MeteorTrackingLevel())) {
             if (isHoldingSneak())
-
                 setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_METEOR_TRACKING, PowerIndex.SKILL_4_SNEAK);
         }else setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4_SNEAK);
         if (isHoldingSneak())
@@ -336,11 +342,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                 .PlanetWavesSettings.meteorshowerCooldown;
 
         this.setCooldown(PowerIndex.SKILL_1, cooldown);
-        S2CPacketUtil.sendCooldownSyncPacket(
-                ((ServerPlayer)this.getSelf()),
-                PowerIndex.SKILL_1,
-                cooldown
-        );
+        syncStandMode();
     }
 
     private static class ScheduledMeteor {
@@ -457,11 +459,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         this.setCooldown(PowerIndex.SKILL_2, cooldown);
 
-        S2CPacketUtil.sendCooldownSyncPacket(
-                ((ServerPlayer) this.getSelf()),
-                PowerIndex.SKILL_2,
-                cooldown
-        );
+        syncStandMode();
 
         level.playSound(
                 null,
@@ -501,13 +499,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
 
                 targetingstand = true;
-                if (self instanceof ServerPlayer pl) {
-                    S2CPacketUtil.sendGenericIntToClientPacket(
-                            pl,
-                            PacketDataIndex.S2C_INT_STAND_MODE,
-                            1
-                    );
-                }
+                syncStandMode();
 
                 this.standTargetPos = hitResult.getLocation();
 
@@ -534,13 +526,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         Level level = this.self.level();
 
         targetingstand = false;
-        if (self instanceof ServerPlayer pl) {
-            S2CPacketUtil.sendGenericIntToClientPacket(
-                    pl,
-                    PacketDataIndex.S2C_INT_STAND_MODE,
-                    0
-            );
-        }
+        syncStandMode();
         standTargetPos = null;
 
         if (!level.isClientSide()) {
@@ -573,13 +559,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         if (!isClient() && this.self instanceof ServerPlayer PE) {
                 PE.displayClientMessage(Component.translatable("text.roundabout.planet_waves.meteor_tracking_message").withStyle(ChatFormatting.RED), true);
         }
-        if (self instanceof ServerPlayer pl) {
-            S2CPacketUtil.sendGenericIntToClientPacket(
-                    pl,
-                    PacketDataIndex.S2C_INT_STAND_MODE,
-                    2
-            );
-        }
+        syncStandMode();
     }
 
     private void meteornottracking() {
@@ -603,13 +583,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             );
         }
 
-        if (self instanceof ServerPlayer pl) {
-            S2CPacketUtil.sendGenericIntToClientPacket(
-                    pl,
-                    PacketDataIndex.S2C_INT_STAND_MODE,
-                    0
-            );
-        }
+        syncStandMode();
     }
     private void meteorDisappearance() {
         if (this.self.level().isClientSide()) return;
@@ -752,7 +726,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         }
     }
-//summon minecraft:creeper ~ ~ ~ {roundabout.StandDisc:{id:"roundabout:max_planet_waves_disc",tag:{Memory:{Pose:0b,Skin:1b}},Count:1b}}
+//summon minecraft:zombie ~ ~ ~ {roundabout.StandDisc:{id:"roundabout:max_planet_waves_disc",tag:{Memory:{Pose:0b,Skin:1b}},Count:1b}}
     @Override
     protected Byte getSummonSound() {
         return SoundIndex.SUMMON_SOUND;
@@ -775,10 +749,24 @@ public class PowersPlanetWaves extends NewDashPreset {
             );
         }
     }
+    private void syncStandMode() {
+        if (self instanceof ServerPlayer pl) {
+            int mode = 0;
 
+            if (targetingstand) mode |= 1;
+            if (tracking) mode |= 2;
+
+            S2CPacketUtil.sendGenericIntToClientPacket(
+                    pl,
+                    PacketDataIndex.S2C_INT_STAND_MODE,
+                    mode
+            );
+        }
+    }
     @Override
     public void clientIntUpdated(int integer) {
-        targetingstand = integer == 1;
+        targetingstand = (integer & 1) != 0;
+        tracking = (integer & 2) != 0;
     }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();

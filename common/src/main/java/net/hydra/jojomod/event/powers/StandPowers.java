@@ -2177,6 +2177,10 @@ public class StandPowers extends AbilityScapeBasis {
     public void readAdditionalSaveData(CompoundTag $$0) {
 
     }
+    // run this to trigger the disc saving and syncing
+    public void saveDiscAndSync(){
+        this.getStandUserSelf().roundabout$setStandDisc(MainUtil.saveToDiscData(self,((StandUser)self).roundabout$getStandDisc().copy()));
+    }
 
     /**You don't really need this*/
     public boolean setPowerSpecial(int lastMove) {return false;}

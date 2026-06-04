@@ -105,7 +105,8 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             float r = isHurt ? 1.0F : 1.0F;
             float g = isHurt ? 0.6F : 1.0F;
             float b = isHurt ? 0.6F : 1.0F;
-            String path = "main";
+            byte skin = ((StandUser) player).roundabout$getStandSkin();
+            String path = PowersWhiteAlbum.getSkinString(skin);
             if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
                 path = "ice";
             }
@@ -172,7 +173,8 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             float r = isHurt ? 1.0F : 1.0F;
             float g = isHurt ? 0.6F : 1.0F;
             float b = isHurt ? 0.6F : 1.0F;
-            String path = "main";
+            byte skin = ((StandUser) player).roundabout$getStandSkin();
+            String path = PowersWhiteAlbum.getSkinString(skin);
             if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
                 path = "ice";
             }

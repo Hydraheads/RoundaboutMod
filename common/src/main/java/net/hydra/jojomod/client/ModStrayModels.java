@@ -93,6 +93,7 @@ public class ModStrayModels {
     public static WhiteAlbumBodyPart WhiteAlbumBody;
     public static WhiteAlbumLeftLegPart WhiteAlbumLeftLeg;
     public static WhiteAlbumRightLegPart WhiteAlbumRightLeg;
+    public static WhiteAlbumSkatePart WhiteAlbumSkate;
 
     public static WhiteAlbumLeftArmPart WhiteAlbumLeftArm;
     public static WhiteAlbumRightArmPart WhiteAlbumRightArm;

@@ -1,7 +1,6 @@
 package net.hydra.jojomod.powers.power_types;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
@@ -896,10 +895,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
 
 
-    public float getSuckStrength(Entity entity) {
+    public float getBloodClutchStrength(Entity entity) {
         if (self instanceof Player pl && ((IFatePlayer) pl).rdbt$getFatePowers() instanceof VampireFate vp) {
             if (this.getReducedDamage(entity)) {
-                return playerDmgMult(2F);
+                return playerDmgMult(3F);
             } else {
                 return mobDmgMult(5F);
             }
@@ -1122,7 +1121,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         return super.setPowerOther(move,lastMove);
     }
 
-    public void suckImpact(Entity entity){
+    public void bloodClutchImpact(Entity entity){
         if (!this.self.level().isClientSide() && getActivePower() == BLOOD_CLUTCH_ATTACK) {
             if (entity != null) {
                 if (entity.distanceTo(self) > 3){
@@ -1131,7 +1130,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 attackTargetId = 0;
                 float pow;
                 float knockbackStrength;
-                pow = getSuckStrength(entity);
+                pow = getBloodClutchStrength(entity);
                 pow = applyComboDamage(pow);
                 knockbackStrength = 0.10F;
 
@@ -1499,7 +1498,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if (attackTargetId > 0) {
                 target = self.level().getEntity(attackTargetId);
             }
-            suckImpact(target);
+            bloodClutchImpact(target);
             setActivePower(PowerIndex.NONE);
         }
     }

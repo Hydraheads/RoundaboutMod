@@ -514,9 +514,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 while ($$0.hasNext()) {
                     MobEffect $$1 = $$0.next();
                     MobEffectInstance $$2 = this.activeEffects.get($$1);
-                    if ($$2.isVisible() && !$$2.getEffect().equals(ModEffects.BLEED) && !$$2.getEffect().equals(ModEffects.CAPTURING_LOVE)
-                            && !$$2.getEffect().equals(ModEffects.FACELESS) && !$$2.getEffect().equals(ModEffects.SINGE)
-                            && !$$2.getEffect().equals(ModEffects.BANISH) && !$$2.getEffect().equals(ModEffects.SWITCH)) {
+                    if ($$2.isVisible() && !MainUtil.hidesPotionEffectSwirl($$2.getEffect())) {
                         onlyBleeding = false;
                     }
                 }
@@ -2908,7 +2906,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ItemStack standDisc = this.roundabout$getStandDisc();
             if (!ItemStack.matches(roundabout$itemParityClient, standDisc)){
                 if (standDisc.getItem() instanceof StandDiscItem SE){
-                    SE.generateStandPowers((LivingEntity)(Object)this);
+                    if (!(this.roundabout$Powers != null && this.roundabout$Powers.getClass() == SE.standPowers.getClass())) {
+                        SE.generateStandPowers((LivingEntity)(Object)this);
+                    }
                     roundabout$itemParityClient = standDisc;
 
                     if (this.roundabout$Powers != null) {

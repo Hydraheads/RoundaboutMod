@@ -219,7 +219,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             } else {
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SKATE_RETRACT_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
             }
-            this.getStandUserSelf().roundabout$setStandDisc(MainUtil.saveToDiscData(self,((StandUser)self).roundabout$getStandDisc().copy()));
+            saveDiscAndSync();
         }
         return true;
     }
@@ -523,35 +523,17 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     public static final byte
             BASE = 1,
-            GREEN =2,
-            RED =3,
-            PURPLE=4,
-            BLUE=5,
-            SILVER=6,
-            GHAST=7,
-            ENDER=8,
-            CONDUIT=9,
-            CAKE=10,
-            SPONGE=11,
-            SCULK=12,
-            REDSTONE=13;
+            BETA =2,
+            FIERCE =3,
+            BLACK =4;
 
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 BASE,
-                GREEN,
-                RED,
-                PURPLE,
-                BLUE,
-                SILVER,
-                GHAST,
-                ENDER,
-                CONDUIT,
-                CAKE,
-                SPONGE,
-                SCULK,
-                REDSTONE
+                FIERCE,
+                BLACK,
+                BETA
         );
     }
 
@@ -564,21 +546,18 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return 7;
     }
     @Override public Component getSkinName(byte skinId) {
+        return Component.translatable("skins.roundabout.white_album."+getSkinString(skinId));
+    }
+    public static Component getSkinNameStatic(byte skinId) {
+        return Component.translatable("skins.roundabout.white_album."+getSkinString(skinId));
+    }
+    public static String getSkinString(byte skinId) {
         return switch (skinId)
         {
-            case GREEN -> Component.translatable("skins.roundabout.survivor.green");
-            case RED -> Component.translatable("skins.roundabout.survivor.red");
-            case PURPLE -> Component.translatable("skins.roundabout.survivor.purple");
-            case BLUE -> Component.translatable("skins.roundabout.survivor.blue");
-            case SILVER -> Component.translatable("skins.roundabout.survivor.silver");
-            case GHAST -> Component.translatable("skins.roundabout.survivor.ghast");
-            case ENDER -> Component.translatable("skins.roundabout.survivor.ender");
-            case CONDUIT -> Component.translatable("skins.roundabout.survivor.conduit");
-            case CAKE -> Component.translatable("skins.roundabout.survivor.cake");
-            case SPONGE -> Component.translatable("skins.roundabout.survivor.sponge");
-            case SCULK -> Component.translatable("skins.roundabout.survivor.sculk");
-            case REDSTONE -> Component.translatable("skins.roundabout.survivor.redstone");
-            default -> Component.translatable("skins.roundabout.survivor.base");
+            case BETA -> "beta";
+            case BLACK -> "black";
+            case FIERCE -> "dramatic";
+            default -> "base";
         };
     }
 

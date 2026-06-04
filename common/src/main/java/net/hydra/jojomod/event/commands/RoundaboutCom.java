@@ -38,10 +38,30 @@ public class RoundaboutCom {
         dispatcher.register(Commands.literal("roundaboutLevelDownStand")
                 .requires(source
                         -> source.hasPermission(2))
-                .executes(context -> net.hydra.jojomod.RoundaboutCommands.roundaboutSetLevelupStand((CommandSourceStack)context.getSource(),
+                .executes(context -> net.hydra.jojomod.RoundaboutCommands.roundaboutSetLeveldownStand((CommandSourceStack)context.getSource(),
                         ImmutableList.of(((CommandSourceStack)context.getSource()).getEntityOrException())))
                 .then(Commands.argument("targets", EntityArgument.entities())
                         .executes(context -> RoundaboutCommands.roundaboutSetLeveldownStand((CommandSourceStack)context.getSource(),
+                                EntityArgument.getEntities(context, "targets")))
+                )
+        );
+        dispatcher.register(Commands.literal("roundaboutLevelUpFate")
+                .requires(source
+                        -> source.hasPermission(2))
+                .executes(context -> net.hydra.jojomod.RoundaboutCommands.roundaboutSetLevelupFate((CommandSourceStack)context.getSource(),
+                        ImmutableList.of(((CommandSourceStack)context.getSource()).getEntityOrException())))
+                .then(Commands.argument("targets", EntityArgument.entities())
+                        .executes(context -> RoundaboutCommands.roundaboutSetLevelupFate((CommandSourceStack)context.getSource(),
+                                EntityArgument.getEntities(context, "targets")))
+                )
+        );
+        dispatcher.register(Commands.literal("roundaboutLevelDownFate")
+                .requires(source
+                        -> source.hasPermission(2))
+                .executes(context -> net.hydra.jojomod.RoundaboutCommands.roundaboutSetLeveldownFate((CommandSourceStack)context.getSource(),
+                        ImmutableList.of(((CommandSourceStack)context.getSource()).getEntityOrException())))
+                .then(Commands.argument("targets", EntityArgument.entities())
+                        .executes(context -> RoundaboutCommands.roundaboutSetLeveldownFate((CommandSourceStack)context.getSource(),
                                 EntityArgument.getEntities(context, "targets")))
                 )
         );

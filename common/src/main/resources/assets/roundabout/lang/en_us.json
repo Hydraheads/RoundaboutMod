@@ -1999,6 +1999,11 @@
   "skins.roundabout.survivor.sculk": "Sculk",
   "skins.roundabout.survivor.redstone": "Redstone",
 
+  "skins.roundabout.white_album.base": "Part 5",
+  "skins.roundabout.white_album.beta": "Beta",
+  "skins.roundabout.white_album.dramatic": "Fierce",
+  "skins.roundabout.white_album.black": "Dark",
+
   "skins.roundabout.killer_queen.anime": "Part 4",
   "skins.roundabout.killer_queen.agogo": "A-Go!Go!",
   "skins.roundabout.killer_queen.cracked": "Cracked",
@@ -2633,6 +2638,8 @@
   "config.roundabout.standtargetingCooldown.desc": "Stand Targeting move cooldown",
   "config.roundabout.usertargetingCooldown.name": "User Targeting Cooldown",
   "config.roundabout.usertargetingCooldown.desc": "User targeting move cooldown",
+  "config.roundabout.meteorTrackingPower.name": "Meteor Tracking Power",
+  "config.roundabout.meteorTrackingPower.desc": "How much the meteors track you in meteor tracking mode",
 
   "config.roundabout.manhattanTransferMaxRange.name": "Manhattan Transfer Max Range",
   "config.roundabout.manhattanTransferMaxRange.desc": "How far you and Manhattan Transfer can distance until it despawns.",

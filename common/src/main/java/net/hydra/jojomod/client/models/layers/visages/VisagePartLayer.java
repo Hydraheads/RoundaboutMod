@@ -153,8 +153,8 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 int whiteAlbumTicks = user.roundabout$getWhiteAlbumVanishTicks();
                 boolean hideExtraPartsWithSuit = false;
                 float heyFull = 0;
+                byte skin = user.roundabout$getStandSkin();
                 if (hasWhiteAlbumOut || whiteAlbumTicks > 0){
-                    byte skin = user.roundabout$getStandSkin();
                     if (user.roundabout$getLastStandSkin() != skin){
                         user.roundabout$setLastStandSkin(skin);
                         whiteAlbumTicks = 0;
@@ -282,7 +282,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 if (hasWhiteAlbumOut || whiteAlbumTicks > 0){
 
 
-                    String path = "main";
+                    String path = PowersWhiteAlbum.getSkinString(skin);
                     if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())){
                         path = "ice";
                     }
@@ -308,6 +308,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                 partialTicks, path, r, g, b, heyFull);
                     }
 
+                    if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pw && pw.hasSkatesActivated()) {
+                        renderWhiteAlbumSkates(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                partialTicks, path, r, g, b, heyFull);
+                    }
 
                     if (visage.getItem() instanceof MaskItem MI) {
                         VisageData vd = MI.visageData.generateVisageData(entity);
@@ -647,6 +651,20 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ClientUtil.pushPoseAndCooperate(poseStack,36);
         getParentModel().body.translateAndRotate(poseStack);
         ModStrayModels.WhiteAlbumBody.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderWhiteAlbumSkates(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                             float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().rightLeg.translateAndRotate(poseStack);
+        ModStrayModels.WhiteAlbumSkate.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().leftLeg.translateAndRotate(poseStack);
+        ModStrayModels.WhiteAlbumSkate.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, alpha, path);
         ClientUtil.popPoseAndCooperate(poseStack,36);
     }

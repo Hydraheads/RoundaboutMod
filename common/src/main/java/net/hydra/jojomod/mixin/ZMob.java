@@ -8,6 +8,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.ITargetGoal;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
+import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.goals.AnubisAttackGoal;
 import net.hydra.jojomod.entity.goals.RoundaboutFollowGoal;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -891,8 +892,14 @@ public abstract class ZMob extends LivingEntity implements IMob {
         if ($$0 != null) {
             /**Flesh buds prevent aggro on the planter*/
             UUID fleshPlanter = (((StandUser)this).rdbt$getFleshBud());
-            if (fleshPlanter != null && ($$0.getUUID().equals(fleshPlanter) ||
-                    (((StandUser)$$0).rdbt$getFleshBud() != null && ((StandUser)$$0).rdbt$getFleshBud().equals(fleshPlanter)))){
+            if (fleshPlanter != null && (
+                    $$0.getUUID().equals(fleshPlanter) ||
+                    (((StandUser)$$0).rdbt$getFleshBud() != null && ((StandUser)$$0).rdbt$getFleshBud().equals(fleshPlanter)) ||
+                            ($$0 instanceof BaseMinion bm && bm.controller2 != null && bm.controller2.equals(fleshPlanter)) ||
+                            ($$0 instanceof Zombiefish zm && zm.controller2 != null && zm.controller2.equals(fleshPlanter))
+
+            )
+            ){
                 ci.cancel();
                 return;
             }

@@ -179,6 +179,49 @@ public class RoundaboutCommands {
         return targets.size();
     }
 
+
+    public static int roundaboutSetLevelupFate(CommandSourceStack source, Collection<? extends Entity> targets) {
+        for (Entity entity : targets) {
+            if (entity instanceof LivingEntity) {
+                if (entity instanceof Player PE) {
+                    if (FateTypes.isVampire(PE)) {
+                        ((IPlayerEntity) PE).roundabout$setFate((byte) FateTypes.VAMPIRE.ordinal());
+                        ((IPlayerEntity) PE).rdbt$getVampireData().vampireLevel =
+                                Mth.clamp(((IPlayerEntity) PE).rdbt$getVampireData().vampireLevel + 1, 0, 40);
+                        S2CPacketUtil.beamVampireData(PE);
+                    }
+                }
+            }
+        }
+        if (targets.size() == 1) {
+            source.sendSuccess(() -> Component.translatable(  "commands.roundabout.levelup_specific.single", ((Entity)targets.iterator().next()).getDisplayName()), true);
+        } else {
+            source.sendSuccess(() -> Component.translatable(  "commands.roundabout.levelup_specific.multiple", targets.size()), true);
+        }
+        return targets.size();
+    }
+
+    public static int roundaboutSetLeveldownFate(CommandSourceStack source, Collection<? extends Entity> targets) {
+        for (Entity entity : targets) {
+            if (entity instanceof LivingEntity) {
+                if (entity instanceof Player PE) {
+                    if (FateTypes.isVampire(PE)) {
+                        ((IPlayerEntity) PE).roundabout$setFate((byte) FateTypes.VAMPIRE.ordinal());
+                        ((IPlayerEntity) PE).rdbt$getVampireData().vampireLevel =
+                                Mth.clamp(((IPlayerEntity) PE).rdbt$getVampireData().vampireLevel - 1, 0, 40);
+                        S2CPacketUtil.beamVampireData(PE);
+                    }
+                }
+            }
+        }
+        if (targets.size() == 1) {
+            source.sendSuccess(() -> Component.translatable(  "commands.roundabout.levelup_specific.single", ((Entity)targets.iterator().next()).getDisplayName()), true);
+        } else {
+            source.sendSuccess(() -> Component.translatable(  "commands.roundabout.levelup_specific.multiple", targets.size()), true);
+        }
+        return targets.size();
+    }
+
     public static int roundaboutSetFate(CommandSourceStack source, Collection<? extends Entity> targets,
                                          String fate, int level, int experience) {
 
