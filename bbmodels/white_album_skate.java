@@ -16,7 +16,7 @@ public class white_album_skate<T extends Entity> extends EntityModel<T> {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition limb = partdefinition.addOrReplaceChild("limb", CubeListBuilder.create().texOffs(84, 50).addBox(0.0F, 9.9F, -11.0F, 0.0F, 3.0F, 22.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition limb = partdefinition.addOrReplaceChild("limb", CubeListBuilder.create().texOffs(84, 50).addBox(0.0F, 9.8F, -11.0F, 0.0F, 3.0F, 22.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 128, 128);
 	}
