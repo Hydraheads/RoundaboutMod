@@ -895,8 +895,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
             if (fleshPlanter != null && (
                     $$0.getUUID().equals(fleshPlanter) ||
                     (((StandUser)$$0).rdbt$getFleshBud() != null && ((StandUser)$$0).rdbt$getFleshBud().equals(fleshPlanter)) ||
-                            ($$0 instanceof BaseMinion bm && bm.controller2.equals(fleshPlanter)) ||
-                            ($$0 instanceof Zombiefish zm && zm.controller2.equals(fleshPlanter))
+                            ($$0 instanceof BaseMinion bm && bm.controller2 != null && bm.controller2.equals(fleshPlanter)) ||
+                            ($$0 instanceof Zombiefish zm && zm.controller2 != null && zm.controller2.equals(fleshPlanter))
 
             )
             ){

@@ -798,10 +798,12 @@ public class BaseMinion extends PathfinderMob {
                             autoTarget2 = null;
                         }
                         if (autoTarget instanceof Mob fm && ((StandUser)fm).rdbt$getFleshBud() != null
+                                && controller2 != null
                                 && ((StandUser)fm).rdbt$getFleshBud().equals(controller2)){
                             autoTarget = null;
                         }
                         if (autoTarget2 instanceof Mob fm && ((StandUser)fm).rdbt$getFleshBud() != null
+                                && controller2 != null
                                 && ((StandUser)fm).rdbt$getFleshBud().equals(controller2)){
                             autoTarget2 = null;
                         }
