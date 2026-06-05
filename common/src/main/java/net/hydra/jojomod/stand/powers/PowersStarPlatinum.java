@@ -705,9 +705,13 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                                 }
                                 float degrees = Mth.wrapDegrees(getLookAtEntityYaw(this.getSelf(), value) - 180);
 
-                                MainUtil.knockbackWithoutBumpUp(value, strength,
-                                        Mth.sin(((degrees * ((float) Math.PI / 180)))),
+                                lookVec = new Vec2( Mth.sin(((degrees * ((float) Math.PI / 180)))),
                                         -Mth.cos((degrees * ((float) Math.PI / 180))));
+                                if (gravD != Direction.DOWN) {
+                                    lookVec = RotationUtil.rotPlayerToWorld(lookVec.x, lookVec.y, gravD);
+                                }
+                                MainUtil.knockbackWithoutBumpUp(value, strength,lookVec.x,lookVec.y)
+                                        ;
                             }
                         }
                     }
