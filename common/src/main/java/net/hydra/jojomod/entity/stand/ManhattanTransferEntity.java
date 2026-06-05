@@ -1,13 +1,8 @@
 package net.hydra.jojomod.entity.stand;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
-import net.hydra.jojomod.block.MirrorBlock;
 import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.*;
-import net.hydra.jojomod.entity.visages.JojoNPC;
-import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.*;
@@ -30,11 +25,9 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
-import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.phys.*;
@@ -75,7 +68,19 @@ public class ManhattanTransferEntity extends StandEntity {
         return true;
     }
     @Override
-    public boolean canBeHitByProjectile() {return true;}
+    public boolean canBeHitByProjectile() {
+        if(this.getUserData(this.getUser()) != null) {
+            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                if(isDesummoning) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean isDesummoning = false;
+
     @Override
     public boolean hasNoPhysics() {
         return false;

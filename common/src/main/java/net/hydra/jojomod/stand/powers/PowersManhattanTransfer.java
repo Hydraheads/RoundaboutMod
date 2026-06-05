@@ -1,6 +1,5 @@
 package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -107,6 +106,15 @@ public class PowersManhattanTransfer extends NewDashPreset {
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
         return new PowersManhattanTransfer(entity);
+    }
+    @Override
+    public void onStandSummon(boolean desummon) {
+        if(desummon){
+            if(this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME){
+                ME.isDesummoning = true;
+            }
+        }
+        super.onStandSummon(desummon);
     }
    @Override
     public StandEntity getNewStandEntity() {
@@ -397,6 +405,8 @@ public class PowersManhattanTransfer extends NewDashPreset {
             if (!hasStandActive(this.getSelf())) {
                 ME.hasItem = false;
                 ME.hasItemTwo = false;
+            } else {
+                ME.isDesummoning = false;
             }
 
             if(this.isClient()){
