@@ -284,7 +284,7 @@ public class SoftAndWetItemLaunchingBubbleEntity extends SoftAndWetBubbleEntity{
         return 0;
     }
     public float getBundleAccuracy(){
-        return 2.75F;
+        return 1.5F;
     }
     public float getThrowAngle(){
         return -0.5F;

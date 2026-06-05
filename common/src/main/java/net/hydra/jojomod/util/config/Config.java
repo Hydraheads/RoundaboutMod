@@ -487,6 +487,8 @@ public class Config implements Cloneable {
         public Integer sightStealingDurationOnPlayersInTicks;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         public Integer primaryPlunderBubbleLifespanInTicks;
+        @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
+        public Integer itemBubbleLifespanInTicks;
         @FloatOption(group = "inherit", value = 1.0F, min = 0, max = 1000F)
         public Float sizeOfMobBubbleMobsStolen;
         @FloatOption(group = "inherit", value = 1.0F, min = 0, max = 1000F)

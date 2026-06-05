@@ -1132,7 +1132,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
         bubble.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
         bubble.setUser(this.self);
         bubble.setOwner(this.self);
-        bubble.lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.primaryPlunderBubbleLifespanInTicks;
+        bubble.lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.itemBubbleLifespanInTicks;
         return bubble;
     }
     public SoftAndWetExplosiveBubbleEntity getExplosiveBubble(){
