@@ -3,7 +3,6 @@ package net.hydra.jojomod.entity.pathfinding;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -46,22 +45,23 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
         return timeInHole;
     }
     private static final EntityDataAccessor<Boolean> VORTEX = SynchedEntityData.defineId(TuskHoleEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Direction> CLINGING = SynchedEntityData.defineId(TuskHoleEntity.class, EntityDataSerializers.DIRECTION);
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         if (!this.entityData.hasItem(VORTEX)) {
             this.entityData.define(VORTEX, false);
+            this.entityData.define(CLINGING, Direction.DOWN);
         }
     }
 
     int lifespan = 150;
     public boolean isVortex() {return entityData.get(VORTEX);}
 
+    public boolean isClinging() {return entityData.get(CLINGING) != Direction.DOWN;}
+    public void setClinging(Direction d) {entityData.set(CLINGING,d);}
+
     private LivingEntity nearest;
-    public TuskHoleEntity(EntityType<? extends GroundPathfindingStandAttackEntity> $$0, Level $$1, LivingEntity user) {
-        super($$0, $$1);
-        this.setUser(user);
-    }
     public TuskHoleEntity(Level $$1, LivingEntity user) {
         super(ModEntities.TUSK_HOLE, $$1);
         this.setUser(user);
@@ -78,10 +78,6 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
         this.goalSelector.addGoal(1,new TuskHoleAttackGoal(this,1.0F,false));
     }
 
-    @Override
-    public boolean hurt(DamageSource source, float amount) {
-        return false;
-    }
 
     @Override
     public boolean doHurtTarget(Entity target) {
@@ -143,6 +139,13 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
             } else {
                 this.timeInHole = 0;
             }
+        }
+
+        if (this.isClinging()) {
+            if (!this.horizontalCollision) {
+                this.setClinging(Direction.DOWN);
+            }
+            this.setDeltaMovement(Vec3.ZERO);
         }
 
         if (this.getUser() != null) { // doubles lifespan during act 3

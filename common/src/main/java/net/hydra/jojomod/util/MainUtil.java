@@ -1151,6 +1151,7 @@ public class MainUtil {
         if (player != null){
             if (((StandUser)player).roundabout$getStandPowers() instanceof PowersTusk PT) {
                 PT.setNailColor(red,green,blue);
+                PT.saveDiscAndSync();
             }
         }
     }

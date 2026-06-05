@@ -1401,6 +1401,12 @@ public abstract class InputEvents implements IInputEvents {
                 }
             }
                 //this.handleStandRush(this.currentScreen == null && this.options.attackKey.isPressed());
+            CameraType type = Minecraft.getInstance().options.getCameraType();
+            if (standComp.roundabout$getStandPowers() instanceof PowersTusk PT && PT.isPiloting()) {
+                if (type != CameraType.FIRST_PERSON) {
+                    Minecraft.getInstance().options.setCameraType(CameraType.FIRST_PERSON);
+                }
+            }
         }
     }
 
@@ -1410,6 +1416,15 @@ public abstract class InputEvents implements IInputEvents {
     private void roundaboutTickSwitch(CallbackInfo ci) {
         if (this.player != null) {
             this.switchTick = this.player.tickCount;
+        }
+    }
+
+    @Inject(method = "handleKeybinds",at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Options;setCameraType(Lnet/minecraft/client/CameraType;)V"), cancellable = true)
+    private void roundabout$cancelChangePerspective(CallbackInfo ci) {
+        if (this.player != null) {
+            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersTusk PT && PT.isPiloting()) {
+                ci.cancel();
+            }
         }
     }
 
