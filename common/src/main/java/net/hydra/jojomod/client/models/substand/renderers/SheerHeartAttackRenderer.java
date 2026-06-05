@@ -57,12 +57,8 @@ public class SheerHeartAttackRenderer extends StandRenderer<SheerHeartAttackEnti
     }
     
     public void render(SheerHeartAttackEntity SheerHeartAttackEntity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
-        //Player ClientPlayer = Minecraft.getInstance().player;
-        
-    	//if (ClientUtil.canSeeStands(ClientPlayer)) {        	
-    		this.model.setupAnim(SheerHeartAttackEntity, 1, 0.0F, 0.0F, SheerHeartAttackEntity.getYRot(), SheerHeartAttackEntity.getXRot());
-    		
-    		super.render(SheerHeartAttackEntity, 0, partialTicks, matrixStack, vertexConsumerProvider, i);	
+
+        super.render(SheerHeartAttackEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, i);
         	
         //}
     }

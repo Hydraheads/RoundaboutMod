@@ -6,11 +6,13 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.client.models.stand.animations.RattAnimations;
+import net.hydra.jojomod.client.models.substand.renderers.animations.SheerHeartAttackAnimations;
 import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.minecraft.client.Minecraft;
@@ -37,7 +39,15 @@ public class SheerHeartAttackModel<T extends SheerHeartAttackEntity> extends Sta
 	private final ModelPart stand2;
 	private final ModelPart head;
 
-	
+	@Override
+	public ModelPart root() {
+		return stand;
+	}
+
+
+	public ModelPart getStand() {
+		return stand;
+	}
 
 	public static LayerDefinition createBodyLayer() {
 		MeshDefinition meshdefinition = new MeshDefinition();
@@ -62,6 +72,23 @@ public class SheerHeartAttackModel<T extends SheerHeartAttackEntity> extends Sta
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
 
+	StandPowers Power = new PowersKillerQueen(null);
+
+	@Override
+	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+		super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
+		defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
+		//defaultModifiers(pEntity);
+		this.animate(pEntity.moving, SheerHeartAttackAnimations.MOVING, pAgeInTicks, 1.0f);
+		this.animate(pEntity.idle, SheerHeartAttackAnimations.IDLE, pAgeInTicks, 1.0f);
+	}
+
+	@Override
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+		stand.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+	}
+
+	/*
 	@Override
 	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
 		Minecraft mc = Minecraft.getInstance();
@@ -93,17 +120,7 @@ public class SheerHeartAttackModel<T extends SheerHeartAttackEntity> extends Sta
             
      
 	}
-	
-	@Override
-    public ModelPart root() {
-        return stand;
-    }
 
-	
-	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		stand.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-	}
-	
+	*/
 	
 }
