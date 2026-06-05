@@ -170,6 +170,16 @@ public class ManhattanTransferEntity extends StandEntity {
     public final void setHeldItemManhattanFull(ItemStack stack) {
         this.entityData.set(HELD_ITEM_MANHATTAN_FULL, stack);
     }
+
+    public int getHattanTarget() {
+        return this.entityData.get(MANHATTAN_TARGET);
+    }
+    public void setHattanTarget(int d) {
+        this.entityData.set(MANHATTAN_TARGET, d);
+    }
+
+    protected static final EntityDataAccessor<Integer> MANHATTAN_TARGET = SynchedEntityData.defineId(ManhattanTransferEntity.class,
+            EntityDataSerializers.INT);
     public boolean hasItem = false;
     public boolean hasItemTwo = false;
     public boolean success = false;
@@ -560,8 +570,8 @@ public void itemEject(){
         rotationHeadXHattan = this.getHeadRotationX();
         rotationHeadYHattan = this.getHeadRotationY();
 
-        System.out.println(this.getHeadRotationX());
-        System.out.println(this.getHeadRotationY());
+      //  System.out.println(this.getHeadRotationX());
+      //  System.out.println(this.getHeadRotationY());
     }
     public float rotationXHattan = 0;
     public float rotationYHattan = 0;
@@ -588,7 +598,7 @@ public void itemEject(){
                         rement.remove(value);
                         target = null;
                     }
-                    if(entityAndData.roundabout$getTrueInvisibilityManhattan() < 1){
+                    if(entityAndData.roundabout$getTrueInvisibilityManhattan() < 1 || this.isInWater()){
                         rement.remove(value);
                         target = null;
                     }

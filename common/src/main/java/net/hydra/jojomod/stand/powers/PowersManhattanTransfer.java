@@ -55,6 +55,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
             MANHATTAN_DODGE = 82,
             DEFLECT_PROJECTILE = 83,
             HIT_SUCCESS = 87,
+            SET_TARGET = 88,
 
          UNLOADED_HATTAN =84,
          LOADED_HATTAN =85,
@@ -80,6 +81,30 @@ public class PowersManhattanTransfer extends NewDashPreset {
         this.currentHattanStatus = status;
         this.updatePowerInt(PowersManhattanTransfer.LOAD_CHECK, status);
         S2CPacketUtil.sendIntPowerDataPacket((Player)this.getSelf(),PowersManhattanTransfer.LOAD_CHECK, status);
+    }
+
+    public int manhattanTarget = 0;
+
+    public LivingEntity getShootTargetAuto() {
+        if (this.getStandEntity(this.getSelf()) instanceof RattEntity RE) {
+            Entity e = this.getSelf().level().getEntity(RE.getRatTarget());
+            if (e instanceof LivingEntity LE) {
+                return LE;
+            }
+        }
+        return null;
+    }
+    public void setShootTarget(LivingEntity l) {
+        if (l != null) {
+            this.manhattanTarget = l.getId();
+            if (!this.isClient()) {
+                if (this.getSelf() instanceof Player P) {
+                    S2CPacketUtil.sendIntPowerDataPacket(P, PowersRatt.SET_TARGET, l.getId());
+                }
+            }
+        } else {
+            this.manhattanTarget = 0;
+        }
     }
 
 
@@ -481,8 +506,8 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 } else {
                     ClientUtil.setCameraEntity(null);
                 }
-                System.out.println("is Up:  " + isPressingW);
-                System.out.println("is Down:  " + isPressingS);
+               // System.out.println("is Up:  " + isPressingW);
+               // System.out.println("is Down:  " + isPressingS);
             }
         }
         /*forceDespawnSet*/
