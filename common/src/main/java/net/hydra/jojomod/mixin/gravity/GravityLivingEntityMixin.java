@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IGravityLivingEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.mixin.StandUserEntity;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -197,6 +198,8 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
         int changeContext = 0;
         if (((StandUser)this).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking()){
             changeContext = 1;
+        } else if (((StandUser)this).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW && PW.hasSkatesActivated()){
+            changeContext = 2;
         }
         if (gravityDirection == Direction.DOWN && changeContext == 0)
             return;
@@ -311,6 +314,8 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
                 float $$26 = this.level().getBlockState($$25).getBlock().getFriction();
                 if (changeContext == 1){
                     $$26 = 0.6F;
+                } else if (changeContext == 2){
+                    $$26 = 0.992F;
                 }
 
                 float $$27 = this.onGround() ? $$26 * 0.91F : 0.91F;

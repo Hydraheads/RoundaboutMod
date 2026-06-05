@@ -186,9 +186,9 @@ public class HarpoonEntity extends AbstractArrow {
             /**Harpoon Buff*/
             if (isThrown){
                 if (((ISuperThrownAbstractArrow)this).roundabout$getSuperThrow()){
-                    $$2*=1.85F;
+                    $$2*=1.3F;
                 } else {
-                    $$2*=1.5F;
+                    $$2*=1.3F;
                 }
             }
 
@@ -225,7 +225,7 @@ public class HarpoonEntity extends AbstractArrow {
                 int airTime = ((IPlayerEntity)target).roundabout$getAirTime();
                 if (airTime > 0){
                     /**the longer a player is in the air without levitation, the more damage the harpoon will do*/
-                    damage+= Math.max(12F,((float) airTime /10));
+                    damage+= Math.min(12F,((float) airTime /10));
                     skyHit = true;
                 }
 
@@ -237,7 +237,7 @@ public class HarpoonEntity extends AbstractArrow {
             }
 
             if (!target.onGround() && !target.isInWater() && !target.isSwimming() && !target.isPassenger()){
-                damage += 4;
+                damage += 3;
                 skyHit = true;
             }
 

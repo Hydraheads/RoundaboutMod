@@ -3836,6 +3836,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         float stepAddon = roundabout$getStandPowers().getStepHeightAddon();
         if (rdbt$this() instanceof Player pl){
             stepAddon += ((IFatePlayer)pl).rdbt$getFatePowers().getStepHeightAddon();
+            if (roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA && PowerTypes.hasStandActive(pl) &&
+                    PWA.hasSkatesActivated()){
+                stepAddon+=0.7F;
+            }
         }
         if (stepAddon > 0){
             cir.setReturnValue(((IEntityAndData)this).roundabout$getStepHeight() + stepAddon);
