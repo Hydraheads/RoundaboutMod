@@ -155,6 +155,21 @@ public class PowersTusk extends NewDashPreset {
     public int getUsedNails() {return nailCooldowns.size();}
     public int getMaxActiveNails() {return 10-getUsedNails();}
 
+    private int[] convertCDToArray() {
+        int[] ret = new int[nailCooldowns.size()];
+        for(int i=0;i<ret.length;i++) {
+            ret[i] = nailCooldowns.get(i).time;
+        }
+        return ret;
+    }
+    private void convertArrayToCD(int[] array) {
+        ArrayList<CooldownInstance> ret = new ArrayList<>();
+        for(int i : array) {
+            ret.add(new CooldownInstance(i,i));
+        }
+        this.nailCooldowns = ret;
+    }
+
     private int getMainHandNails() {return Math.min(5, getMaxActiveNails() );}
     private int getOffHandNails() {return Math.max(0,getMaxActiveNails()-5);}
     public int getLeftHandNails() {return this.getSelf().getMainArm() == HumanoidArm.RIGHT ? getOffHandNails() : getMainHandNails();}
@@ -182,6 +197,9 @@ public class PowersTusk extends NewDashPreset {
             if (this.getAct() > 1) {
                 this.addNailCooldown(ACT_TWO_CD);
             }
+        }
+        if (!isClient() && this.getSelf() instanceof Player) {
+            this.saveDiscAndSync();
         }
     }
 
@@ -1668,6 +1686,8 @@ public class PowersTusk extends NewDashPreset {
         $$0.putFloat("nailColorX",this.getNailColor().x);
         $$0.putFloat("nailColorY",this.getNailColor().y);
         $$0.putFloat("nailColorZ",this.getNailColor().z);
+
+        $$0.putIntArray("nailCooldowns",this.convertCDToArray());
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
@@ -1677,6 +1697,9 @@ public class PowersTusk extends NewDashPreset {
                     $$0.getFloat("nailColorY"),
                     $$0.getFloat("nailColorZ")
             );
+        }
+        if ($$0.contains("nailCooldowns")) {
+            this.convertArrayToCD($$0.getIntArray("nailCooldowns"));
         }
     }
 

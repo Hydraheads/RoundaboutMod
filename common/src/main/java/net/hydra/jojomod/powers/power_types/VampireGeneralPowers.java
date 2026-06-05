@@ -1185,7 +1185,19 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                                 if (((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
                                     vp.addBloodExp(5, entity);
                                 }
-                                pl.getFoodData().eat(2, 0.0F);
+                                if (entity instanceof Player){
+                                    if (((AccessFateFoodData) pl.getFoodData()).rdbt$getRealSaturation() < 7) {
+                                        pl.getFoodData().eat(3, 1.0F);
+                                    } else {
+                                        pl.getFoodData().eat(3, 0F);
+                                    }
+                                } else {
+                                    if (((AccessFateFoodData) pl.getFoodData()).rdbt$getRealSaturation() < 7) {
+                                        pl.getFoodData().eat(2, 0.1F);
+                                    } else {
+                                        pl.getFoodData().eat(2, 0);
+                                    }
+                                }
                             }
                         }
                     } else {
@@ -1708,8 +1720,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         if ((activePow == POWER_DIVE || activePow == BLOOD_CLUTCH_2
                 || activePow == ICE_CLUTCH_2) && $$0.is(DamageTypes.MOB_ATTACK)){
             return true;
-        } else if (activePow == BLOOD_CLUTCH || activePow == BLOOD_CLUTCH_2
-                || activePow == ICE_CLUTCH || activePow == ICE_CLUTCH_2){
+        } else if (activePow == BLOOD_CLUTCH
+                || activePow == ICE_CLUTCH){
             xTryPower(PowerIndex.NONE,true);
         }
         return false;

@@ -80,8 +80,8 @@ public class GroundBubbleEntity extends GroundPathfindingStandAttackEntity {
                 }
             }
             Entity targ = this.getTarget();
-            if (targ != null && this.getTarget().distanceTo(this) < 5) {
-                if ($$0 != null && ((StandUser) $$0).roundabout$getStandPowers() instanceof PowersSoftAndWet PWW) {
+            if (targ != null && this.getTarget().distanceTo(this) < 5 && $$0 != null && targ.getUUID() != $$0.getUUID()) {
+                if (((StandUser) $$0).roundabout$getStandPowers() instanceof PowersSoftAndWet PWW) {
                     SoftAndWetExplosiveBubbleEntity bubble = PWW.getExplosiveBubble();
                     if (bubble != null){
                         bubble.setReady(true);

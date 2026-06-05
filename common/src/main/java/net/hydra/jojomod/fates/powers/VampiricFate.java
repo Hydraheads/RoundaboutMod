@@ -694,7 +694,11 @@ public int speedActivated = 0;
                     addBloodExp(15,bloodSuckingTarget);
                 } else {
                     self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SUCK_DRAIN_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
-                    pl.getFoodData().eat(2, 0.0F);
+                    if (((AccessFateFoodData) pl.getFoodData()).rdbt$getRealSaturation() < 7) {
+                        pl.getFoodData().eat(2, 0.1F);
+                    } else {
+                        pl.getFoodData().eat(2, 0.0F);
+                    }
                     addBloodExp(5,bloodSuckingTarget);
                 }
                 MainUtil.makeBleed(bloodSuckingTarget, 0, 200, null);

@@ -735,7 +735,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     	}
     }
     
-    public void defuseClient() {   	
+    public void defuseClient() {
     	((StandUser) this.getSelf()).roundabout$tryPower(PowersKillerQueen.DEFUSE, true);
         tryPowerPacket(PowersKillerQueen.DEFUSE);
     	
@@ -745,10 +745,9 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     public void detonateClient() {
     	if (!this.onCooldown(PowerIndex.SKILL_1)) {
-	    	if (currentBombStatus != BOMB_NONE) {
+	    	if (currentBombStatus != BOMB_NONE && this.canAttack() && this.canAttack2()) {
 	    		((StandUser) this.getSelf()).roundabout$tryPower(PowersKillerQueen.DETONATE, true);
 	            tryPowerPacket(PowersKillerQueen.DETONATE);
- 
 	    	}
 	    	
 	    	//this.currentBombStatus = BOMB_NONE;
@@ -876,7 +875,13 @@ public class PowersKillerQueen extends NewPunchingStand {
     			}
     			
     			if (this.ticksCount >= 0) { this.ticksCount--;}
-    			
+
+                if (this.SHA != null && !this.SHA.isRemoved()) {
+                    if (this.SHA.shaIsNear() && this.SHA.getHaveToReturn()) {
+                        this.SHA.discard();
+                    }
+                }
+
     			ClientConfig clientConfig = ConfigManager.getClientConfig();
     	    	int bombConf = clientConfig.dynamicSettings.KillerQueenCurrentBombConfig;
     	    	
@@ -1001,76 +1006,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
         return Component.translatable("skins.roundabout.killer_queen.anime");
     }
-    
-    // Explosion related stuff
-    /*
-    public void explodeEffects(Vec3 pos) {
-    	float range = 0.6f;
-    	
-    	((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.KILLER_QUEEN_EXPLOSION,
-                pos.x,
-                pos.y+1.0f,
-                pos.z,
-                18, range, range+0.3f, range, 1.0);
-    	
-    	((ServerLevel) this.getSelf().level()).sendParticles(new DustParticleOptions(new Vector3f(0.02F, 0.02F, 0.04F), 2f),
-    			pos.x,
-                pos.y+1.0f,
-                pos.z,
-                12, range, range+1.2f, range, 0.001);
-    	
-    	// Sound Emitter:
-    	
-    	 explosionSFX(pos, 10);
-    	
-    }
-    
-    
-    
-    
-    public void explosionHurt(Vec3 pos) {
-    	DamageSource dmg = ModDamageTypes.of(this.getSelf().level(), DamageTypes.PLAYER_EXPLOSION, this.getSelf());;
-    	float range = 1.5f;
-    	List<Entity> damages = MainUtil.genHitbox(this.getSelf().level(), pos.x(), pos.y(), pos.z(), range, range, range);
-    	
-    	for(int j = 0;j<damages.size();j++) {
-            Entity entity = damages.get(j);
-            double dist = entity.distanceToSqr(pos);
-            float percUnhand = ((float)dist/ (range * range * range));
-            float perc = 1.0f - (percUnhand*0.75f);
-            float percKnockback = 1.0f - (percUnhand*0.5f);
-            
-            entity.hurt(dmg, perc*ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionDetonateMaxDamage);
-            
-            Vec3 knockback = new Vec3(entity.getX() - pos.x(), entity.getY() - pos.y(), entity.getZ() - pos.z());
-            knockback.normalize().scale(percKnockback*1.8f);
-            
-            MainUtil.takeLiteralUnresistableKnockbackWithY(entity, knockback.x, knockback.y, knockback.z);
-            
-        }
-    	
-    }
-    
-    public void explodeBlocks(BlockPos location) {
-    	Vec3 center = new Vec3(location.getX(), location.getY(), location.getZ());
-    	
-    	for (BlockPos pos : BlockPos.betweenClosed(location.offset(1, 1, 1), location.offset(-1, -1, -1))) {
-			BlockState info = this.getSelf().level().getBlockState(pos);
-			if (isBlockBlackListed(info)) {continue;}
-			
-			
-			
-			Double explosionDistance = 2.0 + ((double) this.getSelf().getRandom().nextIntBetweenInclusive(-2, 2) / 10.0);
-			
-			Double dist2 = center.distanceToSqr(pos.getX(), pos.getY(), pos.getZ());
-			
-			if (dist2 <= explosionDistance) {
-				boolean shouldDrop = !info.requiresCorrectToolForDrops();
-				this.getSelf().level().destroyBlock(pos, shouldDrop);
-			}
-		}
-    }
-    */
+
     public boolean explode() {
     	ClientConfig clientConfig = ConfigManager.getClientConfig();
     	int bombConf = clientConfig.dynamicSettings.KillerQueenCurrentBombConfig;
@@ -1079,11 +1015,9 @@ public class PowersKillerQueen extends NewPunchingStand {
 			BlockPos pos = this.bombBlock.getBlockPos();
 			if (!isClient()) {
 				if (bombConf % 2 == 1 && ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction) {
-					//explodeBlocks(pos);
 					ExplosionUtil.explodeBlocks(pos, this.getSelf().level(), 1.0f);
 				}
-				//this.explosionHurt(pos.getCenter());
-				//this.explodeEffects(pos.getCenter());
+
 				DamageSource dmg = ModDamageTypes.of(this.getSelf().level(), DamageTypes.PLAYER_EXPLOSION, this.getSelf());;
 				
 				ExplosionUtil.explosionHurt(pos.getCenter(), dmg, this.getSelf().level(), 
@@ -1146,43 +1080,28 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
     
     public boolean sendOrReturnSHA() {
-//    	this.setActivePower(PowerIndex.POWER_3);
+    	this.setActivePower(PowerIndex.POWER_3);
+        //this.animateStand(KillerQueenEntity.RELA);
+
         if (!this.getSelf().level().isClientSide()) {
             if (SHA == null || SHA.isRemoved()){
             	SheerHeartAttackEntity sha = ModEntities.SHEER_HEART_ATTACK.create(this.getSelf().level());
             	if (sha != null) {
-            		
-            		sha.setUser(this.self);
-            		//float yaw = this.getSelf().getYHeadRot();
-            		//Vec3 entDir = new Vec3(Mth.sin(yaw), 0 ,Mth.cos(yaw));
-            		
-            	
-            		
-            		Vec3 dir = new Vec3 (
-            			this.self.getDirection().getStepX(),
-            			this.self.getDirection().getStepY(),
-            			this.self.getDirection().getStepZ()
-    				);
-            		
-            		
-            		
-            		
-            		
-            		Vec3 bam = dir;
-                    Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
-                    if (gravD != Direction.DOWN){
-                        bam = RotationUtil.vecPlayerToWorld(bam,gravD);
-                    }
-                    sha.absMoveTo(this.self.getX()+bam.x, this.self.getY()+bam.y, this.self.getZ()+bam.z);
-            		
+
+                    sha.setUser(this.self);
+                    sha.setXRot(this.self.getXRot());
+                    sha.setYRot(this.self.getYRot());
+                    sha.setPos(getRayBlock(this.self,0.5f).add(0,-0.3,0));
+
             		this.self.level().addFreshEntity(sha);
             		
             		SHA = sha;
             	}
             	
             } else {
+                SHA.setHaveToReturn(!SHA.getHaveToReturn());
             	//SHA.get
-            	SHA.discard();
+            	//SHA.discard();
             }
         }
     	
