@@ -1187,7 +1187,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                                 }
                                 if (entity instanceof Player){
                                     if (((AccessFateFoodData) pl.getFoodData()).rdbt$getRealSaturation() < 7) {
-                                        pl.getFoodData().eat(3, 0.4F);
+                                        pl.getFoodData().eat(3, 1.0F);
                                     } else {
                                         pl.getFoodData().eat(3, 0F);
                                     }
