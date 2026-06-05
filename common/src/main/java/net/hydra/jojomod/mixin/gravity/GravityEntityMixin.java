@@ -1109,7 +1109,6 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         if (Objects.equals(ModPacketHandler.PLATFORM_ACCESS.getPlatformName(), "Forge")) {
             if (isInLava())
                 return;
-            return;
         }
 
         boolean counterPushing = false;
