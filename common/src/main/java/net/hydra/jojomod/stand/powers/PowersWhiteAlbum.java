@@ -92,26 +92,31 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public int acceleration = 0;
     public float inputSpeedModifiers(float basis){
         if (hasSkatesActivated()){
-            basis *= 1.35f+(acceleration*0.015F);
+            basis *= 1.25f+(acceleration*0.015F);
         }
         return super.inputSpeedModifiers(basis);
     }
 
+    double lastY = 0;
     @Override
     public void tickPower() {
         if (isPacketPlayer()){
             if (hasSkatesActivated()){
-                if (!self.onGround()) {
-                    if (getStandUserSelf().rdbt$getJumping()){
+                if (self.isInWater() || self.hurtTime > 10 || self.isUsingItem()) {
+                    acceleration = 0;
+                } else if (!self.onGround()) {
+                    if (lastY < self.getY()){
                         acceleration = 0;
                     } else {
-                        acceleration = Math.max(0, acceleration - 4);
+                        acceleration = Math.min(100,acceleration+5);
                     }
-                } else if (self.isInWater()){
-                    acceleration = 0;
                 } else {
                     if (self.isSprinting() && !self.horizontalCollision){
-                        acceleration = Math.min(100,acceleration+1);
+                        if (lastY < self.getY()){
+                            acceleration = Math.max(0,acceleration-25);
+                        } else {
+                            acceleration = Math.min(100,acceleration+1);
+                        }
                     } else {
                         acceleration = Math.max(0,acceleration-5);
                     }
@@ -119,6 +124,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
             } else {
                 acceleration = 0;
+            }
+            if (self.onGround()){
+                lastY = self.getY();
             }
         }
         super.tickPower();
