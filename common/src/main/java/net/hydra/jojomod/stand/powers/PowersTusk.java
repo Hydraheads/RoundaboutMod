@@ -1618,10 +1618,12 @@ public class PowersTusk extends NewDashPreset {
         return powersTusk;
     }
 
+    private static final String location = "textures/stand/tusk/act_";
     public static void buildSkins() {
         for(int i=0;i<4;i++) {
-            MANGA_SKIN[i] = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/tusk/act_"+(i+1)+ "/manga.png");
-            BLUE_SKIN[i] = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/tusk/act_"+(i+1)+ "/blue.png");
+            MANGA_SKIN[i] = new ResourceLocation(Roundabout.MOD_ID,location+(i+1)+ "/manga.png");
+            BLUE_SKIN[i] = new ResourceLocation(Roundabout.MOD_ID,location+(i+1)+ "/blue.png");
+            RESONANCE_SKIN[i] = new ResourceLocation(Roundabout.MOD_ID,location+(i+1)+ "/resonance.png");
         }
     }
     public static ResourceLocation getSkin(byte skin, int act) {
@@ -1629,6 +1631,7 @@ public class PowersTusk extends NewDashPreset {
         ResourceLocation[] skins = switch (skin) {
             case MANGA -> MANGA_SKIN;
             case BLUE -> BLUE_SKIN;
+            case RESONANCE -> RESONANCE_SKIN;
             default -> MANGA_SKIN;
         };
         return skins[act-1];
@@ -1642,22 +1645,26 @@ public class PowersTusk extends NewDashPreset {
 
     private static ResourceLocation[] MANGA_SKIN = new ResourceLocation[4];
     private static ResourceLocation[] BLUE_SKIN = new ResourceLocation[4];
+    private static ResourceLocation[] RESONANCE_SKIN = new ResourceLocation[4];
 
 
     public static final byte
             MANGA = 1,
-            BLUE = 2;
+            BLUE = 2,
+            RESONANCE = 3;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 MANGA,
-                BLUE
+                BLUE,
+                RESONANCE
         );
     }
     @Override public Component getSkinName(byte skinId) {
         return switch (skinId)
         {
             case BLUE -> Component.translatable("skins.roundabout.tusk.blue");
+            case RESONANCE -> Component.translatable("skins.roundabout.tusk.resonance");
             default -> Component.translatable("skins.roundabout.tusk.manga");
         };
     }

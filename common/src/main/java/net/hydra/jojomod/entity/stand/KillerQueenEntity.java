@@ -82,12 +82,16 @@ public class KillerQueenEntity extends FollowingStandEntity {
     public final AnimationState bubbleLaunch = new AnimationState();
     public final AnimationState bubbleRedirect= new AnimationState();
     public final AnimationState heavyStrike = new AnimationState();
+    public final AnimationState shaSend = new AnimationState();
     
     public static byte
 		KICK = 25,
 		KICK_CHARGE = 27,
     	DETONATE = 121,
     	BLOCK_PLANT = 122,
+        MOB_PLANT = 123,
+        MOB_PLANT_2 = 124,
+        SHA_SEND = 88,
     	HEAVY_STRIKE = 26;
     
     @Override
@@ -150,6 +154,22 @@ public class KillerQueenEntity extends FollowingStandEntity {
             } else {
                 this.heavyStrike.stop();
             }
+            if (this.getAnimation() == SHA_SEND) {
+                this.shaSend.startIfStopped(this.tickCount);
+            } else {
+                this.shaSend.stop();
+            }
+            if (this.getAnimation() == MOB_PLANT) {
+                this.mobBombPlant.startIfStopped(this.tickCount);
+            } else {
+                this.mobBombPlant.stop();
+            }
+            if (this.getAnimation() == MOB_PLANT_2) {
+                this.mobBombPlant2.startIfStopped(this.tickCount);
+            } else {
+                this.mobBombPlant2.stop();
+            }
+
         }
     }
 }
