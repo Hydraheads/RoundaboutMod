@@ -3,12 +3,14 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.ThrownWaterBottleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -30,6 +32,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PotionItem;
@@ -75,8 +78,52 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     public boolean skatesActive = false;
     public boolean hasSkatesActivated(){
-        return skatesActive;
+        return skatesActive && PowerTypes.hasStandActive(self);
     }
+
+    @Override
+    public boolean cancelSprintJump(){
+        if (hasSkatesActivated()){
+            return true;
+        }
+        return super.cancelSprintJump();
+    }
+
+    public int acceleration = 0;
+    public float inputSpeedModifiers(float basis){
+        if (hasSkatesActivated()){
+            basis *= 1.35f+(acceleration*0.015F);
+        }
+        return super.inputSpeedModifiers(basis);
+    }
+
+    @Override
+    public void tickPower() {
+        if (isPacketPlayer()){
+            if (hasSkatesActivated()){
+                if (!self.onGround()) {
+                    if (getStandUserSelf().rdbt$getJumping()){
+                        acceleration = 0;
+                    } else {
+                        acceleration = Math.max(0, acceleration - 4);
+                    }
+                } else if (self.isInWater()){
+                    acceleration = 0;
+                } else {
+                    if (self.isSprinting() && !self.horizontalCollision){
+                        acceleration = Math.min(100,acceleration+1);
+                    } else {
+                        acceleration = Math.max(0,acceleration-5);
+                    }
+                }
+
+            } else {
+                acceleration = 0;
+            }
+        }
+        super.tickPower();
+    }
+
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
@@ -500,13 +547,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 EntityTargetTwo = null;
             }
         }
-    }
-    @Override
-    public void tickPower() {
-        if (this.self.level().isClientSide()){
-            unloadTargets();
-        }
-        super.tickPower();
     }
 
 

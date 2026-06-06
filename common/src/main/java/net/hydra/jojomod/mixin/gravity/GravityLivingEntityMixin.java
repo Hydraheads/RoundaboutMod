@@ -315,7 +315,11 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
                 if (changeContext == 1){
                     $$26 = 0.6F;
                 } else if (changeContext == 2){
-                    $$26 = 0.992F;
+                    if (isCrouching()){
+                        $$26 = 0.75F;
+                    } else {
+                        $$26 = 0.992F;
+                    }
                 }
 
                 float $$27 = this.onGround() ? $$26 * 0.91F : 0.91F;
