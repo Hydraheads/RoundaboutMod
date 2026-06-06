@@ -450,6 +450,6 @@ public class BladedBowlerHatEntity extends AbstractArrow {
             damageSource = ModDamageTypes.of(this.level(), ModDamageTypes.STAND, this, entity2);
             float amount = MainUtil.isBossMob(hit) || hit instanceof Player ? 1 : 2;
             hit.hurt(damageSource, amount);
-            if(hit.hurt(damageSource, amount)){System.out.println(amount);}
+            if(hit.hurt(damageSource, amount)){}
         }
 }
