@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.MainUtil;
@@ -83,7 +84,8 @@ public abstract class TimeStopProjectile extends Entity implements IProjectileAc
         Entity entity = $$0.getEntity();
         Projectile PRJ = (Projectile) (Object) this;
         if(isManhattanProjectile) {
-           // Roundabout.LOGGER.info("PROJECTILE HITTIN HARD");
+            Roundabout.LOGGER.info("PROJECTILE HITTIN HARD");
+            entity.hurt(ModDamageTypes.of(level(), ModDamageTypes.STAND, this, PRJ.getOwner()), 1);
         }
         doExtraDamageManhattan($$0);
     }

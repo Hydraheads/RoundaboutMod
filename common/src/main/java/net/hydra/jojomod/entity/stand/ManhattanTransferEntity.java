@@ -6,6 +6,7 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.mixin.time_stop.TimeStopProjectile;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
@@ -362,6 +363,8 @@ public class ManhattanTransferEntity extends StandEntity {
         return false;
     }
 
+    Projectile hattanDeflected = null;
+
     public static boolean manhattanShoot(ManhattanTransferEntity thrower, boolean canSnipe, ItemStack item, float getShotAccuracy,
                                          float getBundleAccuracy,
                                          float getThrowAngle1, float getThrowAngle2, float getThrowAngle3,
@@ -379,7 +382,7 @@ public class ManhattanTransferEntity extends StandEntity {
                 $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3, getShotAccuracy);
                 $$11.setCritArrow(false);
                 ((IAbstractArrowAccess) $$11).roundabout$SetIsManhattan(true);
-                ((IProjectileAccess) $$11).roundabout$setManhattanProjectile(true);
+              //  ((IProjectileAccess) $$11).roundabout$setManhattanProjectile(true);
                 ((IAbstractArrowAccess) $$11).roundabout$setHattanDamage(thrower.manhattanDamageIncipit);
 
                 if (thrower != null) {
@@ -391,6 +394,7 @@ public class ManhattanTransferEntity extends StandEntity {
                 }
                 $$11.setRemainingFireTicks(thrower.fireTicksPrj);
                 thrower.level().addFreshEntity($$11);
+                thrower.hattanDeflected = $$11;
                 $$11.setOwner(thrower.getUser());
             } else if (item.getItem() instanceof AmmoItem) {
                 RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity(thrower.level(), thrower);
@@ -411,6 +415,7 @@ public class ManhattanTransferEntity extends StandEntity {
                 $$7.isHattan = true;
                 $$7.manhattanDamage = thrower.manhattanDamageIncipit;
                 thrower.level().addFreshEntity($$7);
+                thrower.hattanDeflected = $$7;
                 $$7.setOwner(thrower.getUser());
             } else if (item.getItem() instanceof EnderpearlItem) {
                 ThrownEnderpearl $$7 = new ThrownEnderpearl(thrower.level(), thrower);
@@ -420,6 +425,7 @@ public class ManhattanTransferEntity extends StandEntity {
                 $$7.setRemainingFireTicks(thrower.fireTicksPrj);
                 $$7.setOwner(thrower.getUser());
                 thrower.level().addFreshEntity($$7);
+                thrower.hattanDeflected = $$7;
             } else if (item.getItem() instanceof SnowballItem) {
                 Snowball $$7 = new Snowball(thrower.level(), thrower);
                 $$7.setPos(pos);
@@ -428,6 +434,7 @@ public class ManhattanTransferEntity extends StandEntity {
                 $$7.setRemainingFireTicks(thrower.fireTicksPrj);
                 $$7.setOwner(thrower.getUser());
                 thrower.level().addFreshEntity($$7);
+                thrower.hattanDeflected = $$7;
             } else if (item.getItem() instanceof TridentItem || item.getItem() instanceof HarpoonItem) {
                 if (item.getItem() instanceof TridentItem) {
                     ThrownTrident $$7 = new ThrownTrident(thrower.level(), thrower, item);
@@ -436,6 +443,7 @@ public class ManhattanTransferEntity extends StandEntity {
                     $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
                     $$7.setOwner(thrower.getUser());
                     thrower.level().addFreshEntity($$7);
+                    thrower.hattanDeflected = $$7;
                 } else {
                     HarpoonEntity $$7 = new HarpoonEntity(thrower.level(), thrower, item);
                     $$7.setPos(pos);
@@ -443,6 +451,7 @@ public class ManhattanTransferEntity extends StandEntity {
                     $$7.setOwner(thrower.getUser());
                     $$7.setRemainingFireTicks(thrower.fireTicksPrj);
                     thrower.level().addFreshEntity($$7);
+                    thrower.hattanDeflected = $$7;
                 }
             } else if (item.is(Items.IRON_INGOT)) {
                 IronBallEntity $$7 = new IronBallEntity(thrower.level(), thrower, item);
@@ -451,6 +460,8 @@ public class ManhattanTransferEntity extends StandEntity {
                 $$7.setRemainingFireTicks(thrower.fireTicksPrj);
                 $$7.setOwner(thrower.getUser());
                 thrower.level().addFreshEntity($$7);
+                $$7.isHattanIronBall = true;
+                thrower.hattanDeflected = $$7;
             } else if (item.getItem() instanceof KnifeItem) {
                 KnifeEntity $$7 = new KnifeEntity(thrower.level(), thrower, item);
                 $$7.setPos(pos);
@@ -458,13 +469,7 @@ public class ManhattanTransferEntity extends StandEntity {
                 $$7.setRemainingFireTicks(thrower.fireTicksPrj);
                 $$7.setOwner(thrower.getUser());
                 thrower.level().addFreshEntity($$7);
-            } else if (item.getItem() instanceof MatchItem) {
-                KnifeEntity $$7 = new KnifeEntity(thrower.level(), thrower, item);
-                $$7.setPos(pos);
-                $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
-                $$7.setRemainingFireTicks(thrower.fireTicksPrj);
-                $$7.setOwner(thrower.getUser());
-                thrower.level().addFreshEntity($$7);
+                thrower.hattanDeflected = $$7;
             } else if (item.getItem() instanceof PotionItem) {
                 ThrownPotion $$4 = new ThrownPotion(thrower.level(), thrower);
                 $$4.setPos(pos);
@@ -473,6 +478,7 @@ public class ManhattanTransferEntity extends StandEntity {
                 $$4.setOwner(thrower.getUser());
                 $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.4F * mult, getShotAccuracy);
                 thrower.level().addFreshEntity($$4);
+                thrower.hattanDeflected = $$4;
             } else if (item.getItem() instanceof BowlerHatItem) {
                 BladedBowlerHatEntity $$4 = new BladedBowlerHatEntity(thrower.level(), thrower, item);
                 $$4.setPos(pos);
@@ -481,6 +487,7 @@ public class ManhattanTransferEntity extends StandEntity {
                 $$4.setOwner(thrower.getUser());
                 $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.4F * mult, getShotAccuracy);
                 thrower.level().addFreshEntity($$4);
+                thrower.hattanDeflected = $$4;
             } else {
                 getCanPlace = false;
                 ThrownObjectEntity $$14 = new ThrownObjectEntity(thrower, thrower.level(), item, getCanPlace);
@@ -493,9 +500,17 @@ public class ManhattanTransferEntity extends StandEntity {
                 $$14.setRemainingFireTicks(thrower.fireTicksPrj);
                 $$14.setOwner(thrower.getUser());
                 thrower.level().addFreshEntity($$14);
+                thrower.hattanDeflected = $$14;
             }
+            thrower.powerUpProjectile();
         }
         return true;
+    }
+
+    public void powerUpProjectile(){
+        if(this.hattanDeflected != null) {
+            ((IProjectileAccess) hattanDeflected).roundabout$setManhattanProjectile(true);
+        }
     }
 
     public void changeMovementState() {

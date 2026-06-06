@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.projectile;
 
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -95,6 +96,7 @@ public class IronBallEntity extends AbstractArrow {
         }
     }
 
+    public boolean isHattanIronBall = false;
 
     private static final double baseDamage2 = 2f;
 
@@ -206,6 +208,9 @@ public class IronBallEntity extends AbstractArrow {
             if (this.getPierceLevel() <= 0) {
                 this.discard();
             }
+            if(isHattanIronBall){
+                this.bonusIronBallDamage(entity);
+            }
         } else {
             if (pl > 0 && !bl) {
                 //reduced kb
@@ -230,6 +235,18 @@ public class IronBallEntity extends AbstractArrow {
         }
         if (!this.isRemoved()){
             setPierceLevel(pl);
+        }
+    }
+
+    protected void bonusIronBallDamage(Entity hitent){
+        /*Iron Ball and Manhattan Transfer bonus damage*/
+        DamageSource damageSource;
+        Entity entity2 = this.getOwner();
+        damageSource = ModDamageTypes.of(this.level(), ModDamageTypes.STAND, this, entity2);
+        float amount = 1;
+      //  hitent.hurt(ModDamageTypes.of(level(), ModDamageTypes.STAND, this, this.getOwner()), amount);
+        if(hitent.hurt(damageSource, amount)){
+            Roundabout.LOGGER.info("Aaaaaaa");
         }
     }
 
