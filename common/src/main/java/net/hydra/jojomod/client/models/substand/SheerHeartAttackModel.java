@@ -79,7 +79,7 @@ public class SheerHeartAttackModel<T extends SheerHeartAttackEntity> extends Sta
 		super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
 		defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
 		//defaultModifiers(pEntity);
-		this.animate(pEntity.moving, SheerHeartAttackAnimations.MOVING, pAgeInTicks, 1.0f);
+		this.animate(pEntity.moving, SheerHeartAttackAnimations.MOVING, pAgeInTicks, 0.7f);
 		this.animate(pEntity.idle, SheerHeartAttackAnimations.IDLE, pAgeInTicks, 1.0f);
 	}
 
@@ -88,39 +88,4 @@ public class SheerHeartAttackModel<T extends SheerHeartAttackEntity> extends Sta
 		stand.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 
-	/*
-	@Override
-	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
-		Minecraft mc = Minecraft.getInstance();
-
-        Vec3 rots = new Vec3(this.head.xRot,this.stand.yRot,0);
-
-        super.setupAnim(pEntity,pLimbSwing,pLimbSwingAmount,pAgeInTicks,pNetHeadYaw,pHeadPitch);
-
-        
-        if (!mc.isPaused() && !(((TimeStop) pEntity.level()).CanTimeStopEntity(pEntity.getUser())) && !(pEntity.getDeltaMovement() == Vec3.ZERO)) {
-            //Entity target = PR.getShootTarget();
-            //Vec3 v = pEntity.getTargetPosition();
-        	Vec3 v = pEntity.getRotations();
-        		
-        	Roundabout.LOGGER.info("SetupAnim called! " + v.x + " " + v.y + " " + v.z);
-            v = new Vec3( 360-(v.x-Math.PI/2+0.3F),v.y+(float)Math.PI,0);
-
-            //this.head.xRot = Mth.lerp(this.head.xRot, (float) v.x, 0.85F);
-            this.stand.yRot = Mth.lerp(this.stand.yRot, (float) v.y, 0.35F);
-            Roundabout.LOGGER.info("rotation server: " + this.stand.yRot  + " should be " + v.y);
-            
-        } else {
-        	
-            //this.head.xRot = (float)rots.x;
-            this.stand.yRot =(float)rots.y;
-        }
-        //pEntity.setHeadRotationX(this.head.xRot);
-        pEntity.setStandRotationY(this.stand.yRot);
-            
-     
-	}
-
-	*/
-	
 }

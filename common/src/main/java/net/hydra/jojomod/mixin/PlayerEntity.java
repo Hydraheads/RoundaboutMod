@@ -1659,6 +1659,12 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                     roundabout$airTime += 1;
                 }
             }
+        } else {
+            if (notSkybound || this.isInWater()){
+                roundabout$airTime = 0;
+            } else {
+                roundabout$airTime += 1;
+            }
         }
 
         if (!this.isDeadOrDying()) {

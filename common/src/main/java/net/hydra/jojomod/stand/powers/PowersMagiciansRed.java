@@ -1701,6 +1701,10 @@ public class PowersMagiciansRed extends NewPunchingStand {
             if (entity != null && entity.distanceTo(self) > 4.5F) {
                 entity = null;
             }
+            if (entity instanceof Player pl && pl.isCreative()){
+                entity = null;
+            }
+
             if (entity != null) {
                 if (entity instanceof LivingEntity LE) {
                     ((StandUser) LE).roundabout$setBoundTo(this.self);

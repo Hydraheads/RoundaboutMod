@@ -173,13 +173,7 @@ public class KillerQueenModel<T extends KillerQueenEntity> extends StandModel<T>
         this.animate(pEntity.bubbleLaunch, KillerQueenAnimations.bubble_launch, pAgeInTicks, 1F);
         this.animate(pEntity.bubbleRedirect, KillerQueenAnimations.bubble_redirection, pAgeInTicks, 1F);
         this.animate(pEntity.heavyStrike, KillerQueenAnimations.HeavyStrike, pAgeInTicks, 1F);
-        
-        this.animate(pEntity.miningBarrageAnimationState, KillerQueenAnimations.Barrage, pAgeInTicks, 1f);
-        this.animate(pEntity.barrageHurtAnimationState, KillerQueenAnimations.BarrageDamage, pAgeInTicks, 2.5f);
-        //this.animate(pEntity.brokenBlockAnimationState, StandAnimations.BLOCKBREAK, pAgeInTicks, 1.8f);
-        this.animate(pEntity.idleAnimationState, KillerQueenAnimations.Idle, pAgeInTicks, 1f);
-        //this.animate(pEntity.idleAnimationState2, StandAnimations.FLOATY_IDLE, pAgeInTicks, 1f);
-        this.animate(pEntity.blockAnimationState, KillerQueenAnimations.Block, pAgeInTicks, 1f);
+		this.animate(pEntity.shaSend, KillerQueenAnimations.Block, pAgeInTicks, 2F);
     }
 
 
