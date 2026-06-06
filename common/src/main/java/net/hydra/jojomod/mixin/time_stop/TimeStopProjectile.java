@@ -83,19 +83,9 @@ public abstract class TimeStopProjectile extends Entity implements IProjectileAc
     private void roundabout$onHitEntityHattanExtra(EntityHitResult $$0, CallbackInfo ci) {
         Entity entity = $$0.getEntity();
         Projectile PRJ = (Projectile) (Object) this;
-        if(isManhattanProjectile && PRJ instanceof AbstractArrow) {
-            Roundabout.LOGGER.info("PROJECTILE HITTIN HARD");
+        if(isManhattanProjectile && !(PRJ instanceof AbstractArrow)) {
             entity.hurt(ModDamageTypes.of(level(), ModDamageTypes.STAND, this, PRJ.getOwner()), 1);
             this.discard();
-        }
-        doExtraDamageManhattan($$0);
-    }
-
-    private void doExtraDamageManhattan(EntityHitResult $$0){
-        Entity entity = $$0.getEntity();
-        Projectile PRJ = (Projectile) (Object) this;
-        if(isManhattanProjectile) {
-
         }
     }
 
