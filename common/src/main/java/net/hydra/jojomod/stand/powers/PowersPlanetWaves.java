@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.minecraft.server.level.ServerLevel;
@@ -47,11 +46,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.Arrays;
 import java.util.List;
 
-import static net.hydra.jojomod.entity.stand.PlanetWavesEntity.MANGA_SKIN;
-import static net.hydra.jojomod.entity.stand.PlanetWavesEntity.PART_6_SKIN;
-import static net.hydra.jojomod.entity.stand.PlanetWavesEntity.BLUE_SKIN;
-import static net.hydra.jojomod.entity.stand.PlanetWavesEntity.PURPLE_SKIN;
-import static net.hydra.jojomod.entity.stand.PlanetWavesEntity.GREEN_SKIN;
+import static net.hydra.jojomod.entity.stand.PlanetWavesEntity.*;
 
 public class PowersPlanetWaves extends NewDashPreset {
     public PowersPlanetWaves(LivingEntity self) {super(self);}
@@ -91,10 +86,10 @@ public class PowersPlanetWaves extends NewDashPreset {
                 $$1.add(PlanetWavesEntity.BLUE_SKIN);
                 $$1.add(PlanetWavesEntity.PURPLE_SKIN);
                 $$1.add(PlanetWavesEntity.GREEN_SKIN);
-            }/* if (Level > 2 || bypass){
-                $$1.add(MagiciansRedEntity.OVA_SKIN);
-                $$1.add(MagiciansRedEntity.SIDEKICK);
-            } if (Level > 3 || bypass){
+            } if (Level > 2 || bypass){
+                $$1.add(PlanetWavesEntity.OCEAN_WAVES);
+                $$1.add(PlanetWavesEntity.SYMPHONY_WAVES);
+            }/* if (Level > 3 || bypass){
                 $$1.add(MagiciansRedEntity.PURPLE_SKIN);
                 $$1.add(MagiciansRedEntity.PURPLE_ABLAZE);
             } if (Level > 4 || bypass){
@@ -128,6 +123,8 @@ public class PowersPlanetWaves extends NewDashPreset {
             case BLUE_SKIN  -> {return Component.translatable("skins.roundabout.planet_waves.blue");}
             case PURPLE_SKIN  -> {return Component.translatable("skins.roundabout.planet_waves.purple");}
             case GREEN_SKIN  -> {return Component.translatable("skins.roundabout.planet_waves.green");}
+            case OCEAN_WAVES  -> {return Component.translatable("skins.roundabout.planet_waves.ocean_waves");}
+            case SYMPHONY_WAVES  -> {return Component.translatable("skins.roundabout.planet_waves.symphony_waves");}
         }
         return Component.translatable("skins.roundabout.planet_waves.base");
 
@@ -138,25 +135,17 @@ public class PowersPlanetWaves extends NewDashPreset {
         setSkillIcon(context, x, y, 1, StandIcons.PLANET_WAVES_METEOR_SHOWER, PowerIndex.SKILL_1);
         setSkillIcon(context, x, y, 2, StandIcons.PLANET_WAVES_BIG_METEOR, PowerIndex.SKILL_2);
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
-        /*if(canExecuteMoveWithLevel(StandTargetingLevel())){
+        if (isHoldingSneak()){
+            setSkillIcon(context, x, y, 2, StandIcons.PLANET_WAVES_DESINTEGRATION, PowerIndex.SKILL_2_SNEAK);
+            if(canExecuteMoveWithLevel(MeteorTrackingLevel())) {
+                setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_METEOR_TRACKING, PowerIndex.SKILL_4_SNEAK);
+            }else  setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4_SNEAK);
+        }
+        else{if(canExecuteMoveWithLevel(StandTargetingLevel())){
             if (!instandtargeting()) {
                 setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_STAND_TARGETING, PowerIndex.SKILL_4);
             } else setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_STAND_RETRIEVING, PowerIndex.SKILL_4);
-        }else setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4);*/
-        if(canExecuteMoveWithLevel(StandTargetingLevel())){
-            if(!isHoldingSneak()) {
-                if(targetingstand) {
-                    setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_STAND_RETRIEVING, PowerIndex.SKILL_4);
-                } else setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_STAND_TARGETING, PowerIndex.SKILL_4);
-            }
-        }else setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4);
-        if(canExecuteMoveWithLevel(MeteorTrackingLevel())) {
-            if (isHoldingSneak())
-                setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_METEOR_TRACKING, PowerIndex.SKILL_4_SNEAK);
-        }else setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4_SNEAK);
-        if (isHoldingSneak())
-
-            setSkillIcon(context, x, y, 2, StandIcons.PLANET_WAVES_DESINTEGRATION, PowerIndex.SKILL_2_SNEAK);
+        }else setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4);}
     }
 
     @Override
@@ -275,6 +264,8 @@ public class PowersPlanetWaves extends NewDashPreset {
         }
     }
     private void meteorshower() {
+        this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig()
+                .PlanetWavesSettings.meteorshowerCooldown);
         if (this.onCooldown(PowerIndex.SKILL_1)) return;
         if (this.self.level().dimension() == Level.NETHER) return;
 
@@ -338,10 +329,9 @@ public class PowersPlanetWaves extends NewDashPreset {
                 ModSounds.PLANET_WAVES_METEOR_SHOWER_EVENT,
                 net.minecraft.sounds.SoundSource.PLAYERS, 1.0F, 1.0F);
 
-        int cooldown = ClientNetworking.getAppropriateConfig()
-                .PlanetWavesSettings.meteorshowerCooldown;
-
-        this.setCooldown(PowerIndex.SKILL_1, cooldown);
+        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
+                PowerIndex.SKILL_1,ClientNetworking.getAppropriateConfig()
+                        .PlanetWavesSettings.meteorshowerCooldown);
         syncStandMode();
     }
 
@@ -392,6 +382,8 @@ public class PowersPlanetWaves extends NewDashPreset {
     }
 
     private void bigmeteor() {
+        this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig()
+                .PlanetWavesSettings.bigmeteorCooldown);
         Level level = this.self.level();
         if (level.isClientSide()) return;
         if (this.self.level().dimension() == Level.NETHER) return;
@@ -454,10 +446,11 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         level.addFreshEntity(meteor);
 
-        int cooldown = ClientNetworking.getAppropriateConfig()
-                .PlanetWavesSettings.bigmeteorCooldown;
 
-        this.setCooldown(PowerIndex.SKILL_2, cooldown);
+
+        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
+                PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig()
+                        .PlanetWavesSettings.bigmeteorCooldown);
 
         syncStandMode();
 
@@ -829,6 +822,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             // case PlanetWavesEntity.GREEN_SKIN, PlanetWavesEntity.GREEN_ABLAZE -> ModParticles.GREEN_FLAME;
             // case PlanetWavesEntity.DREAD_SKIN, PlanetWavesEntity.DREAD_ABLAZE, PlanetWavesEntity.DREAD_BEAST_SKIN -> ModParticles.DREAD_FLAME;
             //case PlanetWavesEntity.JOJONIUM, PlanetWavesEntity.JOJONIUM_ABLAZE -> ModParticles.CREAM_FLAME;
+            case PlanetWavesEntity.OCEAN_WAVES,PlanetWavesEntity.SYMPHONY_WAVES -> ParticleTypes.SPLASH;
             case PlanetWavesEntity.GREEN_SKIN-> ModParticles.GREEN_FLAME;
             case PlanetWavesEntity.PURPLE_SKIN -> ModParticles.PURPLE_FLAME;
             case PlanetWavesEntity.BLUE_SKIN -> ModParticles.BLUE_FLAME;
