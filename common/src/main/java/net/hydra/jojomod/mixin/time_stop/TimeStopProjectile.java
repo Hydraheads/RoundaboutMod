@@ -85,7 +85,6 @@ public abstract class TimeStopProjectile extends Entity implements IProjectileAc
         Projectile PRJ = (Projectile) (Object) this;
         if(isManhattanProjectile && !(PRJ instanceof AbstractArrow)) {
             entity.hurt(ModDamageTypes.of(level(), ModDamageTypes.STAND, this, PRJ.getOwner()), 1);
-            this.discard();
         }
     }
 
