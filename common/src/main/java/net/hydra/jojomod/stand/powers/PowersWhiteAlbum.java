@@ -110,14 +110,14 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     if (lastY < self.getY()){
                         acceleration = 0;
                     } else {
-                        acceleration = Math.min(100,acceleration+5);
+                        acceleration = Math.min(getMaxAccelerationTicks(),acceleration+5);
                     }
                 } else {
                     if (self.isSprinting() && !self.horizontalCollision){
                         if (lastY < self.getY()){
                             acceleration = Math.max(0,acceleration-25);
                         } else {
-                            acceleration = Math.min(100,acceleration+1);
+                            acceleration = Math.min(getMaxAccelerationTicks(),acceleration+1);
                         }
                     } else {
                         acceleration = Math.max(0,acceleration-5);
@@ -137,6 +137,23 @@ public class PowersWhiteAlbum extends NewDashPreset {
         super.tickPower();
     }
 
+    public static int getMaxAccelerationTicks(){
+        return 100;
+    }
+    /**Add Knockback to attacks when appropriate. This replaces the knockback enchant if it is
+     * higher than the knockback enchant*/
+    public int bufferAttackKnockbackLevel(){
+        if (hasSkatesActivated()) {
+            if (acceleration >= getMaxAccelerationTicks()) {
+                return 3;
+            } else if (acceleration > getMaxAccelerationTicks() * 0.75) {
+                return 2;
+            } else if (acceleration > getMaxAccelerationTicks() * 0.5) {
+                return 1;
+            }
+        }
+        return 0;
+    }
     @Override
     public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
         if (self instanceof Player pl) {

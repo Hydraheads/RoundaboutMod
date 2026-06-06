@@ -1130,6 +1130,12 @@ public class AbilityScapeBasis {
         return false;
     }
 
+    /**Add Knockback to attacks when appropriate. This replaces the knockback enchant if it is
+     * higher than the knockback enchant*/
+    public int bufferAttackKnockbackLevel(){
+        return 0;
+    }
+
     /**If you have a stand entity summoned, get that*/
     public static StandEntity getStandEntity2(LivingEntity User){
         return ((StandUser) User).roundabout$getStand();

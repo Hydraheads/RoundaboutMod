@@ -215,6 +215,7 @@
     "stand_entities.TeleportStandPassengers",
     "stand_users.PermaCastWorld",
     "stand_users.PowersBlock",
+    "stand_users.PowersEnchantmentHelper",
     "stand_users.PowersItemStack",
     "stand_users.PowersItemUsedOnLocationTrigger",
     "stand_users.UserAIAbstractSchoolingFish",
