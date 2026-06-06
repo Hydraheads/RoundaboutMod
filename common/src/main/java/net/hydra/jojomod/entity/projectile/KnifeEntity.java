@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.projectile;
 
 import com.google.common.collect.Sets;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
@@ -139,6 +140,8 @@ public class KnifeEntity extends AbstractArrow {
         ((IAbstractArrowAccess)this).roundabout$resetPiercedEntities();
     }
 
+    public boolean isHattanKnife = false;
+
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
         Entity $$1 = $$0.getEntity();
@@ -178,6 +181,10 @@ public class KnifeEntity extends AbstractArrow {
 
         if ($$1 instanceof Player) {
             $$2 = (float) (2.1F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnPlayers *0.01));
+
+            if(isHattanKnife){
+                this.doBonusKnifeDamageHattan($$1);
+            }
         } else {
             $$2 = (float) (3.5F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnMobs *0.01));;
         }
@@ -219,6 +226,17 @@ public class KnifeEntity extends AbstractArrow {
             this.discard();
         }
 
+    }
+
+    protected void doBonusKnifeDamageHattan(Entity hitent){
+        Roundabout.LOGGER.info("aaaaaa");
+        Entity entityShooter = this.getOwner();
+        DamageSource source = ModDamageTypes.of(this.level(), ModDamageTypes.STAND, this, entityShooter);
+        Float amount = (float) 0.75;
+        hitent.hurt(source, amount);
+        if(hitent.hurt(source, amount)){
+
+        }
     }
 
     public KnifeEntity(EntityType<? extends KnifeEntity> type, Level level, LivingEntity shooter) {

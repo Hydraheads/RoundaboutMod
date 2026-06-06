@@ -469,6 +469,7 @@ public class ManhattanTransferEntity extends StandEntity {
                 $$7.setRemainingFireTicks(thrower.fireTicksPrj);
                 $$7.setOwner(thrower.getUser());
                 thrower.level().addFreshEntity($$7);
+                $$7.isHattanKnife = true;
                 thrower.hattanDeflected = $$7;
             } else if (item.getItem() instanceof PotionItem) {
                 ThrownPotion $$4 = new ThrownPotion(thrower.level(), thrower);

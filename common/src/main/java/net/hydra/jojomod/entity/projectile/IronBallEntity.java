@@ -244,9 +244,8 @@ public class IronBallEntity extends AbstractArrow {
         Entity entity2 = this.getOwner();
         damageSource = ModDamageTypes.of(this.level(), ModDamageTypes.STAND, this, entity2);
         float amount = 1;
-      //  hitent.hurt(ModDamageTypes.of(level(), ModDamageTypes.STAND, this, this.getOwner()), amount);
         if(hitent.hurt(damageSource, amount)){
-            Roundabout.LOGGER.info("Aaaaaaa");
+
         }
     }
 
