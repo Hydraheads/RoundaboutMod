@@ -370,7 +370,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
         }
 
     }
-    /**This is also where red bind and other string-like moves will be rendered*/
+    /**This is also where  red bind and other string-like moves will be rendered*/
 
     @Inject(method = "addParticleInternal(Lnet/minecraft/core/particles/ParticleOptions;ZZDDDDDD)Lnet/minecraft/client/particle/Particle;", at=@At("HEAD"), cancellable = true)
     private void roundabout$addParticle(ParticleOptions $$0, boolean $$1, boolean $$2, double $$3, double $$4, double $$5, double $$6, double $$7, double $$8, CallbackInfoReturnable<Particle> cir)

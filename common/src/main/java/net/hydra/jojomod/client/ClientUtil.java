@@ -1861,6 +1861,7 @@ public class ClientUtil {
 
     }
 
+    // Red Bind rendering
     @Unique
     public static void roundabout$renderBound(LivingEntity victim, float delta, PoseStack poseStack, MultiBufferSource mb, Entity binder, float focus) {
         poseStack.pushPose();
