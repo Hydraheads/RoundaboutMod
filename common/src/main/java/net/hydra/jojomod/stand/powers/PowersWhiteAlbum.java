@@ -92,7 +92,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public int acceleration = 0;
     public float inputSpeedModifiers(float basis){
         if (hasSkatesActivated()){
-            basis *= 1.25f+(acceleration*0.015F);
+            basis *= 1.3f+(acceleration*0.015F);
         }
         return super.inputSpeedModifiers(basis);
     }

@@ -22,6 +22,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
 import net.hydra.jojomod.stand.powers.PowersMetallica;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
@@ -476,6 +477,10 @@ public abstract class EntityAndData implements IEntityAndData {
     public void roundabout$walkingStepSound(BlockPos $$0, BlockState $$1, CallbackInfo ci){
         if(((ILevelAccess)this.level()).roundabout$isFrictionPlundered($$0) ||
                 ((ILevelAccess)this.level()).roundabout$isFrictionPlunderedEntity(((Entity)(Object)this))){
+            ci.cancel();
+        } else if (((Entity)(Object)this) instanceof LivingEntity LE &&
+                ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW
+                && PW.hasSkatesActivated()){
             ci.cancel();
         }
     }
