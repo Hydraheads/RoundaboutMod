@@ -165,6 +165,25 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
         AbstractArrow ABA = (AbstractArrow) (Object) this;
         if(isManhattanProjectile){
             entity.hurt(damageSources().arrow(ABA, entity), roundabout$lastHattanDamage);
+            doBonusDamageHattan(entity);
+        }
+    }
+
+    protected void doBonusDamageHattan(Entity entity){
+        DamageSource damageSource;
+        AbstractArrow ABA = (AbstractArrow) (Object) this;
+        Entity entity2 = ABA.getOwner();
+        damageSource = ModDamageTypes.of(this.level(), ModDamageTypes.STAND, this, entity2);
+        float amount = 1 + (roundabout$lastHattanDamage / 5);
+        float damage = amount <= 4 ? amount : 4;
+
+        float amountPlayersAndBosses = 1 + (roundabout$lastHattanDamage / 8);
+        float damagePlayersAndBosses = amountPlayersAndBosses <= 4 ? amountPlayersAndBosses : 4;
+
+        if(entity instanceof Player || MainUtil.isBossMob(entity)){
+            entity.hurt(damageSource, damagePlayersAndBosses);
+        } else {
+            entity.hurt(damageSource, damage);
         }
     }
 

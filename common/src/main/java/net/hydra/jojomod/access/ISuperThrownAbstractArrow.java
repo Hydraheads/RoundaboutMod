@@ -11,4 +11,6 @@ public interface ISuperThrownAbstractArrow {
     int roundabout$getSuperThrowTicks();
     void roundabout$setSuperThrowTicks(int sTHrow);
     void roundabout$setDelta(Vec3 delta);
+
+    void roundabout$setIsTridentManhattan(boolean hattan);
 }

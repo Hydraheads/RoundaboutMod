@@ -248,6 +248,8 @@ public class RoundaboutBulletEntity extends AbstractArrow {
                     livingEntity.invulnerableTime = 10;
                     livingEntity.hurtTime = 10;
                 }
+
+                doPostHurtXtraDamage(livingEntity);
             }
         } else {
             entity.hurt(ModDamageTypes.of(level(), ModDamageTypes.BULLET, this, this.getOwner()), 1);
@@ -280,6 +282,20 @@ public class RoundaboutBulletEntity extends AbstractArrow {
         this.setSoundEvent(SoundEvents.ARROW_HIT);
         this.setShotFromCrossbow(false);
         ((IAbstractArrowAccess)this).roundabout$resetPiercedEntities();
+    }
+
+    protected void doPostHurtXtraDamage(LivingEntity target) {
+        /*Bonus stand damage for Manhattan Transfer*/
+        float amount = 0;
+        float finalDamage = 0;
+        if(target instanceof Player || MainUtil.isBossMob(target)){
+            amount = 1 + manhattanDamage / 8;
+        } else {
+            amount = 1 + manhattanDamage / 5;
+        }
+        finalDamage = amount <= 4 ? amount : 4;
+
+        target.hurt(ModDamageTypes.of(level(), ModDamageTypes.STAND, this, this.getOwner()), finalDamage);
     }
 
     @Override
