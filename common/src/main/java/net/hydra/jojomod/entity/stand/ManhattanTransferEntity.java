@@ -509,8 +509,10 @@ public class ManhattanTransferEntity extends StandEntity {
     }
 
     public void powerUpProjectile(){
-        if(this.hattanDeflected != null) {
+        if(this.hattanDeflected != null && !(this.hattanDeflected instanceof ThrownTrident)) {
             ((IProjectileAccess) hattanDeflected).roundabout$setManhattanProjectile(true);
+        } else if(this.hattanDeflected instanceof ThrownTrident TR){
+            ((ISuperThrownAbstractArrow) TR).roundabout$setIsTridentManhattan(true);
         }
     }
 
