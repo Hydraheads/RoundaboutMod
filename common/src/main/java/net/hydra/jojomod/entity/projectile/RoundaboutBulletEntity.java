@@ -296,8 +296,6 @@ public class RoundaboutBulletEntity extends AbstractArrow {
         finalDamage = amount <= 4 ? amount : 4;
 
         target.hurt(ModDamageTypes.of(level(), ModDamageTypes.STAND, this, this.getOwner()), finalDamage);
-        System.out.println(finalDamage);
-
     }
 
     @Override
