@@ -286,7 +286,18 @@ public class RoundaboutBulletEntity extends AbstractArrow {
 
     protected void doPostHurtXtraDamage(LivingEntity target) {
         /*Bonus stand damage for Manhattan Transfer*/
-        target.hurt(ModDamageTypes.of(level(), ModDamageTypes.STAND, this, this.getOwner()), 1);
+        float amount = 0;
+        float finalDamage = 0;
+        if(target instanceof Player || MainUtil.isBossMob(target)){
+            amount = 1 + manhattanDamage / 8;
+        } else {
+            amount = 1 + manhattanDamage / 5;
+        }
+        finalDamage = amount <= 4 ? amount : 4;
+
+        target.hurt(ModDamageTypes.of(level(), ModDamageTypes.STAND, this, this.getOwner()), finalDamage);
+        System.out.println(finalDamage);
+
     }
 
     @Override

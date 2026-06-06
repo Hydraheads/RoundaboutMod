@@ -224,7 +224,8 @@ public class HarpoonEntity extends AbstractArrow {
             DamageSource damageSource;
             Entity entity2 = this.getOwner();
             damageSource = ModDamageTypes.of(this.level(), ModDamageTypes.STAND, this, entity2);
-            float amount = 1;
+            float amount = MainUtil.isBossMob(hit) || hit instanceof Player ? 1 : 2;
+            hit.hurt(damageSource, amount);
             if(hit.hurt(damageSource, amount)){}
         }
 

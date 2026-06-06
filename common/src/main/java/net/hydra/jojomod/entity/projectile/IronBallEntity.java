@@ -243,10 +243,9 @@ public class IronBallEntity extends AbstractArrow {
         DamageSource damageSource;
         Entity entity2 = this.getOwner();
         damageSource = ModDamageTypes.of(this.level(), ModDamageTypes.STAND, this, entity2);
-        float amount = 1;
-        if(hitent.hurt(damageSource, amount)){
-
-        }
+        float amount = MainUtil.isBossMob(hitent) || hitent instanceof Player ? 1 : 2;
+        hitent.hurt(damageSource, amount);
+        if(hitent.hurt(damageSource, amount)){}
     }
 
 

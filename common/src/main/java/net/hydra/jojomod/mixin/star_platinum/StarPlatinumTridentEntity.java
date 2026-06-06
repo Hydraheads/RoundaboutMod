@@ -4,8 +4,10 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.ISuperThrownAbstractArrow;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.phys.EntityHitResult;
 import org.spongepowered.asm.mixin.Mixin;
@@ -38,8 +40,14 @@ public class StarPlatinumTridentEntity {
 
         Entity entity2 = thiz.getOwner();
         damageSource = ModDamageTypes.of(thiz.level(), ModDamageTypes.STAND, thiz, entity2);
-        float amount = 1;
-        if(hit.hurt(damageSource, amount)){}
+        float amount = 2;
+        float amountBossAndPlayer = 1;
+        if(hit instanceof Player || MainUtil.isBossMob(hit)){
+            hit.hurt(damageSource, amountBossAndPlayer);
+        } else {
+            hit.hurt(damageSource, amount);
+        }
+
     }
 
     boolean isManhattanTrident = false;
