@@ -309,6 +309,7 @@ public class BaseMinion extends PathfinderMob {
             villagerMinion.setController(this.level().getEntity(getController()));
             villagerMinion.setMovementTactic(getMovementTactic());
             villagerMinion.setTargetTactic(getTargetTactic());
+            villagerMinion.homeSet = homeSet;
             villagerMinion.setHomePosition(getHomePosition());
             villagerMinion.setHeadItem(getHeadItem());
             villagerMinion.setBodyItem(getBodyItem());
@@ -660,10 +661,10 @@ public class BaseMinion extends PathfinderMob {
                 setBodyItem(itemstack);
             }
         }
+        homeSet = $$0.getBoolean("HomeSet");
         setHomePosition(new Vec3($$0.getDouble("HomeX"),$$0.getDouble("HomeY"),$$0.getDouble("HomeZ")));
         this.setTargetTactic($$0.getByte("targetTactic"));
         this.setMovementTactic($$0.getByte("moveTactic"));
-        homeSet = $$0.getBoolean("homeSet");
     }
 
     Zombiefish z1 = null;
