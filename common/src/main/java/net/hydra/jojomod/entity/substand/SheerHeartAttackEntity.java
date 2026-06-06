@@ -76,7 +76,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	static final int tickTargetFindMax = 4;
 
 	int attackTick = 0;
-	static final int attackTickMax = 8;
+	static final int attackTickMax = 15;
 
 	static final byte
 		NONE = 0,
@@ -101,7 +101,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	@Override
 	public void setupAnimationStates() {
-		super.setupAnimationStates();
+		//super.setupAnimationStates();
 		if (this.getUser() != null) {
 			if (this.getDeltaMovement() == Vec3.ZERO) {
 				this.idle.startIfStopped(this.tickCount);
@@ -124,10 +124,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 		LivingEntity user = this.getUser();
 		if (!client) {
 			if(user == null){
-
 				this.discard();
 			}else if((!(((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen)) || (!user.isAlive())){
-
 				this.discard();
 			}else {
 				if (this.tickTargetFindCount <= 0) {
@@ -147,22 +145,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 					this.getNavigation().moveTo(this.getUser(), 1.5f);
 				}
 
-
-				if (this.getNavigation().getPath() != null) {
-					Vec3 target = this.getNavigation().getPath().getTarget().getCenter();
-					Vec3 pos = new Vec3(this.getX(), this.getY(), this.getZ());
-
-					double dist = target.subtract(pos).length();
-					if (dist < 3.0) {
-						this.getNavigation().stop();
-						Roundabout.LOGGER.info("I hate you sha");
-					}else {
-						Roundabout.LOGGER.info("I hate myself " + dist + "the position: " + pos);
-					}
-				}
-
 			}
-
 		}
 
 		super.tick();
@@ -203,22 +186,15 @@ public class SheerHeartAttackEntity extends StandEntity {
 				}else if (LE.isFreezing()) { points -= 40;}
 
 				MobType mobType = LE.getMobType();
-
-				if (mobType.equals(MobType.UNDEAD)) {
-					points -= 30;
-				}else {
-
-				}
-
+				if (mobType.equals(MobType.UNDEAD)) { points -= 30;}
 			}
-
 			if (points <= 0) {continue; }
 
 			if (points > harmest) {
 				points = harmest;
 				harmestDistance = dist;
 				targetEnt = entity;
-			}else if (points == harmest ) {
+			} else if (points == harmest ) {
 				if (harmestDistance == -1 || dist < harmestDistance) {
 					harmestDistance = dist;
 					targetEnt = entity;
@@ -265,6 +241,16 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		ExplosionUtil.explodeEffects(this.position(), this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, 0.3f, 12);
 
+		if (this.getTargetType() == ENTITY){
+			if (!this.entityTarget.isAlive()) {
+				this.entityTarget = null;
+				this.currentTarget = NONE;
+			}
+		}else {
+			this.blockTarget = null;
+			this.currentTarget = NONE;
+		}
+
 		this.attackTick = attackTickMax;
 	}
 
@@ -304,13 +290,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 		Vec3 targetPos = this.getUser().position();
 		double dist = Math.abs(targetPos.subtract(this.getX(), this.getY(), this.getZ()).length());
 
-		//double dist = MainUtil.cheapDistanceTo(this.getX(), this.getY(), this.getZ(), targetPos.x, targetPos.y, targetPos.z);
-
 		boolean struck = this.getNavigation().isStuck();
 
-		Roundabout.LOGGER.info("SHA is " + dist + "KM near you");
-
-		return (dist <= 10.0f) || struck;
+		return (dist <= 1.3f) || struck;
 	}
 
 
@@ -329,7 +311,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		@Override
 		public void stop() {
-
+			this.mob.getNavigation().stop();
 			super.stop();
 		}
 
@@ -339,23 +321,19 @@ public class SheerHeartAttackEntity extends StandEntity {
 			if (ticksUntilNextPathRecalculation <= 0 ) {
 				ticksUntilNextPathRecalculation = 5; // + mob.getRandom().nextInt(7);
 				Path newPath;
-				/*
-				if (this.mob.getTargetType() == this.mob.ENTITY) {
-					newPath = this.mob.getNavigation().createPath(this.mob.entityTarget, 1.0f);
-				}
-				*/
+
 				newPath = this.mob.getNavigation().createPath(targetPos.x, targetPos.y, targetPos.z, 2);
 				if (newPath == null) { return;}
 
-				if (!mob.getNavigation().moveTo(newPath, 1.0f))
-					ticksUntilNextPathRecalculation += 5;
+				if (!mob.getNavigation().moveTo(newPath, 1.2f))
+					ticksUntilNextPathRecalculation = 5;
 			}
 		}
 
 		public boolean canAttack(Vec3 targetPos) {
 			double dist = MainUtil.cheapDistanceTo(this.mob.getX(), this.mob.getY(), this.mob.getZ(), targetPos.x, targetPos.y, targetPos.z);
 
-			return (dist <= 1.0f && this.mob.attackTick <= 0);
+			return (dist <= 1.7f && this.mob.attackTick <= 0);
 		}
 
 		@Override
@@ -377,13 +355,11 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		@Override
 		public boolean canUse() {
-			return this.mob.hasTarget() && this.mob.getTargetType() != NONE && !this.mob.haveToReturn;
+			return this.mob.hasTarget() && !this.mob.getHaveToReturn();
 		}
 
 		@Override
-		public boolean canContinueToUse() {
-			return this.mob.hasTarget() && this.mob.getTargetType() != NONE && !this.mob.haveToReturn;
-		}
+		public boolean canContinueToUse() { return this.mob.hasTarget() && !this.mob.getHaveToReturn();}
 
 	}
 
