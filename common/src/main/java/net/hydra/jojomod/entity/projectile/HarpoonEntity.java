@@ -166,6 +166,7 @@ public class HarpoonEntity extends AbstractArrow {
 
 
         public boolean skyHit = false;
+    public boolean isMahattan = false;
         @Override
         protected void onHitEntity(EntityHitResult $$0) {
             Entity $$1 = $$0.getEntity();
@@ -205,6 +206,9 @@ public class HarpoonEntity extends AbstractArrow {
 
                     this.doPostHurtEffects($$7);
                 }
+                if(isMahattan){
+                    doBonusHattanDamage($$1);
+                }
             }
             ((ISuperThrownAbstractArrow)this).roundabout$cancelSuperThrow();
             this.setDeltaMovement(this.getDeltaMovement().multiply(-0.01, -0.1, -0.01));
@@ -214,6 +218,14 @@ public class HarpoonEntity extends AbstractArrow {
             } else {
                 this.playSound(ModSounds.HARPOON_HIT_EVENT, $$8, 1.0F);
             }
+        }
+
+        protected void doBonusHattanDamage(Entity hit){
+            DamageSource damageSource;
+            Entity entity2 = this.getOwner();
+            damageSource = ModDamageTypes.of(this.level(), ModDamageTypes.STAND, this, entity2);
+            float amount = 1;
+            if(hit.hurt(damageSource, amount)){}
         }
 
         public float addSkyDamage(Entity target, float damage){

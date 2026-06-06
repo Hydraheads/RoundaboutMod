@@ -451,6 +451,7 @@ public class ManhattanTransferEntity extends StandEntity {
                     $$7.setOwner(thrower.getUser());
                     $$7.setRemainingFireTicks(thrower.fireTicksPrj);
                     thrower.level().addFreshEntity($$7);
+                    $$7.isMahattan = true;
                     thrower.hattanDeflected = $$7;
                 }
             } else if (item.is(Items.IRON_INGOT)) {
@@ -487,6 +488,7 @@ public class ManhattanTransferEntity extends StandEntity {
                 $$4.setRemainingFireTicks(thrower.fireTicksPrj);
                 $$4.setOwner(thrower.getUser());
                 $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.4F * mult, getShotAccuracy);
+                $$4.isHattanHatProj = true;
                 thrower.level().addFreshEntity($$4);
                 thrower.hattanDeflected = $$4;
             } else {
