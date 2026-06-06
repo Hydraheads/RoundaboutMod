@@ -344,6 +344,9 @@ public class PowersMandom extends NewDashPreset {
                     if (lastSecond != null) {
                         lastSecond.loadTime(ent);
                     }
+                    if (ent instanceof LivingEntity LE && LE.isUsingItem()){
+                        LE.stopUsingItem();
+                    }
 
                     if (!ent.is(this.self)){
                         if (ent instanceof LivingEntity LE){
