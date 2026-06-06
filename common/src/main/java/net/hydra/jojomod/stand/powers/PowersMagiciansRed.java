@@ -2519,7 +2519,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
             return super.canInterruptPower();
     }
     public void shootAnkh(CrossfireHurricaneEntity ankh){
-        shootAnkhSpeed(ankh, 1.01F);
+        shootAnkhSpeed(ankh, 1.1F);
     }
     public void shootAnkhSpeed(CrossfireHurricaneEntity ankh, float speed){
         ankh.setPos(this.self.getEyePosition().x, this.self.getEyePosition().y, this.self.getEyePosition().z);
