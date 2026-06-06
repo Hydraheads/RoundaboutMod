@@ -10,16 +10,15 @@ import net.hydra.jojomod.entity.projectile.ThrownWaterBottleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
-import net.hydra.jojomod.event.index.FateTypes;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.PowerTypes;
-import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
@@ -29,6 +28,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -97,10 +97,12 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return super.inputSpeedModifiers(basis);
     }
 
+    int lastAcceleration = 0;
     double lastY = 0;
     @Override
     public void tickPower() {
         if (isPacketPlayer()){
+            lastAcceleration = acceleration;
             if (hasSkatesActivated()){
                 if (self.isInWater() || self.hurtTime > 10 || self.isUsingItem()) {
                     acceleration = 0;
@@ -128,10 +130,25 @@ public class PowersWhiteAlbum extends NewDashPreset {
             if (self.onGround()){
                 lastY = self.getY();
             }
+            if (acceleration != lastAcceleration){
+                C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_WHITE_ALBUM_ACCELERATION,acceleration);
+            }
         }
         super.tickPower();
     }
 
+    @Override
+    public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
+        if (self instanceof Player pl) {
+            if (!self.level().isClientSide) {
+                S2CPacketUtil.sendGenericIntToClientPacket(pl,
+                        PacketDataIndex.INT_WHITE_ALBUM_ACCELERATION, 0);
+            }
+            acceleration = 0;
+        }
+
+        return false;
+    }
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {

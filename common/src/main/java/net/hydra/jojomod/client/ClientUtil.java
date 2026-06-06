@@ -815,6 +815,11 @@ public class ClientUtil {
             if (((IPowersPlayer)player).rdbt$getPowers() instanceof VampireGeneralPowers vgp){
                 vgp.ripperEyesLeft = data;
             }
+        } else if (context == PacketDataIndex.S2C_INT_RESET_ACCELERATION) {
+            StandUser user = ((StandUser) player);
+            if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pwa){
+                pwa.acceleration =data;
+            }
         }
     }
     public static void handleDoubleIntPacketS2C(Player player, int data, int data2, byte context) {

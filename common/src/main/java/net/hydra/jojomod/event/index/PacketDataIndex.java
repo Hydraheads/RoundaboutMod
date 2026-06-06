@@ -48,6 +48,7 @@ public class PacketDataIndex {
     public static final byte INT_GRAVITY_FLIP_3 = 17;
     public static final byte INT_GRAVITY_FLIP_4 = 18;
     public static final byte INT_VAMPIRE_SKILL_BUY = 19;
+    public static final byte INT_WHITE_ALBUM_ACCELERATION = 20;
 
     /**Single Byte packets*/
     public static final byte SINGLE_BYTE_GLAIVE_START_SOUND = 1;
@@ -111,6 +112,7 @@ public class PacketDataIndex {
     public static final byte AESTHETICIAN_OPEN = 17;
     public static final byte S2C_SNYC_ACTIVE_POWER = 18;
     public static final byte S2C_INT_RIPPER_EYES = 19;
+    public static final byte S2C_INT_RESET_ACCELERATION = 20;
 
 
     /**S2C BUNDLE packets*/

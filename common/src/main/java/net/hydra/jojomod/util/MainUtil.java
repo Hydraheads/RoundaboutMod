@@ -2869,8 +2869,15 @@ public class MainUtil {
         } else if (context == PacketDataIndex.INT_ANCHOR_PLACE_ATTACK){
             IPlayerEntity ple = (IPlayerEntity) player;
             ple.roundabout$setAnchorPlaceAttack(data);
-        } else if (context == PacketDataIndex.INT_UPDATE_MOVE){
-            ((StandUser)player).roundabout$getStandPowers().updateIntMove(data);
+        } else if (context == PacketDataIndex.INT_UPDATE_MOVE) {
+            ((StandUser) player).roundabout$getStandPowers().updateIntMove(data);
+        } else if (context == PacketDataIndex.INT_WHITE_ALBUM_ACCELERATION) {
+            if (player != null) {
+                StandUser user = ((StandUser) player);
+                if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pwa){
+                    pwa.acceleration =data;
+                }
+            }
         } else if (context == PacketDataIndex.INT_UPDATE_PILOT){
             StandEntity SE = ((StandUser)player).roundabout$getStand();
             Entity target = player.level().getEntity(data);
