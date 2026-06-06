@@ -1676,7 +1676,6 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 Entity ent = getTargetEntity(this.self, 4);
                 if (ent instanceof LivingEntity LE) {
                     leaded = LE;
-                    ((StandUser)LE).roundabout$setBoundTo(this.self);
                     tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK, LE.getId());
                 } else {
                     tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK,-1);
@@ -1684,12 +1683,14 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 }
             }
         } else {
+            if (!self.level().isClientSide()){
             /*Caps how far out the punch goes*/
             Entity targetEntity = getTargetEntity(this.self,4);
             if (targetEntity == null){
                 this.setCooldown(PowerIndex.SKILL_1, getRedBindMissCooldown());
             }
             lassoImpact(targetEntity);
+            }
         }
     }
 
@@ -2944,7 +2945,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
     public float getHurricaneDirectDamage(Entity entity, float size, boolean fireStorm){
         if (this.getReducedDamage(entity)){
-            return bumpDamage(levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (0.5+((size/60)* 5.7)))),fireStorm);
+            return bumpDamage(levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (0.5+((size/60)* 6.3)))),fireStorm);
         } else {
             return bumpDamage(levelupDamageMod(multiplyPowerByStandConfigMobs(1+((size/60)* 16))),fireStorm);
         }
@@ -2952,7 +2953,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public float getHurricaneDamage(Entity entity,  float size, boolean fireStorm){
         if (size >=52){size=60;}
         if (this.getReducedDamage(entity)){
-            return bumpDamage(levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (0.5+((size/60)* 5.0)))),fireStorm);
+            return bumpDamage(levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (0.5+((size/60)* 5.3)))),fireStorm);
         } else {
             return bumpDamage(levelupDamageMod(multiplyPowerByStandConfigMobs(1+((size/60)* 13))),fireStorm);
         }
