@@ -88,7 +88,7 @@ public class GroundHurricaneEntity extends GroundPathfindingStandAttackEntity {
             }
 
             CrossfireHurricaneEntity.blastEntity($$0, this,
-                    this.getSize(), user, true, PMR,fireStormCreated, 0.8F);
+                    this.getSize(), user, true, PMR,fireStormCreated, 0.9F);
         }
         this.discard();
         return true;
