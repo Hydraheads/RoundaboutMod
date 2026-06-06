@@ -182,12 +182,8 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
 
         if(entity instanceof Player || MainUtil.isBossMob(entity)){
             entity.hurt(damageSource, damagePlayersAndBosses);
-            Roundabout.LOGGER.info("Player or Boss");
-            System.out.println(damagePlayersAndBosses);
         } else {
             entity.hurt(damageSource, damage);
-            Roundabout.LOGGER.info("Regular Mob");
-            System.out.println(damage);
         }
     }
 
