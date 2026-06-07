@@ -286,6 +286,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
 
     protected void doPostHurtXtraDamage(LivingEntity target) {
         /*Bonus stand damage for Manhattan Transfer*/
+        float mult = this.getAmmoType() == TOMMY_GUN ? 0.65F : 1F;
         float amount = 0;
         float finalDamage = 0;
         if(target instanceof Player || MainUtil.isBossMob(target)){
@@ -295,7 +296,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
         }
         finalDamage = amount <= 4 ? amount : 4;
 
-        target.hurt(ModDamageTypes.of(level(), ModDamageTypes.STAND, this, this.getOwner()), finalDamage);
+        target.hurt(ModDamageTypes.of(level(), ModDamageTypes.STAND, this, this.getOwner()), finalDamage * mult);
     }
 
     @Override

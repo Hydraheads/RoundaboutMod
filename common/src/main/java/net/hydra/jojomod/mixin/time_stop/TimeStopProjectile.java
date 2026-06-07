@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
+import net.hydra.jojomod.entity.stand.PlanetWavesEntity;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -16,6 +17,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
@@ -83,8 +85,9 @@ public abstract class TimeStopProjectile extends Entity implements IProjectileAc
     private void roundabout$onHitEntityHattanExtra(EntityHitResult $$0, CallbackInfo ci) {
         Entity entity = $$0.getEntity();
         Projectile PRJ = (Projectile) (Object) this;
+        float balanceDamage = entity instanceof Player || MainUtil.isBossMob(entity) ? 0.5F : 0.75F;
         if(isManhattanProjectile && !(PRJ instanceof AbstractArrow)) {
-            entity.hurt(ModDamageTypes.of(level(), ModDamageTypes.STAND, this, PRJ.getOwner()), 1);
+            entity.hurt(ModDamageTypes.of(level(), ModDamageTypes.STAND, this, PRJ.getOwner()), balanceDamage);
         }
     }
 

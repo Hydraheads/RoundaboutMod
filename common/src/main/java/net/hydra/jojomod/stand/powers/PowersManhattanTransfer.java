@@ -34,6 +34,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Blaze;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Ghast;
+import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
@@ -487,6 +491,10 @@ public class PowersManhattanTransfer extends NewDashPreset {
             }
             StandEntity SE = this.getStandEntity(this.getSelf());
         }
+
+        if(this.self != null && this.self.isUsingItem() && isPiloting()){
+            this.self.stopUsingItem();
+        }
     }
 
     int securityTicks = 0;
@@ -812,6 +820,11 @@ public class PowersManhattanTransfer extends NewDashPreset {
     /**Ignore*/
     @Override
     public void tickMobAI(LivingEntity attackTarget){
-
+        boolean isRangedAttackMob = this.getSelf() instanceof RangedAttackMob || this.getSelf() instanceof Blaze || this.getSelf() instanceof Ghast;
+        if(isRangedAttackMob ){
+            this.getSelf().playSound(SoundEvents.GHAST_HURT);
+            this.getSelf().kill();
+        } else {
+        }
     }
 }

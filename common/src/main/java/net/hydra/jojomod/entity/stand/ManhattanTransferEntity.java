@@ -220,6 +220,7 @@ public class ManhattanTransferEntity extends StandEntity {
             if (directEntityWho != null && direct != null) {
                 if (direct instanceof Projectile PR && !source.is(ModDamageTypes.STAND)) {
                     if (directEntityWho != this) {
+                        if(PR instanceof AbstractArrow || PR instanceof ThrowableItemProjectile){
                         if (((directEntityWho.is(User) && !canOthersLoadMT) || canOthersLoadMT) && !hasItem) {
                             hasItemTwo = false;
                             if (direct instanceof AbstractArrow AA) {
@@ -261,6 +262,7 @@ public class ManhattanTransferEntity extends StandEntity {
                                 }
                             }
                             this.changeMovementState();
+                        }
                         } else {
                             success = false;
                             if (direct instanceof AbstractArrow AA) {
@@ -428,6 +430,15 @@ public class ManhattanTransferEntity extends StandEntity {
                 thrower.hattanDeflected = $$7;
             } else if (item.getItem() instanceof SnowballItem) {
                 Snowball $$7 = new Snowball(thrower.level(), thrower);
+                $$7.setPos(pos);
+                $$7.setItem(item);
+                $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
+                $$7.setRemainingFireTicks(thrower.fireTicksPrj);
+                $$7.setOwner(thrower.getUser());
+                thrower.level().addFreshEntity($$7);
+                thrower.hattanDeflected = $$7;
+            } else if (item.getItem() instanceof EggItem) {
+                ThrownEgg $$7 = new ThrownEgg(thrower.level(), thrower);
                 $$7.setPos(pos);
                 $$7.setItem(item);
                 $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
@@ -621,26 +632,26 @@ public class ManhattanTransferEntity extends StandEntity {
             if (lvent != null && !lvent.isEmpty()) {
                 List<LivingEntity> targent = new ArrayList<>(lvent);
                 for (LivingEntity value : lvent) {
-                    IEntityAndData entityAndData = ((IEntityAndData) value);
-                    if (value instanceof StandEntity || value.is(this.getUser())) {
-                        targent.remove(value);
-                        this.setHattanTarget(0);
-                        if (this.getUserData(this.getUser()) != null) {
-                            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-                                PM.targetHattan = null;
+                        IEntityAndData entityAndData = ((IEntityAndData) value);
+                        if (value instanceof StandEntity || value.is(this.getUser())) {
+                            targent.remove(value);
+                            this.setHattanTarget(0);
+                            if (this.getUserData(this.getUser()) != null) {
+                                if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                                    PM.targetHattan = null;
+                                }
+                            }
+                        }
+                        if (entityAndData.roundabout$getTrueInvisibilityManhattan() < 1 || this.isInWater()) {
+                            targent.remove(value);
+                            this.setHattanTarget(0);
+                            if (this.getUserData(this.getUser()) != null) {
+                                if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                                    PM.targetHattan = null;
+                                }
                             }
                         }
                     }
-                    if (entityAndData.roundabout$getTrueInvisibilityManhattan() < 1 || this.isInWater()) {
-                        targent.remove(value);
-                        this.setHattanTarget(0);
-                        if (this.getUserData(this.getUser()) != null) {
-                            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-                                PM.targetHattan = null;
-                            }
-                        }
-                    }
-                }
 
                 lvent = targent;
             }
@@ -653,6 +664,71 @@ public class ManhattanTransferEntity extends StandEntity {
                 if (this.getUserData(this.getUser()) != null) {
                     if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
                         PM.targetHattan = lv;
+                    }
+                }
+            }
+
+
+            List<Projectile> prjtl = this.level().getEntitiesOfClass(Projectile.class, this.getBoundingBox().inflate(1.6F, 1.6F, 1.6F), (projectile) -> {
+                return true;
+            });
+            if (prjtl != null && !prjtl.isEmpty()) {
+                List<Projectile> pickup = new ArrayList<>(prjtl);
+                ItemStack sack = null;
+                for (Projectile value : prjtl) {
+                    IProjectileAccess ipa = (IProjectileAccess) value;
+                    if (value instanceof ThrownEgg || value instanceof ThrownEnderpearl) {
+                        if (value instanceof ThrownEgg TE && !ipa.roundabout$getManhattanProjectile()) {
+                            if (!this.level().isClientSide) {
+                                value.setDeltaMovement(Vec3.ZERO);
+                                ItemStack ii = TE.getItem();
+                                if (!ii.isEmpty()) {
+                                    if (value.getOwner() != null) {
+                                        if (((value.getOwner().is(User) && !canOthersLoadMT) || canOthersLoadMT) && !hasItem) {
+                                            if (this.getUserData(this.getUser()) != null && this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                                                PM.isLoaded();
+                                                this.soundForPlayer();
+                                            }
+                                            hasItem = true;
+                                            this.canAcquireHeldItem = true;
+                                            this.fireTicksPrj = TE.getRemainingFireTicks();
+                                            this.setHeldItemManhattan(ii.copyAndClear());
+                                            value.discard();
+                                        } else {
+                                            hasItemTwo = true;
+                                            this.setHeldItemManhattanFull(ii.copyAndClear());
+                                            this.itemEject();
+                                            value.discard();
+                                        }
+                                    }
+                                }
+                            }
+                        } else if (value instanceof ThrownEnderpearl TE && !ipa.roundabout$getManhattanProjectile()) {
+                            if (!this.level().isClientSide) {
+                                value.setDeltaMovement(Vec3.ZERO);
+                                ItemStack ii = TE.getItem();
+                                if (!ii.isEmpty()) {
+                                    if (value.getOwner() != null) {
+                                        if (((value.getOwner().is(User) && !canOthersLoadMT) || canOthersLoadMT) && !hasItem) {
+                                            if (this.getUserData(this.getUser()) != null && this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                                                PM.isLoaded();
+                                                this.soundForPlayer();
+                                            }
+                                            hasItem = true;
+                                            this.canAcquireHeldItem = true;
+                                            this.fireTicksPrj = TE.getRemainingFireTicks();
+                                            this.setHeldItemManhattan(ii.copyAndClear());
+                                            value.discard();
+                                        } else {
+                                            hasItemTwo = true;
+                                            this.setHeldItemManhattanFull(ii.copyAndClear());
+                                            this.itemEject();
+                                            value.discard();
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
