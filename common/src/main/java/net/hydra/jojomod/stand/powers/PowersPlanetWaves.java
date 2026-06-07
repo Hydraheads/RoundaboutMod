@@ -131,21 +131,28 @@ public class PowersPlanetWaves extends NewDashPreset {
     }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-
         setSkillIcon(context, x, y, 1, StandIcons.PLANET_WAVES_METEOR_SHOWER, PowerIndex.SKILL_1);
-        setSkillIcon(context, x, y, 2, StandIcons.PLANET_WAVES_BIG_METEOR, PowerIndex.SKILL_2);
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
-        if (isHoldingSneak()){
+
+        if (isHoldingSneak()) {
             setSkillIcon(context, x, y, 2, StandIcons.PLANET_WAVES_DESINTEGRATION, PowerIndex.SKILL_2_SNEAK);
-            if(canExecuteMoveWithLevel(MeteorTrackingLevel())) {
+            if (canExecuteMoveWithLevel(MeteorTrackingLevel())) {
                 setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_METEOR_TRACKING, PowerIndex.SKILL_4_SNEAK);
-            }else  setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4_SNEAK);
+            } else {
+                setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4_SNEAK);
+            }
+        } else {
+            setSkillIcon(context, x, y, 2, StandIcons.PLANET_WAVES_BIG_METEOR, PowerIndex.SKILL_2); // ← only registered now
+            if (canExecuteMoveWithLevel(StandTargetingLevel())) {
+                if (!instandtargeting()) {
+                    setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_STAND_TARGETING, PowerIndex.SKILL_4);
+                } else {
+                    setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_STAND_RETRIEVING, PowerIndex.SKILL_4);
+                }
+            } else {
+                setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4);
+            }
         }
-        else{if(canExecuteMoveWithLevel(StandTargetingLevel())){
-            if (!instandtargeting()) {
-                setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_STAND_TARGETING, PowerIndex.SKILL_4);
-            } else setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_STAND_RETRIEVING, PowerIndex.SKILL_4);
-        }else setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4);}
     }
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
@@ -599,6 +606,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         syncStandMode();
     }
     private void meteorDisappearance() {
+        if (this.onCooldown(PowerIndex.SKILL_2_SNEAK)) return;
         if (this.self.level().isClientSide()) return;
 
         Level level = this.self.level();
@@ -628,7 +636,6 @@ public class PowersPlanetWaves extends NewDashPreset {
                 }
             }
         }
-
         if (foundMeteor) {
             level.playSound(
                     null,
@@ -637,6 +644,14 @@ public class PowersPlanetWaves extends NewDashPreset {
                     SoundSource.PLAYERS,
                     1.5F,
                     1.0F
+            );
+
+            this.setCooldown(PowerIndex.SKILL_2_SNEAK, 60);
+
+            S2CPacketUtil.sendCooldownSyncPacket(
+                    (ServerPlayer)this.getSelf(),
+                    PowerIndex.SKILL_2_SNEAK,
+                    60
             );
         }
     }
