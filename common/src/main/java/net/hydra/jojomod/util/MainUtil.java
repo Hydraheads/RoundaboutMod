@@ -203,6 +203,7 @@ public class MainUtil {
     public static ArrayList<String> occultChargeEffectsToBanish = Lists.newArrayList();
     public static ArrayList<String> naturalStandUserMobBlacklist = Lists.newArrayList();
     public static ArrayList<String> hypnotismMobBlackList = Lists.newArrayList();
+    public static ArrayList<String> fleshBudMobBlacklist = Lists.newArrayList();
 
     public static ArrayList<String> addedMobsWithRedBlood = Lists.newArrayList();
     public static ArrayList<String> addedMobsWithBlueBlood = Lists.newArrayList();
@@ -309,6 +310,18 @@ public class MainUtil {
             return true;
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
         if (hypnotismMobBlackList != null && !hypnotismMobBlackList.isEmpty() && rl != null && hypnotismMobBlackList.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isFleshBudBlacklisted(Entity ent){
+        if (ent == null)
+            return false;
+        if (ent instanceof FallenMob)
+            return true;
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        if (fleshBudMobBlacklist != null && !fleshBudMobBlacklist.isEmpty() && rl != null && fleshBudMobBlacklist.contains(rl.toString())){
             return true;
         }
         return false;
@@ -1040,6 +1053,9 @@ public class MainUtil {
         return canDrinkBlood(ent) && !(ent instanceof Player);
     }
     public static boolean canPlantBud(Entity ent,Entity drinker){
+        if (isFleshBudBlacklisted(ent)){
+            return false;
+        }
         return canDrinkBlood2(ent) && !(ent instanceof Player);
     }
     public static boolean canDrinkBloodCritAggro(Entity ent,Entity drinker){
@@ -1697,10 +1713,10 @@ public class MainUtil {
                         if (value instanceof LivingEntity && ((LivingEntity)value).hasEffect(MobEffects.FIRE_RESISTANCE)){
                             MobEffectInstance instance = ((LivingEntity)value).getEffect(MobEffects.FIRE_RESISTANCE);
                             ((LivingEntity)value).removeEffect(MobEffects.FIRE_RESISTANCE);
-                            value.hurt($$5,np/4);
+                            value.hurt($$5,np*=0.6f);
                             ((LivingEntity)value).addEffect(instance);
                         } else {
-                            value.hurt($$5,np/4);
+                            value.hurt($$5,np*=0.6f);
                         }
                     }
                 }

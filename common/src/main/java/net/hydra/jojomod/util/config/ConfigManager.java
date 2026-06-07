@@ -97,6 +97,11 @@ public abstract class ConfigManager {
             MainUtil.hypnotismMobBlackList.clear();
             MainUtil.hypnotismMobBlackList.addAll(getAdvancedConfig().hypnotismMobBlackList);
         }
+        if (getAdvancedConfig().fleshBudMobBlacklist != null)
+        {
+            MainUtil.fleshBudMobBlacklist.clear();
+            MainUtil.fleshBudMobBlacklist.addAll(getAdvancedConfig().fleshBudMobBlacklist);
+        }
         if (getAdvancedConfig().addedMobsWithRedBlood != null)
         {
             MainUtil.addedMobsWithRedBlood.clear();

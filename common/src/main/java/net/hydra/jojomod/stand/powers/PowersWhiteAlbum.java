@@ -121,7 +121,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                             acceleration = Math.min(getMaxAccelerationTicks(),acceleration+1);
                         }
                     } else {
-                        acceleration = Math.max(0,acceleration-30);
+                        acceleration = Math.max(0,acceleration-15);
                     }
                 }
 
