@@ -1347,8 +1347,14 @@ public class PowersMagiciansRed extends NewPunchingStand {
     }
 
     public void offloadLead(){
-        if (leaded != null && (!leaded.isAlive() || !(((StandUser)leaded).roundabout$isStringBound()) || !(((StandUser)leaded).roundabout$getBoundTo().is(this.self)))){
-            leaded = null;
+        if (self.level().isClientSide()){
+            if (leaded != null && (!leaded.isAlive())){
+                leaded = null;
+            }
+        } else {
+            if (leaded != null && (!leaded.isAlive() || !(((StandUser)leaded).roundabout$isStringBound()) || !(((StandUser)leaded).roundabout$getBoundTo().is(this.self)))){
+                leaded = null;
+            }
         }
     }
 
@@ -1696,6 +1702,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
     public int lassoTime= -1;
     public void lassoImpact(Entity entity){
+        boolean landedLead = false;
         if (this.activePower == PowerIndex.POWER_1) {
             this.setAttackTimeDuring(-20);
 
@@ -1708,7 +1715,10 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
             if (entity != null) {
                 if (entity instanceof LivingEntity LE) {
-                    ((StandUser) LE).roundabout$setBoundTo(this.self);
+                    if (!isClient()) {
+                        ((StandUser) LE).roundabout$setBoundTo(this.self);
+                        landedLead = true;
+                    }
                     leaded = LE;
                     lassoTime = 200;
                 }
@@ -1726,6 +1736,11 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
             if (!this.self.level().isClientSide()) {
                 this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+            }
+        }
+        if (!this.self.level().isClientSide() && self instanceof Player player) {
+            if (!landedLead) {
+                S2CPacketUtil.sendSimpleByteToClientPacket(player,PacketDataIndex.CLEAR_LEADED);
             }
         }
     }
