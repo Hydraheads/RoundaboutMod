@@ -1,5 +1,6 @@
 package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -58,7 +59,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public static final byte
             MANHATTAN_DODGE = 82,
             DEFLECT_PROJECTILE = 83,
-            HIT_SUCCESS = 87,
 
          UNLOADED_HATTAN =84,
          LOADED_HATTAN =85,
@@ -222,12 +222,14 @@ public class PowersManhattanTransfer extends NewDashPreset {
             }
             case PowersManhattanTransfer.DEFLECT_PROJECTILE -> {
                 if(this.getStandEntity(this.getSelf()) != null && this.getStandEntity(this.getSelf()) instanceof  ManhattanTransferEntity ME){
+                    if(this.currentHattanStatus == LOADED_HATTAN) {
+                        this.soundThree();
+                    }
                     ME.shootHattan();
                     ME.setHeldItemManhattan(ItemStack.EMPTY);
                     ME.hasItem = false;
                 }
             }
-            case PowersManhattanTransfer.HIT_SUCCESS -> this.self.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP);
         }
         return super.tryPower(move, forced);
     }
@@ -242,6 +244,13 @@ public class PowersManhattanTransfer extends NewDashPreset {
         }
     }
 
+    public void soundThree() {
+            if (isClient()) {
+                if(this.self.distanceTo(this.getStandEntity(this.getSelf())) > 16) {
+                    this.self.playSound(ModSounds.BULLET_RICOCHET_EVENT, 100F, (this.getStandEntity(this.getSelf()).getRandom().nextFloat() * 0.2F + 0.7F));
+                }
+            }
+    }
     public void switchVisionClient(){
         this.tryPower(PowerIndex.POWER_4, true);
         tryPowerPacket(PowerIndex.POWER_4);

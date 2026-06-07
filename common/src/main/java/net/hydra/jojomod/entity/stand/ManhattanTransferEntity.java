@@ -6,7 +6,6 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.*;
-import net.hydra.jojomod.mixin.time_stop.TimeStopProjectile;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
@@ -318,7 +317,15 @@ public class ManhattanTransferEntity extends StandEntity {
     public void soundForPlayer() {
         if (this.getUserData(this.getUser()) != null) {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-                PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
+            }
+        }
+    }
+
+    public void soundForPlayerTwo() {
+        if (this.getUserData(this.getUser()) != null) {
+            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                    PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             }
         }
     }
@@ -373,6 +380,9 @@ public class ManhattanTransferEntity extends StandEntity {
                                          boolean getCanPlace, float xRot, float yRot, Vec3 pos,
                                          boolean playSounds, float mult, boolean canGiveYouItem) {
         thrower.playSound(ModSounds.BULLET_RICOCHET_EVENT, 1.0F, (thrower.random.nextFloat() * 0.2F + 0.7F));
+        if(thrower.distanceTo(thrower.getUser()) > 16) {
+            thrower.soundForPlayerTwo();
+        }
         if (!thrower.level().isClientSide) {
             if (thrower.getUserData(thrower.getUser()) != null && thrower.getUserData(thrower.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
                 PM.isNotLoaded();

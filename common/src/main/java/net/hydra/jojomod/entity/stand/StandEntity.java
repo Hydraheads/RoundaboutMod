@@ -6,6 +6,8 @@ import net.hydra.jojomod.entity.projectile.IronBallEntity;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
@@ -15,6 +17,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -726,6 +729,15 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                     }
                 }
                 else if(this instanceof ManhattanTransferEntity ME){
+                    if (ME.getUser() != null && ME.getUserData(ME.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                        if (ME.hasItem) {
+                            if(ME.distanceTo(ME.getUser()) > 16) {
+                                for (int i = 1; i < 2; i++) {
+                                    ME.getUser().level().playSound(null, ME.getUser().blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1.0F, (ME.random.nextFloat() * 0.2F + 0.7F));
+                                }
+                            }
+                        }
+                    }
                     ME.shootHattan();
                     ME.hasItem = false;
                     ME.setHeldItemManhattan(ItemStack.EMPTY);
