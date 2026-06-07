@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.soft_and_wet;
 
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.PowderSnowBlock;
@@ -16,7 +17,10 @@ public class SoftAndWetPowderSnowBlock {
     @Inject(method = "canEntityWalkOnPowderSnow(Lnet/minecraft/world/entity/Entity;)Z", at = @At(value = "HEAD"), cancellable = true)
     private static void roundabout$isEmpty(Entity $$0, CallbackInfoReturnable<Boolean> cir) {
         if ($$0 instanceof LivingEntity LE){
-            if (((StandUser)LE).roundabout$isBubbleEncased()){
+            StandUser user = ((StandUser)LE);
+            if (user.roundabout$isBubbleEncased()){
+                cir.setReturnValue(true);
+            } else if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum PW && PW.hasSkatesActivated()){
                 cir.setReturnValue(true);
             }
         }
