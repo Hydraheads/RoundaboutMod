@@ -5614,6 +5614,30 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         rdbt$PowerCooldowns = cooldownInstances;
     }
 
+    @Unique
+    @Override
+    public void roundabout$doWindVisionDetectionOther() {
+        /** May not be the best thing, but it's to fix entities potentially not showing up ex. Vexes. The one in EntityAndData was made becausemobs such ghasts and phantoms wouldn't show up as they aren't marked as living entities. I guess it should fix the problem for all entities :) */
+        /*Think of those two as a double check.*/
+        /*Last note: put every entity in the Vex check in case some other entity will need it*/
+        if (!this.level().isClientSide) {
+            IEntityAndData entityAndData = ((IEntityAndData) this);
+            SavedSecond lastSecond = entityAndData.roundabout$getLastSavedSecond();
+            SavedSecond firstSecond = entityAndData.roundabout$getFirstSavedSecond();
+            if (firstSecond != null && lastSecond != null) {
+                boolean posCompare = lastSecond.position.x != firstSecond.position.x || lastSecond.position.z != firstSecond.position.z;
+                boolean posCompareY = lastSecond.position.y != firstSecond.position.y;
+                if (((Entity) (Object) this).isInWater()) {entityAndData.roundabout$setTrueInvisibilityManhattan(-1);}
+                if (((Entity) (Object) this) instanceof Vex v) {
+                    if (v.isInWater()) {entityAndData.roundabout$setTrueInvisibilityManhattan(-1);
+                    } else {if (posCompare) {entityAndData.roundabout$setTrueInvisibilityManhattan(10);}
+                    else if (posCompareY) {entityAndData.roundabout$setTrueInvisibilityManhattan(75);}
+                     else {}
+                    }
+                }
+            }
+        }
+    }
 
     /**If you stand still enough, abilities recharge faster. But this could be overpowered for some abilties, so
      * use discretion and override this to return false on abilities where this might be op.*/
@@ -5726,6 +5750,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void   MoldDetection(Vec3 movement,CallbackInfo info) {
         rdbt$doMoldDetection(movement);
     }
+
+    @Inject(method = "travel", at = @At(value = "TAIL"),cancellable = true, require = 0)
+    public void WindDetectionBackup(Vec3 mov, CallbackInfo ci){roundabout$doWindVisionDetectionOther();}
 
     @Inject(method = "attackable",at = @At("HEAD"),cancellable = true)
     private void roundabout$attackable(CallbackInfoReturnable<Boolean> cir) {
