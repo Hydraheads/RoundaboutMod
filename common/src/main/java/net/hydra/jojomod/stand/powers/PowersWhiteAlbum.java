@@ -104,7 +104,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (isPacketPlayer()){
             lastAcceleration = acceleration;
             if (hasSkatesActivated()){
-                if (self.isInWater() || self.hurtTime > 10 || self.isUsingItem()) {
+                if (self.isInWater() || self.hurtTime > 0 || self.isUsingItem()
+                || !self.isSprinting()) {
                     acceleration = 0;
                 } else if (!self.onGround()) {
                     if (lastY < self.getY()){
@@ -113,14 +114,14 @@ public class PowersWhiteAlbum extends NewDashPreset {
                         acceleration = Math.min(getMaxAccelerationTicks(),acceleration+5);
                     }
                 } else {
-                    if (self.isSprinting() && !self.horizontalCollision){
+                    if (!self.horizontalCollision){
                         if (lastY < self.getY()){
                             acceleration = Math.max(0,acceleration-25);
                         } else {
                             acceleration = Math.min(getMaxAccelerationTicks(),acceleration+1);
                         }
                     } else {
-                        acceleration = Math.max(0,acceleration-5);
+                        acceleration = Math.max(0,acceleration-30);
                     }
                 }
 

@@ -83,6 +83,7 @@ public class KillerQueenEntity extends FollowingStandEntity {
     public final AnimationState bubbleRedirect= new AnimationState();
     public final AnimationState heavyStrike = new AnimationState();
     public final AnimationState shaSend = new AnimationState();
+    public final AnimationState impale = new AnimationState();
     
     public static byte
 		KICK = 25,
@@ -169,7 +170,11 @@ public class KillerQueenEntity extends FollowingStandEntity {
             } else {
                 this.mobBombPlant2.stop();
             }
-
+            if (this.getAnimation() == IMPALE) {
+                this.impale.startIfStopped(this.tickCount);
+            } else {
+                this.impale.stop();
+            }
         }
     }
 }

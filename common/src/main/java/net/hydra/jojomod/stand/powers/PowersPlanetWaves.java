@@ -147,6 +147,27 @@ public class PowersPlanetWaves extends NewDashPreset {
             } else setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_STAND_RETRIEVING, PowerIndex.SKILL_4);
         }else setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4);}
     }
+    @Override
+    public boolean isAttackIneptVisually(byte activeP, int slot) {
+
+        if (activeP == PowerIndex.SKILL_2_SNEAK) {
+
+            List<PWBigMeteorEntity> meteors = this.self.level().getEntitiesOfClass(
+                    PWBigMeteorEntity.class,
+                    this.self.getBoundingBox().inflate(256)
+            );
+
+            for (PWBigMeteorEntity meteor : meteors) {
+                if (meteor.getStandUser() == this.self) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+    }
 
     @Override
     public boolean isStandEnabled() {
@@ -264,8 +285,6 @@ public class PowersPlanetWaves extends NewDashPreset {
         }
     }
     private void meteorshower() {
-        this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig()
-                .PlanetWavesSettings.meteorshowerCooldown);
         if (this.onCooldown(PowerIndex.SKILL_1)) return;
         if (this.self.level().dimension() == Level.NETHER) return;
 
@@ -329,6 +348,8 @@ public class PowersPlanetWaves extends NewDashPreset {
                 ModSounds.PLANET_WAVES_METEOR_SHOWER_EVENT,
                 net.minecraft.sounds.SoundSource.PLAYERS, 1.0F, 1.0F);
 
+        this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig()
+                .PlanetWavesSettings.meteorshowerCooldown);
         S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
                 PowerIndex.SKILL_1,ClientNetworking.getAppropriateConfig()
                         .PlanetWavesSettings.meteorshowerCooldown);
@@ -382,8 +403,6 @@ public class PowersPlanetWaves extends NewDashPreset {
     }
 
     private void bigmeteor() {
-        this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig()
-                .PlanetWavesSettings.bigmeteorCooldown);
         Level level = this.self.level();
         if (level.isClientSide()) return;
         if (this.self.level().dimension() == Level.NETHER) return;
@@ -447,7 +466,8 @@ public class PowersPlanetWaves extends NewDashPreset {
         level.addFreshEntity(meteor);
 
 
-
+        this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig()
+                .PlanetWavesSettings.bigmeteorCooldown);
         S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
                 PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig()
                         .PlanetWavesSettings.bigmeteorCooldown);
