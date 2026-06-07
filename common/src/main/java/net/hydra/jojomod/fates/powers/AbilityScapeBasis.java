@@ -53,6 +53,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Arrow;
@@ -295,6 +296,12 @@ public class AbilityScapeBasis {
             return true;
         }
         return false;
+    }
+
+    public boolean upAi(LivingEntity attackTarget){
+        if (this.getSelf() instanceof Creeper){
+            return false;
+        } else return attackTarget != null && ((StandUser) attackTarget).roundabout$hasAStand();
     }
 
     /** Tries to use an ability of your stand. If forced is true, the ability comes out no matter what.**/

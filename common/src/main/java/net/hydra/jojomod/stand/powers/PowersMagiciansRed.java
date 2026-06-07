@@ -3176,7 +3176,8 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public void tickMobAI(LivingEntity attackTarget){
         if (attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf())) {
             double dist = attackTarget.distanceTo(this.getSelf());
-                boolean isCreeper = this.getSelf() instanceof Creeper;
+            boolean isCreeper = this.getSelf() instanceof Creeper;
+            boolean upAiNow = upAi(attackTarget);
                 if (isCreeper) {
                     if (leaded != null) {
                         if (anticipationticks == 0){
@@ -3206,10 +3207,10 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
                     boolean isBasicMob = (this.self instanceof Zombie || this.self instanceof Spider || this.self instanceof Skeleton);
 
-                    if (!(isBasicMob)) {
+                    if (!(isBasicMob) || upAiNow) {
                         if (dist <= 25 && !hasHurricane() && activePower == PowerIndex.NONE) {
 
-                            if ((this.self instanceof Raider || this.self instanceof Villager || this.self instanceof AvdolNPC ||
+                            if ((upAiNow || this.self instanceof Raider || this.self instanceof Villager || this.self instanceof AvdolNPC ||
                                     this.self instanceof Blaze || this.self instanceof Piglin || this.self instanceof EnderMan ||
                                     this.self instanceof Hoglin || this.self instanceof ZombifiedPiglin || this.self instanceof PiglinBrute)
                                     && !this.onCooldown(PowerIndex.SKILL_2_SNEAK)
