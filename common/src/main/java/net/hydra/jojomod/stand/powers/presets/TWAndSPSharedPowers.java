@@ -1,6 +1,5 @@
 package net.hydra.jojomod.stand.powers.presets;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -8,8 +7,6 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
-import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.TimeStopInstance;
@@ -19,7 +16,6 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.GlaiveItem;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
@@ -31,7 +27,6 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -166,7 +161,12 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             dash();
         }
     }
-
+    public float getRushDistance(){
+        if (forwardBarrage){
+            return 15;
+        }
+        return getReach();
+    }
     public float getFloatOutRange(){
         return 7F;
     }
