@@ -431,18 +431,28 @@ public class Config implements Cloneable {
     public static class KillerQueenSettings {
     	@BooleanOption(group = "inherit", value = true)
         public Boolean enableKillerQueen;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer killerQueenAttackMultOnPlayers;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer killerQueenAttackMultOnMobs;
     	@BooleanOption(group = "inherit", value = false)
         public Boolean enableBitesTheDustDayMode;
     	@BooleanOption(group = "inherit", value = true)
         public Boolean blocksDestruction;
     	@FloatOption(group = "inherit", value = 8.0F, min = 0, max = 200F)
         public Float explosionDetonateMaxDamage;
+        @FloatOption(group = "inherit", value = 6.0F, min = 0, max = 200F)
+        public Float SheerHeartAttackMaxDamage;
     	@IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer blockPlantCooldown;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer mobPlantCooldown;
     	@IntOption(group = "inherit", value = 8, min = 0, max = 72000)
         public Integer explosionActivationCooldown;
     	@IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer kickMinimumCooldown;
+        @IntOption(group = "inherit", value = 140, min = 0, max = 72000)
+        public Integer sheerHeartAttackCooldown;
     	
     }
     

@@ -345,12 +345,20 @@ public class StandIcons {
             "textures/gui/icons/killer_queen/impale.png");
     public static final ResourceLocation KILLER_QUEEN_VAULT = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/killer_queen/ledge_grab.png");
+    public static final ResourceLocation KILLER_QUEEN_FALL_BRACE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/killer_queen/fall_brace.png");
     public static final ResourceLocation KILLER_QUEEN_SHA_RETREAT = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/killer_queen/sha_retreat.png");
+    public static final ResourceLocation KILLER_QUEEN_SHA_RETREAT_CANCEL = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/killer_queen/sha_retreat_cancel.png");
+    public static final ResourceLocation KILLER_QUEEN_SHA_THROW = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/killer_queen/sha_throw.png");
     public static final ResourceLocation KILLER_QUEEN_GUARD = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/killer_queen/guard.png");
     public static final ResourceLocation KILLER_QUEEN_GUARD_BUBBLES = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/killer_queen/guard_bubbles.png");
+    public static final ResourceLocation KILLER_QUEEN_FAST_KICK = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/killer_queen/fast_kick.png");
 
     public static final ResourceLocation PLANET_WAVES_METEOR_SHOWER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/planet_waves/meteor_shower.png");
