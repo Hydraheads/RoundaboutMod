@@ -22,6 +22,8 @@ public class StandIcons {
             "textures/gui/move_square.png");
     public static final ResourceLocation SQUARE_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_square2.png");
+    public static final ResourceLocation SQUARE_GOLD = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/move_square_gold.png");
     public static final ResourceLocation SQUARE_ICON_BLOOD = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_square4.png");
     public static final ResourceLocation NOVELTY_ICON = new ResourceLocation(Roundabout.MOD_ID,
@@ -692,6 +694,8 @@ public class StandIcons {
 
     public static final ResourceLocation SKATE_ACTIVE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/white_album/skate_active.png");
+    public static final ResourceLocation SKATE_ACTIVE_MAX = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/white_album/skate_active_max.png");
     public static final ResourceLocation SKATE_INACTIVE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/white_album/skate_inactive.png");
     public static final ResourceLocation TWISTER = new ResourceLocation(Roundabout.MOD_ID,
