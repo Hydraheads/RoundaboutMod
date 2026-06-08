@@ -4,7 +4,8 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.particles.ParticleTypes;
@@ -21,9 +22,6 @@ import net.hydra.jojomod.entity.stand.PlanetWavesEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.SoundIndex;
-import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
@@ -379,16 +377,35 @@ public class PowersPlanetWaves extends NewDashPreset {
     public void tick() {
         if (self.level().isClientSide()) return;
 
-        if (meteorQueue.isEmpty()) return;
-
         for (int i = 0; i < meteorQueue.size(); i++) {
             ScheduledMeteor m = meteorQueue.get(i);
             m.delay--;
-
             if (m.delay <= 0) {
                 spawnMeteor(m.spawnPos, m.targetPos);
                 meteorQueue.remove(i);
                 i--;
+            }
+        }
+
+        if (isTravelling && standTargetPos != null) {
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand != null) {
+                Vec3 current = stand.position();
+                Vec3 dir = standTargetPos.subtract(current);
+                double dist = dir.length();
+                if (dist < 0.5) {
+                    stand.teleportTo(standTargetPos.x, standTargetPos.y, standTargetPos.z);
+                    isTravelling = false;
+                    standTravelTarget = null;
+                } else {
+                    double speed = Math.min(dist, 0.8);
+                    Vec3 step = dir.normalize().scale(speed);
+                    stand.teleportTo(
+                            current.x + step.x,
+                            current.y + step.y,
+                            current.z + step.z
+                    );
+                }
             }
         }
     }
@@ -491,18 +508,17 @@ public class PowersPlanetWaves extends NewDashPreset {
         );
     }
 
-
+    private boolean isTravelling = false;
+    private Vec3 standTravelTarget = null;
     private void standtargeting() {
         Level level = this.self.level();
 
         Vec3 eyePos = this.self.getEyePosition(1.0F);
         Vec3 lookVec = this.self.getViewVector(1.0F);
-
         Vec3 endPos = eyePos.add(lookVec.scale(128.0D));
 
         ClipContext clipContext = new ClipContext(
-                eyePos,
-                endPos,
+                eyePos, endPos,
                 ClipContext.Block.OUTLINE,
                 ClipContext.Fluid.NONE,
                 this.self
@@ -510,61 +526,87 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         BlockHitResult hitResult = this.self.level().clip(clipContext);
 
-
         if (hitResult.getType() == HitResult.Type.BLOCK) {
             BlockPos pos = hitResult.getBlockPos();
-
-
             if (!this.self.level().getBlockState(pos).isAir()) {
-
-
                 targetingstand = true;
+                isTravelling = true;
+                this.standTargetPos = hitResult.getLocation();
+                this.standTravelTarget = hitResult.getLocation();
+
+                StandEntity stand = this.getStandEntity(this.self);
+                if (stand instanceof FollowingStandEntity FSE) {
+                    FSE.setOffsetType(OffsetIndex.LOOSE);
+                    //this.animateStand(PlanetWavesEntity.SOME_ANIMATION);
+                }
+
                 syncStandMode();
 
-                this.standTargetPos = hitResult.getLocation();
-
-                level.playSound(
-                        null,
-                        this.self.blockPosition(),
+                level.playSound(null, this.self.blockPosition(),
                         ModSounds.PLANET_WAVES_TARGET_EVENT,
-                        net.minecraft.sounds.SoundSource.PLAYERS,
-                        1.0F,
-                        1.0F
-                );
+                        SoundSource.PLAYERS, 1.0F, 1.0F);
+
                 if (!level.isClientSide()) {
-                    this.setCooldown(
-                            PowerIndex.SKILL_4,
+                    this.setCooldown(PowerIndex.SKILL_4,
                             ClientNetworking.getAppropriateConfig()
-                                    .PlanetWavesSettings.standtargetingCooldown
+                                    .PlanetWavesSettings.standtargetingCooldown);
+                }
+            }
+        }
+    }
+    @Override
+    public void tickPowerEnd() {
+        super.tickPowerEnd();
+
+        if (isTravelling && standTargetPos != null) {
+            if (self.level().isClientSide()) return;
+
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand != null) {
+                Vec3 current = stand.position();
+                Vec3 dir = standTargetPos.subtract(current);
+                double dist = dir.length();
+
+                if (dist < 0.5) {
+                    stand.setPos(standTargetPos.x, standTargetPos.y, standTargetPos.z);
+                    isTravelling = false;
+                    //this.animateStand(StandEntity.IDLE);
+                } else {
+                    double speed = Math.min(dist, 0.5); //Velocidad de Stand Targeting viaje
+                    Vec3 step = dir.normalize().scale(speed);
+                    stand.setPos(
+                            current.x + step.x,
+                            current.y + step.y,
+                            current.z + step.z
                     );
                 }
             }
         }
     }
-
     private void usertargeting() {
         Level level = this.self.level();
 
         targetingstand = false;
+        isTravelling = false;
+        standTravelTarget = null;
+
+        StandEntity stand = this.getStandEntity(this.self);
+        if (stand instanceof FollowingStandEntity FSE) {
+            FSE.setOffsetType(OffsetIndex.FOLLOW);
+        }
+
         syncStandMode();
         standTargetPos = null;
 
         if (!level.isClientSide()) {
-            this.setCooldown(
-                    PowerIndex.SKILL_4,
+            this.setCooldown(PowerIndex.SKILL_4,
                     ClientNetworking.getAppropriateConfig()
-                            .PlanetWavesSettings.usertargetingCooldown
-            );
+                            .PlanetWavesSettings.usertargetingCooldown);
         }
 
-        level.playSound(
-                null,
-                this.self.blockPosition(),
+        level.playSound(null, this.self.blockPosition(),
                 ModSounds.PLANET_WAVES_TARGET_EVENT,
-                net.minecraft.sounds.SoundSource.PLAYERS,
-                1.0F,
-                1.0F
-        );
+                SoundSource.PLAYERS, 1.0F, 1.0F);
     }
     private void meteortracking() {
         tracking = true;
@@ -581,7 +623,25 @@ public class PowersPlanetWaves extends NewDashPreset {
         }
         syncStandMode();
     }
+    @Override
+    public boolean canInterruptPower() {
+        if (isTravelling) {
+            isTravelling = false;
+            targetingstand = false;
+            standTravelTarget = null;
+            standTargetPos = null;
 
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand instanceof FollowingStandEntity FSE) {
+                FSE.setOffsetType(OffsetIndex.FOLLOW);
+            }
+
+            this.animateStand(StandEntity.IDLE);
+            syncStandMode();
+            return true;
+        }
+        return super.canInterruptPower();
+    }
     private void meteornottracking() {
         tracking = false;
 
@@ -768,6 +828,14 @@ public class PowersPlanetWaves extends NewDashPreset {
         return super.getSoundFromByte(soundChoice);
     }
     @Override
+    public boolean isServerControlledCooldown(byte num){
+        if (num == PowerIndex.SKILL_1 || num == PowerIndex.SKILL_2 || num == PowerIndex.SKILL_4 || num == PowerIndex.SKILL_2_SNEAK || num == PowerIndex.SKILL_4_SNEAK){
+            return true;
+        }
+        return super.isServerControlledCooldown(num);
+    }
+
+    @Override
     public void serverQueried() {
         if (self instanceof ServerPlayer pl) {
             S2CPacketUtil.sendGenericIntToClientPacket(
@@ -852,11 +920,6 @@ public class PowersPlanetWaves extends NewDashPreset {
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
 
         return switch (skn) {
-            //case PlanetWavesEntity.BLUE_SKIN, PlanetWavesEntity.BLUE_ACE_SKIN, PlanetWavesEntity.BLUE_ABLAZE, PlanetWavesEntity.SKELETAL -> ModParticles.BLUE_FLAME;
-            // case PlanetWavesEntity.PURPLE_SKIN, PlanetWavesEntity.PURPLE_ABLAZE -> ModParticles.PURPLE_FLAME;
-            // case PlanetWavesEntity.GREEN_SKIN, PlanetWavesEntity.GREEN_ABLAZE -> ModParticles.GREEN_FLAME;
-            // case PlanetWavesEntity.DREAD_SKIN, PlanetWavesEntity.DREAD_ABLAZE, PlanetWavesEntity.DREAD_BEAST_SKIN -> ModParticles.DREAD_FLAME;
-            //case PlanetWavesEntity.JOJONIUM, PlanetWavesEntity.JOJONIUM_ABLAZE -> ModParticles.CREAM_FLAME;
             case PlanetWavesEntity.OCEAN_WAVES,PlanetWavesEntity.SYMPHONY_WAVES -> ParticleTypes.SPLASH;
             case PlanetWavesEntity.GREEN_SKIN-> ModParticles.GREEN_FLAME;
             case PlanetWavesEntity.PURPLE_SKIN -> ModParticles.PURPLE_FLAME;
