@@ -127,7 +127,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 		BOMB_BLOCK=1,
 		BOMB_ITEM=2,
 		BOMB_ENTITY=3,
-		BOMB_BUBBLE=4;
+		BOMB_BUBBLE=4,
+        BOMB_CONTACT = 5;
 	
 	private byte currentBombStatus = BOMB_NONE;
 	private boolean shaReleased = false;
@@ -477,7 +478,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     @Override
     public boolean canAttack() {
-    	if (this.inBitesTheDustMode()) {
+    	if (this.getActivePower() == DETONATE || this.inBitesTheDustMode()) {
     		return false;
     	}
     	
@@ -538,7 +539,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         return targetEntity != null;
     }
     public boolean canImpale() {
-        Entity targetEntity = getTargetEntity(this.self, mobPlantRange);
+        Entity targetEntity = getTargetEntity(this.self, impaleRange);
 
         return targetEntity != null;
     }
@@ -1248,16 +1249,23 @@ public class PowersKillerQueen extends NewPunchingStand {
             int bombConf = clientConfig.dynamicSettings.KillerQueenCurrentBombConfig;
 
 
-            if (bombConf >= 2) {
+            if (bombConf >= 2 && this.getActivePower() != DETONATE) {
                 if (this.currentBombStatus == BOMB_BLOCK) {
                     if(Objects.nonNull(this.bombBlock)) {
-                        if (this.bombBlock.detectContact()) {
+                        Entity contact = this.bombBlock.detectContact();
+                        if (contact != null) {
+                            this.syncBombStatus(BOMB_CONTACT);
+                            this.bombBlock.discard();
+                            this.bombEntity = contact;
                             this.detonate();
                         }
                     }
                 }else if (this.currentBombStatus == BOMB_ENTITY) {
                     if(Objects.nonNull(this.bombEntity)) {
-                        if (this.isBombEntityContacting()) {
+                        Entity contact = this.isBombEntityContacting();
+                        if (contact != null) {
+                            this.syncBombStatus(BOMB_CONTACT);
+                            this.bombEntity = contact;
                             this.detonate();
                         }
                     }
@@ -1268,7 +1276,9 @@ public class PowersKillerQueen extends NewPunchingStand {
         super.tickPower();
     }
 
-    public boolean isBombEntityContacting() {
+    public Entity isBombEntityContacting() {
+        //this.bombEntity
+
         float hRad = this.bombEntity.getBbHeight() / 2.0f;
         float wRad = this.bombEntity.getBbWidth() / 2.0f;
         Level level = this.bombEntity.level();
@@ -1276,7 +1286,31 @@ public class PowersKillerQueen extends NewPunchingStand {
         List<Entity> contact = MainUtil.genHitbox(level, this.bombEntity.getX(), this.bombEntity.getY() + hRad, this.bombEntity.getZ(),
                 wRad, hRad, wRad);
 
-        return !contact.isEmpty();
+        double distRecord = -1.0;
+        Entity blowTarget = null;
+
+        for (Entity entity : contact) {
+
+            if (entity == this.bombEntity || entity instanceof StandEntity || !(entity instanceof LivingEntity) ||
+                    entity.equals(this.getStandUserSelf()) || entity.equals(((StandUser)this.getStandUserSelf()).roundabout$getStand())) {
+                continue;
+            }
+            double dist = MainUtil.cheapDistanceTo(
+                    this.bombEntity.getX(),
+                    this.bombEntity.getY(),
+                    this.bombEntity.getZ(),
+                    entity.getX(),
+                    entity.getY(),
+                    entity.getZ()
+            );
+
+            if (distRecord == -1 || dist < distRecord) {
+                blowTarget = entity;
+                distRecord = dist;
+            }
+        }
+
+        return blowTarget;
     }
 
     // sound related stuff
@@ -1478,8 +1512,11 @@ public class PowersKillerQueen extends NewPunchingStand {
             BlockPos bPos = BlockPos.ZERO;
             Vec3 vPos = Vec3.ZERO;
             Level level = this.getSelf().level();
+            byte bStatus = this.currentBombStatus;
 
-            if (this.currentBombStatus == PowersKillerQueen.BOMB_BLOCK) {
+            Entity target = null;
+
+            if (bStatus == PowersKillerQueen.BOMB_BLOCK) {
                 BlockPos pos = this.bombBlock.getBlockPos();
                 bPos = this.bombBlock.getBlockPos();
                 vPos = bPos.getCenter();
@@ -1487,11 +1524,11 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 this.bombBlock.discard();
                 this.bombBlock = null;
-            } else if (this.currentBombStatus == PowersKillerQueen.BOMB_ENTITY) {
+            } else if (bStatus == PowersKillerQueen.BOMB_ENTITY || bStatus == PowersKillerQueen.BOMB_CONTACT) {
                 vPos = this.bombEntity.position();
                 bPos = new BlockPos(this.bombEntity.getBlockX(), this.bombEntity.getBlockY(), this.bombEntity.getBlockZ());
                 level = this.bombEntity.level();
-
+                target = this.bombEntity;
                 this.bombEntity = null;
             }
 
@@ -1505,6 +1542,14 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             ExplosionUtil.explosionHurt(vPos, dmg, level,
                     ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionDetonateMaxDamage, 0.4f, 1.5f);
+
+            if (target != null) {
+                if (target instanceof Player pl) {
+                    pl.die(dmg);
+                }else {
+                    target.hurt(dmg, 25.0f);
+                }
+            }
 
             ExplosionUtil.explodeEffects(vPos, level, ModParticles.KILLER_QUEEN_EXPLOSION, 0.6f);
 
