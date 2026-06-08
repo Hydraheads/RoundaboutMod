@@ -3836,7 +3836,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         float stepAddon = roundabout$getStandPowers().getStepHeightAddon();
         if (rdbt$this() instanceof Player pl){
             stepAddon += ((IFatePlayer)pl).rdbt$getFatePowers().getStepHeightAddon();
-            if (roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA && PowerTypes.hasStandActive(pl) &&
+            if (roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA &&
                     PWA.hasSkatesActivated() && !pl.isCrouching()){
                 stepAddon+=0.7F;
             }
@@ -5278,6 +5278,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Use this code to eliminate the sprint jump during certain actions*/
     @Inject(method = "jumpFromGround", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void roundabout$jumpFromGround(CallbackInfo ci) {
+
+        this.roundabout$getStandPowers().onJump();
+
         if (this.roundabout$getStandPowers().cancelSprintJump() || roundabout$cancelsprintJump()
         || (rdbt$this() instanceof Player pl && (((IFatePlayer)pl).rdbt$getFatePowers().cancelSprintJump() ||
                 ((IPowersPlayer)pl).rdbt$getPowers().cancelSprintJump()))) {

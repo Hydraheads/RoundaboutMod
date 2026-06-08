@@ -24,6 +24,8 @@ public class PlayerPosIndex {
     public static final byte RIPPER_EYES_ACTIVE = 13;
     public static final byte VANISH_START = 14;
     public static final byte VANISH_PERSIST = 15;
+    public static final byte SKATE_JUMP = 16;
+    public static final byte SKATE_TWIRL = 17;
 
     public static final byte SNUBNOSE_AIM = 3;
 

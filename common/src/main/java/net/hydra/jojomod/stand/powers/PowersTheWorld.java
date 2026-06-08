@@ -629,7 +629,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                                         stand.getX(), stand.getY() + 0.3, stand.getZ(),
                                         0, 0, 0, 0, 0.4);
                             }
-                        } else if (build > 80){
+                        } else if (attackTimeDuring > 80){
                             StandEntity stand = getStandEntity(this.self);
                             if (Objects.nonNull(stand)) {
                                 ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.AIR_CRACKLE,
@@ -641,7 +641,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
                     if (this.attackTimeDuring == 108) {
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                    } else if (build >= 0) {
+                    } else if (attackTimeDuring >= 0) {
                         StandEntity stand = getStandEntity(this.self);
                         if (Objects.nonNull(stand)) {
                             AABB BB1 = stand.getBoundingBox();
@@ -650,8 +650,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                             Vec3 vec3d3 = vec3d.add(vec3d2.x * 15, vec3d2.y * 15, vec3d2.z * 15);
                             double mag = 0.05F;
 
-                            if (build > 10) {
-                                mag += Math.pow(Math.max(build,10)-10, 1.4) / 1000;
+                            if (attackTimeDuring > 10) {
+                                mag += Math.pow(Math.max(attackTimeDuring,10)-10, 1.4) / 1000;
                             }
                             BlockHitResult blockHit = this.getSelf().level().clip(
                                     new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
@@ -907,16 +907,16 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
                     hitParticlesCenter(LE);
 
-                    if (getAttackTimeDuring() > 80){
+                    if (build >= 80){
                         MainUtil.knockShieldPlusStand($$5,40);
                     }
 
                     if (this.StandDamageEntityAttack($$5,getAssaultStrength($$5), 0.4F, this.self)){
                         addEXP(3,LE);
-                        if (getAttackTimeDuring() > 80) {
+                        if (build >= 80) {
                             MainUtil.makeBleed($$5, 0, 400, null);
                             MainUtil.makeMobBleed(LE);
-                        } else if (getAttackTimeDuring() > 50) {
+                        } else if (build > 50) {
                             MainUtil.makeBleed($$5, 0, 300, null);
                         } else if (!getAssaultEarlyTime()) {
                             MainUtil.makeBleed($$5, 0, 200, null);
@@ -957,23 +957,23 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public float getAssaultStrength(Entity entity){
         float mult = 1;
         boolean isReduced = this.getReducedDamage(entity);
-        if (build > 95){
+        if (build >= 80){
             mult = 3.5F;
-        } else if (build > 90){
-            mult =3.2F;
-        } else if (build > 80){
+        } else if (attackTimeDuring > 90){
+            mult =3.0F;
+        } else if (attackTimeDuring > 80){
             mult =2.8F;
-        } else if (build > 70){
+        } else if (attackTimeDuring > 70){
             mult =2.2F;
-        } else if (build > 60){
+        } else if (attackTimeDuring > 60){
             mult = 1.8F;
-        } else if (build > 45){
+        } else if (attackTimeDuring > 45){
             mult = 1.5F;
-        } else if (build > 30){
+        } else if (attackTimeDuring > 30){
             mult = 1.4F;
-        } else if (build > 25){
+        } else if (attackTimeDuring > 25){
             mult = 1.3F;
-        } else if (build >= 20){
+        } else if (attackTimeDuring >= 20){
             mult = 1.2F;
         } else if (getAssaultEarlyTime() && isReduced){
             mult = 0.75F;
@@ -1251,7 +1251,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public void tickMobAI(LivingEntity attackTarget){
         if (this.attackTimeDuring <= -1) {
-            if (this.getSelf().fallDistance > 4 && !(this.getSelf() instanceof FlyingMob) && !this.getSelf().isNoGravity()
+            if (this.getSelf().fallDistance > 4 && !(this.self instanceof Blaze) && !(this.getSelf() instanceof FlyingMob) && !this.getSelf().isNoGravity()
                     && !(this.getSelf().noPhysics) && !(this.self instanceof EnderDragon) && !(this.self instanceof WitherBoss)) {
                 /**Fall Brace AI*/
                 ((StandUser) this.getSelf()).roundabout$summonStand(this.getSelf().level(),true,false);
@@ -1265,6 +1265,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         boolean check = attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf());
         double dist = 0;
         if (check) {
+            boolean upAiNow = upAi(attackTarget);
             if (ClientNetworking.getAppropriateConfig().timeStopSettings.mobsTeleportInsteadOfStoppingTime) {
                 dist = attackTarget.distanceTo(this.getSelf());
                     TPTYPE tptype = TPTYPE.GROUND;
@@ -1337,6 +1338,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (postTPStall == 0) {
             if (!(this.getSelf() instanceof Creeper)) {
                 if (check) {
+                    boolean upAiNow = upAi(attackTarget);
                     if ((this.getActivePower() != PowerIndex.NONE)
                             || dist <= 5) {
                         rotateMobHead(attackTarget);
@@ -1364,7 +1366,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                                 }
                             } else if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
                                 if ((RNG < 0.85 && (this.getSelf() instanceof Hoglin || this.getSelf() instanceof Ravager))
-                                || (this.self instanceof JotaroNPC && RNG < 0.47)) {
+                                || ((this.self instanceof DIONPC || upAiNow) && RNG < 0.47)) {
                                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
                                     wentForCharge = false;
                                 } else {
@@ -1377,14 +1379,16 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                                     }
                                 }
                             }
-                        } else if ((this.getSelf().getHealth() > 20 || this.getSelf() instanceof Piglin
+                        } else if ((this.getSelf() instanceof Piglin
                                 || this.getSelf() instanceof DIONPC || this.getSelf() instanceof DiegoNPC
+                                || upAiNow
                                 || this.getSelf() instanceof AbstractVillager) && dist <= 8 && dist >= 5) {
                             if (!onCooldown(PowerIndex.SKILL_1)) {
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
                             }
                         } else if ((this.getSelf() instanceof Spider || this.getSelf() instanceof Slime
                                 || this.getSelf() instanceof DIONPC || this.getSelf() instanceof DiegoNPC
+                                || upAiNow
                                 || this.getSelf() instanceof Rabbit || this.getSelf() instanceof AbstractVillager
                                 || this.getSelf() instanceof Piglin || this.getSelf() instanceof Vindicator) &&
                                 this.getSelf().onGround() && dist <= 19 && dist >= 5) {

@@ -82,8 +82,30 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     @Override
-    public boolean cancelSprintJump(){
+    public void onLandingAnimatedJump(){
         if (hasSkatesActivated()){
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SKATING_LAND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+        }
+    }
+    @Override
+    public void onJump(){
+        if (!self.level().isClientSide()) {
+            if (hasSkatesActivated()) {
+                if (getPlayerPos2() <= 0) {
+                    if (acceleration >= getMaxAccelerationTicks()) {
+                        setPlayerPos2(PlayerPosIndex.SKATE_TWIRL);
+                    } else {
+                        setPlayerPos2(PlayerPosIndex.SKATE_JUMP);
+                    }
+                    twirlTicks = 20;
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean cancelSprintJump(){
+        if (hasSkatesActivated() && acceleration < getMaxAccelerationTicks()){
             return true;
         }
         return super.cancelSprintJump();
@@ -97,6 +119,12 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return super.inputSpeedModifiers(basis);
     }
 
+
+    @Override
+    public boolean forceCrit(){
+        return acceleration >= getMaxAccelerationTicks() || super.forceCrit();
+    }
+
     int lastAcceleration = 0;
     double lastY = 0;
     @Override
@@ -105,7 +133,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             lastAcceleration = acceleration;
             if (hasSkatesActivated()){
                 if (self.isInWater() || self.hurtTime > 0 || self.isUsingItem()
-                || !self.isSprinting()) {
+                || !self.isSprinting() || self.isSwimming()) {
                     acceleration = 0;
                 } else if (!self.onGround()) {
                     if (lastY < self.getY()){
@@ -121,7 +149,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                             acceleration = Math.min(getMaxAccelerationTicks(),acceleration+1);
                         }
                     } else {
-                        acceleration = Math.max(0,acceleration-30);
+                        acceleration = Math.max(0,acceleration-15);
                     }
                 }
 

@@ -6,7 +6,9 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.Zombiefish;
+import net.hydra.jojomod.entity.visages.mobs.DIONPC;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -190,6 +192,10 @@ public enum FateTypes {
         if (entity instanceof Zombiefish)
             return true;
         if (entity instanceof BaseMinion)
+            return true;
+        if (entity instanceof DIONPC)
+            return true;
+        if (entity instanceof FogCloneEntity fce && takesSunlightDamage(fce.player))
             return true;
         return false;
     }

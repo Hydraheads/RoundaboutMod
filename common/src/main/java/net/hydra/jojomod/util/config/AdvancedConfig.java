@@ -162,6 +162,15 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:warden"
             )
     );
+    public Set<String> fleshBudMobBlacklist = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:piglin",
+                    "minecraft:piglin_brute",
+                    "minecraft:hoglin",
+                    "minecraft:zoglin",
+                    "minecraft:zombified_piglin"
+            )
+    );
 
     public Set<String> addedMobsWithRedBlood = new HashSet<>(
             Arrays.asList(

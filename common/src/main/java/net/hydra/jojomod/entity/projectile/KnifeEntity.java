@@ -180,7 +180,7 @@ public class KnifeEntity extends AbstractArrow {
         float $$2;
 
         if ($$1 instanceof Player) {
-            $$2 = (float) (2.1F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnPlayers *0.01));
+            $$2 = (float) (2.29F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnPlayers *0.01));
 
             if(isHattanKnife){
                 this.doBonusKnifeDamageHattan($$1);

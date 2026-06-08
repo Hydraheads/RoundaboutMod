@@ -1222,7 +1222,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public void tickMobAI(LivingEntity attackTarget){
         if (this.attackTimeDuring <= -1) {
-            if (this.getSelf().fallDistance > 4 && !(this.self instanceof FlyingMob) && !this.getSelf().isNoGravity()
+            if (this.getSelf().fallDistance > 4 && !(this.self instanceof Blaze) && !(this.self instanceof FlyingMob) && !this.getSelf().isNoGravity()
                     && !(this.getSelf().noPhysics) && !(this.self instanceof EnderDragon) && !(this.self instanceof WitherBoss)) {
                 /**Fall Brace AI*/
                 ((StandUser) this.getSelf()).roundabout$summonStand(this.getSelf().level(),true,false);
@@ -1234,6 +1234,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             }
         }
         if (attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf())) {
+            boolean upAiNow = upAi(attackTarget);
             double dist = attackTarget.distanceTo(this.getSelf());
             boolean isCreeper = this.getSelf() instanceof Creeper;
             if (isCreeper) {
@@ -1267,7 +1268,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             }
                         } else if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
                             if ((RNG < 0.85 && (this.getSelf() instanceof Hoglin || this.getSelf() instanceof Ravager)) ||
-                                    (this.self instanceof JotaroNPC && RNG < 0.47)) {
+                                    ((this.self instanceof JotaroNPC || upAiNow) && RNG < 0.47)) {
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
                                 wentForCharge = false;
                             } else {
@@ -1280,14 +1281,14 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                                 }
                             }
                         }
-                    } else if ((this.getSelf().getHealth() > 20 || this.getSelf() instanceof Piglin
-                            || this.getSelf() instanceof JotaroNPC
+                    } else if ((this.getSelf() instanceof Piglin
+                            || this.getSelf() instanceof JotaroNPC || upAiNow
                             || this.getSelf() instanceof AbstractVillager) && dist <= 8 && dist >= 5) {
                         if (!onCooldown(PowerIndex.SKILL_1)) {
                             ((StandUser) this.getSelf()).roundabout$tryPower(POWER_STAR_FINGER, true);
                         }
                     } else if ((this.getSelf() instanceof Spider || this.getSelf() instanceof Slime
-                            || this.getSelf() instanceof JotaroNPC
+                            || this.getSelf() instanceof JotaroNPC || upAiNow
                             || this.getSelf() instanceof Rabbit || this.getSelf() instanceof AbstractVillager
                             || this.getSelf() instanceof Piglin || this.getSelf() instanceof Vindicator) &&
                             this.getSelf().onGround() && dist <= 19 && dist >= 5) {

@@ -111,57 +111,60 @@ public class AnimationsHumanoidModel<T extends LivingEntity> extends AgeableList
            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW && PW.hasSkatesActivated() &&
            player.isSprinting()){
 
-               //float accelerationMod = ((float)PW.acceleration) /
-               //        ((float)PowersWhiteAlbum.getMaxAccelerationTicks());
+               Byte pos = ((IPlayerEntity)player).roundabout$GetPos2();
+               if (pos != PlayerPosIndex.SKATE_TWIRL && pos != PlayerPosIndex.SKATE_JUMP) {
+
+                   //float accelerationMod = ((float)PW.acceleration) /
+                   //        ((float)PowersWhiteAlbum.getMaxAccelerationTicks());
 
 
+                   float armCycle = ageInTicks * 0.18F;
+                   // Slight forward lean
+                   this.body.xRot = 0.25F;
 
-               float armCycle = ageInTicks * 0.18F;
-               // Slight forward lean
-               this.body.xRot = 0.25F;
+                   float skateCycle = limbSwing * 0.35F;
 
-               float skateCycle = limbSwing * 0.35F;
-
-               float rightPush = Math.max(0F, Mth.sin(skateCycle));
-               float leftPush  = Math.max(0F, Mth.sin(skateCycle + (float)Math.PI));
+                   float rightPush = Math.max(0F, Mth.sin(skateCycle));
+                   float leftPush = Math.max(0F, Mth.sin(skateCycle + (float) Math.PI));
 
 // Base crouch
 
 // One leg pushes backward while the other recovers
-               float cycle = Mth.sin(limbSwing * 0.35F);
-               this.rightLeg.xRot = -1*(-0.25F - cycle * 0.5F * limbSwingAmount);
-               this.leftLeg.xRot  = -1*(-0.25F + cycle * 0.5F * limbSwingAmount);
-               this.rightLeg.xRot += rightPush * 1.1F * limbSwingAmount;
-               this.leftLeg.xRot += leftPush * 1.1F * limbSwingAmount;
+                   float cycle = Mth.sin(limbSwing * 0.35F);
+                   this.rightLeg.xRot = -1 * (-0.25F - cycle * 0.5F * limbSwingAmount);
+                   this.leftLeg.xRot = -1 * (-0.25F + cycle * 0.5F * limbSwingAmount);
+                   this.rightLeg.xRot += rightPush * 1.1F * limbSwingAmount;
+                   this.leftLeg.xRot += leftPush * 1.1F * limbSwingAmount;
 
-               this.rightLeg.z += 3.0F;
-               this.leftLeg.z += 3.0F;
+                   this.rightLeg.z += 3.0F;
+                   this.leftLeg.z += 3.0F;
 
 // Small outward angle
-               this.rightLeg.zRot = 0.05F + rightPush * 0.15F * limbSwingAmount;
-               this.leftLeg.zRot = -0.05F - leftPush * 0.15F * limbSwingAmount;
+                   this.rightLeg.zRot = 0.05F + rightPush * 0.15F * limbSwingAmount;
+                   this.leftLeg.zRot = -0.05F - leftPush * 0.15F * limbSwingAmount;
 
 // Very subtle yaw
-               this.rightLeg.yRot = -rightPush * 0.1F * limbSwingAmount;
-               this.leftLeg.yRot = leftPush * 0.1F * limbSwingAmount;
+                   this.rightLeg.yRot = -rightPush * 0.1F * limbSwingAmount;
+                   this.leftLeg.yRot = leftPush * 0.1F * limbSwingAmount;
 
 
-               // Smaller arm motion
+                   // Smaller arm motion
 
-               this.rightArm.xRot =
-                       -0.2F
-                               + Mth.cos(armCycle + (float)Math.PI)
-                               * limbSwingAmount * 0.5F;
+                   this.rightArm.xRot =
+                           -0.2F
+                                   + Mth.cos(armCycle + (float) Math.PI)
+                                   * limbSwingAmount * 0.5F;
 
-               this.leftArm.xRot =
-                       -0.2F
-                               + Mth.cos(armCycle)
-                               * limbSwingAmount * 0.5F;
+                   this.leftArm.xRot =
+                           -0.2F
+                                   + Mth.cos(armCycle)
+                                   * limbSwingAmount * 0.5F;
 
-               float sway = Mth.sin(skateCycle);
-               this.body.zRot = sway * 0.08F;
-               this.rightLeg.x += -sway * 1.1F;
-               this.leftLeg.x  += -sway * 1.1F;
+                   float sway = Mth.sin(skateCycle);
+                   this.body.zRot = sway * 0.08F;
+                   this.rightLeg.x += -sway * 1.1F;
+                   this.leftLeg.x += -sway * 1.1F;
+               }
            }
        }
     }
