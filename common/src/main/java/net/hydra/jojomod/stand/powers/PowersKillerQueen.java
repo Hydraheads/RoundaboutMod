@@ -386,7 +386,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             if (this.currentBombStatus == BOMB_NONE) {
                 if (isHoldingSneak()) {
-                    return true;
+                    return !canImpale();
                 }else if(isGuarding()){
                     return !this.hasStrayCat;
                 } else{
@@ -440,7 +440,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
         	case SKILL_2_CROUCH -> {
         		if (!this.inBitesTheDustMode()) {
-        			// impale thing
+        			tryImpale();
         		}
         	}
         	case SKILL_3_NORMAL -> {
@@ -537,6 +537,12 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         return targetEntity != null;
     }
+    public boolean canImpale() {
+        Entity targetEntity = getTargetEntity(this.self, mobPlantRange);
+
+        return targetEntity != null;
+    }
+
     
     @Override
     public float inputSpeedModifiers(float basis){
@@ -918,7 +924,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void updateMobPlant(){
         if (this.attackTimeDuring > -1) {
-            if (this.attackTimeDuring > 24) {
+            if (this.attackTimeDuring > 68) {
                 this.standMobPlant();
             } else {
                 if (!this.getSelf().level().isClientSide()) {
@@ -1320,10 +1326,8 @@ public class PowersKillerQueen extends NewPunchingStand {
     // hightlights entity things :0
     public boolean highlightsEntity(Entity ent,Player player){
         if(this.currentBombStatus == BOMB_ENTITY) {
-            if (this.bombEntity != null && ent == this.bombEntity) {
-                if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
-                    return true;
-                }
+            if (this.bombEntity != null) {
+                return this.getSelf().hasLineOfSight(ent) && ent == this.bombEntity;
             }
         }
         return false;
@@ -1333,10 +1337,8 @@ public class PowersKillerQueen extends NewPunchingStand {
     public int highlightsEntityColor(Entity ent, Player player){
         if(this.currentBombStatus == BOMB_ENTITY) {
             if (this.bombEntity != null && ent == this.bombEntity) {
-                if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
+                if (this.getSelf().hasLineOfSight(ent) && ent == this.bombEntity) {
                     return 16150472;
-                }else {
-                    return 10762864;
                 }
             }
         }
