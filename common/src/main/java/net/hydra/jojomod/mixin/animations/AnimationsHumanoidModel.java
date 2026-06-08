@@ -118,7 +118,7 @@ public class AnimationsHumanoidModel<T extends LivingEntity> extends AgeableList
                    //        ((float)PowersWhiteAlbum.getMaxAccelerationTicks());
 
 
-                   float armCycle = ageInTicks * 0.18F;
+                   float armCycle = limbSwing * 0.35F;
                    // Slight forward lean
                    this.body.xRot = 0.25F;
 
