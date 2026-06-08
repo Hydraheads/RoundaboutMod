@@ -154,6 +154,17 @@ public class PowersPlanetWaves extends NewDashPreset {
     }
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
+        if (activeP == PowerIndex.SKILL_1 || activeP == PowerIndex.SKILL_2 || activeP == PowerIndex.SKILL_2_SNEAK) {
+            if (isTravelling) {
+                return true;
+            }
+        }
+
+        if (activeP == PowerIndex.SKILL_4) {
+            if (isTravelling || isBlockInvalidForTargeting()) {
+                return true;
+            }
+        }
 
         if (activeP == PowerIndex.SKILL_2_SNEAK) {
 
@@ -290,6 +301,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         }
     }
     private void meteorshower() {
+        if(isTravelling)return;
         if (this.onCooldown(PowerIndex.SKILL_1)) return;
         if (this.self.level().dimension() == Level.NETHER) return;
 
@@ -397,6 +409,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                     stand.teleportTo(standTargetPos.x, standTargetPos.y, standTargetPos.z);
                     isTravelling = false;
                     standTravelTarget = null;
+                    syncStandMode();
                 } else {
                     double speed = Math.min(dist, 0.8);
                     Vec3 step = dir.normalize().scale(speed);
@@ -427,6 +440,7 @@ public class PowersPlanetWaves extends NewDashPreset {
     }
 
     private void bigmeteor() {
+        if(isTravelling)return;
         Level level = this.self.level();
         if (level.isClientSide()) return;
         if (this.self.level().dimension() == Level.NETHER) return;
@@ -507,7 +521,30 @@ public class PowersPlanetWaves extends NewDashPreset {
                 1.0F
         );
     }
+    private boolean isBlockInvalidForTargeting() {
+        Vec3 eyePos = this.self.getEyePosition(1.0F);
+        Vec3 lookVec = this.self.getViewVector(1.0F);
+        Vec3 endPos = eyePos.add(lookVec.scale(128.0D));
 
+        ClipContext clipContext = new ClipContext(
+                eyePos, endPos,
+                ClipContext.Block.OUTLINE,
+                ClipContext.Fluid.NONE,
+                this.self
+        );
+
+        BlockHitResult hitResult = this.self.level().clip(clipContext);
+
+        if (hitResult.getType() == HitResult.Type.BLOCK) {
+            BlockPos pos = hitResult.getBlockPos();
+            var state = this.self.level().getBlockState(pos);
+            boolean isFullBlock = state.isCollisionShapeFullBlock(this.self.level(), pos);
+            boolean isOpaque = state.canOcclude();
+            return !isFullBlock || !isOpaque;
+        }
+
+        return true;
+    }
     private boolean isTravelling = false;
     private Vec3 standTravelTarget = null;
     private void standtargeting() {
@@ -528,6 +565,11 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         if (hitResult.getType() == HitResult.Type.BLOCK) {
             BlockPos pos = hitResult.getBlockPos();
+            var state = this.self.level().getBlockState(pos);
+            boolean isFullBlock = state.isCollisionShapeFullBlock(this.self.level(), pos);
+            boolean isOpaque = state.canOcclude();
+            if (!isFullBlock || !isOpaque) return;
+
             if (!this.self.level().getBlockState(pos).isAir()) {
                 targetingstand = true;
                 isTravelling = true;
@@ -537,7 +579,6 @@ public class PowersPlanetWaves extends NewDashPreset {
                 StandEntity stand = this.getStandEntity(this.self);
                 if (stand instanceof FollowingStandEntity FSE) {
                     FSE.setOffsetType(OffsetIndex.LOOSE);
-                    //this.animateStand(PlanetWavesEntity.SOME_ANIMATION);
                 }
 
                 syncStandMode();
@@ -554,6 +595,9 @@ public class PowersPlanetWaves extends NewDashPreset {
             }
         }
     }
+    private LivingEntity grabbedEntity = null;
+    private byte grabAnimationType = 0; // 0 = side, 1 = above, 2 = below
+
     @Override
     public void tickPowerEnd() {
         super.tickPowerEnd();
@@ -570,9 +614,24 @@ public class PowersPlanetWaves extends NewDashPreset {
                 if (dist < 0.5) {
                     stand.setPos(standTargetPos.x, standTargetPos.y, standTargetPos.z);
                     isTravelling = false;
-                    //this.animateStand(StandEntity.IDLE);
+                    syncStandMode();
+
+                    Vec3 diff = current.subtract(standTargetPos);
+                    double absDiffY = Math.abs(diff.y);
+                    double absDiffXZ = Math.sqrt(diff.x * diff.x + diff.z * diff.z);
+
+                    if (absDiffY > absDiffXZ) {
+                        if (diff.y > 0) {
+                            grabAnimationType = 1;
+                        } else {
+                            grabAnimationType = 2;
+                        }
+                    } else {
+                        grabAnimationType = 0;
+                    }
+
                 } else {
-                    double speed = Math.min(dist, 0.5); //Velocidad de Stand Targeting viaje
+                    double speed = Math.min(dist, 0.5);
                     Vec3 step = dir.normalize().scale(speed);
                     stand.setPos(
                             current.x + step.x,
@@ -580,7 +639,48 @@ public class PowersPlanetWaves extends NewDashPreset {
                             current.z + step.z
                     );
                 }
+
+                if (!isTravelling && grabbedEntity == null) {
+                    List<LivingEntity> nearby = self.level().getEntitiesOfClass(
+                            LivingEntity.class,
+                            stand.getBoundingBox().inflate(1.5)
+                    );
+                    for (LivingEntity entity : nearby) {
+                        if (entity.is(this.self)) continue;
+                        if (!entity.isAlive()) continue;
+
+                        grabbedEntity = entity;
+
+                        if (entity instanceof StandUser SU) {
+                            SU.roundabout$setGrabbedTicks(40);
+                        }
+
+                        switch (grabAnimationType) {
+                        }
+                        break;
+                    }
+                }
+
+                if (grabbedEntity != null) {
+                    if (!grabbedEntity.isAlive() ||
+                            grabbedEntity.distanceTo(stand) > 3 ||
+                            (grabbedEntity instanceof StandUser SU && !SU.roundabout$isGrabbed())) {
+                        grabbedEntity = null;
+                        this.animateStand(StandEntity.IDLE);
+                    } else {
+                        grabbedEntity.setPos(
+                                stand.getX(),
+                                stand.getY(),
+                                stand.getZ()
+                        );
+                    }
+                }
             }
+        }
+
+        if (!targetingstand && grabbedEntity != null) {
+            grabbedEntity = null;
+            this.animateStand(StandEntity.IDLE);
         }
     }
     private void usertargeting() {
@@ -589,6 +689,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         targetingstand = false;
         isTravelling = false;
         standTravelTarget = null;
+        grabbedEntity = null; // add this
 
         StandEntity stand = this.getStandEntity(this.self);
         if (stand instanceof FollowingStandEntity FSE) {
@@ -597,6 +698,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         syncStandMode();
         standTargetPos = null;
+        this.animateStand(StandEntity.IDLE);
 
         if (!level.isClientSide()) {
             this.setCooldown(PowerIndex.SKILL_4,
@@ -851,6 +953,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
             if (targetingstand) mode |= 1;
             if (tracking) mode |= 2;
+            if (isTravelling) mode |= 4;  // ADD THIS
 
             S2CPacketUtil.sendGenericIntToClientPacket(
                     pl,
@@ -859,10 +962,12 @@ public class PowersPlanetWaves extends NewDashPreset {
             );
         }
     }
+
     @Override
     public void clientIntUpdated(int integer) {
         targetingstand = (integer & 1) != 0;
         tracking = (integer & 2) != 0;
+        isTravelling = (integer & 4) != 0;  // ADD THIS
     }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
