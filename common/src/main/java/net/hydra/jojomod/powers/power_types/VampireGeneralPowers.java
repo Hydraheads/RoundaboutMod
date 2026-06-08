@@ -656,12 +656,12 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
                             if (target.hurtTime == 0) {
                                 if (DamageHandler.RipperEyesDamage(target, pow, this.self) && !alreadyBeamed.contains(target)) {
-                                    addToCombo();
+                                    addToCombo(target);
                                     bleedEnt(target);
                                 } else if (target.isBlocking()) {
                                     MainUtil.knockShieldPlusStand(target, 200);
                                     if (DamageHandler.RipperEyesDamage(target, pow, this.self) && !alreadyBeamed.contains(target)) {
-                                        addToCombo();
+                                        addToCombo(target);
                                         bleedEnt(target);
                                     }
                                 }
@@ -1145,7 +1145,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         }
                         this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.1f + Math.random() * 0.1f));
                         self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SUCK_DRAIN_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
-                        addToCombo();
+                        addToCombo(entity);
 
                         SimpleParticleType spt = ModParticles.BLOOD;
                         if (MainUtil.hasBlueBlood(entity)){
@@ -1237,7 +1237,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         HeatUtil.addHeat(entity,-24 + (-4*getFreezeLevel()));
                         this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.1f + Math.random() * 0.1f));
                         //self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.HIT_1_SOUND_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
-                        addToCombo();
+                        addToCombo(entity);
 
                         SimpleParticleType spt = ParticleTypes.SNOWFLAKE;
                         ((ServerLevel) this.getSelf().level()).sendParticles(spt,
@@ -1426,7 +1426,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                                 if (!combo){
                                     combo = true;
                                 }
-                                addToCombo();
+                                addToCombo(value);
                             } else {
                                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (1.0f + Math.random() * 0.1f));
                             }
@@ -1748,7 +1748,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
                     takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
                     this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.15f + Math.random() * 0.1f));
-                    addToCombo();
+                    addToCombo(entity);
                     hitParticles(entity);
                 } else {
                     if (!this.self.level().isClientSide()) {
@@ -1820,7 +1820,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                                 0.01);
                         takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
                         this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.7f + Math.random() * 0.1f));
-                        addToCombo();
+                        addToCombo(entity);
                     } else {
                         if (!this.self.level().isClientSide()) {
                             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
