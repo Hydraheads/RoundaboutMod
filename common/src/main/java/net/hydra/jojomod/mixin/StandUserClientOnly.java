@@ -6,9 +6,13 @@ import net.hydra.jojomod.access.ILevelAccess;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.PlayedSoundInstance;
 import net.hydra.jojomod.client.QueueSoundInstance;
+import net.hydra.jojomod.client.WhiteAlbumSkatingSound;
+import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerAmbientSound;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
+import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.RotationAnimation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
@@ -23,6 +27,9 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 
@@ -98,6 +105,25 @@ public abstract class StandUserClientOnly extends Entity implements StandUserCli
     public StandUserClientOnly(EntityType<?> $$0, Level $$1) {
         super($$0, $$1);
     }
+
+
+
+    @Unique
+    public WhiteAlbumSkatingSound rdbt$whiteSkate = null;
+
+    @Inject(method = "tick", at = @At(value = "TAIL"))
+    public void roundabout$soundTick(CallbackInfo ci) {
+        if (((StandUser)this).roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA && PWA.hasSkatesActivated()
+                && this.isSprinting() && this.onGround() && !isSwimming()){
+            if (rdbt$whiteSkate == null || rdbt$whiteSkate.isStopped()) {
+                rdbt$whiteSkate = new WhiteAlbumSkatingSound(
+                        ModSounds.ICE_SKATING_EVENT,
+                        SoundSource.PLAYERS, 1, 0, this);
+                Minecraft.getInstance().getSoundManager().play(rdbt$whiteSkate);
+            }
+        }
+    }
+
 
 
     /**This is called second by the packets, it sets up the client to play the sound on a game tick.

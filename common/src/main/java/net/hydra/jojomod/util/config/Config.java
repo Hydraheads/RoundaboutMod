@@ -717,7 +717,7 @@ public class Config implements Cloneable {
         public Boolean enablePlanetWaves;
         @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
         public Integer meteorshowerCooldown;
-        @IntOption(group = "inherit", value = 360, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer bigmeteorCooldown;
         @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
         public Integer bigmeteorDistance;

@@ -24,6 +24,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -82,8 +83,33 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     @Override
-    public boolean cancelSprintJump(){
+    public void onLandingAnimatedJump(){
         if (hasSkatesActivated()){
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SKATING_LAND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+        }
+    }
+
+    public void fixThis(){
+        if (!self.level().isClientSide()) {
+            if (hasSkatesActivated()) {
+                if (getPlayerPos2() <= 0) {
+                    if (acceleration >= getMaxAccelerationTicks()) {
+                        setPlayerPos2(PlayerPosIndex.SKATE_TWIRL);
+                    } else {
+                        setPlayerPos2(PlayerPosIndex.SKATE_JUMP);
+                    }
+                    twirlTicks = 20;
+                }
+            }
+        }
+    }
+    @Override
+    public void onJump(){
+    }
+
+    @Override
+    public boolean cancelSprintJump(){
+        if (hasSkatesActivated() && acceleration < getMaxAccelerationTicks()){
             return true;
         }
         return super.cancelSprintJump();
@@ -100,18 +126,23 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     @Override
     public boolean forceCrit(){
-        return acceleration >= getMaxAccelerationTicks();
+        return acceleration >= getMaxAccelerationTicks() || super.forceCrit();
     }
 
     int lastAcceleration = 0;
     double lastY = 0;
     @Override
     public void tickPower() {
+        if (!self.level().isClientSide()) {
+            if (lastY < self.getY() && !self.onGround() && !self.isInWater() && !self.isSwimming()) {
+                fixThis();
+            }
+        }
         if (isPacketPlayer()){
             lastAcceleration = acceleration;
             if (hasSkatesActivated()){
                 if (self.isInWater() || self.hurtTime > 0 || self.isUsingItem()
-                || !self.isSprinting()) {
+                || !self.isSprinting() || self.isSwimming()) {
                     acceleration = 0;
                 } else if (!self.onGround()) {
                     if (lastY < self.getY()){
@@ -134,12 +165,12 @@ public class PowersWhiteAlbum extends NewDashPreset {
             } else {
                 acceleration = 0;
             }
-            if (self.onGround()){
-                lastY = self.getY();
-            }
             if (acceleration != lastAcceleration){
                 C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_WHITE_ALBUM_ACCELERATION,acceleration);
             }
+        }
+        if (self.onGround()){
+            lastY = self.getY();
         }
         super.tickPower();
     }
@@ -174,13 +205,20 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return false;
     }
 
+    public ResourceLocation getIconYes(int slot){
+        if (slot == 1 && acceleration >= getMaxAccelerationTicks())
+            return StandIcons.SQUARE_GOLD;
+        return super.getIconYes(slot);
+    }
+
+
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         // code for advanced icons
 
         if (!isHoldingSneak()){
             if (hasSkatesActivated()){
-                setSkillIcon(context, x, y, 1, StandIcons.SKATE_ACTIVE, PowerIndex.SKILL_1);
+                    setSkillIcon(context, x, y, 1, StandIcons.SKATE_ACTIVE, PowerIndex.SKILL_1);
             } else {
                 setSkillIcon(context, x, y, 1, StandIcons.SKATE_INACTIVE, PowerIndex.SKILL_1);
             }
