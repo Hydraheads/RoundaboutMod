@@ -386,7 +386,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             if (this.currentBombStatus == BOMB_NONE) {
                 if (isHoldingSneak()) {
-                    return true;
+                    return !canImpale();
                 }else if(isGuarding()){
                     return !this.hasStrayCat;
                 } else{
@@ -537,6 +537,12 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         return targetEntity != null;
     }
+    public boolean canImpale() {
+        Entity targetEntity = getTargetEntity(this.self, mobPlantRange);
+
+        return targetEntity != null;
+    }
+
     
     @Override
     public float inputSpeedModifiers(float basis){
