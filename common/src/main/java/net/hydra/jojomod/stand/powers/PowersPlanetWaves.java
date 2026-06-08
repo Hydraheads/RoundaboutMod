@@ -142,7 +142,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                 setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4_SNEAK);
             }
         } else {
-            setSkillIcon(context, x, y, 2, StandIcons.PLANET_WAVES_BIG_METEOR, PowerIndex.SKILL_2); // ← only registered now
+            setSkillIcon(context, x, y, 2, StandIcons.PLANET_WAVES_BIG_METEOR, PowerIndex.SKILL_2); // only registered now
             if (canExecuteMoveWithLevel(StandTargetingLevel())) {
                 if (!instandtargeting()) {
                     setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_STAND_TARGETING, PowerIndex.SKILL_4);
