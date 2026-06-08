@@ -629,7 +629,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                                         stand.getX(), stand.getY() + 0.3, stand.getZ(),
                                         0, 0, 0, 0, 0.4);
                             }
-                        } else if (build > 80){
+                        } else if (attackTimeDuring > 80){
                             StandEntity stand = getStandEntity(this.self);
                             if (Objects.nonNull(stand)) {
                                 ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.AIR_CRACKLE,
@@ -641,7 +641,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
                     if (this.attackTimeDuring == 108) {
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                    } else if (build >= 0) {
+                    } else if (attackTimeDuring >= 0) {
                         StandEntity stand = getStandEntity(this.self);
                         if (Objects.nonNull(stand)) {
                             AABB BB1 = stand.getBoundingBox();
@@ -650,8 +650,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                             Vec3 vec3d3 = vec3d.add(vec3d2.x * 15, vec3d2.y * 15, vec3d2.z * 15);
                             double mag = 0.05F;
 
-                            if (build > 10) {
-                                mag += Math.pow(Math.max(build,10)-10, 1.4) / 1000;
+                            if (attackTimeDuring > 10) {
+                                mag += Math.pow(Math.max(attackTimeDuring,10)-10, 1.4) / 1000;
                             }
                             BlockHitResult blockHit = this.getSelf().level().clip(
                                     new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
@@ -907,16 +907,16 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
                     hitParticlesCenter(LE);
 
-                    if (getAttackTimeDuring() > 80){
+                    if (build >= 80){
                         MainUtil.knockShieldPlusStand($$5,40);
                     }
 
                     if (this.StandDamageEntityAttack($$5,getAssaultStrength($$5), 0.4F, this.self)){
                         addEXP(3,LE);
-                        if (getAttackTimeDuring() > 80) {
+                        if (build >= 80) {
                             MainUtil.makeBleed($$5, 0, 400, null);
                             MainUtil.makeMobBleed(LE);
-                        } else if (getAttackTimeDuring() > 50) {
+                        } else if (build > 50) {
                             MainUtil.makeBleed($$5, 0, 300, null);
                         } else if (!getAssaultEarlyTime()) {
                             MainUtil.makeBleed($$5, 0, 200, null);
@@ -957,23 +957,23 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public float getAssaultStrength(Entity entity){
         float mult = 1;
         boolean isReduced = this.getReducedDamage(entity);
-        if (build > 95){
+        if (build >= 80){
             mult = 3.5F;
-        } else if (build > 90){
-            mult =3.2F;
-        } else if (build > 80){
+        } else if (attackTimeDuring > 90){
+            mult =3.0F;
+        } else if (attackTimeDuring > 80){
             mult =2.8F;
-        } else if (build > 70){
+        } else if (attackTimeDuring > 70){
             mult =2.2F;
-        } else if (build > 60){
+        } else if (attackTimeDuring > 60){
             mult = 1.8F;
-        } else if (build > 45){
+        } else if (attackTimeDuring > 45){
             mult = 1.5F;
-        } else if (build > 30){
+        } else if (attackTimeDuring > 30){
             mult = 1.4F;
-        } else if (build > 25){
+        } else if (attackTimeDuring > 25){
             mult = 1.3F;
-        } else if (build >= 20){
+        } else if (attackTimeDuring >= 20){
             mult = 1.2F;
         } else if (getAssaultEarlyTime() && isReduced){
             mult = 0.75F;
