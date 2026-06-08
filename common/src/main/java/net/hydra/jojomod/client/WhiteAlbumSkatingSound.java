@@ -4,8 +4,10 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -24,6 +26,7 @@ public class WhiteAlbumSkatingSound extends AbstractTickableSoundInstance {
         this.volume = volume;
         this.attenuation = Attenuation.LINEAR;
         this.relative = false;
+        this.pitch = pitch;
 
         this.x = (float) entity.getX();
         this.y = (float) entity.getY();
@@ -32,6 +35,7 @@ public class WhiteAlbumSkatingSound extends AbstractTickableSoundInstance {
 
     @Override
     public void tick() {
+        SoundManager manger = Minecraft.getInstance().getSoundManager();
         if (!user.isAlive() || user.isRemoved()) {
             stop();
             return;
