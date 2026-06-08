@@ -97,6 +97,12 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return super.inputSpeedModifiers(basis);
     }
 
+
+    @Override
+    public boolean forceCrit(){
+        return acceleration >= getMaxAccelerationTicks();
+    }
+
     int lastAcceleration = 0;
     double lastY = 0;
     @Override

@@ -298,6 +298,11 @@ public class AbilityScapeBasis {
         return false;
     }
 
+
+    public boolean forceCrit(){
+        return false;
+    }
+
     public boolean upAi(LivingEntity attackTarget){
         if (this.getSelf() instanceof Creeper){
             return false;

@@ -117,6 +117,12 @@ public class PowersWalkingHeart extends NewDashPreset {
         return false;
     }
 
+
+    @Override
+    public boolean forceCrit(){
+        return hasExtendedHeelsForWalking() || super.forceCrit();
+    }
+
     @Override
     public int getExpForLevelUp(int currentLevel){
         int amt;
