@@ -1254,7 +1254,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     if(Objects.nonNull(this.bombBlock)) {
                         Entity contact = this.bombBlock.detectContact();
                         if (contact != null) {
-                            this.syncBombStatus(BOMB_CONTACT);
+                            //this.syncBombStatus(BOMB_CONTACT);
                             this.bombBlock.discard();
                             this.bombEntity = contact;
                             this.detonate();
@@ -1543,7 +1543,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             ExplosionUtil.explosionHurt(vPos, dmg, level,
                     ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionDetonateMaxDamage, 0.4f, 1.5f);
 
-            if (target != null) {
+            if (target != null && bStatus == BOMB_ENTITY) {
                 if (target instanceof Player pl) {
                     pl.die(dmg);
                 }else {
