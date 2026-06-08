@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.goals.CorpseTargetGoal;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.Tactics;
 import net.hydra.jojomod.event.powers.DamageHandler;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.item.BodyBagItem;
@@ -29,6 +30,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -218,6 +221,38 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
         thisBuildBreakGoal = null;
     }
 
+    @Override
+    protected boolean isAffectedByFluids() {
+        if (!isInWater()){
+            return false;
+        }
+        return super.isAffectedByFluids();
+    }
+
+    @Override
+    public boolean isPushedByFluid() {
+        return false;
+    }
+
+    @Override
+    protected float getWaterSlowDown() {
+        return 0.93F;
+    }
+
+    @Override
+    public boolean isInvulnerableTo(DamageSource sauce) {
+        if (sauce.is(DamageTypes.SWEET_BERRY_BUSH) || sauce.is(DamageTypes.LAVA)
+                || sauce.is(ModDamageTypes.GASOLINE_EXPLOSION))
+            return true;
+        return super.isInvulnerableTo(sauce);
+    }
+
+    @Override
+    public void lavaHurt() {
+        if (!this.fireImmune()) {
+            this.setSecondsOnFire(15);
+        }
+    }
     public void setPhasesFull(boolean bool){
         ticksThroughPhases = 10;
         this.entityData.set(PHASES_FULL, bool);

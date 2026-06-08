@@ -1,7 +1,5 @@
 package net.hydra.jojomod.entity.zombie_minion;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
-import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
@@ -10,14 +8,12 @@ import net.hydra.jojomod.entity.goals.*;
 import net.hydra.jojomod.entity.projectile.PoisonLlamaSpit;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
-import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.Tactics;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.item.BodyRemainsItem;
 import net.hydra.jojomod.item.HeadRemainsItem;
-import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -60,7 +56,6 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.UUID;
 
 public class BaseMinion extends PathfinderMob {
