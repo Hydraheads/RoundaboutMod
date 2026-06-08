@@ -117,24 +117,39 @@ public class BlockBombEntity extends StandEntity {
         //super.tick();
     }
 	
-	public boolean detectContact() {
+	public Entity detectContact() {
 		Vec3 pos = this.bombPos.getCenter();
 		float skinSize = 0.10f;
 		
 		List<Entity> entitiesDetect = MainUtil.genHitbox(this.level(), pos.x(), pos.y(), pos.z(),
 				this.blockSize.x() + skinSize, this.blockSize.y() + skinSize, this.blockSize.z() + skinSize);
-		
-		
-		for(int j = 0;j<entitiesDetect.size();j++) {
-            Entity entity = entitiesDetect.get(j);
-            if (entity.isAlive()) {
-            	if (!entity.equals(this.getUser()) && !entity.equals(((StandUser)this.getUser()).roundabout$getStand()) && !entity.equals(this)) {
-            		return true;
-            	}
-            }
-        }
-		
-		return false;
+
+		double distRecord = -1.0;
+		Entity blowTarget = null;
+
+		for (Entity entity : entitiesDetect) {
+			if (entity.equals(this.getUser()) || entity.equals(((StandUser)this.getUser()).roundabout$getStand()) || entity.equals(this)
+				|| entity instanceof StandEntity || !(entity instanceof LivingEntity)) {
+				continue;
+			}
+
+
+			double dist = MainUtil.cheapDistanceTo(
+					this.getX(),
+					this.getY(),
+					this.getZ(),
+					entity.getX(),
+					entity.getY(),
+					entity.getZ()
+			);
+
+			if (distRecord == -1 || dist < distRecord) {
+				blowTarget = entity;
+				distRecord = dist;
+			}
+		}
+
+		return blowTarget;
 	}
 	
 	public void getBlockSize() {
