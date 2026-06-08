@@ -34,7 +34,7 @@ public class AchtungCustomHeadLayer {
             float throwFadeToTheEther = 1f;
             IEntityAndData entityAndData = ((IEntityAndData) user);
             throwFadeToTheEther = ClientUtil.getThrowFadePercent($$3,$$4);
-            if (entityAndData.roundabout$getTrueInvisibility() > -1){
+            if (entityAndData.roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeMobsForWindVision() || ClientUtil.checkIfClientCanSeeMobsForWindVision() && entityAndData.roundabout$getTrueInvisibilityManhattan() < 1){
                 if (!ClientUtil.checkIfClientCanSeeInvisAchtung()){
                     ClientUtil.setThrowFadeToTheEther(throwFadeToTheEther);
                     ci.cancel();
