@@ -394,13 +394,17 @@ public class PowersPlanetWaves extends NewDashPreset {
                 Vec3 dir = standTargetPos.subtract(current);
                 double dist = dir.length();
                 if (dist < 0.5) {
-                    stand.setPos(standTargetPos.x, standTargetPos.y, standTargetPos.z);
+                    stand.teleportTo(standTargetPos.x, standTargetPos.y, standTargetPos.z);
                     isTravelling = false;
                     standTravelTarget = null;
                 } else {
                     double speed = Math.min(dist, 0.8);
                     Vec3 step = dir.normalize().scale(speed);
-                    stand.setPos(current.x + step.x, current.y + step.y, current.z + step.z);
+                    stand.teleportTo(
+                            current.x + step.x,
+                            current.y + step.y,
+                            current.z + step.z
+                    );
                 }
             }
         }
@@ -528,10 +532,12 @@ public class PowersPlanetWaves extends NewDashPreset {
                 targetingstand = true;
                 isTravelling = true;
                 this.standTargetPos = hitResult.getLocation();
+                this.standTravelTarget = hitResult.getLocation();
 
                 StandEntity stand = this.getStandEntity(this.self);
                 if (stand instanceof FollowingStandEntity FSE) {
                     FSE.setOffsetType(OffsetIndex.LOOSE);
+                    //this.animateStand(PlanetWavesEntity.SOME_ANIMATION);
                 }
 
                 syncStandMode();
@@ -548,7 +554,35 @@ public class PowersPlanetWaves extends NewDashPreset {
             }
         }
     }
+    @Override
+    public void tickPowerEnd() {
+        super.tickPowerEnd();
 
+        if (isTravelling && standTargetPos != null) {
+            if (self.level().isClientSide()) return;
+
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand != null) {
+                Vec3 current = stand.position();
+                Vec3 dir = standTargetPos.subtract(current);
+                double dist = dir.length();
+
+                if (dist < 0.5) {
+                    stand.setPos(standTargetPos.x, standTargetPos.y, standTargetPos.z);
+                    isTravelling = false;
+                    //this.animateStand(StandEntity.IDLE);
+                } else {
+                    double speed = Math.min(dist, 0.5); //Velocidad de Stand Targeting viaje
+                    Vec3 step = dir.normalize().scale(speed);
+                    stand.setPos(
+                            current.x + step.x,
+                            current.y + step.y,
+                            current.z + step.z
+                    );
+                }
+            }
+        }
+    }
     private void usertargeting() {
         Level level = this.self.level();
 
