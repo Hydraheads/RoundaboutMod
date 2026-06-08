@@ -1254,7 +1254,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     if(Objects.nonNull(this.bombBlock)) {
                         Entity contact = this.bombBlock.detectContact();
                         if (contact != null) {
-                            //this.syncBombStatus(BOMB_CONTACT);
+                            this.syncBombStatus(BOMB_CONTACT);
                             this.bombBlock.discard();
                             this.bombEntity = contact;
                             this.detonate();
@@ -1264,7 +1264,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     if(Objects.nonNull(this.bombEntity)) {
                         Entity contact = this.isBombEntityContacting();
                         if (contact != null) {
-                            this.syncBombStatus(BOMB_CONTACT);
+                            //this.syncBombStatus(BOMB_CONTACT);
                             this.bombEntity = contact;
                             this.detonate();
                         }
