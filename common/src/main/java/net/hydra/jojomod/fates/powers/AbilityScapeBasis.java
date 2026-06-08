@@ -301,7 +301,8 @@ public class AbilityScapeBasis {
     public boolean upAi(LivingEntity attackTarget){
         if (this.getSelf() instanceof Creeper){
             return false;
-        } else return attackTarget != null && ((StandUser) attackTarget).roundabout$hasAStand();
+        } else return attackTarget != null && ((StandUser) attackTarget).roundabout$hasAStand() &&
+                !((StandUser)attackTarget).roundabout$getStandPowers().isSecondaryStand();
     }
 
     /** Tries to use an ability of your stand. If forced is true, the ability comes out no matter what.**/
