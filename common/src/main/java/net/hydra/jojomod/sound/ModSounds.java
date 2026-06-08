@@ -185,6 +185,9 @@ public class ModSounds {
     public static final String ICE_SKATING = "ice_skating";
     public static final ResourceLocation ICE_SKATING_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ICE_SKATING);
     public static SoundEvent ICE_SKATING_EVENT = SoundEvent.createVariableRangeEvent(ICE_SKATING_ID);
+    public static final String SKATING_LAND = "skating_land";
+    public static final ResourceLocation SKATING_LAND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SKATING_LAND);
+    public static SoundEvent SKATING_LAND_EVENT = SoundEvent.createVariableRangeEvent(SKATING_LAND_ID);
 
     public static final String BANISH = "banish";
     public static final ResourceLocation BANISH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BANISH);

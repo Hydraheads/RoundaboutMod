@@ -5278,6 +5278,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Use this code to eliminate the sprint jump during certain actions*/
     @Inject(method = "jumpFromGround", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void roundabout$jumpFromGround(CallbackInfo ci) {
+
+        this.roundabout$getStandPowers().onJump();
+
         if (this.roundabout$getStandPowers().cancelSprintJump() || roundabout$cancelsprintJump()
         || (rdbt$this() instanceof Player pl && (((IFatePlayer)pl).rdbt$getFatePowers().cancelSprintJump() ||
                 ((IPowersPlayer)pl).rdbt$getPowers().cancelSprintJump()))) {

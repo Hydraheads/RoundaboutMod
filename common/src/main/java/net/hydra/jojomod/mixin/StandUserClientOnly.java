@@ -114,7 +114,7 @@ public abstract class StandUserClientOnly extends Entity implements StandUserCli
     @Inject(method = "tick", at = @At(value = "TAIL"))
     public void roundabout$soundTick(CallbackInfo ci) {
         if (((StandUser)this).roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA && PWA.hasSkatesActivated()
-                && this.isSprinting()){
+                && this.isSprinting() && this.onGround() && !isSwimming()){
             if (rdbt$whiteSkate == null || rdbt$whiteSkate.isStopped()) {
                 rdbt$whiteSkate = new WhiteAlbumSkatingSound(
                         ModSounds.ICE_SKATING_EVENT,

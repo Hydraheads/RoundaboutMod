@@ -17,6 +17,12 @@
       "roundabout:ice_skating"
     ]
   },
+  "skating_land": {
+    "subtitle": "sounds.roundabout.skating_land",
+    "sounds": [
+      "roundabout:skating_land"
+    ]
+  },
   "white_album_summon": {
     "subtitle": "sounds.roundabout.white_album_summon",
     "sounds": [
