@@ -11,6 +11,12 @@
       "roundabout:summon_diver_down"
     ]
   },
+  "ice_skating": {
+    "subtitle": "sounds.roundabout.ice_skating",
+    "sounds": [
+      "roundabout:ice_skating"
+    ]
+  },
   "white_album_summon": {
     "subtitle": "sounds.roundabout.white_album_summon",
     "sounds": [

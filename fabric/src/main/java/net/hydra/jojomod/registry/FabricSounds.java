@@ -97,6 +97,7 @@ public class FabricSounds {
         addSound(ModSounds.HAMMER_CLINK_ID, ModSounds.HAMMER_CLINK_EVENT);
         addSound(ModSounds.GO_BEYOND_LAUNCH_ID, ModSounds.GO_BEYOND_LAUNCH_EVENT);
         addSound(ModSounds.BUBBLE_POP_ID, ModSounds.BUBBLE_POP_EVENT);
+        addSound(ModSounds.ICE_SKATING_ID, ModSounds.ICE_SKATING_EVENT);
         addSound(ModSounds.BANISH_ID, ModSounds.BANISH_EVENT);
 
         addSound(ModSounds.IRON_BALL_BOUNCE_ID, ModSounds.IRON_BALL_BOUNCE_EVENT);

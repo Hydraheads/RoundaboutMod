@@ -100,7 +100,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     @Override
     public boolean forceCrit(){
-        return acceleration >= getMaxAccelerationTicks();
+        return acceleration >= getMaxAccelerationTicks() || super.forceCrit();
     }
 
     int lastAcceleration = 0;
