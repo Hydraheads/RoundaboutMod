@@ -1751,6 +1751,9 @@ public class AbilityScapeBasis {
         return true;
     }
 
+    public void onChangedBlock(BlockPos $$0){
+
+    }
 
     public boolean setPowerMovement(int lastMove) {
         if (this.getSelf() instanceof Player) {

@@ -51,6 +51,9 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> SHINY_QUARTZ = BLOCKS.register("shiny_quartz",
             () -> SHINY_QUARTZ_PROPERTIES
     );
+    public static final RegistryObject<Block> WHITE_ALBUM_ICE = BLOCKS.register("white_album_ice",
+            () -> WHITE_ALBUM_ICE_BLOCK_PROPERTIES
+    );
     public static final RegistryObject<Block> SHINY_QUARTZ_TILES = BLOCKS.register("shiny_quartz_tiles",
             () -> SHINY_QUARTZ_TILES_PROPERTIES
     );

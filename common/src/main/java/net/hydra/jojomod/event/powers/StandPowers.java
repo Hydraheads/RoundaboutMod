@@ -1955,7 +1955,7 @@ public class StandPowers extends AbilityScapeBasis {
                             twirlTicks--;
                         } else {
                             if (pos2 == PlayerPosIndex.SKATE_TWIRL){
-                                ipe.roundabout$SetPos2(PlayerPosIndex.NONE);
+                                ipe.roundabout$SetPos2(PlayerPosIndex.SKATE_JUMP);
                             }
                         }
                     }
