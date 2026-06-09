@@ -652,7 +652,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                         grabbedEntity = entity;
 
                         if (entity instanceof StandUser SU) {
-                            SU.roundabout$setGrabbedTicks(40);
+                            //SU.roundabout$setGrabbedTicks(40);
                         }
 
                         switch (grabAnimationType) {
@@ -664,7 +664,9 @@ public class PowersPlanetWaves extends NewDashPreset {
                 if (grabbedEntity != null) {
                     if (!grabbedEntity.isAlive() ||
                             grabbedEntity.distanceTo(stand) > 3 ||
-                            (grabbedEntity instanceof StandUser SU && !SU.roundabout$isGrabbed())) {
+                            (grabbedEntity instanceof StandUser SU
+                                    //&& !SU.roundabout$isGrabbed()
+                            )) {
                         grabbedEntity = null;
                         this.animateStand(StandEntity.IDLE);
                     } else {

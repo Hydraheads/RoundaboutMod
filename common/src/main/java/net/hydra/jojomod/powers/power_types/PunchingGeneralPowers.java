@@ -605,7 +605,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
             return;
         int comboAmt = getComboAmt();
         setComboAmt(comboAmt+1);
-        setComboExpireTicks(100);
+        setComboExpireTicks(110);
     }
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){

@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ILevelAccess;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.PlayedSoundInstance;
@@ -17,6 +18,7 @@ import net.hydra.jojomod.util.RotationAnimation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -113,13 +115,15 @@ public abstract class StandUserClientOnly extends Entity implements StandUserCli
 
     @Inject(method = "tick", at = @At(value = "TAIL"))
     public void roundabout$soundTick(CallbackInfo ci) {
-        if (((StandUser)this).roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA && PWA.hasSkatesActivated()
-                && this.isSprinting() && this.onGround() && !isSwimming()){
-            if (rdbt$whiteSkate == null || rdbt$whiteSkate.isStopped()) {
-                rdbt$whiteSkate = new WhiteAlbumSkatingSound(
-                        ModSounds.ICE_SKATING_EVENT,
-                        SoundSource.PLAYERS, 1, 0, this);
-                Minecraft.getInstance().getSoundManager().play(rdbt$whiteSkate);
+        if (this.level().isClientSide()) {
+            if (((StandUser) this).roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA && PWA.hasSkatesActivated()
+                    && this.isSprinting() && this.onGround() && !isSwimming()) {
+                if (rdbt$whiteSkate == null || rdbt$whiteSkate.isStopped()) {
+                    rdbt$whiteSkate = new WhiteAlbumSkatingSound(
+                            ModSounds.ICE_SKATING_EVENT,
+                            SoundSource.PLAYERS, 1, 1, this);
+                    Minecraft.getInstance().getSoundManager().play(rdbt$whiteSkate);
+                }
             }
         }
     }
