@@ -50,7 +50,7 @@ public class WhiteAlbumSkatingSound extends AbstractTickableSoundInstance {
                 //Also stop if you jump
                 byte bt = ((IPlayerEntity)pl).roundabout$GetPos2();
                 if (bt == PlayerPosIndex.SKATE_JUMP || bt == PlayerPosIndex.SKATE_TWIRL || pl.isCrouching()
-                || pl.isFallFlying()){
+                || pl.isFallFlying() || pl.isSwimming()){
                     stop();
                     return;
                 }
