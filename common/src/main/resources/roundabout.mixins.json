@@ -185,6 +185,7 @@
     "justice.JusticeVillager",
     "justice.JusticeVillagerHostilesSensor",
     "justice.JusticeZombie",
+    "manhattan.EggAccess",
     "magicians_red.MagiciansRedAbstractFurnaceBlockEntityMixin",
     "magicians_red.StandFirePortalShapeMixin",
     "metallica.DamageTrackingMixin",
