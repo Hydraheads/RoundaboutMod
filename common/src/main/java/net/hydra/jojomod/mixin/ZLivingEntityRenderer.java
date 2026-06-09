@@ -209,7 +209,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
                 }
             }
             if (playerP2 == PlayerPosIndex.SKATE_TWIRL){
-                poseStack.mulPose(Axis.YP.rotationDegrees(((float)$$0.tickCount + $$4) * -75.0F));
+                poseStack.mulPose(Axis.YP.rotationDegrees(((float)$$0.tickCount + $$4) * -45.0F));
             }
         }
     }

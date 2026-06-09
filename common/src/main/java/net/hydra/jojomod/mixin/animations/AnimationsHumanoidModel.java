@@ -152,13 +152,11 @@ public class AnimationsHumanoidModel<T extends LivingEntity> extends AgeableList
 
                    this.rightArm.xRot =
                            -0.2F
-                                   + Mth.cos(armCycle + (float) Math.PI)
-                                   * limbSwingAmount * 0.5F;
+                                   + (-0.25F + cycle * 0.5F * limbSwingAmount);
 
                    this.leftArm.xRot =
                            -0.2F
-                                   + Mth.cos(armCycle)
-                                   * limbSwingAmount * 0.5F;
+                                   + (-0.25F - cycle * 0.5F * limbSwingAmount);
 
                    float sway = Mth.sin(skateCycle);
                    this.body.zRot = sway * 0.08F;
