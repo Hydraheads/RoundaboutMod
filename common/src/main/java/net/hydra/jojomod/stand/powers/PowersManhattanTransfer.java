@@ -284,7 +284,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
     @Override
     public void pilotInputAttack(){
         LivingEntity ent = getPilotingStand();
-        if (ent != null && !switchShootingMode()) {
+        if (ent != null && switchShootingMode()) {
             tryPower(PowersManhattanTransfer.DEFLECT_PROJECTILE, true);
             tryPowerPacket(PowersManhattanTransfer.DEFLECT_PROJECTILE);
             Entity TE = MainUtil.getTargetEntity(ent, 300, 10);
@@ -490,7 +490,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
             }
         }
         if (this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME) {
-            if (ME.getHattanTarget() != 0 && switchShootingMode()){
+            if (ME.getHattanTarget() != 0 && !switchShootingMode()){
                 if(securityTicks < 1 && this.targetHattan != null && ME.hasLineOfSight(this.targetHattan)) {
                     tryPower(PowersManhattanTransfer.DEFLECT_PROJECTILE, true);
                     tryPowerPacket(PowersManhattanTransfer.DEFLECT_PROJECTILE);
@@ -675,7 +675,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 }
             }
         }
-        if(this.switchShootingMode()) {
+        if(!this.switchShootingMode()) {
             if (targetHattan != null && ent == targetHattan) {
                 if (this.isActive() && this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
                     return true;
@@ -696,7 +696,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 }
             }
         }
-        if(this.switchShootingMode()) {
+        if(!this.switchShootingMode()) {
             if (targetHattan != null && ent == targetHattan) {
                 if (this.isActive() && this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
                     return 3407755;
@@ -777,7 +777,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         // code for advanced icons
-        if (switchShootingMode()) {
+        if (!switchShootingMode()) {
             setSkillIcon(context, x, y, 1, StandIcons.MANUAL_SHOOTING_ON, PowerIndex.SKILL_1);
         }
         else

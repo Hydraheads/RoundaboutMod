@@ -262,6 +262,11 @@ public class ManhattanTransferEntity extends StandEntity {
                             }
                             this.changeMovementState();
                         }
+                        if(!(this.getUser() instanceof Player)) {
+                            this.shootHattan();
+                            this.hasItem = false;
+                            this.setHeldItemManhattan(ItemStack.EMPTY);
+                        }
                         } else {
                             success = false;
                             if (direct instanceof AbstractArrow AA) {
@@ -613,7 +618,7 @@ public class ManhattanTransferEntity extends StandEntity {
             if (this.getUserData(this.getUser()) != null) {
                 if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
                     Vec3 rots = this.getRotations(PM.targetHattan);
-                    if (!PM.switchShootingMode() || this.getHattanTarget() == 0) {
+                    if (PM.switchShootingMode() || this.getHattanTarget() == 0) {
                         shootRotationXHattan = rotationXHattan;
                         shootRotationYHattan = rotationYHattan;
                     } else {
