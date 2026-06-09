@@ -938,7 +938,33 @@ public class PowersPlanetWaves extends NewDashPreset {
         }
         return super.isServerControlledCooldown(num);
     }
-
+    @Override
+    public boolean setPowerNone() {
+        boolean result = super.setPowerNone();
+        if (targetingstand) {
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand instanceof FollowingStandEntity FSE) {
+                FSE.setOffsetType(OffsetIndex.LOOSE);
+            }
+        }
+        return result;
+    }
+    @Override
+    public void onStandSummon(boolean desummon) {
+        super.onStandSummon(desummon);
+        if (desummon) {
+            targetingstand = false;
+            isTravelling = false;
+            standTargetPos = null;
+            standTravelTarget = null;
+            grabbedEntity = null;
+        } else if (targetingstand) {
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand instanceof FollowingStandEntity FSE) {
+                FSE.setOffsetType(OffsetIndex.LOOSE);
+            }
+        }
+    }
     @Override
     public void serverQueried() {
         if (self instanceof ServerPlayer pl) {
