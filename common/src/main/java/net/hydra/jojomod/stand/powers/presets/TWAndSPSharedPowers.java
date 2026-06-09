@@ -1186,10 +1186,10 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             return true;
         } else if (this.getActivePower() == PowerIndex.SPECIAL) {
             int cdr;
-            if (interrupter instanceof Mob mb){
-                cdr = ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopInterruptedCooldownMobs;
-            } else {
+            if (interrupter instanceof Player){
                 cdr = ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopInterruptedCooldownv2;
+            } else {
+                cdr = ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopInterruptedCooldownMobs;
             }
             if (this.getSelf() instanceof Player) {
                 S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, cdr);
