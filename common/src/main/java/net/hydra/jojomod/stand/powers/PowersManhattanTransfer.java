@@ -83,7 +83,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public void syncHattanStatus(byte status) {
         this.currentHattanStatus = status;
         this.updatePowerInt(PowersManhattanTransfer.LOAD_CHECK, status);
-        S2CPacketUtil.sendIntPowerDataPacket((Player)this.getSelf(),PowersManhattanTransfer.LOAD_CHECK, status);
+        if(this.getSelf() instanceof Player) {
+            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersManhattanTransfer.LOAD_CHECK, status);
+        }
     }
 
     public boolean isLoaded(){
@@ -417,7 +419,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 ME.isDesummoning = false;
             }
 
-            if (this.isClient()) {
+            if (this.isClient() || !this.isClient()) {
                 if (!isPiloting()) {
                     if (this.currentHattanStatus == UNLOADED_HATTAN) {
                         if (this.getStandEntity(this.getSelf()).isInWaterOrRain()) {
@@ -504,6 +506,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
         if(this.self != null && this.self.isUsingItem() && isPiloting()){
             this.self.stopUsingItem();
         }
+        super.tickPower();
     }
 
     int securityTicks = 0;

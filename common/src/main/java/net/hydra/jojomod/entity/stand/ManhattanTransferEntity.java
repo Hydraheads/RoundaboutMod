@@ -380,8 +380,10 @@ public class ManhattanTransferEntity extends StandEntity {
                                          boolean getCanPlace, float xRot, float yRot, Vec3 pos,
                                          boolean playSounds, float mult, boolean canGiveYouItem) {
         thrower.playSound(ModSounds.BULLET_RICOCHET_EVENT, 1.0F, (thrower.random.nextFloat() * 0.2F + 0.7F));
-        if(thrower.distanceTo(thrower.getUser()) > 16) {
-            thrower.soundForPlayerTwo();
+            if(thrower.getUser() != null) {
+                if(thrower.distanceTo(thrower.getUser()) > 16) {
+                thrower.soundForPlayerTwo();
+            }
         }
         if (!thrower.level().isClientSide) {
             if (thrower.getUserData(thrower.getUser()) != null && thrower.getUserData(thrower.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
@@ -570,7 +572,6 @@ public class ManhattanTransferEntity extends StandEntity {
         validateUUID();
         float pitch = this.getXRot();
         float yaw = this.getYRot();
-        super.tick();
 
         if (this.getUserData(this.getUser()) != null) {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
@@ -625,6 +626,7 @@ public class ManhattanTransferEntity extends StandEntity {
         searchTarget();
         rotationXHattan = this.getXRot();
         rotationYHattan = this.getYRot();
+        super.tick();
     }
     public float rotationXHattan = 0;
     public float rotationYHattan = 0;
