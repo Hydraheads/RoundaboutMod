@@ -391,13 +391,15 @@ public class Config implements Cloneable {
         public Integer objectThrowCooldown;
         @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
         public Integer objectPocketCooldown;
-        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 70, min = 0, max = 72000)
         public Integer mobThrowCooldown;
         @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
         public Integer mobThrowInterruptCooldown;
-        @IntOption(group = "inherit", value = 28, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
         public Integer mobThrowRecoilTicks;
-        @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 0, min = 0, max = 72000)
+        public Integer mobNonPlayerThrowRecoilTicks;
+        @IntOption(group = "inherit", value = 140, min = 0, max = 72000)
         public Integer mobThrowAttackCooldown;
         @BooleanOption(group = "inherit", value = true)
         public Boolean creativeModeRefreshesCooldowns;
@@ -1061,7 +1063,7 @@ public class Config implements Cloneable {
         public Boolean postTSSoften;
         @BooleanOption(group = "inherit", value = true)
         public Boolean postTSCancel;
-        @IntOption(group = "inherit", value = 20, min = 0, max = 100)
+        @IntOption(group = "inherit", value = 14, min = 0, max = 100)
         public Integer timestopLeapCooldown;
         @BooleanOption(group = "inherit", value = true)
         public Boolean timestopCancelsFood;
