@@ -140,7 +140,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                 setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4_SNEAK);
             }
         } else {
-            setSkillIcon(context, x, y, 2, StandIcons.PLANET_WAVES_BIG_METEOR, PowerIndex.SKILL_2); // only registered now
+            setSkillIcon(context, x, y, 2, StandIcons.PLANET_WAVES_BIG_METEOR, PowerIndex.SKILL_2);
             if (canExecuteMoveWithLevel(StandTargetingLevel())) {
                 if (!instandtargeting()) {
                     setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_STAND_TARGETING, PowerIndex.SKILL_4);
@@ -623,14 +623,18 @@ public class PowersPlanetWaves extends NewDashPreset {
                     if (absDiffY > absDiffXZ) {
                         if (diff.y > 0) {
                             grabAnimationType = 1;
+                            //this.animateStand(PlanetWavesEntity.ARRIVE_FROM_ABOVE);
                         } else {
                             grabAnimationType = 2;
+                            //this.animateStand(PlanetWavesEntity.ARRIVE_FROM_BELOW);
                         }
                     } else {
                         grabAnimationType = 0;
+                        //this.animateStand(PlanetWavesEntity.ARRIVE_FROM_SIDE);
                     }
 
                 } else {
+                    //this.animateStand(PlanetWavesEntity.TRAVELLING);
                     double speed = Math.min(dist, 0.5);
                     Vec3 step = dir.normalize().scale(speed);
                     stand.setPos(
@@ -652,10 +656,13 @@ public class PowersPlanetWaves extends NewDashPreset {
                         grabbedEntity = entity;
 
                         if (entity instanceof StandUser SU) {
-                            //SU.roundabout$setGrabbedTicks(40);
+                            SU.roundabout$setGrabbedTicks(40);
                         }
 
                         switch (grabAnimationType) {
+                            //case 1 -> this.animateStand(PlanetWavesEntity.GRAB_FROM_ABOVE);
+                            //case 2 -> this.animateStand(PlanetWavesEntity.GRAB_FROM_BELOW);
+                            //default -> this.animateStand(PlanetWavesEntity.GRAB_FROM_SIDE);
                         }
                         break;
                     }
@@ -691,7 +698,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         targetingstand = false;
         isTravelling = false;
         standTravelTarget = null;
-        grabbedEntity = null; // add this
+        grabbedEntity = null;
 
         StandEntity stand = this.getStandEntity(this.self);
         if (stand instanceof FollowingStandEntity FSE) {
@@ -981,7 +988,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
             if (targetingstand) mode |= 1;
             if (tracking) mode |= 2;
-            if (isTravelling) mode |= 4;  // ADD THIS
+            if (isTravelling) mode |= 4;
 
             S2CPacketUtil.sendGenericIntToClientPacket(
                     pl,
@@ -995,7 +1002,7 @@ public class PowersPlanetWaves extends NewDashPreset {
     public void clientIntUpdated(int integer) {
         targetingstand = (integer & 1) != 0;
         tracking = (integer & 2) != 0;
-        isTravelling = (integer & 4) != 0;  // ADD THIS
+        isTravelling = (integer & 4) != 0;
     }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
