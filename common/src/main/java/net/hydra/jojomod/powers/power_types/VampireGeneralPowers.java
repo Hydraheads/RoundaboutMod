@@ -95,7 +95,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         return Component.translatable("text.roundabout.powers.vampire_select");
     }
     public int getMaxGuardPoints(){
-        return 13;
+        return ClientNetworking.getAppropriateConfig().vampireSettings.vampireGuardPoints;
     }
 
     @Override
