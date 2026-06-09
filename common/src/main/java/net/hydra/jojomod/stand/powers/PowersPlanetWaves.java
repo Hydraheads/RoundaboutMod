@@ -656,7 +656,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                         grabbedEntity = entity;
 
                         if (entity instanceof StandUser SU) {
-                            SU.roundabout$setGrabbedTicks(40);
+                            //SU.roundabout$setGrabbedTicks(40);
                         }
 
                         switch (grabAnimationType) {
