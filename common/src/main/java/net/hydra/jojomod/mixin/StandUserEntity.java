@@ -5275,6 +5275,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return false;
     }
 
+    @Inject(method = "onChangedBlock", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    protected void roundabout$onChangedBlock(BlockPos $$0, CallbackInfo ci) {
+        roundabout$getStandPowers().onChangedBlock($$0);
+    }
     /**Use this code to eliminate the sprint jump during certain actions*/
     @Inject(method = "jumpFromGround", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void roundabout$jumpFromGround(CallbackInfo ci) {
