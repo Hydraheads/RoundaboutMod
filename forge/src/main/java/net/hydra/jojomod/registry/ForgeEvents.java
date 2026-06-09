@@ -197,6 +197,7 @@ public class ForgeEvents {
         ModBlocks.AJA_BLOCK = ForgeBlocks.AJA_BLOCK.get();
         ModBlocks.SHINY_QUARTZ = ForgeBlocks.SHINY_QUARTZ.get();
         ModBlocks.WHITE_ALBUM_ICE_BLOCK = ForgeBlocks.WHITE_ALBUM_ICE.get();
+        ModBlocks.WHITE_ALBUM_ICE_SLAB = ForgeBlocks.WHITE_ALBUM_ICE_SLAB.get();
         ModBlocks.SHINY_QUARTZ_TILES = ForgeBlocks.SHINY_QUARTZ_TILES.get();
         ModBlocks.LOCACACA_CACTUS = ForgeBlocks.LOCACACA_CACTUS.get();
         ModBlocks.LOCACACA_BLOCK = ForgeBlocks.LOCACACA_BLOCK.get();

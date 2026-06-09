@@ -51,10 +51,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.tags.EntityTypeTags;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.TagKey;
+import net.minecraft.tags.*;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.*;
@@ -4128,6 +4125,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
 
+        BlockState state = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement());
+        BlockState state2 = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement().above());
+        if (state.is(ModBlocks.WHITE_ALBUM_ICE_BLOCK) || state.is(ModBlocks.WHITE_ALBUM_ICE_SLAB) ||
+                state2.is(ModBlocks.WHITE_ALBUM_ICE_SLAB)){
+            if (!(roundabout$getStandPowers() instanceof PowersWhiteAlbum PW && PW.hasSkatesActivated())){
+                basis *= 2.8F;
+            }
+        }
 
         float sd = HeatUtil.getSlowdown(rdbt$this());
         if (sd > 0){

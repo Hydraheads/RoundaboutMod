@@ -102,7 +102,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             if (!self.onGround()) {
                 return;
             }
-            BlockState blockState = Blocks.FROSTED_ICE.defaultBlockState();
+            BlockState blockState = ModBlocks.WHITE_ALBUM_ICE_BLOCK.defaultBlockState();
             int j = Math.min(16, 2 + 1);
             BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
             for (BlockPos blockPos2 : BlockPos.betweenClosed(blockPos.offset(-j, -1, -j), blockPos.offset(j, -1, j))) {
@@ -114,9 +114,26 @@ public class PowersWhiteAlbum extends NewDashPreset {
                         || !blockState.canSurvive(self.level(), blockPos2) ||
                         !self.level().isUnobstructed(blockState, blockPos2, CollisionContext.empty())) continue;
                 self.level().setBlockAndUpdate(blockPos2, blockState);
-                self.level().scheduleTick(blockPos2, ModBlocks.WHITE_ALBUM_ICE_BLOCK, Mth.nextInt(self.getRandom(), 60, 120));
+                self.level().scheduleTick(blockPos2, ModBlocks.WHITE_ALBUM_ICE_BLOCK, Mth.nextInt(self.getRandom(), 110, 130));
             }
-        }
+
+            j = 2;
+            blockState = ModBlocks.WHITE_ALBUM_ICE_SLAB.defaultBlockState();
+            for (BlockPos blockPos2 : BlockPos.betweenClosed(blockPos.offset(-j, 0, -j), blockPos.offset(j, 0, j))) {
+
+                mutableBlockPos.set(blockPos2.getX(), blockPos2.getY() + 1, blockPos2.getZ());
+                BlockState blockState2 = self.level().getBlockState(mutableBlockPos);
+                BlockState blockState3 =self.level().getBlockState(mutableBlockPos.below());
+                if (!blockState.canSurvive(self.level(), blockPos2) ||
+                        !self.level().isUnobstructed(blockState, blockPos2, CollisionContext.empty())) continue;
+                if (blockState3.isAir() || (MainUtil.getIsGamemodeApproriateForGrief(self) && blockState3.canBeReplaced())) {
+                            self.level().setBlockAndUpdate(blockPos2, blockState);
+                            self.level().scheduleTick(blockPos2, ModBlocks.WHITE_ALBUM_ICE_SLAB, Mth.nextInt(self.getRandom(), 110, 130));
+
+                }
+                }
+
+            }
     }
 
     public void fixThis(){
@@ -355,23 +372,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
 
-    public void throwBottleActually(ItemStack stack){
-
-        this.self.level().playSound(
-                null,
-                this.self.getX(),
-                this.self.getY(),
-                this.self.getZ(),
-                SoundEvents.SPLASH_POTION_THROW,
-                SoundSource.PLAYERS,
-                0.5F,
-                0.4F / (this.self.getRandom().nextFloat() * 0.4F + 0.8F)
-        );
-        ThrownWaterBottleEntity $$4 = new ThrownWaterBottleEntity(this.self.level(), this.self);
-        $$4.setItem(stack);
-        $$4.shootFromRotation(this.self, this.self.getXRot(), this.self.getYRot(), -0.1F, 1.5F, 0.2F);
-        this.self.level().addFreshEntity($$4);
-    }
 
     public boolean toggleSkates(){
         int cooldown = 5;
@@ -742,14 +742,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
 
-    public boolean canUseWaterBottleThrow(){
-        ItemStack stack = this.getSelf().getMainHandItem();
-        ItemStack stack2 = this.getSelf().getOffhandItem();
-        return ((!stack.isEmpty() && stack.getItem() instanceof PotionItem PI &&
-                PotionUtils.getPotion(stack) == Potions.WATER && !(PI instanceof SplashPotionItem))
-                || ((!stack2.isEmpty() && stack2.getItem() instanceof PotionItem PI2 && PotionUtils.getPotion(stack2) == Potions.WATER)
-                && !(PI2 instanceof SplashPotionItem)));
-    }
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         return super.isAttackIneptVisually(activeP,slot);
     }
