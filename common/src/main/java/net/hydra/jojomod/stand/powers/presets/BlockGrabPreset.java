@@ -44,6 +44,7 @@ import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Illusioner;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.*;
@@ -344,7 +345,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                     return false;
                 } else if (standEntity.getFirstPassenger() != null){
                     if (!this.getSelf().level().isClientSide && hardBlocker < 1) {
-                        hardBlocker = 10;
+                        hardBlocker = 3;
 
                         if (!onCooldown(PowerIndex.SKILL_2)) {
                             if (getAttackTimeDuring() > 0) {
@@ -422,7 +423,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                                                     -Mth.cos((degrees * ((float) Math.PI / 180)))));
                                             ((IEntityAndData) ent).roundabout$setQVecParams(new Vec3(strength * (0.75 + (ybias / 4)),
                                                     ybias,
-                                                    0F));
+                                                    0.8));
                                         } else {
                                             MainUtil.takeUnresistableKnockbackWithYBias(ent, strength * (0.75 + (ybias / 4)),
                                                     Mth.sin(((degrees * ((float) Math.PI / 180)))),
@@ -462,13 +463,13 @@ public class BlockGrabPreset extends NewPunchingStand {
                                     }
                                     this.getSelf().level().playSound(null, ent, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
 
-                                    if ((ent instanceof Player || ((TimeStop) this.getSelf().level()).CanTimeStopEntity(ent))) {
+                                    if ((ent instanceof Player || ent instanceof Illusioner || ((TimeStop) this.getSelf().level()).CanTimeStopEntity(ent))) {
                                         ((IEntityAndData) ent).roundabout$setQVec(new Vec3(Mth.sin(((degrees * ((float) Math.PI / 180)))),
                                                 Mth.sin(degreesY * ((float) Math.PI / 180)),
                                                 -Mth.cos((degrees * ((float) Math.PI / 180)))));
                                         ((IEntityAndData) ent).roundabout$setQVecParams(new Vec3(strength * (0.5 + (ybias / 2)),
                                                 ybias,
-                                                0F));
+                                                0.8F));
 
                                     } else {
                                         MainUtil.takeUnresistableKnockbackWithYBias(ent, strength * (0.5 + (ybias / 2)),
@@ -490,10 +491,22 @@ public class BlockGrabPreset extends NewPunchingStand {
                             }
                         }
                     } else {
-                        this.setAttackTime(0);
-                        this.setActivePowerPhase(getActivePowerPhaseMax());
                         setActivePower(PowerIndex.NONE);
-                        this.setAttackTimeMax(ClientNetworking.getAppropriateConfig().generalStandSettings.mobThrowRecoilTicks);
+                        if (standEntity.getFirstPassenger() instanceof Player || standEntity.getFirstPassenger() instanceof Illusioner){
+                            int recoilTicks = ClientNetworking.getAppropriateConfig().generalStandSettings.mobThrowRecoilTicks;
+                            if (recoilTicks > 0 && (activePowerPhase < getActivePowerPhaseMax() || attackTime < recoilTicks)){
+                                this.setAttackTime(0);
+                                this.setActivePowerPhase(getActivePowerPhaseMax());
+                                this.setAttackTimeMax( recoilTicks);
+                            }
+                        } else {
+                            int recoilTicks = ClientNetworking.getAppropriateConfig().generalStandSettings.mobNonPlayerThrowRecoilTicks;
+                            if (recoilTicks > 0 && (activePowerPhase < getActivePowerPhaseMax() || attackTime < recoilTicks)){
+                                this.setAttackTime(0);
+                                this.setActivePowerPhase(getActivePowerPhaseMax());
+                                this.setAttackTimeMax(recoilTicks);
+                            }
+                        }
                     }
                     return false;
                 }
@@ -634,8 +647,6 @@ public class BlockGrabPreset extends NewPunchingStand {
                                 (this.getActivePower() == PowerIndex.POWER_2_EXTRA)
                                 && this.getAttackTimeDuring() < 3) {
                             return;
-                        } else if (standEntity.getFirstPassenger() != null){
-                            ticksUntilCanImpale = 10;
                         }
                     }
 

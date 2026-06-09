@@ -223,7 +223,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
 
     @Override
     protected boolean isAffectedByFluids() {
-        if (!isInWater()){
+        if (!isInWater() && !this.jumping){
             return false;
         }
         return super.isAffectedByFluids();

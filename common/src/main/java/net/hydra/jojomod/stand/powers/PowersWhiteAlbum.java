@@ -44,8 +44,11 @@ import net.minecraft.world.item.SplashPotionItem;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.FrostedIceBlock;
+import net.minecraft.world.level.block.LiquidBlockContainer;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 
@@ -126,7 +129,17 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 BlockState blockState3 =self.level().getBlockState(mutableBlockPos.below());
                 if (!blockState.canSurvive(self.level(), blockPos2) ||
                         !self.level().isUnobstructed(blockState, blockPos2, CollisionContext.empty())) continue;
-                if (blockState3.isAir() || (MainUtil.getIsGamemodeApproriateForGrief(self) && blockState3.canBeReplaced())) {
+                if (blockState3.isAir() ||
+                        (MainUtil.getIsGamemodeApproriateForGrief(self) &&
+                                blockState3.canBeReplaced() &&
+                                !(blockState3.getBlock() instanceof LiquidBlockContainer)
+                                &&
+                        !blockState3.liquid() &&
+                        !(blockState3.hasProperty(BlockStateProperties.WATERLOGGED) &&
+                                blockState3.getValue(BlockStateProperties.WATERLOGGED)
+                                )
+                        )
+                ) {
                             self.level().setBlockAndUpdate(blockPos2, blockState);
                             self.level().scheduleTick(blockPos2, ModBlocks.WHITE_ALBUM_ICE_SLAB, Mth.nextInt(self.getRandom(), 110, 130));
 

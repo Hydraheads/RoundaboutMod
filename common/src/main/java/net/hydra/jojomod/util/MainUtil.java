@@ -1509,6 +1509,17 @@ public class MainUtil {
                z);
         entity.hasImpulse = true;
     }
+
+    public static void takeUnresistableKnockbackWithYBias2(Entity entity, double strength, double x, double y, double z, float yBias, float yscalp) {
+        entity.hurtMarked = true;
+        strength*=getNetheriteMultiplier(entity);
+        Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
+        Vec3 vec3d3 = vec3d2.multiply(yBias,1-yscalp,yBias);
+        entity.setDeltaMovement(- vec3d3.x,
+                -vec3d3.y,
+                - vec3d3.z);
+        entity.hasImpulse = true;
+    }
     public static void takeUnresistableKnockbackWithYBias(Entity entity, double strength, double x, double y, double z, float yBias) {
         entity.hurtMarked = true;
         strength*=getNetheriteMultiplier(entity);
