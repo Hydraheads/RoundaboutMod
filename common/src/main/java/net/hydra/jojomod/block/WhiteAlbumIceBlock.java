@@ -59,6 +59,15 @@ public class WhiteAlbumIceBlock
         return true;
     }
 
+    public static void melt2(BlockState $$0, Level $$1, BlockPos $$2) {
+        if ($$1.dimensionType().ultraWarm()) {
+            $$1.removeBlock($$2, false);
+        } else {
+            $$1.setBlockAndUpdate($$2, meltsInto());
+            $$1.neighborChanged($$2, meltsInto().getBlock(), $$2);
+        }
+    }
+
     @Override
     public void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block block, BlockPos blockPos2, boolean bl) {
         if (block.defaultBlockState().is(this) && this.fewerNeigboursThan(level, blockPos, 2)) {

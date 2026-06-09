@@ -3,6 +3,7 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.block.WhiteAlbumIceBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
@@ -43,6 +44,7 @@ import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.SplashPotionItem;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.FrostedIceBlock;
@@ -189,6 +191,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return acceleration >= getMaxAccelerationTicks() || super.forceCrit();
     }
 
+    private static final int MAX_ICE_SNAP_RADIUS = 30;
     int lastAcceleration = 0;
     double lastY = 0;
     @Override
@@ -196,6 +199,25 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (!self.level().isClientSide()) {
             if (lastY < self.getY() && !self.onGround() && !self.isInWater() && !self.isSwimming()) {
                 fixThis();
+            }
+
+            if (startIceSnapRing > 0 && self.tickCount % 3 == 0) {
+                if (hasSkatesActivated()){
+                    startIceSnapRing = 0;
+                } else {
+
+                    BlockPos center = iceCenter;
+                    int r = startIceSnapRing;
+
+                    // Check the square perimeter at radius r
+                    processRing(center, r);
+
+                    startIceSnapRing++;
+
+                    if (startIceSnapRing > MAX_ICE_SNAP_RADIUS) {
+                        startIceSnapRing = 0;
+                    }
+                }
             }
         }
         if (isPacketPlayer()){
@@ -233,6 +255,38 @@ public class PowersWhiteAlbum extends NewDashPreset {
             lastY = self.getY();
         }
         super.tickPower();
+    }
+    private void processRing(BlockPos center, int r) {
+
+        Level level = self.level();
+
+        for (int y = -4; y <= 4; y++) {
+
+            for (int x = -r; x <= r; x++) {
+                removeIce(level, center.offset(x, y, -r));
+                removeIce(level, center.offset(x, y, r));
+            }
+
+            for (int z = -r + 1; z <= r - 1; z++) {
+                removeIce(level, center.offset(-r, y, z));
+                removeIce(level, center.offset(r, y, z));
+            }
+        }
+    }
+    private void removeIce(Level level, BlockPos pos) {
+
+        BlockState state = level.getBlockState(pos);
+
+        if (state.is(ModBlocks.WHITE_ALBUM_ICE_SLAB)) {
+
+            level.destroyBlock(pos, false);
+            // or:
+            // level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+        } else if (state.is(ModBlocks.WHITE_ALBUM_ICE_BLOCK)) {
+            WhiteAlbumIceBlock.melt2(state,level,pos);
+            // or:
+            // level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+        }
     }
 
     public static int getMaxAccelerationTicks(){
@@ -360,6 +414,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case SKILL_1_NORMAL-> {
                 toggleSkatesClient();
             }
+            case SKILL_1_CROUCH-> {
+                iceCancelClient();
+            }
             case SKILL_2_NORMAL-> {
                 summonSurvivorClient();
             }
@@ -375,12 +432,36 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
+    public void iceCancelClient(){
+        if (!onCooldown(PowerIndex.SKILL_1_SNEAK)){
+            this.setCooldown(PowerIndex.SKILL_1, 40);
+            this.setCooldown(PowerIndex.SKILL_1_SNEAK, 40);
+            tryPowerPacket(PowerIndex.POWER_1_SNEAK);
+        }
+    }
+
     public void switchModeClient(){
         if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {
             SurvivorTarget = null;
             EntityTargetOne = null;
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
             tryPowerPacket(PowerIndex.POWER_4);
+        }
+    }
+
+
+    public int startIceSnapRing = 0;
+    public BlockPos iceCenter = BlockPos.ZERO;
+    public void iceCancelServer(){
+        this.setCooldown(PowerIndex.SKILL_1, 40);
+        if (!this.self.level().isClientSide()){
+            if (hasSkatesActivated()) {
+                toggleSkates();
+            }
+            iceCenter = self.blockPosition();
+            startIceSnapRing = 1;
+
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SNAP_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
         }
     }
 
@@ -456,11 +537,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case PowerIndex.POWER_1 -> {
                 return toggleSkates();
             }
-            case PowerIndex.POWER_4 -> {
-                return switchAngerSelectionMode();
-            }
-            case PowerIndex.POWER_4_BONUS -> {
-                return selectTarget();
+            case PowerIndex.POWER_1_SNEAK -> {
+                iceCancelServer();
             }
         }
         return super.setPowerOther(move,lastMove);
