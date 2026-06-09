@@ -49,6 +49,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.FlyingMob;
@@ -953,11 +954,11 @@ public class PowersSoftAndWet extends NewPunchingStand {
         return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2);
     }
     @Override
-    public boolean canInterruptPower(){
+    public boolean canInterruptPower(DamageSource sauce, Entity interrupter){
         if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
             return true;
         } else {
-            return super.canInterruptPower();
+            return super.canInterruptPower(sauce,interrupter);
         }
     }
     @Override

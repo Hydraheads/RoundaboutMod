@@ -10,6 +10,7 @@ import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
@@ -735,7 +736,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         syncStandMode();
     }
     @Override
-    public boolean canInterruptPower() {
+    public boolean canInterruptPower(DamageSource sauce, Entity interrupter) {
         if (isTravelling) {
             isTravelling = false;
             targetingstand = false;
@@ -751,7 +752,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             syncStandMode();
             return true;
         }
-        return super.canInterruptPower();
+        return super.canInterruptPower(sauce,interrupter);
     }
     private void meteornottracking() {
         tracking = false;

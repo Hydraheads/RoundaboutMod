@@ -980,7 +980,7 @@ public class Config implements Cloneable {
         public Integer getMiningTierTheWorld;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer oxygenTankAdditionalTicks;
-        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
         public Integer assaultCooldown;
         @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
         public Integer assaultInterruptCooldown;
@@ -1035,8 +1035,10 @@ public class Config implements Cloneable {
         public Integer additionalCooldownPerSecondsUsed;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer timeStopBonusActionsCooldown;
-        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 170, min = 0, max = 72000)
         public Integer timeStopInterruptedCooldownv2;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer timeStopInterruptedCooldownMobs;
         @BooleanOption(group = "inherit", value = true)
         public Boolean timeStopIsAlwaysInterruptable;
         @BooleanOption(group = "inherit", value = false)

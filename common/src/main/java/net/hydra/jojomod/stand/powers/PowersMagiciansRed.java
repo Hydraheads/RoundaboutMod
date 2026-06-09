@@ -51,6 +51,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.IronGolem;
@@ -2520,7 +2521,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     }
 
     @Override
-    public boolean canInterruptPower() {
+    public boolean canInterruptPower(DamageSource sauce, Entity interrupter) {
         if (this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE || this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE_2
                 || this.getActivePower() == PowerIndex.RANGED_BARRAGE || this.getActivePower() == PowerIndex.POWER_4_BONUS) {
             return true;
@@ -2532,7 +2533,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
             this.setCooldown(PowerIndex.SKILL_1, cdr);
             return true;
         }
-            return super.canInterruptPower();
+        return super.canInterruptPower(sauce,interrupter);
     }
     public void shootAnkh(CrossfireHurricaneEntity ankh){
         shootAnkhSpeed(ankh, 1.1F);

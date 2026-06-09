@@ -32,8 +32,10 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -1178,12 +1180,17 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     private int leapEndTicks = -1;
 
     @Override
-    public boolean canInterruptPower(){
+    public boolean canInterruptPower(DamageSource sauce, Entity interrupter){
 
         if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
             return true;
         } else if (this.getActivePower() == PowerIndex.SPECIAL) {
-            int cdr = ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopInterruptedCooldownv2;
+            int cdr;
+            if (interrupter instanceof Mob mb){
+                cdr = ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopInterruptedCooldownMobs;
+            } else {
+                cdr = ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopInterruptedCooldownv2;
+            }
             if (this.getSelf() instanceof Player) {
                 S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, cdr);
             }
@@ -1197,7 +1204,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             this.setCooldown(PowerIndex.SKILL_1_SNEAK, cdr);
             return true;
         } else {
-            return super.canInterruptPower();
+            return super.canInterruptPower(sauce,interrupter);
         }
     }
     @Override
@@ -2002,7 +2009,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     @Override
     public boolean setPowerGuard() {
         if (this.getIsTsCharging()) {
-            this.setCooldown(PowerIndex.SKILL_4,ConfigManager.getConfig().timeStopSettings.timeStopInterruptedCooldownv2);
+            this.setCooldown(PowerIndex.SKILL_4,ConfigManager.getConfig().timeStopSettings.timeStopInterruptedCooldownMobs);
         }
         return super.setPowerGuard();
     }
@@ -2010,7 +2017,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     @Override
     public void onStandSummon(boolean desummon) {
         if (desummon && this.getIsTsCharging() ) {
-            this.setCooldown(PowerIndex.SKILL_4,ConfigManager.getConfig().timeStopSettings.timeStopInterruptedCooldownv2);
+            this.setCooldown(PowerIndex.SKILL_4,ConfigManager.getConfig().timeStopSettings.timeStopInterruptedCooldownMobs);
         }
         super.onStandSummon(desummon);
     }

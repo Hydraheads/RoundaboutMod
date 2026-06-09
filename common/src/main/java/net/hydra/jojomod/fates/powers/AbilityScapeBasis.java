@@ -2615,7 +2615,7 @@ public class AbilityScapeBasis {
 
     /**If a power can be interrupted, that means you can hit the person using the power to cancel it,
      * like when someone charging a barrage gets their barrage canceled to damage*/
-    public boolean canInterruptPower(){
+    public boolean canInterruptPower(DamageSource sauce, Entity interrupter){
         return false;
     }
 
@@ -2666,7 +2666,7 @@ public class AbilityScapeBasis {
         }
 
         if (interrupt){
-            return canInterruptPower();
+            return canInterruptPower(sauce,interrupter);
         } else {
             return false;
         }

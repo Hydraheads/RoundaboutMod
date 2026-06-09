@@ -180,7 +180,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         return super.isAttackIneptVisually(activeP,slot);
     }
     @Override
-    public boolean canInterruptPower(){
+    public boolean canInterruptPower(DamageSource sauce, Entity interrupter){
         if (activePower == RIPPER_EYES_ACTIVATED || activePower == RIPPER_EYES){
             setCooldown(PowerIndex.GENERAL_4,getRipperInterruptCooldown());
             if (self instanceof ServerPlayer sp){
@@ -189,7 +189,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
             return true;
         }
-        return super.canInterruptPower();
+        return super.canInterruptPower(sauce,interrupter);
     }
 
     public void dashOrWallWalk(VampiricFate vp){

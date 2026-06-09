@@ -564,7 +564,7 @@ public class BlockGrabPreset extends NewPunchingStand {
         return false;
     }
     @Override
-    public boolean canInterruptPower(){
+    public boolean canInterruptPower(DamageSource sauce, Entity interrupter){
         StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
         if (standEntity != null) {
             if (!standEntity.getHeldItem().isEmpty()) {
@@ -580,7 +580,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                 return true;
             }
         }
-        return super.canInterruptPower();
+        return super.canInterruptPower(sauce,interrupter);
     }
 
     @Override
