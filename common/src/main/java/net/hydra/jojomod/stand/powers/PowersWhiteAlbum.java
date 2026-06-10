@@ -101,7 +101,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     @Override
     public void onChangedBlock(BlockPos blockPos){
-        if (hasSkatesActivated()) {
+        if (hasSkatesActivated() && self.isSprinting() && !self.isSwimming() &&
+        !self.isFallFlying()) {
             if (!self.onGround()) {
                 return;
             }
