@@ -2525,6 +2525,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$damageGuard(float damage){
         float finalGuard = this.roundabout$GuardPoints - damage;
         this.roundabout$GuardCooldown = 10;
+        rdbt$ticksUntilGuardRegen = 14;
         if (finalGuard <= 0){
             this.roundabout$GuardPoints = 0;
             this.roundabout$breakGuard();
@@ -2573,12 +2574,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (this.roundabout$GuardPoints < this.roundabout$getMaxGuardPoints()) {
             if (!level().isClientSide()) {
                 if (this.roundabout$GuardBroken) {
-                    float guardRegen = this.roundabout$getMaxGuardPoints() / 100;
-                    this.roundabout$regenGuard(guardRegen);
+                    if (PowerTypes.hasStandActivelyEquipped(rdbt$this())) {
+                        float guardRegen = roundabout$getStandPowers().regenBrokenGuard();
+                        this.roundabout$regenGuard(guardRegen);
+                    } else {
+                        float guardRegen = this.roundabout$getMaxGuardPoints() / 100;
+                        this.roundabout$regenGuard(guardRegen);
+                    }
                 } else if (!this.roundabout$isGuarding() && this.roundabout$shieldNotDisabled()) {
                     if (rdbt$ticksUntilGuardRegen <= 0) {
-                        float guardRegen = this.roundabout$getMaxGuardPoints() / 220;
-                        this.roundabout$regenGuard(guardRegen);
+                        if (PowerTypes.hasStandActivelyEquipped(rdbt$this())){
+                            float guardRegen = roundabout$getStandPowers().regenGuard();
+                            this.roundabout$regenGuard(guardRegen);
+                        } else {
+                            float guardRegen = this.roundabout$getMaxGuardPoints() / 220;
+                            this.roundabout$regenGuard(guardRegen);
+                        }
                     }
                 }
             }
@@ -2867,10 +2878,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     public boolean roundabout$isGuardingEffectively(){
         if (this.roundabout$GuardBroken){return false;}
+
         return this.roundabout$isGuardingEffectively2();
     }
     public boolean roundabout$isGuardingEffectively2(){
-        return (this.roundabout$shieldNotDisabled() && roundabout$isGuarding() &&
+        return (this.roundabout$shieldNotDisabled() && ((roundabout$isGuarding() &&
                 (
                         (PowerTypes.hasStandActive(rdbt$this()) &&
                                 this.roundabout$getStandPowers().getAttackTimeDuring() >= ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardDelayTicks)
@@ -2878,7 +2890,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         (PowerTypes.hasPowerActive(rdbt$this()) && rdbt$this() instanceof Player pl &&
                         ((IPowersPlayer)pl).rdbt$getPowers().getAttackTimeDuring() >= ClientNetworking.getAppropriateConfig().vampireSettings.powerGuardDelayTicks)
                 )
-
+        ) || roundabout$getStandPowers().isSpecialGuarding())
         );
     }
 
@@ -3283,7 +3295,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "handleEntityEvent", at = @At(value = "HEAD"), cancellable = true, require = 0)
     public void roundabout$HandleStatus(byte $$0, CallbackInfo ci) {
         if ($$0 == 29){
-            if (this.roundabout$isGuarding()) {
+            if (this.roundabout$isGuarding() || this.roundabout$getStandPowers().isSpecialGuarding()) {
                 if (!this.roundabout$getGuardBroken()) {
                     ((Entity) (Object) this).level().playLocalSound(((Entity) (Object) this).getX(), ((Entity) (Object) this).getY(), ((Entity) (Object) this).getZ(),
                             ModSounds.STAND_GUARD_SOUND_EVENT, ((Entity) (Object) this).getSoundSource(),
@@ -3306,7 +3318,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Inject(method = "isBlocking", at = @At(value = "HEAD"), cancellable = true, require = 0)
     private void roundabout$isBlockingRoundabout(CallbackInfoReturnable<Boolean> ci) {
-        if (this.roundabout$isGuarding()){
+        if (this.roundabout$isGuarding() || this.roundabout$getStandPowers().isSpecialGuarding()){
             ci.setReturnValue(this.roundabout$isGuardingEffectively());
         }
     }

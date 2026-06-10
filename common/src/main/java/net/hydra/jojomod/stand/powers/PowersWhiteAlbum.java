@@ -39,9 +39,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PotionItem;
-import net.minecraft.world.item.SplashPotionItem;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
@@ -185,6 +183,38 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return super.inputSpeedModifiers(basis);
     }
 
+    public boolean isBlockingTraditionally() {
+        if (this.self.isUsingItem() && !this.self.getUseItem().isEmpty()) {
+            Item $$0 = this.self.getUseItem().getItem();
+            if ($$0.getUseAnimation(this.self.getUseItem()) != UseAnim.BLOCK) {
+                return false;
+            } else {
+                return $$0.getUseDuration(this.self.getUseItem()) - this.self.getUseItemRemainingTicks() >= 5;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    /**for stands that subvert guard mechanics like white album*/
+    @Override
+    public boolean isSpecialGuarding(){
+        Roundabout.LOGGER.info("A: "+ (!isBlockingTraditionally() && hasStandActive(self)));
+        return !isBlockingTraditionally() && hasStandActive(self);
+    }
+
+    public int getMaxGuardPoints(){
+        return ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumGuardPoints;
+    }
+
+    @Override
+    public float regenBrokenGuard(){
+        return getStandUserSelf().roundabout$getMaxGuardPoints() / 200;
+    }
+    @Override
+    public float regenGuard(){
+        return getStandUserSelf().roundabout$getMaxGuardPoints() / 440;
+    }
 
     @Override
     public boolean forceCrit(){

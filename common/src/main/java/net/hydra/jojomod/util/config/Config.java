@@ -94,6 +94,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public WalkingHeartSettings walkingHeartSettings;
     @NestedOption(group = "modded")
+    public WhiteAlbumSettings whiteAlbumSettings;
+    @NestedOption(group = "modded")
     public RattSettings rattSettings;
     @NestedOption(group = "modded")
     public AnubisSettings anubisSettings;
@@ -857,6 +859,11 @@ public class Config implements Cloneable {
         public Boolean buffedGroundStance;
     }
 
+
+    public static class WhiteAlbumSettings {
+        @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
+        public Integer whiteAlbumGuardPoints;
+    }
     public static class WalkingHeartSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableWalkingHeart;

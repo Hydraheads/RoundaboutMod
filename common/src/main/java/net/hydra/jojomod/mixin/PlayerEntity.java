@@ -1388,7 +1388,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             user.roundabout$getStandPowers().onHitGuard(amount,user.roundabout$getLogSource());
         }
         }
-        if (user.roundabout$isGuarding()) {
+        if (user.roundabout$isGuarding() || user.roundabout$getStandPowers().isSpecialGuarding()) {
             if (user.roundabout$getLogSource() != null && !user.roundabout$getLogSource().is(DamageTypeTags.BYPASSES_COOLDOWN) && user.roundabout$getGuardCooldown() > 0) {
                 return;
             }

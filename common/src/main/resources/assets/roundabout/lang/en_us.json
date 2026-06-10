@@ -2860,6 +2860,9 @@
   "config.roundabout.vampireGuardPoints.name": "Guard Points",
   "config.roundabout.vampireGuardPoints.desc": "How much raw, unreduced damage can blocking take take before its guard breaks?",
 
+  "config.roundabout.whiteAlbumGuardPoints.name": "Guard Points",
+  "config.roundabout.whiteAlbumGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
+
 
   "config.roundabout.magicianAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.magicianAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
