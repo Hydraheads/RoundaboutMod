@@ -5662,7 +5662,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (firstSecond != null && lastSecond != null) {
                 boolean posCompare = lastSecond.position.x != firstSecond.position.x || lastSecond.position.z != firstSecond.position.z;
                 boolean posCompareY = lastSecond.position.y != firstSecond.position.y;
-                if (((Entity) (Object) this).isInWater()) {entityAndData.roundabout$setTrueInvisibilityManhattan(-1);}
+                if (((Entity) (Object) this).isEyeInFluid(FluidTags.WATER) || ((Entity)(Object) this).isEyeInFluid(FluidTags.LAVA)) {entityAndData.roundabout$setTrueInvisibilityManhattan(-1);}
                 if (((Entity) (Object) this) instanceof Vex v) {
                     if (v.isInWater()) {entityAndData.roundabout$setTrueInvisibilityManhattan(-1);
                     } else {if (posCompare) {entityAndData.roundabout$setTrueInvisibilityManhattan(10);}
