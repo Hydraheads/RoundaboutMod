@@ -856,6 +856,7 @@ public class PowersRatt extends NewDashPreset {
             }
             case PowersRatt.TOGGLE_BURSTING -> {
                 if (isPlaced()) {
+                    this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.JUSTICE_SELECT_EVENT,SoundSource.PLAYERS,0.3F,(float)(1.1+Math.random()*0.2));
                     StandUser SU = this.getStandUserSelf();
                     SU.roundabout$setUniqueStandModeToggle(!SU.roundabout$getUniqueStandModeToggle());
                 } else {
