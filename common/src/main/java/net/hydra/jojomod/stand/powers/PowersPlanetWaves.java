@@ -391,6 +391,8 @@ public class PowersPlanetWaves extends NewDashPreset {
     public void tick() {
         if (self.level().isClientSide()) return;
 
+        if (grabCooldownTicks > 0) grabCooldownTicks--;
+
         for (int i = 0; i < meteorQueue.size(); i++) {
             ScheduledMeteor m = meteorQueue.get(i);
             m.delay--;
@@ -599,6 +601,8 @@ public class PowersPlanetWaves extends NewDashPreset {
     }
     private LivingEntity restrainedEntity = null;
     private byte restrainAnimationType = 0; // 0 = side, 1 = above, 2 = below
+    private int grabCooldownTicks = 0;
+    private static final int GRAB_COOLDOWN = 100;
 
     @Override
     public void tickPowerEnd() {
@@ -649,11 +653,12 @@ public class PowersPlanetWaves extends NewDashPreset {
                 if (!isTravelling && restrainedEntity == null) {
                     List<LivingEntity> nearby = self.level().getEntitiesOfClass(
                             LivingEntity.class,
-                            stand.getBoundingBox().inflate(3.0)
+                            stand.getBoundingBox().inflate(1)
                     );
                     for (LivingEntity entity : nearby) {
                         if (entity.is(this.self)) continue;
                         if (!entity.isAlive()) continue;
+                        if (entity instanceof StandEntity) continue;
 
                         restrainedEntity = entity;
                         System.out.println("Grabbed: " + entity.getName().getString());

@@ -398,25 +398,22 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
             return;
         }
 
-        AABB box = this.getBoundingBox();
-        BlockPos min = BlockPos.containing(Math.floor(box.minX), Math.floor(box.minY), Math.floor(box.minZ));
-        BlockPos max = BlockPos.containing(Math.floor(box.maxX), Math.floor(box.maxY), Math.floor(box.maxZ));
+        BlockPos pos = hit.getBlockPos();
+        BlockState state = this.level().getBlockState(pos);
 
-        for (BlockPos pos : BlockPos.betweenClosed(min, max)) {
-            BlockState state = this.level().getBlockState(pos);
-            if (state.isAir()) continue;
-            if (state.is(Blocks.BEDROCK) || state.is(Blocks.BARRIER)) {
-                explodeAndIgnite();
-                return;
-            }
-            if (isProtectedBlock(state)) continue;
+        if (state.isAir()) return;
 
+        if (state.is(Blocks.BEDROCK) || state.is(Blocks.BARRIER)) {
+            explodeAndIgnite();
+            return;
+        }
+
+        if (!isProtectedBlock(state)) {
             this.level().destroyBlock(pos, false);
             blocksDisintegrated++;
 
             if (blocksDisintegrated >= MAX_BLOCKS_DISINTEGRATED) {
                 explodeAndIgnite();
-                return;
             }
         }
     }

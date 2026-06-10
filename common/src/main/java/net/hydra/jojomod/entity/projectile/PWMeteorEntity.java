@@ -196,7 +196,6 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
         this.chainIndex = index;
         this.isChainStarter = starter;
 
-        //  tick spacing
         this.chainSpawnDelay = index * 6;
     }
     @Override
@@ -380,7 +379,6 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
     private boolean processingExplosion = false;
     @Override
     protected void onHitBlock(BlockHitResult hit) {
-
         if (this.level().isClientSide()) return;
 
         LivingEntity user = this.getStandUser();
@@ -392,48 +390,67 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
         }
 
         Vec3 meteorPos = this.position();
-
         Vec3 toUser = user.position()
                 .add(0, user.getBbHeight() * 0.5, 0)
                 .subtract(meteorPos)
                 .normalize();
-
         Vec3 movementDir = this.getDeltaMovement().normalize();
-
         double approachDot = movementDir.dot(toUser);
-
 
         if (approachDot <= 0.0D) {
             missedPlayer = true;
         }
 
-
         if (!missedPlayer) {
-
             BlockPos pos = hit.getBlockPos();
             BlockState state = this.level().getBlockState(pos);
-            Block block = state.getBlock();
-            if (block instanceof net.minecraft.world.level.block.AbstractGlassBlock) {
+            if (state.getBlock() instanceof net.minecraft.world.level.block.AbstractGlassBlock) {
                 this.level().destroyBlock(pos, true);
             }
 
+            checkEntityCollisionThroughBlock();
             return;
         }
 
         radialExplosion(null);
-
-        this.level().playSound(
-                null,
-                this.getX(),
-                this.getY(),
-                this.getZ(),
-                ModSounds.FIREBALL_HIT_EVENT,
-                SoundSource.PLAYERS,
-                2.5F,
-                1.0F
-        );
-
+        this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                ModSounds.FIREBALL_HIT_EVENT, SoundSource.PLAYERS, 2.5F, 1.0F);
         this.discard();
+    }
+
+    private void checkEntityCollisionThroughBlock() {
+        Vec3 end = this.position();
+        Vec3 start = new Vec3(this.xo, this.yo, this.zo);
+        Vec3 motion = end.subtract(start);
+
+        if (motion.lengthSqr() < 0.0001) return;
+
+        AABB broadphase = new AABB(start, end).inflate(1.0);
+
+        List<Entity> candidates = this.level().getEntities(this, broadphase, e ->
+                e.isAlive()
+                        && e.isPickable()
+                        && !e.is(this.getOwner())
+                        && !(e instanceof net.hydra.jojomod.entity.stand.StandEntity));
+
+        Entity closest = null;
+        double closestDist = Double.MAX_VALUE;
+
+        for (Entity candidate : candidates) {
+            AABB box = candidate.getBoundingBox().inflate(0.2);
+            java.util.Optional<Vec3> hitVec = box.clip(start, end);
+            if (hitVec.isPresent()) {
+                double dist = start.distanceTo(hitVec.get());
+                if (dist < closestDist) {
+                    closestDist = dist;
+                    closest = candidate;
+                }
+            }
+        }
+
+        if (closest != null) {
+            this.onHitEntity(new EntityHitResult(closest));
+        }
     }
 
     public LivingEntity getUser() {
