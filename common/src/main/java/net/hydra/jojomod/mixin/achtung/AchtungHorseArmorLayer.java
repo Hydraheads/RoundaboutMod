@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.achtung;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Camera;
@@ -20,7 +21,8 @@ public class AchtungHorseArmorLayer {
     private void rdbt$renderHorseArmor(PoseStack $$0, MultiBufferSource $$1, int $$2, Horse $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci)
     {
         if ($$3 != null) {
-            if (MainUtil.getEntityIsTrulyInvisible($$3) && !ClientUtil.checkIfClientCanSeeInvisAchtung() && !ClientUtil.checkIfClientCanSeeMobsForWindVision()){
+            IEntityAndData entityAndData = ((IEntityAndData) $$3);
+            if (MainUtil.getEntityIsTrulyInvisible($$3) && !ClientUtil.checkIfClientCanSeeInvisAchtung() && !ClientUtil.checkIfClientCanSeeMobsForWindVision() || entityAndData.roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()){
                 ci.cancel();
             }
         }

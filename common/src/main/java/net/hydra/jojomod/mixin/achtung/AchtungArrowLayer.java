@@ -8,6 +8,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.layers.ArrowLayer;
 import net.minecraft.world.entity.Entity;
+import org.apache.commons.compress.archivers.sevenz.CLI;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -23,7 +24,7 @@ public class AchtungArrowLayer {
             ci.cancel();
             return;
         }
-        if (((IEntityAndData)$$3).roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
+        if (((IEntityAndData)$$3).roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() && !ClientUtil.checkIfClientCanSeeMobsForWindVision() || ClientUtil.checkIfClientCanSeeMobsForWindVision() && (((IEntityAndData)$$3).roundabout$getTrueInvisibilityManhattan() < 1))
             ci.cancel();
     }
 
