@@ -35,6 +35,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -856,9 +857,8 @@ public abstract class EntityAndData implements IEntityAndData {
                     boolean posCompare = lastSecond.position.x != firstSecond.position.x || lastSecond.position.z != firstSecond.position.z;
                     boolean posCompareY = lastSecond.position.y != firstSecond.position.y;
 
-                    if(((Entity) (Object) this).isInWater()){
-                        entityAndData.roundabout$setTrueInvisibilityManhattan(-1);
-                    }
+                    if (((Entity) (Object) this).isEyeInFluid(FluidTags.WATER) || ((Entity)(Object) this).isEyeInFluid(FluidTags.LAVA)) {entityAndData.roundabout$setTrueInvisibilityManhattan(-1);}
+
                     else {
                         if (posCompare) {
                             entityAndData.roundabout$setTrueInvisibilityManhattan(10);
