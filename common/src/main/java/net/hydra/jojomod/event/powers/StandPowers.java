@@ -346,6 +346,10 @@ public class StandPowers extends AbilityScapeBasis {
         return false;
     }
 
+    public boolean surpassesFire(){
+        return false;
+    }
+
     /**When you take damage, intercept or run code based off of it, or potentially cancel it*/
     public boolean interceptIncomingHarm(DamageSource $$0, float $$1){
         return false;
@@ -1943,6 +1947,10 @@ public class StandPowers extends AbilityScapeBasis {
         } else {
             if (softenTicks > 0) {
                 softenTicks-= 2;
+            }
+
+            if (self.isOnFire() && surpassesFire()){
+                self.setSecondsOnFire(0);
             }
 
 

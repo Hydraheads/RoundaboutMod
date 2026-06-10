@@ -162,9 +162,21 @@ public class PowersWhiteAlbum extends NewDashPreset {
             }
     }
 
+    @Override
+    public boolean surpassesFire(){
+        if (((StandUser)self).roundabout$getStandPowers() instanceof
+                PowersWhiteAlbum PWA &&
+                !(((StandUser)self).roundabout$getGuardBroken())
+                && hasStandActive(self)
+        ){
+            return true;
+        }
+        return false;
+    }
+
     /**When you take damage, intercept or run code based off of it, or potentially cancel it*/
     public boolean interceptIncomingHarm(DamageSource $$0, float $$1){
-        if (!self.level().isClientSide()) {
+        if (!self.level().isClientSide() && hasStandActive(self)) {
             StandUser user = getStandUserSelf();
             if (!user.roundabout$getGuardBroken()) {
                 if ($$0.is(DamageTypes.FALL)) {
@@ -182,6 +194,27 @@ public class PowersWhiteAlbum extends NewDashPreset {
                                     SoundSource.PLAYERS, 1F, 1.5F);
                         }
                         return true;
+                    }
+                } else {
+                    if ($$0.is(DamageTypes.CACTUS) ||
+                            $$0.is(DamageTypes.STALAGMITE) ||
+                            $$0.is(DamageTypes.SWEET_BERRY_BUSH) ||
+                            $$0.is(DamageTypes.LAVA) ||
+                            $$0.is(DamageTypes.IN_FIRE)
+                    ){
+                        $$1*=0.05F;
+                        if ($$1 > ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumGuardPoints) {
+                            user.roundabout$breakGuard();
+                            this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
+                                    SoundSource.PLAYERS, 1F, 1.5F);
+                        } else {
+                            user.roundabout$damageGuard($$1);
+                            if (user.roundabout$getGuardBroken()) {
+                                this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
+                                        SoundSource.PLAYERS, 1F, 1.5F);
+                            }
+                            return true;
+                        }
                     }
                 }
             }
@@ -239,7 +272,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
     /**for stands that subvert guard mechanics like white album*/
     @Override
     public boolean isSpecialGuarding(){
-        Roundabout.LOGGER.info("A: "+ (!isBlockingTraditionally() && hasStandActive(self)));
         return !isBlockingTraditionally() && hasStandActive(self);
     }
 

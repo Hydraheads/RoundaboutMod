@@ -372,7 +372,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             PW.hasSkatesActivated() && !this.isInWater()){
                 if (!this.getAbilities().invulnerable) {
                     if (!this.level().isClientSide) {
-                        this.getFoodData().addExhaustion(exhaustion/5);
+                        this.getFoodData().addExhaustion(exhaustion*0.1F);
                     }
                 }
             }

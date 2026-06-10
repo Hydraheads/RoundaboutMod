@@ -1,6 +1,8 @@
 package net.hydra.jojomod.mixin.effects.warding;
 
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,6 +18,11 @@ public abstract class WardingEntityMixin {
     @Inject(method = "setSecondsOnFire(I)V", at = @At(value = "HEAD"),cancellable = true)
     public void rdbt$setSecondsOnFire(int $$0, CallbackInfo ci) {
         if (((net.minecraft.world.entity.Entity)(Object)this) instanceof LivingEntity LE){
+            if (((StandUser)LE).roundabout$getStandPowers().surpassesFire()){
+                ci.cancel();
+                return;
+            }
+
             if (LE.hasEffect(ModEffects.WARDING)){
                 if (!(isInLava() || MainUtil.isPlayerInFireBlock(LE))){
                     ci.cancel();
