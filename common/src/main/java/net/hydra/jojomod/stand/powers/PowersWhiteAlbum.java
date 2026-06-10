@@ -13,6 +13,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.*;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
@@ -34,9 +35,11 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -99,6 +102,15 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
+    @Override
+    public float guardSpecialties(DamageSource sauce, float damage){
+        if (sauce.is(ModDamageTypes.BULLET) ||
+                sauce.is(DamageTypes.PLAYER_ATTACK) ||
+                sauce.getEntity() instanceof Blaze){
+            damage*=0.5F;
+        }
+        return damage;
+    }
     @Override
     public void onChangedBlock(BlockPos blockPos){
         if (hasSkatesActivated() && self.isSprinting() && !self.isSwimming() &&

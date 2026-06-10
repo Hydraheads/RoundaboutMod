@@ -1155,6 +1155,9 @@ public class AbilityScapeBasis {
     public float regenGuard(){
         return getStandUserSelf().roundabout$getMaxGuardPoints() / 220;
     }
+    public float guardSpecialties(DamageSource sauce, float damage){
+        return damage;
+    }
 
     /**If you have a stand entity summoned, get that*/
     public static StandEntity getStandEntity2(LivingEntity User){
