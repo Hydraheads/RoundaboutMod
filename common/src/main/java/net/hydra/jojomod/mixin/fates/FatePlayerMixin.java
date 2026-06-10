@@ -14,6 +14,7 @@ import net.hydra.jojomod.access.AccessFateFoodData;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -46,6 +47,9 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
     @Shadow public abstract FoodData getFoodData();
 
     @Shadow public abstract void displayClientMessage(Component component, boolean bl);
+
+    @Shadow
+    public abstract boolean isCreative();
 
     @Unique
     public FatePowers rdbt$fatePowers = null;
@@ -132,11 +136,20 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
     @Unique
     public void rdbt$tickThroughVampire(){
         if (FateTypes.takesSunlightDamage(this)){
-            if (FateTypes.isInSunlight(this)){
-                if (!FateTypes.isHidden(this)) {
-                    if (this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT),
-                            this.getMaxHealth() * ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick)){
-                        this.addEffect(new MobEffectInstance(ModEffects.SINGE, 200, 0));
+            if (!isSpectator()) {
+                if (FateTypes.isInSunlight(this)) {
+                    if (!FateTypes.isHidden(this)) {
+                        if (FateTypes.canCurrentlyAvoidSunlight(this)) {
+                            if (!isCreative()) {
+                                float amt = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.sunArmorDamage;
+                                ((StandUser)this).roundabout$damageGuard(amt);
+                            }
+                        } else {
+                            if (this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT),
+                                    this.getMaxHealth() * ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick)) {
+                                this.addEffect(new MobEffectInstance(ModEffects.SINGE, 200, 0));
+                            }
+                        }
                     }
                 }
             }

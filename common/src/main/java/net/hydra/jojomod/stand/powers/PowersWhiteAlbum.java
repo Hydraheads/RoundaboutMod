@@ -3,6 +3,7 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.block.WhiteAlbumIceBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
@@ -12,6 +13,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.*;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
@@ -33,16 +35,17 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PotionItem;
-import net.minecraft.world.item.SplashPotionItem;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.FrostedIceBlock;
@@ -100,8 +103,18 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     @Override
+    public float guardSpecialties(DamageSource sauce, float damage){
+        if (sauce.is(ModDamageTypes.BULLET) ||
+                sauce.is(DamageTypes.PLAYER_ATTACK) ||
+                sauce.getEntity() instanceof Blaze){
+            damage*=0.5F;
+        }
+        return damage;
+    }
+    @Override
     public void onChangedBlock(BlockPos blockPos){
-        if (hasSkatesActivated()) {
+        if (hasSkatesActivated() && self.isSprinting() && !self.isSwimming() &&
+        !self.isFallFlying()) {
             if (!self.onGround()) {
                 return;
             }
@@ -149,6 +162,67 @@ public class PowersWhiteAlbum extends NewDashPreset {
             }
     }
 
+    @Override
+    public boolean surpassesFire(){
+        if (((StandUser)self).roundabout$getStandPowers() instanceof
+                PowersWhiteAlbum PWA &&
+                !(((StandUser)self).roundabout$getGuardBroken())
+                && hasStandActive(self)
+        ){
+            return true;
+        }
+        return false;
+    }
+
+    /**When you take damage, intercept or run code based off of it, or potentially cancel it*/
+    public boolean interceptIncomingHarm(DamageSource $$0, float $$1){
+        if (!self.level().isClientSide() && hasStandActive(self)) {
+            StandUser user = getStandUserSelf();
+            if (!user.roundabout$getGuardBroken()) {
+                if ($$0.is(DamageTypes.FALL)) {
+                    if ($$1 > ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumGuardPoints) {
+                        user.roundabout$breakGuard();
+                        this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
+                                SoundSource.PLAYERS, 1F, 1.5F);
+                    } else {
+                        user.roundabout$damageGuard($$1);
+                        if (!user.roundabout$getGuardBroken()) {
+                            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_GUARD_SOUND_EVENT,
+                                    SoundSource.PLAYERS, 0.8F, 0.9F + self.level().random.nextFloat() * 0.3f);
+                        } else {
+                            this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
+                                    SoundSource.PLAYERS, 1F, 1.5F);
+                        }
+                        return true;
+                    }
+                } else {
+                    if ($$0.is(DamageTypes.CACTUS) ||
+                            $$0.is(DamageTypes.STALAGMITE) ||
+                            $$0.is(DamageTypes.SWEET_BERRY_BUSH) ||
+                            $$0.is(DamageTypes.LAVA) ||
+                            $$0.is(DamageTypes.IN_FIRE)||
+                            $$0.is(DamageTypes.ON_FIRE)
+                    ){
+                        $$1*=0.05F;
+                        if ($$1 > ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumGuardPoints) {
+                            user.roundabout$breakGuard();
+                            this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
+                                    SoundSource.PLAYERS, 1F, 1.5F);
+                        } else {
+                            user.roundabout$damageGuard($$1);
+                            if (user.roundabout$getGuardBroken()) {
+                                this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
+                                        SoundSource.PLAYERS, 1F, 1.5F);
+                            }
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     public void fixThis(){
         if (!self.level().isClientSide()) {
             if (hasSkatesActivated()) {
@@ -183,19 +257,81 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return super.inputSpeedModifiers(basis);
     }
 
+    public boolean isBlockingTraditionally() {
+        if (this.self.isUsingItem() && !this.self.getUseItem().isEmpty()) {
+            Item $$0 = this.self.getUseItem().getItem();
+            if ($$0.getUseAnimation(this.self.getUseItem()) != UseAnim.BLOCK) {
+                return false;
+            } else {
+                return $$0.getUseDuration(this.self.getUseItem()) - this.self.getUseItemRemainingTicks() >= 5;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    /**for stands that subvert guard mechanics like white album*/
+    @Override
+    public boolean isSpecialGuarding(){
+        return !isBlockingTraditionally() && hasStandActive(self);
+    }
+
+    public int getMaxGuardPoints(){
+        return ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumGuardPoints;
+    }
+
+    @Override
+    public float regenBrokenGuard(){
+        return getStandUserSelf().roundabout$getMaxGuardPoints() / 200;
+    }
+    @Override
+    public float regenGuard(){
+        return getStandUserSelf().roundabout$getMaxGuardPoints() / 440;
+    }
 
     @Override
     public boolean forceCrit(){
         return acceleration >= getMaxAccelerationTicks() || super.forceCrit();
     }
 
+    private static final int MAX_ICE_SNAP_RADIUS = 30;
     int lastAcceleration = 0;
     double lastY = 0;
     @Override
     public void tickPower() {
         if (!self.level().isClientSide()) {
+            if (cracked){
+                if (!getStandUserSelf().roundabout$getGuardBroken()) {
+                    cracked = false;
+                    saveDiscAndSync();
+                }
+            } else {
+                if (getStandUserSelf().roundabout$getGuardBroken()) {
+                    cracked = true;
+                    saveDiscAndSync();
+                }
+            }
             if (lastY < self.getY() && !self.onGround() && !self.isInWater() && !self.isSwimming()) {
                 fixThis();
+            }
+
+            if (startIceSnapRing > 0 && self.tickCount % 3 == 0) {
+                if (hasSkatesActivated()){
+                    startIceSnapRing = 0;
+                } else {
+
+                    BlockPos center = iceCenter;
+                    int r = startIceSnapRing;
+
+                    // Check the square perimeter at radius r
+                    processRing(center, r);
+
+                    startIceSnapRing++;
+
+                    if (startIceSnapRing > MAX_ICE_SNAP_RADIUS) {
+                        startIceSnapRing = 0;
+                    }
+                }
             }
         }
         if (isPacketPlayer()){
@@ -233,6 +369,38 @@ public class PowersWhiteAlbum extends NewDashPreset {
             lastY = self.getY();
         }
         super.tickPower();
+    }
+    private void processRing(BlockPos center, int r) {
+
+        Level level = self.level();
+
+        for (int y = -4; y <= 4; y++) {
+
+            for (int x = -r; x <= r; x++) {
+                removeIce(level, center.offset(x, y, -r));
+                removeIce(level, center.offset(x, y, r));
+            }
+
+            for (int z = -r + 1; z <= r - 1; z++) {
+                removeIce(level, center.offset(-r, y, z));
+                removeIce(level, center.offset(r, y, z));
+            }
+        }
+    }
+    private void removeIce(Level level, BlockPos pos) {
+
+        BlockState state = level.getBlockState(pos);
+
+        if (state.is(ModBlocks.WHITE_ALBUM_ICE_SLAB)) {
+
+            level.destroyBlock(pos, false);
+            // or:
+            // level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+        } else if (state.is(ModBlocks.WHITE_ALBUM_ICE_BLOCK)) {
+            WhiteAlbumIceBlock.melt2(state,level,pos);
+            // or:
+            // level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+        }
     }
 
     public static int getMaxAccelerationTicks(){
@@ -334,14 +502,18 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
 
+    public boolean cracked = false;
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
         $$0.putBoolean("skatesActive",skatesActive);
+        $$0.putBoolean("cracked",cracked);
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
         if ($$0.contains("skatesActive")) {
             skatesActive = $$0.getBoolean("skatesActive");
+        } if ($$0.contains("cracked")) {
+            cracked = $$0.getBoolean("cracked");
         }
     }
 
@@ -360,6 +532,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case SKILL_1_NORMAL-> {
                 toggleSkatesClient();
             }
+            case SKILL_1_CROUCH-> {
+                iceCancelClient();
+            }
             case SKILL_2_NORMAL-> {
                 summonSurvivorClient();
             }
@@ -375,12 +550,36 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
+    public void iceCancelClient(){
+        if (!onCooldown(PowerIndex.SKILL_1_SNEAK)){
+            this.setCooldown(PowerIndex.SKILL_1, 40);
+            this.setCooldown(PowerIndex.SKILL_1_SNEAK, 40);
+            tryPowerPacket(PowerIndex.POWER_1_SNEAK);
+        }
+    }
+
     public void switchModeClient(){
         if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {
             SurvivorTarget = null;
             EntityTargetOne = null;
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
             tryPowerPacket(PowerIndex.POWER_4);
+        }
+    }
+
+
+    public int startIceSnapRing = 0;
+    public BlockPos iceCenter = BlockPos.ZERO;
+    public void iceCancelServer(){
+        this.setCooldown(PowerIndex.SKILL_1, 40);
+        if (!this.self.level().isClientSide()){
+            if (hasSkatesActivated()) {
+                toggleSkates();
+            }
+            iceCenter = self.blockPosition();
+            startIceSnapRing = 1;
+
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SNAP_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
         }
     }
 
@@ -456,11 +655,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case PowerIndex.POWER_1 -> {
                 return toggleSkates();
             }
-            case PowerIndex.POWER_4 -> {
-                return switchAngerSelectionMode();
-            }
-            case PowerIndex.POWER_4_BONUS -> {
-                return selectTarget();
+            case PowerIndex.POWER_1_SNEAK -> {
+                iceCancelServer();
             }
         }
         return super.setPowerOther(move,lastMove);

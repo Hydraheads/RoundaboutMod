@@ -372,7 +372,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             PW.hasSkatesActivated() && !this.isInWater()){
                 if (!this.getAbilities().invulnerable) {
                     if (!this.level().isClientSide) {
-                        this.getFoodData().addExhaustion(exhaustion/5);
+                        this.getFoodData().addExhaustion(exhaustion*0.1F);
                     }
                 }
             }
@@ -1388,7 +1388,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             user.roundabout$getStandPowers().onHitGuard(amount,user.roundabout$getLogSource());
         }
         }
-        if (user.roundabout$isGuarding()) {
+        if (user.roundabout$isGuarding() || user.roundabout$getStandPowers().isSpecialGuarding()) {
             if (user.roundabout$getLogSource() != null && !user.roundabout$getLogSource().is(DamageTypeTags.BYPASSES_COOLDOWN) && user.roundabout$getGuardCooldown() > 0) {
                 return;
             }
@@ -1404,7 +1404,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         if (((StandUser) this).roundabout$isClashing() || ((StandUser) this).roundabout$getStandPowers().cancelJump()
                 || ((IFatePlayer)this).rdbt$getFatePowers().cancelJump()
         || FateTypes.isTransforming(this) ||
-        FateTypes.takesSunlightDamage(this) && FateTypes.isInSunlight(this)) {
+        FateTypes.takesSunlightDamage(this) && FateTypes.isInSunlight(this)
+                && !FateTypes.canCurrentlyAvoidSunlight(this)&& !FateTypes.isHidden(this)) {
             if (!FateTypes.isHidden(this)) {
                 ci.cancel();
             }

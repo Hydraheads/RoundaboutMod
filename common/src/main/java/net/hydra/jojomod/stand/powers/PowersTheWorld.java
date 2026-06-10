@@ -45,6 +45,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Rabbit;
@@ -1172,7 +1173,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         return Component.translatable(  "skins.roundabout.the_world.base");
     }
     @Override
-    public boolean canInterruptPower(){
+    public boolean canInterruptPower(DamageSource sauce, Entity interrupter){
         if (this.getActivePower() == PowerIndex.POWER_1 || this.getActivePower() == PowerIndex.POWER_1_BONUS){
             int cdr = ClientNetworking.getAppropriateConfig().theWorldSettings.assaultInterruptCooldown;
             if (this.getSelf() instanceof Player) {
@@ -1181,7 +1182,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             this.setCooldown(PowerIndex.SKILL_1, cdr);
             return true;
         } else {
-            return super.canInterruptPower();
+            return super.canInterruptPower(sauce,interrupter);
         }
     }
 

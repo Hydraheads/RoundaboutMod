@@ -40,6 +40,8 @@ public class FabricBlocks {
     );
     public static final Block WHITE_ALBUM_ICE_BLOCK = registerBlockItemless("white_album_ice", WHITE_ALBUM_ICE_BLOCK_PROPERTIES
     );
+    public static final Block WHITE_ALBUM_ICE_WALL_BLOCK = registerBlockItemless("white_album_ice_wall", WHITE_ALBUM_ICE_WALL_BLOCK_PROPERTIES
+    );
     public static final Block WHITE_ALBUM_ICE_SLAB = registerBlockItemless("white_album_coating", WHITE_ALBUM_COATING_PROPERTIES
     );
     public static final Block SHINY_QUARTZ_TILES = registerBlock("shiny_quartz_tiles", ModBlocks.SHINY_QUARTZ_TILES_PROPERTIES
@@ -280,6 +282,7 @@ public class FabricBlocks {
         ModBlocks.AJA_BLOCK = AJA_BLOCK;
         ModBlocks.SHINY_QUARTZ = SHINY_QUARTZ;
         ModBlocks.WHITE_ALBUM_ICE_BLOCK = WHITE_ALBUM_ICE_BLOCK;
+        ModBlocks.WHITE_ALBUM_ICE_WALL_BLOCK = WHITE_ALBUM_ICE_WALL_BLOCK;
         ModBlocks.WHITE_ALBUM_ICE_SLAB = WHITE_ALBUM_ICE_SLAB;
         ModBlocks.SHINY_QUARTZ_TILES = SHINY_QUARTZ_TILES;
         ModBlocks.REGAL_FLOOR = REGAL_FLOOR;

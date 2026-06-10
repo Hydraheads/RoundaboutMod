@@ -495,7 +495,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     @Override
-    public boolean canInterruptPower(){
+    public boolean canInterruptPower(DamageSource sauce, Entity interrupter){
         if (this.getActivePower() == PowerIndex.POWER_2) {
             int cdr = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantCooldown;
             if (this.getSelf() instanceof Player) {
@@ -511,7 +511,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             this.setCooldown(PowerIndex.SKILL_2_SNEAK, cdr);
             return true;
         } else {
-            return super.canInterruptPower();
+            return super.canInterruptPower(sauce,interrupter);
         }
     }
 

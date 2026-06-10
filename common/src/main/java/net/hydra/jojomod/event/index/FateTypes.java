@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.visages.mobs.DIONPC;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampireFate;
@@ -18,6 +19,7 @@ import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.fates.powers.ZombieFate;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
@@ -177,6 +179,15 @@ public enum FateTypes {
                     !ZP.isDisguised()));
         }
         return false;
+    }
+    public static boolean canCurrentlyAvoidSunlight(LivingEntity entity){
+
+        if (entity != null && ((StandUser)entity).roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA &&
+                PWA.hasStandActive(entity) && !((StandUser)entity).roundabout$getGuardBroken()) {
+            return true;
+        }
+        return false;
+
     }
     public static boolean takesSunlightDamage(LivingEntity entity){
         if (entity instanceof Player PE){

@@ -467,6 +467,7 @@
   "block.roundabout.meteor_block": "Meteorite Block",
   "block.roundabout.aja_ore": "Aja Ore",
   "block.roundabout.white_album_ice": "White Album Ice",
+  "block.roundabout.white_album_ice_wall": "Ice Wall",
   "block.roundabout.white_album_coating": "Ice Coating",
   "block.roundabout.deepslate_aja_ore": "Deepslate Aja Ore",
   "block.roundabout.aja_block": "Block of Aja",
@@ -2857,6 +2858,16 @@
   "config.roundabout.encasementBubbleCreateCooldown.name": "Encasement Bubble Cooldown",
   "config.roundabout.encasementBubbleCreateCooldown.desc": "The time between creating encasement bubbles. The default is 80, or 4 seconds.",
 
+  "config.roundabout.vampireGuardPoints.name": "Guard Points",
+  "config.roundabout.vampireGuardPoints.desc": "How much raw, unreduced damage can blocking take take before its guard breaks?",
+
+  "config.roundabout.whiteAlbumGuardPoints.name": "Guard Points",
+  "config.roundabout.whiteAlbumGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
+
+  "config.roundabout.sunArmorDamage.name": "Sun Armor Damage",
+  "config.roundabout.sunArmorDamage.desc": "White Album's suit lets vampires temporarily exist under the sun. Lower this to make it last longer, or raise it very high to make the suit shatter under sunlight immediately.",
+
+
   "config.roundabout.magicianAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.magicianAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
   "config.roundabout.magicianAttackMultOnMobs.name": "Mob Damage Multiplier",
@@ -3190,8 +3201,10 @@
   "config.roundabout.additionalCooldownPerSecondsUsed.desc": "The longer you spend in stopped time, without ending it early, the longer the cooldown is by these ticks. By default it is set to 100, so after every second of spent time you have to wait five additional seconds. This is to incentivize ending the ability early for a shorter cooldown and to balance the power of time stop.",
   "config.roundabout.timeStopBonusActionsCooldown.name": "Bonus Action Cooldown",
   "config.roundabout.timeStopBonusActionsCooldown.desc": "Doing any action like attacking, eating, or launching projectiles in stopped time raises the cooldown even further by this amount (300 ticks or 15 seconds by default) once. This is to encourage using time stop for movement instead of attacking and for balancing reasons.",
-  "config.roundabout.timeStopInterruptedCooldownv2.name": "Interrupt Cooldown",
+  "config.roundabout.timeStopInterruptedCooldownv2.name": "Player Interrupt Cooldown",
   "config.roundabout.timeStopInterruptedCooldownv2.desc": "The cooldown for getting hit and having your time stop canceled. By default, it is 80 ticks (4 seconds). This cooldown exists both for balancing, and to incentivize pressing the time stop button again early to prevent getting hit out of time stop, decreasing your TS time when you do so.",
+  "config.roundabout.timeStopInterruptedCooldownMobs.name": "Mob Interrupt Cooldown",
+  "config.roundabout.timeStopInterruptedCooldownMobs.desc": "The cooldown for getting hit and having your time stop canceled. By default, it is 80 ticks (4 seconds). This cooldown exists both for balancing, and to incentivize pressing the time stop button again early to prevent getting hit out of time stop, decreasing your TS time when you do so.",
   "config.roundabout.timeStopIsAlwaysInterruptable.name": "Always Interruptable",
   "config.roundabout.timeStopIsAlwaysInterruptable.desc": "Whether or not you can even be interrupted while charging time stop. By default this is set to true for balancing reasons, but if you just want to be powerful set this to false.",
   "config.roundabout.preventsBreathing.name": "Prevents Breathing",

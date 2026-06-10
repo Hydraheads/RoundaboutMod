@@ -1279,7 +1279,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.setLastHurtMob(null);
         if (((LivingEntity)(Object)this) instanceof Mob mb){
             mb.setTarget(null);
-            Roundabout.LOGGER.info("4"+mb.getTarget());
             ((IMob)mb).roundabout$deeplyRemoveTargets();
             ((IMob)mb).roundabout$setSightProtectionTicks(ClientNetworking.getAppropriateConfig().softAndWetSettings.ticksBetweenSightStealsOnSameMob);
         }
@@ -2523,12 +2522,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     public void roundabout$damageGuard(float damage){
+        if (PowerTypes.hasStandActivelyEquipped(rdbt$this()) && roundabout$getLogSource() != null){
+            damage = roundabout$getStandPowers().guardSpecialties(roundabout$getLogSource(), damage);
+        }
+
         float finalGuard = this.roundabout$GuardPoints - damage;
         this.roundabout$GuardCooldown = 10;
+        rdbt$ticksUntilGuardRegen = 14;
         if (finalGuard <= 0){
             this.roundabout$GuardPoints = 0;
             this.roundabout$breakGuard();
-            this.roundabout$syncGuard();
         } else {
             this.roundabout$GuardPoints = finalGuard;
             this.roundabout$syncGuard();
@@ -2573,12 +2576,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (this.roundabout$GuardPoints < this.roundabout$getMaxGuardPoints()) {
             if (!level().isClientSide()) {
                 if (this.roundabout$GuardBroken) {
-                    float guardRegen = this.roundabout$getMaxGuardPoints() / 100;
-                    this.roundabout$regenGuard(guardRegen);
+                    if (PowerTypes.hasStandActivelyEquipped(rdbt$this())) {
+                        float guardRegen = roundabout$getStandPowers().regenBrokenGuard();
+                        this.roundabout$regenGuard(guardRegen);
+                    } else {
+                        float guardRegen = this.roundabout$getMaxGuardPoints() / 100;
+                        this.roundabout$regenGuard(guardRegen);
+                    }
                 } else if (!this.roundabout$isGuarding() && this.roundabout$shieldNotDisabled()) {
                     if (rdbt$ticksUntilGuardRegen <= 0) {
-                        float guardRegen = this.roundabout$getMaxGuardPoints() / 220;
-                        this.roundabout$regenGuard(guardRegen);
+                        if (PowerTypes.hasStandActivelyEquipped(rdbt$this())){
+                            float guardRegen = roundabout$getStandPowers().regenGuard();
+                            this.roundabout$regenGuard(guardRegen);
+                        } else {
+                            float guardRegen = this.roundabout$getMaxGuardPoints() / 220;
+                            this.roundabout$regenGuard(guardRegen);
+                        }
                     }
                 }
             }
@@ -2867,10 +2880,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     public boolean roundabout$isGuardingEffectively(){
         if (this.roundabout$GuardBroken){return false;}
+
         return this.roundabout$isGuardingEffectively2();
     }
     public boolean roundabout$isGuardingEffectively2(){
-        return (this.roundabout$shieldNotDisabled() && roundabout$isGuarding() &&
+        return (this.roundabout$shieldNotDisabled() && ((roundabout$isGuarding() &&
                 (
                         (PowerTypes.hasStandActive(rdbt$this()) &&
                                 this.roundabout$getStandPowers().getAttackTimeDuring() >= ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardDelayTicks)
@@ -2878,7 +2892,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         (PowerTypes.hasPowerActive(rdbt$this()) && rdbt$this() instanceof Player pl &&
                         ((IPowersPlayer)pl).rdbt$getPowers().getAttackTimeDuring() >= ClientNetworking.getAppropriateConfig().vampireSettings.powerGuardDelayTicks)
                 )
-
+        ) || roundabout$getStandPowers().isSpecialGuarding())
         );
     }
 
@@ -3283,7 +3297,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "handleEntityEvent", at = @At(value = "HEAD"), cancellable = true, require = 0)
     public void roundabout$HandleStatus(byte $$0, CallbackInfo ci) {
         if ($$0 == 29){
-            if (this.roundabout$isGuarding()) {
+            if (this.roundabout$isGuarding() || this.roundabout$getStandPowers().isSpecialGuarding()) {
                 if (!this.roundabout$getGuardBroken()) {
                     ((Entity) (Object) this).level().playLocalSound(((Entity) (Object) this).getX(), ((Entity) (Object) this).getY(), ((Entity) (Object) this).getZ(),
                             ModSounds.STAND_GUARD_SOUND_EVENT, ((Entity) (Object) this).getSoundSource(),
@@ -3306,7 +3320,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Inject(method = "isBlocking", at = @At(value = "HEAD"), cancellable = true, require = 0)
     private void roundabout$isBlockingRoundabout(CallbackInfoReturnable<Boolean> ci) {
-        if (this.roundabout$isGuarding()){
+        if (this.roundabout$isGuarding() || this.roundabout$getStandPowers().isSpecialGuarding()){
             ci.setReturnValue(this.roundabout$isGuardingEffectively());
         }
     }
@@ -3368,6 +3382,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 ci.setReturnValue(false);
                 return;
             }
+        }
+
+        if (roundabout$getStandPowers().interceptIncomingHarm($$0,$$1)){
+            ci.setReturnValue(false);
+            return;
         }
 
         //Coprse damage is converted and multiplied for Justice Army
@@ -3816,7 +3835,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "setSprinting", at = @At(value = "HEAD"), cancellable = true, require = 0)
     public void roundabout$canSprintPlayer(boolean $$0, CallbackInfo ci) {
         if (roundabout$getStandPowers().cancelSprint() || FateTypes.isTransforming(rdbt$this()) ||
-                (FateTypes.takesSunlightDamage(rdbt$this()) && FateTypes.isInSunlight(rdbt$this()) && !FateTypes.isHidden(rdbt$this()))
+                (FateTypes.takesSunlightDamage(rdbt$this()) && FateTypes.isInSunlight(rdbt$this()) && !FateTypes.isHidden(rdbt$this())
+                && !FateTypes.canCurrentlyAvoidSunlight(rdbt$this()))
         || (rdbt$this() instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers().cancelSprint())){
             ci.cancel();
         }
@@ -4161,7 +4181,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         if (FateTypes.takesSunlightDamage(rdbt$this()) && FateTypes.isInSunlight(rdbt$this())){
             if (!FateTypes.isHidden(rdbt$this())) {
-                basis *= 0.15F;
+                if (!FateTypes.canCurrentlyAvoidSunlight(rdbt$this())){
+                //IF not protected by white album's suit, the sun slows you down
+                    basis *= 0.15F;
+                }
             }
         }
 

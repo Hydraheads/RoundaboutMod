@@ -4,27 +4,30 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.IceBlock;
-import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import org.jetbrains.annotations.Nullable;
 
-public class WhiteAlbumIceBlock
+public class WhiteAlbumIceWallBlock
         extends IceBlock {
     public static final int MAX_AGE = 3;
     public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
     private static final int NEIGHBORS_TO_AGE = 4;
     private static final int NEIGHBORS_TO_MELT = 2;
 
-    public WhiteAlbumIceBlock(BlockBehaviour.Properties properties) {
+    public WhiteAlbumIceWallBlock(Properties properties) {
         super(properties);
         this.registerDefaultState((BlockState)((BlockState)this.stateDefinition.any()).setValue(AGE, 0));
     }
@@ -55,19 +58,22 @@ public class WhiteAlbumIceBlock
             level.setBlock(blockPos, (BlockState)blockState.setValue(AGE, i + 1), 2);
             return false;
         }
-        this.melt(blockState, level, blockPos);
+        this.melt2(blockState, level, blockPos);
         return true;
     }
-
-    public static void melt2(BlockState $$0, Level $$1, BlockPos $$2) {
-        if ($$1.dimensionType().ultraWarm()) {
-            $$1.removeBlock($$2, false);
-        } else {
-            $$1.setBlockAndUpdate($$2, meltsInto());
-            $$1.neighborChanged($$2, meltsInto().getBlock(), $$2);
-        }
+    @Override
+    protected void melt(BlockState $$0, Level $$1, BlockPos $$2) {
+        $$1.removeBlock($$2, false);
+    }
+    protected void melt2(BlockState $$0, Level $$1, BlockPos $$2) {
+        $$1.removeBlock($$2, false);
     }
 
+    @Override
+    public void playerDestroy(Level level, Player player, BlockPos blockPos, BlockState blockState, @Nullable BlockEntity blockEntity, ItemStack itemStack) {
+        player.awardStat(Stats.BLOCK_MINED.get(this));
+        player.causeFoodExhaustion(0.005f);
+    }
     @Override
     public void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block block, BlockPos blockPos2, boolean bl) {
         if (block.defaultBlockState().is(this) && this.fewerNeigboursThan(level, blockPos, 2)) {

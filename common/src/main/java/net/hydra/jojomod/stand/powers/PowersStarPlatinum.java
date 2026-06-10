@@ -43,6 +43,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -1141,7 +1142,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
 
     @Override
-    public boolean canInterruptPower(){
+    public boolean canInterruptPower(DamageSource sauce, Entity interrupter){
         if (this.getActivePower() == POWER_STAR_FINGER && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
             int cdr = ClientNetworking.getAppropriateConfig().starPlatinumSettings.starFingerInterruptCooldown;
             if (this.getSelf() instanceof Player) {
@@ -1150,7 +1151,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             this.setCooldown(PowerIndex.SKILL_1, cdr);
             return true;
         } else {
-            return super.canInterruptPower();
+            return super.canInterruptPower(sauce,interrupter);
         }
     }
 

@@ -367,9 +367,13 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
                         this.rform.translateAndRotate(poseStack);
                         this.right_arm.translateAndRotate(poseStack);
 
-                        String path = "main";
+                        byte skin = ((StandUser) player).roundabout$getStandSkin();
+                        String path = PowersWhiteAlbum.getSkinString(skin);
                         if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
                             path = "ice";
+                        }if (((StandUser)player).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW
+                                && PW.cracked){
+                            path = "cracked/"+path;
                         }
                         ModStrayModels.WhiteAlbumRightArm.render(
                                 context, partialTicks, poseStack, bufferSource, light,
@@ -478,9 +482,13 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
                         this.lform.translateAndRotate(poseStack);
                         this.left_arm.translateAndRotate(poseStack);
 
-                        String path = "main";
-                        if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())){
+                        byte skin = ((StandUser) player).roundabout$getStandSkin();
+                        String path = PowersWhiteAlbum.getSkinString(skin);
+                        if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
                             path = "ice";
+                        }if (((StandUser)player).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW
+                                && PW.cracked){
+                            path = "cracked/"+path;
                         }
                         ModStrayModels.WhiteAlbumLeftArm.render(
                                 context, partialTicks, poseStack, bufferSource, light,
