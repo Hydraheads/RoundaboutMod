@@ -86,7 +86,7 @@ public class RipperEyesProjectile extends RoundaboutGeneralProjectile{
             if (DamageHandler.RipperEyesDamage(entity, power, pl)) {
                 MainUtil.makeBleed(entity,0,400,pl);
             }
-            vgp.addToCombo();
+            vgp.addToCombo(entity);
         }
         alreadyHitEntities.add(entity);
     }

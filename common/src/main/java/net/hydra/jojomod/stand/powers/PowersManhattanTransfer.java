@@ -1,5 +1,6 @@
 package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -34,6 +35,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Blaze;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Ghast;
+import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
@@ -54,7 +59,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public static final byte
             MANHATTAN_DODGE = 82,
             DEFLECT_PROJECTILE = 83,
-            HIT_SUCCESS = 87,
 
          UNLOADED_HATTAN =84,
          LOADED_HATTAN =85,
@@ -79,7 +83,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public void syncHattanStatus(byte status) {
         this.currentHattanStatus = status;
         this.updatePowerInt(PowersManhattanTransfer.LOAD_CHECK, status);
-        S2CPacketUtil.sendIntPowerDataPacket((Player)this.getSelf(),PowersManhattanTransfer.LOAD_CHECK, status);
+        if(this.getSelf() instanceof Player) {
+            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersManhattanTransfer.LOAD_CHECK, status);
+        }
     }
 
     public boolean isLoaded(){
@@ -218,12 +224,14 @@ public class PowersManhattanTransfer extends NewDashPreset {
             }
             case PowersManhattanTransfer.DEFLECT_PROJECTILE -> {
                 if(this.getStandEntity(this.getSelf()) != null && this.getStandEntity(this.getSelf()) instanceof  ManhattanTransferEntity ME){
+                    if(this.currentHattanStatus == LOADED_HATTAN) {
+                        this.soundThree();
+                    }
                     ME.shootHattan();
                     ME.setHeldItemManhattan(ItemStack.EMPTY);
                     ME.hasItem = false;
                 }
             }
-            case PowersManhattanTransfer.HIT_SUCCESS -> this.self.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP);
         }
         return super.tryPower(move, forced);
     }
@@ -238,6 +246,13 @@ public class PowersManhattanTransfer extends NewDashPreset {
         }
     }
 
+    public void soundThree() {
+            if (isClient()) {
+                if(this.self.distanceTo(this.getStandEntity(this.getSelf())) > 16) {
+                    this.self.playSound(ModSounds.BULLET_RICOCHET_EVENT, 100F, (this.getStandEntity(this.getSelf()).getRandom().nextFloat() * 0.2F + 0.7F));
+                }
+            }
+    }
     public void switchVisionClient(){
         this.tryPower(PowerIndex.POWER_4, true);
         tryPowerPacket(PowerIndex.POWER_4);
@@ -269,7 +284,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
     @Override
     public void pilotInputAttack(){
         LivingEntity ent = getPilotingStand();
-        if (ent != null && !switchShootingMode()) {
+        if (ent != null && switchShootingMode()) {
             tryPower(PowersManhattanTransfer.DEFLECT_PROJECTILE, true);
             tryPowerPacket(PowersManhattanTransfer.DEFLECT_PROJECTILE);
             Entity TE = MainUtil.getTargetEntity(ent, 300, 10);
@@ -404,7 +419,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 ME.isDesummoning = false;
             }
 
-            if (this.isClient()) {
+            if (this.isClient() || !this.isClient()) {
                 if (!isPiloting()) {
                     if (this.currentHattanStatus == UNLOADED_HATTAN) {
                         if (this.getStandEntity(this.getSelf()).isInWaterOrRain()) {
@@ -475,7 +490,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
             }
         }
         if (this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME) {
-            if (ME.getHattanTarget() != 0 && switchShootingMode()){
+            if (ME.getHattanTarget() != 0 && !switchShootingMode()){
                 if(securityTicks < 1 && this.targetHattan != null && ME.hasLineOfSight(this.targetHattan)) {
                     tryPower(PowersManhattanTransfer.DEFLECT_PROJECTILE, true);
                     tryPowerPacket(PowersManhattanTransfer.DEFLECT_PROJECTILE);
@@ -487,6 +502,11 @@ public class PowersManhattanTransfer extends NewDashPreset {
             }
             StandEntity SE = this.getStandEntity(this.getSelf());
         }
+
+        if(this.self != null && this.self.isUsingItem() && isPiloting()){
+            this.self.stopUsingItem();
+        }
+        super.tickPower();
     }
 
     int securityTicks = 0;
@@ -655,7 +675,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 }
             }
         }
-        if(this.switchShootingMode()) {
+        if(!this.switchShootingMode()) {
             if (targetHattan != null && ent == targetHattan) {
                 if (this.isActive() && this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
                     return true;
@@ -676,7 +696,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 }
             }
         }
-        if(this.switchShootingMode()) {
+        if(!this.switchShootingMode()) {
             if (targetHattan != null && ent == targetHattan) {
                 if (this.isActive() && this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
                     return 3407755;
@@ -757,7 +777,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         // code for advanced icons
-        if (switchShootingMode()) {
+        if (!switchShootingMode()) {
             setSkillIcon(context, x, y, 1, StandIcons.MANUAL_SHOOTING_ON, PowerIndex.SKILL_1);
         }
         else
@@ -812,6 +832,11 @@ public class PowersManhattanTransfer extends NewDashPreset {
     /**Ignore*/
     @Override
     public void tickMobAI(LivingEntity attackTarget){
-
+        boolean isRangedAttackMob = this.getSelf() instanceof RangedAttackMob || this.getSelf() instanceof Blaze || this.getSelf() instanceof Ghast;
+        if(isRangedAttackMob ){
+            this.getSelf().playSound(SoundEvents.GHAST_HURT);
+            this.getSelf().kill();
+        } else {
+        }
     }
 }

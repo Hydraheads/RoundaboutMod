@@ -2,6 +2,8 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.block.WhiteAlbumIceBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
@@ -11,6 +13,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.*;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
@@ -22,24 +25,35 @@ import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PotionItem;
-import net.minecraft.world.item.SplashPotionItem;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.FrostedIceBlock;
+import net.minecraft.world.level.block.LiquidBlockContainer;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -82,8 +96,153 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     @Override
-    public boolean cancelSprintJump(){
+    public void onLandingAnimatedJump(){
         if (hasSkatesActivated()){
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SKATING_LAND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+        }
+    }
+
+    @Override
+    public float guardSpecialties(DamageSource sauce, float damage){
+        if (sauce.is(ModDamageTypes.BULLET) ||
+                sauce.is(DamageTypes.PLAYER_ATTACK) ||
+                sauce.getEntity() instanceof Blaze){
+            damage*=0.5F;
+        }
+        return damage;
+    }
+    @Override
+    public void onChangedBlock(BlockPos blockPos){
+        if (hasSkatesActivated() && self.isSprinting() && !self.isSwimming() &&
+        !self.isFallFlying()) {
+            if (!self.onGround()) {
+                return;
+            }
+            BlockState blockState = ModBlocks.WHITE_ALBUM_ICE_BLOCK.defaultBlockState();
+            int j = Math.min(16, 2 + 1);
+            BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
+            for (BlockPos blockPos2 : BlockPos.betweenClosed(blockPos.offset(-j, -1, -j), blockPos.offset(j, -1, j))) {
+                BlockState blockState3;
+                if (!blockPos2.closerToCenterThan(self.position(), j)) continue;
+                mutableBlockPos.set(blockPos2.getX(), blockPos2.getY() + 1, blockPos2.getZ());
+                BlockState blockState2 = self.level().getBlockState(mutableBlockPos);
+                if (!blockState2.isAir() || (blockState3 = self.level().getBlockState(blockPos2)) != FrostedIceBlock.meltsInto()
+                        || !blockState.canSurvive(self.level(), blockPos2) ||
+                        !self.level().isUnobstructed(blockState, blockPos2, CollisionContext.empty())) continue;
+                self.level().setBlockAndUpdate(blockPos2, blockState);
+                self.level().scheduleTick(blockPos2, ModBlocks.WHITE_ALBUM_ICE_BLOCK, Mth.nextInt(self.getRandom(), 110, 130));
+            }
+
+            j = 2;
+            blockState = ModBlocks.WHITE_ALBUM_ICE_SLAB.defaultBlockState();
+            for (BlockPos blockPos2 : BlockPos.betweenClosed(blockPos.offset(-j, 0, -j), blockPos.offset(j, 0, j))) {
+
+                mutableBlockPos.set(blockPos2.getX(), blockPos2.getY() + 1, blockPos2.getZ());
+                BlockState blockState2 = self.level().getBlockState(mutableBlockPos);
+                BlockState blockState3 =self.level().getBlockState(mutableBlockPos.below());
+                if (!blockState.canSurvive(self.level(), blockPos2) ||
+                        !self.level().isUnobstructed(blockState, blockPos2, CollisionContext.empty())) continue;
+                if (blockState3.isAir() ||
+                        (MainUtil.getIsGamemodeApproriateForGrief(self) &&
+                                blockState3.canBeReplaced() &&
+                                !(blockState3.getBlock() instanceof LiquidBlockContainer)
+                                &&
+                        !blockState3.liquid() &&
+                        !(blockState3.hasProperty(BlockStateProperties.WATERLOGGED) &&
+                                blockState3.getValue(BlockStateProperties.WATERLOGGED)
+                                )
+                        )
+                ) {
+                            self.level().setBlockAndUpdate(blockPos2, blockState);
+                            self.level().scheduleTick(blockPos2, ModBlocks.WHITE_ALBUM_ICE_SLAB, Mth.nextInt(self.getRandom(), 110, 130));
+
+                }
+                }
+
+            }
+    }
+
+    @Override
+    public boolean surpassesFire(){
+        if (((StandUser)self).roundabout$getStandPowers() instanceof
+                PowersWhiteAlbum PWA &&
+                !(((StandUser)self).roundabout$getGuardBroken())
+                && hasStandActive(self)
+        ){
+            return true;
+        }
+        return false;
+    }
+
+    /**When you take damage, intercept or run code based off of it, or potentially cancel it*/
+    public boolean interceptIncomingHarm(DamageSource $$0, float $$1){
+        if (!self.level().isClientSide() && hasStandActive(self)) {
+            StandUser user = getStandUserSelf();
+            if (!user.roundabout$getGuardBroken()) {
+                if ($$0.is(DamageTypes.FALL)) {
+                    if ($$1 > ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumGuardPoints) {
+                        user.roundabout$breakGuard();
+                        this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
+                                SoundSource.PLAYERS, 1F, 1.5F);
+                    } else {
+                        user.roundabout$damageGuard($$1);
+                        if (!user.roundabout$getGuardBroken()) {
+                            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_GUARD_SOUND_EVENT,
+                                    SoundSource.PLAYERS, 0.8F, 0.9F + self.level().random.nextFloat() * 0.3f);
+                        } else {
+                            this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
+                                    SoundSource.PLAYERS, 1F, 1.5F);
+                        }
+                        return true;
+                    }
+                } else {
+                    if ($$0.is(DamageTypes.CACTUS) ||
+                            $$0.is(DamageTypes.STALAGMITE) ||
+                            $$0.is(DamageTypes.SWEET_BERRY_BUSH) ||
+                            $$0.is(DamageTypes.LAVA) ||
+                            $$0.is(DamageTypes.IN_FIRE)
+                    ){
+                        $$1*=0.05F;
+                        if ($$1 > ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumGuardPoints) {
+                            user.roundabout$breakGuard();
+                            this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
+                                    SoundSource.PLAYERS, 1F, 1.5F);
+                        } else {
+                            user.roundabout$damageGuard($$1);
+                            if (user.roundabout$getGuardBroken()) {
+                                this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
+                                        SoundSource.PLAYERS, 1F, 1.5F);
+                            }
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public void fixThis(){
+        if (!self.level().isClientSide()) {
+            if (hasSkatesActivated()) {
+                if (getPlayerPos2() <= 0) {
+                    if (acceleration >= getMaxAccelerationTicks()) {
+                        setPlayerPos2(PlayerPosIndex.SKATE_TWIRL);
+                    } else {
+                        setPlayerPos2(PlayerPosIndex.SKATE_JUMP);
+                    }
+                    twirlTicks = 20;
+                }
+            }
+        }
+    }
+    @Override
+    public void onJump(){
+    }
+
+    @Override
+    public boolean cancelSprintJump(){
+        if (hasSkatesActivated() && acceleration < getMaxAccelerationTicks()){
             return true;
         }
         return super.cancelSprintJump();
@@ -97,14 +256,77 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return super.inputSpeedModifiers(basis);
     }
 
+    public boolean isBlockingTraditionally() {
+        if (this.self.isUsingItem() && !this.self.getUseItem().isEmpty()) {
+            Item $$0 = this.self.getUseItem().getItem();
+            if ($$0.getUseAnimation(this.self.getUseItem()) != UseAnim.BLOCK) {
+                return false;
+            } else {
+                return $$0.getUseDuration(this.self.getUseItem()) - this.self.getUseItemRemainingTicks() >= 5;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    /**for stands that subvert guard mechanics like white album*/
+    @Override
+    public boolean isSpecialGuarding(){
+        return !isBlockingTraditionally() && hasStandActive(self);
+    }
+
+    public int getMaxGuardPoints(){
+        return ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumGuardPoints;
+    }
+
+    @Override
+    public float regenBrokenGuard(){
+        return getStandUserSelf().roundabout$getMaxGuardPoints() / 200;
+    }
+    @Override
+    public float regenGuard(){
+        return getStandUserSelf().roundabout$getMaxGuardPoints() / 440;
+    }
+
+    @Override
+    public boolean forceCrit(){
+        return acceleration >= getMaxAccelerationTicks() || super.forceCrit();
+    }
+
+    private static final int MAX_ICE_SNAP_RADIUS = 30;
     int lastAcceleration = 0;
     double lastY = 0;
     @Override
     public void tickPower() {
+        if (!self.level().isClientSide()) {
+            if (lastY < self.getY() && !self.onGround() && !self.isInWater() && !self.isSwimming()) {
+                fixThis();
+            }
+
+            if (startIceSnapRing > 0 && self.tickCount % 3 == 0) {
+                if (hasSkatesActivated()){
+                    startIceSnapRing = 0;
+                } else {
+
+                    BlockPos center = iceCenter;
+                    int r = startIceSnapRing;
+
+                    // Check the square perimeter at radius r
+                    processRing(center, r);
+
+                    startIceSnapRing++;
+
+                    if (startIceSnapRing > MAX_ICE_SNAP_RADIUS) {
+                        startIceSnapRing = 0;
+                    }
+                }
+            }
+        }
         if (isPacketPlayer()){
             lastAcceleration = acceleration;
             if (hasSkatesActivated()){
-                if (self.isInWater() || self.hurtTime > 10 || self.isUsingItem()) {
+                if (self.isInWater() || self.hurtTime > 0 || self.isUsingItem()
+                || !self.isSprinting() || self.isSwimming()) {
                     acceleration = 0;
                 } else if (!self.onGround()) {
                     if (lastY < self.getY()){
@@ -113,28 +335,60 @@ public class PowersWhiteAlbum extends NewDashPreset {
                         acceleration = Math.min(getMaxAccelerationTicks(),acceleration+5);
                     }
                 } else {
-                    if (self.isSprinting() && !self.horizontalCollision){
+                    if (!self.horizontalCollision){
                         if (lastY < self.getY()){
                             acceleration = Math.max(0,acceleration-25);
                         } else {
                             acceleration = Math.min(getMaxAccelerationTicks(),acceleration+1);
                         }
                     } else {
-                        acceleration = Math.max(0,acceleration-5);
+                        acceleration = Math.max(0,acceleration-15);
                     }
                 }
 
             } else {
                 acceleration = 0;
             }
-            if (self.onGround()){
-                lastY = self.getY();
-            }
             if (acceleration != lastAcceleration){
                 C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_WHITE_ALBUM_ACCELERATION,acceleration);
             }
         }
+        if (self.onGround()){
+            lastY = self.getY();
+        }
         super.tickPower();
+    }
+    private void processRing(BlockPos center, int r) {
+
+        Level level = self.level();
+
+        for (int y = -4; y <= 4; y++) {
+
+            for (int x = -r; x <= r; x++) {
+                removeIce(level, center.offset(x, y, -r));
+                removeIce(level, center.offset(x, y, r));
+            }
+
+            for (int z = -r + 1; z <= r - 1; z++) {
+                removeIce(level, center.offset(-r, y, z));
+                removeIce(level, center.offset(r, y, z));
+            }
+        }
+    }
+    private void removeIce(Level level, BlockPos pos) {
+
+        BlockState state = level.getBlockState(pos);
+
+        if (state.is(ModBlocks.WHITE_ALBUM_ICE_SLAB)) {
+
+            level.destroyBlock(pos, false);
+            // or:
+            // level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+        } else if (state.is(ModBlocks.WHITE_ALBUM_ICE_BLOCK)) {
+            WhiteAlbumIceBlock.melt2(state,level,pos);
+            // or:
+            // level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+        }
     }
 
     public static int getMaxAccelerationTicks(){
@@ -167,13 +421,20 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return false;
     }
 
+    public ResourceLocation getIconYes(int slot){
+        if (slot == 1 && acceleration >= getMaxAccelerationTicks())
+            return StandIcons.SQUARE_GOLD;
+        return super.getIconYes(slot);
+    }
+
+
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         // code for advanced icons
 
         if (!isHoldingSneak()){
             if (hasSkatesActivated()){
-                setSkillIcon(context, x, y, 1, StandIcons.SKATE_ACTIVE, PowerIndex.SKILL_1);
+                    setSkillIcon(context, x, y, 1, StandIcons.SKATE_ACTIVE, PowerIndex.SKILL_1);
             } else {
                 setSkillIcon(context, x, y, 1, StandIcons.SKATE_INACTIVE, PowerIndex.SKILL_1);
             }
@@ -255,6 +516,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case SKILL_1_NORMAL-> {
                 toggleSkatesClient();
             }
+            case SKILL_1_CROUCH-> {
+                iceCancelClient();
+            }
             case SKILL_2_NORMAL-> {
                 summonSurvivorClient();
             }
@@ -270,6 +534,14 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
+    public void iceCancelClient(){
+        if (!onCooldown(PowerIndex.SKILL_1_SNEAK)){
+            this.setCooldown(PowerIndex.SKILL_1, 40);
+            this.setCooldown(PowerIndex.SKILL_1_SNEAK, 40);
+            tryPowerPacket(PowerIndex.POWER_1_SNEAK);
+        }
+    }
+
     public void switchModeClient(){
         if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {
             SurvivorTarget = null;
@@ -280,23 +552,22 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
 
-    public void throwBottleActually(ItemStack stack){
+    public int startIceSnapRing = 0;
+    public BlockPos iceCenter = BlockPos.ZERO;
+    public void iceCancelServer(){
+        this.setCooldown(PowerIndex.SKILL_1, 40);
+        if (!this.self.level().isClientSide()){
+            if (hasSkatesActivated()) {
+                toggleSkates();
+            }
+            iceCenter = self.blockPosition();
+            startIceSnapRing = 1;
 
-        this.self.level().playSound(
-                null,
-                this.self.getX(),
-                this.self.getY(),
-                this.self.getZ(),
-                SoundEvents.SPLASH_POTION_THROW,
-                SoundSource.PLAYERS,
-                0.5F,
-                0.4F / (this.self.getRandom().nextFloat() * 0.4F + 0.8F)
-        );
-        ThrownWaterBottleEntity $$4 = new ThrownWaterBottleEntity(this.self.level(), this.self);
-        $$4.setItem(stack);
-        $$4.shootFromRotation(this.self, this.self.getXRot(), this.self.getYRot(), -0.1F, 1.5F, 0.2F);
-        this.self.level().addFreshEntity($$4);
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SNAP_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+        }
     }
+
+
 
     public boolean toggleSkates(){
         int cooldown = 5;
@@ -368,11 +639,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case PowerIndex.POWER_1 -> {
                 return toggleSkates();
             }
-            case PowerIndex.POWER_4 -> {
-                return switchAngerSelectionMode();
-            }
-            case PowerIndex.POWER_4_BONUS -> {
-                return selectTarget();
+            case PowerIndex.POWER_1_SNEAK -> {
+                iceCancelServer();
             }
         }
         return super.setPowerOther(move,lastMove);
@@ -667,14 +935,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
 
-    public boolean canUseWaterBottleThrow(){
-        ItemStack stack = this.getSelf().getMainHandItem();
-        ItemStack stack2 = this.getSelf().getOffhandItem();
-        return ((!stack.isEmpty() && stack.getItem() instanceof PotionItem PI &&
-                PotionUtils.getPotion(stack) == Potions.WATER && !(PI instanceof SplashPotionItem))
-                || ((!stack2.isEmpty() && stack2.getItem() instanceof PotionItem PI2 && PotionUtils.getPotion(stack2) == Potions.WATER)
-                && !(PI2 instanceof SplashPotionItem)));
-    }
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         return super.isAttackIneptVisually(activeP,slot);
     }

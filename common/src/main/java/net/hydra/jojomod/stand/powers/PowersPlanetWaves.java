@@ -4,12 +4,14 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
-import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
@@ -22,9 +24,6 @@ import net.hydra.jojomod.entity.stand.PlanetWavesEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.SoundIndex;
-import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
@@ -47,11 +46,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.Arrays;
 import java.util.List;
 
-import static net.hydra.jojomod.entity.stand.PlanetWavesEntity.MANGA_SKIN;
-import static net.hydra.jojomod.entity.stand.PlanetWavesEntity.PART_6_SKIN;
-import static net.hydra.jojomod.entity.stand.PlanetWavesEntity.BLUE_SKIN;
-import static net.hydra.jojomod.entity.stand.PlanetWavesEntity.PURPLE_SKIN;
-import static net.hydra.jojomod.entity.stand.PlanetWavesEntity.GREEN_SKIN;
+import static net.hydra.jojomod.entity.stand.PlanetWavesEntity.*;
 
 public class PowersPlanetWaves extends NewDashPreset {
     public PowersPlanetWaves(LivingEntity self) {super(self);}
@@ -91,10 +86,10 @@ public class PowersPlanetWaves extends NewDashPreset {
                 $$1.add(PlanetWavesEntity.BLUE_SKIN);
                 $$1.add(PlanetWavesEntity.PURPLE_SKIN);
                 $$1.add(PlanetWavesEntity.GREEN_SKIN);
-            }/* if (Level > 2 || bypass){
-                $$1.add(MagiciansRedEntity.OVA_SKIN);
-                $$1.add(MagiciansRedEntity.SIDEKICK);
-            } if (Level > 3 || bypass){
+            } if (Level > 2 || bypass){
+                $$1.add(PlanetWavesEntity.OCEAN_WAVES);
+                $$1.add(PlanetWavesEntity.SYMPHONY_WAVES);
+            }/* if (Level > 3 || bypass){
                 $$1.add(MagiciansRedEntity.PURPLE_SKIN);
                 $$1.add(MagiciansRedEntity.PURPLE_ABLAZE);
             } if (Level > 4 || bypass){
@@ -128,35 +123,68 @@ public class PowersPlanetWaves extends NewDashPreset {
             case BLUE_SKIN  -> {return Component.translatable("skins.roundabout.planet_waves.blue");}
             case PURPLE_SKIN  -> {return Component.translatable("skins.roundabout.planet_waves.purple");}
             case GREEN_SKIN  -> {return Component.translatable("skins.roundabout.planet_waves.green");}
+            case OCEAN_WAVES  -> {return Component.translatable("skins.roundabout.planet_waves.ocean_waves");}
+            case SYMPHONY_WAVES  -> {return Component.translatable("skins.roundabout.planet_waves.symphony_waves");}
         }
         return Component.translatable("skins.roundabout.planet_waves.base");
 
     }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-
         setSkillIcon(context, x, y, 1, StandIcons.PLANET_WAVES_METEOR_SHOWER, PowerIndex.SKILL_1);
-        setSkillIcon(context, x, y, 2, StandIcons.PLANET_WAVES_BIG_METEOR, PowerIndex.SKILL_2);
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
-        /*if(canExecuteMoveWithLevel(StandTargetingLevel())){
-            if (!instandtargeting()) {
-                setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_STAND_TARGETING, PowerIndex.SKILL_4);
-            } else setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_STAND_RETRIEVING, PowerIndex.SKILL_4);
-        }else setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4);*/
-        if(canExecuteMoveWithLevel(StandTargetingLevel())){
-            if(!isHoldingSneak()) {
-                if(targetingstand) {
-                    setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_STAND_RETRIEVING, PowerIndex.SKILL_4);
-                } else setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_STAND_TARGETING, PowerIndex.SKILL_4);
-            }
-        }else setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4);
-        if(canExecuteMoveWithLevel(MeteorTrackingLevel())) {
-            if (isHoldingSneak())
-                setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_METEOR_TRACKING, PowerIndex.SKILL_4_SNEAK);
-        }else setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4_SNEAK);
-        if (isHoldingSneak())
 
+        if (isHoldingSneak()) {
             setSkillIcon(context, x, y, 2, StandIcons.PLANET_WAVES_DESINTEGRATION, PowerIndex.SKILL_2_SNEAK);
+            if (canExecuteMoveWithLevel(MeteorTrackingLevel())) {
+                setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_METEOR_TRACKING, PowerIndex.SKILL_4_SNEAK);
+            } else {
+                setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4_SNEAK);
+            }
+        } else {
+            setSkillIcon(context, x, y, 2, StandIcons.PLANET_WAVES_BIG_METEOR, PowerIndex.SKILL_2);
+            if (canExecuteMoveWithLevel(StandTargetingLevel())) {
+                if (!instandtargeting()) {
+                    setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_STAND_TARGETING, PowerIndex.SKILL_4);
+                } else {
+                    setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_STAND_RETRIEVING, PowerIndex.SKILL_4);
+                }
+            } else {
+                setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4);
+            }
+        }
+    }
+    @Override
+    public boolean isAttackIneptVisually(byte activeP, int slot) {
+        if (activeP == PowerIndex.SKILL_1 || activeP == PowerIndex.SKILL_2 || activeP == PowerIndex.SKILL_2_SNEAK) {
+            if (isTravelling) {
+                return true;
+            }
+        }
+
+        if (activeP == PowerIndex.SKILL_4) {
+            if (isTravelling || isBlockInvalidForTargeting()) {
+                return true;
+            }
+        }
+
+        if (activeP == PowerIndex.SKILL_2_SNEAK) {
+
+            List<PWBigMeteorEntity> meteors = this.self.level().getEntitiesOfClass(
+                    PWBigMeteorEntity.class,
+                    this.self.getBoundingBox().inflate(256)
+            );
+
+            for (PWBigMeteorEntity meteor : meteors) {
+                if (meteor.getStandUser() == this.self) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     @Override
@@ -275,6 +303,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         }
     }
     private void meteorshower() {
+        if(isTravelling)return;
         if (this.onCooldown(PowerIndex.SKILL_1)) return;
         if (this.self.level().dimension() == Level.NETHER) return;
 
@@ -338,10 +367,11 @@ public class PowersPlanetWaves extends NewDashPreset {
                 ModSounds.PLANET_WAVES_METEOR_SHOWER_EVENT,
                 net.minecraft.sounds.SoundSource.PLAYERS, 1.0F, 1.0F);
 
-        int cooldown = ClientNetworking.getAppropriateConfig()
-                .PlanetWavesSettings.meteorshowerCooldown;
-
-        this.setCooldown(PowerIndex.SKILL_1, cooldown);
+        this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig()
+                .PlanetWavesSettings.meteorshowerCooldown);
+        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
+                PowerIndex.SKILL_1,ClientNetworking.getAppropriateConfig()
+                        .PlanetWavesSettings.meteorshowerCooldown);
         syncStandMode();
     }
 
@@ -361,16 +391,36 @@ public class PowersPlanetWaves extends NewDashPreset {
     public void tick() {
         if (self.level().isClientSide()) return;
 
-        if (meteorQueue.isEmpty()) return;
-
         for (int i = 0; i < meteorQueue.size(); i++) {
             ScheduledMeteor m = meteorQueue.get(i);
             m.delay--;
-
             if (m.delay <= 0) {
                 spawnMeteor(m.spawnPos, m.targetPos);
                 meteorQueue.remove(i);
                 i--;
+            }
+        }
+
+        if (isTravelling && standTargetPos != null) {
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand != null) {
+                Vec3 current = stand.position();
+                Vec3 dir = standTargetPos.subtract(current);
+                double dist = dir.length();
+                if (dist < 0.5) {
+                    stand.teleportTo(standTargetPos.x, standTargetPos.y, standTargetPos.z);
+                    isTravelling = false;
+                    standTravelTarget = null;
+                    syncStandMode();
+                } else {
+                    double speed = Math.min(dist, 0.8);
+                    Vec3 step = dir.normalize().scale(speed);
+                    stand.teleportTo(
+                            current.x + step.x,
+                            current.y + step.y,
+                            current.z + step.z
+                    );
+                }
             }
         }
     }
@@ -392,6 +442,7 @@ public class PowersPlanetWaves extends NewDashPreset {
     }
 
     private void bigmeteor() {
+        if(isTravelling)return;
         Level level = this.self.level();
         if (level.isClientSide()) return;
         if (this.self.level().dimension() == Level.NETHER) return;
@@ -454,10 +505,12 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         level.addFreshEntity(meteor);
 
-        int cooldown = ClientNetworking.getAppropriateConfig()
-                .PlanetWavesSettings.bigmeteorCooldown;
 
-        this.setCooldown(PowerIndex.SKILL_2, cooldown);
+        this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig()
+                .PlanetWavesSettings.bigmeteorCooldown);
+        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
+                PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig()
+                        .PlanetWavesSettings.bigmeteorCooldown);
 
         syncStandMode();
 
@@ -470,19 +523,13 @@ public class PowersPlanetWaves extends NewDashPreset {
                 1.0F
         );
     }
-
-
-    private void standtargeting() {
-        Level level = this.self.level();
-
+    private boolean isBlockInvalidForTargeting() {
         Vec3 eyePos = this.self.getEyePosition(1.0F);
         Vec3 lookVec = this.self.getViewVector(1.0F);
-
         Vec3 endPos = eyePos.add(lookVec.scale(128.0D));
 
         ClipContext clipContext = new ClipContext(
-                eyePos,
-                endPos,
+                eyePos, endPos,
                 ClipContext.Block.OUTLINE,
                 ClipContext.Fluid.NONE,
                 this.self
@@ -490,61 +537,211 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         BlockHitResult hitResult = this.self.level().clip(clipContext);
 
+        if (hitResult.getType() == HitResult.Type.BLOCK) {
+            BlockPos pos = hitResult.getBlockPos();
+            var state = this.self.level().getBlockState(pos);
+            boolean isFullBlock = state.isCollisionShapeFullBlock(this.self.level(), pos);
+            boolean isOpaque = state.canOcclude();
+            return !isFullBlock || !isOpaque;
+        }
+
+        return true;
+    }
+    private boolean isTravelling = false;
+    private Vec3 standTravelTarget = null;
+    private void standtargeting() {
+        Level level = this.self.level();
+
+        Vec3 eyePos = this.self.getEyePosition(1.0F);
+        Vec3 lookVec = this.self.getViewVector(1.0F);
+        Vec3 endPos = eyePos.add(lookVec.scale(128.0D));
+
+        ClipContext clipContext = new ClipContext(
+                eyePos, endPos,
+                ClipContext.Block.OUTLINE,
+                ClipContext.Fluid.NONE,
+                this.self
+        );
+
+        BlockHitResult hitResult = this.self.level().clip(clipContext);
 
         if (hitResult.getType() == HitResult.Type.BLOCK) {
             BlockPos pos = hitResult.getBlockPos();
-
+            var state = this.self.level().getBlockState(pos);
+            boolean isFullBlock = state.isCollisionShapeFullBlock(this.self.level(), pos);
+            boolean isOpaque = state.canOcclude();
+            if (!isFullBlock || !isOpaque) return;
 
             if (!this.self.level().getBlockState(pos).isAir()) {
-
-
                 targetingstand = true;
+                isTravelling = true;
+                this.standTargetPos = hitResult.getLocation();
+                this.standTravelTarget = hitResult.getLocation();
+
+                StandEntity stand = this.getStandEntity(this.self);
+                if (stand instanceof FollowingStandEntity FSE) {
+                    FSE.setOffsetType(OffsetIndex.LOOSE);
+                }
+
                 syncStandMode();
 
-                this.standTargetPos = hitResult.getLocation();
-
-                level.playSound(
-                        null,
-                        this.self.blockPosition(),
+                level.playSound(null, this.self.blockPosition(),
                         ModSounds.PLANET_WAVES_TARGET_EVENT,
-                        net.minecraft.sounds.SoundSource.PLAYERS,
-                        1.0F,
-                        1.0F
-                );
+                        SoundSource.PLAYERS, 1.0F, 1.0F);
+
                 if (!level.isClientSide()) {
-                    this.setCooldown(
-                            PowerIndex.SKILL_4,
+                    this.setCooldown(PowerIndex.SKILL_4,
                             ClientNetworking.getAppropriateConfig()
-                                    .PlanetWavesSettings.standtargetingCooldown
-                    );
+                                    .PlanetWavesSettings.standtargetingCooldown);
                 }
             }
         }
     }
+    private LivingEntity restrainedEntity = null;
+    private byte restrainAnimationType = 0; // 0 = side, 1 = above, 2 = below
 
+    @Override
+    public void tickPowerEnd() {
+        super.tickPowerEnd();
+
+        if (isTravelling && standTargetPos != null) {
+            if (self.level().isClientSide()) return;
+
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand != null) {
+                Vec3 current = stand.position();
+                Vec3 dir = standTargetPos.subtract(current);
+                double dist = dir.length();
+
+                if (dist < 0.5) {
+                    stand.setPos(standTargetPos.x, standTargetPos.y, standTargetPos.z);
+                    isTravelling = false;
+                    syncStandMode();
+
+                    Vec3 diff = current.subtract(standTargetPos);
+                    double absDiffY = Math.abs(diff.y);
+                    double absDiffXZ = Math.sqrt(diff.x * diff.x + diff.z * diff.z);
+
+                    if (absDiffY > absDiffXZ) {
+                        if (diff.y > 0) {
+                            restrainAnimationType = 1;
+                            //this.animateStand(PlanetWavesEntity.ARRIVE_FROM_ABOVE);
+                        } else {
+                            restrainAnimationType = 2;
+                            //this.animateStand(PlanetWavesEntity.ARRIVE_FROM_BELOW);
+                        }
+                    } else {
+                        restrainAnimationType = 0;
+                        //this.animateStand(PlanetWavesEntity.ARRIVE_FROM_SIDE);
+                    }
+
+                } else {
+                    //this.animateStand(PlanetWavesEntity.TRAVELLING);
+                    double speed = Math.min(dist, 0.5);
+                    Vec3 step = dir.normalize().scale(speed);
+                    stand.setPos(
+                            current.x + step.x,
+                            current.y + step.y,
+                            current.z + step.z
+                    );
+                }
+
+                if (!isTravelling && restrainedEntity == null) {
+                    List<LivingEntity> nearby = self.level().getEntitiesOfClass(
+                            LivingEntity.class,
+                            stand.getBoundingBox().inflate(3.0)
+                    );
+                    for (LivingEntity entity : nearby) {
+                        if (entity.is(this.self)) continue;
+                        if (!entity.isAlive()) continue;
+
+                        restrainedEntity = entity;
+                        System.out.println("Grabbed: " + entity.getName().getString());
+                        if (restrainedEntity instanceof Mob mob) {
+                            mob.setNoAi(true);
+                        }
+
+                        if (entity instanceof StandUser SU) {
+                            SU.roundabout$setRestrainedTicks(40);
+                        }
+
+                        switch (restrainAnimationType) {
+                            //case 1 -> this.animateStand(PlanetWavesEntity.GRAB_FROM_ABOVE);
+                            //case 2 -> this.animateStand(PlanetWavesEntity.GRAB_FROM_BELOW);
+                            //default -> this.animateStand(PlanetWavesEntity.GRAB_FROM_SIDE);
+                        }
+                        break;
+                    }
+                }
+
+                if (restrainedEntity != null) {
+                    if (!restrainedEntity.isAlive() ||
+                            restrainedEntity.distanceTo(stand) > 3 ||
+                            (restrainedEntity instanceof StandUser SU
+                                    && !SU.roundabout$isRestrained()
+                            )) {
+                        restrainedEntity = null;
+                        this.animateStand(StandEntity.IDLE);
+                    } else {
+
+                        restrainedEntity.setDeltaMovement(Vec3.ZERO);
+                        restrainedEntity.hurtMarked = true;
+
+
+                        if (restrainedEntity instanceof Mob mob) {
+                            mob.getNavigation().stop();
+                            mob.setTarget(null);
+                        }
+
+
+                        restrainedEntity.teleportTo(
+                                stand.getX(),
+                                stand.getY(),
+                                stand.getZ()
+                        );
+                    }
+                }
+            }
+        }
+
+        if (!targetingstand && restrainedEntity != null) {
+            if (restrainedEntity instanceof Mob mob) {
+                mob.setNoAi(false);
+            }
+
+            restrainedEntity = null;
+            this.animateStand(StandEntity.IDLE);
+        }
+    }
     private void usertargeting() {
         Level level = this.self.level();
 
         targetingstand = false;
-        syncStandMode();
-        standTargetPos = null;
+        isTravelling = false;
+        standTravelTarget = null;
+        if (restrainedEntity instanceof Mob mob) {
+            mob.setNoAi(false);
+        }
+        restrainedEntity = null;
 
-        if (!level.isClientSide()) {
-            this.setCooldown(
-                    PowerIndex.SKILL_4,
-                    ClientNetworking.getAppropriateConfig()
-                            .PlanetWavesSettings.usertargetingCooldown
-            );
+        StandEntity stand = this.getStandEntity(this.self);
+        if (stand instanceof FollowingStandEntity FSE) {
+            FSE.setOffsetType(OffsetIndex.FOLLOW);
         }
 
-        level.playSound(
-                null,
-                this.self.blockPosition(),
+        syncStandMode();
+        standTargetPos = null;
+        this.animateStand(StandEntity.IDLE);
+
+        if (!level.isClientSide()) {
+            this.setCooldown(PowerIndex.SKILL_4,
+                    ClientNetworking.getAppropriateConfig()
+                            .PlanetWavesSettings.usertargetingCooldown);
+        }
+
+        level.playSound(null, this.self.blockPosition(),
                 ModSounds.PLANET_WAVES_TARGET_EVENT,
-                net.minecraft.sounds.SoundSource.PLAYERS,
-                1.0F,
-                1.0F
-        );
+                SoundSource.PLAYERS, 1.0F, 1.0F);
     }
     private void meteortracking() {
         tracking = true;
@@ -561,7 +758,25 @@ public class PowersPlanetWaves extends NewDashPreset {
         }
         syncStandMode();
     }
+    @Override
+    public boolean canInterruptPower(DamageSource sauce, Entity interrupter) {
+        if (isTravelling) {
+            isTravelling = false;
+            targetingstand = false;
+            standTravelTarget = null;
+            standTargetPos = null;
 
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand instanceof FollowingStandEntity FSE) {
+                FSE.setOffsetType(OffsetIndex.FOLLOW);
+            }
+
+            this.animateStand(StandEntity.IDLE);
+            syncStandMode();
+            return true;
+        }
+        return super.canInterruptPower(sauce,interrupter);
+    }
     private void meteornottracking() {
         tracking = false;
 
@@ -586,6 +801,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         syncStandMode();
     }
     private void meteorDisappearance() {
+        if (this.onCooldown(PowerIndex.SKILL_2_SNEAK)) return;
         if (this.self.level().isClientSide()) return;
 
         Level level = this.self.level();
@@ -615,7 +831,6 @@ public class PowersPlanetWaves extends NewDashPreset {
                 }
             }
         }
-
         if (foundMeteor) {
             level.playSound(
                     null,
@@ -624,6 +839,14 @@ public class PowersPlanetWaves extends NewDashPreset {
                     SoundSource.PLAYERS,
                     1.5F,
                     1.0F
+            );
+
+            this.setCooldown(PowerIndex.SKILL_2_SNEAK, 60);
+
+            S2CPacketUtil.sendCooldownSyncPacket(
+                    (ServerPlayer)this.getSelf(),
+                    PowerIndex.SKILL_2_SNEAK,
+                    60
             );
         }
     }
@@ -740,6 +963,44 @@ public class PowersPlanetWaves extends NewDashPreset {
         return super.getSoundFromByte(soundChoice);
     }
     @Override
+    public boolean isServerControlledCooldown(byte num){
+        if (num == PowerIndex.SKILL_1 || num == PowerIndex.SKILL_2 || num == PowerIndex.SKILL_4 || num == PowerIndex.SKILL_2_SNEAK || num == PowerIndex.SKILL_4_SNEAK){
+            return true;
+        }
+        return super.isServerControlledCooldown(num);
+    }
+    @Override
+    public boolean setPowerNone() {
+        boolean result = super.setPowerNone();
+        if (targetingstand) {
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand instanceof FollowingStandEntity FSE) {
+                FSE.setOffsetType(OffsetIndex.LOOSE);
+            }
+        }
+        return result;
+    }
+    @Override
+    public void onStandSummon(boolean desummon) {
+        super.onStandSummon(desummon);
+        if (desummon) {
+            if (restrainedEntity instanceof Mob mob) {
+                mob.setNoAi(false);
+            }
+
+            targetingstand = false;
+            isTravelling = false;
+            standTargetPos = null;
+            standTravelTarget = null;
+            restrainedEntity = null;
+        } else if (targetingstand) {
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand instanceof FollowingStandEntity FSE) {
+                FSE.setOffsetType(OffsetIndex.LOOSE);
+            }
+        }
+    }
+    @Override
     public void serverQueried() {
         if (self instanceof ServerPlayer pl) {
             S2CPacketUtil.sendGenericIntToClientPacket(
@@ -755,6 +1016,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
             if (targetingstand) mode |= 1;
             if (tracking) mode |= 2;
+            if (isTravelling) mode |= 4;
 
             S2CPacketUtil.sendGenericIntToClientPacket(
                     pl,
@@ -763,10 +1025,12 @@ public class PowersPlanetWaves extends NewDashPreset {
             );
         }
     }
+
     @Override
     public void clientIntUpdated(int integer) {
         targetingstand = (integer & 1) != 0;
         tracking = (integer & 2) != 0;
+        isTravelling = (integer & 4) != 0;
     }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
@@ -824,11 +1088,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
 
         return switch (skn) {
-            //case PlanetWavesEntity.BLUE_SKIN, PlanetWavesEntity.BLUE_ACE_SKIN, PlanetWavesEntity.BLUE_ABLAZE, PlanetWavesEntity.SKELETAL -> ModParticles.BLUE_FLAME;
-            // case PlanetWavesEntity.PURPLE_SKIN, PlanetWavesEntity.PURPLE_ABLAZE -> ModParticles.PURPLE_FLAME;
-            // case PlanetWavesEntity.GREEN_SKIN, PlanetWavesEntity.GREEN_ABLAZE -> ModParticles.GREEN_FLAME;
-            // case PlanetWavesEntity.DREAD_SKIN, PlanetWavesEntity.DREAD_ABLAZE, PlanetWavesEntity.DREAD_BEAST_SKIN -> ModParticles.DREAD_FLAME;
-            //case PlanetWavesEntity.JOJONIUM, PlanetWavesEntity.JOJONIUM_ABLAZE -> ModParticles.CREAM_FLAME;
+            case PlanetWavesEntity.OCEAN_WAVES,PlanetWavesEntity.SYMPHONY_WAVES -> ParticleTypes.SPLASH;
             case PlanetWavesEntity.GREEN_SKIN-> ModParticles.GREEN_FLAME;
             case PlanetWavesEntity.PURPLE_SKIN -> ModParticles.PURPLE_FLAME;
             case PlanetWavesEntity.BLUE_SKIN -> ModParticles.BLUE_FLAME;

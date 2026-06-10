@@ -20,9 +20,6 @@ public class DIONPC extends StandUsingNPC {
 
     @Override
     public void tick(){
-        if (MainUtil.isVampireBurnTick(this) && host == null){
-            this.kill();
-        }
         super.tick();
     }
     public ItemStack getBasis(){

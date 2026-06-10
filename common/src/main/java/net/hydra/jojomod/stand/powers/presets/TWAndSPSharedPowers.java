@@ -1,6 +1,5 @@
 package net.hydra.jojomod.stand.powers.presets;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -8,8 +7,6 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
-import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.TimeStopInstance;
@@ -19,7 +16,6 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.GlaiveItem;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
@@ -31,14 +27,15 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -166,7 +163,12 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             dash();
         }
     }
-
+    public float getRushDistance(){
+        if (forwardBarrage){
+            return 15;
+        }
+        return getReach();
+    }
     public float getFloatOutRange(){
         return 7F;
     }
@@ -1178,12 +1180,17 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     private int leapEndTicks = -1;
 
     @Override
-    public boolean canInterruptPower(){
+    public boolean canInterruptPower(DamageSource sauce, Entity interrupter){
 
         if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
             return true;
         } else if (this.getActivePower() == PowerIndex.SPECIAL) {
-            int cdr = ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopInterruptedCooldownv2;
+            int cdr;
+            if (interrupter instanceof Player){
+                cdr = ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopInterruptedCooldownv2;
+            } else {
+                cdr = ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopInterruptedCooldownMobs;
+            }
             if (this.getSelf() instanceof Player) {
                 S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, cdr);
             }
@@ -1197,7 +1204,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             this.setCooldown(PowerIndex.SKILL_1_SNEAK, cdr);
             return true;
         } else {
-            return super.canInterruptPower();
+            return super.canInterruptPower(sauce,interrupter);
         }
     }
     @Override
@@ -2002,7 +2009,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     @Override
     public boolean setPowerGuard() {
         if (this.getIsTsCharging()) {
-            this.setCooldown(PowerIndex.SKILL_4,ConfigManager.getConfig().timeStopSettings.timeStopInterruptedCooldownv2);
+            this.setCooldown(PowerIndex.SKILL_4,ConfigManager.getConfig().timeStopSettings.timeStopInterruptedCooldownMobs);
         }
         return super.setPowerGuard();
     }
@@ -2010,7 +2017,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     @Override
     public void onStandSummon(boolean desummon) {
         if (desummon && this.getIsTsCharging() ) {
-            this.setCooldown(PowerIndex.SKILL_4,ConfigManager.getConfig().timeStopSettings.timeStopInterruptedCooldownv2);
+            this.setCooldown(PowerIndex.SKILL_4,ConfigManager.getConfig().timeStopSettings.timeStopInterruptedCooldownMobs);
         }
         super.onStandSummon(desummon);
     }

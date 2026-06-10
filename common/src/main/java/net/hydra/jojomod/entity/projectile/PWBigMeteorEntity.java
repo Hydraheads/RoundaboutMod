@@ -373,7 +373,6 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
 
     @Override
     protected void onHitBlock(BlockHitResult hit) {
-
         if (this.level().isClientSide()) return;
 
         LivingEntity user = this.getStandUser();
@@ -383,71 +382,39 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
             return;
         }
 
-        Vec3 meteorPos = this.position();
+        if (slowing) return;
 
+        Vec3 meteorPos = this.position();
         Vec3 toUser = user.position()
                 .add(0, user.getBbHeight() * 0.5, 0)
                 .subtract(meteorPos)
                 .normalize();
 
         Vec3 movementDir = this.getDeltaMovement().normalize();
-
         double approachDot = movementDir.dot(toUser);
 
         if (approachDot <= 0.0D) {
-            missedPlayer = true;
-        }
-
-        if (missedPlayer) {
             explodeAndIgnite();
             return;
         }
 
         AABB box = this.getBoundingBox();
-
-        BlockPos min = BlockPos.containing(
-                Math.floor(box.minX),
-                Math.floor(box.minY),
-                Math.floor(box.minZ)
-        );
-
-        BlockPos max = BlockPos.containing(
-                Math.floor(box.maxX),
-                Math.floor(box.maxY),
-                Math.floor(box.maxZ)
-        );
+        BlockPos min = BlockPos.containing(Math.floor(box.minX), Math.floor(box.minY), Math.floor(box.minZ));
+        BlockPos max = BlockPos.containing(Math.floor(box.maxX), Math.floor(box.maxY), Math.floor(box.maxZ));
 
         for (BlockPos pos : BlockPos.betweenClosed(min, max)) {
-
             BlockState state = this.level().getBlockState(pos);
-
             if (state.isAir()) continue;
-
-
-            if (state.is(Blocks.BEDROCK)) {
+            if (state.is(Blocks.BEDROCK) || state.is(Blocks.BARRIER)) {
                 explodeAndIgnite();
                 return;
             }
-            if (state.is(Blocks.BARRIER)) {
-                explodeAndIgnite();
-                return;
-            }
-            if (isProtectedBlock(state)) {
-                continue;
-            }
+            if (isProtectedBlock(state)) continue;
 
             this.level().destroyBlock(pos, false);
-
             blocksDisintegrated++;
 
-            /*
-             once block limit is reached,
-             trigger missed-player explosion
-             */
             if (blocksDisintegrated >= MAX_BLOCKS_DISINTEGRATED) {
-
-                missedPlayer = true;
-
                 explodeAndIgnite();
                 return;
             }

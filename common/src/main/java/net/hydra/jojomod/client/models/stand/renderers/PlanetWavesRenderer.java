@@ -19,6 +19,8 @@ public class PlanetWavesRenderer extends StandRenderer<PlanetWavesEntity> {
     private static final ResourceLocation BLUE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/planet_waves/blue.png");
     private static final ResourceLocation PURPLE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/planet_waves/purple.png");
     private static final ResourceLocation GREEN_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/planet_waves/green.png");
+    private static final ResourceLocation OCEAN_WAVES = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/planet_waves/ocean_waves.png");
+    private static final ResourceLocation SYMPHONY_WAVES = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/planet_waves/symphony_waves.png");
 
     public PlanetWavesRenderer(EntityRendererProvider.Context context) {
         super(context, new PlanetWavesModel<>(context.bakeLayer(ModEntityRendererClient.PLANET_WAVES_LAYER)), 0f);
@@ -36,6 +38,10 @@ public class PlanetWavesRenderer extends StandRenderer<PlanetWavesEntity> {
                 return PURPLE_SKIN;
             case (PlanetWavesEntity.GREEN_SKIN):
                 return GREEN_SKIN;
+            case (PlanetWavesEntity.OCEAN_WAVES):
+                return OCEAN_WAVES;
+            case (PlanetWavesEntity.SYMPHONY_WAVES):
+                return SYMPHONY_WAVES;
             default:
                 return PART_6_SKIN;
         }

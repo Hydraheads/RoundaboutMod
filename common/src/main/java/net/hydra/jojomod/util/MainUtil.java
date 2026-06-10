@@ -203,6 +203,7 @@ public class MainUtil {
     public static ArrayList<String> occultChargeEffectsToBanish = Lists.newArrayList();
     public static ArrayList<String> naturalStandUserMobBlacklist = Lists.newArrayList();
     public static ArrayList<String> hypnotismMobBlackList = Lists.newArrayList();
+    public static ArrayList<String> fleshBudMobBlacklist = Lists.newArrayList();
 
     public static ArrayList<String> addedMobsWithRedBlood = Lists.newArrayList();
     public static ArrayList<String> addedMobsWithBlueBlood = Lists.newArrayList();
@@ -309,6 +310,18 @@ public class MainUtil {
             return true;
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
         if (hypnotismMobBlackList != null && !hypnotismMobBlackList.isEmpty() && rl != null && hypnotismMobBlackList.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isFleshBudBlacklisted(Entity ent){
+        if (ent == null)
+            return false;
+        if (ent instanceof FallenMob)
+            return true;
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        if (fleshBudMobBlacklist != null && !fleshBudMobBlacklist.isEmpty() && rl != null && fleshBudMobBlacklist.contains(rl.toString())){
             return true;
         }
         return false;
@@ -1040,6 +1053,9 @@ public class MainUtil {
         return canDrinkBlood(ent) && !(ent instanceof Player);
     }
     public static boolean canPlantBud(Entity ent,Entity drinker){
+        if (isFleshBudBlacklisted(ent)){
+            return false;
+        }
         return canDrinkBlood2(ent) && !(ent instanceof Player);
     }
     public static boolean canDrinkBloodCritAggro(Entity ent,Entity drinker){
@@ -1493,6 +1509,17 @@ public class MainUtil {
                z);
         entity.hasImpulse = true;
     }
+
+    public static void takeUnresistableKnockbackWithYBias2(Entity entity, double strength, double x, double y, double z, float yBias, float yscalp) {
+        entity.hurtMarked = true;
+        strength*=getNetheriteMultiplier(entity);
+        Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
+        Vec3 vec3d3 = vec3d2.multiply(yBias,1-yscalp,yBias);
+        entity.setDeltaMovement(- vec3d3.x,
+                -vec3d3.y,
+                - vec3d3.z);
+        entity.hasImpulse = true;
+    }
     public static void takeUnresistableKnockbackWithYBias(Entity entity, double strength, double x, double y, double z, float yBias) {
         entity.hurtMarked = true;
         strength*=getNetheriteMultiplier(entity);
@@ -1697,10 +1724,10 @@ public class MainUtil {
                         if (value instanceof LivingEntity && ((LivingEntity)value).hasEffect(MobEffects.FIRE_RESISTANCE)){
                             MobEffectInstance instance = ((LivingEntity)value).getEffect(MobEffects.FIRE_RESISTANCE);
                             ((LivingEntity)value).removeEffect(MobEffects.FIRE_RESISTANCE);
-                            value.hurt($$5,np/4);
+                            value.hurt($$5,np*=0.6f);
                             ((LivingEntity)value).addEffect(instance);
                         } else {
-                            value.hurt($$5,np/4);
+                            value.hurt($$5,np*=0.6f);
                         }
                     }
                 }

@@ -20,12 +20,9 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.ZombieFate;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.powers.GeneralPowers;
-import net.hydra.jojomod.stand.powers.PowersAnubis;
+import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.stand.powers.PowersRatt;
-import net.hydra.jojomod.stand.powers.PowersTusk;
-import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -57,6 +54,7 @@ import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameType;
@@ -355,6 +353,31 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             this.getEntityData().set(ROUNDABOUT$POWERS, style);
         }
     }
+
+    @Unique
+    public boolean rdbt$isExhaustingMovement = false;
+    @Inject(method = "checkMovementStatistics",at=@At(value = "HEAD"),require = 0)
+    public void rdbt$checkMovementStatistics(CallbackInfo ci) {
+        rdbt$isExhaustingMovement = true;
+    }
+    @Inject(method = "checkMovementStatistics",at=@At(value = "TAIL"),require = 0)
+    public void rdbt$checkMovementStatistics2(CallbackInfo ci) {
+        rdbt$isExhaustingMovement = false;
+    }
+    @Inject(method = "causeFoodExhaustion",at=@At(value = "HEAD"),require = 0,cancellable = true)
+    public void rdbt$causeFoodExhaustion(float exhaustion,CallbackInfo ci) {
+        //White Album does not lose nearly as much hunger from skating
+        if (rdbt$isExhaustingMovement){
+            if (((StandUser)this).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW &&
+            PW.hasSkatesActivated() && !this.isInWater()){
+                if (!this.getAbilities().invulnerable) {
+                    if (!this.level().isClientSide) {
+                        this.getFoodData().addExhaustion(exhaustion*0.1F);
+                    }
+                }
+            }
+        }
+    }
     @Unique
     @Override
     public byte roundabout$getPower(){
@@ -626,7 +649,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             at = @At(value = "STORE"), ordinal = 2)
     public boolean roundabout$attackThis(boolean value) {
         StandUser SU = ((StandUser) this );
-        if (SU.roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking()){
+        if (SU.roundabout$getStandPowers().forceCrit()){
             return true;
         }
         if ( SU.roundabout$isPossessed() ) {
@@ -1365,7 +1388,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             user.roundabout$getStandPowers().onHitGuard(amount,user.roundabout$getLogSource());
         }
         }
-        if (user.roundabout$isGuarding()) {
+        if (user.roundabout$isGuarding() || user.roundabout$getStandPowers().isSpecialGuarding()) {
             if (user.roundabout$getLogSource() != null && !user.roundabout$getLogSource().is(DamageTypeTags.BYPASSES_COOLDOWN) && user.roundabout$getGuardCooldown() > 0) {
                 return;
             }
@@ -1381,7 +1404,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         if (((StandUser) this).roundabout$isClashing() || ((StandUser) this).roundabout$getStandPowers().cancelJump()
                 || ((IFatePlayer)this).rdbt$getFatePowers().cancelJump()
         || FateTypes.isTransforming(this) ||
-        FateTypes.takesSunlightDamage(this) && FateTypes.isInSunlight(this)) {
+        FateTypes.takesSunlightDamage(this) && FateTypes.isInSunlight(this)
+                && !FateTypes.canCurrentlyAvoidSunlight(this)&& !FateTypes.isHidden(this)) {
             if (!FateTypes.isHidden(this)) {
                 ci.cancel();
             }
@@ -1862,6 +1886,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
     @Shadow
     public abstract Abilities getAbilities();
+
+    @Shadow
+    public abstract FoodData getFoodData();
 
     @Inject(method = "killedEntity", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$hasLineOfSight(ServerLevel $$0, LivingEntity $$1, CallbackInfoReturnable<Boolean> cir) {

@@ -51,10 +51,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.tags.EntityTypeTags;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.TagKey;
+import net.minecraft.tags.*;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.*;
@@ -1282,7 +1279,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.setLastHurtMob(null);
         if (((LivingEntity)(Object)this) instanceof Mob mb){
             mb.setTarget(null);
-            Roundabout.LOGGER.info("4"+mb.getTarget());
             ((IMob)mb).roundabout$deeplyRemoveTargets();
             ((IMob)mb).roundabout$setSightProtectionTicks(ClientNetworking.getAppropriateConfig().softAndWetSettings.ticksBetweenSightStealsOnSameMob);
         }
@@ -2526,12 +2522,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     public void roundabout$damageGuard(float damage){
+        if (PowerTypes.hasStandActivelyEquipped(rdbt$this()) && roundabout$getLogSource() != null){
+            damage = roundabout$getStandPowers().guardSpecialties(roundabout$getLogSource(), damage);
+        }
+
         float finalGuard = this.roundabout$GuardPoints - damage;
         this.roundabout$GuardCooldown = 10;
+        rdbt$ticksUntilGuardRegen = 14;
         if (finalGuard <= 0){
             this.roundabout$GuardPoints = 0;
             this.roundabout$breakGuard();
-            this.roundabout$syncGuard();
         } else {
             this.roundabout$GuardPoints = finalGuard;
             this.roundabout$syncGuard();
@@ -2576,12 +2576,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (this.roundabout$GuardPoints < this.roundabout$getMaxGuardPoints()) {
             if (!level().isClientSide()) {
                 if (this.roundabout$GuardBroken) {
-                    float guardRegen = this.roundabout$getMaxGuardPoints() / 100;
-                    this.roundabout$regenGuard(guardRegen);
+                    if (PowerTypes.hasStandActivelyEquipped(rdbt$this())) {
+                        float guardRegen = roundabout$getStandPowers().regenBrokenGuard();
+                        this.roundabout$regenGuard(guardRegen);
+                    } else {
+                        float guardRegen = this.roundabout$getMaxGuardPoints() / 100;
+                        this.roundabout$regenGuard(guardRegen);
+                    }
                 } else if (!this.roundabout$isGuarding() && this.roundabout$shieldNotDisabled()) {
                     if (rdbt$ticksUntilGuardRegen <= 0) {
-                        float guardRegen = this.roundabout$getMaxGuardPoints() / 220;
-                        this.roundabout$regenGuard(guardRegen);
+                        if (PowerTypes.hasStandActivelyEquipped(rdbt$this())){
+                            float guardRegen = roundabout$getStandPowers().regenGuard();
+                            this.roundabout$regenGuard(guardRegen);
+                        } else {
+                            float guardRegen = this.roundabout$getMaxGuardPoints() / 220;
+                            this.roundabout$regenGuard(guardRegen);
+                        }
                     }
                 }
             }
@@ -2870,10 +2880,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     public boolean roundabout$isGuardingEffectively(){
         if (this.roundabout$GuardBroken){return false;}
+
         return this.roundabout$isGuardingEffectively2();
     }
     public boolean roundabout$isGuardingEffectively2(){
-        return (this.roundabout$shieldNotDisabled() && roundabout$isGuarding() &&
+        return (this.roundabout$shieldNotDisabled() && ((roundabout$isGuarding() &&
                 (
                         (PowerTypes.hasStandActive(rdbt$this()) &&
                                 this.roundabout$getStandPowers().getAttackTimeDuring() >= ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardDelayTicks)
@@ -2881,7 +2892,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         (PowerTypes.hasPowerActive(rdbt$this()) && rdbt$this() instanceof Player pl &&
                         ((IPowersPlayer)pl).rdbt$getPowers().getAttackTimeDuring() >= ClientNetworking.getAppropriateConfig().vampireSettings.powerGuardDelayTicks)
                 )
-
+        ) || roundabout$getStandPowers().isSpecialGuarding())
         );
     }
 
@@ -3286,7 +3297,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "handleEntityEvent", at = @At(value = "HEAD"), cancellable = true, require = 0)
     public void roundabout$HandleStatus(byte $$0, CallbackInfo ci) {
         if ($$0 == 29){
-            if (this.roundabout$isGuarding()) {
+            if (this.roundabout$isGuarding() || this.roundabout$getStandPowers().isSpecialGuarding()) {
                 if (!this.roundabout$getGuardBroken()) {
                     ((Entity) (Object) this).level().playLocalSound(((Entity) (Object) this).getX(), ((Entity) (Object) this).getY(), ((Entity) (Object) this).getZ(),
                             ModSounds.STAND_GUARD_SOUND_EVENT, ((Entity) (Object) this).getSoundSource(),
@@ -3309,7 +3320,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Inject(method = "isBlocking", at = @At(value = "HEAD"), cancellable = true, require = 0)
     private void roundabout$isBlockingRoundabout(CallbackInfoReturnable<Boolean> ci) {
-        if (this.roundabout$isGuarding()){
+        if (this.roundabout$isGuarding() || this.roundabout$getStandPowers().isSpecialGuarding()){
             ci.setReturnValue(this.roundabout$isGuardingEffectively());
         }
     }
@@ -3371,6 +3382,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 ci.setReturnValue(false);
                 return;
             }
+        }
+
+        if (roundabout$getStandPowers().interceptIncomingHarm($$0,$$1)){
+            ci.setReturnValue(false);
+            return;
         }
 
         //Coprse damage is converted and multiplied for Justice Army
@@ -3819,7 +3835,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "setSprinting", at = @At(value = "HEAD"), cancellable = true, require = 0)
     public void roundabout$canSprintPlayer(boolean $$0, CallbackInfo ci) {
         if (roundabout$getStandPowers().cancelSprint() || FateTypes.isTransforming(rdbt$this()) ||
-                (FateTypes.takesSunlightDamage(rdbt$this()) && FateTypes.isInSunlight(rdbt$this()) && !FateTypes.isHidden(rdbt$this()))
+                (FateTypes.takesSunlightDamage(rdbt$this()) && FateTypes.isInSunlight(rdbt$this()) && !FateTypes.isHidden(rdbt$this())
+                && !FateTypes.canCurrentlyAvoidSunlight(rdbt$this()))
         || (rdbt$this() instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers().cancelSprint())){
             ci.cancel();
         }
@@ -3836,7 +3853,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         float stepAddon = roundabout$getStandPowers().getStepHeightAddon();
         if (rdbt$this() instanceof Player pl){
             stepAddon += ((IFatePlayer)pl).rdbt$getFatePowers().getStepHeightAddon();
-            if (roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA && PowerTypes.hasStandActive(pl) &&
+            if (roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA &&
                     PWA.hasSkatesActivated() && !pl.isCrouching()){
                 stepAddon+=0.7F;
             }
@@ -4128,6 +4145,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
 
+        BlockState state = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement());
+        BlockState state2 = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement().above());
+        if (state.is(ModBlocks.WHITE_ALBUM_ICE_BLOCK) || state.is(ModBlocks.WHITE_ALBUM_ICE_SLAB) ||
+                state2.is(ModBlocks.WHITE_ALBUM_ICE_SLAB)){
+            if (!(roundabout$getStandPowers() instanceof PowersWhiteAlbum PW && PW.hasSkatesActivated())){
+                basis *= 2.8F;
+            }
+        }
 
         float sd = HeatUtil.getSlowdown(rdbt$this());
         if (sd > 0){
@@ -4156,7 +4181,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         if (FateTypes.takesSunlightDamage(rdbt$this()) && FateTypes.isInSunlight(rdbt$this())){
             if (!FateTypes.isHidden(rdbt$this())) {
-                basis *= 0.15F;
+                if (!FateTypes.canCurrentlyAvoidSunlight(rdbt$this())){
+                //IF not protected by white album's suit, the sun slows you down
+                    basis *= 0.15F;
+                }
             }
         }
 
@@ -5275,9 +5303,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return false;
     }
 
+    @Inject(method = "onChangedBlock", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    protected void roundabout$onChangedBlock(BlockPos $$0, CallbackInfo ci) {
+        roundabout$getStandPowers().onChangedBlock($$0);
+    }
     /**Use this code to eliminate the sprint jump during certain actions*/
     @Inject(method = "jumpFromGround", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void roundabout$jumpFromGround(CallbackInfo ci) {
+
+        this.roundabout$getStandPowers().onJump();
+
         if (this.roundabout$getStandPowers().cancelSprintJump() || roundabout$cancelsprintJump()
         || (rdbt$this() instanceof Player pl && (((IFatePlayer)pl).rdbt$getFatePowers().cancelSprintJump() ||
                 ((IPowersPlayer)pl).rdbt$getPowers().cancelSprintJump()))) {
@@ -5614,6 +5649,30 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         rdbt$PowerCooldowns = cooldownInstances;
     }
 
+    @Unique
+    @Override
+    public void roundabout$doWindVisionDetectionOther() {
+        /** May not be the best thing, but it's to fix entities potentially not showing up ex. Vexes. The one in EntityAndData was made becausemobs such ghasts and phantoms wouldn't show up as they aren't marked as living entities. I guess it should fix the problem for all entities :) */
+        /*Think of those two as a double check.*/
+        /*Last note: put every entity in the Vex check in case some other entity will need it*/
+        if (!this.level().isClientSide) {
+            IEntityAndData entityAndData = ((IEntityAndData) this);
+            SavedSecond lastSecond = entityAndData.roundabout$getLastSavedSecond();
+            SavedSecond firstSecond = entityAndData.roundabout$getFirstSavedSecond();
+            if (firstSecond != null && lastSecond != null) {
+                boolean posCompare = lastSecond.position.x != firstSecond.position.x || lastSecond.position.z != firstSecond.position.z;
+                boolean posCompareY = lastSecond.position.y != firstSecond.position.y;
+                if (((Entity) (Object) this).isInWater()) {entityAndData.roundabout$setTrueInvisibilityManhattan(-1);}
+                if (((Entity) (Object) this) instanceof Vex v) {
+                    if (v.isInWater()) {entityAndData.roundabout$setTrueInvisibilityManhattan(-1);
+                    } else {if (posCompare) {entityAndData.roundabout$setTrueInvisibilityManhattan(10);}
+                    else if (posCompareY) {entityAndData.roundabout$setTrueInvisibilityManhattan(75);}
+                     else {}
+                    }
+                }
+            }
+        }
+    }
 
     /**If you stand still enough, abilities recharge faster. But this could be overpowered for some abilties, so
      * use discretion and override this to return false on abilities where this might be op.*/
@@ -5726,6 +5785,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void   MoldDetection(Vec3 movement,CallbackInfo info) {
         rdbt$doMoldDetection(movement);
     }
+
+    @Inject(method = "travel", at = @At(value = "TAIL"),cancellable = true, require = 0)
+    public void WindDetectionBackup(Vec3 mov, CallbackInfo ci){roundabout$doWindVisionDetectionOther();}
 
     @Inject(method = "attackable",at = @At("HEAD"),cancellable = true)
     private void roundabout$attackable(CallbackInfoReturnable<Boolean> cir) {

@@ -60,7 +60,6 @@ public class BarbedWireBlock extends RotatedPillarBlock
             return AABB;
         } else {
             return getTrueShape(blockState);
-
         }
     }
 

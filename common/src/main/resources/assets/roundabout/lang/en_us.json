@@ -466,6 +466,8 @@
 
   "block.roundabout.meteor_block": "Meteorite Block",
   "block.roundabout.aja_ore": "Aja Ore",
+  "block.roundabout.white_album_ice": "White Album Ice",
+  "block.roundabout.white_album_coating": "Ice Coating",
   "block.roundabout.deepslate_aja_ore": "Deepslate Aja Ore",
   "block.roundabout.aja_block": "Block of Aja",
   "block.roundabout.coffin_block": "Coffin",
@@ -628,6 +630,9 @@
   "sounds.roundabout.evil_aura_blast": "Chilling Breeze",
   "sounds.roundabout.aura_impact": "Aura Impact",
   "sounds.roundabout.banish": "Banish",
+
+  "sounds.roundabout.ice_skating": "Skating",
+  "sounds.roundabout.skating_land": "Skate land",
 
   "sounds.roundabout.emperor_summon": "Summon Stand",
   "sounds.roundabout.emperor_shoot": "Shoot the emperor",
@@ -1919,6 +1924,8 @@
   "skins.roundabout.planet_waves.blue": "Blue",
   "skins.roundabout.planet_waves.purple": "Purple",
   "skins.roundabout.planet_waves.green": "Green",
+  "skins.roundabout.planet_waves.ocean_waves": "Ocean Waves",
+  "skins.roundabout.planet_waves.symphony_waves": "Symphony",
 
   "skins.roundabout.ratt.anime" : "Anime",
   "skins.roundabout.ratt.manga" : "Manga",
@@ -2033,20 +2040,22 @@
   "skins.roundabout.diver_down.birthdaydiver": "Birthday!",
   "skins.roundabout.diver_down.firediver": "Fire Down",
 
-  "skins.roundabout.20_centuryboy.manga": "manga",
-  "skins.roundabout.20_centuryboy.bedrock": "bedrock",
-  "skins.roundabout.20_centuryboy.bee": "bee",
-  "skins.roundabout.20_centuryboy.biker": "biker",
-  "skins.roundabout.20_centuryboy.retro": "retro",
-  "skins.roundabout.20_centuryboy.gold": "gold",
-  "skins.roundabout.20_centuryboy.19th_century_boy": "19th century",
-  "skins.roundabout.20_centuryboy.shulker": "shulker",
-  "skins.roundabout.20_centuryboy.sulfur": "sulfur",
-  "skins.roundabout.20_centuryboy.lemon": "lemon",
-  "skins.roundabout.20_centuryboy.blue": "blue",
-  "skins.roundabout.20_centuryboy.grape": "grape",
-  "skins.roundabout.20_centuryboy.strawberry": "strawberry",
-  "skins.roundabout.20_centuryboy.chicken": "chicken",
+  "skins.roundabout.20_centuryboy.manga": "Manga",
+  "skins.roundabout.20_centuryboy.bedrock": "Bedrock",
+  "skins.roundabout.20_centuryboy.bee": "Bee",
+  "skins.roundabout.20_centuryboy.biker": "Biker",
+  "skins.roundabout.20_centuryboy.retro": "Retro",
+  "skins.roundabout.20_centuryboy.gold": "Gold",
+  "skins.roundabout.20_centuryboy.19th_century_boy": "19th Century",
+  "skins.roundabout.20_centuryboy.shulker": "Shulker",
+  "skins.roundabout.20_centuryboy.sulfur": "Sulfur",
+  "skins.roundabout.20_centuryboy.lemon": "Lemon",
+  "skins.roundabout.20_centuryboy.blue": "Blue",
+  "skins.roundabout.20_centuryboy.grape": "Grape",
+  "skins.roundabout.20_centuryboy.strawberry": "Strawberry",
+  "skins.roundabout.20_centuryboy.chicken": "Chicken",
+  "skins.roundabout.20_centuryboy.10th_century_boy": "10th Century",
+  "skins.roundabout.20_centuryboy.11th_century_boy": "11th Century",
 
   "skins.roundabout.manhattan_transfer.manhattan_part_6": "Anime",
   "skins.roundabout.manhattan_transfer.manhattan_manga_part_6": "Manga",
@@ -2848,6 +2857,16 @@
   "config.roundabout.encasementBubbleCreateCooldown.name": "Encasement Bubble Cooldown",
   "config.roundabout.encasementBubbleCreateCooldown.desc": "The time between creating encasement bubbles. The default is 80, or 4 seconds.",
 
+  "config.roundabout.vampireGuardPoints.name": "Guard Points",
+  "config.roundabout.vampireGuardPoints.desc": "How much raw, unreduced damage can blocking take take before its guard breaks?",
+
+  "config.roundabout.whiteAlbumGuardPoints.name": "Guard Points",
+  "config.roundabout.whiteAlbumGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
+
+  "config.roundabout.sunArmorDamage.name": "Sun Armor Damage",
+  "config.roundabout.sunArmorDamage.desc": "White Album's suit lets vampires temporarily exist under the sun. Lower this to make it last longer, or raise it very high to make the suit shatter under sunlight immediately.",
+
+
   "config.roundabout.magicianAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.magicianAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
   "config.roundabout.magicianAttackMultOnMobs.name": "Mob Damage Multiplier",
@@ -3181,8 +3200,10 @@
   "config.roundabout.additionalCooldownPerSecondsUsed.desc": "The longer you spend in stopped time, without ending it early, the longer the cooldown is by these ticks. By default it is set to 100, so after every second of spent time you have to wait five additional seconds. This is to incentivize ending the ability early for a shorter cooldown and to balance the power of time stop.",
   "config.roundabout.timeStopBonusActionsCooldown.name": "Bonus Action Cooldown",
   "config.roundabout.timeStopBonusActionsCooldown.desc": "Doing any action like attacking, eating, or launching projectiles in stopped time raises the cooldown even further by this amount (300 ticks or 15 seconds by default) once. This is to encourage using time stop for movement instead of attacking and for balancing reasons.",
-  "config.roundabout.timeStopInterruptedCooldownv2.name": "Interrupt Cooldown",
+  "config.roundabout.timeStopInterruptedCooldownv2.name": "Player Interrupt Cooldown",
   "config.roundabout.timeStopInterruptedCooldownv2.desc": "The cooldown for getting hit and having your time stop canceled. By default, it is 80 ticks (4 seconds). This cooldown exists both for balancing, and to incentivize pressing the time stop button again early to prevent getting hit out of time stop, decreasing your TS time when you do so.",
+  "config.roundabout.timeStopInterruptedCooldownMobs.name": "Mob Interrupt Cooldown",
+  "config.roundabout.timeStopInterruptedCooldownMobs.desc": "The cooldown for getting hit and having your time stop canceled. By default, it is 80 ticks (4 seconds). This cooldown exists both for balancing, and to incentivize pressing the time stop button again early to prevent getting hit out of time stop, decreasing your TS time when you do so.",
   "config.roundabout.timeStopIsAlwaysInterruptable.name": "Always Interruptable",
   "config.roundabout.timeStopIsAlwaysInterruptable.desc": "Whether or not you can even be interrupted while charging time stop. By default this is set to true for balancing reasons, but if you just want to be powerful set this to false.",
   "config.roundabout.preventsBreathing.name": "Prevents Breathing",
@@ -3479,8 +3500,11 @@
   "config.roundabout.currentPowerInventoryTab.name": "Current Power Inventory Tab",
   "config.roundabout.currentPowerInventoryTab.desc": "Stores your last tab (fate vs stand disc tab, etc).",
 
-  "config.roundabout.mobThrowRecoilTicks.name": "Mob Throw Recoil",
-  "config.roundabout.mobThrowRecoilTicks.desc": "How many ticks after throwing a mob you can attack with basic punches again.",
+  "config.roundabout.mobThrowRecoilTicks.name": "Player Throw Recoil",
+  "config.roundabout.mobThrowRecoilTicks.desc": "How many ticks after throwing a player you can attack with basic punches again.",
+
+  "config.roundabout.mobPlayerThrowRecoilTicks.name": "Mob Throw Recoil",
+  "config.roundabout.mobPlayerThrowRecoilTicks.desc": "How many ticks after throwing a mob you can attack with basic punches again.",
 
   "config.roundabout.wallPassingHitboxes.name": "Some Abilities Pass Walls",
   "config.roundabout.wallPassingHitboxes.desc": "Some abilities in the mod like Walking Heart's heel spikes go through walls. If this poses a cheesing problem in your pack, turn this off.",

@@ -368,6 +368,9 @@ public class ClientUtil {
     public static void handleRoadRollerAmbientSound(Entity entity) {
         Minecraft.getInstance().getSoundManager().play(new RoadRollerAmbientSound(ModSounds.ROAD_ROLLER_AMBIENT_EVENT, SoundSource.PLAYERS, 1, 0, entity));
     }
+    public static void handleSkatingSounds(Entity entity) {
+        Minecraft.getInstance().getSoundManager().play(new RoadRollerAmbientSound(ModSounds.ROAD_ROLLER_AMBIENT_EVENT, SoundSource.PLAYERS, 1, 0, entity));
+    }
 
     public static void handleRoadRollerExplosionSound(Entity entity) {
         Minecraft.getInstance().getSoundManager().play(new RoadRollerExplosionSound(ModSounds.ROAD_ROLLER_EXPLOSION_EVENT, SoundSource.PLAYERS, 1, 0, entity));
@@ -1602,6 +1605,10 @@ public class ClientUtil {
             if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
                 PW.setGoBeyondChargeTicks(PW.goBeyondChargeTicks+PW.getGoBeyondUseTicks2());
             }
+        } else if (context == PacketDataIndex.CLEAR_LEADED){
+            if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersMagiciansRed PW) {
+                PW.leaded = null;
+            }
         }
     } public static void handleSimpleBytePacketS2C(byte context){
         LocalPlayer player = Minecraft.getInstance().player;
@@ -1861,6 +1868,7 @@ public class ClientUtil {
 
     }
 
+    // Red Bind rendering
     @Unique
     public static void roundabout$renderBound(LivingEntity victim, float delta, PoseStack poseStack, MultiBufferSource mb, Entity binder, float focus) {
         poseStack.pushPose();

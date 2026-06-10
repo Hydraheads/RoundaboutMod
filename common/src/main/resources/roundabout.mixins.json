@@ -185,6 +185,7 @@
     "justice.JusticeVillager",
     "justice.JusticeVillagerHostilesSensor",
     "justice.JusticeZombie",
+    "manhattan.EggAccess",
     "magicians_red.MagiciansRedAbstractFurnaceBlockEntityMixin",
     "magicians_red.StandFirePortalShapeMixin",
     "metallica.DamageTrackingMixin",
@@ -248,7 +249,8 @@
     "time_stop.TimeStopWorld",
     "tusk.OffBalanceMixin",
     "vanilla_tweaks.ErrorFixUtil",
-    "vanilla_tweaks.TameAbstractHorse"
+    "vanilla_tweaks.TameAbstractHorse",
+    "white_album.SkatingMagmaBlock"
   ],
   "client": [
     "HudRendering",

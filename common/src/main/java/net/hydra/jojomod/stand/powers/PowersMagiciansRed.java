@@ -51,6 +51,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.IronGolem;
@@ -1347,8 +1348,14 @@ public class PowersMagiciansRed extends NewPunchingStand {
     }
 
     public void offloadLead(){
-        if (leaded != null && (!leaded.isAlive() || !(((StandUser)leaded).roundabout$isStringBound()) || !(((StandUser)leaded).roundabout$getBoundTo().is(this.self)))){
-            leaded = null;
+        if (self.level().isClientSide()){
+            if (leaded != null && (!leaded.isAlive())){
+                leaded = null;
+            }
+        } else {
+            if (leaded != null && (!leaded.isAlive() || !(((StandUser)leaded).roundabout$isStringBound()) || !(((StandUser)leaded).roundabout$getBoundTo().is(this.self)))){
+                leaded = null;
+            }
         }
     }
 
@@ -1676,7 +1683,6 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 Entity ent = getTargetEntity(this.self, 4);
                 if (ent instanceof LivingEntity LE) {
                     leaded = LE;
-                    ((StandUser)LE).roundabout$setBoundTo(this.self);
                     tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK, LE.getId());
                 } else {
                     tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK,-1);
@@ -1684,17 +1690,20 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 }
             }
         } else {
+            if (!self.level().isClientSide()){
             /*Caps how far out the punch goes*/
             Entity targetEntity = getTargetEntity(this.self,4);
             if (targetEntity == null){
                 this.setCooldown(PowerIndex.SKILL_1, getRedBindMissCooldown());
             }
             lassoImpact(targetEntity);
+            }
         }
     }
 
     public int lassoTime= -1;
     public void lassoImpact(Entity entity){
+        boolean landedLead = false;
         if (this.activePower == PowerIndex.POWER_1) {
             this.setAttackTimeDuring(-20);
 
@@ -1707,7 +1716,10 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
             if (entity != null) {
                 if (entity instanceof LivingEntity LE) {
-                    ((StandUser) LE).roundabout$setBoundTo(this.self);
+                    if (!isClient()) {
+                        ((StandUser) LE).roundabout$setBoundTo(this.self);
+                        landedLead = true;
+                    }
                     leaded = LE;
                     lassoTime = 200;
                 }
@@ -1725,6 +1737,11 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
             if (!this.self.level().isClientSide()) {
                 this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+            }
+        }
+        if (!this.self.level().isClientSide() && self instanceof Player player) {
+            if (!landedLead) {
+                S2CPacketUtil.sendSimpleByteToClientPacket(player,PacketDataIndex.CLEAR_LEADED);
             }
         }
     }
@@ -2504,7 +2521,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     }
 
     @Override
-    public boolean canInterruptPower() {
+    public boolean canInterruptPower(DamageSource sauce, Entity interrupter) {
         if (this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE || this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE_2
                 || this.getActivePower() == PowerIndex.RANGED_BARRAGE || this.getActivePower() == PowerIndex.POWER_4_BONUS) {
             return true;
@@ -2516,10 +2533,10 @@ public class PowersMagiciansRed extends NewPunchingStand {
             this.setCooldown(PowerIndex.SKILL_1, cdr);
             return true;
         }
-            return super.canInterruptPower();
+        return super.canInterruptPower(sauce,interrupter);
     }
     public void shootAnkh(CrossfireHurricaneEntity ankh){
-        shootAnkhSpeed(ankh, 1.01F);
+        shootAnkhSpeed(ankh, 1.1F);
     }
     public void shootAnkhSpeed(CrossfireHurricaneEntity ankh, float speed){
         ankh.setPos(this.self.getEyePosition().x, this.self.getEyePosition().y, this.self.getEyePosition().z);
@@ -2944,7 +2961,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
     public float getHurricaneDirectDamage(Entity entity, float size, boolean fireStorm){
         if (this.getReducedDamage(entity)){
-            return bumpDamage(levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (0.5+((size/60)* 5.7)))),fireStorm);
+            return bumpDamage(levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (0.5+((size/60)* 6.3)))),fireStorm);
         } else {
             return bumpDamage(levelupDamageMod(multiplyPowerByStandConfigMobs(1+((size/60)* 16))),fireStorm);
         }
@@ -2952,9 +2969,9 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public float getHurricaneDamage(Entity entity,  float size, boolean fireStorm){
         if (size >=52){size=60;}
         if (this.getReducedDamage(entity)){
-            return bumpDamage(levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (0.5+((size/60)* 3.3)))),fireStorm);
+            return bumpDamage(levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (0.5+((size/60)* 5.3)))),fireStorm);
         } else {
-            return bumpDamage(levelupDamageMod(multiplyPowerByStandConfigMobs(1+((size/60)* 9))),fireStorm);
+            return bumpDamage(levelupDamageMod(multiplyPowerByStandConfigMobs(1+((size/60)* 13))),fireStorm);
         }
     }
     public float getFireballDamage(Entity entity){
@@ -3160,7 +3177,8 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public void tickMobAI(LivingEntity attackTarget){
         if (attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf())) {
             double dist = attackTarget.distanceTo(this.getSelf());
-                boolean isCreeper = this.getSelf() instanceof Creeper;
+            boolean isCreeper = this.getSelf() instanceof Creeper;
+            boolean upAiNow = upAi(attackTarget);
                 if (isCreeper) {
                     if (leaded != null) {
                         if (anticipationticks == 0){
@@ -3190,10 +3208,10 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
                     boolean isBasicMob = (this.self instanceof Zombie || this.self instanceof Spider || this.self instanceof Skeleton);
 
-                    if (!(isBasicMob)) {
+                    if (!(isBasicMob) || upAiNow) {
                         if (dist <= 25 && !hasHurricane() && activePower == PowerIndex.NONE) {
 
-                            if ((this.self instanceof Raider || this.self instanceof Villager || this.self instanceof AvdolNPC ||
+                            if ((upAiNow || this.self instanceof Raider || this.self instanceof Villager || this.self instanceof AvdolNPC ||
                                     this.self instanceof Blaze || this.self instanceof Piglin || this.self instanceof EnderMan ||
                                     this.self instanceof Hoglin || this.self instanceof ZombifiedPiglin || this.self instanceof PiglinBrute)
                                     && !this.onCooldown(PowerIndex.SKILL_2_SNEAK)

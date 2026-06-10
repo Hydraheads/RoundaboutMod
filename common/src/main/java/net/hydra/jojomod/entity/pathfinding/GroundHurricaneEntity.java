@@ -25,7 +25,7 @@ public class GroundHurricaneEntity extends GroundPathfindingStandAttackEntity {
 
     public static AttributeSupplier.Builder createStandAttributes() {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,
-                0.25F).add(Attributes.MAX_HEALTH, 20.0).add(Attributes.ATTACK_DAMAGE, 2.0);
+                0.27F).add(Attributes.MAX_HEALTH, 20.0).add(Attributes.ATTACK_DAMAGE, 2.0);
     }
     public GroundHurricaneEntity(EntityType<? extends GroundPathfindingStandAttackEntity> $$0, Level $$1, LivingEntity user) {
         super($$0, $$1);
@@ -88,7 +88,7 @@ public class GroundHurricaneEntity extends GroundPathfindingStandAttackEntity {
             }
 
             CrossfireHurricaneEntity.blastEntity($$0, this,
-                    this.getSize(), user, true, PMR,fireStormCreated, 0.8F);
+                    this.getSize(), user, true, PMR,fireStormCreated, 0.9F);
         }
         this.discard();
         return true;

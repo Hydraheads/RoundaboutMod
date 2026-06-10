@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
@@ -588,7 +589,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
                         takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
                     }
                     this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
-                    addToCombo();
+                    addToCombo(entity);
                     hitParticles(entity);
                 } else {
                     if (!this.self.level().isClientSide()) {
@@ -599,10 +600,12 @@ public class PunchingGeneralPowers extends GeneralPowers {
         }
     }
 
-    public void addToCombo(){
+    public void addToCombo(Entity targ){
+        if (targ instanceof FallenMob fm && !fm.getActivated())
+            return;
         int comboAmt = getComboAmt();
         setComboAmt(comboAmt+1);
-        setComboExpireTicks(100);
+        setComboExpireTicks(110);
     }
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){

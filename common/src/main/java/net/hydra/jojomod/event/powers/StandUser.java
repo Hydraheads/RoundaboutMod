@@ -317,6 +317,8 @@ public interface StandUser {
     void roundabout$setMetallicaInvis(int invis);
     int roundabout$getMetallicaInvis();
 
+    void roundabout$doWindVisionDetectionOther();
+
     /**Gravity Direction*/
 
     /**Soft and Wet Bubble Encasing**/

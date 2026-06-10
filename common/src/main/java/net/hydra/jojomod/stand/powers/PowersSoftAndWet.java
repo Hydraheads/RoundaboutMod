@@ -49,6 +49,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.FlyingMob;
@@ -953,11 +954,11 @@ public class PowersSoftAndWet extends NewPunchingStand {
         return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2);
     }
     @Override
-    public boolean canInterruptPower(){
+    public boolean canInterruptPower(DamageSource sauce, Entity interrupter){
         if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
             return true;
         } else {
-            return super.canInterruptPower();
+            return super.canInterruptPower(sauce,interrupter);
         }
     }
     @Override
@@ -1036,7 +1037,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
     public void tickMobAI(LivingEntity attackTarget){
 
         if (this.attackTimeDuring <= -1) {
-            if (this.getSelf().fallDistance > 4 && !(this.self instanceof FlyingMob) && !this.getSelf().isNoGravity()
+            if (this.getSelf().fallDistance > 4 && !(this.self instanceof Blaze) && !(this.self instanceof FlyingMob) && !this.getSelf().isNoGravity()
                     && !(this.getSelf().noPhysics) && !(this.self instanceof EnderDragon) && !(this.self instanceof WitherBoss)) {
                 /**Fall Brace AI*/
                 if (!((StandUser) this.getSelf()).roundabout$isBubbleEncased()) {
@@ -1050,7 +1051,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
             }
         }
         if (attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf())) {
-
+            boolean upAiNow = upAi(attackTarget);
             double dist = attackTarget.distanceTo(this.getSelf());
             boolean isCreeper = this.getSelf() instanceof Creeper;
             if (isCreeper) {
@@ -1058,7 +1059,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
                 boolean isBasicMob = (this.self instanceof Zombie || this.self instanceof Spider || this.self instanceof Skeleton);
 
 
-                if (this.self instanceof JojoNPC || this.self instanceof Villager || this.self instanceof Raider) {
+                if (this.self instanceof JojoNPC || (upAiNow && !(this.self instanceof Sheep)) || this.self instanceof Villager || this.self instanceof Raider) {
                     if (Math.random() > 0.5F) {
                         bubbleType = PlunderTypes.SIGHT.id;
                     } else {
@@ -1096,7 +1097,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
                             double RNG = Math.random();
                             if ((this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) &&
                                     (this.activePower == PowerIndex.NONE || this.activePower == PowerIndex.ATTACK)) {
-                                if (RNG < 0.5 && (this.self instanceof IronGolem ||
+                                if (RNG < 0.5 && (this.self instanceof IronGolem || upAiNow ||
                                         this.self instanceof Ravager || this.self instanceof Piglin || this.self instanceof AvdolNPC ||
                                         this.self instanceof ZombifiedPiglin ||this.self instanceof Hoglin ||
                                         this.self instanceof PiglinBrute)){

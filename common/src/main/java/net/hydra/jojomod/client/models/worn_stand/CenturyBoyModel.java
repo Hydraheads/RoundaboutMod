@@ -8,6 +8,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
+import net.hydra.jojomod.client.models.layers.animations.CenturyBoyAnimations;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
@@ -113,6 +114,10 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 			"textures/stand/20_centuryboy/strawberry.png");
 	public static ResourceLocation chicken = new ResourceLocation(Roundabout.MOD_ID,
 			"textures/stand/20_centuryboy/chicken.png");
+	public static ResourceLocation older_century_boy = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/20_centuryboy/10th_century_boy.png");
+	public static ResourceLocation oldest_century_boy = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/20_centuryboy/11th_century_boy.png");
 
 
 	public ResourceLocation getTextureLocation(Entity context, byte skin){
@@ -130,6 +135,8 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 			case Powers20thCenturyBoy.GRAPE -> {return grape;}
 			case Powers20thCenturyBoy.STRAWBERRY -> {return strawberry;}
 			case Powers20thCenturyBoy.CHICKEN -> {return chicken;}
+			case Powers20thCenturyBoy.OLDER_CENTURY_BOY -> {return older_century_boy;}
+			case Powers20thCenturyBoy.OLDEST_CENTURY_BOY -> {return oldest_century_boy;}
 			default -> {return manga;}
 		}
 	}
@@ -144,11 +151,6 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 	public void renderBody(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
 						   int light, float r, float g, float b, float alpha, byte skin) {
 		if (context instanceof LivingEntity LE) {
-			this.root().getAllParts().forEach(ModelPart::resetPose);
-			if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
-				partialTicks = 0;
-			}
-			StandUser user = ((StandUser) LE);
 			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
 
 			root().getChild("Waist").getChild("Body").render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
@@ -157,11 +159,6 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 	public void renderHead(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
 						   int light, float r, float g, float b, float alpha, byte skin) {
 		if (context instanceof LivingEntity LE) {
-			this.root().getAllParts().forEach(ModelPart::resetPose);
-			if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
-				partialTicks = 0;
-			}
-			StandUser user = ((StandUser) LE);
 			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
 
 			root().getChild("Waist").getChild("Head").render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
@@ -170,11 +167,6 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 	public void renderRightArm(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
 							  int light, float r, float g, float b, float alpha, byte skin) {
 		if (context instanceof LivingEntity LE) {
-			this.root().getAllParts().forEach(ModelPart::resetPose);
-			if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
-				partialTicks = 0;
-			}
-			StandUser user = ((StandUser) LE);
 			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
 
 			root().getChild("Waist").getChild("RightArm").render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
@@ -182,32 +174,35 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 	}
 	public void renderLeftArm(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
 						   int light, float r, float g, float b, float alpha, byte skin) {
-		if (context instanceof LivingEntity LE) {
-			this.root().getAllParts().forEach(ModelPart::resetPose);
-			if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
-				partialTicks = 0;
-			}
-			StandUser user = ((StandUser) LE);
+		if (context instanceof LivingEntity) {
 			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
 
 			root().getChild("Waist").getChild("LeftArm").render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
 		}
 	}
 
-	public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
+	public void renderAll(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
 					   int light, float r, float g, float b, float alpha, byte skin) {
-		if (context instanceof LivingEntity LE) {
-			this.root().getAllParts().forEach(ModelPart::resetPose);
-			if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
-				partialTicks = 0;
-			}
-			StandUser user = ((StandUser) LE);
+		if (context instanceof LivingEntity) {
 			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
-			/** put animation here later **/
 
-
-			root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
+			root().getChild("Waist").render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
 		}
+	}
+
+	///  calling this in the CenturyBoyLayer file
+	public void renderPart(Entity context, float partialTicks, LivingEntity LE){
+		this.root().getAllParts().forEach(ModelPart::resetPose);
+
+		StandUser user = ((StandUser) LE);
+		user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
+		if (user.roundabout$getIdlePos() == 2){
+			this.animate(user.roundabout$getWornStandIdleAnimation(), CenturyBoyAnimations.standanim.hat,partialTicks, 1f);
+		}
+		if (user.roundabout$getIdlePos() == 1){
+			this.animate(user.roundabout$getWornStandIdleAnimation(), CenturyBoyAnimations.standanim.unlatch,partialTicks, 1f);
+		}
+
 	}
 
 }

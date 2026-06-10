@@ -6,7 +6,6 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.*;
-import net.hydra.jojomod.mixin.time_stop.TimeStopProjectile;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
@@ -220,6 +219,7 @@ public class ManhattanTransferEntity extends StandEntity {
             if (directEntityWho != null && direct != null) {
                 if (direct instanceof Projectile PR && !source.is(ModDamageTypes.STAND)) {
                     if (directEntityWho != this) {
+                        if(PR instanceof AbstractArrow || PR instanceof ThrowableItemProjectile){
                         if (((directEntityWho.is(User) && !canOthersLoadMT) || canOthersLoadMT) && !hasItem) {
                             hasItemTwo = false;
                             if (direct instanceof AbstractArrow AA) {
@@ -261,6 +261,12 @@ public class ManhattanTransferEntity extends StandEntity {
                                 }
                             }
                             this.changeMovementState();
+                        }
+                        if(!(this.getUser() instanceof Player)) {
+                            this.shootHattan();
+                            this.hasItem = false;
+                            this.setHeldItemManhattan(ItemStack.EMPTY);
+                        }
                         } else {
                             success = false;
                             if (direct instanceof AbstractArrow AA) {
@@ -316,7 +322,15 @@ public class ManhattanTransferEntity extends StandEntity {
     public void soundForPlayer() {
         if (this.getUserData(this.getUser()) != null) {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-                PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
+            }
+        }
+    }
+
+    public void soundForPlayerTwo() {
+        if (this.getUserData(this.getUser()) != null) {
+            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                    PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             }
         }
     }
@@ -371,6 +385,11 @@ public class ManhattanTransferEntity extends StandEntity {
                                          boolean getCanPlace, float xRot, float yRot, Vec3 pos,
                                          boolean playSounds, float mult, boolean canGiveYouItem) {
         thrower.playSound(ModSounds.BULLET_RICOCHET_EVENT, 1.0F, (thrower.random.nextFloat() * 0.2F + 0.7F));
+            if(thrower.getUser() != null) {
+                if(thrower.distanceTo(thrower.getUser()) > 16) {
+                thrower.soundForPlayerTwo();
+            }
+        }
         if (!thrower.level().isClientSide) {
             if (thrower.getUserData(thrower.getUser()) != null && thrower.getUserData(thrower.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
                 PM.isNotLoaded();
@@ -428,6 +447,15 @@ public class ManhattanTransferEntity extends StandEntity {
                 thrower.hattanDeflected = $$7;
             } else if (item.getItem() instanceof SnowballItem) {
                 Snowball $$7 = new Snowball(thrower.level(), thrower);
+                $$7.setPos(pos);
+                $$7.setItem(item);
+                $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
+                $$7.setRemainingFireTicks(thrower.fireTicksPrj);
+                $$7.setOwner(thrower.getUser());
+                thrower.level().addFreshEntity($$7);
+                thrower.hattanDeflected = $$7;
+            } else if (item.getItem() instanceof EggItem) {
+                ThrownEgg $$7 = new ThrownEgg(thrower.level(), thrower);
                 $$7.setPos(pos);
                 $$7.setItem(item);
                 $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
@@ -549,7 +577,6 @@ public class ManhattanTransferEntity extends StandEntity {
         validateUUID();
         float pitch = this.getXRot();
         float yaw = this.getYRot();
-        super.tick();
 
         if (this.getUserData(this.getUser()) != null) {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
@@ -591,7 +618,7 @@ public class ManhattanTransferEntity extends StandEntity {
             if (this.getUserData(this.getUser()) != null) {
                 if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
                     Vec3 rots = this.getRotations(PM.targetHattan);
-                    if (!PM.switchShootingMode() || this.getHattanTarget() == 0) {
+                    if (PM.switchShootingMode() || this.getHattanTarget() == 0) {
                         shootRotationXHattan = rotationXHattan;
                         shootRotationYHattan = rotationYHattan;
                     } else {
@@ -604,6 +631,7 @@ public class ManhattanTransferEntity extends StandEntity {
         searchTarget();
         rotationXHattan = this.getXRot();
         rotationYHattan = this.getYRot();
+        super.tick();
     }
     public float rotationXHattan = 0;
     public float rotationYHattan = 0;
@@ -621,26 +649,26 @@ public class ManhattanTransferEntity extends StandEntity {
             if (lvent != null && !lvent.isEmpty()) {
                 List<LivingEntity> targent = new ArrayList<>(lvent);
                 for (LivingEntity value : lvent) {
-                    IEntityAndData entityAndData = ((IEntityAndData) value);
-                    if (value instanceof StandEntity || value.is(this.getUser())) {
-                        targent.remove(value);
-                        this.setHattanTarget(0);
-                        if (this.getUserData(this.getUser()) != null) {
-                            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-                                PM.targetHattan = null;
+                        IEntityAndData entityAndData = ((IEntityAndData) value);
+                        if (value instanceof StandEntity || value.is(this.getUser())) {
+                            targent.remove(value);
+                            this.setHattanTarget(0);
+                            if (this.getUserData(this.getUser()) != null) {
+                                if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                                    PM.targetHattan = null;
+                                }
+                            }
+                        }
+                        if (entityAndData.roundabout$getTrueInvisibilityManhattan() < 1 || this.isInWater()) {
+                            targent.remove(value);
+                            this.setHattanTarget(0);
+                            if (this.getUserData(this.getUser()) != null) {
+                                if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                                    PM.targetHattan = null;
+                                }
                             }
                         }
                     }
-                    if (entityAndData.roundabout$getTrueInvisibilityManhattan() < 1 || this.isInWater()) {
-                        targent.remove(value);
-                        this.setHattanTarget(0);
-                        if (this.getUserData(this.getUser()) != null) {
-                            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-                                PM.targetHattan = null;
-                            }
-                        }
-                    }
-                }
 
                 lvent = targent;
             }

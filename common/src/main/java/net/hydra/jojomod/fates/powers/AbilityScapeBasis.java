@@ -53,6 +53,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Arrow;
@@ -295,6 +296,18 @@ public class AbilityScapeBasis {
             return true;
         }
         return false;
+    }
+
+
+    public boolean forceCrit(){
+        return false;
+    }
+
+    public boolean upAi(LivingEntity attackTarget){
+        if (this.getSelf() instanceof Creeper){
+            return false;
+        } else return attackTarget != null && ((StandUser) attackTarget).roundabout$hasAStand() &&
+                !((StandUser)attackTarget).roundabout$getStandPowers().isSecondaryStand();
     }
 
     /** Tries to use an ability of your stand. If forced is true, the ability comes out no matter what.**/
@@ -1136,6 +1149,16 @@ public class AbilityScapeBasis {
         return 0;
     }
 
+    public float regenBrokenGuard(){
+        return getStandUserSelf().roundabout$getMaxGuardPoints() / 100;
+    }
+    public float regenGuard(){
+        return getStandUserSelf().roundabout$getMaxGuardPoints() / 220;
+    }
+    public float guardSpecialties(DamageSource sauce, float damage){
+        return damage;
+    }
+
     /**If you have a stand entity summoned, get that*/
     public static StandEntity getStandEntity2(LivingEntity User){
         return ((StandUser) User).roundabout$getStand();
@@ -1274,6 +1297,10 @@ public class AbilityScapeBasis {
     /**returns if you are using stand guard*/
     public boolean isGuarding(){
         return this.activePower == PowerIndex.GUARD;
+    }
+    /**for stands that subvert guard mechanics like white album*/
+    public boolean isSpecialGuarding(){
+        return false;
     }
     /**Override this to determine how many points of damage your stand's guard can take before it breaks,
      * generally hooks into config settings.*/
@@ -1738,6 +1765,9 @@ public class AbilityScapeBasis {
         return true;
     }
 
+    public void onChangedBlock(BlockPos $$0){
+
+    }
 
     public boolean setPowerMovement(int lastMove) {
         if (this.getSelf() instanceof Player) {
@@ -2599,7 +2629,7 @@ public class AbilityScapeBasis {
 
     /**If a power can be interrupted, that means you can hit the person using the power to cancel it,
      * like when someone charging a barrage gets their barrage canceled to damage*/
-    public boolean canInterruptPower(){
+    public boolean canInterruptPower(DamageSource sauce, Entity interrupter){
         return false;
     }
 
@@ -2650,7 +2680,7 @@ public class AbilityScapeBasis {
         }
 
         if (interrupt){
-            return canInterruptPower();
+            return canInterruptPower(sauce,interrupter);
         } else {
             return false;
         }

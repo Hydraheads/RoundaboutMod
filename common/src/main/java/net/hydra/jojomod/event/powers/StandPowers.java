@@ -216,6 +216,8 @@ public class StandPowers extends AbilityScapeBasis {
     public boolean cancelSprintJump(){
         return this.isBarraging();
     }
+    public void onJump(){
+    }
 
     public int getJumpHeightAddon() {return 0;}
 
@@ -344,6 +346,14 @@ public class StandPowers extends AbilityScapeBasis {
         return false;
     }
 
+    public boolean surpassesFire(){
+        return false;
+    }
+
+    /**When you take damage, intercept or run code based off of it, or potentially cancel it*/
+    public boolean interceptIncomingHarm(DamageSource $$0, float $$1){
+        return false;
+    }
     /**When you deal damage, intercept or run code based off of it, or potentially cancel it*/
     public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
         return false;
@@ -1938,6 +1948,31 @@ public class StandPowers extends AbilityScapeBasis {
             if (softenTicks > 0) {
                 softenTicks-= 2;
             }
+
+            if (self.isOnFire() && surpassesFire()){
+                self.setSecondsOnFire(0);
+            }
+
+
+            if (self instanceof Player player){
+                IPlayerEntity ipe = ((IPlayerEntity) player);
+                byte pos2 = ipe.roundabout$GetPos2();
+                if (pos2 == PlayerPosIndex.SKATE_JUMP ||
+                        pos2 == PlayerPosIndex.SKATE_TWIRL){
+                    if (self.onGround()) {
+                        ipe.roundabout$SetPos2(PlayerPosIndex.NONE);
+                        onLandingAnimatedJump();
+                    } else {
+                        if (twirlTicks > 0){
+                            twirlTicks--;
+                        } else {
+                            if (pos2 == PlayerPosIndex.SKATE_TWIRL){
+                                ipe.roundabout$SetPos2(PlayerPosIndex.SKATE_JUMP);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         if (this.self instanceof Player PE && PE.isSpectator()) {
@@ -2013,6 +2048,9 @@ public class StandPowers extends AbilityScapeBasis {
             getStandUserSelf().roundabout$setStandAnimation(NONE);
         }
     }
+    public int twirlTicks = 0;
+    public void onLandingAnimatedJump(){}
+
     /**Iteration through skins in the power inventory*/
     public void getSkinInDirection(boolean right, boolean sealed){
         StandUser SE = ((StandUser)this.getSelf());

@@ -22,6 +22,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Camera.class)
 public abstract class PilotingCamera implements ICamera {
@@ -133,11 +134,16 @@ public abstract class PilotingCamera implements ICamera {
             this.move(0.0, 0.3, 0.0);
         }
     }
-
-    @Unique
+    @Inject(method = "isDetached", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$isDetached(CallbackInfoReturnable<Boolean> cir) {
+        if (roundabout$povSwitch != null){
+            cir.setReturnValue(true);
+        }
+    }
+        @Unique
     public boolean roundabout$cleared = false;
     @Inject(method = "setup", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$setup(BlockGetter blockGetter, Entity entity, boolean bl, boolean bl2, float f, CallbackInfo ci) {
+    private void roundabout$setup2(BlockGetter blockGetter, Entity entity, boolean bl, boolean bl2, float f, CallbackInfo ci) {
         if (!roundabout$cleared) {
             if (entity != null && ((TimeStop) entity.level()).CanTimeStopEntity(entity) && !entity.isPassenger()) {
                     f = ((IEntityAndData) entity).roundabout$getPreTSTick();
