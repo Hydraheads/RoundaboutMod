@@ -134,6 +134,7 @@ public class ModBlocks {
     public static Block SHINY_QUARTZ_TILES;
 
     public static Block WHITE_ALBUM_ICE_BLOCK;
+    public static Block WHITE_ALBUM_ICE_WALL_BLOCK;
     public static Block WHITE_ALBUM_ICE_SLAB;
 
     public static Block EQUIPPABLE_STONE_MASK_BLOCK;
@@ -157,6 +158,9 @@ public class ModBlocks {
 
     public static Block WHITE_ALBUM_ICE_BLOCK_PROPERTIES =
             new WhiteAlbumIceBlock(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).friction(0.98F).
+                    randomTicks().strength(0.5F).sound(SoundType.GLASS).noOcclusion());
+    public static Block WHITE_ALBUM_ICE_WALL_BLOCK_PROPERTIES =
+            new WhiteAlbumIceWallBlock(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).friction(0.98F).
                     randomTicks().strength(0.5F).sound(SoundType.GLASS).noOcclusion());
     public static Block WHITE_ALBUM_COATING_PROPERTIES =
             new WhiteAlbumCoatingBlock(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).friction(0.98F)

@@ -54,6 +54,9 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> WHITE_ALBUM_ICE = BLOCKS.register("white_album_ice",
             () -> WHITE_ALBUM_ICE_BLOCK_PROPERTIES
     );
+    public static final RegistryObject<Block> WHITE_ALBUM_ICE_WALL = BLOCKS.register("white_album_ice_wall",
+            () -> WHITE_ALBUM_ICE_WALL_BLOCK_PROPERTIES
+    );
     public static final RegistryObject<Block> WHITE_ALBUM_ICE_SLAB = BLOCKS.register("white_album_coating",
             () -> WHITE_ALBUM_COATING_PROPERTIES
     );
