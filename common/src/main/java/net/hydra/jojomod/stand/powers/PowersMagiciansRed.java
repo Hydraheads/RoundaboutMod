@@ -187,6 +187,14 @@ public class PowersMagiciansRed extends NewPunchingStand {
         return Component.translatable(  "skins.roundabout.magicians_red.base");
     }
 
+
+
+    @Override
+    public void onPowerSwitch(){
+        clearEverything();
+        super.onPowerSwitch();
+    }
+
     @Override
     public int getMaxGuardPoints(){
         return ClientNetworking.getAppropriateConfig().magiciansRedSettings.magiciansRedGuardPoints;
