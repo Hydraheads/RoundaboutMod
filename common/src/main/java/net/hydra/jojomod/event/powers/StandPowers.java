@@ -346,6 +346,10 @@ public class StandPowers extends AbilityScapeBasis {
         return false;
     }
 
+    /**When you take damage, intercept or run code based off of it, or potentially cancel it*/
+    public boolean interceptIncomingHarm(DamageSource $$0, float $$1){
+        return false;
+    }
     /**When you deal damage, intercept or run code based off of it, or potentially cancel it*/
     public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
         return false;

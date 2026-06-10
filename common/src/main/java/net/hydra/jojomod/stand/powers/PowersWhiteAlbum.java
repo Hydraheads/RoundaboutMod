@@ -162,6 +162,33 @@ public class PowersWhiteAlbum extends NewDashPreset {
             }
     }
 
+    /**When you take damage, intercept or run code based off of it, or potentially cancel it*/
+    public boolean interceptIncomingHarm(DamageSource $$0, float $$1){
+        if (!self.level().isClientSide()) {
+            StandUser user = getStandUserSelf();
+            if (!user.roundabout$getGuardBroken()) {
+                if ($$0.is(DamageTypes.FALL)) {
+                    if ($$1 > ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumGuardPoints) {
+                        user.roundabout$breakGuard();
+                        this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
+                                SoundSource.PLAYERS, 1F, 1.5F);
+                    } else {
+                        user.roundabout$damageGuard($$1);
+                        if (!user.roundabout$getGuardBroken()) {
+                            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_GUARD_SOUND_EVENT,
+                                    SoundSource.PLAYERS, 0.8F, 0.9F + self.level().random.nextFloat() * 0.3f);
+                        } else {
+                            this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
+                                    SoundSource.PLAYERS, 1F, 1.5F);
+                        }
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     public void fixThis(){
         if (!self.level().isClientSide()) {
             if (hasSkatesActivated()) {

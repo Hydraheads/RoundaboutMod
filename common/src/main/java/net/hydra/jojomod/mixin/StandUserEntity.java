@@ -2533,7 +2533,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (finalGuard <= 0){
             this.roundabout$GuardPoints = 0;
             this.roundabout$breakGuard();
-            this.roundabout$syncGuard();
         } else {
             this.roundabout$GuardPoints = finalGuard;
             this.roundabout$syncGuard();
@@ -3384,6 +3383,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 ci.setReturnValue(false);
                 return;
             }
+        }
+
+        if (roundabout$getStandPowers().interceptIncomingHarm($$0,$$1)){
+            ci.setReturnValue(false);
+            return;
         }
 
         //Coprse damage is converted and multiplied for Justice Army
