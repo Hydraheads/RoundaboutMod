@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundSource;
@@ -596,8 +597,8 @@ public class PowersPlanetWaves extends NewDashPreset {
             }
         }
     }
-    private LivingEntity grabbedEntity = null;
-    private byte grabAnimationType = 0; // 0 = side, 1 = above, 2 = below
+    private LivingEntity restrainedEntity = null;
+    private byte restrainAnimationType = 0; // 0 = side, 1 = above, 2 = below
 
     @Override
     public void tickPowerEnd() {
@@ -623,14 +624,14 @@ public class PowersPlanetWaves extends NewDashPreset {
 
                     if (absDiffY > absDiffXZ) {
                         if (diff.y > 0) {
-                            grabAnimationType = 1;
+                            restrainAnimationType = 1;
                             //this.animateStand(PlanetWavesEntity.ARRIVE_FROM_ABOVE);
                         } else {
-                            grabAnimationType = 2;
+                            restrainAnimationType = 2;
                             //this.animateStand(PlanetWavesEntity.ARRIVE_FROM_BELOW);
                         }
                     } else {
-                        grabAnimationType = 0;
+                        restrainAnimationType = 0;
                         //this.animateStand(PlanetWavesEntity.ARRIVE_FROM_SIDE);
                     }
 
@@ -645,22 +646,26 @@ public class PowersPlanetWaves extends NewDashPreset {
                     );
                 }
 
-                if (!isTravelling && grabbedEntity == null) {
+                if (!isTravelling && restrainedEntity == null) {
                     List<LivingEntity> nearby = self.level().getEntitiesOfClass(
                             LivingEntity.class,
-                            stand.getBoundingBox().inflate(1.5)
+                            stand.getBoundingBox().inflate(3.0)
                     );
                     for (LivingEntity entity : nearby) {
                         if (entity.is(this.self)) continue;
                         if (!entity.isAlive()) continue;
 
-                        grabbedEntity = entity;
-
-                        if (entity instanceof StandUser SU) {
-                            //SU.roundabout$setGrabbedTicks(40);
+                        restrainedEntity = entity;
+                        System.out.println("Grabbed: " + entity.getName().getString());
+                        if (restrainedEntity instanceof Mob mob) {
+                            mob.setNoAi(true);
                         }
 
-                        switch (grabAnimationType) {
+                        if (entity instanceof StandUser SU) {
+                            SU.roundabout$setRestrainedTicks(40);
+                        }
+
+                        switch (restrainAnimationType) {
                             //case 1 -> this.animateStand(PlanetWavesEntity.GRAB_FROM_ABOVE);
                             //case 2 -> this.animateStand(PlanetWavesEntity.GRAB_FROM_BELOW);
                             //default -> this.animateStand(PlanetWavesEntity.GRAB_FROM_SIDE);
@@ -669,16 +674,27 @@ public class PowersPlanetWaves extends NewDashPreset {
                     }
                 }
 
-                if (grabbedEntity != null) {
-                    if (!grabbedEntity.isAlive() ||
-                            grabbedEntity.distanceTo(stand) > 3 ||
-                            (grabbedEntity instanceof StandUser SU
-                                    //&& !SU.roundabout$isGrabbed()
+                if (restrainedEntity != null) {
+                    if (!restrainedEntity.isAlive() ||
+                            restrainedEntity.distanceTo(stand) > 3 ||
+                            (restrainedEntity instanceof StandUser SU
+                                    && !SU.roundabout$isRestrained()
                             )) {
-                        grabbedEntity = null;
+                        restrainedEntity = null;
                         this.animateStand(StandEntity.IDLE);
                     } else {
-                        grabbedEntity.setPos(
+
+                        restrainedEntity.setDeltaMovement(Vec3.ZERO);
+                        restrainedEntity.hurtMarked = true;
+
+
+                        if (restrainedEntity instanceof Mob mob) {
+                            mob.getNavigation().stop();
+                            mob.setTarget(null);
+                        }
+
+
+                        restrainedEntity.teleportTo(
                                 stand.getX(),
                                 stand.getY(),
                                 stand.getZ()
@@ -688,8 +704,12 @@ public class PowersPlanetWaves extends NewDashPreset {
             }
         }
 
-        if (!targetingstand && grabbedEntity != null) {
-            grabbedEntity = null;
+        if (!targetingstand && restrainedEntity != null) {
+            if (restrainedEntity instanceof Mob mob) {
+                mob.setNoAi(false);
+            }
+
+            restrainedEntity = null;
             this.animateStand(StandEntity.IDLE);
         }
     }
@@ -699,7 +719,10 @@ public class PowersPlanetWaves extends NewDashPreset {
         targetingstand = false;
         isTravelling = false;
         standTravelTarget = null;
-        grabbedEntity = null;
+        if (restrainedEntity instanceof Mob mob) {
+            mob.setNoAi(false);
+        }
+        restrainedEntity = null;
 
         StandEntity stand = this.getStandEntity(this.self);
         if (stand instanceof FollowingStandEntity FSE) {
@@ -961,11 +984,15 @@ public class PowersPlanetWaves extends NewDashPreset {
     public void onStandSummon(boolean desummon) {
         super.onStandSummon(desummon);
         if (desummon) {
+            if (restrainedEntity instanceof Mob mob) {
+                mob.setNoAi(false);
+            }
+
             targetingstand = false;
             isTravelling = false;
             standTargetPos = null;
             standTravelTarget = null;
-            grabbedEntity = null;
+            restrainedEntity = null;
         } else if (targetingstand) {
             StandEntity stand = this.getStandEntity(this.self);
             if (stand instanceof FollowingStandEntity FSE) {
