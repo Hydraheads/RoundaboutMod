@@ -281,47 +281,52 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
                 if (hasWhiteAlbumOut || whiteAlbumTicks > 0){
 
+                    if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pw) {
 
-                    String path = PowersWhiteAlbum.getSkinString(skin);
-                    if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())){
-                        path = "ice";
-                    }
-                    poseStack.pushPose();
-                    renderWhiteAlbumHeadPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                            partialTicks, path, r, g, b, heyFull);
-                    renderWhiteAlbumBodyPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                            partialTicks, path, r, g, b, heyFull);
-                    renderWhiteAlbumRightLegPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                            partialTicks, path, r, g, b, heyFull);
-                    renderWhiteAlbumLeftLegPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                            partialTicks, path, r, g, b, heyFull);
+                        String path = PowersWhiteAlbum.getSkinString(skin);
+                        if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+                            path = "ice";
+                        }
+                        if (pw.cracked){
+                            path = "cracked/"+path;
+                        }
+                        poseStack.pushPose();
+                        renderWhiteAlbumHeadPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                partialTicks, path, r, g, b, heyFull);
+                        renderWhiteAlbumBodyPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                partialTicks, path, r, g, b, heyFull);
+                        renderWhiteAlbumRightLegPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                partialTicks, path, r, g, b, heyFull);
+                        renderWhiteAlbumLeftLegPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                partialTicks, path, r, g, b, heyFull);
 
-                    if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
-                        renderWhiteAlbumSlimRightArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                                partialTicks, path, r, g, b, heyFull);
-                        renderWhiteAlbumSlimLeftArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                                partialTicks, path, r, g, b, heyFull);
-                    } else {
-                        renderWhiteAlbumRightArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                                partialTicks, path, r, g, b, heyFull);
-                        renderWhiteAlbumLeftArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                                partialTicks, path, r, g, b, heyFull);
-                    }
-
-                    if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pw && pw.hasSkatesActivated()) {
-                        renderWhiteAlbumSkates(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                                partialTicks, path, r, g, b, heyFull);
-                    }
-
-                    if (visage.getItem() instanceof MaskItem MI) {
-                        VisageData vd = MI.visageData.generateVisageData(entity);
-                        if (vd.rendersBreast() ||
-                                vd.rendersPlayerBreastPart()) {
-                            renderWhiteAlbumChestPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                        if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
+                            renderWhiteAlbumSlimRightArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                    partialTicks, path, r, g, b, heyFull);
+                            renderWhiteAlbumSlimLeftArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                    partialTicks, path, r, g, b, heyFull);
+                        } else {
+                            renderWhiteAlbumRightArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                    partialTicks, path, r, g, b, heyFull);
+                            renderWhiteAlbumLeftArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
                                     partialTicks, path, r, g, b, heyFull);
                         }
+
+                        if (pw.hasSkatesActivated()) {
+                            renderWhiteAlbumSkates(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                    partialTicks, path, r, g, b, heyFull);
+                        }
+
+                        if (visage.getItem() instanceof MaskItem MI) {
+                            VisageData vd = MI.visageData.generateVisageData(entity);
+                            if (vd.rendersBreast() ||
+                                    vd.rendersPlayerBreastPart()) {
+                                renderWhiteAlbumChestPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                        partialTicks, path, r, g, b, heyFull);
+                            }
+                        }
+                        poseStack.popPose();
                     }
-                    poseStack.popPose();
                 }
 
                 if (entity instanceof Player play) {

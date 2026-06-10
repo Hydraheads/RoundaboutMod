@@ -110,6 +110,10 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
                 path = "ice";
             }
+            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW
+            && PW.cracked){
+                path = "cracked/"+path;
+            }
                 ClientUtil.pushPoseAndCooperate(poseStack,8);
 
                 model.rightArm.translateAndRotate(poseStack);
@@ -177,6 +181,10 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             String path = PowersWhiteAlbum.getSkinString(skin);
             if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
                 path = "ice";
+            }
+            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW
+                    && PW.cracked){
+                path = "cracked/"+path;
             }
             ClientUtil.pushPoseAndCooperate(poseStack,8);
             model.leftArm.translateAndRotate(poseStack);

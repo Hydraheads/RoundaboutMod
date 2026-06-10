@@ -200,7 +200,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
                             $$0.is(DamageTypes.STALAGMITE) ||
                             $$0.is(DamageTypes.SWEET_BERRY_BUSH) ||
                             $$0.is(DamageTypes.LAVA) ||
-                            $$0.is(DamageTypes.IN_FIRE)
+                            $$0.is(DamageTypes.IN_FIRE)||
+                            $$0.is(DamageTypes.ON_FIRE)
                     ){
                         $$1*=0.05F;
                         if ($$1 > ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumGuardPoints) {
@@ -299,6 +300,17 @@ public class PowersWhiteAlbum extends NewDashPreset {
     @Override
     public void tickPower() {
         if (!self.level().isClientSide()) {
+            if (cracked){
+                if (!getStandUserSelf().roundabout$getGuardBroken()) {
+                    cracked = false;
+                    saveDiscAndSync();
+                }
+            } else {
+                if (getStandUserSelf().roundabout$getGuardBroken()) {
+                    cracked = true;
+                    saveDiscAndSync();
+                }
+            }
             if (lastY < self.getY() && !self.onGround() && !self.isInWater() && !self.isSwimming()) {
                 fixThis();
             }
@@ -490,14 +502,18 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
 
+    public boolean cracked = false;
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
         $$0.putBoolean("skatesActive",skatesActive);
+        $$0.putBoolean("cracked",cracked);
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
         if ($$0.contains("skatesActive")) {
             skatesActive = $$0.getBoolean("skatesActive");
+        } if ($$0.contains("cracked")) {
+            cracked = $$0.getBoolean("cracked");
         }
     }
 
