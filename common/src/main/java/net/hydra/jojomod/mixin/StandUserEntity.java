@@ -3832,7 +3832,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "setSprinting", at = @At(value = "HEAD"), cancellable = true, require = 0)
     public void roundabout$canSprintPlayer(boolean $$0, CallbackInfo ci) {
         if (roundabout$getStandPowers().cancelSprint() || FateTypes.isTransforming(rdbt$this()) ||
-                (FateTypes.takesSunlightDamage(rdbt$this()) && FateTypes.isInSunlight(rdbt$this()) && !FateTypes.isHidden(rdbt$this()))
+                (FateTypes.takesSunlightDamage(rdbt$this()) && FateTypes.isInSunlight(rdbt$this()) && !FateTypes.isHidden(rdbt$this())
+                && !FateTypes.canCurrentlyAvoidSunlight(rdbt$this()))
         || (rdbt$this() instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers().cancelSprint())){
             ci.cancel();
         }
@@ -4177,7 +4178,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         if (FateTypes.takesSunlightDamage(rdbt$this()) && FateTypes.isInSunlight(rdbt$this())){
             if (!FateTypes.isHidden(rdbt$this())) {
-                basis *= 0.15F;
+                if (!FateTypes.canCurrentlyAvoidSunlight(rdbt$this())){
+                //IF not protected by white album's suit, the sun slows you down
+                    basis *= 0.15F;
+                }
             }
         }
 

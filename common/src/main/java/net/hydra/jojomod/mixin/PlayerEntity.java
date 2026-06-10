@@ -1404,7 +1404,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         if (((StandUser) this).roundabout$isClashing() || ((StandUser) this).roundabout$getStandPowers().cancelJump()
                 || ((IFatePlayer)this).rdbt$getFatePowers().cancelJump()
         || FateTypes.isTransforming(this) ||
-        FateTypes.takesSunlightDamage(this) && FateTypes.isInSunlight(this)) {
+        FateTypes.takesSunlightDamage(this) && FateTypes.isInSunlight(this)
+                && !FateTypes.canCurrentlyAvoidSunlight(this)&& !FateTypes.isHidden(this)) {
             if (!FateTypes.isHidden(this)) {
                 ci.cancel();
             }

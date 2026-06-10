@@ -28,6 +28,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -37,6 +38,9 @@ import java.util.List;
 
 @Mixin(LivingEntity.class)
 public abstract class StandUserClientOnly extends Entity implements StandUserClient {
+
+    @Shadow
+    public abstract boolean isFallFlying();
 
     /**Mixin for data that only the client tracks on a living entity, meaning servers don't tick or strain
      * these, only the client has them present*/
@@ -117,7 +121,8 @@ public abstract class StandUserClientOnly extends Entity implements StandUserCli
     public void roundabout$soundTick(CallbackInfo ci) {
         if (this.level().isClientSide()) {
             if (((StandUser) this).roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA && PWA.hasSkatesActivated()
-                    && this.isSprinting() && this.onGround() && !isSwimming()) {
+                    && this.isSprinting() && this.onGround() && !isSwimming() && !isFallFlying() && !isCrouching()
+            && !((StandUser)this).roundabout$isDazed()) {
                 if (rdbt$whiteSkate == null || rdbt$whiteSkate.isStopped()) {
                     rdbt$whiteSkate = new WhiteAlbumSkatingSound(
                             ModSounds.ICE_SKATING_EVENT,
