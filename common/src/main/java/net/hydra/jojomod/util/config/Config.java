@@ -865,6 +865,10 @@ public class Config implements Cloneable {
         public Integer whiteAlbumGuardPoints;
         @FloatOption(group = "inherit", value = 0.04F, min = 0F, max = 100F)
         public Float sunArmorDamage;
+        @FloatOption(group = "inherit", value = 0.012F, min = 0F, max = 100F)
+        public Float whiteAlbumAccelerationAmount;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer whiteAlbumMaxAcceleration;
     }
     public static class WalkingHeartSettings {
         @BooleanOption(group = "inherit", value = true)

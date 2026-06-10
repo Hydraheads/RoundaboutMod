@@ -2864,6 +2864,12 @@
   "config.roundabout.whiteAlbumGuardPoints.name": "Guard Points",
   "config.roundabout.whiteAlbumGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
 
+  "config.roundabout.whiteAlbumAccelerationAmount.name": "Acceleration",
+  "config.roundabout.whiteAlbumAccelerationAmount.desc": "How much speed is gained per acceleration build tick? The default caps you off at just beneath the maximum wild horse speed.",
+
+  "config.roundabout.whiteAlbumMaxAcceleration.name": "Max Acceleration",
+  "config.roundabout.whiteAlbumMaxAcceleration.desc": "How many ticks of building speed? 100 ticks = 5 seconds of uninterrupted running.",
+
   "config.roundabout.sunArmorDamage.name": "Sun Armor Damage",
   "config.roundabout.sunArmorDamage.desc": "White Album's suit lets vampires temporarily exist under the sun. Lower this to make it last longer, or raise it very high to make the suit shatter under sunlight immediately.",
 
@@ -3413,6 +3419,7 @@
   "config.roundabout.emperorSettings.name": "Emperor",
   "config.roundabout.achtungSettings.name": "Achtung Baby",
   "config.roundabout.greendaySettings.name": "Green Day",
+  "config.roundabout.whiteAlbumSettings.name": "White Album",
   "config.roundabout.PlanetWavesSettings.name": "Planet Waves",
   "config.roundabout.theWorldSettings.name": "The World",
   "config.roundabout.starPlatinumSettings.name": "Star Platinum",

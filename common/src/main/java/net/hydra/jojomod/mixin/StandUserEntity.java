@@ -4150,7 +4150,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (state.is(ModBlocks.WHITE_ALBUM_ICE_BLOCK) || state.is(ModBlocks.WHITE_ALBUM_ICE_SLAB) ||
                 state2.is(ModBlocks.WHITE_ALBUM_ICE_SLAB)){
             if (!(roundabout$getStandPowers() instanceof PowersWhiteAlbum PW && PW.hasSkatesActivated())){
-                basis *= 2.8F;
+                basis *= (1.3f+(PowersWhiteAlbum.getMaxAccelerationTicks()*ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumAccelerationAmount));
             }
         }
 

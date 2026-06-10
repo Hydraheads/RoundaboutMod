@@ -252,7 +252,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public int acceleration = 0;
     public float inputSpeedModifiers(float basis){
         if (hasSkatesActivated()){
-            basis *= 1.3f+(acceleration*0.015F);
+            basis *= 1.3f+(acceleration*ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumAccelerationAmount);
         }
         return super.inputSpeedModifiers(basis);
     }
@@ -404,7 +404,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     public static int getMaxAccelerationTicks(){
-        return 100;
+        return ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumMaxAcceleration;
     }
     /**Add Knockback to attacks when appropriate. This replaces the knockback enchant if it is
      * higher than the knockback enchant*/
