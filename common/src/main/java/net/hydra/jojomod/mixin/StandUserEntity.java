@@ -2523,6 +2523,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     public void roundabout$damageGuard(float damage){
+        if (roundabout$getLogSource() != null &&
+                roundabout$getLogSource().is(ModDamageTypes.BULLET) ||
+                roundabout$getLogSource().is(DamageTypes.PLAYER_ATTACK) ||
+        roundabout$getLogSource().getEntity() instanceof Blaze){
+            damage*=0.5F;
+        }
         float finalGuard = this.roundabout$GuardPoints - damage;
         this.roundabout$GuardCooldown = 10;
         rdbt$ticksUntilGuardRegen = 14;
