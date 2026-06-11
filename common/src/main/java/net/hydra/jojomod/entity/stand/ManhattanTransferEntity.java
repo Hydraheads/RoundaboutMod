@@ -406,7 +406,6 @@ public class ManhattanTransferEntity extends StandEntity {
                 $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3, getShotAccuracy);
                 $$11.setCritArrow(false);
                 ((IAbstractArrowAccess) $$11).roundabout$SetIsManhattan(true);
-              //  ((IProjectileAccess) $$11).roundabout$setManhattanProjectile(true);
                 ((IAbstractArrowAccess) $$11).roundabout$setHattanDamage(thrower.manhattanDamageIncipit);
 
                 if (thrower != null) {

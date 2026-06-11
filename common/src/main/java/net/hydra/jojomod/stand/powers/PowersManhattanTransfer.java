@@ -23,8 +23,6 @@ import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -36,7 +34,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Blaze;
-import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Ghast;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
@@ -388,7 +385,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
     public boolean isSoundRainInterrupted = false;
 
-
     @Override
     public void tickPower() {
         super.tickPower();
@@ -479,8 +475,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 } else {
                     ClientUtil.setCameraEntity(null);
                 }
-                // System.out.println("is Up:  " + isPressingW);
-                // System.out.println("is Down:  " + isPressingS);
             }
         }
         /*forceDespawnSet*/
@@ -794,13 +788,12 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
     @Override
     public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.DARK_PURPLE);
+        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.RED);
     }
     @Override
     public Component ifWipListDev(){
-        return Component.literal(  "14Kacper").withStyle(ChatFormatting.BLUE);
+        return Component.literal(  "14Kacper").withStyle(ChatFormatting.DARK_RED);
     }
-    //COMMAND TO QUICKLY PUT MANHATTAN TRANSFER INTO ALL MOBS: /roundaboutSetStand @e manhattan_transfer 1 1 0 false
 
     /**Ignore*/
     @Override
