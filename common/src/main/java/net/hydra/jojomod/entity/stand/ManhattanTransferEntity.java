@@ -99,12 +99,15 @@ public class ManhattanTransferEntity extends StandEntity {
     public float getFlyingSpeed() {
         if (this.getUserData(this.getUser()) != null && this.getUser() != null) {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-                if (PM.XtraSpdTick > 7) {
-                    return 0.30F;
-                } else if (PM.XtraSpdTick > 4) {
-                    return 0.25F;
-                } else if (PM.XtraSpdTick > 1) {
-                    return 0.20F;
+                Options key = Minecraft.getInstance().options;
+                if(key.keyDown.isDown() || key.keyRight.isDown() || key.keyUp.isDown() || key.keyLeft.isDown()) {
+                    if (PM.XtraSpdTick > 7) {
+                        return 0.30F;
+                    } else if (PM.XtraSpdTick > 4) {
+                        return 0.25F;
+                    } else if (PM.XtraSpdTick > 1) {
+                        return 0.20F;
+                    }
                 }
             }
         }
@@ -568,25 +571,33 @@ public class ManhattanTransferEntity extends StandEntity {
     public Vec2 getStrangeVector(){
         if(this.getUser() != null && this.getUserData(this.getUser()) != null && this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
             if(this.level().isClientSide) {
-                if(verticalLastPressed) {
-                    if (pressS) {
-                        return new Vec2(0, this.getYRot() - 180);
-                    }
-                    if (!pressS) {
-                        return new Vec2(0, this.getYRot());
-                    }
-                } else {
-                    if (pressA) {
-                        return new Vec2(0, this.getYRot() - 90);
-                    }
-                    if (!pressA) {
-                        return new Vec2(0, this.getYRot() + 90);
+                if(isKeyEverPressed) {
+                    if (verticalLastPressed) {
+                        if (pressS) {
+                            return new Vec2(heighHattanPilotNoMov * aNumber * getFlyingSpeed(), this.getYRot() - 180);
+                        }
+                        if (!pressS) {
+                            return new Vec2(heighHattanPilotNoMov * aNumber * getFlyingSpeed(), this.getYRot());
+                        }
+                    } else {
+                        if (pressA) {
+                            return new Vec2(heighHattanPilotNoMov * aNumber * getFlyingSpeed(), this.getYRot() - 90);
+                        }
+                        if (!pressA) {
+                            return new Vec2(heighHattanPilotNoMov * aNumber * getFlyingSpeed(), this.getYRot() + 90);
+                        }
                     }
                 }
             }
         }
-        return new Vec2(0, this.getYRot());
+        return new Vec2(heighHattanPilotNoMov * aNumber * getFlyingSpeed(), this.getYRot());
     }
+
+    private float aNumber = 10F;
+
+    public float heighHattanPilotNoMov = 0;
+
+    private boolean isKeyEverPressed = false;
 
     public Vec3 getHattanDirection(){
         return Vec3.directionFromRotation(this.getStrangeVector());
@@ -618,23 +629,6 @@ public class ManhattanTransferEntity extends StandEntity {
         float pitch = this.getXRot();
         float yaw = this.getYRot();
 
-        if(this.level().isClientSide) {
-            if(verticalLastPressed) {
-                if (pressS) {
-                    Roundabout.LOGGER.info("S");
-                }
-                if (!pressS) {
-                    Roundabout.LOGGER.info("W");
-                }
-            } else {
-                if (pressA) {
-                    Roundabout.LOGGER.info("A");
-                }
-                if (!pressA) {
-                    Roundabout.LOGGER.info("D");
-                }
-            }
-        }
 
         if (this.getUserData(this.getUser()) != null) {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
@@ -686,11 +680,28 @@ public class ManhattanTransferEntity extends StandEntity {
                 }
             }
         }
+
+        Options options = Minecraft.getInstance().options;
+        if(options.keyJump.isDown() || options.keyShift.isDown()) {
+            if (options.keyJump.isDown()) {
+                heighHattanPilotNoMov = -45 * autoMoveBoost;
+            }
+            if (options.keyShift.isDown()) {
+                heighHattanPilotNoMov = 45 * autoMoveBoost;
+            }
+        }
+        if(!options.keyJump.isDown() && !options.keyShift.isDown()) {
+            heighHattanPilotNoMov = 0;
+        }
+
         searchTarget();
         rotationXHattan = this.getXRot();
         rotationYHattan = this.getYRot();
         super.tick();
     }
+
+    public float autoMoveBoost = 1;
+
     public float rotationXHattan = 0;
     public float rotationYHattan = 0;
 
@@ -879,6 +890,9 @@ public class ManhattanTransferEntity extends StandEntity {
 
                         if (PM.isClient() && !this.stopsManhattanAnimationsWhenHeldItem) {
                             if (PM.isPiloting()) {
+                                if(options.keyDown.isDown() || options.keyUp.isDown() || options.keyLeft.isDown() || options.keyRight.isDown()){
+                                    isKeyEverPressed = true;
+                                }
                                 if (options.keyUp.isDown()) {
                                     isPressingW = true;
                                     pressS = false;
