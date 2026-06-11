@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.*;
@@ -562,6 +563,17 @@ public class ManhattanTransferEntity extends StandEntity {
         if (this.getUserData(this.getUser()) != null && this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
             PM.isLoaded();
         }
+    }
+
+    public Vec2 getStrangeVector(){
+        if(this.getUser() != null && this.getUserData(this.getUser()) != null && this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+
+        }
+        return new Vec2(0, this.getYRot());
+    }
+
+    public Vec3 getHattanDirection(){
+        return Vec3.directionFromRotation(this.getStrangeVector());
     }
 
     @Override

@@ -422,11 +422,11 @@ public class PowersManhattanTransfer extends NewDashPreset {
             if (this.isClient() || !this.isClient()) {
                 if (!isPiloting()) {
                     if (this.currentHattanStatus == UNLOADED_HATTAN) {
-                        if (this.getStandEntity(this.getSelf()).isInWaterOrRain()) {
-                            this.getStandEntity(this.getSelf()).setDeltaMovement(this.getStandEntity(this.getSelf()).getForward().scale(0.010 * configSpeed() * extraSpeedEmergencyHattan()));
-                        } else {
-                            this.getStandEntity(this.getSelf()).setDeltaMovement(this.getStandEntity(this.getSelf()).getForward().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan()));
-                        }
+                            if (this.getStandEntity(this.getSelf()).isInWaterOrRain()) {
+                                ME.setDeltaMovement(ME.getForward().scale(0.010 * configSpeed() * extraSpeedEmergencyHattan()));
+                            } else {
+                                ME.setDeltaMovement(ME.getForward().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan()));
+                            }
                     } else {
                         this.getStandEntity(this.getSelf()).setDeltaMovement(Vec3.ZERO);
                     }
@@ -615,41 +615,14 @@ public class PowersManhattanTransfer extends NewDashPreset {
                             }
                         }
                     }
-                }else {
-                    entity.setDeltaMovement(Vec3.ZERO);
                 }
+            }else {
+                entity.setDeltaMovement(Vec3.ZERO);
+                entity.xxa = 0;
+                entity.zza = 0;
             }
         }
-        keyInputForManhattan();
     }
-
-    public void keyInputForManhattan() {
-        Options options = Minecraft.getInstance().options;
-        if (isPiloting()) {
-            if (options.keyUp.isDown()) {
-                isPressingW = true;
-                isPressingS = false;
-            }
-            if (options.keyDown.isDown()) {
-                isPressingS = true;
-                isPressingW = false;
-            }
-            if (options.keyLeft.isDown()) {
-                isPressingA = true;
-                isPressingD = false;
-            }
-            if (options.keyRight.isDown()) {
-                isPressingD = true;
-                isPressingA = false;
-            }
-
-        }
-    }
-
-    public boolean isPressingW = true;
-    public boolean isPressingA = false;
-    public boolean isPressingS = false;
-    public boolean isPressingD = false;
 
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
