@@ -187,15 +187,22 @@ public class PowersWhiteAlbum extends NewDashPreset {
                         user.roundabout$breakGuard();
                         this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
                                 SoundSource.PLAYERS, 1F, 1.5F);
+                        if (self instanceof Player player){
+                            player.getCooldowns().addCooldown(Items.SHIELD, 100);
+                        }
                     } else {
                         user.roundabout$damageGuard($$1);
                         if (!user.roundabout$getGuardBroken()) {
                             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_GUARD_SOUND_EVENT,
-                                    SoundSource.PLAYERS, 0.8F, 0.9F + self.level().random.nextFloat() * 0.3f);
+                                    SoundSource.PLAYERS, 0.8F, 1.6F + self.level().random.nextFloat() * 0.3f);
                         } else {
                             this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
                                     SoundSource.PLAYERS, 1F, 1.5F);
+                            if (self instanceof Player player){
+                                player.getCooldowns().addCooldown(Items.SHIELD, 100);
+                            }
                         }
+
                         return true;
                     }
                 } else {
@@ -211,11 +218,17 @@ public class PowersWhiteAlbum extends NewDashPreset {
                             user.roundabout$breakGuard();
                             this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
                                     SoundSource.PLAYERS, 1F, 1.5F);
+                            if (self instanceof Player player){
+                                player.getCooldowns().addCooldown(Items.SHIELD, 100);
+                            }
                         } else {
                             user.roundabout$damageGuard($$1);
                             if (user.roundabout$getGuardBroken()) {
                                 this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
                                         SoundSource.PLAYERS, 1F, 1.5F);
+                                if (self instanceof Player player){
+                                    player.getCooldowns().addCooldown(Items.SHIELD, 100);
+                                }
                             }
                             return true;
                         }

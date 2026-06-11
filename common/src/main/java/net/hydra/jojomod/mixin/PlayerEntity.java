@@ -1129,7 +1129,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     /**if your stand guard is broken, disable shields. Also, does not run takeshieldhit code if stand guarding.*/
     @Inject(method = "blockUsingShield", at = @At(value = "HEAD"), cancellable = true)
     protected void roundaboutTakeShieldHit(LivingEntity $$0, CallbackInfo ci) {
-        if (((StandUser) this).roundabout$isGuarding()) {
+        if (((StandUser) this).roundabout$isGuarding() || ((StandUser) this).roundabout$getStandPowers().isSpecialGuarding()) {
             if (((StandUser) this).roundabout$getGuardBroken()){
 
                 ItemStack itemStack = ((LivingEntity) (Object) this).getUseItem();
