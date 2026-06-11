@@ -73,6 +73,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return new PowersWhiteAlbum(entity);
     }
 
+    public boolean freezeImmune(){
+        return hasStandActive(self) || super.freezeImmune();
+    }
     public boolean interceptAttack(){
         return angerSelectionMode();
     }

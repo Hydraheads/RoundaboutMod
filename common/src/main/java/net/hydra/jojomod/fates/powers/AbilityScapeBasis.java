@@ -2077,6 +2077,10 @@ public class AbilityScapeBasis {
         return listE;
     }
 
+    public boolean freezeImmune(){
+        return false;
+    }
+
     public Entity getTargetEntity(LivingEntity User, float distMax){
         return getTargetEntity(User,distMax, 25);
     }

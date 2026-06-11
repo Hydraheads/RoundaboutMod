@@ -121,6 +121,11 @@ public class VampireFate extends VampiricFate {
         return StandIcons.SQUARE_ICON;
     }
 
+
+    public boolean freezeImmune(){
+        return true;
+    }
+
     public boolean isServerControlledCooldown(byte num){
         if (num == PowerIndex.FATE_EXTRA){
             return true;

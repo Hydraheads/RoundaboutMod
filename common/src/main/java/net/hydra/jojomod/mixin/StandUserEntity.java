@@ -2204,6 +2204,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+
+
+    @Inject(method = "canFreeze()Z", at = @At(value = "HEAD"), require = 0, cancellable = true)
+    public void roundabout$canFreeze(CallbackInfoReturnable<Boolean> cir){
+        if (roundabout$getStandPowers().freezeImmune() ||
+                rdbt$this() instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers().freezeImmune()){
+            cir.setReturnValue(false);
+        }
+    }
+
     @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
     public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0){
         if (!this.roundabout$getStandDisc().isEmpty() || $$0.contains("roundabout.StandDisc", 10)) {

@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -85,6 +86,16 @@ public class HeatUtil {
 
     public static void addHeat(Entity entity, int amt){
         if (entity instanceof LivingEntity LE){
+            // White album is immune to gaining heat while the armor is in place, and always immune to cold with its suit
+            if (((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA &&
+            PWA.hasStandActive(LE)){
+                if (amt > 0 && !PWA.cracked){
+                    return;
+                }
+                if (amt < 0){
+                    return;
+                }
+            }
             StandUser su = ((StandUser)LE);
             int heat = su.roundabout$getHeat();
             int prevHeat = heat;
