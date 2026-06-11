@@ -450,7 +450,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     public ResourceLocation getIconYes(int slot){
-        if (slot == 1 && acceleration >= getMaxAccelerationTicks())
+        if (slot == 4 && acceleration >= getMaxAccelerationTicks())
             return StandIcons.SQUARE_GOLD;
         return super.getIconYes(slot);
     }
@@ -461,11 +461,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         // code for advanced icons
 
         if (!isHoldingSneak()){
-            if (hasSkatesActivated()){
-                    setSkillIcon(context, x, y, 1, StandIcons.SKATE_ACTIVE, PowerIndex.SKILL_1);
-            } else {
-                setSkillIcon(context, x, y, 1, StandIcons.SKATE_INACTIVE, PowerIndex.SKILL_1);
-            }
+            setSkillIcon(context, x, y, 1, StandIcons.SUIT_COMBAT, PowerIndex.NO_CD);
         } else {
             setSkillIcon(context, x, y, 1, StandIcons.FREEZE_CANCEL, PowerIndex.SKILL_1);
         }
@@ -484,7 +480,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
 
         if (!isHoldingSneak()){
-            setSkillIcon(context, x, y, 4, StandIcons.SUIT_COMBAT, PowerIndex.NO_CD);
+            if (hasSkatesActivated()){
+                setSkillIcon(context, x, y, 4, StandIcons.SKATE_ACTIVE, PowerIndex.SKILL_1);
+            } else {
+                setSkillIcon(context, x, y, 4, StandIcons.SKATE_INACTIVE, PowerIndex.SKILL_1);
+            }
         } else {
             setSkillIcon(context, x, y, 4, StandIcons.FREEZE_BLOCKS, PowerIndex.NO_CD);
         }
@@ -533,20 +533,19 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
-
     public void toggleSkatesClient(){
         if (!this.onCooldown(PowerIndex.SKILL_1)) {
            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
            tryPowerPacket(PowerIndex.POWER_1);
         }
     }
+
     @Override
     public void powerActivate(PowerContext context) {
         /**Making dash usable on both key presses*/
         switch (context)
         {
             case SKILL_1_NORMAL-> {
-                toggleSkatesClient();
             }
             case SKILL_1_CROUCH-> {
                 iceCancelClient();
@@ -560,8 +559,10 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 dash();
             }
-            case SKILL_4_NORMAL, SKILL_4_CROUCH -> {
-                switchModeClient();
+            case SKILL_4_NORMAL -> {
+                toggleSkatesClient();
+            }
+            case SKILL_4_CROUCH -> {
             }
         }
     }
