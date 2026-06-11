@@ -588,10 +588,11 @@ public class ManhattanTransferEntity extends StandEntity {
                         }
                     } else {
                         if (pressA) {
-                            return new Vec2(heighHattanPilotNoMov * aNumber * getFlyingSpeed()  * 1.25F, this.getYRot() - 90);
+                            //return new Vec2(heighHattanPilotNoMov * aNumber * getFlyingSpeed()  * 1.25F, this.getYRot() - 90);
+                            return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot() - 90);
                         }
                         if (!pressA) {
-                            return new Vec2(heighHattanPilotNoMov * aNumber * getFlyingSpeed()  * 1.25F, this.getYRot() + 90);
+                            return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot() + 90);
                         }
                     }
                 } else {
