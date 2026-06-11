@@ -199,11 +199,13 @@ public abstract class FateFoodDataMixin implements AccessFateFoodData {
                 }
             } else if (this.foodLevel <= 0) {
                 this.tickTimer++;
-                /**Vampires do not starve, remove the starve code here*/
                 if (this.tickTimer >= 80) {
-                    //if ($$0.getHealth() > 10.0F || $$1 == Difficulty.HARD || $$0.getHealth() > 1.0F && $$1 == Difficulty.NORMAL) {
-                        //$$0.hurt($$0.damageSources().starve(), 1.0F);
-                    //}
+                    /**Vampires do not starve*/
+                    if (FateTypes.isZombie($$0)) {
+                        if ($$0.getHealth() > 10.0F || $$1 == Difficulty.HARD || $$0.getHealth() > 1.0F && $$1 == Difficulty.NORMAL) {
+                            $$0.hurt($$0.damageSources().starve(), 1.0F);
+                        }
+                    }
 
                     this.tickTimer = 0;
                 }

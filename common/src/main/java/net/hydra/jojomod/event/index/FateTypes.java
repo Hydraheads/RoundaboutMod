@@ -163,6 +163,15 @@ public enum FateTypes {
         }
         return false;
     }
+    public static boolean needsToEat(LivingEntity entity){
+        if (entity instanceof Player PE){
+            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal() ||
+                    ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.ordinal();
+        }
+        if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire())
+            return true;
+        return false;
+    }
     public static boolean hasBloodHunger(LivingEntity entity){
         if (entity instanceof Player PE){
             return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal() ||

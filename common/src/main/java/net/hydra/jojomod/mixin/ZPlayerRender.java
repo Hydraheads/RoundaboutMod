@@ -102,9 +102,9 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(player, delta);
         if (whiteAmt > 0) {
             boolean isHurt = player.hurtTime > 0;
-            float r = isHurt ? 1.0F : 1.0F;
-            float g = isHurt ? 0.6F : 1.0F;
-            float b = isHurt ? 0.6F : 1.0F;
+            float r = 1;
+            float g = 1;
+            float b = 1;
             byte skin = ((StandUser) player).roundabout$getStandSkin();
             String path = PowersWhiteAlbum.getSkinString(skin);
             if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
@@ -136,9 +136,9 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         } else {
 
             boolean isHurt = player.hurtTime > 0;
-            float r = isHurt ? 1.0F : 1.0F;
-            float g = isHurt ? 0.6F : 1.0F;
-            float b = isHurt ? 0.6F : 1.0F;
+            float r = 1F;
+            float g = 1;
+            float b = 1;
             StandUser user = ((StandUser) player);
             int muscle = user.roundabout$getZappedToID();
             //muscle = 100;
@@ -174,9 +174,9 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(player, delta);
         if (whiteAmt > 0) {
             boolean isHurt = player.hurtTime > 0;
-            float r = isHurt ? 1.0F : 1.0F;
-            float g = isHurt ? 0.6F : 1.0F;
-            float b = isHurt ? 0.6F : 1.0F;
+            float r = 1;
+            float g = 1;
+            float b = 1;
             byte skin = ((StandUser) player).roundabout$getStandSkin();
             String path = PowersWhiteAlbum.getSkinString(skin);
             if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
@@ -206,9 +206,9 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             this.model.leftSleeve.zScale -= 0.04F;
         } else {
             boolean isHurt = player.hurtTime > 0;
-            float r = isHurt ? 1.0F : 1.0F;
-            float g = isHurt ? 0.6F : 1.0F;
-            float b = isHurt ? 0.6F : 1.0F;
+            float r = 1;
+            float g = 1;
+            float b = 1;
             StandUser user = ((StandUser) player);
             int muscle = user.roundabout$getZappedToID();
             //muscle = 100;
@@ -599,9 +599,9 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.inCombatMode()) {
 
             boolean isHurt = acl.hurtTime > 0;
-            float r = isHurt ? 1.0F : 1.0F;
-            float g = isHurt ? 0.6F : 1.0F;
-            float b = isHurt ? 0.6F : 1.0F;
+            float r = 1;
+            float g = 1;
+            float b = 1;
             StandUser user = ((StandUser) acl);
             int muscle = user.roundabout$getZappedToID();
             //muscle = 100;

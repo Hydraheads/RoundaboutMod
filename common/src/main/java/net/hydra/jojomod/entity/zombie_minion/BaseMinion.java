@@ -65,6 +65,8 @@ public class BaseMinion extends PathfinderMob {
     public int clientDigProg = 0;
     public static final int digProgTick = 10;
 
+    public boolean convertedByZombie = false;
+
     public Vec3 homePosition = Vec3.ZERO;
 
     public Vec3 getHomePosition(){
@@ -197,7 +199,7 @@ public class BaseMinion extends PathfinderMob {
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand $$1) {
         EquipmentSlot slot = $$1 == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
-        if (player.isCreative() || player.getId() == getController()){
+        if (player.isCreative() || (player.getId() == getController() && !convertedByZombie)){
             if (player.isCreative() || ((IFatePlayer)player).rdbt$getFatePowers() instanceof VampireFate vp
                             && vp.getVampireData().graftingLevel > 0) {
                 ItemStack stack = player.getItemBySlot(slot);
@@ -279,7 +281,17 @@ public class BaseMinion extends PathfinderMob {
 
         }
 
-        if (!player.isCrouching()){
+        if (getController() <= 0 && controller2 == null || convertedByZombie) {
+            if (player instanceof ServerPlayer sp && FateTypes.isVampire(sp)) {
+                sp.displayClientMessage(Component.translatable("text.roundabout.stole_minion"), true);
+                setController(sp);
+                convertedByZombie = false;
+                this.level().playSound(null, this.blockPosition(), ModSounds.LEVELUP_EVENT, SoundSource.PLAYERS, 1F, 1);
+            }
+            return InteractionResult.CONSUME;
+        }
+
+        if (!player.isCrouching() && !convertedByZombie){
             if (getController() == player.getId()) {
                 if (FateTypes.isVampire(player)){
                     if (player.level().isClientSide()) {
@@ -288,14 +300,6 @@ public class BaseMinion extends PathfinderMob {
                     return InteractionResult.CONSUME;
                 }
             }
-        }
-        if (getController() <= 0 && controller2 == null) {
-            if (player instanceof ServerPlayer sp && FateTypes.isVampire(sp)) {
-                sp.displayClientMessage(Component.translatable("text.roundabout.stole_minion"), true);
-                setController(sp);
-                this.level().playSound(null, this.blockPosition(), ModSounds.LEVELUP_EVENT, SoundSource.PLAYERS, 1F, 1);
-            }
-            return InteractionResult.CONSUME;
         }
         return super.mobInteract(player,$$1);
     }
@@ -617,6 +621,7 @@ public class BaseMinion extends PathfinderMob {
         $$0.putByte("moveTactic",getMovementTactic());
         $$0.putByte("targetTactic",getTargetTactic());
         $$0.putBoolean("HomeSet",homeSet);
+        $$0.putBoolean("convertedByZombie",convertedByZombie);
         $$0.putDouble("HomeX",getHomePosition().x);
         $$0.putDouble("HomeY",getHomePosition().y);
         $$0.putDouble("HomeZ",getHomePosition().z);
@@ -657,6 +662,7 @@ public class BaseMinion extends PathfinderMob {
             }
         }
         homeSet = $$0.getBoolean("HomeSet");
+        convertedByZombie = $$0.getBoolean("convertedByZombie");
         setHomePosition(new Vec3($$0.getDouble("HomeX"),$$0.getDouble("HomeY"),$$0.getDouble("HomeZ")));
         this.setTargetTactic($$0.getByte("targetTactic"));
         this.setMovementTactic($$0.getByte("moveTactic"));

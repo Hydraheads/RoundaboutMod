@@ -3802,9 +3802,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public void rdbt$spawnZombieMinion(Entity ent){
         if (!this.level().isClientSide()) {
-            if (rdbt$this() instanceof Mob lent) {
+            if (rdbt$this() instanceof Mob lent && ent instanceof LivingEntity liv) {
                 VillagerMinion villagerMinion = lent.convertTo(ModEntities.VILLAGER_MINION, false);
                 villagerMinion.setController(ent);
+                if (FateTypes.isZombie(liv)){
+                    villagerMinion.convertedByZombie = true;
+                }
                 if (level() instanceof ServerLevel SL) {
                     SL.sendParticles(ModParticles.BLUE_SPARKLE,
                             this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
