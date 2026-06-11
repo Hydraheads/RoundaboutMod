@@ -564,7 +564,11 @@ public class PowersManhattanTransfer extends NewDashPreset {
                         if (ME.isInRain()){
                             ME.autoMoveBoost = 1.25F;
                             if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
-                                entity.setDeltaMovement(ME.getHattanDirection().scale(0.04 * configSpeed() * extraSpeedEmergencyHattan()));
+                                if($$13 != 0){
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.04 * configSpeed() * extraSpeedEmergencyHattan() * 1.5));
+                                } else {
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.04 * configSpeed() * extraSpeedEmergencyHattan()));
+                                }
                             } else {
                                 if ($$13 != 0) {
                                     entity.setDeltaMovement(delta.x / 1.4, $$13 * flyingSpeed * 2.7F * extraSpeedEmergencyHattan(), delta.z / 1.4);
@@ -575,7 +579,11 @@ public class PowersManhattanTransfer extends NewDashPreset {
                         } else {
                             ME.autoMoveBoost = 1F;
                             if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
-                                entity.setDeltaMovement(ME.getHattanDirection().scale(0.06 * configSpeed() * extraSpeedEmergencyHattan()));
+                                if($$13 != 0){
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.06 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F));
+                                } else {
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.06 * configSpeed() * extraSpeedEmergencyHattan()));
+                                }
                             } else {
                                 if ($$13 != 0) {
                                     entity.setDeltaMovement(delta.x / 1.1, $$13 * flyingSpeed * 3F * extraSpeedEmergencyHattan(), delta.z / 1.1);
@@ -588,7 +596,11 @@ public class PowersManhattanTransfer extends NewDashPreset {
                         if (!ME.isInRain()) {
                             ME.autoMoveBoost = 1F;
                             if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
-                                entity.setDeltaMovement(ME.getHattanDirection().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan()));
+                                if($$13 != 0){
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F));
+                                } else {
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan()));
+                                }
                             } else {
                                 if ($$13 != 0) {
                                     entity.setDeltaMovement(delta.x / 1.6, $$13 * flyingSpeed * 2.5F * extraSpeedEmergencyHattan(), delta.z / 1.6);
@@ -599,7 +611,11 @@ public class PowersManhattanTransfer extends NewDashPreset {
                         } else {
                             ME.autoMoveBoost = 0.75F;
                             if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
-                                entity.setDeltaMovement(ME.getHattanDirection().scale(0.012 * configSpeed() * extraSpeedEmergencyHattan()));
+                                if($$13 != 0){
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.012 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F));
+                                } else {
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.012 * configSpeed() * extraSpeedEmergencyHattan()));
+                                }
                             } else {
                                 if ($$13 != 0) {
                                     entity.setDeltaMovement(delta.x / 2.2, $$13 * flyingSpeed * 2.2F * extraSpeedEmergencyHattan(), delta.z / 2.2);

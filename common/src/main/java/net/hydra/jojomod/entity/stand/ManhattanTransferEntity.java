@@ -573,23 +573,23 @@ public class ManhattanTransferEntity extends StandEntity {
                 if(isKeyEverPressed) {
                     if (verticalLastPressed) {
                         if (pressS) {
-                            return new Vec2(heighHattanPilotNoMov * aNumber * getFlyingSpeed(), this.getYRot() - 180);
+                            return new Vec2(heighHattanPilotNoMov * aNumber * getFlyingSpeed()  * 1.25F, this.getYRot() - 180);
                         }
                         if (!pressS) {
-                            return new Vec2(heighHattanPilotNoMov * aNumber * getFlyingSpeed(), this.getYRot());
+                            return new Vec2(heighHattanPilotNoMov * aNumber * getFlyingSpeed()  * 1.25F, this.getYRot());
                         }
                     } else {
                         if (pressA) {
-                            return new Vec2(heighHattanPilotNoMov * aNumber * getFlyingSpeed(), this.getYRot() - 90);
+                            return new Vec2(heighHattanPilotNoMov * aNumber * getFlyingSpeed()  * 1.25F, this.getYRot() - 90);
                         }
                         if (!pressA) {
-                            return new Vec2(heighHattanPilotNoMov * aNumber * getFlyingSpeed(), this.getYRot() + 90);
+                            return new Vec2(heighHattanPilotNoMov * aNumber * getFlyingSpeed()  * 1.25F, this.getYRot() + 90);
                         }
                     }
                 }
             }
         }
-        return new Vec2(heighHattanPilotNoMov * aNumber * getFlyingSpeed(), this.getYRot());
+        return new Vec2(heighHattanPilotNoMov * aNumber * getFlyingSpeed() * 1.25F, this.getYRot());
     }
 
     private float aNumber = 10F;
