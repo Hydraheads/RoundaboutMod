@@ -696,16 +696,22 @@ public class ManhattanTransferEntity extends StandEntity {
         }
 
         Options options = Minecraft.getInstance().options;
-        if(options.keyJump.isDown() || options.keyShift.isDown()) {
-            if (options.keyJump.isDown()) {
-                heighHattanPilotNoMov = -45 * autoMoveBoost;
+        if (this.getUserData(this.getUser()) != null) {
+            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                if (PM.isPiloting()) {
+                    if (options.keyJump.isDown() || options.keyShift.isDown()) {
+                        if (options.keyJump.isDown()) {
+                            heighHattanPilotNoMov = -45 * autoMoveBoost;
+                        }
+                        if (options.keyShift.isDown()) {
+                            heighHattanPilotNoMov = 45 * autoMoveBoost;
+                        }
+                    }
+                    if (!options.keyJump.isDown() && !options.keyShift.isDown()) {
+                        heighHattanPilotNoMov = 0;
+                    }
+                }
             }
-            if (options.keyShift.isDown()) {
-                heighHattanPilotNoMov = 45 * autoMoveBoost;
-            }
-        }
-        if(!options.keyJump.isDown() && !options.keyShift.isDown()) {
-            heighHattanPilotNoMov = 0;
         }
 
         searchTarget();
