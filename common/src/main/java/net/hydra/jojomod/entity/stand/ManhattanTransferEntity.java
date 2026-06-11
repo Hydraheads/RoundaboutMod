@@ -573,10 +573,18 @@ public class ManhattanTransferEntity extends StandEntity {
                 if(isKeyEverPressed) {
                     if (verticalLastPressed) {
                         if (pressS) {
-                            return new Vec2(heighHattanPilotNoMov * aNumber * getFlyingSpeed()  * 1.25F, this.getYRot() - 180);
+                            if(this.getXRot() < 15 || this.getXRot() > -15) {
+                                return new Vec2(this.getXRot() * -1 + heighHattanPilotNoMov, this.getYRot() - 180);
+                            } else {
+                                return new Vec2(this.getXRot() * -1, this.getYRot() - 180);
+                            }
                         }
                         if (!pressS) {
-                            return new Vec2(heighHattanPilotNoMov * aNumber * getFlyingSpeed()  * 1.25F, this.getYRot());
+                            if(this.getXRot() < 15 || this.getXRot() > -15) {
+                                return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot());
+                            } else {
+                                return new Vec2(this.getXRot(), this.getYRot());
+                            }
                         }
                     } else {
                         if (pressA) {
@@ -586,10 +594,16 @@ public class ManhattanTransferEntity extends StandEntity {
                             return new Vec2(heighHattanPilotNoMov * aNumber * getFlyingSpeed()  * 1.25F, this.getYRot() + 90);
                         }
                     }
+                } else {
+                    if(this.getXRot() < 15 || this.getXRot() > -15) {
+                        return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot());
+                    } else {
+                        return new Vec2(this.getXRot(), this.getYRot());
+                    }
                 }
             }
         }
-        return new Vec2(heighHattanPilotNoMov * aNumber * getFlyingSpeed() * 1.25F, this.getYRot());
+        return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot());
     }
 
     private float aNumber = 10F;
