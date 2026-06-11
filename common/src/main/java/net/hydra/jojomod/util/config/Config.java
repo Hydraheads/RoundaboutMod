@@ -861,6 +861,8 @@ public class Config implements Cloneable {
 
 
     public static class WhiteAlbumSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableWhiteAlbum;
         @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
         public Integer whiteAlbumGuardPoints;
         @FloatOption(group = "inherit", value = 0.04F, min = 0F, max = 100F)

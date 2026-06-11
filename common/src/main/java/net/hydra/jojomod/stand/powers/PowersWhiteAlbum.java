@@ -66,7 +66,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     @Override
     /**Override to add disable config*/
     public boolean isStandEnabled(){
-        return ClientNetworking.getAppropriateConfig().survivorSettings.enableSurvivor;
+        return ClientNetworking.getAppropriateConfig().whiteAlbumSettings.enableWhiteAlbum;
     }
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
