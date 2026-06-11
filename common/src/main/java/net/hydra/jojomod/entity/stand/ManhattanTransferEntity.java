@@ -567,7 +567,23 @@ public class ManhattanTransferEntity extends StandEntity {
 
     public Vec2 getStrangeVector(){
         if(this.getUser() != null && this.getUserData(this.getUser()) != null && this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-
+            if(this.level().isClientSide) {
+                if(verticalLastPressed) {
+                    if (pressS) {
+                        return new Vec2(0, this.getYRot() - 180);
+                    }
+                    if (!pressS) {
+                        return new Vec2(0, this.getYRot());
+                    }
+                } else {
+                    if (pressA) {
+                        return new Vec2(0, this.getYRot() - 90);
+                    }
+                    if (!pressA) {
+                        return new Vec2(0, this.getYRot() + 90);
+                    }
+                }
+            }
         }
         return new Vec2(0, this.getYRot());
     }
@@ -601,6 +617,24 @@ public class ManhattanTransferEntity extends StandEntity {
         validateUUID();
         float pitch = this.getXRot();
         float yaw = this.getYRot();
+
+        if(this.level().isClientSide) {
+            if(verticalLastPressed) {
+                if (pressS) {
+                    Roundabout.LOGGER.info("S");
+                }
+                if (!pressS) {
+                    Roundabout.LOGGER.info("W");
+                }
+            } else {
+                if (pressA) {
+                    Roundabout.LOGGER.info("A");
+                }
+                if (!pressA) {
+                    Roundabout.LOGGER.info("D");
+                }
+            }
+        }
 
         if (this.getUserData(this.getUser()) != null) {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
@@ -797,6 +831,11 @@ public class ManhattanTransferEntity extends StandEntity {
     private boolean isPressingS = false;
     private boolean isPressingD = false;
 
+    private boolean pressS = false;
+    private boolean pressA = false;
+
+    private boolean verticalLastPressed = true;
+
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
@@ -842,24 +881,36 @@ public class ManhattanTransferEntity extends StandEntity {
                             if (PM.isPiloting()) {
                                 if (options.keyUp.isDown()) {
                                     isPressingW = true;
+                                    pressS = false;
+                                    pressA = false;
+                                    verticalLastPressed = true;
                                 }
                                 if (!options.keyUp.isDown()) {
                                     isPressingW = false;
                                 }
                                 if (options.keyDown.isDown()) {
                                     isPressingS = true;
+                                    pressS = true;
+                                    pressA = false;
+                                    verticalLastPressed = true;
                                 }
                                 if (!options.keyDown.isDown()) {
                                     isPressingS = false;
                                 }
                                 if (options.keyLeft.isDown()) {
                                     isPressingA = true;
+                                    pressA = true;
+                                    pressS = false;
+                                    verticalLastPressed = false;
                                 }
                                 if (!options.keyLeft.isDown()) {
                                     isPressingA = false;
                                 }
                                 if (options.keyRight.isDown()) {
                                     isPressingD = true;
+                                    pressA = false;
+                                    pressS = false;
+                                    verticalLastPressed = false;
                                 }
                                 if (!options.keyRight.isDown()) {
                                     isPressingD = false;
