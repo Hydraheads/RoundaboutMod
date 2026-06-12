@@ -1158,9 +1158,6 @@ public class AbilityScapeBasis {
         return getStandUserSelf().roundabout$getMaxGuardPoints() / 220;
     }
     public float guardSpecialties(DamageSource sauce, float damage){
-        if (sauce.is(DamageTypes.PLAYER_ATTACK)){
-            damage*=0.85F;
-        }
         return damage;
     }
 
