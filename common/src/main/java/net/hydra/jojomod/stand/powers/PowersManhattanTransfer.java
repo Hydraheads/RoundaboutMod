@@ -23,6 +23,8 @@ import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -540,6 +542,18 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 UFO_TRANSFER_SKIN
         );
     }
+    public double dodgeBuff(){
+        Options options = Minecraft.getInstance().options;
+        if(this.isClient()) {
+            if (!isPiloting() || isPiloting() && !(options.keyDown.isDown() || options.keyUp.isDown() || options.keyRight.isDown() || options.keyLeft.isDown())) {
+                if(this.XtraSpdTick > 1) {
+                    return 1.5;
+                }
+            }
+        }
+        return 1;
+    }
+
     @Override
     public void pilotStandControls(KeyboardPilotInput kpi, LivingEntity entity) {
         int $$1 = 0;
@@ -565,9 +579,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
                             ME.autoMoveBoost = 1.25F;
                             if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
                                 if($$13 != 0){
-                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.05 * configSpeed() * extraSpeedEmergencyHattan() * 1.5));
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.05 * configSpeed() * extraSpeedEmergencyHattan() * 1.5 * dodgeBuff()));
                                 } else {
-                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.05 * configSpeed() * extraSpeedEmergencyHattan()));
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.05 * configSpeed() * extraSpeedEmergencyHattan() * dodgeBuff()));
                                 }
                             } else {
                                 if ($$13 != 0) {
@@ -580,9 +594,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
                             ME.autoMoveBoost = 1F;
                             if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
                                 if($$13 != 0){
-                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.07 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F));
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.07 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F * dodgeBuff()));
                                 } else {
-                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.07 * configSpeed() * extraSpeedEmergencyHattan()));
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.07 * configSpeed() * extraSpeedEmergencyHattan() * dodgeBuff()));
                                 }
                             } else {
                                 if ($$13 != 0) {
@@ -597,9 +611,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
                             ME.autoMoveBoost = 1F;
                             if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
                                 if($$13 != 0){
-                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F));
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F * dodgeBuff()));
                                 } else {
-                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan()));
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan() * dodgeBuff()));
                                 }
                             } else {
                                 if ($$13 != 0) {
@@ -612,9 +626,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
                             ME.autoMoveBoost = 0.75F;
                             if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
                                 if($$13 != 0){
-                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.015 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F));
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.015 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F * dodgeBuff()));
                                 } else {
-                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.015 * configSpeed() * extraSpeedEmergencyHattan()));
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.015 * configSpeed() * extraSpeedEmergencyHattan() * dodgeBuff()));
                                 }
                             } else {
                                 if ($$13 != 0) {
