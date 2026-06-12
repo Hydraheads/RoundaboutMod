@@ -99,6 +99,7 @@ public class FabricSounds {
         addSound(ModSounds.BUBBLE_POP_ID, ModSounds.BUBBLE_POP_EVENT);
         addSound(ModSounds.ICE_SKATING_ID, ModSounds.ICE_SKATING_EVENT);
         addSound(ModSounds.SKATING_LAND_ID, ModSounds.SKATING_LAND_EVENT);
+        addSound(ModSounds.ICE_RISES_ID, ModSounds.ICE_RISES_EVENT);
         addSound(ModSounds.BANISH_ID, ModSounds.BANISH_EVENT);
 
         addSound(ModSounds.IRON_BALL_BOUNCE_ID, ModSounds.IRON_BALL_BOUNCE_EVENT);
