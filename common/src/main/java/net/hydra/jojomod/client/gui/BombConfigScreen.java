@@ -150,9 +150,22 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 
     @Override
     public boolean mouseReleased(double $$0, double $$1, int $$2) {
+        this.exitBombConfig();
+
+        return super.mouseReleased($$0, $$1, $$2);
+    }
+
+    public void exitBombConfig() {
         this.switchToHoveredGameMode();
         this.minecraft.setScreen(null);
-        return super.mouseReleased($$0, $$1, $$2);
+
+        Player pl = Minecraft.getInstance().player;
+        StandUser SU = (StandUser) pl;
+
+
+        if (SU.roundabout$getStandPowers() instanceof PowersKillerQueen PK) {
+            PK.bombConfigPacket();
+        }
     }
 
     @Override
@@ -229,8 +242,8 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
     @Override
     public boolean keyReleased(int $$0, int $$1, int $$2) {
         if (this.minecraft != null && !roundabout$sameKeyOne(KeyInputRegistry.abilityOneKey)) {
-            this.switchToHoveredGameMode();
-            this.minecraft.setScreen(null);
+            this.exitBombConfig();
+
             if (this.minecraft.player != null){
                 StandUser SU = ((StandUser) this.minecraft.player);
                 if (SU.roundabout$getStandPowers().isBarraging()){

@@ -13,9 +13,8 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-//import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
-//import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
@@ -33,7 +32,6 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.entity.substand.BlockBombEntity;
-import net.hydra.jojomod.entity.visages.mobs.AvdolNPC;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -62,14 +60,8 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.monster.Ravager;
-import net.minecraft.world.entity.monster.ZombifiedPiglin;
-import net.minecraft.world.entity.monster.hoglin.Hoglin;
-import net.minecraft.world.entity.monster.piglin.Piglin;
-import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -79,8 +71,6 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -92,10 +82,6 @@ import java.util.List;
 //import java.util.Hashtable;
 import java.util.Objects;
 
-import org.joml.Vector3f;
-
-
-
 public class PowersKillerQueen extends NewPunchingStand {
 	public PowersKillerQueen(LivingEntity self) {super(self);}
 
@@ -105,33 +91,37 @@ public class PowersKillerQueen extends NewPunchingStand {
         return ClientNetworking.getAppropriateConfig().killerQueenSettings.enableKillerQueen;
     }
 
-	// TODO Make Impale code
 	// TODO Make air bubble bomb spawn and entity
-	// TODO Make bomb entity - Just ned to put a indicator :) and contact bomb and what ever :(
 	// TODO Make bomb item
 	// TODO Bites The Dust
 	
 	// TODO Audio Translations
 	
-	// TODO-FIX pls someone make the block bomb rotation fixed
+	// TODO block bomb rotation fixed
+    // TODO fix Sheer Heart Attack code
+    // TODO explosions ignore ores on shift
 	
 	private static final byte
-		PLANTED=52,
+		PLANTED=53,
 		DETONATE=54,
-		DEFUSE = 57,
-		EXPLOSION = 58,
-        SHEER_HEART_ATTACK = 59,
-        ENTITY_BOMB = 60,
-	
+		DEFUSE = 55,
+		EXPLOSION = 56,
+        SHEER_HEART_ATTACK = 57,
+        ENTITY_BOMB = 58,
+        BOMB_CONFIG = 59,
+
+    // Bomb Status things
 		BOMB_NONE=0,
 		BOMB_BLOCK=1,
 		BOMB_ITEM=2,
 		BOMB_ENTITY=3,
 		BOMB_BUBBLE=4,
         BOMB_CONTACT = 5;
+
 	
 	private byte currentBombStatus = BOMB_NONE;
 	private boolean shaReleased = false;
+    private int bombConfig = 2;
 	
 	 public void syncBombStatus(byte status) {
          this.currentBombStatus = status;
@@ -172,7 +162,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 	
 	private boolean hasStrayCat = false;
 	
-	public float standReach = 5;
+	//public float standReach = 5;
 	public boolean wentForCharge = false;
 	public int chargedFinal;
 	public boolean holdDownClick = false;
@@ -379,19 +369,15 @@ public class PowersKillerQueen extends NewPunchingStand {
     			if (isHoldingSneak()) {
     				return true;
     			}else {
-    				return !canBlockPlantBomb();
-    			}
+                    return !canBlockPlantBomb();
+                }
     		}
     	}
     	if (slot == 2 && !this.BitesTheDustMode) {
 
             if (this.currentBombStatus == BOMB_NONE) {
-                if (isHoldingSneak()) {
-                    return !canImpale();
-                }else if(isGuarding()){
+                if(isGuarding()){
                     return !this.hasStrayCat;
-                } else{
-                    return !canMobPlantBomb();
                 }
             }
     	}
@@ -531,17 +517,6 @@ public class PowersKillerQueen extends NewPunchingStand {
 	    	return (!isBlockBlackListed(state) && !state.isAir()); 
 	    }
 	    return false;
-    }
-
-    public boolean canMobPlantBomb() {
-        Entity targetEntity = getTargetEntity(this.self, mobPlantRange);
-
-        return targetEntity != null;
-    }
-    public boolean canImpale() {
-        Entity targetEntity = getTargetEntity(this.self, impaleRange);
-
-        return targetEntity != null;
     }
 
     
@@ -877,10 +852,13 @@ public class PowersKillerQueen extends NewPunchingStand {
     public boolean tryPower(int move, boolean forced) {
         return super.tryPower(move, forced);
     }
+
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime) {
     	if (move == PowerIndex.SNEAK_ATTACK) {
             this.chargedFinal = chargeTime;
+        }else if (move == BOMB_CONFIG) {
+            this.bombConfig = chargeTime;
         }
     	
     	return super.tryIntPower(move, forced, chargeTime);
@@ -1024,6 +1002,14 @@ public class PowersKillerQueen extends NewPunchingStand {
     	if (!this.BitesTheDustMode ) {
     		ClientUtil.openBombConfigScreen();
     	}
+    }
+
+    public void bombConfigPacket() {
+        int status = ConfigManager.getClientConfig().dynamicSettings.KillerQueenCurrentBombConfig;
+        this.bombConfig = status;
+        this.tryIntPower(PowersKillerQueen.BOMB_CONFIG, true, status);
+        tryIntPowerPacket(PowersKillerQueen.BOMB_CONFIG, status);
+
     }
     
     public void defuseClient() {
@@ -1253,11 +1239,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                 this.syncShaStatus((byte)0);
             }
 
-            ClientConfig clientConfig = ConfigManager.getClientConfig();
-            int bombConf = clientConfig.dynamicSettings.KillerQueenCurrentBombConfig;
 
-
-            if (bombConf >= 2 && this.getActivePower() != DETONATE) {
+            if (this.bombConfig >= 2 && this.getActivePower() != DETONATE) {
                 if (this.currentBombStatus == BOMB_BLOCK) {
                     if(Objects.nonNull(this.bombBlock)) {
                         Entity contact = this.bombBlock.detectContact();
@@ -1516,15 +1499,15 @@ public class PowersKillerQueen extends NewPunchingStand {
 
 
         if (!this.isClient()) {
-            ClientConfig clientConfig = ConfigManager.getClientConfig();
-            int bombConf = clientConfig.dynamicSettings.KillerQueenCurrentBombConfig;
-
-            boolean canDestroyBlocks = bombConf % 2 == 1 && ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction;
 
             BlockPos bPos = BlockPos.ZERO;
             Vec3 vPos = Vec3.ZERO;
             Level level = this.getSelf().level();
             byte bStatus = this.currentBombStatus;
+
+            boolean canDestroyBlocks = ((this.bombConfig % 2) == 1) &&
+                    ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
+                    level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING);
 
             Entity target = null;
 
