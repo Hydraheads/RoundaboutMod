@@ -255,6 +255,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
     @Override
     public void onJump(){
+        fixThis();
     }
 
     @Override
