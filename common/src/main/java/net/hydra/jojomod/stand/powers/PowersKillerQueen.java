@@ -698,10 +698,14 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (entity != null && entity.distanceTo(self) > mobPlantRange+0.75F) {
                 entity = null;
             }
+            if (entity instanceof StandEntity) {
+                entity = null;
+            }
             if (entity != null) {
                 if (entity instanceof LivingEntity LE) {
                     addEXP(5, LE);
                 }
+
 
                 this.bombEntity = entity;
                 this.currentBombStatus = BOMB_ENTITY;
@@ -1523,6 +1527,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 bPos = new BlockPos(this.bombEntity.getBlockX(), this.bombEntity.getBlockY(), this.bombEntity.getBlockZ());
                 level = this.bombEntity.level();
                 target = this.bombEntity;
+
                 this.bombEntity = null;
             }
 
@@ -1539,7 +1544,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             if (target != null && bStatus == BOMB_ENTITY) {
                 if (target instanceof Player pl) {
-                    pl.die(dmg);
+                    if (!pl.isCreative()) { pl.die(dmg); }
                 }else {
                     target.hurt(dmg, 25.0f);
                 }
