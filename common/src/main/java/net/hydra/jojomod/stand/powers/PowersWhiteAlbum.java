@@ -27,6 +27,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -47,6 +48,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BushBlock;
@@ -54,6 +56,8 @@ import net.minecraft.world.level.block.FrostedIceBlock;
 import net.minecraft.world.level.block.LiquidBlockContainer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 
@@ -618,15 +622,58 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
 
+
+    public HitResult pick(double $$0, float $$1, boolean $$2) {
+        Vec3 $$3 = this.self.getEyePosition($$1);
+        Vec3 $$4 = this.self.getViewVector($$1);
+        Vec3 $$5 = $$3.add($$4.x * $$0, $$4.y * $$0, $$4.z * $$0);
+        return this.self.level().clip(new ClipContext($$3, $$5, ClipContext.Block.COLLIDER, $$2 ? net.minecraft.world.level.ClipContext.Fluid.ANY : net.minecraft.world.level.ClipContext.Fluid.NONE, self));
+    }
+
     public void iceWallServer(){
         int cooldown = 120;
         this.setCooldown(PowerIndex.SKILL_3, cooldown);
         if (!this.self.level().isClientSide()){
-            BlockWallEntity fallingblockentity =
-                    new BlockWallEntity(self.level(),
-                            self.getX() + 2, self.getY(), self.getZ(),
-                            Blocks.FROSTED_ICE.defaultBlockState());
-            self.level().addFreshEntity(fallingblockentity);
+            HitResult hit = pick(8.0D, 0.0F, false);
+
+            BlockPos centerPos;
+
+            if (hit.getType() == HitResult.Type.BLOCK) {
+                BlockHitResult blockHit = (BlockHitResult) hit;
+
+                // Spawn on top of the block you are looking at
+                centerPos = blockHit.getBlockPos().relative(blockHit.getDirection());
+            } else {
+                // Fallback: 2 blocks in front of player
+                centerPos = self.blockPosition().relative(self.getDirection(), 2);
+            }
+
+            centerPos = new BlockPos(centerPos.getX(),Math.min(centerPos.getY(),self.blockPosition().getY()),
+                centerPos.getZ());
+            Direction facing = self.getDirection();
+
+// Left/right axis
+            Direction side = facing.getClockWise();
+            for (int width = -1; width <= 1; width++) {
+                for (int height = 0; height < 3; height++) {
+
+                    BlockPos spawnPos = centerPos
+                            .relative(side, width)
+                            .above(height);
+
+                    BlockWallEntity wall =
+                            // slightly off to not z-fight
+                            new BlockWallEntity(
+                                    self.level(),
+                                    spawnPos.getX() + 0.49,
+                                    spawnPos.getY()-0.01,
+                                    spawnPos.getZ() + 0.49,
+                                    Blocks.PACKED_ICE.defaultBlockState()
+                            );
+
+                    self.level().addFreshEntity(wall);
+                }
+            }
            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.ICE_RISES_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
         }
     }

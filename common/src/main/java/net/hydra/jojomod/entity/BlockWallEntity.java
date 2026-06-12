@@ -43,6 +43,7 @@ public class BlockWallEntity extends Entity {
     @Nullable
     public CompoundTag blockData;
     protected static final EntityDataAccessor<BlockPos> DATA_START_POS;
+    protected static final EntityDataAccessor<BlockPos> DATA_FINAL_POS;
 
     public BlockWallEntity(EntityType<? extends BlockWallEntity> $$0, Level $$1) {
         super($$0, $$1);
@@ -86,9 +87,15 @@ public class BlockWallEntity extends Entity {
     public void setStartPos(BlockPos $$0) {
         this.entityData.set(DATA_START_POS, $$0);
     }
+    public void setDataFinalPos(BlockPos $$0) {
+        this.entityData.set(DATA_FINAL_POS, $$0);
+    }
 
     public BlockPos getStartPos() {
         return (BlockPos)this.entityData.get(DATA_START_POS);
+    }
+    public BlockPos getFinalPos() {
+        return (BlockPos)this.entityData.get(DATA_FINAL_POS);
     }
 
     protected Entity.MovementEmission getMovementEmission() {
@@ -97,6 +104,7 @@ public class BlockWallEntity extends Entity {
 
     protected void defineSynchedData() {
         this.entityData.define(DATA_START_POS, BlockPos.ZERO);
+        this.entityData.define(DATA_FINAL_POS, BlockPos.ZERO);
     }
 
     public boolean isPickable() {
@@ -153,6 +161,9 @@ public class BlockWallEntity extends Entity {
         $$0.putBoolean("HurtEntities", this.hurtEntities);
         $$0.putFloat("FallHurtAmount", this.fallDamagePerDistance);
         $$0.putInt("FallHurtMax", this.fallDamageMax);
+        $$0.putInt("FinalPosX", getFinalPos().getX());
+        $$0.putInt("FinalPosY", getFinalPos().getY());
+        $$0.putInt("FinalPosZ", getFinalPos().getZ());
         if (this.blockData != null) {
             $$0.put("TileEntityData", this.blockData);
         }
@@ -169,6 +180,13 @@ public class BlockWallEntity extends Entity {
             this.fallDamageMax = $$0.getInt("FallHurtMax");
         } else if (this.blockState.is(BlockTags.ANVIL)) {
             this.hurtEntities = true;
+        }
+
+
+        if ($$0.contains("FinalPosX")) {
+            setDataFinalPos(new BlockPos($$0.getInt("FinalPosX"),
+                    $$0.getInt("FinalPosX"),$$0.getInt("FinalPosX")) );
+
         }
 
         if ($$0.contains("DropItem", 99)) {
@@ -234,5 +252,8 @@ public class BlockWallEntity extends Entity {
 
     static {
         DATA_START_POS = SynchedEntityData.defineId(BlockWallEntity.class, EntityDataSerializers.BLOCK_POS);
+        DATA_FINAL_POS = SynchedEntityData.defineId(BlockWallEntity.class, EntityDataSerializers.BLOCK_POS);
     }
+
+
 }

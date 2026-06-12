@@ -21,9 +21,11 @@ public class BlockWallEntityRenderer extends EntityRenderer<BlockWallEntity> {
 
     public BlockWallEntityRenderer(EntityRendererProvider.Context $$0) {
         super($$0);
-        this.shadowRadius = 0.5F;
+        this.shadowRadius = 0;
+        this.shadowStrength = 0;
         this.dispatcher = $$0.getBlockRenderDispatcher();
     }
+
 
     public void render(BlockWallEntity $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
         BlockState $$6 = $$0.getBlockState();
@@ -33,7 +35,8 @@ public class BlockWallEntityRenderer extends EntityRenderer<BlockWallEntity> {
                 $$3.pushPose();
                 BlockPos $$8 = BlockPos.containing($$0.getX(), $$0.getBoundingBox().maxY, $$0.getZ());
                 $$3.translate((double)-0.5F, (double)0.0F, (double)-0.5F);
-                $$3.scale(0.99F,0.99F,0.99F);
+
+                //$$3.scale(0.98F,0.98F,0.98F);
                 this.dispatcher.getModelRenderer().tesselateBlock($$7, this.dispatcher.getBlockModel($$6), $$6, $$8, $$3, $$4.getBuffer(ItemBlockRenderTypes.getMovingBlockRenderType($$6)), false, RandomSource.create(), $$6.getSeed($$0.getStartPos()), OverlayTexture.NO_OVERLAY);
                 $$3.popPose();
                 super.render($$0, $$1, $$2, $$3, $$4, $$5);
