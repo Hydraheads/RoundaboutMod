@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -13,6 +14,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
@@ -59,9 +61,17 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.FlyingMob;
+import net.minecraft.world.entity.animal.Rabbit;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.hoglin.Hoglin;
+import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -1170,6 +1180,72 @@ public class PowersKillerQueen extends NewPunchingStand {
      * otherwise.*/
     @Override
     public void tickMobAI(LivingEntity attackTarget){
+        if (this.attackTimeDuring <= -1) {
+            if (this.getSelf().fallDistance > 4 && !(this.self instanceof Blaze) && !(this.self instanceof FlyingMob) && !this.getSelf().isNoGravity()
+                    && !(this.getSelf().noPhysics) && !(this.self instanceof EnderDragon) && !(this.self instanceof WitherBoss)) {
+                /**Fall Brace AI*/
+                ((StandUser) this.getSelf()).roundabout$summonStand(this.getSelf().level(),true,false);
+                if (this.getSelf() instanceof Mob MB){
+                    ((IMob)MB).roundabout$setRetractTicks(140);
+                }
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.EXTRA, true);
+                return;
+            }
+        }
+
+        if (attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf())) {
+            boolean upAiNow = upAi(attackTarget);
+            double dist = attackTarget.distanceTo(this.getSelf());
+            boolean isCreeper = this.getSelf() instanceof Creeper;
+            if (isCreeper) {
+            } else {
+                if ((this.getActivePower() != PowerIndex.NONE)
+                        || dist <= 5){
+                    rotateMobHead(attackTarget);
+                }
+                if (this.attackTimeDuring == -1 || (this.attackTimeDuring < -1 && this.activePower == PowerIndex.ATTACK)) {
+                    Entity targetEntity = getTargetEntity(this.self, -1);
+                    if (targetEntity != null && targetEntity.is(attackTarget)) {
+                        double RNG = Math.random();
+                        if (RNG < 0.3 && targetEntity instanceof Player && this.activePowerPhase <= 0 && !wentForCharge) {
+                            wentForCharge = true;
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.BARRAGE_CHARGE, true);
+                        }else if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
+                            if ((RNG < 0.85 && (this.getSelf() instanceof Hoglin || this.getSelf() instanceof Ravager))) {
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
+                                wentForCharge = false;
+                            } else {
+                                if (!onCooldown(PowerIndex.SKILL_2_SNEAK) && RNG >= 0.85 && dist <= 3 && !wentForCharge) {
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
+                                    wentForCharge = true;
+                                } else {
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.ATTACK, true);
+                                    wentForCharge = false;
+                                }
+                            }
+                        }
+                    } else if ((this.getSelf() instanceof Piglin
+                            || upAiNow
+                            || this.getSelf() instanceof AbstractVillager) && dist <= 11 && dist >= 6) {
+                        if (!onCooldown(PowerIndex.SKILL_3)) {
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BLOCK, true);
+                        }
+                    } else if ((this.getSelf() instanceof Spider || this.getSelf() instanceof Slime
+                            || this.getSelf() instanceof JotaroNPC || upAiNow
+                            || this.getSelf() instanceof Rabbit || this.getSelf() instanceof AbstractVillager
+                            || this.getSelf() instanceof Piglin || this.getSelf() instanceof Vindicator) &&
+                            this.getSelf().onGround() && dist <= 19 && dist >= 5) {
+
+                    } else if (true) {
+                        //double RNG = Math.random(); "&& RNG >= 0.90"
+                        if (!onCooldown(PowerIndex.SKILL_2) && dist <= (mobPlantRange - 0.3) && !wentForCharge) {
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+                        }
+                    }
+                }
+            }
+        }
+        /*
     	if (attackTarget != null && attackTarget.isAlive()){
             if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.BARRAGE)
                     || attackTarget.distanceTo(this.getSelf()) <= 5){
@@ -1190,7 +1266,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     }
                 }
             }
-        }
+        }*/
     }
     
     @Override
