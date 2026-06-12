@@ -650,7 +650,7 @@ public class ManhattanTransferEntity extends StandEntity {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
                 if (stupidTicks >= 1) {
                     //setMaster(this.getUser());
-                    this.moveTo(this.getUser().getX(), this.getUser().getY() + 1.45F ,this.getUser().getZ());
+                    this.moveTo(this.getUser().getX(), this.getUser().getY() + 1.45F ,this.getUser().getZ() - 0.075F);
                     stupidTicks--;
                     this.setXRot(this.getUser().getXRot() % 360);
                     this.setYRot(this.getUser().getYRot() % 360);
