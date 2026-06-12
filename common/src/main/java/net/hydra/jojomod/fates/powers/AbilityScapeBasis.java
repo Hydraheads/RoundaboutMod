@@ -47,12 +47,14 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
@@ -1156,6 +1158,9 @@ public class AbilityScapeBasis {
         return getStandUserSelf().roundabout$getMaxGuardPoints() / 220;
     }
     public float guardSpecialties(DamageSource sauce, float damage){
+        if (sauce.is(DamageTypes.PLAYER_ATTACK)){
+            damage*=0.5F;
+        }
         return damage;
     }
 

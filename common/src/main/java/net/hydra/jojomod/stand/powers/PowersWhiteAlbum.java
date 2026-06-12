@@ -108,11 +108,10 @@ public class PowersWhiteAlbum extends NewDashPreset {
     @Override
     public float guardSpecialties(DamageSource sauce, float damage){
         if (sauce.is(ModDamageTypes.BULLET) ||
-                sauce.is(DamageTypes.PLAYER_ATTACK) ||
                 sauce.getEntity() instanceof Blaze){
             damage*=0.5F;
         }
-        return damage;
+        return super.guardSpecialties(sauce,damage);
     }
     @Override
     public void onChangedBlock(BlockPos blockPos){
