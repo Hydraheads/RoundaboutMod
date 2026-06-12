@@ -290,6 +290,8 @@ public class Config implements Cloneable {
         @FloatOption(group = "inherit", value = 0.4F, min = 0, max = 100F)
         public Float sunDamagePercentPerDamageTick;
         @BooleanOption(group = "inherit", value = false)
+        public Boolean canSurviveInRain;
+        @BooleanOption(group = "inherit", value = false)
         public Boolean vampireUsesInternalSaturation;
         @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
         public Integer diveAttackCooldown;

@@ -327,7 +327,15 @@ public enum FateTypes {
 
     public static boolean isInSunlight(LivingEntity ent) {
         //You don't take sun damage in stopped time (like the ova)
+
         if (!((TimeStop) ent.level()).inTimeStopRange(ent)) {
+
+            if (ClientNetworking.getAppropriateConfig().vampireSettings.canSurviveInRain) {
+                if (ent.level().isRaining()) {
+                    return false;
+                }
+            }
+
             Vec3 yes = ent.getEyePosition();
             Vec3 yes2 = ent.position();
 

@@ -3281,6 +3281,8 @@
   "config.roundabout.expInterval.name": "Blood Experience Intervals",
   "config.roundabout.expInterval.desc": "Change how many ticks between vampire leveling exp.",
 
+  "config.roundabout.canSurviveInRain.name": "Rain Blocks Sunlight",
+  "config.roundabout.canSurviveInRain.desc": "If you want to cheat the challenge of vampirism while it's raining, enable this.",
 
   "config.roundabout.sunDamageUnderwaterReach.name": "Underwater Sun Damage Reach",
   "config.roundabout.sunDamageUnderwaterReach.desc": "Change how far underwater sunlight reaches. Zero makes sunlight not intrude on water.",
