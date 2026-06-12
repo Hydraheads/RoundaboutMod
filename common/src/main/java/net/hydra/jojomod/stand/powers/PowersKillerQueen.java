@@ -549,7 +549,13 @@ public class PowersKillerQueen extends NewPunchingStand {
     public float inputSpeedModifiers(float basis){
         if (this.activePower == PowerIndex.POWER_2) {
             basis*=0.3f;
-        } if (this.activePower == PowerIndex.BARRAGE_CHARGE_2) {
+        } else if (this.getActivePower()==PowerIndex.POWER_2_SNEAK){
+            if (this.getSelf().isCrouching()){
+                float f = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(this.getSelf()), 0.0F, 1.0F);
+                float g = 1/f;
+                basis *= g;
+            }
+        } else if (this.activePower == PowerIndex.BARRAGE_CHARGE_2) {
             basis*=0.5f;
         } else if (this.activePower == PowerIndex.SNEAK_ATTACK_CHARGE){
             if (this.getSelf().isCrouching()) {
