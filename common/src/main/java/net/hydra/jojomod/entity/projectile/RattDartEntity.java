@@ -35,8 +35,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.boss.EnderDragonPart;
-import net.minecraft.world.entity.monster.Creeper;
-import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
@@ -347,7 +346,7 @@ public class RattDartEntity extends AbstractArrow {
         float degrees = MainUtil.getLookAtEntityYaw(this, $$1);
         float force = 0.6F;
         if (this.getShotType() == CHARGED) {
-            force = 0.9F;
+            force = 1.9F;
         }
 
 
@@ -404,6 +403,7 @@ public class RattDartEntity extends AbstractArrow {
             }
             this.playSound(ModSounds.RATT_DART_IMPACT_EVENT, 1.0F, (this.random.nextFloat() * 0.2F + 0.9F));
         } else {
+            //Force is halved if blocked
             force *= 0.5F;
             if ($$1 instanceof Player P) {
                 if (P.isBlocking()) {
@@ -415,8 +415,9 @@ public class RattDartEntity extends AbstractArrow {
 
         }
 
-        if ($$1 instanceof Mob) {
-            force /= 2;
+        if ($$1 instanceof Mob && !($$1 instanceof Illusioner)) {
+            //Force is halved if target is a mob rather than a player
+            force *= 0.5F;
         } else if ($$1 instanceof Player P) {
             if (P.isCreative()){
                 force = 0;
@@ -429,7 +430,7 @@ public class RattDartEntity extends AbstractArrow {
         if (force > 0) {
             MainUtil.takeUnresistableKnockbackWithY($$1, force,
                     Mth.sin(degrees * ((float) Math.PI / 180)),
-                    Mth.sin(-20 * ((float) Math.PI / 180)),
+                    Mth.sin(-18 * ((float) Math.PI / 180)),
                     -Mth.cos(degrees * ((float) Math.PI / 180)));
         }
 
