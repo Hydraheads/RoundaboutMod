@@ -637,6 +637,8 @@ public class ManhattanTransferEntity extends StandEntity {
         DodgeRainTicks = val;
     }
 
+    int stupidTicks = 1;
+
     @Override
     public void tick() {
         validateUUID();
@@ -648,6 +650,7 @@ public class ManhattanTransferEntity extends StandEntity {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
                 if (stupidTicks >= 1) {
                     //setMaster(this.getUser());
+                    this.moveTo(this.getUser().getX(), this.getUser().getY() + 1.45F ,this.getUser().getZ());
                     stupidTicks--;
                     this.setXRot(this.getUser().getXRot() % 360);
                     this.setYRot(this.getUser().getYRot() % 360);
@@ -831,8 +834,6 @@ public class ManhattanTransferEntity extends StandEntity {
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.KNOCKBACK_RESISTANCE, 1.0D);
     }
-
-    int stupidTicks = 1;
 
     public boolean isInRain() {
         BlockPos $$0 = this.blockPosition();
