@@ -7,6 +7,7 @@ import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -152,7 +153,15 @@ public class FleshBlock
                 }
             }
             Vec3 vec3 = entity.getDeltaMovement();
-            entity.makeStuckInBlock($$0, new Vec3((double)0.5F, (double)0.1F, (double)0.5F));
+            if (!cond) {
+                if (!MainUtil.isBossMob(entity)) {
+                    if (entity instanceof Player pl) {
+                        entity.makeStuckInBlock($$0, new Vec3((double) 0.5F, (double) 0.1F, (double) 0.5F));
+                    } else {
+                        entity.makeStuckInBlock($$0, new Vec3((double) 0.75F, (double) 0.1F, (double) 0.75F));
+                    }
+                }
+            }
             if (!cond && !entity.isInvulnerable()) {
                 float clamp = $$0.getValue(LAYERS) == 1 ? 0.001F : 0.0005F;
                 entity.setDeltaMovement(new Vec3(
