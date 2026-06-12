@@ -565,9 +565,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
                             ME.autoMoveBoost = 1.25F;
                             if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
                                 if($$13 != 0){
-                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.04 * configSpeed() * extraSpeedEmergencyHattan() * 1.5));
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.05 * configSpeed() * extraSpeedEmergencyHattan() * 1.5));
                                 } else {
-                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.04 * configSpeed() * extraSpeedEmergencyHattan()));
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.05 * configSpeed() * extraSpeedEmergencyHattan()));
                                 }
                             } else {
                                 if ($$13 != 0) {
@@ -580,9 +580,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
                             ME.autoMoveBoost = 1F;
                             if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
                                 if($$13 != 0){
-                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.06 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F));
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.07 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F));
                                 } else {
-                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.06 * configSpeed() * extraSpeedEmergencyHattan()));
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.07 * configSpeed() * extraSpeedEmergencyHattan()));
                                 }
                             } else {
                                 if ($$13 != 0) {
@@ -612,9 +612,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
                             ME.autoMoveBoost = 0.75F;
                             if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
                                 if($$13 != 0){
-                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.012 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F));
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.015 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F));
                                 } else {
-                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.012 * configSpeed() * extraSpeedEmergencyHattan()));
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.015 * configSpeed() * extraSpeedEmergencyHattan()));
                                 }
                             } else {
                                 if ($$13 != 0) {
