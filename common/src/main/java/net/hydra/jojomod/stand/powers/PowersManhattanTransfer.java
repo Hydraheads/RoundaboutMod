@@ -23,8 +23,6 @@ import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -36,7 +34,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Blaze;
-import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Ghast;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
@@ -373,7 +370,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
     public void setXtraSpdTick(int speedy){XtraSpdTick = speedy;}
 
-    public double extraSpeedEmergencyHattan(){
+    private double extraSpeedEmergencyHattan(){
         if(XtraSpdTick > 7){
             return  3.5F;
         }else if(XtraSpdTick > 4){
@@ -387,7 +384,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
 
     public boolean isSoundRainInterrupted = false;
-
 
     @Override
     public void tickPower() {
@@ -422,11 +418,11 @@ public class PowersManhattanTransfer extends NewDashPreset {
             if (this.isClient() || !this.isClient()) {
                 if (!isPiloting()) {
                     if (this.currentHattanStatus == UNLOADED_HATTAN) {
-                        if (this.getStandEntity(this.getSelf()).isInWaterOrRain()) {
-                            this.getStandEntity(this.getSelf()).setDeltaMovement(this.getStandEntity(this.getSelf()).getForward().scale(0.010 * configSpeed() * extraSpeedEmergencyHattan()));
-                        } else {
-                            this.getStandEntity(this.getSelf()).setDeltaMovement(this.getStandEntity(this.getSelf()).getForward().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan()));
-                        }
+                            if (this.getStandEntity(this.getSelf()).isInWaterOrRain()) {
+                                ME.setDeltaMovement(ME.getHattanDirection().scale(0.010 * configSpeed() * extraSpeedEmergencyHattan()));
+                            } else {
+                                ME.setDeltaMovement(ME.getHattanDirection().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan()));
+                            }
                     } else {
                         this.getStandEntity(this.getSelf()).setDeltaMovement(Vec3.ZERO);
                     }
@@ -479,8 +475,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 } else {
                     ClientUtil.setCameraEntity(null);
                 }
-                // System.out.println("is Up:  " + isPressingW);
-                // System.out.println("is Down:  " + isPressingS);
             }
         }
         /*forceDespawnSet*/
@@ -567,21 +561,29 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 if (ent != null) {
                     Entity TE = MainUtil.getTargetEntity(ent, 300, 10);
                     if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible()) {
-                        if (ME.isInRain()) {
+                        if (ME.isInRain()){
+                            ME.autoMoveBoost = 1.25F;
                             if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
-                                entity.setDeltaMovement(entity.getForward());
-                                entity.setDeltaMovement(entity.getForward().scale(0.04 * configSpeed() * extraSpeedEmergencyHattan()));
+                                if($$13 != 0){
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.04 * configSpeed() * extraSpeedEmergencyHattan() * 1.5));
+                                } else {
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.04 * configSpeed() * extraSpeedEmergencyHattan()));
+                                }
                             } else {
                                 if ($$13 != 0) {
-                                    entity.setDeltaMovement(delta.x / 1.4, $$13 * flyingSpeed * 2.5F * extraSpeedEmergencyHattan(), delta.z / 1.4);
+                                    entity.setDeltaMovement(delta.x / 1.4, $$13 * flyingSpeed * 2.7F * extraSpeedEmergencyHattan(), delta.z / 1.4);
                                 } else {
                                     entity.setDeltaMovement(delta.x / 1.4, 0, delta.z / 1.4);
                                 }
                             }
                         } else {
+                            ME.autoMoveBoost = 1F;
                             if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
-                                entity.setDeltaMovement(entity.getForward());
-                                entity.setDeltaMovement(entity.getForward().scale(0.06 * configSpeed() * extraSpeedEmergencyHattan()));
+                                if($$13 != 0){
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.06 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F));
+                                } else {
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.06 * configSpeed() * extraSpeedEmergencyHattan()));
+                                }
                             } else {
                                 if ($$13 != 0) {
                                     entity.setDeltaMovement(delta.x / 1.1, $$13 * flyingSpeed * 3F * extraSpeedEmergencyHattan(), delta.z / 1.1);
@@ -592,64 +594,45 @@ public class PowersManhattanTransfer extends NewDashPreset {
                         }
                     } else {
                         if (!ME.isInRain()) {
+                            ME.autoMoveBoost = 1F;
                             if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
-                                entity.setDeltaMovement(entity.getForward());
-                                entity.setDeltaMovement(entity.getForward().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan()));
+                                if($$13 != 0){
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F));
+                                } else {
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan()));
+                                }
                             } else {
                                 if ($$13 != 0) {
-                                    entity.setDeltaMovement(delta.x / 1.6, $$13 * flyingSpeed * 2.7F * extraSpeedEmergencyHattan(), delta.z / 1.6);
+                                    entity.setDeltaMovement(delta.x / 1.6, $$13 * flyingSpeed * 2.5F * extraSpeedEmergencyHattan(), delta.z / 1.6);
                                 } else {
                                     entity.setDeltaMovement(delta.x / 1.6, 0, delta.z / 1.6);
                                 }
                             }
                         } else {
+                            ME.autoMoveBoost = 0.75F;
                             if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
-                                entity.setDeltaMovement(entity.getForward());
-                                entity.setDeltaMovement(entity.getForward().scale(0.012 * configSpeed() * extraSpeedEmergencyHattan()));
+                                if($$13 != 0){
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.012 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F));
+                                } else {
+                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.012 * configSpeed() * extraSpeedEmergencyHattan()));
+                                }
                             } else {
                                 if ($$13 != 0) {
-                                    entity.setDeltaMovement(delta.x / 2.2, $$13 * flyingSpeed * 2F * extraSpeedEmergencyHattan(), delta.z / 2.2);
+                                    entity.setDeltaMovement(delta.x / 2.2, $$13 * flyingSpeed * 2.2F * extraSpeedEmergencyHattan(), delta.z / 2.2);
                                 } else {
                                     entity.setDeltaMovement(delta.x / 2.2, 0, delta.z / 2.2);
                                 }
                             }
                         }
                     }
-                }else {
-                    entity.setDeltaMovement(Vec3.ZERO);
                 }
+            }else {
+                entity.setDeltaMovement(Vec3.ZERO);
+                entity.xxa = 0;
+                entity.zza = 0;
             }
         }
-        keyInputForManhattan();
     }
-
-    public void keyInputForManhattan() {
-        Options options = Minecraft.getInstance().options;
-        if (isPiloting()) {
-            if (options.keyUp.isDown()) {
-                isPressingW = true;
-                isPressingS = false;
-            }
-            if (options.keyDown.isDown()) {
-                isPressingS = true;
-                isPressingW = false;
-            }
-            if (options.keyLeft.isDown()) {
-                isPressingA = true;
-                isPressingD = false;
-            }
-            if (options.keyRight.isDown()) {
-                isPressingD = true;
-                isPressingA = false;
-            }
-
-        }
-    }
-
-    public boolean isPressingW = true;
-    public boolean isPressingA = false;
-    public boolean isPressingS = false;
-    public boolean isPressingD = false;
 
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
@@ -821,13 +804,12 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
     @Override
     public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.DARK_PURPLE);
+        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.RED);
     }
     @Override
     public Component ifWipListDev(){
-        return Component.literal(  "14Kacper").withStyle(ChatFormatting.BLUE);
+        return Component.literal(  "14Kacper").withStyle(ChatFormatting.DARK_RED);
     }
-    //COMMAND TO QUICKLY PUT MANHATTAN TRANSFER INTO ALL MOBS: /roundaboutSetStand @e manhattan_transfer 1 1 0 false
 
     /**Ignore*/
     @Override

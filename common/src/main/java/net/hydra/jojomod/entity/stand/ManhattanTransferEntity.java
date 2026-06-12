@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.*;
@@ -98,12 +99,15 @@ public class ManhattanTransferEntity extends StandEntity {
     public float getFlyingSpeed() {
         if (this.getUserData(this.getUser()) != null && this.getUser() != null) {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-                if (PM.XtraSpdTick > 7) {
-                    return 0.30F;
-                } else if (PM.XtraSpdTick > 4) {
-                    return 0.25F;
-                } else if (PM.XtraSpdTick > 1) {
-                    return 0.20F;
+                Options key = Minecraft.getInstance().options;
+                if(key.keyDown.isDown() || key.keyRight.isDown() || key.keyUp.isDown() || key.keyLeft.isDown()) {
+                    if (PM.XtraSpdTick > 7) {
+                        return 0.30F;
+                    } else if (PM.XtraSpdTick > 4) {
+                        return 0.25F;
+                    } else if (PM.XtraSpdTick > 1) {
+                        return 0.20F;
+                    }
                 }
             }
         }
@@ -402,7 +406,6 @@ public class ManhattanTransferEntity extends StandEntity {
                 $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3, getShotAccuracy);
                 $$11.setCritArrow(false);
                 ((IAbstractArrowAccess) $$11).roundabout$SetIsManhattan(true);
-              //  ((IProjectileAccess) $$11).roundabout$setManhattanProjectile(true);
                 ((IAbstractArrowAccess) $$11).roundabout$setHattanDamage(thrower.manhattanDamageIncipit);
 
                 if (thrower != null) {
@@ -564,6 +567,56 @@ public class ManhattanTransferEntity extends StandEntity {
         }
     }
 
+    public Vec2 getStrangeVector(){
+        if(this.getUser() != null && this.getUserData(this.getUser()) != null && this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+            if(this.level().isClientSide) {
+                if(isKeyEverPressed) {
+                    if (verticalLastPressed) {
+                        if (pressS) {
+                            if(this.getXRot() < 15 || this.getXRot() > -15) {
+                                return new Vec2(this.getXRot() * -1 + heighHattanPilotNoMov, this.getYRot() - 180);
+                            } else {
+                                return new Vec2(this.getXRot() * -1, this.getYRot() - 180);
+                            }
+                        }
+                        if (!pressS) {
+                            if(this.getXRot() < 15 || this.getXRot() > -15) {
+                                return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot());
+                            } else {
+                                return new Vec2(this.getXRot(), this.getYRot());
+                            }
+                        }
+                    } else {
+                        if (pressA) {
+                            //return new Vec2(heighHattanPilotNoMov * aNumber * getFlyingSpeed()  * 1.25F, this.getYRot() - 90);
+                            return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot() - 90);
+                        }
+                        if (!pressA) {
+                            return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot() + 90);
+                        }
+                    }
+                } else {
+                    if(this.getXRot() < 15 || this.getXRot() > -15) {
+                        return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot());
+                    } else {
+                        return new Vec2(this.getXRot(), this.getYRot());
+                    }
+                }
+            }
+        }
+        return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot());
+    }
+
+    private float aNumber = 10F;
+
+    public float heighHattanPilotNoMov = 0;
+
+    private boolean isKeyEverPressed = false;
+
+    public Vec3 getHattanDirection(){
+        return Vec3.directionFromRotation(this.getStrangeVector());
+    }
+
     @Override
     public void die(DamageSource $$0) {
         this.deathTime = 0;
@@ -589,6 +642,7 @@ public class ManhattanTransferEntity extends StandEntity {
         validateUUID();
         float pitch = this.getXRot();
         float yaw = this.getYRot();
+
 
         if (this.getUserData(this.getUser()) != null) {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
@@ -640,11 +694,34 @@ public class ManhattanTransferEntity extends StandEntity {
                 }
             }
         }
+
+        Options options = Minecraft.getInstance().options;
+        if (this.getUserData(this.getUser()) != null) {
+            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                if (PM.isPiloting()) {
+                    if (options.keyJump.isDown() || options.keyShift.isDown()) {
+                        if (options.keyJump.isDown()) {
+                            heighHattanPilotNoMov = -45 * autoMoveBoost;
+                        }
+                        if (options.keyShift.isDown()) {
+                            heighHattanPilotNoMov = 45 * autoMoveBoost;
+                        }
+                    }
+                    if (!options.keyJump.isDown() && !options.keyShift.isDown()) {
+                        heighHattanPilotNoMov = 0;
+                    }
+                }
+            }
+        }
+
         searchTarget();
         rotationXHattan = this.getXRot();
         rotationYHattan = this.getYRot();
         super.tick();
     }
+
+    public float autoMoveBoost = 1;
+
     public float rotationXHattan = 0;
     public float rotationYHattan = 0;
 
@@ -785,6 +862,11 @@ public class ManhattanTransferEntity extends StandEntity {
     private boolean isPressingS = false;
     private boolean isPressingD = false;
 
+    private boolean pressS = false;
+    private boolean pressA = false;
+
+    private boolean verticalLastPressed = true;
+
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
@@ -828,26 +910,41 @@ public class ManhattanTransferEntity extends StandEntity {
 
                         if (PM.isClient() && !this.stopsManhattanAnimationsWhenHeldItem) {
                             if (PM.isPiloting()) {
+                                if(options.keyDown.isDown() || options.keyUp.isDown() || options.keyLeft.isDown() || options.keyRight.isDown()){
+                                    isKeyEverPressed = true;
+                                }
                                 if (options.keyUp.isDown()) {
                                     isPressingW = true;
+                                    pressS = false;
+                                    pressA = false;
+                                    verticalLastPressed = true;
                                 }
                                 if (!options.keyUp.isDown()) {
                                     isPressingW = false;
                                 }
                                 if (options.keyDown.isDown()) {
                                     isPressingS = true;
+                                    pressS = true;
+                                    pressA = false;
+                                    verticalLastPressed = true;
                                 }
                                 if (!options.keyDown.isDown()) {
                                     isPressingS = false;
                                 }
                                 if (options.keyLeft.isDown()) {
                                     isPressingA = true;
+                                    pressA = true;
+                                    pressS = false;
+                                    verticalLastPressed = false;
                                 }
                                 if (!options.keyLeft.isDown()) {
                                     isPressingA = false;
                                 }
                                 if (options.keyRight.isDown()) {
                                     isPressingD = true;
+                                    pressA = false;
+                                    pressS = false;
+                                    verticalLastPressed = false;
                                 }
                                 if (!options.keyRight.isDown()) {
                                     isPressingD = false;
