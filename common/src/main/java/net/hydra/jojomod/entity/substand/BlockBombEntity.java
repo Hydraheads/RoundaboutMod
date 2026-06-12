@@ -63,6 +63,9 @@ public class BlockBombEntity extends StandEntity {
 		if (pos != null) {
 			this.bombPos = pos;
 			this.originalState = this.level().getBlockState(pos);
+			if (this.originalState.hasBlockEntity()) {
+				this.originalState.getBlock();
+			}
 			Vec3 positionInWorld = this.bombPos.getCenter().add(0.0F, -0.5F, 0.0F);
 			this.getBlockSize();
 			
@@ -120,6 +123,7 @@ public class BlockBombEntity extends StandEntity {
 	public Entity detectContact() {
 		Vec3 pos = this.bombPos.getCenter();
 		float skinSize = 0.10f;
+
 		
 		List<Entity> entitiesDetect = MainUtil.genHitbox(this.level(), pos.x(), pos.y(), pos.z(),
 				this.blockSize.x() + skinSize, this.blockSize.y() + skinSize, this.blockSize.z() + skinSize);
