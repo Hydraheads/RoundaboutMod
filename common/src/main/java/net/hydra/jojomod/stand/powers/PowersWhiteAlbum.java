@@ -7,6 +7,7 @@ import net.hydra.jojomod.block.WhiteAlbumIceBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.ThrownWaterBottleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -39,6 +40,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
@@ -619,7 +621,12 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public void iceWallServer(){
         int cooldown = 120;
         this.setCooldown(PowerIndex.SKILL_3, cooldown);
-        if (!this.self.level().isClientSide() && this.self instanceof Player PL){
+        if (!this.self.level().isClientSide()){
+            BlockWallEntity fallingblockentity =
+                    new BlockWallEntity(self.level(),
+                            self.getX() + 2, self.getY(), self.getZ(),
+                            Blocks.FROSTED_ICE.defaultBlockState());
+            self.level().addFreshEntity(fallingblockentity);
            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.ICE_RISES_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
         }
     }

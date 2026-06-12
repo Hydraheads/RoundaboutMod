@@ -95,6 +95,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.BLADED_BOWLER_HAT.get(), BladedBowlerHatRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ROUNDABOUT_BULLET_ENTITY.get(), RoundaboutBulletEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_KNIFE.get(), KnifeRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.BLOCK_WALL.get(), BlockWallEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.METALLICA_KNIFE.get(), MetallicaKnifeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.RATT_DART.get(), RattDartRenderer::new);
         event.registerEntityRenderer(ForgeEntities.POISON_LLAMA_SPIT.get(), PoisonLlamaSpitRenderer::new);

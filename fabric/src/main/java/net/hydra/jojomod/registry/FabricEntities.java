@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Zombiefish;
@@ -548,6 +549,14 @@ public class FabricEntities {
                         EntityType.Builder.<KnifeEntity>of(KnifeEntity::new, MobCategory.MISC).
                                 sized(0.5f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":knife")
                 );
+    public static final EntityType<BlockWallEntity> BLOCK_WALL =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "block_wall_entity"),
+                    EntityType.Builder.<BlockWallEntity>of(BlockWallEntity::new, MobCategory.MISC).
+                            sized(BlockWallEntity.dimensions, BlockWallEntity.dimensions).
+                            clientTrackingRange(10).build(Roundabout.MOD_ID+":block_wall_entity")
+            );
         public static final EntityType<RattDartEntity> RATT_DART =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -916,6 +925,7 @@ public class FabricEntities {
                 ModEntities.BLADED_BOWLER_HAT = BLADED_BOWLER_HAT;
                 ModEntities.ROUNDABOUT_BULLET_ENTITY = ROUNDABOUT_BULLET_ENTITY;
                 ModEntities.THROWN_KNIFE = THROWN_KNIFE;
+                ModEntities.BLOCK_WALL = BLOCK_WALL;
                 ModEntities.RATT_DART = RATT_DART;
                 ModEntities.POISON_LLAMA_SPIT = POISON_LLAMA_SPIT;
                 ModEntities.THROWN_MATCH = THROWN_MATCH;
