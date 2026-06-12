@@ -107,12 +107,14 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     @Override
     public float guardSpecialties(DamageSource sauce, float damage){
+        if (sauce.is(DamageTypes.PLAYER_ATTACK)){
+            damage*=0.44F;
+        }
         if (sauce.is(ModDamageTypes.BULLET) ||
-                sauce.is(DamageTypes.PLAYER_ATTACK) ||
                 sauce.getEntity() instanceof Blaze){
             damage*=0.5F;
         }
-        return damage;
+        return super.guardSpecialties(sauce,damage);
     }
     @Override
     public void onChangedBlock(BlockPos blockPos){
@@ -255,6 +257,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
     @Override
     public void onJump(){
+        fixThis();
     }
 
     @Override
@@ -463,7 +466,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (!isHoldingSneak()){
             setSkillIcon(context, x, y, 1, StandIcons.SUIT_COMBAT, PowerIndex.NO_CD);
         } else {
-            setSkillIcon(context, x, y, 1, StandIcons.FREEZE_CANCEL, PowerIndex.SKILL_1);
+            setSkillIcon(context, x, y, 1, StandIcons.FREEZE_CANCEL, PowerIndex.SKILL_1_SNEAK);
         }
 
         if (!isHoldingSneak()){
@@ -476,7 +479,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (!isHoldingSneak()) {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         } else {
-            setSkillIcon(context, x, y, 3, StandIcons.ICE_WALL, PowerIndex.GLOBAL_DASH);
+            setSkillIcon(context, x, y, 3, StandIcons.ICE_WALL, PowerIndex.SKILL_3);
         }
 
         if (!isHoldingSneak()){
@@ -533,6 +536,15 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
+
+    public void iceWallClient(){
+        if (!this.onCooldown(PowerIndex.SKILL_3)) {
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+            tryPowerPacket(PowerIndex.POWER_3);
+        }
+    }
+
+
     public void toggleSkatesClient(){
         if (!this.onCooldown(PowerIndex.SKILL_1)) {
            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
@@ -556,8 +568,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case SKILL_2_CROUCH-> {
                 despawnSurvivorClient();
             }
-            case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
+            case SKILL_3_NORMAL -> {
                 dash();
+            }
+            case SKILL_3_CROUCH -> {
+                iceWallClient();
             }
             case SKILL_4_NORMAL -> {
                 toggleSkatesClient();
@@ -601,6 +616,13 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
 
+    public void iceWallServer(){
+        int cooldown = 120;
+        this.setCooldown(PowerIndex.SKILL_3, cooldown);
+        if (!this.self.level().isClientSide() && this.self instanceof Player PL){
+           this.self.level().playSound(null, this.self.blockPosition(), ModSounds.ICE_RISES_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+        }
+    }
 
     public boolean toggleSkates(){
         int cooldown = 5;
@@ -671,6 +693,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
         {
             case PowerIndex.POWER_1 -> {
                 return toggleSkates();
+            }
+            case PowerIndex.POWER_3 -> {
+                iceWallServer();
             }
             case PowerIndex.POWER_1_SNEAK -> {
                 iceCancelServer();

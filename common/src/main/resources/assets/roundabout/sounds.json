@@ -53,6 +53,12 @@
       "roundabout:emperor_shoot"
     ]
   },
+  "ice_wall": {
+    "subtitle": "sounds.roundabout.ice_wall",
+    "sounds": [
+      "roundabout:ice_wall"
+    ]
+  },
   "emperor_impact": {
     "subtitle": "sounds.roundabout.emperor_impact",
     "sounds": [

@@ -2534,6 +2534,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$damageGuard(float damage){
         if (PowerTypes.hasStandActivelyEquipped(rdbt$this()) && roundabout$getLogSource() != null){
             damage = roundabout$getStandPowers().guardSpecialties(roundabout$getLogSource(), damage);
+        } else  if (PowerTypes.hasPowerActivelyEquipped(rdbt$this()) && roundabout$getLogSource() != null){
+            if (rdbt$this() instanceof Player pl){
+                damage = ((IPowersPlayer)pl).rdbt$getPowers().guardSpecialties(roundabout$getLogSource(), damage);
+            }
         }
 
         float finalGuard = this.roundabout$GuardPoints - damage;

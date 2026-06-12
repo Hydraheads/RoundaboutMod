@@ -547,7 +547,15 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     @Override
     public float inputSpeedModifiers(float basis){
-        if (this.activePower == PowerIndex.BARRAGE_CHARGE_2) {
+        if (this.activePower == PowerIndex.POWER_2) {
+            basis*=0.3f;
+        } else if (this.getActivePower()==PowerIndex.POWER_2_SNEAK){
+            if (this.getSelf().isCrouching()){
+                float f = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(this.getSelf()), 0.0F, 1.0F);
+                float g = 1/f;
+                basis *= g;
+            }
+        } else if (this.activePower == PowerIndex.BARRAGE_CHARGE_2) {
             basis*=0.5f;
         } else if (this.activePower == PowerIndex.SNEAK_ATTACK_CHARGE){
             if (this.getSelf().isCrouching()) {
@@ -1277,7 +1285,11 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public Entity isBombEntityContacting() {
-        //this.bombEntity
+        if (this.bombEntity instanceof LivingEntity LE) {
+            LivingEntity lastAttacker = LE.getLastAttacker();
+            int lastTime = LE.getLastHurtMobTimestamp();
+            Roundabout.LOGGER.info("Last damage taken: " + lastTime);
+        }
 
         float hRad = this.bombEntity.getBbHeight() / 2.0f;
         float wRad = this.bombEntity.getBbWidth() / 2.0f;
@@ -1395,7 +1407,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.barrage",
                 "instruction.roundabout.barrage", StandIcons.KILLER_QUEEN_BARRAGE,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,0, "ability.roundabout.guard",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39, topPos+99,0, "ability.roundabout.guard",
                 "instruction.roundabout.hold_block", StandIcons.KILLER_QUEEN_GUARD_BUBBLES,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.bubble_selection",
                 "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_PLANT_BOMB_BLOCK,1,level,bypas));
@@ -1517,7 +1529,6 @@ public class PowersKillerQueen extends NewPunchingStand {
             Entity target = null;
 
             if (bStatus == PowersKillerQueen.BOMB_BLOCK) {
-                BlockPos pos = this.bombBlock.getBlockPos();
                 bPos = this.bombBlock.getBlockPos();
                 vPos = bPos.getCenter();
                 level = this.bombBlock.level();
