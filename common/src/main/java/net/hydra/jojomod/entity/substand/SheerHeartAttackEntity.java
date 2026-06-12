@@ -178,6 +178,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 			if (entity instanceof LivingEntity LE) {
 				if (LE.isDeadOrDying()) { continue; }
+				if (LE instanceof Player pl) {
+					if (pl.isCreative()) { continue; }
+				}
 				points += 20;
 				points += HeatUtil.getHeat(LE);
 

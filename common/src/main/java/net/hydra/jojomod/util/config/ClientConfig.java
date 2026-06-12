@@ -189,7 +189,7 @@ public class ClientConfig implements Cloneable {
         public Integer currentPowerInventoryTab;
         @BooleanOption(group = "inherit", value = true)
         public Boolean  windVisionMode;
-        @IntOption(group = "inherit", value = 1, min = 0, max = 3)
+        @IntOption(group = "inherit", value = 2, min = 0, max = 3)
         public Integer KillerQueenCurrentBombConfig;
     }
     public static class VanillaMCTweaks {
