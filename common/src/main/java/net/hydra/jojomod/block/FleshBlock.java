@@ -152,6 +152,7 @@ public class FleshBlock
                 }
             }
             Vec3 vec3 = entity.getDeltaMovement();
+            entity.makeStuckInBlock($$0, new Vec3((double)0.5F, (double)0.1F, (double)0.5F));
             if (!cond && !entity.isInvulnerable()) {
                 float clamp = $$0.getValue(LAYERS) == 1 ? 0.001F : 0.0005F;
                 entity.setDeltaMovement(new Vec3(
