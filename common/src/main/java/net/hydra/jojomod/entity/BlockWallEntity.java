@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity;
 import com.mojang.logging.LogUtils;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.core.BlockPos;
@@ -23,10 +24,12 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import org.joml.Vector3f;
@@ -84,7 +87,7 @@ public class BlockWallEntity extends Entity {
     }
 
     public boolean isAttackable() {
-        return false;
+        return true;
     }
 
     public void setStartPos(BlockPos $$0) {
@@ -142,6 +145,21 @@ public class BlockWallEntity extends Entity {
         discard();
     }
 
+
+    @Override
+    public boolean hurt(DamageSource $$0, float damage) {
+        if (this.isInvulnerableTo($$0)) {
+            return false;
+        } else {
+            if ((damage > 3 || MainUtil.isStandDamage($$0)) &&
+                    !$$0.is(ModDamageTypes.KNIFE) && !this.level().isClientSide()){
+                breakAndDiscard();
+            }
+            //This true is import
+            return true;
+        }
+    }
+
     Vec3 finPos = Vec3.ZERO;
     @Override
     public void tick() {
@@ -182,8 +200,18 @@ public class BlockWallEntity extends Entity {
         super.tick();
         refreshDimensions();
 
-    }
+        AABB wallBox = this.getBoundingBox();
 
+        for (LivingEntity mob : level().getEntitiesOfClass(
+                LivingEntity.class,
+                wallBox.inflate(0.1))) {
+
+            if (mob.getBoundingBox().intersects(wallBox)) {
+                mob.push(0, 0.2, 0);
+            }
+        }
+
+    }
     public void callOnBrokenAfterFall(Block $$0, BlockPos $$1) {
     }
 
