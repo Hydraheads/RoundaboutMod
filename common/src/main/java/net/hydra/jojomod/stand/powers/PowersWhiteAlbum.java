@@ -484,7 +484,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
 
 
-        if (!isHoldingSneak()) {
+        if (!isHoldingSneak() && !hasSkatesActivated()) {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         } else {
             setSkillIcon(context, x, y, 3, StandIcons.ICE_WALL, PowerIndex.SKILL_3);
@@ -579,7 +579,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 despawnSurvivorClient();
             }
             case SKILL_3_NORMAL -> {
-                dash();
+                dashOrWall();
             }
             case SKILL_3_CROUCH -> {
                 iceWallClient();
@@ -589,6 +589,14 @@ public class PowersWhiteAlbum extends NewDashPreset {
             }
             case SKILL_4_CROUCH -> {
             }
+        }
+    }
+
+    public void dashOrWall(){
+        if (hasSkatesActivated()){
+            iceWallClient();
+        } else {
+            dash();
         }
     }
 
@@ -666,18 +674,24 @@ public class PowersWhiteAlbum extends NewDashPreset {
         int cooldown = 120;
         this.setCooldown(PowerIndex.SKILL_3, cooldown);
         if (!this.self.level().isClientSide()){
-            HitResult hit = pick(2, 0.0F, false);
 
             BlockPos centerPos;
+            Direction facing = self.getDirection();
 
-            if (hit.getType() == HitResult.Type.BLOCK) {
-                BlockHitResult blockHit = (BlockHitResult) hit;
-
-                // Spawn on top of the block you are looking at
-                centerPos = blockHit.getBlockPos().relative(blockHit.getDirection());
+            if (!self.isCrouching() && hasSkatesActivated()){
+                centerPos = self.getOnPos().relative(facing.getOpposite()).relative(facing.getOpposite());
             } else {
-                // Fallback: 2 blocks in front of player
-                centerPos = self.blockPosition().relative(self.getDirection(), 2);
+
+                HitResult hit = pick(2, 0.0F, false);
+                if (hit.getType() == HitResult.Type.BLOCK) {
+                    BlockHitResult blockHit = (BlockHitResult) hit;
+
+                    // Spawn on top of the block you are looking at
+                    centerPos = blockHit.getBlockPos().relative(blockHit.getDirection());
+                } else {
+                    // Fallback: 2 blocks in front of player
+                    centerPos = self.blockPosition().relative(self.getDirection(), 2);
+                }
             }
 
             boolean isSafe = false;
@@ -692,7 +706,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
             if (isSafe) {
                 centerPos = new BlockPos(centerPos.getX(), Math.min(centerPos.getY(), self.blockPosition().getY()),
                         centerPos.getZ());
-                Direction facing = self.getDirection();
 
 // Left/right axis
                 Direction side = facing.getClockWise();
@@ -719,6 +732,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                                         Blocks.PACKED_ICE.defaultBlockState()
                                 );
                         wall.setDataFinalPos(newVec.add(0, 2, 0));
+                        wall.timing = 200;
                         wall.canGrief = MainUtil.getIsGamemodeApproriateForGrief(self);
 
                         self.level().addFreshEntity(wall);

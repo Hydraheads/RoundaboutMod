@@ -44,6 +44,7 @@ public class BlockWallEntity extends Entity {
     private boolean hurtEntities;
     private int fallDamageMax;
     private float fallDamagePerDistance;
+    public int timing = -1;
     @Nullable
     public CompoundTag blockData;
     protected static final EntityDataAccessor<BlockPos> DATA_START_POS;
@@ -129,15 +130,17 @@ public class BlockWallEntity extends Entity {
         updated = true;
     }
 
-    public boolean marked = false;
-    public boolean marked2 = false;
-    public int tickToDeath  = 5;
-
     Vec3 finPos = Vec3.ZERO;
     @Override
     public void tick() {
 
         if (!level().isClientSide()) {
+            if (timing > -1){
+                timing--;
+                if (timing <= 0){
+                    discard();
+                }
+            }
             Vec3 current = position();
             Vec3 target = new Vec3(getFinalPos().x, getFinalPos().y, getFinalPos().z);
             refreshDimensions();
@@ -211,11 +214,10 @@ public class BlockWallEntity extends Entity {
     protected void addAdditionalSaveData(CompoundTag $$0) {
         $$0.put("BlockState", NbtUtils.writeBlockState(this.blockState));
         $$0.putInt("Time", this.time);
+        $$0.putInt("DeathTimer", this.timing);
         $$0.putBoolean("DropItem", this.dropItem);
         $$0.putBoolean("HurtEntities", this.hurtEntities);
         $$0.putBoolean("CanGrief", this.canGrief);
-        $$0.putBoolean("marked", this.marked);
-        $$0.putBoolean("marked2", this.marked2);
         $$0.putFloat("FallHurtAmount", this.fallDamagePerDistance);
         $$0.putInt("FallHurtMax", this.fallDamageMax);
         $$0.putFloat("FinalPosX", getFinalPos().x());
@@ -231,9 +233,8 @@ public class BlockWallEntity extends Entity {
     protected void readAdditionalSaveData(CompoundTag $$0) {
         this.blockState = NbtUtils.readBlockState(this.level().holderLookup(Registries.BLOCK), $$0.getCompound("BlockState"));
         this.time = $$0.getInt("Time");
+        this.timing = $$0.getInt("DeathTimer");
         this.canGrief = $$0.getBoolean("CanGrief");
-        this.marked = $$0.getBoolean("marked");
-        this.marked2 = $$0.getBoolean("marked2");
         if ($$0.contains("HurtEntities", 99)) {
             this.hurtEntities = $$0.getBoolean("HurtEntities");
             this.fallDamagePerDistance = $$0.getFloat("FallHurtAmount");
