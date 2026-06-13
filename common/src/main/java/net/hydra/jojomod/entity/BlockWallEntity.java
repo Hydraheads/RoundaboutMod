@@ -111,12 +111,22 @@ public class BlockWallEntity extends Entity {
         return 0.3f;
     }
     private int lerpSteps;
+    private double lerpX;
+    private double lerpY;
+    private double lerpZ;
+
+    public boolean updated = false;
     @Override
     public void lerpTo(double $$0, double $$1, double $$2, float $$3, float $$4, int $$5, boolean $$6) {
-        this.lerpSteps = 0;
-        this.setPos($$0, $$1, $$2);
+        this.lerpX = $$0;
+        this.lerpY = $$1;
+        this.lerpZ = $$2;
         this.setRot($$3, $$4);
+        this.lerpSteps = $$5;
+        updated = true;
     }
+
+    Vec3 finPos = Vec3.ZERO;
     @Override
     public void tick() {
         if (!level().isClientSide()) {
@@ -132,6 +142,18 @@ public class BlockWallEntity extends Entity {
                 setPos(current.add(
                         delta.normalize().scale(distanceToClearWhileTicked())
                 ));
+            }
+        } else {
+            if (this.lerpSteps > 0) {
+                double $$0 = this.getX() + (this.lerpX - this.getX()) / (double)this.lerpSteps;
+                double $$1 = this.getY() + (this.lerpY - this.getY()) / (double)this.lerpSteps;
+                double $$2 = this.getZ() + (this.lerpZ - this.getZ()) / (double)this.lerpSteps;
+                --this.lerpSteps;
+                this.setPos($$0, $$1, $$2);
+            } else {
+                if (updated) {
+                    this.setPos(lerpX, lerpY, lerpZ);
+                }
             }
         }
         super.tick();
