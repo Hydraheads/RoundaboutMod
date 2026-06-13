@@ -1644,13 +1644,26 @@ public class PowersKillerQueen extends NewPunchingStand {
                 boolean playersHitkill = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantHitkillPlayers;
                 boolean mobsHitkill = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantHitkillMobs;
 
-                if ((target instanceof Player pl && playersHitkill)) {
-                    if (!pl.isCreative()) { pl.die(dmg); }
-                }else {
-                    if (!(target instanceof Player) && mobsHitkill) {
+                boolean isBoss = MainUtil.isBossMob(target);
+
+                if (target instanceof Player pl) {
+                    if (!pl.isCreative() && playersHitkill) { pl.die(dmg); }
+                    else {
+                        target.hurt(dmg, hitPoints
+                            * ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnPlayers
+                        );
+                    }
+                } else {
+                    if (mobsHitkill && !isBoss) {
                         target.kill();
+                    } else if (isBoss) {
+                        target.hurt(dmg, hitPoints * 0.70f
+                            * ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnMobs
+                        );
                     } else {
-                        target.hurt(dmg, hitPoints);
+                        target.hurt(dmg, hitPoints
+                            * ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnMobs
+                        );
                     }
                 }
             }
