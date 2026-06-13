@@ -88,6 +88,12 @@ public class PowersSurvivor extends NewDashPreset {
     }
 
 
+    @Override
+    public void onPowerSwitch(){
+        removeAllSurvivors();
+        super.onPowerSwitch();
+    }
+
     public List<SurvivorEntity> survivorsSpawned = new ArrayList<>();
 
     public void listInit(){
