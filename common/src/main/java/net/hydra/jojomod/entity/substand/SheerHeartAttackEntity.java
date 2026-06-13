@@ -77,10 +77,13 @@ public class SheerHeartAttackEntity extends StandEntity {
 	static final int tickTargetFindMax = 4;
 
 	int attackTick = 0;
-	static final int attackTickMax = 15;
+	static final int attackTickMax = 35;
+	int jumpTick = 0;
+	static final int jumpTickMax = 30;
 
 	public int struckTicks = 0;
 	static final int struckMaxTicks = 12;
+	public int flyngTicks = 0;
 
 	static final byte
 		NONE = 0,
@@ -121,7 +124,6 @@ public class SheerHeartAttackEntity extends StandEntity {
 	@Override
 	public void tick() {
 		this.setFadeOut((byte)1);
-
 		validateUUID();
 
 		boolean client = this.level().isClientSide();
@@ -140,19 +142,39 @@ public class SheerHeartAttackEntity extends StandEntity {
 				}
 
 				if (this.attackTick > 0) { this.attackTick--;}
+				if (this.jumpTick > 0) { this.jumpTick--;}
 
+				if (!this.onGround()) {
+					flyngTicks++;
+				}else {
+					flyngTicks = 0;
+				}
+
+				if (flyngTicks > 2) {
+					Vec3 tPos = this.getTargetPosition();
+					Vec3 sPos = this.position();
+					double dist = MainUtil.cheapDistanceTo(
+							tPos.x, tPos.y, tPos.z,
+							sPos.x, sPos.y, sPos.z
+						);
+					if (dist <= 1.3 && this.attackTick <= 0) {
+						this.attack();
+					}
+				}
+
+				/*
 				if (this.hasTarget()) {
 					//this.lookAt(EntityAnchorArgument.Anchor.FEET,this.getTargetPosition());
 				}else if (!this.haveToReturn ){
 					this.getNavigation().stop();
-				}else {
-					this.getNavigation().moveTo(this.getUser(), 1.5f);
+				}else {*/
+					/*this.getNavigation().moveTo(this.getUser(), 1.5f);
 					if (this.getDeltaMovement().length() < 0.55) {
 						struckTicks++;
 					}else {
 						struckTicks = 0;
-					}
-				}
+					}*/
+				//}
 			}
 		}
 
@@ -162,8 +184,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
-		this.goalSelector.addGoal(2, new WarmestSeek(this));
+		//this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
+		this.goalSelector.addGoal(5, new WarmestSeek(this));
 		this.goalSelector.addGoal(1, new TryToReturn(this));
 	}
 
@@ -202,7 +224,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			if (points <= 0) {continue; }
 
 			if (points > harmest) {
-				points = harmest;
+				harmest = points;
 				harmestDistance = dist;
 				targetEnt = entity;
 			} else if (points == harmest ) {
@@ -252,14 +274,12 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
 
-	public void attack(Vec3 position) {
-
-		this.jump(position);
+	public void attack() {
 
 		DamageSource dmg = ModDamageTypes.of(this.level(), DamageTypes.PLAYER_EXPLOSION, this);;
 
 		ExplosionUtil.explosionHurt(this.position(), dmg, this.level(),
-				ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionDetonateMaxDamage, 0.3f, 1.3f);
+				ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage, 0.3f, 1.3f);
 
 		ExplosionUtil.explodeEffects(this.position(), this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, 0.3f, 12);
 
@@ -277,16 +297,18 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
 	 public void jump(Vec3 jumpT0Pos){
-		this.lookAt(EntityAnchorArgument.Anchor.EYES,jumpT0Pos);
-
-		this.setDeltaMovement((this.getLookAngle().multiply(1.2,1.2,1.2)).add(0,0.9,0));
+		if (this.onGround()) {
+			this.lookAt(EntityAnchorArgument.Anchor.EYES, jumpT0Pos);
+			this.jumpTick = jumpTickMax;
+			this.setDeltaMovement((this.getLookAngle().multiply(1.2, 1.2, 1.2)).add(0, 0.9, 0));
+		}
 	}
 
 	public void shoot(Vec3 shootToPos){
 
 		this.lookAt(EntityAnchorArgument.Anchor.EYES,shootToPos);
 
-		this.setDeltaMovement((this.getLookAngle().multiply(1.0,1.0,1.0)).add(0,0.1,0));
+		this.setDeltaMovement((this.getLookAngle().multiply(1.3,1.3,1.3)).add(0,0.1,0));
 	}
 
 
@@ -353,7 +375,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 				if (!this.mob.canAttack(targetPos)) {
 					this.move(targetPos);
 				}else {
-					if (type == ENTITY) {
+					if (type == ENTITY && this.mob.jumpTick <= 0) {
 						this.mob.jump(targetPos);
 					}
 				}

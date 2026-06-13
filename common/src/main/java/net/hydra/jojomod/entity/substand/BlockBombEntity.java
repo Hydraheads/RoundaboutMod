@@ -83,24 +83,19 @@ public class BlockBombEntity extends StandEntity {
 	
 	@Override
     public void tick() {
+		this.setFadeOut((byte)1);
+		validateUUID();
+
 		boolean client = this.level().isClientSide();
         LivingEntity user = this.getUser();
         if (!client) {
             if(user == null){
-                
                 this.discard();
             }else if((!(((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen)) || (!user.isAlive())){
-                
                 this.discard();
             }
             else{
-            	
-            	
-            	this.setHeadRotationX(0);
-            	this.setHeadRotationY(0);
-            	this.setStandRotationX(0);
-            	this.setStandRotationY(0);
-            	this.setStandRotationZ(0);
+				this.setYRot(0f);
             	if (this.tickIndicator > 0 && this.tickIndicator % 2 == 0){   
 	            	Vec3 pos = bombPos.getCenter();
 	            	
@@ -117,7 +112,7 @@ public class BlockBombEntity extends StandEntity {
             }
 		
         }
-        //super.tick();
+        super.tick();
     }
 	
 	public Entity detectContact() {
