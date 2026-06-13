@@ -671,7 +671,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     BlockPos storeCenter = BlockPos.ZERO;
     Direction sideX = Direction.UP;
     public void iceWallServer(){
-        int cooldown = 120;
+        int cooldown = 110;
         this.setCooldown(PowerIndex.SKILL_3, cooldown);
         if (!this.self.level().isClientSide()){
 

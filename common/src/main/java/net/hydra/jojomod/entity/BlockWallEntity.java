@@ -6,6 +6,8 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -16,6 +18,7 @@ import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -130,6 +133,15 @@ public class BlockWallEntity extends Entity {
         updated = true;
     }
 
+    public void breakAndDiscard(){
+        level().levelEvent(
+                2001,
+                getOnPos().above(),
+                Block.getId(blockState)
+        );
+        discard();
+    }
+
     Vec3 finPos = Vec3.ZERO;
     @Override
     public void tick() {
@@ -138,7 +150,7 @@ public class BlockWallEntity extends Entity {
             if (timing > -1){
                 timing--;
                 if (timing <= 0){
-                    discard();
+                    breakAndDiscard();
                 }
             }
             Vec3 current = position();
