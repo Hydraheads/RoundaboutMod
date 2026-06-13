@@ -121,6 +121,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         BOMB_CONFIG = 59,
         BITES_THE_DUST_COMBAT = 60,
         BITES_THE_DUST_DAY = 61,
+        IMPALE_NOISE = 105,
 
     // Bomb Status things
 		BOMB_NONE=0,
@@ -128,11 +129,17 @@ public class PowersKillerQueen extends NewPunchingStand {
 		BOMB_ITEM=2,
 		BOMB_ENTITY=3,
 		BOMB_BUBBLE=4,
-        BOMB_CONTACT = 5;
+        BOMB_CONTACT = 5,
+    // Sheer Heart Attack Status things
+        SHA_NONE = 0,
+        SHA_SEND = 1,
+        SHA_RETREAT = 3;
+
 
 	
 	private byte currentBombStatus = BOMB_NONE;
 	private boolean shaReleased = false;
+    private byte currentShaStatus = SHA_NONE;
     private int bombConfig = 2;
 	
 	 public void syncBombStatus(byte status) {
@@ -144,6 +151,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void syncShaStatus(byte status) {
         this.shaReleased = status == 1;
+        this.currentShaStatus = status;
         this.updatePowerInt(PowersKillerQueen.SHEER_HEART_ATTACK, status);
         S2CPacketUtil.sendIntPowerDataPacket((Player)this.getSelf(),PowersKillerQueen.SHEER_HEART_ATTACK, status);
     }
@@ -188,6 +196,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public static final float mobPlantRange = 3.5F;
     public static final float impaleRange = 3.5F;
     public static final float blockPlantRange = 3.5f;
+    public static final float btdPlantRange = 3.0f;
 
     @Override
     public int getMaxGuardPoints(){ return 15; }
@@ -342,13 +351,21 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         if (isHoldingSneak() && !(inBitesTheDustMode())){
         	if (this.shaReleased) {
-        		setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_RETREAT, PowerIndex.NO_CD);
+                if (this.currentShaStatus == SHA_SEND) {
+                    setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_RETREAT, PowerIndex.NO_CD);
+                }else {
+                    setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_RETREAT_CANCEL, PowerIndex.NO_CD);
+                }
         	}else {
         		setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_SUMMON, PowerIndex.SKILL_3);
         	}
         } else if (isGuarding() && !(inBitesTheDustMode())){
             if (this.shaReleased) {
-                setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_RETREAT, PowerIndex.NO_CD);
+                if (this.currentShaStatus == SHA_SEND) {
+                    setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_RETREAT, PowerIndex.NO_CD);
+                }else {
+                    setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_RETREAT_CANCEL, PowerIndex.NO_CD);
+                }
             }else {
                 setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_THROW, PowerIndex.SKILL_3);
             }
@@ -897,6 +914,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
             case PowersKillerQueen.SHEER_HEART_ATTACK-> {
                 this.shaReleased = data == 1;
+                this.currentShaStatus = (byte)data;
             }
             case PowersKillerQueen.ENTITY_BOMB -> {
                 this.bombEntity = this.getSelf().level().getEntity(data);
@@ -1158,7 +1176,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (Objects.nonNull(stand)){
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_2_SNEAK);
-            //playSoundsIfNearby(IMPALE_NOISE, 27, false);
+            playSoundsIfNearby(IMPALE_NOISE, 27, false);
 
             this.animateStand(KillerQueenEntity.IMPALE);
 
@@ -1316,13 +1334,12 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (this.SHA != null) {
                 if ((this.SHA.shaIsNear() && this.SHA.getHaveToReturn()) || this.SHA.isRemoved() || this.inBitesTheDustMode()) {
                     this.SHA.discard();
-                    this.syncShaStatus((byte)0);
+                    this.syncShaStatus(SHA_NONE);
                     this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackCooldown);
                 }
             }else if (this.shaReleased){
-                this.syncShaStatus((byte)0);
+                this.syncShaStatus(SHA_NONE);
             }
-
 
             if (this.bombConfig >= 2 && this.getActivePower() != DETONATE) {
                 if (this.currentBombStatus == BOMB_BLOCK) {
@@ -1411,6 +1428,8 @@ public class PowersKillerQueen extends NewPunchingStand {
     	   return ModSounds.KILLER_QUEEN_DETONATE_EVENT;
        }else if (soundChoice == PowersKillerQueen.EXPLOSION) {
     	   return ModSounds.KILLER_QUEEN_EXPLOSION_EVENT;
+       }else if (soundChoice == IMPALE_NOISE) {
+           return ModSounds.IMPALE_CHARGE_EVENT;
        }
        
         return super.getSoundFromByte(soundChoice);
@@ -1620,10 +1639,32 @@ public class PowersKillerQueen extends NewPunchingStand {
                     ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionDetonateMaxDamage, 0.4f, 1.5f);
 
             if (target != null && bStatus == BOMB_ENTITY) {
+                float hitPoints = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantDesintegrationDamage;
+
+                boolean playersHitkill = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantHitkillPlayers;
+                boolean mobsHitkill = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantHitkillMobs;
+
+                boolean isBoss = MainUtil.isBossMob(target);
+
                 if (target instanceof Player pl) {
-                    if (!pl.isCreative()) { pl.die(dmg); }
-                }else {
-                    target.hurt(dmg, 25.0f);
+                    if (!pl.isCreative() && playersHitkill) { pl.die(dmg); }
+                    else {
+                        target.hurt(dmg, hitPoints
+                            * ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnPlayers
+                        );
+                    }
+                } else {
+                    if (mobsHitkill && !isBoss) {
+                        target.kill();
+                    } else if (isBoss) {
+                        target.hurt(dmg, hitPoints * 0.70f
+                            * ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnMobs
+                        );
+                    } else {
+                        target.hurt(dmg, hitPoints
+                            * ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnMobs
+                        );
+                    }
                 }
             }
 
@@ -1712,11 +1753,12 @@ public class PowersKillerQueen extends NewPunchingStand {
                         SHA.shoot(getRayBlock(this.self,4f));
                     }
 
-                    this.syncShaStatus((byte)1);
+                    this.syncShaStatus(SHA_SEND);
             	}
             	
             } else {
                 SHA.setHaveToReturn(!SHA.getHaveToReturn());
+                this.syncShaStatus(SHA_RETREAT);
             }
         }
     	
