@@ -1,6 +1,9 @@
 package net.hydra.jojomod.entity;
 
 import com.mojang.logging.LogUtils;
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -16,14 +19,13 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntitySelector;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import org.joml.Vector3f;
 import org.slf4j.Logger;
 
@@ -37,6 +39,7 @@ public class BlockWallEntity extends Entity {
     private BlockState blockState;
     public int time;
     public boolean dropItem;
+    public boolean canGrief = false;
     private boolean cancelDrop;
     private boolean hurtEntities;
     private int fallDamageMax;
@@ -126,9 +129,14 @@ public class BlockWallEntity extends Entity {
         updated = true;
     }
 
+    public boolean marked = false;
+    public boolean marked2 = false;
+    public int tickToDeath  = 5;
+
     Vec3 finPos = Vec3.ZERO;
     @Override
     public void tick() {
+
         if (!level().isClientSide()) {
             Vec3 current = position();
             Vec3 target = new Vec3(getFinalPos().x, getFinalPos().y, getFinalPos().z);
@@ -158,6 +166,7 @@ public class BlockWallEntity extends Entity {
         }
         super.tick();
         refreshDimensions();
+
     }
 
     public void callOnBrokenAfterFall(Block $$0, BlockPos $$1) {
@@ -204,6 +213,9 @@ public class BlockWallEntity extends Entity {
         $$0.putInt("Time", this.time);
         $$0.putBoolean("DropItem", this.dropItem);
         $$0.putBoolean("HurtEntities", this.hurtEntities);
+        $$0.putBoolean("CanGrief", this.canGrief);
+        $$0.putBoolean("marked", this.marked);
+        $$0.putBoolean("marked2", this.marked2);
         $$0.putFloat("FallHurtAmount", this.fallDamagePerDistance);
         $$0.putInt("FallHurtMax", this.fallDamageMax);
         $$0.putFloat("FinalPosX", getFinalPos().x());
@@ -219,6 +231,9 @@ public class BlockWallEntity extends Entity {
     protected void readAdditionalSaveData(CompoundTag $$0) {
         this.blockState = NbtUtils.readBlockState(this.level().holderLookup(Registries.BLOCK), $$0.getCompound("BlockState"));
         this.time = $$0.getInt("Time");
+        this.canGrief = $$0.getBoolean("CanGrief");
+        this.marked = $$0.getBoolean("marked");
+        this.marked2 = $$0.getBoolean("marked2");
         if ($$0.contains("HurtEntities", 99)) {
             this.hurtEntities = $$0.getBoolean("HurtEntities");
             this.fallDamagePerDistance = $$0.getFloat("FallHurtAmount");

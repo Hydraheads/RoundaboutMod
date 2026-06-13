@@ -112,6 +112,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
+
     @Override
     public float guardSpecialties(DamageSource sauce, float damage){
         if (sauce.is(DamageTypes.PLAYER_ATTACK)){
@@ -546,8 +547,10 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     public void iceWallClient(){
         if (!this.onCooldown(PowerIndex.SKILL_3)) {
-            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
-            tryPowerPacket(PowerIndex.POWER_3);
+            if (canUseIceWall()) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+                tryPowerPacket(PowerIndex.POWER_3);
+            }
         }
     }
 
@@ -631,6 +634,34 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return this.self.level().clip(new ClipContext($$3, $$5, ClipContext.Block.COLLIDER, $$2 ? net.minecraft.world.level.ClipContext.Fluid.ANY : net.minecraft.world.level.ClipContext.Fluid.NONE, self));
     }
 
+    public boolean canUseIceWall(){
+
+        HitResult hit = pick(2, 0.0F, false);
+
+        BlockPos centerPos;
+
+        if (hit.getType() == HitResult.Type.BLOCK) {
+            BlockHitResult blockHit = (BlockHitResult) hit;
+
+            // Spawn on top of the block you are looking at
+            centerPos = blockHit.getBlockPos().relative(blockHit.getDirection());
+        } else {
+            // Fallback: 2 blocks in front of player
+            centerPos = self.blockPosition().relative(self.getDirection(), 2);
+        }
+
+        for (var i = 0; i < 5; i++) {
+            if (self.level().getBlockState(centerPos.below(i)).isSolid()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public int placePhase = 0;
+    BlockPos storeCenter = BlockPos.ZERO;
+    Direction sideX = Direction.UP;
     public void iceWallServer(){
         int cooldown = 120;
         this.setCooldown(PowerIndex.SKILL_3, cooldown);
@@ -649,38 +680,52 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 centerPos = self.blockPosition().relative(self.getDirection(), 2);
             }
 
-            centerPos = new BlockPos(centerPos.getX(),Math.min(centerPos.getY(),self.blockPosition().getY()),
-                centerPos.getZ());
-            Direction facing = self.getDirection();
-
-// Left/right axis
-            Direction side = facing.getClockWise();
-            for (int width = -1; width <= 1; width++) {
-                for (int height = 0; height < 3; height++) {
-
-                    BlockPos spawnPos = centerPos
-                            .relative(side, width)
-                            .above(height);
-
-                    Vector3f newVec = new Vector3f((float) (spawnPos.getX() + 0.49),
-                            (float)(spawnPos.getY()-0.01),
-                            (float)(spawnPos.getZ() + 0.49)).add(0,-3,0);
-
-                    BlockWallEntity wall =
-                            // slightly off to not z-fight
-                            new BlockWallEntity(
-                                    self.level(),
-                                    newVec.x,
-                                    newVec.y,
-                                    newVec.z,
-                                    Blocks.PACKED_ICE.defaultBlockState()
-                            );
-                    wall.setDataFinalPos(newVec.add(0,2,0));
-
-                    self.level().addFreshEntity(wall);
+            boolean isSafe = false;
+            for (var i = 0; i < 5; i++) {
+                if (self.level().getBlockState(centerPos.below(i)).isSolid()){
+                    centerPos = centerPos.below(i);
+                    isSafe = true;
+                    i = 10;
                 }
             }
-           this.self.level().playSound(null, this.self.blockPosition(), ModSounds.ICE_RISES_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+
+            if (isSafe) {
+                centerPos = new BlockPos(centerPos.getX(), Math.min(centerPos.getY(), self.blockPosition().getY()),
+                        centerPos.getZ());
+                Direction facing = self.getDirection();
+
+// Left/right axis
+                Direction side = facing.getClockWise();
+                sideX = side;
+                storeCenter = centerPos;
+                for (int width = -1; width <= 1; width++) {
+                    for (int height = 0; height < 2; height++) {
+
+                        BlockPos spawnPos = centerPos
+                                .relative(side, width)
+                                .above(height);
+
+                        Vector3f newVec = new Vector3f((float) (spawnPos.getX()+0.5),
+                                (float) (spawnPos.getY()),
+                                (float) (spawnPos.getZ() + 0.5)).add(0, -1, 0);
+
+                        BlockWallEntity wall =
+                                // slightly off to not z-fight
+                                new BlockWallEntity(
+                                        self.level(),
+                                        newVec.x,
+                                        newVec.y,
+                                        newVec.z,
+                                        Blocks.PACKED_ICE.defaultBlockState()
+                                );
+                        wall.setDataFinalPos(newVec.add(0, 2, 0));
+                        wall.canGrief = MainUtil.getIsGamemodeApproriateForGrief(self);
+
+                        self.level().addFreshEntity(wall);
+                    }
+                }
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.ICE_RISES_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+            }
         }
     }
 

@@ -36,7 +36,7 @@ public class BlockWallEntityRenderer extends EntityRenderer<BlockWallEntity> {
                 BlockPos $$8 = BlockPos.containing($$0.getX(), $$0.getBoundingBox().maxY, $$0.getZ());
                 $$3.translate((double)-0.5F, (double)0.0F, (double)-0.5F);
 
-                //$$3.scale(0.98F,0.98F,0.98F);
+                $$3.translate(0.01F,-0.01F,0.01F);
                 this.dispatcher.getModelRenderer().tesselateBlock($$7,
                         this.dispatcher.getBlockModel($$6),
                         $$6, $$8, $$3,
