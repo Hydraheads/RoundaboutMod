@@ -1676,7 +1676,7 @@
   "ability.roundabout.kq_bomb_block":"Block Primary Bomb Plant",
   "ability.roundabout.kq_bomb_block.desc":"Plants a bomb on the block you are facing",
   "ability.roundabout.kq_bomb_item":"Item Primary Bomb Plant",
-  "ability.roundabout.kq_bomb_item.desc":"Plants a bomb on the item you are helding, it is throwed if you are still helding when triggering detonate",
+  "ability.roundabout.kq_bomb_item.desc":"Plants a bomb on the item you are helding, it is throwed on detonate if you are still helding it",
   "ability.roundabout.kq_bomb_mob":"Mob Primary Bomb Plant",
   "ability.roundabout.kq_bomb_mob.desc":"Plants a bomb on the mob you are facing, it slows you down a lot, and has 3 seconds windup, but it will deal 25 damage on mobs and insta-kill players when detonating",
   "ability.roundabout.kq_bomb_bubble":"Stray cats Bubbles Primary Bomb",

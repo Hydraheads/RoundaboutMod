@@ -147,13 +147,12 @@ public class SheerHeartAttackEntity extends StandEntity {
 					this.getNavigation().stop();
 				}else {
 					this.getNavigation().moveTo(this.getUser(), 1.5f);
-					if (this.getDeltaMovement().length() < 0.2) {
+					if (this.getDeltaMovement().length() < 0.55) {
 						struckTicks++;
 					}else {
 						struckTicks = 0;
 					}
 				}
-
 			}
 		}
 
