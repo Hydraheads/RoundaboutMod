@@ -196,6 +196,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public static final float mobPlantRange = 3.5F;
     public static final float impaleRange = 3.5F;
     public static final float blockPlantRange = 3.5f;
+    public static final float btdPlantRange = 3.0f;
 
     @Override
     public int getMaxGuardPoints(){ return 15; }
