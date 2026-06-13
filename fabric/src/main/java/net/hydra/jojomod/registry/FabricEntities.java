@@ -554,7 +554,8 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "block_wall_entity"),
                     EntityType.Builder.<BlockWallEntity>of(BlockWallEntity::new, MobCategory.MISC).
-                            sized(BlockWallEntity.dimensions, BlockWallEntity.dimensions).
+                            sized(BlockWallEntity.dimensions, BlockWallEntity.dimensions)
+                            .updateInterval(1).
                             clientTrackingRange(10).build(Roundabout.MOD_ID+":block_wall_entity")
             );
         public static final EntityType<RattDartEntity> RATT_DART =

@@ -37,7 +37,11 @@ public class BlockWallEntityRenderer extends EntityRenderer<BlockWallEntity> {
                 $$3.translate((double)-0.5F, (double)0.0F, (double)-0.5F);
 
                 //$$3.scale(0.98F,0.98F,0.98F);
-                this.dispatcher.getModelRenderer().tesselateBlock($$7, this.dispatcher.getBlockModel($$6), $$6, $$8, $$3, $$4.getBuffer(ItemBlockRenderTypes.getMovingBlockRenderType($$6)), false, RandomSource.create(), $$6.getSeed($$0.getStartPos()), OverlayTexture.NO_OVERLAY);
+                this.dispatcher.getModelRenderer().tesselateBlock($$7,
+                        this.dispatcher.getBlockModel($$6),
+                        $$6, $$8, $$3,
+                        $$4.getBuffer(ItemBlockRenderTypes.getMovingBlockRenderType($$6)),
+                        false, RandomSource.create(), $$6.getSeed($$0.getStartPos()), OverlayTexture.NO_OVERLAY);
                 $$3.popPose();
                 super.render($$0, $$1, $$2, $$3, $$4, $$5);
             }

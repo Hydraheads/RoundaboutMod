@@ -484,7 +484,8 @@ public class ForgeEntities {
             ENTITY_TYPES.register("block_wall", () ->
                     EntityType.Builder.<BlockWallEntity>of(BlockWallEntity::new, MobCategory.MISC)
                             .sized(BlockWallEntity.dimensions, BlockWallEntity.dimensions).
-                            clientTrackingRange(10).
+                            clientTrackingRange(10)
+                            .updateInterval(1).
                             build(new ResourceLocation(Roundabout.MOD_ID, "block_wall").toString())
             );
     public static final RegistryObject<EntityType<MetallicaKnifeEntity>> METALLICA_KNIFE =

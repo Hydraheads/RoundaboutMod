@@ -60,6 +60,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -634,7 +635,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         int cooldown = 120;
         this.setCooldown(PowerIndex.SKILL_3, cooldown);
         if (!this.self.level().isClientSide()){
-            HitResult hit = pick(8.0D, 0.0F, false);
+            HitResult hit = pick(2, 0.0F, false);
 
             BlockPos centerPos;
 
@@ -661,15 +662,20 @@ public class PowersWhiteAlbum extends NewDashPreset {
                             .relative(side, width)
                             .above(height);
 
+                    Vector3f newVec = new Vector3f((float) (spawnPos.getX() + 0.49),
+                            (float)(spawnPos.getY()-0.01),
+                            (float)(spawnPos.getZ() + 0.49)).add(0,-3,0);
+
                     BlockWallEntity wall =
                             // slightly off to not z-fight
                             new BlockWallEntity(
                                     self.level(),
-                                    spawnPos.getX() + 0.49,
-                                    spawnPos.getY()-0.01,
-                                    spawnPos.getZ() + 0.49,
+                                    newVec.x,
+                                    newVec.y,
+                                    newVec.z,
                                     Blocks.PACKED_ICE.defaultBlockState()
                             );
+                    wall.setDataFinalPos(newVec.add(0,2,0));
 
                     self.level().addFreshEntity(wall);
                 }

@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
@@ -43,13 +44,14 @@ public class BlockWallEntity extends Entity {
     @Nullable
     public CompoundTag blockData;
     protected static final EntityDataAccessor<BlockPos> DATA_START_POS;
-    protected static final EntityDataAccessor<BlockPos> DATA_FINAL_POS;
+    protected static final EntityDataAccessor<Vector3f> DATA_FINAL_POS;
 
     public BlockWallEntity(EntityType<? extends BlockWallEntity> $$0, Level $$1) {
         super($$0, $$1);
         this.blockState = Blocks.SAND.defaultBlockState();
         this.dropItem = true;
         this.fallDamageMax = 40;
+        this.blocksBuilding = true;
     }
 
     public static final float dimensions = 1F;
@@ -73,12 +75,6 @@ public class BlockWallEntity extends Entity {
     @Override
     public void push(Entity $$0) {
     }
-    public static BlockWallEntity fall(Level $$0, BlockPos $$1, BlockState $$2) {
-        BlockWallEntity $$3 = new BlockWallEntity($$0, (double)$$1.getX() + (double)0.5F, (double)$$1.getY(), (double)$$1.getZ() + (double)0.5F, $$2.hasProperty(BlockStateProperties.WATERLOGGED) ? (BlockState)$$2.setValue(BlockStateProperties.WATERLOGGED, false) : $$2);
-        $$0.setBlock($$1, $$2.getFluidState().createLegacyBlock(), 3);
-        $$0.addFreshEntity($$3);
-        return $$3;
-    }
 
     public boolean isAttackable() {
         return false;
@@ -87,15 +83,15 @@ public class BlockWallEntity extends Entity {
     public void setStartPos(BlockPos $$0) {
         this.entityData.set(DATA_START_POS, $$0);
     }
-    public void setDataFinalPos(BlockPos $$0) {
+    public void setDataFinalPos(Vector3f $$0) {
         this.entityData.set(DATA_FINAL_POS, $$0);
     }
 
     public BlockPos getStartPos() {
         return (BlockPos)this.entityData.get(DATA_START_POS);
     }
-    public BlockPos getFinalPos() {
-        return (BlockPos)this.entityData.get(DATA_FINAL_POS);
+    public Vector3f getFinalPos() {
+        return (Vector3f) this.entityData.get(DATA_FINAL_POS);
     }
 
     protected Entity.MovementEmission getMovementEmission() {
@@ -104,15 +100,42 @@ public class BlockWallEntity extends Entity {
 
     protected void defineSynchedData() {
         this.entityData.define(DATA_START_POS, BlockPos.ZERO);
-        this.entityData.define(DATA_FINAL_POS, BlockPos.ZERO);
+        this.entityData.define(DATA_FINAL_POS, new Vector3f(0,0,0));
     }
 
     public boolean isPickable() {
         return !this.isRemoved();
     }
 
+    public float distanceToClearWhileTicked(){
+        return 0.3f;
+    }
+    private int lerpSteps;
+    @Override
+    public void lerpTo(double $$0, double $$1, double $$2, float $$3, float $$4, int $$5, boolean $$6) {
+        this.lerpSteps = 0;
+        this.setPos($$0, $$1, $$2);
+        this.setRot($$3, $$4);
+    }
+    @Override
     public void tick() {
+        if (!level().isClientSide()) {
+            Vec3 current = position();
+            Vec3 target = new Vec3(getFinalPos().x, getFinalPos().y, getFinalPos().z);
+            refreshDimensions();
+            Vec3 delta = target.subtract(current);
+            double distance = delta.length();
+
+            if (distance <= distanceToClearWhileTicked()) {
+                setPos(target);
+            } else {
+                setPos(current.add(
+                        delta.normalize().scale(distanceToClearWhileTicked())
+                ));
+            }
+        }
         super.tick();
+        refreshDimensions();
     }
 
     public void callOnBrokenAfterFall(Block $$0, BlockPos $$1) {
@@ -161,9 +184,9 @@ public class BlockWallEntity extends Entity {
         $$0.putBoolean("HurtEntities", this.hurtEntities);
         $$0.putFloat("FallHurtAmount", this.fallDamagePerDistance);
         $$0.putInt("FallHurtMax", this.fallDamageMax);
-        $$0.putInt("FinalPosX", getFinalPos().getX());
-        $$0.putInt("FinalPosY", getFinalPos().getY());
-        $$0.putInt("FinalPosZ", getFinalPos().getZ());
+        $$0.putFloat("FinalPosX", getFinalPos().x());
+        $$0.putFloat("FinalPosY", getFinalPos().y());
+        $$0.putFloat("FinalPosZ", getFinalPos().z());
         if (this.blockData != null) {
             $$0.put("TileEntityData", this.blockData);
         }
@@ -184,8 +207,8 @@ public class BlockWallEntity extends Entity {
 
 
         if ($$0.contains("FinalPosX")) {
-            setDataFinalPos(new BlockPos($$0.getInt("FinalPosX"),
-                    $$0.getInt("FinalPosX"),$$0.getInt("FinalPosX")) );
+            setDataFinalPos(new Vector3f($$0.getFloat("FinalPosX"),
+                    $$0.getFloat("FinalPosY"),$$0.getFloat("FinalPosZ")) );
 
         }
 
@@ -252,7 +275,7 @@ public class BlockWallEntity extends Entity {
 
     static {
         DATA_START_POS = SynchedEntityData.defineId(BlockWallEntity.class, EntityDataSerializers.BLOCK_POS);
-        DATA_FINAL_POS = SynchedEntityData.defineId(BlockWallEntity.class, EntityDataSerializers.BLOCK_POS);
+        DATA_FINAL_POS = SynchedEntityData.defineId(BlockWallEntity.class, EntityDataSerializers.VECTOR3);
     }
 
 
