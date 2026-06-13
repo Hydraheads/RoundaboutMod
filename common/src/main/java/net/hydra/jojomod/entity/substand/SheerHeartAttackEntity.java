@@ -51,6 +51,7 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -78,6 +79,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 	int attackTick = 0;
 	static final int attackTickMax = 15;
 
+	public int struckTicks = 0;
+	static final int struckMaxTicks = 12;
+
 	static final byte
 		NONE = 0,
 		BLOCK = 1,
@@ -96,7 +100,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public static AttributeSupplier.Builder createStandAttributes() {
 		return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,
-				0.2F).add(Attributes.MAX_HEALTH, 20.0).add(Attributes.ATTACK_DAMAGE, 5.0);
+				0.25F).add(Attributes.MAX_HEALTH, 20.0).add(Attributes.ATTACK_DAMAGE, 5.0);
 	}
 
 	@Override
@@ -138,11 +142,16 @@ public class SheerHeartAttackEntity extends StandEntity {
 				if (this.attackTick > 0) { this.attackTick--;}
 
 				if (this.hasTarget()) {
-					this.lookAt(EntityAnchorArgument.Anchor.FEET,this.getTargetPosition());
+					//this.lookAt(EntityAnchorArgument.Anchor.FEET,this.getTargetPosition());
 				}else if (!this.haveToReturn ){
 					this.getNavigation().stop();
 				}else {
 					this.getNavigation().moveTo(this.getUser(), 1.5f);
+					if (this.getDeltaMovement().length() < 0.2) {
+						struckTicks++;
+					}else {
+						struckTicks = 0;
+					}
 				}
 
 			}
@@ -156,7 +165,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		super.registerGoals();
 		this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
 		this.goalSelector.addGoal(2, new WarmestSeek(this));
-		//this.goalSelector.addGoal(1, new TryToReturn(this));
+		this.goalSelector.addGoal(1, new TryToReturn(this));
 	}
 
 	public boolean hasTarget() { return this.currentTarget != NONE;}
@@ -214,6 +223,17 @@ public class SheerHeartAttackEntity extends StandEntity {
 		}
 	}
 
+	public boolean canAttack(Vec3 targetPos) {
+		double dist = MainUtil.cheapDistanceTo(this.getX(), this.getY(), this.getZ(), targetPos.x, targetPos.y, targetPos.z);
+		float minDist = 4.0f;
+
+		if (this.getTargetType() == BLOCK) {
+			minDist = 1.3f;
+		}
+
+		return (dist <= minDist && this.attackTick <= 0);
+	}
+
 	public byte getTargetType() { return this.currentTarget;}
 
 	public Vec3 getTargetPosition() {
@@ -258,33 +278,22 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
 	 public void jump(Vec3 jumpT0Pos){
-			//Vec3 location = new Vec3(this.getX(),this.getY(),this.getZ());
-
-			//this.setDeltaMovement(jumpT0Pos);
 		this.lookAt(EntityAnchorArgument.Anchor.EYES,jumpT0Pos);
 
-		this.setDeltaMovement((this.getLookAngle().multiply(1.5,1.5,1.5)).add(0,0.75,0));
+		this.setDeltaMovement((this.getLookAngle().multiply(1.2,1.2,1.2)).add(0,0.9,0));
+	}
+
+	public void shoot(Vec3 shootToPos){
+
+		this.lookAt(EntityAnchorArgument.Anchor.EYES,shootToPos);
+
+		this.setDeltaMovement((this.getLookAngle().multiply(1.0,1.0,1.0)).add(0,0.1,0));
 	}
 
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-		/*Entity entity = source.getEntity();
 
-		if (entity != null) {
-			if (this.equals(entity)) {
-				return false;
-			}
-			if (entity instanceof StandEntity SE) {
-				if (SE.getUser().equals(this.getUser())) {
-					return false;
-				}
-			}
-			if (entity.equals(this.getUser())) {
-				return false;
-			}
-		}*/
-		//return super.hurt(source, amount*0.1f);
 		return false;
 	}
 
@@ -293,19 +302,19 @@ public class SheerHeartAttackEntity extends StandEntity {
 		Vec3 targetPos = this.getUser().position();
 		double dist = Math.abs(targetPos.subtract(this.getX(), this.getY(), this.getZ()).length());
 
-		boolean struck = this.getNavigation().isStuck();
+		boolean struck = this.getNavigation().isStuck() || this.struckTicks >= struckMaxTicks;
 
 		return (dist <= 1.3f) || struck;
 	}
 
 
-	static class WarmestSeek extends TargetGoal {
+	static class WarmestSeek extends Goal {
 		protected final SheerHeartAttackEntity mob;
 
 		public int ticksUntilNextPathRecalculation = 15;
 
 		public WarmestSeek(SheerHeartAttackEntity $$0) {
-			super($$0, true);
+			this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK, Flag.JUMP));
 			this.mob = $$0;
 		}
 
@@ -333,12 +342,6 @@ public class SheerHeartAttackEntity extends StandEntity {
 			}
 		}
 
-		public boolean canAttack(Vec3 targetPos) {
-			double dist = MainUtil.cheapDistanceTo(this.mob.getX(), this.mob.getY(), this.mob.getZ(), targetPos.x, targetPos.y, targetPos.z);
-
-			return (dist <= 1.7f && this.mob.attackTick <= 0);
-		}
-
 		@Override
 		public void tick() {
 
@@ -346,34 +349,32 @@ public class SheerHeartAttackEntity extends StandEntity {
 			if (type != NONE) {
 				Vec3 targetPos = this.mob.getTargetPosition();
 
-				if (!this.canAttack(targetPos)) {
+				this.mob.lookAt(EntityAnchorArgument.Anchor.FEET,targetPos);
+
+				if (!this.mob.canAttack(targetPos)) {
 					this.move(targetPos);
 				}else {
-					this.mob.attack(targetPos);
+					if (type == ENTITY) {
+						this.mob.jump(targetPos);
+					}
 				}
 			}
 
 			super.tick();
 		}
 
-		@Override
-		public boolean canUse() {
-			return this.mob.hasTarget() && !this.mob.getHaveToReturn();
-		}
-
-		@Override
-		public boolean canContinueToUse() { return this.mob.hasTarget() && !this.mob.getHaveToReturn();}
-
+		@Override public boolean canUse() { return this.mob.hasTarget() && !this.mob.getHaveToReturn(); }
+		@Override public boolean canContinueToUse() { return this.mob.hasTarget() && !this.mob.getHaveToReturn();}
 	}
 
 
-	static class TryToReturn extends TargetGoal {
+	static class TryToReturn extends Goal {
 		protected final SheerHeartAttackEntity mob;
 
 		public int ticksUntilNextPathRecalculation = 15;
 
 		public TryToReturn(SheerHeartAttackEntity $$0) {
-			super($$0, true);
+			this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK, Flag.JUMP));
 			this.mob = $$0;
 		}
 
@@ -381,15 +382,17 @@ public class SheerHeartAttackEntity extends StandEntity {
 		public void start() { super.start();}
 
 		@Override
-		public void stop() { super.stop();}
+		public void stop() {
+			this.mob.getNavigation().stop();
+			super.stop();
+		}
 
 		public void move(Vec3 targetPos) {
 			ticksUntilNextPathRecalculation--;
 			if (ticksUntilNextPathRecalculation <= 0 ) {
-
 				ticksUntilNextPathRecalculation = 5; // + mob.getRandom().nextInt(7);
 
-				Path newPath = this.mob.getNavigation().createPath(targetPos.x, targetPos.y, targetPos.z, 0);
+				Path newPath = this.mob.getNavigation().createPath(targetPos.x, targetPos.y, targetPos.z, 2);
 				if (newPath == null) { return;}
 
 				if (!mob.getNavigation().moveTo(newPath, 2.0f))

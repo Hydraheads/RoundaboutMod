@@ -1701,14 +1701,17 @@ public class PowersKillerQueen extends NewPunchingStand {
                     sha.setUser(this.self);
                     sha.setXRot(this.self.getXRot());
                     sha.setYRot(this.self.getYRot());
-                    sha.setPos(getRayBlock(this.self,0.5f).add(0,-0.3,0));
-
+                    if (shaThrow) {
+                        sha.setPos(this.self.getEyePosition());
+                    } else {
+                        sha.setPos(getRayBlock(this.self, 0.5f).add(0, -0.3, 0));
+                    }
             		this.self.level().addFreshEntity(sha);
             		
             		SHA = sha;
 
                     if (shaThrow) {
-                        SHA.jump(getRayBlock(this.self,4f));
+                        SHA.shoot(getRayBlock(this.self,4f));
                     }
 
                     this.syncShaStatus((byte)1);
