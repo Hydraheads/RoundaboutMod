@@ -43,7 +43,7 @@ public class BlockBombEntity extends StandEntity {
 	
 	
 	private BlockPos bombPos;
-	private BlockEntity blockInfo;
+	//private BlockEntity blockInfo;
 	private BlockState originalState;
 	private static final int maxTickIndicator = 6;
 	private int tickIndicator = maxTickIndicator;
@@ -63,9 +63,9 @@ public class BlockBombEntity extends StandEntity {
 		if (pos != null) {
 			this.bombPos = pos;
 			this.originalState = this.level().getBlockState(pos);
-			if (this.originalState.hasBlockEntity()) {
-				this.originalState.getBlock();
-			}
+			/*if (this.originalState.hasBlockEntity()) {
+				this.blockInfo = this.level().getBlockEntity(pos);
+			}*/
 			Vec3 positionInWorld = this.bombPos.getCenter().add(0.0F, -0.5F, 0.0F);
 			this.getBlockSize();
 			

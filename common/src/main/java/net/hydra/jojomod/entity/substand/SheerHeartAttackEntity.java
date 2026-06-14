@@ -150,7 +150,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 					flyngTicks = 0;
 				}
 
-				if (flyngTicks > 2) {
+				if (flyngTicks > 2 && this.hasTarget()) {
 					Vec3 tPos = this.getTargetPosition();
 					Vec3 sPos = this.position();
 					double dist = MainUtil.cheapDistanceTo(
@@ -161,20 +161,6 @@ public class SheerHeartAttackEntity extends StandEntity {
 						this.attack();
 					}
 				}
-
-				/*
-				if (this.hasTarget()) {
-					//this.lookAt(EntityAnchorArgument.Anchor.FEET,this.getTargetPosition());
-				}else if (!this.haveToReturn ){
-					this.getNavigation().stop();
-				}else {*/
-					/*this.getNavigation().moveTo(this.getUser(), 1.5f);
-					if (this.getDeltaMovement().length() < 0.55) {
-						struckTicks++;
-					}else {
-						struckTicks = 0;
-					}*/
-				//}
 			}
 		}
 
@@ -235,6 +221,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 			}
 		}
 
+
+
+
 		if (targetEnt != null) {
 			this.entityTarget = targetEnt;
 			this.currentTarget = ENTITY;
@@ -253,6 +242,11 @@ public class SheerHeartAttackEntity extends StandEntity {
 		}
 
 		return (dist <= minDist && this.attackTick <= 0);
+	}
+	public boolean shouldJump(Vec3 targetPos) {
+		double dist = MainUtil.cheapDistanceTo(this.getX(), this.getY(), this.getZ(), targetPos.x, targetPos.y, targetPos.z);
+
+		return dist > 1.3f;
 	}
 
 	public byte getTargetType() { return this.currentTarget;}
@@ -374,9 +368,13 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 				if (!this.mob.canAttack(targetPos)) {
 					this.move(targetPos);
-				}else {
-					if (type == ENTITY && this.mob.jumpTick <= 0) {
-						this.mob.jump(targetPos);
+				}else if (this.mob.attackTick <= 0) {
+					if (this.mob.shouldJump(targetPos)) {
+						if (type == ENTITY && this.mob.jumpTick <= 0) {
+							this.mob.jump(targetPos);
+						}
+					} else  {
+						this.mob.attack();
 					}
 				}
 			}

@@ -29,6 +29,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.ZombieFate;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.PlayerHandItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
@@ -68,12 +69,16 @@ import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.PlayerHeadItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.PlayerHeadBlock;
+import net.minecraft.world.level.block.PlayerWallHeadBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.nbt.CompoundTag;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1362,10 +1367,10 @@ public class PowersKillerQueen extends NewPunchingStand {
     public Entity isBombEntityContacting() {
         if (this.bombEntity instanceof LivingEntity LE) {
             LivingEntity lastAttacker = LE.getLastAttacker();
-            int lastTime = LE.getLastHurtMobTimestamp();
+            int lastTime = LE.getLastHurtByMobTimestamp();
             Roundabout.LOGGER.info("Last damage taken: " + lastTime);
         }
-        float margin = 0.15f;
+        float margin = 0.2f;
 
         float hRad = this.bombEntity.getBbHeight() / 2.0f + margin;
         float wRad = this.bombEntity.getBbWidth() / 2.0f + margin;
@@ -1659,6 +1664,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     if (LE.isDeadOrDying()) {
                         ItemStack stack = null;
                         byte type = -1;
+
                         if (LE instanceof Player pl) {
                             if (((IFatePlayer)pl).rdbt$getFatePowers() instanceof ZombieFate zp) {
                                 type = 3;
@@ -1688,6 +1694,12 @@ public class PowersKillerQueen extends NewPunchingStand {
                                 case 3 -> {
                                     stack = ModItems.ROTTEN_HAND.getDefaultInstance().copy();
                                 }
+                            }
+
+                            if (LE instanceof Player PL) {
+                                CompoundTag nbtData = new CompoundTag();
+                                nbtData.putString(PlayerHandItem.TAG_HAND_OWNER, PL.getName().getString());
+                                stack.setTag(nbtData);
                             }
 
                             ItemEntity drop = new ItemEntity(LE.level(),

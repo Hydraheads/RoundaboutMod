@@ -51,7 +51,6 @@ public class BlockBombModel<T extends BlockBombEntity> extends StandModel<T> {
 		this.stand.yRot = 0.0f;
 		pEntity.setStandRotationX(0.0f);
 		pEntity.setStandRotationY(0.0f);
-		
 	}
 
 	@Override
