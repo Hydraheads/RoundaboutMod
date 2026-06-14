@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -29,6 +30,9 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.fates.powers.ZombieFate;
+import net.hydra.jojomod.item.HandItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -62,6 +66,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.FlyingMob;
+import net.minecraft.world.entity.animal.Ocelot;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
@@ -1627,14 +1632,11 @@ public class PowersKillerQueen extends NewPunchingStand {
                 this.bombEntity = null;
             }
 
-
             if (canDestroyBlocks) {
                 ExplosionUtil.explodeBlocks(bPos, level, 1.0f);
             }
 
             DamageSource dmg = ModDamageTypes.of(level, DamageTypes.PLAYER_EXPLOSION, this.getSelf());
-
-
             ExplosionUtil.explosionHurt(vPos, dmg, level,
                     ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionDetonateMaxDamage, 0.4f, 1.5f);
 
@@ -1666,6 +1668,36 @@ public class PowersKillerQueen extends NewPunchingStand {
                         );
                     }
                 }
+
+                if (target instanceof LivingEntity LE) {
+                    if (LE.isDeadOrDying()) {
+                        ItemStack stack = ModItems.HAND.getDefaultInstance().copy();;
+                        byte type = -1;
+                        if (LE instanceof Player pl) {
+                            if (((IFatePlayer)pl).rdbt$getFatePowers() instanceof ZombieFate zp) {
+                                type = 3;
+                            } else {
+                                type = 0;
+                            }
+                        }else if (LE instanceof AbstractIllager) {
+                            type = 1;
+                        } else if (LE instanceof AbstractVillager) {
+                            type = 2;
+                        } else {
+
+                            if ((LE instanceof Zombie)) {
+                                type = 3;
+                            }
+
+                        }
+                        if (type != -1) {
+                            ItemEntity drop = new ItemEntity(LE.level(),
+                                    LE.getX(), LE.getY(), LE.getZ(),
+                                    stack);
+                            LE.level().addFreshEntity(drop);
+                        }
+                    }
+                }
             }
 
             ExplosionUtil.explodeEffects(vPos, level, ModParticles.KILLER_QUEEN_EXPLOSION, 0.6f);
@@ -1681,7 +1713,6 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     public boolean detonate() {
     	if (!this.isClient() && this.getActivePower() == PowerIndex.NONE) {
-    		
     		 if (this.currentBombStatus == BOMB_BLOCK) {
             	this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().killerQueenSettings.blockPlantCooldown);
             }
@@ -1689,7 +1720,6 @@ public class PowersKillerQueen extends NewPunchingStand {
     		this.playSoundsIfNearby(DETONATE, 27, true);
     		this.animateStand(KillerQueenEntity.DETONATE);
     		this.poseStand(OffsetIndex.ATTACK);
-    		
     		this.setActivePower(DETONATE);
     		
     		this.ticksCount = ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionActivationCooldown;
