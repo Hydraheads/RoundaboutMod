@@ -240,14 +240,12 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public void fixThis(){
         if (!self.level().isClientSide()) {
             if (hasSkatesActivated()) {
-                if (getPlayerPos2() <= 0) {
-                    if (acceleration >= getMaxAccelerationTicks()) {
-                        setPlayerPos2(PlayerPosIndex.SKATE_TWIRL);
-                    } else {
-                        setPlayerPos2(PlayerPosIndex.SKATE_JUMP);
-                    }
-                    twirlTicks = 20;
+                if (acceleration >= getMaxAccelerationTicks()) {
+                    setPlayerPos2(PlayerPosIndex.SKATE_TWIRL);
+                } else {
+                    setPlayerPos2(PlayerPosIndex.SKATE_JUMP);
                 }
+                twirlTicks = 20;
             }
         }
     }
