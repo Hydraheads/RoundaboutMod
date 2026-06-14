@@ -396,6 +396,7 @@ public class ForgeEvents {
         ModItems.METEORITE = ForgeItems.METEORITE.get();
         ModItems.METEORITE_INGOT = ForgeItems.METEORITE_INGOT.get();
         ModItems.AJA = ForgeItems.AJA.get();
+        ModItems.HAND = ForgeItems.HAND.get();
         ModItems.ULTRAVIOLET_BLASTER = ForgeItems.ULTRAVIOLET_BLASTER.get();
         ModItems.LOCACACA_PIT = ForgeItems.LOCACACA_PIT.get();
         ModItems.LOCACACA = ForgeItems.LOCACACA.get();

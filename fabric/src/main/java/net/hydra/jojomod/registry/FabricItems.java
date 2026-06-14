@@ -201,6 +201,7 @@ public class FabricItems {
     public static Item COFFEE_GUM = registerItem("coffee_gum", new Item(new Item.Properties().food(ModFoodComponents.COFFEE_GUM)));
     public static Item METEORITE = registerItem("meteorite", new Item(new Item.Properties()));
     public static Item AJA = registerItem("aja", new Item(new Item.Properties()));
+    public static Item HAND = registerItem("hand", new Item(new Item.Properties()));
     public static Item METEORITE_INGOT = registerItem("meteorite_ingot", new Item(new Item.Properties()));
     public static Item STREET_SIGN_DIO_BLOCK_ITEM = registerItem("street_sign_dio_item", (Item) new SignBlockItem(ModBlocks.STREET_SIGN_DIO, new Item.Properties().stacksTo(1)));
     public static Item STREET_SIGN_RIGHT_BLOCK_ITEM = registerItem("street_sign_right_item", (Item) new SignBlockItem(ModBlocks.STREET_SIGN_RIGHT, new Item.Properties().stacksTo(1)));
@@ -563,6 +564,7 @@ public class FabricItems {
                     .icon(() -> new ItemStack(AJA)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here
                     	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
+                        entries.accept(HAND);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_20_CENTURY_BOY);
@@ -707,6 +709,7 @@ public class FabricItems {
         ModItems.COFFEE_GUM = COFFEE_GUM;
         ModItems.METEORITE = METEORITE;
         ModItems.AJA = AJA;
+        ModItems.HAND = HAND;
         ModItems.ROAD_ROLLER = ROAD_ROLLER;
         ModItems.METEORITE_INGOT = METEORITE_INGOT;
         ModItems.IRON_BALL_CROSSBOW = IRON_BALL_CROSSBOW;
