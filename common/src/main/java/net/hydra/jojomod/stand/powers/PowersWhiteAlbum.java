@@ -473,8 +473,12 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
 
 
-        if (!isHoldingSneak() && !hasSkatesActivated()) {
-            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        if (!isHoldingSneak()){
+            if (hasSkatesActivated()){
+                setSkillIcon(context, x, y, 3, StandIcons.ICE_WALL_BEHIND, PowerIndex.SKILL_3);
+            } else {
+                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+            }
         } else {
             setSkillIcon(context, x, y, 3, StandIcons.ICE_WALL, PowerIndex.SKILL_3);
         }
@@ -577,11 +581,17 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     public void dashOrWall(){
         if (hasSkatesActivated()){
-            iceWallClient();
+            if (!this.onCooldown(PowerIndex.SKILL_3)) {
+                if (canUseIceWall()) {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BLOCK, true);
+                    tryPowerPacket(PowerIndex.POWER_3_BLOCK);
+                }
+            }
         } else {
             dash();
         }
     }
+
 
     public void iceCancelClient(){
         if (!onCooldown(PowerIndex.SKILL_1_SNEAK)){
@@ -645,7 +655,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public int placePhase = 0;
     BlockPos storeCenter = BlockPos.ZERO;
     Direction sideX = Direction.UP;
-    public void iceWallServer(){
+    public void iceWallServer(boolean special){
         int cooldown = 110;
         this.setCooldown(PowerIndex.SKILL_3, cooldown);
         if (!this.self.level().isClientSide()){
@@ -653,7 +663,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             BlockPos centerPos;
             Direction facing = self.getDirection();
 
-            if (!self.isCrouching() && hasSkatesActivated()){
+            if (special){
                 centerPos = self.getOnPos().relative(facing.getOpposite()).relative(facing.getOpposite());
             } else {
 
@@ -789,7 +799,10 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 return toggleSkates();
             }
             case PowerIndex.POWER_3 -> {
-                iceWallServer();
+                iceWallServer(false);
+            }
+            case PowerIndex.POWER_3_BLOCK -> {
+                iceWallServer(true);
             }
             case PowerIndex.POWER_1_SNEAK -> {
                 iceCancelServer();
