@@ -1,13 +1,11 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IMob;
-import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
@@ -24,21 +22,17 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
-import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.ZombieFate;
-import net.hydra.jojomod.item.HandItem;
 import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.entity.substand.BlockBombEntity;
-import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.hydra.jojomod.util.C2SPacketUtil;
@@ -46,13 +40,10 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.ExplosionUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -63,10 +54,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.FlyingMob;
-import net.minecraft.world.entity.animal.Ocelot;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
@@ -79,11 +68,8 @@ import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -1652,7 +1638,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     if (!pl.isCreative() && playersHitkill) { pl.die(dmg); }
                     else {
                         target.hurt(dmg, hitPoints
-                            * ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnPlayers
+                            * (ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnPlayers/100.0f)
                         );
                     }
                 } else {
@@ -1660,18 +1646,18 @@ public class PowersKillerQueen extends NewPunchingStand {
                         target.kill();
                     } else if (isBoss) {
                         target.hurt(dmg, hitPoints * 0.70f
-                            * ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnMobs
+                            * (ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnMobs / 100f)
                         );
                     } else {
                         target.hurt(dmg, hitPoints
-                            * ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnMobs
+                            * (ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnMobs / 100f)
                         );
                     }
                 }
 
                 if (target instanceof LivingEntity LE) {
                     if (LE.isDeadOrDying()) {
-                        ItemStack stack = ModItems.HAND.getDefaultInstance().copy();;
+                        ItemStack stack = null;
                         byte type = -1;
                         if (LE instanceof Player pl) {
                             if (((IFatePlayer)pl).rdbt$getFatePowers() instanceof ZombieFate zp) {
@@ -1684,13 +1670,26 @@ public class PowersKillerQueen extends NewPunchingStand {
                         } else if (LE instanceof AbstractVillager) {
                             type = 2;
                         } else {
-
                             if ((LE instanceof Zombie)) {
                                 type = 3;
                             }
-
                         }
                         if (type != -1) {
+                            switch (type) {
+                                case 0 -> {
+                                    stack = ModItems.HAND.getDefaultInstance().copy();
+                                }
+                                case 1 -> {
+                                    stack = ModItems.ILLAGER_HAND.getDefaultInstance().copy();
+                                }
+                                case 2 -> {
+                                    stack = ModItems.VILLAGER_HAND.getDefaultInstance().copy();
+                                }
+                                case 3 -> {
+                                    stack = ModItems.ROTTEN_HAND.getDefaultInstance().copy();
+                                }
+                            }
+
                             ItemEntity drop = new ItemEntity(LE.level(),
                                     LE.getX(), LE.getY(), LE.getZ(),
                                     stack);
