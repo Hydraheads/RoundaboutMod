@@ -130,6 +130,13 @@ public class ModBlocks {
     public static Block FOG_DIRT_COATING;
     public static Block FOG_TRAP;
 
+
+    public static Block FROZEN_DIRT;
+    public static Block FROZEN_STONE;
+    public static Block FROZEN_COBBLESTONE;
+    public static Block FROZEN_DEEPSLATE;
+    public static Block FROZEN_COBBLED_DEEPSLATE;
+
     public static Block SHINY_QUARTZ;
     public static Block SHINY_QUARTZ_TILES;
 
@@ -756,6 +763,23 @@ public class ModBlocks {
     public static Block AJA_BLOCK_PROPERTIES = new AjaBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.STONE).noOcclusion().instrument(NoteBlockInstrument.BASEDRUM).lightLevel(litBlockEmission(15)).
     requiresCorrectToolForDrops().strength(3.5F, 6.0F));
+
+
+    public static Block FROZEN_DIRT_PROPERTIES = new Block(BlockBehaviour.Properties.of().mapColor(MapColor.DIRT).
+            strength(0.2F).sound(SoundType.GLASS));
+    public static Block FROZEN_STONE_PROPERTIES = new Block(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.5F, 6.0F)
+            .sound(SoundType.GLASS));
+    public static Block FROZEN_COBBLESTONE_PROPERTIES =  new Block(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.66F, 6.0F)
+            .sound(SoundType.GLASS));
+    public static Block FROZEN_DEEPSLATE_PROPERTIES = new RotatedPillarBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DEEPSLATE).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.0F, 6.0F)
+            .sound(SoundType.GLASS));
+    public static Block FROZEN_COBBLED_DEEPSLATE_PROPERTIES =  new Block(BlockBehaviour.Properties.of().mapColor(MapColor.DEEPSLATE).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.0F, 6.0F)
+            .sound(SoundType.GLASS).strength(1.16F, 6.0F).sound(SoundType.GLASS));
+
 
     public static CultivationPotBlock cultivationPot(Block $$0, FeatureFlag... $$1) {
         BlockBehaviour.Properties $$2 = BlockBehaviour.Properties.of().instabreak().noOcclusion().pushReaction(PushReaction.DESTROY);

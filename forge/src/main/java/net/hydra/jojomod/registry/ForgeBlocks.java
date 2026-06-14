@@ -45,6 +45,22 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> AJA_BLOCK = BLOCKS.register("aja_block",
             () -> AJA_BLOCK_PROPERTIES
     );
+    public static final RegistryObject<Block> FROZEN_DIRT = BLOCKS.register("frozen_dirt",
+            () -> FROZEN_DIRT_PROPERTIES
+    );
+    public static final RegistryObject<Block> FROZEN_STONE = BLOCKS.register("frozen_stone",
+            () -> FROZEN_STONE_PROPERTIES
+    );
+    public static final RegistryObject<Block> FROZEN_COBBLESTONE = BLOCKS.register("frozen_cobblestone",
+            () -> FROZEN_COBBLESTONE_PROPERTIES
+    );
+    public static final RegistryObject<Block> FROZEN_DEEPSLATE = BLOCKS.register("frozen_deepslate",
+            () -> FROZEN_DEEPSLATE_PROPERTIES
+    );
+    public static final RegistryObject<Block> FROZEN_COBBLED_DEEPSLATE =
+            BLOCKS.register("frozen_cobbled_deepslate",
+            () -> FROZEN_COBBLED_DEEPSLATE_PROPERTIES
+    );
     public static final RegistryObject<Block> METEOR_BLOCK = BLOCKS.register("meteor_block",
             () -> ModBlocks.METEOR_BLOCK_PROPERTIES
             );

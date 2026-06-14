@@ -106,6 +106,26 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.AJA_BLOCK.get(),
                     new Item.Properties()
             )));
+    public static final RegistryObject<BlockItem> FROZEN_DIRT_ITEM = addToBuildingTab(ITEMS.register("frozen_dirt",
+            () -> new BlockItem(ForgeBlocks.FROZEN_DIRT.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> FROZEN_STONE_ITEM = addToBuildingTab(ITEMS.register("frozen_stone",
+            () -> new BlockItem(ForgeBlocks.FROZEN_STONE.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> FROZEN_COBBLESTONE_ITEM = addToBuildingTab(ITEMS.register("frozen_cobblestone",
+            () -> new BlockItem(ForgeBlocks.FROZEN_COBBLESTONE.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> FROZEN_DEEPSLATE_ITEM = addToBuildingTab(ITEMS.register("frozen_deepslate",
+            () -> new BlockItem(ForgeBlocks.FROZEN_DEEPSLATE.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> FROZEN_COBBLED_DEEPSLATE_ITEM = addToBuildingTab(ITEMS.register("frozen_cobbled_deepslate",
+            () -> new BlockItem(ForgeBlocks.FROZEN_COBBLED_DEEPSLATE.get(),
+                    new Item.Properties()
+            )));
     public static final RegistryObject<BlockItem> SHINY_QUARTZ_ITEM = addToBuildingTab(ITEMS.register("shiny_quartz",
             () -> new BlockItem(ForgeBlocks.SHINY_QUARTZ.get(),
                     new Item.Properties()

@@ -36,6 +36,16 @@ public class FabricBlocks {
     );
     public static final Block AJA_BLOCK = registerBlock("aja_block", AJA_BLOCK_PROPERTIES
     );
+    public static final Block FROZEN_DIRT = registerBlock("frozen_dirt", FROZEN_DIRT_PROPERTIES
+    );
+    public static final Block FROZEN_COBBLESTONE = registerBlock("frozen_cobblestone", FROZEN_COBBLESTONE_PROPERTIES
+    );
+    public static final Block FROZEN_STONE = registerBlock("frozen_stone", FROZEN_STONE_PROPERTIES
+    );
+    public static final Block FROZEN_DEEPSLATE = registerBlock("frozen_deepslate", FROZEN_DEEPSLATE_PROPERTIES
+    );
+    public static final Block FROZEN_COBBLED_DEEPSLATE = registerBlock("frozen_cobbled_deepslate", FROZEN_COBBLED_DEEPSLATE_PROPERTIES
+    );
     public static final Block SHINY_QUARTZ = registerBlock("shiny_quartz", ModBlocks.SHINY_QUARTZ_PROPERTIES
     );
     public static final Block WHITE_ALBUM_ICE_BLOCK = registerBlockItemless("white_album_ice", WHITE_ALBUM_ICE_BLOCK_PROPERTIES
@@ -280,6 +290,11 @@ public class FabricBlocks {
         ModBlocks.AJA_ORE = AJA_ORE;
         ModBlocks.DEEPSLATE_AJA_ORE = DEEPSLATE_AJA_ORE;
         ModBlocks.AJA_BLOCK = AJA_BLOCK;
+        ModBlocks.FROZEN_DIRT = FROZEN_DIRT;
+        ModBlocks.FROZEN_COBBLESTONE = FROZEN_COBBLESTONE;
+        ModBlocks.FROZEN_STONE = FROZEN_STONE;
+        ModBlocks.FROZEN_DEEPSLATE = FROZEN_DEEPSLATE;
+        ModBlocks.FROZEN_COBBLED_DEEPSLATE = FROZEN_COBBLED_DEEPSLATE;
         ModBlocks.SHINY_QUARTZ = SHINY_QUARTZ;
         ModBlocks.WHITE_ALBUM_ICE_BLOCK = WHITE_ALBUM_ICE_BLOCK;
         ModBlocks.WHITE_ALBUM_ICE_WALL_BLOCK = WHITE_ALBUM_ICE_WALL_BLOCK;

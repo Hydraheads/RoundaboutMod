@@ -466,6 +466,11 @@
 
   "block.roundabout.meteor_block": "Meteorite Block",
   "block.roundabout.aja_ore": "Aja Ore",
+  "block.roundabout.frozen_dirt": "Frozen Dirt",
+  "block.roundabout.frozen_stone": "Frozen Stone",
+  "block.roundabout.frozen_cobblestone": "Frozen Cobblestone",
+  "block.roundabout.frozen_deepslate": "Frozen Deepslate",
+  "block.roundabout.frozen_cobbled_deepslate": "Frozen Cobbled Deepslate",
   "block.roundabout.white_album_ice": "White Album Ice",
   "block.roundabout.white_album_ice_wall": "Ice Wall",
   "block.roundabout.white_album_coating": "Ice Coating",
