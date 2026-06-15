@@ -2,6 +2,8 @@ package net.hydra.jojomod.client.models.stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.hydra.jojomod.client.models.stand.animations.GreenDayAnimations;
+import net.hydra.jojomod.client.models.stand.animations.PlanetWavesAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StarPlatinumAnimations;
 import net.hydra.jojomod.entity.stand.PlanetWavesEntity;
@@ -94,7 +96,13 @@ public class PlanetWavesModel<T extends PlanetWavesEntity> extends StandModel<T>
         super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
         defaultModifiers(pEntity);
         defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
-
+        this.animate(pEntity.floating_pw, PlanetWavesAnimations.floating, pAgeInTicks, 1f);
+        this.animate(pEntity.bury_horizontal, PlanetWavesAnimations.bury_horizontal, pAgeInTicks, 1f);
+        this.animate(pEntity.bury_downwards, PlanetWavesAnimations.bury_downwards, pAgeInTicks, 1.25f);
+        this.animate(pEntity.bury_upwards, PlanetWavesAnimations.bury_upwards, pAgeInTicks, 1f);
+        this.animate(pEntity.grab_horizontal, PlanetWavesAnimations.grab_horizontal, pAgeInTicks, 1f);
+        this.animate(pEntity.grab_downwards, PlanetWavesAnimations.grab_downwards,pAgeInTicks,1f);
+        this.animate(pEntity.grab_upwards , PlanetWavesAnimations.grab_upwards ,pAgeInTicks,1f);
     }
 
     @Override
