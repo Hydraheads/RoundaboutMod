@@ -239,7 +239,9 @@ public class PowersPlanetWaves extends NewDashPreset {
     private boolean targetingstand = false;
     private boolean tracking = false;
     private Vec3 standTargetPos = null;
+    private Vec3 standSurfacePos = null;
     private Vec3 standTargetLook = null;
+    private Vec3 standApproachDir = null;
     public boolean instandtargeting(){
         return this.targetingstand;
     }
@@ -402,29 +404,6 @@ public class PowersPlanetWaves extends NewDashPreset {
                 i--;
             }
         }
-
-        if (isTravelling && standTargetPos != null) {
-            StandEntity stand = this.getStandEntity(this.self);
-            if (stand != null) {
-                Vec3 current = stand.position();
-                Vec3 dir = standTargetPos.subtract(current);
-                double dist = dir.length();
-                if (dist < 0.5) {
-                    stand.teleportTo(standTargetPos.x, standTargetPos.y, standTargetPos.z);
-                    isTravelling = false;
-                    standTravelTarget = null;
-                    syncStandMode();
-                } else {
-                    double speed = Math.min(dist, 0.8);
-                    Vec3 step = dir.normalize().scale(speed);
-                    stand.teleportTo(
-                            current.x + step.x,
-                            current.y + step.y,
-                            current.z + step.z
-                    );
-                }
-            }
-        }
     }
     private void spawnMeteor(Vec3 spawnPos, Vec3 targetPos) {
         Level level = this.self.level();
@@ -549,14 +528,24 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         return true;
     }
+    private net.minecraft.core.Direction standHitDirection = null;
     private boolean isTravelling = false;
     private Vec3 standTravelTarget = null;
+
+    public double buryDepthHorizontal = 0.5; //0 superficie, 1 adentro
+    public double buryDepthUp = 0.5;
+    public double buryDepthDown = 0.5;
+
+    public double buryCenterHorizontal = 1.0;   //0 es el punto de contacto, 1 el centro
+    public double buryCenterUp = 1.0;
+    public double buryCenterDown = 1.0;
+
     private void standtargeting() {
         Level level = this.self.level();
 
-        Vec3 eyePos = this.self.getEyePosition(1.0F);
+        Vec3 eyePos  = this.self.getEyePosition(1.0F);
         Vec3 lookVec = this.self.getViewVector(1.0F);
-        Vec3 endPos = eyePos.add(lookVec.scale(128.0D));
+        Vec3 endPos  = eyePos.add(lookVec.scale(128.0D));
 
         ClipContext clipContext = new ClipContext(
                 eyePos, endPos,
@@ -566,37 +555,42 @@ public class PowersPlanetWaves extends NewDashPreset {
         );
 
         BlockHitResult hitResult = this.self.level().clip(clipContext);
+        if (hitResult.getType() != HitResult.Type.BLOCK) return;
 
-        if (hitResult.getType() == HitResult.Type.BLOCK) {
-            BlockPos pos = hitResult.getBlockPos();
-            var state = this.self.level().getBlockState(pos);
-            boolean isFullBlock = state.isCollisionShapeFullBlock(this.self.level(), pos);
-            boolean isOpaque = state.canOcclude();
-            if (!isFullBlock || !isOpaque) return;
+        BlockPos pos   = hitResult.getBlockPos();
+        var      state = this.self.level().getBlockState(pos);
+        if (!state.isCollisionShapeFullBlock(this.self.level(), pos) || !state.canOcclude()) return;
+        if (state.isAir()) return;
 
-            if (!this.self.level().getBlockState(pos).isAir()) {
-                targetingstand = true;
-                isTravelling = true;
-                this.standTargetPos = hitResult.getLocation();
-                this.standTravelTarget = hitResult.getLocation();
+        Vec3 blockCenter = Vec3.atLowerCornerOf(pos).add(0.5, 0.5, 0.5);
+        Vec3 faceNormal  = Vec3.atLowerCornerOf(hitResult.getDirection().getNormal());
 
-                StandEntity stand = this.getStandEntity(this.self);
-                if (stand instanceof FollowingStandEntity FSE) {
-                    FSE.setOffsetType(OffsetIndex.LOOSE);
-                }
+        // Stop exactly at the face surface, outside the block
+        Vec3 faceCenter  = blockCenter.add(faceNormal.scale(0.5));
 
-                syncStandMode();
+        this.standTargetPos    = faceCenter;
+        this.standTravelTarget = faceCenter;
+        this.standHitDirection = hitResult.getDirection();
+        restrainAnimationType  = 0;
 
-                level.playSound(null, this.self.blockPosition(),
-                        ModSounds.PLANET_WAVES_TARGET_EVENT,
-                        SoundSource.PLAYERS, 1.0F, 1.0F);
+        targetingstand = true;
+        isTravelling   = true;
 
-                if (!level.isClientSide()) {
-                    this.setCooldown(PowerIndex.SKILL_4,
-                            ClientNetworking.getAppropriateConfig()
-                                    .PlanetWavesSettings.standtargetingCooldown);
-                }
-            }
+        StandEntity stand = this.getStandEntity(this.self);
+        if (stand instanceof FollowingStandEntity FSE) {
+            FSE.setOffsetType(OffsetIndex.LOOSE);
+        }
+
+        syncStandMode();
+
+        level.playSound(null, this.self.blockPosition(),
+                ModSounds.PLANET_WAVES_TARGET_EVENT,
+                SoundSource.PLAYERS, 1.0F, 1.0F);
+
+        if (!level.isClientSide()) {
+            this.setCooldown(PowerIndex.SKILL_4,
+                    ClientNetworking.getAppropriateConfig()
+                            .PlanetWavesSettings.standtargetingCooldown);
         }
     }
     private LivingEntity restrainedEntity = null;
@@ -607,136 +601,146 @@ public class PowersPlanetWaves extends NewDashPreset {
     @Override
     public void tickPowerEnd() {
         super.tickPowerEnd();
+        if (self.level().isClientSide()) return;
 
-        if (isTravelling && standTargetPos != null) {
-            if (self.level().isClientSide()) return;
+        StandEntity stand = this.getStandEntity(this.self);
 
-            StandEntity stand = this.getStandEntity(this.self);
-            if (stand != null) {
-                Vec3 current = stand.position();
-                Vec3 dir = standTargetPos.subtract(current);
-                double dist = dir.length();
+        // ── 1. TRAVEL PHASE ──────────────────────────────────────────────
+        if (isTravelling && standTargetPos != null && stand != null) {
 
-                if (dist < 0.5) {
-                    stand.setPos(standTargetPos.x, standTargetPos.y, standTargetPos.z);
-                    isTravelling = false;
+            Vec3   current = stand.position();
+            Vec3   dir     = standTargetPos.subtract(current);
+            double dist    = dir.length();
+
+            if (dist < 0.3) {
+                stand.setPos(standTargetPos.x, standTargetPos.y, standTargetPos.z);
+                isTravelling = false;
+
+                // Rotate to face outward from the block face
+                if (standHitDirection != null) {
+                    float yaw;
+                    float extraX;
+                    switch (standHitDirection) {
+                        case NORTH -> { yaw = 0.0F;   extraX = 0.0F;   }
+                        case SOUTH -> { yaw = 180.0F; extraX = 0.0F;   }
+                        case EAST  -> { yaw = 90.0F;  extraX = 0.0F;   }
+                        case WEST  -> { yaw = 270.0F; extraX = 0.0F;   }
+                        case UP    -> { yaw = 0.0F;   extraX = -90.0F; }  
+                        case DOWN  -> { yaw = 0.0F;   extraX = 90.0F;  }
+                        default    -> { yaw = 0.0F;   extraX = 0.0F;   }
+                    }
+                    stand.setYRot(yaw);
+                    stand.yRotO = yaw;
+                    stand.setXRot(0.0F);
+                    stand.xRotO = 0.0F;
+                    stand.setStandRotationX(extraX);
+                }
+
+                animateStand(PlanetWavesEntity.BURY_HORIZONTAL);
+                syncStandMode();
+            } else {
+                animateStand(PlanetWavesEntity.FLOATING);
+                double speed = Math.min(dist, 0.5);
+                Vec3   step  = dir.normalize().scale(speed);
+                stand.setPos(
+                        current.x + step.x,
+                        current.y + step.y,
+                        current.z + step.z
+                );
+            }
+        }
+
+        // ── 2. BURIED — GRAB DETECTION ───────────────────────────────────
+        if (!isTravelling && targetingstand && stand != null) {
+
+            if (restrainedEntity == null && grabCooldownTicks <= 0) {
+                List<LivingEntity> nearby = self.level().getEntitiesOfClass(
+                        LivingEntity.class,
+                        stand.getBoundingBox().inflate(1.2)
+                );
+                for (LivingEntity entity : nearby) {
+                    if (entity.is(this.self))         continue;
+                    if (!entity.isAlive())             continue;
+                    if (entity instanceof StandEntity) continue;
+
+                    restrainedEntity = entity;
+                    if (restrainedEntity instanceof Mob mob) mob.setNoAi(true);
+                    if (entity instanceof StandUser SU)      SU.roundabout$setRestrainedTicks(200);
+                    animateStand(PlanetWavesEntity.GRAB_HORIZONTAL);
                     syncStandMode();
-
-                    Vec3 diff = current.subtract(standTargetPos);
-                    double absDiffY = Math.abs(diff.y);
-                    double absDiffXZ = Math.sqrt(diff.x * diff.x + diff.z * diff.z);
-
-                    if (absDiffY > absDiffXZ) {
-                        if (diff.y > 0) {
-                            restrainAnimationType = 1;
-                            //this.animateStand(PlanetWavesEntity.ARRIVE_FROM_ABOVE);
-                        } else {
-                            restrainAnimationType = 2;
-                            //this.animateStand(PlanetWavesEntity.ARRIVE_FROM_BELOW);
-                        }
-                    } else {
-                        restrainAnimationType = 0;
-                        //this.animateStand(PlanetWavesEntity.ARRIVE_FROM_SIDE);
-                    }
-
-                } else {
-                    //this.animateStand(PlanetWavesEntity.TRAVELLING);
-                    double speed = Math.min(dist, 0.5);
-                    Vec3 step = dir.normalize().scale(speed);
-                    stand.setPos(
-                            current.x + step.x,
-                            current.y + step.y,
-                            current.z + step.z
-                    );
-                }
-
-                if (!isTravelling && restrainedEntity == null) {
-                    List<LivingEntity> nearby = self.level().getEntitiesOfClass(
-                            LivingEntity.class,
-                            stand.getBoundingBox().inflate(1)
-                    );
-                    for (LivingEntity entity : nearby) {
-                        if (entity.is(this.self)) continue;
-                        if (!entity.isAlive()) continue;
-                        if (entity instanceof StandEntity) continue;
-
-                        restrainedEntity = entity;
-                        System.out.println("Grabbed: " + entity.getName().getString());
-                        if (restrainedEntity instanceof Mob mob) {
-                            mob.setNoAi(true);
-                        }
-
-                        if (entity instanceof StandUser SU) {
-                            SU.roundabout$setRestrainedTicks(40);
-                        }
-
-                        switch (restrainAnimationType) {
-                            //case 1 -> this.animateStand(PlanetWavesEntity.GRAB_FROM_ABOVE);
-                            //case 2 -> this.animateStand(PlanetWavesEntity.GRAB_FROM_BELOW);
-                            //default -> this.animateStand(PlanetWavesEntity.GRAB_FROM_SIDE);
-                        }
-                        break;
-                    }
-                }
-
-                if (restrainedEntity != null) {
-                    if (!restrainedEntity.isAlive() ||
-                            restrainedEntity.distanceTo(stand) > 3 ||
-                            (restrainedEntity instanceof StandUser SU
-                                    && !SU.roundabout$isRestrained()
-                            )) {
-                        restrainedEntity = null;
-                        this.animateStand(StandEntity.IDLE);
-                    } else {
-
-                        restrainedEntity.setDeltaMovement(Vec3.ZERO);
-                        restrainedEntity.hurtMarked = true;
-
-
-                        if (restrainedEntity instanceof Mob mob) {
-                            mob.getNavigation().stop();
-                            mob.setTarget(null);
-                        }
-
-
-                        restrainedEntity.teleportTo(
-                                stand.getX(),
-                                stand.getY(),
-                                stand.getZ()
-                        );
-                    }
+                    break;
                 }
             }
         }
 
-        if (!targetingstand && restrainedEntity != null) {
-            if (restrainedEntity instanceof Mob mob) {
-                mob.setNoAi(false);
+        // ── 3. HOLD RESTRAINED ENTITY ────────────────────────────────────
+        if (restrainedEntity != null && stand != null) {
+
+            if (restrainedEntity instanceof StandUser SU) {
+                SU.roundabout$setRestrainedTicks(60);
             }
 
-            restrainedEntity = null;
-            this.animateStand(StandEntity.IDLE);
+            boolean lost = !restrainedEntity.isAlive()
+                    || restrainedEntity.distanceTo(stand) > 4.0;
+
+            if (lost) {
+                releaseRestrainedEntity(stand);
+            } else {
+                restrainedEntity.setDeltaMovement(Vec3.ZERO);
+                restrainedEntity.hurtMarked = true;
+                if (restrainedEntity instanceof Mob mob) {
+                    mob.getNavigation().stop();
+                    mob.setTarget(null);
+                }
+                restrainedEntity.teleportTo(
+                        stand.getX(),
+                        stand.getY(),
+                        stand.getZ()
+                );
+            }
+        }
+
+        // ── 4. RELEASE if stand recalled ─────────────────────────────────
+        if (!targetingstand && restrainedEntity != null) {
+            releaseRestrainedEntity(stand);
         }
     }
-    private void usertargeting() {
-        Level level = this.self.level();
 
-        targetingstand = false;
-        isTravelling = false;
-        standTravelTarget = null;
+    /** Shared cleanup when the grab ends. */
+    private void releaseRestrainedEntity(StandEntity stand) {
+        if (restrainedEntity instanceof Mob mob) mob.setNoAi(false);
+        restrainedEntity = null;
+        grabCooldownTicks = GRAB_COOLDOWN;
+        if (stand != null) this.animateStand(StandEntity.IDLE);
+        syncStandMode();
+    }
+
+    private void releaseRestrainedEntity() {
         if (restrainedEntity instanceof Mob mob) {
             mob.setNoAi(false);
         }
         restrainedEntity = null;
+        this.animateStand(StandEntity.IDLE);
+    }
+    private boolean isBuried= false;
+    private Vec3 buriedStandPos= null;
+    private void usertargeting() {
+        Level level = this.self.level();
+
+        targetingstand    = false;
+        isTravelling      = false;
+        standTravelTarget = null;
+        standHitDirection = null;
 
         StandEntity stand = this.getStandEntity(this.self);
+        releaseRestrainedEntity(stand);
+
         if (stand instanceof FollowingStandEntity FSE) {
             FSE.setOffsetType(OffsetIndex.FOLLOW);
         }
 
-        syncStandMode();
         standTargetPos = null;
-        this.animateStand(StandEntity.IDLE);
+        syncStandMode();
 
         if (!level.isClientSide()) {
             this.setCooldown(PowerIndex.SKILL_4,
@@ -989,15 +993,13 @@ public class PowersPlanetWaves extends NewDashPreset {
     public void onStandSummon(boolean desummon) {
         super.onStandSummon(desummon);
         if (desummon) {
-            if (restrainedEntity instanceof Mob mob) {
-                mob.setNoAi(false);
-            }
-
-            targetingstand = false;
-            isTravelling = false;
-            standTargetPos = null;
+            StandEntity stand = this.getStandEntity(this.self);
+            releaseRestrainedEntity(stand);
+            targetingstand    = false;
+            isTravelling      = false;
+            standTargetPos    = null;
             standTravelTarget = null;
-            restrainedEntity = null;
+            standHitDirection = null;
         } else if (targetingstand) {
             StandEntity stand = this.getStandEntity(this.self);
             if (stand instanceof FollowingStandEntity FSE) {
@@ -1005,6 +1007,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             }
         }
     }
+    private Vec3 standApproachOrigin = null;
     @Override
     public void serverQueried() {
         if (self instanceof ServerPlayer pl) {
@@ -1018,25 +1021,28 @@ public class PowersPlanetWaves extends NewDashPreset {
     private void syncStandMode() {
         if (self instanceof ServerPlayer pl) {
             int mode = 0;
-
             if (targetingstand) mode |= 1;
-            if (tracking) mode |= 2;
-            if (isTravelling) mode |= 4;
+            if (tracking)       mode |= 2;
+            if (isTravelling)   mode |= 4;
+            mode |= (restrainAnimationType & 0x3) << 3;
+            // Pack direction ordinal into bits 5-7 (DOWN=0,UP=1,NORTH=2,SOUTH=3,WEST=4,EAST=5)
+            int dirOrdinal = (standHitDirection != null) ? standHitDirection.ordinal() : 0;
+            mode |= (dirOrdinal & 0x7) << 5;
 
             S2CPacketUtil.sendGenericIntToClientPacket(
-                    pl,
-                    PacketDataIndex.S2C_INT_STAND_MODE,
-                    mode
-            );
+                    pl, PacketDataIndex.S2C_INT_STAND_MODE, mode);
         }
     }
 
-    @Override
     public void clientIntUpdated(int integer) {
-        targetingstand = (integer & 1) != 0;
-        tracking = (integer & 2) != 0;
-        isTravelling = (integer & 4) != 0;
+        targetingstand        = (integer & 1) != 0;
+        tracking              = (integer & 2) != 0;
+        isTravelling          = (integer & 4) != 0;
+        restrainAnimationType = (byte)((integer >> 3) & 0x3);
+        int dirOrdinal        = (integer >> 5) & 0x7;
+        standHitDirection     = net.minecraft.core.Direction.values()[dirOrdinal];
     }
+
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.meteor_shower",
