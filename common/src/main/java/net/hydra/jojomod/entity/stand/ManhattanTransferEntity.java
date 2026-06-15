@@ -567,6 +567,7 @@ public class ManhattanTransferEntity extends StandEntity {
         }
     }
 
+    public int setHatAnimDir = 1;
     public Vec2 getStrangeVector(){
         if(this.getUser() != null && this.getUserData(this.getUser()) != null && this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
             if(this.level().isClientSide) {
@@ -587,8 +588,7 @@ public class ManhattanTransferEntity extends StandEntity {
                             }
                         }
                     } else {
-                        if (pressA) {
-                            //return new Vec2(heighHattanPilotNoMov * aNumber * getFlyingSpeed()  * 1.25F, this.getYRot() - 90);
+                        if (pressA) {;
                             return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot() - 90);
                         }
                         if (!pressA) {
@@ -865,6 +865,10 @@ public class ManhattanTransferEntity extends StandEntity {
     public final AnimationState right_manhattan_incipit = new AnimationState();
     public final AnimationState right_manhattan_loop = new AnimationState();
     public final AnimationState right_manhattan_stop = new AnimationState();
+    public final AnimationState slow_manhattan_back = new AnimationState();
+    public final AnimationState slow_manhattan_left = new AnimationState();
+    public final AnimationState slow_manhattan_right = new AnimationState();
+
 
     private boolean isPressingW = false;
     private boolean isPressingA = false;
@@ -880,7 +884,7 @@ public class ManhattanTransferEntity extends StandEntity {
     public void setupAnimationStates() {
         super.setupAnimationStates();
         Options options = Minecraft.getInstance().options;
-        if(this.getUserData(this.getUser()) != null && this.getUser() != null) {
+        if (this.getUserData(this.getUser()) != null && this.getUser() != null) {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
                 AnimationState $$0 = this.slow_manhattan;
                 AnimationState $$1 = this.forward_manhattan_incipit;
@@ -895,6 +899,9 @@ public class ManhattanTransferEntity extends StandEntity {
                 AnimationState $$10 = this.right_manhattan_incipit;
                 AnimationState $$11 = this.right_manhattan_stop;
                 AnimationState $$12 = this.right_manhattan_loop;
+                AnimationState $$13 = this.slow_manhattan_back;
+                AnimationState $$14 = this.slow_manhattan_left;
+                AnimationState $$15 = this.slow_manhattan_right;
 
                 if (!PM.isActive()) {
                     //this.rain_dodging_manhattan.stop();
@@ -919,14 +926,18 @@ public class ManhattanTransferEntity extends StandEntity {
 
                         if (PM.isClient() && !this.stopsManhattanAnimationsWhenHeldItem) {
                             if (PM.isPiloting()) {
-                                if(options.keyDown.isDown() || options.keyUp.isDown() || options.keyLeft.isDown() || options.keyRight.isDown()){
+                                if (options.keyDown.isDown() || options.keyUp.isDown() || options.keyLeft.isDown() || options.keyRight.isDown()) {
                                     isKeyEverPressed = true;
+                                }
+                                if((!options.keyDown.isDown() || !options.keyUp.isDown()) || (!options.keyLeft.isDown() || !options.keyRight.isDown())){
+                                    Roundabout.LOGGER.info("aaaaaa");
                                 }
                                 if (options.keyUp.isDown()) {
                                     isPressingW = true;
                                     pressS = false;
                                     pressA = false;
                                     verticalLastPressed = true;
+                                    this.setHatAnimDir = 1;
                                 }
                                 if (!options.keyUp.isDown()) {
                                     isPressingW = false;
@@ -936,6 +947,7 @@ public class ManhattanTransferEntity extends StandEntity {
                                     pressS = true;
                                     pressA = false;
                                     verticalLastPressed = true;
+                                    this.setHatAnimDir = 2;
                                 }
                                 if (!options.keyDown.isDown()) {
                                     isPressingS = false;
@@ -945,6 +957,7 @@ public class ManhattanTransferEntity extends StandEntity {
                                     pressA = true;
                                     pressS = false;
                                     verticalLastPressed = false;
+                                    this.setHatAnimDir = 3;
                                 }
                                 if (!options.keyLeft.isDown()) {
                                     isPressingA = false;
@@ -954,6 +967,7 @@ public class ManhattanTransferEntity extends StandEntity {
                                     pressA = false;
                                     pressS = false;
                                     verticalLastPressed = false;
+                                    this.setHatAnimDir = 4;
                                 }
                                 if (!options.keyRight.isDown()) {
                                     isPressingD = false;
@@ -969,7 +983,7 @@ public class ManhattanTransferEntity extends StandEntity {
                                     $$1.stop();
                                     $$2.stop();
                                     $$6.startIfStopped(this.tickCount);
-                                    $$0.startIfStopped(this.tickCount);
+                                     $$0.startIfStopped(this.tickCount);
                                 }
                                 if (isPressingS && !isPressingW) {
                                     $$3.startIfStopped(this.tickCount);
@@ -981,7 +995,7 @@ public class ManhattanTransferEntity extends StandEntity {
                                     $$3.stop();
                                     $$4.stop();
                                     $$5.startIfStopped(this.tickCount);
-                                    $$0.startIfStopped(this.tickCount);
+                                    $$13.startIfStopped(this.tickCount);
                                 }
 
                                 if (isPressingW && isPressingS) {
@@ -995,7 +1009,7 @@ public class ManhattanTransferEntity extends StandEntity {
                                     if ($$4.isStarted()) {
                                         $$5.startIfStopped(this.tickCount);
                                     }
-                                    $$0.startIfStopped(this.tickCount);
+                                     // $$14.startIfStopped(this.tickCount);
                                 }
 
                                 if (isPressingA && !isPressingD) {
@@ -1006,7 +1020,7 @@ public class ManhattanTransferEntity extends StandEntity {
                                     $$0.stop();
                                 } else {
                                     $$8.startIfStopped(this.tickCount);
-                                    $$0.startIfStopped(this.tickCount);
+                                    $$14.startIfStopped(this.tickCount);
                                     $$7.stop();
                                     $$9.stop();
                                 }
@@ -1019,7 +1033,7 @@ public class ManhattanTransferEntity extends StandEntity {
                                     $$0.stop();
                                 } else {
                                     $$11.startIfStopped(this.tickCount);
-                                    $$0.startIfStopped(this.tickCount);
+                                     $$15.startIfStopped(this.tickCount);
                                     $$10.stop();
                                     $$12.stop();
                                 }
@@ -1035,11 +1049,33 @@ public class ManhattanTransferEntity extends StandEntity {
                                     if ($$12.isStarted()) {
                                         $$11.startIfStopped(this.tickCount);
                                     }
-                                    $$0.startIfStopped(this.tickCount);
                                 }
 
-                            } else {
-                                $$0.startIfStopped(this.tickCount);
+                            } else if (!PM.isPiloting()) {
+                                if (this.setHatAnimDir == 1) {
+                                    $$0.startIfStopped(this.tickCount);
+                                    $$13.stop();
+                                    $$14.stop();
+                                    $$15.stop();
+                                }
+                                if (this.setHatAnimDir == 2) {
+                                    $$13.startIfStopped(this.tickCount);
+                                    $$14.stop();
+                                    $$15.stop();
+                                    $$0.stop();
+                                }
+                                if (this.setHatAnimDir == 3) {
+                                    $$14.startIfStopped(this.tickCount);
+                                    $$13.stop();
+                                    $$15.stop();
+                                    $$0.stop();
+                                }
+                                if (this.setHatAnimDir == 4) {
+                                    $$15.startIfStopped(this.tickCount);
+                                    $$13.stop();
+                                    $$14.stop();
+                                    $$0.stop();
+                                }
                                 $$2.stop();
                                 $$1.stop();
                                 $$3.stop();
@@ -1067,6 +1103,9 @@ public class ManhattanTransferEntity extends StandEntity {
                             $$10.stop();
                             $$11.stop();
                             $$12.stop();
+                            $$13.stop();
+                            $$14.stop();
+                            $$15.stop();
                         }
                     }
                 }
