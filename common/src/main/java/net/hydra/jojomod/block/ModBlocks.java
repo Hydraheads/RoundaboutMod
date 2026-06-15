@@ -136,6 +136,14 @@ public class ModBlocks {
     public static Block FROZEN_COBBLESTONE;
     public static Block FROZEN_DEEPSLATE;
     public static Block FROZEN_COBBLED_DEEPSLATE;
+    public static Block FROZEN_SAND;
+    public static Block FROZEN_SANDSTONE;
+    public static Block FROZEN_GRAVEL;
+    public static Block FROZEN_END_STONE;
+    public static Block FROZEN_NETHERRACK;
+    public static Block FROZEN_NETHER_BRICKS;
+    public static Block FROZEN_OBSIDIAN;
+    public static Block FROZEN_STONE_BRICKS;
 
     public static Block SHINY_QUARTZ;
     public static Block SHINY_QUARTZ_TILES;

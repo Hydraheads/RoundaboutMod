@@ -142,6 +142,7 @@ public class RattDartEntity extends AbstractArrow {
         }
     }
 
+    public boolean disableMelt = false;
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
         super.readAdditionalSaveData($$0);
@@ -153,6 +154,9 @@ public class RattDartEntity extends AbstractArrow {
         }
         if ($$0.contains("type")) {
             this.entityData.set(ROUNDABOUT$TYPE,$$0.getByte("type"));
+        }
+        if ($$0.contains("disableMelt")) {
+            disableMelt = $$0.getBoolean("disableMelt");
         }
         if ($$0.contains("particles")) {
             this.entityData.set(ROUNDABOUT$PARTICLES,$$0.getBoolean("particles"));
@@ -180,6 +184,7 @@ public class RattDartEntity extends AbstractArrow {
         if (this.getEntityData().hasItem(ROUNDABOUT$BREAKS_BLOCKS)) {
             $$0.putBoolean("breaks",this.getEntityData().get(ROUNDABOUT$BREAKS_BLOCKS));
         }
+        $$0.putBoolean("disableMelt",disableMelt);
     }
 
     double ding() {
@@ -316,16 +321,18 @@ public class RattDartEntity extends AbstractArrow {
             }
         }
 
-        MobEffectInstance effect = $$1.getEffect(ModEffects.MELTING);
+        if (!disableMelt) {
+            MobEffectInstance effect = $$1.getEffect(ModEffects.MELTING);
 
-        int stack = effect != null ? effect.getAmplifier() : -1;
-        stack += this.getShotType() == CHARGED ? 2 : 1;
+            int stack = effect != null ? effect.getAmplifier() : -1;
+            stack += this.getShotType() == CHARGED ? 2 : 1;
 
 
-        if (stack != -1) {
-            int duration =(int)  (600 * (this.getShotType() == CHARGED ? 1.5 : 1));
-            int originalDuration = effect != null ? effect.getDuration() : 0;
-            $$1.addEffect(new MobEffectInstance(ModEffects.MELTING, Math.max(duration,originalDuration) , stack), this);
+            if (stack != -1) {
+                int duration = (int) (600 * (this.getShotType() == CHARGED ? 1.5 : 1));
+                int originalDuration = effect != null ? effect.getDuration() : 0;
+                $$1.addEffect(new MobEffectInstance(ModEffects.MELTING, Math.max(duration, originalDuration), stack), this);
+            }
         }
     }
 
