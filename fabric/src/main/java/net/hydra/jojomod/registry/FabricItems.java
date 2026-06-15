@@ -490,8 +490,13 @@ public class FabricItems {
                         entries.accept(ModBlocks.FROZEN_DEEPSLATE);
                         entries.accept(ModBlocks.FROZEN_COBBLED_DEEPSLATE);
                         entries.accept(ModBlocks.FROZEN_STONE_BRICKS);
+                        entries.accept(ModBlocks.FROZEN_DIORITE);
+                        entries.accept(ModBlocks.FROZEN_ANDESITE);
+                        entries.accept(ModBlocks.FROZEN_GRANITE);
                         entries.accept(ModBlocks.FROZEN_SAND);
                         entries.accept(ModBlocks.FROZEN_SANDSTONE);
+                        entries.accept(ModBlocks.FROZEN_RED_SAND);
+                        entries.accept(ModBlocks.FROZEN_RED_SANDSTONE);
                         entries.accept(ModBlocks.FROZEN_GRAVEL);
                         entries.accept(ModBlocks.FROZEN_OBSIDIAN);
                         entries.accept(ModBlocks.FROZEN_NETHERRACK);

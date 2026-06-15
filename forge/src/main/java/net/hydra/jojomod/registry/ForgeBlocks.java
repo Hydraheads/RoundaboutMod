@@ -54,6 +54,15 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> FROZEN_COBBLESTONE = BLOCKS.register("frozen_cobblestone",
             () -> FROZEN_COBBLESTONE_PROPERTIES
     );
+    public static final RegistryObject<Block> FROZEN_DIORITE = BLOCKS.register("frozen_diorite",
+            () -> FROZEN_DIORITE_PROPERTIES
+    );
+    public static final RegistryObject<Block> FROZEN_ANDESITE = BLOCKS.register("frozen_andesite",
+            () -> FROZEN_ANDESITE_PROPERTIES
+    );
+    public static final RegistryObject<Block> FROZEN_GRANITE = BLOCKS.register("frozen_granite",
+            () -> FROZEN_GRANITE_PROPERTIES
+    );
     public static final RegistryObject<Block> FROZEN_DEEPSLATE = BLOCKS.register("frozen_deepslate",
             () -> FROZEN_DEEPSLATE_PROPERTIES
     );
@@ -72,6 +81,14 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> FROZEN_SANDSTONE =
             BLOCKS.register("frozen_sandstone",
                     () -> FROZEN_SANDSTONE_PROPERTIES
+            );
+    public static final RegistryObject<Block> FROZEN_RED_SAND =
+            BLOCKS.register("frozen_red_sand",
+                    () -> FROZEN_RED_SAND_PROPERTIES
+            );
+    public static final RegistryObject<Block> FROZEN_RED_SANDSTONE =
+            BLOCKS.register("frozen_red_sandstone",
+                    () -> FROZEN_RED_SANDSTONE_PROPERTIES
             );
     public static final RegistryObject<Block> FROZEN_GRAVEL =
             BLOCKS.register("frozen_gravel",

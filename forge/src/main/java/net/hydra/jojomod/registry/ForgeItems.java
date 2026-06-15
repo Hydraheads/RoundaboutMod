@@ -132,6 +132,21 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.FROZEN_STONE_BRICKS.get(),
                     new Item.Properties()
             )));
+    public static final RegistryObject<BlockItem> FROZEN_DIORITE_ITEM =
+            addToBuildingTab(ITEMS.register("frozen_diorite",
+                    () -> new BlockItem(ForgeBlocks.FROZEN_DIORITE.get(),
+                            new Item.Properties()
+                    )));
+    public static final RegistryObject<BlockItem> FROZEN_ANDESITE_ITEM =
+            addToBuildingTab(ITEMS.register("frozen_andesite",
+                    () -> new BlockItem(ForgeBlocks.FROZEN_ANDESITE.get(),
+                            new Item.Properties()
+                    )));
+    public static final RegistryObject<BlockItem> FROZEN_GRANITE_ITEM =
+            addToBuildingTab(ITEMS.register("frozen_granite",
+                    () -> new BlockItem(ForgeBlocks.FROZEN_GRANITE.get(),
+                            new Item.Properties()
+                    )));
     public static final RegistryObject<BlockItem> FROZEN_SAND_ITEM =
             addToBuildingTab(ITEMS.register("frozen_sand",
             () -> new BlockItem(ForgeBlocks.FROZEN_SAND.get(),
@@ -142,6 +157,16 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.FROZEN_SANDSTONE.get(),
                     new Item.Properties()
             )));
+    public static final RegistryObject<BlockItem> FROZEN_RED_SAND_ITEM =
+            addToBuildingTab(ITEMS.register("frozen_red_sand",
+                    () -> new BlockItem(ForgeBlocks.FROZEN_RED_SAND.get(),
+                            new Item.Properties()
+                    )));
+    public static final RegistryObject<BlockItem> FROZEN_RED_SANDSTONE_ITEM =
+            addToBuildingTab(ITEMS.register("frozen_red_sandstone",
+                    () -> new BlockItem(ForgeBlocks.FROZEN_RED_SANDSTONE.get(),
+                            new Item.Properties()
+                    )));
     public static final RegistryObject<BlockItem> FROZEN_GRAVEL_ITEM =
             addToBuildingTab(ITEMS.register("frozen_gravel",
             () -> new BlockItem(ForgeBlocks.FROZEN_GRAVEL.get(),

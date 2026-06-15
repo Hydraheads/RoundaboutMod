@@ -201,8 +201,13 @@ public class ForgeEvents {
         ModBlocks.FROZEN_DEEPSLATE = ForgeBlocks.FROZEN_DEEPSLATE.get();
         ModBlocks.FROZEN_COBBLED_DEEPSLATE = ForgeBlocks.FROZEN_COBBLED_DEEPSLATE.get();
         ModBlocks.FROZEN_STONE_BRICKS = ForgeBlocks.FROZEN_STONE_BRICKS.get();
+        ModBlocks.FROZEN_DIORITE = ForgeBlocks.FROZEN_DIORITE.get();
+        ModBlocks.FROZEN_ANDESITE = ForgeBlocks.FROZEN_ANDESITE.get();
+        ModBlocks.FROZEN_GRANITE = ForgeBlocks.FROZEN_GRANITE.get();
         ModBlocks.FROZEN_SAND = ForgeBlocks.FROZEN_SAND.get();
         ModBlocks.FROZEN_SANDSTONE = ForgeBlocks.FROZEN_SANDSTONE.get();
+        ModBlocks.FROZEN_RED_SAND = ForgeBlocks.FROZEN_RED_SAND.get();
+        ModBlocks.FROZEN_RED_SANDSTONE = ForgeBlocks.FROZEN_RED_SANDSTONE.get();
         ModBlocks.FROZEN_GRAVEL = ForgeBlocks.FROZEN_GRAVEL.get();
         ModBlocks.FROZEN_OBSIDIAN = ForgeBlocks.FROZEN_OBSIDIAN.get();
         ModBlocks.FROZEN_NETHERRACK = ForgeBlocks.FROZEN_NETHERRACK.get();

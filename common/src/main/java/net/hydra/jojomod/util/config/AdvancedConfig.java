@@ -120,12 +120,17 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
-    public Set<String> freezableBlocksWhiteAlbum = new HashSet<>(
+    public Set<String> freezableBlocksList = new HashSet<>(
             Arrays.asList(
                     "minecraft:dirt:roundabout:frozen_dirt",
                     "minecraft:grass_block:roundabout:frozen_dirt",
                     "minecraft:mycelium:roundabout:frozen_dirt",
                     "minecraft:podzol:roundabout:frozen_dirt",
+                    "minecraft:diorite:roundabout:frozen_diorite",
+                    "minecraft:andesite:roundabout:frozen_andesite",
+                    "minecraft:granite:roundabout:frozen_granite",
+                    "minecraft:red_sand:roundabout:frozen_red_sand",
+                    "minecraft:red_sandstone:roundabout:frozen_red_sandstone",
                     "minecraft:water:minecraft:ice",
                     "minecraft:stone:roundabout:frozen_stone",
                     "minecraft:cobblestone:roundabout:frozen_cobblestone",
@@ -157,7 +162,12 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:obsidian:roundabout:frozen_obsidian",
                     "minecraft:netherrack:roundabout:frozen_netherrack",
                     "minecraft:nether_bricks:roundabout:frozen_nether_bricks",
-                    "minecraft:end_stone:roundabout:frozen_end_stone"
+                    "minecraft:end_stone:roundabout:frozen_end_stone",
+                    "minecraft:diorite:roundabout:frozen_diorite",
+                    "minecraft:andesite:roundabout:frozen_andesite",
+                    "minecraft:granite:roundabout:frozen_granite",
+                    "minecraft:red_sand:roundabout:frozen_red_sand",
+                    "minecraft:red_sandstone:roundabout:frozen_red_sandstone"
             )
     );
 
