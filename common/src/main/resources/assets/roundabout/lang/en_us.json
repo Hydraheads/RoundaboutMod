@@ -3293,6 +3293,8 @@
   "config.roundabout.postTSCancel.desc": "Whether or not certain moves get canceled when time resumes. Disable for legacy version.",
   "config.roundabout.timestopLeapCooldown.name": "Time Stop Leaping Cooldown",
   "config.roundabout.timestopLeapCooldown.desc": "Time stop is disabled for a short time after a leap",
+  "config.roundabout.starFingerLeapCooldown.name": "Star Finger Leaping CD",
+  "config.roundabout.starFingerLeapCooldown.desc": "Time stop is disabled for a short time after a leap",
   "config.roundabout.timestopCancelsFood.name": "Time Stop Cancels Food",
   "config.roundabout.timestopCancelsFood.desc": "While in stopped time, you cannot gain healing from food",
 

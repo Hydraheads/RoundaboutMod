@@ -467,12 +467,14 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public int ticksForFinger = 0;
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
-        if (keyIsDown && this.getActivePower() == POWER_EARLY_IMPALE && this.attackTimeDuring < 24 && attackTimeDuring > 2) {
-            //impaleTicks = 4;
-            holdDownClick = true;
-            animateStand(StarPlatinumEntity.IMPALE_2);
-            this.attackTimeDuring = -8;
-            tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK_2,getTargetEntityId2(impaleRange));
+        if (keyIsDown && this.getActivePower() == POWER_EARLY_IMPALE && this.attackTimeDuring < 24) {
+            if (attackTimeDuring > 5) {
+                //impaleTicks = 4;
+                holdDownClick = true;
+                animateStand(StarPlatinumEntity.IMPALE_2);
+                this.attackTimeDuring = -8;
+                tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK_2, getTargetEntityId2(impaleRange));
+            }
         } else if ((this.getActivePower() != POWER_STAR_FINGER || this.attackTimeDuring >= 26)) {
             super.buttonInputAttack(keyIsDown,options);
         } else {
@@ -731,7 +733,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
 
     public float getBlitzKnockback(){
-        return 0.42F;
+        return 1.2F;
     }
     public void impaleImpact2(Entity entity){
         this.setAttackTimeDuring(-7);
@@ -746,9 +748,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                     addEXP(1, LE);
                 }
                 takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
-                entity.setDeltaMovement(entity.getDeltaMovement().add(0,0.3,0));
+                entity.setDeltaMovement(entity.getDeltaMovement().add(0,0.2,0));
             } else {
-                knockShield2(entity, 30);
+                takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength/2);
             }
         }
 
