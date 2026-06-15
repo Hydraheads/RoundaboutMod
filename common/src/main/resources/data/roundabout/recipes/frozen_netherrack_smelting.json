@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "building",
+  "cookingtime": 100,
+  "experience": 1.0,
+  "ingredient": {
+    "item": "roundabout:frozen_netherrack"
+  },
+  "result": "minecraft:netherrack"
+}

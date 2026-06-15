@@ -46,6 +46,22 @@ public class FabricBlocks {
     );
     public static final Block FROZEN_COBBLED_DEEPSLATE = registerBlock("frozen_cobbled_deepslate", FROZEN_COBBLED_DEEPSLATE_PROPERTIES
     );
+    public static final Block FROZEN_SAND = registerBlock("frozen_sand", FROZEN_SAND_PROPERTIES
+    );
+    public static final Block FROZEN_SANDSTONE = registerBlock("frozen_sandstone", FROZEN_SANDSTONE_PROPERTIES
+    );
+    public static final Block FROZEN_GRAVEL = registerBlock("frozen_gravel", FROZEN_GRAVEL_PROPERTIES
+    );
+    public static final Block FROZEN_END_STONE = registerBlock("frozen_end_stone", FROZEN_END_STONE_PROPERTIES
+    );
+    public static final Block FROZEN_NETHERRACK = registerBlock("frozen_netherrack", FROZEN_NETHERRACK_PROPERTIES
+    );
+    public static final Block FROZEN_NETHER_BRICKS = registerBlock("frozen_nether_bricks", FROZEN_NETHER_BRICKS_PROPERTIES
+    );
+    public static final Block FROZEN_OBSIDIAN = registerBlock("frozen_obsidian", FROZEN_OBSIDIAN_PROPERTIES
+    );
+    public static final Block FROZEN_STONE_BRICKS = registerBlock("frozen_stone_bricks", FROZEN_STONE_BRICKS_PROPERTIES
+    );
     public static final Block SHINY_QUARTZ = registerBlock("shiny_quartz", ModBlocks.SHINY_QUARTZ_PROPERTIES
     );
     public static final Block WHITE_ALBUM_ICE_BLOCK = registerBlockItemless("white_album_ice", WHITE_ALBUM_ICE_BLOCK_PROPERTIES
@@ -295,6 +311,14 @@ public class FabricBlocks {
         ModBlocks.FROZEN_STONE = FROZEN_STONE;
         ModBlocks.FROZEN_DEEPSLATE = FROZEN_DEEPSLATE;
         ModBlocks.FROZEN_COBBLED_DEEPSLATE = FROZEN_COBBLED_DEEPSLATE;
+        ModBlocks.FROZEN_SAND = FROZEN_SAND;
+        ModBlocks.FROZEN_SANDSTONE = FROZEN_SANDSTONE;
+        ModBlocks.FROZEN_GRAVEL = FROZEN_GRAVEL;
+        ModBlocks.FROZEN_END_STONE = FROZEN_END_STONE;
+        ModBlocks.FROZEN_NETHERRACK = FROZEN_NETHERRACK;
+        ModBlocks.FROZEN_NETHER_BRICKS = FROZEN_NETHER_BRICKS;
+        ModBlocks.FROZEN_OBSIDIAN = FROZEN_OBSIDIAN;
+        ModBlocks.FROZEN_STONE_BRICKS = FROZEN_STONE_BRICKS;
         ModBlocks.SHINY_QUARTZ = SHINY_QUARTZ;
         ModBlocks.WHITE_ALBUM_ICE_BLOCK = WHITE_ALBUM_ICE_BLOCK;
         ModBlocks.WHITE_ALBUM_ICE_WALL_BLOCK = WHITE_ALBUM_ICE_WALL_BLOCK;

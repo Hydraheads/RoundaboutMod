@@ -7,6 +7,11 @@
     "roundabout:frozen_stone",
     "roundabout:frozen_cobblestone",
     "roundabout:frozen_deepslate",
-    "roundabout:frozen_cobbled_deepslate"
+    "roundabout:frozen_cobbled_deepslate",
+    "roundabout:frozen_netherrack",
+    "roundabout:frozen_nether_bricks",
+    "roundabout:frozen_stone_bricks",
+    "roundabout:frozen_sandstone",
+    "roundabout:frozen_end_stone"
   ]
 }

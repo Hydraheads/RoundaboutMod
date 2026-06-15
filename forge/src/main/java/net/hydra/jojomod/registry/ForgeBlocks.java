@@ -61,6 +61,38 @@ public class ForgeBlocks {
             BLOCKS.register("frozen_cobbled_deepslate",
             () -> FROZEN_COBBLED_DEEPSLATE_PROPERTIES
     );
+    public static final RegistryObject<Block> FROZEN_STONE_BRICKS =
+            BLOCKS.register("frozen_stone_bricks",
+                    () -> FROZEN_STONE_BRICKS_PROPERTIES
+            );
+    public static final RegistryObject<Block> FROZEN_SAND =
+            BLOCKS.register("frozen_sand",
+                    () -> FROZEN_SAND_PROPERTIES
+            );
+    public static final RegistryObject<Block> FROZEN_SANDSTONE =
+            BLOCKS.register("frozen_sandstone",
+                    () -> FROZEN_SANDSTONE_PROPERTIES
+            );
+    public static final RegistryObject<Block> FROZEN_GRAVEL =
+            BLOCKS.register("frozen_gravel",
+                    () -> FROZEN_GRAVEL_PROPERTIES
+            );
+    public static final RegistryObject<Block> FROZEN_OBSIDIAN =
+            BLOCKS.register("frozen_obsidian",
+                    () -> FROZEN_OBSIDIAN_PROPERTIES
+            );
+    public static final RegistryObject<Block> FROZEN_NETHERRACK =
+            BLOCKS.register("frozen_netherrack",
+                    () -> FROZEN_NETHERRACK_PROPERTIES
+            );
+    public static final RegistryObject<Block> FROZEN_NETHER_BRICKS =
+            BLOCKS.register("frozen_nether_bricks",
+                    () -> FROZEN_NETHER_BRICKS_PROPERTIES
+            );
+    public static final RegistryObject<Block> FROZEN_END_STONE =
+            BLOCKS.register("frozen_end_stone",
+                    () -> FROZEN_END_STONE_PROPERTIES
+            );
     public static final RegistryObject<Block> METEOR_BLOCK = BLOCKS.register("meteor_block",
             () -> ModBlocks.METEOR_BLOCK_PROPERTIES
             );
