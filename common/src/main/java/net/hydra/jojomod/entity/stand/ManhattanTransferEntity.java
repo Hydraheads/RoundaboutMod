@@ -639,37 +639,45 @@ public class ManhattanTransferEntity extends StandEntity {
 
     int stupidTicks = 1;
 
+    public int tickInWater = 100;
+    int dirPause = 0;
+    int randomDirection = 0;
     @Override
     public void tick() {
         validateUUID();
         float pitch = this.getXRot();
         float yaw = this.getYRot();
-
-
+        if(dirPause > 0){
+            dirPause--;
+        }
         if (this.getUserData(this.getUser()) != null) {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
                 if (stupidTicks >= 1) {
-                    //setMaster(this.getUser());
                     this.moveTo(this.getUser().getX(), this.getUser().getY() + 1.45F ,this.getUser().getZ() - 0.075F);
                     stupidTicks--;
                     this.setXRot(this.getUser().getXRot() % 360);
                     this.setYRot(this.getUser().getYRot() % 360);
                     this.setYBodyRot(this.getUser().getYRot() % 360);
-                    //this.setYBodyRot(yaw);
                 }
                 if (horizontalCollision || verticalCollision) {
+                    if(dirPause == 0) {
+                        randomDirection = random.nextInt(2) + 1;
+                        dirPause = 40;
+                    }
+
                     if (!PM.isPiloting()) {
-                        this.setXRot(pitch + 25);
-
-                        this.setYBodyRot(yaw + 25);
-
-                        this.setYRot(yaw);
-
-                        if (yaw >= -90 && yaw <= 0) {
-                            this.setYRot(yaw - 25);
+                        if(horizontalCollision) {
+                            this.setYBodyRot(this.getYRot() % 360);
+                            if (randomDirection <= 1) {
+                                this.setYRot(yaw - 15);
+                            } else {
+                                this.setYRot(yaw + 15);
+                            }
                         }
-                        if (yaw <= 90 && yaw > 0) {
-                            this.setYRot(yaw + 25);
+                        if(verticalCollision && !verticalCollisionBelow){
+                            this.setXRot(pitch + 15);
+                        } if(verticalCollisionBelow){
+                            this.setXRot(pitch - 15);
                         }
                     }
                 }
@@ -751,7 +759,7 @@ public class ManhattanTransferEntity extends StandEntity {
                                 }
                             }
                         }
-                        if (entityAndData.roundabout$getTrueInvisibilityManhattan() < 1 || this.isInWater()) {
+                        if (entityAndData.roundabout$getTrueInvisibilityManhattan() < 1 || this.isInWater() || this.isInLava()) {
                             targent.remove(value);
                             this.setHattanTarget(0);
                             if (this.getUserData(this.getUser()) != null) {

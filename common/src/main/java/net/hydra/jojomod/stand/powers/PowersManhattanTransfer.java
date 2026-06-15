@@ -420,11 +420,16 @@ public class PowersManhattanTransfer extends NewDashPreset {
             if (this.isClient() || !this.isClient()) {
                 if (!isPiloting()) {
                     if (this.currentHattanStatus == UNLOADED_HATTAN) {
-                            if (this.getStandEntity(this.getSelf()).isInWaterOrRain()) {
+                        if(!ME.isInWater() && !ME.isInLava()) {
+                            if (ME.isInRain()) {
                                 ME.setDeltaMovement(ME.getHattanDirection().scale(0.010 * configSpeed() * extraSpeedEmergencyHattan()));
                             } else {
                                 ME.setDeltaMovement(ME.getHattanDirection().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan()));
                             }
+                        } else {
+                            ME.setDeltaMovement(ME.getHattanDirection().scale(0.0025 * configSpeed() * extraSpeedEmergencyHattan()));
+
+                        }
                     } else {
                         this.getStandEntity(this.getSelf()).setDeltaMovement(Vec3.ZERO);
                     }
@@ -447,6 +452,19 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 }
             }
 
+            if(ME.isInLava() || ME.isInWater()){
+                ME.tickInWater--;
+            } else {
+                ME.tickInWater = 100;
+            }
+
+            if(ME.tickInWater < 1){
+                this.sealStand(true);
+            }
+
+            if(ME.isTechnicallyInWall()){
+                this.sealStand(true);
+            }
         }
         if (this.self instanceof Player PL) {
 
@@ -573,69 +591,86 @@ public class PowersManhattanTransfer extends NewDashPreset {
                     $$13++;
                 }
                 if (ent != null) {
-                    Entity TE = MainUtil.getTargetEntity(ent, 300, 10);
-                    if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible()) {
-                        if (ME.isInRain()){
-                            ME.autoMoveBoost = 1.25F;
-                            if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
-                                if($$13 != 0){
-                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.05 * configSpeed() * extraSpeedEmergencyHattan() * 1.5 * dodgeBuff()));
+                    if(!ME.isInWater() && !ME.isInLava()) {
+                        Entity TE = MainUtil.getTargetEntity(ent, 300, 10);
+                        if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible()) {
+                            if (ME.isInRain()) {
+                                ME.autoMoveBoost = 1.25F;
+                                if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
+                                    if ($$13 != 0) {
+                                        entity.setDeltaMovement(ME.getHattanDirection().scale(0.05 * configSpeed() * extraSpeedEmergencyHattan() * 1.5 * dodgeBuff()));
+                                    } else {
+                                        entity.setDeltaMovement(ME.getHattanDirection().scale(0.05 * configSpeed() * extraSpeedEmergencyHattan() * dodgeBuff()));
+                                    }
                                 } else {
-                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.05 * configSpeed() * extraSpeedEmergencyHattan() * dodgeBuff()));
+                                    if ($$13 != 0) {
+                                        entity.setDeltaMovement(delta.x / 1.4, $$13 * flyingSpeed * 2.7F * extraSpeedEmergencyHattan(), delta.z / 1.4);
+                                    } else {
+                                        entity.setDeltaMovement(delta.x / 1.4, 0, delta.z / 1.4);
+                                    }
                                 }
                             } else {
-                                if ($$13 != 0) {
-                                    entity.setDeltaMovement(delta.x / 1.4, $$13 * flyingSpeed * 2.7F * extraSpeedEmergencyHattan(), delta.z / 1.4);
+                                ME.autoMoveBoost = 1F;
+                                if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
+                                    if ($$13 != 0) {
+                                        entity.setDeltaMovement(ME.getHattanDirection().scale(0.07 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F * dodgeBuff()));
+                                    } else {
+                                        entity.setDeltaMovement(ME.getHattanDirection().scale(0.07 * configSpeed() * extraSpeedEmergencyHattan() * dodgeBuff()));
+                                    }
                                 } else {
-                                    entity.setDeltaMovement(delta.x / 1.4, 0, delta.z / 1.4);
+                                    if ($$13 != 0) {
+                                        entity.setDeltaMovement(delta.x / 1.1, $$13 * flyingSpeed * 3F * extraSpeedEmergencyHattan(), delta.z / 1.1);
+                                    } else {
+                                        entity.setDeltaMovement(delta.x / 1.1, 0, delta.z / 1.1);
+                                    }
                                 }
                             }
                         } else {
-                            ME.autoMoveBoost = 1F;
-                            if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
-                                if($$13 != 0){
-                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.07 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F * dodgeBuff()));
+                            if (!ME.isInRain()) {
+                                ME.autoMoveBoost = 1F;
+                                if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
+                                    if ($$13 != 0) {
+                                        entity.setDeltaMovement(ME.getHattanDirection().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F * dodgeBuff()));
+                                    } else {
+                                        entity.setDeltaMovement(ME.getHattanDirection().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan() * dodgeBuff()));
+                                    }
                                 } else {
-                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.07 * configSpeed() * extraSpeedEmergencyHattan() * dodgeBuff()));
+                                    if ($$13 != 0) {
+                                        entity.setDeltaMovement(delta.x / 1.6, $$13 * flyingSpeed * 2.5F * extraSpeedEmergencyHattan(), delta.z / 1.6);
+                                    } else {
+                                        entity.setDeltaMovement(delta.x / 1.6, 0, delta.z / 1.6);
+                                    }
                                 }
                             } else {
-                                if ($$13 != 0) {
-                                    entity.setDeltaMovement(delta.x / 1.1, $$13 * flyingSpeed * 3F * extraSpeedEmergencyHattan(), delta.z / 1.1);
+                                ME.autoMoveBoost = 0.75F;
+                                if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
+                                    if ($$13 != 0) {
+                                        entity.setDeltaMovement(ME.getHattanDirection().scale(0.015 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F * dodgeBuff()));
+                                    } else {
+                                        entity.setDeltaMovement(ME.getHattanDirection().scale(0.015 * configSpeed() * extraSpeedEmergencyHattan() * dodgeBuff()));
+                                    }
                                 } else {
-                                    entity.setDeltaMovement(delta.x / 1.1, 0, delta.z / 1.1);
+                                    if ($$13 != 0) {
+                                        entity.setDeltaMovement(delta.x / 2.2, $$13 * flyingSpeed * 2.2F * extraSpeedEmergencyHattan(), delta.z / 2.2);
+                                    } else {
+                                        entity.setDeltaMovement(delta.x / 2.2, 0, delta.z / 2.2);
+                                    }
                                 }
                             }
                         }
                     } else {
-                        if (!ME.isInRain()) {
-                            ME.autoMoveBoost = 1F;
-                            if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
-                                if($$13 != 0){
-                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F * dodgeBuff()));
-                                } else {
-                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan() * dodgeBuff()));
-                                }
+                        ME.autoMoveBoost = 0.75F;
+                        if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
+                            if ($$13 != 0) {
+                                entity.setDeltaMovement(ME.getHattanDirection().scale(0.0025 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F * dodgeBuff()));
                             } else {
-                                if ($$13 != 0) {
-                                    entity.setDeltaMovement(delta.x / 1.6, $$13 * flyingSpeed * 2.5F * extraSpeedEmergencyHattan(), delta.z / 1.6);
-                                } else {
-                                    entity.setDeltaMovement(delta.x / 1.6, 0, delta.z / 1.6);
-                                }
+                                entity.setDeltaMovement(ME.getHattanDirection().scale(0.0025 * configSpeed() * extraSpeedEmergencyHattan() * dodgeBuff()));
                             }
                         } else {
-                            ME.autoMoveBoost = 0.75F;
-                            if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
-                                if($$13 != 0){
-                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.015 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F * dodgeBuff()));
-                                } else {
-                                    entity.setDeltaMovement(ME.getHattanDirection().scale(0.015 * configSpeed() * extraSpeedEmergencyHattan() * dodgeBuff()));
-                                }
+                            if ($$13 != 0) {
+                                entity.setDeltaMovement(delta.x * 0.025, $$13 * flyingSpeed * 0.5F * extraSpeedEmergencyHattan(), delta.z * 0.025);
                             } else {
-                                if ($$13 != 0) {
-                                    entity.setDeltaMovement(delta.x / 2.2, $$13 * flyingSpeed * 2.2F * extraSpeedEmergencyHattan(), delta.z / 2.2);
-                                } else {
-                                    entity.setDeltaMovement(delta.x / 2.2, 0, delta.z / 2.2);
-                                }
+                                entity.setDeltaMovement(delta.x * 0.025, 0, delta.z * 0.025);
                             }
                         }
                     }
@@ -651,30 +686,32 @@ public class PowersManhattanTransfer extends NewDashPreset {
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
         IEntityAndData entityAndData = ((IEntityAndData) ent);
-        if(visionModeClient) {
-            if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) && ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
-                if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
-                    return true;
+        if(this.getStandEntity(this.getSelf()) instanceof  ManhattanTransferEntity ME && !ME.isInWater() && !ME.isInLava()) {
+            if (visionModeClient) {
+                if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) && ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
+                    if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
+                        return true;
+                    }
+                }
+            }
+            if (isPiloting()) {
+                if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) & ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
+                    if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
+                        return true;
+                    }
+                }
+            }
+            if (!this.switchShootingMode()) {
+                if (targetHattan != null && ent == targetHattan) {
+                    if (this.isActive() && this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
+                        return true;
+                    }
                 }
             }
         }
-        if(isPiloting()){
-            if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) & ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
-                if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
-                    return true;
-                }
-            }
-        }
-        if (ent instanceof ManhattanTransferEntity ME) {
-            if (this.getSelf() == ME.getUser()) {
+        if (ent instanceof ManhattanTransferEntity MZ) {
+            if (this.getSelf() == MZ.getUser()) {
                 if (this.isHoldingSneak()) {
-                    return true;
-                }
-            }
-        }
-        if(!this.switchShootingMode()) {
-            if (targetHattan != null && ent == targetHattan) {
-                if (this.isActive() && this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
                     return true;
                 }
             }
