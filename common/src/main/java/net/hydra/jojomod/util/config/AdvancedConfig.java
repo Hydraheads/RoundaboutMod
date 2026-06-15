@@ -144,6 +144,9 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:gravel:roundabout:frozen_gravel",
                     "minecraft:obsidian:roundabout:frozen_obsidian",
                     "minecraft:netherrack:roundabout:frozen_netherrack",
+                    "minecraft:warped_nylium:roundabout:frozen_netherrack",
+                    "minecraft:crimson_nylium:roundabout:frozen_netherrack",
+                    "minecraft:netherrack:roundabout:frozen_netherrack",
                     "minecraft:nether_bricks:roundabout:frozen_nether_bricks",
                     "minecraft:end_stone:roundabout:frozen_end_stone"
             )
