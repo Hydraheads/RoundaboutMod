@@ -766,19 +766,19 @@ public class ModBlocks {
 
 
     public static Block FROZEN_DIRT_PROPERTIES = new Block(BlockBehaviour.Properties.of().mapColor(MapColor.DIRT).
-            strength(0.2F).sound(SoundType.GLASS));
+            strength(0.2F).sound(SoundType.GLASS).friction(0.97F));
     public static Block FROZEN_STONE_PROPERTIES = new Block(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).
             instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.5F, 6.0F)
-            .sound(SoundType.GLASS));
+            .sound(SoundType.GLASS).friction(0.97F));
     public static Block FROZEN_COBBLESTONE_PROPERTIES =  new Block(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).
             instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.66F, 6.0F)
-            .sound(SoundType.GLASS));
+            .sound(SoundType.GLASS).friction(0.97F));
     public static Block FROZEN_DEEPSLATE_PROPERTIES = new RotatedPillarBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DEEPSLATE).
             instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.0F, 6.0F)
-            .sound(SoundType.GLASS));
+            .sound(SoundType.GLASS).friction(0.97F));
     public static Block FROZEN_COBBLED_DEEPSLATE_PROPERTIES =  new Block(BlockBehaviour.Properties.of().mapColor(MapColor.DEEPSLATE).
             instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.0F, 6.0F)
-            .sound(SoundType.GLASS).strength(1.16F, 6.0F).sound(SoundType.GLASS));
+            .sound(SoundType.GLASS).strength(1.16F, 6.0F).sound(SoundType.GLASS).friction(0.97F));
 
 
     public static CultivationPotBlock cultivationPot(Block $$0, FeatureFlag... $$1) {

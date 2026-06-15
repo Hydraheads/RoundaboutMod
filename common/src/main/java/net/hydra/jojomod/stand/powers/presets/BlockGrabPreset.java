@@ -423,7 +423,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                                                     -Mth.cos((degrees * ((float) Math.PI / 180)))));
                                             ((IEntityAndData) ent).roundabout$setQVecParams(new Vec3(strength * (0.75 + (ybias / 4)),
                                                     ybias,
-                                                    0.8));
+                                                    0.85));
                                         } else {
                                             MainUtil.takeUnresistableKnockbackWithYBias(ent, strength * (0.75 + (ybias / 4)),
                                                     Mth.sin(((degrees * ((float) Math.PI / 180)))),
@@ -469,7 +469,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                                                 -Mth.cos((degrees * ((float) Math.PI / 180)))));
                                         ((IEntityAndData) ent).roundabout$setQVecParams(new Vec3(strength * (0.5 + (ybias / 2)),
                                                 ybias,
-                                                0.8F));
+                                                0.85F));
 
                                     } else {
                                         MainUtil.takeUnresistableKnockbackWithYBias(ent, strength * (0.5 + (ybias / 2)),

@@ -487,12 +487,14 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 if (entity instanceof LivingEntity LE) {
                     addEXP(5, LE);
                     if (MainUtil.getMobBleed(entity)) {
-                        if ((((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
-                            MainUtil.makeBleed(entity, 0, 200, this.getSelf());
-                        } else {
-                            MainUtil.makeBleed(entity, 2, 200, this.getSelf());
-                        }
+                        if (!airTriggered) {
+                            if ((((TimeStop) this.getSelf().level()).CanTimeStopEntity(entity))) {
+                                MainUtil.makeBleed(entity, 0, 200, this.getSelf());
+                            } else {
+                                MainUtil.makeBleed(entity, 2, 200, this.getSelf());
+                            }
                             MainUtil.makeMobBleed(entity);
+                        }
                     }
                 }
                 takeDeterminedKnockback(this.self, entity, knockbackStrength);
@@ -509,7 +511,11 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         float pitch = 1F;
             if (entity != null) {
                 playImpaleConnectSoundExtra();
-                SE = getImpaleSound();
+                if (airTriggered){
+                    SE = ModSounds.PUNCH_4_SOUND_EVENT;
+                } else {
+                    SE = getImpaleSound();
+                }
                 pitch = 1.2F;
             } else {
                 SE = ModSounds.PUNCH_2_SOUND_EVENT;
@@ -1467,9 +1473,12 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         return 1/((float) this.getKickBarrageWindup() /20);
     }
 
+    public boolean airTriggered = false;
     public boolean impale(){
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)){
+
+            airTriggered = (((StandUser) this.getSelf()).roundabout$getLeapTicks() > 0);
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_1_SNEAK);
             playSoundsIfNearby(IMPALE_NOISE, 27, false);
