@@ -571,6 +571,7 @@ public class ForgeEvents {
         ModEffects.CAPTURING_LOVE = ForgeEffects.CAPTURING_LOVE.get();
         ModEffects.FACELESS = ForgeEffects.FACELESS.get();
         ModEffects.MELTING = ForgeEffects.MELTING.get();
+        ModEffects.STAND_MELTING = ForgeEffects.STAND_MELTING.get();
         ModEffects.GRAVITY_FLIP = ForgeEffects.GRAVITY_FLIP.get();
         ModEffects.WARDING = ForgeEffects.WARDING.get();
         ModEffects.SINGE = ForgeEffects.SINGE.get();

@@ -740,7 +740,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
         if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
-            int ClashTime = Math.min(15, Math.round(((float) attackTimeDuring / maxSuperHitTime) * 15));
+            int ClashTime = Math.min(15, Math.round(((float) attackTimeDuring / getMaxSuperHitTime()) * 15));
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
 
@@ -1618,10 +1618,10 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
     public void updateKickAttackCharge(){
         if (this.attackTimeDuring > -1) {
-            if (this.attackTimeDuring >= maxSuperHitTime &&
+            if (this.attackTimeDuring >= getMaxSuperHitTime() &&
                     (!(this.getSelf() instanceof Player) || (this.self.level().isClientSide() && isPacketPlayer()))){
                 int atd = this.getAttackTimeDuring();
-                ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.SNEAK_ATTACK, true,maxSuperHitTime);
+                ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.SNEAK_ATTACK, true,getMaxSuperHitTime());
                 if (this.self.level().isClientSide()){
                     tryIntPowerPacket(PowerIndex.SNEAK_ATTACK, atd);
                 }
@@ -2139,7 +2139,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     }
 
     public void animateKickAttackHit(){
-        if (chargedFinal >= maxSuperHitTime) {
+        if (chargedFinal >= getMaxSuperHitTime()) {
             animateStand(StandEntity.FINAL_ATTACK);
         } else {
             animateStand(MagiciansRedEntity.CHARGED_PUNCH);
@@ -2162,30 +2162,32 @@ public class PowersMagiciansRed extends NewPunchingStand {
         this.clashDone = false;
         return true;
     }
-    public static int maxSuperHitTime = 25;
+    public int getMaxSuperHitTime(){
+        return 25+(getMeltLevel()*2);
+    }
     public boolean setPowerSuperHit() {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.SNEAK_ATTACK);
         this.poseStand(OffsetIndex.ATTACK);
-        chargedFinal = Math.min(this.chargedFinal,maxSuperHitTime);
+        chargedFinal = Math.min(this.chargedFinal,getMaxSuperHitTime());
         animateKickAttackHit();
         //playBarrageCrySound();
         return true;
     }
 
     public float getKickAttackKnockback(){
-        if (chargedFinal >= maxSuperHitTime) {
-            return (((float)this.chargedFinal /(float)maxSuperHitTime)*3);
+        if (chargedFinal >= getMaxSuperHitTime()) {
+            return (((float)this.chargedFinal /(float)getMaxSuperHitTime())*3);
         } else {
-            return (((float)this.chargedFinal/(float)maxSuperHitTime)*1.5F);
+            return (((float)this.chargedFinal/(float)getMaxSuperHitTime())*1.5F);
         }
     }
     public float getKickAttackStrength(Entity entity){
         float punchD = this.getPunchStrength(entity)*2+this.getHeavyPunchStrength(entity);
         if (this.getReducedDamage(entity)){
-            return (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD);
+            return (((float)this.chargedFinal/(float)getMaxSuperHitTime())*punchD);
         } else {
-            return (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD)+1;
+            return (((float)this.chargedFinal/(float)getMaxSuperHitTime())*punchD)+1;
         }
     }
     public void kickAttackImpact(Entity entity){
@@ -2198,13 +2200,13 @@ public class PowersMagiciansRed extends NewPunchingStand {
             knockbackStrength = getKickAttackKnockback();
             if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
                 if (entity instanceof LivingEntity LE) {
-                    if (chargedFinal >= maxSuperHitTime) {
+                    if (chargedFinal >= getMaxSuperHitTime()) {
                         addEXP(5, LE);
                     }
                 }
                 takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
             } else {
-                if (chargedFinal >= maxSuperHitTime) {
+                if (chargedFinal >= getMaxSuperHitTime()) {
                     knockShield2(entity, getKickAttackKnockShieldTime());
 
                 }
@@ -2212,7 +2214,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
             int fireCount = 50;
             float firespeed =0.05F;
-            if (chargedFinal >= maxSuperHitTime){
+            if (chargedFinal >= getMaxSuperHitTime()){
                 fireCount = 100;
                 firespeed =0.1F;
             }
@@ -2447,7 +2449,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
     public void standFinalAttack(){
 
-        if (chargedFinal >= maxSuperHitTime) {
+        if (chargedFinal >= getMaxSuperHitTime()) {
             this.setAttackTimeMax((int) (ClientNetworking.getAppropriateConfig().magiciansRedSettings.magicianKickMinimumCooldown + chargedFinal * 1.5));
         } else {
             this.setAttackTimeMax((int) (ClientNetworking.getAppropriateConfig().magiciansRedSettings.magicianKickMinimumCooldown + chargedFinal));
@@ -3015,8 +3017,9 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 this.attackTimeMax = 0;
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE,true);
             } else {
-                if ((this.attackTimeDuring == 7 && this.activePowerPhase == 1)
-                        || this.attackTimeDuring == 8) {
+                int meltLevel = getMeltLevel();
+                if ((this.attackTimeDuring == (7+meltLevel) && this.activePowerPhase == 1)
+                        || this.attackTimeDuring == (8+meltLevel)) {
                     this.standPunch();
                 }
             }

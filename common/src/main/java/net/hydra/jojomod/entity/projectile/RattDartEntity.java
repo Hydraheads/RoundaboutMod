@@ -11,9 +11,11 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
+import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.Direction;
@@ -409,6 +411,22 @@ public class RattDartEntity extends AbstractArrow {
                 if (P.isBlocking()) {
                     if (this.getShotType() == CHARGED || getShotType() == BURST_CHARGED) {
                         MainUtil.knockShieldPlusStand(P,50);
+                    }
+                }
+            }
+
+            if ($$1 instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof
+                    NewPunchingStand nps && nps.isGuarding()){
+                if (nps.meltIFrames <= 0){
+                    nps.meltIFrames = 3;
+                    if (LE.hasEffect(ModEffects.STAND_MELTING)){
+                        MobEffectInstance mei = LE.getEffect(ModEffects.STAND_MELTING);
+                        if (mei != null){
+                            LE.addEffect(new MobEffectInstance(ModEffects.STAND_MELTING,240,
+                                    Math.min(6,mei.getAmplifier()+1)));
+                        }
+                    } else {
+                        LE.addEffect(new MobEffectInstance(ModEffects.STAND_MELTING,240,0));
                     }
                 }
             }

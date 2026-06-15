@@ -757,20 +757,20 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     @Override
     public float getFinalAttackKnockback(){
-        return (((float)this.chargedFinal/(float)maxSuperHitTime)*2.0F);
+        return (((float)this.chargedFinal/(float)getMaxSuperHitTime())*2.0F);
     }
     @Override
     public float getFinalPunchStrength(Entity entity){
         float ret;
         float punchD = this.getPunchStrength(entity)*2+this.getHeavyPunchStrength(entity);
         if (this.getReducedDamage(entity)){
-            ret = (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD);
-            if (this.chargedFinal >= maxSuperHitTime){
+            ret = (((float)this.chargedFinal/(float)getMaxSuperHitTime())*punchD);
+            if (this.chargedFinal >= getMaxSuperHitTime()){
                 ret +=0.5F;
             }
         } else {
-            ret = (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD)+3;
-            if (this.chargedFinal >= maxSuperHitTime){
+            ret = (((float)this.chargedFinal/(float)getMaxSuperHitTime())*punchD)+3;
+            if (this.chargedFinal >= getMaxSuperHitTime()){
                 ret +=2;
             }
         }

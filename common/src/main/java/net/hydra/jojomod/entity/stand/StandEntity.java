@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.stand;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.NoVibrationEntity;
 import net.hydra.jojomod.entity.projectile.IronBallEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.ModItems;
@@ -20,6 +21,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -59,6 +61,8 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
             EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Byte> FADE_OUT = SynchedEntityData.defineId(StandEntity.class,
             EntityDataSerializers.BYTE);
+    protected static final EntityDataAccessor<Integer> MELT_LEVEL = SynchedEntityData.defineId(StandEntity.class,
+            EntityDataSerializers.INT);
 
 
 
@@ -317,6 +321,15 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         return this.entityData.get(FADE_OUT);
     }
 
+
+
+    public final void setMeltLevel(int FadeOut) {
+        this.entityData.set(MELT_LEVEL, FadeOut);
+    } //sets leaning direction
+    public int getMeltLevel() {
+        return this.entityData.get(MELT_LEVEL);
+    }
+
     public final void setFadePercent(Integer FadeOut) {
         this.entityData.set(FADE_PERCENT, FadeOut);
     } //sets leaning direction
@@ -472,6 +485,7 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
             this.entityData.define(IDLE_ANIMATION, (byte) 0);
             this.entityData.define(HELD_ITEM, ItemStack.EMPTY);
             this.entityData.define(SKIN, (byte) 0);
+            this.entityData.define(MELT_LEVEL, 0);
         }
     }
 
@@ -633,6 +647,15 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
 
             if (this.level().isClientSide()){
                 setupAnimationStates();
+            } else {
+                if (getUser() != null && getUser().hasEffect(ModEffects.STAND_MELTING)){
+                    MobEffectInstance mei = getUser().getEffect(ModEffects.STAND_MELTING);
+                    if (mei != null){
+                        setMeltLevel(mei.getAmplifier()+1);
+                    }
+                } else {
+                    setMeltLevel(0);
+                }
             }
 
             if ((this.isAlive() && !this.dead || forceVisible) && !forceDespawnSet){

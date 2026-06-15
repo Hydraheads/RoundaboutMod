@@ -229,9 +229,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public float getFinalPunchStrength(Entity entity){
         float punchD = this.getPunchStrength(entity)*2+this.getHeavyPunchStrength(entity);
         if (this.getReducedDamage(entity)){
-            return (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD);
+            return (((float)this.chargedFinal/(float)getMaxSuperHitTime())*punchD);
         } else {
-            return ((((float)this.chargedFinal/(float)maxSuperHitTime)*punchD)+3);
+            return ((((float)this.chargedFinal/(float)getMaxSuperHitTime())*punchD)+3);
         }
     }
 

@@ -921,8 +921,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                     tryPowerPacket(PowerIndex.NONE);
                 }
-            } else if (this.attackTimeDuring >= maxSuperHitTime && !(this.getSelf() instanceof Player)){
-                ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.SNEAK_ATTACK, true,maxSuperHitTime);
+            } else if (this.attackTimeDuring >= getMaxSuperHitTime() && !(this.getSelf() instanceof Player)){
+                ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.SNEAK_ATTACK, true,getMaxSuperHitTime());
             }
         }
     }
@@ -1377,7 +1377,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
         } else if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
-            int ClashTime = Math.min(15,Math.round(((float) attackTimeDuring / maxSuperHitTime) * 15));
+            int ClashTime = Math.min(15,Math.round(((float) attackTimeDuring / getMaxSuperHitTime()) * 15));
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
         } else {
@@ -1839,26 +1839,28 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         this.clashDone = false;
         return true;
     }
-    public static int maxSuperHitTime = 25;
+    public int getMaxSuperHitTime(){
+        return 25+(getMeltLevel()*2);
+    }
     public boolean setPowerSuperHit() {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.SNEAK_ATTACK);
         this.poseStand(OffsetIndex.ATTACK);
-        chargedFinal = Math.min(this.chargedFinal,maxSuperHitTime);
+        chargedFinal = Math.min(this.chargedFinal,getMaxSuperHitTime());
         animateFinalAttackHit();
         //playBarrageCrySound();
         return true;
     }
 
     public float getFinalAttackKnockback(){
-        return (((float)this.chargedFinal /(float)maxSuperHitTime)*3);
+        return (((float)this.chargedFinal /(float)getMaxSuperHitTime())*3);
     }
     public float getFinalPunchStrength(Entity entity){
         float punchD = this.getPunchStrength(entity)*2+this.getHeavyPunchStrength(entity);
         if (this.getReducedDamage(entity)){
-            return (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD);
+            return (((float)this.chargedFinal/(float)getMaxSuperHitTime())*punchD);
         } else {
-            return (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD)+3;
+            return (((float)this.chargedFinal/(float)getMaxSuperHitTime())*punchD)+3;
         }
     }
     public int getFinalAttackKnockShieldTime(){
@@ -1885,13 +1887,13 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             dspStuff(entity);
             if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
                 if (entity instanceof LivingEntity LE) {
-                    if (chargedFinal >= maxSuperHitTime) {
+                    if (chargedFinal >= getMaxSuperHitTime()) {
                         addEXP(5, LE);
                     }
                 }
                 takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
             } else {
-                if (chargedFinal >= maxSuperHitTime) {
+                if (chargedFinal >= getMaxSuperHitTime()) {
                     knockShield2(entity, getFinalAttackKnockShieldTime());
                 }
             }

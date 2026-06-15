@@ -46,6 +46,10 @@ public class ForgeEffects{
                     new Effect(MobEffectCategory.HARMFUL, 10329495)
                             .addAttributeModifier(Attributes.MAX_HEALTH,"6107DE5E-7CE8-4030-940E-514C1F160890",-0.7, AttributeModifier.Operation.ADDITION)
             );
+    public static final RegistryObject<MobEffect> STAND_MELTING =
+            POTION_EFFECTS.register("stand_melting", () ->
+                    new Effect(MobEffectCategory.HARMFUL, 10329495)
+            );
     public static final RegistryObject<MobEffect> GRAVITY_FLIP =
             POTION_EFFECTS.register("gravity_flip", () ->
                     new Effect(MobEffectCategory.HARMFUL, 4906114));

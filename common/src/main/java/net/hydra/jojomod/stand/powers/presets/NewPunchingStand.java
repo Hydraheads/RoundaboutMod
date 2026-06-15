@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -105,6 +106,17 @@ public class NewPunchingStand extends NewDashPreset {
         }
     }
 
+
+    public int getMeltLevel(){
+        if (self.hasEffect(ModEffects.STAND_MELTING)) {
+            MobEffectInstance melt = self.getEffect(ModEffects.STAND_MELTING);
+            if (melt != null) {
+                return melt.getAmplifier() + 1;
+            }
+        }
+        return 0;
+    }
+
     @Override
     public boolean setPowerAttack(){
         if (this.activePowerPhase >= 3){
@@ -112,9 +124,11 @@ public class NewPunchingStand extends NewDashPreset {
         } else {
             this.activePowerPhase++;
             if (this.activePowerPhase == 3) {
-                this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown;
+                this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown
+                + getMeltLevel()*3;
             } else {
-                this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchCooldown;
+                this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchCooldown
+                        + getMeltLevel()*3;
             }
 
         }
@@ -136,8 +150,9 @@ public class NewPunchingStand extends NewDashPreset {
                 this.attackTimeMax = 0;
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE,true);
             } else {
-                if ((this.attackTimeDuring == 5 && this.activePowerPhase == 1)
-                        || this.attackTimeDuring == 6) {
+                int meltLevel = getMeltLevel();
+                if ((this.attackTimeDuring == (5+meltLevel) && this.activePowerPhase == 1)
+                        || this.attackTimeDuring == (6+meltLevel)) {
                     this.standPunch();
                 }
             }
@@ -346,6 +361,16 @@ public class NewPunchingStand extends NewDashPreset {
 
     public float getPunchAngle(){
         return ClientNetworking.getAppropriateConfig().generalStandSettings.basePunchAngle;
+    }
+
+    public int meltIFrames = 0;
+    public void tickPower(){
+        if (!self.level().isClientSide()){
+            if (meltIFrames > 0){
+                meltIFrames--;
+            }
+        }
+        super.tickPower();
     }
 
     @Override
