@@ -30,6 +30,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
@@ -468,7 +469,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (keyIsDown && this.getActivePower() == POWER_EARLY_IMPALE && this.attackTimeDuring < 24) {
-            if (attackTimeDuring > 5) {
+            if (attackTimeDuring > 2) {
                 //impaleTicks = 4;
                 holdDownClick = true;
                 animateStand(StarPlatinumEntity.IMPALE_2);
@@ -478,7 +479,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         } else if ((this.getActivePower() != POWER_STAR_FINGER || this.attackTimeDuring >= 26)) {
             super.buttonInputAttack(keyIsDown,options);
         } else {
-            if (attackTimeDuring > 5) {
+            if (attackTimeDuring > 10) {
                 if (keyIsDown && ticksForFinger == 100) {
                     holdDownClick = true;
                     ticksForFinger = 101;
@@ -735,7 +736,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
 
     public float getBlitzKnockback(){
-        return 1.2F;
+        return 1.3F;
     }
     public void impaleImpact2(Entity entity){
         this.setAttackTimeDuring(-7);
@@ -1008,6 +1009,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void applyLeapCooldowns(){
+        this.setCooldown(PowerIndex.SKILL_1, ConfigManager.getConfig().starPlatinumSettings.starFingerLeapCooldown);
     }
 
     public float getPunchStrength(Entity entity){
