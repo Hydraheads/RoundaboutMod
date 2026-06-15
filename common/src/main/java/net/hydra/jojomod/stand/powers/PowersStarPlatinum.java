@@ -478,12 +478,14 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         } else if ((this.getActivePower() != POWER_STAR_FINGER || this.attackTimeDuring >= 26)) {
             super.buttonInputAttack(keyIsDown,options);
         } else {
-            if (keyIsDown && ticksForFinger == 100) {
-                holdDownClick = true;
-                ticksForFinger = 101;
-                animateStand(StarPlatinumEntity.STAR_FINGER_2);
-                tryIntToServerPacket(PacketDataIndex.INT_UPDATE_MOVE,attackTimeDuring);
-                this.attackTimeDuring = 26;
+            if (attackTimeDuring > 5) {
+                if (keyIsDown && ticksForFinger == 100) {
+                    holdDownClick = true;
+                    ticksForFinger = 101;
+                    animateStand(StarPlatinumEntity.STAR_FINGER_2);
+                    tryIntToServerPacket(PacketDataIndex.INT_UPDATE_MOVE, attackTimeDuring);
+                    this.attackTimeDuring = 26;
+                }
             }
         }
     }
@@ -951,7 +953,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             if (ticksForFinger < 26) {
                 pow *= (1 - (((float) (26 - ticksForFinger) / 26) * 0.95F));
                 if (getReducedDamage(entity)){
-                    pow*=0.5F;
+                    pow*=0.8F;
                 }
             }
 
