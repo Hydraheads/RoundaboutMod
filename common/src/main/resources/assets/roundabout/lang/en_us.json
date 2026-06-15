@@ -2921,6 +2921,9 @@
   "config.roundabout.sunArmorDamage.name": "Sun Armor Damage",
   "config.roundabout.sunArmorDamage.desc": "White Album's suit lets vampires temporarily exist under the sun. Lower this to make it last longer, or raise it very high to make the suit shatter under sunlight immediately.",
 
+  "config.roundabout.blockFreezeRadius.name": "Block Freeze Radius",
+  "config.roundabout.blockFreezeRadius.desc": "What is the radius of blocks that white album can convert into frozen blocks with its frozen world ability?",
+
 
   "config.roundabout.magicianAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.magicianAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",

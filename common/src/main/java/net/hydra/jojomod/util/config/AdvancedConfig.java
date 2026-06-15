@@ -120,6 +120,34 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
+    public Set<String> freezableBlocksWhiteAlbum = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:dirt:roundabout:frozen_dirt",
+                    "minecraft:grass_block:roundabout:frozen_dirt",
+                    "minecraft:mycelium:roundabout:frozen_dirt",
+                    "minecraft:podzol:roundabout:frozen_dirt",
+                    "minecraft:water:minecraft:ice",
+                    "minecraft:stone:roundabout:frozen_stone",
+                    "minecraft:granite:roundabout:frozen_stone",
+                    "minecraft:diorite:roundabout:frozen_stone",
+                    "minecraft:andesite:roundabout:frozen_stone",
+                    "minecraft:cobblestone:roundabout:frozen_cobblestone",
+                    "minecraft:deepslate:roundabout:frozen_deepslate",
+                    "minecraft:cobbled_deepslate:roundabout:frozen_cobbled_deepslate",
+                    "minecraft:stone_bricks:roundabout:frozen_stone_bricks",
+                    "minecraft:cracked_stone_bricks:roundabout:frozen_stone_bricks",
+                    "minecraft:mossy_stone_bricks:roundabout:frozen_stone_bricks",
+                    "minecraft:sand:roundabout:frozen_sand",
+                    "minecraft:red_sand:roundabout:frozen_sand",
+                    "minecraft:sandstone:roundabout:frozen_sandstone",
+                    "minecraft:red_sandstone:roundabout:frozen_sandstone",
+                    "minecraft:gravel:roundabout:frozen_gravel",
+                    "minecraft:obsidian:roundabout:frozen_obsidian",
+                    "minecraft:netherrack:roundabout:frozen_netherrack",
+                    "minecraft:nether_bricks:roundabout:frozen_nether_bricks",
+                    "minecraft:end_stone:roundabout:frozen_end_stone"
+            )
+    );
 
     public Set<String> standBlockGrabBlacklist = new HashSet<>(
             Arrays.asList(
