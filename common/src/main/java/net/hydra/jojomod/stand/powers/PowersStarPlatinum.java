@@ -941,34 +941,40 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public void fingerDamage(Entity entity){
         float pow = getFingerDamage(entity);
         float knockbackStrength = 0.3F;
-        if(ticksForFinger < 26){
-            pow*=(1 - (((float) (26-ticksForFinger) /26)*0.95F));
-        }
 
-        hitParticlesCenter(entity);
-        if(ticksForFinger < 26){
-            if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
-                takeDeterminedKnockback(this.self, entity, knockbackStrength);
-                if (entity instanceof LivingEntity LE){
-                    addEXP(1, LE);
-                    if (ticksForFinger >13){
-                        if (canFingerBleed) {
-                            MainUtil.makeBleed(LE, 0, 200, this.self);
+        if (entity != null && entity.distanceTo(self) > 8.5F) {
+            entity = null;
+        }
+        if (entity != null) {
+            if (ticksForFinger < 26) {
+                pow *= (1 - (((float) (26 - ticksForFinger) / 26) * 0.95F));
+            }
+
+            hitParticlesCenter(entity);
+            if (ticksForFinger < 26) {
+                if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
+                    takeDeterminedKnockback(this.self, entity, knockbackStrength);
+                    if (entity instanceof LivingEntity LE) {
+                        addEXP(1, LE);
+                        if (ticksForFinger > 13) {
+                            if (canFingerBleed) {
+                                MainUtil.makeBleed(LE, 0, 200, this.self);
+                            }
                         }
                     }
                 }
-            }
-        } else {
-            if (StarFingerDamageEntityAttack(entity, pow, 0, this.self)) {
-                takeDeterminedKnockback(this.self, entity, knockbackStrength);
-                if (entity instanceof LivingEntity LE){
-                    addEXP(2, LE);
-                    if (canFingerBleed) {
-                        MainUtil.makeBleed(LE, 1, 160, this.self);
-                    }
-                }
             } else {
-                knockShield2(entity, 40);
+                if (StarFingerDamageEntityAttack(entity, pow, 0, this.self)) {
+                    takeDeterminedKnockback(this.self, entity, knockbackStrength);
+                    if (entity instanceof LivingEntity LE) {
+                        addEXP(2, LE);
+                        if (canFingerBleed) {
+                            MainUtil.makeBleed(LE, 1, 160, this.self);
+                        }
+                    }
+                } else {
+                    knockShield2(entity, 40);
+                }
             }
         }
     }

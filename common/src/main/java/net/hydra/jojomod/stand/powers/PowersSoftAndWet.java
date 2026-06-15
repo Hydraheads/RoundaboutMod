@@ -2312,6 +2312,10 @@ public void unlockSkin(){
 
     public void kickAttackImpact(Entity entity){
         this.setAttackTimeDuring(-20);
+
+        if (entity != null && entity.distanceTo(self) > getReach()+0.5F) {
+            entity = null;
+        }
         if (entity != null) {
             if (chargedFinal < getMaxSuperHitTime()) {
                 hitParticlesCenter(entity);
