@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.zombie_minion;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.MinionAttackGoal;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.goals.*;
@@ -109,7 +110,7 @@ public class BaseMinion extends PathfinderMob {
             this.goalSelector.addGoal(2, new ClimbOnTopOfPowderSnowGoal(this, this.level()));
         }
         this.goalSelector.addGoal(6, new LeapAtTargetBearHeadGoal(this, 0.4F));
-        this.goalSelector.addGoal(7, new MeleeAttackGoal(this, 1.0, false));
+        this.goalSelector.addGoal(7, new MinionAttackGoal(this, 1.0, false));
         if (!(this instanceof ParrotMinion)) {
             this.goalSelector.addGoal(9, new MinionStrollGoal(this, 1.0));
         }

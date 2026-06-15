@@ -942,7 +942,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         float pow = getFingerDamage(entity);
         float knockbackStrength = 0.3F;
         if(ticksForFinger < 26){
-            pow*=(1 - ((float) (26-ticksForFinger) /26));
+            pow*=(1 - (((float) (26-ticksForFinger) /26)*0.95F));
         }
 
         hitParticlesCenter(entity);
@@ -964,7 +964,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 if (entity instanceof LivingEntity LE){
                     addEXP(2, LE);
                     if (canFingerBleed) {
-                        MainUtil.makeBleed(LE, 1, 200, this.self);
+                        MainUtil.makeBleed(LE, 1, 160, this.self);
                     }
                 }
             } else {
@@ -1016,7 +1016,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
     public float getFingerDamage(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 2.7* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod((float) ((float) 2.5* (ClientNetworking.getAppropriateConfig().
                     starPlatinumSettings.starPlatinumAttackMultOnPlayers*0.01)));
         } else {
             return levelupDamageMod((float) ((float) 10* (ClientNetworking.getAppropriateConfig().

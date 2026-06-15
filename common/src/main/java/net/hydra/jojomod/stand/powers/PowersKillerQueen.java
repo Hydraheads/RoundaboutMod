@@ -346,7 +346,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
 
         if (isHoldingSneak() && !(inBitesTheDustMode())){
-        	if (this.shaReleased) {
+        	if (this.currentShaStatus != SHA_NONE) {
                 if (this.currentShaStatus == SHA_SEND) {
                     setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_RETREAT, PowerIndex.NO_CD);
                 }else {
@@ -356,7 +356,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         		setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_SUMMON, PowerIndex.SKILL_3);
         	}
         } else if (isGuarding() && !(inBitesTheDustMode())){
-            if (this.shaReleased) {
+            if (this.currentShaStatus != SHA_NONE) {
                 if (this.currentShaStatus == SHA_SEND) {
                     setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_RETREAT, PowerIndex.NO_CD);
                 }else {

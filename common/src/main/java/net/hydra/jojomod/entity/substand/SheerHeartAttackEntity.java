@@ -294,7 +294,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		if (this.onGround()) {
 			this.lookAt(EntityAnchorArgument.Anchor.EYES, jumpT0Pos);
 			this.jumpTick = jumpTickMax;
-			this.setDeltaMovement((this.getLookAngle().multiply(1.2, 1.2, 1.2)).add(0, 0.9, 0));
+			this.setDeltaMovement((this.getLookAngle().multiply(1.2, 1.2, 1.2)).add(0, 0.11, 0));
 		}
 	}
 
@@ -302,7 +302,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		this.lookAt(EntityAnchorArgument.Anchor.EYES,shootToPos);
 
-		this.setDeltaMovement((this.getLookAngle().multiply(1.3,1.3,1.3)).add(0,0.1,0));
+		this.setDeltaMovement((this.getLookAngle().multiply(1.3,1.3,1.3)).add(0,0.12,0));
 	}
 
 
