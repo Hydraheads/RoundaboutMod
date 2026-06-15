@@ -836,7 +836,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public float getPunchStrength(Entity entity){
         if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
             if (this.getReducedDamage(entity)){
-                return playerDmgMult(0.68F * (1+ (vp.getVampireData().strengthLevel * 0.05F)));
+                return playerDmgMult(0.7F * (1+ (vp.getVampireData().strengthLevel * 0.05F)));
             } else {
                 return mobDmgMult(2.1F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             }
