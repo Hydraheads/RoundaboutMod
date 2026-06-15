@@ -961,9 +961,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (build >= 80){
             mult = 3.5F;
         } else if (attackTimeDuring > 90){
-            mult =3.0F;
+            mult =2.6F;
         } else if (attackTimeDuring > 80){
-            mult =2.8F;
+            mult =2.4F;
         } else if (attackTimeDuring > 70){
             mult =2.2F;
         } else if (attackTimeDuring > 60){

@@ -1089,7 +1089,7 @@ public class Config implements Cloneable {
         public Boolean postTSSoften;
         @BooleanOption(group = "inherit", value = true)
         public Boolean postTSCancel;
-        @IntOption(group = "inherit", value = 14, min = 0, max = 100)
+        @IntOption(group = "inherit", value = 20, min = 0, max = 100)
         public Integer timestopLeapCooldown;
         @BooleanOption(group = "inherit", value = true)
         public Boolean timestopCancelsFood;
