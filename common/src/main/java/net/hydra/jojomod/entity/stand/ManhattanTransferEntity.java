@@ -639,6 +639,8 @@ public class ManhattanTransferEntity extends StandEntity {
 
     int stupidTicks = 1;
 
+    public int tickInWater = 100;
+
     @Override
     public void tick() {
         validateUUID();
@@ -751,7 +753,7 @@ public class ManhattanTransferEntity extends StandEntity {
                                 }
                             }
                         }
-                        if (entityAndData.roundabout$getTrueInvisibilityManhattan() < 1 || this.isInWater()) {
+                        if (entityAndData.roundabout$getTrueInvisibilityManhattan() < 1 || this.isInWater() || this.isInLava()) {
                             targent.remove(value);
                             this.setHattanTarget(0);
                             if (this.getUserData(this.getUser()) != null) {

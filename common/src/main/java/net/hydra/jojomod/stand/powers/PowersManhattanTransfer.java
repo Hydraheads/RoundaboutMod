@@ -420,7 +420,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
             if (this.isClient() || !this.isClient()) {
                 if (!isPiloting()) {
                     if (this.currentHattanStatus == UNLOADED_HATTAN) {
-                        if(!ME.isInWater()) {
+                        if(!ME.isInWater() && !ME.isInLava()) {
                             if (ME.isInRain()) {
                                 ME.setDeltaMovement(ME.getHattanDirection().scale(0.010 * configSpeed() * extraSpeedEmergencyHattan()));
                             } else {
@@ -452,6 +452,19 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 }
             }
 
+            if(ME.isInLava() || ME.isInWater()){
+                ME.tickInWater--;
+            } else {
+                ME.tickInWater = 100;
+            }
+
+            if(ME.tickInWater < 1){
+                this.sealStand(true);
+            }
+
+            if(ME.isTechnicallyInWall()){
+                this.sealStand(true);
+            }
         }
         if (this.self instanceof Player PL) {
 
@@ -578,7 +591,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                     $$13++;
                 }
                 if (ent != null) {
-                    if(!ME.isInWater()) {
+                    if(!ME.isInWater() && !ME.isInLava()) {
                         Entity TE = MainUtil.getTargetEntity(ent, 300, 10);
                         if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible()) {
                             if (ME.isInRain()) {
@@ -673,7 +686,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
         IEntityAndData entityAndData = ((IEntityAndData) ent);
-        if(this.getStandEntity(this.getSelf()) instanceof  ManhattanTransferEntity ME && !ME.isInWater()) {
+        if(this.getStandEntity(this.getSelf()) instanceof  ManhattanTransferEntity ME && !ME.isInWater() && !ME.isInLava()) {
             if (visionModeClient) {
                 if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) && ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
                     if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
