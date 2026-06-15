@@ -903,7 +903,7 @@ public class Config implements Cloneable {
     public static class RattSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableRatt;
-        @IntOption(group = "inherit", value = 30, min = 0, max = 100)
+        @IntOption(group = "inherit", value = 25, min = 0, max = 100)
         public Integer rattSafetyTicks;
         @FloatOption(group = "inherit", value = 1F, min = 0F, max = 100F)
         public Float rattAttackBonusOnMobs;
