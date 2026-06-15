@@ -790,26 +790,26 @@ public class ModBlocks {
 
 
 
-    public static Block FROZEN_SAND_PROPERTIES = new Block(BlockBehaviour.Properties.of().mapColor(MapColor.SAND).
+    public static Block FROZEN_SAND_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.SAND).
             instrument(NoteBlockInstrument.SNARE).strength(0.166f).sound(SoundType.GLASS).
             friction(0.98F));
-    public static Block FROZEN_SANDSTONE_PROPERTIES = new Block(BlockBehaviour.Properties.of().mapColor(MapColor.SAND).
+    public static Block FROZEN_SANDSTONE_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.SAND).
             instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().
             strength(0.26F).friction(0.98F));
-    public static Block FROZEN_GRAVEL_PROPERTIES = new Block(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).
+    public static Block FROZEN_GRAVEL_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).
             instrument(NoteBlockInstrument.SNARE).strength(0.2f).sound(SoundType.GLASS).friction(0.98F));
-    public static Block FROZEN_END_STONE_PROPERTIES = new Block(BlockBehaviour.Properties.of().mapColor(MapColor.SAND).
+    public static Block FROZEN_END_STONE_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.SAND).
             instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().
             strength(1.0f, 9.0f).sound(SoundType.GLASS).friction(0.98F));
-    public static Block FROZEN_NETHERRACK_PROPERTIES = new Block(BlockBehaviour.Properties.of().mapColor(MapColor.NETHER).
+    public static Block FROZEN_NETHERRACK_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.NETHER).
             instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().
             strength(0.166f).sound(SoundType.GLASS).friction(0.98F));
-    public static Block FROZEN_NETHER_BRICKS_PROPERTIES = new Block(BlockBehaviour.Properties.of().mapColor(MapColor.NETHER).
+    public static Block FROZEN_NETHER_BRICKS_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.NETHER).
             instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.66F, 6.0f).sound(SoundType.GLASS).friction(0.98F));
-    public static Block FROZEN_OBSIDIAN_PROPERTIES = new Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).
+    public static Block FROZEN_OBSIDIAN_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).
             instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().
             strength(16.6F, 1200.0f).sound(SoundType.GLASS).friction(0.988F));
-    public static Block FROZEN_STONE_BRICKS_PROPERTIES = new Block(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).
+    public static Block FROZEN_STONE_BRICKS_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).
             instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().
             strength(0.5f, 6.0f).sound(SoundType.GLASS).friction(0.98F));
 
