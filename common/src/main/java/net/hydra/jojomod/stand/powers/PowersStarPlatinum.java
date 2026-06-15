@@ -948,6 +948,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (entity != null) {
             if (ticksForFinger < 26) {
                 pow *= (1 - (((float) (26 - ticksForFinger) / 26) * 0.95F));
+                if (getReducedDamage(entity)){
+                    pow*=0.5F;
+                }
             }
 
             hitParticlesCenter(entity);
