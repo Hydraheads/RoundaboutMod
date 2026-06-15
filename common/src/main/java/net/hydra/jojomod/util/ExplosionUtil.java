@@ -36,7 +36,6 @@ public class ExplosionUtil {
 	}
 
     public static void explodeEffects(Vec3 pos, Level level, SimpleParticleType particle, float range, int amount) {
-    	//float range = 0.6f;
     	
     	((ServerLevel) level).sendParticles(particle,
                 pos.x,
@@ -50,16 +49,10 @@ public class ExplosionUtil {
                 pos.z,
                 (int)Math.floor(amount*0.66), range, range+1.2f, range, 0.001);
     	
-    	// Sound Emitter:
-    	
-    	 //explosionSFX(pos, 10);
-    	
     }
     
 	
 	public static void explosionHurt(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
-    	//DamageSource dmg = ModDamageTypes.of(level, DamageTypes.PLAYER_EXPLOSION, this.getSelf());;
-    	//float range = 1.5f;
     	List<Entity> damages = MainUtil.genHitbox(level, pos.x(), pos.y(), pos.z(), range, range, range);
     	
     	for(int j = 0;j<damages.size();j++) {
@@ -77,7 +70,6 @@ public class ExplosionUtil {
             MainUtil.takeLiteralUnresistableKnockbackWithY(entity, knockback.x, knockback.y, knockback.z);
             
         }
-    	
     }
 	
 	public static void explodeBlocks(BlockPos location, Level level, Float range) {

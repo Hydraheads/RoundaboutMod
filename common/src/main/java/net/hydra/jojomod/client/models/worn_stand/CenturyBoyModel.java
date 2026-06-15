@@ -112,6 +112,8 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 			"textures/stand/20_centuryboy/grape.png");
 	public static ResourceLocation strawberry = new ResourceLocation(Roundabout.MOD_ID,
 			"textures/stand/20_centuryboy/strawberry.png");
+	public static ResourceLocation salmonberry = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/20_centuryboy/salmonberry.png");
 	public static ResourceLocation chicken = new ResourceLocation(Roundabout.MOD_ID,
 			"textures/stand/20_centuryboy/chicken.png");
 	public static ResourceLocation older_century_boy = new ResourceLocation(Roundabout.MOD_ID,
@@ -134,6 +136,7 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 			case Powers20thCenturyBoy.BLUE -> {return blue;}
 			case Powers20thCenturyBoy.GRAPE -> {return grape;}
 			case Powers20thCenturyBoy.STRAWBERRY -> {return strawberry;}
+			case Powers20thCenturyBoy.SALMONBERRY -> {return salmonberry;}
 			case Powers20thCenturyBoy.CHICKEN -> {return chicken;}
 			case Powers20thCenturyBoy.OLDER_CENTURY_BOY -> {return older_century_boy;}
 			case Powers20thCenturyBoy.OLDEST_CENTURY_BOY -> {return oldest_century_boy;}
