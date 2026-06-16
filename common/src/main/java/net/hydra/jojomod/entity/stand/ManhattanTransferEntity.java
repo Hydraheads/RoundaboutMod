@@ -925,7 +925,7 @@ public class ManhattanTransferEntity extends StandEntity {
                         this.rain_dodging_manhattan.stop();
 
                         if (PM.isClient() && !this.stopsManhattanAnimationsWhenHeldItem) {
-                            if (PM.isPiloting()) {
+                          /*  if (PM.isPiloting()) {
                                 if (options.keyDown.isDown() || options.keyUp.isDown() || options.keyLeft.isDown() || options.keyRight.isDown()) {
                                     isKeyEverPressed = true;
                                 }
@@ -1048,7 +1048,7 @@ public class ManhattanTransferEntity extends StandEntity {
                                     }
                                 }
 
-                            } else if (!PM.isPiloting()) {
+                            } else*/ if (!PM.isPiloting()) {
                                 if (this.setHatAnimDir == 1) {
                                     $$0.startIfStopped(this.tickCount);
                                     $$13.stop();
