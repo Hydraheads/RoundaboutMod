@@ -26,15 +26,18 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.Main;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.player.Player;
@@ -858,17 +861,31 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     }
                 }
 
-                if (self.level() instanceof ServerLevel sl) {
-                    sl.sendParticles(ModParticles.COLD_CRACKLE,
-                            self.getEyePosition().x,
-                            self.getEyePosition().y,
-                            self.getEyePosition().z,
-                            0, 0, 0, 0, 0);
+            } else {
+                ItemStack stack = self.getItemBySlot(EquipmentSlot.MAINHAND);
 
+                if (stack.getItem() instanceof BlockItem blockItem
+                        && MainUtil.FREEZABLE_BLOCK_ITEMS.containsKey(blockItem.getBlock())) {
+
+                    Block frozen = MainUtil.FREEZABLE_BLOCK_ITEMS.get(blockItem.getBlock());
+
+                    self.setItemSlot(
+                            EquipmentSlot.MAINHAND,
+                            new ItemStack(frozen)
+                    );
                 }
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BLOCK_FREEZE_EVENT,
-                        SoundSource.PLAYERS, 1F, 1F);
             }
+
+            if (self.level() instanceof ServerLevel sl) {
+                sl.sendParticles(ModParticles.COLD_CRACKLE,
+                        self.getEyePosition().x,
+                        self.getEyePosition().y,
+                        self.getEyePosition().z,
+                        0, 0, 0, 0, 0);
+
+            }
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BLOCK_FREEZE_EVENT,
+                    SoundSource.PLAYERS, 1F, 1F);
         }
     }
 

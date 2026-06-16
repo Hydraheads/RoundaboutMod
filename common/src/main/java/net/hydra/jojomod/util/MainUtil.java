@@ -207,6 +207,7 @@ public class MainUtil {
     public static ArrayList<String> fleshBudMobBlacklist = Lists.newArrayList();
 
     public static final Map<Block, Block> FREEZABLE_BLOCKS = new HashMap<>();
+    public static final Map<Block, Block> FREEZABLE_BLOCK_ITEMS = new HashMap<>();
 
     public static ArrayList<String> addedMobsWithRedBlood = Lists.newArrayList();
     public static ArrayList<String> addedMobsWithBlueBlood = Lists.newArrayList();
