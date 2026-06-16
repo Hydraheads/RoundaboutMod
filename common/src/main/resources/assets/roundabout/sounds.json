@@ -11,6 +11,12 @@
       "roundabout:summon_diver_down"
     ]
   },
+  "block_freeze": {
+    "subtitle": "sounds.roundabout.block_freeze",
+    "sounds": [
+      "roundabout:block_freeze"
+    ]
+  },
   "ice_skating": {
     "subtitle": "sounds.roundabout.ice_skating",
     "sounds": [

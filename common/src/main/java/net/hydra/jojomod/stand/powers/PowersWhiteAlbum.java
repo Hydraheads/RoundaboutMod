@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -25,6 +26,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -489,7 +491,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 setSkillIcon(context, x, y, 4, StandIcons.SKATE_INACTIVE, PowerIndex.SKILL_1);
             }
         } else {
-            setSkillIcon(context, x, y, 4, StandIcons.FREEZE_BLOCKS, PowerIndex.SKILL_4);
+            setSkillIcon(context, x, y, 4, StandIcons.FREEZE_BLOCKS, PowerIndex.SKILL_4_SNEAK);
         }
 
         super.renderIcons(context, x, y);
@@ -841,6 +843,17 @@ public class PowersWhiteAlbum extends NewDashPreset {
                         }
                     }
                 }
+
+                if (self.level() instanceof ServerLevel sl) {
+                    sl.sendParticles(ModParticles.COLD_CRACKLE,
+                            self.getEyePosition().x,
+                            self.getEyePosition().y,
+                            self.getEyePosition().z,
+                            0, 0, 0, 0, 0);
+
+                }
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BLOCK_FREEZE_EVENT,
+                        SoundSource.PLAYERS, 1F, 1F);
             }
         }
     }

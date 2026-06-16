@@ -547,6 +547,7 @@ public class ForgeEvents {
         ModParticles.FRICTIONLESS = ForgeParticles.FRICTIONLESS.get();
         ModParticles.EXCLAMATION = ForgeParticles.EXCLAMATION.get();
         ModParticles.BABY_CRACKLE = ForgeParticles.BABY_CRACKLE.get();
+        ModParticles.COLD_CRACKLE = ForgeParticles.COLD_CRACKLE.get();
         ModParticles.MAGIC_DUST = ForgeParticles.MAGIC_DUST.get();
         ModParticles.BRIEF_MAGIC_DUST = ForgeParticles.BRIEF_MAGIC_DUST.get();
         ModParticles.D4C_LINES = ForgeParticles.D4C_LINES.get();
