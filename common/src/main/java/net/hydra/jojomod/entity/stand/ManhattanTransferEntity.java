@@ -99,14 +99,16 @@ public class ManhattanTransferEntity extends StandEntity {
     public float getFlyingSpeed() {
         if (this.getUserData(this.getUser()) != null && this.getUser() != null) {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-                Options key = Minecraft.getInstance().options;
-                if(key.keyDown.isDown() || key.keyRight.isDown() || key.keyUp.isDown() || key.keyLeft.isDown()) {
-                    if (PM.XtraSpdTick > 7) {
-                        return 0.30F;
-                    } else if (PM.XtraSpdTick > 4) {
-                        return 0.25F;
-                    } else if (PM.XtraSpdTick > 1) {
-                        return 0.20F;
+                if(this.level().isClientSide) {
+                    Options key = Minecraft.getInstance().options;
+                    if (key.keyDown.isDown() || key.keyRight.isDown() || key.keyUp.isDown() || key.keyLeft.isDown()) {
+                        if (PM.XtraSpdTick > 7) {
+                            return 0.30F;
+                        } else if (PM.XtraSpdTick > 4) {
+                            return 0.25F;
+                        } else if (PM.XtraSpdTick > 1) {
+                            return 0.20F;
+                        }
                     }
                 }
             }
@@ -706,20 +708,22 @@ public class ManhattanTransferEntity extends StandEntity {
             }
         }
 
-        Options options = Minecraft.getInstance().options;
-        if (this.getUserData(this.getUser()) != null) {
-            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-                if (PM.isPiloting()) {
-                    if (options.keyJump.isDown() || options.keyShift.isDown()) {
-                        if (options.keyJump.isDown()) {
-                            heighHattanPilotNoMov = -45 * autoMoveBoost;
+        if(this.level().isClientSide) {
+            Options options = Minecraft.getInstance().options;
+            if (this.getUserData(this.getUser()) != null) {
+                if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                    if (PM.isPiloting()) {
+                        if (options.keyJump.isDown() || options.keyShift.isDown()) {
+                            if (options.keyJump.isDown()) {
+                                heighHattanPilotNoMov = -45 * autoMoveBoost;
+                            }
+                            if (options.keyShift.isDown()) {
+                                heighHattanPilotNoMov = 45 * autoMoveBoost;
+                            }
                         }
-                        if (options.keyShift.isDown()) {
-                            heighHattanPilotNoMov = 45 * autoMoveBoost;
+                        if (!options.keyJump.isDown() && !options.keyShift.isDown()) {
+                            heighHattanPilotNoMov = 0;
                         }
-                    }
-                    if (!options.keyJump.isDown() && !options.keyShift.isDown()) {
-                        heighHattanPilotNoMov = 0;
                     }
                 }
             }
@@ -925,7 +929,7 @@ public class ManhattanTransferEntity extends StandEntity {
                         this.rain_dodging_manhattan.stop();
 
                         if (PM.isClient() && !this.stopsManhattanAnimationsWhenHeldItem) {
-                          /*  if (PM.isPiloting()) {
+                            if (PM.isPiloting()) {
                                 if (options.keyDown.isDown() || options.keyUp.isDown() || options.keyLeft.isDown() || options.keyRight.isDown()) {
                                     isKeyEverPressed = true;
                                 }
@@ -970,7 +974,7 @@ public class ManhattanTransferEntity extends StandEntity {
                                     isPressingD = false;
                                 }
 
-                                if (isPressingW && !isPressingS) {
+                            /*    if (isPressingW && !isPressingS) {
                                     $$1.startIfStopped(this.tickCount);
                                     $$2.startIfStopped(this.tickCount);
                                     $$4.stop();
@@ -1046,9 +1050,9 @@ public class ManhattanTransferEntity extends StandEntity {
                                     if ($$12.isStarted()) {
                                         $$11.startIfStopped(this.tickCount);
                                     }
-                                }
+                                }*/
 
-                            } else*/ if (!PM.isPiloting()) {
+                            } else if (!PM.isPiloting()) {
                                 if (this.setHatAnimDir == 1) {
                                     $$0.startIfStopped(this.tickCount);
                                     $$13.stop();
