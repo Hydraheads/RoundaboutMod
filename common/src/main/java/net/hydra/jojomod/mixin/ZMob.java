@@ -60,6 +60,8 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.sensing.Sensing;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.TropicalFish;
+import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.monster.Enemy;
@@ -223,6 +225,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
             if ($$0.getEntity() != null) {
                 if (((StandUser)this).roundabout$hasAStand() && !roundabout$isBred &&
                         !(((Mob)(Object)this) instanceof Animal) &&
+                        !(((Mob)(Object)this) instanceof WaterAnimal) &&
                         !(((Mob)(Object)this) instanceof AbstractVillager)) {
                     if ($$0.getEntity() instanceof Player) {
                         if (!this.level().isClientSide()){

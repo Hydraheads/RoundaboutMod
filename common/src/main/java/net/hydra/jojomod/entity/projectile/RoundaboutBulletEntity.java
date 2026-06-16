@@ -20,9 +20,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -227,7 +229,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
                     ;
                 }
             if(!isHattan) {
-                boolean didDamage = livingEntity.hurt(ModDamageTypes.of(level(), ModDamageTypes.BULLET, this, this.getOwner()), damage);
+                boolean didDamage = livingEntity.hurt(ModDamageTypes.of(level(), getDamageType(), this, this.getOwner()), damage);
 
                 if (didDamage) {
                     applyEffect(livingEntity);
@@ -238,7 +240,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
                     livingEntity.hurtTime = 10;
                 }
             } else {
-                boolean didDamage = livingEntity.hurt(ModDamageTypes.of(level(), ModDamageTypes.BULLET, this, this.getOwner()), damageManhattan);
+                boolean didDamage = livingEntity.hurt(ModDamageTypes.of(level(), getDamageType(), this, this.getOwner()), damageManhattan);
 
                 if (didDamage) {
                     applyEffect(livingEntity);
@@ -252,18 +254,23 @@ public class RoundaboutBulletEntity extends AbstractArrow {
                 doPostHurtXtraDamage(livingEntity);
             }
         } else {
-            entity.hurt(ModDamageTypes.of(level(), ModDamageTypes.BULLET, this, this.getOwner()), 1);
+            entity.hurt(ModDamageTypes.of(level(), getDamageType(), this, this.getOwner()), 1);
         }
 
         Entity $$2 = this.getOwner();
-        DamageSource damageSource = ModDamageTypes.of(level(), ModDamageTypes.BULLET, this, $$2);
-
         if ($$2 instanceof LivingEntity livingOwner) {
             livingOwner.setLastHurtMob(entity);
         }
 
         this.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), ModSounds.BULLET_PENTRATION_EVENT, this.getSoundSource(), 1.0F, 1.0F);
         this.discard();
+    }
+
+    ResourceKey<DamageType> getDamageType(){
+        if (getAmmoType() == SNIPER) {
+            return ModDamageTypes.SNIPER_BULLET;
+        }
+        return ModDamageTypes.BULLET;
     }
 
     protected void onHitBlock2(BlockHitResult $$0) {
