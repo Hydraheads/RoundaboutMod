@@ -1692,6 +1692,36 @@ public class MainUtil {
         return true;
     }
 
+    //Couldn't find better wording but this tests if you're on claimed land that isn't yours
+    //It doesn't need the block hit to be on a claim
+    public static boolean canPlaceOnClaim(Player player,BlockPos pos){
+        //Seems counterintuitive but most abilities have their own ways of handling this, so I'll just make it return True.
+
+        if(!ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims || !MainUtil.getIsGamemodeApproriateForGrief(player)){
+            return true;
+
+        }
+        boolean isLiquid = (!player.level().getBlockState(pos).isSolid() && !player.level().getBlockState(pos).isAir());
+        BlockState replace = player.level().getBlockState(pos);
+        //Always correct, but for some reason I need to put it as a conditional
+        if(Blocks.BARRIER.asItem() instanceof  BlockItem barrier){
+            barrier.place(new BlockPlaceContext(player,player.getUsedItemHand(),barrier.getDefaultInstance(),new BlockHitResult(new Vec3(pos.getX(),pos.getY(),pos.getZ()), Direction.UP,pos.relative(Direction.DOWN),false)));
+
+            player.level().destroyBlock(pos,false,player);
+            if(!player.level().getBlockState(pos).isAir()){
+                player.level().removeBlock(pos,false);
+                if(isLiquid) {
+                    player.level().setBlock(pos, replace, 0);
+                }
+                return false;
+            }
+            if(isLiquid) {
+                player.level().setBlock(pos, replace, 0);
+            }
+        }
+        return true;
+    }
+
     public static void gasExplode(BlockState blk, ServerLevel level, BlockPos blkPos, int iteration, int hitRadius, int blockRadius, float power){
         if (!level.isClientSide){
             level.sendParticles(ParticleTypes.LAVA, blkPos.getX() + 0.5, blkPos.getY(), blkPos.getZ() + 0.5,

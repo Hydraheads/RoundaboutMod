@@ -146,21 +146,22 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 BlockState blockState3 =self.level().getBlockState(mutableBlockPos.below());
                 if (!blockState.canSurvive(self.level(), blockPos2) ||
                         !self.level().isUnobstructed(blockState, blockPos2, CollisionContext.empty())) continue;
-                if (blockState3.isAir() ||
-                        (MainUtil.getIsGamemodeApproriateForGrief(self) &&
-                                blockState3.canBeReplaced() &&
-                                !(blockState3.getBlock() instanceof LiquidBlockContainer)
-                                &&
-                        !blockState3.liquid() &&
-                        !(blockState3.hasProperty(BlockStateProperties.WATERLOGGED) &&
-                                blockState3.getValue(BlockStateProperties.WATERLOGGED)
-                                )
-                        )
-                ) {
+                    if (blockState3.isAir() ||
+                            (MainUtil.getIsGamemodeApproriateForGrief(self) &&
+                                    blockState3.canBeReplaced() &&
+                                    !(blockState3.getBlock() instanceof LiquidBlockContainer)
+                                    &&
+                            !blockState3.liquid() &&
+                            !(blockState3.hasProperty(BlockStateProperties.WATERLOGGED) &&
+                                    blockState3.getValue(BlockStateProperties.WATERLOGGED)
+                                    )
+                            )
+                    ) {
+                        if (!(self instanceof Player pl && !MainUtil.canPlaceOnClaim(pl, blockPos))) {
                             self.level().setBlockAndUpdate(blockPos2, blockState);
                             self.level().scheduleTick(blockPos2, ModBlocks.WHITE_ALBUM_ICE_SLAB, Mth.nextInt(self.getRandom(), 110, 130));
-
-                }
+                        }
+                    }
                 }
 
             }
