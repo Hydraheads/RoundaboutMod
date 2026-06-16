@@ -114,12 +114,6 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
-    public Set<String> noExpBreakBlocks = new HashSet<>(
-            Arrays.asList(
-                    "minecraft:netherrack"
-            )
-    );
-
     public Set<String> freezableBlocksList = new HashSet<>(
             Arrays.asList(
                     "minecraft:dirt:roundabout:frozen_dirt",
