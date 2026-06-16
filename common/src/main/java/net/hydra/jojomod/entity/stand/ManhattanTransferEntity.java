@@ -750,7 +750,7 @@ public class ManhattanTransferEntity extends StandEntity {
                 List<LivingEntity> targent = new ArrayList<>(lvent);
                 for (LivingEntity value : lvent) {
                         IEntityAndData entityAndData = ((IEntityAndData) value);
-                        if (value instanceof StandEntity || value.is(this.getUser())) {
+                        if (value instanceof StandEntity || value.is(this.getUser())|| !this.hasLineOfSight(value)) {
                             targent.remove(value);
                             this.setHattanTarget(0);
                             if (this.getUserData(this.getUser()) != null) {
@@ -928,9 +928,6 @@ public class ManhattanTransferEntity extends StandEntity {
                             if (PM.isPiloting()) {
                                 if (options.keyDown.isDown() || options.keyUp.isDown() || options.keyLeft.isDown() || options.keyRight.isDown()) {
                                     isKeyEverPressed = true;
-                                }
-                                if((!options.keyDown.isDown() || !options.keyUp.isDown()) || (!options.keyLeft.isDown() || !options.keyRight.isDown())){
-                                    Roundabout.LOGGER.info("aaaaaa");
                                 }
                                 if (options.keyUp.isDown()) {
                                     isPressingW = true;
