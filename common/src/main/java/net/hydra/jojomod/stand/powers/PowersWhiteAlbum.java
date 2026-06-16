@@ -246,7 +246,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 if (acceleration >= getMaxAccelerationTicks()) {
                     setPlayerPos2(PlayerPosIndex.SKATE_TWIRL);
                 } else {
-                    setPlayerPos2(PlayerPosIndex.SKATE_JUMP);
+                    if (getPlayerPos2() != PlayerPosIndex.SKATE_TWIRL) {
+                        setPlayerPos2(PlayerPosIndex.SKATE_JUMP);
+                    }
                 }
                 twirlTicks = 20;
             }
