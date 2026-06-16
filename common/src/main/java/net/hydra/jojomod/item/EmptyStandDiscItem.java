@@ -58,8 +58,8 @@ public class EmptyStandDiscItem extends Item {
                                 currentDisc
                         );
                     }
-                    $$1.getCooldowns().addCooldown(this, 30);
-                    $$1.getCooldowns().addCooldown(currentDisc.getItem(), 30);
+                    $$1.getCooldowns().addCooldown(this, 22);
+                    $$1.getCooldowns().addCooldown(currentDisc.getItem(), 22);
                 }
             }
         }

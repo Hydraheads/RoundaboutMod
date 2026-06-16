@@ -69,8 +69,8 @@ public class StandDiscItem extends Item {
                     ItemStack convDisc = MainUtil.saveToDiscData($$1, currentDisc.copy());
                     ((StandUser) $$1).roundabout$getStandPowers().onStandSwitch();
                     convertStuff($$3, $$1);
-                    $$1.getCooldowns().addCooldown(this, 30);
-                    $$1.getCooldowns().addCooldown(convDisc.getItem(), 30);
+                    $$1.getCooldowns().addCooldown(this, 22);
+                    $$1.getCooldowns().addCooldown(convDisc.getItem(), 22);
                     if ($$2.equals(InteractionHand.MAIN_HAND)){
                         $$1.setItemSlot(
                                 EquipmentSlot.MAINHAND,
