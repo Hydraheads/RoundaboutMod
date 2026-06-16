@@ -700,7 +700,10 @@ public class AbilityScapeBasis {
     }
 
 
-
+    //Renders fists
+    public boolean isBrawling(){
+        return false;
+    }
 
     public void baseTickPower(){
         if (this.self.isAlive() && !this.self.isRemoved()) {

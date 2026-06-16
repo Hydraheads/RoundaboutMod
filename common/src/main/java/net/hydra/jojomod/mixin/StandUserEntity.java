@@ -3172,6 +3172,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     active=false;
                 }
             } else {
+                if (rdbt$this() instanceof Player pl){
+                    ((IPowersPlayer)pl).rdbt$getPowers().playSummonSound();
+                }
                 active = true;
             }
 
