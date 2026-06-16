@@ -2934,6 +2934,9 @@
   "config.roundabout.blockFreezeRadius.name": "Block Freeze Radius",
   "config.roundabout.blockFreezeRadius.desc": "What is the radius of blocks that white album can convert into frozen blocks with its frozen world ability?",
 
+  "config.roundabout.freezesSurfaceWater.name": "Block Freeze Water",
+  "config.roundabout.freezesSurfaceWater.desc": "Enable frozen world to coat the raging seas in ice.",
+
 
   "config.roundabout.magicianAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.magicianAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",

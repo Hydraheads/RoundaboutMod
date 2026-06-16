@@ -26,15 +26,18 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.Main;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.player.Player;
@@ -146,21 +149,20 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 BlockState blockState3 =self.level().getBlockState(mutableBlockPos.below());
                 if (!blockState.canSurvive(self.level(), blockPos2) ||
                         !self.level().isUnobstructed(blockState, blockPos2, CollisionContext.empty())) continue;
-                if (blockState3.isAir() ||
-                        (MainUtil.getIsGamemodeApproriateForGrief(self) &&
-                                blockState3.canBeReplaced() &&
-                                !(blockState3.getBlock() instanceof LiquidBlockContainer)
-                                &&
-                        !blockState3.liquid() &&
-                        !(blockState3.hasProperty(BlockStateProperties.WATERLOGGED) &&
-                                blockState3.getValue(BlockStateProperties.WATERLOGGED)
-                                )
-                        )
-                ) {
+                    if (blockState3.isAir() ||
+                            (MainUtil.getIsGamemodeApproriateForGrief(self) &&
+                                    blockState3.canBeReplaced() &&
+                                    !(blockState3.getBlock() instanceof LiquidBlockContainer)
+                                    &&
+                            !blockState3.liquid() &&
+                            !(blockState3.hasProperty(BlockStateProperties.WATERLOGGED) &&
+                                    blockState3.getValue(BlockStateProperties.WATERLOGGED)
+                                    )
+                            )
+                    ) {
                             self.level().setBlockAndUpdate(blockPos2, blockState);
                             self.level().scheduleTick(blockPos2, ModBlocks.WHITE_ALBUM_ICE_SLAB, Mth.nextInt(self.getRandom(), 110, 130));
-
-                }
+                    }
                 }
 
             }
@@ -501,7 +503,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
 
     public void toggleBlockFreezeClient(){
-        if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
+        if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK) && !self.isInWater()) {
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_SNEAK, true);
             tryPowerPacket(PowerIndex.POWER_4_SNEAK);
         }
@@ -815,10 +817,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public void freezeBlocksServer(){
         int cooldown = 240;
         this.setCooldown(PowerIndex.SKILL_4_SNEAK, cooldown);
-        if (!this.self.level().isClientSide() && this.self instanceof Player PL){
+        if (!this.self.level().isClientSide() && this.self instanceof Player PL && !PL.isInWater()){
             if (MainUtil.getIsGamemodeApproriateForGrief(PL)){
                 int radius = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.blockFreezeRadius;
                 BlockPos center = self.blockPosition();
+                boolean canFreezeWater = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.freezesSurfaceWater;
 
                 for (int x = -radius; x <= radius; x++) {
                     for (int y = -radius; y <= radius; y++) {
@@ -833,30 +836,56 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
                             BlockState state = self.level().getBlockState(pos);
 
-                            Block replacement = MainUtil.FREEZABLE_BLOCKS.get(state.getBlock());
+                            if (canFreezeWater && state.is(Blocks.WATER) && self.level().getBlockState(pos.above()).isAir()){
+                                if (!(self instanceof Player pl && !MainUtil.canPlaceOnClaim(pl, pos))) {
+                                    self.level().setBlock(
+                                            pos,
+                                            Blocks.ICE.defaultBlockState(),
+                                            Block.UPDATE_ALL
+                                    );
+                                }
+                            } else {
+                                Block replacement = MainUtil.FREEZABLE_BLOCKS.get(state.getBlock());
 
-                            if (replacement != null) {
-                                self.level().setBlock(
-                                        pos,
-                                        replacement.defaultBlockState(),
-                                        Block.UPDATE_ALL
-                                );
+                                if (replacement != null) {
+                                    if (!(self instanceof Player pl && !MainUtil.canPlaceOnClaim(pl, pos))) {
+                                        self.level().setBlock(
+                                                pos,
+                                                replacement.defaultBlockState(),
+                                                Block.UPDATE_ALL
+                                        );
+                                    }
+                                }
                             }
                         }
                     }
                 }
 
-                if (self.level() instanceof ServerLevel sl) {
-                    sl.sendParticles(ModParticles.COLD_CRACKLE,
-                            self.getEyePosition().x,
-                            self.getEyePosition().y,
-                            self.getEyePosition().z,
-                            0, 0, 0, 0, 0);
+            } else {
+                ItemStack stack = self.getItemBySlot(EquipmentSlot.MAINHAND);
 
+                if (stack.getItem() instanceof BlockItem blockItem
+                        && MainUtil.FREEZABLE_BLOCK_ITEMS.containsKey(blockItem.getBlock())) {
+
+                    Block frozen = MainUtil.FREEZABLE_BLOCK_ITEMS.get(blockItem.getBlock());
+
+                    self.setItemSlot(
+                            EquipmentSlot.MAINHAND,
+                            new ItemStack(frozen)
+                    );
                 }
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BLOCK_FREEZE_EVENT,
-                        SoundSource.PLAYERS, 1F, 1F);
             }
+
+            if (self.level() instanceof ServerLevel sl) {
+                sl.sendParticles(ModParticles.COLD_CRACKLE,
+                        self.getEyePosition().x,
+                        self.getEyePosition().y,
+                        self.getEyePosition().z,
+                        0, 0, 0, 0, 0);
+
+            }
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BLOCK_FREEZE_EVENT,
+                    SoundSource.PLAYERS, 1F, 1F);
         }
     }
 
@@ -946,6 +975,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
 
     public boolean isAttackIneptVisually(byte activeP, int slot) {
+        if (slot == 4 && isHoldingSneak() && self.isInWater()){
+            return true;
+        }
         return super.isAttackIneptVisually(activeP,slot);
     }
 

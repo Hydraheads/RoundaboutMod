@@ -63,10 +63,10 @@ public abstract class ConfigManager {
 
     public static void loadBlacklists2()
     {
-        if (getAdvancedConfig().freezableBlocksList != null)
+        if (getAdvancedConfig().freezableBlocksListWA != null)
         {
             MainUtil.FREEZABLE_BLOCKS.clear();
-            for (String entry : getAdvancedConfig().freezableBlocksList) {
+            for (String entry : getAdvancedConfig().freezableBlocksListWA) {
                 try {
                     String[] split = entry.split(":");
 
@@ -86,6 +86,35 @@ public abstract class ConfigManager {
 
 
                     MainUtil.FREEZABLE_BLOCKS.put(sourceBlock, targetBlock);
+
+                } catch (Exception e) {
+                    Roundabout.LOGGER.error("Failed to parse freezable block entry '{}'", entry, e);
+                }
+            }
+        }
+        if (getAdvancedConfig().freezableBlocksFlintAndSteel != null)
+        {
+            MainUtil.FREEZABLE_BLOCK_ITEMS.clear();
+            for (String entry : getAdvancedConfig().freezableBlocksFlintAndSteel) {
+                try {
+                    String[] split = entry.split(":");
+
+                    if (split.length != 4) {
+                        Roundabout.LOGGER.warn("Invalid freezable block entry: {}", entry);
+                        continue;
+                    }
+
+                    ResourceLocation sourceId =
+                            new ResourceLocation(split[0], split[1]);
+
+                    ResourceLocation targetId =
+                            new ResourceLocation(split[2], split[3]);
+
+                    Block sourceBlock = BuiltInRegistries.BLOCK.get(sourceId);
+                    Block targetBlock = BuiltInRegistries.BLOCK.get(targetId);
+
+
+                    MainUtil.FREEZABLE_BLOCK_ITEMS.put(sourceBlock, targetBlock);
 
                 } catch (Exception e) {
                     Roundabout.LOGGER.error("Failed to parse freezable block entry '{}'", entry, e);
