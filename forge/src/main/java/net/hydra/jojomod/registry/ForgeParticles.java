@@ -198,6 +198,10 @@ public class ForgeParticles {
             "baby_crackle",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> COLD_CRACKLE = PARTICLES.register(
+            "cold_crackle",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> MAGIC_DUST = PARTICLES.register(
             "magic_dust",
             () -> new SimpleParticleType(true)

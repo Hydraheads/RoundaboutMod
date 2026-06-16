@@ -126,6 +126,73 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.FROZEN_COBBLED_DEEPSLATE.get(),
                     new Item.Properties()
             )));
+
+    public static final RegistryObject<BlockItem> FROZEN_STONE_BRICKS_ITEM =
+            addToBuildingTab(ITEMS.register("frozen_stone_bricks",
+            () -> new BlockItem(ForgeBlocks.FROZEN_STONE_BRICKS.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> FROZEN_DIORITE_ITEM =
+            addToBuildingTab(ITEMS.register("frozen_diorite",
+                    () -> new BlockItem(ForgeBlocks.FROZEN_DIORITE.get(),
+                            new Item.Properties()
+                    )));
+    public static final RegistryObject<BlockItem> FROZEN_ANDESITE_ITEM =
+            addToBuildingTab(ITEMS.register("frozen_andesite",
+                    () -> new BlockItem(ForgeBlocks.FROZEN_ANDESITE.get(),
+                            new Item.Properties()
+                    )));
+    public static final RegistryObject<BlockItem> FROZEN_GRANITE_ITEM =
+            addToBuildingTab(ITEMS.register("frozen_granite",
+                    () -> new BlockItem(ForgeBlocks.FROZEN_GRANITE.get(),
+                            new Item.Properties()
+                    )));
+    public static final RegistryObject<BlockItem> FROZEN_SAND_ITEM =
+            addToBuildingTab(ITEMS.register("frozen_sand",
+            () -> new BlockItem(ForgeBlocks.FROZEN_SAND.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> FROZEN_SANDSTONE_ITEM =
+            addToBuildingTab(ITEMS.register("frozen_sandstone",
+            () -> new BlockItem(ForgeBlocks.FROZEN_SANDSTONE.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> FROZEN_RED_SAND_ITEM =
+            addToBuildingTab(ITEMS.register("frozen_red_sand",
+                    () -> new BlockItem(ForgeBlocks.FROZEN_RED_SAND.get(),
+                            new Item.Properties()
+                    )));
+    public static final RegistryObject<BlockItem> FROZEN_RED_SANDSTONE_ITEM =
+            addToBuildingTab(ITEMS.register("frozen_red_sandstone",
+                    () -> new BlockItem(ForgeBlocks.FROZEN_RED_SANDSTONE.get(),
+                            new Item.Properties()
+                    )));
+    public static final RegistryObject<BlockItem> FROZEN_GRAVEL_ITEM =
+            addToBuildingTab(ITEMS.register("frozen_gravel",
+            () -> new BlockItem(ForgeBlocks.FROZEN_GRAVEL.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> FROZEN_OBSIDIAN_ITEM =
+            addToBuildingTab(ITEMS.register("frozen_obsidian",
+                    () -> new BlockItem(ForgeBlocks.FROZEN_OBSIDIAN.get(),
+                            new Item.Properties()
+                    )));
+    public static final RegistryObject<BlockItem> FROZEN_NETHERRACK_ITEM =
+            addToBuildingTab(ITEMS.register("frozen_netherrack",
+            () -> new BlockItem(ForgeBlocks.FROZEN_NETHERRACK.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> FROZEN_NETHER_BRICKS_ITEM =
+            addToBuildingTab(ITEMS.register("frozen_nether_bricks",
+            () -> new BlockItem(ForgeBlocks.FROZEN_NETHER_BRICKS.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> FROZEN_END_STONE_ITEM =
+            addToBuildingTab(ITEMS.register("frozen_end_stone",
+            () -> new BlockItem(ForgeBlocks.FROZEN_END_STONE.get(),
+                    new Item.Properties()
+            )));
+
     public static final RegistryObject<BlockItem> SHINY_QUARTZ_ITEM = addToBuildingTab(ITEMS.register("shiny_quartz",
             () -> new BlockItem(ForgeBlocks.SHINY_QUARTZ.get(),
                     new Item.Properties()

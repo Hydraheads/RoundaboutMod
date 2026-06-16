@@ -16,6 +16,7 @@ import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
+import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.paintings.RoundaboutPainting;
 import net.hydra.jojomod.entity.pathfinding.GroundPathfindingStandAttackEntity;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
@@ -204,6 +205,8 @@ public class MainUtil {
     public static ArrayList<String> naturalStandUserMobBlacklist = Lists.newArrayList();
     public static ArrayList<String> hypnotismMobBlackList = Lists.newArrayList();
     public static ArrayList<String> fleshBudMobBlacklist = Lists.newArrayList();
+
+    public static final Map<Block, Block> FREEZABLE_BLOCKS = new HashMap<>();
 
     public static ArrayList<String> addedMobsWithRedBlood = Lists.newArrayList();
     public static ArrayList<String> addedMobsWithBlueBlood = Lists.newArrayList();
@@ -641,7 +644,7 @@ public class MainUtil {
     }
     public static double getStandUserOdds(Mob mob) {
         if ((isBossMob(mob) && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
-                || mob instanceof JojoNPC
+                || mob instanceof JojoNPC || mob instanceof ZombieAesthetician
         || isMobStandUserBlacklisted(mob)){
             return 0;
         } else if (mob instanceof AbstractVillager){

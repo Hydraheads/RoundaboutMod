@@ -84,6 +84,8 @@ public class ForgeSounds {
             register(ModSounds.SKATING_LAND, ModSounds.SKATING_LAND_ID);
     public static final RegistryObject<SoundEvent> ICE_RISES_EVENT =
             register(ModSounds.ICE_RISES, ModSounds.ICE_RISES_ID);
+    public static final RegistryObject<SoundEvent> BLOCK_FREEZE_EVEN =
+            register(ModSounds.BLOCK_FREEZE, ModSounds.BLOCK_FREEZE_ID);
     public static final RegistryObject<SoundEvent> BANISH_EVENT =
             register(ModSounds.BANISH, ModSounds.BANISH_ID);
     public static final RegistryObject<SoundEvent> IRON_BALL_BOUNCE_EVENT =

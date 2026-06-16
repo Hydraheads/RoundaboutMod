@@ -13,7 +13,17 @@
     "roundabout:aja_block",
     "roundabout:frozen_stone",
     "roundabout:frozen_cobblestone",
+    "roundabout:frozen_diorite",
+    "roundabout:frozen_andesite",
+    "roundabout:frozen_granite",
     "roundabout:frozen_deepslate",
-    "roundabout:frozen_cobbled_deepslate"
+    "roundabout:frozen_cobbled_deepslate",
+    "roundabout:frozen_netherrack",
+    "roundabout:frozen_nether_bricks",
+    "roundabout:frozen_stone_bricks",
+    "roundabout:frozen_sandstone",
+    "roundabout:frozen_red_sandstone",
+    "roundabout:frozen_end_stone",
+    "roundabout:frozen_obsidian"
   ]
 }

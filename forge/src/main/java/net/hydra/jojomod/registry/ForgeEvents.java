@@ -26,6 +26,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.item.Items;
@@ -200,6 +201,19 @@ public class ForgeEvents {
         ModBlocks.FROZEN_COBBLESTONE = ForgeBlocks.FROZEN_COBBLESTONE.get();
         ModBlocks.FROZEN_DEEPSLATE = ForgeBlocks.FROZEN_DEEPSLATE.get();
         ModBlocks.FROZEN_COBBLED_DEEPSLATE = ForgeBlocks.FROZEN_COBBLED_DEEPSLATE.get();
+        ModBlocks.FROZEN_STONE_BRICKS = ForgeBlocks.FROZEN_STONE_BRICKS.get();
+        ModBlocks.FROZEN_DIORITE = ForgeBlocks.FROZEN_DIORITE.get();
+        ModBlocks.FROZEN_ANDESITE = ForgeBlocks.FROZEN_ANDESITE.get();
+        ModBlocks.FROZEN_GRANITE = ForgeBlocks.FROZEN_GRANITE.get();
+        ModBlocks.FROZEN_SAND = ForgeBlocks.FROZEN_SAND.get();
+        ModBlocks.FROZEN_SANDSTONE = ForgeBlocks.FROZEN_SANDSTONE.get();
+        ModBlocks.FROZEN_RED_SAND = ForgeBlocks.FROZEN_RED_SAND.get();
+        ModBlocks.FROZEN_RED_SANDSTONE = ForgeBlocks.FROZEN_RED_SANDSTONE.get();
+        ModBlocks.FROZEN_GRAVEL = ForgeBlocks.FROZEN_GRAVEL.get();
+        ModBlocks.FROZEN_OBSIDIAN = ForgeBlocks.FROZEN_OBSIDIAN.get();
+        ModBlocks.FROZEN_NETHERRACK = ForgeBlocks.FROZEN_NETHERRACK.get();
+        ModBlocks.FROZEN_NETHER_BRICKS = ForgeBlocks.FROZEN_NETHER_BRICKS.get();
+        ModBlocks.FROZEN_END_STONE = ForgeBlocks.FROZEN_END_STONE.get();
         ModBlocks.AJA_BLOCK = ForgeBlocks.AJA_BLOCK.get();
         ModBlocks.SHINY_QUARTZ = ForgeBlocks.SHINY_QUARTZ.get();
         ModBlocks.WHITE_ALBUM_ICE_BLOCK = ForgeBlocks.WHITE_ALBUM_ICE.get();
@@ -533,6 +547,7 @@ public class ForgeEvents {
         ModParticles.FRICTIONLESS = ForgeParticles.FRICTIONLESS.get();
         ModParticles.EXCLAMATION = ForgeParticles.EXCLAMATION.get();
         ModParticles.BABY_CRACKLE = ForgeParticles.BABY_CRACKLE.get();
+        ModParticles.COLD_CRACKLE = ForgeParticles.COLD_CRACKLE.get();
         ModParticles.MAGIC_DUST = ForgeParticles.MAGIC_DUST.get();
         ModParticles.BRIEF_MAGIC_DUST = ForgeParticles.BRIEF_MAGIC_DUST.get();
         ModParticles.D4C_LINES = ForgeParticles.D4C_LINES.get();
@@ -707,6 +722,7 @@ public class ForgeEvents {
         ModEntities.FOG_CLONE = ForgeEntities.FOG_CLONE.get();
 
         ForgeItems.assignStupidForge();
+        ConfigManager.loadBlacklists2();
     }
 
     /**

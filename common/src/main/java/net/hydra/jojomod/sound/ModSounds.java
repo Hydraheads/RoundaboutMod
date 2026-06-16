@@ -193,6 +193,11 @@ public class ModSounds {
     public static final ResourceLocation ICE_RISES_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ICE_RISES);
     public static SoundEvent ICE_RISES_EVENT = SoundEvent.createVariableRangeEvent(ICE_RISES_ID);
 
+    public static final String BLOCK_FREEZE = "block_freeze";
+    public static final ResourceLocation BLOCK_FREEZE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLOCK_FREEZE);
+    public static SoundEvent BLOCK_FREEZE_EVENT = SoundEvent.createVariableRangeEvent(BLOCK_FREEZE_ID);
+
+
 
     public static final String BANISH = "banish";
     public static final ResourceLocation BANISH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BANISH);

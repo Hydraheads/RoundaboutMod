@@ -692,10 +692,14 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
 
 
+    public void applyLeapCooldowns(){
+
+    }
     @Override
     public boolean setPowerSneakMovement(int lastMove) {
 
         if (!onCooldown(PowerIndex.SKILL_4)) { // leaping puts timestop on a cooldown
+            applyLeapCooldowns();
             this.setCooldown(PowerIndex.SKILL_4, ConfigManager.getConfig().timeStopSettings.timestopLeapCooldown);
         }
 

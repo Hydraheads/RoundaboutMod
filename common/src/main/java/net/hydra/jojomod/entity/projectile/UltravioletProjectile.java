@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -136,7 +137,7 @@ public class UltravioletProjectile extends RoundaboutGeneralProjectile{
         //Add hurt code here
         //Roundabout.LOGGER.info("charge-> "+charge+" power-> "+power);
         if (entity instanceof LivingEntity lv) {
-            if (entity instanceof BaseMinion BM ||
+            if (entity instanceof BaseMinion || entity instanceof Zombiefish  ||
                     FateTypes.isVampire(lv)  ||
                     FateTypes.isZombie(lv)) {
                 float power = 10;

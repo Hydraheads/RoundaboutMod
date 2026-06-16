@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -25,6 +26,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -39,6 +41,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FrostedIceBlock;
 import net.minecraft.world.level.block.LiquidBlockContainer;
@@ -243,7 +246,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 if (acceleration >= getMaxAccelerationTicks()) {
                     setPlayerPos2(PlayerPosIndex.SKATE_TWIRL);
                 } else {
-                    setPlayerPos2(PlayerPosIndex.SKATE_JUMP);
+                    if (getPlayerPos2() != PlayerPosIndex.SKATE_TWIRL) {
+                        setPlayerPos2(PlayerPosIndex.SKATE_JUMP);
+                    }
                 }
                 twirlTicks = 20;
             }
@@ -488,11 +493,20 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 setSkillIcon(context, x, y, 4, StandIcons.SKATE_INACTIVE, PowerIndex.SKILL_1);
             }
         } else {
-            setSkillIcon(context, x, y, 4, StandIcons.FREEZE_BLOCKS, PowerIndex.NO_CD);
+            setSkillIcon(context, x, y, 4, StandIcons.FREEZE_BLOCKS, PowerIndex.SKILL_4_SNEAK);
         }
 
         super.renderIcons(context, x, y);
     }
+
+
+    public void toggleBlockFreezeClient(){
+        if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_SNEAK, true);
+            tryPowerPacket(PowerIndex.POWER_4_SNEAK);
+        }
+    }
+
 
     public boolean renderHelmet(){
         return PowerTypes.hasStandActive(self);
@@ -573,6 +587,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 toggleSkatesClient();
             }
             case SKILL_4_CROUCH -> {
+                toggleBlockFreezeClient();
             }
         }
     }
@@ -770,25 +785,10 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     @Override
     public boolean tryTripleIntPower(int move, boolean forced, int chargeTime, int move2, int move3){
-        switch (move)
-        {
-            case PowerIndex.POWER_4_BONUS -> {
-                initializeTargets(chargeTime,move2, move3);
-            }
-        }
+
         return tryPower(move, forced);
     }
 
-    public void initializeTargets(int x, int y, int z){
-
-
-        Entity targ = this.self.level().getEntity(x);
-        if (targ instanceof SurvivorEntity SE){
-            SurvivorTarget = SE;
-        }
-        EntityTargetOne = this.self.level().getEntity(y);
-        EntityTargetTwo = this.self.level().getEntity(z);
-    }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         switch (move)
@@ -805,13 +805,60 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case PowerIndex.POWER_1_SNEAK -> {
                 iceCancelServer();
             }
+            case PowerIndex.POWER_4_SNEAK -> {
+                freezeBlocksServer();
+            }
         }
         return super.setPowerOther(move,lastMove);
     }
 
-    public SurvivorEntity SurvivorTarget = null;
-    public Entity EntityTargetOne = null;
-    public Entity EntityTargetTwo = null;
+    public void freezeBlocksServer(){
+        int cooldown = 240;
+        this.setCooldown(PowerIndex.SKILL_4_SNEAK, cooldown);
+        if (!this.self.level().isClientSide() && this.self instanceof Player PL){
+            if (MainUtil.getIsGamemodeApproriateForGrief(PL)){
+                int radius = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.blockFreezeRadius;
+                BlockPos center = self.blockPosition();
+
+                for (int x = -radius; x <= radius; x++) {
+                    for (int y = -radius; y <= radius; y++) {
+                        for (int z = -radius; z <= radius; z++) {
+
+                            // Compare squared distances (faster than sqrt)
+                            if (x * x + y * y + z * z > radius * radius) {
+                                continue;
+                            }
+
+                            BlockPos pos = center.offset(x, y, z);
+
+                            BlockState state = self.level().getBlockState(pos);
+
+                            Block replacement = MainUtil.FREEZABLE_BLOCKS.get(state.getBlock());
+
+                            if (replacement != null) {
+                                self.level().setBlock(
+                                        pos,
+                                        replacement.defaultBlockState(),
+                                        Block.UPDATE_ALL
+                                );
+                            }
+                        }
+                    }
+                }
+
+                if (self.level() instanceof ServerLevel sl) {
+                    sl.sendParticles(ModParticles.COLD_CRACKLE,
+                            self.getEyePosition().x,
+                            self.getEyePosition().y,
+                            self.getEyePosition().z,
+                            0, 0, 0, 0, 0);
+
+                }
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BLOCK_FREEZE_EVENT,
+                        SoundSource.PLAYERS, 1F, 1F);
+            }
+        }
+    }
 
 
     @Override

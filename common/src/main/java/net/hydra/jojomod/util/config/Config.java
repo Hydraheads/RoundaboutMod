@@ -878,6 +878,8 @@ public class Config implements Cloneable {
         public Float whiteAlbumAccelerationAmount;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer whiteAlbumMaxAcceleration;
+        @IntOption(group = "inherit", value = 4, min = 0, max = 50)
+        public Integer blockFreezeRadius;
     }
     public static class WalkingHeartSettings {
         @BooleanOption(group = "inherit", value = true)
@@ -1029,7 +1031,9 @@ public class Config implements Cloneable {
         public Integer guardianCooldown;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer starFingerCooldown;
-        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer starFingerLeapCooldown;
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
         public Integer blitzAttackCooldown;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer starFingerInterruptCooldown;

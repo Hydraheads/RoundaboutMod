@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
@@ -1964,6 +1965,7 @@ public class StandPowers extends AbilityScapeBasis {
                 if (pos2 == PlayerPosIndex.SKATE_JUMP ||
                         pos2 == PlayerPosIndex.SKATE_TWIRL){
                     if (self.onGround()) {
+                        Roundabout.LOGGER.info("1");
                         ipe.roundabout$SetPos2(PlayerPosIndex.NONE);
                         onLandingAnimatedJump();
                     } else {
@@ -1971,6 +1973,7 @@ public class StandPowers extends AbilityScapeBasis {
                             twirlTicks--;
                         } else {
                             if (pos2 == PlayerPosIndex.SKATE_TWIRL){
+                                Roundabout.LOGGER.info("2");
                                 ipe.roundabout$SetPos2(PlayerPosIndex.SKATE_JUMP);
                             }
                         }

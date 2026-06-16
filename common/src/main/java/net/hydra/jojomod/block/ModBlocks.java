@@ -145,6 +145,12 @@ public class ModBlocks {
     public static Block FROZEN_OBSIDIAN;
     public static Block FROZEN_STONE_BRICKS;
 
+    public static Block FROZEN_DIORITE;
+    public static Block FROZEN_ANDESITE;
+    public static Block FROZEN_GRANITE;
+    public static Block FROZEN_RED_SAND;
+    public static Block FROZEN_RED_SANDSTONE;
+
     public static Block SHINY_QUARTZ;
     public static Block SHINY_QUARTZ_TILES;
 
@@ -788,6 +794,45 @@ public class ModBlocks {
             instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.0F, 6.0F)
             .sound(SoundType.GLASS).strength(1.16F, 6.0F).sound(SoundType.GLASS).friction(0.98F));
 
+    public static Block FROZEN_DIORITE_PROPERTIES = new Block(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.5F, 6.0F)
+            .sound(SoundType.GLASS).friction(0.98F));
+    public static Block FROZEN_ANDESITE_PROPERTIES = new Block(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.5F, 6.0F)
+            .sound(SoundType.GLASS).friction(0.98F));
+    public static Block FROZEN_GRANITE_PROPERTIES = new Block(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.5F, 6.0F)
+            .sound(SoundType.GLASS).friction(0.98F));
+
+
+    public static Block FROZEN_SAND_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.SAND).
+            instrument(NoteBlockInstrument.SNARE).strength(0.166f).sound(SoundType.GLASS).
+            friction(0.98F));
+    public static Block FROZEN_RED_SAND_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.SAND).
+            instrument(NoteBlockInstrument.SNARE).strength(0.166f).sound(SoundType.GLASS).
+            friction(0.98F));
+    public static Block FROZEN_SANDSTONE_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.SAND).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().sound(SoundType.GLASS).
+            strength(0.26F).friction(0.98F));
+    public static Block FROZEN_RED_SANDSTONE_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.SAND).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().sound(SoundType.GLASS).
+            strength(0.26F).friction(0.98F));
+    public static Block FROZEN_GRAVEL_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).
+            instrument(NoteBlockInstrument.SNARE).strength(0.2f).sound(SoundType.GLASS).friction(0.98F));
+    public static Block FROZEN_END_STONE_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.SAND).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().
+            strength(1.0f, 9.0f).sound(SoundType.GLASS).friction(0.98F));
+    public static Block FROZEN_NETHERRACK_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.NETHER).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().
+            strength(0.166f).sound(SoundType.GLASS).friction(0.98F));
+    public static Block FROZEN_NETHER_BRICKS_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.NETHER).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.66F, 6.0f).sound(SoundType.GLASS).friction(0.98F));
+    public static Block FROZEN_OBSIDIAN_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().
+            strength(16.6F, 1200.0f).sound(SoundType.GLASS).friction(0.988F));
+    public static Block FROZEN_STONE_BRICKS_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().
+            strength(0.5f, 6.0f).sound(SoundType.GLASS).friction(0.98F));
 
     public static CultivationPotBlock cultivationPot(Block $$0, FeatureFlag... $$1) {
         BlockBehaviour.Properties $$2 = BlockBehaviour.Properties.of().instabreak().noOcclusion().pushReaction(PushReaction.DESTROY);
