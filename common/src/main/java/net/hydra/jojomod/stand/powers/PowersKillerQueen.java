@@ -13,6 +13,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModGamerules;
@@ -102,8 +103,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 	// TODO Bites The Dust
 	
 	// TODO Audio Translations
-	
-	// TODO block bomb rotation fixed
+
     // TODO fix Sheer Heart Attack code
     // TODO explosions ignore ores on shift
 	
@@ -1603,7 +1603,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             boolean canDestroyBlocks = ((this.bombConfig % 2) == 1) &&
                     ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
-                    level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING);
+                    level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
+                    this.getSelf() instanceof Player;
 
             Entity target = null;
 
@@ -1628,6 +1629,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
 
             DamageSource dmg = ModDamageTypes.of(level, DamageTypes.PLAYER_EXPLOSION, this.getSelf());
+            DamageSource sneakyDmg = ModDamageTypes.of(level, DamageTypes.EXPLOSION, null);
             ExplosionUtil.explosionHurtSneaky(vPos, dmg, level,
                     ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionDetonateMaxDamage, 0.4f, 1.5f);
 
@@ -1639,6 +1641,10 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 boolean isBoss = MainUtil.isBossMob(target);
 
+                if (!target.getControllingPassenger().hasLineOfSight(this.getSelf()) && !isBoss) {
+                    dmg = sneakyDmg;
+                }
+
                 if (target instanceof Player pl) {
                     if (!pl.isCreative() && playersHitkill) { pl.die(dmg); }
                     else {
@@ -1647,9 +1653,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                         );
                     }
                 } else {
-                    if (mobsHitkill && !isBoss) {
-                        target.kill();
-                    } else if (isBoss) {
+                    if (mobsHitkill && !isBoss) { target.kill();}
+                    else if (isBoss) {
                         target.hurt(dmg, hitPoints * 0.70f
                             * (ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnMobs / 100f)
                         );
@@ -1671,7 +1676,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                             } else {
                                 type = 0;
                             }
-                        }else if (LE instanceof AbstractIllager) {
+                        }else if (LE instanceof JojoNPC){
+                            type = 0;
+                        } else if (LE instanceof AbstractIllager) {
                             type = 1;
                         } else if (LE instanceof AbstractVillager) {
                             type = 2;

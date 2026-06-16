@@ -1,59 +1,37 @@
 package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.PenetratableWithProjectile;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 
-import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.util.ExplosionUtil;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
-import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.FireworkRocketItem;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Path;
 
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.EnumSet;
 import java.util.List;
-import java.util.UUID;
 
 
 public class SheerHeartAttackEntity extends StandEntity {
@@ -77,7 +55,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	static final int tickTargetFindMax = 4;
 
 	int attackTick = 0;
-	static final int attackTickMax = 35;
+	static final int attackTickMax = 25;
 	int jumpTick = 0;
 	static final int jumpTickMax = 30;
 
@@ -96,7 +74,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public byte currentTarget = NONE;
 	public Entity entityTarget = null;
-	public Vec3 blockTarget = null;
+	public BlockPos blockTarget = null;
 	public int ticksUntilNextPathRecalculation = 15;
 
 	public float viewRange = 10.0f;
@@ -108,7 +86,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public static AttributeSupplier.Builder createStandAttributes() {
 		return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,
-				0.25F).add(Attributes.MAX_HEALTH, 20.0).add(Attributes.ATTACK_DAMAGE, 5.0);
+				0.5F).add(Attributes.MAX_HEALTH, 20.0).add(Attributes.ATTACK_DAMAGE, 5.0);
 	}
 
 	@Override
@@ -187,14 +165,6 @@ public class SheerHeartAttackEntity extends StandEntity {
 		}
 	}
 
-	@Override
-	protected void registerGoals() {
-		//super.registerGoals();
-		//this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
-		//this.goalSelector.addGoal(5, new WarmestSeek(this));
-		//this.goalSelector.addGoal(5, new TryToReturn(this));
-	}
-
 	public boolean hasTarget() {
 		if (this.currentTarget == ENTITY) {
 			if (this.entityTarget == null) {
@@ -209,6 +179,12 @@ public class SheerHeartAttackEntity extends StandEntity {
 					this.currentTarget = NONE;
 				}
 			}
+		}else if (this.currentTarget == BLOCK) {
+			BlockState BlockInfo = this.level().getBlockState(this.blockTarget);
+			if (ExplosionUtil.isBlockBlackListed(BlockInfo)) {
+				this.currentTarget = NONE;
+				this.blockTarget = null;
+			}
 		}
 
 		return this.currentTarget != NONE;
@@ -220,84 +196,91 @@ public class SheerHeartAttackEntity extends StandEntity {
 		double harmestDistance = -1;
 
 		Entity targetEnt = null;
+		BlockPos targetPos = null;
 
-		for(int j = 0;j<entities.size();j++) {
-			Entity entity = entities.get(j);
+		byte currentChoice = NONE;
+
+        for (Entity entity : entities) {
+			int points = getEntityWarm(entity);
+            if (points <= 0) { continue; }
+
 			double dist = entity.distanceToSqr(this.position());
 
-			int points = 0;
+            if (points > harmest) {
+				currentChoice = ENTITY;
+                harmest = points;
+                harmestDistance = dist;
+                targetEnt = entity;
+            } else if (points == harmest) {
+                if (harmestDistance == -1 || dist < harmestDistance) {
+					currentChoice = ENTITY;
+                    harmestDistance = dist;
+                    targetEnt = entity;
+                }
+            }
+        }
+		BlockPos bPos = this.blockPosition();
 
-			if (entity instanceof StandEntity || entity.is(this.getUser())){ continue;}
-
-			if (entity instanceof LivingEntity LE) {
-				if (LE.isDeadOrDying()) { continue; }
-				if (LE instanceof Player pl) {
-					if (pl.isCreative()) { continue; }
-				}
-				points += 20;
-				points += HeatUtil.getHeat(LE);
-
-				if (LE.isOnFire() || LE.wasOnFire || HeatUtil.isHot(LE)) { points += 70;}
-				if (LE.isFullyFrozen()) { points -= 80;
-				}else if (LE.isFreezing()) { points -= 40;}
-
-				MobType mobType = LE.getMobType();
-				if (mobType.equals(MobType.UNDEAD)) { points -= 30;}
+		for (BlockPos pos : BlockPos.betweenClosed(
+				bPos.offset((int)viewRange, (int)viewRange, (int)viewRange),
+				bPos.offset(-(int)viewRange, -(int)viewRange, -(int)viewRange))) {
+			BlockState info = this.level().getBlockState(pos);
+			if (ExplosionUtil.isBlockBlackListed(info)) {
+				continue;
 			}
-			if (points <= 0) {continue; }
+
+			int points = -1;
+
+			points += info.getLightEmission() * 10;
+
+			if (points < 0) { continue; }
+
+			double dist = pos.distToCenterSqr(this.position());
+
 
 			if (points > harmest) {
+				currentChoice = BLOCK;
 				harmest = points;
 				harmestDistance = dist;
-				targetEnt = entity;
-			} else if (points == harmest ) {
+				targetPos = pos;
+			} else if (points == harmest) {
 				if (harmestDistance == -1 || dist < harmestDistance) {
+					currentChoice = BLOCK;
 					harmestDistance = dist;
-					targetEnt = entity;
+					targetPos = pos;
 				}
 			}
 		}
 
 
-
-
-		if (targetEnt != null) {
+		if (currentChoice == ENTITY) {
 			this.entityTarget = targetEnt;
 			this.currentTarget = ENTITY;
+		}else if (currentChoice == BLOCK) {
+			this.blockTarget = targetPos;
+			this.currentTarget = BLOCK;
 		}else {
 			this.entityTarget = null;
 			this.currentTarget = NONE;
 		}
 	}
 
-	public boolean canAttack(Vec3 targetPos) {
-
-		double dist = this.position().distanceTo(targetPos);
-		float minDist = 4.0f;
-
-		if (this.getTargetType() == BLOCK) {
-			minDist = 1.3f;
-		}
-
-		return (dist <= minDist && this.attackTick <= 0);
-	}
-
 	public boolean shouldJump(Vec3 targetPos) {
-		if (this.jumpTick <= 0) {
+		if (this.jumpTick > 0) {
 			return false;
 		}
-		double dist = this.position().distanceTo(targetPos);
+		double dist = Math.abs(this.position().distanceTo(targetPos));
 
-		return dist > (explosionRadius+0.6f);
+		return (float)dist > (3.0f) && (float)dist < 4.0f;
 	}
 	public boolean shouldExplode(Vec3 targetPos) {
-		if (this.attackTick <= 0) {
+		if (this.attackTick > 0) {
 			return false;
 		}
 
-		double dist = this.position().distanceTo(targetPos);
+		double dist = Math.abs(this.position().distanceTo(targetPos));
 
-		return dist < (explosionRadius-0.1f);
+		return (float)dist < (explosionRadius-0.12f);
 	}
 
 	public byte getTargetType() { return this.currentTarget;}
@@ -308,7 +291,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		if (type != NONE) {
 			Vec3 targetPos;
 			if (type == BLOCK) {
-				targetPos = this.blockTarget;
+				targetPos = this.blockTarget.getCenter();
 			}else {
 				targetPos = this.entityTarget.position();
 			}
@@ -338,7 +321,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 					this.currentTarget = NONE;
 				}
 			}
-		}else {
+		}else if(this.getTargetType() == BLOCK){
+			boolean shouldDrop = !this.level().getBlockState(this.blockTarget).requiresCorrectToolForDrops();
+			this.level().destroyBlock(this.blockTarget, shouldDrop);
 			this.blockTarget = null;
 			this.currentTarget = NONE;
 		}
@@ -350,14 +335,14 @@ public class SheerHeartAttackEntity extends StandEntity {
 		if (this.onGround()) {
 			this.lookAt(EntityAnchorArgument.Anchor.EYES, jumpT0Pos);
 			this.jumpTick = jumpTickMax;
-			this.setDeltaMovement((this.getLookAngle().multiply(1.2, 1.2, 1.2)).add(0, 0.14, 0));
+			this.setDeltaMovement((this.getLookAngle().multiply(1.5, 1.5, 1.5)).add(0, 0.2, 0));
 		}
 	}
 
 	public void shoot(Vec3 shootToPos){
 		this.lookAt(EntityAnchorArgument.Anchor.EYES,shootToPos);
 
-		this.setDeltaMovement((this.getLookAngle().multiply(1.3,1.3,1.3)).add(0,0.12,0));
+		this.setDeltaMovement((this.getLookAngle().multiply(1.6,1.6,1.6)).add(0,0.01,0));
 	}
 
 	public boolean shaIsNear() {
@@ -370,142 +355,64 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
 	public void shaStopMove() {
+		this.getMoveControl().setWantedPosition(this.getX(), this.getY(), this.getZ(), 0.0);
+		this.getNavigation().setSpeedModifier(0.0);
 		this.getNavigation().stop();
 	}
+
 
 	public void shaMove(Vec3 targetPos) {
 		ticksUntilNextPathRecalculation--;
 		if (ticksUntilNextPathRecalculation <= 0 ) {
 			ticksUntilNextPathRecalculation = 5; // + mob.getRandom().nextInt(7);
 
-			Path newPath = this.getNavigation().createPath(targetPos.x, targetPos.y, targetPos.z, 2);
-			if (newPath == null) { return;}
+			Path newPath;
+			if (this.haveToReturn) {
+				newPath = this.getNavigation().createPath(this.getUser(), 1);
+			}else if (this.currentTarget == ENTITY) {
+				newPath = this.getNavigation().createPath(this.entityTarget, 0);
+			}else {
+				newPath = this.getNavigation().createPath(targetPos.x, targetPos.y, targetPos.z, 0);
+			}
 
-			if (!this.getNavigation().moveTo(newPath, 2.0f))
+			//this.lookAt(EntityAnchorArgument.Anchor.EYES, targetPos);
+
+			if (newPath == null) {
+				Roundabout.LOGGER.info("the path is null!?");
+				return;
+			}
+
+			if (!this.getNavigation().moveTo(newPath, 0.5f))
 				ticksUntilNextPathRecalculation += 5;
 		}
 	}
 
 
 
-    /*
-	static class WarmestSeek extends Goal {
-		protected final SheerHeartAttackEntity mob;
+	public int getEntityWarm(Entity entity) {
+		int points = 0;
 
-		public int ticksUntilNextPathRecalculation = 15;
+		if (entity instanceof StandEntity || entity.is(this.getUser())){ return -1;}
 
-		public WarmestSeek(SheerHeartAttackEntity $$0) {
-			this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK, Flag.JUMP));
-			this.mob = $$0;
-		}
-
-		@Override
-		public void start() { super.start();}
-
-		@Override
-		public void stop() {
-			this.mob.getNavigation().stop();
-			super.stop();
-		}
-
-		public void move(Vec3 targetPos) {
-
-			ticksUntilNextPathRecalculation--;
-			if (ticksUntilNextPathRecalculation <= 0 ) {
-				ticksUntilNextPathRecalculation = 5; // + mob.getRandom().nextInt(7);
-				Path newPath;
-
-				newPath = this.mob.getNavigation().createPath(targetPos.x, targetPos.y, targetPos.z, 2);
-				if (newPath == null) { return;}
-
-				if (!this.mob.getNavigation().moveTo(newPath, 1.2f))
-					ticksUntilNextPathRecalculation = 5;
+		if (entity instanceof LivingEntity LE) {
+			if (LE.isDeadOrDying()) { return points; }
+			if (LE instanceof Player pl) {
+				if (pl.isCreative()) { return points; }
 			}
+			points += 20;
+			points += HeatUtil.getHeat(LE);
+
+			if (LE.isOnFire() || LE.wasOnFire || HeatUtil.isHot(LE)) { points += 70;}
+			if (LE.isFullyFrozen()) { points -= 80;
+			}else if (LE.isFreezing()) { points -= 40;}
+
+			MobType mobType = LE.getMobType();
+			if (mobType.equals(MobType.UNDEAD)) { points -= 30;}
 		}
-
-		@Override
-		public void tick() {
-
-			byte type = this.mob.getTargetType();
-			if (type != NONE) {
-				Vec3 targetPos = this.mob.getTargetPosition();
-
-				this.mob.lookAt(EntityAnchorArgument.Anchor.FEET,targetPos);
-
-				if (!this.mob.canAttack(targetPos)) {
-					this.move(targetPos);
-				}else if (this.mob.attackTick <= 0) {
-					if (this.mob.shouldJump(targetPos)) {
-						if (type == ENTITY && this.mob.jumpTick <= 0) {
-							this.mob.jump(targetPos);
-						}
-					} else  {
-						this.mob.attack();
-					}
-				}
-			}
-
-			super.tick();
-		}
-
-		@Override public boolean canUse() { return this.mob.hasTarget() && !this.mob.getHaveToReturn(); }
-		@Override public boolean canContinueToUse() { return this.mob.hasTarget() && !this.mob.getHaveToReturn();}
+		return points;
 	}
 
 
-	static class TryToReturn extends Goal {
-		protected final SheerHeartAttackEntity mob;
-
-		public int ticksUntilNextPathRecalculation = 15;
-
-		public TryToReturn(SheerHeartAttackEntity $$0) {
-			this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK, Flag.JUMP));
-			this.mob = $$0;
-		}
-
-		@Override
-		public void start() { super.start();}
-
-		@Override
-		public void stop() {
-			this.mob.getNavigation().stop();
-			super.stop();
-		}
-
-		public void move(Vec3 targetPos) {
-			ticksUntilNextPathRecalculation--;
-			if (ticksUntilNextPathRecalculation <= 0 ) {
-				ticksUntilNextPathRecalculation = 5; // + mob.getRandom().nextInt(7);
-
-				Path newPath = this.mob.getNavigation().createPath(targetPos.x, targetPos.y, targetPos.z, 2);
-				if (newPath == null) { return;}
-
-				if (!this.mob.getNavigation().moveTo(newPath, 2.0f))
-					ticksUntilNextPathRecalculation += 5;
-			}
-		}
-
-
-		@Override
-		public void tick() {
-			if (this.mob != null) {
-				LivingEntity user = this.mob.getUser();
-				if (user != null) {
-					if ((!(((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen)) || (!user.isAlive())) {
-						Vec3 targetPos = user.position();
-
-						if (!this.mob.shaIsNear()) {
-							this.move(targetPos);
-						}
-					}
-				}
-			}
-			super.tick();
-		}
-
-		@Override public boolean canUse() { return this.mob.getHaveToReturn();}
-		@Override public boolean canContinueToUse() { return this.mob.getHaveToReturn();}
-	} */
     @Override public boolean hurt(DamageSource source, float amount) { return false;}
 
 	@Override public boolean isPickable() { return true;}
