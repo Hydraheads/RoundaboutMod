@@ -3,6 +3,9 @@ package net.hydra.jojomod.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.LivingEntity;
 import org.joml.Vector3f;
 
 import com.google.common.collect.Lists;
@@ -50,20 +53,41 @@ public class ExplosionUtil {
                 (int)Math.floor(amount*0.66), range, range+1.2f, range, 0.001);
     	
     }
-    
-	
+
 	public static void explosionHurt(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
+		explosionHurtBase(false, pos, dmgSource, level, damage, knockBack, range);
+	}
+
+	public static void explosionHurtSneaky(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
+		explosionHurtBase(true, pos, dmgSource, level, damage, knockBack, range);
+	}
+	
+	public static void explosionHurtBase(Boolean sneaky, Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
     	List<Entity> damages = MainUtil.genHitbox(level, pos.x(), pos.y(), pos.z(), range, range, range);
-    	
+
+		Entity causer = dmgSource.getEntity();
+
+		DamageSource notSeenDamage =  ModDamageTypes.of(level, DamageTypes.EXPLOSION, null);
+
     	for(int j = 0;j<damages.size();j++) {
             Entity entity = damages.get(j);
             double dist = entity.distanceToSqr(pos);
             float percUnhand = ((float)dist/ (range * range * range));
             float perc = 1.0f - (percUnhand*0.75f);
             float percKnockback = 1.0f - (percUnhand*0.5f);
-            
-            entity.hurt(dmgSource, perc*damage);
-            
+
+			boolean hasSeen = true;
+
+			if (sneaky && entity instanceof LivingEntity LE && causer != null) {
+				hasSeen = (LE.hasLineOfSight(causer));
+			}
+
+			if (hasSeen) {
+				entity.hurt(dmgSource, perc * damage);
+			} else {
+				entity.hurt(notSeenDamage, perc * damage);
+			}
+
             Vec3 knockbackUnhand = new Vec3(entity.getX() - pos.x(), entity.getY() - pos.y(), entity.getZ() - pos.z());
             Vec3 knockback = knockbackUnhand.normalize().scale(Math.min(knockBack, percKnockback*knockBack));
             

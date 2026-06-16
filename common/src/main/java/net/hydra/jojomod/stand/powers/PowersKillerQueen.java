@@ -1628,7 +1628,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
 
             DamageSource dmg = ModDamageTypes.of(level, DamageTypes.PLAYER_EXPLOSION, this.getSelf());
-            ExplosionUtil.explosionHurt(vPos, dmg, level,
+            ExplosionUtil.explosionHurtSneaky(vPos, dmg, level,
                     ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionDetonateMaxDamage, 0.4f, 1.5f);
 
             if (target != null && bStatus == BOMB_ENTITY) {
