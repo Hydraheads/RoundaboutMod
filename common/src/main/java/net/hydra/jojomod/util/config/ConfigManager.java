@@ -140,6 +140,11 @@ public abstract class ConfigManager {
             MainUtil.standDestructionBlacklist.clear();
             MainUtil.standDestructionBlacklist.addAll(getAdvancedConfig().standDestructionBlacklist);
         }
+        if (getAdvancedConfig().standBlockExplosionBlacklist != null)
+        {
+            MainUtil.standBlockExplosionBlacklist.clear();
+            MainUtil.standBlockExplosionBlacklist.addAll(getAdvancedConfig().standBlockExplosionBlacklist);
+        }
         if (getAdvancedConfig().occultChargeEffectsToBanishv2 != null)
         {
             MainUtil.occultChargeEffectsToBanish.clear();

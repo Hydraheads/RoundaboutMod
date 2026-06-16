@@ -27,11 +27,12 @@ import net.minecraft.world.phys.Vec3;
 
 public class ExplosionUtil {
 	
-	public static ArrayList<String> blowableBlocksBlackList = Lists.newArrayList("minecraft:bedrock", "minecraft:obsidian");
+	//private static ArrayList<String> blowableBlocksBlackList = Lists.newArrayList("minecraft:bedrock", "minecraft:obsidian");
 	
-	static boolean isBlockBlackListed(BlockState bs) {
+	public static boolean isBlockBlackListed(BlockState bs) {
 		ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
-		return (blowableBlocksBlackList != null && !blowableBlocksBlackList.isEmpty() && rl != null && blowableBlocksBlackList.contains(rl.toString()));
+
+		return (MainUtil.standBlockExplosionBlacklist != null && !MainUtil.standBlockExplosionBlacklist.isEmpty() && rl != null && MainUtil.standBlockExplosionBlacklist.contains(rl.toString()));
 	}
 	public static void explodeEffects(Vec3 pos, Level level, SimpleParticleType particle, float range) {
 		explodeEffects(pos, level, particle, range, 18);
@@ -82,7 +83,7 @@ public class ExplosionUtil {
 				hasSeen = (LE.hasLineOfSight(causer));
 			}
 
-			if (hasSeen) {
+			if (hasSeen || MainUtil.isBossMob(entity)) {
 				entity.hurt(dmgSource, perc * damage);
 			} else {
 				entity.hurt(notSeenDamage, perc * damage);
@@ -101,7 +102,7 @@ public class ExplosionUtil {
     	
     	int intSize = (int) Math.floor(range);
     	
-    	Double explosionDistanceMax = Math.pow(range + 0.5, 2);
+    	double explosionDistanceMax = Math.pow(range + 0.5, 2);
     	
     	for (BlockPos pos : BlockPos.betweenClosed(location.offset(intSize, intSize, intSize), location.offset(-intSize, -intSize, -intSize))) {
 			BlockState info = level.getBlockState(pos);
