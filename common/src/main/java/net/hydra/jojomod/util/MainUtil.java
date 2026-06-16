@@ -2941,7 +2941,7 @@ public class MainUtil {
             if (player != null) {
                 StandUser user = ((StandUser) player);
                 if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pwa){
-                    pwa.acceleration =data;
+                    pwa.setAcceleration(data);
                 }
             }
         } else if (context == PacketDataIndex.INT_UPDATE_PILOT){

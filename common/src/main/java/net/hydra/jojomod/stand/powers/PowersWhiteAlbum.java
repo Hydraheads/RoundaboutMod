@@ -391,6 +391,21 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
         super.tickPower();
     }
+
+    public void setAcceleration(int num){
+        byte pos2 = getPlayerPos2();
+        acceleration = num;
+        if (num > 0){
+            if (pos2 != PlayerPosIndex.SKATE_JUMP &&
+                    pos2 != PlayerPosIndex.SKATE_TWIRL){
+                setPlayerPos2(PlayerPosIndex.SKATE_GENERAL);
+            }
+        } else {
+            if (pos2 == PlayerPosIndex.SKATE_GENERAL){
+                setPlayerPos2(PlayerPosIndex.NONE_2);
+            }
+        }
+    }
     private void processRing(BlockPos center, int r) {
 
         Level level = self.level();
