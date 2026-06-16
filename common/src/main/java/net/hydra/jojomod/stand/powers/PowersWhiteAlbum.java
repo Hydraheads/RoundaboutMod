@@ -157,10 +157,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
                                     )
                             )
                     ) {
-                        if (!(self instanceof Player pl && !MainUtil.canPlaceOnClaim(pl, blockPos))) {
                             self.level().setBlockAndUpdate(blockPos2, blockState);
                             self.level().scheduleTick(blockPos2, ModBlocks.WHITE_ALBUM_ICE_SLAB, Mth.nextInt(self.getRandom(), 110, 130));
-                        }
                     }
                 }
 
@@ -837,11 +835,13 @@ public class PowersWhiteAlbum extends NewDashPreset {
                             Block replacement = MainUtil.FREEZABLE_BLOCKS.get(state.getBlock());
 
                             if (replacement != null) {
-                                self.level().setBlock(
-                                        pos,
-                                        replacement.defaultBlockState(),
-                                        Block.UPDATE_ALL
-                                );
+                                if (!(self instanceof Player pl && !MainUtil.canPlaceOnClaim(pl, pos))) {
+                                    self.level().setBlock(
+                                            pos,
+                                            replacement.defaultBlockState(),
+                                            Block.UPDATE_ALL
+                                    );
+                                }
                             }
                         }
                     }

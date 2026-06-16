@@ -1705,7 +1705,10 @@ public class MainUtil {
         BlockState replace = player.level().getBlockState(pos);
         //Always correct, but for some reason I need to put it as a conditional
         if(Blocks.BARRIER.asItem() instanceof  BlockItem barrier){
-            barrier.place(new BlockPlaceContext(player,player.getUsedItemHand(),barrier.getDefaultInstance(),new BlockHitResult(new Vec3(pos.getX(),pos.getY(),pos.getZ()), Direction.UP,pos.relative(Direction.DOWN),false)));
+            barrier.place(new BlockPlaceContext(player,player.getUsedItemHand(),
+                    barrier.getDefaultInstance(),new BlockHitResult(
+                            new Vec3(pos.getX(),pos.getY(),pos.getZ()), Direction.UP,
+                    pos.relative(Direction.DOWN),false)));
 
             player.level().destroyBlock(pos,false,player);
             if(!player.level().getBlockState(pos).isAir()){
