@@ -500,7 +500,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
 
     public void toggleBlockFreezeClient(){
-        if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
+        if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK) && !self.isInWater()) {
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_SNEAK, true);
             tryPowerPacket(PowerIndex.POWER_4_SNEAK);
         }
@@ -814,10 +814,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public void freezeBlocksServer(){
         int cooldown = 240;
         this.setCooldown(PowerIndex.SKILL_4_SNEAK, cooldown);
-        if (!this.self.level().isClientSide() && this.self instanceof Player PL){
+        if (!this.self.level().isClientSide() && this.self instanceof Player PL && !PL.isInWater()){
             if (MainUtil.getIsGamemodeApproriateForGrief(PL)){
                 int radius = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.blockFreezeRadius;
                 BlockPos center = self.blockPosition();
+                boolean canFreezeWater = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.freezesSurfaceWater;
 
                 for (int x = -radius; x <= radius; x++) {
                     for (int y = -radius; y <= radius; y++) {
@@ -832,15 +833,25 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
                             BlockState state = self.level().getBlockState(pos);
 
-                            Block replacement = MainUtil.FREEZABLE_BLOCKS.get(state.getBlock());
-
-                            if (replacement != null) {
+                            if (canFreezeWater && state.is(Blocks.WATER) && self.level().getBlockState(pos.above()).isAir()){
                                 if (!(self instanceof Player pl && !MainUtil.canPlaceOnClaim(pl, pos))) {
                                     self.level().setBlock(
                                             pos,
-                                            replacement.defaultBlockState(),
+                                            Blocks.ICE.defaultBlockState(),
                                             Block.UPDATE_ALL
                                     );
+                                }
+                            } else {
+                                Block replacement = MainUtil.FREEZABLE_BLOCKS.get(state.getBlock());
+
+                                if (replacement != null) {
+                                    if (!(self instanceof Player pl && !MainUtil.canPlaceOnClaim(pl, pos))) {
+                                        self.level().setBlock(
+                                                pos,
+                                                replacement.defaultBlockState(),
+                                                Block.UPDATE_ALL
+                                        );
+                                    }
                                 }
                             }
                         }
@@ -947,6 +958,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
 
     public boolean isAttackIneptVisually(byte activeP, int slot) {
+        if (slot == 4 && isHoldingSneak() && self.isInWater()){
+            return true;
+        }
         return super.isAttackIneptVisually(activeP,slot);
     }
 

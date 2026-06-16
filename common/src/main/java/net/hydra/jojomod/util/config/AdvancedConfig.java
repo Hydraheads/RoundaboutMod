@@ -114,7 +114,7 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
-    public Set<String> freezableBlocksList = new HashSet<>(
+    public Set<String> freezableBlocksListWA = new HashSet<>(
             Arrays.asList(
                     "minecraft:dirt:roundabout:frozen_dirt",
                     "minecraft:grass_block:roundabout:frozen_dirt",
@@ -125,7 +125,6 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:granite:roundabout:frozen_granite",
                     "minecraft:red_sand:roundabout:frozen_red_sand",
                     "minecraft:red_sandstone:roundabout:frozen_red_sandstone",
-                    "minecraft:water:minecraft:ice",
                     "minecraft:stone:roundabout:frozen_stone",
                     "minecraft:cobblestone:roundabout:frozen_cobblestone",
                     "minecraft:deepslate:roundabout:frozen_deepslate",

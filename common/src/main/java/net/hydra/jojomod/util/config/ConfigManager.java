@@ -63,10 +63,10 @@ public abstract class ConfigManager {
 
     public static void loadBlacklists2()
     {
-        if (getAdvancedConfig().freezableBlocksList != null)
+        if (getAdvancedConfig().freezableBlocksListWA != null)
         {
             MainUtil.FREEZABLE_BLOCKS.clear();
-            for (String entry : getAdvancedConfig().freezableBlocksList) {
+            for (String entry : getAdvancedConfig().freezableBlocksListWA) {
                 try {
                     String[] split = entry.split(":");
 

@@ -880,6 +880,8 @@ public class Config implements Cloneable {
         public Integer whiteAlbumMaxAcceleration;
         @IntOption(group = "inherit", value = 4, min = 0, max = 50)
         public Integer blockFreezeRadius;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean freezesSurfaceWater;
     }
     public static class WalkingHeartSettings {
         @BooleanOption(group = "inherit", value = true)
