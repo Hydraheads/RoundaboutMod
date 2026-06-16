@@ -8,6 +8,7 @@ import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -26,21 +27,40 @@ public class EmptyStandDiscItem extends Item {
     }
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
-        ItemStack $$3 = $$1.getItemInHand($$2);
+        ItemStack $$3;
+        if ($$2.equals(InteractionHand.MAIN_HAND)){
+            $$3 = $$1.getItemBySlot(EquipmentSlot.MAINHAND);
+        } else {
+            $$3 = $$1.getItemBySlot(EquipmentSlot.OFFHAND);
+        }
         if (!$$0.isClientSide) {
-            ItemStack currentDisc = ((StandUser) $$1).roundabout$getStandDisc();
-            if (!currentDisc.isEmpty()) {
-                $$3.shrink(1);
-                ((StandUser) $$1).roundabout$getStandPowers().onStandSwitch();
-                if (!$$1.isCreative()){
-                    S2CPacketUtil.sendSimpleByteToClientPacket(
-                            ((ServerPlayer)$$1), PacketDataIndex.S2C_SIMPLE_FREEZE_STAND);
+            if (!$$3.isEmpty() && $$3.getItem() instanceof EmptyStandDiscItem) {
+                ItemStack currentDisc = ((StandUser) $$1).roundabout$getStandDisc().copy();
+                if (!currentDisc.isEmpty()) {
+                    ((StandUser) $$1).roundabout$getStandPowers().onStandSwitch();
+                    if (!$$1.isCreative()) {
+                        S2CPacketUtil.sendSimpleByteToClientPacket(
+                                ((ServerPlayer) $$1), PacketDataIndex.S2C_SIMPLE_FREEZE_STAND);
+                    }
+                    ((StandUser) $$1).roundabout$setStand(null);
+                    ((StandUser) $$1).roundabout$setActive(false);
+                    addItem($$1, MainUtil.saveToDiscData($$1, currentDisc.copy()));
+                    ((StandUser) $$1).roundabout$setStandDisc(ItemStack.EMPTY);
+                    this.generateStandPowers($$1);
+                    if ($$2.equals(InteractionHand.MAIN_HAND)){
+                        $$1.setItemSlot(
+                                EquipmentSlot.MAINHAND,
+                                currentDisc
+                        );
+                    } else {
+                        $$1.setItemSlot(
+                                EquipmentSlot.OFFHAND,
+                                currentDisc
+                        );
+                    }
+                    $$1.getCooldowns().addCooldown(this, 30);
+                    $$1.getCooldowns().addCooldown(currentDisc.getItem(), 30);
                 }
-                ((StandUser) $$1).roundabout$setStand(null);
-                ((StandUser) $$1).roundabout$setActive(false);
-                addItem($$1, MainUtil.saveToDiscData($$1,currentDisc.copy()));
-                ((StandUser) $$1).roundabout$setStandDisc(ItemStack.EMPTY);
-                this.generateStandPowers($$1);
             }
         }
         return InteractionResultHolder.consume($$3);
