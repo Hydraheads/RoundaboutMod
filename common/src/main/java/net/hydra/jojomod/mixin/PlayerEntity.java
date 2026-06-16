@@ -103,9 +103,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     private static final EntityDataAccessor<Byte> ROUNDABOUT$TEAM_COLOR = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.BYTE);
     @Unique
-    private static final EntityDataAccessor<Byte> ROUNDABOUT$WATCH_STYLE = SynchedEntityData.defineId(Player.class,
-            EntityDataSerializers.BYTE);
-    @Unique
     private static final EntityDataAccessor<Byte> ROUNDABOUT$FATE = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.BYTE);
     @Unique
@@ -297,16 +294,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     @Unique
     @Override
-    public void roundabout$setWatchStyle(byte style){
-        if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$WATCH_STYLE)) {
-            ((Player) (Object) this).getEntityData().set(ROUNDABOUT$WATCH_STYLE, style);
-        }
-    }
-    @Unique
-    @Override
     public byte roundabout$getWatchStyle(){
-        if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$WATCH_STYLE)) {
-            return this.entityData.get(ROUNDABOUT$WATCH_STYLE);
+        if (((StandUser)this).roundabout$getStandPowers() instanceof PowersMandom PM) {
+            return PM.getWatchStyle();
         }
         return 0;
     }
@@ -1174,7 +1164,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         compoundtag.putFloat("idleYOffset",roundabout$idleYOffset);
         compoundtag.putFloat("sizePercent",roundabout$sizePercent);
         compoundtag.putByte("teamColor",roundabout$getTeamColor());
-        compoundtag.putByte("watchStyle",roundabout$getWatchStyle());
         compoundtag.putByte("fate",roundabout$getFate());
         compoundtag.putByte("power",roundabout$getPower());
         compoundtag.putFloat("hairColorX",rdbt$getHairColorX());
@@ -1267,9 +1256,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
         if (compoundtag2.contains("teamColor")) {
             roundabout$setTeamColor(compoundtag2.getByte("teamColor"));
-        }
-        if (compoundtag2.contains("watchStyle")) {
-            roundabout$setWatchStyle(compoundtag2.getByte("watchStyle"));
         }
         if (compoundtag2.contains("fate")) {
             roundabout$setFate(compoundtag2.getByte("fate"));
@@ -1812,7 +1798,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_EXP, 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_CONTROLLING, 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$TEAM_COLOR, (byte) 0);
-            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$WATCH_STYLE, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$FATE, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$POWERS, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BLINDED, false);

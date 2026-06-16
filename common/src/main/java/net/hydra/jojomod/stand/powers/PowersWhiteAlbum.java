@@ -120,7 +120,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
     @Override
     public void onChangedBlock(BlockPos blockPos){
-        if (hasSkatesActivated() && self.isSprinting() && !self.isSwimming() &&
+        if (hasSkatesActivated() && acceleration > 0 && !self.isSwimming() &&
         !self.isFallFlying()) {
             if (!self.onGround()) {
                 return;
@@ -534,7 +534,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public void tickPowerEnd() {
         //Roundabout.LOGGER.info("skates: "+skatesActive);
     }
-
 
     public boolean cracked = false;
     @Override
