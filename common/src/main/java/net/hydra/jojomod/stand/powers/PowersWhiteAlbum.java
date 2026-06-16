@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.WhiteAlbumIceBlock;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -249,21 +250,28 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     public void fixThis(){
+        //Roundabout.LOGGER.info("2");
         if (!self.level().isClientSide()) {
+            //Roundabout.LOGGER.info("3");
             if (hasSkatesActivated()) {
+                //Roundabout.LOGGER.info("4");
                 if (acceleration >= getMaxAccelerationTicks()) {
+                    //Roundabout.LOGGER.info("5");
                     setPlayerPos2(PlayerPosIndex.SKATE_TWIRL);
+                    twirlTicks = 20;
                 } else {
+                    //Roundabout.LOGGER.info("6");
                     if (getPlayerPos2() != PlayerPosIndex.SKATE_TWIRL) {
+                        //Roundabout.LOGGER.info("7");
                         setPlayerPos2(PlayerPosIndex.SKATE_JUMP);
                     }
                 }
-                twirlTicks = 20;
             }
         }
     }
     @Override
     public void onJump(){
+        Roundabout.LOGGER.info("1");
         fixThis();
     }
 

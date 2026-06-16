@@ -1965,7 +1965,6 @@ public class StandPowers extends AbilityScapeBasis {
                 if (pos2 == PlayerPosIndex.SKATE_JUMP ||
                         pos2 == PlayerPosIndex.SKATE_TWIRL){
                     if (self.onGround()) {
-                        Roundabout.LOGGER.info("1");
                         ipe.roundabout$SetPos2(PlayerPosIndex.NONE);
                         onLandingAnimatedJump();
                     } else {
@@ -1973,7 +1972,6 @@ public class StandPowers extends AbilityScapeBasis {
                             twirlTicks--;
                         } else {
                             if (pos2 == PlayerPosIndex.SKATE_TWIRL){
-                                Roundabout.LOGGER.info("2");
                                 ipe.roundabout$SetPos2(PlayerPosIndex.SKATE_JUMP);
                             }
                         }
