@@ -90,7 +90,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 	static final byte
 		NONE = 0,
 		BLOCK = 1,
-		ENTITY = 2;
+		ENTITY = 2,
+		IDLE = 0,
+		WALK = 1;
 
 	public byte currentTarget = NONE;
 	public Entity entityTarget = null;
@@ -155,13 +157,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 				this.moveToTarget();
 
 				if (flyngTicks > 2 && this.hasTarget()) {
-					Vec3 tPos = this.getTargetPosition();
-					Vec3 sPos = this.position();
-					double dist = MainUtil.cheapDistanceTo(
-							tPos.x, tPos.y, tPos.z,
-							sPos.x, sPos.y, sPos.z
-						);
-					if (this.shouldExplode(tPos)) {
+					if (this.shouldExplode(this.getTargetPosition())) {
 						this.attack();
 					}
 				}
@@ -275,7 +271,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
 	public boolean canAttack(Vec3 targetPos) {
-		double dist = MainUtil.cheapDistanceTo(this.getX(), this.getY(), this.getZ(), targetPos.x, targetPos.y, targetPos.z);
+
+		double dist = this.position().distanceTo(targetPos);
 		float minDist = 4.0f;
 
 		if (this.getTargetType() == BLOCK) {
@@ -289,7 +286,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		if (this.jumpTick <= 0) {
 			return false;
 		}
-		double dist = MainUtil.cheapDistanceTo(this.getX(), this.getY(), this.getZ(), targetPos.x, targetPos.y, targetPos.z);
+		double dist = this.position().distanceTo(targetPos);
 
 		return dist > (explosionRadius+0.6f);
 	}
@@ -297,9 +294,10 @@ public class SheerHeartAttackEntity extends StandEntity {
 		if (this.attackTick <= 0) {
 			return false;
 		}
-		double dist = MainUtil.cheapDistanceTo(this.getX(), this.getY(), this.getZ(), targetPos.x, targetPos.y, targetPos.z);
 
-		return dist < (explosionRadius-0.2f);
+		double dist = this.position().distanceTo(targetPos);
+
+		return dist < (explosionRadius-0.1f);
 	}
 
 	public byte getTargetType() { return this.currentTarget;}
@@ -357,19 +355,10 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
 	public void shoot(Vec3 shootToPos){
-
 		this.lookAt(EntityAnchorArgument.Anchor.EYES,shootToPos);
 
 		this.setDeltaMovement((this.getLookAngle().multiply(1.3,1.3,1.3)).add(0,0.12,0));
 	}
-
-
-	@Override
-	public boolean hurt(DamageSource source, float amount) {
-
-		return false;
-	}
-
 
 	public boolean shaIsNear() {
 		Vec3 targetPos = this.getUser().position();
@@ -383,6 +372,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public void shaStopMove() {
 		this.getNavigation().stop();
 	}
+
 	public void shaMove(Vec3 targetPos) {
 		ticksUntilNextPathRecalculation--;
 		if (ticksUntilNextPathRecalculation <= 0 ) {
@@ -396,6 +386,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 		}
 	}
 
+
+
+    /*
 	static class WarmestSeek extends Goal {
 		protected final SheerHeartAttackEntity mob;
 
@@ -512,7 +505,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		@Override public boolean canUse() { return this.mob.getHaveToReturn();}
 		@Override public boolean canContinueToUse() { return this.mob.getHaveToReturn();}
-	}
+	} */
+    @Override public boolean hurt(DamageSource source, float amount) { return false;}
 
 	@Override public boolean isPickable() { return true;}
 	@Override public boolean isPushedByFluid() { return true;}
