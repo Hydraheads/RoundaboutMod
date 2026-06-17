@@ -267,10 +267,6 @@ public class ManhattanTransferEntity extends StandEntity {
                                     }
                                 }
                                 this.changeMovementState();
-                            } else if (!(this.getUser() instanceof Player)) {
-                                this.shootHattan();
-                                this.hasItem = false;
-                                this.setHeldItemManhattan(ItemStack.EMPTY);
                             } else {
                                 success = false;
                                 if (direct instanceof AbstractArrow AA) {
