@@ -2231,6 +2231,50 @@ public class MainUtil {
     }
 
     //Walls corners and doors check
+    public static boolean canActuallyHitInvolved2(Entity self, Entity entity){
+        Vec3 from = new Vec3(self.getX(), self.getY(), self.getZ()); // your position
+        Vec3 to = entity.getEyePosition(1.0F); // where the entity's eyes are
+
+        BlockHitResult result = self.level().clip(new ClipContext(
+                from,
+                to,
+                ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.NONE,
+                self
+        ));
+        boolean isBlocked = result.getType() != HitResult.Type.MISS &&
+                result.getLocation().distanceTo(from) < to.distanceTo(from);
+
+        Vec3 from2 = new Vec3(entity.getX(), entity.getY(), entity.getZ()); // your position
+        Vec3 to2 = self.getEyePosition(1.0F); // where the entity's eyes are
+
+        BlockHitResult result2 = self.level().clip(new ClipContext(
+                from2,
+                to2,
+                ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.NONE,
+                self
+        ));
+        boolean isBlocked2 = result2.getType() != HitResult.Type.MISS &&
+                result2.getLocation().distanceTo(from2) < to2.distanceTo(from2);
+
+
+        Vec3 from3 = new Vec3(entity.getX(), entity.getY(), entity.getZ()); // your position
+        Vec3 to3 = self.getEyePosition(1.0F); // where the entity's eyes are
+
+        BlockHitResult result3 = self.level().clip(new ClipContext(
+                from3,
+                to2,
+                ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.NONE,
+                self
+        ));
+        boolean isBlocked3 = result3.getType() != HitResult.Type.MISS &&
+                result3.getLocation().distanceTo(from3) < to3.distanceTo(from3);
+
+        return !isBlocked || !isBlocked2 || !isBlocked3;
+    }
+    //Walls corners and doors check
     public static boolean canActuallyHitInvolved(Entity self, Entity entity){
         if (entity instanceof SoftAndWetPlunderBubbleEntity){
             return false;

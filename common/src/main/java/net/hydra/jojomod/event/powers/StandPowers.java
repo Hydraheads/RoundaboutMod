@@ -724,10 +724,6 @@ public class StandPowers extends AbilityScapeBasis {
         }
     }
 
-    public int getBarrageRecoilTime(){
-        return ClientNetworking.getAppropriateConfig().
-                generalStandSettings.barrageRecoilCooldown;
-    }
 
 
 
@@ -1782,107 +1778,6 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    /**If you override this for any reason, you should probably call the super(). Although SP and TW override
-     * this, you can probably do better*/
-    public void barrageImpact(Entity entity, int hitNumber){
-        if (this.isBarrageAttacking()) {
-            if (bonusBarrageConditions()) {
-                boolean sideHit = false;
-                if (hitNumber > 1000){
-                    if (!(ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect)){
-                        return;
-                    }
-                    hitNumber-=1000;
-                    sideHit = true;
-                }
-                boolean lastHit = (hitNumber >= this.getBarrageLength());
-                if (entity != null) {
-                    if (entity instanceof LivingEntity && ((StandUser) entity).roundabout$isBarraging()
-                            && ((StandUser) entity).roundabout$getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))  && !this.getStandUserSelf().roundabout$isPossessed()   ) {
-                        initiateClash(entity);
-                    } else {
-                        hitParticles(entity);
-
-                        float pow;
-                        float knockbackStrength = 0;
-                        /**By saving the velocity before hitting, we can let people approach barraging foes
-                         * through shields.*/
-                        Vec3 prevVelocity = entity.getDeltaMovement();
-                        if (lastHit) {
-                            pow = this.getBarrageFinisherStrength(entity);
-                            knockbackStrength = this.getBarrageFinisherKnockback();
-                        } else {
-                            pow = this.getBarrageHitStrength(entity);
-                            float mn = this.getBarrageLength() - hitNumber;
-                            if (mn == 0) {
-                                mn = 0.015F;
-                            } else {
-                                mn = ((0.015F / (mn)));
-                            }
-                            knockbackStrength = 0.014F - mn;
-                        }
-
-                        if (sideHit){
-                            pow/=4;
-                            knockbackStrength/=6;
-                        }
-
-                        if (StandRushDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
-                            if (entity instanceof LivingEntity LE) {
-                                if (lastHit) {
-                                    setDazed((LivingEntity) entity, (byte) 0);
-
-                                    if (!sideHit) {
-                                        ((StandUser)LE).roundabout$setDestructionTrailTicks(80);
-                                        addEXP(8,LE);
-                                        playBarrageEndNoise(0, entity);
-                                    }
-                                } else {
-                                    setDazed((LivingEntity) entity, (byte) 3);
-                                    if (!sideHit) {
-                                        playBarrageNoise(hitNumber, entity);
-                                    }
-                                }
-                            }
-                            barrageImpact2(entity, lastHit, knockbackStrength);
-                        } else {
-                            if (lastHit) {
-                                knockShield2(entity, 200);
-                                if (!sideHit) {
-                                    playBarrageBlockEndNoise(0, entity);
-                                }
-                            } else {
-                                entity.setDeltaMovement(prevVelocity);
-                                playBarrageBlockNoise();
-                            }
-                        }
-                    }
-                } else {
-                    if (!sideHit) {
-                        playBarrageMissNoise(hitNumber);
-                    }
-                }
-
-                if (lastHit) {
-                    animateStand(StandEntity.BARRAGE_FINISHER);
-                    this.attackTimeDuring = -10;
-                }
-            } else {
-                ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
-            }
-        } else {
-            ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
-        }
-    }
-    public void barrageImpact2(Entity entity, boolean lastHit, float knockbackStrength){
-        if (entity instanceof LivingEntity){
-            if (lastHit) {
-                takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
-            } else {
-                takeKnockbackUp(entity,knockbackStrength);
-            }
-        }
-    }
     /**This happens every time a stand barrage hits, generally you dont want to override this unless
      * your stand's barrage operates very differently*/
     public void standBarrageHit(){
@@ -2025,6 +1920,12 @@ public class StandPowers extends AbilityScapeBasis {
                 }
                 this.attackTime++;
                 if (this.attackTime > this.attackTimeMax) {
+                    //if (activePowerPhase != 0){
+                        //if (this.self.level().isClientSide()){
+                            //C2SPacketUtil.trySingleBytePacket(PacketDataIndex.FIX_COOLDOWN_FOR_SERVER);
+                        //}
+                        //this.setActivePowerPhase((byte) 0);
+                    //}
                     this.setActivePowerPhase((byte) 0);
                 }
                 if (this.interruptCD > 0) {
@@ -2138,6 +2039,18 @@ public class StandPowers extends AbilityScapeBasis {
     }
     public int getMaxTSTime (){
         return 0;
+    }
+
+    @Override
+    public boolean setPowerOther(int move, int lastMove) {
+        if (move == PowerIndex.ATTACK) {
+            setAttack();
+        } else if (move == PowerIndex.BARRAGE_CHARGE) {
+            this.setPowerBarrageCharge();
+        } else if (move == PowerIndex.BARRAGE) {
+            this.setPowerBarrage();
+        }
+        return false;
     }
     public int getMaxChargeTSTime(){
         return 0;

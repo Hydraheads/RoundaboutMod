@@ -30,12 +30,14 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -833,7 +835,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         return (float) (dmg*(((float)ClientNetworking.getAppropriateConfig().vampireSettings.vampireAttackMultOnPlayers)*0.01));
     }
 
-    public float getPunchStrength(Entity entity){
+    public float getBrawlPunchStrength(Entity entity){
         if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
             if (this.getReducedDamage(entity)){
                 return playerDmgMult(0.7F * (1+ (vp.getVampireData().strengthLevel * 0.05F)));
@@ -841,7 +843,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 return mobDmgMult(2.1F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             }
         } else {
-            return super.getPunchStrength(entity);
+            return super.getBrawlPunchStrength(entity);
         }
     }
 
@@ -854,8 +856,13 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 return mobDmgMult(3F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             }
         } else {
-            return super.getPunchStrength(entity);
+            return super.getBrawlPunchStrength(entity);
         }
+    }
+
+    @Override
+    public ResourceKey<DamageType> getPunchDamageSource(){
+        return ModDamageTypes.VAMPIRE;
     }
 
     public float getRipperEyeStrength(Entity entity){
@@ -888,7 +895,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 return mobDmgMult(3F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             }
         } else {
-            return super.getPunchStrength(entity);
+            return super.getBrawlPunchStrength(entity);
         }
     }
 
@@ -1120,6 +1127,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
         return super.setPowerOther(move,lastMove);
     }
+
+
 
     public void bloodClutchImpact(Entity entity){
         if (!this.self.level().isClientSide() && getActivePower() == BLOOD_CLUTCH_ATTACK) {
@@ -1375,7 +1384,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 return mobDmgMult(3.4F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             }
         } else {
-            return super.getPunchStrength(entity);
+            return super.getBrawlPunchStrength(entity);
         }
     }
 

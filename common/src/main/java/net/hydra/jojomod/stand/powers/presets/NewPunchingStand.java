@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
@@ -80,6 +81,104 @@ public class NewPunchingStand extends NewDashPreset {
     }
 
 
+    /**If you override this for any reason, you should probably call the super(). Although SP and TW override
+     * this, you can probably do better*/
+    public void barrageImpact(Entity entity, int hitNumber){
+        if (this.isBarrageAttacking()) {
+            if (bonusBarrageConditions()) {
+                boolean sideHit = false;
+                if (hitNumber > 1000){
+                    if (!(ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect)){
+                        return;
+                    }
+                    hitNumber-=1000;
+                    sideHit = true;
+                }
+                boolean lastHit = (hitNumber >= this.getBarrageLength());
+                if (entity != null) {
+                    if (entity instanceof LivingEntity && ((StandUser) entity).roundabout$isBarraging()
+                            && ((StandUser) entity).roundabout$getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))  && !this.getStandUserSelf().roundabout$isPossessed()   ) {
+                        initiateClash(entity);
+                    } else {
+                        hitParticles(entity);
+
+                        float pow;
+                        float knockbackStrength = 0;
+                        /**By saving the velocity before hitting, we can let people approach barraging foes
+                         * through shields.*/
+                        Vec3 prevVelocity = entity.getDeltaMovement();
+                        if (lastHit) {
+                            pow = this.getBarrageFinisherStrength(entity);
+                            knockbackStrength = this.getBarrageFinisherKnockback();
+                        } else {
+                            pow = this.getBarrageHitStrength(entity);
+                            float mn = this.getBarrageLength() - hitNumber;
+                            if (mn == 0) {
+                                mn = 0.015F;
+                            } else {
+                                mn = ((0.015F / (mn)));
+                            }
+                            knockbackStrength = 0.014F - mn;
+                        }
+
+                        if (sideHit){
+                            pow/=4;
+                            knockbackStrength/=6;
+                        }
+
+                        if (StandRushDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
+                            if (entity instanceof LivingEntity LE) {
+                                if (lastHit) {
+                                    setDazed((LivingEntity) entity, (byte) 0);
+
+                                    if (!sideHit) {
+                                        ((StandUser)LE).roundabout$setDestructionTrailTicks(80);
+                                        addEXP(8,LE);
+                                        playBarrageEndNoise(0, entity);
+                                    }
+                                } else {
+                                    setDazed((LivingEntity) entity, (byte) 3);
+                                    if (!sideHit) {
+                                        playBarrageNoise(hitNumber, entity);
+                                    }
+                                }
+                            }
+                            barrageImpact2(entity, lastHit, knockbackStrength);
+                        } else {
+                            if (lastHit) {
+                                knockShield2(entity, 200);
+                                if (!sideHit) {
+                                    playBarrageBlockEndNoise(0, entity);
+                                }
+                            } else {
+                                entity.setDeltaMovement(prevVelocity);
+                                playBarrageBlockNoise();
+                            }
+                        }
+                    }
+                } else {
+                    if (!sideHit) {
+                        playBarrageMissNoise(hitNumber);
+                    }
+                }
+
+                if (lastHit) {
+                    animateStand(StandEntity.BARRAGE_FINISHER);
+                    this.attackTimeDuring = -10;
+                }
+            } else {
+                ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
+            }
+        } else {
+            ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
+        }
+    }
+
+    @Override
+    public int getBarrageRecoilTime(){
+        return ClientNetworking.getAppropriateConfig().
+                generalStandSettings.barrageRecoilCooldown;
+    }
     /**Punching stands only go for barrages when facing players, because barrages will be interrupted 100% of the time
      * otherwise.*/
     @Override
@@ -106,6 +205,15 @@ public class NewPunchingStand extends NewDashPreset {
         }
     }
 
+    @Override
+    public int getBarrageLength(){
+        return 60;
+    }
+
+    @Override
+    public float getRushDistance(){
+        return getReach();
+    }
 
     public int getMeltLevel(){
         if (self.hasEffect(ModEffects.STAND_MELTING)) {
@@ -280,11 +388,9 @@ public class NewPunchingStand extends NewDashPreset {
     }
 
     @Override
-    public void updateMovesFromPacket(byte activePower){
-        if (activePower == PowerIndex.BARRAGE){
-            this.setActivePowerPhase(this.activePowerPhaseMax);
-        }
-        super.updateMovesFromPacket(activePower);
+    /**Override this to set the special move*/
+    public boolean setPowerOther(int move, int lastMove) {
+        return false;
     }
 
     @Override
