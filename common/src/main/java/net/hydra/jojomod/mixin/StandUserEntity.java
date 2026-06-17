@@ -2032,6 +2032,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (!(this.level().isClientSide)) {
             this.getEntityData().set(ROUNDABOUT$STAND_DISC, stack);
             if (stack.getItem() instanceof StandDiscItem SD){
+                SD.generateStandPowers(rdbt$this());
+                MainUtil.extractDiscData(((LivingEntity)(Object)this), SD, stack);
+            }
+        }
+    }
+    @Unique
+    @Override
+    public void roundabout$updateStandDisc(ItemStack stack) {
+        if (!(this.level().isClientSide)) {
+            this.getEntityData().set(ROUNDABOUT$STAND_DISC, stack);
+            if (stack.getItem() instanceof StandDiscItem SD){
                 MainUtil.extractDiscData(((LivingEntity)(Object)this), SD, stack);
             }
         }
@@ -2295,7 +2306,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ItemStack itemstack = ItemStack.of(compoundtag);
             if (!itemstack.isEmpty() && itemstack.getItem() instanceof StandDiscItem SD){
                 this.roundabout$setStandDisc(itemstack);
-                SD.generateStandPowers((LivingEntity)(Object)this);
                 MainUtil.extractDiscData(((LivingEntity)(Object)this),SD,itemstack);
             }
         }if ($$0.contains("roundabout.StandRejectionDisc", 10)) {

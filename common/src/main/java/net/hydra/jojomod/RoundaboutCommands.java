@@ -94,7 +94,6 @@ public class RoundaboutCommands {
 
                     user.roundabout$setStandDisc(disc);
                 if (disc != ItemStack.EMPTY && disc.getItem() instanceof StandDiscItem SD) {
-                    SD.generateStandPowers(LE);
 
                     user.roundabout$setStandSkin(skin);
                     user.roundabout$setIdlePosX(pose);
@@ -143,7 +142,7 @@ public class RoundaboutCommands {
                     if (!standDisc.isEmpty() && !(standDisc.getItem() instanceof MaxStandDiscItem)){
                         ipe.roundabout$setStandExp(0);
                         ipe.roundabout$setStandLevel((byte) Math.min(user.roundabout$getStandPowers().getMaxLevel(),standLevel+1));
-                        user.roundabout$setStandDisc(MainUtil.saveToDiscData(PE,standDisc).copy());
+                        user.roundabout$updateStandDisc(MainUtil.saveToDiscData(PE,standDisc).copy());
                     }
                 }
             }
@@ -167,7 +166,7 @@ public class RoundaboutCommands {
                     if (!standDisc.isEmpty() && !(standDisc.getItem() instanceof MaxStandDiscItem)){
                         ipe.roundabout$setStandExp(0);
                         ipe.roundabout$setStandLevel((byte) Math.max(0,standLevel-1));
-                        user.roundabout$setStandDisc(MainUtil.saveToDiscData(PE,standDisc).copy());
+                        user.roundabout$updateStandDisc(MainUtil.saveToDiscData(PE,standDisc).copy());
                     }
                 }
             }
@@ -432,7 +431,7 @@ public class RoundaboutCommands {
                     if (!standDisc.isEmpty() && !(standDisc.getItem() instanceof MaxStandDiscItem)){
                         ipe.roundabout$setStandExp(0);
                         ipe.roundabout$setStandLevel((byte) Math.min(user.roundabout$getStandPowers().getMaxLevel(),level));
-                        user.roundabout$setStandDisc(MainUtil.saveToDiscData(PE,standDisc).copy());
+                        user.roundabout$updateStandDisc(MainUtil.saveToDiscData(PE,standDisc).copy());
                     }
                 }
             }

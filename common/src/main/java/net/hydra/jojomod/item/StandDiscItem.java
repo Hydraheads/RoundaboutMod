@@ -49,7 +49,6 @@ public class StandDiscItem extends Item {
             ((StandUser) player).roundabout$setStand(null);
             ((StandUser) player).roundabout$setActive(false);
             ((StandUser) player).roundabout$setStandDisc(stack.copy());
-            SI.generateStandPowers(player);
             ((StandUser) player).roundabout$getStandPowers().onStandSwitchInto();
         }
     }
