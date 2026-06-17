@@ -443,13 +443,33 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
             Vec3 vec3 = new Vec3(walkingSpeed, 0, walkingSpeed);
 
-            if (isActive()) {
-                DimensionType t = this.getStandEntity(this.getSelf()).level().dimensionType();
-                DimensionType T = this.getSelf().level().dimensionType();
-
-                if (this.getSelf().distanceTo(this.getStandEntity(this.getSelf())) > this.getMaxPilotRange()) {
-                    sealStand(true);
+            /*yoinked justice code to fix MT miscalculating distances :)*/
+            if (this.self instanceof Player PL){
+                int getPilotInt = ((IPlayerEntity) PL).roundabout$getControlling();
+                Entity getPilotEntity = this.self.level().getEntity(getPilotInt);
+                if (this.self.level().isClientSide() && isPacketPlayer()) {
+                        if (getPilotEntity instanceof LivingEntity le) {
+                            if (le.isRemoved() || !le.isAlive() ||
+                                    MainUtil.cheapDistanceTo2(le.getX(), le.getZ(), PL.getX(), PL.getZ())
+                                            > getMaxPilotRange()) {
+                                IPlayerEntity ipe = ((IPlayerEntity) PL);
+                                ipe.roundabout$setIsControlling(0);
+                                tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
+                                sealStand(true);
+                                ClientUtil.setCameraEntity(null);
+                            } else {
+                                StandEntity SE = getStandEntity(this.self);
+                                if (SE != null && le.is(SE)) {
+                                    ClientUtil.setCameraEntity(le);
+                                }
+                            }
+                        } else {
+                            ClientUtil.setCameraEntity(null);
+                        }
                 }
+            }
+            if(!isPiloting() && MainUtil.cheapDistanceTo2(ME.getX(), ME.getZ(), this.self.getX(), this.self.getZ()) > getMaxPilotRange()) {
+                sealStand(true);
             }
 
             if(ME.isInLava() || ME.isInWater()){
@@ -471,37 +491,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
                     ME.isHattanPilotMode = true;
                 } else {
                     ME.isHattanPilotMode = false;
-                }
-            }
-        }
-        if (this.self instanceof Player PL) {
-
-            if (this.getStandEntity(this.getSelf()) != null) {
-                if (this.getStandEntity(this.getSelf()).forceDespawnSet) {
-                    setPowerNone();
-                }
-            }
-            int getPilotInt = ((IPlayerEntity) PL).roundabout$getControlling();
-            Entity getPilotEntity = this.self.level().getEntity(getPilotInt);
-            if (this.self.level().isClientSide() && isPacketPlayer()) {
-
-                if (getPilotEntity instanceof LivingEntity le) {
-
-                    if (le.isRemoved() || !le.isAlive() ||
-                            MainUtil.cheapDistanceTo2(le.getX(), le.getZ(), PL.getX(), PL.getZ())
-                                    > getMaxPilotRange()) {
-                        IPlayerEntity ipe = ((IPlayerEntity) PL);
-                        ipe.roundabout$setIsControlling(0);
-                        tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
-                        ClientUtil.setCameraEntity(null);
-                    } else {
-                        StandEntity SE = getStandEntity(this.self);
-                        if (SE != null && le.is(SE)) {
-                            ClientUtil.setCameraEntity(le);
-                        }
-                    }
-                } else {
-                    ClientUtil.setCameraEntity(null);
                 }
             }
         }
