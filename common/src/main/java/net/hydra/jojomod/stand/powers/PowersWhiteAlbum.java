@@ -24,6 +24,7 @@ import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -1116,6 +1117,17 @@ public class PowersWhiteAlbum extends NewDashPreset {
             for (Entity value : hurricaneSpecial2) {
                 if (value.isRemoved() || !(value.isAlive())){
                     iceEntities.remove(value);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void buttonInputAttack(boolean keyIsDown, Options options) {
+        if (keyIsDown) {
+            if (activePowerPhase == 0){
+                if (isBrawling()) {
+                    this.tryPower(PowerIndex.ATTACK);
                 }
             }
         }

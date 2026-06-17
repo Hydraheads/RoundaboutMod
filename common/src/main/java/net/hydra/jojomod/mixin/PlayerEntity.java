@@ -1643,6 +1643,16 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         } else {
             PowerTypes.fixPowers(this);
             roundabout$qmessageTick();
+            byte pos = roundabout$GetPos2();
+            if (pos > 0) {
+                if (!PowerTypes.canKeepGuardPos(this) && pos == PlayerPosIndex.GUARD) {
+                    roundabout$SetPos2(PlayerPosIndex.NONE);
+                } else if (!PowerTypes.canKeepBarrageChargePos(this) && pos == PlayerPosIndex.BARRAGE_CHARGE) {
+                    roundabout$SetPos2(PlayerPosIndex.NONE);
+                } else if (!PowerTypes.canKeepBarragePos(this) && pos == PlayerPosIndex.BARRAGE) {
+                    roundabout$SetPos2(PlayerPosIndex.NONE);
+                }
+            }
         }
         if (!(this.getVehicle() != null && this.getVehicle() instanceof StandEntity SE && SE.canRestrainWhileMounted())) {
             ((StandUser) this).roundabout$setRestrainedTicks(-1);
