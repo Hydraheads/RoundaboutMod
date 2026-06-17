@@ -26,7 +26,7 @@ public class StarPlatinumTridentEntity {
         ((ISuperThrownAbstractArrow)this).roundabout$cancelSuperThrow();
     }
 
-    @Inject(method = "onHitEntity", at = @At(value = "HEAD"),cancellable = true)
+    @Inject(method = "onHitEntity", at = @At(value = "TAIL"),cancellable = true)
     private void roundabout$onHitEntityManhattan(EntityHitResult $$0, CallbackInfo ci) {
         Entity hit = $$0.getEntity();
         if(isManhattanTrident){

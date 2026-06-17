@@ -95,6 +95,12 @@ public class BlockBombEntity extends StandEntity {
                 this.discard();
             }
             else{
+				if ((((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ)) {
+					if (this != PKQ.bombBlock) {
+						this.discard();
+						return;
+					}
+				}
 				this.setYRot(0f);
 				this.setYBodyRot(0);
             	if (this.tickIndicator > 0 && this.tickIndicator % 2 == 0){   
