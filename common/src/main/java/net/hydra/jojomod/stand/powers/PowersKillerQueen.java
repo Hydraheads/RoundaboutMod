@@ -546,7 +546,12 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override
     public float inputSpeedModifiers(float basis){
         if (this.activePower == PowerIndex.POWER_2) {
-            basis*=0.3f;
+            if (this.getSelf().isCrouching()){
+                float f = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(this.getSelf()), 0.0F, 1.0F);
+                float g = 1/f;
+                basis *= g;
+            }
+            basis*=0.8f;
         } else if (this.getActivePower()==PowerIndex.POWER_2_SNEAK){
             if (this.getSelf().isCrouching()){
                 float f = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(this.getSelf()), 0.0F, 1.0F);
@@ -747,6 +752,9 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void kickAttackImpact(Entity entity){
     	 this.setAttackTimeDuring(-20);
+        if (entity != null && entity.distanceTo(self) > getReach()+0.5f) {
+            entity = null;
+        }
          if (entity != null) {
              if (chargedFinal < maxKickTime) {
             	 hitParticles(entity);
