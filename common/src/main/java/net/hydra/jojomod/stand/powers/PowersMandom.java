@@ -25,6 +25,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -72,6 +73,21 @@ public class PowersMandom extends NewDashPreset {
     public boolean rendersPlayer(){
         return true;
     }
+
+
+    public byte watchStyle = WATCHLESS;
+    @Override
+    public void addAdditionalSaveData(CompoundTag $$0) {
+        $$0.putByte("watchStyle",watchStyle);
+        super.addAdditionalSaveData($$0);
+    }
+    @Override
+    public void readAdditionalSaveData(CompoundTag $$0) {
+        if ($$0.contains("watchStyle")) {
+            watchStyle = $$0.getByte("watchStyle");
+        }
+        super.readAdditionalSaveData($$0);
+    }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         // code for advanced icons
@@ -111,10 +127,7 @@ public class PowersMandom extends NewDashPreset {
     }
 
     public byte getWatchStyle(){
-        if (this.self instanceof Player PL){
-            return ((IPlayerEntity)PL).roundabout$getWatchStyle();
-        }
-        return WATCHLESS;
+        return watchStyle;
     }
     public void swapWatchStyle(){
         byte style = getWatchStyle();
@@ -122,9 +135,8 @@ public class PowersMandom extends NewDashPreset {
         if (style > ROLEX){
             style = WATCHLESS;
         }
-        if (this.self instanceof Player PL){
-            ((IPlayerEntity)PL).roundabout$setWatchStyle(style);
-        }
+        watchStyle = style;
+        saveDiscAndSync();
     }
     public boolean activatedPastVision(){
         return getStandUserSelf().roundabout$getUniqueStandModeToggle();

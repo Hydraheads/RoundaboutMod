@@ -26,6 +26,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.item.Items;
@@ -194,6 +195,25 @@ public class ForgeEvents {
         ModBlocks.ANCIENT_METEOR = ForgeBlocks.ANCIENT_METEOR.get();
         ModBlocks.AJA_ORE = ForgeBlocks.AJA_ORE.get();
         ModBlocks.DEEPSLATE_AJA_ORE = ForgeBlocks.DEEPSLATE_AJA_ORE.get();
+        ModBlocks.AJA_BLOCK = ForgeBlocks.AJA_BLOCK.get();
+        ModBlocks.FROZEN_DIRT = ForgeBlocks.FROZEN_DIRT.get();
+        ModBlocks.FROZEN_STONE = ForgeBlocks.FROZEN_STONE.get();
+        ModBlocks.FROZEN_COBBLESTONE = ForgeBlocks.FROZEN_COBBLESTONE.get();
+        ModBlocks.FROZEN_DEEPSLATE = ForgeBlocks.FROZEN_DEEPSLATE.get();
+        ModBlocks.FROZEN_COBBLED_DEEPSLATE = ForgeBlocks.FROZEN_COBBLED_DEEPSLATE.get();
+        ModBlocks.FROZEN_STONE_BRICKS = ForgeBlocks.FROZEN_STONE_BRICKS.get();
+        ModBlocks.FROZEN_DIORITE = ForgeBlocks.FROZEN_DIORITE.get();
+        ModBlocks.FROZEN_ANDESITE = ForgeBlocks.FROZEN_ANDESITE.get();
+        ModBlocks.FROZEN_GRANITE = ForgeBlocks.FROZEN_GRANITE.get();
+        ModBlocks.FROZEN_SAND = ForgeBlocks.FROZEN_SAND.get();
+        ModBlocks.FROZEN_SANDSTONE = ForgeBlocks.FROZEN_SANDSTONE.get();
+        ModBlocks.FROZEN_RED_SAND = ForgeBlocks.FROZEN_RED_SAND.get();
+        ModBlocks.FROZEN_RED_SANDSTONE = ForgeBlocks.FROZEN_RED_SANDSTONE.get();
+        ModBlocks.FROZEN_GRAVEL = ForgeBlocks.FROZEN_GRAVEL.get();
+        ModBlocks.FROZEN_OBSIDIAN = ForgeBlocks.FROZEN_OBSIDIAN.get();
+        ModBlocks.FROZEN_NETHERRACK = ForgeBlocks.FROZEN_NETHERRACK.get();
+        ModBlocks.FROZEN_NETHER_BRICKS = ForgeBlocks.FROZEN_NETHER_BRICKS.get();
+        ModBlocks.FROZEN_END_STONE = ForgeBlocks.FROZEN_END_STONE.get();
         ModBlocks.AJA_BLOCK = ForgeBlocks.AJA_BLOCK.get();
         ModBlocks.SHINY_QUARTZ = ForgeBlocks.SHINY_QUARTZ.get();
         ModBlocks.WHITE_ALBUM_ICE_BLOCK = ForgeBlocks.WHITE_ALBUM_ICE.get();
@@ -396,6 +416,10 @@ public class ForgeEvents {
         ModItems.METEORITE = ForgeItems.METEORITE.get();
         ModItems.METEORITE_INGOT = ForgeItems.METEORITE_INGOT.get();
         ModItems.AJA = ForgeItems.AJA.get();
+        ModItems.HAND = ForgeItems.HAND.get();
+        ModItems.VILLAGER_HAND = ForgeItems.VILLAGER_HAND.get();
+        ModItems.ILLAGER_HAND = ForgeItems.ILLAGER_HAND.get();
+        ModItems.ROTTEN_HAND = ForgeItems.ROTTEN_HAND.get();
         ModItems.ULTRAVIOLET_BLASTER = ForgeItems.ULTRAVIOLET_BLASTER.get();
         ModItems.LOCACACA_PIT = ForgeItems.LOCACACA_PIT.get();
         ModItems.LOCACACA = ForgeItems.LOCACACA.get();
@@ -523,6 +547,7 @@ public class ForgeEvents {
         ModParticles.FRICTIONLESS = ForgeParticles.FRICTIONLESS.get();
         ModParticles.EXCLAMATION = ForgeParticles.EXCLAMATION.get();
         ModParticles.BABY_CRACKLE = ForgeParticles.BABY_CRACKLE.get();
+        ModParticles.COLD_CRACKLE = ForgeParticles.COLD_CRACKLE.get();
         ModParticles.MAGIC_DUST = ForgeParticles.MAGIC_DUST.get();
         ModParticles.BRIEF_MAGIC_DUST = ForgeParticles.BRIEF_MAGIC_DUST.get();
         ModParticles.D4C_LINES = ForgeParticles.D4C_LINES.get();
@@ -561,6 +586,7 @@ public class ForgeEvents {
         ModEffects.CAPTURING_LOVE = ForgeEffects.CAPTURING_LOVE.get();
         ModEffects.FACELESS = ForgeEffects.FACELESS.get();
         ModEffects.MELTING = ForgeEffects.MELTING.get();
+        ModEffects.STAND_MELTING = ForgeEffects.STAND_MELTING.get();
         ModEffects.GRAVITY_FLIP = ForgeEffects.GRAVITY_FLIP.get();
         ModEffects.WARDING = ForgeEffects.WARDING.get();
         ModEffects.SINGE = ForgeEffects.SINGE.get();
@@ -614,6 +640,7 @@ public class ForgeEvents {
         ModEntities.BLADED_BOWLER_HAT = ForgeEntities.BLADED_BOWLER_HAT.get();
         ModEntities.ROUNDABOUT_BULLET_ENTITY = ForgeEntities.ROUNDABOUT_BULLET_ENTITY.get();
         ModEntities.THROWN_KNIFE = ForgeEntities.THROWN_KNIFE.get();
+        ModEntities.BLOCK_WALL = ForgeEntities.BLOCK_WALL.get();
         ModEntities.METALLICA_KNIFE = ForgeEntities.METALLICA_KNIFE.get();
         ModEntities.RATT_DART = ForgeEntities.RATT_DART.get();
         ModEntities.POISON_LLAMA_SPIT = ForgeEntities.POISON_LLAMA_SPIT.get();
@@ -695,6 +722,7 @@ public class ForgeEvents {
         ModEntities.FOG_CLONE = ForgeEntities.FOG_CLONE.get();
 
         ForgeItems.assignStupidForge();
+        ConfigManager.loadBlacklists2();
     }
 
     /**

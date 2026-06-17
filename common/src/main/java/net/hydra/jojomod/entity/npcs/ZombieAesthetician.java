@@ -309,16 +309,6 @@ public class ZombieAesthetician extends Zombie {
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
         rollStand();
-        RandomSource $$5 = serverLevelAccessor.getRandom();
-        if ($$5.nextFloat() < 0.2F) {
-            setSkinNumber(2);
-        } else if ($$5.nextFloat() < 0.4F) {
-            setSkinNumber(3);
-        } else if ($$5.nextFloat() < 0.6F) {
-            setSkinNumber(4);
-        } else if ($$5.nextFloat() < 0.8F) {
-            setSkinNumber(5);
-        }
         return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
     }
 

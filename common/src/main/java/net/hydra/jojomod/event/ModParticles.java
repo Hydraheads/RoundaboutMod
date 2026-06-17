@@ -59,6 +59,7 @@ public class ModParticles {
     public static SimpleParticleType FRICTIONLESS;
     public static SimpleParticleType EXCLAMATION;
     public static SimpleParticleType BABY_CRACKLE;
+    public static SimpleParticleType COLD_CRACKLE;
     public static SimpleParticleType MAGIC_DUST;
     public static SimpleParticleType BRIEF_MAGIC_DUST;
     public static SimpleParticleType STITCH;

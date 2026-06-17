@@ -786,6 +786,8 @@ public class ClientUtil {
             if (data > 0){
                 ((StandUser) player).roundabout$setMaxSealedTicks(data);
                 ((StandUser) player).roundabout$setSealedTicks(data);
+            } else if (data == -1){
+                ((StandUser) player).roundabout$setSealedTicks(-1);
             }
         } else if (context == PacketDataIndex.S2C_INT_BUBBLE_FINISH){
             Entity target = player.level().getEntity(data);

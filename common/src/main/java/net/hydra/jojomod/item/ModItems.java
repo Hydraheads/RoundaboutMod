@@ -102,6 +102,10 @@ public class ModItems {
     public static Item SILVERFISH_REMAINS;
 
     public static Item AJA;
+    public static Item HAND;
+    public static Item VILLAGER_HAND;
+    public static Item ILLAGER_HAND;
+    public static Item ROTTEN_HAND;
 
     public static Item KNIFE;
     public static Item KNIFE_BUNDLE;

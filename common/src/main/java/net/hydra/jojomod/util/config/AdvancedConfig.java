@@ -114,17 +114,68 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
-    public Set<String> noExpBreakBlocks = new HashSet<>(
+    public Set<String> freezableBlocksListWA = new HashSet<>(
             Arrays.asList(
-                    "minecraft:netherrack"
+                    "minecraft:dirt:roundabout:frozen_dirt",
+                    "minecraft:grass_block:roundabout:frozen_dirt",
+                    "minecraft:mycelium:roundabout:frozen_dirt",
+                    "minecraft:podzol:roundabout:frozen_dirt",
+                    "minecraft:diorite:roundabout:frozen_diorite",
+                    "minecraft:andesite:roundabout:frozen_andesite",
+                    "minecraft:granite:roundabout:frozen_granite",
+                    "minecraft:red_sand:roundabout:frozen_red_sand",
+                    "minecraft:red_sandstone:roundabout:frozen_red_sandstone",
+                    "minecraft:stone:roundabout:frozen_stone",
+                    "minecraft:cobblestone:roundabout:frozen_cobblestone",
+                    "minecraft:deepslate:roundabout:frozen_deepslate",
+                    "minecraft:cobbled_deepslate:roundabout:frozen_cobbled_deepslate",
+                    "minecraft:stone_bricks:roundabout:frozen_stone_bricks",
+                    "minecraft:sand:roundabout:frozen_sand",
+                    "minecraft:sandstone:roundabout:frozen_sandstone",
+                    "minecraft:gravel:roundabout:frozen_gravel",
+                    "minecraft:obsidian:roundabout:frozen_obsidian",
+                    "minecraft:netherrack:roundabout:frozen_netherrack",
+                    "minecraft:warped_nylium:roundabout:frozen_netherrack",
+                    "minecraft:crimson_nylium:roundabout:frozen_netherrack",
+                    "minecraft:nether_bricks:roundabout:frozen_nether_bricks",
+                    "minecraft:end_stone:roundabout:frozen_end_stone"
             )
     );
-
+    public Set<String> freezableBlocksFlintAndSteel = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:dirt:roundabout:frozen_dirt",
+                    "minecraft:stone:roundabout:frozen_stone",
+                    "minecraft:cobblestone:roundabout:frozen_cobblestone",
+                    "minecraft:deepslate:roundabout:frozen_deepslate",
+                    "minecraft:cobbled_deepslate:roundabout:frozen_cobbled_deepslate",
+                    "minecraft:stone_bricks:roundabout:frozen_stone_bricks",
+                    "minecraft:sand:roundabout:frozen_sand",
+                    "minecraft:sandstone:roundabout:frozen_sandstone",
+                    "minecraft:gravel:roundabout:frozen_gravel",
+                    "minecraft:obsidian:roundabout:frozen_obsidian",
+                    "minecraft:netherrack:roundabout:frozen_netherrack",
+                    "minecraft:nether_bricks:roundabout:frozen_nether_bricks",
+                    "minecraft:end_stone:roundabout:frozen_end_stone",
+                    "minecraft:diorite:roundabout:frozen_diorite",
+                    "minecraft:andesite:roundabout:frozen_andesite",
+                    "minecraft:granite:roundabout:frozen_granite",
+                    "minecraft:red_sand:roundabout:frozen_red_sand",
+                    "minecraft:red_sandstone:roundabout:frozen_red_sandstone"
+            )
+    );
 
     public Set<String> standBlockGrabBlacklist = new HashSet<>(
             Arrays.asList(
                     "minecraft:crying_obsidian",
                     "minecraft:ancient_debris"
+            )
+    );
+    public Set<String> standBlockExplosionBlacklist = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:bedrock",
+                    "minecraft:obsidian",
+                    "minecraft:light",
+                    "minecraft:barrier"
             )
     );
     public Set<String> standDestructionBlacklist = new HashSet<>(

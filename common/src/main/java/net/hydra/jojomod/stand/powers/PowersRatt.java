@@ -786,7 +786,12 @@ public class PowersRatt extends NewDashPreset {
                 break;
             }
         }
-        RattDartEntity e = new RattDartEntity(this.getSelf().level(),this.getSelf(),i >PowersRatt.MaxThreshold ? RattDartEntity.CHARGED : RattDartEntity.BASIC );
+
+        boolean maxed = i >PowersRatt.MaxThreshold;
+        RattDartEntity e = new RattDartEntity(this.getSelf().level(),this.getSelf(),maxed ? RattDartEntity.CHARGED : RattDartEntity.BASIC );
+        if (!maxed){
+            e.disableMelt = true;
+        }
         e.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0.5F, power*balancingSpeed, accuracy);
         e.setSuperthrowTicks(50);
         if (isAutoMining()){e.setBlockBreak(true);}

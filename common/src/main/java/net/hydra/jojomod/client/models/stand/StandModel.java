@@ -6,6 +6,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.MainUtil;
@@ -13,6 +14,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -73,9 +76,16 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
         this.animate(entity.idleAnimationState4, StandAnimations.STAR_PLATINUM_IDLE, animationProgress, 1f);
         this.animate(entity.armlessAnimation, StandAnimations.ArmIdle, animationProgress, 1f);
         this.animate(entity.armlessAnimationIdle, StandAnimations.ArmIdle2, animationProgress, 1f);
-        this.animate(entity.punchState1, StandAnimations.COMBO1, animationProgress, 1.4f);
-        this.animate(entity.punchState2, StandAnimations.COMBO2, animationProgress, 1.16666f); /*1.1666 for 6 ticks, 1.4 for 5*/
-        this.animate(entity.punchState3, StandAnimations.COMBO3, animationProgress, 1.16666f);
+        Entity owner = entity.getUser();
+        float partial = 1.4f;
+        float full = 1.16666f;
+        if (entity.getMeltLevel() > 0){
+            partial = 1.4f - Math.min(0.5f,0.9f*((float) entity.getMeltLevel()));
+            full = 1.16666f - Math.min(0.5f,0.07f*((float) entity.getMeltLevel()));
+        }
+        this.animate(entity.punchState1, StandAnimations.COMBO1, animationProgress, partial);
+        this.animate(entity.punchState2, StandAnimations.COMBO2, animationProgress, full); /*1.1666 for 6 ticks, 1.4 for 5*/
+        this.animate(entity.punchState3, StandAnimations.COMBO3, animationProgress, full);
         this.animate(entity.blockAnimationState, StandAnimations.BLOCK, animationProgress, 1f);
         this.animate(entity.barrageChargeAnimationState, StandAnimations.BARRAGECHARGE, animationProgress, windupLength);
         this.animate(entity.barrageAnimationState, StandAnimations.BARRAGE, animationProgress, 1f);

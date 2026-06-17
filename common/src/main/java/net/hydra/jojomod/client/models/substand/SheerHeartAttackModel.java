@@ -79,7 +79,7 @@ public class SheerHeartAttackModel<T extends SheerHeartAttackEntity> extends Sta
 		super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
 		defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
 		//defaultModifiers(pEntity);
-		this.animate(pEntity.moving, SheerHeartAttackAnimations.MOVING, pAgeInTicks, 0.7f);
+		this.animate(pEntity.moving, SheerHeartAttackAnimations.MOVING, pAgeInTicks, 1.7f);
 		this.animate(pEntity.idle, SheerHeartAttackAnimations.IDLE, pAgeInTicks, 1.0f);
 	}
 

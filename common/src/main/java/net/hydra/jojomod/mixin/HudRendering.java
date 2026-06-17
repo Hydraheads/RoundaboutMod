@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
@@ -135,50 +136,53 @@ public abstract class HudRendering implements IHudAccess {
             }
             if (this.minecraft.options.getCameraType().isFirstPerson()) {
                 if (FateTypes.takesSunlightDamage(this.minecraft.player)){
+                    if (!(ClientNetworking.getAppropriateConfig().vampireSettings.canSurviveInRain
+                    && this.minecraft.player.level().isRaining())) {
                     // Fade speed per tick — lower = slower fade
-                    float fadeStep = 1.0F / 30.0F; // same as before: full fade over ~30 ticks
+                        float fadeStep = 1.0F / 30.0F; // same as before: full fade over ~30 ticks
 
-                    boolean checksOut = false;
-                    long timeOfDay = this.minecraft.level.getDayTime() % 24000L;
-                    boolean isDay = timeOfDay < 12555L || timeOfDay > 23200; // 0–12000 = day, 12000–24000 = night
+                        boolean checksOut = false;
+                        long timeOfDay = this.minecraft.level.getDayTime() % 24000L;
+                        boolean isDay = timeOfDay < 12555L || timeOfDay > 23200; // 0–12000 = day, 12000–24000 = night
 
-                    if (MainUtil.isSunDamageWorld(this.minecraft.player.level().dimension().location().getPath()) &&
-                            isDay) {
-                        Vec3 yes = this.minecraft.player.getEyePosition();
-                        int range = 3;
-                        for (var i = -range; i <= range; i++) {
-                            for (var j = -range; j <= range; j++) {
-                                if (!(i == 0 || j == 0)) {
-                                    if (this.minecraft.player.level().canSeeSky(BlockPos.containing(yes.add(i,0,j)))){
-                                        checksOut = true;
+                        if (MainUtil.isSunDamageWorld(this.minecraft.player.level().dimension().location().getPath()) &&
+                                isDay) {
+                            Vec3 yes = this.minecraft.player.getEyePosition();
+                            int range = 3;
+                            for (var i = -range; i <= range; i++) {
+                                for (var j = -range; j <= range; j++) {
+                                    if (!(i == 0 || j == 0)) {
+                                        if (this.minecraft.player.level().canSeeSky(BlockPos.containing(yes.add(i,0,j)))){
+                                            checksOut = true;
+                                        }
                                     }
                                 }
                             }
+                            if (FateTypes.isInSunlight(this.minecraft.player)){
+                                checksOut = true;
+                            }
                         }
-                        if (FateTypes.isInSunlight(this.minecraft.player)){
-                            checksOut = true;
+
+
+                        if (checksOut) {
+                            rdbt$fadingIn = true;
+                        } else {
+                            rdbt$fadingIn = false;
                         }
-                    }
+                        // Smoothly approach target
+                        if (rdbt$fadingIn) {
+                            rdbt$currentAlpha = Mth.clamp(rdbt$currentAlpha + fadeStep, 0.0F, 1.0F);
+                        } else {
+                            rdbt$currentAlpha = Mth.clamp(rdbt$currentAlpha - fadeStep, 0.0F, 1.0F);
+                        }
 
+                        // Only render if visible
+                        if (rdbt$currentAlpha > 0.01F) {
+                            RenderSystem.enableBlend();
+                            this.renderTextureOverlay($$1, StandIcons.SUN_TINGE_OVERLAY, rdbt$currentAlpha);
+                        }
 
-                    if (checksOut) {
-                        rdbt$fadingIn = true;
-                    } else {
-                        rdbt$fadingIn = false;
                     }
-                    // Smoothly approach target
-                    if (rdbt$fadingIn) {
-                        rdbt$currentAlpha = Mth.clamp(rdbt$currentAlpha + fadeStep, 0.0F, 1.0F);
-                    } else {
-                        rdbt$currentAlpha = Mth.clamp(rdbt$currentAlpha - fadeStep, 0.0F, 1.0F);
-                    }
-
-                    // Only render if visible
-                    if (rdbt$currentAlpha > 0.01F) {
-                        RenderSystem.enableBlend();
-                        this.renderTextureOverlay($$1, StandIcons.SUN_TINGE_OVERLAY, rdbt$currentAlpha);
-                    }
-
 
                 }
                 //Vampire freeze overlay

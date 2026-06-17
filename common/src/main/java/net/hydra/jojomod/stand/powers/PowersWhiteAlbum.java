@@ -5,13 +5,12 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.WhiteAlbumIceBlock;
 import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
-import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.projectile.ThrownWaterBottleEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.BlockWallEntity;
+import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -22,38 +21,41 @@ import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
-import net.minecraft.ChatFormatting;
-import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.Main;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Blaze;
-import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.FrostedIceBlock;
 import net.minecraft.world.level.block.LiquidBlockContainer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -98,12 +100,19 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return skatesActive && PowerTypes.hasStandActive(self);
     }
 
+
+    @Override
+    public boolean isBrawling(){
+        return fistsOut;
+    }
+
     @Override
     public void onLandingAnimatedJump(){
         if (hasSkatesActivated()){
             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SKATING_LAND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
         }
     }
+
 
     @Override
     public float guardSpecialties(DamageSource sauce, float damage){
@@ -118,7 +127,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
     @Override
     public void onChangedBlock(BlockPos blockPos){
-        if (hasSkatesActivated() && self.isSprinting() && !self.isSwimming() &&
+        if (hasSkatesActivated() && acceleration > 0 && !self.isSwimming() &&
         !self.isFallFlying()) {
             if (!self.onGround()) {
                 return;
@@ -147,21 +156,20 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 BlockState blockState3 =self.level().getBlockState(mutableBlockPos.below());
                 if (!blockState.canSurvive(self.level(), blockPos2) ||
                         !self.level().isUnobstructed(blockState, blockPos2, CollisionContext.empty())) continue;
-                if (blockState3.isAir() ||
-                        (MainUtil.getIsGamemodeApproriateForGrief(self) &&
-                                blockState3.canBeReplaced() &&
-                                !(blockState3.getBlock() instanceof LiquidBlockContainer)
-                                &&
-                        !blockState3.liquid() &&
-                        !(blockState3.hasProperty(BlockStateProperties.WATERLOGGED) &&
-                                blockState3.getValue(BlockStateProperties.WATERLOGGED)
-                                )
-                        )
-                ) {
+                    if (blockState3.isAir() ||
+                            (MainUtil.getIsGamemodeApproriateForGrief(self) &&
+                                    blockState3.canBeReplaced() &&
+                                    !(blockState3.getBlock() instanceof LiquidBlockContainer)
+                                    &&
+                            !blockState3.liquid() &&
+                            !(blockState3.hasProperty(BlockStateProperties.WATERLOGGED) &&
+                                    blockState3.getValue(BlockStateProperties.WATERLOGGED)
+                                    )
+                            )
+                    ) {
                             self.level().setBlockAndUpdate(blockPos2, blockState);
                             self.level().scheduleTick(blockPos2, ModBlocks.WHITE_ALBUM_ICE_SLAB, Mth.nextInt(self.getRandom(), 110, 130));
-
-                }
+                    }
                 }
 
             }
@@ -242,15 +250,21 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     public void fixThis(){
+        //Roundabout.LOGGER.info("2");
         if (!self.level().isClientSide()) {
+            //Roundabout.LOGGER.info("3");
             if (hasSkatesActivated()) {
-                if (getPlayerPos2() <= 0) {
-                    if (acceleration >= getMaxAccelerationTicks()) {
-                        setPlayerPos2(PlayerPosIndex.SKATE_TWIRL);
-                    } else {
+                //Roundabout.LOGGER.info("4");
+                if (acceleration >= getMaxAccelerationTicks()) {
+                    //Roundabout.LOGGER.info("5");
+                    setPlayerPos2(PlayerPosIndex.SKATE_TWIRL);
+                    twirlTicks = 20;
+                } else {
+                    //Roundabout.LOGGER.info("6");
+                    if (getPlayerPos2() != PlayerPosIndex.SKATE_TWIRL) {
+                        //Roundabout.LOGGER.info("7");
                         setPlayerPos2(PlayerPosIndex.SKATE_JUMP);
                     }
-                    twirlTicks = 20;
                 }
             }
         }
@@ -319,6 +333,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     @Override
     public void tickPower() {
         if (!self.level().isClientSide()) {
+            ticklIceEntities();
             if (cracked){
                 if (!getStandUserSelf().roundabout$getGuardBroken()) {
                     cracked = false;
@@ -388,6 +403,21 @@ public class PowersWhiteAlbum extends NewDashPreset {
             lastY = self.getY();
         }
         super.tickPower();
+    }
+
+    public void setAcceleration(int num){
+        byte pos2 = getPlayerPos2();
+        acceleration = num;
+        if (num > 0){
+            if (pos2 != PlayerPosIndex.SKATE_JUMP &&
+                    pos2 != PlayerPosIndex.SKATE_TWIRL){
+                setPlayerPos2(PlayerPosIndex.SKATE_GENERAL);
+            }
+        } else {
+            if (pos2 == PlayerPosIndex.SKATE_GENERAL){
+                setPlayerPos2(PlayerPosIndex.NONE_2);
+            }
+        }
     }
     private void processRing(BlockPos center, int r) {
 
@@ -464,9 +494,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
         // code for advanced icons
 
         if (!isHoldingSneak()){
-            setSkillIcon(context, x, y, 1, StandIcons.SUIT_COMBAT, PowerIndex.NO_CD);
+            setSkillIcon(context, x, y, 1, StandIcons.SUIT_COMBAT, PowerIndex.SKILL_4);
         } else {
-            setSkillIcon(context, x, y, 1, StandIcons.FREEZE_CANCEL, PowerIndex.SKILL_1);
+            setSkillIcon(context, x, y, 1, StandIcons.FREEZE_CANCEL, PowerIndex.SKILL_1_SNEAK);
         }
 
         if (!isHoldingSneak()){
@@ -476,10 +506,14 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
 
 
-        if (!isHoldingSneak()) {
-            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        if (!isHoldingSneak()){
+            if (hasSkatesActivated()){
+                setSkillIcon(context, x, y, 3, StandIcons.ICE_WALL_BEHIND, PowerIndex.SKILL_3);
+            } else {
+                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+            }
         } else {
-            setSkillIcon(context, x, y, 3, StandIcons.ICE_WALL, PowerIndex.GLOBAL_DASH);
+            setSkillIcon(context, x, y, 3, StandIcons.ICE_WALL, PowerIndex.SKILL_3);
         }
 
         if (!isHoldingSneak()){
@@ -489,11 +523,20 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 setSkillIcon(context, x, y, 4, StandIcons.SKATE_INACTIVE, PowerIndex.SKILL_1);
             }
         } else {
-            setSkillIcon(context, x, y, 4, StandIcons.FREEZE_BLOCKS, PowerIndex.NO_CD);
+            setSkillIcon(context, x, y, 4, StandIcons.FREEZE_BLOCKS, PowerIndex.SKILL_4_SNEAK);
         }
 
         super.renderIcons(context, x, y);
     }
+
+
+    public void toggleBlockFreezeClient(){
+        if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK) && !self.isInWater()) {
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_SNEAK, true);
+            tryPowerPacket(PowerIndex.POWER_4_SNEAK);
+        }
+    }
+
 
     public boolean renderHelmet(){
         return PowerTypes.hasStandActive(self);
@@ -520,12 +563,13 @@ public class PowersWhiteAlbum extends NewDashPreset {
         //Roundabout.LOGGER.info("skates: "+skatesActive);
     }
 
-
     public boolean cracked = false;
+    public boolean fistsOut = false;
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
         $$0.putBoolean("skatesActive",skatesActive);
         $$0.putBoolean("cracked",cracked);
+        $$0.putBoolean("fistsOut",fistsOut);
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
@@ -533,8 +577,21 @@ public class PowersWhiteAlbum extends NewDashPreset {
             skatesActive = $$0.getBoolean("skatesActive");
         } if ($$0.contains("cracked")) {
             cracked = $$0.getBoolean("cracked");
+        } if ($$0.contains("fistsOut")) {
+            fistsOut = $$0.getBoolean("fistsOut");
         }
     }
+
+
+    public void iceWallClient(){
+        if (!this.onCooldown(PowerIndex.SKILL_3)) {
+            if (canUseIceWall()) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+                tryPowerPacket(PowerIndex.POWER_3);
+            }
+        }
+    }
+
 
     public void toggleSkatesClient(){
         if (!this.onCooldown(PowerIndex.SKILL_1)) {
@@ -549,24 +606,43 @@ public class PowersWhiteAlbum extends NewDashPreset {
         switch (context)
         {
             case SKILL_1_NORMAL-> {
+                toggleFistsClient();
             }
             case SKILL_1_CROUCH-> {
                 iceCancelClient();
             }
-            case SKILL_2_NORMAL-> {
-                summonSurvivorClient();
+            case SKILL_3_NORMAL -> {
+                dashOrWall();
             }
-            case SKILL_2_CROUCH-> {
-                despawnSurvivorClient();
-            }
-            case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
-                dash();
+            case SKILL_3_CROUCH -> {
+                iceWallClient();
             }
             case SKILL_4_NORMAL -> {
                 toggleSkatesClient();
             }
             case SKILL_4_CROUCH -> {
+                toggleBlockFreezeClient();
             }
+        }
+    }
+
+    public void dashOrWall(){
+        if (hasSkatesActivated()){
+            if (!this.onCooldown(PowerIndex.SKILL_3)) {
+                if (canUseIceWall()) {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BLOCK, true);
+                    tryPowerPacket(PowerIndex.POWER_3_BLOCK);
+                }
+            }
+        } else {
+            dash();
+        }
+    }
+
+    public void toggleFistsClient(){
+        if (!onCooldown(PowerIndex.SKILL_4)){
+            this.setCooldown(PowerIndex.SKILL_4, 9);
+            tryPowerPacket(PowerIndex.POWER_1_BONUS);
         }
     }
 
@@ -575,15 +651,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
             this.setCooldown(PowerIndex.SKILL_1, 40);
             this.setCooldown(PowerIndex.SKILL_1_SNEAK, 40);
             tryPowerPacket(PowerIndex.POWER_1_SNEAK);
-        }
-    }
-
-    public void switchModeClient(){
-        if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {
-            SurvivorTarget = null;
-            EntityTargetOne = null;
-            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
-            tryPowerPacket(PowerIndex.POWER_4);
         }
     }
 
@@ -596,6 +663,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             if (hasSkatesActivated()) {
                 toggleSkates();
             }
+            clearAllIceEntities();
             iceCenter = self.blockPosition();
             startIceSnapRing = 1;
 
@@ -604,6 +672,129 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
 
+
+    public HitResult pick(double $$0, float $$1, boolean $$2) {
+        Vec3 $$3 = this.self.getEyePosition($$1);
+        Vec3 $$4 = this.self.getViewVector($$1);
+        Vec3 $$5 = $$3.add($$4.x * $$0, $$4.y * $$0, $$4.z * $$0);
+        return this.self.level().clip(new ClipContext($$3, $$5, ClipContext.Block.COLLIDER, $$2 ? net.minecraft.world.level.ClipContext.Fluid.ANY : net.minecraft.world.level.ClipContext.Fluid.NONE, self));
+    }
+
+    public boolean canUseIceWall(){
+
+        HitResult hit = pick(2, 0.0F, false);
+
+        BlockPos centerPos;
+
+        if (hit.getType() == HitResult.Type.BLOCK) {
+            BlockHitResult blockHit = (BlockHitResult) hit;
+
+            // Spawn on top of the block you are looking at
+            centerPos = blockHit.getBlockPos().relative(blockHit.getDirection());
+        } else {
+            // Fallback: 2 blocks in front of player
+            centerPos = self.blockPosition().relative(self.getDirection(), 2);
+        }
+
+        for (var i = 0; i < 5; i++) {
+            if (self.level().getBlockState(centerPos.below(i)).isSolid()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public int placePhase = 0;
+    BlockPos storeCenter = BlockPos.ZERO;
+    Direction sideX = Direction.UP;
+    public void iceWallServer(boolean special){
+        int cooldown = 110;
+        this.setCooldown(PowerIndex.SKILL_3, cooldown);
+        if (!this.self.level().isClientSide()){
+
+            BlockPos centerPos;
+            Direction facing = self.getDirection();
+
+            if (special){
+                centerPos = self.getOnPos().relative(facing.getOpposite()).relative(facing.getOpposite());
+            } else {
+
+                HitResult hit = pick(2, 0.0F, false);
+                if (hit.getType() == HitResult.Type.BLOCK) {
+                    BlockHitResult blockHit = (BlockHitResult) hit;
+
+                    // Spawn on top of the block you are looking at
+                    centerPos = blockHit.getBlockPos().relative(blockHit.getDirection());
+                } else {
+                    // Fallback: 2 blocks in front of player
+                    centerPos = self.blockPosition().relative(self.getDirection(), 2);
+                }
+            }
+
+            boolean isSafe = false;
+            for (var i = 0; i < 5; i++) {
+                if (self.level().getBlockState(centerPos.below(i)).isSolid()){
+                    centerPos = centerPos.below(i);
+                    isSafe = true;
+                    i = 10;
+                }
+            }
+
+            if (isSafe) {
+                centerPos = new BlockPos(centerPos.getX(), Math.min(centerPos.getY(), self.blockPosition().getY()),
+                        centerPos.getZ());
+
+// Left/right axis
+                Direction side = facing.getClockWise();
+                sideX = side;
+                storeCenter = centerPos;
+                for (int width = -1; width <= 1; width++) {
+                    for (int height = 0; height < 2; height++) {
+
+                        BlockPos spawnPos = centerPos
+                                .relative(side, width)
+                                .above(height);
+
+                        Vector3f newVec = new Vector3f((float) (spawnPos.getX()+0.5),
+                                (float) (spawnPos.getY()),
+                                (float) (spawnPos.getZ() + 0.5)).add(0, -1, 0);
+
+                        BlockWallEntity wall =
+                                // slightly off to not z-fight
+                                new BlockWallEntity(
+                                        self.level(),
+                                        newVec.x,
+                                        newVec.y,
+                                        newVec.z,
+                                        Blocks.PACKED_ICE.defaultBlockState()
+                                );
+                        wall.setDataFinalPos(newVec.add(0, 2, 0));
+                        wall.timing = 200;
+                        wall.canGrief = MainUtil.getIsGamemodeApproriateForGrief(self);
+                        addIceEntity(wall);
+                        self.level().addFreshEntity(wall);
+                    }
+                }
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.ICE_RISES_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+            }
+        }
+    }
+
+
+    public void toggleFists(){
+        int cooldown = 9;
+        this.setCooldown(PowerIndex.SKILL_4, cooldown);
+        if (!this.self.level().isClientSide()){
+            fistsOut = !fistsOut;
+            if (fistsOut){
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.HEEL_RAISE_EVENT, SoundSource.PLAYERS, 0.9F, (float) (1.02 + (Math.random() * 0.06)));
+            } else {
+                //this.self.level().playSound(null, this.self.blockPosition(), ModSounds.HEEL_RAISE_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+            }
+            saveDiscAndSync();
+        }
+    }
 
     public boolean toggleSkates(){
         int cooldown = 5;
@@ -649,25 +840,10 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     @Override
     public boolean tryTripleIntPower(int move, boolean forced, int chargeTime, int move2, int move3){
-        switch (move)
-        {
-            case PowerIndex.POWER_4_BONUS -> {
-                initializeTargets(chargeTime,move2, move3);
-            }
-        }
+
         return tryPower(move, forced);
     }
 
-    public void initializeTargets(int x, int y, int z){
-
-
-        Entity targ = this.self.level().getEntity(x);
-        if (targ instanceof SurvivorEntity SE){
-            SurvivorTarget = SE;
-        }
-        EntityTargetOne = this.self.level().getEntity(y);
-        EntityTargetTwo = this.self.level().getEntity(z);
-    }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         switch (move)
@@ -675,94 +851,97 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case PowerIndex.POWER_1 -> {
                 return toggleSkates();
             }
+            case PowerIndex.POWER_1_BONUS -> {
+                toggleFists();
+            }
+            case PowerIndex.POWER_3 -> {
+                iceWallServer(false);
+            }
+            case PowerIndex.POWER_3_BLOCK -> {
+                iceWallServer(true);
+            }
             case PowerIndex.POWER_1_SNEAK -> {
                 iceCancelServer();
+            }
+            case PowerIndex.POWER_4_SNEAK -> {
+                freezeBlocksServer();
             }
         }
         return super.setPowerOther(move,lastMove);
     }
 
-    @Override
-    public boolean highlightsEntity(Entity ent,Player player){
-        if (ent != null) {
-            if (angerSelectionMode()) {
-                if (
-                        (SurvivorTarget != null  && ent.is(SurvivorTarget)) ||
-                                (EntityTargetOne != null && ent.is(EntityTargetOne))
-                ) {
-                    return true;
+    public void freezeBlocksServer(){
+        int cooldown = 240;
+        this.setCooldown(PowerIndex.SKILL_4_SNEAK, cooldown);
+        if (!this.self.level().isClientSide() && this.self instanceof Player PL && !PL.isInWater()){
+            if (MainUtil.getIsGamemodeApproriateForGrief(PL)){
+                int radius = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.blockFreezeRadius;
+                BlockPos center = self.blockPosition();
+                boolean canFreezeWater = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.freezesSurfaceWater;
+
+                for (int x = -radius; x <= radius; x++) {
+                    for (int y = -radius; y <= radius; y++) {
+                        for (int z = -radius; z <= radius; z++) {
+
+                            // Compare squared distances (faster than sqrt)
+                            if (x * x + y * y + z * z > radius * radius) {
+                                continue;
+                            }
+
+                            BlockPos pos = center.offset(x, y, z);
+
+                            BlockState state = self.level().getBlockState(pos);
+
+                            if (canFreezeWater && state.is(Blocks.WATER) && self.level().getBlockState(pos.above()).isAir()){
+                                if (!(self instanceof Player pl && !MainUtil.canPlaceOnClaim(pl, pos))) {
+                                    self.level().setBlock(
+                                            pos,
+                                            Blocks.ICE.defaultBlockState(),
+                                            Block.UPDATE_ALL
+                                    );
+                                }
+                            } else {
+                                Block replacement = MainUtil.FREEZABLE_BLOCKS.get(state.getBlock());
+
+                                if (replacement != null) {
+                                    if (!(self instanceof Player pl && !MainUtil.canPlaceOnClaim(pl, pos))) {
+                                        self.level().setBlock(
+                                                pos,
+                                                replacement.defaultBlockState(),
+                                                Block.UPDATE_ALL
+                                        );
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
-                Entity highlights = getHighlighter();
-                if (highlights != null && highlights.is(ent)){
-                    return true;
+            } else {
+                ItemStack stack = self.getItemBySlot(EquipmentSlot.MAINHAND);
+
+                if (stack.getItem() instanceof BlockItem blockItem
+                        && MainUtil.FREEZABLE_BLOCK_ITEMS.containsKey(blockItem.getBlock())) {
+
+                    Block frozen = MainUtil.FREEZABLE_BLOCK_ITEMS.get(blockItem.getBlock());
+
+                    self.setItemSlot(
+                            EquipmentSlot.MAINHAND,
+                            new ItemStack(frozen)
+                    );
                 }
             }
-        }
-        return false;
-    }
-    @Override
-    public int highlightsEntityColor(Entity ent, Player player){
-        if (
-                (SurvivorTarget != null && ent != null && ent.is(SurvivorTarget)) ||
-                        (EntityTargetOne != null && ent != null && ent.is(EntityTargetOne))
-        ){
-            return 4971295;
-        }
-        return 11283968;
-    }
 
-    public SurvivorEntity SurvivorTarget = null;
-    public Entity EntityTargetOne = null;
-    public Entity EntityTargetTwo = null;
-    public boolean selectTarget(){
-        setRageCupidCooldown();
-        unloadTargets();
-        SurvivorEntity surv = SurvivorTarget;
-        if (surv != null && EntityTargetOne instanceof LivingEntity LE && EntityTargetTwo instanceof LivingEntity LE2){
-            surv.matchEntities(LE,LE2);
-        }
-        return true;
-    }
-    public void selectTargetClient(){
-        Entity TE = MainUtil.getTargetEntity(this.self, getCupidHighlightRange(), 15);
-        if (SurvivorTarget == null){
-            if (TE instanceof SurvivorEntity SE && (SE.getActivated() || getCreative())){
-                SurvivorTarget = SE;
-                this.self.playSound(ModSounds.SURVIVOR_PLACE_EVENT, 1F, 1.5F);
-            }
-        } else if (EntityTargetOne == null){
-            if (SurvivorEntity.canZapEntity(TE) && canUseZap(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange()){
-                EntityTargetOne = TE;
-                this.self.playSound(ModSounds.SURVIVOR_PLACE_EVENT, 1F, 1.5F);
-            }
-        } else {
-            if (SurvivorEntity.canZapEntity(TE) && canUseZap(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange() && !EntityTargetOne.is(TE)){
-                /**Passing 3 integers is something a block pos can do, so why not just use that packet*/
+            if (self.level() instanceof ServerLevel sl) {
+                sl.sendParticles(ModParticles.COLD_CRACKLE,
+                        self.getEyePosition().x,
+                        self.getEyePosition().y,
+                        self.getEyePosition().z,
+                        0, 0, 0, 0, 0);
 
-                if (!this.onCooldown(PowerIndex.SKILL_4)) {
-                    setRageCupidCooldown();
-                    tryTripleIntPacket(PowerIndex.POWER_4_BONUS, SurvivorTarget.getId(), EntityTargetOne.getId(), TE.getId());
-
-                    SurvivorTarget = null;
-                    EntityTargetOne = null;
-                }
             }
-        }
-    }
-    public boolean canUseStillStandingRecharge(byte bt){
-        if (bt == PowerIndex.SKILL_2)
-            return false;
-        return super.canUseStillStandingRecharge(bt);
-    }
-
-    public void summonSurvivorClient(){
-        if (!this.onCooldown(PowerIndex.SKILL_2)) {
-            Vec3 pos = MainUtil.getRaytracePointOnMobOrBlockIfNotUp(this.self, 30,0.3f);
-            if (pos != null) {
-                tryPosPower(PowerIndex.POWER_2, true, pos);
-                tryPosPowerPacket(PowerIndex.POWER_2, pos);
-            }
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BLOCK_FREEZE_EVENT,
+                    SoundSource.PLAYERS, 1F, 1F);
         }
     }
 
@@ -785,115 +964,12 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
-    public boolean canUseZap(Entity ent) {
-        if (ent instanceof LivingEntity LE &&
-                (
-                        MainUtil.isBossMob(LE) &&
-                                !ClientNetworking.getAppropriateConfig().survivorSettings.canUseSurvivorOnBossesInSurvival &&
-                                !(this.getCreative())
-                )
-        ) {
-            return false;
-        }
-        return true;
-    }
 
-
-    public void setRageCupidCooldown(){
-        int cooldown = ClientNetworking.getAppropriateConfig().survivorSettings.rageCupidCooldown;
-        this.setCooldown(PowerIndex.SKILL_4, cooldown);
-    }
-
-    public Entity getHighlighter(){
-        Entity TE = MainUtil.getTargetEntity(this.self, getCupidHighlightRange(), 15);
-        if (SurvivorTarget == null){
-            if (TE instanceof SurvivorEntity SE && (SE.getActivated() || getCreative())){
-                return SE;
-            }
-        } else if (EntityTargetOne == null){
-            if (SurvivorEntity.canZapEntity(TE) && canUseZap(TE) && !TE.isInvisible() && TE.distanceTo(SurvivorTarget) <= getCupidRange()){
-                return TE;
-            }
-        } else {
-            if (SurvivorEntity.canZapEntity(TE) && canUseZap(TE) && !TE.isInvisible() && TE.distanceTo(SurvivorTarget) <= getCupidRange()
-                    && !EntityTargetOne.is(TE)){
-                return TE;
-            }
-        }
-        return null;
-    }
-
-    SurvivorEntity tempstand = null;
-    public void blipStand(Vec3 pos, boolean activated){
-        StandEntity stand = ModEntities.SURVIVOR.create(this.getSelf().level());
-        if (stand instanceof SurvivorEntity SE) {
-            StandUser user = getStandUserSelf();
-            stand.absMoveTo(pos.x(), pos.y(), pos.z());
-            stand.setSkin(user.roundabout$getStandSkin());
-            stand.setIdleAnimation(user.roundabout$getIdlePos());
-            stand.setMaster(this.self);
-            SE.setRandomSize((float) (Math.random()*0.4F));
-            SE.setYRot(this.self.getYHeadRot() % 360);
-            if (activated){
-                SE.setActivated(true);
-            }
-            tempstand = SE;
-            this.self.level().addFreshEntity(stand);
-            playStandUserOnlySoundsIfNearby(PLACE, 100, false, false);
-        }
-
-    }
-
-    @Override
-    public boolean isServerControlledCooldown(byte num){
-        if (num == PowerIndex.SKILL_2 && ClientNetworking.getAppropriateConfig().survivorSettings.SummonSurvivorCooldownCooldownUsesServerLatency) {
-            return true;
-        }
-        if (num == PowerIndex.SKILL_4 && ClientNetworking.getAppropriateConfig().survivorSettings.rageCupidCooldownCooldownUsesServerLatency) {
-            return true;
-        }
-        return super.isServerControlledCooldown(num);
-    }
     @Override
     public boolean tryPower(int move, boolean forced) {
         return super.tryPower(move, forced);
     }
 
-
-    /** if = -1, not melt dodging */
-    public int meltDodgeTicks = -1;
-
-    public int getCupidRange(){
-        if (getCreative())
-            return ClientNetworking.getAppropriateConfig().survivorSettings.survivorCupidCreativeRange;
-        return ClientNetworking.getAppropriateConfig().survivorSettings.survivorCupidRange;
-    }
-    public int getCupidHighlightRange(){
-        return 100;
-    }
-
-    public void unloadTargets(){
-        if (SurvivorTarget != null){
-            if ((!SurvivorTarget.getActivated() && !getCreative()) || SurvivorTarget.isRemoved() || !SurvivorTarget.isAlive()){
-                SurvivorTarget = null;
-            }
-        }
-        if (EntityTargetOne != null){
-            if (SurvivorTarget == null ||
-                    EntityTargetOne.isRemoved() || !EntityTargetOne.isAlive() ||
-                    (EntityTargetOne.distanceTo(SurvivorTarget) > getCupidRange())){
-                SurvivorTarget = null;
-            }
-        }
-        if (EntityTargetTwo != null){
-            if (SurvivorTarget == null || EntityTargetOne == null ||
-                    EntityTargetTwo.isRemoved() || !EntityTargetTwo.isAlive() ||
-                    (EntityTargetTwo.distanceTo(SurvivorTarget) > getCupidRange())
-                    || (EntityTargetOne != null && EntityTargetOne.is(EntityTargetTwo))){
-                EntityTargetTwo = null;
-            }
-        }
-    }
 
 
     @Override
@@ -923,14 +999,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
         );
     }
 
-    @Override
-    public int getDisplayPowerInventoryScale(){
-        return 60;
-    }
-    @Override
-    public int getDisplayPowerInventoryYOffset(){
-        return 7;
-    }
     @Override public Component getSkinName(byte skinId) {
         return Component.translatable("skins.roundabout.white_album."+getSkinString(skinId));
     }
@@ -957,21 +1025,15 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case SoundIndex.SUMMON_SOUND -> {
                 return ModSounds.WHITE_ALBUM_SUMMON_EVENT;
             }
-            case PLACE -> {
-                return ModSounds.SURVIVOR_PLACE_EVENT;
-            }
-            case RETRACT -> {
-                return ModSounds.SURVIVOR_REMOVE_EVENT;
-            }
-            case SHOCK -> {
-                return ModSounds.SURVIVOR_SHOCK_EVENT;
-            }
         }
         return super.getSoundFromByte(soundChoice);
     }
 
 
     public boolean isAttackIneptVisually(byte activeP, int slot) {
+        if (slot == 4 && isHoldingSneak() && self.isInWater()){
+            return true;
+        }
         return super.isAttackIneptVisually(activeP,slot);
     }
 
@@ -998,18 +1060,46 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
 
 
-    public boolean switchAngerSelectionMode(){
-        if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {
-            getStandUserSelf().roundabout$setUniqueStandModeToggle(!angerSelectionMode());
-            if (!isClient() && this.self instanceof ServerPlayer PE) {
-                if (angerSelectionMode()) {
-                    PE.displayClientMessage(Component.translatable("text.roundabout.survivor.anger_selection").withStyle(ChatFormatting.RED), true);
+    public List<Entity> iceEntities = new ArrayList<>();
+
+    public void addIceEntity(Entity che){
+        iceEntityInit();
+        iceEntities.add(che);
+    }
+    public void iceEntityInit(){
+        if (iceEntities == null) {
+            iceEntities = new ArrayList<>();
+        }
+    }
+    public void clearAllIceEntities(){
+        iceEntityInit();
+
+        List<Entity> hurricaneSpecial2 = new ArrayList<>(iceEntities) {
+        };
+        if (!iceEntities.isEmpty()) {
+            for (Entity value : hurricaneSpecial2) {
+                iceEntities.remove(value);
+                if (value instanceof BlockWallEntity bwe){
+                    bwe.breakAndDiscard();
                 } else {
-                    PE.displayClientMessage(Component.translatable("text.roundabout.survivor.anger_selection_off").withStyle(ChatFormatting.RED), true);
+                    value.discard();
                 }
             }
         }
-        return true;
+    }
+
+    public void ticklIceEntities(){
+        iceEntityInit();
+
+        List<Entity> hurricaneSpecial2 = new ArrayList<>(iceEntities) {
+        };
+        if (!iceEntities.isEmpty()) {
+            for (Entity value : hurricaneSpecial2) {
+                if (value.isRemoved() || !(value.isAlive())){
+                    iceEntities.remove(value);
+                }
+            }
+        }
     }
 
 
@@ -1029,17 +1119,4 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
 
-    boolean holdAttack = false;
-    public void buttonInputAttack(boolean keyIsDown, Options options) {
-        if (keyIsDown) {
-            if (!holdAttack) {
-                holdAttack = true;
-                if (angerSelectionMode()) {
-                    selectTargetClient();
-                }
-            }
-        } else if (holdAttack){
-            holdAttack = false;
-        }
-    }
 }

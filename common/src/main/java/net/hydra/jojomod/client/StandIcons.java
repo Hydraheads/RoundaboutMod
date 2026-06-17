@@ -714,6 +714,8 @@ public class StandIcons {
             "textures/gui/icons/white_album/passive_guard.png");
     public static final ResourceLocation ICE_WALL = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/white_album/ice_wall.png");
+    public static final ResourceLocation ICE_WALL_BEHIND = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/white_album/ice_wall_behind.png");
 
     public static final ResourceLocation SELF_INVIS = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/achtung_baby/self_invis.png");

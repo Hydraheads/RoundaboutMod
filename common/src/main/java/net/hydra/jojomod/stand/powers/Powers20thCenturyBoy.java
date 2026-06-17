@@ -122,7 +122,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         STRAWBERRY = 13,
         CHICKEN = 14,
         OLDER_CENTURY_BOY = 15,
-        OLDEST_CENTURY_BOY = 16;
+        OLDEST_CENTURY_BOY = 16,
+        SALMONBERRY = 17;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
@@ -139,6 +140,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                 BLUE,
                 GRAPE,
                 STRAWBERRY,
+                SALMONBERRY,
                 CHICKEN,
                 OLDER_CENTURY_BOY,
                 OLDEST_CENTURY_BOY
@@ -164,6 +166,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             case Powers20thCenturyBoy.CHICKEN -> Component.translatable("skins.roundabout.20_centuryboy.chicken");
             case Powers20thCenturyBoy.OLDER_CENTURY_BOY -> Component.translatable("skins.roundabout.20_centuryboy.10th_century_boy");
             case Powers20thCenturyBoy.OLDEST_CENTURY_BOY -> Component.translatable("skins.roundabout.20_centuryboy.11th_century_boy");
+            case Powers20thCenturyBoy.SALMONBERRY -> Component.translatable("skins.roundabout.20_centuryboy.salmonberry");
             default -> Component.translatable("skins.roundabout.20_centuryboy.manga");
         };
     }

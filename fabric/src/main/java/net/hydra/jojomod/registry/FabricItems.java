@@ -201,6 +201,10 @@ public class FabricItems {
     public static Item COFFEE_GUM = registerItem("coffee_gum", new Item(new Item.Properties().food(ModFoodComponents.COFFEE_GUM)));
     public static Item METEORITE = registerItem("meteorite", new Item(new Item.Properties()));
     public static Item AJA = registerItem("aja", new Item(new Item.Properties()));
+    public static Item HAND = registerItem("player_hand", new Item(new Item.Properties()));
+    public static Item VILLAGER_HAND = registerItem("villager_hand", new Item(new Item.Properties()));
+    public static Item ILLAGER_HAND = registerItem("illager_hand", new Item(new Item.Properties()));
+    public static Item ROTTEN_HAND = registerItem("rotten_hand", new Item(new Item.Properties()));
     public static Item METEORITE_INGOT = registerItem("meteorite_ingot", new Item(new Item.Properties()));
     public static Item STREET_SIGN_DIO_BLOCK_ITEM = registerItem("street_sign_dio_item", (Item) new SignBlockItem(ModBlocks.STREET_SIGN_DIO, new Item.Properties().stacksTo(1)));
     public static Item STREET_SIGN_RIGHT_BLOCK_ITEM = registerItem("street_sign_right_item", (Item) new SignBlockItem(ModBlocks.STREET_SIGN_RIGHT, new Item.Properties().stacksTo(1)));
@@ -480,6 +484,24 @@ public class FabricItems {
                         entries.accept(ModBlocks.AJA_ORE);
                         entries.accept(ModBlocks.DEEPSLATE_AJA_ORE);
                         entries.accept(ModBlocks.AJA_BLOCK);
+                        entries.accept(ModBlocks.FROZEN_DIRT);
+                        entries.accept(ModBlocks.FROZEN_STONE);
+                        entries.accept(ModBlocks.FROZEN_COBBLESTONE);
+                        entries.accept(ModBlocks.FROZEN_DEEPSLATE);
+                        entries.accept(ModBlocks.FROZEN_COBBLED_DEEPSLATE);
+                        entries.accept(ModBlocks.FROZEN_STONE_BRICKS);
+                        entries.accept(ModBlocks.FROZEN_DIORITE);
+                        entries.accept(ModBlocks.FROZEN_ANDESITE);
+                        entries.accept(ModBlocks.FROZEN_GRANITE);
+                        entries.accept(ModBlocks.FROZEN_SAND);
+                        entries.accept(ModBlocks.FROZEN_SANDSTONE);
+                        entries.accept(ModBlocks.FROZEN_RED_SAND);
+                        entries.accept(ModBlocks.FROZEN_RED_SANDSTONE);
+                        entries.accept(ModBlocks.FROZEN_GRAVEL);
+                        entries.accept(ModBlocks.FROZEN_OBSIDIAN);
+                        entries.accept(ModBlocks.FROZEN_NETHERRACK);
+                        entries.accept(ModBlocks.FROZEN_NETHER_BRICKS);
+                        entries.accept(ModBlocks.FROZEN_END_STONE);
                         entries.accept(ModBlocks.SHINY_QUARTZ);
                         entries.accept(ModBlocks.SHINY_QUARTZ_TILES);
                         entries.accept(ModBlocks.REGAL_FLOOR);
@@ -563,6 +585,10 @@ public class FabricItems {
                     .icon(() -> new ItemStack(AJA)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here
                     	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
+                        entries.accept(HAND);
+                        entries.accept(VILLAGER_HAND);
+                        entries.accept(ILLAGER_HAND);
+                        entries.accept(ROTTEN_HAND);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_20_CENTURY_BOY);
@@ -707,6 +733,10 @@ public class FabricItems {
         ModItems.COFFEE_GUM = COFFEE_GUM;
         ModItems.METEORITE = METEORITE;
         ModItems.AJA = AJA;
+        ModItems.HAND = HAND;
+        ModItems.VILLAGER_HAND = VILLAGER_HAND;
+        ModItems.ILLAGER_HAND = ILLAGER_HAND;
+        ModItems.ROTTEN_HAND = ROTTEN_HAND;
         ModItems.ROAD_ROLLER = ROAD_ROLLER;
         ModItems.METEORITE_INGOT = METEORITE_INGOT;
         ModItems.IRON_BALL_CROSSBOW = IRON_BALL_CROSSBOW;

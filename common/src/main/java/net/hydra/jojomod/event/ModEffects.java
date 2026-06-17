@@ -12,6 +12,7 @@ public class ModEffects {
     public static MobEffect CAPTURING_LOVE;
     public static MobEffect FACELESS;
     public static MobEffect MELTING;
+    public static MobEffect STAND_MELTING;
     public static MobEffect GRAVITY_FLIP;
     public static MobEffect WARDING;
     public static MobEffect SINGE;

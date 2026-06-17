@@ -1,6 +1,7 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Zombiefish;
@@ -478,6 +479,14 @@ public class ForgeEntities {
                     EntityType.Builder.<KnifeEntity>of(KnifeEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "knife").toString())
+            );
+    public static final RegistryObject<EntityType<BlockWallEntity>> BLOCK_WALL =
+            ENTITY_TYPES.register("block_wall", () ->
+                    EntityType.Builder.<BlockWallEntity>of(BlockWallEntity::new, MobCategory.MISC)
+                            .sized(BlockWallEntity.dimensions, BlockWallEntity.dimensions).
+                            clientTrackingRange(10)
+                            .updateInterval(1).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "block_wall").toString())
             );
     public static final RegistryObject<EntityType<MetallicaKnifeEntity>> METALLICA_KNIFE =
             ENTITY_TYPES.register("metallica_knife", () ->

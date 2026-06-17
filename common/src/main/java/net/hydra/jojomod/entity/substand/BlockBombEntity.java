@@ -43,7 +43,7 @@ public class BlockBombEntity extends StandEntity {
 	
 	
 	private BlockPos bombPos;
-	private BlockEntity blockInfo;
+	//private BlockEntity blockInfo;
 	private BlockState originalState;
 	private static final int maxTickIndicator = 6;
 	private int tickIndicator = maxTickIndicator;
@@ -63,9 +63,9 @@ public class BlockBombEntity extends StandEntity {
 		if (pos != null) {
 			this.bombPos = pos;
 			this.originalState = this.level().getBlockState(pos);
-			if (this.originalState.hasBlockEntity()) {
-				this.originalState.getBlock();
-			}
+			/*if (this.originalState.hasBlockEntity()) {
+				this.blockInfo = this.level().getBlockEntity(pos);
+			}*/
 			Vec3 positionInWorld = this.bombPos.getCenter().add(0.0F, -0.5F, 0.0F);
 			this.getBlockSize();
 			
@@ -83,24 +83,20 @@ public class BlockBombEntity extends StandEntity {
 	
 	@Override
     public void tick() {
+		this.setFadeOut((byte)1);
+		validateUUID();
+
 		boolean client = this.level().isClientSide();
         LivingEntity user = this.getUser();
         if (!client) {
             if(user == null){
-                
                 this.discard();
             }else if((!(((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen)) || (!user.isAlive())){
-                
                 this.discard();
             }
             else{
-            	
-            	
-            	this.setHeadRotationX(0);
-            	this.setHeadRotationY(0);
-            	this.setStandRotationX(0);
-            	this.setStandRotationY(0);
-            	this.setStandRotationZ(0);
+				this.setYRot(0f);
+				this.setYBodyRot(0);
             	if (this.tickIndicator > 0 && this.tickIndicator % 2 == 0){   
 	            	Vec3 pos = bombPos.getCenter();
 	            	
@@ -117,7 +113,7 @@ public class BlockBombEntity extends StandEntity {
             }
 		
         }
-        //super.tick();
+        super.tick();
     }
 	
 	public Entity detectContact() {

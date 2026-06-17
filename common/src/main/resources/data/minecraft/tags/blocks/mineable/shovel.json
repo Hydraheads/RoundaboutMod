@@ -1,6 +1,10 @@
 {
   "replace": false,
   "values": [
-    "roundabout:impact_mound"
+    "roundabout:impact_mound",
+    "roundabout:frozen_sand",
+    "roundabout:frozen_red_sand",
+    "roundabout:frozen_dirt",
+    "roundabout:frozen_gravel"
   ]
 }

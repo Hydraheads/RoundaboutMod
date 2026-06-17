@@ -8,6 +8,7 @@ import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputRegistry;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.util.config.ClientConfig;
@@ -23,6 +24,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 
@@ -111,14 +113,15 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 			guiGraphics.setColor(1f, 1f, 1f, 1f);
 			int status = this.getMode()*2;
 			if (this.isSelected) {status = 1;}
-			
-			if (this.context == 0 && !ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction) {status = 3;}
+
+            Level level = Minecraft.getInstance().player.level();
+
+			if (this.context == 0 && (!ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction
+                    || !level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING))) {status = 3;}
 			
 	        this.drawSlot(guiGraphics, status);
 	        this.drawIcon(guiGraphics);
-		    
 		}
-		
         
         @Override
 		public void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
@@ -150,9 +153,22 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 
     @Override
     public boolean mouseReleased(double $$0, double $$1, int $$2) {
+        this.exitBombConfig();
+
+        return super.mouseReleased($$0, $$1, $$2);
+    }
+
+    public void exitBombConfig() {
         this.switchToHoveredGameMode();
         this.minecraft.setScreen(null);
-        return super.mouseReleased($$0, $$1, $$2);
+
+        Player pl = Minecraft.getInstance().player;
+        StandUser SU = (StandUser) pl;
+
+
+        if (SU.roundabout$getStandPowers() instanceof PowersKillerQueen PK) {
+            PK.bombConfigPacket();
+        }
     }
 
     @Override
@@ -181,7 +197,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
             this.setFirstMousePos = true;
         }
        
-        boolean bl = this.firstMouseX == i && this.firstMouseY == j;
+        //boolean bl = this.firstMouseX == i && this.firstMouseY == j;
        
         this.currentlyHovered = -1;
         if (this.slots.get(0).isHoveredOrFocused()) {this.currentlyHovered = 0;}
@@ -229,8 +245,8 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
     @Override
     public boolean keyReleased(int $$0, int $$1, int $$2) {
         if (this.minecraft != null && !roundabout$sameKeyOne(KeyInputRegistry.abilityOneKey)) {
-            this.switchToHoveredGameMode();
-            this.minecraft.setScreen(null);
+            this.exitBombConfig();
+
             if (this.minecraft.player != null){
                 StandUser SU = ((StandUser) this.minecraft.player);
                 if (SU.roundabout$getStandPowers().isBarraging()){

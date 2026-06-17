@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;

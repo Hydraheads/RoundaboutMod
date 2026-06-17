@@ -876,8 +876,11 @@ public class PowersSoftAndWet extends NewPunchingStand {
             return super.getSoundPitchFromByte(soundChoice);
         }
     }
-    public static int maxSuperHitTime = 25;
 
+
+    public int getMaxSuperHitTime(){
+        return 25+(getMeltLevel()*2);
+    }
 
     public int getBubbleBarrageRecoilTime(){
         return ClientNetworking.getAppropriateConfig().
@@ -936,7 +939,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
         } else if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
-            int ClashTime = Math.min(15, Math.round(((float) attackTimeDuring / maxSuperHitTime) * 15));
+            int ClashTime = Math.min(15, Math.round(((float) attackTimeDuring / getMaxSuperHitTime()) * 15));
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
         } else if (standOn && this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
@@ -1871,8 +1874,8 @@ public class PowersSoftAndWet extends NewPunchingStand {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.SNEAK_ATTACK);
         this.poseStand(OffsetIndex.ATTACK);
-        chargedFinal = Math.min(this.chargedFinal,maxSuperHitTime);
-        if (chargedFinal >= maxSuperHitTime){
+        chargedFinal = Math.min(this.chargedFinal,getMaxSuperHitTime());
+        if (chargedFinal >= getMaxSuperHitTime()){
             this.animateStand(SoftAndWetEntity.ENCASEMENT_STRIKE);
         } else {
             this.animateStand(SoftAndWetEntity.KICK);
@@ -2291,26 +2294,30 @@ public void unlockSkin(){
     }
 
     public float getKickAttackKnockback(){
-        return (((float)this.chargedFinal/(float)maxSuperHitTime)*2.85F);
+        return (((float)this.chargedFinal/(float)getMaxSuperHitTime())*2.85F);
     }
     public float getKickAttackStrength(Entity entity){
         float punchD = this.getPunchStrength(entity)*1.9F+this.getHeavyPunchStrength(entity);
         /**Full charge does much less damage because it's more for moving mobs*/
 
-        if (this.chargedFinal >= maxSuperHitTime){
+        if (this.chargedFinal >= getMaxSuperHitTime()){
             punchD*=0.5F;
         }
         if (this.getReducedDamage(entity)){
-            return (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD);
+            return (((float)this.chargedFinal/(float)getMaxSuperHitTime())*punchD);
         } else {
-            return (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD)+1;
+            return (((float)this.chargedFinal/(float)getMaxSuperHitTime())*punchD)+1;
         }
     }
 
     public void kickAttackImpact(Entity entity){
         this.setAttackTimeDuring(-20);
+
+        if (entity != null && entity.distanceTo(self) > getReach()+0.5F) {
+            entity = null;
+        }
         if (entity != null) {
-            if (chargedFinal < maxSuperHitTime) {
+            if (chargedFinal < getMaxSuperHitTime()) {
                 hitParticlesCenter(entity);
             }
 
@@ -2320,7 +2327,7 @@ public void unlockSkin(){
             knockbackStrength = getKickAttackKnockback();
             if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
                 if (entity instanceof LivingEntity LE) {
-                    if (chargedFinal >= maxSuperHitTime) {
+                    if (chargedFinal >= getMaxSuperHitTime()) {
                         addEXP(5, LE);
                     } else {
                         addEXP(1, LE);
@@ -2328,14 +2335,14 @@ public void unlockSkin(){
                 }
                 takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
             } else {
-                if (chargedFinal >= maxSuperHitTime) {
+                if (chargedFinal >= getMaxSuperHitTime()) {
                     knockShield2(entity, getKickAttackKnockShieldTime());
 
                 }
             }
 
             if (entity instanceof LivingEntity LE && !(LE instanceof Player PE && PE.isCreative())) {
-                if (chargedFinal >= maxSuperHitTime) {
+                if (chargedFinal >= getMaxSuperHitTime()) {
                     StandUser SE = ((StandUser) LE);
                     if (!SE.roundabout$isLaunchBubbleEncased()) {
                         float xRot = this.self.getXRot();
@@ -2376,7 +2383,7 @@ public void unlockSkin(){
 
             int fireCount = 50;
             float firespeed =0.05F;
-            if (chargedFinal >= maxSuperHitTime){
+            if (chargedFinal >= getMaxSuperHitTime()){
                 fireCount = 100;
                 firespeed =0.1F;
             }
@@ -2402,7 +2409,7 @@ public void unlockSkin(){
 
         if (!this.self.level().isClientSide()) {
             this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
-            if (chargedFinal >= maxSuperHitTime && entity instanceof LivingEntity) {
+            if (chargedFinal >= getMaxSuperHitTime() && entity instanceof LivingEntity) {
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.WATER_ENCASE_EVENT, SoundSource.PLAYERS, 1F, pitch);
             }
         }
@@ -2422,7 +2429,7 @@ public void unlockSkin(){
     }
     public void encasementKick(){
 
-        if (chargedFinal >= maxSuperHitTime) {
+        if (chargedFinal >= getMaxSuperHitTime()) {
             this.setAttackTimeMax((int) (ClientNetworking.getAppropriateConfig().softAndWetSettings.kickMinimumCooldown + chargedFinal * 1.5));
         } else {
             this.setAttackTimeMax((int) (ClientNetworking.getAppropriateConfig().softAndWetSettings.kickMinimumCooldown + chargedFinal));
@@ -2444,10 +2451,10 @@ public void unlockSkin(){
     }
     public void updateKickAttackCharge(){
         if (this.attackTimeDuring > -1) {
-            if (this.attackTimeDuring >= maxSuperHitTime &&
+            if (this.attackTimeDuring >= getMaxSuperHitTime() &&
                     (!(this.getSelf() instanceof Player) || (this.self.level().isClientSide() && isPacketPlayer()))){
                 int atd = this.getAttackTimeDuring();
-                ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.SNEAK_ATTACK, true,maxSuperHitTime);
+                ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.SNEAK_ATTACK, true,getMaxSuperHitTime());
                 if (this.self.level().isClientSide()){
                     tryIntPowerPacket(PowerIndex.SNEAK_ATTACK,atd);
                 }

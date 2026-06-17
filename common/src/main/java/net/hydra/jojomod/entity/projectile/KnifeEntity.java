@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -221,6 +222,9 @@ public class KnifeEntity extends AbstractArrow {
                 }
 
                 this.doPostHurtEffects($$7);
+            }
+            if ($$1 instanceof BlockWallEntity){
+                $$6 = SoundEvents.ARROW_HIT;
             }
             this.playSound($$6, 1.0F, (this.random.nextFloat() * 0.2F + 0.9F));
             this.discard();

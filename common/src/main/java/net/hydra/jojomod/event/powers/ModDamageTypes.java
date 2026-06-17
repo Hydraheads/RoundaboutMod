@@ -54,6 +54,7 @@ public class ModDamageTypes {
         public static final ResourceKey<DamageType> ANUBIS_SPIN = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "anubis_spin"));
         public static final ResourceKey<DamageType> CREAM_VOID_BALL = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "cream_void_ball"));
         public static final ResourceKey<DamageType> BULLET = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "bullet"));
+    public static final ResourceKey<DamageType> SNIPER_BULLET = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "sniper_bullet"));
         public static final ResourceKey<DamageType> KICKED = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "kick"));
         public static final ResourceKey<DamageType> RIPPER_EYES = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "ripper_eyes"));
     public static final ResourceKey<DamageType> ULTRAVIOLET = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "ultraviolet"));

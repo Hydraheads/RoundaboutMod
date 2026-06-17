@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.zombie_minion;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.MinionAttackGoal;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.goals.*;
@@ -100,22 +101,23 @@ public class BaseMinion extends PathfinderMob {
     }
     public void addBehaviourGoals() {
         this.goalSelector.addGoal(1, new AvoidPanicGoal<LivingEntity>(this, LivingEntity.class, 6.0F, (double)1.0F, 1.2));;
-        this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::canGetMadAt));
-        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false, this::canGetMadAt));
+        this.goalSelector.addGoal(2, new RestrictSunGoal(this));
+        this.targetSelector.addGoal(4, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::canGetMadAt));
+        this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false, this::canGetMadAt));
 
         if (!(this instanceof AxolotlMinion)) {
-            this.goalSelector.addGoal(2, new FloatGoal(this));
-            this.goalSelector.addGoal(2, new ClimbOnTopOfPowderSnowGoal(this, this.level()));
+            this.goalSelector.addGoal(3, new FloatGoal(this));
+            this.goalSelector.addGoal(3, new ClimbOnTopOfPowderSnowGoal(this, this.level()));
         }
-        this.goalSelector.addGoal(6, new LeapAtTargetBearHeadGoal(this, 0.4F));
-        this.goalSelector.addGoal(7, new MeleeAttackGoal(this, 1.0, false));
+        this.goalSelector.addGoal(7, new LeapAtTargetBearHeadGoal(this, 0.4F));
+        this.goalSelector.addGoal(8, new MinionAttackGoal(this, 1.0, false));
         if (!(this instanceof ParrotMinion)) {
-            this.goalSelector.addGoal(9, new MinionStrollGoal(this, 1.0));
+            this.goalSelector.addGoal(10, new MinionStrollGoal(this, 1.0));
         }
-        this.goalSelector.addGoal(8, new MinionFollowCommanderGoal(this, 1.2, 10.0F, 1.5F, false));
-        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
-        this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Mob.class, 8.0F));
+        this.goalSelector.addGoal(9, new MinionFollowCommanderGoal(this, 1.2, 10.0F, 1.5F, false));
+        this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
+        this.goalSelector.addGoal(12, new LookAtPlayerGoal(this, Mob.class, 8.0F));
    }
     @Override
     public boolean canBreatheUnderwater(){
@@ -150,6 +152,11 @@ public class BaseMinion extends PathfinderMob {
             return false;
         }
         if ($$0 != null && controller != null && controller.getUUID() == $$0.getUUID()){
+            return false;
+        }
+        if ($$0 instanceof Mob fm && ((StandUser)fm).rdbt$getFleshBud() != null
+            && controller2 != null
+            && ((StandUser)fm).rdbt$getFleshBud().equals(controller2)) {
             return false;
         }
         return super.canAttack($$0);
@@ -350,7 +357,7 @@ public class BaseMinion extends PathfinderMob {
                     SoundSource.PLAYERS,
                     1.0F,
                     0.9F);
-            digCooldown = 140;
+            digCooldown = 100;
             if (getMovementTactic() == Tactics.FOLLOW.id){
                 setMovementTactic(Tactics.STAY_PUT.id);
             }
@@ -512,7 +519,11 @@ public class BaseMinion extends PathfinderMob {
 
     @Override
     public void setTarget(@Nullable LivingEntity $$0) {
-        if (($$0 != null && controller != null && controller.getUUID() == $$0.getUUID()) || ($$0 instanceof WitherBoss)){
+        if (($$0 != null && controller != null && controller.getUUID() == $$0.getUUID()) || ($$0 instanceof WitherBoss)) {
+            return;
+        } else if ($$0 instanceof Mob fm && ((StandUser)fm).rdbt$getFleshBud() != null
+                    && controller2 != null
+                    && ((StandUser)fm).rdbt$getFleshBud().equals(controller2)) {
             return;
         } else {
             super.setTarget($$0);
@@ -528,6 +539,10 @@ public class BaseMinion extends PathfinderMob {
 
     public void setLastHurtByMob(@Nullable LivingEntity $$0) {
         if (($$0 != null && controller != null && controller.is($$0)) || ($$0 instanceof WitherBoss)){
+            return;
+        } else if ($$0 instanceof Mob fm && ((StandUser)fm).rdbt$getFleshBud() != null
+                && controller2 != null
+                && ((StandUser)fm).rdbt$getFleshBud().equals(controller2)) {
             return;
         } else {
             super.setLastHurtByMob($$0);
@@ -767,7 +782,12 @@ public class BaseMinion extends PathfinderMob {
 
             if (this.getTarget() != null && (((!this.getTarget().isAlive() || this.getTarget().isRemoved() ||
                     (controller != null && controller.is(getTarget()))
-                    )) || (getTargetTactic() == Tactics.PEACEFUL.id))
+                    )) || (getTargetTactic() == Tactics.PEACEFUL.id) ||
+
+            (this.getTarget() instanceof Mob fm && ((StandUser)fm).rdbt$getFleshBud() != null
+                    && controller2 != null
+                    && ((StandUser)fm).rdbt$getFleshBud().equals(controller2))
+            )
             ){
                 this.setTarget(null);
                 this.setLastHurtByMob(null);

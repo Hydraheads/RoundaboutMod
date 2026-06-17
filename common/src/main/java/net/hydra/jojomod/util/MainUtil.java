@@ -16,6 +16,7 @@ import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
+import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.paintings.RoundaboutPainting;
 import net.hydra.jojomod.entity.pathfinding.GroundPathfindingStandAttackEntity;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
@@ -200,10 +201,14 @@ public class MainUtil {
     public static ArrayList<String> expLessBlocks = Lists.newArrayList();
     public static ArrayList<String> standBlockGrabBlacklist = Lists.newArrayList();
     public static ArrayList<String> standDestructionBlacklist = Lists.newArrayList();
+    public static ArrayList<String> standBlockExplosionBlacklist = Lists.newArrayList();
     public static ArrayList<String> occultChargeEffectsToBanish = Lists.newArrayList();
     public static ArrayList<String> naturalStandUserMobBlacklist = Lists.newArrayList();
     public static ArrayList<String> hypnotismMobBlackList = Lists.newArrayList();
     public static ArrayList<String> fleshBudMobBlacklist = Lists.newArrayList();
+
+    public static final Map<Block, Block> FREEZABLE_BLOCKS = new HashMap<>();
+    public static final Map<Block, Block> FREEZABLE_BLOCK_ITEMS = new HashMap<>();
 
     public static ArrayList<String> addedMobsWithRedBlood = Lists.newArrayList();
     public static ArrayList<String> addedMobsWithBlueBlood = Lists.newArrayList();
@@ -641,7 +646,7 @@ public class MainUtil {
     }
     public static double getStandUserOdds(Mob mob) {
         if ((isBossMob(mob) && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
-                || mob instanceof JojoNPC
+                || mob instanceof JojoNPC || mob instanceof ZombieAesthetician
         || isMobStandUserBlacklisted(mob)){
             return 0;
         } else if (mob instanceof AbstractVillager){
@@ -1689,6 +1694,39 @@ public class MainUtil {
         return true;
     }
 
+    //Couldn't find better wording but this tests if you're on claimed land that isn't yours
+    //It doesn't need the block hit to be on a claim
+    public static boolean canPlaceOnClaim(Player player,BlockPos pos){
+        //Seems counterintuitive but most abilities have their own ways of handling this, so I'll just make it return True.
+
+        if(!ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims || !MainUtil.getIsGamemodeApproriateForGrief(player)){
+            return true;
+
+        }
+        boolean isLiquid = (!player.level().getBlockState(pos).isSolid() && !player.level().getBlockState(pos).isAir());
+        BlockState replace = player.level().getBlockState(pos);
+        //Always correct, but for some reason I need to put it as a conditional
+        if(Blocks.BARRIER.asItem() instanceof  BlockItem barrier){
+            barrier.place(new BlockPlaceContext(player,player.getUsedItemHand(),
+                    barrier.getDefaultInstance(),new BlockHitResult(
+                            new Vec3(pos.getX(),pos.getY(),pos.getZ()), Direction.UP,
+                    pos.relative(Direction.DOWN),false)));
+
+            player.level().destroyBlock(pos,false,player);
+            if(!player.level().getBlockState(pos).isAir()){
+                player.level().removeBlock(pos,false);
+                if(isLiquid) {
+                    player.level().setBlock(pos, replace, 0);
+                }
+                return false;
+            }
+            if(isLiquid) {
+                player.level().setBlock(pos, replace, 0);
+            }
+        }
+        return true;
+    }
+
     public static void gasExplode(BlockState blk, ServerLevel level, BlockPos blkPos, int iteration, int hitRadius, int blockRadius, float power){
         if (!level.isClientSide){
             level.sendParticles(ParticleTypes.LAVA, blkPos.getX() + 0.5, blkPos.getY(), blkPos.getZ() + 0.5,
@@ -2070,13 +2108,15 @@ public class MainUtil {
         return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS)
                 || value.equals(ModEffects.BANISH) || value.equals(ModEffects.WARDING) || value.equals(ModEffects.HEX)
                 || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.STAND_VIRUS) ||
-                value.equals(ModEffects.SINGE) ||
+                value.equals(ModEffects.SINGE)
+                || value.equals(ModEffects.STAND_MELTING) ||
                 value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING) || value.equals(ModEffects.MOLD);
     }
     public static boolean hidesPotionEffectSwirl(MobEffect value){
         return value.equals(ModEffects.BLEED) || value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.FACELESS)
                 || value.equals(ModEffects.BANISH) || value.equals(ModEffects.WARDING) || value.equals(ModEffects.HEX)
-                || value.equals(ModEffects.SWITCH) ||
+                || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.MELTING)
+                || value.equals(ModEffects.STAND_MELTING) ||
                 value.equals(ModEffects.SINGE);
     }
 
@@ -2902,7 +2942,7 @@ public class MainUtil {
             if (player != null) {
                 StandUser user = ((StandUser) player);
                 if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pwa){
-                    pwa.acceleration =data;
+                    pwa.setAcceleration(data);
                 }
             }
         } else if (context == PacketDataIndex.INT_UPDATE_PILOT){
