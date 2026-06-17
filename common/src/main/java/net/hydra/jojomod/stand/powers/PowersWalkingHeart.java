@@ -1452,4 +1452,9 @@ public class PowersWalkingHeart extends NewDashPreset {
         }
     }
 
+    @Override
+    public void refreshCooldowns() {
+        super.refreshCooldowns();
+        this.setShootTicks(0);
+    }
 }
