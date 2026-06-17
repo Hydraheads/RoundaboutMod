@@ -598,10 +598,12 @@ public class ManhattanTransferEntity extends StandEntity {
                         }
                     }
                 } else {
-                    if(this.getXRot() < 15 || this.getXRot() > -15) {
-                        return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot());
-                    } else {
-                        return new Vec2(this.getXRot(), this.getYRot());
+                    if(stupidTicks < 1) {
+                        if (this.getXRot() < 15 || this.getXRot() > -15) {
+                            return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot());
+                        } else {
+                            return new Vec2(this.getXRot(), this.getYRot());
+                        }
                     }
                 }
             }
@@ -639,11 +641,13 @@ public class ManhattanTransferEntity extends StandEntity {
         DodgeRainTicks = val;
     }
 
-    int stupidTicks = 1;
+    int stupidTicks = 10;
 
     public int tickInWater = 100;
     int dirPause = 0;
     int randomDirection = 0;
+    public boolean isHattanPilotMode = false;
+
     @Override
     public void tick() {
         validateUUID();
@@ -652,48 +656,45 @@ public class ManhattanTransferEntity extends StandEntity {
         if(dirPause > 0){
             dirPause--;
         }
-        if (this.getUserData(this.getUser()) != null) {
-            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-                if (stupidTicks >= 1) {
-                    this.moveTo(this.getUser().getX(), this.getUser().getY() + 1.45F ,this.getUser().getZ() - 0.075F);
-                    stupidTicks--;
-                    this.setXRot(this.getUser().getXRot() % 360);
-                    this.setYRot(this.getUser().getYRot() % 360);
-                    this.setYBodyRot(this.getUser().getYRot() % 360);
-                }
-                if (horizontalCollision || verticalCollision) {
-                    if(dirPause == 0) {
-                        randomDirection = random.nextInt(2) + 1;
-                        dirPause = 40;
-                    }
 
-                    if (!PM.isPiloting()) {
-                        if(horizontalCollision) {
-                            this.setYBodyRot(this.getYRot() % 360);
-                            if (randomDirection <= 1) {
-                                this.setYRot(yaw - 15);
-                            } else {
-                                this.setYRot(yaw + 15);
-                            }
-                        }
-                        if(verticalCollision && !verticalCollisionBelow){
-                            this.setXRot(pitch + 15);
-                        } if(verticalCollisionBelow){
-                            this.setXRot(pitch - 15);
-                        }
-                    }
-                }
+if(this.getUser() != null) {
+    if(stupidTicks >= 1) {
+        if (stupidTicks == 10) {
+            this.moveTo(this.getUser().getX(), this.getUser().getY() + 1.45F, this.getUser().getZ() - 0.075F);
+        } else {
+            this.setXRot(this.getUser().getXRot() % 360);
+            this.setYRot(this.getUser().getYHeadRot() % 360);
+            this.setYBodyRot(this.getUser().getYHeadRot() % 360);
+        }
+        stupidTicks--;
+    }
+}
+
+if(!isHattanPilotMode) {
+    if (horizontalCollision || verticalCollision) {
+        if (dirPause == 0) {
+            randomDirection = random.nextInt(2) + 1;
+            dirPause = 40;
+        }
+
+        if (horizontalCollision) {
+            this.setYBodyRot(this.getYRot() % 360);
+            if (randomDirection <= 1) {
+                this.setYRot(yaw - 15);
+            } else {
+                this.setYRot(yaw + 15);
             }
         }
-        if (!this.level().isClientSide()) {
-            if (!forceVisible) {
-                this.setXRot(pitch);
-                this.setYRot(yaw);
-                this.setYBodyRot(yaw);
-                this.xRotO = pitch;
-                this.yRotO = yaw;
+        if (verticalCollision && !verticalCollisionBelow) {
+            this.setXRot(pitch + 15);
+        }
+        if (verticalCollisionBelow) {
+            this.setXRot(pitch - 15);
+        }
+    }
+}
 
-            }
+        if (!this.level().isClientSide()) {
             if (this.getUserData(this.getUser()) != null) {
                 if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
                     Vec3 rots = this.getRotations(PM.targetHattan);
@@ -908,8 +909,52 @@ public class ManhattanTransferEntity extends StandEntity {
                 AnimationState $$15 = this.slow_manhattan_right;
 
                 if (!PM.isActive()) {
-                    //this.rain_dodging_manhattan.stop();
                 } else {
+                    if(PM.isClient() && PM.isPiloting()) {
+                        if (options.keyDown.isDown() || options.keyUp.isDown() || options.keyLeft.isDown() || options.keyRight.isDown()) {
+                            isKeyEverPressed = true;
+                        }
+                        if (options.keyUp.isDown()) {
+                            isPressingW = true;
+                            pressS = false;
+                            pressA = false;
+                            verticalLastPressed = true;
+                            this.setHatAnimDir = 1;
+                        }
+                        if (!options.keyUp.isDown()) {
+                            isPressingW = false;
+                        }
+                        if (options.keyDown.isDown()) {
+                            isPressingS = true;
+                            pressS = true;
+                            pressA = false;
+                            verticalLastPressed = true;
+                            this.setHatAnimDir = 2;
+                        }
+                        if (!options.keyDown.isDown()) {
+                            isPressingS = false;
+                        }
+                        if (options.keyLeft.isDown()) {
+                            isPressingA = true;
+                            pressA = true;
+                            pressS = false;
+                            verticalLastPressed = false;
+                            this.setHatAnimDir = 3;
+                        }
+                        if (!options.keyLeft.isDown()) {
+                            isPressingA = false;
+                        }
+                        if (options.keyRight.isDown()) {
+                            isPressingD = true;
+                            pressA = false;
+                            pressS = false;
+                            verticalLastPressed = false;
+                            this.setHatAnimDir = 4;
+                        }
+                        if (!options.keyRight.isDown()) {
+                            isPressingD = false;
+                        }
+                    }
                     if (isInRain()) {
                         this.rain_dodging_manhattan.startIfStopped(this.tickCount);
                         $$2.stop();
@@ -930,50 +975,6 @@ public class ManhattanTransferEntity extends StandEntity {
 
                         if (PM.isClient() && !this.stopsManhattanAnimationsWhenHeldItem) {
                             if (PM.isPiloting()) {
-                                if (options.keyDown.isDown() || options.keyUp.isDown() || options.keyLeft.isDown() || options.keyRight.isDown()) {
-                                    isKeyEverPressed = true;
-                                }
-                                if (options.keyUp.isDown()) {
-                                    isPressingW = true;
-                                    pressS = false;
-                                    pressA = false;
-                                    verticalLastPressed = true;
-                                    this.setHatAnimDir = 1;
-                                }
-                                if (!options.keyUp.isDown()) {
-                                    isPressingW = false;
-                                }
-                                if (options.keyDown.isDown()) {
-                                    isPressingS = true;
-                                    pressS = true;
-                                    pressA = false;
-                                    verticalLastPressed = true;
-                                    this.setHatAnimDir = 2;
-                                }
-                                if (!options.keyDown.isDown()) {
-                                    isPressingS = false;
-                                }
-                                if (options.keyLeft.isDown()) {
-                                    isPressingA = true;
-                                    pressA = true;
-                                    pressS = false;
-                                    verticalLastPressed = false;
-                                    this.setHatAnimDir = 3;
-                                }
-                                if (!options.keyLeft.isDown()) {
-                                    isPressingA = false;
-                                }
-                                if (options.keyRight.isDown()) {
-                                    isPressingD = true;
-                                    pressA = false;
-                                    pressS = false;
-                                    verticalLastPressed = false;
-                                    this.setHatAnimDir = 4;
-                                }
-                                if (!options.keyRight.isDown()) {
-                                    isPressingD = false;
-                                }
-
                             /*    if (isPressingW && !isPressingS) {
                                     $$1.startIfStopped(this.tickCount);
                                     $$2.startIfStopped(this.tickCount);

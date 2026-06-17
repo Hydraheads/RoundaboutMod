@@ -465,6 +465,14 @@ public class PowersManhattanTransfer extends NewDashPreset {
             if(ME.isTechnicallyInWall()){
                 this.sealStand(true);
             }
+
+            if(this.isClient()){
+                if (this.isPiloting()){
+                    ME.isHattanPilotMode = true;
+                } else {
+                    ME.isHattanPilotMode = false;
+                }
+            }
         }
         if (this.self instanceof Player PL) {
 
