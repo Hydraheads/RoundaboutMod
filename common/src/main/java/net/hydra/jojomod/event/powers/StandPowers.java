@@ -217,8 +217,7 @@ public class StandPowers extends AbilityScapeBasis {
     public boolean cancelSprintJump(){
         return this.isBarraging();
     }
-    public void onJump(){
-    }
+
 
     public int getJumpHeightAddon() {return 0;}
 

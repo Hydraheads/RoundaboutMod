@@ -3204,4 +3204,6 @@ public class AbilityScapeBasis {
             tryIntPowerPacket(PowerIndex.ATTACK,id);
         }
     }
+    public void onJump(){
+    }
 }
