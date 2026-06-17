@@ -1015,7 +1015,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
         float attackTimeDuring = getAttackTimeDuring();
         if (powerOn && !hasRendered) {
-        Entity TE2 = getTargetEntity(playerEntity, 5, getPunchAngle());
+        Entity TE2 = getTargetEntity(playerEntity, 5, getBrawlPunchAngle());
             if ((getActivePower() == NONE || attackTimeDuring <= -1) &&
                     TE2 != null && TE2.isAlive()) {
 
@@ -1143,7 +1143,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         if (!(entity instanceof Player) && entity instanceof LivingEntity LE){
                             setDazed(LE,(byte) 4);
                         }
-                        this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.1f + Math.random() * 0.1f));
+                        this.self.level().playSound(null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.1f + Math.random() * 0.1f));
                         self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SUCK_DRAIN_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
                         addToCombo(entity);
 
@@ -1235,7 +1235,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                             setDazed(LE,(byte) 4);
                         }
                         HeatUtil.addHeat(entity,-24 + (-4*getFreezeLevel()));
-                        this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.1f + Math.random() * 0.1f));
+                        this.self.level().playSound(null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.1f + Math.random() * 0.1f));
                         //self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.HIT_1_SOUND_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
                         addToCombo(entity);
 
@@ -1358,7 +1358,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             doHairGrab();
         } else {
 
-            Entity TE = getTargetEntity(self, 5F, getPunchAngle());
+            Entity TE = getTargetEntity(self, 5F, getBrawlPunchAngle());
             int id = 0;
             if (TE != null){
                 id = TE.getId();
@@ -1467,7 +1467,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             doSweepHit();
         } else {
 
-            Entity TE = getTargetEntity(self, 1.5F, getPunchAngle());
+            Entity TE = getTargetEntity(self, 1.5F, getBrawlPunchAngle());
             int id = 0;
             if (TE != null){
                 id = TE.getId();
@@ -1747,7 +1747,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
                 if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
                     takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
-                    this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.15f + Math.random() * 0.1f));
+                    this.self.level().playSound(null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.15f + Math.random() * 0.1f));
                     addToCombo(entity);
                     hitParticles(entity);
                 } else {
@@ -1819,7 +1819,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                                 0.2,
                                 0.01);
                         takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
-                        this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.7f + Math.random() * 0.1f));
+                        this.self.level().playSound(null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.7f + Math.random() * 0.1f));
                         addToCombo(entity);
                     } else {
                         if (!this.self.level().isClientSide()) {

@@ -17,6 +17,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampiricFate;
+import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -80,13 +81,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public boolean freezeImmune(){
         return hasStandActive(self) || super.freezeImmune();
     }
-    public boolean interceptAttack(){
-        return angerSelectionMode();
-    }
-
-    public boolean angerSelectionMode(){
-        return getStandUserSelf().roundabout$getUniqueStandModeToggle();
-    }
 
     @Override
     public boolean canSummonStandAsEntity(){
@@ -105,6 +99,16 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     @Override
     public boolean isBrawling(){
+        return fistsOut;
+    }
+    @Override
+    public boolean interceptAttack(){
+        return fistsOut;
+    }
+
+    @Override
+    /**If the standard right click input should usually be canceled while your stand is active*/
+    public boolean interceptGuard(){
         return fistsOut;
     }
 
@@ -788,7 +792,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
-
     public void toggleFists(){
         int cooldown = 9;
         this.setCooldown(PowerIndex.SKILL_4, cooldown);
@@ -1118,6 +1121,55 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
+    public void renderAttackHud(GuiGraphics context, Player playerEntity,
+                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
+                                float flashAlpha, float otherFlashAlpha) {
+        boolean powerOn = PowerTypes.hasStandActive(playerEntity);
+        int j = scaledHeight / 2 - 7 - 4;
+        int k = scaledWidth / 2 - 8;
+
+        float attackTimeDuring = getAttackTimeDuring();
+        if (powerOn && isBarrageAttacking() && attackTimeDuring > -1) {
+            int ClashTime = 15 - Math.round((attackTimeDuring / getBarrageLength()) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+        } else if (powerOn && isBarrageCharging()) {
+            int ClashTime = Math.round((attackTimeDuring / getBarrageWindup()) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+        } else {
+            int barTexture = 0;
+            Entity TE = getTargetEntity(playerEntity, 3, getBrawlPunchAngle());
+            float attackTimeMax = getAttackTimeMax();
+            if (attackTimeMax > 0) {
+                float attackTime = getAttackTime();
+                float finalATime = attackTime / attackTimeMax;
+                if (finalATime <= 1) {
+
+                    if (getActivePowerPhase() == getActivePowerPhaseMax()) {
+                        barTexture = 24;
+                    } else if (TE != null && isBrawling()) {
+                        barTexture = 12;
+                    } else {
+                        barTexture = 18;
+                    }
+
+
+                    context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+                    int finalATimeInt = Math.round(finalATime * 15);
+                    context.blit(StandIcons.JOJO_ICONS, k, j, 193, barTexture, finalATimeInt, 6);
+
+                }
+            }
+            if (powerOn && isBrawling()) {
+                if (TE != null) {
+                    if (barTexture == 0) {
+                        context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
+                    }
+                }
+            }
+        }
+    }
 
     @Override
     public boolean isWip() {
