@@ -153,6 +153,11 @@ public class BaseMinion extends PathfinderMob {
         if ($$0 != null && controller != null && controller.getUUID() == $$0.getUUID()){
             return false;
         }
+        if ($$0 instanceof Mob fm && ((StandUser)fm).rdbt$getFleshBud() != null
+            && controller2 != null
+            && ((StandUser)fm).rdbt$getFleshBud().equals(controller2)) {
+            return false;
+        }
         return super.canAttack($$0);
     }
 
@@ -351,7 +356,7 @@ public class BaseMinion extends PathfinderMob {
                     SoundSource.PLAYERS,
                     1.0F,
                     0.9F);
-            digCooldown = 140;
+            digCooldown = 100;
             if (getMovementTactic() == Tactics.FOLLOW.id){
                 setMovementTactic(Tactics.STAY_PUT.id);
             }
@@ -513,7 +518,11 @@ public class BaseMinion extends PathfinderMob {
 
     @Override
     public void setTarget(@Nullable LivingEntity $$0) {
-        if (($$0 != null && controller != null && controller.getUUID() == $$0.getUUID()) || ($$0 instanceof WitherBoss)){
+        if (($$0 != null && controller != null && controller.getUUID() == $$0.getUUID()) || ($$0 instanceof WitherBoss)) {
+            return;
+        } else if ($$0 instanceof Mob fm && ((StandUser)fm).rdbt$getFleshBud() != null
+                    && controller2 != null
+                    && ((StandUser)fm).rdbt$getFleshBud().equals(controller2)) {
             return;
         } else {
             super.setTarget($$0);
@@ -529,6 +538,10 @@ public class BaseMinion extends PathfinderMob {
 
     public void setLastHurtByMob(@Nullable LivingEntity $$0) {
         if (($$0 != null && controller != null && controller.is($$0)) || ($$0 instanceof WitherBoss)){
+            return;
+        } else if ($$0 instanceof Mob fm && ((StandUser)fm).rdbt$getFleshBud() != null
+                && controller2 != null
+                && ((StandUser)fm).rdbt$getFleshBud().equals(controller2)) {
             return;
         } else {
             super.setLastHurtByMob($$0);
@@ -768,7 +781,12 @@ public class BaseMinion extends PathfinderMob {
 
             if (this.getTarget() != null && (((!this.getTarget().isAlive() || this.getTarget().isRemoved() ||
                     (controller != null && controller.is(getTarget()))
-                    )) || (getTargetTactic() == Tactics.PEACEFUL.id))
+                    )) || (getTargetTactic() == Tactics.PEACEFUL.id) ||
+
+            (this.getTarget() instanceof Mob fm && ((StandUser)fm).rdbt$getFleshBud() != null
+                    && controller2 != null
+                    && ((StandUser)fm).rdbt$getFleshBud().equals(controller2))
+            )
             ){
                 this.setTarget(null);
                 this.setLastHurtByMob(null);
