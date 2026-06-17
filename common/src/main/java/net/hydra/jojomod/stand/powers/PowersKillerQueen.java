@@ -1641,8 +1641,10 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 boolean isBoss = MainUtil.isBossMob(target);
 
-                if (!target.getControllingPassenger().hasLineOfSight(this.getSelf()) && !isBoss) {
-                    dmg = sneakyDmg;
+                if (target instanceof LivingEntity LE) {
+                    if (LE.hasLineOfSight(this.getSelf()) && !isBoss){
+                        dmg = sneakyDmg;
+                    }
                 }
 
                 if (target instanceof Player pl) {

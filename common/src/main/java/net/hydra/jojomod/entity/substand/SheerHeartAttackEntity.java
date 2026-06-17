@@ -371,6 +371,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 				newPath = this.getNavigation().createPath(this.getUser(), 1);
 			}else if (this.currentTarget == ENTITY) {
 				newPath = this.getNavigation().createPath(this.entityTarget, 0);
+			}else if (this.currentTarget == BLOCK) {
+				newPath = this.getNavigation().createPath(this.blockTarget, 0);
 			}else {
 				newPath = this.getNavigation().createPath(targetPos.x, targetPos.y, targetPos.z, 0);
 			}
