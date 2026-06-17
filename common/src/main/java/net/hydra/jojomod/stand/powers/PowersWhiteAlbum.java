@@ -271,7 +271,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
     @Override
     public void onJump(){
-        Roundabout.LOGGER.info("1");
         fixThis();
     }
 
