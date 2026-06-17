@@ -1681,7 +1681,11 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
 
                 if (target instanceof Player pl) {
-                    if (!pl.isCreative() && playersHitkill) { pl.die(dmg); }
+                    /*
+                     * apparently, "die(dmg)" would result in the player been glitched
+                     * and unable to respawn for some weird reason.
+                    */
+                    if (!pl.isCreative() && playersHitkill) { pl.hurt(dmg, 9999999999.0f); }
                     else {target.hurt(dmg, hitPoints);}
                 } else {
                     if (mobsHitkill && !isBoss) { target.kill();}
