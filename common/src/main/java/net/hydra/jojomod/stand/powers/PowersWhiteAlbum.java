@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.WhiteAlbumIceBlock;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -15,6 +16,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -333,6 +335,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
     @Override
     public void tickPower() {
         if (!self.level().isClientSide()) {
+            if (hasSkatesActivated() && self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampiricFate vf &&
+                    vf.isPlantedInWall()){
+                toggleSkates();
+            }
+
             ticklIceEntities();
             if (cracked){
                 if (!getStandUserSelf().roundabout$getGuardBroken()) {
@@ -800,13 +807,22 @@ public class PowersWhiteAlbum extends NewDashPreset {
         int cooldown = 5;
         this.setCooldown(PowerIndex.SKILL_1, cooldown);
         if (!this.self.level().isClientSide() && this.self instanceof Player PL){
-            skatesActive = !skatesActive;
-            if (skatesActive){
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SKATE_EQUIP_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+            if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampiricFate vf &&
+                    vf.isPlantedInWall()) {
+                if (skatesActive) {
+                    skatesActive = false;
+                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SKATE_EQUIP_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+                    saveDiscAndSync();
+                }
             } else {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SKATE_RETRACT_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+                skatesActive = !skatesActive;
+                if (skatesActive) {
+                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SKATE_EQUIP_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+                } else {
+                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SKATE_RETRACT_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+                }
+                saveDiscAndSync();
             }
-            saveDiscAndSync();
         }
         return true;
     }
