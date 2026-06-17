@@ -2032,6 +2032,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (!(this.level().isClientSide)) {
             this.getEntityData().set(ROUNDABOUT$STAND_DISC, stack);
             if (stack.getItem() instanceof StandDiscItem SD){
+                SD.generateStandPowers(rdbt$this());
+                MainUtil.extractDiscData(((LivingEntity)(Object)this), SD, stack);
+            }
+        }
+    }
+    @Unique
+    @Override
+    public void roundabout$updateStandDisc(ItemStack stack) {
+        if (!(this.level().isClientSide)) {
+            this.getEntityData().set(ROUNDABOUT$STAND_DISC, stack);
+            if (stack.getItem() instanceof StandDiscItem SD){
                 MainUtil.extractDiscData(((LivingEntity)(Object)this), SD, stack);
             }
         }
@@ -2295,7 +2306,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ItemStack itemstack = ItemStack.of(compoundtag);
             if (!itemstack.isEmpty() && itemstack.getItem() instanceof StandDiscItem SD){
                 this.roundabout$setStandDisc(itemstack);
-                SD.generateStandPowers((LivingEntity)(Object)this);
                 MainUtil.extractDiscData(((LivingEntity)(Object)this),SD,itemstack);
             }
         }if ($$0.contains("roundabout.StandRejectionDisc", 10)) {
@@ -2984,6 +2994,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (!StandDisc.isEmpty() && StandDisc.getItem() instanceof StandDiscItem SD){
                 if (this.roundabout$Powers == null || !SD.standPowers.getClass().equals(this.roundabout$Powers.getClass())) {
                     SD.generateStandPowers((LivingEntity) (Object) this);
+                    if (this.level().isClientSide()){
+                        if (this.roundabout$Powers != null) {
+                            CompoundTag $$4 = StandDisc.getTagElement("Memory");
+                            if ($$4 != null) {
+                                this.roundabout$Powers.readAdditionalSaveData($$4);
+                            }
+                        }
+                    }
                 }
             } else {
                 if (this.roundabout$Powers == null) {
@@ -3172,6 +3190,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     active=false;
                 }
             } else {
+                if (rdbt$this() instanceof Player pl){
+                    ((IPowersPlayer)pl).rdbt$getPowers().playSummonSound();
+                }
                 active = true;
             }
 

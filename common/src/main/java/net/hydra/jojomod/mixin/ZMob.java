@@ -363,7 +363,6 @@ public abstract class ZMob extends LivingEntity implements IMob {
             ItemStack stack = ModItems.getPoolForMob(this).get(index).getDefaultInstance();
             if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem SD){
                 ((StandUser)this).roundabout$setStandDisc(stack);
-                SD.generateStandPowers(((LivingEntity) (Object) this));
                 ((StandUser)this).roundabout$getStandPowers().rollSkin();
             }
         } else if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_WORTHY_MOB_SPAWNS) && $$5.nextFloat() < MainUtil.getWorthyOdds(((Mob)(Object)this))) {

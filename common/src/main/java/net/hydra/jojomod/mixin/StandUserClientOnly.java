@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.QueueSoundInstance;
 import net.hydra.jojomod.client.WhiteAlbumSkatingSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerAmbientSound;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.sound.ModSounds;
@@ -121,7 +122,7 @@ public abstract class StandUserClientOnly extends Entity implements StandUserCli
     public void roundabout$soundTick(CallbackInfo ci) {
         if (this.level().isClientSide()) {
             if (((StandUser) this).roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA && PWA.hasSkatesActivated()
-                    && this.isSprinting() && this.onGround() && !isSwimming() && !isFallFlying() && !isCrouching()
+                    && (this.isSprinting() || PWA.getPlayerPos2() == PlayerPosIndex.SKATE_GENERAL) && this.onGround() && !isSwimming() && !isFallFlying() && !isCrouching()
             && !((StandUser)this).roundabout$isDazed()) {
                 if (rdbt$whiteSkate == null || rdbt$whiteSkate.isStopped()) {
                     rdbt$whiteSkate = new WhiteAlbumSkatingSound(

@@ -96,6 +96,7 @@ public class BlockBombEntity extends StandEntity {
             }
             else{
 				this.setYRot(0f);
+				this.setYBodyRot(0);
             	if (this.tickIndicator > 0 && this.tickIndicator % 2 == 0){   
 	            	Vec3 pos = bombPos.getCenter();
 	            	

@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.Options;
@@ -17,6 +18,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -48,9 +50,7 @@ public class GeneralPowers extends AbilityScapeBasis {
     public Component getPowerTagName(){
         return Component.empty();
     }
-    public boolean isBrawling(){
-        return false;
-    }
+
 
     /**Adjust this function to enable the below minin functions, and intercept your mining when not holding
      * a mining tool*/
@@ -269,6 +269,8 @@ public class GeneralPowers extends AbilityScapeBasis {
         }
     }
 
+    public void playSummonSound() {
+    }
     /**When you are about to be hit by a projectile, intercept or run code based off of it, or potentially cancel it
      * Currently it supports abstract arrows but this can be expanded*/
     public boolean dealWithProjectile(Entity ent, HitResult res){

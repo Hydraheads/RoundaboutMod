@@ -73,6 +73,8 @@ public enum PowerTypes {
         if (ent instanceof Player pl){
             if (isUsingPower(ent)){
                 return ((IPowersPlayer)pl).rdbt$getPowers().isBrawling();
+            }  else if (isUsingStand(ent)){
+                return ((StandUser)pl).roundabout$getStandPowers().isBrawling();
             }
         }
         return false;

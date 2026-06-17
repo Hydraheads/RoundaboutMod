@@ -34,7 +34,6 @@ public class StandUsingNPC extends JojoNPC{
             if (stack == null || stack.isEmpty()){
                 if (getDisc() != null){
                     ((StandUser)this).roundabout$setStandDisc(getDisc().getDefaultInstance().copy());
-                    getDisc().generateStandPowers(this);
                     applySkin();
                 }
             }

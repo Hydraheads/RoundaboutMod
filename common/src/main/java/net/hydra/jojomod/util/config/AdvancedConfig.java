@@ -170,6 +170,14 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:ancient_debris"
             )
     );
+    public Set<String> standBlockExplosionBlacklist = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:bedrock",
+                    "minecraft:obsidian",
+                    "minecraft:light",
+                    "minecraft:barrier"
+            )
+    );
     public Set<String> standDestructionBlacklist = new HashSet<>(
             Arrays.asList(
                     "minecraft:diamond_block",

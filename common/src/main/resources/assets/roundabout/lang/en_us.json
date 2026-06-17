@@ -186,6 +186,11 @@
   "item.roundabout.goat_remains": "Goat Remains",
   "item.roundabout.axolotl_remains": "Axolotl Remains",
 
+  "item.roundabout.player_hand": "Player Hand",
+  "item.roundabout.villager_hand": "Villager Hand",
+  "item.roundabout.illager_hand": "Illager Hand",
+  "item.roundabout.rotten_hand": "Rotten Hand",
+
   "item.roundabout.road_roller": "Road Roller",
 
   "item.roundabout.snubnose_revolver": "Snubnose Revolver",
@@ -879,7 +884,7 @@
   "sounds.roundabout.extend_spikes":  "Spikes",
   "sounds.roundabout.wall_latch":  "Wall Latch",
   "sounds.roundabout.summon_walking":  "Stand Summoned",
-  "sounds.roundabout.heel_raise":  "Leg raises",
+  "sounds.roundabout.heel_raise":  "Limb Raises",
   "sounds.roundabout.heel_stomp":  "Leg lowers",
   "sounds.roundabout.spike_hit":  "Spike hit",
   "sounds.roundabout.spike_miss":  "Spike extend",

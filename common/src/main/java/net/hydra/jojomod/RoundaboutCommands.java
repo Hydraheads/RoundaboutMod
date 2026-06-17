@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -93,7 +94,6 @@ public class RoundaboutCommands {
 
                     user.roundabout$setStandDisc(disc);
                 if (disc != ItemStack.EMPTY && disc.getItem() instanceof StandDiscItem SD) {
-                    SD.generateStandPowers(LE);
 
                     user.roundabout$setStandSkin(skin);
                     user.roundabout$setIdlePosX(pose);
@@ -142,7 +142,7 @@ public class RoundaboutCommands {
                     if (!standDisc.isEmpty() && !(standDisc.getItem() instanceof MaxStandDiscItem)){
                         ipe.roundabout$setStandExp(0);
                         ipe.roundabout$setStandLevel((byte) Math.min(user.roundabout$getStandPowers().getMaxLevel(),standLevel+1));
-                        user.roundabout$setStandDisc(MainUtil.saveToDiscData(PE,standDisc).copy());
+                        user.roundabout$updateStandDisc(MainUtil.saveToDiscData(PE,standDisc).copy());
                     }
                 }
             }
@@ -166,7 +166,7 @@ public class RoundaboutCommands {
                     if (!standDisc.isEmpty() && !(standDisc.getItem() instanceof MaxStandDiscItem)){
                         ipe.roundabout$setStandExp(0);
                         ipe.roundabout$setStandLevel((byte) Math.max(0,standLevel-1));
-                        user.roundabout$setStandDisc(MainUtil.saveToDiscData(PE,standDisc).copy());
+                        user.roundabout$updateStandDisc(MainUtil.saveToDiscData(PE,standDisc).copy());
                     }
                 }
             }
@@ -431,7 +431,7 @@ public class RoundaboutCommands {
                     if (!standDisc.isEmpty() && !(standDisc.getItem() instanceof MaxStandDiscItem)){
                         ipe.roundabout$setStandExp(0);
                         ipe.roundabout$setStandLevel((byte) Math.min(user.roundabout$getStandPowers().getMaxLevel(),level));
-                        user.roundabout$setStandDisc(MainUtil.saveToDiscData(PE,standDisc).copy());
+                        user.roundabout$updateStandDisc(MainUtil.saveToDiscData(PE,standDisc).copy());
                     }
                 }
             }
@@ -457,6 +457,8 @@ public class RoundaboutCommands {
                     }
                     ((StandUser) PE).roundabout$setHeat(0);
                     MainUtil.clearCooldowns(PE);
+                    S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) PE),
+                            PacketDataIndex.S2C_INT_SEAL, -1);
                 }
 
             }

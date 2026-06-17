@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.WhiteAlbumIceBlock;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -99,6 +100,12 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return skatesActive && PowerTypes.hasStandActive(self);
     }
 
+
+    @Override
+    public boolean isBrawling(){
+        return fistsOut;
+    }
+
     @Override
     public void onLandingAnimatedJump(){
         if (hasSkatesActivated()){
@@ -120,7 +127,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
     @Override
     public void onChangedBlock(BlockPos blockPos){
-        if (hasSkatesActivated() && self.isSprinting() && !self.isSwimming() &&
+        if (hasSkatesActivated() && acceleration > 0 && !self.isSwimming() &&
         !self.isFallFlying()) {
             if (!self.onGround()) {
                 return;
@@ -243,16 +250,22 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     public void fixThis(){
+        //Roundabout.LOGGER.info("2");
         if (!self.level().isClientSide()) {
+            //Roundabout.LOGGER.info("3");
             if (hasSkatesActivated()) {
+                //Roundabout.LOGGER.info("4");
                 if (acceleration >= getMaxAccelerationTicks()) {
+                    //Roundabout.LOGGER.info("5");
                     setPlayerPos2(PlayerPosIndex.SKATE_TWIRL);
+                    twirlTicks = 20;
                 } else {
+                    //Roundabout.LOGGER.info("6");
                     if (getPlayerPos2() != PlayerPosIndex.SKATE_TWIRL) {
+                        //Roundabout.LOGGER.info("7");
                         setPlayerPos2(PlayerPosIndex.SKATE_JUMP);
                     }
                 }
-                twirlTicks = 20;
             }
         }
     }
@@ -391,6 +404,21 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
         super.tickPower();
     }
+
+    public void setAcceleration(int num){
+        byte pos2 = getPlayerPos2();
+        acceleration = num;
+        if (num > 0){
+            if (pos2 != PlayerPosIndex.SKATE_JUMP &&
+                    pos2 != PlayerPosIndex.SKATE_TWIRL){
+                setPlayerPos2(PlayerPosIndex.SKATE_GENERAL);
+            }
+        } else {
+            if (pos2 == PlayerPosIndex.SKATE_GENERAL){
+                setPlayerPos2(PlayerPosIndex.NONE_2);
+            }
+        }
+    }
     private void processRing(BlockPos center, int r) {
 
         Level level = self.level();
@@ -466,7 +494,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         // code for advanced icons
 
         if (!isHoldingSneak()){
-            setSkillIcon(context, x, y, 1, StandIcons.SUIT_COMBAT, PowerIndex.NO_CD);
+            setSkillIcon(context, x, y, 1, StandIcons.SUIT_COMBAT, PowerIndex.SKILL_4);
         } else {
             setSkillIcon(context, x, y, 1, StandIcons.FREEZE_CANCEL, PowerIndex.SKILL_1_SNEAK);
         }
@@ -535,12 +563,13 @@ public class PowersWhiteAlbum extends NewDashPreset {
         //Roundabout.LOGGER.info("skates: "+skatesActive);
     }
 
-
     public boolean cracked = false;
+    public boolean fistsOut = false;
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
         $$0.putBoolean("skatesActive",skatesActive);
         $$0.putBoolean("cracked",cracked);
+        $$0.putBoolean("fistsOut",fistsOut);
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
@@ -548,6 +577,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
             skatesActive = $$0.getBoolean("skatesActive");
         } if ($$0.contains("cracked")) {
             cracked = $$0.getBoolean("cracked");
+        } if ($$0.contains("fistsOut")) {
+            fistsOut = $$0.getBoolean("fistsOut");
         }
     }
 
@@ -575,6 +606,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         switch (context)
         {
             case SKILL_1_NORMAL-> {
+                toggleFistsClient();
             }
             case SKILL_1_CROUCH-> {
                 iceCancelClient();
@@ -607,6 +639,12 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
+    public void toggleFistsClient(){
+        if (!onCooldown(PowerIndex.SKILL_4)){
+            this.setCooldown(PowerIndex.SKILL_4, 9);
+            tryPowerPacket(PowerIndex.POWER_1_BONUS);
+        }
+    }
 
     public void iceCancelClient(){
         if (!onCooldown(PowerIndex.SKILL_1_SNEAK)){
@@ -743,6 +781,21 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
+
+    public void toggleFists(){
+        int cooldown = 9;
+        this.setCooldown(PowerIndex.SKILL_4, cooldown);
+        if (!this.self.level().isClientSide()){
+            fistsOut = !fistsOut;
+            if (fistsOut){
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.HEEL_RAISE_EVENT, SoundSource.PLAYERS, 0.9F, (float) (1.02 + (Math.random() * 0.06)));
+            } else {
+                //this.self.level().playSound(null, this.self.blockPosition(), ModSounds.HEEL_RAISE_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+            }
+            saveDiscAndSync();
+        }
+    }
+
     public boolean toggleSkates(){
         int cooldown = 5;
         this.setCooldown(PowerIndex.SKILL_1, cooldown);
@@ -797,6 +850,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
         {
             case PowerIndex.POWER_1 -> {
                 return toggleSkates();
+            }
+            case PowerIndex.POWER_1_BONUS -> {
+                toggleFists();
             }
             case PowerIndex.POWER_3 -> {
                 iceWallServer(false);

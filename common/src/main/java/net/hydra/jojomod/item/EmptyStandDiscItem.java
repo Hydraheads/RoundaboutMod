@@ -44,7 +44,6 @@ public class EmptyStandDiscItem extends Item {
                     }
                     ((StandUser) $$1).roundabout$setStand(null);
                     ((StandUser) $$1).roundabout$setActive(false);
-                    addItem($$1, MainUtil.saveToDiscData($$1, currentDisc.copy()));
                     ((StandUser) $$1).roundabout$setStandDisc(ItemStack.EMPTY);
                     this.generateStandPowers($$1);
                     if ($$2.equals(InteractionHand.MAIN_HAND)){
@@ -64,15 +63,6 @@ public class EmptyStandDiscItem extends Item {
             }
         }
         return InteractionResultHolder.consume($$3);
-    }
-
-    public void addItem(Player player, ItemStack stack){
-            ItemEntity $$4 = new ItemEntity(player.level(), player.getEyePosition().x,
-                    player.getEyePosition().y, player.getEyePosition().z,
-                    stack);
-            $$4.setPickUpDelay(0);
-            $$4.setThrower(player.getUUID());
-            player.level().addFreshEntity($$4);
     }
     public boolean canAddItem(ItemStack itemStack, Inventory inventory) {
         boolean bl = false;

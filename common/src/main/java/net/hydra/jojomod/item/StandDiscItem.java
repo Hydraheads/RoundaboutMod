@@ -49,7 +49,6 @@ public class StandDiscItem extends Item {
             ((StandUser) player).roundabout$setStand(null);
             ((StandUser) player).roundabout$setActive(false);
             ((StandUser) player).roundabout$setStandDisc(stack.copy());
-            SI.generateStandPowers(player);
             ((StandUser) player).roundabout$getStandPowers().onStandSwitchInto();
         }
     }
@@ -146,22 +145,4 @@ public class StandDiscItem extends Item {
         return Component.translatable(sd.getDescriptionId() + ".desc");
     }
 
-
-    public void addItem(Player player, ItemStack stack){
-            ItemEntity $$4 = new ItemEntity(player.level(), player.getEyePosition().x,
-                    player.getEyePosition().y, player.getEyePosition().z,
-                    stack);
-            $$4.setPickUpDelay(0);
-            $$4.setThrower(player.getUUID());
-            player.level().addFreshEntity($$4);
-    }
-    public boolean canAddItem(ItemStack itemStack, Inventory inventory) {
-        boolean bl = false;
-        for (ItemStack itemStack2 : inventory.items) {
-            if (!itemStack2.isEmpty() && (!ItemStack.isSameItemSameTags(itemStack2, itemStack) || itemStack2.getCount() >= itemStack2.getMaxStackSize())) continue;
-            bl = true;
-            break;
-        }
-        return bl;
-    }
 }

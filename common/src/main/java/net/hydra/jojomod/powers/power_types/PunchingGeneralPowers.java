@@ -1,8 +1,6 @@
 package net.hydra.jojomod.powers.power_types;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -178,6 +176,14 @@ public class PunchingGeneralPowers extends GeneralPowers {
                     && (this.airTime > 6);
         }
         return false;
+    }
+
+    @Override
+    public void playSummonSound() {
+        if (!this.self.isCrouching()){
+            this.self.level().playSound(null, self.getX(), self.getY(),
+                    self.getZ(), ModSounds.HEEL_RAISE_EVENT, self.getSoundSource(), 0.9F, 1.02F);
+        }
     }
 
     @Override

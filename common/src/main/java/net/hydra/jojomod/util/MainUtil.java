@@ -201,6 +201,7 @@ public class MainUtil {
     public static ArrayList<String> expLessBlocks = Lists.newArrayList();
     public static ArrayList<String> standBlockGrabBlacklist = Lists.newArrayList();
     public static ArrayList<String> standDestructionBlacklist = Lists.newArrayList();
+    public static ArrayList<String> standBlockExplosionBlacklist = Lists.newArrayList();
     public static ArrayList<String> occultChargeEffectsToBanish = Lists.newArrayList();
     public static ArrayList<String> naturalStandUserMobBlacklist = Lists.newArrayList();
     public static ArrayList<String> hypnotismMobBlackList = Lists.newArrayList();
@@ -2941,7 +2942,7 @@ public class MainUtil {
             if (player != null) {
                 StandUser user = ((StandUser) player);
                 if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pwa){
-                    pwa.acceleration =data;
+                    pwa.setAcceleration(data);
                 }
             }
         } else if (context == PacketDataIndex.INT_UPDATE_PILOT){

@@ -2747,5 +2747,12 @@ public void unlockSkin(){
             default -> Component.translatable("skins.roundabout.soft_and_wet.light");
         };
     }
+
+    @Override
+    public void refreshCooldowns() {
+        super.refreshCooldowns();
+        this.setGoBeyondChargeTicks(0);
+        this.setShootTicks(0);
+    }
 }
 
