@@ -1636,10 +1636,20 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (target != null && bStatus == BOMB_ENTITY) {
                 float hitPoints = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantDesintegrationDamage;
 
+                if (this.getReducedDamage(target)) {
+                    hitPoints *= (ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnPlayers/100.0f);
+                }else {
+                    hitPoints *= (ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnMobs/100.0f);
+                }
+
                 boolean playersHitkill = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantHitkillPlayers;
                 boolean mobsHitkill = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantHitkillMobs;
 
                 boolean isBoss = MainUtil.isBossMob(target);
+
+                if (isBoss) {
+                    hitPoints *= 0.70f;
+                }
 
                 if (target instanceof LivingEntity LE) {
                     if (LE.hasLineOfSight(this.getSelf()) && !isBoss){
@@ -1649,22 +1659,10 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 if (target instanceof Player pl) {
                     if (!pl.isCreative() && playersHitkill) { pl.die(dmg); }
-                    else {
-                        target.hurt(dmg, hitPoints
-                            * (ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnPlayers/100.0f)
-                        );
-                    }
+                    else {target.hurt(dmg, hitPoints);}
                 } else {
                     if (mobsHitkill && !isBoss) { target.kill();}
-                    else if (isBoss) {
-                        target.hurt(dmg, hitPoints * 0.70f
-                            * (ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnMobs / 100f)
-                        );
-                    } else {
-                        target.hurt(dmg, hitPoints
-                            * (ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnMobs / 100f)
-                        );
-                    }
+                    else {target.hurt(dmg, hitPoints);}
                 }
 
                 if (target instanceof LivingEntity LE) {
