@@ -117,6 +117,13 @@ public class SheerHeartAttackEntity extends StandEntity {
 			}else if((!(((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen)) || (!user.isAlive())){
 				this.discard();
 			}else {
+				if ((((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ)) {
+					if (this != PKQ.SHA) {
+						this.discard();
+						return;
+					}
+				}
+
 				if (this.tickTargetFindCount <= 0) {
 					this.findTarget();
 					this.tickTargetFindCount = tickTargetFindMax;
@@ -231,12 +238,11 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 			int points = -1;
 
-			points += info.getLightEmission() * 10;
+			points += info.getLightEmission() * 5;
 
 			if (points < 0) { continue; }
 
 			double dist = pos.distToCenterSqr(this.position());
-
 
 			if (points > harmest) {
 				currentChoice = BLOCK;
@@ -413,7 +419,6 @@ public class SheerHeartAttackEntity extends StandEntity {
 		}
 		return points;
 	}
-
 
     @Override public boolean hurt(DamageSource source, float amount) { return false;}
 
