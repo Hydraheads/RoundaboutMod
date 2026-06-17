@@ -280,7 +280,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
             }
             punchImpact(target);
         } else {
-            Entity TE = getTargetEntity(self, 3, getPunchAngle());
+            Entity TE = getTargetEntity(self, 3, getBrawlPunchAngle());
             int id = 0;
             if (TE != null){
                 id = TE.getId();
@@ -594,7 +594,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
                     if (!(entity instanceof Player)) {
                         takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
                     }
-                    this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
+                    this.self.level().playSound(null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
                     addToCombo(entity);
                     hitParticles(entity);
                 } else {
@@ -634,20 +634,8 @@ public class PunchingGeneralPowers extends GeneralPowers {
         return true;
     }
 
-    public float getPunchAngle(){
+    public float getBrawlPunchAngle(){
         return 5;
-    }
-
-    public SoundEvent getPunchSound(){
-        double rand = Math.random();
-        if (rand < 0.25){
-            return ModSounds.COMBAT_PUNCH_1_EVENT;
-        } else if (rand < 0.5){
-            return ModSounds.COMBAT_PUNCH_2_EVENT;
-        } else if (rand < 0.75){
-            return ModSounds.COMBAT_PUNCH_3_EVENT;
-        }
-        return ModSounds.COMBAT_PUNCH_4_EVENT;
     }
 
     public boolean hasRendered = false;
@@ -673,7 +661,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
             hasRendered = true;
         } else {
             int barTexture = 0;
-            Entity TE = getTargetEntity(playerEntity, 3, getPunchAngle());
+            Entity TE = getTargetEntity(playerEntity, 3, getBrawlPunchAngle());
             float attackTimeMax = getAttackTimeMax();
             if (attackTimeMax > 0) {
                 float attackTime = getAttackTime();
@@ -701,12 +689,12 @@ public class PunchingGeneralPowers extends GeneralPowers {
                     if (barTexture == 0) {
                         if (this instanceof VampireGeneralPowers vgp){
                             if (isHoldingSneak()){
-                                if (getTargetEntity(playerEntity, 1.5F, getPunchAngle()) != null){
+                                if (getTargetEntity(playerEntity, 1.5F, getBrawlPunchAngle()) != null){
                                     context.blit(StandIcons.JOJO_ICONS, k, j, 193, 75, 15, 6);
                                     hasRendered = true;
                                 }
                             } else {
-                                if (getTargetEntity(playerEntity, 1.5F, getPunchAngle()) != null){
+                                if (getTargetEntity(playerEntity, 1.5F, getBrawlPunchAngle()) != null){
                                     context.blit(StandIcons.JOJO_ICONS, k, j, 193, 75, 15, 6);
                                     hasRendered = true;
                                 } else {

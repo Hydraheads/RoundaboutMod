@@ -44,7 +44,8 @@ public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
     public void render(BlockBombEntity blockBombEntity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         Player ClientPlayer = Minecraft.getInstance().player;
         boolean hidesOnF1 = ConfigManager.getClientConfig().killerQueenSettings.bombOverlayHideOnF1;
-        
+
+        //matrixStack.scale(0.95f, 0.95f, 0.95f);
         
     	if (ClientUtil.canSeeStands(ClientPlayer) && !(Minecraft.getInstance().options.hideGui && hidesOnF1)) {
         	Player UserPlayer =((Player)blockBombEntity.getUser());

@@ -2785,4 +2785,18 @@ public class AbilityScapeBasis {
         return item.isEdible() || item instanceof HarpoonItem || item instanceof TridentItem
                 || item instanceof KnifeItem;
     }
+    public float getBrawlPunchAngle(){
+        return 5;
+    }
+    public SoundEvent getBrawlPunchSound(){
+        double rand = Math.random();
+        if (rand < 0.25){
+            return ModSounds.COMBAT_PUNCH_1_EVENT;
+        } else if (rand < 0.5){
+            return ModSounds.COMBAT_PUNCH_2_EVENT;
+        } else if (rand < 0.75){
+            return ModSounds.COMBAT_PUNCH_3_EVENT;
+        }
+        return ModSounds.COMBAT_PUNCH_4_EVENT;
+    }
 }

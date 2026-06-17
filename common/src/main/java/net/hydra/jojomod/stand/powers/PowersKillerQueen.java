@@ -152,18 +152,29 @@ public class PowersKillerQueen extends NewPunchingStand {
         S2CPacketUtil.sendIntPowerDataPacket((Player)this.getSelf(),PowersKillerQueen.SHEER_HEART_ATTACK, status);
     }
 
-	public static ArrayList<String> blowableBlocksBlackList = Lists.newArrayList("minecraft:bedrock", "minecraft:obsidian");
-	
-	public boolean isBlockBlackListed(BlockState bs) {
-		ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
-		return (blowableBlocksBlackList != null && !blowableBlocksBlackList.isEmpty() && rl != null && blowableBlocksBlackList.contains(rl.toString()));
-	}
-	
 	public Entity bombEntity = null;
 	public BlockBombEntity bombBlock = null;
 	public Entity bombBubble = null;
 	public SheerHeartAttackEntity SHA = null;
-	
+
+    @Override
+    public void onPowerSwitch(){
+        this.bombEntity = null;
+        if (this.bombBlock != null) {
+            this.bombBlock.discard();
+            this.bombBlock = null;
+        }
+        if (this.SHA != null) {
+            this.SHA.discard();
+            this.SHA = null;
+        }
+        if (this.bombBubble != null) {
+            this.bombBubble.discard();
+        }
+
+        super.onPowerSwitch();
+    }
+
 	private boolean BitesTheDustMode = false;
 	public boolean inBitesTheDustMode() {return this.BitesTheDustMode;}
 	public boolean switchModes(){
@@ -177,8 +188,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 	
 	private boolean hasStrayCat = false;
-	
-	//public float standReach = 5;
+
 	public boolean wentForCharge = false;
 	public int chargedFinal;
 	public boolean holdDownClick = false;
@@ -196,6 +206,10 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public int getMaxGuardPoints(){ return 15; }
+    @Override
+    public byte getMaxLevel(){
+        return 7;
+    }
 
     @Override public float getPickMiningSpeed() { return 12F;}
     @Override public float getAxeMiningSpeed() { return 8F;}
@@ -255,9 +269,10 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     // Level stufff
 
-    public int getImpaleLevel() {
-        return 2;
-    }
+    public int getImpaleLevel() { return 2;}
+    public int getSheerHeartAttackLevel() { return 3; }
+    public int getStrayCatLevel() { return 5; }
+    public int getBitesTheDustLevel() { return 7; }
 
 
     public static final byte
@@ -537,7 +552,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 	        BlockPos pos = blockHit.getBlockPos();
 	    	BlockState state = this.getSelf().level().getBlockState(pos);
 	    	
-	    	return (!isBlockBlackListed(state) && !state.isAir()); 
+	    	return (!ExplosionUtil.isBlockBlackListed(state));
 	    }
 	    return false;
     }
@@ -634,7 +649,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         if (this.self instanceof Player){
             if (isPacketPlayer()){
-                this.setAttackTimeDuring(-20);
+                this.setAttackTimeDuring(-15);
                 this.mobPlantTicks = 15;
                 tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK,getTargetEntityId2(mobPlantRange));
             }
@@ -721,7 +736,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void mobPlantImpact(Entity entity) {
         if (activePower == PowerIndex.POWER_2){
-            this.setAttackTimeDuring(-20);
+            this.setAttackTimeDuring(-15);
 
             if (entity != null && entity.distanceTo(self) > mobPlantRange+0.75F) {
                 entity = null;
@@ -947,7 +962,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void updateMobPlant(){
         if (this.attackTimeDuring > -1) {
-            if (this.attackTimeDuring > 68) {
+            if (this.attackTimeDuring > 60) {
                 this.standMobPlant();
             } else {
                 if (!this.getSelf().level().isClientSide()) {
@@ -1135,7 +1150,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 		        BlockPos pos = blockHit.getBlockPos();
 		    	BlockState state = this.getSelf().level().getBlockState(pos);
 		    	
-		    	if (!isBlockBlackListed(state) && !state.isAir()) {
+		    	if (!ExplosionUtil.isBlockBlackListed(state)) {
 		    		this.bombBlock = ModEntities.BLOCK_BOMB.create(this.getSelf().level());
 		    		this.bombBlock.setUser(this.self);
 		    		this.bombBlock.setBlockPos(pos);
@@ -1373,11 +1388,11 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public Entity isBombEntityContacting() {
-        if (this.bombEntity instanceof LivingEntity LE) {
+        /*if (this.bombEntity instanceof LivingEntity LE) {
             LivingEntity lastAttacker = LE.getLastAttacker();
             int lastTime = LE.getLastHurtByMobTimestamp();
             Roundabout.LOGGER.info("Last damage taken: " + lastTime);
-        }
+        }*/
         float margin = 0.2f;
 
         float hRad = this.bombEntity.getBbHeight() / 2.0f + margin;
@@ -1498,12 +1513,12 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.barrage",
                 "instruction.roundabout.barrage", StandIcons.KILLER_QUEEN_BARRAGE,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39, topPos+99,0, "ability.roundabout.kq_guard_bubble",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39, topPos+99, getStrayCatLevel(), "ability.roundabout.kq_guard_bubble",
                 "instruction.roundabout.hold_block", StandIcons.KILLER_QUEEN_GUARD_BUBBLES,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.kq_bomb_block",
                 "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_PLANT_BOMB_BLOCK,1,level,bypas));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80, 0, "ability.roundabout.kq_btd_day",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80, getBitesTheDustLevel(), "ability.roundabout.kq_btd_day",
                 "instruction.roundabout.press_skill_btd_mode", StandIcons.KILLER_QUEEN_BTD_DAY,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99, 0, "ability.roundabout.kq_bomb_item",
                 "instruction.roundabout.press_skill_crouch", StandIcons.KILLER_QUEEN_PLANT_BOMB_ITEM,1,level,bypas));
@@ -1512,12 +1527,12 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.roundabout.kq_bomb_mob",
                 "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_PLANT_BOMB_MOB,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,0, "ability.roundabout.impale",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,getImpaleLevel(), "ability.roundabout.impale",
                 "instruction.roundabout.press_skill_crouch", StandIcons.KILLER_QUEEN_IMPALE,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,0, "ability.roundabout.kq_bomb_bubble",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118, getStrayCatLevel(), "ability.roundabout.kq_bomb_bubble",
                 "instruction.roundabout.press_skill_block", StandIcons.KILLER_QUEEN_BUBBLE_LAUNCH,2,level,bypas));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80, 0, "ability.roundabout.kq_btd_combat",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80, getBitesTheDustLevel(), "ability.roundabout.kq_btd_combat",
                 "instruction.roundabout.press_skill_shooting_mode", StandIcons.KILLER_QUEEN_BTD_COMBAT,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
@@ -1526,12 +1541,12 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+80,0, "ability.roundabout.vault",
                 "instruction.roundabout.press_skill_air", StandIcons.KILLER_QUEEN_VAULT,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99, 0, "ability.roundabout.kq_sha_summon",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99, getSheerHeartAttackLevel(), "ability.roundabout.kq_sha_summon",
                 "instruction.roundabout.press_skill_crouch", StandIcons.KILLER_QUEEN_SHA_SUMMON,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+118,0, "ability.roundabout.kq_sha_throw",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+118,getSheerHeartAttackLevel(), "ability.roundabout.kq_sha_throw",
                 "instruction.roundabout.press_skill_block", StandIcons.KILLER_QUEEN_SHA_THROW,3,level,bypas));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+80, 0, "ability.roundabout.kq_btd_mode",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+80, getBitesTheDustLevel(), "ability.roundabout.kq_btd_mode",
                 "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_BTD_ACTIVATE,4,level,bypas));
 
         return $$1;
@@ -1666,7 +1681,11 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
 
                 if (target instanceof Player pl) {
-                    if (!pl.isCreative() && playersHitkill) { pl.die(dmg); }
+                    /*
+                     * apparently, "die(dmg)" would result in the player been glitched
+                     * and unable to respawn for some weird reason.
+                    */
+                    if (!pl.isCreative() && playersHitkill) { pl.hurt(dmg, 9999999999.0f); }
                     else {target.hurt(dmg, hitPoints);}
                 } else {
                     if (mobsHitkill && !isBoss) { target.kill();}

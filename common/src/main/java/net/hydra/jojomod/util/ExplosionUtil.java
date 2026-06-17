@@ -32,7 +32,7 @@ public class ExplosionUtil {
 	public static boolean isBlockBlackListed(BlockState bs) {
 		ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
 
-		return (MainUtil.standBlockExplosionBlacklist != null && !MainUtil.standBlockExplosionBlacklist.isEmpty() && rl != null && MainUtil.standBlockExplosionBlacklist.contains(rl.toString()));
+		return (MainUtil.standBlockExplosionBlacklist != null && !MainUtil.standBlockExplosionBlacklist.isEmpty() && rl != null && MainUtil.standBlockExplosionBlacklist.contains(rl.toString())) && !bs.isAir();
 	}
 	public static void explodeEffects(Vec3 pos, Level level, SimpleParticleType particle, float range) {
 		explodeEffects(pos, level, particle, range, 18);
