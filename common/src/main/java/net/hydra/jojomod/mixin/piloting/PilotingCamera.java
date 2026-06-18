@@ -48,12 +48,12 @@ public abstract class PilotingCamera implements ICamera {
 
     @Unique
     public float roundabout$getViewXRot(Entity ent, float $$0) {
-        return $$0 == 1.0F ? ent.getXRot() : MainUtil.controlledLerpAngleDegrees(ClientUtil.getFrameTime(),ent.xRotO,ent.getXRot(),1);
+        return $$0 == 1.0F ? ent.getXRot() : MainUtil.controlledLerpAngleDegrees($$0%1,ent.xRotO,ent.getXRot(),1);
     }
-
+    
     @Unique
     public float roundabout$getViewYRot(Entity ent, float $$0) {
-        return $$0 == 1.0F ? ent.getYRot() : MainUtil.controlledLerpAngleDegrees(ClientUtil.getFrameTime(),ent.yRotO,ent.getYRot(),1);
+        return $$0 == 1.0F ? ent.getYRot() : MainUtil.controlledLerpAngleDegrees($$0%1,ent.yRotO,ent.getYRot(),1);
     }
     @Unique
     public void roundabout$setup(BlockGetter blockGetter, Entity entity, boolean bl, boolean bl2, float f) {
@@ -62,8 +62,7 @@ public abstract class PilotingCamera implements ICamera {
             Direction gravityDirection = GravityAPI.getGravityDirection(roundabout$povSwitch);
             RotationAnimation animation = GravityAPI.getRotationAnimation(roundabout$povSwitch);
             if (animation != null) {
-                float partialTick = Minecraft.getInstance().getFrameTime();
-                long timeMs = entity.level().getGameTime() * 50 + (long) (partialTick * 50);
+                long timeMs = entity.level().getGameTime() * 50 + (long) (f%1 * 50);
                 animation.update(timeMs);
                 if (!(gravityDirection == Direction.DOWN && !animation.isInAnimation())) {
                     this.initialized = true;

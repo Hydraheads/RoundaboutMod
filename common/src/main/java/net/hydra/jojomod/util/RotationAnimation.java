@@ -1,8 +1,10 @@
 package net.hydra.jojomod.util;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.util.gravity.QuaternionUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -113,9 +115,16 @@ public class RotationAnimation {
      */
     public Quaternionf getCurrentGravityRotation(Direction currentGravity, long timeMs) {
 
+        //Roundabout.LOGGER.info("tms: "+timeMs);
         if (ClientUtil.checkIfGamePaused()){
             if (ent != null){
+                float partialTick = Minecraft.getInstance().getFrameTime();
                 timeMs = ent.level().getGameTime() * 50;
+            }
+        } else {
+            if (ent != null){
+                float partialTick = Minecraft.getInstance().getFrameTime();
+                timeMs = ent.level().getGameTime() * 50 + (long) ((partialTick%1) * 50);
             }
         }
 
