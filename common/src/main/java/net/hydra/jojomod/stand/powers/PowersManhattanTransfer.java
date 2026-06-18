@@ -35,14 +35,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Blaze;
-import net.minecraft.world.entity.monster.Ghast;
-import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.*;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -861,16 +857,5 @@ public class PowersManhattanTransfer extends NewDashPreset {
     @Override
     public Component ifWipListDev(){
         return Component.literal(  "14Kacper").withStyle(ChatFormatting.DARK_RED);
-    }
-
-    /**Ignore*/
-    @Override
-    public void tickMobAI(LivingEntity attackTarget){
-        boolean isRangedAttackMob = this.getSelf() instanceof RangedAttackMob || this.getSelf() instanceof Blaze || this.getSelf() instanceof Ghast;
-        if(isRangedAttackMob ){
-            this.getSelf().playSound(SoundEvents.GHAST_HURT);
-            this.getSelf().kill();
-        } else {
-        }
     }
 }
