@@ -324,10 +324,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 IPlayerEntity ipe = ((IPlayerEntity) PE);
                 ipe.roundabout$setIsControlling(0);
             }
+            this.setSomeTicks(5);
             tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
         } else {
-            this.tryPower(PowerIndex.POWER_2, true);
-            tryPowerPacket(PowerIndex.POWER_2);
             StandEntity entity = this.getStandEntity(this.self);
             int L = 0;
             if (entity != null) {
@@ -393,6 +392,14 @@ public class PowersManhattanTransfer extends NewDashPreset {
         if (XtraSpdTick > 1) {
             XtraSpdTick--;
         }
+        if(this.isClient()){
+            if(this.isPiloting()) {
+                if(this.someTicks > 0){
+                    someTicks--;
+                }
+            }
+        }
+
         if (this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME) {
             if (ME.isInRain()) {
                 if (isSoundRainInterrupted) {
@@ -523,11 +530,16 @@ public class PowersManhattanTransfer extends NewDashPreset {
     int securityTicks = 0;
     void setSecurityTicks(int st){securityTicks = st;}
 
+    int someTicks = 5;
+    void setSomeTicks(int ticks){someTicks = ticks;}
+
     public void synchToCamera(){
         if (isPiloting()) {
             LivingEntity ent = getPilotingStand();
             if (ent != null) {
-                ClientUtil.synchToCamera(ent);
+                if(someTicks < 1){
+                    ClientUtil.synchToCamera(ent);
+                }
             }
         }
     }
