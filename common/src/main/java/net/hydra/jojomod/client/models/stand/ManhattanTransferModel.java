@@ -254,6 +254,7 @@ public class ManhattanTransferModel<T extends ManhattanTransferEntity> extends S
         this.animate(pEntity.slow_manhattan_back, ManhattanTransferAnimations.Slow_Hattan_Back, pAgeInTicks, 1f);
         this.animate(pEntity.slow_manhattan_left, ManhattanTransferAnimations.Slow_Hattan_Left, pAgeInTicks, 1f);
         this.animate(pEntity.slow_manhattan_right, ManhattanTransferAnimations.Slow_Hattan_Right, pAgeInTicks, 1f);
+        this.animate(pEntity.manhattan_is_loaded, ManhattanTransferAnimations.Manhattan_Loaded, pAgeInTicks, 1f);
     }
 
 

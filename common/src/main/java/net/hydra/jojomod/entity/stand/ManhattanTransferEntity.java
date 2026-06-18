@@ -869,6 +869,7 @@ if(!isHattanPilotMode) {
     public final AnimationState slow_manhattan_back = new AnimationState();
     public final AnimationState slow_manhattan_left = new AnimationState();
     public final AnimationState slow_manhattan_right = new AnimationState();
+    public final AnimationState manhattan_is_loaded= new AnimationState();
 
 
     private boolean isPressingW = false;
@@ -903,192 +904,59 @@ if(!isHattanPilotMode) {
                 AnimationState $$13 = this.slow_manhattan_back;
                 AnimationState $$14 = this.slow_manhattan_left;
                 AnimationState $$15 = this.slow_manhattan_right;
+                AnimationState afk = this.manhattan_is_loaded;
 
                 if (!PM.isActive()) {
                 } else {
-                    if(PM.isClient() && PM.isPiloting()) {
-                        if (options.keyDown.isDown() || options.keyUp.isDown() || options.keyLeft.isDown() || options.keyRight.isDown()) {
-                            isKeyEverPressed = true;
-                        }
-                        if (options.keyUp.isDown()) {
-                            isPressingW = true;
-                            pressS = false;
-                            pressA = false;
-                            verticalLastPressed = true;
-                            this.setHatAnimDir = 1;
-                        }
-                        if (!options.keyUp.isDown()) {
-                            isPressingW = false;
-                        }
-                        if (options.keyDown.isDown()) {
-                            isPressingS = true;
-                            pressS = true;
-                            pressA = false;
-                            verticalLastPressed = true;
-                            this.setHatAnimDir = 2;
-                        }
-                        if (!options.keyDown.isDown()) {
-                            isPressingS = false;
-                        }
-                        if (options.keyLeft.isDown()) {
-                            isPressingA = true;
-                            pressA = true;
-                            pressS = false;
-                            verticalLastPressed = false;
-                            this.setHatAnimDir = 3;
-                        }
-                        if (!options.keyLeft.isDown()) {
-                            isPressingA = false;
-                        }
-                        if (options.keyRight.isDown()) {
-                            isPressingD = true;
-                            pressA = false;
-                            pressS = false;
-                            verticalLastPressed = false;
-                            this.setHatAnimDir = 4;
-                        }
-                        if (!options.keyRight.isDown()) {
-                            isPressingD = false;
-                        }
-                    }
-                    if (isInRain()) {
-                        this.rain_dodging_manhattan.startIfStopped(this.tickCount);
-                        $$2.stop();
-                        $$1.stop();
-                        $$3.stop();
-                        $$4.stop();
-                        $$5.stop();
-                        $$6.stop();
-                        $$7.stop();
-                        $$8.stop();
-                        $$9.stop();
-                        $$10.stop();
-                        $$11.stop();
-                        $$12.stop();
-                    }
-                    if (!isInRain()) {
-                        this.rain_dodging_manhattan.stop();
-
-                        if (PM.isClient() && !this.stopsManhattanAnimationsWhenHeldItem) {
-                            if (PM.isPiloting()) {
-                            /*    if (isPressingW && !isPressingS) {
-                                    $$1.startIfStopped(this.tickCount);
-                                    $$2.startIfStopped(this.tickCount);
-                                    $$4.stop();
-                                    $$6.stop();
-                                    $$0.stop();
-                                } else {
-                                    $$1.stop();
-                                    $$2.stop();
-                                    $$6.startIfStopped(this.tickCount);
-                                     $$0.startIfStopped(this.tickCount);
-                                }
-                                if (isPressingS && !isPressingW) {
-                                    $$3.startIfStopped(this.tickCount);
-                                    $$4.startIfStopped(this.tickCount);
-                                    $$2.stop();
-                                    $$0.stop();
-                                    $$5.stop();
-                                } else {
-                                    $$3.stop();
-                                    $$4.stop();
-                                    $$5.startIfStopped(this.tickCount);
-                                    $$13.startIfStopped(this.tickCount);
-                                }
-
-                                if (isPressingW && isPressingS) {
-                                    $$1.stop();
-                                    $$2.stop();
-                                    $$3.stop();
-                                    $$4.stop();
-                                    if ($$2.isStarted()) {
-                                        $$6.startIfStopped(this.tickCount);
-                                    }
-                                    if ($$4.isStarted()) {
-                                        $$5.startIfStopped(this.tickCount);
-                                    }
-                                     // $$14.startIfStopped(this.tickCount);
-                                }
-
-                                if (isPressingA && !isPressingD) {
-                                    $$7.startIfStopped(this.tickCount);
-                                    $$9.startIfStopped(this.tickCount);
-                                    $$12.stop();
-                                    $$8.stop();
-                                    $$0.stop();
-                                } else {
-                                    $$8.startIfStopped(this.tickCount);
-                                    $$14.startIfStopped(this.tickCount);
-                                    $$7.stop();
-                                    $$9.stop();
-                                }
-
-                                if (isPressingD && !isPressingA) {
-                                    $$10.startIfStopped(this.tickCount);
-                                    $$12.startIfStopped(this.tickCount);
-                                    $$9.stop();
-                                    $$11.stop();
-                                    $$0.stop();
-                                } else {
-                                    $$11.startIfStopped(this.tickCount);
-                                     $$15.startIfStopped(this.tickCount);
-                                    $$10.stop();
-                                    $$12.stop();
-                                }
-
-                                if (isPressingD && isPressingA) {
-                                    $$7.stop();
-                                    $$9.stop();
-                                    $$10.stop();
-                                    $$12.stop();
-                                    if ($$9.isStarted()) {
-                                        $$8.startIfStopped(this.tickCount);
-                                    }
-                                    if ($$12.isStarted()) {
-                                        $$11.startIfStopped(this.tickCount);
-                                    }
-                                }*/
-
-                            } else if (!PM.isPiloting()) {
-                                if (this.setHatAnimDir == 1) {
-                                    $$0.startIfStopped(this.tickCount);
-                                    $$13.stop();
-                                    $$14.stop();
-                                    $$15.stop();
-                                }
-                                if (this.setHatAnimDir == 2) {
-                                    $$13.startIfStopped(this.tickCount);
-                                    $$14.stop();
-                                    $$15.stop();
-                                    $$0.stop();
-                                }
-                                if (this.setHatAnimDir == 3) {
-                                    $$14.startIfStopped(this.tickCount);
-                                    $$13.stop();
-                                    $$15.stop();
-                                    $$0.stop();
-                                }
-                                if (this.setHatAnimDir == 4) {
-                                    $$15.startIfStopped(this.tickCount);
-                                    $$13.stop();
-                                    $$14.stop();
-                                    $$0.stop();
-                                }
-                                $$2.stop();
-                                $$1.stop();
-                                $$3.stop();
-                                $$4.stop();
-                                $$5.stop();
-                                $$6.stop();
-                                $$7.stop();
-                                $$8.stop();
-                                $$9.stop();
-                                $$10.stop();
-                                $$11.stop();
-                                $$12.stop();
+                    if (PM.isClient()) {
+                        if (PM.isPiloting()) {
+                            if (options.keyDown.isDown() || options.keyUp.isDown() || options.keyLeft.isDown() || options.keyRight.isDown()) {
+                                isKeyEverPressed = true;
                             }
-                        } else {
-                            $$0.stop();
+                            if (options.keyUp.isDown()) {
+                                isPressingW = true;
+                                pressS = false;
+                                pressA = false;
+                                verticalLastPressed = true;
+                                this.setHatAnimDir = 1;
+                            }
+                            if (!options.keyUp.isDown()) {
+                                isPressingW = false;
+                            }
+                            if (options.keyDown.isDown()) {
+                                isPressingS = true;
+                                pressS = true;
+                                pressA = false;
+                                verticalLastPressed = true;
+                                this.setHatAnimDir = 2;
+                            }
+                            if (!options.keyDown.isDown()) {
+                                isPressingS = false;
+                            }
+                            if (options.keyLeft.isDown()) {
+                                isPressingA = true;
+                                pressA = true;
+                                pressS = false;
+                                verticalLastPressed = false;
+                                this.setHatAnimDir = 3;
+                            }
+                            if (!options.keyLeft.isDown()) {
+                                isPressingA = false;
+                            }
+                            if (options.keyRight.isDown()) {
+                                isPressingD = true;
+                                pressA = false;
+                                pressS = false;
+                                verticalLastPressed = false;
+                                this.setHatAnimDir = 4;
+                            }
+                            if (!options.keyRight.isDown()) {
+                                isPressingD = false;
+                            }
+                        }
+
+                        if (isInRain()) {
+                            this.rain_dodging_manhattan.startIfStopped(this.tickCount);
                             $$2.stop();
                             $$1.stop();
                             $$3.stop();
@@ -1104,6 +972,71 @@ if(!isHattanPilotMode) {
                             $$13.stop();
                             $$14.stop();
                             $$15.stop();
+                            afk.stop();
+                        }
+                        if (!isInRain()) {
+                            this.rain_dodging_manhattan.stop();
+                            if (PM.isClient()){
+                                if(!this.stopsManhattanAnimationsWhenHeldItem) {
+                                if (PM.isPiloting()) {
+
+                                } else if (!PM.isPiloting()) {
+                                    if (this.setHatAnimDir == 1) {
+                                        $$0.startIfStopped(this.tickCount);
+                                        $$13.stop();
+                                        $$14.stop();
+                                        $$15.stop();
+                                    }
+                                    if (this.setHatAnimDir == 2) {
+                                        $$13.startIfStopped(this.tickCount);
+                                        $$14.stop();
+                                        $$15.stop();
+                                        $$0.stop();
+                                    }
+                                    if (this.setHatAnimDir == 3) {
+                                        $$14.startIfStopped(this.tickCount);
+                                        $$13.stop();
+                                        $$15.stop();
+                                        $$0.stop();
+                                    }
+                                    if (this.setHatAnimDir == 4) {
+                                        $$15.startIfStopped(this.tickCount);
+                                        $$13.stop();
+                                        $$14.stop();
+                                        $$0.stop();
+                                    }
+                                    $$2.stop();
+                                    $$1.stop();
+                                    $$3.stop();
+                                    $$4.stop();
+                                    $$5.stop();
+                                    $$6.stop();
+                                    $$7.stop();
+                                    $$8.stop();
+                                    $$9.stop();
+                                    $$10.stop();
+                                    $$11.stop();
+                                    $$12.stop();
+                                }} else {
+                                    $$0.stop();
+                                    $$2.stop();
+                                    $$1.stop();
+                                    $$3.stop();
+                                    $$4.stop();
+                                    $$5.stop();
+                                    $$6.stop();
+                                    $$7.stop();
+                                    $$8.stop();
+                                    $$9.stop();
+                                    $$10.stop();
+                                    $$11.stop();
+                                    $$12.stop();
+                                    $$13.stop();
+                                    $$14.stop();
+                                    $$15.stop();
+                                    afk.startIfStopped(this.tickCount);
+                                }
+                            }
                         }
                     }
                 }
