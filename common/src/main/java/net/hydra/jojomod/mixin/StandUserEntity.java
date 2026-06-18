@@ -5380,6 +5380,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     protected void roundabout$jumpFromGround(CallbackInfo ci) {
 
         this.roundabout$getStandPowers().onJump();
+        if (rdbt$this() instanceof Player pl) {
+            ((IFatePlayer)pl).rdbt$getFatePowers().onJump();
+        }
 
         if (this.roundabout$getStandPowers().cancelSprintJump() || roundabout$cancelsprintJump()
         || (rdbt$this() instanceof Player pl && (((IFatePlayer)pl).rdbt$getFatePowers().cancelSprintJump() ||

@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.gravity;
 
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IClientEntity;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IGravityEntity;
@@ -345,6 +346,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
 
         roundabout$adjustEntityPosition(oldGravity, newGravity, getBoundingBox());
 
+        //Roundabout.LOGGER.info("1");
         if (level().isClientSide()) {
             RotationAnimation ani = ((IClientEntity)this).roundabout$getGravityAnimation();
             Validate.notNull(ani, "gravity animation is null");
@@ -526,7 +528,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
                     ) {
                         dr = PW.getHeelDirection();
                     } else if (rdbt$this() instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof
-                            VampiricFate VP && VP.getWallWalkDirection() != VP.getIntendedDirection()) {
+                            VampiricFate VP && VP.isPlantedInWall()) {
                         dr = VP.getWallWalkDirection();
                     } else if (rdbt$this() instanceof LivingEntity LE && LE.hasEffect(ModEffects.GRAVITY_FLIP)) {
                         MobEffectInstance mi = LE.getEffect(ModEffects.GRAVITY_FLIP);

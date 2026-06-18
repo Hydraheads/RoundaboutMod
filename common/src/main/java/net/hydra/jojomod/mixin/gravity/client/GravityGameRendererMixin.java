@@ -62,7 +62,7 @@ public abstract class GravityGameRendererMixin {
                 if (animation == null) {
                     return;
                 }
-                long timeMs = focusedEntity.level().getGameTime() * 50 + (long) (tickDelta * 50);
+                long timeMs = focusedEntity.level().getGameTime() * 50 + (long) (tickDelta%1 * 50);
                 Quaternionf currentGravityRotation = animation.getCurrentGravityRotation(gravityDirection, timeMs);
 
 

@@ -217,8 +217,7 @@ public class StandPowers extends AbilityScapeBasis {
     public boolean cancelSprintJump(){
         return this.isBarraging();
     }
-    public void onJump(){
-    }
+
 
     public int getJumpHeightAddon() {return 0;}
 
@@ -2043,13 +2042,6 @@ public class StandPowers extends AbilityScapeBasis {
 
     @Override
     public boolean setPowerOther(int move, int lastMove) {
-        if (move == PowerIndex.ATTACK) {
-            setAttack();
-        } else if (move == PowerIndex.BARRAGE_CHARGE) {
-            this.setPowerBarrageCharge();
-        } else if (move == PowerIndex.BARRAGE) {
-            this.setPowerBarrage();
-        }
         return false;
     }
     public int getMaxChargeTSTime(){

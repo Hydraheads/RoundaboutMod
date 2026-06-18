@@ -65,7 +65,7 @@ public abstract class GravityEntityRenderDispatcherMixin {
                 if (animation == null) {
                     return;
                 }
-                long timeMs = entity.level().getGameTime() * 50 + (long) (tickDelta * 50);
+                long timeMs = entity.level().getGameTime() * 50 + (long) (tickDelta%1 * 50);
                 matrices.mulPose(new Quaternionf(animation.getCurrentGravityRotation(gravityDirection, timeMs)).conjugate());
             }
         }
