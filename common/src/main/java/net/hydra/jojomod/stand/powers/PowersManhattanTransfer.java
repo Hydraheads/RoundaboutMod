@@ -330,7 +330,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 ipe.roundabout$setIsControlling(0);
             }
             this.setSomeTicks(5);
-            this.setCooldown(PowerIndex.SKILL_2, 15);
             tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
         } else {
             StandEntity entity = this.getStandEntity(this.self);
@@ -340,6 +339,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
             }
             tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, L);
         }
+        this.setCooldown(PowerIndex.SKILL_2, 15);
     }
     @Override
     public boolean isPiloting() {
