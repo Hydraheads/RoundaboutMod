@@ -211,7 +211,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public boolean tryPower(int move, boolean forced) {
         switch (move) {
             case PowersManhattanTransfer.MANHATTAN_DODGE -> {
-                    this.setCooldown(PowersManhattanTransfer.MANHATTAN_DODGE, ClientNetworking.getAppropriateConfig().manhattanTransferSettings.manhattanDashCooldown);
                     this.setXtraSpdTick(10);
                     this.getStandEntity(this.getSelf()).level().playSound(null, this.getSelf().blockPosition(), ModSounds.VAMPIRE_DASH_EVENT, SoundSource.PLAYERS, 0.8F, 2F);
 
@@ -238,13 +237,13 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
 
     public void manhattanDodge() {
-        if (!onCooldown(PowersManhattanTransfer.MANHATTAN_DODGE) && !isAttackIneptVisually(PowersManhattanTransfer.MANHATTAN_DODGE,3)) {
-          /*  tryPower(PowersManhattanTransfer.MANHATTAN_DODGE);
+        if (!onCooldown(PowerIndex.SKILL_3) && !isAttackIneptVisually(PowersManhattanTransfer.MANHATTAN_DODGE,3)) {
+            tryPower(PowersManhattanTransfer.MANHATTAN_DODGE);
             tryPowerPacket(PowersManhattanTransfer.MANHATTAN_DODGE);
             if (isClient()) {
                 this.self.playSound(ModSounds.VAMPIRE_DASH_EVENT, 100F, 1.2F);
-            }*/
-            this.setCooldown(PowersManhattanTransfer.MANHATTAN_DODGE, 100);
+            }
+            this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().manhattanTransferSettings.manhattanDashCooldown);
         }
     }
 
@@ -256,10 +255,13 @@ public class PowersManhattanTransfer extends NewDashPreset {
             }
     }
     public void switchVisionClient(){
-        this.tryPower(PowerIndex.POWER_4, true);
-        tryPowerPacket(PowerIndex.POWER_4);
-        if (isClient() && visionModeClient) {
-            this.self.playSound(ModSounds.MANHATTAN_VISION_EVENT, 150F, 0.9F);
+        if (!onCooldown(PowerIndex.SKILL_4) && !isAttackIneptVisually(PowerIndex.SKILL_4,3)) {
+            this.tryPower(PowerIndex.POWER_4, true);
+            tryPowerPacket(PowerIndex.POWER_4);
+            if (isClient() && visionModeClient) {
+                this.self.playSound(ModSounds.MANHATTAN_VISION_EVENT, 150F, 0.9F);
+            }
+            this.setCooldown(PowerIndex.SKILL_4, 15);
         }
     }
 
@@ -825,10 +827,10 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public void renderIcons(GuiGraphics context, int x, int y) {
         // code for advanced icons
         if (!switchShootingMode()) {
-            setSkillIcon(context, x, y, 1, StandIcons.MANUAL_SHOOTING_ON, PowerIndex.SKILL_1);
+            setSkillIcon(context, x, y, 1, StandIcons.MANUAL_SHOOTING_ON, PowerIndex.NO_CD);
         }
         else
-            setSkillIcon(context, x, y, 1, StandIcons.MANUAL_SHOOTING_OFF, PowerIndex.SKILL_1);
+            setSkillIcon(context, x, y, 1, StandIcons.MANUAL_SHOOTING_OFF, PowerIndex.NO_CD);
 
         if (isPiloting())
             setSkillIcon(context, x, y, 2, StandIcons.CONTROL_MODE_OFF, PowerIndex.SKILL_2);
@@ -842,7 +844,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
             setSkillIcon(context, x, y, 4, StandIcons.WIND_VISION_OFF, PowerIndex.SKILL_4);
 
         if(isPiloting()){
-            setSkillIcon(context, x, y, 3, StandIcons.MANHATTAN_DODGE, PowersManhattanTransfer.MANHATTAN_DODGE);
+            setSkillIcon(context, x, y, 3, StandIcons.MANHATTAN_DODGE, PowerIndex.SKILL_3);
         }
         else{
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
