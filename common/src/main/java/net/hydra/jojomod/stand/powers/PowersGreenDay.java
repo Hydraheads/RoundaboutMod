@@ -456,11 +456,8 @@ public class PowersGreenDay extends NewPunchingStand {
                         legGoneTicks = 0;
                         this.self.level().playSound(null, this.self.blockPosition(), ModSounds.GREEN_DAY_STITCH_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                         ((StandUser) this.self).rdbt$SetCrawlTicks(0);
-                        setActivePower(PowerIndex.POWER_3_BONUS);
-                        S2CPacketUtil.sendIntPowerDataPacket((Player)this.getSelf(),PowerIndex.POWER_3_BONUS,0);
 
                         double Xangle = Math.toRadians(this.self.getLookAngle().x);
-                        double Pitch = Math.toRadians(this.self.getLookAngle().y);
                         double Zangle = Math.toRadians(this.self.getLookAngle().z);
                         double diameter = 0.4d;
                         for (int i = 0; i < 11; i = i + 1) {
@@ -759,9 +756,13 @@ public class PowersGreenDay extends NewPunchingStand {
         //this.self.level().addFreshEntity($$2);
         Player player = (Player)this.self;
         if(this.self.getOffhandItem().getItem() instanceof AirItem){
-            this.self.setItemInHand(InteractionHand.OFF_HAND,Off_hand_entity.getMainHandItem());
+            ItemEntity item = new ItemEntity(this.self.level(), this.self.getX(), this.self.getY() + 2, this.self.getZ(), Off_hand_entity.getMainHandItem());
+            $$2.setPickUpDelay(1);
+            this.self.level().addFreshEntity($$2);
         }else {
-            this.self.spawnAtLocation(Off_hand_entity.getMainHandItem());
+            ItemEntity item = new ItemEntity(this.self.level(), this.self.getX(), this.self.getY() + 2, this.self.getZ(), Off_hand_entity.getMainHandItem());
+            $$2.setPickUpDelay(1);
+            this.self.level().addFreshEntity($$2);
         }
 
         Off_hand_entity.setUser(null);
@@ -1107,6 +1108,10 @@ public class PowersGreenDay extends NewPunchingStand {
     public int getLeapLevel(){
         return 3;
     }
+
+    public void reattatchLegs(){
+
+    }
     public int bonusLeapCount = -1;
     public void bigLeap(LivingEntity entity,float range, float mult){
         //legGoneTicks = 240;
@@ -1332,7 +1337,7 @@ public class PowersGreenDay extends NewPunchingStand {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
                 }
             }else
-            if(!(this.self.onGround()) && (RNG > 0.9)){
+            if( (RNG > 0.95) && (this.self.getHealth() < this.self.getMaxHealth())){
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
             }
 
@@ -1353,6 +1358,12 @@ public class PowersGreenDay extends NewPunchingStand {
 
     @Override
     public void levelUp(){
+        if(Main_arm != null) {
+            Main_arm.discard();
+        }
+        if(Off_hand_entity != null) {
+            Off_hand_entity.discard();
+        }
         if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE){
             IPlayerEntity ipe = ((IPlayerEntity) PE);
             byte level = ipe.roundabout$getStandLevel();
@@ -1460,6 +1471,8 @@ public class PowersGreenDay extends NewPunchingStand {
 
         return Component.translatable(  "skins.roundabout.green_day.part_five_green_day");
     }
+
+
 
     @Override
     public List<Byte> getSkinList() {
