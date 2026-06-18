@@ -312,7 +312,6 @@ public class ManhattanTransferEntity extends StandEntity {
                     if (direct instanceof AbstractArrow AA) {
                         manhattanDamageIncipit = amount;
                     }
-                    soundForPlayer();
                 }
             }
         }
@@ -320,21 +319,6 @@ public class ManhattanTransferEntity extends StandEntity {
         return super.hurt(source, amount);
     }
 
-    public void soundForPlayer() {
-        if (this.getUserData(this.getUser()) != null) {
-            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-                    PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
-            }
-        }
-    }
-
-    public void soundForPlayerTwo() {
-        if (this.getUserData(this.getUser()) != null) {
-            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-                    PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
-            }
-        }
-    }
 
     public void itemEject() {
         if (hasItem && this.canAcquireHeldItem) {
@@ -390,7 +374,6 @@ public class ManhattanTransferEntity extends StandEntity {
         thrower.playSound(ModSounds.BULLET_RICOCHET_EVENT, 1.0F, (thrower.random.nextFloat() * 0.2F + 0.7F));
             if(thrower.getUser() != null) {
                 if(thrower.distanceTo(thrower.getUser()) > 16) {
-                thrower.soundForPlayerTwo();
             }
         }
         if (!thrower.level().isClientSide) {

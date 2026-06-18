@@ -224,9 +224,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
             }
             case PowersManhattanTransfer.DEFLECT_PROJECTILE -> {
                 if(this.getStandEntity(this.getSelf()) != null && this.getStandEntity(this.getSelf()) instanceof  ManhattanTransferEntity ME){
-                    if(this.currentHattanStatus == LOADED_HATTAN) {
-                        this.soundThree();
-                    }
                     ME.shootHattan();
                     ME.setHeldItemManhattan(ItemStack.EMPTY);
                     ME.hasItem = false;
@@ -246,14 +243,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
             this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().manhattanTransferSettings.manhattanDashCooldown);
         }
     }
-
-    public void soundThree() {
-            if (isClient()) {
-                if(this.self.distanceTo(this.getStandEntity(this.getSelf())) > 16) {
-                    this.self.playSound(ModSounds.BULLET_RICOCHET_EVENT, 100F, (this.getStandEntity(this.getSelf()).getRandom().nextFloat() * 0.2F + 0.7F));
-                }
-            }
-    }
     public void switchVisionClient(){
         if (!onCooldown(PowerIndex.SKILL_4) && !isAttackIneptVisually(PowerIndex.SKILL_4,3)) {
             this.tryPower(PowerIndex.POWER_4, true);
@@ -264,14 +253,11 @@ public class PowersManhattanTransfer extends NewDashPreset {
             this.setCooldown(PowerIndex.SKILL_4, 15);
         }
     }
-
     @Override
     public void updateIntMove(int in) {
         super.updateIntMove(in);
     }
-
     public boolean visionModeClient = false;
-
     public void switchVision(){
         if (isClient() && this.self instanceof Player PE) {
 

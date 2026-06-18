@@ -59,7 +59,6 @@ public abstract class FireworkRocketAccess implements IFireworkRocketAccess {
                             }
                             ME.hasItem = true;
                             ME.changeMovementState();
-                            ME.soundForPlayer();
                             ME.fireworkLifeTicks = this.life;
                             fwork.discard();
                         }
