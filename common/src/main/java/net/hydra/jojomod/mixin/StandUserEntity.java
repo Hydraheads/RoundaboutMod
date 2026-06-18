@@ -2630,12 +2630,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (this.roundabout$GuardPoints < this.roundabout$getMaxGuardPoints()) {
             if (!level().isClientSide()) {
                 if (this.roundabout$GuardBroken) {
-                    if (PowerTypes.hasStandActivelyEquipped(rdbt$this())) {
-                        float guardRegen = roundabout$getStandPowers().regenBrokenGuard();
-                        this.roundabout$regenGuard(guardRegen);
-                    } else {
-                        float guardRegen = this.roundabout$getMaxGuardPoints() / 100;
-                        this.roundabout$regenGuard(guardRegen);
+                    if (!roundabout$isDazed()) {
+                        if (PowerTypes.hasStandActivelyEquipped(rdbt$this())) {
+                            float guardRegen = roundabout$getStandPowers().regenBrokenGuard();
+                            this.roundabout$regenGuard(guardRegen);
+                        } else {
+                            float guardRegen = this.roundabout$getMaxGuardPoints() / 100;
+                            this.roundabout$regenGuard(guardRegen);
+                        }
                     }
                 } else if (!this.roundabout$isGuarding() && this.roundabout$shieldNotDisabled()) {
                     if (rdbt$ticksUntilGuardRegen <= 0) {
