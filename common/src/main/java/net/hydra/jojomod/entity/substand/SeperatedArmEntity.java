@@ -211,14 +211,20 @@ public class SeperatedArmEntity extends StandEntity {
         LivingEntity user = this.getUser();
         if (!client) {
            if(user != null) {
-                if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm != null)) {
-                    if (!(((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm.equals(this))) {
+               if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity != null) && (((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm != null)) {
+                   if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm.equals(this)) || (((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity.equals(this)))) {
+                       spawnAtLocation(this.getMainHandItem());
+                       this.discard();
+                   }
+               }
+                else if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm != null)) {
+                    if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm.equals(this)))) {
                         spawnAtLocation(this.getMainHandItem());
                         this.discard();
                     }
                 }
-                if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity != null)) {
-                    if (!(((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity.equals(this))) {
+                else if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity != null)) {
+                    if (!( (((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity.equals(this)))) {
                         spawnAtLocation(this.getMainHandItem());
                         this.discard();
                     }
