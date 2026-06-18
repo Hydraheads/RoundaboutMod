@@ -523,14 +523,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
     int securityTicks = 0;
     void setSecurityTicks(int st){securityTicks = st;}
 
-    public void synchToCamera(){
-        if (isPiloting()) {
-            LivingEntity ent = getPilotingStand();
-            if (ent != null) {
-                ClientUtil.synchToCamera(ent);
-            }
-        }
-    }
     @Override
     public void updateUniqueMoves() {
         super.updateUniqueMoves();
