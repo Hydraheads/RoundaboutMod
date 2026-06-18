@@ -1123,6 +1123,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     @Override
+    public boolean setPowerAttack(){
+        setAttack();
+        return false;
+    }
+    @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (keyIsDown) {
             if (activePowerPhase == 0){

@@ -2042,13 +2042,6 @@ public class StandPowers extends AbilityScapeBasis {
 
     @Override
     public boolean setPowerOther(int move, int lastMove) {
-        if (move == PowerIndex.ATTACK) {
-            setAttack();
-        } else if (move == PowerIndex.BARRAGE_CHARGE) {
-            this.setPowerBarrageCharge();
-        } else if (move == PowerIndex.BARRAGE) {
-            this.setPowerBarrage();
-        }
         return false;
     }
     public int getMaxChargeTSTime(){
