@@ -65,6 +65,7 @@ public class SeperatedArmEntity extends StandEntity {
     public int FireworkLaunchTicks = 0;
     public Vec3 LaunchAngle = null;
     public int SpinTicks = 0;
+    public BlockPos MiningPos = new BlockPos(0,-60,0);
 
     public void setSpinTicks(int val){SpinTicks = val;};
 
@@ -114,6 +115,13 @@ public class SeperatedArmEntity extends StandEntity {
         LaunchAngle = this.getDeltaMovement();
         Can_activate = true;
         flyingTicks=0;
+        MiningPos = new BlockPos(
+                ((Double)(jumpT0Pos.x)).intValue(),
+                ((Double)(jumpT0Pos.y)).intValue(),
+                ((Double)(jumpT0Pos.z)).intValue());
+        Roundabout.LOGGER.info(level().getBlockState(MiningPos).getBlock().toString());
+
+
     }
 
     public void jump2(Vec3 jumpT0Pos){
@@ -141,6 +149,7 @@ public class SeperatedArmEntity extends StandEntity {
         LaunchAngle = this.getDeltaMovement();
         Can_activate = true;
         flyingTicks=0;
+
     }
 
     public BlockPos IsArmContactingBlock(){
@@ -201,6 +210,26 @@ public class SeperatedArmEntity extends StandEntity {
         boolean client = this.level().isClientSide();
         LivingEntity user = this.getUser();
         if (!client) {
+           if(user != null) {
+               if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity != null) && (((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm != null)) {
+                   if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm.equals(this)) || (((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity.equals(this)))) {
+                       spawnAtLocation(this.getMainHandItem());
+                       this.discard();
+                   }
+               }
+                else if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm != null)) {
+                    if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm.equals(this)))) {
+                        spawnAtLocation(this.getMainHandItem());
+                        this.discard();
+                    }
+                }
+                else if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity != null)) {
+                    if (!( (((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity.equals(this)))) {
+                        spawnAtLocation(this.getMainHandItem());
+                        this.discard();
+                    }
+                }
+            }
             if(user == null){
                 spawnAtLocation(this.getMainHandItem());
                 this.discard();
@@ -214,10 +243,12 @@ public class SeperatedArmEntity extends StandEntity {
                 }else{
                     flyingTicks = 0;
                 }
-                if(Can_activate_special || (Can_activate  && flyingTicks > 2)) {
+                if( Can_activate_special || (Can_activate )) {
                     ItemStack item = (this.getMainHandItem());
-                    if (!(this.IsArmContactingBlock() == null) && Can_activate) {
-                        BlockState block = (this.level().getBlockState(this.IsArmContactingBlock()));
+                    if ((MainUtil.cheapDistanceTo(this.getX(),this.getY(),this.getZ(),MiningPos.getX(),MiningPos.getY(),MiningPos.getZ()) < 2)) {
+
+                        BlockState block = (this.level().getBlockState(MiningPos));
+
 
 
 
@@ -235,14 +266,16 @@ public class SeperatedArmEntity extends StandEntity {
                             );
                         }
 
+                        RightTier = true;
+
                         boolean pickaxeable = block.is(BlockTags.MINEABLE_WITH_PICKAXE) && RightTier;
                         boolean axeable = block.is(BlockTags.MINEABLE_WITH_AXE) && RightTier;
                         boolean shovelable = block.is(BlockTags.MINEABLE_WITH_SHOVEL) && RightTier;
 
-                        BlockState state = this.level().getBlockState(IsArmContactingBlock());
+                        BlockState state = this.level().getBlockState(MiningPos);
                         ServerLevel level = (ServerLevel) this.level();
 
-                        BlockPos targetpos = IsArmContactingBlock();
+                        BlockPos targetpos = MiningPos;
                         
                         if (this.getMainHandItem().getItem() instanceof PickaxeItem) {
                             if (pickaxeable) {
@@ -449,108 +482,115 @@ public class SeperatedArmEntity extends StandEntity {
         }
 
 
-        for(int j = 0;j<damages.size();j++){
+        for(int j = 0;j<damages.size();j++) {
 
             Entity entity = damages.get(j);
-            if(!(SpinTicks > 0)) {
-                ((StandUser) user).roundabout$getStandPowers().addEXP(1);
+            if (!(SpinTicks > 0) && (Math.random() > 0.5)) {
+                if(user != null) {
+                    ((StandUser) user).roundabout$getStandPowers().addEXP(1);
+                }
             }
 
-            if(!((entity.equals(this) ||entity.equals((Object)user)) || entity instanceof StandEntity || entity instanceof ItemEntity)) {
-                if (flyingTicks > 2 && SpinTicks >0) {
-                    BlockPos pos = new BlockPos(new Vec3i((int) this.getX(), (int) (this.getY() - 0.2), (int) this.getZ()));
-                    if ((level().getBlockState(new BlockPos(pos)).isAir())) {
-                        this.level().addParticle(ParticleTypes.FLASH,this.getX(),this.getY(),this.getZ(),0,0,0);
-                        entity.addDeltaMovement(new Vec3(0, 0.2, 0));
-                    }
-                }
 
-                if(item instanceof KnifeItem){
-                    Can_activate = false;
-                    this.setDeltaMovement(0,0,0);
-                    float $$2;
-                    Entity $$1 = entity;
-
-                    if (entity instanceof Player) {
-                        $$2 = (float) (2.29F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnPlayers *0.01));
-                    } else {
-                        $$2 = (float) (4.0F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnMobs *0.01));;
-                    }
-                    if ($$1 instanceof LivingEntity $$3) {
-                        int f = EnchantmentHelper.getEnchantmentLevel(Enchantments.PROJECTILE_PROTECTION, $$3);
-                        $$2 = (float) ($$2 * (1-(f*0.03)));
-
-                    }
-                    if(SpinTicks > 1){
-                        $$2 = $$2 / 6;
-                    }
-
-                    Entity $$4 = this.getUser();
-                    DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.KNIFE, $$4);
-                    SoundEvent $$6 = ModSounds.KNIFE_IMPACT_EVENT;
-                    Vec3 DM = $$1.getDeltaMovement();
-                    if ($$1.hurt($$5, $$2)) {
-
-                        if ($$4 instanceof LivingEntity LE) {
-                            LE.setLastHurtMob($$1);
+                if (!((entity.equals(this) || entity.equals(user)) || entity instanceof StandEntity || entity instanceof ItemEntity)) {
+                    if (flyingTicks > 2 && SpinTicks > 0) {
+                        BlockPos pos = new BlockPos(new Vec3i((int) this.getX(), (int) (this.getY() - 0.2), (int) this.getZ()));
+                        if ((level().getBlockState(new BlockPos(pos)).isAir())) {
+                            this.level().addParticle(ParticleTypes.FLASH, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+                            entity.addDeltaMovement(new Vec3(0, 0.2, 0));
                         }
-                        if (MainUtil.getMobBleed($$1)){
-                            MainUtil.makeBleed($$1,0,400,getUser());
+                    }
+
+                    if (item instanceof KnifeItem) {
+                        Can_activate = false;
+                        this.setDeltaMovement(0, 0, 0);
+                        float $$2;
+                        Entity $$1 = entity;
+
+                        if (entity instanceof Player) {
+                            $$2 = (float) (2.29F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnPlayers * 0.01));
+                        } else {
+                            $$2 = (float) (4.0F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnMobs * 0.01));
+                            ;
                         }
-                        if ($$1.getType() == EntityType.ENDERMAN) {
-                            return;
+                        if ($$1 instanceof LivingEntity $$3) {
+                            int f = EnchantmentHelper.getEnchantmentLevel(Enchantments.PROJECTILE_PROTECTION, $$3);
+                            $$2 = (float) ($$2 * (1 - (f * 0.03)));
+
+                        }
+                        if (SpinTicks > 1) {
+                            $$2 = $$2 / 6;
                         }
 
-                        if ($$1 instanceof LivingEntity $$7) {
-                            $$1.setDeltaMovement($$1.getDeltaMovement().multiply(0.4,0.4,0.4));
-                            if ($$4 instanceof LivingEntity) {
-                                EnchantmentHelper.doPostHurtEffects($$7, $$4);
-                                EnchantmentHelper.doPostDamageEffects((LivingEntity) $$4, $$7);
+                        Entity $$4 = this.getUser();
+                        DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.KNIFE, $$4);
+                        SoundEvent $$6 = ModSounds.KNIFE_IMPACT_EVENT;
+                        Vec3 DM = $$1.getDeltaMovement();
+                        if ($$1.hurt($$5, $$2)) {
+
+                            if ($$4 instanceof LivingEntity LE) {
+                                LE.setLastHurtMob($$1);
+                            }
+                            if (MainUtil.getMobBleed($$1)) {
+                                MainUtil.makeBleed($$1, 0, 400, getUser());
+                            }
+                            if ($$1.getType() == EntityType.ENDERMAN) {
+                                return;
                             }
 
+                            if ($$1 instanceof LivingEntity $$7) {
+                                $$1.setDeltaMovement($$1.getDeltaMovement().multiply(0.4, 0.4, 0.4));
+                                if ($$4 instanceof LivingEntity) {
+                                    EnchantmentHelper.doPostHurtEffects($$7, $$4);
+                                    EnchantmentHelper.doPostDamageEffects((LivingEntity) $$4, $$7);
+                                }
+
+                            }
+                            this.playSound($$6, 1.0F, (this.random.nextFloat() * 0.2F + 0.9F));
+                            this.getMainHandItem().setCount(this.getMainHandItem().getCount() - 1);
                         }
-                        this.playSound($$6, 1.0F, (this.random.nextFloat() * 0.2F + 0.9F));
-                        this.getMainHandItem().setCount(this.getMainHandItem().getCount() - 1);
-                    }
-                    Vec3 location = new Vec3(this.getX(),this.getY(),this.getZ());
-                    ((ServerLevel) this.level()).sendParticles(ParticleTypes.CRIT, location.x,
-                            location.y, location.z,
-                            16,
-                            0.45, 0.45, 0.45,
-                            0.1);
-
-                }else if(this.getMainHandItem().getItem() instanceof ShieldItem){
-                    Can_activate = true;
-                    if(entity instanceof Projectile && !(entity instanceof GoBeyondEntity)){
-                        entity.discard();
-
-                        Vec3 location = new Vec3(this.getX(),this.getY(),this.getZ());
-                        ((ServerLevel) this.level()).sendParticles(ModParticles.PUNCH_MISS, location.x,
+                        Vec3 location = new Vec3(this.getX(), this.getY(), this.getZ());
+                        ((ServerLevel) this.level()).sendParticles(ParticleTypes.CRIT, location.x,
                                 location.y, location.z,
-                                1,
-                                0, 0, 0,
+                                16,
+                                0.45, 0.45, 0.45,
                                 0.1);
 
+                    } else if (this.getMainHandItem().getItem() instanceof ShieldItem) {
+                        Can_activate = true;
+                        if (entity instanceof Projectile && !(entity instanceof GoBeyondEntity)) {
+                            entity.discard();
 
-                    }
-                }
+                            Vec3 location = new Vec3(this.getX(), this.getY(), this.getZ());
+                            ((ServerLevel) this.level()).sendParticles(ModParticles.PUNCH_MISS, location.x,
+                                    location.y, location.z,
+                                    1,
+                                    0, 0, 0,
+                                    0.1);
 
-                else {
-                    Can_activate = false;
-                    this.setDeltaMovement(0, 0, 0);
-                    Vec3 location = new Vec3(this.getX(), this.getY(), this.getZ());
-                    ((ServerLevel) this.level()).sendParticles(ParticleTypes.CRIT, location.x,
-                            location.y, location.z,
-                            16,
-                            0.45, 0.45, 0.45,
-                            0.1);
-                    if (entity instanceof Player) {
-                        entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), (Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue()) * 1.75f);
+
+                        }
                     } else {
-                        entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), (Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue()) * 1f);
+                        if(entity instanceof LivingEntity) {
+                            if (!((StandUser) entity).roundabout$isGuarding() || ((LivingEntity) entity).isBlocking()) {
+                                Can_activate = false;
+                                this.setDeltaMovement(0, 0, 0);
+                                Vec3 location = new Vec3(this.getX(), this.getY(), this.getZ());
+                                ((ServerLevel) this.level()).sendParticles(ParticleTypes.CRIT, location.x,
+                                        location.y, location.z,
+                                        16,
+                                        0.45, 0.45, 0.45,
+                                        0.1);
+                                if (entity instanceof Player) {
+                                    entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), (Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue()) * 1.75f);
+                                } else {
+                                    entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), (Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue()) * 1f);
+                                }
+                            }
+                        }
                     }
                 }
-            }
+
         }
     }
 
