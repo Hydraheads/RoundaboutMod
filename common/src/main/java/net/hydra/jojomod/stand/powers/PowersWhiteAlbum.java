@@ -913,12 +913,18 @@ public class PowersWhiteAlbum extends NewDashPreset {
                             BlockState state = self.level().getBlockState(pos);
 
                             if (canFreezeWater && state.is(Blocks.WATER) && self.level().getBlockState(pos.above()).isAir()){
-                                if (!(self instanceof Player pl && !MainUtil.canPlaceOnClaim(pl, pos))) {
-                                    self.level().setBlock(
-                                            pos,
-                                            Blocks.ICE.defaultBlockState(),
-                                            Block.UPDATE_ALL
-                                    );
+                                if (self.level().isUnobstructed(Blocks.ICE.defaultBlockState(), pos, CollisionContext.empty())) {
+                                    if (self.level().isUnobstructed(Blocks.ICE.defaultBlockState(),
+                                            pos.above(), CollisionContext.empty())) {
+                                            if (!(self instanceof Player pl && !MainUtil.canPlaceOnClaim(pl, pos))) {
+                                                self.level().setBlock(
+                                                        pos,
+                                                        Blocks.ICE.defaultBlockState(),
+                                                        Block.UPDATE_ALL
+                                                );
+                                            }
+
+                                    }
                                 }
                             } else {
                                 Block replacement = MainUtil.FREEZABLE_BLOCKS.get(state.getBlock());
