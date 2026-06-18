@@ -150,7 +150,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
                     switchShooting();
             }
                 case SKILL_2_NORMAL, SKILL_2_CROUCH -> {
-                toggleControlModeClient();
+                    if(!onCooldown(PowerIndex.SKILL_2) && !isAttackIneptVisually(PowerIndex.SKILL_2, 2)) {
+                        toggleControlModeClient();
+                    }
             }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 if(!isPiloting()) {
@@ -237,11 +239,12 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
     public void manhattanDodge() {
         if (!onCooldown(PowersManhattanTransfer.MANHATTAN_DODGE) && !isAttackIneptVisually(PowersManhattanTransfer.MANHATTAN_DODGE,3)) {
-            tryPower(PowersManhattanTransfer.MANHATTAN_DODGE);
+          /*  tryPower(PowersManhattanTransfer.MANHATTAN_DODGE);
             tryPowerPacket(PowersManhattanTransfer.MANHATTAN_DODGE);
             if (isClient()) {
                 this.self.playSound(ModSounds.VAMPIRE_DASH_EVENT, 100F, 1.2F);
-            }
+            }*/
+            this.setCooldown(PowersManhattanTransfer.MANHATTAN_DODGE, 100);
         }
     }
 
@@ -325,6 +328,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 ipe.roundabout$setIsControlling(0);
             }
             this.setSomeTicks(5);
+            this.setCooldown(PowerIndex.SKILL_2, 15);
             tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
         } else {
             StandEntity entity = this.getStandEntity(this.self);
