@@ -840,7 +840,7 @@ public class Config implements Cloneable {
         public Integer manhattanTransferMaxRange;
         @IntOption(group = "inherit", value = 4, min = 1, max = 5)
         public Integer getAutoSpeed;
-        @IntOption(group = "inherit", value = 70, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
         public Integer manhattanDashCooldown;
         @BooleanOption(group = "inherit", value = false)
         public Boolean canOtherMobsLoadManhattanTransfer;

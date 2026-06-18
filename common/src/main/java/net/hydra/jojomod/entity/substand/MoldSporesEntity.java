@@ -44,26 +44,24 @@ public class MoldSporesEntity extends StandEntity {
 
     @Override
     public void tick() {
+        this.setFadeOut((byte) 1);
+        boolean client = this.level().isClientSide();
+        LivingEntity user = this.getUser();
+        StandUser StandUU = (StandUser)user;
+        if(StandUU != null) {
+            if (!(StandUU.roundabout$getStandPowers() instanceof PowersGreenDay)) {
+                this.discard();
+            }
+        }
         if (lifetime <1){
             this.discard();
         }else{
             lifetime--;
         }
-        this.setFadeOut((byte) 1);
-        boolean client = this.level().isClientSide();
-        LivingEntity user = this.getUser();
-        StandUser StandUU = (StandUser)user;
         if (!client) {
 
             if (user == null) {
                 spawnAtLocation(this.getMainHandItem());
-                this.discard();
-            }
-            if(StandUU != null) {
-                if (!(StandUU.roundabout$getStandPowers() instanceof PowersGreenDay)) {
-                    this.discard();
-                }
-            }else{
                 this.discard();
             }
             if (this.getDeltaMovement().y > 0.2){
@@ -105,15 +103,17 @@ public class MoldSporesEntity extends StandEntity {
                 //boolean down = previousYpos > entity.getY() + 0.1;
 
                 boolean isStand = (entity instanceof StandEntity);
-                boolean playerBalanceDetection = ((entity.getY() - 2 < this.getUser().getY() && this.getUser() instanceof Player) || (!(entity instanceof Player)));
+                boolean isBoss = (MainUtil.isBossMob(entity));
+                boolean playerBalanceDetection = ((entity.getY() - 1.5 < this.getUser().getY() && this.getUser() instanceof Player) || (!(entity instanceof Player)));
                 if(!playerBalanceDetection){
-                    playerBalanceDetection = (entity instanceof Player && ((StandUser)entity).getStaringYPos()-1 > entity.getY());
+                    playerBalanceDetection = (((StandUser)entity).getStaringYPos()-0.5 > entity.getY());
                 }
                 if (entity instanceof LivingEntity) {
 
                     if (!((StandUser) entity).roundabout$getStandPowers().isStoppingTime()
                             && !((StandUser) entity).roundabout$isBubbleEncased()
                             && !isStand
+                            && !isBoss
                             && ((StandUser) entity).GoingDown()
                             && !(entity instanceof FallenMob)
                             && ((StandUser) entity).getJumpImmunityTicks() < 1
@@ -141,7 +141,9 @@ public class MoldSporesEntity extends StandEntity {
                             } else {
                                 entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), 8 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGMobsMultiplier / 100F));
                             }
-                            ((StandUser) User).roundabout$getStandPowers().addEXP(1);
+                            if(Math.random()<0.2) {
+                                ((StandUser) User).roundabout$getStandPowers().addEXP(1);
+                            }
                         }
                     }
                 }

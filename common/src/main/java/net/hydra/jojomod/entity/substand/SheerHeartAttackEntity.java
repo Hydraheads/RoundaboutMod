@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.navigation.StandEntityNavigation;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -11,6 +12,7 @@ import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.util.ExplosionUtil;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.core.Vec3i;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -28,6 +30,7 @@ import net.minecraft.world.level.pathfinder.Path;
 
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,7 +48,11 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	@Override
 	protected PathNavigation createNavigation(Level $$0) {
-		return new WallClimberNavigation(this, $$0);
+		StandEntityNavigation nav = new StandEntityNavigation(this, $$0);
+		nav.setAvoidSun(false);
+		nav.setAvoidFire(false);
+
+		return nav;
 	}
 
 	public final AnimationState idle = new AnimationState();
@@ -203,7 +210,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 		double harmestDistance = -1;
 
 		Entity targetEnt = null;
-		BlockPos targetPos = null;
+		int targetPosX = 0;
+		int targetPosY = 0;
+		int targetPosZ = 0;
 
 		byte currentChoice = NONE;
 
@@ -213,20 +222,14 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 			double dist = entity.distanceToSqr(this.position());
 
-            if (points > harmest) {
+            if (points > harmest || (points == harmest && (harmestDistance == -1 || dist < harmestDistance)))  {
 				currentChoice = ENTITY;
                 harmest = points;
                 harmestDistance = dist;
                 targetEnt = entity;
-            } else if (points == harmest) {
-                if (harmestDistance == -1 || dist < harmestDistance) {
-					currentChoice = ENTITY;
-                    harmestDistance = dist;
-                    targetEnt = entity;
-                }
             }
         }
-		BlockPos bPos = this.blockPosition();
+		BlockPos bPos = this.getOnPos();
 
 		for (BlockPos pos : BlockPos.betweenClosed(
 				bPos.offset((int)viewRange, (int)viewRange, (int)viewRange),
@@ -238,23 +241,21 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 			int points = -1;
 
-			points += info.getLightEmission() * 5;
+			points += (int)(info.getLightEmission() * 1.5);
 
 			if (points < 0) { continue; }
 
 			double dist = pos.distToCenterSqr(this.position());
 
-			if (points > harmest) {
+			if (points > harmest || (points == harmest && (harmestDistance == -1 || dist < harmestDistance))) {
 				currentChoice = BLOCK;
 				harmest = points;
 				harmestDistance = dist;
-				targetPos = pos;
-			} else if (points == harmest) {
-				if (harmestDistance == -1 || dist < harmestDistance) {
-					currentChoice = BLOCK;
-					harmestDistance = dist;
-					targetPos = pos;
-				}
+				targetPosX = pos.getX();
+				targetPosY = pos.getY();
+				targetPosZ = pos.getZ();
+
+				//targetPos = pos.getCenter();
 			}
 		}
 
@@ -263,7 +264,12 @@ public class SheerHeartAttackEntity extends StandEntity {
 			this.entityTarget = targetEnt;
 			this.currentTarget = ENTITY;
 		}else if (currentChoice == BLOCK) {
-			this.blockTarget = targetPos;
+			//Vec3 bt = targetPos.subtract(0.5, 0.5, 0.5);
+			this.blockTarget = new BlockPos(
+					targetPosX,
+					targetPosY,
+					targetPosZ
+			);
 			this.currentTarget = BLOCK;
 		}else {
 			this.entityTarget = null;
@@ -286,7 +292,14 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		double dist = Math.abs(this.position().distanceTo(targetPos));
 
-		return (float)dist < (explosionRadius-0.12f);
+		Roundabout.LOGGER.info("Distance: " + dist);
+
+		float minDist = (explosionRadius-0.12f);
+		if (this.currentTarget == BLOCK) {
+			minDist = 1.4f;
+		}
+
+		return (float)dist < minDist;
 	}
 
 	public byte getTargetType() { return this.currentTarget;}
@@ -312,22 +325,32 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		DamageSource dmg = ModDamageTypes.of(this.level(), DamageTypes.PLAYER_EXPLOSION, this);;
 
-		ExplosionUtil.explosionHurt(this.position(), dmg, this.level(),
-				ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage, 0.3f, explosionRadius);
-
-		ExplosionUtil.explodeEffects(this.position(), this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, 0.3f, 8);
-
 		if (this.getTargetType() == ENTITY){
-			if (!this.entityTarget.isAlive()) {
-				this.entityTarget = null;
-				this.currentTarget = NONE;
-			}else if (this.entityTarget instanceof LivingEntity LE) {
-				if (LE.isDeadOrDying()) {
+			ExplosionUtil.explosionHurt(this.position(), dmg, this.level(),
+					ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage, 0.3f, explosionRadius);
+
+			ExplosionUtil.explodeEffects(this.position(), this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, 0.3f, 8);
+
+			if (this.entityTarget != null) {
+
+				MainUtil.takeDeterminedKnockbackWithY(this, this.entityTarget, 0.6f);
+
+				if (!this.entityTarget.isAlive()) {
 					this.entityTarget = null;
 					this.currentTarget = NONE;
+				} else if (this.entityTarget instanceof LivingEntity LE) {
+					if (LE.isDeadOrDying()) {
+						this.entityTarget = null;
+						this.currentTarget = NONE;
+					}
 				}
 			}
 		}else if(this.getTargetType() == BLOCK){
+			ExplosionUtil.explosionHurt(this.blockTarget.getCenter(), dmg, this.level(),
+					ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage, 0.3f, explosionRadius);
+
+			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, 0.12f, 4);
+
 			boolean shouldDrop = !this.level().getBlockState(this.blockTarget).requiresCorrectToolForDrops();
 			this.level().destroyBlock(this.blockTarget, shouldDrop);
 			this.blockTarget = null;
@@ -341,7 +364,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		if (this.onGround()) {
 			this.lookAt(EntityAnchorArgument.Anchor.EYES, jumpT0Pos);
 			this.jumpTick = jumpTickMax;
-			this.setDeltaMovement((this.getLookAngle().multiply(1.5, 1.5, 1.5)).add(0, 0.2, 0));
+			this.setDeltaMovement((this.getLookAngle().multiply(1.5, 1.5, 1.5)).add(0, 0.21, 0));
 		}
 	}
 
@@ -378,7 +401,15 @@ public class SheerHeartAttackEntity extends StandEntity {
 			}else if (this.currentTarget == ENTITY) {
 				newPath = this.getNavigation().createPath(this.entityTarget, 0);
 			}else if (this.currentTarget == BLOCK) {
-				newPath = this.getNavigation().createPath(this.blockTarget, 0);
+				BlockState BS = this.level().getBlockState(this.blockTarget);
+				if (BS.isPathfindable(this.level(), this.blockTarget, PathComputationType.LAND)) {
+					newPath = this.getNavigation().createPath(this.blockTarget.below(), 0);
+					//this.level().getBlockState(this.blockTarget);
+				}else {
+					newPath = this.getNavigation().createPath(this.blockTarget, 0);
+				}
+
+
 			}else {
 				newPath = this.getNavigation().createPath(targetPos.x, targetPos.y, targetPos.z, 0);
 			}
@@ -386,9 +417,10 @@ public class SheerHeartAttackEntity extends StandEntity {
 			//this.lookAt(EntityAnchorArgument.Anchor.EYES, targetPos);
 
 			if (newPath == null) {
-				Roundabout.LOGGER.info("the path is null!?");
 				return;
 			}
+
+
 
 			if (!this.getNavigation().moveTo(newPath, 0.5f))
 				ticksUntilNextPathRecalculation += 5;

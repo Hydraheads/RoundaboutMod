@@ -35,14 +35,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Blaze;
-import net.minecraft.world.entity.monster.Ghast;
-import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.*;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -52,6 +48,14 @@ import java.util.List;
 import static net.hydra.jojomod.event.index.SoundIndex.MANHATTAN_RAIN;
 
 public class PowersManhattanTransfer extends NewDashPreset {
+
+    //TODO: Fix shooting mode being shared between mobs
+    //TODO: 500 other stupid bugfixes (pain) :/
+
+    //TODO: Wind Vision V Toggle work
+
+    //TODO:Shader
+
     public PowersManhattanTransfer(LivingEntity self) {
         super(self);
     }
@@ -150,7 +154,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
                     switchShooting();
             }
                 case SKILL_2_NORMAL, SKILL_2_CROUCH -> {
-                toggleControlModeClient();
+                    if(!onCooldown(PowerIndex.SKILL_2) && !isAttackIneptVisually(PowerIndex.SKILL_2, 2)) {
+                        toggleControlModeClient();
+                    }
             }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 if(!isPiloting()) {
@@ -209,7 +215,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public boolean tryPower(int move, boolean forced) {
         switch (move) {
             case PowersManhattanTransfer.MANHATTAN_DODGE -> {
-                    this.setCooldown(PowersManhattanTransfer.MANHATTAN_DODGE, ClientNetworking.getAppropriateConfig().manhattanTransferSettings.manhattanDashCooldown);
                     this.setXtraSpdTick(10);
                     this.getStandEntity(this.getSelf()).level().playSound(null, this.getSelf().blockPosition(), ModSounds.VAMPIRE_DASH_EVENT, SoundSource.PLAYERS, 0.8F, 2F);
 
@@ -223,9 +228,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
             }
             case PowersManhattanTransfer.DEFLECT_PROJECTILE -> {
                 if(this.getStandEntity(this.getSelf()) != null && this.getStandEntity(this.getSelf()) instanceof  ManhattanTransferEntity ME){
-                    if(this.currentHattanStatus == LOADED_HATTAN) {
-                        this.soundThree();
-                    }
                     ME.shootHattan();
                     ME.setHeldItemManhattan(ItemStack.EMPTY);
                     ME.hasItem = false;
@@ -236,37 +238,30 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
 
     public void manhattanDodge() {
-        if (!onCooldown(PowersManhattanTransfer.MANHATTAN_DODGE) && !isAttackIneptVisually(PowersManhattanTransfer.MANHATTAN_DODGE,3)) {
+        if (!onCooldown(PowerIndex.SKILL_3) && !isAttackIneptVisually(PowersManhattanTransfer.MANHATTAN_DODGE,3)) {
             tryPower(PowersManhattanTransfer.MANHATTAN_DODGE);
             tryPowerPacket(PowersManhattanTransfer.MANHATTAN_DODGE);
             if (isClient()) {
                 this.self.playSound(ModSounds.VAMPIRE_DASH_EVENT, 100F, 1.2F);
             }
+            this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().manhattanTransferSettings.manhattanDashCooldown);
         }
-    }
-
-    public void soundThree() {
-            if (isClient()) {
-                if(this.self.distanceTo(this.getStandEntity(this.getSelf())) > 16) {
-                    this.self.playSound(ModSounds.BULLET_RICOCHET_EVENT, 100F, (this.getStandEntity(this.getSelf()).getRandom().nextFloat() * 0.2F + 0.7F));
-                }
-            }
     }
     public void switchVisionClient(){
-        this.tryPower(PowerIndex.POWER_4, true);
-        tryPowerPacket(PowerIndex.POWER_4);
-        if (isClient() && visionModeClient) {
-            this.self.playSound(ModSounds.MANHATTAN_VISION_EVENT, 150F, 0.9F);
+        if (!onCooldown(PowerIndex.SKILL_4) && !isAttackIneptVisually(PowerIndex.SKILL_4,3)) {
+            this.tryPower(PowerIndex.POWER_4, true);
+            tryPowerPacket(PowerIndex.POWER_4);
+            if (isClient() && visionModeClient) {
+                this.self.playSound(ModSounds.MANHATTAN_VISION_EVENT, 150F, 0.9F);
+            }
+            this.setCooldown(PowerIndex.SKILL_4, 15);
         }
     }
-
     @Override
     public void updateIntMove(int in) {
         super.updateIntMove(in);
     }
-
     public boolean visionModeClient = false;
-
     public void switchVision(){
         if (isClient() && this.self instanceof Player PE) {
 
@@ -324,10 +319,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 IPlayerEntity ipe = ((IPlayerEntity) PE);
                 ipe.roundabout$setIsControlling(0);
             }
+            this.setSomeTicks(5);
             tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
         } else {
-            this.tryPower(PowerIndex.POWER_2, true);
-            tryPowerPacket(PowerIndex.POWER_2);
             StandEntity entity = this.getStandEntity(this.self);
             int L = 0;
             if (entity != null) {
@@ -335,6 +329,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
             }
             tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, L);
         }
+        this.setCooldown(PowerIndex.SKILL_2, 15);
     }
     @Override
     public boolean isPiloting() {
@@ -393,6 +388,14 @@ public class PowersManhattanTransfer extends NewDashPreset {
         if (XtraSpdTick > 1) {
             XtraSpdTick--;
         }
+        if(this.isClient()){
+            if(this.isPiloting()) {
+                if(this.someTicks > 0){
+                    someTicks--;
+                }
+            }
+        }
+
         if (this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME) {
             if (ME.isInRain()) {
                 if (isSoundRainInterrupted) {
@@ -523,11 +526,16 @@ public class PowersManhattanTransfer extends NewDashPreset {
     int securityTicks = 0;
     void setSecurityTicks(int st){securityTicks = st;}
 
+    int someTicks = 5;
+    void setSomeTicks(int ticks){someTicks = ticks;}
+
     public void synchToCamera(){
         if (isPiloting()) {
             LivingEntity ent = getPilotingStand();
             if (ent != null) {
-                ClientUtil.synchToCamera(ent);
+                if(someTicks < 1){
+                    ClientUtil.synchToCamera(ent);
+                }
             }
         }
     }
@@ -789,7 +797,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.manual_shooting",
+      /*  $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.manual_shooting",
                 "instruction.roundabout.press_skill", StandIcons.MANUAL_SHOOTING_OFF, 1, level, bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.control_mode",
                 "instruction.roundabout.press_skill", StandIcons.CONTROL_MODE_ON, 2, level, bypass));
@@ -802,17 +810,17 @@ public class PowersManhattanTransfer extends NewDashPreset {
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.bonus_damage",
                 "instruction.roundabout.passive",  StandIcons.MANHATTAN_DAMAGE_BOOST, 1, level, bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.manhattan_dodge",
-                "instruction.roundabout.press_skill",  StandIcons.MANHATTAN_DODGE, 3, level, bypass));
+                "instruction.roundabout.press_skill",  StandIcons.MANHATTAN_DODGE, 3, level, bypass));*/
         return $$1;
     }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         // code for advanced icons
         if (!switchShootingMode()) {
-            setSkillIcon(context, x, y, 1, StandIcons.MANUAL_SHOOTING_ON, PowerIndex.SKILL_1);
+            setSkillIcon(context, x, y, 1, StandIcons.MANUAL_SHOOTING_ON, PowerIndex.NO_CD);
         }
         else
-            setSkillIcon(context, x, y, 1, StandIcons.MANUAL_SHOOTING_OFF, PowerIndex.SKILL_1);
+            setSkillIcon(context, x, y, 1, StandIcons.MANUAL_SHOOTING_OFF, PowerIndex.NO_CD);
 
         if (isPiloting())
             setSkillIcon(context, x, y, 2, StandIcons.CONTROL_MODE_OFF, PowerIndex.SKILL_2);
@@ -826,7 +834,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
             setSkillIcon(context, x, y, 4, StandIcons.WIND_VISION_OFF, PowerIndex.SKILL_4);
 
         if(isPiloting()){
-            setSkillIcon(context, x, y, 3, StandIcons.MANHATTAN_DODGE, PowersManhattanTransfer.MANHATTAN_DODGE);
+            setSkillIcon(context, x, y, 3, StandIcons.MANHATTAN_DODGE, PowerIndex.SKILL_3);
         }
         else{
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
@@ -857,16 +865,5 @@ public class PowersManhattanTransfer extends NewDashPreset {
     @Override
     public Component ifWipListDev(){
         return Component.literal(  "14Kacper").withStyle(ChatFormatting.DARK_RED);
-    }
-
-    /**Ignore*/
-    @Override
-    public void tickMobAI(LivingEntity attackTarget){
-        boolean isRangedAttackMob = this.getSelf() instanceof RangedAttackMob || this.getSelf() instanceof Blaze || this.getSelf() instanceof Ghast;
-        if(isRangedAttackMob ){
-            this.getSelf().playSound(SoundEvents.GHAST_HURT);
-            this.getSelf().kill();
-        } else {
-        }
     }
 }

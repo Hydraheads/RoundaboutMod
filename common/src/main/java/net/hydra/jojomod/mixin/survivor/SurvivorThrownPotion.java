@@ -60,7 +60,6 @@ public abstract class SurvivorThrownPotion extends ThrowableItemProjectile imple
                                      }
                                      ME.hasItem = true;
                                      ME.changeMovementState();
-                                     ME.soundForPlayer();
                                      this.discard();
                                  }
                              }

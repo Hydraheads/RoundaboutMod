@@ -96,28 +96,39 @@ public class ExplosionUtil {
             
         }
     }
-	
+
 	public static void explodeBlocks(BlockPos location, Level level, Float range) {
-    	Vec3 center = new Vec3(location.getX(), location.getY(), location.getZ());
-    	
-    	int intSize = (int) Math.floor(range);
-    	
-    	double explosionDistanceMax = Math.pow(range + 0.5, 2);
-    	
-    	for (BlockPos pos : BlockPos.betweenClosed(location.offset(intSize, intSize, intSize), location.offset(-intSize, -intSize, -intSize))) {
+		explodeBlocksBase(location, level, range, false);
+	}
+
+	public static void explodeBlocksIgnoreOres(BlockPos location, Level level, Float range) {
+		explodeBlocksBase(location, level, range, true);
+	}
+
+	public static void explodeBlocksBase(BlockPos location, Level level, Float range, boolean ignoreOres) {
+		Vec3 center = new Vec3(location.getX(), location.getY(), location.getZ());
+
+		int intSize = (int) Math.floor(range);
+
+		double explosionDistanceMax = Math.pow(range + 0.5, 2);
+
+		for (BlockPos pos : BlockPos.betweenClosed(location.offset(intSize, intSize, intSize), location.offset(-intSize, -intSize, -intSize))) {
 			BlockState info = level.getBlockState(pos);
-			if (isBlockBlackListed(info)) { continue; }
-			
+			if (isBlockBlackListed(info) || (MainUtil.confirmIsOre(info) && ignoreOres)) {
+				continue;
+			}
+
+
 			// Simulate natural explosions
-			Double explosionDistance = explosionDistanceMax  + ((double) level.getRandom().nextIntBetweenInclusive(-intSize*2, intSize*2) / 7.5);
-			
+			Double explosionDistance = explosionDistanceMax + ((double) level.getRandom().nextIntBetweenInclusive(-intSize * 2, intSize * 2) / 7.5);
+
 			Double dist2 = center.distanceToSqr(pos.getX(), pos.getY(), pos.getZ());
-			
+
 			if (dist2 <= explosionDistance) {
 				boolean shouldDrop = !info.requiresCorrectToolForDrops();
 				level.destroyBlock(pos, shouldDrop);
 			}
 		}
-    }
-	
+	}
+
 }
