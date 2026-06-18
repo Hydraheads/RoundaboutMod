@@ -656,7 +656,7 @@ public class ManhattanTransferEntity extends StandEntity {
 if(this.getUser() != null) {
     if(stupidTicks >= 1) {
         if (stupidTicks == 10) {
-            this.moveTo(this.getUser().getX(), this.getUser().getY() + 1.45F, this.getUser().getZ() - 0.075F);
+            this.moveTo(this.getUser().getX(), this.getUser().getEyeY(), this.getUser().getZ() - 0.075F);
         } else {
             this.setXRot(this.getUser().getXRot() % 360);
             this.setYRot(this.getUser().getYHeadRot() % 360);
