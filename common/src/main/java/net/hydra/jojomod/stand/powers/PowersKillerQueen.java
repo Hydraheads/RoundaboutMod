@@ -105,7 +105,6 @@ public class PowersKillerQueen extends NewPunchingStand {
 	// TODO Audio Translations
 
     // TODO fix Sheer Heart Attack code
-    // TODO explosions ignore ores on shift
 	
 	private static final byte
 		PLANTED=53,
@@ -134,7 +133,6 @@ public class PowersKillerQueen extends NewPunchingStand {
 
 	
 	private byte currentBombStatus = BOMB_NONE;
-	private boolean shaReleased = false;
     private byte currentShaStatus = SHA_NONE;
     private int bombConfig = 2;
 	
@@ -146,7 +144,6 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void syncShaStatus(byte status) {
-        this.shaReleased = status == 1;
         this.currentShaStatus = status;
         this.updatePowerInt(PowersKillerQueen.SHEER_HEART_ATTACK, status);
         S2CPacketUtil.sendIntPowerDataPacket((Player)this.getSelf(),PowersKillerQueen.SHEER_HEART_ATTACK, status);
@@ -491,10 +488,14 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
     // Can methods
-    
+
+    public boolean isBitesTheDustPlanted() {
+        return this.getActivePower() == BITES_THE_DUST_COMBAT || this.getActivePower() == BITES_THE_DUST_DAY;
+    }
+
     @Override
     public boolean canGuard(){
-    	if (this.getActivePower() == DETONATE || this.getActivePower() == BITES_THE_DUST_COMBAT) {
+    	if (this.getActivePower() == DETONATE || isBitesTheDustPlanted()) {
     		return false;
     	}
         return super.canGuard();
@@ -502,7 +503,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     @Override
     public boolean canAttack() {
-    	if (this.getActivePower() == DETONATE || this.getActivePower() == BITES_THE_DUST_COMBAT) {
+    	if (this.getActivePower() == DETONATE || isBitesTheDustPlanted()) {
     		return false;
     	}
     	
@@ -511,7 +512,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     @Override
     public boolean canAttack2() {
-    	if (this.getActivePower() == BITES_THE_DUST_COMBAT) {
+    	if (isBitesTheDustPlanted()) {
     		return false;
     	}
     	
@@ -932,7 +933,6 @@ public class PowersKillerQueen extends NewPunchingStand {
                }
             }
             case PowersKillerQueen.SHEER_HEART_ATTACK-> {
-                this.shaReleased = data == 1;
                 this.currentShaStatus = (byte)data;
             }
             case PowersKillerQueen.ENTITY_BOMB -> {
@@ -1356,7 +1356,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     this.syncShaStatus(SHA_NONE);
                     this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackCooldown);
                 }
-            }else if (this.shaReleased){
+            }else if (this.currentShaStatus != SHA_NONE){
                 this.syncShaStatus(SHA_NONE);
             }
 
@@ -1648,7 +1648,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
 
             if (canDestroyBlocks) {
-                ExplosionUtil.explodeBlocks(bPos, level, 1.0f);
+                ExplosionUtil.explodeBlocksBase(bPos, level, 1.0f, this.getSelf().isCrouching());
             }
 
             DamageSource dmg = ModDamageTypes.of(level, DamageTypes.PLAYER_EXPLOSION, this.getSelf());
@@ -1797,15 +1797,17 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
     
     public boolean sendOrReturnSHA(boolean shaThrow) {
-        if (shaThrow) {
-            this.animateStand(KillerQueenEntity.FIRST_PUNCH);
-        }else{
-            this.animateStand(KillerQueenEntity.SHA_SEND);
-        }
+        if (this.currentShaStatus == SHA_NONE) {
+            if (shaThrow) {
+                this.animateStand(KillerQueenEntity.FIRST_PUNCH);
+            } else {
+                this.animateStand(KillerQueenEntity.SHA_SEND);
+            }
 
-        this.poseStand(OffsetIndex.GUARD);
-        this.setAttackTimeDuring(-15);
-    	this.setActivePower(PowerIndex.POWER_3);
+            this.poseStand(OffsetIndex.FOLLOW);
+            this.setAttackTimeDuring(-15);
+            this.setActivePower(PowerIndex.POWER_3);
+        }
 
         if (!this.getSelf().level().isClientSide()) {
             if (SHA == null || SHA.isRemoved()){
@@ -1833,7 +1835,11 @@ public class PowersKillerQueen extends NewPunchingStand {
             	
             } else {
                 SHA.setHaveToReturn(!SHA.getHaveToReturn());
-                this.syncShaStatus(SHA_RETREAT);
+                if (SHA.getHaveToReturn()) {
+                    this.syncShaStatus(SHA_RETREAT);
+                }else {
+                    this.syncShaStatus(SHA_SEND);
+                }
             }
         }
     	
