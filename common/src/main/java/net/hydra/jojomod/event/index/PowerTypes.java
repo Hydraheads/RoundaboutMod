@@ -123,7 +123,12 @@ public enum PowerTypes {
         if (ent instanceof Player pl){
             if (isUsingPower(ent)){
                 return ((IPowersPlayer)pl).rdbt$getPowers().isBrawling() &&
-                        ((IPowersPlayer)pl).rdbt$getPowers().getActivePower() == PowerIndex.NONE;
+                        (((IPowersPlayer)pl).rdbt$getPowers().getActivePower() == PowerIndex.NONE ||
+                        ((IPowersPlayer)pl).rdbt$getPowers().getActivePower() == PowerIndex.BRAWL_ATTACK);
+            } if (isUsingStand(ent)){
+                return ((StandUser)pl).roundabout$getStandPowers().isBrawling() &&
+                        (((StandUser)pl).roundabout$getStandPowers().getActivePower() == PowerIndex.NONE ||
+                                ((StandUser)pl).roundabout$getStandPowers().getActivePower() == PowerIndex.BRAWL_ATTACK);
             }
         }
         return false;

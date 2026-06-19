@@ -3191,7 +3191,7 @@ public class AbilityScapeBasis {
         }
         this.attackTimeDuring = 0;
         this.setAttackTime(0);
-        setActivePower(PowerIndex.ATTACK);
+        setActivePower(PowerIndex.NONE);
         setActivePowerPhase((byte) 1);
         if (!self.level().isClientSide()) {
             Entity target = null;

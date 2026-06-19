@@ -85,10 +85,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return this.activePower == PowerIndex.EXTRA;
     }
     @Override
-    public boolean canAttack() {
-        return super.canAttack();
-    }
-    @Override
     public boolean canSummonStandAsEntity(){
         return false;
     }

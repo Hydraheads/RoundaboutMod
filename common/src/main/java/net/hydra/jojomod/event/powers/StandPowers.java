@@ -1896,12 +1896,12 @@ public class StandPowers extends AbilityScapeBasis {
                 }
                 this.attackTime++;
                 if (this.attackTime > this.attackTimeMax) {
-                    //if (activePowerPhase != 0){
-                        //if (this.self.level().isClientSide()){
-                            //C2SPacketUtil.trySingleBytePacket(PacketDataIndex.FIX_COOLDOWN_FOR_SERVER);
-                        //}
-                        //this.setActivePowerPhase((byte) 0);
+                //if (activePowerPhase != 0){
+                    //if (this.self.level().isClientSide()){
+                        //C2SPacketUtil.trySingleBytePacket(PacketDataIndex.FIX_COOLDOWN_FOR_SERVER);
                     //}
+                    //this.setActivePowerPhase((byte) 0);
+                //}
                     this.setActivePowerPhase((byte) 0);
                 }
                 if (this.interruptCD > 0) {

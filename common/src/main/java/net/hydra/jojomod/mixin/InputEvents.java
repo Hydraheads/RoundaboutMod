@@ -260,17 +260,16 @@ public abstract class InputEvents implements IInputEvents {
                 }
             }
 
-            if (standComp.roundabout$getCombatMode() && PowerTypes.isMiningStand(player)){
-                if (PowerTypes.isBrawling(player)){
-                    ci.setReturnValue(rdbt$stopBreakingBlock());
-                } else {
-                    ci.setReturnValue(false);
-                }
-                return;
-            }
             if (powers.isPiloting()){
                 ci.setReturnValue(false);
                 powers.pilotInputAttack();
+                return;
+            }
+            if (PowerTypes.isBrawling(player)) {
+                ci.setReturnValue(rdbt$stopBreakingBlock());
+                return;
+            } else if (standComp.roundabout$getCombatMode() && PowerTypes.isMiningStand(player)){
+                    ci.setReturnValue(false);
                 return;
             }
             if (itemStack.getItem() != null && itemStack.getItem() instanceof FirearmItem && ((FirearmItem) itemStack.getItem()).interceptAttack(itemStack, player) && !player.getCooldowns().isOnCooldown(itemStack.getItem())) {
@@ -495,7 +494,7 @@ public abstract class InputEvents implements IInputEvents {
                     return;
                 }
 
-                if (standComp.roundabout$getCombatMode() && !PowerTypes.isMiningStand(player) && !PowerTypes.isBrawlButNotAttacking(player)){
+                if (standComp.roundabout$getCombatMode() && !(PowerTypes.hasStandActive(player) && PowerTypes.isMiningStand(player)) && !PowerTypes.isBrawlButNotAttacking(player)){
                     ci.cancel();
                     return;
                 }
@@ -1307,7 +1306,7 @@ public abstract class InputEvents implements IInputEvents {
                 }
             }
 
-            if (standComp.roundabout$getCombatMode() && !PowerTypes.isMiningStand(player) && !PowerTypes.isBrawlButNotAttacking(player)){
+            if (standComp.roundabout$getCombatMode() &&  !(PowerTypes.hasStandActive(player) && PowerTypes.isMiningStand(player)) && !PowerTypes.isBrawlButNotAttacking(player)){
                 if (roundabout$activeMining || Minecraft.getInstance().gameMode.isDestroying()) {
                     roundabout$activeMining = false;
                     Minecraft.getInstance().gameMode.stopDestroyBlock();

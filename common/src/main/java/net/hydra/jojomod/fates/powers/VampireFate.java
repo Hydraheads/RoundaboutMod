@@ -637,70 +637,74 @@ public class VampireFate extends VampiricFate {
     }
     @Override
     public void addBloodExp(int amt, Entity target){
-        VampireData vdata = getVampireData2();
-        if (vdata.vampireLevel < 40 && self instanceof Player pl){
-            int exp = vdata.bloodExp;
+        if (!self.level().isClientSide()) {
+            VampireData vdata = getVampireData2();
+            if (vdata.vampireLevel < 40 && self instanceof Player pl) {
+                int exp = vdata.bloodExp;
 
-            if (target instanceof  LivingEntity LE && LE.hasEffect(ModEffects.VAMPIRE_BLOOD)){
-                return;
-            }
-            if (target instanceof Npc) {
-                int npcExp = vdata.npcExp;
-                if (npcExp < getEXPcap()){
-                    npcExp = Mth.clamp(npcExp+amt,0,getEXPcap());
-                    int change = npcExp - vdata.npcExp;
-                    if (change > 0){
-                        vdata.bloodExp+=change;
-                        vdata.npcExp = npcExp;
-                        if (vdata.timeSinceNpc == 0){
-                            vdata.timeSinceNpc = ClientNetworking.getAppropriateConfig().vampireSettings.expInterval;
+                if (target instanceof LivingEntity LE && LE.hasEffect(ModEffects.VAMPIRE_BLOOD)) {
+                    return;
+                }
+                if (target instanceof Npc) {
+                    int npcExp = vdata.npcExp;
+                    if (npcExp < getEXPcap()) {
+                        npcExp = Mth.clamp(npcExp + amt, 0, getEXPcap());
+                        int change = npcExp - vdata.npcExp;
+                        if (change > 0) {
+                            vdata.bloodExp += change;
+                            vdata.npcExp = npcExp;
+                            if (vdata.timeSinceNpc == 0) {
+                                vdata.timeSinceNpc = ClientNetworking.getAppropriateConfig().vampireSettings.expInterval;
+                            }
                         }
                     }
-                }
-            } else if (target instanceof Animal || target instanceof WaterAnimal || target instanceof AmbientCreature){
-                int animalExp = vdata.animalExp;
-                if (animalExp < getEXPcap()){
-                    animalExp = Mth.clamp(animalExp+amt,0,getEXPcap());
-                    int change = animalExp - vdata.animalExp;
-                    if (change > 0){
-                        vdata.bloodExp+=change;
-                        vdata.animalExp = animalExp;
-                        if (vdata.timeSinceAnimal == 0){
-                            vdata.timeSinceAnimal = ClientNetworking.getAppropriateConfig().vampireSettings.expInterval;;
+                } else if (target instanceof Animal || target instanceof WaterAnimal || target instanceof AmbientCreature) {
+                    int animalExp = vdata.animalExp;
+                    if (animalExp < getEXPcap()) {
+                        animalExp = Mth.clamp(animalExp + amt, 0, getEXPcap());
+                        int change = animalExp - vdata.animalExp;
+                        if (change > 0) {
+                            vdata.bloodExp += change;
+                            vdata.animalExp = animalExp;
+                            if (vdata.timeSinceAnimal == 0) {
+                                vdata.timeSinceAnimal = ClientNetworking.getAppropriateConfig().vampireSettings.expInterval;
+                                ;
+                            }
                         }
                     }
-                }
-            } else {
-                int monsterEXP = vdata.monsterEXP;
-                if (monsterEXP < getEXPcap()){
-                    monsterEXP = Mth.clamp(monsterEXP+amt,0,getEXPcap());
-                    int change = monsterEXP - vdata.monsterEXP;
-                    if (change > 0){
-                        vdata.bloodExp+=change;
-                        vdata.monsterEXP = monsterEXP;
-                        if (vdata.timeSinceMonster == 0){
-                            vdata.timeSinceMonster = ClientNetworking.getAppropriateConfig().vampireSettings.expInterval;;
-                        }
-                    }
-                }
-            }
-
-            if (vdata.bloodExp >= getLevelUpExpCost() && vdata.vampireLevel < 40){
-                vdata.bloodExp = 0;
-                vdata.vampireLevel+=1;
-                if (vdata.vampireLevel == 40){
-                    ((ServerPlayer) this.self).displayClientMessage(Component.
-                            translatable("leveling.roundabout.max_levelup.vampire").withStyle(ChatFormatting.DARK_RED)
-                            .withStyle(ChatFormatting.BOLD), true);
                 } else {
-                    ((ServerPlayer) this.self).displayClientMessage(Component.
-                            translatable("leveling.roundabout.levelup.vampire").withStyle(ChatFormatting.DARK_RED).
-                            withStyle(ChatFormatting.BOLD), true);
+                    int monsterEXP = vdata.monsterEXP;
+                    if (monsterEXP < getEXPcap()) {
+                        monsterEXP = Mth.clamp(monsterEXP + amt, 0, getEXPcap());
+                        int change = monsterEXP - vdata.monsterEXP;
+                        if (change > 0) {
+                            vdata.bloodExp += change;
+                            vdata.monsterEXP = monsterEXP;
+                            if (vdata.timeSinceMonster == 0) {
+                                vdata.timeSinceMonster = ClientNetworking.getAppropriateConfig().vampireSettings.expInterval;
+                                ;
+                            }
+                        }
+                    }
                 }
-                S2CPacketUtil.vampireMessage(pl);
 
+                if (vdata.bloodExp >= getLevelUpExpCost() && vdata.vampireLevel < 40) {
+                    vdata.bloodExp = 0;
+                    vdata.vampireLevel += 1;
+                    if (vdata.vampireLevel == 40) {
+                        ((ServerPlayer) this.self).displayClientMessage(Component.
+                                translatable("leveling.roundabout.max_levelup.vampire").withStyle(ChatFormatting.DARK_RED)
+                                .withStyle(ChatFormatting.BOLD), true);
+                    } else {
+                        ((ServerPlayer) this.self).displayClientMessage(Component.
+                                translatable("leveling.roundabout.levelup.vampire").withStyle(ChatFormatting.DARK_RED).
+                                withStyle(ChatFormatting.BOLD), true);
+                    }
+                    S2CPacketUtil.vampireMessage(pl);
+
+                }
+                S2CPacketUtil.beamVampireData2(pl);
             }
-            S2CPacketUtil.beamVampireData2(pl);
         }
     }
 
