@@ -329,20 +329,6 @@ public class AbilityScapeBasis {
     }
     public boolean tryPower(int move, boolean forced){
 
-        if (!self.level().isClientSide()) {
-            if (getPlayerPos2() > 0) {
-                if (move != PowerIndex.GUARD && getPlayerPos2() == PlayerPosIndex.GUARD) {
-                    setPlayerPos2(PlayerPosIndex.NONE);
-                }
-                if (move != PowerIndex.BARRAGE_CHARGE && getPlayerPos2() == PlayerPosIndex.BARRAGE_CHARGE) {
-                    setPlayerPos2(PlayerPosIndex.NONE);
-                }
-                if (move != PowerIndex.BARRAGE && getPlayerPos2() == PlayerPosIndex.BARRAGE) {
-                    setPlayerPos2(PlayerPosIndex.NONE);
-                }
-            }
-
-        }
 
         clearStuff(move,forced);
 
@@ -1601,6 +1587,10 @@ public class AbilityScapeBasis {
         if (this.attackTimeDuring <= -1) {
             return this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax;
         }
+        return false;
+    }
+
+    public boolean canClash(){
         return false;
     }
 
@@ -3194,7 +3184,6 @@ public class AbilityScapeBasis {
     }
 
     public void setAttack(){
-        Roundabout.LOGGER.info(""+this.getClass());
         if (HeatUtil.isArmsFrozen(self)){
             this.attackTimeMax= 12;
         } else {

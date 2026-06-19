@@ -628,12 +628,6 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    public boolean setPowerBarrageCharge() {
-        return true;
-    }
-
-    public void setPowerBarrage() {
-    }
 
     public int clashStarter = 0;
 
@@ -1651,23 +1645,6 @@ public class StandPowers extends AbilityScapeBasis {
     public void updateBarrageCharge(){
         if (this.attackTimeDuring >= this.getBarrageWindup()) {
             ((StandUser) this.self).roundabout$tryPower(PowerIndex.BARRAGE, true);
-        }
-    }
-    public void updateBarrage(){
-        if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
-            ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
-        } else {
-            if (this.attackTimeDuring > this.getBarrageLength()) {
-                this.attackTimeDuring = -20;
-            } else {
-                if (this.attackTimeDuring > 0) {
-                    this.setAttackTime((getBarrageRecoilTime() - 1) -
-                            Math.round(((float) this.attackTimeDuring / this.getBarrageLength())
-                                    * (getBarrageRecoilTime() - 1)));
-
-                    standBarrageHit();
-                }
-            }
         }
     }
 

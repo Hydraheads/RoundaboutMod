@@ -607,7 +607,7 @@ public class ClientToServerPackets {
 
                 /**Release right click to stop guarding*/
                 if (message.equals(MESSAGES.GuardCancel.value)) {
-                    if (((StandUser) sender).roundabout$isGuarding() || ((StandUser) sender).roundabout$isBarraging()
+                    if (((StandUser) sender).roundabout$isGuardInput() || ((StandUser) sender).roundabout$isBarraging()
                             || (((IPowersPlayer)sender).rdbt$getPowers() instanceof PunchingGeneralPowers pgp &&
                             pgp.isBarraging())
                             || ((StandUser) sender).roundabout$getStandPowers().clickRelease()) {

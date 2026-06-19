@@ -3,6 +3,7 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.block.StandFireBlock;
 import net.hydra.jojomod.block.WhiteAlbumIceBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
@@ -46,10 +47,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.FrostedIceBlock;
-import net.minecraft.world.level.block.LiquidBlockContainer;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
@@ -85,6 +83,10 @@ public class PowersWhiteAlbum extends NewDashPreset {
     /**returns if you are using stand guard*/
     public boolean isGuardInput(){
         return this.activePower == PowerIndex.EXTRA;
+    }
+    @Override
+    public boolean canAttack() {
+        return super.canAttack();
     }
     @Override
     public boolean canSummonStandAsEntity(){
@@ -169,7 +171,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     if (blockState3.isAir() ||
                             (MainUtil.getIsGamemodeApproriateForGrief(self) &&
                                     blockState3.canBeReplaced() &&
-                                    !(blockState3.getBlock() instanceof LiquidBlockContainer)
+                                    !(blockState3.getBlock() instanceof LiquidBlockContainer)&&
+                                    !(blockState3.getBlock() instanceof FireBlock)&&
+                                    !(blockState3.getBlock() instanceof StandFireBlock)
                                     &&
                             !blockState3.liquid() &&
                             !(blockState3.hasProperty(BlockStateProperties.WATERLOGGED) &&
@@ -332,7 +336,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     /**for stands that subvert guard mechanics like white album*/
     @Override
     public boolean isSpecialGuarding(){
-        return !isBlockingTraditionally() && hasStandActive(self);
+        return !isBlockingTraditionally() && hasStandActive(self) && !isBarraging();
     }
 
     public int getMaxGuardPoints(){
@@ -1168,7 +1172,10 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (keyIsDown) {
             if (activePowerPhase == 0){
                 if (isBrawling()) {
-                    this.tryPower(PowerIndex.ATTACK);
+                    if (getActivePower() != PowerIndex.EXTRA &&
+                            !isBarraging()) {
+                        this.tryPower(PowerIndex.ATTACK);
+                    }
                 }
             }
         }
@@ -1225,6 +1232,15 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     @Override
+    public float getBrawlPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return 0.7F;
+        } else {
+            return 2.2F;
+        }
+    }
+
+    @Override
     public boolean isWip() {
         return true;
     }
@@ -1239,7 +1255,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (targ instanceof Player PL){
             HeatUtil.addHeat(PL,-2);
         } else if (targ instanceof LivingEntity LE){
-            HeatUtil.addHeat(LE,-12);
+            HeatUtil.addHeat(LE,-14);
         }
     }
 

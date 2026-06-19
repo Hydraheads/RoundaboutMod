@@ -80,6 +80,10 @@ public class NewPunchingStand extends NewDashPreset {
         return false;
     }
 
+    @Override
+    public boolean canClash(){
+        return true;
+    }
 
     /**If you override this for any reason, you should probably call the super(). Although SP and TW override
      * this, you can probably do better*/
@@ -96,7 +100,7 @@ public class NewPunchingStand extends NewDashPreset {
                 }
                 boolean lastHit = (hitNumber >= this.getBarrageLength());
                 if (entity != null) {
-                    if (entity instanceof LivingEntity && ((StandUser) entity).roundabout$isBarraging()
+                    if (entity instanceof LivingEntity && ((StandUser) entity).roundabout$isBarraging() && ((StandUser) entity).roundabout$getStandPowers().canClash()
                             && ((StandUser) entity).roundabout$getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))  && !this.getStandUserSelf().roundabout$isPossessed()   ) {
                         initiateClash(entity);
                     } else {
@@ -171,6 +175,25 @@ public class NewPunchingStand extends NewDashPreset {
             }
         } else {
             ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
+        }
+    }
+
+
+    public void updateBarrage(){
+        if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
+            ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
+        } else {
+            if (this.attackTimeDuring > this.getBarrageLength()) {
+                this.attackTimeDuring = -20;
+            } else {
+                if (this.attackTimeDuring > 0) {
+                    this.setAttackTime((getBarrageRecoilTime() - 1) -
+                            Math.round(((float) this.attackTimeDuring / this.getBarrageLength())
+                                    * (getBarrageRecoilTime() - 1)));
+
+                    standBarrageHit();
+                }
+            }
         }
     }
 
