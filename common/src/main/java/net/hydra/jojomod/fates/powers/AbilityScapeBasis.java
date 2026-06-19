@@ -329,20 +329,6 @@ public class AbilityScapeBasis {
     }
     public boolean tryPower(int move, boolean forced){
 
-        if (!self.level().isClientSide()) {
-            if (getPlayerPos2() > 0) {
-                if (move != PowerIndex.GUARD && getPlayerPos2() == PlayerPosIndex.GUARD) {
-                    setPlayerPos2(PlayerPosIndex.NONE);
-                }
-                if (move != PowerIndex.BARRAGE_CHARGE && getPlayerPos2() == PlayerPosIndex.BARRAGE_CHARGE) {
-                    setPlayerPos2(PlayerPosIndex.NONE);
-                }
-                if (move != PowerIndex.BARRAGE && getPlayerPos2() == PlayerPosIndex.BARRAGE) {
-                    setPlayerPos2(PlayerPosIndex.NONE);
-                }
-            }
-
-        }
 
         clearStuff(move,forced);
 
@@ -1368,6 +1354,10 @@ public class AbilityScapeBasis {
     public boolean isGuarding(){
         return this.activePower == PowerIndex.GUARD;
     }
+    /**returns if you are using stand guard*/
+    public boolean isGuardInput(){
+        return isGuarding();
+    }
     /**for stands that subvert guard mechanics like white album*/
     public boolean isSpecialGuarding(){
         return false;
@@ -1597,6 +1587,10 @@ public class AbilityScapeBasis {
         if (this.attackTimeDuring <= -1) {
             return this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax;
         }
+        return false;
+    }
+
+    public boolean canClash(){
         return false;
     }
 
@@ -2689,6 +2683,17 @@ public class AbilityScapeBasis {
         return false;
     }
 
+    public void setPlayerPos(byte pos){
+        if (self instanceof Player){
+            ((IPlayerEntity) self).roundabout$SetPos(pos);
+        }
+    }
+    public byte getPlayerPos(){
+        if (self instanceof Player){
+            return ((IPlayerEntity) self).roundabout$GetPos();
+        }
+        return 0;
+    }
     public void setPlayerPos2(byte pos){
         if (self instanceof Player){
             ((IPlayerEntity) self).roundabout$SetPos2(pos);
@@ -3179,7 +3184,6 @@ public class AbilityScapeBasis {
     }
 
     public void setAttack(){
-        Roundabout.LOGGER.info(""+this.getClass());
         if (HeatUtil.isArmsFrozen(self)){
             this.attackTimeMax= 12;
         } else {

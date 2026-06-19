@@ -1036,7 +1036,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 }
                 boolean lastHit = (hitNumber >= this.getKickBarrageLength());
                 if (entity != null) {
-                    if (entity instanceof LivingEntity && ((StandUser) entity).roundabout$isBarraging()
+                    if (entity instanceof LivingEntity && ((StandUser) entity).roundabout$isBarraging() && ((StandUser) entity).roundabout$getStandPowers().canClash()
                             && ((StandUser) entity).roundabout$getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
                         initiateClash(entity);
                     } else {

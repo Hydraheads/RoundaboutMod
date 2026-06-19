@@ -48,7 +48,7 @@ public class WhiteAlbumSkatingSound extends AbstractTickableSoundInstance {
                 return;
             } else if (user instanceof Player pl){
                 //Also stop if you jump
-                byte bt = ((IPlayerEntity)pl).roundabout$GetPos2();
+                byte bt = ((IPlayerEntity)pl).roundabout$GetPos();
                 if (bt == PlayerPosIndex.SKATE_JUMP || bt == PlayerPosIndex.SKATE_TWIRL || pl.isCrouching()
                 || pl.isFallFlying() || pl.isSwimming() || ((StandUser)pl).roundabout$isDazed()){
                     stop();

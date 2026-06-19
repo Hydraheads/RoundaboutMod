@@ -840,7 +840,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if (this.getReducedDamage(entity)){
                 return playerDmgMult(0.7F * (1+ (vp.getVampireData().strengthLevel * 0.05F)));
             } else {
-                return mobDmgMult(2.1F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
+                return mobDmgMult(2.6F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             }
         } else {
             return super.getBrawlPunchStrength(entity);
@@ -853,7 +853,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if (this.getReducedDamage(entity)){
                 return playerDmgMult(1.2F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             } else {
-                return mobDmgMult(3F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
+                return mobDmgMult(3.7F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             }
         } else {
             return super.getBrawlPunchStrength(entity);
@@ -892,7 +892,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if (this.getReducedDamage(entity)){
                 return playerDmgMult(1.3F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             } else {
-                return mobDmgMult(3F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
+                return mobDmgMult(3.7F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             }
         } else {
             return super.getBrawlPunchStrength(entity);

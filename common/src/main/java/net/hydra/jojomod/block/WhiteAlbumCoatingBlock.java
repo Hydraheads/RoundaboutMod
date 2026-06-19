@@ -2,17 +2,23 @@ package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -26,6 +32,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -73,9 +80,14 @@ public class WhiteAlbumCoatingBlock
 
     @SuppressWarnings("deprecation")
     @Override
-    public VoxelShape getShape(BlockState $$0, BlockGetter $$1, BlockPos $$2, CollisionContext $$3) {
-        return EMPTY;
+    public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
+        if (collisionContext.isHoldingItem(Items.FLINT_AND_STEEL)) {
+            return SHAPE_SMALL;
+        } else {
+            return EMPTY;
+        }
     }
+
     @SuppressWarnings("deprecation")
     @Override
     public VoxelShape getCollisionShape(BlockState $$0, BlockGetter $$1, BlockPos $$2, CollisionContext $$3) {
@@ -162,5 +174,47 @@ public class WhiteAlbumCoatingBlock
     @Override
     public ItemStack getCloneItemStack(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
         return ItemStack.EMPTY;
+    }
+
+    @Override
+    public InteractionResult use(BlockState state,
+                                 Level level,
+                                 BlockPos pos,
+                                 Player player,
+                                 InteractionHand hand,
+                                 BlockHitResult hit) {
+
+        ItemStack stack = player.getItemInHand(hand);
+
+        if (stack.is(Items.FLINT_AND_STEEL)) {
+
+                if (!level.isClientSide) {
+
+                    level.setBlock(
+                            pos,
+                            Blocks.AIR.defaultBlockState(),
+                            Block.UPDATE_ALL
+                    );
+
+                    stack.hurtAndBreak(
+                            1,
+                            player,
+                            p -> p.broadcastBreakEvent(hand)
+                    );
+                }
+
+                level.playSound(
+                        player,
+                        pos,
+                        SoundEvents.FLINTANDSTEEL_USE,
+                        SoundSource.BLOCKS,
+                        1.0F,
+                        level.random.nextFloat() * 0.4F + 0.8F
+                );
+            return InteractionResult.sidedSuccess(level.isClientSide);
+
+        }
+
+        return super.use(state, level, pos, player, hand, hit);
     }
 }

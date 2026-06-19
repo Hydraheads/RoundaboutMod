@@ -7,6 +7,9 @@ public class PlayerPosIndex {
     public static final byte DODGE_FORWARD = 2;
     public static final byte DODGE_BACKWARD = 3;
     public static final byte SUNLIGHT = 4;
+    public static final byte SKATE_JUMP = 5;
+    public static final byte SKATE_TWIRL = 6;
+    public static final byte SKATE_GENERAL = 7;
 
     //Pos 2
     public static final byte NONE_2 = 0;
@@ -24,11 +27,8 @@ public class PlayerPosIndex {
     public static final byte RIPPER_EYES_ACTIVE = 13;
     public static final byte VANISH_START = 14;
     public static final byte VANISH_PERSIST = 15;
-    public static final byte SKATE_JUMP = 16;
-    public static final byte SKATE_TWIRL = 17;
     //Tragically vanilla desyncs your sprinting with client/server every time you hit a mob while sprinting
     //So this is visually necessary for other players to see you skating
-    public static final byte SKATE_GENERAL = 18;
 
     public static final byte SNUBNOSE_AIM = 3;
 

@@ -783,7 +783,7 @@ public abstract class InputEvents implements IInputEvents {
                 ci.cancel();
                 return;
             } else if (PowerTypes.hasStandActive(this.player)) {
-                if (standComp.roundabout$isGuarding() || standComp.roundabout$isBarraging() || standComp.roundabout$isClashing() || standComp.roundabout$getStandPowers().cancelItemUse()) {
+                if (standComp.roundabout$isGuardInput() || standComp.roundabout$isBarraging() || standComp.roundabout$isClashing() || standComp.roundabout$getStandPowers().cancelItemUse()) {
                     ci.cancel();
                     return;
                 }
@@ -1269,7 +1269,7 @@ public abstract class InputEvents implements IInputEvents {
             GeneralPowers generalPowers = ((IPowersPlayer)player).rdbt$getPowers();
             if (!this.options.keyUse.isDown() && !roundabout$sameKeyOne(KeyInputRegistry.guardKey)) {
                 if (PowerTypes.hasStandActivelyEquipped(player)){
-                    if (standComp.roundabout$isGuarding() || standComp.roundabout$isBarraging() ||
+                    if (standComp.roundabout$isGuardInput() || standComp.roundabout$isBarraging() ||
                             powers.clickRelease()) {
                         /*This code makes it so there is a slight delay between blocking and subsequent punch chain attacks.
                          * This delay exists so you can't right click left click chain for instant full power punches.*/
@@ -1286,7 +1286,7 @@ public abstract class InputEvents implements IInputEvents {
 
                 }
                 if (PowerTypes.hasPowerActivelyEquipped(player)){
-                    if (standComp.roundabout$isGuarding() || generalPowers.isBarraging()) {
+                    if (standComp.roundabout$isGuardInput() || generalPowers.isBarraging()) {
                         /*This code makes it so there is a slight delay between blocking and subsequent punch chain attacks.
                          * This delay exists so you can't right click left click chain for instant full power punches.*/
                             standComp.roundabout$tryPowerP(PowerIndex.NONE,true);
@@ -1324,7 +1324,7 @@ public abstract class InputEvents implements IInputEvents {
                         Entity TE = standComp.roundabout$getTargetEntity(player, -1);
                         if (!isMining && TE == null && this.hitResult != null && !this.player.isHandsBusy()
                                 && (standComp.roundabout$getActivePower() == PowerIndex.NONE || standComp.roundabout$getAttackTimeDuring() == -1)
-                                && !standComp.roundabout$isGuarding()) {
+                                && !standComp.roundabout$isGuardInput()) {
                             boolean $$1 = false;
                             switch (this.hitResult.getType()) {
                                 case BLOCK:
@@ -1362,7 +1362,7 @@ public abstract class InputEvents implements IInputEvents {
                 }
 
                 if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
-                    if (!isMining && standComp.roundabout$isGuarding() && !standComp.roundabout$isBarraging()) {
+                    if (!isMining && standComp.roundabout$isGuardInput() && !standComp.roundabout$isBarraging()) {
                         if (rdbt$isInitialized(player)) {
                             powers.preCheckButtonInputBarrage(this.options.keyAttack.isDown(), this.options);
                         }
@@ -1381,7 +1381,7 @@ public abstract class InputEvents implements IInputEvents {
                     }
                 }
                 if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
-                    if (!isMining && standComp.roundabout$isGuarding() && !generalPowers.isBarraging()) {
+                    if (!isMining && standComp.roundabout$isGuardInput() && !generalPowers.isBarraging()) {
                         if (rdbt$isInitialized(player)) {
                             generalPowers.preCheckButtonInputBarrage(this.options.keyAttack.isDown(), this.options);
                         }

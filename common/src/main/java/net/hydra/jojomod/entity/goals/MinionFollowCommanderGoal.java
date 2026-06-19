@@ -1,24 +1,29 @@
 package net.hydra.jojomod.entity.goals;
 
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.Tactics;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
 public class MinionFollowCommanderGoal extends Goal {
     public static final int TELEPORT_WHEN_DISTANCE_IS = 12;
-    private static final int MIN_HORIZONTAL_DISTANCE_FROM_PLAYER_WHEN_TELEPORTING = 2;
+//    private static final int MIN_HORIZONTAL_DISTANCE_FROM_PLAYER_WHEN_TELEPORTING = 2;
     private static final int MAX_HORIZONTAL_DISTANCE_FROM_PLAYER_WHEN_TELEPORTING = 3;
     private static final int MAX_VERTICAL_DISTANCE_FROM_PLAYER_WHEN_TELEPORTING = 1;
     private final BaseMinion fallenMob;
@@ -102,8 +107,39 @@ public class MinionFollowCommanderGoal extends Goal {
     public void tick() {
         if (--this.timeToRecalcPath <= 0) {
             this.timeToRecalcPath = this.adjustedTickDelay(10);
-            this.navigation.moveTo(this.owner, this.speedModifier);
+            if (this.fallenMob.distanceToSqr(this.owner) >= (double)144.0F &&
+                    (!(isDay(this.owner.level())))) {
+                this.teleportToOwner();
+            } else {
+                this.navigation.moveTo(this.owner, this.speedModifier);
+            }
         }
+    }
+
+    public boolean isDay(Level lv){
+        boolean checksOut = false;
+        long timeOfDay = lv.getDayTime() % 24000L;
+        boolean isDay = timeOfDay < 12555L || timeOfDay > 23200; // 0–12000 = day, 12000–24000 = night
+
+        if (MainUtil.isSunDamageWorld(this.owner.level().dimension().location().getPath()) &&
+                isDay) {
+            Vec3 yes = this.owner.getEyePosition();
+            int range = 3;
+            for (var i = -range; i <= range; i++) {
+                for (var j = -range; j <= range; j++) {
+                    if (!(i == 0 || j == 0)) {
+                        if (this.owner.level().canSeeSky(BlockPos.containing(yes.add(i,0,j)))){
+                            checksOut = true;
+                        }
+                    }
+                }
+            }
+            if (FateTypes.isInSunlight(this.owner)){
+                checksOut = true;
+            }
+        }
+
+        return checksOut;
     }
 
     private void teleportToOwner() {

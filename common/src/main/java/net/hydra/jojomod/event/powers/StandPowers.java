@@ -628,12 +628,6 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    public boolean setPowerBarrageCharge() {
-        return true;
-    }
-
-    public void setPowerBarrage() {
-    }
 
     public int clashStarter = 0;
 
@@ -1653,23 +1647,6 @@ public class StandPowers extends AbilityScapeBasis {
             ((StandUser) this.self).roundabout$tryPower(PowerIndex.BARRAGE, true);
         }
     }
-    public void updateBarrage(){
-        if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
-            ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
-        } else {
-            if (this.attackTimeDuring > this.getBarrageLength()) {
-                this.attackTimeDuring = -20;
-            } else {
-                if (this.attackTimeDuring > 0) {
-                    this.setAttackTime((getBarrageRecoilTime() - 1) -
-                            Math.round(((float) this.attackTimeDuring / this.getBarrageLength())
-                                    * (getBarrageRecoilTime() - 1)));
-
-                    standBarrageHit();
-                }
-            }
-        }
-    }
 
     /**Enemies randomize their clash power, up to on occasion the maximum for some forced at best ties*/
     private void RoundaboutEnemyClash(){
@@ -1855,18 +1832,18 @@ public class StandPowers extends AbilityScapeBasis {
 
             if (self instanceof Player player){
                 IPlayerEntity ipe = ((IPlayerEntity) player);
-                byte pos2 = ipe.roundabout$GetPos2();
-                if (pos2 == PlayerPosIndex.SKATE_JUMP ||
-                        pos2 == PlayerPosIndex.SKATE_TWIRL){
+                byte pos = ipe.roundabout$GetPos();
+                if (pos == PlayerPosIndex.SKATE_JUMP ||
+                        pos == PlayerPosIndex.SKATE_TWIRL){
                     if (self.onGround()) {
-                        ipe.roundabout$SetPos2(PlayerPosIndex.NONE);
+                        ipe.roundabout$SetPos(PlayerPosIndex.NONE);
                         onLandingAnimatedJump();
                     } else {
                         if (twirlTicks > 0){
                             twirlTicks--;
                         } else {
-                            if (pos2 == PlayerPosIndex.SKATE_TWIRL){
-                                ipe.roundabout$SetPos2(PlayerPosIndex.SKATE_JUMP);
+                            if (pos == PlayerPosIndex.SKATE_TWIRL){
+                                ipe.roundabout$SetPos(PlayerPosIndex.SKATE_JUMP);
                             }
                         }
                     }
