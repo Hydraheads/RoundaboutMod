@@ -34,8 +34,6 @@ import net.minecraft.world.phys.*;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +56,7 @@ public class ManhattanTransferEntity extends StandEntity {
             POLLINATION_SKIN = 7,
             UFO_TRANSFER_SKIN = 8;
 
+    /*The 12 billion values I need for the stand to work as intended*/
     @Override
     public boolean isNoGravity() {
         return true;
@@ -81,9 +80,6 @@ public class ManhattanTransferEntity extends StandEntity {
         }
         return true;
     }
-
-    public boolean isDesummoning = false;
-
     @Override
     public boolean hasNoPhysics() {
         return false;
@@ -187,6 +183,7 @@ public class ManhattanTransferEntity extends StandEntity {
     }
     protected static final EntityDataAccessor<Integer> MANHATTAN_TARGET = SynchedEntityData.defineId(ManhattanTransferEntity.class,
             EntityDataSerializers.INT);
+    public boolean isDesummoning = false;
     public boolean hasItem = false;
     public boolean hasItemTwo = false;
     public boolean success = false;
@@ -214,9 +211,33 @@ public class ManhattanTransferEntity extends StandEntity {
     public float getThrowAngle3() {
         return 0.0F;
     }
-
     public boolean canOthersLoadMT = ClientNetworking.getAppropriateConfig().manhattanTransferSettings.canOtherMobsLoadManhattanTransfer;
     public int fireTicksPrj = 0;
+    Projectile hattanDeflected = null;
+    public int fireworkLifeTicks = 0;
+    public int setHatAnimDir = 1;
+    public float heighHattanPilotNoMov = 0;
+    private boolean isKeyEverPressed = false;
+    public StandUser getUserData(LivingEntity User) {
+        return ((StandUser) User);
+    }
+    public int DodgeRainTicks = 0;
+    public void setDodgeRainTicks(int val) {
+        DodgeRainTicks = val;
+    }
+    int stupidTicks = 10;
+    public int tickInWater = 100;
+    int dirPause = 0;
+    int randomDirection = 0;
+    public boolean isHattanPilotMode = false;
+    public float autoMoveBoost = 1;
+    public float rotationXHattan = 0;
+    public float rotationYHattan = 0;
+    public float shootRotationXHattan = 0;
+    public float shootRotationYHattan = 0;
+    public float manhattanDetectionRange = ClientNetworking.getAppropriateConfig().manhattanTransferSettings.manhattanAutoShootingRange;
+
+    /*actual methods*/
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
@@ -342,7 +363,7 @@ public class ManhattanTransferEntity extends StandEntity {
         }
     }
 
-    public boolean shootHattan(/*ItemStack item*/) {
+    public boolean shootHattan() {
         /***/
         if (!getHeldItemManhattan().isEmpty()) {
             Vec3 pos = new Vec3(this.getX(), this.getEyeY() - 0.1F, this.getZ());
@@ -362,21 +383,12 @@ public class ManhattanTransferEntity extends StandEntity {
         }
         return false;
     }
-
-    Projectile hattanDeflected = null;
-
-    public int fireworkLifeTicks = 0;
-
     public static boolean manhattanShoot(ManhattanTransferEntity thrower, boolean canSnipe, ItemStack item, float getShotAccuracy,
                                          float getBundleAccuracy,
                                          float getThrowAngle1, float getThrowAngle2, float getThrowAngle3,
                                          boolean getCanPlace, float xRot, float yRot, Vec3 pos,
                                          boolean playSounds, float mult, boolean canGiveYouItem) {
         thrower.playSound(ModSounds.BULLET_RICOCHET_EVENT, 1.0F, (thrower.random.nextFloat() * 0.2F + 0.7F));
-            if(thrower.getUser() != null) {
-                if(thrower.distanceTo(thrower.getUser()) > 16) {
-            }
-        }
         if (!thrower.level().isClientSide) {
             if (thrower.getUserData(thrower.getUser()) != null && thrower.getUserData(thrower.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
                 PM.isNotLoaded();
@@ -542,14 +554,11 @@ public class ManhattanTransferEntity extends StandEntity {
             ((IFireworkRocketAccess) FER).roundabout$SetFireworkRemainingLifeTicks(this.fireworkLifeTicks);
         }
     }
-
     public void changeMovementState() {
         if (this.getUserData(this.getUser()) != null && this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
             PM.isLoaded();
         }
     }
-
-    public int setHatAnimDir = 1;
     public Vec2 getStrangeVector(){
         if(this.getUser() != null && this.getUserData(this.getUser()) != null && this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
             if(this.level().isClientSide) {
@@ -590,13 +599,6 @@ public class ManhattanTransferEntity extends StandEntity {
         }
         return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot());
     }
-
-    private float aNumber = 10F;
-
-    public float heighHattanPilotNoMov = 0;
-
-    private boolean isKeyEverPressed = false;
-
     public Vec3 getHattanDirection(){
         return Vec3.directionFromRotation(this.getStrangeVector());
     }
@@ -606,27 +608,6 @@ public class ManhattanTransferEntity extends StandEntity {
         this.deathTime = 0;
         super.die($$0);
     }
-
-    @Override
-    protected void tickDeath() {
-        super.die(this.damageSources().generic());
-        super.tickDeath();
-    }
-    public StandUser getUserData(LivingEntity User) {
-          return ((StandUser) User);
-    }
-    public int DodgeRainTicks = 0;
-
-    public void setDodgeRainTicks(int val) {
-        DodgeRainTicks = val;
-    }
-
-    int stupidTicks = 10;
-
-    public int tickInWater = 100;
-    int dirPause = 0;
-    int randomDirection = 0;
-    public boolean isHattanPilotMode = false;
 
     @Override
     public void tick() {
@@ -715,16 +696,6 @@ if(!isHattanPilotMode) {
         rotationYHattan = this.getYRot();
         super.tick();
     }
-
-    public float autoMoveBoost = 1;
-
-    public float rotationXHattan = 0;
-    public float rotationYHattan = 0;
-
-    public float shootRotationXHattan = 0;
-    public float shootRotationYHattan = 0;
-
-    public float manhattanDetectionRange = ClientNetworking.getAppropriateConfig().manhattanTransferSettings.manhattanAutoShootingRange;
 
     public void searchTarget() {
         if (this.level() != null) {
@@ -824,10 +795,6 @@ if(!isHattanPilotMode) {
 
     }
 
-    public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.KNOCKBACK_RESISTANCE, 1.0D);
-    }
-
     public boolean isInRain() {
         BlockPos $$0 = this.blockPosition();
         return this.level().isRainingAt($$0)
@@ -835,7 +802,6 @@ if(!isHattanPilotMode) {
     }
 
     public boolean stopsManhattanAnimationsWhenHeldItem = false;
-
     public final AnimationState rain_dodging_manhattan = new AnimationState();
     public final AnimationState slow_manhattan = new AnimationState();
     public final AnimationState forward_manhattan_incipit = new AnimationState();

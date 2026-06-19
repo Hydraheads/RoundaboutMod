@@ -281,17 +281,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
         if (ent != null && switchShootingMode()) {
             tryPower(PowersManhattanTransfer.DEFLECT_PROJECTILE, true);
             tryPowerPacket(PowersManhattanTransfer.DEFLECT_PROJECTILE);
-            Entity TE = MainUtil.getTargetEntity(ent, 300, 10);
-            IEntityAndData entityAndData = ((IEntityAndData) TE);
-            //If Target is detected
-            if (TE != null && entityAndData.roundabout$getTrueInvisibilityManhattan() > 1 && !(TE instanceof StandEntity && !TE.isAttackable())) {
-                Vec3 vec3d = ent.getEyePosition(0);
-                Vec3 vec3d2 = ent.getViewVector(0);
-                Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
-                BlockHitResult blockHit = ent.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, ent));
-                if ((blockHit.distanceTo(ent) - 1) < ent.distanceToSqr(TE)) {
-                }
-            }
+
         }
     }
     public boolean switchShootingMode(){
@@ -506,8 +496,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
         if (this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME) {
             if (ME.getHattanTarget() != 0 && !switchShootingMode()){
                 if(securityTicks < 1 && this.targetHattan != null && ME.hasLineOfSight(this.targetHattan)) {
-                    tryPower(PowersManhattanTransfer.DEFLECT_PROJECTILE, true);
-                    tryPowerPacket(PowersManhattanTransfer.DEFLECT_PROJECTILE);
+                        ME.shootHattan();
+                        ME.setHeldItemManhattan(ItemStack.EMPTY);
+                        ME.hasItem = false;
                 } else {
                     securityTicks--;
                 }
