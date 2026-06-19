@@ -3073,35 +3073,40 @@ public class AbilityScapeBasis {
         return ModDamageTypes.STAND;
     }
 
+
+    public long impactTimeStamp = 0;
     public void brawlPunchImpact(Entity entity) {
         if (!this.self.level().isClientSide()) {
-            attackTargetId = 0;
-            self.swing(InteractionHand.MAIN_HAND, true);
-            if (entity != null) {
-                if (entity.distanceTo(self) > 3.8){
-                    return;
-                }
-                float pow;
-                float knockbackStrength;
-                pow = getBrawlPunchStrength(entity);
-                pow = applyComboDamage(pow);
-                knockbackStrength = 0.10F;
-
-                boolean bool = entity.hurt(ModDamageTypes.of(entity.level(), getPunchDamageSource(), self), pow);
-                if (bool && entity instanceof LivingEntity LE){
-                    LE.setLastHurtMob(entity);
-                }
-
-                if (bool) {
-                    if (!(entity instanceof Player)) {
-                        takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
+            if (impactTimeStamp != self.level().getGameTime()) {
+                impactTimeStamp = self.level().getGameTime();
+                attackTargetId = 0;
+                self.swing(InteractionHand.MAIN_HAND, true);
+                if (entity != null) {
+                    if (entity.distanceTo(self) > 3.8) {
+                        return;
                     }
-                    this.self.level().playSound(null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
-                    addToCombo(entity);
-                    hitParticles(entity);
-                } else {
-                    if (!this.self.level().isClientSide()) {
-                        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
+                    float pow;
+                    float knockbackStrength;
+                    pow = getBrawlPunchStrength(entity);
+                    pow = applyComboDamage(pow);
+                    knockbackStrength = 0.10F;
+
+                    boolean bool = entity.hurt(ModDamageTypes.of(entity.level(), getPunchDamageSource(), self), pow);
+                    if (bool && entity instanceof LivingEntity LE) {
+                        LE.setLastHurtMob(entity);
+                    }
+
+                    if (bool) {
+                        if (!(entity instanceof Player)) {
+                            takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
+                        }
+                        this.self.level().playSound(null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
+                        addToCombo(entity);
+                        hitParticles(entity);
+                    } else {
+                        if (!this.self.level().isClientSide()) {
+                            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
+                        }
                     }
                 }
             }
