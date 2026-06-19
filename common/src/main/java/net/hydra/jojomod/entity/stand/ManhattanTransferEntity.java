@@ -342,7 +342,7 @@ public class ManhattanTransferEntity extends StandEntity {
         }
     }
 
-    public boolean shootHattan(/*ItemStack item*/) {
+    public boolean shootHattan() {
         /***/
         if (!getHeldItemManhattan().isEmpty()) {
             Vec3 pos = new Vec3(this.getX(), this.getEyeY() - 0.1F, this.getZ());
@@ -373,10 +373,6 @@ public class ManhattanTransferEntity extends StandEntity {
                                          boolean getCanPlace, float xRot, float yRot, Vec3 pos,
                                          boolean playSounds, float mult, boolean canGiveYouItem) {
         thrower.playSound(ModSounds.BULLET_RICOCHET_EVENT, 1.0F, (thrower.random.nextFloat() * 0.2F + 0.7F));
-            if(thrower.getUser() != null) {
-                if(thrower.distanceTo(thrower.getUser()) > 16) {
-            }
-        }
         if (!thrower.level().isClientSide) {
             if (thrower.getUserData(thrower.getUser()) != null && thrower.getUserData(thrower.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
                 PM.isNotLoaded();
@@ -590,8 +586,6 @@ public class ManhattanTransferEntity extends StandEntity {
         }
         return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot());
     }
-
-    private float aNumber = 10F;
 
     public float heighHattanPilotNoMov = 0;
 
@@ -822,10 +816,6 @@ if(!isHattanPilotMode) {
             return new Vec3(0, 0, 0);
 
 
-    }
-
-    public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.KNOCKBACK_RESISTANCE, 1.0D);
     }
 
     public boolean isInRain() {
