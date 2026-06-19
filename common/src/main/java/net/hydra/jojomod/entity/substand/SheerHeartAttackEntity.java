@@ -8,6 +8,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.util.ExplosionUtil;
 import net.hydra.jojomod.util.HeatUtil;
@@ -16,6 +17,8 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
@@ -450,6 +453,11 @@ public class SheerHeartAttackEntity extends StandEntity {
 			if (mobType.equals(MobType.UNDEAD)) { points -= 30;}
 		}
 		return points;
+	}
+
+	@Override
+	protected SoundEvent getAmbientSound() {
+		return null;
 	}
 
     @Override public boolean hurt(DamageSource source, float amount) { return false;}
