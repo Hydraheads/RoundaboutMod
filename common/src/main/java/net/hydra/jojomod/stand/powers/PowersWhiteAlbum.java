@@ -260,13 +260,13 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 //Roundabout.LOGGER.info("4");
                 if (acceleration >= getMaxAccelerationTicks()) {
                     //Roundabout.LOGGER.info("5");
-                    setPlayerPos2(PlayerPosIndex.SKATE_TWIRL);
+                    setPlayerPos(PlayerPosIndex.SKATE_TWIRL);
                     twirlTicks = 20;
                 } else {
                     //Roundabout.LOGGER.info("6");
-                    if (getPlayerPos2() != PlayerPosIndex.SKATE_TWIRL) {
+                    if (getPlayerPos() != PlayerPosIndex.SKATE_TWIRL) {
                         //Roundabout.LOGGER.info("7");
-                        setPlayerPos2(PlayerPosIndex.SKATE_JUMP);
+                        setPlayerPos(PlayerPosIndex.SKATE_JUMP);
                     }
                 }
             }
@@ -414,16 +414,16 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     public void setAcceleration(int num){
-        byte pos2 = getPlayerPos2();
+        byte pos = getPlayerPos();
         acceleration = num;
         if (num > 0){
-            if (pos2 != PlayerPosIndex.SKATE_JUMP &&
-                    pos2 != PlayerPosIndex.SKATE_TWIRL){
-                setPlayerPos2(PlayerPosIndex.SKATE_GENERAL);
+            if (pos != PlayerPosIndex.SKATE_JUMP &&
+                    pos != PlayerPosIndex.SKATE_TWIRL){
+                setPlayerPos(PlayerPosIndex.SKATE_GENERAL);
             }
         } else {
-            if (pos2 == PlayerPosIndex.SKATE_GENERAL){
-                setPlayerPos2(PlayerPosIndex.NONE_2);
+            if (pos == PlayerPosIndex.SKATE_GENERAL){
+                setPlayerPos(PlayerPosIndex.NONE);
             }
         }
     }

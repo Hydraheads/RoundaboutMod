@@ -2689,6 +2689,17 @@ public class AbilityScapeBasis {
         return false;
     }
 
+    public void setPlayerPos(byte pos){
+        if (self instanceof Player){
+            ((IPlayerEntity) self).roundabout$SetPos(pos);
+        }
+    }
+    public byte getPlayerPos(){
+        if (self instanceof Player){
+            return ((IPlayerEntity) self).roundabout$GetPos();
+        }
+        return 0;
+    }
     public void setPlayerPos2(byte pos){
         if (self instanceof Player){
             ((IPlayerEntity) self).roundabout$SetPos2(pos);

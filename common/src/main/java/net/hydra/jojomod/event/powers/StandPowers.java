@@ -1855,18 +1855,18 @@ public class StandPowers extends AbilityScapeBasis {
 
             if (self instanceof Player player){
                 IPlayerEntity ipe = ((IPlayerEntity) player);
-                byte pos2 = ipe.roundabout$GetPos2();
-                if (pos2 == PlayerPosIndex.SKATE_JUMP ||
-                        pos2 == PlayerPosIndex.SKATE_TWIRL){
+                byte pos = ipe.roundabout$GetPos();
+                if (pos == PlayerPosIndex.SKATE_JUMP ||
+                        pos == PlayerPosIndex.SKATE_TWIRL){
                     if (self.onGround()) {
-                        ipe.roundabout$SetPos2(PlayerPosIndex.NONE);
+                        ipe.roundabout$SetPos(PlayerPosIndex.NONE);
                         onLandingAnimatedJump();
                     } else {
                         if (twirlTicks > 0){
                             twirlTicks--;
                         } else {
-                            if (pos2 == PlayerPosIndex.SKATE_TWIRL){
-                                ipe.roundabout$SetPos2(PlayerPosIndex.SKATE_JUMP);
+                            if (pos == PlayerPosIndex.SKATE_TWIRL){
+                                ipe.roundabout$SetPos(PlayerPosIndex.SKATE_JUMP);
                             }
                         }
                     }
