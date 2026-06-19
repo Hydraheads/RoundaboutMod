@@ -496,8 +496,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
         if (this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME) {
             if (ME.getHattanTarget() != 0 && !switchShootingMode()){
                 if(securityTicks < 1 && this.targetHattan != null && ME.hasLineOfSight(this.targetHattan)) {
-                    tryPower(PowersManhattanTransfer.DEFLECT_PROJECTILE, true);
-                    tryPowerPacket(PowersManhattanTransfer.DEFLECT_PROJECTILE);
+                        ME.shootHattan();
+                        ME.setHeldItemManhattan(ItemStack.EMPTY);
+                        ME.hasItem = false;
                 } else {
                     securityTicks--;
                 }
