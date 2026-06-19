@@ -516,7 +516,8 @@ public abstract class InputEvents implements IInputEvents {
                         this.gameMode.stopDestroyBlock();
                     }
                     ci.cancel();
-                } else if ((PowerTypes.hasStandActive(player) && standComp.roundabout$getStandPowers().interceptAttack())|| (((IFatePlayer)player).rdbt$getFatePowers().interceptAttack())){
+                } else if ((PowerTypes.hasStandActive(player) && standComp.roundabout$getStandPowers().interceptAttack() &&
+                        standComp.roundabout$getStandPowers().isMiningStand())|| (((IFatePlayer)player).rdbt$getFatePowers().interceptAttack())){
                     if (isMining) {
                         if (!this.player.isUsingItem()) {
                             if ($$0 && this.hitResult != null && this.hitResult.getType() == HitResult.Type.BLOCK) {
@@ -1352,6 +1353,7 @@ public abstract class InputEvents implements IInputEvents {
                 powers.preCheckButtonInputUse(this.options.keyUse.isDown(),this.options);
                 generalPowers.preCheckButtonInputUse(this.options.keyUse.isDown(),this.options);
                 }
+
                 if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
                     if (!isMining && !roundabout$activeMining && standComp.roundabout$getInterruptCD()) {
                         if (rdbt$isInitialized(player) && !((StandUser)player).roundabout$isDazed()) {

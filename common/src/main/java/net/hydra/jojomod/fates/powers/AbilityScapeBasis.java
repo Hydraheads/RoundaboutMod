@@ -1584,7 +1584,7 @@ public class AbilityScapeBasis {
         }}
     }
     public boolean canAttack(){
-        if (this.attackTimeDuring <= -1) {
+        if (this.attackTimeDuring <= -1 || getActivePower() == PowerIndex.NONE) {
             return this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax;
         }
         return false;
