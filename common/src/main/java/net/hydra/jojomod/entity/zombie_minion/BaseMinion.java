@@ -357,7 +357,7 @@ public class BaseMinion extends PathfinderMob {
                     SoundSource.PLAYERS,
                     1.0F,
                     0.9F);
-            digCooldown = 100;
+            digCooldown = 80;
             if (getMovementTactic() == Tactics.FOLLOW.id){
                 setMovementTactic(Tactics.STAY_PUT.id);
             }
