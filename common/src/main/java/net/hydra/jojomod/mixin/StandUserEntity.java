@@ -2928,6 +2928,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return this.roundabout$getStandPowers().isGuarding() ||
                 (rdbt$this() instanceof Player pl && ((IPowersPlayer)pl).rdbt$getPowers().isGuarding());
     }
+    public boolean roundabout$isGuardInput(){
+        return this.roundabout$getStandPowers().isGuardInput() ||
+                (rdbt$this() instanceof Player pl && ((IPowersPlayer)pl).rdbt$getPowers().isGuardInput());
+    }
     public boolean roundabout$isBarraging(){
         return this.roundabout$getStandPowers().isBarraging();
     }

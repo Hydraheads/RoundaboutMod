@@ -1368,6 +1368,10 @@ public class AbilityScapeBasis {
     public boolean isGuarding(){
         return this.activePower == PowerIndex.GUARD;
     }
+    /**returns if you are using stand guard*/
+    public boolean isGuardInput(){
+        return isGuarding();
+    }
     /**for stands that subvert guard mechanics like white album*/
     public boolean isSpecialGuarding(){
         return false;

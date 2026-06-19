@@ -7,6 +7,7 @@ import net.hydra.jojomod.block.WhiteAlbumIceBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.BlockWallEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
@@ -79,6 +80,12 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return hasStandActive(self) || super.freezeImmune();
     }
 
+    public static final byte ICE_CHARGE = 80;
+
+    /**returns if you are using stand guard*/
+    public boolean isGuardInput(){
+        return this.activePower == PowerIndex.EXTRA;
+    }
     @Override
     public boolean canSummonStandAsEntity(){
         return false;
@@ -290,7 +297,23 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (hasSkatesActivated()){
             basis *= 1.3f+(acceleration*ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumAccelerationAmount);
         }
+        if (getActivePower() == PowerIndex.EXTRA){
+            basis*=0.1F;
+        }
         return super.inputSpeedModifiers(basis);
+    }
+
+    public boolean canGuard(){
+        return !this.isBarraging() && isBrawling();
+    }
+    @Override
+    public boolean buttonInputGuard(boolean keyIsDown, Options options) {
+        if (!this.isGuarding() && canGuard()) {
+            ((StandUser)this.getSelf()).roundabout$tryPowerP(PowerIndex.EXTRA,true);
+            tryPowerPacket(PowerIndex.EXTRA);
+            return true;
+        }
+        return false;
     }
 
     public boolean isBlockingTraditionally() {
@@ -873,6 +896,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case PowerIndex.POWER_3 -> {
                 iceWallServer(false);
             }
+            case PowerIndex.EXTRA -> {
+                setPowerExtraGuard();
+            }
             case PowerIndex.POWER_3_BLOCK -> {
                 iceWallServer(true);
             }
@@ -885,6 +911,14 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
         return super.setPowerOther(move,lastMove);
     }
+
+
+    public boolean setPowerExtraGuard() {
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.EXTRA);
+        return true;
+    }
+
 
     public void freezeBlocksServer(){
         int cooldown = 240;
