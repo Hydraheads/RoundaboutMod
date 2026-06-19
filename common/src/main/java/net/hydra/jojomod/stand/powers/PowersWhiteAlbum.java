@@ -1181,6 +1181,17 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
+    @Override
+    public void buttonInputBarrage(boolean keyIsDown, Options options) {
+        if (keyIsDown) {
+            if (activePowerPhase == 0){
+                if (isBrawling()) {
+
+                }
+            }
+        }
+    }
+
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
