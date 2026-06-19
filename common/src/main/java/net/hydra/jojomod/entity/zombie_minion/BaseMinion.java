@@ -804,7 +804,7 @@ public class BaseMinion extends PathfinderMob {
                     if (controller.getId() != this.getController()) {
                         this.setController(controller.getId());
                     }
-                    if (!(getTargetTactic() == Tactics.PEACEFUL.id)) {
+                    if (!(getTargetTactic() == Tactics.PEACEFUL.id) && LE.distanceTo(this) < 30) {
                         autoTarget = LE.getLastHurtByMob();
                         autoTarget2 = LE.getLastHurtMob();
                         if (autoTarget instanceof BaseMinion fm && fm.getController() == this.getController()) {
