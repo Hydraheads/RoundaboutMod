@@ -1190,6 +1190,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
+    public int getWhiteAlbumChargeLength(){
+        return 35;
+    }
+
+
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
@@ -1202,6 +1207,10 @@ public class PowersWhiteAlbum extends NewDashPreset {
             int ClashTime = 15 - Math.round((attackTimeDuring / getBarrageLength()) * 15);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+        } else if (getActivePower() == PowerIndex.EXTRA) {
+            int ClashTime =  Math.round(attackTimeDuring / Math.max(getWhiteAlbumChargeLength(),attackTimeDuring) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 104, ClashTime, 6);
         } else if (powerOn && isBarrageCharging()) {
             int ClashTime = Math.round((attackTimeDuring / getBarrageWindup()) * 15);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
