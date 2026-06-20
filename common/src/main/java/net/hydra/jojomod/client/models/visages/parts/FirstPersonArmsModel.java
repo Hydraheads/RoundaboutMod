@@ -19,6 +19,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ColtRevolverItem;
 import net.hydra.jojomod.item.SnubnoseRevolverItem;
 import net.hydra.jojomod.item.TommyGunItem;
+import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
@@ -186,6 +187,18 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
                         standUser.roundabout$getWornStandAnimation().startIfStopped(player.tickCount);
                     }
                     this.animate(standUser.roundabout$getWornStandAnimation(),anim,partialTicks,1F);
+                }
+
+                if (standUser.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PowerTypes.isUsingStand(player)){
+                    if (PCB.invincibleState){
+
+                        AnimationDefinition anim = PCB.getAnimation(standUser, true);
+                        if (standUser.roundabout$getStandAnimation() == PowerIndex.NONE) {
+                            standUser.roundabout$getWornStandAnimation().startIfStopped(player.tickCount);
+                        }
+                        this.animate(standUser.roundabout$getWornStandAnimation(),anim,partialTicks,1F);
+
+                    }
                 }
 
                 Mob shapeShift = ((IPlayerRenderer)PR).roundabout$getShapeShift(player);
