@@ -1862,8 +1862,17 @@ public class ClientUtil {
                     ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
                 }
                 stack.popPose();
+            } else if (standUser.roundabout$getStandPowers() instanceof  Powers20thCenturyBoy PCB && PCB.invincibleState) {
+                stack.pushPose();
+                FirstPersonArmsModel.player = play;
+                FirstPersonArmsSlimModel.player = play;
+                if (slimBoolean) {
+                    ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount * $$4, stack, source, light);
+                } else {
+                    ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount * $$4, stack, source, light);
+                }
+                stack.popPose();
             }
-
 
 
         }

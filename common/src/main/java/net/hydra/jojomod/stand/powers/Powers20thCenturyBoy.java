@@ -88,7 +88,12 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                 setSkillIcon(context, x, y, 1, StandIcons.REDSTONE_STANCE, PowerIndex.SKILL_1);
             }
         }
-        setSkillIcon(context,x,y,2, StandIcons.TOGGLE_INVINCIBILITY, PowerIndex.SKILL_2);
+        if (!invincibleState){
+            setSkillIcon(context,x,y,2, StandIcons.TOGGLE_INVINCIBILITY, PowerIndex.SKILL_2);
+        } else{
+            setSkillIcon(context,x,y,2, StandIcons.DETOGGLE_INVINCIBILITY, PowerIndex.SKILL_2);
+        }
+
         setSkillIcon(context,x,y,3,StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         super.renderIcons(context, x, y);
     }
@@ -123,7 +128,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         CHICKEN = 14,
         OLDER_CENTURY_BOY = 15,
         OLDEST_CENTURY_BOY = 16,
-        SALMONBERRY = 17;
+        SALMONBERRY = 17,
+        BETA = 18;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
@@ -143,7 +149,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                 SALMONBERRY,
                 CHICKEN,
                 OLDER_CENTURY_BOY,
-                OLDEST_CENTURY_BOY
+                OLDEST_CENTURY_BOY,
+                BETA
 
         );
     }
@@ -167,6 +174,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             case Powers20thCenturyBoy.OLDER_CENTURY_BOY -> Component.translatable("skins.roundabout.20_centuryboy.10th_century_boy");
             case Powers20thCenturyBoy.OLDEST_CENTURY_BOY -> Component.translatable("skins.roundabout.20_centuryboy.11th_century_boy");
             case Powers20thCenturyBoy.SALMONBERRY -> Component.translatable("skins.roundabout.20_centuryboy.salmonberry");
+            case Powers20thCenturyBoy.BETA -> Component.translatable("skins.roundabout.20_centuryboy.beta");
             default -> Component.translatable("skins.roundabout.20_centuryboy.manga");
         };
     }
@@ -326,14 +334,23 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     }
 
     /** animation thingy **/
-    public static AnimationDefinition getAnimation(StandUser SU){
+    public static AnimationDefinition getAnimation(StandUser SU, boolean fp){
         AnimationDefinition anim = null;
         if (SU.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.invincibleState){
-            switch (PCB.staticMode){
-                case 1 -> anim = CenturyBoyAnimations.ground;
-                case 2 -> anim = CenturyBoyAnimations.neutral;
-                case 3 -> anim = CenturyBoyAnimations.knockback;
-                case 4 -> anim = CenturyBoyAnimations.redstone;
+            if (!fp){
+                switch (PCB.staticMode){
+                    case 1 -> anim = CenturyBoyAnimations.ground;
+                    case 2 -> anim = CenturyBoyAnimations.neutral;
+                    case 3 -> anim = CenturyBoyAnimations.knockback;
+                    case 4 -> anim = CenturyBoyAnimations.redstone;
+                }
+            } else{
+                switch (PCB.staticMode){
+                    case 1 -> anim = CenturyBoyAnimations.FPground;
+                    case 2 -> anim = CenturyBoyAnimations.FPneutral;
+                    case 3 -> anim = CenturyBoyAnimations.FPknockback;
+                    case 4 -> anim = CenturyBoyAnimations.FPredstone;
+                }
             }
         }
         return anim;

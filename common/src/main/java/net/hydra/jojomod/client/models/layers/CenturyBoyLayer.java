@@ -83,7 +83,7 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
                         /// for unlatch...
                         if (user.roundabout$getIdlePos() == 1) {
-                            poseStack.translate(0.0, 0.25, 0.0);
+                            poseStack.translate(0.0, 0.25, -0.15);
                             ModStrayModels.CENTURY_BOY.renderAll(entity, partialTicks, poseStack, bufferSource,
                                     packedLight, r, g, b, heyfull, skin);
                             ClientUtil.popPoseAndCooperate(poseStack, 26);
