@@ -345,6 +345,7 @@ public class AbilityScapeBasis {
     }
 
 
+
     /**How far do the basic attacks of your stand travel if it is a humanoid stand and overrides the above?
      * (default is 5, 3 minecraft block range +2 meters extra from stand)*/
     public float getReach(){

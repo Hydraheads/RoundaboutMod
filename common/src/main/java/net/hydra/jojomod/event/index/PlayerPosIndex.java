@@ -27,6 +27,7 @@ public class PlayerPosIndex {
     public static final byte RIPPER_EYES_ACTIVE = 13;
     public static final byte VANISH_START = 14;
     public static final byte VANISH_PERSIST = 15;
+    public static final byte CHARGE_SHOT = 16;
     //Tragically vanilla desyncs your sprinting with client/server every time you hit a mob while sprinting
     //So this is visually necessary for other players to see you skating
 

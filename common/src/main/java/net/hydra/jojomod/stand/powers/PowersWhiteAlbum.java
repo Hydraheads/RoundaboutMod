@@ -297,9 +297,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (hasSkatesActivated()){
             basis *= 1.3f+(acceleration*ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumAccelerationAmount);
         }
-        if (getActivePower() == PowerIndex.EXTRA){
-            basis*=0.1F;
-        }
         return super.inputSpeedModifiers(basis);
     }
 
@@ -916,6 +913,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public boolean setPowerExtraGuard() {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.EXTRA);
+        if (!self.level().isClientSide()) {
+            if (getPlayerPos2() != PlayerPosIndex.CHARGE_SHOT) {
+                setPlayerPos2(PlayerPosIndex.CHARGE_SHOT);
+            }
+        }
         return true;
     }
 

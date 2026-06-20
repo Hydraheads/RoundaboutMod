@@ -99,6 +99,14 @@ public enum PowerTypes {
         }
         return false;
     }
+    public static boolean canChargeShotPos(Entity ent){
+        if (ent instanceof Player pl){
+            if (isUsingStand(ent)){
+                return ((StandUser)pl).roundabout$getStandPowers().activePower  == PowerIndex.EXTRA;
+            }
+        }
+        return false;
+    }
 
     public static boolean isBrawling(Entity ent){
         if (ent instanceof Player pl){
