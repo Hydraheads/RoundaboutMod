@@ -45,9 +45,9 @@ public class SheerHeartAttackRenderer extends StandRenderer<SheerHeartAttackEnti
     private static final ResourceLocation YELLOW_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/sheer_heart_attack/yellow.png");
     private static final ResourceLocation UMBRA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/sheer_heart_attack/umbra.png");
     private static final ResourceLocation NIGHTMARE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/sheer_heart_attack/nightmare.png");
-    private static final ResourceLocation CREEPER_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/sheer_heart_attack/trap.png");
+    private static final ResourceLocation CREEPER_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/sheer_heart_attack/cart.png");
     private static final ResourceLocation TAMA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/sheer_heart_attack/loaf.png");
-    private static final ResourceLocation MINESWEEPER_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/sheer_heart_attack/minesweeper.png");
+    private static final ResourceLocation MINESWEEPER_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/sheer_heart_attack/trap.png");
     private static final ResourceLocation NOTW_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/sheer_heart_attack/notw.png");
     private static final ResourceLocation MEMENTO_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/sheer_heart_attack/mementomorioh.png");
     private static final ResourceLocation STARDUST_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/sheer_heart_attack/stardust.png");
@@ -81,8 +81,9 @@ public class SheerHeartAttackRenderer extends StandRenderer<SheerHeartAttackEnti
             } else if (BT == KillerQueenEntity.NIGHTMARE) {
                 //return NIGHTMARE_SKIN;
             } else if (BT == KillerQueenEntity.LIMBUSMORTIS) {
-                //return LIMBUSMORTIS_SKIN;
+                return LIMBUSMORTIS_SKIN;
             } else if (BT == KillerQueenEntity.JOJOLION) {
+                return MANGA_SKIN;
                 //return JOJOLION_SKIN;
             } else if (BT == KillerQueenEntity.GUNPOWDER) {
                 return GUNPOWDER_SKIN;
@@ -95,7 +96,7 @@ public class SheerHeartAttackRenderer extends StandRenderer<SheerHeartAttackEnti
             } else if (BT == KillerQueenEntity.TAMA) {
                 return TAMA_SKIN;
             } else if (BT == KillerQueenEntity.MINESWEEPER) {
-                //return MINESWEEPER_SKIN;
+                return MINESWEEPER_SKIN;
             } else if (BT == KillerQueenEntity.NOTW) {
                 //return NOTW_SKIN;
             } else if (BT == KillerQueenEntity.MEMENTO) {
