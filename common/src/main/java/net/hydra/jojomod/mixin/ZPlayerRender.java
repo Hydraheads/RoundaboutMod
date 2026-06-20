@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.client.models.layers.*;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
+import net.hydra.jojomod.client.models.visages.parts.WhiteAlbumColdPart;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.mobs.*;
@@ -653,6 +654,17 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             MandomLayer.renderWatchFirstPerson(stack, buffer, getPackedLightCoords(acl, 1F), acl, 1, 1, 1, yes,
                     0, 0, $$4, ((IPlayerModel) this.model).roundabout$getSlim()
             );
+
+            if (((StandUser)acl).roundabout$getStandPowers() instanceof PowersWhiteAlbum pwa &&
+                    ((IPlayerEntity)acl).roundabout$GetPos2() == PlayerPosIndex.CHARGE_SHOT){
+
+                ClientUtil.pushPoseAndCooperate(stack,33);
+                $$4.translateAndRotate(stack);
+                stack.translate(0.11F,0.07F,0.1F);
+                ModStrayModels.WhiteAlbumCold.render(acl, acl.tickCount+ ClientUtil.getFrameTime() %1, stack, buffer, getPackedLightCoords(acl,1F),
+                        1,1,1, 1, "test");
+                ClientUtil.popPoseAndCooperate(stack,33);
+            }
         }
 
     }

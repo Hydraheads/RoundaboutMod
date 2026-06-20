@@ -668,7 +668,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     public void toggleFistsClient(){
-        if (!onCooldown(PowerIndex.SKILL_4)){
+        if (!onCooldown(PowerIndex.SKILL_4) && getActivePower() != PowerIndex.EXTRA){
             this.setCooldown(PowerIndex.SKILL_4, 9);
             tryPowerPacket(PowerIndex.POWER_1_BONUS);
         }

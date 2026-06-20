@@ -325,6 +325,7 @@ public class ClientForgeEvents {
         ModStrayModels.MooshroomHeadPart = new MooshroomHeadPart();
         ModStrayModels.SilverfishHeadPart = new SilverfishHeadPart();
 
+        ModStrayModels.WhiteAlbumCold = new WhiteAlbumColdPart();
         ModStrayModels.WhiteAlbumHead = new WhiteAlbumHeadPart();
         ModStrayModels.WhiteAlbumChest = new WhiteAlbumChestPart();
         ModStrayModels.WhiteAlbumBody = new WhiteAlbumBodyPart();

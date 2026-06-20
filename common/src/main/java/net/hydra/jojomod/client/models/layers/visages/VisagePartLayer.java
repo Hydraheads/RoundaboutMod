@@ -312,6 +312,12 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                     partialTicks, path, r, g, b, heyFull);
                         }
 
+                        if (entity instanceof Player player &&
+                                ((IPlayerEntity)player).roundabout$GetPos2() == PlayerPosIndex.CHARGE_SHOT){
+                            renderWhiteAlbumColdBlast(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                    partialTicks, path, r, g, b);
+                        }
+
                         if (pw.hasSkatesActivated()) {
                             renderWhiteAlbumSkates(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
                                     partialTicks, path, r, g, b, heyFull);
@@ -559,6 +565,14 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ClientUtil.pushPoseAndCooperate(poseStack,33);
         getParentModel().body.translateAndRotate(poseStack);
         ModStrayModels.SmallChestPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,33);
+    }
+    public void renderWhiteAlbumColdBlast(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                  float r, float g, float b) {
+        ClientUtil.pushPoseAndCooperate(poseStack,33);
+        getParentModel().rightArm.translateAndRotate(poseStack);
+        ModStrayModels.WhiteAlbumCold.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,33);
     }
