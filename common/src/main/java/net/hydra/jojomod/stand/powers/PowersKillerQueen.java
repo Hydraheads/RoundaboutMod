@@ -1446,6 +1446,8 @@ public class PowersKillerQueen extends NewPunchingStand {
     	   return ModSounds.KILLER_QUEEN_EXPLOSION_EVENT;
        }else if (soundChoice == IMPALE_NOISE) {
            return ModSounds.IMPALE_CHARGE_EVENT;
+       }else if (soundChoice == SHEER_HEART_ATTACK) {
+           return ModSounds.KILLER_QUEEN_SHA_SUMMON_EVENT;
        }
        
         return super.getSoundFromByte(soundChoice);
@@ -1464,7 +1466,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
                 if (blockPos.closerToCenterThan(pos, range)) {
-                    
+
                     S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, serverPlayerEntity.getId(), EXPLOSION);
                    
                 }
@@ -1769,14 +1771,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             this.setAttackTimeDuring(0);
             this.poseStand(OffsetIndex.GUARD);
             this.animateStand(KillerQueenEntity.DETONATE);
-            //this.setAttackTimeDuring(-ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionActivationCooldown);
             this.setActivePower(DETONATE);
-
-
-            /*this.poseStand(OffsetIndex.ATTACK);
-    		this.setActivePower(DETONATE);
-    		
-    		this.ticksCount = ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionActivationCooldown;*/
     	}
     	
     	return true;
@@ -1807,6 +1802,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     public boolean sendOrReturnSHA(boolean shaThrow) {
         if (this.currentShaStatus == SHA_NONE) {
+            this.playSoundsIfNearby(SHEER_HEART_ATTACK, 27, true);
             if (shaThrow) {
                 this.animateStand(KillerQueenEntity.FIRST_PUNCH);
             } else {
