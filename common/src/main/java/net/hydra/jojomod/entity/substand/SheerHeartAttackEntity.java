@@ -86,13 +86,18 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public Entity entityTarget = null;
 	public BlockPos blockTarget = null;
 	public int ticksUntilNextPathRecalculation = 15;
+	public int returnTicks = 0;
+	private static int returnMaxTicks = 300;
 
 	public float viewRange = 10.0f;
 
 	private boolean haveToReturn = false;
 
 	public boolean getHaveToReturn() { return this.haveToReturn;}
-	public void setHaveToReturn(boolean value) { this.haveToReturn = value;}
+	public void setHaveToReturn(boolean value) {
+		this.returnTicks = 0;
+		this.haveToReturn = value;
+	}
 
 	public static AttributeSupplier.Builder createStandAttributes() {
 		return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,
@@ -141,6 +146,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 					this.tickTargetFindCount--;
 				}
 
+
 				if (this.attackTick > 0) { this.attackTick--;}
 				if (this.jumpTick > 0) { this.jumpTick--;}
 
@@ -150,6 +156,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 					flyngTicks = 0;
 				}
 				this.moveToTarget();
+
+				if (this.haveToReturn) { this.returnTicks++; }
+
 
 				if (flyngTicks > 2 && this.hasTarget()) {
 					if (this.shouldExplode(this.getTargetPosition())) {
@@ -383,7 +392,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		boolean struck = this.getNavigation().isStuck() || this.struckTicks >= struckMaxTicks;
 
-		return (dist <= 1.3f) || struck;
+		return (dist <= 1.3f) || struck || this.returnTicks > returnMaxTicks;
 	}
 
 	public void shaStopMove() {

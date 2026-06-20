@@ -189,7 +189,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 	
 	public static int maxKickTime = 25;
 	private static final int blockPlantMaxTicks = 5;
-	private int ticksCount = -1;
+	//private int ticksCount = -1;
     public int mobPlantTicks = 0;
     public int impaleTicks = 0;
 
@@ -1354,8 +1354,6 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
 
             }
-
-            if (this.ticksCount >= 0) { this.ticksCount--;}
 
             if (this.SHA != null) {
                 if ((this.SHA.shaIsNear() && this.SHA.getHaveToReturn()) || this.SHA.isRemoved() || this.inBitesTheDustMode()) {
