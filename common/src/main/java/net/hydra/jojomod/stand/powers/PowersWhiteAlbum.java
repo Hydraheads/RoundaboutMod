@@ -81,7 +81,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     /**returns if you are using stand guard*/
     public boolean isGuardInput(){
-        return this.activePower == PowerIndex.EXTRA;
+        return isChargingCold();
     }
     @Override
     public boolean canSummonStandAsEntity(){
@@ -196,13 +196,16 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return false;
     }
 
+    public boolean isChargingCold(){
+        return (activePower == PowerIndex.EXTRA);
+    }
     public int stallTicks = 0;
     /**When you take damage, intercept or run code based off of it, or potentially cancel it*/
     public boolean interceptIncomingHarm(DamageSource $$0, float $$1){
         if (!self.level().isClientSide() && hasStandActive(self)) {
 
             //Even if you block the attack, your ice blast should be canceled bc it's insane
-            if (activePower == PowerIndex.EXTRA){
+            if (isChargingCold()){
                 if ($$0.getEntity() instanceof LivingEntity LE && self instanceof Player player){
                     S2CPacketUtil.sendSimpleByteToClientPacket(player,PacketDataIndex.STALL);
                     ((StandUser)self).roundabout$tryPower(PowerIndex.NONE,true);
@@ -295,8 +298,14 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     @Override
     public boolean cancelSprintJump(){
-        if (hasSkatesActivated() && acceleration < getMaxAccelerationTicks()){
-            return true;
+        if (hasSkatesActivated()){
+            if (acceleration < getMaxAccelerationTicks()){
+                return true;
+            }
+        } else {
+            if (isChargingCold()){
+                return true;
+            }
         }
         return super.cancelSprintJump();
     }
@@ -305,6 +314,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public float inputSpeedModifiers(float basis){
         if (hasSkatesActivated()){
             basis *= 1.3f+(acceleration*ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumAccelerationAmount);
+        } if (isChargingCold()){
+            basis *= 0.9f;
         }
         return super.inputSpeedModifiers(basis);
     }
@@ -314,7 +325,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
-        if (!this.isGuarding() && canGuard() && getActivePower() != PowerIndex.EXTRA) {
+        if (!this.isGuarding() && canGuard() && !isChargingCold()) {
             ((StandUser)this.getSelf()).roundabout$tryPowerP(PowerIndex.EXTRA,true);
             tryPowerPacket(PowerIndex.EXTRA);
             return true;
@@ -680,7 +691,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     public void toggleFistsClient(){
-        if (!onCooldown(PowerIndex.SKILL_4) && getActivePower() != PowerIndex.EXTRA){
+        if (!onCooldown(PowerIndex.SKILL_4) && !isChargingCold()){
             this.setCooldown(PowerIndex.SKILL_4, 9);
             tryPowerPacket(PowerIndex.POWER_1_BONUS);
         }
@@ -1038,7 +1049,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     @Override
     public boolean tryPower(int move, boolean forced) {
 
-        if (this.getActivePower() == PowerIndex.EXTRA) {
+        if (isChargingCold()) {
             stopSoundsIfNearby(ICE_CHARGE, 100, false);
         }
         return super.tryPower(move, forced);
@@ -1189,7 +1200,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (keyIsDown) {
             if (activePowerPhase == 0){
                 if (isBrawling()) {
-                    if (getActivePower() != PowerIndex.EXTRA &&
+                    if (!isChargingCold() &&
                             !isBarraging()) {
                         this.tryPower(PowerIndex.ATTACK);
                     }
@@ -1229,7 +1240,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             int ClashTime = 15 - Math.round((attackTimeDuring / getBarrageLength()) * 15);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
-        } else if (getActivePower() == PowerIndex.EXTRA) {
+        } else if (isChargingCold()) {
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             if (hasColdCharged()){
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, 15, 6);
