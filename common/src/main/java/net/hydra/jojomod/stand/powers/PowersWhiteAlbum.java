@@ -196,9 +196,19 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return false;
     }
 
+    public int stallTicks = 0;
     /**When you take damage, intercept or run code based off of it, or potentially cancel it*/
     public boolean interceptIncomingHarm(DamageSource $$0, float $$1){
         if (!self.level().isClientSide() && hasStandActive(self)) {
+
+            //Even if you block the attack, your ice blast should be canceled bc it's insane
+            if (activePower == PowerIndex.EXTRA){
+                if ($$0.getEntity() instanceof LivingEntity LE && self instanceof Player player){
+                    S2CPacketUtil.sendSimpleByteToClientPacket(player,PacketDataIndex.STALL);
+                    ((StandUser)self).roundabout$tryPower(PowerIndex.NONE,true);
+                }
+            }
+
             StandUser user = getStandUserSelf();
             if (!user.roundabout$getGuardBroken()) {
                 if ($$0.is(DamageTypes.FALL)) {
@@ -300,7 +310,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     public boolean canGuard(){
-        return !this.isBarraging() && isBrawling();
+        return !this.isBarraging() && isBrawling() && stallTicks <= 0;
     }
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
@@ -354,6 +364,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
     double lastY = 0;
     @Override
     public void tickPower() {
+        if (stallTicks > 0){
+            stallTicks--;
+        }
         if (!self.level().isClientSide()) {
             if (hasSkatesActivated() && self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampiricFate vf &&
                     vf.isPlantedInWall()){
@@ -613,8 +626,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public void iceWallClient(){
         if (!this.onCooldown(PowerIndex.SKILL_3)) {
             if (canUseIceWall()) {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
                 tryPowerPacket(PowerIndex.POWER_3);
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
             }
         }
     }

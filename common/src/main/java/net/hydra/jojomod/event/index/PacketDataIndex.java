@@ -93,6 +93,7 @@ public class PacketDataIndex {
     public static final byte S2C_RESPAWN = 5;
     public static final byte S2C_SOFT = 6;
     public static final byte CLEAR_LEADED = 7;
+    public static final byte STALL = 8;
 
 
     /**S2C Int packets*/

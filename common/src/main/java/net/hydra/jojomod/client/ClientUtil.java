@@ -1611,6 +1611,11 @@ public class ClientUtil {
             if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersMagiciansRed PW) {
                 PW.leaded = null;
             }
+        } else if (context == PacketDataIndex.STALL){
+            if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof
+                    PowersWhiteAlbum PW) {
+                PW.stallTicks = 10;
+            }
         }
     } public static void handleSimpleBytePacketS2C(byte context){
         LocalPlayer player = Minecraft.getInstance().player;
