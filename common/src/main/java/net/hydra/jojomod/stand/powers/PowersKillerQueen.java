@@ -1654,8 +1654,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                 addEXP(bStatus == BOMB_ENTITY ? 10 : 5, LE);
             }
 
-            DamageSource dmg = ModDamageTypes.of(level, DamageTypes.PLAYER_EXPLOSION, this.getSelf());
-            DamageSource sneakyDmg = ModDamageTypes.of(level, DamageTypes.EXPLOSION, null);
+            DamageSource dmg = ModDamageTypes.of(level, ModDamageTypes.EXPLOSIVE_STAND, this.getSelf());
+            DamageSource sneakyDmg = ModDamageTypes.of(level, ModDamageTypes.EXPLOSIVE_STAND, null);
             ExplosionUtil.explosionHurtSneaky(vPos, dmg, level,
                     ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionDetonateMaxDamage, 0.4f, 1.5f);
 
@@ -1734,7 +1734,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                             }
 
                             if (LE instanceof Player PL) {
-                                CompoundTag nbtData = new CompoundTag();
+                                CompoundTag nbtData = stack.getTag();
                                 nbtData.putString(PlayerHandItem.TAG_HAND_OWNER, PL.getName().getString());
                                 stack.setTag(nbtData);
                             }

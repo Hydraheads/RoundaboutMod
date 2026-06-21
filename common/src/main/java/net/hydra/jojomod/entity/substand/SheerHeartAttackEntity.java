@@ -337,7 +337,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public void attack() {
 
-		DamageSource dmg = ModDamageTypes.of(this.level(), DamageTypes.PLAYER_EXPLOSION, this);;
+		DamageSource dmg = ModDamageTypes.of(this.level(), ModDamageTypes.EXPLOSIVE_STAND, this.getUser());;
 
 		if (this.getTargetType() == ENTITY){
 			ExplosionUtil.explosionHurt(this.position(), dmg, this.level(),
@@ -465,14 +465,26 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
 	public void tryClimb() {
-		float range = 1.0f;
-		Vec3 vec3d = this.getEyePosition(0);
-		Vec3 vec3d2 = this.getViewVector(0);
-		Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
-		HitResult blockHit = this.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
-		//Vec3 pos =  blockHit.getLocation();
-		if (blockHit.getType() == HitResult.Type.BLOCK) {
-			this.setDeltaMovement(this.getDeltaMovement().add(0, 1, 0));
+		float targetY = this.getBlockY();
+		if (this.haveToReturn) {
+			targetY = this.getUser().getBlockY();
+		}
+		else if (this.currentTarget == BLOCK) {
+			targetY = this.blockTarget.getY();
+		}else if (this.currentTarget == ENTITY) {
+			targetY = this.entityTarget.getBlockY();
+		}
+
+		if (targetY - this.getBlockY() > 1.2) {
+			float range = 1.0f;
+			Vec3 vec3d = this.position();
+			Vec3 vec3d2 = this.getViewVector(0);
+			Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+			HitResult blockHit = this.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+			//Vec3 pos =  blockHit.getLocation();
+			if (blockHit.getType() == HitResult.Type.BLOCK) {
+				this.setDeltaMovement(this.getDeltaMovement().add(0, 0.8, 0));
+			}
 		}
 	}
 
