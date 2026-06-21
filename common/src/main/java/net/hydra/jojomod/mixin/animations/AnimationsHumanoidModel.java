@@ -109,9 +109,9 @@ public class AnimationsHumanoidModel<T extends LivingEntity> extends AgeableList
 
 
            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW && PW.hasSkatesActivated() &&
-                   (player.isSprinting() || PW.getPlayerPos2() == PlayerPosIndex.SKATE_GENERAL) && !player.isFallFlying() && !player.isCrouching()){
+                   (player.isSprinting() || PW.getPlayerPos() == PlayerPosIndex.SKATE_GENERAL) && !player.isFallFlying() && !player.isCrouching()){
 
-               Byte pos = ((IPlayerEntity)player).roundabout$GetPos2();
+               Byte pos = ((IPlayerEntity)player).roundabout$GetPos();
                if (pos != PlayerPosIndex.SKATE_TWIRL && pos != PlayerPosIndex.SKATE_JUMP) {
 
                    //float accelerationMod = ((float)PW.acceleration) /

@@ -645,6 +645,7 @@
   "sounds.roundabout.hammer_clink": "Hammer Clink",
   "sounds.roundabout.bone_chomp": "Devour",
   "sounds.roundabout.ice_wall": "Ice rises",
+  "sounds.roundabout.ice_blast_charge": "Cold charging",
 
   "sounds.roundabout.iron_ball_impact": "Iron ball impact",
   "sounds.roundabout.iron_ball_bounce": "Iron ball bounce",
@@ -2118,6 +2119,8 @@
   "skins.roundabout.20_centuryboy.chicken": "Chicken",
   "skins.roundabout.20_centuryboy.10th_century_boy": "10th Century",
   "skins.roundabout.20_centuryboy.11th_century_boy": "11th Century",
+  "skins.roundabout.20_centuryboy.beta": "Beta",
+
 
   "skins.roundabout.manhattan_transfer.manhattan_part_6": "Anime",
   "skins.roundabout.manhattan_transfer.manhattan_manga_part_6": "Manga",

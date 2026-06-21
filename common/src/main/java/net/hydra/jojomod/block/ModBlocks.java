@@ -188,7 +188,7 @@ public class ModBlocks {
                     .lightLevel((L) -> {
                         return 1;
                     }).
-                    randomTicks().strength(0.5F).forceSolidOff().sound(SoundType.GLASS).noOcclusion().pushReaction(PushReaction.DESTROY));
+                    randomTicks().strength(0.5F).forceSolidOff().sound(SoundType.GLASS).replaceable().noOcclusion().pushReaction(PushReaction.DESTROY));
 
 
     public static Block ANCIENT_METEOR_PROPERTIES = new AncientMeteorBlock(

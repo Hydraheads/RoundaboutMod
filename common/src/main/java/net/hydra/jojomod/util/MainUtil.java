@@ -3463,7 +3463,7 @@ public class MainUtil {
             if(Objects.nonNull(visage)) {
 
                 if (visage.getItem() instanceof MaskItem MI) {
-                    if(! visage.getItem().equals(ModItems.RAT_MASK) &&! visage.getItem().equals(ModItems.BLANK_MASK)) {
+                    if(! visage.getItem().equals(ModItems.RAT_MASK) &&! visage.getItem().equals(ModItems.BLANK_MASK) && !visage.getItem().equals(ModItems.MODIFICATION_MASK)) {
                         //Roundabout.LOGGER.info(MI.visageData.generateVisageData(player).getSkinPath());
                         return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/" + MI.visageData.generateVisageData(player).getSkinPath() + ".png");
                     }

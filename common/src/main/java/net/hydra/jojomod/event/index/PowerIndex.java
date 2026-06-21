@@ -12,7 +12,7 @@ public class PowerIndex {
     public static final byte BARRAGE_CLASH = 6;
     public static final byte SPECIAL = 7;
     public static final byte SPECIAL_FINISH = 8;
-    public static final byte SPECIAL_CANCEL = 9;
+    public static final byte BRAWL_ATTACK = 9;
     public static final byte SPECIAL_CHARGED = 10;
     public static final byte SPECIAL_TRACKER = 11;
     public static final byte MOVEMENT = 12;

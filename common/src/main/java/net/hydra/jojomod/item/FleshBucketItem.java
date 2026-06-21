@@ -25,6 +25,10 @@ public class FleshBucketItem extends Item {
         super($$0);
     }
 
+    @Override
+    public boolean isEnchantable(ItemStack p_41456_) {
+        return false;
+    }
 
 
     @Override

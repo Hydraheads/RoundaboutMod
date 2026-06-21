@@ -120,6 +120,8 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 			"textures/stand/20_centuryboy/10th_century_boy.png");
 	public static ResourceLocation oldest_century_boy = new ResourceLocation(Roundabout.MOD_ID,
 			"textures/stand/20_centuryboy/11th_century_boy.png");
+	public static ResourceLocation beta = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/20_centuryboy/beta.png");
 
 
 	public ResourceLocation getTextureLocation(Entity context, byte skin){
@@ -140,6 +142,7 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 			case Powers20thCenturyBoy.CHICKEN -> {return chicken;}
 			case Powers20thCenturyBoy.OLDER_CENTURY_BOY -> {return older_century_boy;}
 			case Powers20thCenturyBoy.OLDEST_CENTURY_BOY -> {return oldest_century_boy;}
+			case Powers20thCenturyBoy.BETA ->  {return  beta;}
 			default -> {return manga;}
 		}
 	}
@@ -193,7 +196,6 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 		}
 	}
 
-	///  calling this in the CenturyBoyLayer file
 	public void renderPart(Entity context, float partialTicks, LivingEntity LE){
 		this.root().getAllParts().forEach(ModelPart::resetPose);
 

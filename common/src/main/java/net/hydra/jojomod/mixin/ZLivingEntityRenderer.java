@@ -184,7 +184,6 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
             }
 
             byte playerP = ((IPlayerEntity)$$0).roundabout$GetPos();
-            byte playerP2 = ((IPlayerEntity)$$0).roundabout$GetPos2();
 
             /*Dodge makes you lean forward visually*/
             if (playerP == PlayerPosIndex.DODGE_FORWARD || playerP == PlayerPosIndex.DODGE_BACKWARD) {
@@ -207,8 +206,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
                     poseStack.mulPose(Axis.XP.rotationDegrees($$5 * 45));
                 }
-            }
-            if (playerP2 == PlayerPosIndex.SKATE_TWIRL){
+            }else if (playerP == PlayerPosIndex.SKATE_TWIRL){
                 poseStack.mulPose(Axis.YP.rotationDegrees(((float)$$0.tickCount + $$4) * -45.0F));
             }
         }

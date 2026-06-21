@@ -115,7 +115,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
 
     @Override
     public int getComboAmt(){
-        return 0;
+        return comboAmt;
     }
     public void setComboAmt(int comboAmt){
         this.comboAmt = comboAmt;

@@ -329,20 +329,6 @@ public class AbilityScapeBasis {
     }
     public boolean tryPower(int move, boolean forced){
 
-        if (!self.level().isClientSide()) {
-            if (getPlayerPos2() > 0) {
-                if (move != PowerIndex.GUARD && getPlayerPos2() == PlayerPosIndex.GUARD) {
-                    setPlayerPos2(PlayerPosIndex.NONE);
-                }
-                if (move != PowerIndex.BARRAGE_CHARGE && getPlayerPos2() == PlayerPosIndex.BARRAGE_CHARGE) {
-                    setPlayerPos2(PlayerPosIndex.NONE);
-                }
-                if (move != PowerIndex.BARRAGE && getPlayerPos2() == PlayerPosIndex.BARRAGE) {
-                    setPlayerPos2(PlayerPosIndex.NONE);
-                }
-            }
-
-        }
 
         clearStuff(move,forced);
 
@@ -357,6 +343,7 @@ public class AbilityScapeBasis {
         }
         return false;
     }
+
 
 
     /**How far do the basic attacks of your stand travel if it is a humanoid stand and overrides the above?
@@ -1368,6 +1355,10 @@ public class AbilityScapeBasis {
     public boolean isGuarding(){
         return this.activePower == PowerIndex.GUARD;
     }
+    /**returns if you are using stand guard*/
+    public boolean isGuardInput(){
+        return isGuarding();
+    }
     /**for stands that subvert guard mechanics like white album*/
     public boolean isSpecialGuarding(){
         return false;
@@ -1594,9 +1585,13 @@ public class AbilityScapeBasis {
         }}
     }
     public boolean canAttack(){
-        if (this.attackTimeDuring <= -1) {
+        if (this.attackTimeDuring <= -1 || getActivePower() == PowerIndex.NONE) {
             return this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax;
         }
+        return false;
+    }
+
+    public boolean canClash(){
         return false;
     }
 
@@ -2689,6 +2684,17 @@ public class AbilityScapeBasis {
         return false;
     }
 
+    public void setPlayerPos(byte pos){
+        if (self instanceof Player){
+            ((IPlayerEntity) self).roundabout$SetPos(pos);
+        }
+    }
+    public byte getPlayerPos(){
+        if (self instanceof Player){
+            return ((IPlayerEntity) self).roundabout$GetPos();
+        }
+        return 0;
+    }
     public void setPlayerPos2(byte pos){
         if (self instanceof Player){
             ((IPlayerEntity) self).roundabout$SetPos2(pos);
@@ -3068,35 +3074,40 @@ public class AbilityScapeBasis {
         return ModDamageTypes.STAND;
     }
 
+
+    public long impactTimeStamp = 0;
     public void brawlPunchImpact(Entity entity) {
         if (!this.self.level().isClientSide()) {
-            attackTargetId = 0;
-            self.swing(InteractionHand.MAIN_HAND, true);
-            if (entity != null) {
-                if (entity.distanceTo(self) > 3.8){
-                    return;
-                }
-                float pow;
-                float knockbackStrength;
-                pow = getBrawlPunchStrength(entity);
-                pow = applyComboDamage(pow);
-                knockbackStrength = 0.10F;
-
-                boolean bool = entity.hurt(ModDamageTypes.of(entity.level(), getPunchDamageSource(), self), pow);
-                if (bool && entity instanceof LivingEntity LE){
-                    LE.setLastHurtMob(entity);
-                }
-
-                if (bool) {
-                    if (!(entity instanceof Player)) {
-                        takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
+            if (impactTimeStamp != self.level().getGameTime()) {
+                impactTimeStamp = self.level().getGameTime();
+                attackTargetId = 0;
+                self.swing(InteractionHand.MAIN_HAND, true);
+                if (entity != null) {
+                    if (entity.distanceTo(self) > 3.8) {
+                        return;
                     }
-                    this.self.level().playSound(null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
-                    addToCombo(entity);
-                    hitParticles(entity);
-                } else {
-                    if (!this.self.level().isClientSide()) {
-                        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
+                    float pow;
+                    float knockbackStrength;
+                    pow = getBrawlPunchStrength(entity);
+                    pow = applyComboDamage(pow);
+                    knockbackStrength = 0.10F;
+
+                    boolean bool = entity.hurt(ModDamageTypes.of(entity.level(), getPunchDamageSource(), self), pow);
+                    if (bool && entity instanceof LivingEntity LE) {
+                        LE.setLastHurtMob(entity);
+                    }
+
+                    if (bool) {
+                        if (!(entity instanceof Player)) {
+                            takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
+                        }
+                        this.self.level().playSound(null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
+                        addToCombo(entity);
+                        hitParticles(entity);
+                    } else {
+                        if (!this.self.level().isClientSide()) {
+                            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
+                        }
                     }
                 }
             }
@@ -3179,7 +3190,6 @@ public class AbilityScapeBasis {
     }
 
     public void setAttack(){
-        Roundabout.LOGGER.info(""+this.getClass());
         if (HeatUtil.isArmsFrozen(self)){
             this.attackTimeMax= 12;
         } else {
@@ -3187,7 +3197,7 @@ public class AbilityScapeBasis {
         }
         this.attackTimeDuring = 0;
         this.setAttackTime(0);
-        setActivePower(PowerIndex.ATTACK);
+        setActivePower(PowerIndex.NONE);
         setActivePowerPhase((byte) 1);
         if (!self.level().isClientSide()) {
             Entity target = null;

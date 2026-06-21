@@ -1651,6 +1651,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                     roundabout$SetPos2(PlayerPosIndex.NONE);
                 } else if (!PowerTypes.canKeepBarragePos(this) && pos == PlayerPosIndex.BARRAGE) {
                     roundabout$SetPos2(PlayerPosIndex.NONE);
+                } else if (!PowerTypes.canChargeShotPos(this) && pos == PlayerPosIndex.CHARGE_SHOT) {
+                    roundabout$SetPos2(PlayerPosIndex.NONE);
                 }
             }
         }

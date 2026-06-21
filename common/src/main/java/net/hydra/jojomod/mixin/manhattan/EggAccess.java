@@ -51,7 +51,6 @@ public abstract class EggAccess extends ThrowableItemProjectile {
                             }
                             ME.hasItem = true;
                             ME.changeMovementState();
-                            ME.soundForPlayer();
                             this.discard();
                         }
                     }

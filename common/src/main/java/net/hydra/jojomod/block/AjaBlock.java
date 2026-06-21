@@ -7,13 +7,10 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.redstone.Redstone;
 
 public class AjaBlock extends AjaOreBlock {
 
@@ -57,7 +54,7 @@ public class AjaBlock extends AjaOreBlock {
 
         int power = getNeighborLight(level, pos);
 
-        if (state.getValue(POWER) != power) {
+        if (state.hasProperty(BlockStateProperties.POWER) && state.getValue(POWER) != power) {
 
             BlockState newState = state
                     .setValue(POWER, power);
@@ -129,7 +126,10 @@ public class AjaBlock extends AjaOreBlock {
                          BlockPos pos,
                          Direction direction) {
 
-        return state.getValue(POWER);
+        if (state.hasProperty(POWER)){
+            return state.getValue(POWER);
+        }
+        return 0;
     }
 
     @Override
@@ -138,7 +138,10 @@ public class AjaBlock extends AjaOreBlock {
                                BlockPos pos,
                                Direction direction) {
 
-        return state.getValue(POWER);
+        if (state.hasProperty(POWER)){
+            return state.getValue(POWER);
+        }
+        return 0;
     }
 
     @Override
@@ -152,7 +155,7 @@ public class AjaBlock extends AjaOreBlock {
             // Check if neighbor has a LIT property
             if (!(neighborState.getBlock() instanceof AjaOreBlock) &&
                     !(neighborState.is(Blocks.REDSTONE_WIRE)) &&
-                    neighborState.getLightEmission() > 0) {
+                    neighborState.getLightEmission() > 0 && neighborState.hasProperty(BlockStateProperties.LIT)) {
 
                 if (neighborState.getValue(BlockStateProperties.LIT)) {
                     return true;

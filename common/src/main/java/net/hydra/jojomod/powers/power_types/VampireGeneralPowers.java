@@ -840,7 +840,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if (this.getReducedDamage(entity)){
                 return playerDmgMult(0.7F * (1+ (vp.getVampireData().strengthLevel * 0.05F)));
             } else {
-                return mobDmgMult(2.1F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
+                return mobDmgMult(2.6F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             }
         } else {
             return super.getBrawlPunchStrength(entity);
@@ -853,7 +853,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if (this.getReducedDamage(entity)){
                 return playerDmgMult(1.2F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             } else {
-                return mobDmgMult(3F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
+                return mobDmgMult(3.7F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             }
         } else {
             return super.getBrawlPunchStrength(entity);
@@ -892,7 +892,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if (this.getReducedDamage(entity)){
                 return playerDmgMult(1.3F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             } else {
-                return mobDmgMult(3F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
+                return mobDmgMult(3.7F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             }
         } else {
             return super.getBrawlPunchStrength(entity);
@@ -1738,30 +1738,33 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
     public void sweepImpact(Entity entity) {
         if (!this.self.level().isClientSide()) {
-            attackTargetId = 0;
-            self.swing(InteractionHand.MAIN_HAND, true);
-            if (entity != null) {
-                if (entity.distanceTo(self) > 3){
-                    return;
-                }
-                float pow;
-                float knockbackStrength;
-                pow = getSweepStrength(entity);
-                pow = applyComboDamage(pow);
-                knockbackStrength = 2.0F;
-                if (entity instanceof LivingEntity LE && LE.isBlocking()){
-                    knockShield2(LE,120);
-                    knockbackStrength = 0.20F;
-                }
+            if (impactTimeStamp != self.level().getGameTime()) {
+                impactTimeStamp = self.level().getGameTime();
+                attackTargetId = 0;
+                self.swing(InteractionHand.MAIN_HAND, true);
+                if (entity != null) {
+                    if (entity.distanceTo(self) > 3) {
+                        return;
+                    }
+                    float pow;
+                    float knockbackStrength;
+                    pow = getSweepStrength(entity);
+                    pow = applyComboDamage(pow);
+                    knockbackStrength = 2.0F;
+                    if (entity instanceof LivingEntity LE && LE.isBlocking()) {
+                        knockShield2(LE, 120);
+                        knockbackStrength = 0.20F;
+                    }
 
-                if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
-                    takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
-                    this.self.level().playSound(null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.15f + Math.random() * 0.1f));
-                    addToCombo(entity);
-                    hitParticles(entity);
-                } else {
-                    if (!this.self.level().isClientSide()) {
-                        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
+                    if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
+                        takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
+                        this.self.level().playSound(null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.15f + Math.random() * 0.1f));
+                        addToCombo(entity);
+                        hitParticles(entity);
+                    } else {
+                        if (!this.self.level().isClientSide()) {
+                            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
+                        }
                     }
                 }
             }

@@ -171,6 +171,7 @@ public interface StandUser {
     void roundabout$setAttackTimeDuring(int attackTimeDuring);
     void roundabout$setInterruptCD(int interruptCD);
     boolean roundabout$isGuarding();
+    boolean roundabout$isGuardInput();
     boolean roundabout$isBarraging();
     boolean roundabout$isClashing();
     float roundabout$getGuardCooldown();

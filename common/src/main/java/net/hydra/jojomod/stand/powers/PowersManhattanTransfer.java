@@ -35,14 +35,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Blaze;
-import net.minecraft.world.entity.monster.Ghast;
-import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.*;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -52,6 +48,14 @@ import java.util.List;
 import static net.hydra.jojomod.event.index.SoundIndex.MANHATTAN_RAIN;
 
 public class PowersManhattanTransfer extends NewDashPreset {
+
+    //TODO: Fix shooting mode being shared between mobs
+    //TODO: 500 other stupid bugfixes (pain) :/
+
+    //TODO: Wind Vision V Toggle work
+
+    //TODO:Shader
+
     public PowersManhattanTransfer(LivingEntity self) {
         super(self);
     }
@@ -224,9 +228,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
             }
             case PowersManhattanTransfer.DEFLECT_PROJECTILE -> {
                 if(this.getStandEntity(this.getSelf()) != null && this.getStandEntity(this.getSelf()) instanceof  ManhattanTransferEntity ME){
-                    if(this.currentHattanStatus == LOADED_HATTAN) {
-                        this.soundThree();
-                    }
                     ME.shootHattan();
                     ME.setHeldItemManhattan(ItemStack.EMPTY);
                     ME.hasItem = false;
@@ -246,14 +247,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
             this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().manhattanTransferSettings.manhattanDashCooldown);
         }
     }
-
-    public void soundThree() {
-            if (isClient()) {
-                if(this.self.distanceTo(this.getStandEntity(this.getSelf())) > 16) {
-                    this.self.playSound(ModSounds.BULLET_RICOCHET_EVENT, 100F, (this.getStandEntity(this.getSelf()).getRandom().nextFloat() * 0.2F + 0.7F));
-                }
-            }
-    }
     public void switchVisionClient(){
         if (!onCooldown(PowerIndex.SKILL_4) && !isAttackIneptVisually(PowerIndex.SKILL_4,3)) {
             this.tryPower(PowerIndex.POWER_4, true);
@@ -264,14 +257,11 @@ public class PowersManhattanTransfer extends NewDashPreset {
             this.setCooldown(PowerIndex.SKILL_4, 15);
         }
     }
-
     @Override
     public void updateIntMove(int in) {
         super.updateIntMove(in);
     }
-
     public boolean visionModeClient = false;
-
     public void switchVision(){
         if (isClient() && this.self instanceof Player PE) {
 
@@ -291,17 +281,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
         if (ent != null && switchShootingMode()) {
             tryPower(PowersManhattanTransfer.DEFLECT_PROJECTILE, true);
             tryPowerPacket(PowersManhattanTransfer.DEFLECT_PROJECTILE);
-            Entity TE = MainUtil.getTargetEntity(ent, 300, 10);
-            IEntityAndData entityAndData = ((IEntityAndData) TE);
-            //If Target is detected
-            if (TE != null && entityAndData.roundabout$getTrueInvisibilityManhattan() > 1 && !(TE instanceof StandEntity && !TE.isAttackable())) {
-                Vec3 vec3d = ent.getEyePosition(0);
-                Vec3 vec3d2 = ent.getViewVector(0);
-                Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
-                BlockHitResult blockHit = ent.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, ent));
-                if ((blockHit.distanceTo(ent) - 1) < ent.distanceToSqr(TE)) {
-                }
-            }
+
         }
     }
     public boolean switchShootingMode(){
@@ -516,8 +496,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
         if (this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME) {
             if (ME.getHattanTarget() != 0 && !switchShootingMode()){
                 if(securityTicks < 1 && this.targetHattan != null && ME.hasLineOfSight(this.targetHattan)) {
-                    tryPower(PowersManhattanTransfer.DEFLECT_PROJECTILE, true);
-                    tryPowerPacket(PowersManhattanTransfer.DEFLECT_PROJECTILE);
+                        ME.shootHattan();
+                        ME.setHeldItemManhattan(ItemStack.EMPTY);
+                        ME.hasItem = false;
                 } else {
                     securityTicks--;
                 }
@@ -875,16 +856,5 @@ public class PowersManhattanTransfer extends NewDashPreset {
     @Override
     public Component ifWipListDev(){
         return Component.literal(  "14Kacper").withStyle(ChatFormatting.DARK_RED);
-    }
-
-    /**Ignore*/
-    @Override
-    public void tickMobAI(LivingEntity attackTarget){
-        boolean isRangedAttackMob = this.getSelf() instanceof RangedAttackMob || this.getSelf() instanceof Blaze || this.getSelf() instanceof Ghast;
-        if(isRangedAttackMob ){
-            this.getSelf().playSound(SoundEvents.GHAST_HURT);
-            this.getSelf().kill();
-        } else {
-        }
     }
 }

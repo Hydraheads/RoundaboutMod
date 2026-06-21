@@ -159,6 +159,19 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 this.leftArm.xRot = -0.4F;
                 offsetCorrect = false;
                 change = true;
+            } else if (posByte == PlayerPosIndex.CHARGE_SHOT){
+                this.rightArm.yRot = 0.22F;
+                this.leftArm.yRot = -0.22F;
+
+                this.rightArm.zRot = -0.5F;
+                this.leftArm.zRot = 0.5F;
+
+                //yrot = arm spinny, zrot = arm go up and down
+
+                this.rightArm.xRot = -1F;
+                this.leftArm.xRot = -1F;
+                offsetCorrect = false;
+                change = true;
             } else if (posByte == PlayerPosIndex.SWEEP_KICK){
                 boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
                 GeneralPowers gp = ((IPowersPlayer)$$0).rdbt$getPowers();
@@ -337,7 +350,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
                 }
                 if (SU.roundabout$getStandPowers() instanceof Powers20thCenturyBoy && PowerTypes.hasStandActive(P)){
-                    AnimationDefinition anim = Powers20thCenturyBoy.getAnimation(SU);
+                    AnimationDefinition anim = Powers20thCenturyBoy.getAnimation(SU, false);
                     if (anim != null){
                         if (ipe.roundabout$GetPoseEmote() != Poses.NONE.id) {
                             ipe.roundabout$SetPoseEmote(Poses.NONE.id);
@@ -409,6 +422,26 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         this.rightArm.xRot = -1.1F + curve;
                         this.leftArm.yRot = 0.9F;
                         this.leftArm.xRot = -1.4F + curve;
+                    } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.CHARGE_SHOT) {
+                        if ($$0.isCrouching()) {
+                            float curve = -0.5F;
+                            this.rightArm.yRot = -0.45F;
+                            this.rightArm.xRot = -0.65F + curve;
+                            this.leftArm.yRot = 0.45F;
+                            this.leftArm.xRot = -0.55F + curve;
+                        } else if (((IPlayerEntity) $$0).roundabout$GetPos() == PlayerPosIndex.SKATE_GENERAL){
+                            float curve = -0.5F;
+                            this.rightArm.yRot = -0.45F;
+                            this.rightArm.xRot = -0.8F + curve;
+                            this.leftArm.yRot = 0.45F;
+                            this.leftArm.xRot = -0.7F + curve;
+                        } else {
+                            float curve = -0.5F;
+                            this.rightArm.yRot = -0.45F;
+                            this.rightArm.xRot = -1.1F + curve;
+                            this.leftArm.yRot = 0.45F;
+                            this.leftArm.xRot = -1.0F + curve;
+                        }
                     } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.BARRAGE_CHARGE) {
                         float curve = ((float) (-Math.PI / 2) + this.head.xRot) / 3;
                         this.rightArm.yRot = 0.4F;

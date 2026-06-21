@@ -8,6 +8,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.util.ExplosionUtil;
 import net.hydra.jojomod.util.HeatUtil;
@@ -16,6 +17,8 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
@@ -83,13 +86,18 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public Entity entityTarget = null;
 	public BlockPos blockTarget = null;
 	public int ticksUntilNextPathRecalculation = 15;
+	public int returnTicks = 0;
+	private static int returnMaxTicks = 300;
 
 	public float viewRange = 10.0f;
 
 	private boolean haveToReturn = false;
 
 	public boolean getHaveToReturn() { return this.haveToReturn;}
-	public void setHaveToReturn(boolean value) { this.haveToReturn = value;}
+	public void setHaveToReturn(boolean value) {
+		this.returnTicks = 0;
+		this.haveToReturn = value;
+	}
 
 	public static AttributeSupplier.Builder createStandAttributes() {
 		return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,
@@ -138,6 +146,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 					this.tickTargetFindCount--;
 				}
 
+
 				if (this.attackTick > 0) { this.attackTick--;}
 				if (this.jumpTick > 0) { this.jumpTick--;}
 
@@ -147,6 +156,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 					flyngTicks = 0;
 				}
 				this.moveToTarget();
+
+				if (this.haveToReturn) { this.returnTicks++; }
+
 
 				if (flyngTicks > 2 && this.hasTarget()) {
 					if (this.shouldExplode(this.getTargetPosition())) {
@@ -380,7 +392,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		boolean struck = this.getNavigation().isStuck() || this.struckTicks >= struckMaxTicks;
 
-		return (dist <= 1.3f) || struck;
+		return (dist <= 1.3f) || struck || this.returnTicks > returnMaxTicks;
 	}
 
 	public void shaStopMove() {
@@ -450,6 +462,11 @@ public class SheerHeartAttackEntity extends StandEntity {
 			if (mobType.equals(MobType.UNDEAD)) { points -= 30;}
 		}
 		return points;
+	}
+
+	@Override
+	protected SoundEvent getAmbientSound() {
+		return null;
 	}
 
     @Override public boolean hurt(DamageSource source, float amount) { return false;}

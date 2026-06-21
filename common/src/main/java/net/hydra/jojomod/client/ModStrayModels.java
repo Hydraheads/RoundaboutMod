@@ -88,6 +88,7 @@ public class ModStrayModels {
     public static VampireHairTwoPart VampireHairTwo;
     public static VampireHairFleshBudLayer VampireHairFlesh;
 
+    public static WhiteAlbumColdPart WhiteAlbumCold;
     public static WhiteAlbumHeadPart WhiteAlbumHead;
     public static WhiteAlbumChestPart WhiteAlbumChest;
     public static WhiteAlbumBodyPart WhiteAlbumBody;

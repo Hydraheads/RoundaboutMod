@@ -476,7 +476,8 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
             }
             float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(player, delta);
             if (whiteAmt > 0) {
-                String path = "main";
+                byte skin = ((StandUser) player).roundabout$getStandSkin();
+                String path = PowersWhiteAlbum.getSkinString(skin);
                 if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
                     path = "ice";
                 }
@@ -486,11 +487,11 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                 if (((IPlayerModel) plm).roundabout$getSlim()) {
                     ModStrayModels.WhiteAlbumSlimRightArm.render(
                             player, delta, poseStack, bSource, light,
-                            r, g, b, whiteAmt, path);
+                            r, g, b, Math.min(whiteAmt,barrageAlpha), path);
                 } else {
                     ModStrayModels.WhiteAlbumRightArm.render(
                             player, delta, poseStack, bSource, light,
-                            r, g, b, whiteAmt, path);
+                            r, g, b, Math.min(whiteAmt,barrageAlpha), path);
                 }
                 ClientUtil.popPoseAndCooperate(poseStack, 8);
             } else if (bt == LocacacaCurseIndex.RIGHT_HAND) {
@@ -560,7 +561,8 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
             }
             float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(player, delta);
             if (whiteAmt > 0) {
-                String path = "main";
+                byte skin = ((StandUser) player).roundabout$getStandSkin();
+                String path = PowersWhiteAlbum.getSkinString(skin);
                 if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
                     path = "ice";
                 }
@@ -570,11 +572,11 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                 if (((IPlayerModel) plm).roundabout$getSlim()) {
                     ModStrayModels.WhiteAlbumSlimLeftArm.render(
                             player, delta, poseStack, bSource, light,
-                            r, g, b, whiteAmt, path);
+                            r, g, b, Math.min(whiteAmt,barrageAlpha), path);
                 } else {
                     ModStrayModels.WhiteAlbumLeftArm.render(
                             player, delta, poseStack, bSource, light,
-                            r, g, b, whiteAmt, path);
+                            r, g, b, Math.min(whiteAmt,barrageAlpha), path);
                 }
                 ClientUtil.popPoseAndCooperate(poseStack, 8);
             } else if (bt == LocacacaCurseIndex.LEFT_HAND) {

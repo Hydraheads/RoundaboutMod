@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.locacaca;
 
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -25,6 +26,20 @@ public class StoneMultiplayerGamemode {
             if ((curse == LocacacaCurseIndex.LEFT_HAND && $$0.getMainArm() == HumanoidArm.RIGHT && $$1 == InteractionHand.OFF_HAND)
                     || (curse == LocacacaCurseIndex.RIGHT_HAND && $$0.getMainArm() == HumanoidArm.LEFT && $$1 == InteractionHand.OFF_HAND)) {
                 cir.setReturnValue(InteractionResult.FAIL);
+            }
+        }
+        if(((StandUser)$$0).roundabout$getStandPowers() instanceof PowersGreenDay PGD){
+            if((!PGD.HasOffHand)){
+                if($$1 == InteractionHand.OFF_HAND){
+                    cir.setReturnValue(InteractionResult.FAIL);
+                }
+
+            }
+            if((!PGD.HasMainArm)){
+                if($$1 == InteractionHand.MAIN_HAND){
+                    cir.setReturnValue(InteractionResult.FAIL);
+                }
+
             }
         }
     }

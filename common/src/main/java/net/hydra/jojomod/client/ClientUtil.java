@@ -1611,6 +1611,11 @@ public class ClientUtil {
             if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersMagiciansRed PW) {
                 PW.leaded = null;
             }
+        } else if (context == PacketDataIndex.STALL){
+            if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof
+                    PowersWhiteAlbum PW) {
+                PW.stallTicks = 10;
+            }
         }
     } public static void handleSimpleBytePacketS2C(byte context){
         LocalPlayer player = Minecraft.getInstance().player;
@@ -1862,8 +1867,17 @@ public class ClientUtil {
                     ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
                 }
                 stack.popPose();
+            } else if (standUser.roundabout$getStandPowers() instanceof  Powers20thCenturyBoy PCB && PCB.invincibleState) {
+                stack.pushPose();
+                FirstPersonArmsModel.player = play;
+                FirstPersonArmsSlimModel.player = play;
+                if (slimBoolean) {
+                    ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount * $$4, stack, source, light);
+                } else {
+                    ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount * $$4, stack, source, light);
+                }
+                stack.popPose();
             }
-
 
 
         }
