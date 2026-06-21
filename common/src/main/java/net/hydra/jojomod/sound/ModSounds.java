@@ -197,6 +197,10 @@ public class ModSounds {
     public static final ResourceLocation BLOCK_FREEZE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLOCK_FREEZE);
     public static SoundEvent BLOCK_FREEZE_EVENT = SoundEvent.createVariableRangeEvent(BLOCK_FREEZE_ID);
 
+    public static final String ICE_BLAST_CHARGE = "ice_blast_charge";
+    public static final ResourceLocation ICE_BLAST_CHARGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ICE_BLAST_CHARGE);
+    public static SoundEvent ICE_BLAST_CHARGE_EVENT = SoundEvent.createVariableRangeEvent(ICE_BLAST_CHARGE_ID);
+
 
 
     public static final String BANISH = "banish";

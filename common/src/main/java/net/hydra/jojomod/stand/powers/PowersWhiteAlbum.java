@@ -8,7 +8,6 @@ import net.hydra.jojomod.block.WhiteAlbumIceBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.BlockWallEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
@@ -305,7 +304,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
-        if (!this.isGuarding() && canGuard()) {
+        if (!this.isGuarding() && canGuard() && getActivePower() != PowerIndex.EXTRA) {
             ((StandUser)this.getSelf()).roundabout$tryPowerP(PowerIndex.EXTRA,true);
             tryPowerPacket(PowerIndex.EXTRA);
             return true;
@@ -894,7 +893,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 iceWallServer(false);
             }
             case PowerIndex.EXTRA -> {
-                setPowerExtraGuard();
+                setPowerColdBlast();
             }
             case PowerIndex.POWER_3_BLOCK -> {
                 iceWallServer(true);
@@ -910,15 +909,15 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
 
-    public boolean setPowerExtraGuard() {
+    public void setPowerColdBlast() {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.EXTRA);
         if (!self.level().isClientSide()) {
             if (getPlayerPos2() != PlayerPosIndex.CHARGE_SHOT) {
                 setPlayerPos2(PlayerPosIndex.CHARGE_SHOT);
+                playSoundsIfNearby(ICE_CHARGE, 32, false, true);
             }
         }
-        return true;
     }
 
 
@@ -1025,6 +1024,10 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     @Override
     public boolean tryPower(int move, boolean forced) {
+
+        if (this.getActivePower() == PowerIndex.EXTRA) {
+            stopSoundsIfNearby(ICE_CHARGE, 100, false);
+        }
         return super.tryPower(move, forced);
     }
 
@@ -1082,6 +1085,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
         {
             case SoundIndex.SUMMON_SOUND -> {
                 return ModSounds.WHITE_ALBUM_SUMMON_EVENT;
+            }
+            case ICE_CHARGE -> {
+                return ModSounds.ICE_BLAST_CHARGE_EVENT;
             }
         }
         return super.getSoundFromByte(soundChoice);
@@ -1194,6 +1200,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return 35;
     }
 
+    public boolean hasColdCharged(){
+        return attackTimeDuring > getWhiteAlbumChargeLength();
+    }
 
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
@@ -1208,9 +1217,13 @@ public class PowersWhiteAlbum extends NewDashPreset {
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
         } else if (getActivePower() == PowerIndex.EXTRA) {
-            int ClashTime =  Math.round(attackTimeDuring / Math.max(getWhiteAlbumChargeLength(),attackTimeDuring) * 15);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
-            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 104, ClashTime, 6);
+            if (hasColdCharged()){
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, 15, 6);
+            } else {
+                int ClashTime =  Math.round(attackTimeDuring / Math.max(getWhiteAlbumChargeLength(),attackTimeDuring) * 15);
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 104, ClashTime, 6);
+            }
         } else if (powerOn && isBarrageCharging()) {
             int ClashTime = Math.round((attackTimeDuring / getBarrageWindup()) * 15);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
