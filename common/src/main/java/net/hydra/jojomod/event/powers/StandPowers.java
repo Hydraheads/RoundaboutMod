@@ -266,6 +266,9 @@ public class StandPowers extends AbilityScapeBasis {
     /**What happens when you left click while in pilot mode, exists clientside like poweractivate*/
     public void pilotInputAttack(){
     }
+    /**Controls what blocks a stand can place in pilot mode*/
+    public boolean canPilotPlaceBlock(ItemStack stack) {return false;}
+    public int getPilotPlaceRange() {return 0;}
     /**What happens when you left click while in pilot mode, exists clientside like poweractivate*/
     public boolean pilotInputInteract(){
         return false;

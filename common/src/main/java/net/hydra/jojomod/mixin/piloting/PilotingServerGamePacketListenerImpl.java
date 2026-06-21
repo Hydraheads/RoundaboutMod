@@ -45,12 +45,12 @@ public abstract class PilotingServerGamePacketListenerImpl {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
             LivingEntity piloting = powers.getPilotingStand();
-            if (powers.isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved() && powers instanceof PowersJustice
+            if (powers.isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved()
             && MainUtil.getIsGamemodeApproriateForGrief(player)) {
                 InteractionHand $$2 = $$0.getHand();
                 ItemStack $$3 = this.player.getItemInHand($$2);
-                if ($$3.getItem() instanceof FogBlockItem) {
-                    ROUNDABOUT$MAX_INTERACTION_DISTANCE = Mth.square(ClientNetworking.getAppropriateConfig().justiceSettings.fogAndPilotRange + 15);
+                if (powers.canPilotPlaceBlock($$3)) {
+                    ROUNDABOUT$MAX_INTERACTION_DISTANCE = Mth.square(powers.getPilotPlaceRange());
                     roundabout$handleUseItemOn($$0);
                 }
                 ci.cancel();

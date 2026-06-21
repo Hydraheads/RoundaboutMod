@@ -24,6 +24,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.item.FogBlockItem;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
@@ -257,6 +258,17 @@ public class PowersJustice extends NewDashPreset {
             }
         }
         super.onStandSwitch();
+    }
+
+
+    @Override
+    public boolean canPilotPlaceBlock(ItemStack stack) {
+        return stack.getItem() instanceof FogBlockItem;
+    }
+
+    @Override
+    public int getPilotPlaceRange() {
+        return ClientNetworking.getAppropriateConfig().justiceSettings.fogAndPilotRange + 15;
     }
 
     @Override

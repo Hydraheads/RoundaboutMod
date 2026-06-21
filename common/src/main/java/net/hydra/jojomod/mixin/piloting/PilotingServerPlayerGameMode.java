@@ -48,7 +48,8 @@ public abstract class PilotingServerPlayerGameMode {
     @Inject(method = "useItemOn(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$useItemOn(ServerPlayer serverPlayer, Level level, ItemStack itemStack, InteractionHand interactionHand, BlockHitResult blockHitResult, CallbackInfoReturnable<InteractionResult> cir) {
 
-        if (serverPlayer != null && ((StandUser)serverPlayer).roundabout$getStandPowers() instanceof PowersJustice PJ && PJ.isPiloting()) {
+        StandPowers powers = ((StandUser)serverPlayer).roundabout$getStandPowers();
+        if (serverPlayer != null && powers.isPiloting() && powers.getPilotPlaceRange() != 0) {
             InteractionResult interactionResult2;
             InteractionResult interactionResult;
             BlockPos blockPos = blockHitResult.getBlockPos();
@@ -92,7 +93,7 @@ public abstract class PilotingServerPlayerGameMode {
         if (this.player != null) { StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
             LivingEntity piloting = powers.getPilotingStand();
-            if (powers.isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved() && powers instanceof PowersJustice
+            if (powers.isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved() && powers.getPilotPlaceRange() != 0
             && MainUtil.getIsGamemodeApproriateForGrief(player)) {
                 BlockState $$6 = this.level.getBlockState($$0);
                 if (!$$6.isAir() && $$6.getBlock() instanceof FogBlock) {
@@ -106,76 +107,79 @@ public abstract class PilotingServerPlayerGameMode {
     @Unique
     public void roundabout$handleBlockBreakAction(BlockPos $$0, ServerboundPlayerActionPacket.Action $$1, Direction $$2, int $$3, int $$4) {
 
-        double ROUNDABOUT$MAX_INTERACTION_DISTANCE = Mth.square(ClientNetworking.getAppropriateConfig().justiceSettings.fogAndPilotRange+15);
-        if (this.player.getEyePosition().distanceToSqr(Vec3.atCenterOf($$0)) > ROUNDABOUT$MAX_INTERACTION_DISTANCE) {
-        } else if ($$0.getY() >= $$3) {
-            this.player.connection.send(new ClientboundBlockUpdatePacket($$0, this.level.getBlockState($$0)));
-        } else {
-            if ($$1 == ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK) {
-                if (!this.level.mayInteract(this.player, $$0)) {
-                    this.player.connection.send(new ClientboundBlockUpdatePacket($$0, this.level.getBlockState($$0)));
-                    return;
-                }
-
-                if (this.isCreative()) {
-                    this.destroyAndAck($$0, $$4, "creative destroy");
-                    return;
-                }
-
-                if (this.player.blockActionRestricted(this.level, $$0, this.gameModeForPlayer)) {
-                    this.player.connection.send(new ClientboundBlockUpdatePacket($$0, this.level.getBlockState($$0)));
-                    return;
-                }
-                this.destroyProgressStart = this.gameTicks;
-                float $$5 = 1.0F;
-                BlockState $$6 = this.level.getBlockState($$0);
-                if (!$$6.isAir()) {
-                    $$6.attack(this.level, $$0, this.player);
-                    $$5 = $$6.getDestroyProgress(this.player, this.player.level(), $$0);
-                }
-
-                if (!$$6.isAir() && $$5 >= 1.0F) {
-                    this.destroyAndAck($$0, $$4, "insta mine");
-                } else {
-                    if (this.isDestroyingBlock) {
-                        this.player.connection.send(new ClientboundBlockUpdatePacket(this.destroyPos, this.level.getBlockState(this.destroyPos)));
+        StandPowers powers = ((StandUser)this.player).roundabout$getStandPowers();
+        if (powers != null) {
+            double ROUNDABOUT$MAX_INTERACTION_DISTANCE = Mth.square(powers.getPilotPlaceRange());
+            if (this.player.getEyePosition().distanceToSqr(Vec3.atCenterOf($$0)) > ROUNDABOUT$MAX_INTERACTION_DISTANCE) {
+            } else if ($$0.getY() >= $$3) {
+                this.player.connection.send(new ClientboundBlockUpdatePacket($$0, this.level.getBlockState($$0)));
+            } else {
+                if ($$1 == ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK) {
+                    if (!this.level.mayInteract(this.player, $$0)) {
+                        this.player.connection.send(new ClientboundBlockUpdatePacket($$0, this.level.getBlockState($$0)));
+                        return;
                     }
 
-                    this.isDestroyingBlock = true;
-                    this.destroyPos = $$0.immutable();
-                    int $$7 = (int)($$5 * 10.0F);
-                    this.level.destroyBlockProgress(this.player.getId(), $$0, $$7);
-                    this.lastSentState = $$7;
-                }
-            } else if ($$1 == ServerboundPlayerActionPacket.Action.STOP_DESTROY_BLOCK) {
-                if ($$0.equals(this.destroyPos)) {
-                    int $$8 = this.gameTicks - this.destroyProgressStart;
-                    BlockState $$9 = this.level.getBlockState($$0);
-                    if (!$$9.isAir()) {
-                        float $$10 = $$9.getDestroyProgress(this.player, this.player.level(), $$0) * (float)($$8 + 1);
-                        if ($$10 >= 0.7F) {
-                            this.isDestroyingBlock = false;
-                            this.level.destroyBlockProgress(this.player.getId(), $$0, -1);
-                            this.destroyAndAck($$0, $$4, "destroyed");
-                            return;
+                    if (this.isCreative()) {
+                        this.destroyAndAck($$0, $$4, "creative destroy");
+                        return;
+                    }
+
+                    if (this.player.blockActionRestricted(this.level, $$0, this.gameModeForPlayer)) {
+                        this.player.connection.send(new ClientboundBlockUpdatePacket($$0, this.level.getBlockState($$0)));
+                        return;
+                    }
+                    this.destroyProgressStart = this.gameTicks;
+                    float $$5 = 1.0F;
+                    BlockState $$6 = this.level.getBlockState($$0);
+                    if (!$$6.isAir()) {
+                        $$6.attack(this.level, $$0, this.player);
+                        $$5 = $$6.getDestroyProgress(this.player, this.player.level(), $$0);
+                    }
+
+                    if (!$$6.isAir() && $$5 >= 1.0F) {
+                        this.destroyAndAck($$0, $$4, "insta mine");
+                    } else {
+                        if (this.isDestroyingBlock) {
+                            this.player.connection.send(new ClientboundBlockUpdatePacket(this.destroyPos, this.level.getBlockState(this.destroyPos)));
                         }
 
-                        if (!this.hasDelayedDestroy) {
-                            this.isDestroyingBlock = false;
-                            this.hasDelayedDestroy = true;
-                            this.delayedDestroyPos = $$0;
-                            this.delayedTickStart = this.destroyProgressStart;
+                        this.isDestroyingBlock = true;
+                        this.destroyPos = $$0.immutable();
+                        int $$7 = (int) ($$5 * 10.0F);
+                        this.level.destroyBlockProgress(this.player.getId(), $$0, $$7);
+                        this.lastSentState = $$7;
+                    }
+                } else if ($$1 == ServerboundPlayerActionPacket.Action.STOP_DESTROY_BLOCK) {
+                    if ($$0.equals(this.destroyPos)) {
+                        int $$8 = this.gameTicks - this.destroyProgressStart;
+                        BlockState $$9 = this.level.getBlockState($$0);
+                        if (!$$9.isAir()) {
+                            float $$10 = $$9.getDestroyProgress(this.player, this.player.level(), $$0) * (float) ($$8 + 1);
+                            if ($$10 >= 0.7F) {
+                                this.isDestroyingBlock = false;
+                                this.level.destroyBlockProgress(this.player.getId(), $$0, -1);
+                                this.destroyAndAck($$0, $$4, "destroyed");
+                                return;
+                            }
+
+                            if (!this.hasDelayedDestroy) {
+                                this.isDestroyingBlock = false;
+                                this.hasDelayedDestroy = true;
+                                this.delayedDestroyPos = $$0;
+                                this.delayedTickStart = this.destroyProgressStart;
+                            }
                         }
                     }
-                }
 
-            } else if ($$1 == ServerboundPlayerActionPacket.Action.ABORT_DESTROY_BLOCK) {
-                this.isDestroyingBlock = false;
-                if (!Objects.equals(this.destroyPos, $$0)) {
-                    this.level.destroyBlockProgress(this.player.getId(), this.destroyPos, -1);
-                }
+                } else if ($$1 == ServerboundPlayerActionPacket.Action.ABORT_DESTROY_BLOCK) {
+                    this.isDestroyingBlock = false;
+                    if (!Objects.equals(this.destroyPos, $$0)) {
+                        this.level.destroyBlockProgress(this.player.getId(), this.destroyPos, -1);
+                    }
 
-                this.level.destroyBlockProgress(this.player.getId(), $$0, -1);
+                    this.level.destroyBlockProgress(this.player.getId(), $$0, -1);
+                }
             }
         }
     }
