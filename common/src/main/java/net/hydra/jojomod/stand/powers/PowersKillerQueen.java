@@ -344,7 +344,9 @@ public class PowersKillerQueen extends NewPunchingStand {
     	} else if (this.currentBombStatus != BOMB_NONE) {
         	setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BOMB_DEFUSE, PowerIndex.NO_CD);
         } else if (isGuarding()) {
-        	if (this.currentBombStatus == BOMB_BUBBLE) {
+            if (!canExecuteMoveWithLevel(getStrayCatLevel())) {
+                setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+            } else if (this.currentBombStatus == BOMB_BUBBLE) {
         		setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BUBBLE_REDIRECT, PowerIndex.NO_CD);
         	} else {
         		 setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BUBBLE_LAUNCH, PowerIndex.SKILL_2_GUARD);
@@ -360,7 +362,9 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
 
         if (isHoldingSneak() && !(inBitesTheDustMode())){
-        	if (this.currentShaStatus != SHA_NONE) {
+            if (!canExecuteMoveWithLevel(getSheerHeartAttackLevel())) {
+                setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+            } else if (this.currentShaStatus != SHA_NONE) {
                 if (this.currentShaStatus == SHA_SEND) {
                     setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_RETREAT, PowerIndex.NO_CD);
                 }else {
@@ -370,7 +374,9 @@ public class PowersKillerQueen extends NewPunchingStand {
         		setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_SUMMON, PowerIndex.SKILL_3);
         	}
         } else if (isGuarding() && !(inBitesTheDustMode())){
-            if (this.currentShaStatus != SHA_NONE) {
+            if (!canExecuteMoveWithLevel(getSheerHeartAttackLevel())) {
+                setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+            } else if (this.currentShaStatus != SHA_NONE) {
                 if (this.currentShaStatus == SHA_SEND) {
                     setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_RETREAT, PowerIndex.NO_CD);
                 }else {
@@ -389,8 +395,10 @@ public class PowersKillerQueen extends NewPunchingStand {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
             }
         }
-        
-        if (inBitesTheDustMode()) {
+
+        if (!canExecuteMoveWithLevel(getBitesTheDustLevel())) {
+            setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+        } else if (inBitesTheDustMode()) {
         	setSkillIcon(context, x, y, 4, StandIcons.KILLER_QUEEN_BTD_DEACTIVATE, PowerIndex.SKILL_4);
         }else {
         	setSkillIcon(context, x, y, 4, StandIcons.KILLER_QUEEN_BTD_ACTIVATE, PowerIndex.SKILL_4);
@@ -485,7 +493,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         		}
         	}
         	case SKILL_4_NORMAL, SKILL_4_CROUCH, SKILL_4_GUARD, SKILL_4_CROUCH_GUARD -> {
-        		bitesTheDustModeToggleClient();
+        		//bitesTheDustModeToggleClient();
         	}
         }
     }
