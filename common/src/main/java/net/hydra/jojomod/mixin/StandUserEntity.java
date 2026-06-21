@@ -1488,10 +1488,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
         }
-        if (roundabout$isSealed()){
-            roundabout$setSealedTicks(roundabout$sealedTicks - 1);
+        if (roundabout$isSealed() && !level().isClientSide()){
+            roundabout$updateSealedTicks(roundabout$sealedTicks - 1);
             if (((LivingEntity)(Object)this) instanceof Player PE && PE.isCreative()){
-                roundabout$setSealedTicks(-1);
+                roundabout$updateSealedTicks(0);
             }
             if (!roundabout$isSealed()){
                 this.roundabout$setDrowning(false);
@@ -2292,6 +2292,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 compoundtag.putInt("cooldown_" + i + "_max", ci.maxTime);
             }
         }
+        compoundtag.putInt("sealedTicks",roundabout$getSealedTicks());
 
 
         $$0.put("roundabout",compoundtag);
@@ -2320,6 +2321,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         roundabout$setBubbleEncased(compoundtag.getByte("bubbleEncased"));
         roundabout$setHeat(compoundtag.getByte("heat"));
+        if (compoundtag.contains("sealedTicks")) {
+            roundabout$sealedTicks = compoundtag.getInt("sealedTicks");
+        }
         if (compoundtag.contains("fleshBud")) {
             rdbt$fleshBudPlanted = compoundtag.getUUID("fleshBud");
         }
@@ -3042,15 +3046,61 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     @Unique
     public void roundabout$setSealedTicks(int ticks){
-        if (PowerTypes.hasStandActive(rdbt$this())){
+        if (PowerTypes.hasStandActive(rdbt$this()) && ticks > -1){
             roundabout$setSummonCD(8);
             roundabout$setActive(false);
+            roundabout$setMaxSealedTicks(ticks);
             roundabout$tryPower(PowerIndex.NONE, true);
             if (this.level().isClientSide()) {
                 C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_DESUMMON);
             }
         }
         roundabout$sealedTicks = ticks;
+        if (!level().isClientSide()){
+            if (rdbt$this() instanceof Player pl) {
+                S2CPacketUtil.sendGenericIntToClientPacket(
+                pl, PacketDataIndex.S2C_INT_MAX_SEAL, ticks);
+                S2CPacketUtil.sendGenericIntToClientPacket(
+                        pl, PacketDataIndex.S2C_INT_SEAL, ticks);
+            }
+        }
+    }
+
+
+
+    @Override
+    @Unique
+    public void roundabout$updateSealedTicks(int ticks){
+        roundabout$sealedTicks = ticks;
+        if (!level().isClientSide()){
+            if (rdbt$this() instanceof Player pl) {
+                S2CPacketUtil.sendGenericIntToClientPacket(
+                        pl, PacketDataIndex.S2C_INT_SEAL, ticks);
+            }
+        }
+    }
+
+    @Override
+    @Unique
+    public void roundabout$setSealedTicks(int ticks, int max){
+        if (PowerTypes.hasStandActive(rdbt$this())){
+            roundabout$setSummonCD(8);
+            roundabout$setActive(false);
+            roundabout$setMaxSealedTicks(max);
+            roundabout$tryPower(PowerIndex.NONE, true);
+            if (this.level().isClientSide()) {
+                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_DESUMMON);
+            }
+        }
+        roundabout$sealedTicks = ticks;
+        if (!level().isClientSide()){
+             if (rdbt$this() instanceof Player pl) {
+                 S2CPacketUtil.sendGenericIntToClientPacket(
+                         pl, PacketDataIndex.S2C_INT_MAX_SEAL, max);
+                    S2CPacketUtil.sendGenericIntToClientPacket(
+                    pl, PacketDataIndex.S2C_INT_SEAL, ticks);
+            }
+        }
     }
 
     @Override

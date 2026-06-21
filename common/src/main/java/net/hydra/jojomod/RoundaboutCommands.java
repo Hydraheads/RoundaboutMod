@@ -457,8 +457,7 @@ public class RoundaboutCommands {
                     }
                     ((StandUser) PE).roundabout$setHeat(0);
                     MainUtil.clearCooldowns(PE);
-                    S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) PE),
-                            PacketDataIndex.S2C_INT_SEAL, -1);
+                    ((StandUser) PE).roundabout$updateSealedTicks(-1);
                 }
 
             }

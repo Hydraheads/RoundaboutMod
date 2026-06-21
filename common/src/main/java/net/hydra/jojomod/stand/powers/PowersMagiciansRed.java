@@ -1449,14 +1449,9 @@ public class PowersMagiciansRed extends NewPunchingStand {
         if (this.self instanceof Player PE && PE.isCreative() && sealTime > 20){
             sealTime = 20;
         }
-        if (this.self.level().isClientSide()) {
-            user.roundabout$setMaxSealedTicks(sealTime);
-            user.roundabout$setSealedTicks(sealTime);
-        }
 
-        if (!this.self.level().isClientSide() && user instanceof Player PE){
-            S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) PE),
-                    PacketDataIndex.S2C_INT_SEAL, sealTime);
+        if (!this.self.level().isClientSide()){
+            user.roundabout$setSealedTicks(sealTime);
         }
         user.roundabout$setActive(false);
     }

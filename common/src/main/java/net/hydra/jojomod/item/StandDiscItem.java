@@ -83,8 +83,8 @@ public class StandDiscItem extends Item {
                     }
 
                     if (!$$1.isCreative()) {
-                        S2CPacketUtil.sendSimpleByteToClientPacket(
-                                ((ServerPlayer) $$1), PacketDataIndex.S2C_SIMPLE_FREEZE_STAND);
+                        ((StandUser)$$1).roundabout$setSealedTicks(
+                                ClientNetworking.getAppropriateConfig().itemSettings.switchStandDiscLength);
                     }
                 } else {
                     convertStuff($$3, $$1);

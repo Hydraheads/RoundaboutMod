@@ -1,5 +1,6 @@
 package net.hydra.jojomod.item;
 
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -37,14 +38,12 @@ public class EmptyStandDiscItem extends Item {
             if (!$$3.isEmpty() && $$3.getItem() instanceof EmptyStandDiscItem) {
                 ItemStack currentDisc = ((StandUser) $$1).roundabout$getStandDisc().copy();
                 if (!currentDisc.isEmpty()) {
-                    ((StandUser) $$1).roundabout$getStandPowers().onStandSwitch();
-                    if (!$$1.isCreative()) {
-                        S2CPacketUtil.sendSimpleByteToClientPacket(
-                                ((ServerPlayer) $$1), PacketDataIndex.S2C_SIMPLE_FREEZE_STAND);
-                    }
-                    ((StandUser) $$1).roundabout$setStand(null);
-                    ((StandUser) $$1).roundabout$setActive(false);
-                    ((StandUser) $$1).roundabout$setStandDisc(ItemStack.EMPTY);
+                    StandUser user = ((StandUser) $$1);
+                    user.roundabout$getStandPowers().onStandSwitch();
+                    user.roundabout$setSealedTicks(ClientNetworking.getAppropriateConfig().itemSettings.switchStandDiscLength);
+                    user.roundabout$setStand(null);
+                    user.roundabout$setActive(false);
+                    user.roundabout$setStandDisc(ItemStack.EMPTY);
                     this.generateStandPowers($$1);
                     if ($$2.equals(InteractionHand.MAIN_HAND)){
                         $$1.setItemSlot(

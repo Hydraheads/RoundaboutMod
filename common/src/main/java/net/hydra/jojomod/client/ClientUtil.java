@@ -783,12 +783,13 @@ public class ClientUtil {
         } else if (context== PacketDataIndex.S2C_INT_ATD){
             ((StandUser) player).roundabout$getStandPowers().setAttackTimeDuring(data);
         } else if (context == PacketDataIndex.S2C_INT_SEAL){
-            if (data > 0){
-                ((StandUser) player).roundabout$setMaxSealedTicks(data);
-                ((StandUser) player).roundabout$setSealedTicks(data);
-            } else if (data == -1){
-                ((StandUser) player).roundabout$setSealedTicks(-1);
+            StandUser user = ((StandUser) player);
+            if (user.roundabout$getMaxSealedTicks() < data){
+                user.roundabout$setMaxSealedTicks(data);
             }
+            user.roundabout$setSealedTicks(data);
+        } else if (context == PacketDataIndex.S2C_INT_MAX_SEAL){
+            ((StandUser) player).roundabout$setMaxSealedTicks(data);
         } else if (context == PacketDataIndex.S2C_INT_BUBBLE_FINISH){
             Entity target = player.level().getEntity(data);
             if (target instanceof SoftAndWetPlunderBubbleEntity IE) {
@@ -1586,14 +1587,6 @@ public class ClientUtil {
     public static void handleSimpleBytePacketS2C(LocalPlayer player, byte context){
         if (context == 1) {
             ((StandUser) player).roundabout$setGasolineTime(context);
-        } else if (context == PacketDataIndex.S2C_SIMPLE_FREEZE_STAND) {
-                int switchTicks = ClientNetworking.getAppropriateConfig().itemSettings.switchStandDiscLength;
-                if (switchTicks > 0){
-                    if (((StandUser) player).roundabout$getSealedTicks() < switchTicks) {
-                        ((StandUser) player).roundabout$setMaxSealedTicks(switchTicks);
-                        ((StandUser) player).roundabout$setSealedTicks(switchTicks);
-                    }
-                }
         } else if (context == PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK) {
             ((StandUser) player).roundabout$getStandPowers().suspendGuard = true;
             ((StandUser) player).roundabout$getStandPowers().scopeLevel = 0;

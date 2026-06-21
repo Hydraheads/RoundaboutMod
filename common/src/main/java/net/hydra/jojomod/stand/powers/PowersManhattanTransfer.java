@@ -344,8 +344,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
             user.roundabout$setSealedTicks(sealTime);
         }
         if (!this.self.level().isClientSide() && user instanceof Player PE) {
-            S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) PE),
-                    PacketDataIndex.S2C_INT_SEAL, sealTime);
+            ((StandUser)PE).roundabout$setSealedTicks(sealTime);
         }
         user.roundabout$setActive(false);
     }
