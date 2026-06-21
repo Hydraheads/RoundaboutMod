@@ -20,12 +20,10 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.FirearmItem;
-import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.WarhammerItem;
 import net.hydra.jojomod.mixin.access.MinecraftAccessor;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.*;
-import net.hydra.jojomod.item.FogBlockItem;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -61,7 +59,6 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -677,17 +674,17 @@ public abstract class InputEvents implements IInputEvents {
 
 
     @Unique
-    public void roundabout$doItemUseWithJustice(){
+    public boolean roundaboutPlaceBlock(){
 
         if (this.rightClickDelay == 0 && this.player != null && !this.player.isUsingItem() && this.level != null) {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
             LivingEntity piloting = powers.getPilotingStand();
-            HitResult $$47 = null;
+            HitResult blockHitResult = null;
             if (piloting != null && piloting.isAlive() && !piloting.isRemoved()){
                 if (level != null) {
                     double d0 = 10;
-                    $$47 = piloting.pick(d0, 0, false);
+                    blockHitResult = piloting.pick(d0, 0, false);
                 }
             }
             boolean B = false;
@@ -696,53 +693,53 @@ public abstract class InputEvents implements IInputEvents {
                 this.rightClickDelay = 4;
                 if (!this.player.isHandsBusy()) {
 
-                    for (InteractionHand $$0 : InteractionHand.values()) {
-                        ItemStack $$1 = this.player.getItemInHand($$0);
-                        if (!$$1.isItemEnabled(this.level.enabledFeatures())) {
-                            return;
+                    for (InteractionHand hand : InteractionHand.values()) {
+                        ItemStack heldItem = hand == InteractionHand.MAIN_HAND ? ((IPlayerEntity)player).roundabout$getForRealMainHand()  : ((IPlayerEntity)player).roundabout$getForRealOffHand();
+                        if (!heldItem.isItemEnabled(this.level.enabledFeatures())) {
+                            return false;
                         }
 
-                        if ($$47 != null && $$1.getItem() instanceof FogBlockItem) {
-                            switch ($$47.getType()) {
+                        if (blockHitResult != null && powers.canPilotPlaceBlock(heldItem)) {
+                            switch (blockHitResult.getType()) {
                                 case BLOCK:
-                                    BlockHitResult $$5 = (BlockHitResult)$$47;
-                                    int $$6 = $$1.getCount();
+                                    BlockHitResult $$5 = (BlockHitResult)blockHitResult;
+                                    int count = heldItem.getCount();
                                     if(MainUtil.canPlaceOnClaim(this.player,$$5)) {
-                                        InteractionResult $$7 = this.gameMode.useItemOn(this.player, $$0, $$5);
-                                        if ($$7.consumesAction()) {
-                                            if ($$7.shouldSwing()) {
-                                                this.player.swing($$0);
-                                                if (!$$1.isEmpty() && ($$1.getCount() != $$6 || this.gameMode.hasInfiniteItems())) {
-                                                    this.gameRenderer.itemInHandRenderer.itemUsed($$0);
+                                        InteractionResult result = this.gameMode.useItemOn(this.player, hand, $$5);
+                                        if (result.consumesAction()) {
+                                            if (result.shouldSwing()) {
+                                                this.player.swing(hand);
+                                                if (!heldItem.isEmpty() && (heldItem.getCount() != count || this.gameMode.hasInfiniteItems())) {
+                                                    this.gameRenderer.itemInHandRenderer.itemUsed(hand);
                                                 }
                                             }
 
-                                            return;
+                                            return true;
                                         }
 
-                                        if ($$7 == InteractionResult.FAIL) {
-                                            return;
+                                        if (result == InteractionResult.FAIL) {
+                                            return false;
                                         }
                                     }
                             }
                         }
 
-                        if (!$$1.isEmpty() && $$1.getItem() instanceof FogBlockItem) {
-                            InteractionResult $$8 = this.gameMode.useItem(this.player, $$0);
-                            if ($$8.consumesAction()) {
-                                if ($$8.shouldSwing()) {
-                                    this.player.swing($$0);
+                        // possibly deprecated
+                        if (!heldItem.isEmpty() && powers.canPilotPlaceBlock(heldItem)) {
+                            InteractionResult result = this.gameMode.useItem(this.player, hand);
+                            if (result.consumesAction()) {
+                                if (result.shouldSwing()) {
+                                    this.player.swing(hand);
                                 }
-
-                                this.gameRenderer.itemInHandRenderer.itemUsed($$0);
-                                return;
+                                this.gameRenderer.itemInHandRenderer.itemUsed(hand);
+                                return true;
                             }
                         }
                     }
                 }
             }
-            powers.pilotInputInteract();
         }
+        return false;
     }
 
     @Inject(method = "startUseItem", at = @At("HEAD"), cancellable = true)
@@ -771,11 +768,10 @@ public abstract class InputEvents implements IInputEvents {
             }
             if (powers.isPiloting()){
                 ci.cancel();
-                if (powers instanceof PowersJustice){
-                    roundabout$doItemUseWithJustice();
-                } else {
+                if (!roundaboutPlaceBlock()) {
                     powers.pilotInputInteract();
                 }
+
                 return;
             }
 

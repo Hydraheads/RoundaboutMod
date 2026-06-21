@@ -27,6 +27,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Path;
@@ -34,6 +35,7 @@ import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -335,7 +337,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public void attack() {
 
-		DamageSource dmg = ModDamageTypes.of(this.level(), DamageTypes.PLAYER_EXPLOSION, this);;
+		DamageSource dmg = ModDamageTypes.of(this.level(), ModDamageTypes.EXPLOSIVE_STAND, this.getUser());;
 
 		if (this.getTargetType() == ENTITY){
 			ExplosionUtil.explosionHurt(this.position(), dmg, this.level(),
@@ -426,13 +428,11 @@ public class SheerHeartAttackEntity extends StandEntity {
 				newPath = this.getNavigation().createPath(targetPos.x, targetPos.y, targetPos.z, 0);
 			}
 
-			//this.lookAt(EntityAnchorArgument.Anchor.EYES, targetPos);
-
 			if (newPath == null) {
 				return;
+			} else {
+				this.tryClimb();
 			}
-
-
 
 			if (!this.getNavigation().moveTo(newPath, 0.5f))
 				ticksUntilNextPathRecalculation += 5;
@@ -462,6 +462,30 @@ public class SheerHeartAttackEntity extends StandEntity {
 			if (mobType.equals(MobType.UNDEAD)) { points -= 30;}
 		}
 		return points;
+	}
+
+	public void tryClimb() {
+		float targetY = this.getBlockY();
+		if (this.haveToReturn) {
+			targetY = this.getUser().getBlockY();
+		}
+		else if (this.currentTarget == BLOCK) {
+			targetY = this.blockTarget.getY();
+		}else if (this.currentTarget == ENTITY) {
+			targetY = this.entityTarget.getBlockY();
+		}
+
+		if (targetY - this.getBlockY() > 1.2) {
+			float range = 1.0f;
+			Vec3 vec3d = this.position();
+			Vec3 vec3d2 = this.getViewVector(0);
+			Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+			HitResult blockHit = this.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+			//Vec3 pos =  blockHit.getLocation();
+			if (blockHit.getType() == HitResult.Type.BLOCK) {
+				this.setDeltaMovement(this.getDeltaMovement().add(0, 0.8, 0));
+			}
+		}
 	}
 
 	@Override

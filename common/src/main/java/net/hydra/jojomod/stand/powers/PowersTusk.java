@@ -120,7 +120,7 @@ public class PowersTusk extends NewDashPreset {
 
     @Override public int getDisplayPowerInventoryYOffset() {return this.getAct() < 3 ? 20 : 0;}
     @Override public int getDisplayPowerInventoryScale() {return this.getAct() == 4 ? 24 : 30;}
-    @Override public boolean hasPassiveCombatMode() {return this.getActivePower() != PowerIndex.MINING ;}
+    @Override public boolean hasPassiveCombatMode() {return this.getActivePower() != PowerIndex.MINING && !this.isInHole() ;}
     @Override public boolean hasShootingModeVisually(HumanoidArm arm) {
         if (!isGunMode() || this.getActivePower() == PowersTusk.SHOOT_MODE) {
             if (renderBothArms()) {
@@ -1208,9 +1208,19 @@ public class PowersTusk extends NewDashPreset {
         }
     }
 
+
+    @Override
+    public boolean canPilotPlaceBlock(ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public int getPilotPlaceRange() {
+        return (int)this.getPilotingStand().distanceTo(this.getSelf()) + 10;
+    }
+
     @Override
     public boolean pilotInputInteract() {
-
         if (isGunMode() ) {
             tryPower(PowersTusk.SHOOT_MODE);
             tryPowerPacket(PowersTusk.SHOOT_MODE);
@@ -1218,8 +1228,6 @@ public class PowersTusk extends NewDashPreset {
             tryPower(PowersTusk.FIRE_NAIL);
             tryPowerPacket(PowersTusk.FIRE_NAIL);
         }
-
-
         return true;
     }
 
