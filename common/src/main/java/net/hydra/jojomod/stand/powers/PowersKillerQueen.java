@@ -78,6 +78,7 @@ import net.minecraft.world.level.block.PlayerHeadBlock;
 import net.minecraft.world.level.block.PlayerWallHeadBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.nbt.CompoundTag;
 
@@ -349,7 +350,11 @@ public class PowersKillerQueen extends NewPunchingStand {
         		 setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BUBBLE_LAUNCH, PowerIndex.SKILL_2_GUARD);
         	}
     	} else if (isHoldingSneak()){
-    		 setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_IMPALE, PowerIndex.SKILL_2_SNEAK);
+            if (canExecuteMoveWithLevel(getImpaleLevel())) {
+                setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_IMPALE, PowerIndex.SKILL_2_SNEAK);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+            }
         } else {
         	setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_PLANT_BOMB_MOB, PowerIndex.SKILL_2);
         }
@@ -547,7 +552,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 	        Vec3 vec3d3 = vec3d.add(vec3d2.x * blockPlantRange, vec3d2.y * blockPlantRange, vec3d2.z * blockPlantRange);
 	        
 	        BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this.getSelf()));       
-	        BlockPos pos = blockHit.getBlockPos();
+	        if (blockHit.getType() != HitResult.Type.BLOCK) { return false; }
+            BlockPos pos = blockHit.getBlockPos();
 	    	BlockState state = this.getSelf().level().getBlockState(pos);
 	    	
 	    	return (!ExplosionUtil.isBlockBlackListed(state));
@@ -1098,12 +1104,14 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void tryImpale() {
         if (!this.onCooldown(PowerIndex.SKILL_2_SNEAK)) {
-            if (this.activePower == PowerIndex.POWER_2_SNEAK) {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                tryPowerPacket(PowerIndex.NONE);
-            } else {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
-                tryPowerPacket(PowerIndex.POWER_2_SNEAK);
+            if (canExecuteMoveWithLevel(getImpaleLevel())) {
+                if (this.activePower == PowerIndex.POWER_2_SNEAK) {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                    tryPowerPacket(PowerIndex.NONE);
+                } else {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
+                    tryPowerPacket(PowerIndex.POWER_2_SNEAK);
+                }
             }
         }
     }
@@ -1158,10 +1166,12 @@ public class PowersKillerQueen extends NewPunchingStand {
 		        Vec3 vec3d2 = this.getSelf().getViewVector(0);
 		        Vec3 vec3d3 = vec3d.add(vec3d2.x * blockPlantRange, vec3d2.y * blockPlantRange, vec3d2.z * blockPlantRange);
 		        
-		        BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this.getSelf()));       
-		        BlockPos pos = blockHit.getBlockPos();
+		        BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this.getSelf()));
+                if (blockHit.getType() != HitResult.Type.BLOCK) { return true; }
+
+                BlockPos pos = blockHit.getBlockPos();
 		    	BlockState state = this.getSelf().level().getBlockState(pos);
-		    	
+
 		    	if (!ExplosionUtil.isBlockBlackListed(state)) {
                     //this.poseStand(OffsetIndex.FOLLOW);
 
