@@ -333,21 +333,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
         }
         return false;
     }
-    public void sealStand(boolean forced) {
-        int sealTime = 0;
-        StandUser user = ((StandUser) this.self);
-        if (this.self instanceof Player PE && PE.isCreative() && sealTime > 0) {
-            sealTime = 0;
-        }
-        if (this.self.level().isClientSide()) {
-            user.roundabout$setMaxSealedTicks(sealTime);
-            user.roundabout$setSealedTicks(sealTime);
-        }
-        if (!this.self.level().isClientSide() && user instanceof Player PE) {
-            ((StandUser)PE).roundabout$setSealedTicks(sealTime);
-        }
-        user.roundabout$setActive(false);
-    }
     public boolean isActive() {
         return this.getStandEntity(this.getSelf()) != null;
     }
@@ -433,37 +418,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 }
             }
 
-            Vec3 vec3 = new Vec3(walkingSpeed, 0, walkingSpeed);
-
-            /*yoinked justice code to fix MT miscalculating distances :)*/
-            if (this.self instanceof Player PL){
-                int getPilotInt = ((IPlayerEntity) PL).roundabout$getControlling();
-                Entity getPilotEntity = this.self.level().getEntity(getPilotInt);
-                if (this.self.level().isClientSide() && isPacketPlayer()) {
-                        if (getPilotEntity instanceof LivingEntity le) {
-                            if (le.isRemoved() || !le.isAlive() ||
-                                    MainUtil.cheapDistanceTo2(le.getX(), le.getZ(), PL.getX(), PL.getZ())
-                                            > getMaxPilotRange()) {
-                                IPlayerEntity ipe = ((IPlayerEntity) PL);
-                                ipe.roundabout$setIsControlling(0);
-                                tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
-                                sealStand(true);
-                                ClientUtil.setCameraEntity(null);
-                            } else {
-                                StandEntity SE = getStandEntity(this.self);
-                                if (SE != null && le.is(SE)) {
-                                    ClientUtil.setCameraEntity(le);
-                                }
-                            }
-                        } else {
-                            ClientUtil.setCameraEntity(null);
-                        }
-                }
-            }
-            if(!isPiloting() && MainUtil.cheapDistanceTo2(ME.getX(), ME.getZ(), this.self.getX(), this.self.getZ()) > getMaxPilotRange()) {
-                sealStand(true);
-            }
-
             if(ME.isInLava() || ME.isInWater()){
                 ME.tickInWater--;
             } else {
@@ -471,11 +425,11 @@ public class PowersManhattanTransfer extends NewDashPreset {
             }
 
             if(ME.tickInWater < 1){
-                this.sealStand(true);
+                ((StandUser)this.self).roundabout$setActive(false);
             }
 
             if(ME.isTechnicallyInWall()){
-                this.sealStand(true);
+                ((StandUser)this.self).roundabout$setActive(false);
             }
 
             if(this.isClient()){
@@ -484,6 +438,36 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 } else {
                     ME.isHattanPilotMode = false;
                 }
+            }
+        }
+
+        /*yoinked justice code to fix MT miscalculating distances :)*/
+        if (this.self instanceof Player PL){
+            int getPilotInt = ((IPlayerEntity) PL).roundabout$getControlling();
+            Entity getPilotEntity = this.self.level().getEntity(getPilotInt);
+            if (this.self.level().isClientSide() && isPacketPlayer()) {
+                if (getPilotEntity instanceof LivingEntity le) {
+                    if (le.isRemoved() || !le.isAlive() ||
+                            MainUtil.cheapDistanceTo2(le.getX(), le.getZ(), PL.getX(), PL.getZ())
+                                    > getMaxPilotRange()) {
+                        IPlayerEntity ipe = ((IPlayerEntity) PL);
+                        ipe.roundabout$setIsControlling(0);
+                        tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
+                        ClientUtil.setCameraEntity(null);
+                    } else {
+                        StandEntity SE = getStandEntity(this.self);
+                        if (SE != null && le.is(SE)) {
+                            ClientUtil.setCameraEntity(le);
+                        }
+                    }
+                } else {
+                    ClientUtil.setCameraEntity(null);
+                }
+            }
+        }
+        if(this.getStandEntity(this.getSelf()) != null && this.getSelf() != null) {
+            if (MainUtil.cheapDistanceTo2(this.getStandEntity(self).getX(), this.getStandEntity(self).getZ(), this.self.getX(), this.self.getZ()) > getMaxPilotRange()) {
+                ((StandUser)this.self).roundabout$setActive(false);
             }
         }
         /*forceDespawnSet*/
