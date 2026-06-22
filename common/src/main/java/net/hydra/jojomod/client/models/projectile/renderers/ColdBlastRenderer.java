@@ -35,7 +35,7 @@ public class ColdBlastRenderer extends EntityRenderer<ColdBlastProjectile> {
 
             $$3.pushPose();
             $$3.translate(0,-1F,0);
-            $$3.scale(2f,2f,2f);
+            $$3.scale(1.6f,1.6f,1.6f);
             ModStrayModels.WhiteAlbumCold.render2($$0, $$2, $$3, $$4, $$5, 1.0F, 1.0F, 1.0F, 1f);
             $$3.popPose();
             super.render($$0, $$1, $$2, $$3, $$4, 15728880);
