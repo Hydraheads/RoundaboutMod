@@ -29,6 +29,7 @@ import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Path;
 
@@ -306,8 +307,6 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		double dist = Math.abs(this.position().distanceTo(targetPos));
 
-		Roundabout.LOGGER.info("Distance: " + dist);
-
 		float minDist = (explosionRadius-0.12f);
 		if (this.currentTarget == BLOCK) {
 			minDist = 1.4f;
@@ -407,7 +406,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public void shaMove(Vec3 targetPos) {
 		ticksUntilNextPathRecalculation--;
 		if (ticksUntilNextPathRecalculation <= 0 ) {
-			ticksUntilNextPathRecalculation = 5; // + mob.getRandom().nextInt(7);
+			ticksUntilNextPathRecalculation = 15; // + mob.getRandom().nextInt(7);
 
 			Path newPath;
 			if (this.haveToReturn) {
@@ -465,7 +464,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
 	public void tryClimb() {
-		float targetY = this.getBlockY();
+		/*float targetY = this.getBlockY();
 		if (this.haveToReturn) {
 			targetY = this.getUser().getBlockY();
 		}
@@ -473,9 +472,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 			targetY = this.blockTarget.getY();
 		}else if (this.currentTarget == ENTITY) {
 			targetY = this.entityTarget.getBlockY();
-		}
+		}*/
 
-		if (targetY - this.getBlockY() > 1.2) {
+		//if (targetY - this.getBlockY() > 1.2) {
 			float range = 1.0f;
 			Vec3 vec3d = this.position();
 			Vec3 vec3d2 = this.getViewVector(0);
@@ -485,7 +484,14 @@ public class SheerHeartAttackEntity extends StandEntity {
 			if (blockHit.getType() == HitResult.Type.BLOCK) {
 				this.setDeltaMovement(this.getDeltaMovement().add(0, 0.8, 0));
 			}
-		}
+		//}
+	}
+	@Override
+	protected void playStepSound(BlockPos blockPos, BlockState blockState) {
+		this.playSound(ModSounds.KILLER_QUEEN_SHA_MOVING_EVENT, 0.15f, 1.0f);
+
+		//SoundType soundType = blockState.getSoundType();
+		//this.playSound(soundType.getStepSound(), soundType.getVolume() * 0.15f, soundType.getPitch());
 	}
 
 	@Override

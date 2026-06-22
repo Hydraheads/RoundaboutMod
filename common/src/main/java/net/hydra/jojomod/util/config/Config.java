@@ -463,6 +463,8 @@ public class Config implements Cloneable {
         public Integer sheerHeartAttackCooldown;
         @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
         public Integer mobPlantDesintegrationDamage;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer mobPlantWindup;
         @BooleanOption(group = "inherit", value = true)
         public Boolean mobPlantHitkillPlayers;
         @BooleanOption(group = "inherit", value = false)
