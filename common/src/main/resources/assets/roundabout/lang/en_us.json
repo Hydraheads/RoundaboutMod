@@ -2451,6 +2451,9 @@
   "config.roundabout.fixModLoaderCreatedBugs.name": "Fix Modloader Bugs",
   "config.roundabout.fixModLoaderCreatedBugs.desc": "Forge especially replaces a lot of vanilla code with its own creating new bugs. For instance, on forge you can block the warden without your shield being disabled (this is not true of vanilla). Turning on this setting fixes any bug I find like that which is actively causing the mod problems.",
 
+  "config.roundabout.bufferServerDistance.name": "Fix Moved Wrongly",
+  "config.roundabout.bufferServerDistance.desc": "Provides a buffer to accommodate roundabout movement skills that provide short bursts of speed. Disable if it is causing problems with other mods.",
+
   "config.roundabout.enableKillerQueen.name": "Enable Stand",
   "config.roundabout.enableKillerQueen.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableMagiciansRed.name": "Enable Stand",

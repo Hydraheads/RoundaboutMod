@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.gravity;
 
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.network.chat.Component;
@@ -29,9 +30,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -79,6 +78,51 @@ public abstract class GravityServerGamePacketListenerImplMixin {
         return (ServerGamePacketListenerImpl)(Object)this;
     }
 
+    @ModifyConstant(method = "handleMovePlayer", constant = @Constant(floatValue = 100.0F),require = 0)
+    private float imfast_PlayerMaxSpeed(float speed) {
+        if (ClientNetworking.getAppropriateConfig().vanillaMinecraftTweaks.bufferServerDistance){
+            return 1000.0F;
+        }
+        return speed;
+    }
+
+    // Moved Quickly
+    @ModifyConstant(method = "handleMovePlayer", constant = @Constant(floatValue = 300.0F),require = 0)
+    private float imfast_ElytraMaxSpeed(float speed) {
+        if (ClientNetworking.getAppropriateConfig().vanillaMinecraftTweaks.bufferServerDistance){
+            return 400.0F;
+        }
+        return speed;
+    }
+
+    // Moved Quickly
+    @ModifyConstant(method = "handleMoveVehicle", constant = @Constant(doubleValue = 100.0),require = 0)
+    private double imfast_VehicleMaxSpeed(double speed) {
+        if (ClientNetworking.getAppropriateConfig().vanillaMinecraftTweaks.bufferServerDistance){
+            return 1000.0F;
+        }
+        return speed;
+    }
+
+    // Moved Wrongly
+    @ModifyConstant(method = "handleMovePlayer", constant = @Constant(doubleValue = 0.0625),require = 0)
+    private double imfast_MovedWrong(double speed) {
+        if (ClientNetworking.getAppropriateConfig().vanillaMinecraftTweaks.bufferServerDistance){
+            return 1F;
+        }
+        return speed;
+    }
+
+    // Moved Wrongly
+    @ModifyConstant(method = "handleMoveVehicle", constant = @Constant(doubleValue = 0.0625),require = 0)
+    private double imfast_VehicleMovedWrong(double speed) {
+        if (ClientNetworking.getAppropriateConfig().vanillaMinecraftTweaks.bufferServerDistance){
+            return 1F;
+        }
+        return speed;
+    }
+
+
     @Inject(
             method = "handleMovePlayer",
             at = @At(
@@ -87,9 +131,11 @@ public abstract class GravityServerGamePacketListenerImplMixin {
             cancellable = true
     )
     private void roundabout$handleMovePlayer(ServerboundMovePlayerPacket $$0, CallbackInfo ci) {
+        // When gravity is flipped, performs special instructions
         Direction gravityDirection = GravityAPI.getGravityDirection(this.player);
-        if (gravityDirection == Direction.DOWN)
+        if (gravityDirection == Direction.DOWN){
             return;
+        }
         ci.cancel();
         PacketUtils.ensureRunningOnSameThread($$0, (ServerGamePacketListenerImpl)(Object)this, this.player.serverLevel());
         if (containsInvalidValues($$0.getX(0.0), $$0.getY(0.0), $$0.getZ(0.0), $$0.getYRot(0.0F), $$0.getXRot(0.0F))) {
@@ -147,10 +193,11 @@ public abstract class GravityServerGamePacketListenerImplMixin {
                                     && (!this.player.level().getGameRules().getBoolean(GameRules.RULE_DISABLE_ELYTRA_MOVEMENT_CHECK) || !this.player.isFallFlying())
                             )
                             {
-                                float $$16 = this.player.isFallFlying() ? 300.0F : 100.0F;
+                                float $$16 = this.player.isFallFlying() ? 300.0F : 250.0F;
                                 if ($$14 - $$13 > (double)($$16 * (float)$$15) && !this.isSingleplayerOwner()) {
                                     LOGGER.warn("{} moved too quickly! {},{},{}", this.player.getName().getString(), $$10, $$11, $$12);
                                     this.teleport(this.player.getX(), this.player.getY(), this.player.getZ(), this.player.getYRot(), this.player.getXRot());
+                                    ci.cancel();
                                     return;
                                 }
                             }
@@ -181,7 +228,7 @@ public abstract class GravityServerGamePacketListenerImplMixin {
                             $$14 = $$10 * $$10 + $$11 * $$11 + $$12 * $$12;
                             boolean $$21 = false;
                             if (!this.player.isChangingDimension()
-                                    && $$14 > 0.5225
+                                    && $$14 > 0.6225
                                     && !this.player.isSleeping()
                                     && !this.player.gameMode.isCreative()
                                     && this.player.gameMode.getGameModeForPlayer() != GameType.SPECTATOR) {
