@@ -853,6 +853,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         boolean shoot = isChargingCold() && hasColdCharged();
         StandUser standComp = ((StandUser) self);
         standComp.roundabout$tryPower(PowerIndex.NONE,true);
+        stallTicks = 3;
         if (standComp.roundabout$getActivePowerPhase() > 0 ) {
             standComp.roundabout$setInterruptCD(3);
         }
@@ -966,9 +967,10 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     public void setPowerColdBlastShot() {
+
         if (getActivePower() == PowerIndex.EXTRA && self instanceof Player pl){
             if (getPlayerPos2() == PlayerPosIndex.CHARGE_SHOT) {
-                this.setPlayerPos2(PowerIndex.NONE);
+
                 self.level().playSound((Player)null, self.getX(), self.getY(), self.getZ(), ModSounds.ICE_BREAKER_EVENT,
                         SoundSource.NEUTRAL, 1F, (float)(1.2F+Math.random()*0.08f));
                 if (!self.level().isClientSide) {
@@ -980,6 +982,10 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     self.level().addFreshEntity(bubble);
                 }
             }
+        }
+
+        if (((StandUser) self).roundabout$isGuardInput()) {
+            ((StandUser) self).roundabout$tryPower(PowerIndex.NONE, true);
         }
     }
 
