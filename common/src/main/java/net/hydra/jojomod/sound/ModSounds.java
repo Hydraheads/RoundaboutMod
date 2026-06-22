@@ -572,6 +572,9 @@ public class ModSounds {
     public static final String KILLER_QUEEN_SHA_SUMMON = "sha_summon";
     public static final ResourceLocation KILLER_QUEEN_SHA_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SHA_SUMMON);
     public static SoundEvent KILLER_QUEEN_SHA_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SHA_SUMMON_ID);
+    public static final String KILLER_QUEEN_SHA_MOVING = "sha_moving";
+    public static final ResourceLocation KILLER_QUEEN_SHA_MOVING_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SHA_MOVING);
+    public static SoundEvent KILLER_QUEEN_SHA_MOVING_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SHA_MOVING_ID);
     public static final String KILLER_QUEEN_BARRAGE = "killer_queen_barrage";
     public static final ResourceLocation KILLER_QUEEN_BARRAGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_BARRAGE);
     public static SoundEvent KILLER_QUEEN_BARRAGE_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_BARRAGE_ID);

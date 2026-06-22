@@ -259,6 +259,8 @@ public class ForgeSounds {
             register(ModSounds.STAND_BARRAGE_END_BLOCK, ModSounds.STAND_BARRAGE_END_BLOCK_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHIBA_EVENT =
             register(ModSounds.KILLER_QUEEN_SHIBA, ModSounds.KILLER_QUEEN_SHIBA_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHA_MOVING_EVENT =
+            register(ModSounds.KILLER_QUEEN_SHA_MOVING, ModSounds.KILLER_QUEEN_SHA_MOVING_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHA_SUMMON_EVENT =
             register(ModSounds.KILLER_QUEEN_SHA_SUMMON, ModSounds.KILLER_QUEEN_SHA_SUMMON_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_BARRAGE_EVENT =

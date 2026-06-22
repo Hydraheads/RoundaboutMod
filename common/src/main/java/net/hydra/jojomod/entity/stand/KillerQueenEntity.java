@@ -1,5 +1,7 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.util.config.ClientConfig;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
@@ -160,16 +162,19 @@ public class KillerQueenEntity extends FollowingStandEntity {
             } else {
                 this.shaSend.stop();
             }
+
             if (this.getAnimation() == MOB_PLANT) {
                 this.mobBombPlant.startIfStopped(this.tickCount);
             } else {
                 this.mobBombPlant.stop();
             }
+
             if (this.getAnimation() == MOB_PLANT_2) {
                 this.mobBombPlant2.startIfStopped(this.tickCount);
             } else {
                 this.mobBombPlant2.stop();
             }
+
             if (this.getAnimation() == IMPALE) {
                 this.impale.startIfStopped(this.tickCount);
             } else {
