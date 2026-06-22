@@ -971,8 +971,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (getActivePower() == PowerIndex.EXTRA && self instanceof Player pl){
             if (getPlayerPos2() == PlayerPosIndex.CHARGE_SHOT) {
 
-                self.level().playSound((Player)null, self.getX(), self.getY(), self.getZ(), ModSounds.ICE_BREAKER_EVENT,
-                        SoundSource.NEUTRAL, 1F, (float)(1.2F+Math.random()*0.08f));
+                self.level().playSound((Player)null, self.getX(), self.getY(), self.getZ(), ModSounds.COLD_SHOT_EVENT,
+                        SoundSource.NEUTRAL, 1F, (float)(1F+Math.random()*0.08f));
                 if (!self.level().isClientSide) {
                     ColdBlastProjectile bubble = new ColdBlastProjectile(self,self.level());
                     bubble.absMoveTo(self.getX(), self.getY(), self.getZ());

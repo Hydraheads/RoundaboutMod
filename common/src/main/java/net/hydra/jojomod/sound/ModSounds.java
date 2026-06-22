@@ -201,6 +201,11 @@ public class ModSounds {
     public static final ResourceLocation ICE_BLAST_CHARGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ICE_BLAST_CHARGE);
     public static SoundEvent ICE_BLAST_CHARGE_EVENT = SoundEvent.createVariableRangeEvent(ICE_BLAST_CHARGE_ID);
 
+    public static final String COLD_SHOT = "cold_shot";
+    public static final ResourceLocation COLD_SHOT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+COLD_SHOT);
+    public static SoundEvent COLD_SHOT_EVENT = SoundEvent.createVariableRangeEvent(COLD_SHOT_ID);
+
+
 
 
     public static final String BANISH = "banish";
