@@ -115,6 +115,8 @@ public class Config implements Cloneable {
         public Boolean mountingHorsesInCreativeTamesThem;
         @BooleanOption(group = "inherit", value = true)
         public Boolean fixModLoaderCreatedBugs;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean bufferServerDistance;
     }
 
     public static class GeneralStandUserMobSettings {
