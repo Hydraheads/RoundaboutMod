@@ -2950,6 +2950,8 @@
   "config.roundabout.freezesSurfaceWater.name": "Block Freeze Water",
   "config.roundabout.freezesSurfaceWater.desc": "Enable frozen world to coat the raging seas in ice.",
 
+  "config.roundabout.freezesGrass.name": "Freezes Grass",
+  "config.roundabout.freezesGrass.desc": "If disabled, white album won't replace grass and tallgrass, and other non-air blocks, even with stand griefing on.",
 
   "config.roundabout.magicianAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.magicianAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",

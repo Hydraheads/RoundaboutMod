@@ -138,6 +138,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public void onChangedBlock(BlockPos blockPos){
         if (hasSkatesActivated() && acceleration > 0 && !self.isSwimming() &&
         !self.isFallFlying()) {
+            boolean canFreezeGrass = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.freezesGrass;
             if (!self.onGround()) {
                 return;
             }
@@ -166,7 +167,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 if (!blockState.canSurvive(self.level(), blockPos2) ||
                         !self.level().isUnobstructed(blockState, blockPos2, CollisionContext.empty())) continue;
                     if (blockState3.isAir() ||
-                            (MainUtil.getIsGamemodeApproriateForGrief(self) &&
+                            (MainUtil.getIsGamemodeApproriateForGrief(self) && canFreezeGrass &&
                                     blockState3.canBeReplaced() &&
                                     !(blockState3.getBlock() instanceof LiquidBlockContainer)&&
                                     !(blockState3.getBlock() instanceof FireBlock)&&

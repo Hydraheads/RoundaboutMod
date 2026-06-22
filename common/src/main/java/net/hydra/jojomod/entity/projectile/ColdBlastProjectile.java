@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StandFireBlock;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
@@ -106,6 +107,7 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
     }
     public void onChangedBlock2(BlockPos blockPos){
         if (getOwner() != null) {
+            boolean canFreezeGrass = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.freezesGrass;
             BlockState blockState = ModBlocks.WHITE_ALBUM_ICE_BLOCK.defaultBlockState();
             int j = Math.min(16, 2 + 1);
             BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
@@ -130,7 +132,7 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
                 if (!blockState.canSurvive(level(), blockPos2) ||
                         !level().isUnobstructed(blockState, blockPos2, CollisionContext.empty())) continue;
                 if (blockState3.isAir() ||
-                        (MainUtil.getIsGamemodeApproriateForGrief(getOwner()) &&
+                        (MainUtil.getIsGamemodeApproriateForGrief(getOwner()) && canFreezeGrass &&
                                 blockState3.canBeReplaced() &&
                                 !(blockState3.getBlock() instanceof LiquidBlockContainer) &&
                                 !(blockState3.getBlock() instanceof FireBlock) &&
