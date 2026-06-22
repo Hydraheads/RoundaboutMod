@@ -363,7 +363,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (canExecuteMoveWithLevel(getImpaleLevel())) {
                 setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_IMPALE, PowerIndex.SKILL_2_SNEAK);
             } else {
-                setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD,true);
             }
         } else {
         	setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_PLANT_BOMB_MOB, PowerIndex.SKILL_2);
@@ -405,7 +405,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
 
         if (!canExecuteMoveWithLevel(getBitesTheDustLevel())) {
-            setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+            setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
         } else if (inBitesTheDustMode()) {
         	setSkillIcon(context, x, y, 4, StandIcons.KILLER_QUEEN_BTD_DEACTIVATE, PowerIndex.SKILL_4);
         }else {
@@ -1285,7 +1285,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     bombItem.setTag(tag);
 
                     this.bombItemStack = bombItem;
-                    syncShaStatus(BOMB_ITEM);
+                    syncBombStatus(BOMB_ITEM);
 
                     PL.addItem(bombItem);
 
@@ -1726,18 +1726,22 @@ public class PowersKillerQueen extends NewPunchingStand {
                 addEXP(bStatus == BOMB_ENTITY ? 10 : 5, LE);
             }
 
+            float dmgOnPlayers = (ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnPlayers/100.0f);
+            float dmgOnMobs = (ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnMobs/100.0f);
+
             DamageSource dmg = ModDamageTypes.of(level, ModDamageTypes.EXPLOSIVE_STAND, this.getSelf());
             DamageSource sneakyDmg = ModDamageTypes.of(level, ModDamageTypes.EXPLOSIVE_STAND, null);
-            ExplosionUtil.explosionHurtSneaky(vPos, dmg, level,
-                    ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionDetonateMaxDamage, 0.4f, 1.5f);
+            ExplosionUtil.explosionHurtSneakyWithMulti(vPos, dmg, level,
+                    ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionDetonateMaxDamage,
+                    0.4f, 1.5f, dmgOnMobs, dmgOnPlayers);
 
             if (target != null && bStatus == BOMB_ENTITY) {
                 float hitPoints = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantDesintegrationDamage;
 
                 if (this.getReducedDamage(target)) {
-                    hitPoints *= (ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnPlayers/100.0f);
+                    hitPoints *= dmgOnPlayers;
                 }else {
-                    hitPoints *= (ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnMobs/100.0f);
+                    hitPoints *= dmgOnMobs;
                 }
 
                 boolean playersHitkill = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantHitkillPlayers;
