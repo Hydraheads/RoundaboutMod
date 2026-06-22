@@ -91,6 +91,9 @@ public class ModBlocks {
     public static Block DEEPSLATE_AJA_ORE;
     public static Block AJA_BLOCK;
 
+    public static Block COLD_AIR;
+    public static Block FREEZING_AIR;
+
     public static Block BARBED_WIRE;
     public static Block BARBED_WIRE_BUNDLE;
     public static Block GODDESS_STATUE_BLOCK;
@@ -190,6 +193,23 @@ public class ModBlocks {
                     }).
                     randomTicks().friction(0.98F).strength(0.5F).forceSolidOff().sound(SoundType.GLASS).replaceable().noOcclusion().pushReaction(PushReaction.DESTROY));
 
+
+    public static Block COLD_AIR_PROPERTIES =
+            new ColdAirBlock(BlockBehaviour.Properties.of().mapColor(MapColor.ICE)
+                    .noOcclusion()
+                    .pushReaction(PushReaction.DESTROY)
+                    .strength(0F, 0F)
+                    .sound(SoundType.EMPTY)
+                    .noCollission()
+                    .replaceable());
+    public static Block FREEZING_AIR_PROPERTIES =
+            new FreezingAirBlock(BlockBehaviour.Properties.of().mapColor(MapColor.ICE)
+                    .noOcclusion()
+                    .pushReaction(PushReaction.DESTROY)
+                    .strength(0F, 0F)
+                    .sound(SoundType.EMPTY)
+                    .noCollission()
+                    .replaceable());
 
     public static Block ANCIENT_METEOR_PROPERTIES = new AncientMeteorBlock(
             BlockBehaviour.Properties.of()

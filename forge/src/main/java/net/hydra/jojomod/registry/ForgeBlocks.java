@@ -110,6 +110,14 @@ public class ForgeBlocks {
             BLOCKS.register("frozen_end_stone",
                     () -> FROZEN_END_STONE_PROPERTIES
             );
+    public static final RegistryObject<Block> COLD_AIR =
+            BLOCKS.register("cold_air",
+                    () -> COLD_AIR_PROPERTIES
+            );
+    public static final RegistryObject<Block> FREEZING_AIR =
+            BLOCKS.register("freezing_air",
+                    () -> FREEZING_AIR_PROPERTIES
+            );
     public static final RegistryObject<Block> METEOR_BLOCK = BLOCKS.register("meteor_block",
             () -> ModBlocks.METEOR_BLOCK_PROPERTIES
             );

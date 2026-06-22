@@ -72,6 +72,10 @@ public class FabricBlocks {
     );
     public static final Block FROZEN_STONE_BRICKS = registerBlock("frozen_stone_bricks", FROZEN_STONE_BRICKS_PROPERTIES
     );
+    public static final Block COLD_AIR = registerBlockItemless("cold_air", COLD_AIR_PROPERTIES
+    );
+    public static final Block FREEZING_AIR = registerBlockItemless("freezing_air", FREEZING_AIR_PROPERTIES
+    );
     public static final Block SHINY_QUARTZ = registerBlock("shiny_quartz", ModBlocks.SHINY_QUARTZ_PROPERTIES
     );
     public static final Block WHITE_ALBUM_ICE_BLOCK = registerBlockItemless("white_album_ice", WHITE_ALBUM_ICE_BLOCK_PROPERTIES
@@ -334,6 +338,8 @@ public class FabricBlocks {
         ModBlocks.FROZEN_NETHER_BRICKS = FROZEN_NETHER_BRICKS;
         ModBlocks.FROZEN_OBSIDIAN = FROZEN_OBSIDIAN;
         ModBlocks.FROZEN_STONE_BRICKS = FROZEN_STONE_BRICKS;
+        ModBlocks.COLD_AIR = COLD_AIR;
+        ModBlocks.FREEZING_AIR = FREEZING_AIR;
         ModBlocks.SHINY_QUARTZ = SHINY_QUARTZ;
         ModBlocks.WHITE_ALBUM_ICE_BLOCK = WHITE_ALBUM_ICE_BLOCK;
         ModBlocks.WHITE_ALBUM_ICE_WALL_BLOCK = WHITE_ALBUM_ICE_WALL_BLOCK;

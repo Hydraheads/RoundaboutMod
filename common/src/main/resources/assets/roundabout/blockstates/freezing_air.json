@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "": {
+      "model": "roundabout:block/cold_air"
+    }
+  },
+  "render_type": "translucent"
+}

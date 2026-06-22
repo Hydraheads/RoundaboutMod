@@ -214,6 +214,8 @@ public class ForgeEvents {
         ModBlocks.FROZEN_NETHERRACK = ForgeBlocks.FROZEN_NETHERRACK.get();
         ModBlocks.FROZEN_NETHER_BRICKS = ForgeBlocks.FROZEN_NETHER_BRICKS.get();
         ModBlocks.FROZEN_END_STONE = ForgeBlocks.FROZEN_END_STONE.get();
+        ModBlocks.COLD_AIR = ForgeBlocks.COLD_AIR.get();
+        ModBlocks.FREEZING_AIR = ForgeBlocks.FREEZING_AIR.get();
         ModBlocks.AJA_BLOCK = ForgeBlocks.AJA_BLOCK.get();
         ModBlocks.SHINY_QUARTZ = ForgeBlocks.SHINY_QUARTZ.get();
         ModBlocks.WHITE_ALBUM_ICE_BLOCK = ForgeBlocks.WHITE_ALBUM_ICE.get();
