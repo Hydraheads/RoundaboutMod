@@ -1148,12 +1148,6 @@ public class ClientUtil {
             ent.setYHeadRot(ent.getYRot());
         }
     }
-    public static void synchToCameraAllPersons(Entity ent){
-        Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
-        ent.setYRot(camera.getYRot());
-        ent.setXRot(camera.getXRot());
-        ent.setYHeadRot(ent.getYRot());
-    }
     public static boolean getFirstPerson(){
         if (Minecraft.getInstance() != null && Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
             return true;
