@@ -64,6 +64,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.animal.Turtle;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.piglin.Piglin;
@@ -4269,6 +4270,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
 
+        if (rdbt$this() instanceof Turtle){
+            return basis;
+        }
         BlockState state = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement());
         BlockState state2 = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement().above());
         if (state.is(ModBlocks.WHITE_ALBUM_ICE_BLOCK) || state.is(ModBlocks.WHITE_ALBUM_ICE_SLAB) ||

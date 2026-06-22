@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
+import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -85,17 +86,24 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
             Entity ent = $$0.getEntity();
             if (ent != null && ent.isAlive()) {
                 if (!alreadyHitEntity($$0.getEntity())) {
-                    blastEntity(ent);
+                    if (ent instanceof LivingEntity lv && !(getOwner() != null && getOwner().getUUID() == ent.getUUID())) {
+                        blastEntity(lv);
+                    }
                 }
             }
         }
     }
-    public void blastEntity(Entity entity){
+    public void blastEntity(LivingEntity entity){
         //Add hurt code here
         //Roundabout.LOGGER.info("charge-> "+charge+" power-> "+power);
-        if (entity instanceof LivingEntity lv && !(getOwner() != null && getOwner().getUUID() == entity.getUUID())) {
-
+        if (!entity.isInvulnerable()){
+            if (entity instanceof Player pl){
+                HeatUtil.addHeat(entity,-20);
+            } else {
+                HeatUtil.addHeat(entity,-40);
+            }
         }
+
         alreadyHitEntities.add(entity);
     }
 

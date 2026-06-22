@@ -96,6 +96,9 @@ public class HeatUtil {
                     return;
                 }
             }
+            if (amt < 0 && !MainUtil.canFreeze(LE)){
+                return;
+            }
             StandUser su = ((StandUser)LE);
             int heat = su.roundabout$getHeat();
             int prevHeat = heat;
