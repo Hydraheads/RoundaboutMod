@@ -13,6 +13,7 @@ import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class GroundPathfindingStandAttackEntity extends PathfinderMob {
@@ -134,6 +135,17 @@ public class GroundPathfindingStandAttackEntity extends PathfinderMob {
             }
         }
         super.tick();
+    }
+
+
+    @Override
+    public void setTarget(@Nullable LivingEntity $$0) {
+        LivingEntity user = this.getUser();
+        if (user != null && $$0 != null && $$0.getUUID().equals(user.getUUID())){
+            return;
+        } else {
+            super.setTarget($$0);
+        }
     }
 
     public void onEnd() {}
