@@ -691,6 +691,67 @@ if(!isHattanPilotMode) {
             }
         }
 
+        if(this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+            if(PM.isClient()) {
+                Options options = Minecraft.getInstance().options;
+                if (PM.isPiloting()) {
+                    if (options.keyDown.isDown() || options.keyUp.isDown() || options.keyLeft.isDown() || options.keyRight.isDown()) {
+                        isKeyEverPressed = true;
+                    }
+                    if (options.keyUp.isDown()) {
+                        isPressingW = true;
+                        pressS = false;
+                        pressA = false;
+                        verticalLastPressed = true;
+                        this.setHatAnimDir = 1;
+                    }
+                    if (!options.keyUp.isDown()) {
+                        isPressingW = false;
+                    }
+                    if (options.keyDown.isDown()) {
+                        isPressingS = true;
+                        pressS = true;
+                        pressA = false;
+                        verticalLastPressed = true;
+                        this.setHatAnimDir = 2;
+                    }
+                    if (!options.keyDown.isDown()) {
+                        isPressingS = false;
+                    }
+
+                    if ((options.keyUp.isDown() && options.keyDown.isDown()) || (options.keyLeft.isDown() && options.keyRight.isDown()) || (options.keyUp.isDown() && options.keyDown.isDown() && (options.keyLeft.isDown() && options.keyRight.isDown()))) {
+                        isPressingW = true;
+                        pressS = false;
+                        pressA = false;
+                        verticalLastPressed = true;
+                        this.setHatAnimDir = 1;
+                    }
+                    if (!(options.keyRight.isDown() && options.keyLeft.isDown())) {
+                        if (options.keyLeft.isDown()) {
+                            isPressingA = true;
+                            pressA = true;
+                            pressS = false;
+                            verticalLastPressed = false;
+                            this.setHatAnimDir = 3;
+                        }
+                        if (!options.keyLeft.isDown()) {
+                            isPressingA = false;
+                        }
+                        if (options.keyRight.isDown()) {
+                            isPressingD = true;
+                            pressA = false;
+                            pressS = false;
+                            verticalLastPressed = false;
+                            this.setHatAnimDir = 4;
+                        }
+                        if (!options.keyRight.isDown()) {
+                            isPressingD = false;
+                        }
+                    }
+                }
+            }
+        }
+
         searchTarget();
         rotationXHattan = this.getXRot();
         rotationYHattan = this.getYRot();
@@ -835,162 +896,6 @@ if(!isHattanPilotMode) {
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
-        Options options = Minecraft.getInstance().options;
-        if (this.getUserData(this.getUser()) != null && this.getUser() != null) {
-            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-                AnimationState $$0 = this.slow_manhattan;
-                AnimationState $$1 = this.forward_manhattan_incipit;
-                AnimationState $$2 = this.forward_manhattan_loop;
-                AnimationState $$3 = this.back_manhattan_incipit;
-                AnimationState $$4 = this.back_manhattan_loop;
-                AnimationState $$5 = this.back_manhattan_stop;
-                AnimationState $$6 = this.forward_manhattan_stop;
-                AnimationState $$7 = this.left_manhattan_incipit;
-                AnimationState $$8 = this.left_manhattan_stop;
-                AnimationState $$9 = this.left_manhattan_loop;
-                AnimationState $$10 = this.right_manhattan_incipit;
-                AnimationState $$11 = this.right_manhattan_stop;
-                AnimationState $$12 = this.right_manhattan_loop;
-                AnimationState $$13 = this.slow_manhattan_back;
-                AnimationState $$14 = this.slow_manhattan_left;
-                AnimationState $$15 = this.slow_manhattan_right;
-                AnimationState afk = this.manhattan_is_loaded;
-
-                if (!PM.isActive()) {
-                } else {
-                    if (PM.isClient()) {
-                        if (PM.isPiloting()) {
-                            if (options.keyDown.isDown() || options.keyUp.isDown() || options.keyLeft.isDown() || options.keyRight.isDown()) {
-                                isKeyEverPressed = true;
-                            }
-                            if (options.keyUp.isDown()) {
-                                isPressingW = true;
-                                pressS = false;
-                                pressA = false;
-                                verticalLastPressed = true;
-                                this.setHatAnimDir = 1;
-                            }
-                            if (!options.keyUp.isDown()) {
-                                isPressingW = false;
-                            }
-                            if (options.keyDown.isDown()) {
-                                isPressingS = true;
-                                pressS = true;
-                                pressA = false;
-                                verticalLastPressed = true;
-                                this.setHatAnimDir = 2;
-                            }
-                            if (!options.keyDown.isDown()) {
-                                isPressingS = false;
-                            }
-                            if (options.keyLeft.isDown()) {
-                                isPressingA = true;
-                                pressA = true;
-                                pressS = false;
-                                verticalLastPressed = false;
-                                this.setHatAnimDir = 3;
-                            }
-                            if (!options.keyLeft.isDown()) {
-                                isPressingA = false;
-                            }
-                            if (options.keyRight.isDown()) {
-                                isPressingD = true;
-                                pressA = false;
-                                pressS = false;
-                                verticalLastPressed = false;
-                                this.setHatAnimDir = 4;
-                            }
-                            if (!options.keyRight.isDown()) {
-                                isPressingD = false;
-                            }
-                        }
-
-                        if (isInRain()) {
-                            this.rain_dodging_manhattan.startIfStopped(this.tickCount);
-                            $$2.stop();
-                            $$1.stop();
-                            $$3.stop();
-                            $$4.stop();
-                            $$5.stop();
-                            $$6.stop();
-                            $$7.stop();
-                            $$8.stop();
-                            $$9.stop();
-                            $$10.stop();
-                            $$11.stop();
-                            $$12.stop();
-                            $$13.stop();
-                            $$14.stop();
-                            $$15.stop();
-                            afk.stop();
-                        }
-                        if (!isInRain()) {
-                            this.rain_dodging_manhattan.stop();
-                            if (PM.isClient()){
-                                if(!this.stopsManhattanAnimationsWhenHeldItem) {
-                                if (PM.isPiloting()) {
-
-                                } else if (!PM.isPiloting()) {
-                                    if (this.setHatAnimDir == 1) {
-                                        $$0.startIfStopped(this.tickCount);
-                                        $$13.stop();
-                                        $$14.stop();
-                                        $$15.stop();
-                                    }
-                                    if (this.setHatAnimDir == 2) {
-                                        $$13.startIfStopped(this.tickCount);
-                                        $$14.stop();
-                                        $$15.stop();
-                                        $$0.stop();
-                                    }
-                                    if (this.setHatAnimDir == 3) {
-                                        $$14.startIfStopped(this.tickCount);
-                                        $$13.stop();
-                                        $$15.stop();
-                                        $$0.stop();
-                                    }
-                                    if (this.setHatAnimDir == 4) {
-                                        $$15.startIfStopped(this.tickCount);
-                                        $$13.stop();
-                                        $$14.stop();
-                                        $$0.stop();
-                                    }
-                                    $$2.stop();
-                                    $$1.stop();
-                                    $$3.stop();
-                                    $$4.stop();
-                                    $$5.stop();
-                                    $$6.stop();
-                                    $$7.stop();
-                                    $$8.stop();
-                                    $$9.stop();
-                                    $$10.stop();
-                                    $$11.stop();
-                                    $$12.stop();
-                                }} else {
-                                    $$0.stop();
-                                    $$2.stop();
-                                    $$1.stop();
-                                    $$3.stop();
-                                    $$4.stop();
-                                    $$5.stop();
-                                    $$6.stop();
-                                    $$7.stop();
-                                    $$8.stop();
-                                    $$9.stop();
-                                    $$10.stop();
-                                    $$11.stop();
-                                    $$12.stop();
-                                    $$13.stop();
-                                    $$14.stop();
-                                    $$15.stop();
-                                    afk.startIfStopped(this.tickCount);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        
     }
 }
