@@ -896,6 +896,6 @@ if(!isHattanPilotMode) {
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
-        
+
     }
 }
