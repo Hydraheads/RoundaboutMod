@@ -30,9 +30,6 @@ import static org.apache.logging.log4j.ThreadContext.isEmpty;
 @Mixin(PlayerRenderer.class)
 public class BowlerHatPlayerRendererMixin {
     /**Reward a winner of a raid with the executioner axe template*/
-    @Unique
-    public boolean roundabout$hasRewarded = false;
-
     @Shadow
     protected void renderHand(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, AbstractClientPlayer abstractClientPlayer, ModelPart modelPart, ModelPart modelPart2) {
 

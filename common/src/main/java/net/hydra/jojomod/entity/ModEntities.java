@@ -97,6 +97,7 @@ public class ModEntities {
     public static EntityType<EvilAuraProjectile> EVIL_AURA_PROJECTILE;
     public static EntityType<RipperEyesProjectile> RIPPER_EYES_PROJECTILE;
     public static EntityType<UltravioletProjectile> ULTRAVIOLET_PROJECTILE;
+    public static EntityType<ColdBlastProjectile> COLD_BLAST_PROJECTILE;
     public static EntityType<PWMeteorEntity> PW_METEOR;
     public static EntityType<PWBigMeteorEntity> PW_BIG_METEOR;
 

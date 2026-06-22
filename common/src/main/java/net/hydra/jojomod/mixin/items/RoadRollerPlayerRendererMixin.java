@@ -26,8 +26,6 @@ import java.util.UUID;
 @Mixin(PlayerRenderer.class)
 public class RoadRollerPlayerRendererMixin {
     /**Reward a winner of a raid with the executioner axe template*/
-    @Unique
-    public boolean roundabout$hasRewarded = false;
 
     @Shadow
     protected void renderHand(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, AbstractClientPlayer abstractClientPlayer, ModelPart modelPart, ModelPart modelPart2) {
