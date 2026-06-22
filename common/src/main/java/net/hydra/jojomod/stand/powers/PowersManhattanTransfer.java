@@ -524,7 +524,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
             LivingEntity ent = getPilotingStand();
             if (ent != null) {
                 if(someTicks < 1){
-                    ClientUtil.synchToCamera(ent);
+                    ClientUtil.synchToCameraAllPersons(ent);
                 }
             }
         }
