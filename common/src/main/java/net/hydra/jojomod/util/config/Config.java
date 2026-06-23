@@ -894,6 +894,10 @@ public class Config implements Cloneable {
         public Float bonusPlayerDMGWhite;
         @FloatOption(group = "inherit", value = 0.15F, min = 0, max = 72000F)
         public Float bonusMobDMGWhite;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer miningSpeedMultiplierWhiteAlbum;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierWhiteAlbum;
     }
     public static class WalkingHeartSettings {
         @BooleanOption(group = "inherit", value = true)

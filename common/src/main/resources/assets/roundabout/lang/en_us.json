@@ -3045,7 +3045,9 @@
   "config.roundabout.attackSpeedBuff.name": "Attack Speed Buff",
   "config.roundabout.attackSpeedBuff.desc": "Increases the speed of swinging weapons with justice active. By default, the stand increases your attack speed by 30%.",
   "config.roundabout.miningSpeedBuff.name": "Mining Speed Buff",
-  "config.roundabout.miningSpeedBuff.desc": "Increases the speed of breaking blocks with white album active. By default, the stand increases your mining speed by 30%.",
+  "config.roundabout.miningSpeedBuff.desc": "Increases the speed of breaking blocks with justice active. By default, the stand increases your mining speed by 30%.",
+  "config.roundabout.miningSpeedBuffWhite.name": "Mining Speed Buff",
+  "config.roundabout.miningSpeedBuffWhite.desc": "Increases the speed of breaking blocks with white album active. By default, the stand increases your mining speed by 15%.",
   "config.roundabout.bonusPlayerDMGWhite.name": "Bonus Player Damage",
   "config.roundabout.bonusPlayerDMGWhite.desc": "This % melee damage increase.",
   "config.roundabout.bonusMobDMGWhite.name": "Bonus Mob Damage",
@@ -3375,6 +3377,12 @@
   "config.roundabout.starFingerInterruptCooldown.desc": "Change the length of interrupt time if you are hit our of star finger. (default is 80 or 4 seconds)",
   "config.roundabout.blitzAttackCooldown.name": "Star Blitz Cooldown",
   "config.roundabout.blitzAttackCooldown.desc": "Change the length in between ending impale early with the attack button and using Star Blitz.",
+
+
+  "config.roundabout.miningSpeedMultiplierWhiteAlbum.name": "Mining Speed Multiplier",
+  "config.roundabout.miningSpeedMultiplierWhiteAlbum.desc": "Adjust how fast the stand can mine.",
+  "config.roundabout.getMiningTierWhiteAlbum.name": "Mining Tier",
+  "config.roundabout.getMiningTierWhiteAlbum.desc": "Tier 0 is the default, it does not replace tools for harvesting blocks. Tier 1 is wood tier, tier 2 is stone tier, tier 3 is iron tier, and tier 4 is diamond tier.",
 
 
   "config.roundabout.vampireUsesPotionEffectForNightVision.name": "Vampire Uses NV Potion",

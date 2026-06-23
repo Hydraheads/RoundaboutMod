@@ -1419,7 +1419,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             }
             return;
         }
-        if (PowerTypes.hasStandActive(this) && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()
+        StandPowers powers = ((StandUser) this).roundabout$getStandPowers();
+        if (PowerTypes.hasStandActive(this) &&
+                (powers.canUseMiningStand() || powers.isMiningRegardless())
+
         ) {
             int MiningTier = ((StandUser) this).roundabout$getStandPowers().getMiningLevel();
             if (MiningTier >= 4){
@@ -1446,7 +1449,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     protected void roundabout$getDestroySpeed2(BlockState $$0, CallbackInfoReturnable<Float> cir) {
         StandPowers powers = ((StandUser) this).roundabout$getStandPowers();
         GeneralPowers gp = ((IPowersPlayer)this).rdbt$getPowers();
-        if (PowerTypes.hasStandActive(this) && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()) {
+        if (PowerTypes.hasStandActive(this) &&
+                (powers.canUseMiningStand()) || powers.isMiningRegardless()) {
             cir.setReturnValue(rdbt$mutualMiningSpeedFunction($$0,powers));
             return;
         }

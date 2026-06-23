@@ -708,6 +708,23 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     @Override
+    public float getMiningMultiplier() {
+        return (float) (1F*(ClientNetworking.getAppropriateConfig().
+                whiteAlbumSettings.miningSpeedMultiplierWhiteAlbum *0.01));
+    }
+
+
+    @Override
+    public int getMiningLevel() {
+        return ClientNetworking.getAppropriateConfig().whiteAlbumSettings.getMiningTierWhiteAlbum;
+    }
+
+    @Override
+    public float getPickMiningSpeed() {
+        return 12F;
+    }
+
+    @Override
     public float getDamageAdd(DamageSource source, float amt, Entity target){
         if (PowerTypes.hasStandActive(self)) {
             if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)) {

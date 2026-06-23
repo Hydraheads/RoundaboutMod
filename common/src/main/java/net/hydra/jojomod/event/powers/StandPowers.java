@@ -666,6 +666,10 @@ public class StandPowers extends AbilityScapeBasis {
         ));
     }
 
+    public boolean isMiningRegardless() {
+        return isBrawling() && hasStandActive(self);
+    }
+
     /**How fast does the block mine blocks that require pickaxes?*/
     public float getPickMiningSpeed() {
         return 5F;
