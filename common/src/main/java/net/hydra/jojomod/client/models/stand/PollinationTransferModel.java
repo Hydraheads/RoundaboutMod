@@ -2,6 +2,8 @@ package net.hydra.jojomod.client.models.stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.hydra.jojomod.client.models.stand.animations.ManhattanTransferAnimations;
+import net.hydra.jojomod.client.models.stand.animations.PollinationTransferAnimations;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.stand.PollinationTransferEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -19,7 +21,7 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.model.EntityModel;
 
 
-public class PollinationTransferModel <T extends ManhattanTransferEntity> extends StandModel<T> {
+public class PollinationTransferModel <T extends PollinationTransferEntity> extends StandModel<T> {
 
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "pollination_transfer"), "main");
 
@@ -102,7 +104,6 @@ public class PollinationTransferModel <T extends ManhattanTransferEntity> extend
     public static LayerDefinition getTexturedModelData() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
-
         PartDefinition stand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
 
         PartDefinition stand2 = stand.addOrReplaceChild("stand2", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
@@ -128,9 +129,9 @@ public class PollinationTransferModel <T extends ManhattanTransferEntity> extend
 
         PartDefinition cube_r4 = wing.addOrReplaceChild("cube_r4", CubeListBuilder.create().texOffs(0, 0).addBox(-3.0F, -1.0F, -2.0F, 6.0F, 1.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -0.9F, 3.0F, -0.2155F, 0.0F, 0.0F));
 
-        PartDefinition spikes = wing.addOrReplaceChild("spikes", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition spikes = wing.addOrReplaceChild("spikes", CubeListBuilder.create(), PartPose.offset(0.0F, -2.0F, 5.0F));
 
-        PartDefinition cube_r5 = spikes.addOrReplaceChild("cube_r5", CubeListBuilder.create().texOffs(44, 13).addBox(-3.0209F, -1.9976F, 0.1684F, 6.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -2.6F, 5.2F, -0.9076F, 0.0F, 0.0F));
+        PartDefinition cube_r5 = spikes.addOrReplaceChild("cube_r5", CubeListBuilder.create().texOffs(44, 13).addBox(-3.0209F, -1.84F, 0.0452F, 6.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -0.6F, 0.4F, -0.9076F, 0.0F, 0.0F));
 
         PartDefinition wing2 = stand2.addOrReplaceChild("wing2", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
@@ -138,9 +139,9 @@ public class PollinationTransferModel <T extends ManhattanTransferEntity> extend
 
         PartDefinition cube_r7 = wing2.addOrReplaceChild("cube_r7", CubeListBuilder.create().texOffs(0, 9).addBox(-2.0F, -1.0F, -3.0F, 8.0F, 1.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, -0.8F, 0.0F, 0.0F, 0.0F, 0.2182F));
 
-        PartDefinition spikes2 = wing2.addOrReplaceChild("spikes2", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition spikes2 = wing2.addOrReplaceChild("spikes2", CubeListBuilder.create(), PartPose.offset(5.1359F, -1.914F, 0.0F));
 
-        PartDefinition cube_r8 = spikes2.addOrReplaceChild("cube_r8", CubeListBuilder.create().texOffs(44, 11).addBox(-3.0F, -1.9576F, 0.0392F, 6.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(5.4F, -2.3F, 0.0F, 0.0F, -1.5708F, 0.9163F));
+        PartDefinition cube_r8 = spikes2.addOrReplaceChild("cube_r8", CubeListBuilder.create().texOffs(44, 11).addBox(-3.0F, -1.9576F, 0.0392F, 6.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.2641F, -0.386F, 0.0F, 0.0F, -1.5708F, 0.9163F));
 
         PartDefinition wing3 = stand2.addOrReplaceChild("wing3", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
@@ -148,9 +149,9 @@ public class PollinationTransferModel <T extends ManhattanTransferEntity> extend
 
         PartDefinition cube_r10 = wing3.addOrReplaceChild("cube_r10", CubeListBuilder.create().texOffs(24, 24).addBox(-2.9F, -2.0F, -1.0F, 6.0F, 2.0F, 3.0F, new CubeDeformation(0.03F)), PartPose.offsetAndRotation(-3.0F, -0.9F, -0.1F, 0.0F, -1.5708F, -0.2182F));
 
-        PartDefinition spikes3 = wing3.addOrReplaceChild("spikes3", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition spikes3 = wing3.addOrReplaceChild("spikes3", CubeListBuilder.create(), PartPose.offset(-5.0F, -2.0F, 0.0F));
 
-        PartDefinition cube_r11 = spikes3.addOrReplaceChild("cube_r11", CubeListBuilder.create().texOffs(44, 11).addBox(-3.0F, -1.9576F, -0.0392F, 6.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-5.4F, -2.4F, 0.0F, 0.0F, -1.5708F, -0.9163F));
+        PartDefinition cube_r11 = spikes3.addOrReplaceChild("cube_r11", CubeListBuilder.create().texOffs(44, 11).addBox(-3.0F, -1.9999F, 0.011F, 6.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.3359F, -0.414F, 0.0F, 0.0F, -1.5708F, -0.9163F));
 
         PartDefinition wing4 = stand2.addOrReplaceChild("wing4", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
@@ -201,10 +202,12 @@ public class PollinationTransferModel <T extends ManhattanTransferEntity> extend
     }
     StandPowers Power = new PowersStarPlatinum(null);
 
-   /* @Override
-    public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-    }*/
+    @Override
+    public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+        super.setupAnim(pEntity,pLimbSwing,pLimbSwingAmount,pAgeInTicks,pNetHeadYaw,pHeadPitch);
+        this.animate(pEntity.flowerhattan_is_loaded, PollinationTransferAnimations.flower_loaded, pAgeInTicks, 1f);
+        this.animate(pEntity.rain_dodging_flowerhattan, PollinationTransferAnimations.rain_dodge_flowerhattan, pAgeInTicks, 1f);
+    }
 
     @Override
     public ModelPart root() {
