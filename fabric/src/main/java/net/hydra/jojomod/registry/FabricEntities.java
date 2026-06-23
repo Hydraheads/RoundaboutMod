@@ -658,6 +658,13 @@ public class FabricEntities {
                     EntityType.Builder.<ColdBlastProjectile>of(ColdBlastProjectile::new, MobCategory.MISC).
                             sized(1F, 1F).clientTrackingRange(15).build(Roundabout.MOD_ID+":cold_blast")
             );
+    public static final EntityType<IceTwisterEntity> COLD_TWISTER =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "cold_twister"),
+                    EntityType.Builder.<IceTwisterEntity>of(IceTwisterEntity::new, MobCategory.MISC).
+                            sized(1F, 1F).clientTrackingRange(15).build(Roundabout.MOD_ID+":cold_twister")
+            );
         public static final EntityType<GasolineSplatterEntity> GASOLINE_SPLATTER =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -958,6 +965,7 @@ public class FabricEntities {
                 ModEntities.IRON_BALL = IRON_BALL;
                 ModEntities.PW_METEOR = PW_METEOR;
                 ModEntities.PW_BIG_METEOR = PW_BIG_METEOR;
+                ModEntities.COLD_TWISTER = COLD_TWISTER;
 
                 ModEntities.THROWN_OBJECT = THROWN_OBJECT;
                 ModEntities.THROWN_ANUBIS = THROWN_ANUBIS;

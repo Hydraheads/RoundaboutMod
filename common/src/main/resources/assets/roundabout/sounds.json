@@ -23,6 +23,12 @@
       "roundabout:ice_blast_charge"
     ]
   },
+  "cold_shot": {
+    "subtitle": "sounds.roundabout.cold_shot",
+    "sounds": [
+      "roundabout:cold_shot"
+    ]
+  },
   "ice_skating": {
     "subtitle": "sounds.roundabout.ice_skating",
     "sounds": [

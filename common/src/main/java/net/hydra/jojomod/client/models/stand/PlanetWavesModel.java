@@ -101,10 +101,36 @@ public class PlanetWavesModel<T extends PlanetWavesEntity> extends StandModel<T>
         this.animate(pEntity.bury_downwards, PlanetWavesAnimations.bury_downwards, pAgeInTicks, 1.25f);
         this.animate(pEntity.bury_upwards, PlanetWavesAnimations.bury_upwards, pAgeInTicks, 1f);
         this.animate(pEntity.grab_horizontal, PlanetWavesAnimations.grab_horizontal, pAgeInTicks, 1f);
-        this.animate(pEntity.grab_downwards, PlanetWavesAnimations.grab_downwards,pAgeInTicks,1f);
-        this.animate(pEntity.grab_upwards , PlanetWavesAnimations.grab_upwards ,pAgeInTicks,1f);
-    }
+        this.animate(pEntity.grab_downwards, PlanetWavesAnimations.grab_downwards, pAgeInTicks, 1f);
+        this.animate(pEntity.grab_upwards, PlanetWavesAnimations.grab_upwards, pAgeInTicks, 1f);
 
+        // Apply burial rotation AFTER animations so it isn't overwritten
+        byte anim = pEntity.getAnimation();
+        if (anim == PlanetWavesEntity.BURY_HORIZONTAL ||
+                anim == PlanetWavesEntity.BURY_DOWNWARDS ||
+                anim == PlanetWavesEntity.BURY_UPWARDS ||
+                anim == PlanetWavesEntity.GRAB_HORIZONTAL ||
+                anim == PlanetWavesEntity.GRAB_DOWNWARDS ||
+                anim == PlanetWavesEntity.GRAB_UPWARDS) {
+            float rotX = pEntity.getStandRotationX();
+            float rotY = pEntity.getStandRotationY();
+            this.stand.xRot += rotX;
+            this.stand.yRot = rotY;
+        }
+    }
+    @Override
+    public void rotateStand(T mobEntity, ModelPart stand, float tickDelta) {
+        byte anim = mobEntity.getAnimation();
+        if (anim == PlanetWavesEntity.BURY_HORIZONTAL ||
+                anim == PlanetWavesEntity.BURY_DOWNWARDS ||
+                anim == PlanetWavesEntity.BURY_UPWARDS ||
+                anim == PlanetWavesEntity.GRAB_HORIZONTAL ||
+                anim == PlanetWavesEntity.GRAB_DOWNWARDS ||
+                anim == PlanetWavesEntity.GRAB_UPWARDS) {
+            return;
+        }
+        super.rotateStand(mobEntity, stand, tickDelta);
+    }
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         super.renderToBuffer(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);

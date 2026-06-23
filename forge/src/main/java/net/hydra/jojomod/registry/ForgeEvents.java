@@ -214,11 +214,14 @@ public class ForgeEvents {
         ModBlocks.FROZEN_NETHERRACK = ForgeBlocks.FROZEN_NETHERRACK.get();
         ModBlocks.FROZEN_NETHER_BRICKS = ForgeBlocks.FROZEN_NETHER_BRICKS.get();
         ModBlocks.FROZEN_END_STONE = ForgeBlocks.FROZEN_END_STONE.get();
+        ModBlocks.COLD_AIR = ForgeBlocks.COLD_AIR.get();
+        ModBlocks.FREEZING_AIR = ForgeBlocks.FREEZING_AIR.get();
         ModBlocks.AJA_BLOCK = ForgeBlocks.AJA_BLOCK.get();
         ModBlocks.SHINY_QUARTZ = ForgeBlocks.SHINY_QUARTZ.get();
         ModBlocks.WHITE_ALBUM_ICE_BLOCK = ForgeBlocks.WHITE_ALBUM_ICE.get();
         ModBlocks.WHITE_ALBUM_ICE_WALL_BLOCK = ForgeBlocks.WHITE_ALBUM_ICE_WALL.get();
         ModBlocks.WHITE_ALBUM_ICE_SLAB = ForgeBlocks.WHITE_ALBUM_ICE_SLAB.get();
+        ModBlocks.STICKY_ICE = ForgeBlocks.STICKY_ICE_BLOCK.get();
         ModBlocks.SHINY_QUARTZ_TILES = ForgeBlocks.SHINY_QUARTZ_TILES.get();
         ModBlocks.LOCACACA_CACTUS = ForgeBlocks.LOCACACA_CACTUS.get();
         ModBlocks.LOCACACA_BLOCK = ForgeBlocks.LOCACACA_BLOCK.get();
@@ -651,6 +654,7 @@ public class ForgeEvents {
         ModEntities.STAND_FIREBALL = ForgeEntities.STAND_FIREBALL.get();
         ModEntities.PW_BIG_METEOR = ForgeEntities.PW_BIG_METEOR.get();
         ModEntities.PW_METEOR = ForgeEntities.PW_METEOR.get();
+        ModEntities.COLD_TWISTER = ForgeEntities.COLD_TWISTER.get();
         ModEntities.EVIL_AURA_PROJECTILE = ForgeEntities.EVIL_AURA_PROJECTILE.get();
         ModEntities.RIPPER_EYES_PROJECTILE = ForgeEntities.RIPPER_EYES_PROJECTILE.get();
         ModEntities.ULTRAVIOLET_PROJECTILE = ForgeEntities.ULTRAVIOLET_PROJECTILE.get();

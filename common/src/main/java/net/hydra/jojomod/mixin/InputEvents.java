@@ -1270,11 +1270,7 @@ public abstract class InputEvents implements IInputEvents {
                         /*This code makes it so there is a slight delay between blocking and subsequent punch chain attacks.
                          * This delay exists so you can't right click left click chain for instant full power punches.*/
                         if (!powers.onClickRelease()) {
-                            standComp.roundabout$tryPower(PowerIndex.NONE,true);
-                            if (standComp.roundabout$getActivePowerPhase() > 0 ) {
-                                standComp.roundabout$setInterruptCD(3);
-                            }
-                            C2SPacketUtil.guardCancelPacket();
+                            powers.onReleaseGuard();
                         }
 
                     }

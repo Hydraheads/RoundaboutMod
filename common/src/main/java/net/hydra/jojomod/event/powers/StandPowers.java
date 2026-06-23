@@ -165,6 +165,15 @@ public class StandPowers extends AbilityScapeBasis {
     public void onStandSwitchInto(){
     }
 
+    public void onReleaseGuard(){
+        StandUser standComp = ((StandUser) self);
+        standComp.roundabout$tryPower(PowerIndex.NONE,true);
+        if (standComp.roundabout$getActivePowerPhase() > 0 ) {
+            standComp.roundabout$setInterruptCD(3);
+        }
+        C2SPacketUtil.guardCancelPacket();
+    }
+
     /**Holds one arm out with the player model, override if you are using a stand like soft and wet or emperor that
      * should make the player hold their arm out in 3d person*/
     public boolean hasShootingModeVisually(HumanoidArm arm){

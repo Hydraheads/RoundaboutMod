@@ -99,11 +99,11 @@ public class PowersRatt extends NewDashPreset {
             PLACE_BURST = 69,
             SET_TARGET = 70,
 
-            CHANGE_MODE = 7,
-            SETPLACE = 8,
-            SCOPE = 9,
-            MINING = 10,
-            RATT_LEAP = 5;
+            CHANGE_MODE = 71,
+            SETPLACE = 72,
+            SCOPE = 73,
+            MINING = 74,
+            RATT_LEAP = 75;
 
 
 

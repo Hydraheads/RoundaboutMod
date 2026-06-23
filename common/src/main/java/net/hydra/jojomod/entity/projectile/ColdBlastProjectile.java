@@ -2,6 +2,9 @@ package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPowersPlayer;
+import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.block.StandFireBlock;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
@@ -12,7 +15,11 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
+import net.hydra.jojomod.util.HeatUtil;
+import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
@@ -24,9 +31,15 @@ import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.FireBlock;
+import net.minecraft.world.level.block.FrostedIceBlock;
+import net.minecraft.world.level.block.LiquidBlockContainer;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +68,9 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
 
     @Override
     public void tick() {
+        if (!level().isClientSide()){
+            onChangedBlockX();
+        }
         super.tick();
     }
 
@@ -70,18 +86,78 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
             Entity ent = $$0.getEntity();
             if (ent != null && ent.isAlive()) {
                 if (!alreadyHitEntity($$0.getEntity())) {
-                    blastEntity(ent);
+                    if (ent instanceof LivingEntity lv && !(getOwner() != null && getOwner().getUUID() == ent.getUUID())) {
+                        blastEntity(lv);
+                    }
                 }
             }
         }
     }
-    public void blastEntity(Entity entity){
+    public void blastEntity(LivingEntity entity){
         //Add hurt code here
         //Roundabout.LOGGER.info("charge-> "+charge+" power-> "+power);
-        if (entity instanceof LivingEntity lv && !(getOwner() != null && getOwner().getUUID() == entity.getUUID())) {
-
+        if (!entity.isInvulnerable()){
+            if (entity instanceof Player pl){
+                HeatUtil.addHeat(entity,-20);
+            } else {
+                HeatUtil.addHeat(entity,-40);
+            }
         }
+
         alreadyHitEntities.add(entity);
+    }
+
+    public void onChangedBlockX(){
+        BlockPos blockPos = blockPosition();
+        onChangedBlock2(blockPos);
+        onChangedBlock2(blockPos.below());
+        onChangedBlock2(blockPos.below().below());
+    }
+    public void onChangedBlock2(BlockPos blockPos){
+        if (getOwner() != null) {
+            boolean canFreezeGrass = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.freezesGrass;
+            BlockState blockState = ModBlocks.WHITE_ALBUM_ICE_BLOCK.defaultBlockState();
+            int j = Math.min(16, 2 + 1);
+            BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
+            for (BlockPos blockPos2 : BlockPos.betweenClosed(blockPos.offset(-j, -1, -j), blockPos.offset(j, -1, j))) {
+                BlockState blockState3;
+                mutableBlockPos.set(blockPos2.getX(), blockPos2.getY() + 1, blockPos2.getZ());
+                BlockState blockState2 = level().getBlockState(mutableBlockPos);
+                if (!blockState2.isAir() || (blockState3 = level().getBlockState(blockPos2)) != FrostedIceBlock.meltsInto()
+                        || !blockState.canSurvive(level(), blockPos2) ||
+                        !level().isUnobstructed(blockState, blockPos2, CollisionContext.empty())) continue;
+                level().setBlockAndUpdate(blockPos2, blockState);
+                level().scheduleTick(blockPos2, ModBlocks.WHITE_ALBUM_ICE_BLOCK, Mth.nextInt(level().getRandom(), 110, 130));
+            }
+
+            j = 2;
+            blockState = ModBlocks.WHITE_ALBUM_ICE_SLAB.defaultBlockState();
+            for (BlockPos blockPos2 : BlockPos.betweenClosed(blockPos.offset(-j, 0, -j), blockPos.offset(j, 0, j))) {
+
+                mutableBlockPos.set(blockPos2.getX(), blockPos2.getY() + 1, blockPos2.getZ());
+                BlockState blockState2 = level().getBlockState(mutableBlockPos);
+                BlockState blockState3 = level().getBlockState(mutableBlockPos.below());
+                if (!blockState.canSurvive(level(), blockPos2) ||
+                        !level().isUnobstructed(blockState, blockPos2, CollisionContext.empty())) continue;
+                if (blockState3.isAir() ||
+                        (MainUtil.getIsGamemodeApproriateForGrief(getOwner()) && canFreezeGrass &&
+                                blockState3.canBeReplaced() &&
+                                !(blockState3.getBlock() instanceof LiquidBlockContainer) &&
+                                !(blockState3.getBlock() instanceof FireBlock) &&
+                                !(blockState3.getBlock() instanceof StandFireBlock)
+                                &&
+                                !blockState3.liquid() &&
+                                !(blockState3.hasProperty(BlockStateProperties.WATERLOGGED) &&
+                                        blockState3.getValue(BlockStateProperties.WATERLOGGED)
+                                )
+                        )
+                ) {
+                    level().setBlockAndUpdate(blockPos2, blockState);
+                    level().scheduleTick(blockPos2, ModBlocks.WHITE_ALBUM_ICE_SLAB, Mth.nextInt(level().getRandom(), 110, 130));
+                }
+            }
+        }
+
     }
 
     @Override

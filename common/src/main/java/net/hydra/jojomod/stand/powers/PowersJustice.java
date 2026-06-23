@@ -1185,6 +1185,8 @@ public class PowersJustice extends NewDashPreset {
                                                 if (fm.manualTarget instanceof Player PE){
                                                     fm.setLastHurtByPlayer(PE);
                                                 }
+                                                fm.removeBuildBreakGoal();
+                                                fm.getNavigation().stop();
                                                 fm.setLastHurtByMob(fm.manualTarget);
                                                 fm.setTarget(fm.manualTarget);
                                             }
@@ -1331,6 +1333,8 @@ public class PowersJustice extends NewDashPreset {
                                         fm.setPersistentAngerTarget(null);
                                         fm.setLastHurtByPlayer(null);
                                         fm.setAggressive(false);
+                                        fm.removeBuildBreakGoal();
+                                        fm.getNavigation().stop();
                                         fm.getNavigation().moveTo(fm.getNavigation().createPath(blockPos, 0), 1);
                                     }
                                 }

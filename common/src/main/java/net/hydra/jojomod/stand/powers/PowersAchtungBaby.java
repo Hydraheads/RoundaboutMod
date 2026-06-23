@@ -5,6 +5,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.block.InvisiBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.block.RoundaboutAttackBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
@@ -375,7 +376,7 @@ public class PowersAchtungBaby extends NewDashPreset {
                                 BlockState oldState = this.self.level().getBlockState(targetPos);
 
                                 // Example: Replace dirt with glowstone
-                                if (!oldState.isAir() && !oldState.is(Blocks.OBSIDIAN) && oldState.getBlock().isCollisionShapeFullBlock(oldState, this.self.level(), targetPos)
+                                if (!oldState.isAir() && !(oldState.getBlock() instanceof RoundaboutAttackBlock) && !oldState.is(Blocks.OBSIDIAN) && oldState.getBlock().isCollisionShapeFullBlock(oldState, this.self.level(), targetPos)
                                         && this.self.level().getBlockEntity(targetPos) == null && !MainUtil.confirmIsOre(oldState)) {
                                     BlockState replaced = sl.getBlockState(targetPos);
                                     BlockEntity replacedEntity = sl.getBlockEntity(targetPos);

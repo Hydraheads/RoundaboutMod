@@ -110,6 +110,14 @@ public class ForgeBlocks {
             BLOCKS.register("frozen_end_stone",
                     () -> FROZEN_END_STONE_PROPERTIES
             );
+    public static final RegistryObject<Block> COLD_AIR =
+            BLOCKS.register("cold_air",
+                    () -> COLD_AIR_PROPERTIES
+            );
+    public static final RegistryObject<Block> FREEZING_AIR =
+            BLOCKS.register("freezing_air",
+                    () -> FREEZING_AIR_PROPERTIES
+            );
     public static final RegistryObject<Block> METEOR_BLOCK = BLOCKS.register("meteor_block",
             () -> ModBlocks.METEOR_BLOCK_PROPERTIES
             );
@@ -124,6 +132,9 @@ public class ForgeBlocks {
     );
     public static final RegistryObject<Block> WHITE_ALBUM_ICE_SLAB = BLOCKS.register("white_album_coating",
             () -> WHITE_ALBUM_COATING_PROPERTIES
+    );
+    public static final RegistryObject<Block> STICKY_ICE_BLOCK = BLOCKS.register("sticky_ice",
+            () -> STICKY_ICE_PROPERTIES
     );
     public static final RegistryObject<Block> SHINY_QUARTZ_TILES = BLOCKS.register("shiny_quartz_tiles",
             () -> SHINY_QUARTZ_TILES_PROPERTIES

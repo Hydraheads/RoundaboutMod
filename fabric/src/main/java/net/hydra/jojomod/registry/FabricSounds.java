@@ -102,6 +102,7 @@ public class FabricSounds {
         addSound(ModSounds.ICE_RISES_ID, ModSounds.ICE_RISES_EVENT);
         addSound(ModSounds.BLOCK_FREEZE_ID, ModSounds.BLOCK_FREEZE_EVENT);
         addSound(ModSounds.ICE_BLAST_CHARGE_ID, ModSounds.ICE_BLAST_CHARGE_EVENT);
+        addSound(ModSounds.COLD_SHOT_ID, ModSounds.COLD_SHOT_EVENT);
         addSound(ModSounds.BANISH_ID, ModSounds.BANISH_EVENT);
 
         addSound(ModSounds.IRON_BALL_BOUNCE_ID, ModSounds.IRON_BALL_BOUNCE_EVENT);

@@ -8,6 +8,8 @@ import net.hydra.jojomod.block.WhiteAlbumIceBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.BlockWallEntity;
+import net.hydra.jojomod.entity.projectile.ColdBlastProjectile;
+import net.hydra.jojomod.entity.projectile.UltravioletProjectile;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
@@ -136,6 +138,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public void onChangedBlock(BlockPos blockPos){
         if (hasSkatesActivated() && acceleration > 0 && !self.isSwimming() &&
         !self.isFallFlying()) {
+            boolean canFreezeGrass = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.freezesGrass;
             if (!self.onGround()) {
                 return;
             }
@@ -164,7 +167,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 if (!blockState.canSurvive(self.level(), blockPos2) ||
                         !self.level().isUnobstructed(blockState, blockPos2, CollisionContext.empty())) continue;
                     if (blockState3.isAir() ||
-                            (MainUtil.getIsGamemodeApproriateForGrief(self) &&
+                            (MainUtil.getIsGamemodeApproriateForGrief(self) && canFreezeGrass &&
                                     blockState3.canBeReplaced() &&
                                     !(blockState3.getBlock() instanceof LiquidBlockContainer)&&
                                     !(blockState3.getBlock() instanceof FireBlock)&&
@@ -846,6 +849,23 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
+    @Override
+    public void onReleaseGuard(){
+        boolean shoot = isChargingCold() && hasColdCharged();
+        StandUser standComp = ((StandUser) self);
+        standComp.roundabout$tryPower(PowerIndex.NONE,true);
+        stallTicks = 3;
+        if (standComp.roundabout$getActivePowerPhase() > 0 ) {
+            standComp.roundabout$setInterruptCD(3);
+        }
+        if (shoot){
+            tryPowerPacket(PowerIndex.EXTRA_2);
+        } else {
+            C2SPacketUtil.guardCancelPacket();
+        }
+    }
+
+
     public boolean toggleSkates(){
         int cooldown = 5;
         this.setCooldown(PowerIndex.SKILL_1, cooldown);
@@ -919,6 +939,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case PowerIndex.EXTRA -> {
                 setPowerColdBlast();
             }
+            case PowerIndex.EXTRA_2 -> {
+                setPowerColdBlastShot();
+            }
             case PowerIndex.POWER_3_BLOCK -> {
                 iceWallServer(true);
             }
@@ -941,6 +964,29 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 setPlayerPos2(PlayerPosIndex.CHARGE_SHOT);
                 playSoundsIfNearby(ICE_CHARGE, 32, false, true);
             }
+        }
+    }
+
+    public void setPowerColdBlastShot() {
+
+        if (getActivePower() == PowerIndex.EXTRA && self instanceof Player pl){
+            if (getPlayerPos2() == PlayerPosIndex.CHARGE_SHOT) {
+
+                self.level().playSound((Player)null, self.getX(), self.getY(), self.getZ(), ModSounds.COLD_SHOT_EVENT,
+                        SoundSource.NEUTRAL, 1F, (float)(1F+Math.random()*0.08f));
+                if (!self.level().isClientSide) {
+                    ColdBlastProjectile bubble = new ColdBlastProjectile(self,self.level());
+                    bubble.absMoveTo(self.getX(), self.getY(), self.getZ());
+                    bubble.setUser(self);
+                    bubble.setOwner(self);
+                    bubble.shootThis(pl);
+                    self.level().addFreshEntity(bubble);
+                }
+            }
+        }
+
+        if (((StandUser) self).roundabout$isGuardInput()) {
+            ((StandUser) self).roundabout$tryPower(PowerIndex.NONE, true);
         }
     }
 

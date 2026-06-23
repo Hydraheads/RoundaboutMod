@@ -886,6 +886,8 @@ public class Config implements Cloneable {
         public Integer blockFreezeRadius;
         @BooleanOption(group = "inherit", value = true)
         public Boolean freezesSurfaceWater;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean freezesGrass;
     }
     public static class WalkingHeartSettings {
         @BooleanOption(group = "inherit", value = true)
