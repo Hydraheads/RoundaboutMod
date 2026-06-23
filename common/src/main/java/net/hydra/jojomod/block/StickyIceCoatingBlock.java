@@ -81,4 +81,8 @@ public class StickyIceCoatingBlock
     public int range2(){
         return 5;
     }
+    @Override
+    public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
+            return Shapes.empty();
+    }
 }

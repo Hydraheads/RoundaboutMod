@@ -724,7 +724,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
         if (!onCooldown(PowerIndex.SKILL_2)) {
 
-            this.setCooldown(PowerIndex.SKILL_2, 180);
+            this.setCooldown(PowerIndex.SKILL_2, 200);
             Level level = self.level();
 
             BlockPos checkPos = pos;
