@@ -116,11 +116,18 @@ public class WhiteAlbumCoatingBlock
                 mutableBlockPos.setWithOffset((Vec3i)blockPos, direction);
                 BlockState blockState2 = serverLevel.getBlockState(mutableBlockPos);
                 if (!blockState2.is(this) || this.slightlyMelt(blockState2, serverLevel, mutableBlockPos)) continue;
-                serverLevel.scheduleTick((BlockPos)mutableBlockPos, this, Mth.nextInt(randomSource, 30, 40));
+                serverLevel.scheduleTick((BlockPos)mutableBlockPos, this, Mth.nextInt(randomSource, range1(), range2()));
             }
             return;
         }
-        serverLevel.scheduleTick(blockPos, this, Mth.nextInt(randomSource, 30, 40));
+        serverLevel.scheduleTick(blockPos, this, Mth.nextInt(randomSource, range1(), range2()));
+    }
+
+    public int range1(){
+        return 30;
+    }
+    public int range2(){
+        return 40;
     }
 
     private boolean slightlyMelt(BlockState blockState, Level level, BlockPos blockPos) {
