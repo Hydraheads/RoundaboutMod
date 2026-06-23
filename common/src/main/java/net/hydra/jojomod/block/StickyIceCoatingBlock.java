@@ -60,7 +60,7 @@ public class StickyIceCoatingBlock
                 if (FateTypes.isVampire(LE)) {
                     $$3.makeStuckInBlock($$0, new Vec3((double) 0.4F, (double) 0.3F, (double) 0.4F));
                 } else {
-                    $$3.makeStuckInBlock($$0, new Vec3((double) 0.65F, (double) 0.8F, (double) 0.65F));
+                    $$3.makeStuckInBlock($$0, new Vec3((double) 0.58F, (double) 0.8F, (double) 0.58F));
                 }
             }
             if (!$$1.isClientSide) {
@@ -68,7 +68,11 @@ public class StickyIceCoatingBlock
             }
         }
     }
-
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean isCollisionShapeFullBlock(BlockState p_262062_, BlockGetter p_261848_, BlockPos p_261466_) {
+        return false;
+    }
     @Override
     public int range1(){
         return 2;

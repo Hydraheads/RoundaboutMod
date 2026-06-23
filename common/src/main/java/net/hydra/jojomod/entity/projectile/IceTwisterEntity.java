@@ -7,6 +7,8 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.util.HeatUtil;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -14,11 +16,14 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.LiquidBlockContainer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 
@@ -58,6 +63,27 @@ public class IceTwisterEntity extends Entity {
 
                     }
                     discard();
+                }
+            }
+
+            AABB wallBox = this.getBoundingBox();
+
+            for (LivingEntity mob : level().getEntitiesOfClass(
+                    LivingEntity.class,
+                    wallBox.inflate(0.1))) {
+
+                if (mob.getBoundingBox().intersects(wallBox)) {
+                    if (MainUtil.canFreeze(mob)) {
+                        if (mob instanceof Player pl){
+                            if (this.tickCount%2==0){
+                                HeatUtil.addHeat(mob,-1);
+                            }
+                        } else {
+                            if (this.tickCount%2==0 || HeatUtil.getHeat(mob) > -50) {
+                                HeatUtil.addHeat(mob, -1);
+                            }
+                        }
+                    }
                 }
             }
 
