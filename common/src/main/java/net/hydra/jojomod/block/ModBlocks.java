@@ -160,6 +160,7 @@ public class ModBlocks {
     public static Block WHITE_ALBUM_ICE_BLOCK;
     public static Block WHITE_ALBUM_ICE_WALL_BLOCK;
     public static Block WHITE_ALBUM_ICE_SLAB;
+    public static Block STICKY_ICE;
 
     public static Block EQUIPPABLE_STONE_MASK_BLOCK;
     public static Block BLOODY_STONE_MASK_BLOCK;
@@ -188,6 +189,12 @@ public class ModBlocks {
                     randomTicks().strength(0.5F).sound(SoundType.GLASS).noOcclusion());
     public static Block WHITE_ALBUM_COATING_PROPERTIES =
             new WhiteAlbumCoatingBlock(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).friction(0.98F)
+                    .lightLevel((L) -> {
+                        return 1;
+                    }).
+                    randomTicks().friction(0.98F).strength(0.5F).forceSolidOff().sound(SoundType.GLASS).replaceable().noOcclusion().pushReaction(PushReaction.DESTROY));
+    public static Block STICKY_ICE_PROPERTIES =
+            new StickyIceCoatingBlock(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).friction(0.98F)
                     .lightLevel((L) -> {
                         return 1;
                     }).
