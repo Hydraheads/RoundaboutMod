@@ -50,12 +50,22 @@ public class PlanetWavesRenderer extends StandRenderer<PlanetWavesEntity> {
     @Override
     public void render(PlanetWavesEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         float factor = 0.5F + (mobEntity.getSizePercent()/2);
+
+        matrixStack.pushPose();
+
+        float rotX = mobEntity.getStandRotationX();
+        if (rotX != 0.0F) {
+            matrixStack.mulPose(com.mojang.math.Axis.XP.rotationDegrees(rotX));
+        }
+
         if (mobEntity.isBaby()) {
             matrixStack.scale(0.5f*factor, 0.5f*factor, 0.5f*factor);
         } else {
             matrixStack.scale(0.8f * factor, 0.8f * factor, 0.8f * factor);
         }
         super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
+
+        matrixStack.popPose();
     }
 
     @Nullable
