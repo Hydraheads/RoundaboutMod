@@ -411,11 +411,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
                         this.getStandEntity(this.getSelf()).setDeltaMovement(Vec3.ZERO);
                     }
                 }
-                if (this.currentHattanStatus == LOADED_HATTAN) {
-                    ME.stopsManhattanAnimationsWhenHeldItem = true;
-                } else {
-                    ME.stopsManhattanAnimationsWhenHeldItem = false;
-                }
             }
 
             if(ME.isInLava() || ME.isInWater()){

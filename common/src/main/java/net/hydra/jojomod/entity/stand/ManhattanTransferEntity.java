@@ -46,6 +46,7 @@ public class ManhattanTransferEntity extends StandEntity {
     public ManhattanTransferEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
     }
+
     public static final byte
             ANIME_SKIN = 1,
             MANGA_SKIN = 2,
@@ -61,14 +62,17 @@ public class ManhattanTransferEntity extends StandEntity {
     public boolean isNoGravity() {
         return true;
     }
+
     @Override
     public boolean lockPos() {
         return false;
     }
+
     @Override
     public boolean forceVisualRotation() {
         return true;
     }
+
     @Override
     public boolean canBeHitByProjectile() {
         if (this.getUserData(this.getUser()) != null) {
@@ -80,23 +84,27 @@ public class ManhattanTransferEntity extends StandEntity {
         }
         return true;
     }
+
     @Override
     public boolean hasNoPhysics() {
         return false;
     }
+
     @Override
     public boolean isAttackable() {
         return true;
     }
+
     @Override
     public boolean skipAttackInteraction(Entity $$0) {
         return false;
     }
+
     @Override
     public float getFlyingSpeed() {
         if (this.getUserData(this.getUser()) != null && this.getUser() != null) {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-                if(this.level().isClientSide) {
+                if (this.level().isClientSide) {
                     Options key = Minecraft.getInstance().options;
                     if (key.keyDown.isDown() || key.keyRight.isDown() || key.keyUp.isDown() || key.keyLeft.isDown()) {
                         if (PM.XtraSpdTick > 7) {
@@ -112,6 +120,7 @@ public class ManhattanTransferEntity extends StandEntity {
         }
         return 0.10F;
     }
+
     @Override
     public boolean isControlledByLocalInstance() {
         LivingEntity user = this.getUser();
@@ -123,6 +132,7 @@ public class ManhattanTransferEntity extends StandEntity {
         }
         return super.isControlledByLocalInstance();
     }
+
     @Override
     public void travel(Vec3 vec3) {
         super.travel(vec3);
@@ -133,6 +143,7 @@ public class ManhattanTransferEntity extends StandEntity {
         }
 
     }
+
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
         $$0.putBoolean("roundabout.AcquireHeldItem", this.canAcquireHeldItem);
@@ -141,6 +152,7 @@ public class ManhattanTransferEntity extends StandEntity {
         $$0.put("roundabout.HeldItem", this.getHeldItemManhattanFull().save(compoundtag));
         super.addAdditionalSaveData($$0);
     }
+
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
         this.canAcquireHeldItem = $$0.getBoolean("roundabout.AcquireHeldItem");
@@ -150,14 +162,18 @@ public class ManhattanTransferEntity extends StandEntity {
         this.setHeldItemManhattanFull(itemstack);
         super.readAdditionalSaveData($$0);
     }
+
     protected static final EntityDataAccessor<ItemStack> HELD_ITEM_MANHATTAN = SynchedEntityData.defineId(ManhattanTransferEntity.class,
             EntityDataSerializers.ITEM_STACK);
+
     public final ItemStack getHeldItemManhattan() {
         return this.entityData.get(HELD_ITEM_MANHATTAN);
     }
+
     public final void setHeldItemManhattan(ItemStack stack) {
         this.entityData.set(HELD_ITEM_MANHATTAN, stack);
     }
+
     @Override
     protected void defineSynchedData() {
         if (!this.entityData.hasItem(HELD_ITEM_MANHATTAN)) {
@@ -167,20 +183,26 @@ public class ManhattanTransferEntity extends StandEntity {
             this.entityData.define(MANHATTAN_TARGET, 0);
         }
     }
+
     protected static final EntityDataAccessor<ItemStack> HELD_ITEM_MANHATTAN_FULL = SynchedEntityData.defineId(ManhattanTransferEntity.class,
             EntityDataSerializers.ITEM_STACK);
+
     public final ItemStack getHeldItemManhattanFull() {
         return this.entityData.get(HELD_ITEM_MANHATTAN_FULL);
     }
+
     public final void setHeldItemManhattanFull(ItemStack stack) {
         this.entityData.set(HELD_ITEM_MANHATTAN_FULL, stack);
     }
+
     public int getHattanTarget() {
         return this.entityData.get(MANHATTAN_TARGET);
     }
+
     public void setHattanTarget(int d) {
         this.entityData.set(MANHATTAN_TARGET, d);
     }
+
     protected static final EntityDataAccessor<Integer> MANHATTAN_TARGET = SynchedEntityData.defineId(ManhattanTransferEntity.class,
             EntityDataSerializers.INT);
     public boolean isDesummoning = false;
@@ -190,27 +212,35 @@ public class ManhattanTransferEntity extends StandEntity {
     public boolean isSnubnose = false;
     public float manhattanDamageIncipit = 0;
     public boolean canAcquireHeldItem = false;
+
     public boolean getCanPlace() {
         return false;
     }
+
     public boolean canSnipe() {
         return false;
     }
+
     public float getShotAccuracy() {
         return 0.0F;
     }
+
     public float getBundleAccuracy() {
         return 0.0F;
     }
+
     public float getThrowAngle() {
         return 0.0F;
     }
+
     public float getThrowAngle2() {
         return 0.0F;
     }
+
     public float getThrowAngle3() {
         return 0.0F;
     }
+
     public boolean canOthersLoadMT = ClientNetworking.getAppropriateConfig().manhattanTransferSettings.canOtherMobsLoadManhattanTransfer;
     public int fireTicksPrj = 0;
     Projectile hattanDeflected = null;
@@ -218,13 +248,17 @@ public class ManhattanTransferEntity extends StandEntity {
     public int setHatAnimDir = 1;
     public float heighHattanPilotNoMov = 0;
     private boolean isKeyEverPressed = false;
+
     public StandUser getUserData(LivingEntity User) {
         return ((StandUser) User);
     }
+
     public int DodgeRainTicks = 0;
+
     public void setDodgeRainTicks(int val) {
         DodgeRainTicks = val;
     }
+
     int stupidTicks = 10;
     public int tickInWater = 100;
     int dirPause = 0;
@@ -247,7 +281,7 @@ public class ManhattanTransferEntity extends StandEntity {
             if (directEntityWho != null && direct != null) {
                 if (direct instanceof Projectile PR && !source.is(ModDamageTypes.STAND)) {
                     if (directEntityWho != this) {
-                        if(PR instanceof AbstractArrow || PR instanceof ThrowableItemProjectile) {
+                        if (PR instanceof AbstractArrow || PR instanceof ThrowableItemProjectile) {
                             if (((directEntityWho.is(User) && !canOthersLoadMT) || canOthersLoadMT) && !hasItem) {
                                 hasItemTwo = false;
                                 if (direct instanceof AbstractArrow AA) {
@@ -364,7 +398,6 @@ public class ManhattanTransferEntity extends StandEntity {
     }
 
     public boolean shootHattan() {
-        /***/
         if (!getHeldItemManhattan().isEmpty()) {
             Vec3 pos = new Vec3(this.getX(), this.getEyeY() - 0.1F, this.getZ());
             Direction gravD = ((IGravityEntity) this).roundabout$getGravityDirection();
@@ -383,6 +416,7 @@ public class ManhattanTransferEntity extends StandEntity {
         }
         return false;
     }
+
     public static boolean manhattanShoot(ManhattanTransferEntity thrower, boolean canSnipe, ItemStack item, float getShotAccuracy,
                                          float getBundleAccuracy,
                                          float getThrowAngle1, float getThrowAngle2, float getThrowAngle3,
@@ -517,7 +551,7 @@ public class ManhattanTransferEntity extends StandEntity {
                 $$4.isHattanHatProj = true;
                 thrower.level().addFreshEntity($$4);
                 thrower.hattanDeflected = $$4;
-            }else if (item.getItem() instanceof FireworkRocketItem){
+            } else if (item.getItem() instanceof FireworkRocketItem) {
                 FireworkRocketEntity $$4 = new FireworkRocketEntity(thrower.level(), item, thrower, thrower.getX(), thrower.getEyeY(), thrower.getZ(), true);
                 $$4.setPos(pos);
                 $$4.setRemainingFireTicks(thrower.fireTicksPrj);
@@ -544,42 +578,45 @@ public class ManhattanTransferEntity extends StandEntity {
         return true;
     }
 
-    public void powerUpProjectile(){
-        if(this.hattanDeflected != null && !(this.hattanDeflected instanceof ThrownTrident) && !(this.hattanDeflected instanceof FireworkRocketEntity)) {
+    public void powerUpProjectile() {
+        if (this.hattanDeflected != null && !(this.hattanDeflected instanceof ThrownTrident) && !(this.hattanDeflected instanceof FireworkRocketEntity)) {
             ((IProjectileAccess) hattanDeflected).roundabout$setManhattanProjectile(true);
-        } else if(this.hattanDeflected instanceof ThrownTrident TR){
+        } else if (this.hattanDeflected instanceof ThrownTrident TR) {
             ((ISuperThrownAbstractArrow) TR).roundabout$setIsTridentManhattan(true);
-        } else if(this.hattanDeflected instanceof FireworkRocketEntity FER){
+        } else if (this.hattanDeflected instanceof FireworkRocketEntity FER) {
             ((IFireworkRocketAccess) FER).setIsHattanProj(true);
             ((IFireworkRocketAccess) FER).roundabout$SetFireworkRemainingLifeTicks(this.fireworkLifeTicks);
         }
     }
+
     public void changeMovementState() {
         if (this.getUserData(this.getUser()) != null && this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
             PM.isLoaded();
         }
     }
-    public Vec2 getStrangeVector(){
-        if(this.getUser() != null && this.getUserData(this.getUser()) != null && this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-            if(this.level().isClientSide) {
-                if(isKeyEverPressed) {
+
+    public Vec2 getStrangeVector() {
+        if (this.getUser() != null && this.getUserData(this.getUser()) != null && this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+            if (this.level().isClientSide) {
+                if (isKeyEverPressed) {
                     if (verticalLastPressed) {
                         if (pressS) {
-                            if(this.getXRot() < 15 || this.getXRot() > -15) {
+                            if (this.getXRot() < 15 || this.getXRot() > -15) {
                                 return new Vec2(this.getXRot() * -1 + heighHattanPilotNoMov, this.getYRot() - 180);
                             } else {
                                 return new Vec2(this.getXRot() * -1, this.getYRot() - 180);
                             }
                         }
                         if (!pressS) {
-                            if(this.getXRot() < 15 || this.getXRot() > -15) {
+                            if (this.getXRot() < 15 || this.getXRot() > -15) {
                                 return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot());
                             } else {
                                 return new Vec2(this.getXRot(), this.getYRot());
                             }
                         }
                     } else {
-                        if (pressA) {;
+                        if (pressA) {
+                            ;
                             return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot() - 90);
                         }
                         if (!pressA) {
@@ -587,7 +624,7 @@ public class ManhattanTransferEntity extends StandEntity {
                         }
                     }
                 } else {
-                    if(stupidTicks < 1) {
+                    if (stupidTicks < 1) {
                         if (this.getXRot() < 15 || this.getXRot() > -15) {
                             return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot());
                         } else {
@@ -599,7 +636,8 @@ public class ManhattanTransferEntity extends StandEntity {
         }
         return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot());
     }
-    public Vec3 getHattanDirection(){
+
+    public Vec3 getHattanDirection() {
         return Vec3.directionFromRotation(this.getStrangeVector());
     }
 
@@ -614,46 +652,52 @@ public class ManhattanTransferEntity extends StandEntity {
         validateUUID();
         float pitch = this.getXRot();
         float yaw = this.getYRot();
-        if(dirPause > 0){
+        if (dirPause > 0) {
             dirPause--;
         }
 
-if(this.getUser() != null) {
-    if(stupidTicks >= 1) {
-        if (stupidTicks == 10) {
-            this.moveTo(this.getUser().getX(), this.getUser().getEyeY(), this.getUser().getZ() - 0.075F);
+        if (!getHeldItemManhattan().isEmpty()) {
+            stopsManhattanAnimationsWhenHeldItem = true;
         } else {
-            this.setXRot(this.getUser().getXRot() % 360);
-            this.setYRot(this.getUser().getYHeadRot() % 360);
-            this.setYBodyRot(this.getUser().getYHeadRot() % 360);
-        }
-        stupidTicks--;
-    }
-}
-
-if(!isHattanPilotMode) {
-    if (horizontalCollision || verticalCollision) {
-        if (dirPause == 0) {
-            randomDirection = random.nextInt(2) + 1;
-            dirPause = 40;
+            stopsManhattanAnimationsWhenHeldItem = false;
         }
 
-        if (horizontalCollision) {
-            this.setYBodyRot(this.getYRot() % 360);
-            if (randomDirection <= 1) {
-                this.setYRot(yaw - 15);
-            } else {
-                this.setYRot(yaw + 15);
+        if (this.getUser() != null) {
+            if (stupidTicks >= 1) {
+                if (stupidTicks == 10) {
+                    this.moveTo(this.getUser().getX(), this.getUser().getEyeY(), this.getUser().getZ() - 0.075F);
+                } else {
+                    this.setXRot(this.getUser().getXRot() % 360);
+                    this.setYRot(this.getUser().getYHeadRot() % 360);
+                    this.setYBodyRot(this.getUser().getYHeadRot() % 360);
+                }
+                stupidTicks--;
             }
         }
-        if (verticalCollision && !verticalCollisionBelow) {
-            this.setXRot(pitch + 15);
+
+        if (!isHattanPilotMode) {
+            if (horizontalCollision || verticalCollision) {
+                if (dirPause == 0) {
+                    randomDirection = random.nextInt(2) + 1;
+                    dirPause = 40;
+                }
+
+                if (horizontalCollision) {
+                    this.setYBodyRot(this.getYRot() % 360);
+                    if (randomDirection <= 1) {
+                        this.setYRot(yaw - 15);
+                    } else {
+                        this.setYRot(yaw + 15);
+                    }
+                }
+                if (verticalCollision && !verticalCollisionBelow) {
+                    this.setXRot(pitch + 15);
+                }
+                if (verticalCollisionBelow) {
+                    this.setXRot(pitch - 15);
+                }
+            }
         }
-        if (verticalCollisionBelow) {
-            this.setXRot(pitch - 15);
-        }
-    }
-}
 
         if (!this.level().isClientSide()) {
             if (this.getUserData(this.getUser()) != null) {
@@ -670,7 +714,7 @@ if(!isHattanPilotMode) {
             }
         }
 
-        if(this.level().isClientSide) {
+        if (this.level().isClientSide) {
             Options options = Minecraft.getInstance().options;
             if (this.getUserData(this.getUser()) != null) {
                 if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
@@ -691,63 +735,84 @@ if(!isHattanPilotMode) {
             }
         }
 
-        if(this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-            if(PM.isClient()) {
+        if (this.getUser() != null && ((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+            if (PM.isClient()) {
                 Options options = Minecraft.getInstance().options;
                 if (PM.isPiloting()) {
                     if (options.keyDown.isDown() || options.keyUp.isDown() || options.keyLeft.isDown() || options.keyRight.isDown()) {
                         isKeyEverPressed = true;
                     }
                     if (options.keyUp.isDown()) {
-                        isPressingW = true;
+                        W = true;
                         pressS = false;
                         pressA = false;
                         verticalLastPressed = true;
                         this.setHatAnimDir = 1;
                     }
                     if (!options.keyUp.isDown()) {
-                        isPressingW = false;
+                        W = false;
                     }
                     if (options.keyDown.isDown()) {
-                        isPressingS = true;
+                        S = true;
                         pressS = true;
                         pressA = false;
                         verticalLastPressed = true;
                         this.setHatAnimDir = 2;
                     }
                     if (!options.keyDown.isDown()) {
-                        isPressingS = false;
+                        S = false;
                     }
 
-                    if ((options.keyUp.isDown() && options.keyDown.isDown()) || (options.keyLeft.isDown() && options.keyRight.isDown()) || (options.keyUp.isDown() && options.keyDown.isDown() && (options.keyLeft.isDown() && options.keyRight.isDown()))) {
-                        isPressingW = true;
+                    if ((options.keyUp.isDown() && options.keyDown.isDown())) {
+                        W = false;
+                        S = false;
                         pressS = false;
                         pressA = false;
                         verticalLastPressed = true;
                         this.setHatAnimDir = 1;
                     }
-                    if (!(options.keyRight.isDown() && options.keyLeft.isDown())) {
-                        if (options.keyLeft.isDown()) {
-                            isPressingA = true;
-                            pressA = true;
-                            pressS = false;
-                            verticalLastPressed = false;
-                            this.setHatAnimDir = 3;
-                        }
-                        if (!options.keyLeft.isDown()) {
-                            isPressingA = false;
-                        }
-                        if (options.keyRight.isDown()) {
-                            isPressingD = true;
-                            pressA = false;
-                            pressS = false;
-                            verticalLastPressed = false;
-                            this.setHatAnimDir = 4;
-                        }
-                        if (!options.keyRight.isDown()) {
-                            isPressingD = false;
-                        }
+
+                    if(options.keyLeft.isDown() && options.keyRight.isDown()){
+                        A = false;
+                        D = false;
+                        pressS = false;
+                        pressA = false;
+                        verticalLastPressed = true;
+                        this.setHatAnimDir = 1;
                     }
+
+                    if((options.keyUp.isDown() && options.keyDown.isDown() && (options.keyLeft.isDown() && options.keyRight.isDown()))){
+                        W = false;
+                        A = false;
+                        S = false;
+                        D = false;
+                        pressS = false;
+                        pressA = false;
+                        verticalLastPressed = true;
+                        this.setHatAnimDir = 1;
+                    }
+
+                    if (options.keyLeft.isDown() && !options.keyRight.isDown()) {
+                        A = true;
+                        pressA = true;
+                        pressS = false;
+                        verticalLastPressed = false;
+                        this.setHatAnimDir = 3;
+                    }
+                    if (!options.keyLeft.isDown()) {
+                        A = false;
+                    }
+                    if (options.keyRight.isDown() && !options.keyLeft.isDown()) {
+                        D = true;
+                        pressA = false;
+                        pressS = false;
+                        verticalLastPressed = false;
+                        this.setHatAnimDir = 4;
+                    }
+                    if (!options.keyRight.isDown()) {
+                        D = false;
+                    }
+
                 }
             }
         }
@@ -766,26 +831,26 @@ if(!isHattanPilotMode) {
             if (lvent != null && !lvent.isEmpty()) {
                 List<LivingEntity> targent = new ArrayList<>(lvent);
                 for (LivingEntity value : lvent) {
-                        IEntityAndData entityAndData = ((IEntityAndData) value);
-                        if (value instanceof StandEntity || value.is(this.getUser())|| !this.hasLineOfSight(value)) {
-                            targent.remove(value);
-                            this.setHattanTarget(0);
-                            if (this.getUserData(this.getUser()) != null) {
-                                if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-                                    PM.targetHattan = null;
-                                }
-                            }
-                        }
-                        if (entityAndData.roundabout$getTrueInvisibilityManhattan() < 1 || this.isInWater() || this.isInLava()) {
-                            targent.remove(value);
-                            this.setHattanTarget(0);
-                            if (this.getUserData(this.getUser()) != null) {
-                                if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-                                    PM.targetHattan = null;
-                                }
+                    IEntityAndData entityAndData = ((IEntityAndData) value);
+                    if (value instanceof StandEntity || value.is(this.getUser()) || !this.hasLineOfSight(value)) {
+                        targent.remove(value);
+                        this.setHattanTarget(0);
+                        if (this.getUserData(this.getUser()) != null) {
+                            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                                PM.targetHattan = null;
                             }
                         }
                     }
+                    if (entityAndData.roundabout$getTrueInvisibilityManhattan() < 1 || this.isInWater() || this.isInLava()) {
+                        targent.remove(value);
+                        this.setHattanTarget(0);
+                        if (this.getUserData(this.getUser()) != null) {
+                            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                                PM.targetHattan = null;
+                            }
+                        }
+                    }
+                }
 
                 lvent = targent;
             }
@@ -804,7 +869,7 @@ if(!isHattanPilotMode) {
         }
     }
 
-    public static final float[] ShotPowerFloats = {3.55F,3.5F,4F};
+    public static final float[] ShotPowerFloats = {3.55F, 3.5F, 4F};
 
     public BlockHitResult getTargetPos() {
         Vec3 vec3d = this.getEyePosition(0);
@@ -816,42 +881,42 @@ if(!isHattanPilotMode) {
     }
 
     public Vec3 getEyeP(float d) {
-        return this.getPosition(d).add(0,0.15,0);
+        return this.getPosition(d).add(0, 0.15, 0);
     }
 
     public Vec3 getRotations(Entity target) {
 
 
-            Vec3 targetPos = getTargetPos().getLocation();
-            if (target != null) {
-                targetPos = target.getEyePosition(1);
+        Vec3 targetPos = getTargetPos().getLocation();
+        if (target != null) {
+            targetPos = target.getEyePosition(1);
 
-                    double dist = targetPos.distanceTo(this.getPosition(1));
-                    double time = dist / ShotPowerFloats[1];
-                    time *= 1.4;
-                    Vec3 vec = target.getDeltaMovement();
-                    if (target instanceof Player) {
-                        if (Math.abs(vec.y) < 3) {
-                            vec = new Vec3(vec.x, 0, vec.z);
-                        }
-                    }
-                    targetPos = targetPos.add(vec.multiply(time, time, time));
-
+            double dist = targetPos.distanceTo(this.getPosition(1));
+            double time = dist / ShotPowerFloats[1];
+            time *= 1.4;
+            Vec3 vec = target.getDeltaMovement();
+            if (target instanceof Player) {
+                if (Math.abs(vec.y) < 3) {
+                    vec = new Vec3(vec.x, 0, vec.z);
+                }
             }
-            double x = (targetPos.x() - this.getPosition(0).x());
-            double z = (targetPos.z() - this.getPosition(0).z());
-            float rot = (float) (Math.atan2(z, x) - Math.PI / 2);
+            targetPos = targetPos.add(vec.multiply(time, time, time));
 
-            double hy = (targetPos.y() - (this.getEyeP(0).y()));
-            double hd = Math.sqrt(Math.pow(x, 2) + Math.pow(z, 2));
+        }
+        double x = (targetPos.x() - this.getPosition(0).x());
+        double z = (targetPos.z() - this.getPosition(0).z());
+        float rot = (float) (Math.atan2(z, x) - Math.PI / 2);
 
-            float hrot = (float) (Math.atan2(hd, hy) + Math.PI / 2);
+        double hy = (targetPos.y() - (this.getEyeP(0).y()));
+        double hd = Math.sqrt(Math.pow(x, 2) + Math.pow(z, 2));
 
-            if (target != null) {
-                return new Vec3(hrot, rot, 0);
-            }
+        float hrot = (float) (Math.atan2(hd, hy) + Math.PI / 2);
 
-            return new Vec3(0, 0, 0);
+        if (target != null) {
+            return new Vec3(hrot, rot, 0);
+        }
+
+        return new Vec3(0, 0, 0);
 
 
     }
@@ -859,7 +924,7 @@ if(!isHattanPilotMode) {
     public boolean isInRain() {
         BlockPos $$0 = this.blockPosition();
         return this.level().isRainingAt($$0)
-                || this.level().isRainingAt(BlockPos.containing((double)$$0.getX(), this.getBoundingBox().maxY, (double)$$0.getZ()));
+                || this.level().isRainingAt(BlockPos.containing((double) $$0.getX(), this.getBoundingBox().maxY, (double) $$0.getZ()));
     }
 
     public boolean stopsManhattanAnimationsWhenHeldItem = false;
@@ -880,22 +945,206 @@ if(!isHattanPilotMode) {
     public final AnimationState slow_manhattan_back = new AnimationState();
     public final AnimationState slow_manhattan_left = new AnimationState();
     public final AnimationState slow_manhattan_right = new AnimationState();
-    public final AnimationState manhattan_is_loaded= new AnimationState();
+    public final AnimationState manhattan_is_loaded = new AnimationState();
 
 
-    private boolean isPressingW = false;
-    private boolean isPressingA = false;
-    private boolean isPressingS = false;
-    private boolean isPressingD = false;
+    private boolean W = false;
+    private boolean A = false;
+    private boolean S = false;
+    private boolean D = false;
 
     private boolean pressS = false;
     private boolean pressA = false;
 
     private boolean verticalLastPressed = true;
 
+    private boolean isPressing = false;
+
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
+        AnimationState rd = this.rain_dodging_manhattan;
+        AnimationState loaded = this.manhattan_is_loaded;
 
+        AnimationState forBeg = this.forward_manhattan_incipit;
+        AnimationState forLoop = this.forward_manhattan_loop;
+        AnimationState forStop = this.forward_manhattan_stop;
+
+        AnimationState backBeg = this.back_manhattan_incipit;
+        AnimationState backLoop = this.back_manhattan_loop;
+        AnimationState backStop = this.back_manhattan_stop;
+
+        AnimationState leftBeg = this.left_manhattan_incipit;
+        AnimationState leftLoop = this.left_manhattan_loop;
+        AnimationState leftStop = this.left_manhattan_stop;
+
+        AnimationState rightBeg = this.right_manhattan_incipit;
+        AnimationState rightLoop = this.right_manhattan_loop;
+        AnimationState rightStop = this.right_manhattan_stop;
+
+        AnimationState forSlow = this.slow_manhattan;
+        AnimationState backSlow = this.slow_manhattan_back;
+        AnimationState leftSlow = this.slow_manhattan_left;
+        AnimationState rightSlow = this.slow_manhattan_right;
+
+
+        if (this.level().isClientSide) {
+            if (!this.isInRain()) {
+                if ((W || A || S || D) && isHattanPilotMode) {
+                    isPressing = true;
+                } else if ((W && S) || (A && D)){
+                    isPressing = false;
+                }else {
+                    isPressing = false;
+                }
+                rd.stop();
+                if (!this.stopsManhattanAnimationsWhenHeldItem) {
+                    loaded.stop();
+                    if (isPressing) {
+                        forSlow.stop();
+                        backSlow.stop();
+                        leftSlow.stop();
+                        rightSlow.stop();
+                        if (W) {
+                            backLoop.stop();
+                            forStop.stop();
+                            forBeg.startIfStopped(this.tickCount);
+                            forLoop.startIfStopped(this.tickCount);
+                        }
+                        if (!W) {
+                            forBeg.stop();
+                            forLoop.stop();
+                            forStop.startIfStopped(this.tickCount);
+                        }
+                        if (S) {
+                            forLoop.stop();
+                            backStop.stop();
+                            backBeg.startIfStopped(this.tickCount);
+                            backLoop.startIfStopped(this.tickCount);
+                        }
+                        if (!S) {
+                            backLoop.stop();
+                            backBeg.stop();
+                            backStop.startIfStopped(this.tickCount);
+                        }
+
+                        if (A) {
+                            rightLoop.stop();
+                            leftStop.stop();
+                            leftBeg.startIfStopped(this.tickCount);
+                            leftLoop.startIfStopped(this.tickCount);
+                        }
+                        if (!A) {
+                            leftBeg.stop();
+                            leftLoop.stop();
+                            leftStop.startIfStopped(this.tickCount);
+                        }
+
+                        if (D) {
+                            leftLoop.stop();
+                            rightStop.stop();
+                            rightBeg.startIfStopped(this.tickCount);
+                            rightLoop.startIfStopped(this.tickCount);
+                        }
+                        if (!D) {
+                            rightBeg.stop();
+                            rightLoop.stop();
+                            rightStop.startIfStopped(this.tickCount);
+                        }
+                    } else {
+                        if (forLoop.isStarted()) {
+                            forBeg.stop();
+                            forLoop.stop();
+                            backLoop.stop();
+                            backBeg.stop();
+                            forStop.startIfStopped(this.tickCount);
+                        }
+                        if (backLoop.isStarted()) {
+                            backLoop.stop();
+                            backBeg.stop();
+                            forBeg.stop();
+                            forLoop.stop();
+                            backStop.startIfStopped(this.tickCount);
+                        }
+                        if (leftLoop.isStarted()) {
+                            leftLoop.stop();
+                            leftBeg.stop();
+                            rightBeg.stop();
+                            rightLoop.stop();
+                            leftStop.startIfStopped(this.tickCount);
+                        }
+                        if (rightLoop.isStarted()) {
+                            leftLoop.stop();
+                            leftBeg.stop();
+                            rightBeg.stop();
+                            rightLoop.stop();
+                            rightStop.startIfStopped(this.tickCount);
+                        }
+
+                        if (setHatAnimDir == 1) {
+                            forSlow.startIfStopped(this.tickCount);
+                            backSlow.stop();
+                            leftSlow.stop();
+                            rightSlow.stop();
+                        }
+                        if (setHatAnimDir == 2) {
+                            backSlow.startIfStopped(this.tickCount);
+                            leftSlow.stop();
+                            rightSlow.stop();
+                            forSlow.stop();
+                        }
+                        if (setHatAnimDir == 3) {
+                            leftSlow.startIfStopped(this.tickCount);
+                            rightSlow.stop();
+                            forSlow.stop();
+                            backSlow.stop();
+                        }
+                        if (setHatAnimDir == 4) {
+                            rightSlow.startIfStopped(this.tickCount);
+                            leftSlow.stop();
+                            backSlow.stop();
+                            forSlow.stop();
+                        }
+                    }
+                } else {
+                    loaded.startIfStopped(this.tickCount);
+                    forLoop.stop();
+                    forBeg.stop();
+                    forStop.stop();
+                    forSlow.stop();
+                    backBeg.stop();
+                    backSlow.stop();
+                    backLoop.stop();
+                    backStop.stop();
+                    leftSlow.stop();
+                    leftBeg.stop();
+                    leftStop.stop();
+                    leftLoop.stop();
+                    rightBeg.stop();
+                    rightSlow.stop();
+                    rightStop.stop();
+                    rightLoop.stop();
+                }
+            } else {
+                rd.startIfStopped(this.tickCount);
+                loaded.stop();
+                forLoop.stop();
+                forBeg.stop();
+                forStop.stop();
+                forSlow.stop();
+                backBeg.stop();
+                backSlow.stop();
+                backLoop.stop();
+                backStop.stop();
+                leftSlow.stop();
+                leftBeg.stop();
+                leftStop.stop();
+                leftLoop.stop();
+                rightBeg.stop();
+                rightSlow.stop();
+                rightStop.stop();
+                rightLoop.stop();
+            }
+        }
     }
 }
