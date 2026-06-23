@@ -72,6 +72,7 @@ import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.item.BlockItem;
@@ -241,6 +242,18 @@ public class PowersKillerQueen extends NewPunchingStand {
                     generalStandSettings.generalImpaleAttackMultiplier *0.01))));
         } else {
             return levelupDamageMod(((float) ((float) 12* (ClientNetworking.getAppropriateConfig().
+                    killerQueenSettings.killerQueenAttackMultOnMobs*0.01) * (ClientNetworking.getAppropriateConfig().
+                    generalStandSettings.generalImpaleAttackMultiplier *0.01))));
+        }
+    }
+
+    public float getAirBubbleDamage(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(((float) ((float) 2.5f * (ClientNetworking.getAppropriateConfig().
+                    killerQueenSettings.killerQueenAttackMultOnPlayers*0.01) * (ClientNetworking.getAppropriateConfig().
+                    generalStandSettings.generalImpaleAttackMultiplier *0.01))));
+        } else {
+            return levelupDamageMod(((float) ((float) 3.0f * (ClientNetworking.getAppropriateConfig().
                     killerQueenSettings.killerQueenAttackMultOnMobs*0.01) * (ClientNetworking.getAppropriateConfig().
                     generalStandSettings.generalImpaleAttackMultiplier *0.01))));
         }
@@ -1470,9 +1483,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (mobPlantTicks > 0){ mobPlantTicks--; }
         if (impaleTicks > 0){ impaleTicks--; }
 
-        if (isClient()) {
-
-        }else {
+        if (!isClient()) {
 
             if (this.currentBombStatus == BOMB_BLOCK) {
                 if (this.bombBlock.blockGotDestroyed()) { this.defuseServer(); }
