@@ -4,9 +4,11 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StandFireBlock;
 import net.hydra.jojomod.block.StickyIceCoatingBlock;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.event.ModParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
@@ -46,6 +48,14 @@ public class IceTwisterEntity extends Entity {
             if (lifeSpan > -1){
                 lifeSpan--;
                 if (lifeSpan == 0){
+                    if (level() instanceof ServerLevel sl) {
+                        sl.sendParticles(ModParticles.VACUUM,
+                                this.getX(),
+                                this.getY()+1,
+                                this.getZ(),
+                                15, 0.3, 0.4, 0.3, 0.1F);
+
+                    }
                     discard();
                 }
             }
@@ -65,7 +75,7 @@ public class IceTwisterEntity extends Entity {
                                     && iceState.canSurvive(level(), targetPos)) {
 
                                 level().setBlockAndUpdate(targetPos, iceState);
-                                level().scheduleTick(targetPos, ModBlocks.STICKY_ICE, Mth.nextInt(level().getRandom(), 150, 152));
+                                level().scheduleTick(targetPos, ModBlocks.STICKY_ICE, Mth.nextInt(level().getRandom(), 141, 145));
                             }
                             // placement logic
                         }

@@ -555,9 +555,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
 
         if (!isHoldingSneak()){
-            setSkillIcon(context, x, y, 2, StandIcons.TWISTER, PowerIndex.NO_CD);
+            setSkillIcon(context, x, y, 2, StandIcons.TWISTER, PowerIndex.SKILL_2);
         } else {
-            setSkillIcon(context, x, y, 2, StandIcons.GENTLY_WEEPS, PowerIndex.NO_CD);
+            setSkillIcon(context, x, y, 2, StandIcons.GENTLY_WEEPS, PowerIndex.SKILL_2_SNEAK);
         }
 
 
@@ -684,6 +684,12 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
+    public boolean isServerControlledCooldown(byte num){
+        if (num == PowerIndex.SKILL_2 || num == PowerIndex.SKILL_2_SNEAK) {
+            return true;
+        }
+        return super.isServerControlledCooldown(num);
+    }
 
     public void iceTwisterClient(){
         if (!onCooldown(PowerIndex.SKILL_2) && !isChargingCold()){
@@ -693,7 +699,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     false
             );
 
-            this.setCooldown(PowerIndex.SKILL_2, 180);
             tryBlockPosPowerPacket(PowerIndex.POWER_2,hit.getBlockPos());
         }
     }
@@ -717,31 +722,35 @@ public class PowersWhiteAlbum extends NewDashPreset {
             return;
         }
 
-        Level level = self.level();
+        if (!onCooldown(PowerIndex.SKILL_2)) {
 
-        BlockPos checkPos = pos;
+            this.setCooldown(PowerIndex.SKILL_2, 180);
+            Level level = self.level();
 
-        while (checkPos.getY() > level.getMinBuildHeight()) {
-            BlockState state = level.getBlockState(checkPos);
+            BlockPos checkPos = pos;
 
-            boolean replaceable = state.canBeReplaced();
-            boolean liquid = !state.getFluidState().isEmpty();
+            while (checkPos.getY() > level.getMinBuildHeight()) {
+                BlockState state = level.getBlockState(checkPos);
 
-            if (!replaceable && !liquid || checkPos.getCenter().distanceTo(self.position()) > 7) {
-                // Found ground
-                BlockPos twisterPos = checkPos.above();
+                boolean replaceable = state.canBeReplaced();
+                boolean liquid = !state.getFluidState().isEmpty();
 
-                // Spawn twister here
+                if (!replaceable && !liquid || checkPos.getCenter().distanceTo(self.position()) > 7) {
+                    // Found ground
+                    BlockPos twisterPos = checkPos.above();
+
+                    // Spawn twister here
 
 
-                IceTwisterEntity twister = new IceTwisterEntity(
-                        this.self.level(), twisterPos.getCenter().subtract(0,0.5F,0));
-                this.getSelf().level().addFreshEntity(twister);
-                twister.lifeSpan = 140;
-                break;
+                    IceTwisterEntity twister = new IceTwisterEntity(
+                            this.self.level(), twisterPos.getCenter().subtract(0, 0.5F, 0));
+                    this.getSelf().level().addFreshEntity(twister);
+                    twister.lifeSpan = 140;
+                    break;
+                }
+
+                checkPos = checkPos.below();
             }
-
-            checkPos = checkPos.below();
         }
     }
 

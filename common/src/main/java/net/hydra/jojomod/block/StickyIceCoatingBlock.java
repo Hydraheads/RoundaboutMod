@@ -71,6 +71,6 @@ public class StickyIceCoatingBlock
     }
     @Override
     public int range2(){
-        return 4;
+        return 5;
     }
 }
