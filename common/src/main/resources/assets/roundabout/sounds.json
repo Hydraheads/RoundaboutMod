@@ -23,6 +23,12 @@
       "roundabout:ice_blast_charge"
     ]
   },
+  "icy_wind": {
+    "subtitle": "sounds.roundabout.icy_wind",
+    "sounds": [
+      "roundabout:icy_wind"
+    ]
+  },
   "cold_shot": {
     "subtitle": "sounds.roundabout.cold_shot",
     "sounds": [

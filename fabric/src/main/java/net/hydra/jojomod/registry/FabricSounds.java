@@ -321,6 +321,7 @@ public class FabricSounds {
         addSound(ModSounds.VAMPIRE_DASH_ID, ModSounds.VAMPIRE_DASH_EVENT);
         addSound(ModSounds.VAMPIRE_GLEAM_ID, ModSounds.VAMPIRE_GLEAM_EVENT);
 
+        addSound(ModSounds.ICY_WIND_ID, ModSounds.ICY_WIND_EVENT);
         addSound(ModSounds.GLAIVE_CHARGE_ID, ModSounds.GLAIVE_CHARGE_EVENT);
         addSound(ModSounds.GLAIVE_ATTACK_ID, ModSounds.GLAIVE_ATTACK_EVENT);
         addSound(ModSounds.FOG_CLONE_ID, ModSounds.FOG_CLONE_EVENT);

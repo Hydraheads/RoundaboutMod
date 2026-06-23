@@ -3,8 +3,10 @@ package net.hydra.jojomod.entity.projectile;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StandFireBlock;
 import net.hydra.jojomod.block.StickyIceCoatingBlock;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -86,9 +88,15 @@ public class IceTwisterEntity extends Entity {
             if (renderCold < 10) {
                 renderCold++;
             }
+            if (!started && !((TimeStop) level()).inTimeStopRange(this)) {
+                started = true;
+                ClientUtil.handleTwisterSound(this);
+            }
         }
         super.tick();
     }
+
+    public boolean started = false;
 
     private boolean canFreeze(BlockPos pos) {
         BlockState state = level().getBlockState(pos);

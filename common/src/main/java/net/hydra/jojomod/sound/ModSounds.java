@@ -996,6 +996,10 @@ public class ModSounds {
     public static final ResourceLocation VAMPIRE_GLEAM_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VAMPIRE_GLEAM);
     public static SoundEvent VAMPIRE_GLEAM_EVENT = SoundEvent.createVariableRangeEvent(VAMPIRE_GLEAM_ID);
 
+    public static final String ICY_WIND = "icy_wind";
+    public static final ResourceLocation ICY_WIND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ICY_WIND);
+    public static SoundEvent ICY_WIND_EVENT = SoundEvent.createVariableRangeEvent(ICY_WIND_ID);
+
 
     public static final String GLAIVE_CHARGE = "glaive_charge";
     public static final ResourceLocation GLAIVE_CHARGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GLAIVE_CHARGE);

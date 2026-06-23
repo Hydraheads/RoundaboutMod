@@ -42,6 +42,7 @@ import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
@@ -370,6 +371,11 @@ public class ClientUtil {
     }
     public static void handleSkatingSounds(Entity entity) {
         Minecraft.getInstance().getSoundManager().play(new RoadRollerAmbientSound(ModSounds.ROAD_ROLLER_AMBIENT_EVENT, SoundSource.PLAYERS, 1, 0, entity));
+    }
+    public static void handleTwisterSound(Entity entity) {
+        Minecraft.getInstance().getSoundManager().play(new EntityBoundSoundInstance(ModSounds.ICY_WIND_EVENT,
+                SoundSource.PLAYERS, 1, 1, entity,
+                entity.level().random.nextLong()));
     }
 
     public static void handleRoadRollerExplosionSound(Entity entity) {
