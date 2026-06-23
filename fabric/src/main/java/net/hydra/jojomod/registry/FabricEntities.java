@@ -663,7 +663,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "cold_twister"),
                     EntityType.Builder.<IceTwisterEntity>of(IceTwisterEntity::new, MobCategory.MISC).
-                            sized(1F, 1F).clientTrackingRange(15).build(Roundabout.MOD_ID+":cold_twister")
+                            sized(IceTwisterEntity.height, IceTwisterEntity.width).clientTrackingRange(15).build(Roundabout.MOD_ID+":cold_twister")
             );
         public static final EntityType<GasolineSplatterEntity> GASOLINE_SPLATTER =
                 Registry.register(

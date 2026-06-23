@@ -593,7 +593,7 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<IceTwisterEntity>> COLD_TWISTER =
             ENTITY_TYPES.register("cold_twister", () ->
-                    EntityType.Builder.<IceTwisterEntity>of(IceTwisterEntity::new, MobCategory.MISC).sized(1F, 1F).
+                    EntityType.Builder.<IceTwisterEntity>of(IceTwisterEntity::new, MobCategory.MISC).sized(IceTwisterEntity.height, IceTwisterEntity.width).
                             clientTrackingRange(15).
                             build(new ResourceLocation(Roundabout.MOD_ID, "cold_twister").toString())
             );

@@ -31,6 +31,7 @@ public class IceTwisterRenderer extends EntityRenderer<IceTwisterEntity> {
     }
 
 
+
     public void render(IceTwisterEntity $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
 
             if (((TimeStop) $$0.level()).inTimeStopRange($$0)) {
@@ -42,6 +43,7 @@ public class IceTwisterRenderer extends EntityRenderer<IceTwisterEntity> {
 
 
             $$3.scale(1.6f, 1.6f, 1.6f);
+            $$3.translate(0,-0.1f,0);
             this.model.root().getAllParts().forEach(ModelPart::resetPose);
             $$0.twisterSpin.startIfStopped($$0.tickCount);
             this.model.animate2($$0.twisterSpin, RipperEyesAnimation.SPIN, $$0.tickCount+$$2, 1f);
@@ -62,7 +64,8 @@ public class IceTwisterRenderer extends EntityRenderer<IceTwisterEntity> {
 
             this.model.root().xRot = (float) Math.toRadians(pitch);
             this.model.root().yRot = (float) Math.toRadians(Mth.wrapDegrees(yaw*-1) %360);
-            this.model.renderToBuffer($$3, $$6, $$5, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1f);
+            this.model.renderToBuffer($$3, $$6, $$5, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F,
+                    Math.min((((float)$$0.renderCold)/10)+($$2*0.1F),1f));
             $$3.popPose();
             super.render($$0, $$1, $$2, $$3, $$4, $$5);
 

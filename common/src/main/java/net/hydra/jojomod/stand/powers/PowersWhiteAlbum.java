@@ -2,13 +2,13 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IFatePlayer;
-import net.hydra.jojomod.block.ModBlocks;
-import net.hydra.jojomod.block.StandFireBlock;
-import net.hydra.jojomod.block.WhiteAlbumIceBlock;
+import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.projectile.ColdBlastProjectile;
+import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
+import net.hydra.jojomod.entity.projectile.IceTwisterEntity;
 import net.hydra.jojomod.entity.projectile.UltravioletProjectile;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -167,24 +167,25 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 if (!blockState.canSurvive(self.level(), blockPos2) ||
                         !self.level().isUnobstructed(blockState, blockPos2, CollisionContext.empty())) continue;
                     if (blockState3.isAir() ||
-                            (MainUtil.getIsGamemodeApproriateForGrief(self) && canFreezeGrass &&
-                                    blockState3.canBeReplaced() &&
-                                    !(blockState3.getBlock() instanceof LiquidBlockContainer)&&
-                                    !(blockState3.getBlock() instanceof FireBlock)&&
-                                    !(blockState3.getBlock() instanceof StandFireBlock)
-                                    &&
-                            !blockState3.liquid() &&
-                            !(blockState3.hasProperty(BlockStateProperties.WATERLOGGED) &&
-                                    blockState3.getValue(BlockStateProperties.WATERLOGGED)
-                                    )
-                            )
-                    ) {
-                            self.level().setBlockAndUpdate(blockPos2, blockState);
-                            self.level().scheduleTick(blockPos2, ModBlocks.WHITE_ALBUM_ICE_SLAB, Mth.nextInt(self.getRandom(), 110, 130));
-                    }
+                        (MainUtil.getIsGamemodeApproriateForGrief(self) && canFreezeGrass &&
+                                blockState3.canBeReplaced() &&
+                                !(blockState3.getBlock() instanceof LiquidBlockContainer)&&
+                                !(blockState3.getBlock() instanceof FireBlock)&&
+                                !(blockState3.getBlock() instanceof StickyIceCoatingBlock)&&
+                                !(blockState3.getBlock() instanceof ColdAirBlock)&&
+                                !(blockState3.getBlock() instanceof StandFireBlock)
+                                &&
+                        !blockState3.liquid() &&
+                        !(blockState3.hasProperty(BlockStateProperties.WATERLOGGED) &&
+                                blockState3.getValue(BlockStateProperties.WATERLOGGED)
+                                )
+                        )
+                ) {
+                        self.level().setBlockAndUpdate(blockPos2, blockState);
+                        self.level().scheduleTick(blockPos2, ModBlocks.WHITE_ALBUM_ICE_SLAB, Mth.nextInt(self.getRandom(), 110, 130));
                 }
-
             }
+        }
     }
 
     @Override
@@ -554,9 +555,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
 
         if (!isHoldingSneak()){
-            setSkillIcon(context, x, y, 2, StandIcons.TWISTER, PowerIndex.NO_CD);
+            setSkillIcon(context, x, y, 2, StandIcons.TWISTER, PowerIndex.SKILL_2);
         } else {
-            setSkillIcon(context, x, y, 2, StandIcons.GENTLY_WEEPS, PowerIndex.NO_CD);
+            setSkillIcon(context, x, y, 2, StandIcons.GENTLY_WEEPS, PowerIndex.SKILL_2_SNEAK);
         }
 
 
@@ -665,6 +666,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case SKILL_1_CROUCH-> {
                 iceCancelClient();
             }
+            case SKILL_2_NORMAL-> {
+                iceTwisterClient();
+            }
             case SKILL_3_NORMAL -> {
                 dashOrWall();
             }
@@ -680,6 +684,25 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
+    public boolean isServerControlledCooldown(byte num){
+        if (num == PowerIndex.SKILL_2 || num == PowerIndex.SKILL_2_SNEAK) {
+            return true;
+        }
+        return super.isServerControlledCooldown(num);
+    }
+
+    public void iceTwisterClient(){
+        if (!onCooldown(PowerIndex.SKILL_2) && !isChargingCold()){
+            BlockHitResult hit = (BlockHitResult) self.pick(
+                    5.0D, // reach distance
+                    0.0F,
+                    false
+            );
+
+            tryBlockPosPowerPacket(PowerIndex.POWER_2,hit.getBlockPos());
+        }
+    }
+
     public void dashOrWall(){
         if (hasSkatesActivated()){
             if (!this.onCooldown(PowerIndex.SKILL_3)) {
@@ -690,6 +713,44 @@ public class PowersWhiteAlbum extends NewDashPreset {
             }
         } else {
             dash();
+        }
+    }
+
+    public void iceTwister(){
+        BlockPos pos = twisterPos;
+        if (pos == null) {
+            return;
+        }
+
+        if (!onCooldown(PowerIndex.SKILL_2)) {
+
+            this.setCooldown(PowerIndex.SKILL_2, 180);
+            Level level = self.level();
+
+            BlockPos checkPos = pos;
+
+            while (checkPos.getY() > level.getMinBuildHeight()) {
+                BlockState state = level.getBlockState(checkPos);
+
+                boolean replaceable = state.canBeReplaced();
+                boolean liquid = !state.getFluidState().isEmpty();
+
+                if (!replaceable && !liquid || checkPos.getCenter().distanceTo(self.position()) > 7) {
+                    // Found ground
+                    BlockPos twisterPos = checkPos.above();
+
+                    // Spawn twister here
+
+
+                    IceTwisterEntity twister = new IceTwisterEntity(
+                            this.self.level(), twisterPos.getCenter().subtract(0, 0.5F, 0));
+                    this.getSelf().level().addFreshEntity(twister);
+                    twister.lifeSpan = 140;
+                    break;
+                }
+
+                checkPos = checkPos.below();
+            }
         }
     }
 
@@ -933,6 +994,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case PowerIndex.POWER_1_BONUS -> {
                 toggleFists();
             }
+            case PowerIndex.POWER_2 -> {
+                iceTwister();
+            }
             case PowerIndex.POWER_3 -> {
                 iceWallServer(false);
             }
@@ -1079,6 +1143,13 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     public void despawnSurvivorClient(){
         tryPowerPacket(PowerIndex.POWER_2_SNEAK);
+    }
+
+    public BlockPos twisterPos = BlockPos.ZERO;
+    @Override
+    public boolean tryBlockPosPower(int move, boolean forced, BlockPos pos) {
+        twisterPos = pos;
+        return super.tryBlockPosPower(move, forced,pos);
     }
     @Override
     public boolean tryPosPower(int move, boolean forced, Vec3 pos) {
