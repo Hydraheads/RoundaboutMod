@@ -1032,6 +1032,11 @@ public class MainUtil {
     }
 
     public static boolean canFreeze(Entity mob){
+        if (mob instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA &&
+                PWA.hasStandActive(LE)) {
+            return false;
+        }
+
         return (!isFreezableMobBlacklisted(mob) && !(mob instanceof Mob mb && isBossMob(mb))
                 && !(mob != null && ((TimeStop)mob.level()).CanTimeStopEntity(mob))
         &&  !(mob instanceof LivingEntity le && FateTypes.isVampire(le)));
