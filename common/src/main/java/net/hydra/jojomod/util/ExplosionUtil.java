@@ -3,6 +3,7 @@ package net.hydra.jojomod.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
@@ -82,18 +83,14 @@ public class ExplosionUtil {
 
 		DamageSource notSeenDamage =  ModDamageTypes.of(level, DamageTypes.EXPLOSION, null);
 
+		Roundabout.LOGGER.info("Damage on Players: " + damage * playerMult);
+
 		for(int j = 0;j<damages.size();j++) {
 			Entity entity = damages.get(j);
 			double dist = entity.distanceToSqr(pos);
 			float percUnhand = ((float)dist/ (range * range * range));
 			float perc = 1.0f - (percUnhand*0.75f);
 			float percKnockback = 1.0f - (percUnhand*0.5f);
-
-			if (MainUtil.getReducedDamage(entity)) {
-				perc *= playerMult;
-			}else {
-				perc *= mobMult;
-			}
 
 			boolean hasSeen = true;
 
@@ -102,10 +99,19 @@ public class ExplosionUtil {
 			}
 
 			if (hasSeen || MainUtil.isBossMob(entity)) {
-				entity.hurt(dmgSource, perc * damage);
+				if (MainUtil.getReducedDamage(entity)) {
+					entity.hurt(dmgSource, perc * damage * playerMult);
+				}else {
+					entity.hurt(dmgSource, perc * damage * mobMult);
+				}
 			} else {
-				entity.hurt(notSeenDamage, perc * damage);
+				if (MainUtil.getReducedDamage(entity)) {
+					entity.hurt(notSeenDamage, perc * damage * playerMult);
+				}else {
+					entity.hurt(notSeenDamage, perc * damage * mobMult);
+				}
 			}
+
 
 			Vec3 knockbackUnhand = new Vec3(entity.getX() - pos.x(), entity.getY() - pos.y(), entity.getZ() - pos.z());
 			Vec3 knockback = knockbackUnhand.normalize().scale(Math.min(knockBack, percKnockback*knockBack));
