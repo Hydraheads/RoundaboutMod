@@ -218,15 +218,15 @@
   "sha_moving": {
     	"subtitle": "sounds.roundabout.sha_moving",
     	"sounds": [
-    	"roundabout:sha_moving"
-    ]
+    	  "roundabout:sha_moving"
+      ]
 	},
   "summon_sha": {
     "subtitle": "sounds.roundabout.summon_sha",
     "sounds": [
         "roundabout:summon_sha"
     ]
-    },
+  },
   "killer_queen_bubble_launch": {
     "subtitle": "sounds.roundabout.killer_queen_bubble_launch",
     "sounds": [
@@ -257,6 +257,12 @@
         "roundabout:summon_killer_queen"
       ]
     },
+  "killer_queen_shiba": {
+    "subtitle": "sounds.roundabout.killer_queen_shiba",
+    "sounds": [
+      "roundabout:killer_queen_shiba"
+    ]
+  },
   "summon_magician": {
     "subtitle": "sounds.roundabout.summon_magician",
     "sounds": [
