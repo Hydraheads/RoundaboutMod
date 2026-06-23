@@ -198,7 +198,8 @@ public class ModBlocks {
                     .lightLevel((L) -> {
                         return 1;
                     }).
-                    randomTicks().friction(0.98F).strength(0.5F).forceSolidOff().sound(SoundType.GLASS).replaceable().noOcclusion().pushReaction(PushReaction.DESTROY));
+                    randomTicks().friction(0.98F).strength(0.5F).forceSolidOff().sound(SoundType.GLASS).replaceable().
+                    noCollission().noOcclusion().pushReaction(PushReaction.DESTROY));
 
 
     public static Block COLD_AIR_PROPERTIES =

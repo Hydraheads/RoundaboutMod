@@ -70,7 +70,6 @@ public class WhiteAlbumCoatingBlock
     }
     @Override
     public void randomTick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource randomSource) {
-        this.tick(blockState, serverLevel, blockPos, randomSource);
     }
 
     @Override

@@ -49,14 +49,18 @@ public class StickyIceCoatingBlock
         super(properties);
     }
 
+    @Override
+    public boolean isPathfindable(BlockState $$0, BlockGetter $$1, BlockPos $$2, PathComputationType $$3) {
+        return true;
+    }
     public void entityInside(BlockState $$0, Level $$1, BlockPos $$2, Entity $$3) {
         if ($$3 instanceof LivingEntity LE && !LE.isInvulnerable() && !MainUtil.isBossMob($$3)) {
             if (!(((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW &&
                     PowerTypes.hasStandActive(LE))) {
                 if (FateTypes.isVampire(LE)) {
-                    $$3.makeStuckInBlock($$0, new Vec3((double) 0.3F, (double) 0.3F, (double) 0.3F));
+                    $$3.makeStuckInBlock($$0, new Vec3((double) 0.4F, (double) 0.3F, (double) 0.4F));
                 } else {
-                    $$3.makeStuckInBlock($$0, new Vec3((double) 0.6F, (double) 0.8F, (double) 0.6F));
+                    $$3.makeStuckInBlock($$0, new Vec3((double) 0.65F, (double) 0.8F, (double) 0.65F));
                 }
             }
             if (!$$1.isClientSide) {
