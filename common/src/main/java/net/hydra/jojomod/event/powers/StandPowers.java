@@ -150,6 +150,10 @@ public class StandPowers extends AbilityScapeBasis {
     public void visualFrameTick() {};
 
 
+    public float getDamageAdd(DamageSource source, float amt, Entity target){
+        return 0;
+    }
+
 
     /**Runs this code while switching out of your stand with a disc*/
     public void onStandSwitch(){

@@ -888,6 +888,12 @@ public class Config implements Cloneable {
         public Boolean freezesSurfaceWater;
         @BooleanOption(group = "inherit", value = true)
         public Boolean freezesGrass;
+        @FloatOption(group = "inherit", value = 0.15F, min = 0, max = 72000F)
+        public Float miningSpeedBuffWhite;
+        @FloatOption(group = "inherit", value = 0.1F, min = 0, max = 72000F)
+        public Float bonusPlayerDMGWhite;
+        @FloatOption(group = "inherit", value = 0.15F, min = 0, max = 72000F)
+        public Float bonusMobDMGWhite;
     }
     public static class WalkingHeartSettings {
         @BooleanOption(group = "inherit", value = true)

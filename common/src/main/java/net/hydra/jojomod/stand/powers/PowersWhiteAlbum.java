@@ -702,6 +702,24 @@ public class PowersWhiteAlbum extends NewDashPreset {
             tryBlockPosPowerPacket(PowerIndex.POWER_2,hit.getBlockPos());
         }
     }
+    @Override
+    public float getBonusPassiveMiningSpeed(){
+        return 1f + ClientNetworking.getAppropriateConfig().whiteAlbumSettings.miningSpeedBuffWhite;
+    }
+
+    @Override
+    public float getDamageAdd(DamageSource source, float amt, Entity target){
+        if (PowerTypes.hasStandActive(self)) {
+            if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)) {
+                if (target instanceof Player pl) {
+                    return ClientNetworking.getAppropriateConfig().whiteAlbumSettings.bonusPlayerDMGWhite;
+                } else {
+                    return ClientNetworking.getAppropriateConfig().whiteAlbumSettings.bonusMobDMGWhite;
+                }
+            }
+        }
+        return super.getDamageAdd(source,amt,target);
+    }
 
     public void dashOrWall(){
         if (hasSkatesActivated()){

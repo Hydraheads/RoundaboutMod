@@ -3045,7 +3045,11 @@
   "config.roundabout.attackSpeedBuff.name": "Attack Speed Buff",
   "config.roundabout.attackSpeedBuff.desc": "Increases the speed of swinging weapons with justice active. By default, the stand increases your attack speed by 30%.",
   "config.roundabout.miningSpeedBuff.name": "Mining Speed Buff",
-  "config.roundabout.miningSpeedBuff.desc": "Increases the speed of breaking blocks with justice active. By default, the stand increases your mining speed by 30%.",
+  "config.roundabout.miningSpeedBuff.desc": "Increases the speed of breaking blocks with white album active. By default, the stand increases your mining speed by 30%.",
+  "config.roundabout.bonusPlayerDMGWhite.name": "Bonus Player Damage",
+  "config.roundabout.bonusPlayerDMGWhite.desc": "This % melee damage increase.",
+  "config.roundabout.bonusMobDMGWhite.name": "Bonus Mob Damage",
+  "config.roundabout.bonusMobDMGWhite.desc": "This % melee damage increase.",
 
   "config.roundabout.numberOfYapLines.name": "Yap Line Count",
   "config.roundabout.numberOfYapLines.desc": "Change this if you want to add more yap lines to the lang file in a resource pack.",
