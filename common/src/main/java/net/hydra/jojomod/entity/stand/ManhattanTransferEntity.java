@@ -249,6 +249,8 @@ public class ManhattanTransferEntity extends StandEntity {
     public float heighHattanPilotNoMov = 0;
     private boolean isKeyEverPressed = false;
 
+    int knockbackArrow = 0;
+
     public StandUser getUserData(LivingEntity User) {
         return ((StandUser) User);
     }
@@ -296,6 +298,7 @@ public class ManhattanTransferEntity extends StandEntity {
                                         }
                                         this.fireTicksPrj = AA.getRemainingFireTicks();
                                         this.setHeldItemManhattan(ii.copyAndClear());
+                                        knockbackArrow = AA.getKnockback();
                                         AA.discard();
                                     } else if (AA instanceof RoundaboutBulletEntity BE) {
                                         hasItem = true;
@@ -432,6 +435,7 @@ public class ManhattanTransferEntity extends StandEntity {
                 AbstractArrow $$11 = $$10.createArrow(thrower.level(), item, thrower);
                 $$11.setPos(pos);
                 $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3, getShotAccuracy);
+                $$11.setKnockback(thrower.knockbackArrow);
                 $$11.setCritArrow(false);
                 ((IAbstractArrowAccess) $$11).roundabout$SetIsManhattan(true);
                 ((IAbstractArrowAccess) $$11).roundabout$setHattanDamage(thrower.manhattanDamageIncipit);
@@ -447,6 +451,7 @@ public class ManhattanTransferEntity extends StandEntity {
                 thrower.level().addFreshEntity($$11);
                 thrower.hattanDeflected = $$11;
                 $$11.setOwner(thrower.getUser());
+                thrower.knockbackArrow = 0;
             } else if (item.getItem() instanceof AmmoItem) {
                 RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity(thrower.level(), thrower);
                 $$7.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.5F, getShotAccuracy);
@@ -948,17 +953,17 @@ public class ManhattanTransferEntity extends StandEntity {
     public final AnimationState manhattan_is_loaded = new AnimationState();
 
 
-    private boolean W = false;
-    private boolean A = false;
-    private boolean S = false;
-    private boolean D = false;
+    public boolean W = false;
+    public  boolean A = false;
+    public  boolean S = false;
+    public  boolean D = false;
 
-    private boolean pressS = false;
-    private boolean pressA = false;
+    public  boolean pressS = false;
+    public  boolean pressA = false;
 
-    private boolean verticalLastPressed = true;
+    public  boolean verticalLastPressed = true;
 
-    private boolean isPressing = false;
+    public  boolean isPressing = false;
 
     @Override
     public void setupAnimationStates() {
