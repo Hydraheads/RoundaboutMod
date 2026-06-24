@@ -219,6 +219,10 @@ public class PollinationTransferModel <T extends PollinationTransferEntity> exte
         this.animate(pEntity.back_flowerhattan_stop, PollinationTransferAnimations.b_stop, pAgeInTicks, 1f);
         this.animate(pEntity.left_flowerhattan_stop, PollinationTransferAnimations.l_stop, pAgeInTicks, 1f);
         this.animate(pEntity.right_flowerhattan_stop, PollinationTransferAnimations.r_stop, pAgeInTicks, 1f);
+        this.animate(pEntity.forward_flowerhattan_loop, PollinationTransferAnimations.fLoop, pAgeInTicks, 1f);
+        this.animate(pEntity.back_flowerhattan_loop, PollinationTransferAnimations.bLoop, pAgeInTicks, 1f);
+        this.animate(pEntity.left_flowerhattan_loop, PollinationTransferAnimations.lLoop, pAgeInTicks, 1f);
+        this.animate(pEntity.right_flowerhattan_loop, PollinationTransferAnimations.rLoop, pAgeInTicks, 1f);
     }
 
     @Override
