@@ -64,6 +64,8 @@ public class IceTwisterEntity extends Entity {
                     }
                     discard();
                 }
+            } else {
+                discard();
             }
 
             AABB wallBox = this.getBoundingBox();
