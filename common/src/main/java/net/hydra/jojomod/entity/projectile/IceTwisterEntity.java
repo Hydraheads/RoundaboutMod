@@ -163,11 +163,11 @@ public class IceTwisterEntity extends Entity {
 
     @Override
     protected void readAdditionalSaveData(CompoundTag compoundTag) {
-        compoundTag.putInt("lifespan", lifeSpan);
+        lifeSpan = compoundTag.getInt("lifespan");
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag compoundTag) {
-        lifeSpan = compoundTag.getInt("lifespan");
+        compoundTag.putInt("lifespan", lifeSpan);
     }
 }
