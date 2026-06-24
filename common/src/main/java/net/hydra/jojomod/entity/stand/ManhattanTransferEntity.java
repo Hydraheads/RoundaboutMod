@@ -434,7 +434,7 @@ public class ManhattanTransferEntity extends StandEntity {
                 ArrowItem $$10 = (ArrowItem) item.getItem();
                 AbstractArrow $$11 = $$10.createArrow(thrower.level(), item, thrower);
                 $$11.setPos(pos);
-                $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3, getShotAccuracy);
+                $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3F, getShotAccuracy);
                 $$11.setKnockback(thrower.knockbackArrow);
                 $$11.setCritArrow(false);
                 ((IAbstractArrowAccess) $$11).roundabout$SetIsManhattan(true);
@@ -537,7 +537,16 @@ public class ManhattanTransferEntity extends StandEntity {
                 thrower.level().addFreshEntity($$7);
                 $$7.isHattanKnife = true;
                 thrower.hattanDeflected = $$7;
-            } else if (item.getItem() instanceof PotionItem) {
+            } else if (item.getItem() instanceof MatchItem) {
+            MatchEntity $$7 = new MatchEntity(thrower, thrower.level());
+            $$7.setPos(pos);
+            $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
+            $$7.setRemainingFireTicks(thrower.fireTicksPrj);
+            $$7.setOwner(thrower.getUser());
+            $$7.isHattanMatch = true;
+            thrower.level().addFreshEntity($$7);
+            thrower.hattanDeflected = $$7;
+        } else if (item.getItem() instanceof PotionItem) {
                 ThrownPotion $$4 = new ThrownPotion(thrower.level(), thrower);
                 $$4.setPos(pos);
                 $$4.setItem(item);
