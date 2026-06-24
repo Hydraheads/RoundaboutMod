@@ -5,6 +5,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.MinionAttackGoal;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Zombiefish;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.goals.*;
 import net.hydra.jojomod.entity.projectile.PoisonLlamaSpit;
 import net.hydra.jojomod.event.ModParticles;
@@ -521,6 +522,15 @@ public class BaseMinion extends PathfinderMob {
     public void setTarget(@Nullable LivingEntity $$0) {
         if (($$0 != null && controller != null && controller.getUUID() == $$0.getUUID()) || ($$0 instanceof WitherBoss)) {
             return;
+        } else if ($$0 instanceof BaseMinion bm && controller2 != null
+                && bm.controller2 != null && bm.controller2.equals(controller2)) {
+            return;
+        } else if ($$0 instanceof Zombiefish bm && controller2 != null
+                && bm.controller2 != null && bm.controller2.equals(controller2)) {
+            return;
+        } else if ($$0 instanceof FallenMob bm && controller2 != null
+                && bm.controller != null && bm.controller.getUUID().equals(controller2)) {
+            return;
         } else if ($$0 instanceof Mob fm && ((StandUser)fm).rdbt$getFleshBud() != null
                     && controller2 != null
                     && ((StandUser)fm).rdbt$getFleshBud().equals(controller2)) {
@@ -539,6 +549,15 @@ public class BaseMinion extends PathfinderMob {
 
     public void setLastHurtByMob(@Nullable LivingEntity $$0) {
         if (($$0 != null && controller != null && controller.is($$0)) || ($$0 instanceof WitherBoss)){
+            return;
+        } else if ($$0 instanceof BaseMinion bm && controller2 != null
+                && bm.controller2 != null && bm.controller2.equals(controller2)) {
+            return;
+        } else if ($$0 instanceof Zombiefish bm && controller2 != null
+                && bm.controller2 != null && bm.controller2.equals(controller2)) {
+            return;
+        } else if ($$0 instanceof FallenMob bm && controller2 != null
+                && bm.controller != null && bm.controller.getUUID().equals(controller2)) {
             return;
         } else if ($$0 instanceof Mob fm && ((StandUser)fm).rdbt$getFleshBud() != null
                 && controller2 != null
