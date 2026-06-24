@@ -57,13 +57,6 @@ public class IceTwisterRenderer extends EntityRenderer<IceTwisterEntity> {
         double dz = motion.z;
         // Horizontal distance (XZ plane)
         double horizontal = Math.sqrt(dx * dx + dz * dz);
-        // Yaw (rotation around Y axis)
-        float yaw = (float)(Math.atan2(dz, dx) * (180F / Math.PI)) - 90F;
-        // Pitch (rotation around X axis)
-        float pitch = (float)(-(Math.atan2(dy, horizontal) * (180F / Math.PI)));
-
-            this.model.root().xRot = (float) Math.toRadians(pitch);
-            this.model.root().yRot = (float) Math.toRadians(Mth.wrapDegrees(yaw*-1) %360);
             this.model.renderToBuffer($$3, $$6, $$5, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F,
                     Math.min((((float)$$0.renderCold)/10)+($$2*0.1F),1f));
             $$3.popPose();
