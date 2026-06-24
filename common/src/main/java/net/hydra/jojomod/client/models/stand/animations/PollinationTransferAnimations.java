@@ -161,7 +161,7 @@ public class PollinationTransferAnimations {
                     new Keyframe(2.75F, KeyframeAnimations.posVec(-0.5F, -1.0F, 1.5F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(2.8333F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
-            .addAnimation("key_string1", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+            .addAnimation("stem", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.0833F, KeyframeAnimations.degreeVec(-12.7774F, -10.1754F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.2083F, KeyframeAnimations.degreeVec(-5.2774F, -10.1754F, 0.0F), AnimationChannel.Interpolations.LINEAR),
@@ -216,6 +216,63 @@ public class PollinationTransferAnimations {
                     new Keyframe(2.125F, KeyframeAnimations.posVec(0.0F, 0.3F, 0.1F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(2.2083F, KeyframeAnimations.posVec(0.2F, 0.3F, 0.1F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(2.2917F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .addAnimation("leaf1", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+			new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(0.1667F, KeyframeAnimations.degreeVec(-22.4068F, 3.2649F, 1.3558F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(0.375F, KeyframeAnimations.degreeVec(31.5373F, 7.9884F, -13.9004F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(0.5833F, KeyframeAnimations.degreeVec(-15.9627F, 7.9884F, -13.9004F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(0.6667F, KeyframeAnimations.degreeVec(-12.8935F, 12.3823F, 3.317F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(0.75F, KeyframeAnimations.degreeVec(-0.3843F, -0.1172F, 3.4022F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(0.9167F, KeyframeAnimations.degreeVec(-0.0359F, -0.3696F, -64.9268F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(1.0833F, KeyframeAnimations.degreeVec(-0.2026F, -0.3113F, -37.4267F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(1.2917F, KeyframeAnimations.degreeVec(-0.3174F, -0.1572F, -6.895F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(1.375F, KeyframeAnimations.degreeVec(-0.3449F, -0.0556F, 10.2898F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(1.5417F, KeyframeAnimations.degreeVec(9.4185F, -2.1347F, 22.6186F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(1.75F, KeyframeAnimations.degreeVec(9.6485F, 0.3636F, 7.8252F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(1.9583F, KeyframeAnimations.degreeVec(13.1192F, 7.8644F, -44.3189F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(2.1667F, KeyframeAnimations.degreeVec(-0.1618F, 3.6055F, -27.255F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(2.2917F, KeyframeAnimations.degreeVec(2.1955F, 2.8651F, 12.8051F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(2.375F, KeyframeAnimations.degreeVec(10.009F, 2.8651F, 12.8051F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(2.4167F, KeyframeAnimations.degreeVec(8.2222F, 10.3821F, -57.3801F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(2.5F, KeyframeAnimations.degreeVec(-12.3682F, 10.3821F, -57.3801F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(2.6667F, KeyframeAnimations.degreeVec(-7.2341F, 13.1359F, -20.0658F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(2.75F, KeyframeAnimations.degreeVec(-4.0F, 0.0F, -6.0F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(2.7917F, KeyframeAnimations.degreeVec(29.8062F, 0.0F, 16.0F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(2.875F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .addAnimation("leaf1", new AnimationChannel(AnimationChannel.Targets.POSITION,
+			new Keyframe(2.875F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .addAnimation("leaf2", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+			new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(0.1667F, KeyframeAnimations.degreeVec(-33.4065F, -12.6084F, 8.1926F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(0.375F, KeyframeAnimations.degreeVec(19.0747F, -8.2252F, -5.5497F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(0.5833F, KeyframeAnimations.degreeVec(6.5747F, -8.2252F, -5.5497F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(0.625F, KeyframeAnimations.degreeVec(-3.9968F, -9.3106F, -18.1505F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(0.75F, KeyframeAnimations.degreeVec(0.2762F, 0.379F, 1.0278F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(0.9167F, KeyframeAnimations.degreeVec(-0.0727F, 0.4632F, -43.9736F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(1.0833F, KeyframeAnimations.degreeVec(0.3892F, 0.2618F, 21.0278F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(1.2083F, KeyframeAnimations.degreeVec(0.4634F, 0.0728F, 46.0271F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(1.4583F, KeyframeAnimations.degreeVec(0.3694F, 0.2755F, 18.2923F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(1.5417F, KeyframeAnimations.degreeVec(10.3302F, 0.3214F, 10.7923F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(1.9583F, KeyframeAnimations.degreeVec(-2.9277F, 12.5074F, -34.026F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(2.1667F, KeyframeAnimations.degreeVec(20.9612F, 14.3424F, -38.8081F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(2.2917F, KeyframeAnimations.degreeVec(22.2961F, -12.0886F, 21.1343F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(2.375F, KeyframeAnimations.degreeVec(29.664F, -0.0167F, -0.9246F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(2.5F, KeyframeAnimations.degreeVec(-1.8403F, -0.0167F, -0.9246F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(2.6667F, KeyframeAnimations.degreeVec(8.093F, 1.0449F, -8.3495F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(2.75F, KeyframeAnimations.degreeVec(0.593F, 1.0449F, -8.3495F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(2.7917F, KeyframeAnimations.degreeVec(27.7681F, 4.5618F, -14.9828F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(2.875F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .addAnimation("leaf2", new AnimationChannel(AnimationChannel.Targets.POSITION,
+			new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(0.9167F, KeyframeAnimations.posVec(-0.25F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(1.0833F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(1.2083F, KeyframeAnimations.posVec(-0.25F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(1.9583F, KeyframeAnimations.posVec(-0.25F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(2.875F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
             .build();
 
