@@ -9,7 +9,10 @@ import net.hydra.jojomod.entity.corpses.FallenCreeper;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.Direction;
@@ -21,12 +24,14 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -144,6 +149,13 @@ public class MatchEntity extends ThrowableItemProjectile {
                     if(!ME.hasItem){
                         ItemStack ii = this.getItem();
                         if (!ii.isEmpty()) {
+                            if(ME.getUser() instanceof Player PL && ((StandUser) PL).roundabout$getStandPowers() instanceof  PowersManhattanTransfer PM){
+                                if(ME.getHattanTarget() == 0 || PM.switchShootingMode()) {
+                                    PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
+                                } else {
+                                    PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1F, (this.random.nextFloat() * 0.2F + 0.7F));
+                                }
+                            }
                             ME.hasItemTwo = false;
                             ME.hasItem = true;
                             ME.success = true;

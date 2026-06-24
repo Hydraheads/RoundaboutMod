@@ -5,6 +5,11 @@ import net.hydra.jojomod.access.IFireworkRocketAccess;
 import net.hydra.jojomod.access.ISuperThrownAbstractArrow;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -50,6 +55,13 @@ public abstract class FireworkRocketAccess implements IFireworkRocketAccess {
                         ci.cancel();
                         if (ci.isCancelled()) {
                             ME.setHeldItemManhattan(ii.copyAndClear());
+                            if(ME.getUser() instanceof Player PL && ((StandUser) PL).roundabout$getStandPowers() instanceof  PowersManhattanTransfer PM){
+                                if(ME.getHattanTarget() == 0 || PM.switchShootingMode()) {
+                                    PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
+                                } else {
+                                    PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1F, (ME.getRandom().nextFloat() * 0.2F + 0.7F));
+                                }
+                            }
                             if (fwork.getOwner() == null || fwork.getOwner() instanceof Player) {
                                 ME.canAcquireHeldItem = true;
                                 ME.hasItemTwo = false;
@@ -73,11 +85,16 @@ public abstract class FireworkRocketAccess implements IFireworkRocketAccess {
                 }
 
         }
+    }
+
+    @Inject(method = "onHitEntity", at = @At(value = "TAIL"),cancellable = true)
+    private void roundabout$onHitEntityBonusHattanDamage(EntityHitResult $$0, CallbackInfo ci) {
+        Entity Hattan = ((EntityHitResult) $$0).getEntity();
+        FireworkRocketEntity fwork = (FireworkRocketEntity) (Object) (this);
         if(isHat){
             Hattan.hurt(ModDamageTypes.of(fwork.level(), ModDamageTypes.STAND, fwork, fwork.getOwner()), 2);
         }
     }
-
     @Override
     public int roundabout$GetFireworkRemainingLifeTicks(){
         return life;

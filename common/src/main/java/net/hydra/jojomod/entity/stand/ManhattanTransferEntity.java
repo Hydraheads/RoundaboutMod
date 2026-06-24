@@ -19,6 +19,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.*;
@@ -286,6 +288,13 @@ public class ManhattanTransferEntity extends StandEntity {
                         if (PR instanceof AbstractArrow || PR instanceof ThrowableItemProjectile) {
                             if (((directEntityWho.is(User) && !canOthersLoadMT) || canOthersLoadMT) && !hasItem) {
                                 hasItemTwo = false;
+                                if(this.getUser() instanceof Player PL && ((StandUser) PL).roundabout$getStandPowers() instanceof  PowersManhattanTransfer PM){
+                                    if(this.getHattanTarget() == 0 || PM.switchShootingMode()) {
+                                        PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
+                                    } else {
+                                            PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1F, (this.random.nextFloat() * 0.2F + 0.7F));
+                                    }
+                                }
                                 if (direct instanceof AbstractArrow AA) {
                                     ItemStack ii = ((IAbstractArrowAccess) direct).roundabout$GetPickupItem();
                                     if (!ii.isEmpty()) {
@@ -426,6 +435,11 @@ public class ManhattanTransferEntity extends StandEntity {
                                          boolean getCanPlace, float xRot, float yRot, Vec3 pos,
                                          boolean playSounds, float mult, boolean canGiveYouItem) {
         thrower.playSound(ModSounds.BULLET_RICOCHET_EVENT, 1.0F, (thrower.random.nextFloat() * 0.2F + 0.7F));
+        if(thrower.getUser() instanceof Player PL && ((StandUser) PL).roundabout$getStandPowers() instanceof  PowersManhattanTransfer PM && MainUtil.cheapDistanceTo2(thrower.getX(), thrower.getZ(), thrower.getUser().getX(), thrower.getUser().getZ()) > 16){
+            if (PM.isClient()) {
+                PM.self.playSound(ModSounds.BULLET_RICOCHET_EVENT, 100F, (thrower.random.nextFloat() * 0.2F + 0.7F));
+            }
+        }
         if (!thrower.level().isClientSide) {
             if (thrower.getUserData(thrower.getUser()) != null && thrower.getUserData(thrower.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
                 PM.isNotLoaded();
