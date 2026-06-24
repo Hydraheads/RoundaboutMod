@@ -207,6 +207,10 @@ public class PollinationTransferModel <T extends PollinationTransferEntity> exte
         super.setupAnim(pEntity,pLimbSwing,pLimbSwingAmount,pAgeInTicks,pNetHeadYaw,pHeadPitch);
         this.animate(pEntity.flowerhattan_is_loaded, PollinationTransferAnimations.flower_loaded, pAgeInTicks, 1f);
         this.animate(pEntity.rain_dodging_flowerhattan, PollinationTransferAnimations.rain_dodge_flowerhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.slow_flowerhattan, PollinationTransferAnimations.f_slow, pAgeInTicks, 1f);
+        this.animate(pEntity.slow_flowerhattan_back, PollinationTransferAnimations.b_slow, pAgeInTicks, 1f);
+        this.animate(pEntity.slow_flowerhattan_left, PollinationTransferAnimations.l_slow, pAgeInTicks, 1f);
+        this.animate(pEntity.slow_flowerhattan_right, PollinationTransferAnimations.r_slow, pAgeInTicks, 1f);
     }
 
     @Override
