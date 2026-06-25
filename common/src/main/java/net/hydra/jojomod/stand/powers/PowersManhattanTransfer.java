@@ -508,7 +508,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
         }
 
         if (ClientNetworking.getAppropriateConfig().manhattanTransferSettings.windVisionUsesNightVision) {
-            if (isPiloting() || visionModeClient) {
+            if ((isPiloting() || visionModeClient) && isActive()) {
                 if (!this.getSelf().hasEffect(MobEffects.NIGHT_VISION)) {
                     this.getSelf().addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, -1, 20, false, false), null);
                 }
