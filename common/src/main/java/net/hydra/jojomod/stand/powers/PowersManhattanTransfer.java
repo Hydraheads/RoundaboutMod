@@ -54,10 +54,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
     //TODO: Fix shooting mode being shared between mobs
     //TODO: 500 other stupid bugfixes (pain) :/
 
-    //TODO: Wind Vision V Toggle work
-
-    //TODO:Shader
-
     public PowersManhattanTransfer(LivingEntity self) {
         super(self);
     }
