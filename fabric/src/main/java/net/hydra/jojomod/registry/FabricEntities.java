@@ -663,7 +663,16 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "cold_twister"),
                     EntityType.Builder.<IceTwisterEntity>of(IceTwisterEntity::new, MobCategory.MISC).
-                            sized(IceTwisterEntity.height, IceTwisterEntity.width).clientTrackingRange(15).build(Roundabout.MOD_ID+":cold_twister")
+                            sized(IceTwisterEntity.height, IceTwisterEntity.width).clientTrackingRange(15).
+                            build(Roundabout.MOD_ID+":cold_twister")
+            );
+    public static final EntityType<GentlyWeepsEntity> GENTLY_WEEPS =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "gently_weeps"),
+                    EntityType.Builder.<GentlyWeepsEntity>of(GentlyWeepsEntity::new, MobCategory.MISC).
+                            sized(GentlyWeepsEntity.height, GentlyWeepsEntity.width).clientTrackingRange(15).
+                            build(Roundabout.MOD_ID+":gently_weeps")
             );
         public static final EntityType<GasolineSplatterEntity> GASOLINE_SPLATTER =
                 Registry.register(
@@ -966,6 +975,7 @@ public class FabricEntities {
                 ModEntities.PW_METEOR = PW_METEOR;
                 ModEntities.PW_BIG_METEOR = PW_BIG_METEOR;
                 ModEntities.COLD_TWISTER = COLD_TWISTER;
+                ModEntities.GENTLY_WEEPS = GENTLY_WEEPS;
 
                 ModEntities.THROWN_OBJECT = THROWN_OBJECT;
                 ModEntities.THROWN_ANUBIS = THROWN_ANUBIS;

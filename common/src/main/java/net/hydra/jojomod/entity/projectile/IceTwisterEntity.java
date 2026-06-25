@@ -1,8 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.block.ModBlocks;
-import net.hydra.jojomod.block.StandFireBlock;
-import net.hydra.jojomod.block.StickyIceCoatingBlock;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
@@ -10,28 +8,19 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.FireBlock;
-import net.minecraft.world.level.block.LiquidBlockContainer;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 
-public class IceTwisterEntity extends Entity {
-    public final AnimationState twisterSpin = new AnimationState();
-    public int lifeSpan = -1;
-    public int renderCold = 1;
-
+public class IceTwisterEntity extends WhiteAlbumFreezingEntity {
     public static final float height = 3f;
     public static final float width = 3f;
 
@@ -83,7 +72,7 @@ public class IceTwisterEntity extends Entity {
                                 MainUtil.takeLiteralUnresistableKnockbackWithY(mob,0,-1,0);
                             }
                         } else {
-                            if (this.tickCount%2==0) {
+                            if (this.tickCount%2==0 || HeatUtil.getHeat(mob) > -33) {
                                 HeatUtil.addHeat(mob, -1);
                             }
                         }
@@ -126,47 +115,4 @@ public class IceTwisterEntity extends Entity {
         super.tick();
     }
 
-    public boolean started = false;
-
-    private boolean canFreeze(BlockPos pos) {
-        BlockState state = level().getBlockState(pos);
-
-        if (!state.canBeReplaced())
-            return false;
-
-        if (!state.getFluidState().isEmpty())
-            return false;
-
-        if (state.getBlock() instanceof LiquidBlockContainer)
-            return false;
-
-        if (state.getBlock() instanceof FireBlock)
-            return false;
-
-        if (state.getBlock() instanceof StickyIceCoatingBlock)
-            return false;
-
-        if (state.getBlock() instanceof StandFireBlock)
-            return false;
-
-        if (state.hasProperty(BlockStateProperties.WATERLOGGED)
-                && state.getValue(BlockStateProperties.WATERLOGGED))
-            return false;
-
-        return true;
-    }
-
-    @Override
-    protected void defineSynchedData() {
-    }
-
-    @Override
-    protected void readAdditionalSaveData(CompoundTag compoundTag) {
-        lifeSpan = compoundTag.getInt("lifespan");
-    }
-
-    @Override
-    protected void addAdditionalSaveData(CompoundTag compoundTag) {
-        compoundTag.putInt("lifespan", lifeSpan);
-    }
 }

@@ -597,6 +597,13 @@ public class ForgeEntities {
                             clientTrackingRange(15).
                             build(new ResourceLocation(Roundabout.MOD_ID, "cold_twister").toString())
             );
+    public static final RegistryObject<EntityType<GentlyWeepsEntity>> GENTLY_WEEPS =
+            ENTITY_TYPES.register("gently_weeps", () ->
+                    EntityType.Builder.<GentlyWeepsEntity>of(GentlyWeepsEntity::new, MobCategory.MISC).sized(GentlyWeepsEntity.height,
+                                    GentlyWeepsEntity.width).
+                            clientTrackingRange(15).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "gently_weeps").toString())
+            );
     public static final RegistryObject<EntityType<GasolineSplatterEntity>> GASOLINE_SPLATTER =
             ENTITY_TYPES.register("gasoline_splatter", () ->
                     EntityType.Builder.<GasolineSplatterEntity>of(GasolineSplatterEntity::new, MobCategory.MISC).sized(0.8f, 0.8f).

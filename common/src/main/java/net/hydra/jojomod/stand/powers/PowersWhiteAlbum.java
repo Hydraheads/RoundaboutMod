@@ -7,9 +7,8 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.projectile.ColdBlastProjectile;
-import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
+import net.hydra.jojomod.entity.projectile.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.projectile.IceTwisterEntity;
-import net.hydra.jojomod.entity.projectile.UltravioletProjectile;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
@@ -669,6 +668,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case SKILL_2_NORMAL-> {
                 iceTwisterClient();
             }
+            case SKILL_2_CROUCH-> {
+                gentlyWeepsClient();
+            }
             case SKILL_3_NORMAL -> {
                 dashOrWall();
             }
@@ -700,6 +702,12 @@ public class PowersWhiteAlbum extends NewDashPreset {
             );
 
             tryBlockPosPowerPacket(PowerIndex.POWER_2,hit.getBlockPos());
+        }
+    }
+
+    public void gentlyWeepsClient(){
+        if (!onCooldown(PowerIndex.SKILL_2_SNEAK) && !isChargingCold()){
+            tryPowerPacket(PowerIndex.POWER_2_SNEAK);
         }
     }
     @Override
@@ -786,6 +794,19 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
                 checkPos = checkPos.below();
             }
+        }
+    }
+
+
+    public void gentlyWeeps(){
+        BlockPos pos = self.getOnPos();
+        if (!onCooldown(PowerIndex.SKILL_2_SNEAK)) {
+            this.setCooldown(PowerIndex.SKILL_2_SNEAK, 200);
+            Level level = self.level();
+            GentlyWeepsEntity twister = new GentlyWeepsEntity(
+                    level, pos.getCenter().add(0, 0.5F, 0));
+            level.addFreshEntity(twister);
+            twister.lifeSpan = 140;
         }
     }
 
@@ -1031,6 +1052,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
             }
             case PowerIndex.POWER_2 -> {
                 iceTwister();
+            }
+            case PowerIndex.POWER_2_SNEAK -> {
+                gentlyWeeps();
             }
             case PowerIndex.POWER_3 -> {
                 iceWallServer(false);

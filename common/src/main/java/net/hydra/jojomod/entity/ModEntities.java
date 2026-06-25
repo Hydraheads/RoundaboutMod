@@ -102,6 +102,7 @@ public class ModEntities {
     public static EntityType<PWBigMeteorEntity> PW_BIG_METEOR;
 
     public static EntityType<IceTwisterEntity> COLD_TWISTER;
+    public static EntityType<GentlyWeepsEntity> GENTLY_WEEPS;
     public static EntityType<GasolineCanEntity> GASOLINE_CAN;
     public static EntityType<RoadRollerEntity> ROAD_ROLLER_ENTITY;
 
