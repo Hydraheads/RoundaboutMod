@@ -39,11 +39,11 @@ public class GentlyWeepsRenderer extends EntityRenderer<GentlyWeepsEntity> {
 
             $$3.pushPose();
             $$3.mulPose(Axis.ZP.rotationDegrees(180f));
-            $$3.translate(0,-1,0);
+            $$3.translate(0,-2,0);
 
             this.model.root().getAllParts().forEach(ModelPart::resetPose);
             $$0.twisterSpin.startIfStopped($$0.tickCount);
-            this.model.animate2($$0.twisterSpin, RipperEyesAnimation.SPIN_2, $$0.tickCount+$$2, 0.1f);
+            this.model.animate2($$0.twisterSpin, RipperEyesAnimation.SPIN_2, $$0.tickCount+$$2, 1f);
             VertexConsumer $$6 = $$4.getBuffer(RenderType.entityTranslucent(getTextureLocation($$0)));
 
 
