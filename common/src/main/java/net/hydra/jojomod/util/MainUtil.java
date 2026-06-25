@@ -215,6 +215,7 @@ public class MainUtil {
     public static ArrayList<String> addedMobsWithEnderBlood = Lists.newArrayList();
     public static ArrayList<String> removeBloodFromThese = Lists.newArrayList();
     public static ArrayList<String> unfreezableMobs = Lists.newArrayList();
+    public static ArrayList<String> powerfulMobs = Lists.newArrayList();
     public static ArrayList<String> foodThatHasEffectsForVampires = Lists.newArrayList();
     public static ArrayList<String> vampireSunDamageWorlds = Lists.newArrayList();
     public static Set<String> foodThatGivesBloodList = Set.of();
@@ -354,6 +355,15 @@ public class MainUtil {
             return false;
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
         if (unfreezableMobs != null && !unfreezableMobs.isEmpty() && rl != null && unfreezableMobs.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isPowerfulMob(Entity ent){
+        if (ent == null)
+            return false;
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        if (powerfulMobs != null && !powerfulMobs.isEmpty() && rl != null && powerfulMobs.contains(rl.toString())){
             return true;
         }
         return false;
@@ -2438,7 +2448,8 @@ public class MainUtil {
         return $$8 == null ? null : new EntityHitResult($$8, $$9);
     }
     public static boolean isBossMob(Entity LE){
-        if (LE instanceof Warden || LE instanceof EnderDragon || LE instanceof WitherBoss ||
+        if (LE instanceof Warden || LE instanceof EnderDragon || LE instanceof WitherBoss
+            || isPowerfulMob(LE) ||
                 (LE instanceof LivingEntity ll && (ModPacketHandler.PLATFORM_ACCESS.getBoss(ll)))){
             return true;
         }

@@ -164,6 +164,7 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
+
     public Set<String> standBlockGrabBlacklist = new HashSet<>(
             Arrays.asList(
                     "minecraft:crying_obsidian",
@@ -247,18 +248,25 @@ public class AdvancedConfig implements Cloneable {
                     "mod_id:add_other_entry_here"
             )
     );
-    public Set<String> removeFreezableMobs = new HashSet<>(
+    public Set<String> removeFreezableMobsv2 = new HashSet<>(
             Arrays.asList(
                     "minecraft:blaze",
                     "minecraft:vex",
                     "minecraft:stray",
                     "minecraft:magma_cube",
                     "minecraft:snow_golem",
-                    "minecraft:iron_golem",
-                    "minecraft:copper_golem",
                     "minecraft:allay"
             )
     );
+
+    public Set<String> powerfulMobs = new HashSet<>(
+            Arrays.asList(
+                    "mowziesmobs:frostmaw",
+                    "mowziesmobs:ferrous_wroughtnaut",
+                    "mowziesmobs:umvuthi"
+            )
+    );
+
     public Set<String> vampireSunDamageWorlds = new HashSet<>(
             Arrays.asList(
                     "overworld"

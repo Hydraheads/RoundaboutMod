@@ -185,10 +185,15 @@ public abstract class ConfigManager {
             MainUtil.removeBloodFromThese.clear();
             MainUtil.removeBloodFromThese.addAll(getAdvancedConfig().removeBloodFromThese);
         }
-        if (getAdvancedConfig().removeFreezableMobs != null)
+        if (getAdvancedConfig().removeFreezableMobsv2 != null)
         {
             MainUtil.unfreezableMobs.clear();
-            MainUtil.unfreezableMobs.addAll(getAdvancedConfig().removeFreezableMobs);
+            MainUtil.unfreezableMobs.addAll(getAdvancedConfig().removeFreezableMobsv2);
+        }
+        if (getAdvancedConfig().powerfulMobs != null)
+        {
+            MainUtil.powerfulMobs.clear();
+            MainUtil.powerfulMobs.addAll(getAdvancedConfig().powerfulMobs);
         }
         if (getAdvancedConfig().vampireSunDamageWorlds != null)
         {
