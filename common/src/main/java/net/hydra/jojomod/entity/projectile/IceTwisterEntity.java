@@ -83,7 +83,7 @@ public class IceTwisterEntity extends Entity {
                                 MainUtil.takeLiteralUnresistableKnockbackWithY(mob,0,-1,0);
                             }
                         } else {
-                            if (this.tickCount%2==0 || HeatUtil.getHeat(mob) > -50) {
+                            if (this.tickCount%2==0) {
                                 HeatUtil.addHeat(mob, -1);
                             }
                         }
