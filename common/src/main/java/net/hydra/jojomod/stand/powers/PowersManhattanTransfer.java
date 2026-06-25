@@ -33,6 +33,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -356,6 +358,8 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
     public boolean isSoundRainInterrupted = false;
 
+    public int visionTicks = -1;
+
     @Override
     public void tickPower() {
         super.tickPower();
@@ -486,9 +490,41 @@ public class PowersManhattanTransfer extends NewDashPreset {
             StandEntity SE = this.getStandEntity(this.getSelf());
         }
 
+        if (visionTicks > -1){
+            visionTicks--;
+        }
+        if (isPiloting()){
+            if (visionTicks < 10) {
+                visionTicks++;
+            }
+        } else {
+            if (visionTicks > -1) {
+                visionTicks--;
+            }
+        }
+
         if(this.self != null && this.self.isUsingItem() && isPiloting()){
             this.self.stopUsingItem();
         }
+
+        if (ClientNetworking.getAppropriateConfig().manhattanTransferSettings.windVisionUsesNightVision) {
+            if (isPiloting()) {
+                if (!this.getSelf().hasEffect(MobEffects.NIGHT_VISION)) {
+                    this.getSelf().addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, -1, 20, false, false), null);
+                }
+            } else {
+                MobEffectInstance ME = this.getSelf().getEffect(MobEffects.NIGHT_VISION);
+                if (ME != null && ME.isInfiniteDuration() && ME.getAmplifier() == 20) {
+                    this.getSelf().removeEffect(MobEffects.NIGHT_VISION);
+                }
+            }
+        } else {
+            MobEffectInstance ME = this.getSelf().getEffect(MobEffects.NIGHT_VISION);
+            if (ME != null && ME.isInfiniteDuration() && ME.getAmplifier() == 20) {
+                this.getSelf().removeEffect(MobEffects.NIGHT_VISION);
+            }
+        }
+
         super.tickPower();
     }
 
