@@ -42,9 +42,6 @@ import java.util.List;
 
 public class ManhattanTransferEntity extends StandEntity {
 
-    //TODO: Manhattan Transfer Animations for piloting
-    //TODO: Manhattan Transfer Bullet Hit Sound
-
     public ManhattanTransferEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
     }
