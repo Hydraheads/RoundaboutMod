@@ -699,7 +699,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
         if(this.getStandEntity(this.getSelf()) instanceof  ManhattanTransferEntity ME && !ME.isInWater() && !ME.isInLava()) {
             if (visionModeClient) {
                 if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) && ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
-                    if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
+                    if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent) || this.getSelf().hasLineOfSight(ent)) {
                         return true;
                     }
                 }
@@ -721,7 +721,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
         }
         if (ent instanceof ManhattanTransferEntity MZ) {
             if (this.getSelf() == MZ.getUser()) {
-                if (this.isHoldingSneak()) {
+                if (this.isHoldingSneak() && !isPiloting()) {
                     return true;
                 }
             }
@@ -735,7 +735,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public int highlightsEntityColor(Entity ent, Player player){
         if (ent instanceof ManhattanTransferEntity ME) {
             if (this.getSelf() == ME.getUser()) {
-                if (this.isHoldingSneak()/* && !isPiloting()*/) {
+                if (this.isHoldingSneak() && !isPiloting()) {
                     return 65425;
                 }
             }
@@ -743,11 +743,11 @@ public class PowersManhattanTransfer extends NewDashPreset {
         if(!this.switchShootingMode()) {
             if (targetHattan != null && ent == targetHattan) {
                 if (this.isActive() && this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
-                    return 3407755;
+                    return 3407793;
                 }
             }
         }
-        return 29960;
+        return 60207;
     }
 
     @Override
