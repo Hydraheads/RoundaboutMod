@@ -475,14 +475,19 @@ public class SheerHeartAttackEntity extends StandEntity {
 		}*/
 
 		//if (targetY - this.getBlockY() > 1.2) {
+			/*
 			float range = 1.0f;
 			Vec3 vec3d = this.position();
 			Vec3 vec3d2 = this.getViewVector(0);
 			Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
 			HitResult blockHit = this.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+			*/
 			//Vec3 pos =  blockHit.getLocation();
-			if (blockHit.getType() == HitResult.Type.BLOCK) {
-				this.setDeltaMovement(this.getDeltaMovement().add(0, 0.8, 0));
+
+			// blockHit.getType() == HitResult.Type.BLOCK &&
+			if (this.isInWall()) {
+				Vec3 mov = this.getDeltaMovement();
+				this.setDeltaMovement(mov.x, 0.8f, mov.y);
 			}
 		//}
 	}
