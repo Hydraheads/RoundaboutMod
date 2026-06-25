@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.gravity;
 
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.platform.Services;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.network.chat.Component;
@@ -36,7 +37,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 
-@Mixin(value = ServerGamePacketListenerImpl.class, priority = 1001)
+@Mixin(value = ServerGamePacketListenerImpl.class, priority = 999)
 public abstract class GravityServerGamePacketListenerImplMixin {
 
 
