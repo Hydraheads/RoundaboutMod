@@ -39,7 +39,7 @@ public class GentlyWeepsRenderer extends EntityRenderer<GentlyWeepsEntity> {
 
             $$3.pushPose();
             $$3.mulPose(Axis.ZP.rotationDegrees(180f));
-            $$3.translate(0,-2,0);
+            $$3.translate(0,-1.5,0);
 
             this.model.root().getAllParts().forEach(ModelPart::resetPose);
             $$0.twisterSpin.startIfStopped($$0.tickCount);
