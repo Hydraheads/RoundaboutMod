@@ -28,10 +28,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
@@ -474,6 +471,12 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
                 if (!(user instanceof Mob mb && mb.getTarget() !=null && mb.getTarget().is(gotten))){
                     return;
                 }
+            }
+        }
+        if (gotten instanceof TamableAnimal TA){
+            if (user instanceof TamableAnimal TT && TT.getOwner() != null
+                    && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
+                return;
             }
         }
         float dmg = 1;

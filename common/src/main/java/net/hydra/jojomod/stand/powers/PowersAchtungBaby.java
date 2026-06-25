@@ -400,7 +400,11 @@ public class PowersAchtungBaby extends NewDashPreset {
     }
     public boolean invisibleBurst(){
         if (isClient() || (!this.onCooldown(PowerIndex.SKILL_2) || !ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstCooldownUsesServerLatency)) {
-            setCooldown(PowerIndex.SKILL_2,ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstCooldown);
+            if (self instanceof Mob){
+                setCooldown(PowerIndex.SKILL_2,ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstCooldownMobs);
+            } else {
+                setCooldown(PowerIndex.SKILL_2,ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstCooldown);
+            }
             if (this.self.level() instanceof ServerLevel sl) {
                 burstTicks = 22;
                 burstParticles(sl);

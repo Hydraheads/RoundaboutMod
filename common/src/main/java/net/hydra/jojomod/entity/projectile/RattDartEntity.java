@@ -32,10 +32,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.player.Player;
@@ -342,6 +339,13 @@ public class RattDartEntity extends AbstractArrow {
         Entity $$1 = $$0.getEntity();
 
         if ($$1.equals(this.getOwner())) {return;}
+
+        if ($$1 instanceof TamableAnimal TA){
+            if (this.getOwner() instanceof TamableAnimal TT && TT.getOwner() != null
+                    && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
+                return;
+            }
+        }
 
         if (!level().isClientSide && $$0.getEntity() instanceof EnderMan em) {
 

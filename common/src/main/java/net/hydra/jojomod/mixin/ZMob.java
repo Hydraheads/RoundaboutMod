@@ -535,7 +535,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Unique
     public void roundabout$targetVillageEnemies(){
         LivingEntity potentialTarget = null;
-        AABB $$0 = this.getBoundingBox().inflate(10.0, 8.0, 10.0);
+        AABB $$0 = this.getBoundingBox().inflate(15.0, 8.0, 15.0);
         List<? extends LivingEntity> $$1 = this.level().getNearbyEntities(LivingEntity.class, MainUtil.attackTargeting, this, $$0);
         float mindist = -1;
 

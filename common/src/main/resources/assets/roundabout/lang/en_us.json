@@ -3195,6 +3195,11 @@
   "config.roundabout.revealLocationWhenFinishedEating.desc": "If finishing eating removes your invisibility.",
   "config.roundabout.invisiBurstCooldown.name": "Invisiburst Cooldown",
   "config.roundabout.invisiBurstCooldown.desc": "The amount of ticks in between turning invisible.",
+  "config.roundabout.invisiBurstCooldownMobs.name": "Invisiburst Mob CD",
+  "config.roundabout.invisiBurstCooldownMobs.desc": "The amount of ticks in between turning invisible for mobs.",
+
+
+
   "config.roundabout.invisiBurstCooldownUsesServerLatency.name": "Invis Cooldown Uses Latency",
   "config.roundabout.invisiBurstCooldownUsesServerLatency.desc": "Let the server fully manage invisiburst's cooldown. This is advisable if you want a second of being visable between bursts for balancing reasons, because bad server tps could make it limitless..",
   "config.roundabout.invisiBurstAlertsMobs.name": "Invisiburst Alerts Mobs",

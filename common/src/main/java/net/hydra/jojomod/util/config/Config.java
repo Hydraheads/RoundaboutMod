@@ -966,6 +966,8 @@ public class Config implements Cloneable {
         public Boolean revealLocationWhenFinishedEating;
         @IntOption(group = "inherit", value = 139, min = 0, max = 72000)
         public Integer invisiBurstCooldown;
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
+        public Integer invisiBurstCooldownMobs;
         @BooleanOption(group = "inherit", value = true)
         public Boolean invisiBurstCooldownUsesServerLatency;
         @IntOption(group = "inherit", value = 280, min = 0, max = 72000)
