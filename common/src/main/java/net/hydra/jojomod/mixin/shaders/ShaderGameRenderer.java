@@ -87,6 +87,11 @@ public abstract class ShaderGameRenderer implements IShaderGameRenderer {
                 }
             }
         }
+
+        if(ClientUtil.checkIfClientCanSeeMobsForWindVision()){
+            RPostShaderRegistry.WIND_VISION.roundabout$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
+            RPostShaderRegistry.WIND_VISION.roundabout$process(tickDelta);
+        }
     }
 
     @Inject(method = "reloadShaders", at=@At("HEAD"))
