@@ -33,6 +33,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -356,6 +358,8 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
     public boolean isSoundRainInterrupted = false;
 
+    public int visionTicks = -1;
+
     @Override
     public void tickPower() {
         super.tickPower();
@@ -486,9 +490,41 @@ public class PowersManhattanTransfer extends NewDashPreset {
             StandEntity SE = this.getStandEntity(this.getSelf());
         }
 
+        if (visionTicks > -1){
+            visionTicks--;
+        }
+        if (isPiloting() || visionModeClient){
+            if (visionTicks < 10) {
+                visionTicks++;
+            }
+        } else {
+            if (visionTicks > -1) {
+                visionTicks--;
+            }
+        }
+
         if(this.self != null && this.self.isUsingItem() && isPiloting()){
             this.self.stopUsingItem();
         }
+
+        if (ClientNetworking.getAppropriateConfig().manhattanTransferSettings.windVisionUsesNightVision) {
+            if ((isPiloting() || visionModeClient) && isActive()) {
+                if (!this.getSelf().hasEffect(MobEffects.NIGHT_VISION)) {
+                    this.getSelf().addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, -1, 20, false, false), null);
+                }
+            } else {
+                MobEffectInstance ME = this.getSelf().getEffect(MobEffects.NIGHT_VISION);
+                if (ME != null && ME.isInfiniteDuration() && ME.getAmplifier() == 20) {
+                    this.getSelf().removeEffect(MobEffects.NIGHT_VISION);
+                }
+            }
+        } else {
+            MobEffectInstance ME = this.getSelf().getEffect(MobEffects.NIGHT_VISION);
+            if (ME != null && ME.isInfiniteDuration() && ME.getAmplifier() == 20) {
+                this.getSelf().removeEffect(MobEffects.NIGHT_VISION);
+            }
+        }
+
         super.tickPower();
     }
 
@@ -660,32 +696,34 @@ public class PowersManhattanTransfer extends NewDashPreset {
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
         IEntityAndData entityAndData = ((IEntityAndData) ent);
-        if(this.getStandEntity(this.getSelf()) instanceof  ManhattanTransferEntity ME && !ME.isInWater() && !ME.isInLava()) {
-            if (visionModeClient) {
-                if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) && ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
-                    if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
-                        return true;
+        if(!(ent instanceof  ManhattanTransferEntity)) {
+            if (this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME && !ME.isInWater() && !ME.isInLava()) {
+                if (visionModeClient) {
+                    if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) && ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
+                        if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent) || this.getSelf().hasLineOfSight(ent)) {
+                            return true;
+                        }
                     }
                 }
-            }
-            if (isPiloting()) {
-                if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) & ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
-                    if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
-                        return true;
+                if (isPiloting()) {
+                    if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) & ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
+                        if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
+                            return true;
+                        }
                     }
                 }
-            }
-            if (!this.switchShootingMode()) {
-                if (targetHattan != null && ent == targetHattan) {
-                    if (this.isActive() && this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
-                        return true;
+                if (!this.switchShootingMode()) {
+                    if (targetHattan != null && ent == targetHattan) {
+                        if (this.isActive() && this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
+                            return true;
+                        }
                     }
                 }
             }
         }
         if (ent instanceof ManhattanTransferEntity MZ) {
             if (this.getSelf() == MZ.getUser()) {
-                if (this.isHoldingSneak()) {
+                if (this.isHoldingSneak() && !isPiloting()) {
                     return true;
                 }
             }
@@ -699,7 +737,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public int highlightsEntityColor(Entity ent, Player player){
         if (ent instanceof ManhattanTransferEntity ME) {
             if (this.getSelf() == ME.getUser()) {
-                if (this.isHoldingSneak()/* && !isPiloting()*/) {
+                if (this.isHoldingSneak() && !isPiloting()) {
                     return 65425;
                 }
             }
@@ -707,11 +745,11 @@ public class PowersManhattanTransfer extends NewDashPreset {
         if(!this.switchShootingMode()) {
             if (targetHattan != null && ent == targetHattan) {
                 if (this.isActive() && this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
-                    return 3407755;
+                    return 3407793;
                 }
             }
         }
-        return 29960;
+        return 60207;
     }
 
     @Override

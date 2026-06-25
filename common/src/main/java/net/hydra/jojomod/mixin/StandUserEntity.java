@@ -5781,6 +5781,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         rdbt$PowerCooldowns = cooldownInstances;
     }
 
+    private double previousYposManhattan = 0.0;
+    private double previousXposManhattan = 0.0;
+    private double previousZposManhattan = 0.0;
+
     @Unique
     @Override
     public void roundabout$doWindVisionDetectionOther() {
@@ -5789,21 +5793,26 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         /*Last note: put every entity in the Vex check in case some other entity will need it*/
         if (!this.level().isClientSide) {
             IEntityAndData entityAndData = ((IEntityAndData) this);
-            SavedSecond lastSecond = entityAndData.roundabout$getLastSavedSecond();
-            SavedSecond firstSecond = entityAndData.roundabout$getFirstSavedSecond();
-            if (firstSecond != null && lastSecond != null) {
-                boolean posCompare = lastSecond.position.x != firstSecond.position.x || lastSecond.position.z != firstSecond.position.z;
-                boolean posCompareY = lastSecond.position.y != firstSecond.position.y;
+            boolean down = previousYposManhattan > this.getY();
+            boolean up = previousYposManhattan < this.getY();
+            boolean movementX = previousXposManhattan != this.getX();
+            boolean movementZ = previousZposManhattan != this.getZ();
                 if (((Entity) (Object) this).isEyeInFluid(FluidTags.WATER) || ((Entity)(Object) this).isEyeInFluid(FluidTags.LAVA)) {entityAndData.roundabout$setTrueInvisibilityManhattan(-1);}
                 if (((Entity) (Object) this) instanceof Vex v) {
                     if (v.isInWater()) {entityAndData.roundabout$setTrueInvisibilityManhattan(-1);
-                    } else {if (posCompare) {entityAndData.roundabout$setTrueInvisibilityManhattan(10);}
-                    else if (posCompareY) {entityAndData.roundabout$setTrueInvisibilityManhattan(75);}
-                     else {}
+                    } else {
+                        if (down || up) {
+                            entityAndData.roundabout$setTrueInvisibilityManhattan(120);
+                        }
+                        else if (movementX || movementZ) {
+                            entityAndData.roundabout$setTrueInvisibilityManhattan(120);
+                        }
                     }
                 }
-            }
         }
+        previousYposManhattan = this.getY();
+        previousXposManhattan = this.getX();
+        previousZposManhattan = this.getZ();
     }
 
     /**If you stand still enough, abilities recharge faster. But this could be overpowered for some abilties, so

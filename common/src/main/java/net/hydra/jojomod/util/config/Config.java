@@ -850,6 +850,8 @@ public class Config implements Cloneable {
         public Boolean canOtherMobsLoadManhattanTransfer;
         @FloatOption(group = "inherit", value = 16F, min = 0F, max = 72000F)
         public Float manhattanAutoShootingRange;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean windVisionUsesNightVision;
 
     }
 

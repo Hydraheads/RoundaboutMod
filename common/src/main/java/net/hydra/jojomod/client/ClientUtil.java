@@ -884,15 +884,12 @@ public class ClientUtil {
     public static boolean checkIfClientCanSeeMobsForWindVision() {
 
         LocalPlayer player = Minecraft.getInstance().player;
-        if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersManhattanTransfer PMT && PMT.isPiloting()) {
-                    return true;
-        }
-        return false;
-    }
-    public static boolean checkIfClientCanSeeMobsForWindVisionFromPlayerPov() {
-        LocalPlayer player = Minecraft.getInstance().player;
-        if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersManhattanTransfer PMT && PMT.visionModeClient && PMT.isActive()) {
-            return true;
+        if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersManhattanTransfer PMT && (PMT.isPiloting() || PMT.visionModeClient)) {
+            if(PMT.isActive()) {
+                return true;
+            } else {
+                return false;
+            }
         }
         return false;
     }

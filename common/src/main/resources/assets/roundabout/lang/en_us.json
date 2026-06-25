@@ -2739,7 +2739,8 @@
   "config.roundabout.canOtherMobsLoadManhattanTransfer.desc":"Decide if other mobs can load your stand. Remember that projectiles shot by your MT become yours, so you can manipulate an another players Enderpearl to teleport you instead of teleporting the other player. It's set to false to simulate how the stand works in the original source, but you can turn it on.",
   "config.roundabout.manhattanAutoShootingRange.name":"Automatic Shooting Mode Detection Range",
   "config.roundabout.manhattanAutoShootingRange.desc":"Select how close does the stand need to be to shoot at an entity in automatic mode",
-
+  "config.roundabout.windVisionUsesNightVision.name":"Wind Vision uses Potion Effect",
+  "config.roundabout.windVisionUsesNightVision.desc":"If you have a mod like Bad Optimizations that deletes the vanilla code that wind vision uses to light things up, turn this on so it works regardless.",
 
   "config.roundabout.walkingHeartAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.walkingHeartAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
@@ -3591,8 +3592,6 @@
   "config.roundabout.mandomRewindAttemptsToSkipInterpolation.desc": "Turn this off if you have a mod that makes mobs invisible after using mandom. Whether or not time rewind attempts to skip interpolation, so mobs instantly blip into their new locations instead of visually sliding really fast like endermen teleports.",
   "config.roundabout.tuskUsesShootMode.name": "Tusk Gun Mode",
   "config.roundabout.tuskUsesShootMode.desc": "Whether you  need to hold right click and then press left click, or just right click",
-  "config.roundabout.windVisionMode.name": "Wind Vision Toggle",
-  "config.roundabout.windVisionMode.desc": "Toggle on and off Wind Vision from your perspective. To change it in-game, press Skill 4",
 
   "config.roundabout.renderJusticeParticlesWhilePilotingInFirstPerson.name": "1st Person Fog",
   "config.roundabout.renderJusticeParticlesWhilePilotingInFirstPerson.desc": "Fog particles can be disabled for first person rendering of justice control mode.",
