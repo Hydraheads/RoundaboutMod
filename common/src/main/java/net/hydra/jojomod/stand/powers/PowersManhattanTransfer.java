@@ -696,27 +696,25 @@ public class PowersManhattanTransfer extends NewDashPreset {
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
         IEntityAndData entityAndData = ((IEntityAndData) ent);
-        if(!(ent instanceof  ManhattanTransferEntity)) {
-            if (this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME && !ME.isInWater() && !ME.isInLava()) {
-                if (visionModeClient) {
-                    if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) && ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
-                        if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent) || this.getSelf().hasLineOfSight(ent)) {
-                            return true;
-                        }
+        if(this.getStandEntity(this.getSelf()) instanceof  ManhattanTransferEntity ME && !ME.isInWater() && !ME.isInLava()) {
+            if (visionModeClient) {
+                if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) && ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
+                    if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent) || this.getSelf().hasLineOfSight(ent)) {
+                        return true;
                     }
                 }
-                if (isPiloting()) {
-                    if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) & ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
-                        if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
-                            return true;
-                        }
+            }
+            if (isPiloting()) {
+                if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) & ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
+                    if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
+                        return true;
                     }
                 }
-                if (!this.switchShootingMode()) {
-                    if (targetHattan != null && ent == targetHattan) {
-                        if (this.isActive() && this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
-                            return true;
-                        }
+            }
+            if (!this.switchShootingMode()) {
+                if (targetHattan != null && ent == targetHattan) {
+                    if (this.isActive() && this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
+                        return true;
                     }
                 }
             }
