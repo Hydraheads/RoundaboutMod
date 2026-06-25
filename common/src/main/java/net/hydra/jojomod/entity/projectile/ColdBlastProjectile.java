@@ -69,6 +69,16 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
     @Override
     public void tick() {
         if (!level().isClientSide()){
+            if (tickCount % 1 == 0) {
+                if (level() instanceof ServerLevel sl) {
+                    sl.sendParticles(ModParticles.VACUUM,
+                            this.getX(),
+                            this.getY() + 0.5F,
+                            this.getZ(),
+                            5, 0.1,0.1,0.1, 0.1F);
+
+                }
+            }
             onChangedBlockX();
         }
         super.tick();
