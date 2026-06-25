@@ -2,6 +2,11 @@ package net.hydra.jojomod.mixin.manhattan;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -41,6 +46,13 @@ public abstract class EggAccess extends ThrowableItemProjectile {
                     if (!ii.isEmpty()) {
                         ci.cancel();
                         if(ci.isCancelled()) {
+                            if(ME.getUser() instanceof Player PL && ((StandUser) PL).roundabout$getStandPowers() instanceof  PowersManhattanTransfer PM){
+                                if(ME.getHattanTarget() == 0 || PM.switchShootingMode()) {
+                                    PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
+                                } else {
+                                    PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1F, (this.random.nextFloat() * 0.2F + 0.7F));
+                                }
+                            }
                             ME.setHeldItemManhattan(ii.copyAndClear());
                             if (this.getOwner() == null || this.getOwner() instanceof Player) {
                                 ME.canAcquireHeldItem = true;

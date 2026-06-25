@@ -6,9 +6,13 @@ import net.hydra.jojomod.block.GasolineBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenCreeper;
+import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.Direction;
@@ -20,12 +24,14 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -63,6 +69,10 @@ public class MatchEntity extends ThrowableItemProjectile {
     public boolean isDud(){
         return dud;
     }
+
+    public boolean isHattanMatch = false;
+
+    public float setHattanStandDamage = isHattanMatch ? 0.5F : 0F;
 
     public MatchEntity(Level world, double p_36862_, double p_36863_, double p_36864_) {
         super(ModEntities.THROWN_MATCH, p_36862_, p_36863_, p_36864_, world);
@@ -127,7 +137,7 @@ public class MatchEntity extends ThrowableItemProjectile {
         if (!this.level().isClientSide()) {
             if (!isDud()) {
                 Entity $$1 = $$0.getEntity();
-                float $$2 = (float) (2.0f * (ClientNetworking.getAppropriateConfig().itemSettings.matchDamage * 0.01));
+                float $$2 = (float) (2.0f * (ClientNetworking.getAppropriateConfig().itemSettings.matchDamage * 0.01 + setHattanStandDamage));
 
                 Entity $$4 = this.getOwner();
 
@@ -135,6 +145,36 @@ public class MatchEntity extends ThrowableItemProjectile {
 
                 SoundEvent $$6 = SoundEvents.FIRE_EXTINGUISH;
                 Vec3 DM = $$1.getDeltaMovement();
+                if($$1 instanceof ManhattanTransferEntity ME){
+                    if(!ME.hasItem){
+                        ItemStack ii = this.getItem();
+                        if (!ii.isEmpty()) {
+                            if(ME.getUser() instanceof Player PL && ((StandUser) PL).roundabout$getStandPowers() instanceof  PowersManhattanTransfer PM){
+                                if(ME.getHattanTarget() == 0 || PM.switchShootingMode()) {
+                                    PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
+                                } else {
+                                    PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1F, (this.random.nextFloat() * 0.2F + 0.7F));
+                                }
+                            }
+                            ME.hasItemTwo = false;
+                            ME.hasItem = true;
+                            ME.success = true;
+                            ME.canAcquireHeldItem = true;
+                            ME.fireTicksPrj = this.getRemainingFireTicks();
+                            ME.changeMovementState();
+                            ME.setHeldItemManhattan(ii.copyAndClear());
+                            this.discard();
+                        }
+                    } else {
+                        ItemStack ii = this.getItem();
+                        if (!ii.isEmpty()) {
+                            ME.canAcquireHeldItem = true;
+                            ME.hasItemTwo = true;
+                            ME.setHeldItemManhattanFull(ii.copyAndClear());
+                            this.discard();
+                        }
+                    }
+                }
                 if ($$1 instanceof Creeper) {
                     ((Creeper) $$1).ignite();
                 } else if ($$1 instanceof FallenCreeper fc && !fc.getActivated()) {

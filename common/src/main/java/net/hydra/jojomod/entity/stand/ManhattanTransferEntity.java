@@ -19,6 +19,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.*;
@@ -286,6 +288,13 @@ public class ManhattanTransferEntity extends StandEntity {
                         if (PR instanceof AbstractArrow || PR instanceof ThrowableItemProjectile) {
                             if (((directEntityWho.is(User) && !canOthersLoadMT) || canOthersLoadMT) && !hasItem) {
                                 hasItemTwo = false;
+                                if(this.getUser() instanceof Player PL && ((StandUser) PL).roundabout$getStandPowers() instanceof  PowersManhattanTransfer PM){
+                                    if(this.getHattanTarget() == 0 || PM.switchShootingMode()) {
+                                        PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
+                                    } else {
+                                            PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1F, (this.random.nextFloat() * 0.2F + 0.7F));
+                                    }
+                                }
                                 if (direct instanceof AbstractArrow AA) {
                                     ItemStack ii = ((IAbstractArrowAccess) direct).roundabout$GetPickupItem();
                                     if (!ii.isEmpty()) {
@@ -426,6 +435,11 @@ public class ManhattanTransferEntity extends StandEntity {
                                          boolean getCanPlace, float xRot, float yRot, Vec3 pos,
                                          boolean playSounds, float mult, boolean canGiveYouItem) {
         thrower.playSound(ModSounds.BULLET_RICOCHET_EVENT, 1.0F, (thrower.random.nextFloat() * 0.2F + 0.7F));
+        if(thrower.getUser() instanceof Player PL && ((StandUser) PL).roundabout$getStandPowers() instanceof  PowersManhattanTransfer PM && MainUtil.cheapDistanceTo2(thrower.getX(), thrower.getZ(), thrower.getUser().getX(), thrower.getUser().getZ()) > 16){
+            if (PM.isClient()) {
+                PM.self.playSound(ModSounds.BULLET_RICOCHET_EVENT, 100F, (thrower.random.nextFloat() * 0.2F + 0.7F));
+            }
+        }
         if (!thrower.level().isClientSide) {
             if (thrower.getUserData(thrower.getUser()) != null && thrower.getUserData(thrower.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
                 PM.isNotLoaded();
@@ -434,7 +448,7 @@ public class ManhattanTransferEntity extends StandEntity {
                 ArrowItem $$10 = (ArrowItem) item.getItem();
                 AbstractArrow $$11 = $$10.createArrow(thrower.level(), item, thrower);
                 $$11.setPos(pos);
-                $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3, getShotAccuracy);
+                $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3F, getShotAccuracy);
                 $$11.setKnockback(thrower.knockbackArrow);
                 $$11.setCritArrow(false);
                 ((IAbstractArrowAccess) $$11).roundabout$SetIsManhattan(true);
@@ -537,7 +551,16 @@ public class ManhattanTransferEntity extends StandEntity {
                 thrower.level().addFreshEntity($$7);
                 $$7.isHattanKnife = true;
                 thrower.hattanDeflected = $$7;
-            } else if (item.getItem() instanceof PotionItem) {
+            } else if (item.getItem() instanceof MatchItem) {
+            MatchEntity $$7 = new MatchEntity(thrower, thrower.level());
+            $$7.setPos(pos);
+            $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
+            $$7.setRemainingFireTicks(thrower.fireTicksPrj);
+            $$7.setOwner(thrower.getUser());
+            $$7.isHattanMatch = true;
+            thrower.level().addFreshEntity($$7);
+            thrower.hattanDeflected = $$7;
+        } else if (item.getItem() instanceof PotionItem) {
                 ThrownPotion $$4 = new ThrownPotion(thrower.level(), thrower);
                 $$4.setPos(pos);
                 $$4.setItem(item);
