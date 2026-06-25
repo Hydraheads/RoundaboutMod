@@ -493,7 +493,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
         if (visionTicks > -1){
             visionTicks--;
         }
-        if (isPiloting() || visionModeClient){
+        if (isPiloting()){
             if (visionTicks < 10) {
                 visionTicks++;
             }
@@ -508,7 +508,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
         }
 
         if (ClientNetworking.getAppropriateConfig().manhattanTransferSettings.windVisionUsesNightVision) {
-            if (isPiloting() || visionModeClient) {
+            if (isPiloting()) {
                 if (!this.getSelf().hasEffect(MobEffects.NIGHT_VISION)) {
                     this.getSelf().addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, -1, 20, false, false), null);
                 }
