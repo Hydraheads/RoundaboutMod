@@ -108,7 +108,7 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
         //Roundabout.LOGGER.info("charge-> "+charge+" power-> "+power);
         if (!entity.isInvulnerable()){
             if (entity instanceof Player pl){
-                HeatUtil.addHeat(entity,-20);
+                HeatUtil.addHeat(entity,-25);
             } else {
                 HeatUtil.addHeat(entity,-40);
             }

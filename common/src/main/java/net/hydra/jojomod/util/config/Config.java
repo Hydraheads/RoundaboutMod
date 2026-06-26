@@ -746,11 +746,6 @@ public class Config implements Cloneable {
         public Integer usertargetingCooldown;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer meteorTrackingPower;
-
-        ;
-
-
-
     }
     public static class HeyYaSettings {
         @BooleanOption(group = "inherit", value = true)
@@ -900,6 +895,18 @@ public class Config implements Cloneable {
         public Integer miningSpeedMultiplierWhiteAlbum;
         @IntOption(group = "inherit", value = 0, min = 0, max = 4)
         public Integer getMiningTierWhiteAlbum;
+        @IntOption(group = "inherit", value = 800, min = 0, max = 72000)
+        public Integer gentlyWeepsCooldown;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer twisterCooldown;
+        @IntOption(group = "inherit", value = 240, min = 0, max = 72000)
+        public Integer freezeBlocksCooldown;
+        @IntOption(group = "inherit", value = 110, min = 0, max = 72000)
+        public Integer iceWallCooldown;
+        @IntOption(group = "inherit", value = 140, min = 0, max = 72000)
+        public Integer twisterLifespan;
+        @IntOption(group = "inherit", value = 160, min = 0, max = 72000)
+        public Integer gentlyWeepsLifespan;
     }
     public static class WalkingHeartSettings {
         @BooleanOption(group = "inherit", value = true)
