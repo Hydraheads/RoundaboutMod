@@ -377,6 +377,11 @@ public class ClientUtil {
                 SoundSource.PLAYERS, 1, 1, entity,
                 entity.level().random.nextLong()));
     }
+    public static void handleWeepsSound(Entity entity) {
+        Minecraft.getInstance().getSoundManager().play(new EntityBoundSoundInstance(ModSounds.GENTLY_WEEPS_EVENT,
+                SoundSource.PLAYERS, 1, 1, entity,
+                entity.level().random.nextLong()));
+    }
 
     public static void handleRoadRollerExplosionSound(Entity entity) {
         Minecraft.getInstance().getSoundManager().play(new RoadRollerExplosionSound(ModSounds.ROAD_ROLLER_EXPLOSION_EVENT, SoundSource.PLAYERS, 1, 0, entity));

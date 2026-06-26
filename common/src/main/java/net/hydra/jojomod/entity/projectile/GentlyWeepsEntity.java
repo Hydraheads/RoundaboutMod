@@ -105,6 +105,10 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
             if (renderCold < 10) {
                 renderCold++;
             }
+            if (!started && !((TimeStop) level()).inTimeStopRange(this)) {
+                started = true;
+                ClientUtil.handleWeepsSound(this);
+            }
         }
         super.tick();
     }

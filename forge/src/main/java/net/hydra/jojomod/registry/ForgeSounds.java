@@ -90,6 +90,8 @@ public class ForgeSounds {
             register(ModSounds.ICE_BLAST_CHARGE, ModSounds.ICE_BLAST_CHARGE_ID);
     public static final RegistryObject<SoundEvent> COLD_SHOT_EVENT =
             register(ModSounds.COLD_SHOT, ModSounds.COLD_SHOT_ID);
+    public static final RegistryObject<SoundEvent> GENTLY_WEEPS_EVENT =
+            register(ModSounds.GENTLY_WEEPS, ModSounds.GENTLY_WEEPS_ID);
     public static final RegistryObject<SoundEvent> BANISH_EVENT =
             register(ModSounds.BANISH, ModSounds.BANISH_ID);
     public static final RegistryObject<SoundEvent> IRON_BALL_BOUNCE_EVENT =

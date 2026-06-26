@@ -35,6 +35,12 @@
       "roundabout:cold_shot"
     ]
   },
+  "gently_weeps": {
+    "subtitle": "sounds.roundabout.gently_weeps",
+    "sounds": [
+      "roundabout:gently_weeps"
+    ]
+  },
   "ice_skating": {
     "subtitle": "sounds.roundabout.ice_skating",
     "sounds": [
