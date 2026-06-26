@@ -2688,6 +2688,18 @@
   "config.roundabout.bypassAllNametagHidesInCreativeMode.name": "Creative Tag Vision",
   "config.roundabout.bypassAllNametagHidesInCreativeMode.desc": "In creative mode, bypass all settings and see real nametags.",
 
+  "config.roundabout.gentlyWeepsCooldown.name": "Gently Weeps CD",
+  "config.roundabout.defaceAttackCooldowngentlyWeepsCooldown.desc": "The cooldown in ticks.",
+  "config.roundabout.twisterCooldown.name": "Cold Twister CD",
+  "config.roundabout.twisterCooldown.desc": "The cooldown in ticks.",
+  "config.roundabout.freezeBlocksCooldown.name": "Block Freeze CD",
+  "config.roundabout.freezeBlocksCooldown.desc": "The cooldown in ticks.",
+  "config.roundabout.iceWallCooldown.name": "Ice Wall Cooldown",
+  "config.roundabout.iceWallCooldown.desc": "The cooldown in ticks.",
+  "config.roundabout.twisterLifespan.name": "Twister Lifespan",
+  "config.roundabout.twisterLifespan.desc": "How long does the ability stay active?",
+  "config.roundabout.gentlyWeepsLifespan.name": "Gently Weeps Lifespan",
+  "config.roundabout.gentlyWeepsLifespan.desc": "How long does the ability stay active?",
 
 
   "config.roundabout.cinderellaAttackMultOnPlayers.name": "Player Damage Multiplier",
