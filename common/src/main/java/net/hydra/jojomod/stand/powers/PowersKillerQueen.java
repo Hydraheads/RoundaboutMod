@@ -32,7 +32,6 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.ZombieFate;
 import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.item.PlayerHandItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
@@ -462,7 +461,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             return !this.hasStrayCat;
     	}
 
-        if (slot == 3 && !this.BitesTheDustMode) {
+        if (slot == 4 && !this.BitesTheDustMode) {
             return !this.canBitesTheDustPlant();
         }
     		
@@ -989,7 +988,7 @@ public class PowersKillerQueen extends NewPunchingStand {
          if (!this.self.level().isClientSide()) {
              this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, 1.0f);
              //if (chargedFinal >= maxKickTime && entity instanceof LivingEntity) {
-             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_SHIBA_EVENT, SoundSource.PLAYERS, 0.8F, 1.0f);
+             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_SHIBA_EVENT, SoundSource.PLAYERS, 0.6F, 0.7f);
              //}
          }
     }
