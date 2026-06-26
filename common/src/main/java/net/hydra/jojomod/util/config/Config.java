@@ -888,7 +888,7 @@ public class Config implements Cloneable {
         public Integer blockFreezeRadius;
         @BooleanOption(group = "inherit", value = true)
         public Boolean freezesSurfaceWater;
-        @BooleanOption(group = "inherit", value = true)
+        @BooleanOption(group = "inherit", value = false)
         public Boolean freezesGrass;
         @FloatOption(group = "inherit", value = 0.15F, min = 0, max = 72000F)
         public Float miningSpeedBuffWhite;

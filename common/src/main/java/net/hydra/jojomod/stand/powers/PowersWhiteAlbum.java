@@ -494,7 +494,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
         BlockState state = level.getBlockState(pos);
 
-        if (state.is(ModBlocks.WHITE_ALBUM_ICE_SLAB)) {
+        if (state.is(ModBlocks.WHITE_ALBUM_ICE_SLAB) || state.is(ModBlocks.STICKY_ICE)) {
 
             level.destroyBlock(pos, false);
             // or:
@@ -787,6 +787,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
                     IceTwisterEntity twister = new IceTwisterEntity(
                             this.self.level(), twisterPos.getCenter().subtract(0, 0.5F, 0));
+                    addIceEntity(twister);
                     this.getSelf().level().addFreshEntity(twister);
                     twister.lifeSpan = 140;
                     break;
@@ -805,6 +806,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             Level level = self.level();
             GentlyWeepsEntity twister = new GentlyWeepsEntity(
                     level, pos.getCenter().add(0, 0.5F, 0));
+            addIceEntity(twister);
             level.addFreshEntity(twister);
             twister.lifeSpan = 140;
         }
