@@ -160,9 +160,9 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
         }
 
         if(isManhattanProjectile && !isManhattanProjectileMobAI){
-                ABA.setDeltaMovement(0.0001, 0.0001, 0.0001);
-                entity.invulnerableTime = 0;
-                /** It's important to keep it here, because it should slow the arrow when it lands and then apply the damage at the very end*/
+            ABA.setDeltaMovement(0.0001, 0.0001, 0.0001);
+            entity.invulnerableTime = 0;
+            /** It's important to keep it here, because it should slow the arrow when it lands and then apply the damage at the very end*/
         }
 
     }
@@ -171,13 +171,12 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
     private void roundabout$onHitEntityHattan(EntityHitResult $$0, CallbackInfo ci) {
         Entity entity = $$0.getEntity();
         AbstractArrow ABA = (AbstractArrow) (Object) this;
-        if(isManhattanProjectile && !isManhattanProjectileMobAI){
+        if(isManhattanProjectile){
+            if(!isManhattanProjectileMobAI) {
                 entity.hurt(damageSources().arrow(ABA, ABA.getOwner()), roundabout$lastHattanDamage);
+            }
                 entity.invulnerableTime = 0;
                 doBonusDamageHattan(entity);
-        } else {
-            entity.invulnerableTime = 0;
-            doBonusDamageHattan(entity);
         }
     }
 
