@@ -557,7 +557,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
         // code for advanced icons
 
         if (!isHoldingSneak()){
-            setSkillIcon(context, x, y, 1, StandIcons.SUIT_COMBAT, PowerIndex.SKILL_4);
+            if (fistsOut){
+                setSkillIcon(context, x, y, 1, StandIcons.SUIT_COMBAT_2, PowerIndex.SKILL_4);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.SUIT_COMBAT, PowerIndex.SKILL_4);
+            }
         } else {
             setSkillIcon(context, x, y, 1, StandIcons.FREEZE_CANCEL, PowerIndex.SKILL_1_SNEAK);
         }
