@@ -1744,6 +1744,8 @@
   "ability.roundabout.meteor_tracking.desc":"Toggle between meteor tracking on/off. When meteor tracking is on all meteors in the meteor shower will follow you.",
   "ability.roundabout.forced_dissintegration":"Forced Disintegration",
   "ability.roundabout.forced_dissintegration.desc":"Makes all current big meteors disintegrate. This move is useful to avoid destruction.",
+  "ability.roundabout.grab":"Grab",
+  "ability.roundabout.gra.desc":"When in stand targeting mode if anyone gets close enough to planet waves they will get grabbed.",
 
   "ability.roundabout.manual_shooting": "Shooting Mode",
   "ability.roundabout.manual_shooting.desc": "Allows you to press left click with your mouse shoot in the direction you want if you are controlling the stand and it contains any storable projectile. If you decide to keep automatic shooting, the stand will instantly redirect it towards the nearest moving entity when it's able to.",

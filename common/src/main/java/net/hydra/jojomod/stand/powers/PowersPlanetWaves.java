@@ -136,7 +136,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
 
         if (isHoldingSneak()) {
-            setSkillIcon(context, x, y, 2, StandIcons.PLANET_WAVES_DESINTEGRATION, PowerIndex.SKILL_2_SNEAK);
+            setSkillIcon(context, x, y, 2, StandIcons.PLANET_WAVES_FORCED_DISINTEGRATION, PowerIndex.SKILL_2_SNEAK);
             if (canExecuteMoveWithLevel(MeteorTrackingLevel())) {
                 setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_METEOR_TRACKING, PowerIndex.SKILL_4_SNEAK);
             } else {
@@ -572,11 +572,12 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         double sinkDepth;
         switch (hitResult.getDirection()) {
-            case UP    -> sinkDepth = 0.1;
-            case DOWN  -> sinkDepth = 0.1;
-            default    -> sinkDepth = 0.6;
+            case UP   -> sinkDepth = 0.4;  // floor: sink upward into block
+            case DOWN -> sinkDepth = -0.4; // ceiling: normal points DOWN, negate to go UP into block
+            default   -> sinkDepth = 0.55; // walls
         }
-// sink INWARD — move from face toward block center and beyond
+
+// This line uses sinkDepth — negative value flips the sink direction for ceiling
         this.sinkTarget = faceCenter.subtract(faceNormal.scale(sinkDepth));
         this.standHitDirection = hitResult.getDirection();
         restrainAnimationType  = 0;
@@ -1111,7 +1112,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.big_meteor",
                 "instruction.roundabout.press_skill", StandIcons.PLANET_WAVES_BIG_METEOR,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.forced_dissintegration",
-                "instruction.roundabout.press_skill_crouch", StandIcons.PLANET_WAVES_DESINTEGRATION,2,level,bypass));
+                "instruction.roundabout.press_skill_crouch", StandIcons.PLANET_WAVES_FORCED_DISINTEGRATION,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 3, "ability.roundabout.stand_targeting",
@@ -1122,6 +1123,8 @@ public class PowersPlanetWaves extends NewDashPreset {
                 "instruction.roundabout.press_skill_crouch", StandIcons.PLANET_WAVES_METEOR_TRACKING, 4, level, bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0, "ability.roundabout.desintegration",
                 "instruction.roundabout.passive", StandIcons.PLANET_WAVES_DESINTEGRATION, 4, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 118, 0, "ability.roundabout.",
+                "instruction.roundabout.passive", StandIcons.PLANET_WAVES_GRAB, 4, level, bypass));
 
         return $$1;
 
