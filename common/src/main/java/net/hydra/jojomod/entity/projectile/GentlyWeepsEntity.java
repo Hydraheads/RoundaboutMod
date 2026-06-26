@@ -1,11 +1,14 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
@@ -14,13 +17,18 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.Snowball;
+import net.minecraft.world.entity.projectile.ThrownTrident;
+import net.minecraft.world.item.TridentItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -70,7 +78,22 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
                                 ) {
                                     setBled(true);
                                 } else {
-
+                                    if (pj instanceof RoundaboutBulletEntity || pj instanceof Arrow
+                                    || pj instanceof KnifeEntity || pj instanceof MatchEntity ||
+                                    pj instanceof ThrownTrident || pj instanceof HarpoonEntity){
+                                        IProjectileAccess ipa = (IProjectileAccess) pj;
+                                        if (!ipa.roundabout$getIsDeflected()){
+                                            if (pj instanceof RoundaboutBulletEntity) {
+                                                pj.setOwner(this);
+                                                ((RoundaboutBulletEntity) pj).setSuperThrown(false);
+                                                pj.level().playSound(null, pj.blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                                            }
+                                            ipa.roundabout$setIsDeflected(true);
+                                            ((IEntityAndData)pj).rdbt$forceDeltaMovement(pj.getDeltaMovement().scale(-0.4));
+                                            pj.setYRot(pj.getYRot() + 180.0F);
+                                            pj.yRotO += 180.0F;
+                                        }
+                                    }
                                 }
                             }
                         } else if (MainUtil.canFreeze(mob)) {
