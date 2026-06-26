@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.block.ModBlocks;
@@ -27,10 +28,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.Arrow;
-import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.entity.projectile.Snowball;
-import net.minecraft.world.entity.projectile.ThrownTrident;
+import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.item.TridentItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -84,29 +82,28 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
                                 ) {
                                     setBled(true);
                                 } else {
-                                    if (pj instanceof RoundaboutBulletEntity || pj instanceof Arrow
-                                    || pj instanceof KnifeEntity || pj instanceof MatchEntity ||
-                                    pj instanceof ThrownTrident || pj instanceof HarpoonEntity){
-                                        IProjectileAccess ipa = (IProjectileAccess) pj;
-                                        if (!ipa.roundabout$getIsDeflected()){
-
-                                            ((ServerLevel) level()).sendParticles(ModParticles.ICE_SPARKLE,
-                                                    pj.getX(),
-                                                    pj.getY(),
-                                                    pj.getZ(),
-                                                    10, 0, 0, 0, 0.2);
-                                            pj.level().playSound(null, pj.blockPosition(), ModSounds.ICE_BREAKER_EVENT,
-                                                    SoundSource.PLAYERS, 2.0F, 1.0F);
-                                            if (pj instanceof RoundaboutBulletEntity) {
-                                                pj.setOwner(this);
-                                                ((RoundaboutBulletEntity) pj).setSuperThrown(false);
+                                    if (pj instanceof RoundaboutBulletEntity || pj instanceof AbstractArrow ||
+                                    pj instanceof MatchEntity){
+                                        if (!(pj instanceof AbstractArrow aa && ((IAbstractArrowAccess)aa).roundabout$GetIsManhattan())
+                                        && !(pj instanceof RoundaboutBulletEntity abe && abe.isHattan)){
+                                            IProjectileAccess ipa = (IProjectileAccess) pj;
+                                            if (!ipa.roundabout$getIsDeflected()) {
+                                                ((ServerLevel) level()).sendParticles(ModParticles.ICE_SPARKLE,
+                                                        pj.getX(),
+                                                        pj.getY(),
+                                                        pj.getZ(),
+                                                        10, 0, 0, 0, 0.2);
+                                                pj.level().playSound(null, pj.blockPosition(), ModSounds.ICE_BREAKER_EVENT,
+                                                        SoundSource.PLAYERS, 2.0F, 1.0F);
+                                                if (pj instanceof RoundaboutBulletEntity) {
+                                                    pj.setOwner(this);
+                                                    ((RoundaboutBulletEntity) pj).setSuperThrown(false);
+                                                }
+                                                ipa.roundabout$setIsDeflected(true);
+                                                ((IEntityAndData) pj).rdbt$forceDeltaMovement(pj.getDeltaMovement().scale(-0.4));
+                                                pj.setYRot(pj.getYRot() + 180.0F);
+                                                pj.yRotO += 180.0F;
                                             }
-                                            ipa.roundabout$setIsDeflected(true);
-                                            ((IEntityAndData)pj).rdbt$forceDeltaMovement(pj.getDeltaMovement().scale(-0.4));
-                                            pj.setYRot(pj.getYRot() + 180.0F);
-                                            pj.yRotO += 180.0F;
-
-
                                         }
                                     }
                                 }
