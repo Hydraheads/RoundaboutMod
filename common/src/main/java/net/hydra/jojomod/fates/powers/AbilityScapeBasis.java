@@ -1233,12 +1233,15 @@ public class AbilityScapeBasis {
     /**set an ability on cooldown*/
     public void setCooldown(byte power, int cooldown){
         if (!getPowerCooldowns().isEmpty() && getPowerCooldowns().size() >= power){
-            getPowerCooldowns().get(power).time = cooldown;
-            getPowerCooldowns().get(power).maxTime = cooldown;
+            if ((self instanceof Player pl && pl.isCreative()) || cooldown > getPowerCooldowns().get(power).time ||
+                    cooldown <= 1) {
+                getPowerCooldowns().get(power).time = cooldown;
+                getPowerCooldowns().get(power).maxTime = cooldown;
 
-            if (self instanceof ServerPlayer sp && getStandUserSelf().rdbt$isServerControlledCooldown(getPowerCooldowns().get(power),power)){
+                if (self instanceof ServerPlayer sp && getStandUserSelf().rdbt$isServerControlledCooldown(getPowerCooldowns().get(power), power)) {
 
-                S2CPacketUtil.sendMaxCooldownSyncPacket(sp, power, cooldown, cooldown);
+                    S2CPacketUtil.sendMaxCooldownSyncPacket(sp, power, cooldown, cooldown);
+                }
             }
         }
     }
