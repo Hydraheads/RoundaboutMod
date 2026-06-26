@@ -147,13 +147,14 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
         }
 
         if(entity instanceof ManhattanTransferEntity ME && isManhattanProjectile){
-            ME.getUser().hurt(damageSources().arrow(ABA, entity), roundabout$lastHattanDamage);
+            ME.getUser().hurt(damageSources().arrow(ABA, ABA.getOwner()), roundabout$lastHattanDamage);
             this.discard();
             ci.cancel();
         }
 
         if(isManhattanProjectile){
             ABA.setDeltaMovement(0.0001, 0.0001, 0.0001);
+            entity.invulnerableTime = 0;
             /** It's important to keep it here, because it should slow the arrow when it lands and then apply the damage at the very end*/
         }
 
@@ -164,7 +165,8 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
         Entity entity = $$0.getEntity();
         AbstractArrow ABA = (AbstractArrow) (Object) this;
         if(isManhattanProjectile){
-            entity.hurt(damageSources().arrow(ABA, entity), roundabout$lastHattanDamage);
+            entity.hurt(damageSources().arrow(ABA, ABA.getOwner()), roundabout$lastHattanDamage);
+            entity.invulnerableTime = 0;
             doBonusDamageHattan(entity);
         }
     }
