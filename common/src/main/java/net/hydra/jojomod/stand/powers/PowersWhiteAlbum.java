@@ -557,7 +557,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
         // code for advanced icons
 
         if (!isHoldingSneak()){
-            setSkillIcon(context, x, y, 1, StandIcons.SUIT_COMBAT, PowerIndex.SKILL_4);
+            if (fistsOut){
+                setSkillIcon(context, x, y, 1, StandIcons.SUIT_COMBAT_2, PowerIndex.SKILL_4);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.SUIT_COMBAT, PowerIndex.SKILL_4);
+            }
         } else {
             setSkillIcon(context, x, y, 1, StandIcons.FREEZE_CANCEL, PowerIndex.SKILL_1_SNEAK);
         }
@@ -1266,13 +1270,15 @@ public class PowersWhiteAlbum extends NewDashPreset {
             BASE = 1,
             BETA =2,
             FIERCE =3,
-            BLACK =4;
+            BLACK =4,
+            SHADE =5;
 
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 BASE,
                 FIERCE,
+                SHADE,
                 BLACK,
                 BETA
         );
@@ -1290,6 +1296,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case BETA -> "beta";
             case BLACK -> "black";
             case FIERCE -> "dramatic";
+            case SHADE -> "shade";
             default -> "base";
         };
     }
