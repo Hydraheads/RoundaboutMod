@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.sound.ModSounds;
@@ -76,7 +77,8 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
                     if (mob.getBoundingBox().intersects(wallBox)) {
                         if (mob instanceof Projectile pj){
                             if (!getBled() && !(pj.getOwner() instanceof LivingEntity LE &&
-                                    ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum)) {
+                                    ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum
+                            && PowerTypes.hasStandActive(LE))) {
                                 if (pj instanceof BloodSplatterEntity ||
                                         (pj instanceof SoftAndWetPlunderBubbleEntity pb && pb.getLiquidStolen() == 4)
                                 ) {

@@ -11,6 +11,7 @@ import net.hydra.jojomod.client.models.projectile.IceTwisterModel;
 import net.hydra.jojomod.client.models.visages.parts.RipperEyesAnimation;
 import net.hydra.jojomod.entity.projectile.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.projectile.IceTwisterEntity;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
@@ -38,7 +39,8 @@ public class GentlyWeepsRenderer extends EntityRenderer<GentlyWeepsEntity> {
 
         if ($$0.getBled() || ClientUtil.checkIfClientCanSeeMobsForWindVision() ||
                 (ClientUtil.getPlayer() != null &&
-                        ((StandUser)ClientUtil.getPlayer()).roundabout$getStandPowers() instanceof PowersWhiteAlbum)) {
+                        ((StandUser)ClientUtil.getPlayer()).roundabout$getStandPowers() instanceof PowersWhiteAlbum
+                && PowerTypes.hasStandActive(ClientUtil.getPlayer()))) {
             if (((TimeStop) $$0.level()).inTimeStopRange($$0)) {
                 $$2 = 0;
             }
