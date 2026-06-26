@@ -1084,6 +1084,8 @@ public class PowersJustice extends NewDashPreset {
                 done = true;
                 this.self.setDeltaMovement(this.self.getDeltaMovement().add(vector.x,vector.y+0.2F,vector.z
                 ));
+                this.self.hasImpulse = true;
+                this.self.hurtMarked = true;
             } else if (effect.getDuration() == 2) {
                 vector = new Vec3(0,
                         (this.self.getY()-10 - this.self.getY()),
@@ -1091,6 +1093,8 @@ public class PowersJustice extends NewDashPreset {
                 done = true;
                 this.self.setDeltaMovement(this.self.getDeltaMovement().add(vector.x,vector.y+0.2F,vector.z
                 ));
+                this.self.hasImpulse = true;
+                this.self.hurtMarked = true;
             }
             if (done){
                 this.self.hurtMarked = true;
@@ -1524,6 +1528,9 @@ public class PowersJustice extends NewDashPreset {
                                                 vector.z+random3,
                                                 0.15);
                                         vector = vector.scale(MainUtil.getNetheriteMultiplier(LE));
+                                        if (LE instanceof Player){
+                                            vector.scale(0.8F);
+                                        }
                                         LE.setDeltaMovement(LE.getDeltaMovement().add(vector.x,vector.y*0.55+0.2F,vector.z
                                         ));
                                         LE.hurtMarked = true;
