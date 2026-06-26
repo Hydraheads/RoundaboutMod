@@ -1270,13 +1270,15 @@ public class PowersWhiteAlbum extends NewDashPreset {
             BASE = 1,
             BETA =2,
             FIERCE =3,
-            BLACK =4;
+            BLACK =4,
+            SHADE =5;
 
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 BASE,
                 FIERCE,
+                SHADE,
                 BLACK,
                 BETA
         );
@@ -1294,6 +1296,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case BETA -> "beta";
             case BLACK -> "black";
             case FIERCE -> "dramatic";
+            case SHADE -> "shade";
             default -> "base";
         };
     }
