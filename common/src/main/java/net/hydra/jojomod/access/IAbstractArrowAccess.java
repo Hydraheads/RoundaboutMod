@@ -30,6 +30,7 @@ public interface IAbstractArrowAccess {
     void roundabout$SetIsManhattan(boolean isManhattanProjectile);
     float roundabout$getHattanDamage();
     void roundabout$setHattanDamage(float manhattanDmg);
+    void roundabout$isMobAiArrow(boolean mobAIForManhattan);
 
     @Nullable
     EntityHitResult roundabout$FindHitEntity(Vec3 $$0, Vec3 $$1);
