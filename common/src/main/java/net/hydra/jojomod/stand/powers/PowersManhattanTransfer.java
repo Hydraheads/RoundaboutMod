@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -37,8 +38,18 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.SnowGolem;
+import net.minecraft.world.entity.monster.Blaze;
+import net.minecraft.world.entity.monster.Ghast;
+import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.entity.projectile.SmallFireball;
+import net.minecraft.world.entity.projectile.Snowball;
+import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.phys.*;
@@ -848,10 +859,12 @@ public class PowersManhattanTransfer extends NewDashPreset {
     @Override
     public void onActuallyHurt(DamageSource $$0, float $$1) {
         if ($$0.is(ModDamageTypes.STAND) || $$0.is(ModDamageTypes.STAND_RUSH) || $$0.is(ModDamageTypes.PENETRATING_STAND)) {
-            if ($$0.getEntity().getPosition(1).distanceTo(this.getSelf().getPosition(1)) < 6.0) {
-                if (this.getSelf() instanceof Player P) {
-                    if (this.getStandUserSelf().roundabout$getCombatMode()) {
-                        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1F, 1F);
+            if($$0.getEntity() != null) {
+                if ($$0.getEntity().getPosition(1).distanceTo(this.getSelf().getPosition(1)) < 6.0) {
+                    if (this.getSelf() instanceof Player P) {
+                        if (this.getStandUserSelf().roundabout$getCombatMode()) {
+                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1F, 1F);
+                        }
                     }
                 }
             }
@@ -868,5 +881,42 @@ public class PowersManhattanTransfer extends NewDashPreset {
     @Override
     public Component ifWipListDev(){
         return Component.literal(  "14Kacper").withStyle(ChatFormatting.DARK_RED);
+    }
+
+    private int mobShootArrow = 80;
+
+    @Override
+    public void tickMobAI(LivingEntity attackTarget){
+        if(mobShootArrow > 1){
+            mobShootArrow--;
+        } else {
+            if(targetHattan != null) {
+                if (this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME) {
+                    if (this.getSelf() instanceof SnowGolem) {
+                        Snowball $$7 = new Snowball(ME.getUser().level(), ME.getUser());
+                        $$7.setPos(ME.getX(), ME.getY() - 0.15, ME.getZ());
+                        $$7.setItem($$7.getItem());
+                        $$7.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, -3.0F, 2F, 0.0F);
+                        ME.level().addFreshEntity($$7);
+                        ME.hattanDeflected = $$7;
+                    } else {
+                        Arrow $$11 = new Arrow(this.getSelf().level(), ME.getX(), ME.getY(), ME.getZ());
+                        $$11.setPos(ME.getX(), ME.getY() - 0.15, ME.getZ());
+                        $$11.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, 0.0F, 1.5F, 0.0F);
+                        $$11.pickup = AbstractArrow.Pickup.DISALLOWED;
+                        ME.level().addFreshEntity($$11);
+                        ME.hattanDeflected = $$11;
+                        powerUpMobArrow($$11);
+                    }
+                    ME.powerUpProjectile();
+                }
+                mobShootArrow = 100;
+            }
+        }
+    }
+
+    private void powerUpMobArrow(AbstractArrow arrow){
+        ((IAbstractArrowAccess) arrow).roundabout$SetIsManhattan(true);
+        ((IAbstractArrowAccess) arrow).roundabout$isMobAiArrow(true);
     }
 }

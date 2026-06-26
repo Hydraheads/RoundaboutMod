@@ -18,6 +18,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
@@ -109,10 +110,16 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
 
     @Override
     public void roundabout$SetIsManhattan(boolean isManhattanProjectile){
-        this.isManhattanProjectile = isManhattanProjectile;
+            this.isManhattanProjectile = isManhattanProjectile;
     }
 
     public boolean isManhattanProjectile;
+    public boolean isManhattanProjectileMobAI = false;
+
+    @Override
+    public void roundabout$isMobAiArrow(boolean isMobAIArrow){
+        this.isManhattanProjectileMobAI = isMobAIArrow;
+    }
 
     @Inject(method = "onHitEntity", at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$onHitEntity(EntityHitResult $$0, CallbackInfo ci) {
@@ -152,10 +159,10 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
             ci.cancel();
         }
 
-        if(isManhattanProjectile){
-            ABA.setDeltaMovement(0.0001, 0.0001, 0.0001);
-            entity.invulnerableTime = 0;
-            /** It's important to keep it here, because it should slow the arrow when it lands and then apply the damage at the very end*/
+        if(isManhattanProjectile && !isManhattanProjectileMobAI){
+                ABA.setDeltaMovement(0.0001, 0.0001, 0.0001);
+                entity.invulnerableTime = 0;
+                /** It's important to keep it here, because it should slow the arrow when it lands and then apply the damage at the very end*/
         }
 
     }
@@ -164,8 +171,11 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
     private void roundabout$onHitEntityHattan(EntityHitResult $$0, CallbackInfo ci) {
         Entity entity = $$0.getEntity();
         AbstractArrow ABA = (AbstractArrow) (Object) this;
-        if(isManhattanProjectile){
-            entity.hurt(damageSources().arrow(ABA, ABA.getOwner()), roundabout$lastHattanDamage);
+        if(isManhattanProjectile && !isManhattanProjectileMobAI){
+                entity.hurt(damageSources().arrow(ABA, ABA.getOwner()), roundabout$lastHattanDamage);
+                entity.invulnerableTime = 0;
+                doBonusDamageHattan(entity);
+        } else {
             entity.invulnerableTime = 0;
             doBonusDamageHattan(entity);
         }

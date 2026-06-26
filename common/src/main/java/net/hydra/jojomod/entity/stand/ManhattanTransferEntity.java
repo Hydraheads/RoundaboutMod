@@ -242,7 +242,7 @@ public class ManhattanTransferEntity extends StandEntity {
 
     public boolean canOthersLoadMT = ClientNetworking.getAppropriateConfig().manhattanTransferSettings.canOtherMobsLoadManhattanTransfer;
     public int fireTicksPrj = 0;
-    Projectile hattanDeflected = null;
+    public Projectile hattanDeflected = null;
     public int fireworkLifeTicks = 0;
     public int setHatAnimDir = 1;
     public float heighHattanPilotNoMov = 0;
