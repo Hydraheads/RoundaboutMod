@@ -441,28 +441,25 @@ public class ManhattanTransferEntity extends StandEntity {
             if (thrower.getUserData(thrower.getUser()) != null && thrower.getUserData(thrower.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
                 PM.isNotLoaded();
             }
-            if (item.getItem() instanceof ArrowItem) {
-                ArrowItem $$10 = (ArrowItem) item.getItem();
-                AbstractArrow $$11 = $$10.createArrow(thrower.level(), item, thrower);
-                $$11.setPos(pos);
-                $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3F, getShotAccuracy);
-                $$11.setKnockback(thrower.knockbackArrow);
-                $$11.setCritArrow(false);
-                ((IAbstractArrowAccess) $$11).roundabout$SetIsManhattan(true);
-                ((IAbstractArrowAccess) $$11).roundabout$setHattanDamage(thrower.manhattanDamageIncipit);
-
-                if (thrower != null) {
-                    if (!thrower.canAcquireHeldItem) {
-                        $$11.pickup = AbstractArrow.Pickup.DISALLOWED;
-                    } else {
-                        $$11.pickup = AbstractArrow.Pickup.ALLOWED;
-                    }
-                }
-                $$11.setRemainingFireTicks(thrower.fireTicksPrj);
-                thrower.level().addFreshEntity($$11);
-                thrower.hattanDeflected = $$11;
-                $$11.setOwner(thrower.getUser());
-                thrower.knockbackArrow = 0;
+         if (item.getItem() instanceof ArrowItem) {
+            ArrowItem $$10 = (ArrowItem) item.getItem();
+            AbstractArrow $$11 = $$10.createArrow(thrower.getUser().level(), item, thrower.getUser());
+            $$11.setPos(pos);
+            $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3F, getShotAccuracy);
+            $$11.setKnockback(thrower.knockbackArrow);
+            $$11.setCritArrow(false);
+            if(thrower.canAcquireHeldItem){
+                $$11.pickup =AbstractArrow.Pickup.ALLOWED;
+            }else {
+                $$11.pickup =AbstractArrow.Pickup.DISALLOWED;
+            }
+            thrower.level().addFreshEntity($$11);
+            ((IAbstractArrowAccess) $$11).roundabout$SetIsManhattan(true);
+            ((IAbstractArrowAccess) $$11).roundabout$setHattanDamage(thrower.manhattanDamageIncipit);
+            $$11.setRemainingFireTicks(thrower.fireTicksPrj);
+            thrower.hattanDeflected = $$11;
+            //$$11.setOwner(thrower.getUser());
+            thrower.knockbackArrow = 0;
             } else if (item.getItem() instanceof AmmoItem) {
                 RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity(thrower.level(), thrower);
                 $$7.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.5F, getShotAccuracy);
