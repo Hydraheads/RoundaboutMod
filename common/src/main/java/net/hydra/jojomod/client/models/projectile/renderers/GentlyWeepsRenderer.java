@@ -36,7 +36,7 @@ public class GentlyWeepsRenderer extends EntityRenderer<GentlyWeepsEntity> {
 
     public void render(GentlyWeepsEntity $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
 
-        if ($$0.getBled() ||
+        if ($$0.getBled() || ClientUtil.checkIfClientCanSeeMobsForWindVision() ||
                 (ClientUtil.getPlayer() != null &&
                         ((StandUser)ClientUtil.getPlayer()).roundabout$getStandPowers() instanceof PowersWhiteAlbum)) {
             if (((TimeStop) $$0.level()).inTimeStopRange($$0)) {
