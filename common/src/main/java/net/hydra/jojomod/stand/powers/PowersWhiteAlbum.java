@@ -1475,8 +1475,14 @@ public class PowersWhiteAlbum extends NewDashPreset {
     @Override
     public float getBrawlPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
+            if (!MainUtil.canFreeze(entity)){
+                return 0.93F;
+            }
             return 0.7F;
         } else {
+            if (!MainUtil.canFreeze(entity)){
+                return 2.5F;
+            }
             return 2.2F;
         }
     }
