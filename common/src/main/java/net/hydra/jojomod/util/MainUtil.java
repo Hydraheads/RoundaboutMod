@@ -20,6 +20,7 @@ import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.paintings.RoundaboutPainting;
 import net.hydra.jojomod.entity.pathfinding.GroundPathfindingStandAttackEntity;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
+import net.hydra.jojomod.entity.projectile.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -1275,11 +1276,13 @@ public class MainUtil {
             }
 
             if (!hasEnderBlood(entity) && !hasBlueBlood(entity)) {
+                //Bleeding activates stone masks
                 if (source != null && isWearingEitherStoneMask(source) && source.distanceTo(entity) < 5) {
                     activateStoneMask(source);
                 } else if (isWearingStoneMask(entity)) {
                     activateStoneMask(entity);
                 }
+
             }
 
             ((StandUser)entity).roundabout$setBleedLevel(level);

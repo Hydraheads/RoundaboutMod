@@ -6,9 +6,12 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
@@ -34,6 +37,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
 import java.util.UUID;
 
 public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
@@ -72,7 +76,8 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
 
                     if (mob.getBoundingBox().intersects(wallBox)) {
                         if (mob instanceof Projectile pj){
-                            if (!getBled()) {
+                            if (!getBled() && !(pj.getOwner() instanceof LivingEntity LE &&
+                                    ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum)) {
                                 if (pj instanceof BloodSplatterEntity ||
                                         (pj instanceof SoftAndWetPlunderBubbleEntity pb && pb.getLiquidStolen() == 4)
                                 ) {
@@ -92,26 +97,33 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
                                             ((IEntityAndData)pj).rdbt$forceDeltaMovement(pj.getDeltaMovement().scale(-0.4));
                                             pj.setYRot(pj.getYRot() + 180.0F);
                                             pj.yRotO += 180.0F;
+
+
                                         }
                                     }
                                 }
                             }
-                        } else if (MainUtil.canFreeze(mob)) {
-                            if (this.tickCount > 10) {
-                                if (mob instanceof Player pl) {
-                                    int amt = -3;
-                                    if (this.tickCount > 20) {
-                                        amt = -4;
+                        } else {
+                            if (!getBled() && mob instanceof LivingEntity LE && LE.hasEffect(ModEffects.BLEED)){
+                                setBled(true);
+                            }
+                            if (MainUtil.canFreeze(mob)) {
+                                if (this.tickCount > 10) {
+                                    if (mob instanceof Player pl) {
+                                        int amt = -3;
+                                        if (this.tickCount > 20) {
+                                            amt = -4;
+                                        }
+                                        HeatUtil.addHeat(mob, amt);
+                                    } else {
+                                        HeatUtil.addHeat(mob, -2);
                                     }
-                                    HeatUtil.addHeat(mob, amt);
                                 } else {
-                                    HeatUtil.addHeat(mob, -2);
-                                }
-                            } else {
-                                if (mob instanceof Player pl) {
-                                    HeatUtil.addHeat(mob, -1);
-                                } else {
-                                    HeatUtil.addHeat(mob, -1);
+                                    if (mob instanceof Player pl) {
+                                        HeatUtil.addHeat(mob, -1);
+                                    } else {
+                                        HeatUtil.addHeat(mob, -1);
+                                    }
                                 }
                             }
                         }

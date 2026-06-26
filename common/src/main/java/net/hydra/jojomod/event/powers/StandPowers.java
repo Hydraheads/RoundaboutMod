@@ -426,6 +426,7 @@ public class StandPowers extends AbilityScapeBasis {
             if (!ipa.roundabout$getIsDeflected()){
                 if (PE instanceof RoundaboutBulletEntity) {
                     ((RoundaboutBulletEntity) PE).setSuperThrown(false);
+                    PE.setOwner(self);
                     PE.level().playSound(null, PE.blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
                 ipa.roundabout$setIsDeflected(true);
