@@ -53,6 +53,26 @@ public class FrozenBlock extends Block {
                             thawed.defaultBlockState(),
                             Block.UPDATE_ALL
                     );
+                    BlockPos.betweenClosed(pos.offset(-2, -2, -2), pos.offset(2, 2, 2))
+                            .forEach(targetPos -> {
+
+                                BlockState targetState = level.getBlockState(targetPos);
+
+                                // Only convert your frozen blocks
+                                if (targetState.getBlock() instanceof FrozenBlock frozenBlock) {
+
+                                    Block thawedBlock = frozenBlock.getThawedBlock();
+
+                                    if (thawedBlock != null) {
+                                        level.setBlock(
+                                                targetPos,
+                                                thawedBlock.defaultBlockState(),
+                                                Block.UPDATE_ALL
+                                        );
+                                    }
+                                }
+                            });
+
 
                     stack.hurtAndBreak(
                             1,

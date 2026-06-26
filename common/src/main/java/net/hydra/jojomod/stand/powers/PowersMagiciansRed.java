@@ -2838,6 +2838,25 @@ public class PowersMagiciansRed extends NewPunchingStand {
                                 thawed.defaultBlockState(),
                                 Block.UPDATE_ALL
                         );
+                        BlockPos.betweenClosed(grabBlock.offset(-2, -2, -2), grabBlock.offset(2, 2, 2))
+                                .forEach(targetPos -> {
+
+                                    BlockState targetState = self.level().getBlockState(targetPos);
+
+                                    // Only convert your frozen blocks
+                                    if (targetState.getBlock() instanceof FrozenBlock frozenBlock) {
+
+                                        Block thawedBlock = frozenBlock.getThawedBlock();
+
+                                        if (thawedBlock != null) {
+                                            self.level().setBlock(
+                                                    targetPos,
+                                                    thawedBlock.defaultBlockState(),
+                                                    Block.UPDATE_ALL
+                                            );
+                                        }
+                                    }
+                                });
 
                         self.level().playSound(
                                 null,
