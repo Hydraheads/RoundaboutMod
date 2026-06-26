@@ -4,9 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.block.CoffinBlock;
-import net.hydra.jojomod.block.CoffinBlockEntity;
-import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -24,51 +22,21 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BedPart;
 
 public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer<T> {
-    private static final String BOTTOM = "bottom";
-    private static final String LID = "lid";
-    private static final String LOCK = "lock";
-    private final ModelPart left_coffin;
-    private final ModelPart right_coffin;
-    private final ModelPart left_lid;
-    private final ModelPart right_lid;
-    private final ModelPart left_bottom;
-    private final ModelPart right_bottom;
     private final ModelPart hand;
     private final ModelPart hand_slim;
 
     public HandRenderer(BlockEntityRendererProvider.Context $$0) {
-        ModelPart $$2 = $$0.bakeLayer(ModEntityRendererClient.COFFIN_LEFT_LAYER);
-        this.left_coffin = $$2.getChild("coffin");
-        this.left_lid = left_coffin.getChild("lid");
-        this.left_bottom = left_coffin.getChild("bottom");
-        ModelPart $$3 = $$0.bakeLayer(ModEntityRendererClient.COFFIN_RIGHT_LAYER);
-        this.right_coffin = $$3.getChild("coffin");
-        this.hand = this.right_coffin;
-        this.hand_slim = this.right_coffin;
-        this.right_lid = right_coffin.getChild("lid");
-        this.right_bottom = right_coffin.getChild("bottom");
-    }
+        ModelPart $$2 = $$0.bakeLayer(ModEntityRendererClient.HAND_BLOCK_LAYER);
+        this.hand = $$2.getChild("hand");
 
-    public static LayerDefinition createDoubleBodyRightLayer() {
-        MeshDefinition meshdefinition = new MeshDefinition();
-        PartDefinition partdefinition = meshdefinition.getRoot();
-
-        PartDefinition coffin = partdefinition.addOrReplaceChild("coffin", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
-
-        PartDefinition lid = coffin.addOrReplaceChild("lid", CubeListBuilder.create().texOffs(96, 0).addBox(0.0F, -3.0F, 0.0F, 12.0F, 3.0F, 16.0F, new CubeDeformation(0.0F)), PartPose.offset(-6.0F, -9.0F, -8.0F));
-
-        PartDefinition bottom = coffin.addOrReplaceChild("bottom", CubeListBuilder.create().texOffs(96, 69).addBox(-6.0F, -1.0F, 0.0F, 12.0F, 2.0F, 14.0F, new CubeDeformation(0.0F))
-                .texOffs(108, 19).addBox(-8.0F, -8.0F, 0.0F, 2.0F, 9.0F, 16.0F, new CubeDeformation(0.0F))
-                .texOffs(108, 44).addBox(6.0F, -8.0F, 0.0F, 2.0F, 9.0F, 16.0F, new CubeDeformation(0.0F))
-                .texOffs(96, 19).addBox(-6.0F, -8.0F, 14.0F, 12.0F, 9.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -1.0F, -8.0F));
-
-        return LayerDefinition.create(meshdefinition, 160, 160);
+        ModelPart $$3 = $$0.bakeLayer(ModEntityRendererClient.HAND_SLIM_BLOCK_LAYER);
+        this.hand_slim = $$3.getChild("hand");
     }
 
     public static LayerDefinition createHandLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
-        PartDefinition hand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create(), PartPose.offset(0.0F, 12.0F, 0.0F));
+        PartDefinition hand = partdefinition.addOrReplaceChild("hand", CubeListBuilder.create(), PartPose.offset(0.0F, 12.0F, 0.0F));
 
         PartDefinition LeftArm = hand.addOrReplaceChild("LeftArm", CubeListBuilder.create().texOffs(40,16).addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(40,32).addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.25F)), PartPose.offsetAndRotation(-1.0F, 10.0F, 1.0F, -1.5708F, 0.0F, 0.0F));
@@ -79,7 +47,7 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
     public static LayerDefinition createHandSlimLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
-        PartDefinition hand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create(), PartPose.offset(0.0F, 12.0F, 0.0F));
+        PartDefinition hand = partdefinition.addOrReplaceChild("hand", CubeListBuilder.create(), PartPose.offset(0.0F, 12.0F, 0.0F));
 
         PartDefinition LeftArm = hand.addOrReplaceChild("LeftArm", CubeListBuilder.create().texOffs(40,16).addBox(-1.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(40,32).addBox(-1.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, new CubeDeformation(0.25F)), PartPose.offsetAndRotation(-1.0F, 10.0F, 1.0F, -1.5708F, 0.0F, 0.0F));
@@ -87,22 +55,6 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
 
-
-    public static LayerDefinition createDoubleBodyLeftLayer() {
-        MeshDefinition meshdefinition = new MeshDefinition();
-        PartDefinition partdefinition = meshdefinition.getRoot();
-
-        PartDefinition coffin = partdefinition.addOrReplaceChild("coffin", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
-
-        PartDefinition lid = coffin.addOrReplaceChild("lid", CubeListBuilder.create().texOffs(0, 0).addBox(0.0F, -3.0F, -16.0F, 12.0F, 3.0F, 16.0F, new CubeDeformation(0.0F)), PartPose.offset(-6.0F, -9.0F, 8.0F));
-
-        PartDefinition bottom = coffin.addOrReplaceChild("bottom", CubeListBuilder.create().texOffs(0, 69).addBox(0.0F, 7.0F, -14.0F, 12.0F, 2.0F, 14.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 19).addBox(0.0F, 0.0F, -16.0F, 12.0F, 9.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(12, 19).addBox(-2.0F, 0.0F, -16.0F, 2.0F, 9.0F, 16.0F, new CubeDeformation(0.0F))
-                .texOffs(12, 44).addBox(12.0F, 0.0F, -16.0F, 2.0F, 9.0F, 16.0F, new CubeDeformation(0.0F)), PartPose.offset(-6.0F, -9.0F, 8.0F));
-
-        return LayerDefinition.create(meshdefinition, 160, 160);
-    }
     private static final ResourceLocation COFFIN = new ResourceLocation(Roundabout.MOD_ID, "textures/block/coffin1.png");
 
     @Override
@@ -110,7 +62,7 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
         Level $$6 = $$0.getLevel();
         boolean $$7 = $$6 != null;
         BlockState $$8 = $$7 ? $$0.getBlockState() : ModBlocks.COFFIN_BLOCK.defaultBlockState().setValue(ChestBlock.FACING, Direction.SOUTH);
-        if ($$8.getBlock() instanceof CoffinBlock $$11 && $$0 instanceof CoffinBlockEntity cbe) {
+        if ($$8.getBlock() instanceof HandBlock $$11 && $$0 instanceof HandBlockEntity cbe) {
             //BedPart $$9 = $$8.hasProperty(CoffinBlock.PART) ? $$8.getValue(CoffinBlock.PART) : BedPart.HEAD;
 
 
@@ -126,15 +78,9 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
             /*if ($$9 == BedPart.HEAD) {
                 this.render($$2, vertexConsumer, this.right_bottom, openness, $$4, $$5);
             } else {*/
-            this.render($$2, vertexConsumer, this.left_bottom, $$4, $$5);
+            this.hand.render($$2, vertexConsumer, $$4, $$5);
             //}
             $$2.popPose();
         }
-    }
-
-    private void render(PoseStack $$0, VertexConsumer $$1, ModelPart $$2, int $$6, int $$7) {
-
-        $$2.render($$0, $$1, $$6, $$7);
-        //$$4.render($$0, $$1, $$6, $$7);
     }
 }

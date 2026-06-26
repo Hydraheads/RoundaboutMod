@@ -54,6 +54,8 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation DIVER_DOWN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "diver_down"), "main");
     public static final ModelLayerLocation HARPOON_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "harpoon"), "main");
     //public static final ModelLayerLocation CHESSBOARD_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "chessboard"), "main");
+    public static final ModelLayerLocation HAND_BLOCK_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "hand_normal"), "main");
+    public static final ModelLayerLocation HAND_SLIM_BLOCK_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "hand_slim"), "main");
     
     public static final ModelLayerLocation BLADED_BOWLER_HAT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "bladed_bowler_hat"), "main");
     public static final ModelLayerLocation TUSK_HOLE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk_hole"), "main");

@@ -251,6 +251,8 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.MR_SPIN_LAYER, MagiciansRedSpinEffectLayer::createLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.COFFIN_LEFT_LAYER, CoffinRenderer::createDoubleBodyLeftLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.COFFIN_RIGHT_LAYER, CoffinRenderer::createDoubleBodyRightLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.HAND_BLOCK_LAYER, HandRenderer::createHandLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.HAND_SLIM_BLOCK_LAYER, HandRenderer::createHandSlimLayer);
         //EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.CHESSBOARD_LAYER, ChessBoardRenderer::createBodyLayer);
         BlockEntityRenderers.register(ModBlocks.STAND_FIRE_BLOCK_ENTITY, StandFireRenderer::new);
         BlockEntityRenderers.register(ModBlocks.MIRROR_BLOCK_ENTITY, MirrorBlockEntityRenderer::new);

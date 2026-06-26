@@ -531,14 +531,14 @@ public class ForgeItems {
             () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> AJA = addToTab(ITEMS.register("aja",
             () -> new Item(new Item.Properties())));
-    public static final RegistryObject<Item> HAND = addToWIPTab(ITEMS.register("player_hand",
+    /*public static final RegistryObject<Item> HAND = addToWIPTab(ITEMS.register("player_hand",
             () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> VILLAGER_HAND = addToWIPTab(ITEMS.register("villager_hand",
             () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> ILLAGER_HAND = addToWIPTab(ITEMS.register("illager_hand",
             () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> ROTTEN_HAND = addToWIPTab(ITEMS.register("rotten_hand",
-            () -> new Item(new Item.Properties())));
+            () -> new Item(new Item.Properties())));*/
     public static final RegistryObject<Item> ULTRAVIOLET_BLASTER = addToTab(ITEMS.register("ultraviolet_blaster",
             () -> new UltravioletBlasterItem(new Item.Properties().stacksTo(1).durability(UltravioletBlasterItem.durability))));
     public static final RegistryObject<Item> WALL_STREET_SIGN_DIO_BLOCK_ITEM = addToBuildingTab(ITEMS.register("wall_street_sign_dio",
