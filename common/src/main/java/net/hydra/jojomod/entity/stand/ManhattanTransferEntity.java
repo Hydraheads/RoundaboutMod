@@ -444,7 +444,7 @@ public class ManhattanTransferEntity extends StandEntity {
          if (item.getItem() instanceof ArrowItem) {
             ArrowItem $$10 = (ArrowItem) item.getItem();
             AbstractArrow $$11 = $$10.createArrow(thrower.getUser().level(), item, thrower.getUser());
-            $$11.setPos(pos);
+            $$11.setPos(pos.x, pos.y - 0.15, pos.z);
             $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3F, getShotAccuracy);
             $$11.setKnockback(thrower.knockbackArrow);
             $$11.setCritArrow(false);
@@ -458,12 +458,11 @@ public class ManhattanTransferEntity extends StandEntity {
             ((IAbstractArrowAccess) $$11).roundabout$setHattanDamage(thrower.manhattanDamageIncipit);
             $$11.setRemainingFireTicks(thrower.fireTicksPrj);
             thrower.hattanDeflected = $$11;
-            //$$11.setOwner(thrower.getUser());
             thrower.knockbackArrow = 0;
             } else if (item.getItem() instanceof AmmoItem) {
-                RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity(thrower.level(), thrower);
+                RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity(thrower.getUser().level(), thrower.getUser());
                 $$7.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.5F, getShotAccuracy);
-
+                    $$7.setPos(pos.x, pos.y - 0.15, pos.z);
                 if (item.getItem() instanceof SnubnoseAmmoItem) {
                     if (thrower.isSnubnose) {
                         $$7.setAmmoType(RoundaboutBulletEntity.SNUBNOSE);
@@ -480,111 +479,99 @@ public class ManhattanTransferEntity extends StandEntity {
                 $$7.manhattanDamage = thrower.manhattanDamageIncipit;
                 thrower.level().addFreshEntity($$7);
                 thrower.hattanDeflected = $$7;
-                $$7.setOwner(thrower.getUser());
             } else if (item.getItem() instanceof EnderpearlItem) {
-                ThrownEnderpearl $$7 = new ThrownEnderpearl(thrower.level(), thrower);
-                $$7.setPos(pos);
+                ThrownEnderpearl $$7 = new ThrownEnderpearl(thrower.getUser().level(), thrower.getUser());
+                $$7.setPos(pos.x, pos.y - 0.15, pos.z);
                 $$7.setItem(item);
                 $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
                 $$7.setRemainingFireTicks(thrower.fireTicksPrj);
-                $$7.setOwner(thrower.getUser());
                 thrower.level().addFreshEntity($$7);
                 thrower.hattanDeflected = $$7;
             } else if (item.getItem() instanceof SnowballItem) {
-                Snowball $$7 = new Snowball(thrower.level(), thrower);
-                $$7.setPos(pos);
+                Snowball $$7 = new Snowball(thrower.getUser().level(), thrower.getUser());
+                $$7.setPos(pos.x, pos.y - 0.15, pos.z);
                 $$7.setItem(item);
                 $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
                 $$7.setRemainingFireTicks(thrower.fireTicksPrj);
-                $$7.setOwner(thrower.getUser());
                 thrower.level().addFreshEntity($$7);
                 thrower.hattanDeflected = $$7;
             } else if (item.getItem() instanceof EggItem) {
-                ThrownEgg $$7 = new ThrownEgg(thrower.level(), thrower);
-                $$7.setPos(pos);
+                ThrownEgg $$7 = new ThrownEgg(thrower.getUser().level(), thrower.getUser());
+                $$7.setPos(pos.x, pos.y - 0.15, pos.z);
                 $$7.setItem(item);
                 $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
                 $$7.setRemainingFireTicks(thrower.fireTicksPrj);
-                $$7.setOwner(thrower.getUser());
                 thrower.level().addFreshEntity($$7);
                 thrower.hattanDeflected = $$7;
             } else if (item.getItem() instanceof TridentItem || item.getItem() instanceof HarpoonItem) {
                 if (item.getItem() instanceof TridentItem) {
-                    ThrownTrident $$7 = new ThrownTrident(thrower.level(), thrower, item);
-                    $$7.setPos(pos);
+                    ThrownTrident $$7 = new ThrownTrident(thrower.getUser().level(), thrower.getUser(), item);
+                    $$7.setPos(pos.x, pos.y - 0.15, pos.z);
                     $$7.setRemainingFireTicks(thrower.fireTicksPrj);
                     $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
-                    $$7.setOwner(thrower.getUser());
                     thrower.level().addFreshEntity($$7);
                     thrower.hattanDeflected = $$7;
                 } else {
-                    HarpoonEntity $$7 = new HarpoonEntity(thrower.level(), thrower, item);
-                    $$7.setPos(pos);
+                    HarpoonEntity $$7 = new HarpoonEntity(thrower.getUser().level(), thrower.getUser(), item);
+                    $$7.setPos(pos.x, pos.y - 0.15, pos.z);
                     $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
-                    $$7.setOwner(thrower.getUser());
                     $$7.setRemainingFireTicks(thrower.fireTicksPrj);
                     thrower.level().addFreshEntity($$7);
                     $$7.isMahattan = true;
                     thrower.hattanDeflected = $$7;
                 }
             } else if (item.is(Items.IRON_INGOT)) {
-                IronBallEntity $$7 = new IronBallEntity(thrower.level(), thrower, item);
-                $$7.setPos(pos);
+                IronBallEntity $$7 = new IronBallEntity(thrower.getUser().level(), thrower.getUser(), item);
+                $$7.setPos(pos.x, pos.y - 0.15, pos.z);
                 $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
                 $$7.setRemainingFireTicks(thrower.fireTicksPrj);
-                $$7.setOwner(thrower.getUser());
                 thrower.level().addFreshEntity($$7);
                 $$7.isHattanIronBall = true;
                 thrower.hattanDeflected = $$7;
             } else if (item.getItem() instanceof KnifeItem) {
-                KnifeEntity $$7 = new KnifeEntity(thrower.level(), thrower, item);
-                $$7.setPos(pos);
+                KnifeEntity $$7 = new KnifeEntity(thrower.getUser().level(), thrower.getUser(), item);
+                $$7.setPos(pos.x, pos.y - 0.15, pos.z);
                 $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
                 $$7.setRemainingFireTicks(thrower.fireTicksPrj);
-                $$7.setOwner(thrower.getUser());
                 thrower.level().addFreshEntity($$7);
                 $$7.isHattanKnife = true;
                 thrower.hattanDeflected = $$7;
             } else if (item.getItem() instanceof MatchItem) {
-            MatchEntity $$7 = new MatchEntity(thrower, thrower.level());
-            $$7.setPos(pos);
+            MatchEntity $$7 = new MatchEntity(thrower.getUser(), thrower.getUser().level());
+            $$7.setPos(pos.x, pos.y - 0.15, pos.z);
             $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
             $$7.setRemainingFireTicks(thrower.fireTicksPrj);
-            $$7.setOwner(thrower.getUser());
             $$7.isHattanMatch = true;
             thrower.level().addFreshEntity($$7);
             thrower.hattanDeflected = $$7;
         } else if (item.getItem() instanceof PotionItem) {
-                ThrownPotion $$4 = new ThrownPotion(thrower.level(), thrower);
-                $$4.setPos(pos);
+                ThrownPotion $$4 = new ThrownPotion(thrower.getUser().level(), thrower.getUser());
+                $$4.setPos(pos.x, pos.y - 0.15, pos.z);
                 $$4.setItem(item);
                 $$4.setRemainingFireTicks(thrower.fireTicksPrj);
-                $$4.setOwner(thrower.getUser());
                 $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.4F * mult, getShotAccuracy);
                 thrower.level().addFreshEntity($$4);
                 thrower.hattanDeflected = $$4;
             } else if (item.getItem() instanceof BowlerHatItem) {
-                BladedBowlerHatEntity $$4 = new BladedBowlerHatEntity(thrower.level(), thrower, item);
-                $$4.setPos(pos);
+                BladedBowlerHatEntity $$4 = new BladedBowlerHatEntity(thrower.getUser().level(), thrower.getUser(), item);
+                $$4.setPos(pos.x, pos.y - 0.15, pos.z);
                 $$4.setItem(item);
                 $$4.setRemainingFireTicks(thrower.fireTicksPrj);
-                $$4.setOwner(thrower.getUser());
                 $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.4F * mult, getShotAccuracy);
                 $$4.isHattanHatProj = true;
                 thrower.level().addFreshEntity($$4);
                 thrower.hattanDeflected = $$4;
             } else if (item.getItem() instanceof FireworkRocketItem) {
-                FireworkRocketEntity $$4 = new FireworkRocketEntity(thrower.level(), item, thrower, thrower.getX(), thrower.getEyeY(), thrower.getZ(), true);
-                $$4.setPos(pos);
+                FireworkRocketEntity $$4 = new FireworkRocketEntity(thrower.getUser().level(), item, thrower.getUser(), thrower.getX(), thrower.getY() - 0.15, thrower.getZ(), true);
+                $$4.setPos(pos.x, pos.y - 0.15, pos.z);
                 $$4.setRemainingFireTicks(thrower.fireTicksPrj);
-                $$4.setOwner(thrower.getUser());
                 $$4.shootFromRotation(thrower, xRot, yRot, 0.0F, 1.4F * mult, getShotAccuracy);
                 thrower.level().addFreshEntity($$4);
                 thrower.hattanDeflected = $$4;
             } else {
                 getCanPlace = false;
-                ThrownObjectEntity $$14 = new ThrownObjectEntity(thrower, thrower.level(), item, getCanPlace);
-                $$14.setPos(pos);
+                ThrownObjectEntity $$14 = new ThrownObjectEntity(thrower.getUser(), thrower.getUser().level(), item, getCanPlace);
+                $$14.setPos(pos.x, pos.y - 0.15, pos.z);
                 $$14.shootFromRotation(thrower, xRot,
                         yRot, getThrowAngle1, 1.7F * mult, getThrowAngle2);
                 if (canSnipe) {
