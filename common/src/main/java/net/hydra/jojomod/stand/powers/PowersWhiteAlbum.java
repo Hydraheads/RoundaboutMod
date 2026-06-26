@@ -768,6 +768,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (!onCooldown(PowerIndex.SKILL_2)) {
 
             this.setCooldown(PowerIndex.SKILL_2, 200);
+            this.setCooldown(PowerIndex.SKILL_2_SNEAK, 20);
             Level level = self.level();
 
             BlockPos checkPos = pos;
@@ -800,15 +801,20 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
 
     public void gentlyWeeps(){
-        BlockPos pos = self.getOnPos();
         if (!onCooldown(PowerIndex.SKILL_2_SNEAK)) {
-            this.setCooldown(PowerIndex.SKILL_2_SNEAK, 200);
+            BlockPos pos = self.getOnPos();
+            if (self.level().getBlockState(pos).is(ModBlocks.WHITE_ALBUM_ICE_SLAB)){
+                pos = pos.below();
+            }
+            this.setCooldown(PowerIndex.SKILL_2_SNEAK, 600);
+            this.setCooldown(PowerIndex.SKILL_2, 20);
+
             Level level = self.level();
             GentlyWeepsEntity twister = new GentlyWeepsEntity(
                     level, pos.getCenter().add(0, 0.5F, 0));
             addIceEntity(twister);
             level.addFreshEntity(twister);
-            twister.lifeSpan = 140;
+            twister.lifeSpan = 160;
         }
     }
 

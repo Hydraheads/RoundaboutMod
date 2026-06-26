@@ -43,60 +43,57 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
             if (lifeSpan > -1){
                 lifeSpan--;
                 if (lifeSpan == 0){
-                    if (level() instanceof ServerLevel sl) {
-                        sl.sendParticles(ModParticles.VACUUM,
-                                this.getX(),
-                                this.getY()+1,
-                                this.getZ(),
-                                15, 0.3, 0.4, 0.3, 0.1F);
-
-                    }
                     discard();
                 }
             } else {
                 discard();
             }
 
-            AABB wallBox = this.getBoundingBox();
 
-            for (LivingEntity mob : level().getEntitiesOfClass(
-                    LivingEntity.class,
-                    wallBox.inflate(0.1))) {
+                AABB wallBox = this.getBoundingBox();
 
-                if (mob.getBoundingBox().intersects(wallBox)) {
-                    if (MainUtil.canFreeze(mob)) {
-                        if (mob instanceof Player pl){
-                            if (this.tickCount%2==0){
-                                HeatUtil.addHeat(mob,-1);
-                            }
-                            if (!mob.onGround()){
-                                MainUtil.takeLiteralUnresistableKnockbackWithY(mob,0,-1,0);
-                            }
-                        } else {
-                            if (this.tickCount%2==0 || HeatUtil.getHeat(mob) > -33) {
-                                HeatUtil.addHeat(mob, -1);
+                for (LivingEntity mob : level().getEntitiesOfClass(
+                        LivingEntity.class,
+                        wallBox.inflate(0.1))) {
+
+                    if (mob.getBoundingBox().intersects(wallBox)) {
+                        if (MainUtil.canFreeze(mob)) {
+                            if (this.tickCount > 10) {
+                                if (mob instanceof Player pl) {
+                                    int amt = -3;
+                                    if (this.tickCount > 20) {
+                                        amt = -4;
+                                    }
+                                    HeatUtil.addHeat(mob, amt);
+                                } else {
+                                    HeatUtil.addHeat(mob, -2);
+                                }
+                            } else {
+                                if (mob instanceof Player pl) {
+                                    HeatUtil.addHeat(mob, -1);
+                                } else {
+                                    HeatUtil.addHeat(mob, -1);
+                                }
                             }
                         }
                     }
                 }
-            }
 
             if (tickCount > 7) {
                 int range = 0;
                 if (tickCount > 12) {
                     range = 1;
                 }
-                for (int y = 0; y < 3; y++) {
+                for (int y = 1; y < 4; y++) {
                     for (int x = -range; x <= range; x++) {
                         for (int z = -range; z <= range; z++) {
                             BlockPos targetPos = getOnPos().offset(x, y, z);
-                            BlockState iceState = ModBlocks.STICKY_ICE.defaultBlockState();
+                            BlockState iceState = ModBlocks.COLD_AIR.defaultBlockState();
 
                             if (canFreeze(targetPos)
                                     && iceState.canSurvive(level(), targetPos)) {
-
                                 level().setBlockAndUpdate(targetPos, iceState);
-                                level().scheduleTick(targetPos, ModBlocks.STICKY_ICE, Mth.nextInt(level().getRandom(), 141, 145));
+                                level().scheduleTick(targetPos, ModBlocks.COLD_AIR, Mth.nextInt(level().getRandom(), lifeSpan, lifeSpan+1));
                             }
                             // placement logic
                         }
@@ -107,10 +104,6 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
         } else {
             if (renderCold < 10) {
                 renderCold++;
-            }
-            if (!started && !((TimeStop) level()).inTimeStopRange(this)) {
-                started = true;
-                ClientUtil.handleTwisterSound(this);
             }
         }
         super.tick();

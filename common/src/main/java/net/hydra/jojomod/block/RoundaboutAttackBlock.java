@@ -1,6 +1,11 @@
 package net.hydra.jojomod.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HalfTransparentBlock;
@@ -34,5 +39,10 @@ public class RoundaboutAttackBlock extends HalfTransparentBlock {
                                BlockPos pos,
                                CollisionContext context) {
         return Shapes.empty();
+    }
+
+    @Override
+    public void tick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource randomSource) {
+        serverLevel.removeBlock(blockPos, false);
     }
 }

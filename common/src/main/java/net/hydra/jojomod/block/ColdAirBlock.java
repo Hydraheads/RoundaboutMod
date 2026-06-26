@@ -1,6 +1,9 @@
 package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.HeatUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
@@ -17,13 +20,11 @@ public class ColdAirBlock extends RoundaboutAttackBlock {
 
     public void entityInside(BlockState $$0, Level $$1, BlockPos $$2, Entity $$3) {
         if ($$3 instanceof LivingEntity LE && !LE.isInvulnerable()) {
-            if (FateTypes.isVampire(LE)){
-                $$3.makeStuckInBlock($$0, new Vec3((double)0.3F, (double)0.3F, (double)0.3F));
-            } else {
-                $$3.makeStuckInBlock($$0, new Vec3((double)0.8F, (double)0.8F, (double)0.8F));
-            }
-            if (!$$1.isClientSide) {
-                HeatUtil.addHeat($$3,-1);
+            if (!(((StandUser) LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW &&
+                    PowerTypes.hasStandActive(LE))) {
+                if (FateTypes.isVampire(LE)) {
+                    $$3.makeStuckInBlock($$0, new Vec3((double) 0.5F, (double) 0.9F, (double) 0.5F));
+                }
             }
         }
     }
