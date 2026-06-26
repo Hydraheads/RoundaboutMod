@@ -884,33 +884,42 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
 
     private int mobShootArrow = 80;
-
+    private int ticksOnFireBlaze = this.self instanceof Blaze || this.self instanceof  Ghast ? 100 : 0;
     @Override
     public void tickMobAI(LivingEntity attackTarget){
-        if(mobShootArrow > 1){
-            mobShootArrow--;
-        } else {
-            if(targetHattan != null) {
-                if (this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME) {
-                    if (this.getSelf() instanceof SnowGolem) {
-                        Snowball $$7 = new Snowball(ME.getUser().level(), ME.getUser());
-                        $$7.setPos(ME.getX(), ME.getY() - 0.15, ME.getZ());
-                        $$7.setItem($$7.getItem());
-                        $$7.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, -3.0F, 2F, 0.0F);
-                        ME.level().addFreshEntity($$7);
-                        ME.hattanDeflected = $$7;
-                    } else {
-                        Arrow $$11 = new Arrow(this.getSelf().level(), ME.getX(), ME.getY(), ME.getZ());
-                        $$11.setPos(ME.getX(), ME.getY() - 0.15, ME.getZ());
-                        $$11.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, 0.0F, 1.5F, 0.0F);
-                        $$11.pickup = AbstractArrow.Pickup.DISALLOWED;
-                        ME.level().addFreshEntity($$11);
-                        ME.hattanDeflected = $$11;
-                        powerUpMobArrow($$11);
+        if(this.getStandEntity(this.self) != null) {
+            if ((MainUtil.cheapDistanceTo(this.self.getX(), this.self.getY(), this.self.getZ(), this.getStandEntity(this.self).getX(), this.getStandEntity(this.self).getY(), this.getStandEntity(this.self).getZ()) > 16 && MainUtil.cheapDistanceTo(attackTarget.getX(), attackTarget.getY(), attackTarget.getZ(), this.getStandEntity(this.self).getX(), this.getStandEntity(this.self).getY(), this.getStandEntity(this.self).getZ()) > 16)) {
+                ((StandUser) this.self).roundabout$setActive(false);
+            } else {
+                if (mobShootArrow > 1) {
+                    mobShootArrow--;
+                } else {
+                    if (targetHattan != null) {
+                        if (this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME) {
+                            if (ME.hasLineOfSight(this.targetHattan)) {
+                                if (this.getSelf() instanceof SnowGolem) {
+                                    Snowball $$7 = new Snowball(ME.getUser().level(), ME.getUser());
+                                    $$7.setPos(ME.getX(), ME.getY() - 0.15, ME.getZ());
+                                    $$7.setItem($$7.getItem());
+                                    $$7.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, -3.0F, 2F, 0.0F);
+                                    ME.level().addFreshEntity($$7);
+                                    ME.hattanDeflected = $$7;
+                                } else {
+                                    Arrow $$11 = new Arrow(this.getSelf().level(), ME.getX(), ME.getY(), ME.getZ());
+                                    $$11.setPos(ME.getX(), ME.getY() - 0.15, ME.getZ());
+                                    $$11.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, 0.0F, 2.5F, 0.0F);
+                                    $$11.pickup = AbstractArrow.Pickup.DISALLOWED;
+                                    ME.level().addFreshEntity($$11);
+                                    ME.hattanDeflected = $$11;
+                                    $$11.setRemainingFireTicks(ticksOnFireBlaze);
+                                    powerUpMobArrow($$11);
+                                }
+                                ME.powerUpProjectile();
+                            }
+                        }
+                        mobShootArrow = 100;
                     }
-                    ME.powerUpProjectile();
                 }
-                mobShootArrow = 100;
             }
         }
     }
