@@ -975,7 +975,10 @@ public class MainUtil {
         };
         for (Entity value : hitEntities) {
             if (value instanceof LivingEntity mb){
-                if ((mb.isFallFlying() || mb instanceof Phantom|| mb instanceof FallenPhantom) && !(mb instanceof StandEntity)){
+                if ((mb.isFallFlying() || mb instanceof Phantom|| (mb instanceof FallenPhantom fm &&
+                        !(fm.getControllingPassenger() != null && owner != null &&
+                                owner.getUUID().equals(fm.getControllingPassenger().getUUID()))))
+                        && !(mb instanceof StandEntity)){
                     if (owner != null && owner.getUUID() == mb.getUUID()) {
                     } else {
                         return mb;
@@ -2927,6 +2930,7 @@ public class MainUtil {
     /**A generalized packet for sending floats to the server. Context is what to do with the data byte*/
     public static void handleFloatPacketC2S(Player player, float data, byte context){
         if (context == PacketDataIndex.FLOAT_VELOCITY_BARBED_WIRE) {
+            data = Math.min(data,15F);
             if (player.getVehicle() != null){
                 if (player.getVehicle().hurt(ModDamageTypes.of(player.level(), ModDamageTypes.BARBED_WIRE), data)){
                     MainUtil.makeBleed(player.getVehicle(),0,200,null);
