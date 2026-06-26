@@ -126,6 +126,8 @@ public abstract class EntityAndData implements IEntityAndData {
     @Unique
     public void rdbt$forceDeltaMovement(Vec3 $$0) {
         this.deltaMovement = $$0;
+        this.hurtMarked = true;
+        this.hasImpulse = true;
     }
 
 
@@ -721,6 +723,12 @@ public abstract class EntityAndData implements IEntityAndData {
     @Shadow public abstract boolean isInLava();
 
     @Shadow private float maxUpStep;
+
+    @Shadow
+    public boolean hurtMarked;
+
+    @Shadow
+    public boolean hasImpulse;
 
     @Override
     @Unique

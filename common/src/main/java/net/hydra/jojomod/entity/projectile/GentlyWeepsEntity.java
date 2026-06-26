@@ -5,7 +5,6 @@ import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -88,10 +87,17 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
                                     pj instanceof ThrownTrident || pj instanceof HarpoonEntity){
                                         IProjectileAccess ipa = (IProjectileAccess) pj;
                                         if (!ipa.roundabout$getIsDeflected()){
+
+                                            ((ServerLevel) level()).sendParticles(ModParticles.ICE_SPARKLE,
+                                                    pj.getX(),
+                                                    pj.getY(),
+                                                    pj.getZ(),
+                                                    10, 0, 0, 0, 0.2);
+                                            pj.level().playSound(null, pj.blockPosition(), ModSounds.ICE_BREAKER_EVENT,
+                                                    SoundSource.PLAYERS, 2.0F, 1.0F);
                                             if (pj instanceof RoundaboutBulletEntity) {
                                                 pj.setOwner(this);
                                                 ((RoundaboutBulletEntity) pj).setSuperThrown(false);
-                                                pj.level().playSound(null, pj.blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                                             }
                                             ipa.roundabout$setIsDeflected(true);
                                             ((IEntityAndData)pj).rdbt$forceDeltaMovement(pj.getDeltaMovement().scale(-0.4));
@@ -144,7 +150,7 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
                             if (canFreeze(targetPos)
                                     && iceState.canSurvive(level(), targetPos)) {
                                 level().setBlockAndUpdate(targetPos, iceState);
-                                level().scheduleTick(targetPos, ModBlocks.COLD_AIR, Mth.nextInt(level().getRandom(), lifeSpan, lifeSpan+1));
+                                level().scheduleTick(targetPos, ModBlocks.COLD_AIR, Mth.nextInt(level().getRandom(), lifeSpan, lifeSpan+2));
                             }
                             // placement logic
                         }

@@ -494,7 +494,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
         BlockState state = level.getBlockState(pos);
 
-        if (state.is(ModBlocks.WHITE_ALBUM_ICE_SLAB) || state.is(ModBlocks.STICKY_ICE)) {
+        if (state.is(ModBlocks.WHITE_ALBUM_ICE_SLAB) || state.is(ModBlocks.STICKY_ICE)
+                || state.is(ModBlocks.COLD_AIR)) {
 
             level.destroyBlock(pos, false);
             // or:
