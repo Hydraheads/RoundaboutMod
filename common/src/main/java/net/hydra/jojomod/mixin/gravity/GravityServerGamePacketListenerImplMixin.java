@@ -101,7 +101,7 @@ public abstract class GravityServerGamePacketListenerImplMixin {
     @ModifyConstant(method = "handleMoveVehicle", constant = @Constant(doubleValue = 100.0),require = 0)
     private double imfast_VehicleMaxSpeed(double speed) {
         if (ClientNetworking.getAppropriateConfig().vanillaMinecraftTweaks.bufferServerDistance){
-            return 1000.0F;
+            return 1000D;
         }
         return speed;
     }
@@ -110,20 +110,10 @@ public abstract class GravityServerGamePacketListenerImplMixin {
     @ModifyConstant(method = "handleMovePlayer", constant = @Constant(doubleValue = 0.0625),require = 0)
     private double imfast_MovedWrong(double speed) {
         if (ClientNetworking.getAppropriateConfig().vanillaMinecraftTweaks.bufferServerDistance){
-            return 1F;
+            return 1D;
         }
         return speed;
     }
-
-    // Moved Wrongly
-    @ModifyConstant(method = "handleMoveVehicle", constant = @Constant(doubleValue = 0.0625),require = 0)
-    private double imfast_VehicleMovedWrong(double speed) {
-        if (ClientNetworking.getAppropriateConfig().vanillaMinecraftTweaks.bufferServerDistance){
-            return 1F;
-        }
-        return speed;
-    }
-
 
     @Inject(
             method = "handleMovePlayer",
