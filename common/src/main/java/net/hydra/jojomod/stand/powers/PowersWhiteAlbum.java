@@ -432,7 +432,15 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     if (lastY < self.getY()){
                         acceleration = 0;
                     } else {
-                        acceleration = Math.min(getMaxAccelerationTicks(),acceleration+5);
+                        if (acceleration > 10){
+                            if (self.getDeltaMovement().y > -0.3F) {
+                                if (self.level().getBlockState(self.getOnPos().below()).isSolid()) {
+                                    self.setDeltaMovement(self.getDeltaMovement().add(0, -0.3F, 0));
+                                    acceleration = Math.min(getMaxAccelerationTicks(), acceleration + 5);
+                                }
+                            }
+                            acceleration = Math.min(getMaxAccelerationTicks(),acceleration+5);
+                        }
                     }
                 } else {
                     if (!self.horizontalCollision){
