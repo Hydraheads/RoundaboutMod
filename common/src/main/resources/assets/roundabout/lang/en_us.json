@@ -29,6 +29,9 @@
   "text.roundabout.bullets.tommy": "Compatible with Tommy Guns.",
   "text.roundabout.bullets.sniper": "Compatible with Jackal Rifles.",
 
+  "text.roundabout.stray_cat.anime": "Anime Color",
+  "text.roundabout.stray_cat.manga": "Manga Color",
+
   "text.roundabout.respawn_as_human": "Respawn as Human",
 
   "text.roundabout.out_of_bullets": "Shift right click to reload!",
@@ -92,8 +95,8 @@
   "item.roundabout.hairspray": "Hairspray",
   "item.roundabout.occult_charge": "Occult Charge",
   "item.roundabout.iron_ball_crossbow": "Iron Ball Crossbow",
-  "item.roundabout.stray_cat_anime": "Stray Cat - Anime",
-  "item.roundabout.stray_cat_manga": "Stray Cat - Manga",
+  "item.roundabout.stray_cat_anime": "Stray Cat",
+  "item.roundabout.stray_cat_manga": "Stray Cat",
 
   "roundabout.coffin_sleep": "Leave Coffin",
 
