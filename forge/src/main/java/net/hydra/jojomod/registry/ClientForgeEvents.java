@@ -133,6 +133,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.ANUBIS_SLIPSTREAM.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.TUSK_NAIL.get(), TuskNailRenderer::new);
         event.registerEntityRenderer(ForgeEntities.TUSK_HOLE.get(), TuskHoleRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.STRAY_CAT_AIRBUBBLE.get(), StrayCatAirBubbleRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ROAD_ROLLER_ENTITY.get(), RoadRollerEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SEPERATED_LEGS.get(), SeperatedLegsRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SEPERATED_ARM.get(), SeperatedArmRenderer::new);

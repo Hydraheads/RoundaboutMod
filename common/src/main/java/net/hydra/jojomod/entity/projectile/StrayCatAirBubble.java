@@ -3,7 +3,9 @@ package net.hydra.jojomod.entity.projectile;
 import net.hydra.jojomod.access.NoVibrationEntity;
 import net.hydra.jojomod.access.PenetratableWithProjectile;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.UnburnableProjectile;
+import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -45,12 +47,21 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         super($$0, $$1);
     }
 
+    /*public StrayCatAirBubble(LivingEntity living, Level $$1) {
+        super(ModEntities.STRAY_CAT_AIRBUBBLE, $$1);
+        setOwner(living);
+        //places = false;
+    }*/
+
+
     public int lifeSpan = 0;
     public LivingEntity standUser;
     public UUID standUserUUID;
     private static final EntityDataAccessor<Boolean> ACTIVATED = SynchedEntityData.defineId(SoftAndWetBubbleEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> LAUNCHED = SynchedEntityData.defineId(SoftAndWetBubbleEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Float> SPEED = SynchedEntityData.defineId(SoftAndWetBubbleEntity.class, EntityDataSerializers.FLOAT);
+
+
     public boolean getActivated() {
         return this.getEntityData().get(ACTIVATED);
     }
@@ -92,10 +103,10 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     }
 
     private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(SoftAndWetBubbleEntity.class, EntityDataSerializers.INT);
-    protected StrayCatAirBubble(EntityType<? extends StrayCatAirBubble> $$0, double $$1, double $$2, double $$3, Level $$4) {
+    /*protected StrayCatAirBubble(EntityType<? extends StrayCatAirBubble> $$0, double $$1, double $$2, double $$3, Level $$4) {
         this($$0, $$4);
         this.setPos($$1, $$2, $$3);
-    }
+    }*/
 
     public int getUserID() {
         return this.getEntityData().get(USER_ID);
@@ -114,9 +125,6 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         if (!this.level().isClientSide()) {
             if (this.getOwner() == null || !this.getOwner().isAlive() || this.getOwner().isRemoved() ||
                     this.getOwner().distanceTo(this) > getDistanceUntilPopping() && distancePops()){
-                popBubble();
-                return;
-            }else if(!(((StandUser)this.getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen)){
                 popBubble();
                 return;
             }

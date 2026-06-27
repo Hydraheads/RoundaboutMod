@@ -23,38 +23,17 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public class StrayCatAirBubbleRenderer extends EntityRenderer<StrayCatAirBubble> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/bubble_plunder.png");
-    private static final ResourceLocation SHOOTING_1 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/shooting_bubble_1.png");
-    private static final ResourceLocation SHOOTING_2 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/shooting_bubble_2.png");
-    private static final ResourceLocation SHOOTING_3 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/shooting_bubble_3.png");
-    private static final ResourceLocation SHOOTING_4 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/shooting_bubble_4.png");
-    private static final ResourceLocation ITEM_1 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/explosive_item_bubble_1.png");
-    private static final ResourceLocation ITEM_2 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/explosive_item_bubble_2.png");
-    private static final ResourceLocation ITEM_3 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/explosive_item_bubble_3.png");
-    private static final ResourceLocation ITEM_4 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/explosive_item_bubble_4.png");
-    private static final ResourceLocation MOB = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/bubble_plunder_mob.png");
-    private static final ResourceLocation BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/bubble.png");
-    private static final ResourceLocation GAS_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/gasoline_bubble.png");
-    private static final ResourceLocation WATER_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/water_bubble.png");
-    private static final ResourceLocation LAVA_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/lava_bubble.png");
-    private static final ResourceLocation FIRE_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/fire_bubble.png");
-    private static final ResourceLocation BLOOD_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/blood_bubble.png");
-    private static final ResourceLocation BLUE_BLOOD_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/hemolymph_bubble.png");
-    private static final ResourceLocation ENDER_BLOOD_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/ender_blood_bubble.png");
-    private static final ResourceLocation MILK_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/milk_bubble.png");
+    private static final ResourceLocation PINK_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/killer_queen/projectiles/pink.png");
 
     private final float scale;
-    private final ItemRenderer itemRenderer;
 
     public StrayCatAirBubbleRenderer(EntityRendererProvider.Context context, float scale) {
         super(context);
-        this.itemRenderer = context.getItemRenderer();
         this.scale = scale;
     }
 
     public StrayCatAirBubbleRenderer(EntityRendererProvider.Context context) {
         super(context);
-        this.itemRenderer = context.getItemRenderer();
         this.scale = 1f;
     }
 
@@ -180,7 +159,7 @@ public class StrayCatAirBubbleRenderer extends EntityRenderer<StrayCatAirBubble>
                 default -> SHOOTING_1;
             };
         }*/
-        return BUBBLE;
+        return PINK_BUBBLE;
     }
 }
 

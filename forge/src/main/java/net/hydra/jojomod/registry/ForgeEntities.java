@@ -723,6 +723,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "tusk_hole").toString())
             );
+    public static final RegistryObject<EntityType<StrayCatAirBubble>> STRAY_CAT_AIRBUBBLE =
+            ENTITY_TYPES.register("stray_cat_bubble", () ->
+                    EntityType.Builder.<StrayCatAirBubble>of(StrayCatAirBubble::new, MobCategory.MISC).sized(0.1F, 0.1f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "stray_cat_bubble").toString())
+            );
     public static final RegistryObject<EntityType<RoadRollerEntity>> ROAD_ROLLER_ENTITY =
             ENTITY_TYPES.register("road_roller_entity", () ->
                     EntityType.Builder.<RoadRollerEntity>of(RoadRollerEntity::new, MobCategory.MISC).
