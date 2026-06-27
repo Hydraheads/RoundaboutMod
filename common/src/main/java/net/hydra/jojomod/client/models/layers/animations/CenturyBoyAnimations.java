@@ -354,10 +354,10 @@ public class CenturyBoyAnimations {
 		.build();
 	public class standanim {
 		public static final AnimationDefinition hat = AnimationDefinition.Builder.withLength(0.25F)
-				.addAnimation("Head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+				.addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 						new Keyframe(0.0F, KeyframeAnimations.degreeVec(-29.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
 				))
-				.addAnimation("Head", new AnimationChannel(AnimationChannel.Targets.POSITION,
+				.addAnimation("head", new AnimationChannel(AnimationChannel.Targets.POSITION,
 						new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 5.4F, 0.2F), AnimationChannel.Interpolations.LINEAR)
 				))
 				.addAnimation("body", new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -369,58 +369,76 @@ public class CenturyBoyAnimations {
 				.addAnimation("body", new AnimationChannel(AnimationChannel.Targets.SCALE,
 						new Keyframe(0.0F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.LINEAR)
 				))
-				.addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+				.addAnimation("rightArm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 						new Keyframe(0.0F, KeyframeAnimations.degreeVec(19.5684F, 26.1279F, 21.3967F), AnimationChannel.Interpolations.LINEAR)
 				))
-				.addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.POSITION,
+				.addAnimation("rightArm", new AnimationChannel(AnimationChannel.Targets.POSITION,
 						new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 2.0F, 0.6F), AnimationChannel.Interpolations.LINEAR)
 				))
-				.addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.SCALE,
+				.addAnimation("rightArm", new AnimationChannel(AnimationChannel.Targets.SCALE,
 						new Keyframe(0.0F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.LINEAR)
 				))
-				.addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+				.addAnimation("leftArm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 						new Keyframe(0.0F, KeyframeAnimations.degreeVec(25.0313F, -25.2519F, -26.2664F), AnimationChannel.Interpolations.LINEAR)
 				))
-				.addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.POSITION,
+				.addAnimation("leftArm", new AnimationChannel(AnimationChannel.Targets.POSITION,
 						new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 1.7F, 0.6F), AnimationChannel.Interpolations.LINEAR)
 				))
-				.addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.SCALE,
+				.addAnimation("leftArm", new AnimationChannel(AnimationChannel.Targets.SCALE,
+						new Keyframe(0.0F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.LINEAR)
+				))
+				.addAnimation("rightArmSlim", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+						new Keyframe(0.0F, KeyframeAnimations.degreeVec(19.5684F, 26.1279F, 21.3967F), AnimationChannel.Interpolations.LINEAR)
+				))
+				.addAnimation("rightArmSlim", new AnimationChannel(AnimationChannel.Targets.POSITION,
+						new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 2.0F, 0.6F), AnimationChannel.Interpolations.LINEAR)
+				))
+				.addAnimation("rightArmSlim", new AnimationChannel(AnimationChannel.Targets.SCALE,
+						new Keyframe(0.0F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.LINEAR)
+				))
+				.addAnimation("leftArmSlim", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+						new Keyframe(0.0F, KeyframeAnimations.degreeVec(25.0313F, -25.2519F, -26.2664F), AnimationChannel.Interpolations.LINEAR)
+				))
+				.addAnimation("leftArmSlim", new AnimationChannel(AnimationChannel.Targets.POSITION,
+						new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 1.7F, 0.6F), AnimationChannel.Interpolations.LINEAR)
+				))
+				.addAnimation("leftArmSlim", new AnimationChannel(AnimationChannel.Targets.SCALE,
 						new Keyframe(0.0F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.LINEAR)
 				))
 				.build();
 
 		public static final AnimationDefinition unlatch = AnimationDefinition.Builder.withLength(0.25F)
-				.addAnimation("Head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+				.addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 						new Keyframe(0.0F, KeyframeAnimations.degreeVec(-20.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
 				))
-				.addAnimation("Head", new AnimationChannel(AnimationChannel.Targets.POSITION,
+				.addAnimation("head", new AnimationChannel(AnimationChannel.Targets.POSITION,
 						new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 7.0F, 10.0F), AnimationChannel.Interpolations.LINEAR)
 				))
-				.addAnimation("Body", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+				.addAnimation("body", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 						new Keyframe(0.0F, KeyframeAnimations.degreeVec(10.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
 				))
-				.addAnimation("Body", new AnimationChannel(AnimationChannel.Targets.POSITION,
+				.addAnimation("body", new AnimationChannel(AnimationChannel.Targets.POSITION,
 						new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 5.0F, 10.0F), AnimationChannel.Interpolations.LINEAR)
 				))
-				.addAnimation("Body", new AnimationChannel(AnimationChannel.Targets.SCALE,
+				.addAnimation("body", new AnimationChannel(AnimationChannel.Targets.SCALE,
 						new Keyframe(0.0F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.LINEAR)
 				))
-				.addAnimation("RightArm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+				.addAnimation("rightArm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 						new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 50.0F, 7.5F), AnimationChannel.Interpolations.LINEAR)
 				))
-				.addAnimation("RightArm", new AnimationChannel(AnimationChannel.Targets.POSITION,
+				.addAnimation("rightArm", new AnimationChannel(AnimationChannel.Targets.POSITION,
 						new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 6.0F, 10.0F), AnimationChannel.Interpolations.LINEAR)
 				))
-				.addAnimation("RightArm", new AnimationChannel(AnimationChannel.Targets.SCALE,
+				.addAnimation("rightArm", new AnimationChannel(AnimationChannel.Targets.SCALE,
 						new Keyframe(0.0F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.LINEAR)
 				))
-				.addAnimation("LeftArm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+				.addAnimation("leftArm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 						new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, -40.0F, -10.0F), AnimationChannel.Interpolations.LINEAR)
 				))
-				.addAnimation("LeftArm", new AnimationChannel(AnimationChannel.Targets.POSITION,
+				.addAnimation("leftArm", new AnimationChannel(AnimationChannel.Targets.POSITION,
 						new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 6.0F, 10.0F), AnimationChannel.Interpolations.LINEAR)
 				))
-				.addAnimation("LeftArm", new AnimationChannel(AnimationChannel.Targets.SCALE,
+				.addAnimation("leftArm", new AnimationChannel(AnimationChannel.Targets.SCALE,
 						new Keyframe(0.0F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.LINEAR)
 				))
 				.build();
