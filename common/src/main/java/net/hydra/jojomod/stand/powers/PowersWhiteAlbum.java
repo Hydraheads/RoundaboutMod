@@ -20,6 +20,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -32,6 +33,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -41,6 +43,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -53,6 +56,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -1553,13 +1558,39 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     @Override
-    public boolean isWip() {
-        return true;
-    }
-
-    @Override
-    public Component ifWipListDev() {
-        return Component.literal("Hydra");
+    public void playSummonEffects(boolean forced){
+        if (!forced) {
+            Level lv = this.getSelf().level();
+            Holder<Biome> theBiome = lv.getBiome(this.getSelf().getOnPos());
+            if ((this.getSelf()) instanceof Player PE
+                    &&
+                    (theBiome.is(Biomes.ICE_SPIKES) ||
+                    theBiome.is(Biomes.SNOWY_PLAINS) ||
+                    theBiome.is(Biomes.SNOWY_BEACH) ||
+                            theBiome.is(Biomes.SNOWY_TAIGA) ||
+                            theBiome.is(Biomes.SNOWY_SLOPES)
+                    )
+            ){
+                StandUser user = ((StandUser)PE);
+                ItemStack stack = user.roundabout$getStandDisc();
+                if (!stack.isEmpty() && stack.is(ModItems.STAND_DISC_WHITE_ALBUM)){
+                    IPlayerEntity ipe = ((IPlayerEntity) PE);
+                    if (!ipe.roundabout$getUnlockedBonusSkin()){
+                        if (!lv.isClientSide()) {
+                            ipe.roundabout$setUnlockedBonusSkin(true);
+                            lv.playSound(null, PE.getX(), PE.getY(),
+                                    PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
+                            ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
+                                    PE.getY()+PE.getEyeHeight(), PE.getZ(),
+                                    10, 0.5, 0.5, 0.5, 0.2);
+                            user.roundabout$setStandSkin(YUKI);
+                            ((ServerPlayer) ipe).displayClientMessage(
+                                    Component.translatable("unlock_skin.roundabout.white_album.yuki"), true);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override
