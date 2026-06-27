@@ -191,11 +191,16 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
         float amountPlayersAndBosses = 1 + (roundabout$lastHattanDamage / 8);
         float damagePlayersAndBosses = amountPlayersAndBosses <= 4 ? amountPlayersAndBosses : 4;
 
-        if(entity instanceof Player || MainUtil.isBossMob(entity)){
-            entity.hurt(damageSource, damagePlayersAndBosses);
+        if(!isManhattanProjectileMobAI) {
+            if (entity instanceof Player || MainUtil.isBossMob(entity)) {
+                entity.hurt(damageSource, damagePlayersAndBosses);
+            } else {
+                entity.hurt(damageSource, damage);
+            }
         } else {
-            entity.hurt(damageSource, damage);
+            entity.hurt(damageSource, 1);
         }
+
     }
 
     @Unique
