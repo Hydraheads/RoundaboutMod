@@ -899,7 +899,7 @@ public class PowersJustice extends NewDashPreset {
     @Override
     public List<Byte> getSkinList(){
         List<Byte> $$1 = Lists.newArrayList();
-        $$1.add(TheWorldEntity.PART_3_SKIN);
+        $$1.add(JusticeEntity.PART_3_SKIN);
         $$1.add(JusticeEntity.SKELETON_SKIN);
         if (this.getSelf() instanceof Player PE){
             byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();

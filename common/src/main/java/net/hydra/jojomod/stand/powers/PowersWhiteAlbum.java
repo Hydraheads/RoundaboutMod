@@ -10,6 +10,8 @@ import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.projectile.ColdBlastProjectile;
 import net.hydra.jojomod.entity.projectile.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.projectile.IceTwisterEntity;
+import net.hydra.jojomod.entity.stand.JusticeEntity;
+import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
@@ -17,6 +19,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampiricFate;
+import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -1295,22 +1298,35 @@ public class PowersWhiteAlbum extends NewDashPreset {
             MANGA =10,
             YUKI =11;
 
+
     @Override
-    public List<Byte> getSkinList() {
-        return Arrays.asList(
-                BASE,
-                MANGA,
-                FIERCE,
-                KNIGHT,
-                SHADE,
-                BLACK,
-                ICEOLOGER,
-                STRAY,
-                FRIGID,
-                BETA,
-                YUKI
-        );
+    public List<Byte> getSkinList(){
+        List<Byte> $$1 = Lists.newArrayList();
+        $$1.add(BASE);
+        $$1.add(MANGA);
+        if (this.getSelf() instanceof Player PE){
+            byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
+            ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
+            boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+            if (Level > 1 || bypass){
+                $$1.add(FIERCE);
+                $$1.add(KNIGHT);
+            } if (Level > 2 || bypass){
+                $$1.add(SHADE);
+                $$1.add(BLACK);
+            } if (Level > 3 || bypass){
+                $$1.add(ICEOLOGER);
+                $$1.add(STRAY);
+            } if (Level > 4 || bypass){
+                $$1.add(FRIGID);
+                $$1.add(BETA);
+            } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
+                $$1.add(YUKI);
+            }
+        }
+        return $$1;
     }
+
 
     @Override public Component getSkinName(byte skinId) {
         return Component.translatable("skins.roundabout.white_album."+getSkinString(skinId));
