@@ -266,8 +266,6 @@ public class ManhattanTransferEntity extends StandEntity {
     int randomDirection = 0;
     public boolean isHattanPilotMode = false;
     public float autoMoveBoost = 1;
-    public float rotationXHattan = 0;
-    public float rotationYHattan = 0;
     public float shootRotationXHattan = 0;
     public float shootRotationYHattan = 0;
     public float manhattanDetectionRange = ClientNetworking.getAppropriateConfig().manhattanTransferSettings.manhattanAutoShootingRange;
@@ -827,8 +825,6 @@ public class ManhattanTransferEntity extends StandEntity {
         }
 
         searchTarget();
-        rotationXHattan = this.getXRot();
-        rotationYHattan = this.getYRot();
         super.tick();
     }
 
