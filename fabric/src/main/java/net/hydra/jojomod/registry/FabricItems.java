@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.event.powers.visagedata.aesthetician.*;
 import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.item.StrayCats.*;
 import net.hydra.jojomod.item.paintings.BirthOfVenusPaintingItem;
 import net.hydra.jojomod.item.paintings.MonaLisaPaintingItem;
 import net.hydra.jojomod.item.paintings.VanGoughPaintingItem;
@@ -196,6 +197,9 @@ public class FabricItems {
     public static Item GASOLINE_CAN = registerItem("gasoline_can", new GasolineCanItem(new Item.Properties().stacksTo(16)));
     public static Item GASOLINE_BUCKET = registerItem("gasoline_bucket", new GasolineBucketItem(new Item.Properties().stacksTo(1)));
     public static Item ROAD_ROLLER = registerItem("road_roller", new RoadRollerItem(new Item.Properties().stacksTo(1)));
+
+    public static Item STRAY_CAT_ANIME = registerItem("stray_cat_anime", new StrayCatAnime(new Item.Properties().stacksTo(1)));
+    public static Item STRAY_CAT_MANGA = registerItem("stray_cat_manga", new StrayCatManga(new Item.Properties().stacksTo(1)));
 
     public static Item STAND_DISC = registerItem("stand_disc", new EmptyStandDiscItem(new Item.Properties().stacksTo(1)));
     public static Item COFFEE_GUM = registerItem("coffee_gum", new Item(new Item.Properties().food(ModFoodComponents.COFFEE_GUM)));
@@ -585,10 +589,8 @@ public class FabricItems {
                     .icon(() -> new ItemStack(AJA)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here
                     	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
-                        //entries.accept(HAND);
-                        //entries.accept(VILLAGER_HAND);
-                        //entries.accept(ILLAGER_HAND);
-                        //entries.accept(ROTTEN_HAND);
+                        entries.accept(STRAY_CAT_ANIME);
+                        entries.accept(STRAY_CAT_MANGA);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_20_CENTURY_BOY);
@@ -741,7 +743,9 @@ public class FabricItems {
         ModItems.METEORITE_INGOT = METEORITE_INGOT;
         ModItems.IRON_BALL_CROSSBOW = IRON_BALL_CROSSBOW;
         ModItems.LOCACACA_PIT = LOCACACA_PIT;
-        
+
+        ModItems.STRAY_CAT_ANIME = STRAY_CAT_ANIME;
+        ModItems.STRAY_CAT_MANGA = STRAY_CAT_MANGA;
 
         ((StreetSignBlock)FabricBlocks.STREET_SIGN_DIO).referenceItem = STREET_SIGN_DIO_BLOCK_ITEM.getDefaultInstance();
         ((StreetSignBlock)FabricBlocks.STREET_SIGN_RIGHT).referenceItem = STREET_SIGN_RIGHT_BLOCK_ITEM.getDefaultInstance();

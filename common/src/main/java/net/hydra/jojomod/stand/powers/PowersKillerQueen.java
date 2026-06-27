@@ -88,12 +88,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.nbt.CompoundTag;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-//import java.util.UUID;
-//import java.util.Dictionary;
-//import java.util.Hashtable;
 import java.util.Objects;
 
 public class PowersKillerQueen extends NewPunchingStand {
@@ -485,7 +481,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         	case SKILL_1_CROUCH -> {
                 if (this.currentBombStatus == BOMB_NONE) {
                     if (this.canItemPlantBomb()) {
-                        tryItemPlantBomb();
+                        //tryItemPlantBomb();
                     }
                 }else {
                     detonateClient();
@@ -1932,55 +1928,13 @@ public class PowersKillerQueen extends NewPunchingStand {
                         if (playersHitkill) {
                             pl.hurt(dmg, 9999999999.0f);
                         } else {
-                            target.hurt(dmg, hitPoints);
+                            pl.hurt(dmg, hitPoints);
                         }
                     }
                 } else {
                     if (mobsHitkill && !isBoss) { target.kill();}
                     else {target.hurt(dmg, hitPoints);}
                 }
-
-                /*
-                if (target instanceof LivingEntity LE) {
-                    if (LE.isDeadOrDying()) {
-                        ItemStack stack = null;
-                        byte type = -1;
-
-                        if (LE instanceof Player pl) {
-                            if (((IFatePlayer)pl).rdbt$getFatePowers() instanceof ZombieFate zp) {
-                                type = 3;
-                            } else {
-                                type = 0;
-                            }
-                        }
-
-                        else if (LE instanceof JojoNPC){ type = 0; }
-                        else if (LE instanceof AbstractIllager) { type = 1; }
-                        else if (LE instanceof AbstractVillager) { type = 2; }
-                        else if (LE instanceof Zombie) { type = 3; }
-
-                        if (type != -1) {
-                            switch (type) {
-                                case 0 -> { stack = ModItems.HAND.getDefaultInstance().copy(); }
-                                case 1 -> { stack = ModItems.ILLAGER_HAND.getDefaultInstance().copy(); }
-                                case 2 -> { stack = ModItems.VILLAGER_HAND.getDefaultInstance().copy(); }
-                                case 3 -> { stack = ModItems.ROTTEN_HAND.getDefaultInstance().copy(); }
-                            }
-
-                            if (LE instanceof Player PL) {
-                                CompoundTag nbtData = stack.getTag();
-                                nbtData.putString(PlayerHandItem.TAG_HAND_OWNER, PL.getName().getString());
-                                stack.setTag(nbtData);
-                            }
-
-                            ItemEntity drop = new ItemEntity(LE.level(),
-                                    LE.getX(), LE.getY(), LE.getZ(),
-                                    stack);
-                            LE.level().addFreshEntity(drop);
-                        }
-                    }
-                }
-                */
             }
 
             ExplosionUtil.explodeEffects(vPos, level, ModParticles.KILLER_QUEEN_EXPLOSION, 0.6f);
