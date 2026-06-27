@@ -713,8 +713,8 @@ public class ManhattanTransferEntity extends StandEntity {
                 if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
                     Vec3 rots = this.getRotations(PM.targetHattan);
                     if (PM.switchShootingMode() || this.getHattanTarget() == 0) {
-                        shootRotationXHattan = rotationXHattan;
-                        shootRotationYHattan = rotationYHattan;
+                        shootRotationXHattan = this.getXRot();
+                        shootRotationYHattan = this.getYRot();
                     } else {
                         shootRotationXHattan = (float) rots.x() * 180 / (float) Math.PI + 180;
                         shootRotationYHattan = (float) rots.y * 180 / (float) Math.PI;

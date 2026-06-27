@@ -434,10 +434,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 ((StandUser)this.self).roundabout$setActive(false);
             }
 
-            if(ME.isTechnicallyInWall()){
-                ((StandUser)this.self).roundabout$setActive(false);
-            }
-
             if(this.isClient()){
                 if (this.isPiloting()){
                     ME.isHattanPilotMode = true;
