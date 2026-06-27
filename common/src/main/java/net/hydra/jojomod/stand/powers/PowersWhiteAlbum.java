@@ -28,6 +28,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -397,6 +398,24 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 if (getStandUserSelf().roundabout$getGuardBroken()) {
                     cracked = true;
                     saveDiscAndSync();
+                }
+
+                if (PowerTypes.hasStandActive(self)){
+                if (self.level() instanceof ServerLevel sl) {
+                    if (self.tickCount % 10 == 0) {
+                        sl.sendParticles(
+                                ParticleTypes.SNOWFLAKE,
+                                self.getEyePosition().x,
+                                self.getEyePosition().y,
+                                self.getEyePosition().z,
+                                1,     // count
+                                0.5,    // x spread
+                                0.2,    // y spread
+                                0.5,    // z spread
+                                0.01    // speed
+                        );
+                    }
+                }
                 }
             }
             if (lastY < self.getY() && !self.onGround() && !self.isInWater() && !self.isSwimming()) {
@@ -1275,12 +1294,15 @@ public class PowersWhiteAlbum extends NewDashPreset {
             KNIGHT =6,
             ICEOLOGER =7,
             STRAY =8,
-            FRIGID =9;
+            FRIGID =9,
+            MANGA =10,
+            YUKI =11;
 
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 BASE,
+                MANGA,
                 FIERCE,
                 KNIGHT,
                 SHADE,
@@ -1288,7 +1310,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 ICEOLOGER,
                 STRAY,
                 FRIGID,
-                BETA
+                BETA,
+                YUKI
         );
     }
 
@@ -1309,6 +1332,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case FRIGID -> "frigid";
             case ICEOLOGER -> "iceologer";
             case SHADE -> "shade";
+            case MANGA -> "manga";
+            case YUKI -> "yuki";
             default -> "base";
         };
     }
