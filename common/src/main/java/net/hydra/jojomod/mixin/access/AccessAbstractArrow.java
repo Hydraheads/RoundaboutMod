@@ -5,6 +5,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.PenetratableWithProjectile;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.projectile.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -144,6 +145,10 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
                 ci.cancel();
                 return;
             }
+        } else if (entity instanceof GentlyWeepsEntity gwe){
+            GentlyWeepsEntity.dealWithProjectile(ABA,gwe);
+            ci.cancel();
+            return;
         }
 
 

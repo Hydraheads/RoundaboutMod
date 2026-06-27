@@ -185,6 +185,9 @@ public class KnifeEntity extends AbstractArrow {
                 }
                // return;
             }
+        } else if ($$1 instanceof GentlyWeepsEntity gwe){
+            GentlyWeepsEntity.dealWithProjectile(this,gwe);
+            return;
         }
         float $$2;
 

@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.survivor;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.projectile.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
@@ -92,6 +93,10 @@ public abstract class SurvivorThrownPotion extends ThrowableItemProjectile imple
                         }
                     }
                 }
+            } else if ($$2x instanceof GentlyWeepsEntity gwe){
+                GentlyWeepsEntity.dealWithProjectile(this,gwe);
+                ci.cancel();
+                return;
             }
         }
 

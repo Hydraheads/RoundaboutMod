@@ -23,6 +23,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -54,6 +55,65 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
         this.setPos($$1, $$2, $$3);
     }
 
+    @Override
+    public boolean canBeHitByProjectile() {
+        return this.isAlive();
+    }
+
+    @Override
+    public boolean hurt(DamageSource $$0, float $$1) {
+        if (this.isInvulnerableTo($$0)) {
+            return false;
+        } else {
+            if ($$0.getDirectEntity() instanceof Projectile pj){
+                return true;
+            }
+
+
+            this.markHurt();
+            return false;
+        }
+    }
+
+    public static void dealWithProjectile(Projectile pj, GentlyWeepsEntity this2){
+        if (pj.level() instanceof ServerLevel sl) {
+            if (!this2.getBled() && !(pj.getOwner() instanceof LivingEntity LE &&
+                    ((StandUser) LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum
+                    && PowerTypes.hasStandActive(LE))) {
+                if (pj instanceof BloodSplatterEntity ||
+                        (pj instanceof SoftAndWetPlunderBubbleEntity pb && pb.getLiquidStolen() == 4)
+                ) {
+                    this2.setBled(true);
+                } else {
+                    if (pj instanceof AbstractArrow || pj instanceof IronBallEntity ||
+                            pj instanceof MatchEntity) {
+                        if (!(pj instanceof AbstractArrow aa && ((IAbstractArrowAccess) aa).roundabout$GetIsManhattan())
+                                && !(pj instanceof RoundaboutBulletEntity abe && abe.isHattan)) {
+                            IProjectileAccess ipa = (IProjectileAccess) pj;
+                            if (!ipa.roundabout$getIsDeflected()) {
+                                ((ServerLevel) this2.level()).sendParticles(ModParticles.ICE_SPARKLE,
+                                        pj.getX(),
+                                        pj.getY(),
+                                        pj.getZ(),
+                                        10, 0, 0, 0, 0.2);
+                                pj.level().playSound(null, pj.blockPosition(), ModSounds.ICE_BREAKER_EVENT,
+                                        SoundSource.PLAYERS, 1.0F, 2.0F);
+                                if (pj instanceof RoundaboutBulletEntity) {
+                                    pj.setOwner(this2);
+                                    ((RoundaboutBulletEntity) pj).setSuperThrown(false);
+                                }
+                                ipa.roundabout$setIsDeflected(true);
+                                ((IEntityAndData) pj).rdbt$forceDeltaMovement(pj.getDeltaMovement().scale(-0.4));
+                                pj.setYRot(pj.getYRot() + 180.0F);
+                                pj.yRotO += 180.0F;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public void tick(){
         if (!level().isClientSide()){
             if (lifeSpan > -1){
@@ -61,8 +121,6 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
                 if (lifeSpan == 0){
                     discard();
                 }
-            } else {
-                discard();
             }
 
 
@@ -74,40 +132,7 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
 
                     if (mob.getBoundingBox().intersects(wallBox)) {
                         if (mob instanceof Projectile pj){
-                            if (!getBled() && !(pj.getOwner() instanceof LivingEntity LE &&
-                                    ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum
-                            && PowerTypes.hasStandActive(LE))) {
-                                if (pj instanceof BloodSplatterEntity ||
-                                        (pj instanceof SoftAndWetPlunderBubbleEntity pb && pb.getLiquidStolen() == 4)
-                                ) {
-                                    setBled(true);
-                                } else {
-                                    if (pj instanceof RoundaboutBulletEntity || pj instanceof AbstractArrow ||
-                                    pj instanceof MatchEntity){
-                                        if (!(pj instanceof AbstractArrow aa && ((IAbstractArrowAccess)aa).roundabout$GetIsManhattan())
-                                        && !(pj instanceof RoundaboutBulletEntity abe && abe.isHattan)){
-                                            IProjectileAccess ipa = (IProjectileAccess) pj;
-                                            if (!ipa.roundabout$getIsDeflected()) {
-                                                ((ServerLevel) level()).sendParticles(ModParticles.ICE_SPARKLE,
-                                                        pj.getX(),
-                                                        pj.getY(),
-                                                        pj.getZ(),
-                                                        10, 0, 0, 0, 0.2);
-                                                pj.level().playSound(null, pj.blockPosition(), ModSounds.ICE_BREAKER_EVENT,
-                                                        SoundSource.PLAYERS, 2.0F, 1.0F);
-                                                if (pj instanceof RoundaboutBulletEntity) {
-                                                    pj.setOwner(this);
-                                                    ((RoundaboutBulletEntity) pj).setSuperThrown(false);
-                                                }
-                                                ipa.roundabout$setIsDeflected(true);
-                                                ((IEntityAndData) pj).rdbt$forceDeltaMovement(pj.getDeltaMovement().scale(-0.4));
-                                                pj.setYRot(pj.getYRot() + 180.0F);
-                                                pj.yRotO += 180.0F;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                            dealWithProjectile(pj,this);
                         } else {
                             if (!getBled() && mob instanceof LivingEntity LE && LE.hasEffect(ModEffects.BLEED)){
                                 setBled(true);
