@@ -1,20 +1,26 @@
 package net.hydra.jojomod.client.models.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 
 public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>> extends RenderLayer<T, A> {
     private final EntityRenderDispatcher dispatcher;
@@ -83,12 +89,12 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
                         /// for unlatch...
                         if (user.roundabout$getIdlePos() == 1) {
-                            poseStack.translate(0.0, 0.25, -0.15);
+                            poseStack.translate(0.0, -0.2, 0.3);
                             ModStrayModels.CENTURY_BOY.renderAll(entity, partialTicks, poseStack, bufferSource,
                                     packedLight, r, g, b, heyfull, skin);
                             ClientUtil.popPoseAndCooperate(poseStack, 26);
                         } else {
-                            poseStack.translate(0.0, 0.75, 0.0);
+                            poseStack.translate(0, -0.1, 0.52);
                             ModStrayModels.CENTURY_BOY.renderBody(entity, partialTicks, poseStack, bufferSource,
                                     packedLight, r, g, b, heyfull, skin);
 
@@ -102,7 +108,7 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
                             getParentModel().head.translateAndRotate(poseStack);
 
-                            poseStack.translate(0.0, 0.75, 0.0);
+                            poseStack.translate(0, -0.1, 0.52);
 
                             ModStrayModels.CENTURY_BOY.renderHead(entity, partialTicks, poseStack, bufferSource,
                                     packedLight, r, g, b, heyfull, skin);
@@ -119,13 +125,19 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             getParentModel().leftArm.translateAndRotate(poseStack);
 
 
-                            poseStack.translate(-0.3, 0.63, 0.0);
+                            poseStack.translate(-.3, -0.23, 0.52);
 
-                            ModStrayModels.CENTURY_BOY.renderLeftArm(entity, partialTicks, poseStack, bufferSource,
-                                    packedLight, r, g, b, heyfull, skin);
+                            if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
+                                ModStrayModels.CENTURY_BOY.renderLeftArmSlim(entity, partialTicks, poseStack, bufferSource,
+                                        packedLight, r, g, b, heyfull, skin);
+                            } else {
+                                ModStrayModels.CENTURY_BOY.renderLeftArm(entity, partialTicks, poseStack, bufferSource,
+                                        packedLight, r, g, b, heyfull, skin);
+                            }
 
                             ClientUtil.popPoseAndCooperate(poseStack, 26);
                             /// right arm
+
                             ClientUtil.pushPoseAndCooperate(poseStack, 26);
                             if (entity.isBaby()) {
                                 poseStack.scale(0.6F, 0.6F, 0.6F);
@@ -135,13 +147,37 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
                             getParentModel().rightArm.translateAndRotate(poseStack);
 
-                            poseStack.translate(0.3, 0.63, 0.0);
+                            poseStack.translate(.3, -0.23, 0.52);
 
-                            ModStrayModels.CENTURY_BOY.renderRightArm(entity, partialTicks, poseStack, bufferSource,
+                            if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
+                            ModStrayModels.CENTURY_BOY.renderRightArmSlim(entity, partialTicks, poseStack, bufferSource,
                                     packedLight, r, g, b, heyfull, skin);
+                            } else {
+                                ModStrayModels.CENTURY_BOY.renderRightArm(entity, partialTicks, poseStack, bufferSource,
+                                        packedLight, r, g, b, heyfull, skin);
+                            }
 
                             ClientUtil.popPoseAndCooperate(poseStack, 26);
+
+                            /// breast
+                            if (entity instanceof  IPlayerEntity IPL && IPL.roundabout$getMaskSlot().getItem() instanceof
+                                    MaskItem MI && MI.visageData.generateVisageData(entity).rendersBreast()) {
+                                ClientUtil.pushPoseAndCooperate(poseStack, 26);
+                                if (entity.isBaby()) {
+                                    poseStack.scale(0.6F, 0.6F, 0.6F);
+                                    poseStack.translate(0.3, 1, -0.3);
+                                }
+
+                                getParentModel().body.translateAndRotate(poseStack);
+
+
+                                ModStrayModels.CENTURY_BOY.renderBreast(entity, partialTicks, poseStack, bufferSource,
+                                        packedLight, r, g, b, heyfull, skin);
+
+                                ClientUtil.popPoseAndCooperate(poseStack, 26);
+                            }
                         }
+
                     }
                 }
             }
