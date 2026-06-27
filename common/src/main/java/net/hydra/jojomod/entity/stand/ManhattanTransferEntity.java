@@ -693,8 +693,10 @@ public class ManhattanTransferEntity extends StandEntity {
                     this.setYBodyRot(this.getYRot() % 360);
                     if (randomDirection <= 1) {
                         this.setYRot(yaw - 15);
+                        this.setYHeadRot(yaw - 15);
                     } else {
                         this.setYRot(yaw + 15);
+                        this.setYHeadRot(yaw + 15);
                     }
                 }
                 if (verticalCollision && !verticalCollisionBelow) {
