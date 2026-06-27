@@ -224,6 +224,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
                 }
                 if (livingEntity instanceof Player) {
                     damage = (float) (damage * (ClientNetworking.getAppropriateConfig().itemSettings.gunDamageOnPlayers * 0.01));
+                    damage *=0.9F;
                 } else {
                     damage = (float) (damage * (ClientNetworking.getAppropriateConfig().itemSettings.gunDamageOnMobs * 0.01));
                     ;
