@@ -1,6 +1,5 @@
-package net.hydra.jojomod.mixin.manhattan;
+package net.hydra.jojomod.mixin.access;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
@@ -23,11 +22,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ThrownEgg.class)
-public abstract class EggAccess extends ThrowableItemProjectile {
+public abstract class AccessEgg extends ThrowableItemProjectile {
 
     /**For use to everyone who'll need this :)*/
 
-    public EggAccess(EntityType<? extends ThrowableItemProjectile> $$0, LivingEntity $$1, Level $$2) {
+    public AccessEgg(EntityType<? extends ThrowableItemProjectile> $$0, LivingEntity $$1, Level $$2) {
         super($$0, $$1, $$2);
     }
 
@@ -38,7 +37,6 @@ public abstract class EggAccess extends ThrowableItemProjectile {
             Entity $$2x = ((EntityHitResult) $$0).getEntity();
             ThrownEgg thrownEgg = (ThrownEgg) (Object) (this);
             if($$2x instanceof ManhattanTransferEntity ME){
-                Roundabout.LOGGER.info("aaaaa");
                 ci.cancel();
                 thrownEgg.discard();
                 if ((this.getOwner().is(ME.getUser()) && !ME.canOthersLoadMT || ME.canOthersLoadMT) && !ME.hasItem) {
