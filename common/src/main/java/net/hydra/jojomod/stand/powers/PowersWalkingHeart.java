@@ -127,9 +127,9 @@ public class PowersWalkingHeart extends NewDashPreset {
     public int getExpForLevelUp(int currentLevel){
         int amt;
         if (currentLevel == 1) {
-            amt = 200;
+            amt = 150;
         } else if (currentLevel == 2){
-            amt = 400;
+            amt = 300;
         } else {
             amt = 800;
         }

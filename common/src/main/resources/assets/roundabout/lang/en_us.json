@@ -2697,8 +2697,8 @@
 
   "config.roundabout.gentlyWeepsCooldown.name": "Gently Weeps CD",
   "config.roundabout.defaceAttackCooldowngentlyWeepsCooldown.desc": "The cooldown in ticks.",
-  "config.roundabout.twisterCooldown.name": "Cold Twister CD",
-  "config.roundabout.twisterCooldown.desc": "The cooldown in ticks.",
+  "config.roundabout.twisterCooldownv2.name": "Cold Twister CD",
+  "config.roundabout.twisterCooldownv2.desc": "The cooldown in ticks.",
   "config.roundabout.freezeBlocksCooldown.name": "Block Freeze CD",
   "config.roundabout.freezeBlocksCooldown.desc": "The cooldown in ticks.",
   "config.roundabout.iceWallCooldown.name": "Ice Wall Cooldown",
@@ -2964,8 +2964,8 @@
   "config.roundabout.whiteAlbumGuardPoints.name": "Guard Points",
   "config.roundabout.whiteAlbumGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
 
-  "config.roundabout.whiteAlbumAccelerationAmount.name": "Acceleration",
-  "config.roundabout.whiteAlbumAccelerationAmount.desc": "How much speed is gained per acceleration build tick? The default caps you off at just beneath the maximum wild horse speed.",
+  "config.roundabout.whiteAlbumAccelerationAmountv2.name": "Acceleration",
+  "config.roundabout.whiteAlbumAccelerationAmountv2.desc": "How much speed is gained per acceleration build tick? The default caps you off at just beneath the maximum wild horse speed.",
 
   "config.roundabout.whiteAlbumMaxAcceleration.name": "Max Acceleration",
   "config.roundabout.whiteAlbumMaxAcceleration.desc": "How many ticks of building speed? 100 ticks = 5 seconds of uninterrupted running.",
@@ -2979,8 +2979,8 @@
   "config.roundabout.freezesSurfaceWater.name": "Block Freeze Water",
   "config.roundabout.freezesSurfaceWater.desc": "Enable frozen world to coat the raging seas in ice.",
 
-  "config.roundabout.freezesGrass.name": "Freezes Grass",
-  "config.roundabout.freezesGrass.desc": "If disabled, white album won't replace grass and tallgrass, and other non-air blocks, even with stand griefing on.",
+  "config.roundabout.freezesGrassv2.name": "Freezes Grass",
+  "config.roundabout.freezesGrassv2.desc": "If disabled, white album won't replace grass and tallgrass, and other non-air blocks, even with stand griefing on.",
 
   "config.roundabout.magicianAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.magicianAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",

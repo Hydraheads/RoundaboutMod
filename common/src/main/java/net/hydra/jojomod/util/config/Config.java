@@ -875,8 +875,8 @@ public class Config implements Cloneable {
         public Integer whiteAlbumGuardPoints;
         @FloatOption(group = "inherit", value = 0.07F, min = 0F, max = 100F)
         public Float sunArmorDamage;
-        @FloatOption(group = "inherit", value = 0.012F, min = 0F, max = 100F)
-        public Float whiteAlbumAccelerationAmount;
+        @FloatOption(group = "inherit", value = 0.0115F, min = 0F, max = 100F)
+        public Float whiteAlbumAccelerationAmountv3;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer whiteAlbumMaxAcceleration;
         @IntOption(group = "inherit", value = 4, min = 0, max = 50)
@@ -884,7 +884,7 @@ public class Config implements Cloneable {
         @BooleanOption(group = "inherit", value = true)
         public Boolean freezesSurfaceWater;
         @BooleanOption(group = "inherit", value = false)
-        public Boolean freezesGrass;
+        public Boolean freezesGrassv2;
         @FloatOption(group = "inherit", value = 0.15F, min = 0, max = 72000F)
         public Float miningSpeedBuffWhite;
         @FloatOption(group = "inherit", value = 0.1F, min = 0, max = 72000F)
@@ -897,8 +897,8 @@ public class Config implements Cloneable {
         public Integer getMiningTierWhiteAlbum;
         @IntOption(group = "inherit", value = 800, min = 0, max = 72000)
         public Integer gentlyWeepsCooldown;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer twisterCooldown;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer twisterCooldownv2;
         @IntOption(group = "inherit", value = 240, min = 0, max = 72000)
         public Integer freezeBlocksCooldown;
         @IntOption(group = "inherit", value = 110, min = 0, max = 72000)

@@ -4279,7 +4279,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 state2.is(ModBlocks.WHITE_ALBUM_ICE_SLAB)){
             StandPowers powers = roundabout$getStandPowers();
             if (!(powers instanceof PowersWhiteAlbum PW && PW.hasSkatesActivated()) && !powers.isGuardInput()){
-                basis *= (1.3f+(PowersWhiteAlbum.getMaxAccelerationTicks()*ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumAccelerationAmount));
+                basis *= (1.3f+(PowersWhiteAlbum.getMaxAccelerationTicks()*ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumAccelerationAmountv3));
             }
         }
 

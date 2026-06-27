@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IFatePlayer;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
@@ -9,7 +10,6 @@ import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.projectile.ColdBlastProjectile;
 import net.hydra.jojomod.entity.projectile.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.projectile.IceTwisterEntity;
-import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
@@ -24,6 +24,7 @@ import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
@@ -33,6 +34,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -122,7 +124,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
-
     @Override
     public float guardSpecialties(DamageSource sauce, float damage){
         if (sauce.is(DamageTypes.PLAYER_ATTACK)){
@@ -134,11 +135,12 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
         return super.guardSpecialties(sauce,damage);
     }
+
     @Override
     public void onChangedBlock(BlockPos blockPos){
         if (hasSkatesActivated() && acceleration > 0 && !self.isSwimming() &&
         !self.isFallFlying()) {
-            boolean canFreezeGrass = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.freezesGrass;
+            boolean canFreezeGrass = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.freezesGrassv2;
             if (!self.onGround()) {
                 return;
             }
@@ -317,7 +319,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public int acceleration = 0;
     public float inputSpeedModifiers(float basis){
         if (hasSkatesActivated()){
-            basis *= 1.3f+(acceleration*ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumAccelerationAmount);
+            basis *= 1.3f+(acceleration*ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumAccelerationAmountv3);
         } if (isChargingCold()){
             basis *= 0.9f;
         }
@@ -400,7 +402,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     saveDiscAndSync();
                 }
 
-                if (PowerTypes.hasStandActive(self)){
+                if (PowerTypes.hasStandActive(self) && getStandUserSelf().roundabout$getStandSkin() == YUKI){
                 if (self.level() instanceof ServerLevel sl) {
                     if (self.tickCount % 10 == 0) {
                         sl.sendParticles(
@@ -586,30 +588,30 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
 
         if (!isHoldingSneak()){
-            setSkillIcon(context, x, y, 2, StandIcons.TWISTER, PowerIndex.SKILL_2);
+            LockedOrNot(context, x, y, 2, StandIcons.TWISTER, PowerIndex.SKILL_2, getTwisterLevel());
         } else {
-            setSkillIcon(context, x, y, 2, StandIcons.GENTLY_WEEPS, PowerIndex.SKILL_2_SNEAK);
+            LockedOrNot(context, x, y, 2, StandIcons.GENTLY_WEEPS, PowerIndex.SKILL_2_SNEAK,getGentlyWeepsLevel());
         }
 
 
         if (!isHoldingSneak()){
             if (hasSkatesActivated()){
-                setSkillIcon(context, x, y, 3, StandIcons.ICE_WALL_BEHIND, PowerIndex.SKILL_3);
+                LockedOrNot(context, x, y, 3, StandIcons.ICE_WALL_BEHIND, PowerIndex.SKILL_3, getIceWallLevel());
             } else {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
             }
         } else {
-            setSkillIcon(context, x, y, 3, StandIcons.ICE_WALL, PowerIndex.SKILL_3);
+            LockedOrNot(context, x, y, 3, StandIcons.ICE_WALL, PowerIndex.SKILL_3,getIceWallLevel());
         }
 
         if (!isHoldingSneak()){
             if (hasSkatesActivated()){
-                setSkillIcon(context, x, y, 4, StandIcons.SKATE_ACTIVE, PowerIndex.SKILL_1);
+                LockedOrNot(context, x, y, 4, StandIcons.SKATE_ACTIVE, PowerIndex.SKILL_1, getSkatesLevel());
             } else {
-                setSkillIcon(context, x, y, 4, StandIcons.SKATE_INACTIVE, PowerIndex.SKILL_1);
+                LockedOrNot(context, x, y, 4, StandIcons.SKATE_INACTIVE, PowerIndex.SKILL_1, getSkatesLevel());
             }
         } else {
-            setSkillIcon(context, x, y, 4, StandIcons.FREEZE_BLOCKS, PowerIndex.SKILL_4_SNEAK);
+            LockedOrNot(context, x, y, 4, StandIcons.FREEZE_BLOCKS, PowerIndex.SKILL_4_SNEAK, getBlockFreezeLevel());
         }
 
         super.renderIcons(context, x, y);
@@ -617,7 +619,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
 
     public void toggleBlockFreezeClient(){
-        if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK) && !self.isInWater()) {
+        if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK) && !self.isInWater()
+        && canExecuteMoveWithLevel(getBlockFreezeLevel())) {
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_SNEAK, true);
             tryPowerPacket(PowerIndex.POWER_4_SNEAK);
         }
@@ -628,13 +631,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return PowerTypes.hasStandActive(self);
     }
 
-    public List<SurvivorEntity> survivorsSpawned = new ArrayList<>();
-
-    public void listInit(){
-        if (survivorsSpawned == null) {
-            survivorsSpawned = new ArrayList<>();
-        }
-    }
     public Component getPosName(byte posID){
         return Component.empty();
     }
@@ -670,7 +666,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
 
     public void iceWallClient(){
-        if (!this.onCooldown(PowerIndex.SKILL_3)) {
+        if (!this.onCooldown(PowerIndex.SKILL_3) && canExecuteMoveWithLevel(getIceWallLevel())) {
             if (canUseIceWall()) {
                 tryPowerPacket(PowerIndex.POWER_3);
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
@@ -680,7 +676,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
 
     public void toggleSkatesClient(){
-        if (!this.onCooldown(PowerIndex.SKILL_1)) {
+        if (!this.onCooldown(PowerIndex.SKILL_1) && canExecuteMoveWithLevel(getSkatesLevel())) {
            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
            tryPowerPacket(PowerIndex.POWER_1);
         }
@@ -726,7 +722,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     public void iceTwisterClient(){
-        if (!onCooldown(PowerIndex.SKILL_2) && !isChargingCold()){
+        if (!onCooldown(PowerIndex.SKILL_2) && !isChargingCold() && canExecuteMoveWithLevel(getTwisterLevel())){
             BlockHitResult hit = (BlockHitResult) self.pick(
                     5.0D, // reach distance
                     0.0F,
@@ -738,7 +734,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     public void gentlyWeepsClient(){
-        if (!onCooldown(PowerIndex.SKILL_2_SNEAK) && !isChargingCold()){
+        if (!onCooldown(PowerIndex.SKILL_2_SNEAK) && !isChargingCold()
+                && canExecuteMoveWithLevel(getGentlyWeepsLevel())){
             tryPowerPacket(PowerIndex.POWER_2_SNEAK);
         }
     }
@@ -778,9 +775,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return super.getDamageAdd(source,amt,target);
     }
 
+
+
     public void dashOrWall(){
         if (hasSkatesActivated()){
-            if (!this.onCooldown(PowerIndex.SKILL_3)) {
+            if (!this.onCooldown(PowerIndex.SKILL_3) && canExecuteMoveWithLevel(getIceWallLevel())) {
                 if (canUseIceWall()) {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BLOCK, true);
                     tryPowerPacket(PowerIndex.POWER_3_BLOCK);
@@ -799,7 +798,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
         if (!onCooldown(PowerIndex.SKILL_2)) {
 
-            this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().whiteAlbumSettings.twisterCooldown);
+            this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().whiteAlbumSettings.twisterCooldownv2);
             this.setCooldown(PowerIndex.SKILL_2_SNEAK, 20);
             Level level = self.level();
 
@@ -816,8 +815,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     BlockPos twisterPos = checkPos.above();
 
                     // Spawn twister here
-
-
+                    addEXP(1);
                     IceTwisterEntity twister = new IceTwisterEntity(
                             this.self.level(), twisterPos.getCenter().subtract(0, 0.5F, 0));
                     addIceEntity(twister);
@@ -843,6 +841,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             this.setCooldown(PowerIndex.SKILL_2, 30);
 
             Level level = self.level();
+            addEXP(3);
             GentlyWeepsEntity twister = new GentlyWeepsEntity(
                     level, pos.getCenter().add(0, 0.5F, 0));
             addIceEntity(twister);
@@ -988,6 +987,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                         self.level().addFreshEntity(wall);
                     }
                 }
+                addEXP(1);
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.ICE_RISES_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
             }
         }
@@ -1231,6 +1231,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                         0, 0, 0, 0, 0);
 
             }
+            addEXP(1);
             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BLOCK_FREEZE_EVENT,
                     SoundSource.PLAYERS, 1F, 1F);
         }
@@ -1239,10 +1240,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     @Override
     public void tickMobAI(LivingEntity attackTarget){
-    }
-
-    public void despawnSurvivorClient(){
-        tryPowerPacket(PowerIndex.POWER_2_SNEAK);
     }
 
     public BlockPos twisterPos = BlockPos.ZERO;
@@ -1551,6 +1548,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     @Override
     public void addToCombo(Entity targ){
+        if (targ instanceof LivingEntity LV){
+            addEXP(1,LV);
+        }
         if (targ instanceof Player PL){
             HeatUtil.addHeat(PL,-2);
         } else if (targ instanceof LivingEntity LE){
@@ -1563,5 +1563,62 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return Component.translatable("roundabout.dev_status.active");
     }
 
+    //2- Ice Wall
+    //3- Twister
+    //4- Block Freeze
+    //5- Gently Weeps
+    @Override
+    public byte getMaxLevel(){
+        return 5;
+    }
 
+    public int getSkatesLevel(){return 1;}
+    public int getIceWallLevel(){return 2;}
+    public int getTwisterLevel(){return 3;}
+    public int getBlockFreezeLevel(){return 4;}
+    public int getGentlyWeepsLevel(){return 5;}
+
+    @Override
+    public int getExpForLevelUp(int currentLevel){
+        int amt;
+        if (currentLevel == 1) {
+            amt = 50;
+        } else {
+            amt = (100+((currentLevel-1)*150));
+        }
+        amt= (int) (amt*(getLevelMultiplier()));
+        return amt;
+    }
+    @Override
+    public void gainExpFromStandardMining(BlockState $$1, BlockPos $$2) {
+        if (!($$1.getBlock() instanceof IceBlock) && !$$1.is(Blocks.PACKED_ICE) &&
+                !($$1.getDestroySpeed(this.self.level(),$$2) < 0.5) && MainUtil.isBlockExpAble($$1)) {
+            if (Math.random() > 0.62) {
+                addEXP(1);
+            }
+        }
+    }
+    @Override
+    public void levelUp(){
+        if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE){
+            IPlayerEntity ipe = ((IPlayerEntity) PE);
+            byte level = ipe.roundabout$getStandLevel();
+            if (level == 5){
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.both").
+                        withStyle(ChatFormatting.AQUA), true);
+            } else {
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.both").
+                        withStyle(ChatFormatting.AQUA), true);
+            }
+        }
+        super.levelUp();
+    }
+
+    @Override
+    public boolean interceptSuccessfulDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
+        if ((hasStandActive(this.getSelf()) && $$0.is(DamageTypes.PLAYER_ATTACK))){
+            addEXP(1,target);
+        }
+        return false;
+    }
 }

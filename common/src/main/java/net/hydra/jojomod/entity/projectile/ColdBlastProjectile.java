@@ -1,34 +1,19 @@
 package net.hydra.jojomod.entity.projectile;
 
-import net.hydra.jojomod.access.IFatePlayer;
-import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StandFireBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.Zombiefish;
-import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
-import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.FateTypes;
-import net.hydra.jojomod.event.index.PowerTypes;
-import net.hydra.jojomod.event.powers.DamageHandler;
-import net.hydra.jojomod.fates.powers.VampireFate;
-import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Husk;
-import net.minecraft.world.entity.monster.Phantom;
-import net.minecraft.world.entity.monster.Skeleton;
-import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.FireBlock;
@@ -38,7 +23,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 
 import java.util.ArrayList;
@@ -125,7 +109,7 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
     }
     public void onChangedBlock2(BlockPos blockPos){
         if (getOwner() != null) {
-            boolean canFreezeGrass = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.freezesGrass;
+            boolean canFreezeGrass = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.freezesGrassv2;
             BlockState blockState = ModBlocks.WHITE_ALBUM_ICE_BLOCK.defaultBlockState();
             int j = Math.min(16, 2 + 1);
             BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();

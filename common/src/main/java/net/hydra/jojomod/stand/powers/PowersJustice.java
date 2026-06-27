@@ -1437,13 +1437,10 @@ public class PowersJustice extends NewDashPreset {
     }
     @Override
     public void gainExpFromStandardMining(BlockState $$1, BlockPos $$2) {
-        if (hasStandActive(this.getSelf())) {
-            if (!($$1.getBlock() instanceof IceBlock) && !$$1.is(Blocks.PACKED_ICE)
-                    &&
-                    !($$1.getDestroySpeed(this.self.level(),$$2) < 0.1)) {
-                if (Math.random() > 0.62) {
-                    addEXP(1);
-                }
+        if (!($$1.getBlock() instanceof IceBlock) && !$$1.is(Blocks.PACKED_ICE) &&
+                !($$1.getDestroySpeed(this.self.level(),$$2) < 0.5) && MainUtil.isBlockExpAble($$1)) {
+            if (Math.random() > 0.62) {
+                addEXP(1);
             }
         }
     }
@@ -1451,7 +1448,7 @@ public class PowersJustice extends NewDashPreset {
     public boolean interceptSuccessfulDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
         if ((hasStandActive(this.getSelf()) && $$0.is(DamageTypes.PLAYER_ATTACK)) || $$0.is(ModDamageTypes.CORPSE)
                 || $$0.is(ModDamageTypes.CORPSE_ARROW) || $$0.is(ModDamageTypes.CORPSE_EXPLOSION)){
-            addEXP(1);
+            addEXP(1,target);
         }
 
         return false;
