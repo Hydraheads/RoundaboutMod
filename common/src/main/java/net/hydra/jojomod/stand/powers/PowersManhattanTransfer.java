@@ -915,6 +915,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                                     powerUpMobArrow($$11);
                                 }
                                 ME.powerUpProjectile();
+                                ME.playSound(ModSounds.BULLET_RICOCHET_EVENT, 1.0F, (ME.getRandom().nextFloat() * 0.2F + 0.7F));
                             }
                         }
                         mobShootArrow = 100;
