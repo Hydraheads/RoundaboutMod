@@ -54,6 +54,8 @@ abstract public class AbtractStrayCat extends Item {
                     bubble.setSped(SPEED);
                     bubble.setOwner(P);
 
+
+
                     Vec3 addToPosition = new Vec3(0, P.getEyeHeight() * 0.8F, 0);
                     Direction direction = ((IGravityEntity) P).roundabout$getGravityDirection();
                     if (direction != Direction.DOWN) {

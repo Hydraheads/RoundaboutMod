@@ -72,9 +72,9 @@ public class ForgeItems {
     public static final RegistryObject<Item> ROAD_ROLLER = addToTab(ITEMS.register("road_roller",
             () -> new RoadRollerItem(new Item.Properties().stacksTo(1))));
 
-    public static final RegistryObject<Item> STRAY_CAT_ANIME = addToTab(ITEMS.register("stray_cat_anime",
+    public static final RegistryObject<Item> STRAY_CAT_ANIME = addToWIPTab(ITEMS.register("stray_cat_anime",
             () -> new StrayCatAnime(new Item.Properties().stacksTo(1))));
-    public static final RegistryObject<Item> STRAY_CAT_MANGA= addToTab(ITEMS.register("stray_cat_manga",
+    public static final RegistryObject<Item> STRAY_CAT_MANGA= addToWIPTab(ITEMS.register("stray_cat_manga",
             () -> new StrayCatManga(new Item.Properties().stacksTo(1))));
 
     public static final RegistryObject<BlockItem> WIRE_TRAP = addToBuildingTab(ITEMS.register("wire_trap",
