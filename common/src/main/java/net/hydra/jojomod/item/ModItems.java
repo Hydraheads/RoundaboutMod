@@ -180,6 +180,9 @@ public class ModItems {
 
     public static Item ANUBIS_ITEM;
 
+    public static Item STRAY_CAT_ANIME;
+    public static Item STRAY_CAT_MANGA;
+
     public static Item SNUBNOSE_REVOLVER;
     public static Item SNUBNOSE_AMMO;
 

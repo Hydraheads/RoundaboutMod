@@ -434,10 +434,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 ((StandUser)this.self).roundabout$setActive(false);
             }
 
-            if(ME.isTechnicallyInWall()){
-                ((StandUser)this.self).roundabout$setActive(false);
-            }
-
             if(this.isClient()){
                 if (this.isPiloting()){
                     ME.isHattanPilotMode = true;
@@ -752,11 +748,11 @@ public class PowersManhattanTransfer extends NewDashPreset {
         if(!this.switchShootingMode()) {
             if (targetHattan != null && ent == targetHattan) {
                 if (this.isActive() && this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
-                    return 3407793;
+                    return 10747842;
                 }
             }
         }
-        return 60207;
+        return 5111688;
     }
 
     @Override
@@ -885,40 +881,49 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
     private int mobShootArrow = 80;
     private int ticksOnFireBlaze = this.self instanceof Blaze || this.self instanceof  Ghast ? 100 : 0;
+    private int outTicks = 5;
     @Override
     public void tickMobAI(LivingEntity attackTarget){
         if(this.getStandEntity(this.self) != null) {
-            if ((MainUtil.cheapDistanceTo(this.self.getX(), this.self.getY(), this.self.getZ(), this.getStandEntity(this.self).getX(), this.getStandEntity(this.self).getY(), this.getStandEntity(this.self).getZ()) > 16 && MainUtil.cheapDistanceTo(attackTarget.getX(), attackTarget.getY(), attackTarget.getZ(), this.getStandEntity(this.self).getX(), this.getStandEntity(this.self).getY(), this.getStandEntity(this.self).getZ()) > 16)) {
-                ((StandUser) this.self).roundabout$setActive(false);
-            } else {
-                if (mobShootArrow > 1) {
-                    mobShootArrow--;
+            if(attackTarget != null) {
+                if ((MainUtil.cheapDistanceTo(this.self.getX(), this.self.getY(), this.self.getZ(), this.getStandEntity(this.self).getX(), this.getStandEntity(this.self).getY(), this.getStandEntity(this.self).getZ()) > 16 && MainUtil.cheapDistanceTo(attackTarget.getX(), attackTarget.getY(), attackTarget.getZ(), this.getStandEntity(this.self).getX(), this.getStandEntity(this.self).getY(), this.getStandEntity(this.self).getZ()) > 16)) {
+                    ((StandUser) this.self).roundabout$setActive(false);
                 } else {
-                    if (targetHattan != null) {
-                        if (this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME) {
-                            if (ME.hasLineOfSight(this.targetHattan)) {
-                                if (this.getSelf() instanceof SnowGolem) {
-                                    Snowball $$7 = new Snowball(ME.getUser().level(), ME.getUser());
-                                    $$7.setPos(ME.getX(), ME.getY() - 0.15, ME.getZ());
-                                    $$7.setItem($$7.getItem());
-                                    $$7.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, -3.0F, 2F, 0.0F);
-                                    ME.level().addFreshEntity($$7);
-                                    ME.hattanDeflected = $$7;
-                                } else {
-                                    Arrow $$11 = new Arrow(this.getSelf().level(), ME.getX(), ME.getY(), ME.getZ());
-                                    $$11.setPos(ME.getX(), ME.getY() - 0.15, ME.getZ());
-                                    $$11.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, 0.0F, 2.5F, 0.0F);
-                                    $$11.pickup = AbstractArrow.Pickup.DISALLOWED;
-                                    ME.level().addFreshEntity($$11);
-                                    ME.hattanDeflected = $$11;
-                                    $$11.setRemainingFireTicks(ticksOnFireBlaze);
-                                    powerUpMobArrow($$11);
+                    if (mobShootArrow > 1) {
+                        mobShootArrow--;
+                    } else {
+                        if (outTicks > 1) {
+                            if (targetHattan != null && this.getStandEntity(this.getSelf()).hasLineOfSight(targetHattan)) {
+                                outTicks--;
+                            }
+                        } else {
+                            if (targetHattan != null) {
+                                if (this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME) {
+                                    if (ME.hasLineOfSight(this.targetHattan)) {
+                                        if (this.getSelf() instanceof SnowGolem) {
+                                            Snowball $$7 = new Snowball(ME.getUser().level(), ME.getUser());
+                                            $$7.setPos(ME.getX(), ME.getY() - 0.15, ME.getZ());
+                                            $$7.setItem($$7.getItem());
+                                            $$7.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, -3.0F, 2F, 0.0F);
+                                            ME.level().addFreshEntity($$7);
+                                            ME.hattanDeflected = $$7;
+                                        } else {
+                                            Arrow $$11 = new Arrow(this.getSelf().level(), ME.getX(), ME.getY(), ME.getZ());
+                                            $$11.setPos(ME.getX(), ME.getY() - 0.15, ME.getZ());
+                                            $$11.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, 0.0F, 2.5F, 0.0F);
+                                            $$11.pickup = AbstractArrow.Pickup.DISALLOWED;
+                                            ME.level().addFreshEntity($$11);
+                                            ME.hattanDeflected = $$11;
+                                            $$11.setRemainingFireTicks(ticksOnFireBlaze);
+                                            powerUpMobArrow($$11);
+                                        }
+                                        ME.powerUpProjectile();
+                                        ME.playSound(ModSounds.BULLET_RICOCHET_EVENT, 1.0F, (ME.getRandom().nextFloat() * 0.2F + 0.7F));
+                                    }
                                 }
-                                ME.powerUpProjectile();
-                                ME.playSound(ModSounds.BULLET_RICOCHET_EVENT, 1.0F, (ME.getRandom().nextFloat() * 0.2F + 0.7F));
+                                mobShootArrow = 100;
                             }
                         }
-                        mobShootArrow = 100;
                     }
                 }
             }

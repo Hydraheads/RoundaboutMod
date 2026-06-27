@@ -311,6 +311,9 @@ public class ForgeEvents {
         ModItems.ROAD_ROLLER = ForgeItems.ROAD_ROLLER.get();
         ModItems.STAND_DISC = ForgeItems.STAND_DISC.get();
 
+        ModItems.STRAY_CAT_ANIME = ForgeItems.STRAY_CAT_ANIME.get();
+        ModItems.STRAY_CAT_MANGA = ForgeItems.STRAY_CAT_MANGA.get();
+
         ModItems.STAND_DISC_THE_WORLD = ForgeItems.STAND_DISC_THE_WORLD.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_THE_WORLD.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_THE_WORLD.get());
         ModItems.MAX_STAND_DISC_THE_WORLD = ForgeItems.MAX_STAND_DISC_THE_WORLD.get();
@@ -648,6 +651,7 @@ public class ForgeEvents {
         ModEntities.RATT_DART = ForgeEntities.RATT_DART.get();
         ModEntities.POISON_LLAMA_SPIT = ForgeEntities.POISON_LLAMA_SPIT.get();
         ModEntities.THROWN_MATCH = ForgeEntities.THROWN_MATCH.get();
+        ModEntities.STRAY_CAT_AIRBUBBLE = ForgeEntities.STRAY_CAT_AIRBUBBLE.get();
         ModEntities.THROWN_WATER_BOTTLE = ForgeEntities.THROWN_WATER_BOTTLE.get();
         ModEntities.CROSSFIRE_HURRICANE = ForgeEntities.CROSSFIRE_HURRICANE.get();
         ModEntities.LIFE_TRACKER = ForgeEntities.LIFE_TRACKER.get();

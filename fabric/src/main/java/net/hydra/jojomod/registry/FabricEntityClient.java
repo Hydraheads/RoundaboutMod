@@ -129,6 +129,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.ITEM_LAUNCHING_BUBBLE_ENTITY, SoftAndWetBubbleRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GO_BEYOND, NoRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ENCASEMENT_BUBBLE, EncasementBubbleRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.STRAY_CAT_AIRBUBBLE, StrayCatAirBubbleRenderer::new);
         EntityRendererRegistry.register(FabricEntities.OVA_ENYA, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ENYA, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.JOTARO, VisageBasisRenderer::new);

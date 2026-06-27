@@ -812,6 +812,14 @@ public class FabricEntities {
                                 sized(EncasementBubbleEntity.eWidth, EncasementBubbleEntity.eHeight).
                                 clientTrackingRange(10).build(Roundabout.MOD_ID+":encasement_bubble")
                 );
+    public static final EntityType<StrayCatAirBubble> STRAY_CAT_AIRBUBBLE =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "stray_cat_bubble"),
+                    EntityType.Builder.<StrayCatAirBubble>of(StrayCatAirBubble::new, MobCategory.MISC).
+                            sized(StrayCatAirBubble.eWidth, StrayCatAirBubble.eHeight).
+                            clientTrackingRange(10).build(Roundabout.MOD_ID+":stray_cat_bubble")
+            );
         public static final EntityType<VanGoughPainting> VAN_GOUGH_PAINTING =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -987,6 +995,7 @@ public class FabricEntities {
                 ModEntities.ITEM_LAUNCHING_BUBBLE_ENTITY = ITEM_LAUNCHING_BUBBLE_ENTITY;
                 ModEntities.GO_BEYOND = GO_BEYOND;
                 ModEntities.ENCASEMENT_BUBBLE = ENCASEMENT_BUBBLE;
+                ModEntities.STRAY_CAT_AIRBUBBLE = STRAY_CAT_AIRBUBBLE;
                 ModEntities.CINDERELLA_VISAGE_DISPLAY = CINDERELLA_VISAGE_DISPLAY;
                 ModEntities.ANUBIS_POSSESSOR = ANUBIS_POSSESSOR;
                 ModEntities.ANUBIS_SLIPSTREAM = ANUBIS_SLIPSTREAM;

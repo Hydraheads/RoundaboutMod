@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.event.powers.visagedata.aesthetician.*;
 import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.item.StrayCats.*;
 import net.hydra.jojomod.item.paintings.BirthOfVenusPaintingItem;
 import net.hydra.jojomod.item.paintings.MonaLisaPaintingItem;
 import net.hydra.jojomod.item.paintings.VanGoughPaintingItem;
@@ -70,6 +71,12 @@ public class ForgeItems {
             () -> new OccultChargeItem(new Item.Properties().stacksTo(16))));
     public static final RegistryObject<Item> ROAD_ROLLER = addToTab(ITEMS.register("road_roller",
             () -> new RoadRollerItem(new Item.Properties().stacksTo(1))));
+
+    public static final RegistryObject<Item> STRAY_CAT_ANIME = addToWIPTab(ITEMS.register("stray_cat_anime",
+            () -> new StrayCatAnime(new Item.Properties().stacksTo(1))));
+    public static final RegistryObject<Item> STRAY_CAT_MANGA= addToWIPTab(ITEMS.register("stray_cat_manga",
+            () -> new StrayCatManga(new Item.Properties().stacksTo(1))));
+
     public static final RegistryObject<BlockItem> WIRE_TRAP = addToBuildingTab(ITEMS.register("wire_trap",
             () -> new BlockItem(ForgeBlocks.WIRE_TRAP.get(),
                     new Item.Properties()
@@ -209,6 +216,7 @@ public class ForgeItems {
             () -> new ChessBoardBlockItem(ForgeBlocks.CHESSBOARD_BLOCK.get(),
                     new Item.Properties().stacksTo(1)
             )));*/
+
     public static final RegistryObject<BlockItem> REGAL_WALL_ITEM = addToBuildingTab(ITEMS.register("regal_wall",
             () -> new BlockItem(ForgeBlocks.REGAL_WALL.get(),
                     new Item.Properties()
