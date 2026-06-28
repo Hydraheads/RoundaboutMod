@@ -2,5 +2,13 @@
   "parent" : "item/generated",
   "textures" : {
     "layer0" : "roundabout:item/stray_cat_manga"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "roundabout:anim" : 0.1
+      },
+      "model" : "roundabout:item/stray_cat_manga_sleep"
+    }
+  ]
 }
