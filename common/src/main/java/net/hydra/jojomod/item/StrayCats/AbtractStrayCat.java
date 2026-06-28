@@ -1,5 +1,6 @@
 package net.hydra.jojomod.item.StrayCats;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
@@ -30,13 +31,13 @@ abstract public class AbtractStrayCat extends Item {
         return UseAnim.NONE;
     }
 
-    private static final float SPEED = 0.67f;
+    private static final float SPEED = 0.6f;
 
     @Override
     public ItemStack finishUsingItem(ItemStack $$0, Level level, LivingEntity livingEntity) {
         if (livingEntity instanceof Player P) {
 
-            if (!level.isClientSide) {
+            if (!level.isClientSide && !isSleeping(level)) {
                 P.getCooldowns().addCooldown($$0.getItem(),13);
 
                 StrayCatAirBubble bubble = ModEntities.STRAY_CAT_AIRBUBBLE.create(level);
@@ -45,14 +46,15 @@ abstract public class AbtractStrayCat extends Item {
                     bubble.setOwner(P);
 
 
-                    Vec3 addToPosition = new Vec3(0, P.getEyeHeight() * 0.95F, 0);
+                    Vec3 addToPosition = new Vec3(0, P.getEyeHeight(), 0);
                     Direction direction = ((IGravityEntity) P).roundabout$getGravityDirection();
                     if (direction != Direction.DOWN) {
                         addToPosition = RotationUtil.vecPlayerToWorld(addToPosition, direction);
                     }
                     Vec3 pos = P.getPosition(1).add(addToPosition.x, addToPosition.y, addToPosition.z).add(P.getForward().scale(P.getBbWidth() * 1));
                     bubble.setPos(pos.x(), pos.y(), pos.z());
-                    bubble.shootFromRotationDeltaAgnostic(P, P.getXRot(), P.getYRot(), 1.0F, SPEED, 0);
+                    //bubble.shootFromRotationDeltaAgnostic(P, P.getXRot(), P.getYRot(), 1.0F, SPEED, 0);
+                    bubble.shootFromRotation(P, P.getXRot(), P.getYRot(), -0.5F, SPEED, 0.00f);
 
                     level.addFreshEntity(bubble);
                 }
@@ -68,11 +70,19 @@ abstract public class AbtractStrayCat extends Item {
         return InteractionResultHolder.fail($$3);
     }
 
-    public float getCurrentPredicateValue(Level level) {
-        if (!level.isDay()) {
-            return 0.2f;
-        }
+    static boolean isSleeping(Level level) {
+        return level.getDayTime() >= 13000 && level.getDayTime() <= 23750;
+    }
 
+    public float getCurrentPredicateValue(Level level) {
+
+        if (level != null) {
+
+            if (isSleeping(level)) {
+
+                return 0.2f;
+            }
+        }
         return 0.0f;
     }
 
