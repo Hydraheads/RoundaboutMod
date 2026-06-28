@@ -104,6 +104,7 @@ public class FabricSounds {
         addSound(ModSounds.ICE_BLAST_CHARGE_ID, ModSounds.ICE_BLAST_CHARGE_EVENT);
         addSound(ModSounds.COLD_SHOT_ID, ModSounds.COLD_SHOT_EVENT);
         addSound(ModSounds.GENTLY_WEEPS_ID, ModSounds.GENTLY_WEEPS_EVENT);
+        addSound(ModSounds.DING_ID, ModSounds.DING_EVENT);
         addSound(ModSounds.BANISH_ID, ModSounds.BANISH_EVENT);
 
         addSound(ModSounds.IRON_BALL_BOUNCE_ID, ModSounds.IRON_BALL_BOUNCE_EVENT);

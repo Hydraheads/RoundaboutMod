@@ -452,6 +452,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             }
         }
         if (isPacketPlayer()){
+            playDing();
             lastAcceleration = acceleration;
             if (hasSkatesActivated()){
                 if (self.isInWater() || self.hurtTime > 0 || self.isUsingItem()
@@ -1482,6 +1483,12 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     public boolean hasColdCharged(){
         return attackTimeDuring > getWhiteAlbumChargeLength();
+    }
+
+    public void playDing(){
+        if (isChargingCold() && attackTimeDuring == getWhiteAlbumChargeLength()){
+            this.self.playSound(ModSounds.DING_EVENT, 1F, (float) (1.1F+Math.random()*0.03F));
+        }
     }
 
     public void renderAttackHud(GuiGraphics context, Player playerEntity,

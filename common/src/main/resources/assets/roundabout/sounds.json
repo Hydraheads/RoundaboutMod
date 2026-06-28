@@ -17,6 +17,12 @@
       "roundabout:block_freeze"
     ]
   },
+  "ding": {
+    "subtitle": "sounds.roundabout.ding",
+    "sounds": [
+      "roundabout:ding"
+    ]
+  },
   "ice_blast_charge": {
     "subtitle": "sounds.roundabout.ice_blast_charge",
     "sounds": [

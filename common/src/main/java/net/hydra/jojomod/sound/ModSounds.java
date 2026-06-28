@@ -209,6 +209,10 @@ public class ModSounds {
     public static final ResourceLocation GENTLY_WEEPS_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GENTLY_WEEPS);
     public static SoundEvent GENTLY_WEEPS_EVENT = SoundEvent.createVariableRangeEvent(GENTLY_WEEPS_ID);
 
+    public static final String DING = "ding";
+    public static final ResourceLocation DING_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DING);
+    public static SoundEvent DING_EVENT = SoundEvent.createVariableRangeEvent(DING_ID);
+
 
 
 
