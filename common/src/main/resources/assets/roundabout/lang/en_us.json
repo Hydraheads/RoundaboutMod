@@ -1307,6 +1307,31 @@
   "ability.roundabout.cold_punch": "Cold Punch",
   "ability.roundabout.cold_punch.desc": "Must activate brawling to use! Throws a punch directly in front of you. Hold it down for nonstop attacks! Hits make opponents colder!",
 
+  "ability.roundabout.cold_guard": "Ice Armor",
+  "ability.roundabout.cold_guard.desc": "While the stand is active, you cover yourself in ice that transforms into your stand's vision. Provides a passive stand guard 180 degrees in front of you, like using a shield. This guard protects from a number of things including fall damage, fire, and sunlight. When the guard runs out, the armor is temporarily cracked. Grants you resistances to heat and cold.",
+
+  "ability.roundabout.freeze_cancel": "Freeze Cancel",
+  "ability.roundabout.freeze_cancel.desc": "Negate your ice, gradually removing it. This ability deactivates your skates.",
+
+  "ability.roundabout.ice_twister": "Cold Twister",
+  "ability.roundabout.ice_twister.desc": "Creates a miniature blizzard where you are looking. It freezes the ground into sticky ice that slows and traps opponents. Those standing in the twister get colder.",
+
+  "ability.roundabout.gently_weeps": "Gently Weeps",
+  "ability.roundabout.gently_weeps.desc": "Uses massive amounts of stand power to freeze the air surrounding you, reaching -215 degrees Celsius. Rapidly freezes anything in its radius. Unless covered in blood, deflects many types of incoming projectiles.",
+
+  "ability.roundabout.ice_wall": "Ice Wall",
+  "ability.roundabout.ice_wall.desc": "Makes a wall of ice appear from the ground. In front of you, it can block mobs and projectiles. If aimed beneath you, you can rise up along with it. Damaging the blocks with enough force breaks them. You can use this to your advantage to carve into the wall and jump on top of it.",
+
+  "ability.roundabout.ice_wall_behind": "Ice Wall (Behind)",
+  "ability.roundabout.ice_wall_behind.desc": "Makes a wall of ice appear from the ground behind you. This replaces dash while skating, and is good from blocking those chasing you using with your trail.",
+
+  "ability.roundabout.skate_activate": "Skate Activation",
+  "ability.roundabout.skate_activate.desc": "Attaches skates to your armor, granting you speed and gradually acceleration. Skating uphill lowers your acceleration, while skating downhill increases it. You leave a trail of ice that others swiftly slide across to catch up to you, and you can easily use your other abilities to lace it with traps. Freezes water in a manner similar to frost walker.",
+
+  "ability.roundabout.block_freeze": "Block Freeze",
+  "ability.roundabout.block_freeze.desc": "Using your ability to freeze any material, you turn certain blocks into cold variants. Cold blocks can be mined rapidly, so you can easily break obsidian and the like. They drop as unique building materials, and can easily be reverted with a flint and steel.",
+
+
   "ability.roundabout.cold_blast": "Cold Air Blast",
   "ability.roundabout.cold_blast.desc": "Must activate brawling to use! Release interact after the meter reaches the end to fire a projectile that freezes the blocks it passes by into stand ice. Mobs it passes through become colder.",
 

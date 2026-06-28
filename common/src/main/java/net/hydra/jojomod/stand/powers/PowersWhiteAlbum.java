@@ -1394,6 +1394,24 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 "instruction.roundabout.press_attack", StandIcons.WHITE_PUNCH,0,level,bypass));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.roundabout.cold_blast",
                 "instruction.roundabout.hold_block", StandIcons.COLD_BLAST,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.cold_guard",
+                "instruction.roundabout.passive", StandIcons.COLD_GUARD,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.freeze_cancel",
+                "instruction.roundabout.press_skill_crouch", StandIcons.FREEZE_CANCEL,1,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,getTwisterLevel(), "ability.roundabout.ice_twister",
+                "instruction.roundabout.press_skill", StandIcons.TWISTER,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,getGentlyWeepsLevel(), "ability.roundabout.gently_weeps",
+                "instruction.roundabout.press_skill_crouch", StandIcons.GENTLY_WEEPS,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.dodge",
+                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,getIceWallLevel(), "ability.roundabout.ice_wall",
+                "instruction.roundabout.press_skill_crouch", StandIcons.ICE_WALL,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,getIceWallLevel(), "ability.roundabout.ice_wall_behind",
+                "instruction.roundabout.press_skill", StandIcons.ICE_WALL_BEHIND,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,getSkatesLevel(), "ability.roundabout.skate_activate",
+                "instruction.roundabout.press_skill", StandIcons.SKATE_ACTIVE,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,getBlockFreezeLevel(), "ability.roundabout.block_freeze",
+                "instruction.roundabout.press_skill_crouch", StandIcons.FREEZE_BLOCKS,4,level,bypass));
 
         return $$1;
     }
