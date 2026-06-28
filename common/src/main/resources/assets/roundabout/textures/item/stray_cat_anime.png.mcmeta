@@ -1,6 +1,9 @@
 {
 	"animation": {
+		"width" : 16,
+		"height" : 16,
 		"frametime": 2,
-		"frames" : [{"index":0,"time":50}, 1, 2, 3, 4, 5, {"index":6,"time":30}, 7]
+		"frames" : [{"index":0,"time":60}, 1, 2, 3, 4, 5, {"index":0,"time":40}, 6, {"index":0,"time":75},
+		{"index":7,"time":4}, {"index":8,"time":4}, {"index":9,"time":8}, {"index":10,"time":8}, {"index":9,"time":8}, {"index":10,"time":4}, {"index":11,"time":4}]
 	} 
 }

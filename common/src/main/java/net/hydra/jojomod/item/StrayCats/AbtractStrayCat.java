@@ -23,7 +23,7 @@ abstract public class AbtractStrayCat extends Item {
     public AbtractStrayCat(Properties $$0) { super($$0); }
 
     @Override public int getUseDuration(ItemStack $$0) {
-        return 0;
+        return 1;
     }
 
     @Override public UseAnim getUseAnimation(ItemStack $$0) {
@@ -68,7 +68,11 @@ abstract public class AbtractStrayCat extends Item {
         return InteractionResultHolder.fail($$3);
     }
 
-    public float getCurrentPredicateValue() {
+    public float getCurrentPredicateValue(Level level) {
+        if (!level.isDay()) {
+            return 0.2f;
+        }
+
         return 0.0f;
     }
 
