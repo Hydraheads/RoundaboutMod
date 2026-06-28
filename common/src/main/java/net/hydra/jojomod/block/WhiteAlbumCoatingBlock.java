@@ -67,7 +67,7 @@ public class WhiteAlbumCoatingBlock
         BlockPos $$3 = $$2.below();
         return ($$1.getBlockState($$3).isFaceSturdy($$1, $$3, Direction.UP) ||
                 $$1.getBlockState($$3).getBlock() instanceof LeavesBlock ||
-                $$1.getBlockState($$3).getBlock() instanceof LeavesBlock) &&
+                $$1.getBlockState($$3).is(Blocks.ICE)) &&
                 !$$1.getBlockState($$3).is(ModBlocks.WHITE_ALBUM_ICE_SLAB) &&
                 !$$1.getBlockState($$3).is(ModBlocks.WHITE_ALBUM_ICE_BLOCK);
     }
