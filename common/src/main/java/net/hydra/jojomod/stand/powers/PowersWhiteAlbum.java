@@ -136,7 +136,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     @Override
     public float guardSpecialties(DamageSource sauce, float damage){
         if (sauce.is(DamageTypes.PLAYER_ATTACK)){
-            damage*=0.44F;
+            damage*=ClientNetworking.getAppropriateConfig().whiteAlbumSettings.playerGuardDamageMultiplier;
         }
         if (sauce.is(DamageTypes.MOB_ATTACK)){
             damage*=ClientNetworking.getAppropriateConfig().whiteAlbumSettings.mobGuardDamageMultiplier;
