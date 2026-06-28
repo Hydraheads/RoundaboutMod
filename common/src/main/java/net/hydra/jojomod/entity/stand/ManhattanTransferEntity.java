@@ -656,7 +656,9 @@ public class ManhattanTransferEntity extends StandEntity {
     }
 
     int ticksFixRot = 0;
-    int ticksFixRotTwo = 0;
+
+    private void setShootRotationX(float shootX){shootRotationXHattan = shootX;}
+    private void setShootRotationY(float shootY){shootRotationYHattan = shootY;}
 
     @Override
     public void tick() {
@@ -734,14 +736,19 @@ public class ManhattanTransferEntity extends StandEntity {
                 if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
                     Vec3 rots = this.getRotations(PM.targetHattan);
                     if (PM.switchShootingMode() || this.getHattanTarget() == 0) {
-                        shootRotationXHattan = this.getXRot();
-                        shootRotationYHattan = this.getYRot();
+                        setShootRotationX(this.getXRot());
+                        setShootRotationY(this.getYRot());
                     } else {
-                        shootRotationXHattan = (float) rots.x() * 180 / (float) Math.PI + 180;
-                        shootRotationYHattan = (float) rots.y * 180 / (float) Math.PI;
+                        setShootRotationX((float) rots.x() * 180 / (float) Math.PI + 180);
+                        setShootRotationY((float) rots.y * 180 / (float) Math.PI);
                     }
                 }
             }
+        }
+
+        if(!this.level().isClientSide()) {
+            System.out.println(shootRotationXHattan);
+            System.out.println(shootRotationYHattan);
         }
 
         if (this.level().isClientSide) {
