@@ -2519,6 +2519,10 @@
   "config.roundabout.bufferServerDistance.name": "Fix Moved Wrongly",
   "config.roundabout.bufferServerDistance.desc": "Provides a buffer to accommodate roundabout movement skills that provide short bursts of speed. Disable if it is causing problems with other mods.",
 
+  "config.roundabout.mobGuardDamageMultiplier.name": "Mob DMG Mult",
+  "config.roundabout.mobGuardDamageMultiplier.desc": "For stand Guard. Mobs do this many times more damage to your guard with their melee attacks (mob damage). This is to make fighting zombies and such not a joke.",
+
+
   "config.roundabout.enableKillerQueen.name": "Enable Stand",
   "config.roundabout.enableKillerQueen.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableMagiciansRed.name": "Enable Stand",
