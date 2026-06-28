@@ -1300,6 +1300,16 @@
   "ability.roundabout.punch_fate": "Punch",
   "ability.roundabout.punch_fate.desc": "Throws a punch directly in front of you. Hold it down for nonstop attacks!",
 
+
+  "ability.roundabout.toggle_brawl": "Brawl Mode",
+  "ability.roundabout.toggle_brawl.desc": "Activate to change your attack and interact buttons to special abilities! Can be toggled on and off.",
+
+  "ability.roundabout.cold_punch": "Cold Punch",
+  "ability.roundabout.cold_punch.desc": "Must activate brawling to use! Throws a punch directly in front of you. Hold it down for nonstop attacks! Hits make opponents colder!",
+
+  "ability.roundabout.cold_blast": "Cold Air Blast",
+  "ability.roundabout.cold_blast.desc": "Must activate brawling to use! Release interact after the meter reaches the end to fire a projectile that freezes the blocks it passes by into stand ice. Mobs it passes through become colder.",
+
   "ability.roundabout.sweep_kick": "Sweep/Stomp",
   "ability.roundabout.sweep_kick.desc": "Throws a kick in a short range directly in front of you. The knockback is quite high. If used in the air, it instead makes you slam into the ground, briefly dazing mobs it hits.",
 

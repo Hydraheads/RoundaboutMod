@@ -725,6 +725,12 @@ public class StandIcons {
     public static final ResourceLocation ICE_WALL_BEHIND = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/white_album/ice_wall_behind.png");
 
+
+    public static final ResourceLocation WHITE_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/white_album/punch.png");
+    public static final ResourceLocation COLD_BLAST = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/white_album/cold_blast.png");
+
     public static final ResourceLocation SELF_INVIS = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/achtung_baby/self_invis.png");
     public static final ResourceLocation BURST_INVIS = new ResourceLocation(Roundabout.MOD_ID,

@@ -1388,18 +1388,13 @@ public class PowersWhiteAlbum extends NewDashPreset {
             SHOCK = 63;
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.throw_bottle",
-                "instruction.roundabout.press_skill", StandIcons.BOTTLE, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.summon_survivor",
-                "instruction.roundabout.press_skill", StandIcons.SPAWN,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.desummon_survivor",
-                "instruction.roundabout.press_skill_crouch", StandIcons.DESPAWN,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.dodge",
-                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
-        if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {
-            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.target_zap",
-                    "instruction.roundabout.press_skill", StandIcons.RAGE_SELECTION, 4, level, bypass));
-        }
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.roundabout.toggle_brawl",
+                "instruction.roundabout.press_skill", StandIcons.SUIT_COMBAT_2,1,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+99,0, "ability.roundabout.cold_punch",
+                "instruction.roundabout.press_attack", StandIcons.WHITE_PUNCH,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.roundabout.cold_blast",
+                "instruction.roundabout.hold_block", StandIcons.COLD_BLAST,0,level,bypass));
+
         return $$1;
     }
 
