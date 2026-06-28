@@ -1329,7 +1329,7 @@
   "ability.roundabout.ice_wall_behind.desc": "Makes a wall of ice appear from the ground behind you. This replaces dash while skating, and is good from blocking those chasing you using with your trail.",
 
   "ability.roundabout.skate_activate": "Skate Activation",
-  "ability.roundabout.skate_activate.desc": "Attaches skates to your armor, granting you speed and gradually acceleration. Skating uphill lowers your acceleration, while skating downhill increases it. You leave a trail of ice that others swiftly slide across to catch up to you, and you can easily use your other abilities to lace it with traps. Freezes water in a manner similar to frost walker.",
+  "ability.roundabout.skate_activate.desc": "Attaches skates to your armor, granting you speed and gradual acceleration. Skating uphill lowers your acceleration, while skating downhill increases it. You leave a trail of ice that others swiftly slide across to catch up to you, and you can easily use your other abilities to lace it with traps. Freezes water in a manner similar to frost walker.",
 
   "ability.roundabout.block_freeze": "Block Freeze",
   "ability.roundabout.block_freeze.desc": "Using your ability to freeze any material, you turn certain blocks into cold variants. Cold blocks can be mined rapidly, so you can easily break obsidian and the like. They drop as unique building materials, and can easily be reverted with a flint and steel.",
