@@ -32,7 +32,7 @@ public class WhiteAlbumRightArmPart extends PsuedoHierarchicalModel {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition limb = partdefinition.addOrReplaceChild("limb", CubeListBuilder.create().texOffs(16, 48).addBox(-2.0F, -0.1F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.35F))
+        PartDefinition limb = partdefinition.addOrReplaceChild("limb", CubeListBuilder.create().texOffs(16, 48).addBox(-2.0F, 0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.35F))
                 .texOffs(24, 32).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.26F)), PartPose.offset(-1.0F, -2.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 128, 128);
