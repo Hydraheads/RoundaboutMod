@@ -34,6 +34,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.JumpControl;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.animal.goat.Goat;
@@ -118,10 +119,7 @@ public class SeperatedArmEntity extends StandEntity {
         LaunchAngle = this.getDeltaMovement();
         Can_activate = true;
         flyingTicks=0;
-        MiningPos =  new BlockPos(
-                ((Double)(jumpT0Pos.x)).intValue(),
-                ((Double)(jumpT0Pos.y)).intValue(),
-                ((Double)(jumpT0Pos.z)).intValue());
+        MiningPos =  (BlockPos.containing(jumpT0Pos));
     }
 
     public void jump2(Vec3 jumpT0Pos){
@@ -149,11 +147,7 @@ public class SeperatedArmEntity extends StandEntity {
         LaunchAngle = this.getDeltaMovement();
         Can_activate = true;
         flyingTicks=0;
-        MiningPos = new BlockPos(
-                ((Double)(jumpT0Pos.x)).intValue(),
-                ((Double)(jumpT0Pos.y)).intValue(),
-                ((Double)(jumpT0Pos.z)).intValue());
-
+        MiningPos = (BlockPos.containing(jumpT0Pos));
 
     }
 

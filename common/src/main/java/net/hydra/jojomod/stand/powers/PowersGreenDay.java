@@ -668,20 +668,26 @@ public class PowersGreenDay extends NewPunchingStand {
     }
 
     public Vec3 rayCastFromSelf(double dist){
-        int steps = (int) (Math.round(dist * 8) + 1);
+        int steps = (int) (Math.round(dist * 6) + 1);
         Vec3 CurrentCheckPos = this.self.getEyePosition();
-        double xstep = (this.self.getLookAngle().x)/8 ;
-        double ystep = (self.getLookAngle().y)/8 ;
-        double zstep = (self.getLookAngle().z)/8 ;
+        double xstep = (this.self.getLookAngle().x)/6 ;
+        double ystep = (self.getLookAngle().y)/6 ;
+        double zstep = (self.getLookAngle().z)/6 ;
 
 
         for(int i = 0; i < steps ;i ++){
             CurrentCheckPos = CurrentCheckPos.add(xstep,ystep,zstep);
 
-            BlockPos bp = new BlockPos(((Double)(CurrentCheckPos.x)).intValue(),
-                    ((Double)(CurrentCheckPos.y)).intValue(),
-                    ((Double)(CurrentCheckPos.z)).intValue());
+
+           // if(!this.self.level().isClientSide) {
+           //     ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.END_ROD, CurrentCheckPos.x, CurrentCheckPos.y, CurrentCheckPos.z, 1, 0, 0, 0, 0);
+           // }
+            BlockPos bp = (BlockPos.containing(CurrentCheckPos));
             if(this.self.level().getBlockState(bp).getBlock() != Blocks.AIR){
+               // if(!this.self.level().isClientSide) {
+
+               //     ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.END_ROD, bp.getCenter().x, bp.getCenter().y, bp.getCenter().z, 1, 0, 0, 0, 0);
+               // }
                 return CurrentCheckPos;
             }
 
