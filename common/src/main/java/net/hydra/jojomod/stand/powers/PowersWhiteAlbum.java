@@ -230,6 +230,19 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 }
             }
 
+            if (self instanceof Player pl) {
+                if ($$0.is(DamageTypes.FALL) ||
+                        ($$0.getEntity() != null &&
+                                ($$0.is(DamageTypes.MOB_ATTACK) || $$0.is(DamageTypes.PLAYER_ATTACK)))
+                ) {
+                    if (!self.level().isClientSide) {
+                        S2CPacketUtil.sendGenericIntToClientPacket(pl,
+                                PacketDataIndex.INT_WHITE_ALBUM_ACCELERATION, 0);
+                    }
+                    acceleration = 0;
+                }
+            }
+
             StandUser user = getStandUserSelf();
             if (!user.roundabout$getGuardBroken()) {
                 if ($$0.is(DamageTypes.FALL)) {
