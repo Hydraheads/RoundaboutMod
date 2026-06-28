@@ -281,6 +281,10 @@ public class SeperatedArmEntity extends StandEntity {
                             if (pickaxeable) {
                                 level.destroyBlock(targetpos, true,this);
                                 this.setDeltaMovement(0, 0, 0);
+
+                                if(Can_activate) {
+                                    this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
+                                }
                                 Can_activate = false;
                             }
 
@@ -289,6 +293,10 @@ public class SeperatedArmEntity extends StandEntity {
                             if (shovelable) {
                                 level.destroyBlock(targetpos, true, this);
                                 this.setDeltaMovement(0, 0, 0);
+
+                                if(Can_activate) {
+                                    this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
+                                }
                                 Can_activate = false;
                             }
 
@@ -298,6 +306,9 @@ public class SeperatedArmEntity extends StandEntity {
                                 level.destroyBlock(targetpos, true,this);
 
                                 this.setDeltaMovement(0, 0, 0);
+                                if(Can_activate) {
+                                    this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
+                                }
                                 Can_activate = false;
                             }
 
@@ -483,6 +494,10 @@ public class SeperatedArmEntity extends StandEntity {
 
 
         for(int j = 0;j<damages.size();j++) {
+            if(SpinTicks == 0) {
+                this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
+            }
+
 
             Entity entity = damages.get(j);
             if (!(SpinTicks > 0) && (Math.random() > 0.5)) {

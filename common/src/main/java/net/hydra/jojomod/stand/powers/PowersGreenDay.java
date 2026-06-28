@@ -1090,7 +1090,7 @@ public class PowersGreenDay extends NewPunchingStand {
 
     @Override
     public boolean highlightsEntity(Entity ent, Player player) {
-        if(isStandEnabled()) {
+        if(hasStandActive(this.self)) {
             if (player.isCrouching()) {
                 if (ent instanceof LivingEntity) {
                     if (allies.contains(ent.getStringUUID()) && player.hasLineOfSight(ent)) {
