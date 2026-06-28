@@ -1079,7 +1079,7 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public void tickMobAI(LivingEntity attackTarget) {
-        if (attackTarget != null) {
+        if (attackTarget != null && attackTarget.isAlive()) {
             this.setShootTarget(attackTarget);
             // this.getStandUserSelf().roundabout$setCombatMode(true);
             //    double dist = attackTarget.getPosition(0).distanceTo(this.getSelf().getPosition(0));
