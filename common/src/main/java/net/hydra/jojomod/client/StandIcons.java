@@ -734,6 +734,8 @@ public class StandIcons {
             "textures/gui/icons/white_album/cold_guard.png");
     public static final ResourceLocation SUIT_POWER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/white_album/suit_power.png");
+    public static final ResourceLocation FULL_ACCEL = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/white_album/full_accel.png");
 
     public static final ResourceLocation SELF_INVIS = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/achtung_baby/self_invis.png");

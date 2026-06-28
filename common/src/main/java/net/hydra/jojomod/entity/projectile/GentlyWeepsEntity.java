@@ -86,7 +86,8 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
                 ) {
                     this2.setBled(true);
                 } else {
-                    if (pj instanceof AbstractArrow || pj instanceof IronBallEntity ||
+                    if (pj instanceof AbstractArrow || pj instanceof IronBallEntity || pj instanceof ThrownObjectEntity ||
+                            pj instanceof RipperEyesProjectile ||
                             pj instanceof MatchEntity) {
                         if (!(pj instanceof AbstractArrow aa && ((IAbstractArrowAccess) aa).roundabout$GetIsManhattan())
                                 && !(pj instanceof RoundaboutBulletEntity abe && abe.isHattan)) {

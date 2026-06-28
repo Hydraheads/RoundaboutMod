@@ -1337,6 +1337,9 @@
   "ability.roundabout.suit_power": "Suit Power",
   "ability.roundabout.suit_power.desc": "The suit provides a slight passive increase in attack power.",
 
+  "ability.roundabout.full_accel": "Full Accel",
+  "ability.roundabout.full_accel.desc": "If you build up maximum acceleration with your skates active, the final icon's border will become yellow. If you jump while this is active, you do a trick jump and twirl around, going slightly further. If you instead attack an opponent in this state, it is a critical hit and deals significant knockback.",
+
 
   "ability.roundabout.cold_blast": "Cold Air Blast",
   "ability.roundabout.cold_blast.desc": "Must activate brawling to use! Release interact after the meter reaches the end to fire a projectile that freezes the blocks it passes by into stand ice. Mobs it passes through become colder.",

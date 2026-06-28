@@ -1429,8 +1429,10 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 "instruction.roundabout.press_skill", StandIcons.SKATE_ACTIVE,4,level,bypass));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,getBlockFreezeLevel(), "ability.roundabout.block_freeze",
                 "instruction.roundabout.press_skill_crouch", StandIcons.FREEZE_BLOCKS,4,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,getIceWallLevel(), "ability.roundabout.suit_power",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,0, "ability.roundabout.suit_power",
                 "instruction.roundabout.passive", StandIcons.SUIT_POWER,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.roundabout.full_accel",
+                "instruction.roundabout.passive", StandIcons.FULL_ACCEL,0,level,bypass));
 
         return $$1;
     }
