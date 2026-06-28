@@ -29,6 +29,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.IceBlock;
+import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -47,6 +48,16 @@ public class StickyIceCoatingBlock
         extends WhiteAlbumCoatingBlock {
     public StickyIceCoatingBlock(Properties properties) {
         super(properties);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean canSurvive(BlockState $$0, LevelReader $$1, BlockPos $$2) {
+        BlockPos $$3 = $$2.below();
+        return ($$1.getBlockState($$3).isFaceSturdy($$1, $$3, Direction.UP) ||
+                $$1.getBlockState($$3).getBlock() instanceof LeavesBlock ||
+                $$1.getBlockState($$3).getBlock() instanceof LeavesBlock) &&
+                !$$1.getBlockState($$3).is(ModBlocks.WHITE_ALBUM_ICE_SLAB);
     }
 
     @Override
