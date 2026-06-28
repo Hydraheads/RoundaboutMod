@@ -51,6 +51,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -136,6 +137,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public float guardSpecialties(DamageSource sauce, float damage){
         if (sauce.is(DamageTypes.PLAYER_ATTACK)){
             damage*=0.44F;
+        }
+        if (sauce.is(DamageTypes.MOB_ATTACK)){
+            damage*=2F;
         }
         if (sauce.is(ModDamageTypes.BULLET) ||
                 sauce.getEntity() instanceof Blaze){
@@ -1412,6 +1416,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 "instruction.roundabout.press_skill", StandIcons.SKATE_ACTIVE,4,level,bypass));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,getBlockFreezeLevel(), "ability.roundabout.block_freeze",
                 "instruction.roundabout.press_skill_crouch", StandIcons.FREEZE_BLOCKS,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,getIceWallLevel(), "ability.roundabout.suit_power",
+                "instruction.roundabout.passive", StandIcons.SUIT_POWER,0,level,bypass));
 
         return $$1;
     }
@@ -1621,7 +1627,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (targ instanceof Player PL){
             HeatUtil.addHeat(PL,-2);
         } else if (targ instanceof LivingEntity LE){
-            HeatUtil.addHeat(LE,-14);
+            HeatUtil.addHeat(LE,-12);
         }
     }
 

@@ -1305,7 +1305,7 @@
 
 
   "ability.roundabout.toggle_brawl": "Brawl Mode",
-  "ability.roundabout.toggle_brawl.desc": "Activate to change your attack and interact buttons to special abilities! Can be toggled on and off.",
+  "ability.roundabout.toggle_brawl.desc": "Activate to change your attack and interact buttons to special abilities! Can be toggled on and off. While in brawl mode, you break blocks quickly.",
 
   "ability.roundabout.cold_punch": "Cold Punch",
   "ability.roundabout.cold_punch.desc": "Must activate brawling to use! Throws a punch directly in front of you. Hold it down for nonstop attacks! Hits make opponents colder!",
@@ -1333,6 +1333,9 @@
 
   "ability.roundabout.block_freeze": "Block Freeze",
   "ability.roundabout.block_freeze.desc": "Using your ability to freeze any material, you turn certain blocks into cold variants. Cold blocks can be mined rapidly, so you can easily break obsidian and the like. They drop as unique building materials, and can easily be reverted with a flint and steel.",
+
+  "ability.roundabout.suit_power": "Suit Power",
+  "ability.roundabout.suit_power.desc": "The suit provides a slight passive increase in attack power.",
 
 
   "ability.roundabout.cold_blast": "Cold Air Blast",
