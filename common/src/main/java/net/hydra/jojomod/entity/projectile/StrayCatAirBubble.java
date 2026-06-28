@@ -271,7 +271,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
                 SoundSource.PLAYERS, 2F, (float)(0.98+(Math.random()*0.04)));
         if (!this.level().isClientSide()){
-            ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_POP,
+            ((ServerLevel) this.level()).sendParticles(ModParticles.SMALL_EXPLOSION,
                     this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
                     1, 0, 0,0, 0.015);
         }
