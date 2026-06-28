@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.block.RoundaboutDoor;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.GoBeyondEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -86,6 +87,8 @@ public class SeperatedArmEntity extends StandEntity {
         }
     }
 
+
+
     public SeperatedArmEntity(EntityType<? extends StandEntity> $$0, Level $$1) {
         super($$0, $$1);
     }
@@ -115,13 +118,10 @@ public class SeperatedArmEntity extends StandEntity {
         LaunchAngle = this.getDeltaMovement();
         Can_activate = true;
         flyingTicks=0;
-        MiningPos = new BlockPos(
+        MiningPos =  new BlockPos(
                 ((Double)(jumpT0Pos.x)).intValue(),
                 ((Double)(jumpT0Pos.y)).intValue(),
                 ((Double)(jumpT0Pos.z)).intValue());
-        Roundabout.LOGGER.info(level().getBlockState(MiningPos).getBlock().toString());
-
-
     }
 
     public void jump2(Vec3 jumpT0Pos){
@@ -149,8 +149,14 @@ public class SeperatedArmEntity extends StandEntity {
         LaunchAngle = this.getDeltaMovement();
         Can_activate = true;
         flyingTicks=0;
+        MiningPos = new BlockPos(
+                ((Double)(jumpT0Pos.x)).intValue(),
+                ((Double)(jumpT0Pos.y)).intValue(),
+                ((Double)(jumpT0Pos.z)).intValue());
+
 
     }
+
 
     public BlockPos IsArmContactingBlock(){
         
