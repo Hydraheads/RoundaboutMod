@@ -3248,7 +3248,7 @@
   "config.roundabout.fallProtectionOnRelease.name": "Release Fall Protection",
   "config.roundabout.fallProtectionOnRelease.desc": "When you exit a wall, grants fall immunity like a stand leap.",
   "config.roundabout.enableWallWalking.name": "Enable Wall Walking",
-  "config.roundabout.enableWallWalking.desc": "Allows flipping directions to walk on walls. Generally, this feature is stable, but if you have a modpack that causes it to bug out/not work smoothly turn this off. Without wall walking, you gain an additional block of step height while your spikes are planted.",
+  "config.roundabout.enableWallWalking.desc": "Allows flipping directions to walk on walls. Generally, this feature is stable, but if you have a modpack that causes it to bug out/not work smoothly turn this off. Without wall walking, you gain an additional block of step height while your spikes are planted with walking heart.",
 
   "config.roundabout.enableCornerCutting.name": "Enable Corner Cutting",
   "config.roundabout.enableCornerCutting.desc": "Allows training wheel mode of Walking Heart by pressing V, so you can flip over corners.",
