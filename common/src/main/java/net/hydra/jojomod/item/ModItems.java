@@ -8,7 +8,6 @@ import net.hydra.jojomod.event.powers.VisageStoreEntry;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.CreativeModeTab;
@@ -162,6 +161,7 @@ public class ModItems {
     public static Item JOSUKE_PART_EIGHT_MASK;
     public static Item AYA_MASK;
     public static Item MISTA_MASK;
+    public static Item GHIACCIO_MASK;
     public static Item JOHNNY_MASK;
     public static Item LUCY_MASK;
     public static Item AESTHETICIAN_MASK_1;
@@ -249,6 +249,7 @@ public class ModItems {
         addToVisageStore(JOTARO_4_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(AYA_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(MISTA_MASK,1, characterCostExp, characterCostEmerald);
+        addToVisageStore(GHIACCIO_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(JOTARO_6_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(GUCCIO_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(JOHNNY_MASK,2, characterCostExp, characterCostEmerald);

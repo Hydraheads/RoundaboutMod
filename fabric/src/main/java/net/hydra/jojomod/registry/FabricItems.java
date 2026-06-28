@@ -5,7 +5,6 @@ import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StreetSignBlock;
-import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.event.powers.visagedata.aesthetician.*;
@@ -21,16 +20,12 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class FabricItems {
     public static Item STAND_ARROW = registerItem("stand_arrow", new StandArrowItem(new Item.Properties().stacksTo(1).durability(5)));
@@ -239,6 +234,7 @@ public class FabricItems {
     public static Item LUCY_MASK = registerItem("lucy_mask", new MaskItem(new Item.Properties().stacksTo(1), new LucyVisage(null)));
     public static Item JOHNNY_MASK = registerItem("johnny_mask", new MaskItem(new Item.Properties().stacksTo(1), new JohnnyVisage(null)));
     public static Item MISTA_MASK = registerItem("mista_mask", new MaskItem(new Item.Properties().stacksTo(1), new MistaVisage(null)));
+    public static Item GHIACCIO_MASK = registerItem("ghiaccio_mask", new MaskItem(new Item.Properties().stacksTo(1), new GhiaccioVisage(null)));
     public static Item JOSUKE_PART_EIGHT_MASK = registerItem("josuke_part_eight_mask", new MaskItem(new Item.Properties().stacksTo(1), new JosukePartEightVisage(null)));
     public static Item GUCCIO_MASK = registerItem("guccio_mask", new MaskItem(new Item.Properties().stacksTo(1), new GuccioVisage(null)));
     public static Item HATO_MASK = registerItem("hato_mask", new MaskItem(new Item.Properties().stacksTo(1), new HatoVisage(null)));
@@ -416,6 +412,7 @@ public class FabricItems {
                         entries.accept(JOTARO_4_MASK);
                         entries.accept(AYA_MASK);
                         entries.accept(MISTA_MASK);
+                        entries.accept(GHIACCIO_MASK);
                         entries.accept(JOTARO_6_MASK);
                         entries.accept(GUCCIO_MASK);
                         entries.accept(JOHNNY_MASK);
@@ -780,6 +777,7 @@ public class FabricItems {
         ModItems.VALENTINE_MASK = VALENTINE_MASK;
         ModItems.LUCY_MASK = LUCY_MASK;
         ModItems.MISTA_MASK = MISTA_MASK;
+        ModItems.GHIACCIO_MASK = GHIACCIO_MASK;
         ModItems.JOHNNY_MASK = JOHNNY_MASK;
         ModItems.JOSUKE_PART_EIGHT_MASK = JOSUKE_PART_EIGHT_MASK;
         ModItems.GUCCIO_MASK = GUCCIO_MASK;

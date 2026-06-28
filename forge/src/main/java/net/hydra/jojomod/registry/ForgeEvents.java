@@ -464,6 +464,7 @@ public class ForgeEvents {
         ModItems.VALENTINE_MASK = ForgeItems.VALENTINE_MASK.get();
         ModItems.JOSUKE_PART_EIGHT_MASK = ForgeItems.JOSUKE_PART_EIGHT_MASK.get();
         ModItems.MISTA_MASK = ForgeItems.MISTA_MASK.get();
+        ModItems.GHIACCIO_MASK = ForgeItems.GHIACCIO_MASK.get();
         ModItems.AYA_MASK = ForgeItems.AYA_MASK.get();
         ModItems.AESTHETICIAN_MASK_1 = ForgeItems.AESTHETICIAN_MASK_1.get();
         ModItems.AESTHETICIAN_MASK_2 = ForgeItems.AESTHETICIAN_MASK_2.get();
