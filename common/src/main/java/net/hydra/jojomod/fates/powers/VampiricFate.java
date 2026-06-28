@@ -906,7 +906,7 @@ public int speedActivated = 0;
 
 
     public boolean canWallWalkConfig(){
-        return ClientNetworking.getAppropriateConfig().walkingHeartSettings.enableWallWalking;
+        return ClientNetworking.getAppropriateConfig().miscellaneousSettings.enableWallWalking;
     }
 
 

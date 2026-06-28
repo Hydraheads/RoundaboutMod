@@ -246,7 +246,8 @@ public class Config implements Cloneable {
         public Boolean wallPassingHitboxes;
         @BooleanOption(group = "inherit", value = false)
         public Boolean wallPassingHitboxesOnBosses;
-
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableWallWalking;
         @BooleanOption(group = "inherit", value = false)
         public Boolean disableBleedingAndBloodSplatters;
         @BooleanOption(group = "inherit", value = false)
@@ -915,8 +916,6 @@ public class Config implements Cloneable {
     public static class WalkingHeartSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableWalkingHeart;
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean enableWallWalking;
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableCornerCutting;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)

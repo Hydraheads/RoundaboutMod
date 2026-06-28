@@ -1051,7 +1051,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
 
     public boolean toggleSkates(){
-        int cooldown = 5;
+        int cooldown = 25;
         this.setCooldown(PowerIndex.SKILL_1, cooldown);
         if (!this.self.level().isClientSide() && this.self instanceof Player PL){
             if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampiricFate vf &&

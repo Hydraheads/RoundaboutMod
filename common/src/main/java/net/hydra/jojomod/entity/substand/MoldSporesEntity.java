@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.RoundaboutLoadServer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -53,10 +54,10 @@ public class MoldSporesEntity extends StandEntity {
                 this.discard();
             }
         }
-        if (lifetime <1){
+        lifetime--;
+        if (lifetime <1) {
             this.discard();
-        }else{
-            lifetime--;
+
         }
         if (!client) {
 
@@ -74,7 +75,7 @@ public class MoldSporesEntity extends StandEntity {
                 //this.setDeltaMovement(0,-0.4,0);
             }
             tickeffect();
-                ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST,
+            ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST,
                         this.getX(),
                         this.getY(),
                         this.getZ(),
@@ -95,6 +96,7 @@ public class MoldSporesEntity extends StandEntity {
     }
 
     public void tickeffect(){
+        Roundabout.LOGGER.info(Float.toString(this.range));
         List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),range * 2,range * 2,range * 2);
         for(int j = 0;j<damages.size();j++) {
             if (Objects.nonNull(this.getUser())) {
@@ -140,6 +142,11 @@ public class MoldSporesEntity extends StandEntity {
                                 entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), 4 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGPlayersMultiplier / 100F));
                             } else {
                                 entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), 8 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGMobsMultiplier / 100F));
+                            }
+                            if(!entity.isAlive()){
+                                range += 4;
+                                lifetime += 150;
+                                entity.discard();
                             }
                             if(Math.random()<0.2) {
                                 ((StandUser) User).roundabout$getStandPowers().addEXP(1);
