@@ -19,6 +19,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -654,6 +655,9 @@ public class ManhattanTransferEntity extends StandEntity {
         super.die($$0);
     }
 
+    int ticksFixRot = 0;
+    int ticksFixRotTwo = 0;
+
     @Override
     public void tick() {
         validateUUID();
@@ -690,13 +694,21 @@ public class ManhattanTransferEntity extends StandEntity {
                 }
 
                 if (horizontalCollision) {
-                    this.setYBodyRot(this.getYRot() % 360);
-                    if (randomDirection <= 1) {
-                        this.setYRot(yaw - 15);
-                        this.setYHeadRot(yaw - 15);
+                    if(this.getUser() instanceof Player || this.getUser() instanceof ServerPlayer) {
+                        if (randomDirection <= 1) {
+                            this.setYRot(yaw - 15);
+                            this.setYHeadRot(yaw - 15);
+                        } else {
+                            this.setYRot(yaw + 15);
+                            this.setYHeadRot(yaw + 15);
+                        }
                     } else {
-                        this.setYRot(yaw + 15);
-                        this.setYHeadRot(yaw + 15);
+                        if (randomDirection <= 1) {
+                            this.setYRot(yaw - 15);
+                        } else {
+                            this.setYRot(yaw + 15);
+                        }
+                        ticksFixRot = 10;
                     }
                 }
                 if (verticalCollision && !verticalCollisionBelow) {
@@ -704,6 +716,15 @@ public class ManhattanTransferEntity extends StandEntity {
                 }
                 if (verticalCollisionBelow) {
                     this.setXRot(pitch - 15);
+                }
+            } else {
+                if(ticksFixRot > 1){
+                    if(randomDirection < 1) {
+                        setYRot(this.getYRot() + 1);
+                    } else {
+                        setYRot(this.getYRot() - 1);
+                    }
+                    ticksFixRot--;
                 }
             }
         }
