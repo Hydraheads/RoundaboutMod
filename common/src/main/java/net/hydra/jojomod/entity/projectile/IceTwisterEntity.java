@@ -18,6 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
 
 
 public class IceTwisterEntity extends WhiteAlbumFreezingEntity {
@@ -93,7 +94,6 @@ public class IceTwisterEntity extends WhiteAlbumFreezingEntity {
 
                             if (canFreeze(targetPos)
                                     && iceState.canSurvive(level(), targetPos)) {
-
                                 level().setBlockAndUpdate(targetPos, iceState);
                                 level().scheduleTick(targetPos, ModBlocks.STICKY_ICE, Mth.nextInt(level().getRandom(), 141, 145));
                             }

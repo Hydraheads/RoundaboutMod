@@ -63,7 +63,7 @@ public class StickyIceCoatingBlock
                     if (LE instanceof Player){
                         $$3.makeStuckInBlock($$0, new Vec3((double) 0.57F, (double) 0.8F, (double) 0.57F));
                     } else {
-                        $$3.makeStuckInBlock($$0, new Vec3((double) 0.75F, (double) 0.8F, (double) 0.75F));
+                        $$3.makeStuckInBlock($$0, new Vec3((double) 0.88F, (double) 0.8F, (double) 0.88F));
                     }
                 }
             }
@@ -88,5 +88,20 @@ public class StickyIceCoatingBlock
     @Override
     public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
             return Shapes.empty();
+    }
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter level,
+                                        BlockPos pos, CollisionContext context) {
+        return Shapes.empty();
+    }
+    @Override
+    public VoxelShape getBlockSupportShape(BlockState state, BlockGetter level, BlockPos pos) {
+        return Shapes.empty();
+    }
+
+    @Override
+    public VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos,
+                                     CollisionContext context) {
+        return Shapes.empty();
     }
 }
