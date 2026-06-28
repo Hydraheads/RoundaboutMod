@@ -746,11 +746,6 @@ public class ManhattanTransferEntity extends StandEntity {
             }
         }
 
-        if(!this.level().isClientSide()) {
-            System.out.println(shootRotationXHattan);
-            System.out.println(shootRotationYHattan);
-        }
-
         if (this.level().isClientSide) {
             Options options = Minecraft.getInstance().options;
             if (this.getUserData(this.getUser()) != null) {
