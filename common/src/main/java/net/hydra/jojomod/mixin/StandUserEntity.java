@@ -64,6 +64,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Turtle;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.monster.*;
@@ -4278,7 +4279,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (state.is(ModBlocks.WHITE_ALBUM_ICE_BLOCK) || state.is(ModBlocks.WHITE_ALBUM_ICE_SLAB) ||
                 state2.is(ModBlocks.WHITE_ALBUM_ICE_SLAB)){
             StandPowers powers = roundabout$getStandPowers();
-            if (!(powers instanceof PowersWhiteAlbum PW && PW.hasSkatesActivated()) && !powers.isGuardInput()){
+            if (!(powers instanceof PowersWhiteAlbum PW && (PW.hasSkatesActivated() || rdbt$this() instanceof Animal)) && !powers.isGuardInput()){
                 basis *= (1.3f+(PowersWhiteAlbum.getMaxAccelerationTicks()*ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumAccelerationAmountv3));
             }
         }

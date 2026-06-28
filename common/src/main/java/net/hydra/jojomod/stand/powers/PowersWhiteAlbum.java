@@ -52,6 +52,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -148,31 +150,37 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return super.guardSpecialties(sauce,damage);
     }
 
+    public void onChangedFrozenWater(BlockPos blockPos, int j){
+        BlockState blockState = ModBlocks.WHITE_ALBUM_ICE_BLOCK.defaultBlockState();
+        BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
+        for (BlockPos blockPos2 : BlockPos.betweenClosed(blockPos.offset(-j, -1, -j), blockPos.offset(j, -1, j))) {
+            BlockState blockState3;
+            if (!blockPos2.closerToCenterThan(self.position(), j)) continue;
+            mutableBlockPos.set(blockPos2.getX(), blockPos2.getY() + 1, blockPos2.getZ());
+            BlockState blockState2 = self.level().getBlockState(mutableBlockPos);
+            if (!blockState2.isAir() || (blockState3 = self.level().getBlockState(blockPos2)) != FrostedIceBlock.meltsInto()
+                    || !blockState.canSurvive(self.level(), blockPos2) ||
+                    !self.level().isUnobstructed(blockState, blockPos2, CollisionContext.empty())) continue;
+            self.level().setBlockAndUpdate(blockPos2, blockState);
+            self.level().scheduleTick(blockPos2, ModBlocks.WHITE_ALBUM_ICE_BLOCK, Mth.nextInt(self.getRandom(), 110, 130));
+        }
+    }
     @Override
     public void onChangedBlock(BlockPos blockPos){
-        if (hasSkatesActivated() && acceleration > 0 && !self.isSwimming() &&
+        if (self instanceof Animal ah && ah.getPassengers() != null && !ah.getPassengers().isEmpty() &&
+                ah.getPassengers().get(0) instanceof Player) {
+            onChangedFrozenWater(blockPos,3);
+        } else if (hasSkatesActivated() && acceleration > 0 && !self.isSwimming() &&
         !self.isFallFlying()) {
             boolean canFreezeGrass = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.freezesGrassv2;
             if (!self.onGround()) {
                 return;
             }
-            BlockState blockState = ModBlocks.WHITE_ALBUM_ICE_BLOCK.defaultBlockState();
-            int j = Math.min(16, 2 + 1);
-            BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
-            for (BlockPos blockPos2 : BlockPos.betweenClosed(blockPos.offset(-j, -1, -j), blockPos.offset(j, -1, j))) {
-                BlockState blockState3;
-                if (!blockPos2.closerToCenterThan(self.position(), j)) continue;
-                mutableBlockPos.set(blockPos2.getX(), blockPos2.getY() + 1, blockPos2.getZ());
-                BlockState blockState2 = self.level().getBlockState(mutableBlockPos);
-                if (!blockState2.isAir() || (blockState3 = self.level().getBlockState(blockPos2)) != FrostedIceBlock.meltsInto()
-                        || !blockState.canSurvive(self.level(), blockPos2) ||
-                        !self.level().isUnobstructed(blockState, blockPos2, CollisionContext.empty())) continue;
-                self.level().setBlockAndUpdate(blockPos2, blockState);
-                self.level().scheduleTick(blockPos2, ModBlocks.WHITE_ALBUM_ICE_BLOCK, Mth.nextInt(self.getRandom(), 110, 130));
-            }
+            onChangedFrozenWater(blockPos,3);
 
-            j = 2;
-            blockState = ModBlocks.WHITE_ALBUM_ICE_SLAB.defaultBlockState();
+            BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
+            int j = 2;
+            BlockState blockState = ModBlocks.WHITE_ALBUM_ICE_SLAB.defaultBlockState();
             for (BlockPos blockPos2 : BlockPos.betweenClosed(blockPos.offset(-j, 0, -j), blockPos.offset(j, 0, j))) {
 
                 mutableBlockPos.set(blockPos2.getX(), blockPos2.getY() + 1, blockPos2.getZ());
