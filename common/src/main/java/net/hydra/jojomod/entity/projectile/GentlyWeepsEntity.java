@@ -66,6 +66,7 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
             return false;
         } else {
             if ($$0.getDirectEntity() instanceof Projectile pj){
+                dealWithProjectile(pj,this);
                 return true;
             }
 
