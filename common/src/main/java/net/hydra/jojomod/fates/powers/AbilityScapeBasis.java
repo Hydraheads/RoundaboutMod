@@ -1215,7 +1215,7 @@ public class AbilityScapeBasis {
     }
     public float guardSpecialties(DamageSource sauce, float damage){
         if (sauce.is(ModDamageTypes.BULLET) || sauce.is(ModDamageTypes.KNIFE)){
-            damage*=0.5F;
+            damage*=0.25F;
         }
         return damage;
     }
