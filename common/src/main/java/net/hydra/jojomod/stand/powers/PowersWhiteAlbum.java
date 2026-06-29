@@ -358,6 +358,15 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return super.inputSpeedModifiers(basis);
     }
 
+    @Override
+    public void tickStandRejection(MobEffectInstance effect){
+        if (!this.getSelf().level().isClientSide()) {
+            if (effect.getDuration() == 80) {
+                HeatUtil.addHeat(self,-99);
+            }
+        }
+    }
+
     public boolean canGuard(){
         return !this.isBarraging() && isBrawling() && stallTicks <= 0;
     }
@@ -1288,12 +1297,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
     @Override
     public boolean tryPosPower(int move, boolean forced, Vec3 pos) {
         return tryPower(move, forced);
-    }
-
-    @Override
-    public void tickStandRejection(MobEffectInstance effect) {
-        if (!this.getSelf().level().isClientSide()) {
-        }
     }
 
 
