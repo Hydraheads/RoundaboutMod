@@ -59,110 +59,111 @@ public class VisagePartLayer2<T extends LivingEntity, A extends HumanoidModel<T>
     float scale = 1;
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, float var9, float var10) {
-        Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft != null){
-            if (ClientUtil.getThrowFadePercent(entity,partialTicks) <= 0){
-                return;
-            }
-            boolean $$18 = !entity.isInvisible();
-            boolean $$19 = !$$18 && !entity.isInvisibleTo(minecraft.player);
-            boolean $$20 = minecraft.shouldEntityAppearGlowing(entity);
-            boolean $$21 = this.getRenderT($$18, $$19, $$20);
-            if ($$21) {
-
-
-                boolean isHurt = entity.hurtTime > 0;
-                float r = isHurt ? 1.0F : 1.0F;
-                float g = isHurt ? 0.6F : 1.0F;
-                float b = isHurt ? 0.6F : 1.0F;
-                StandUser user = ((StandUser) entity);
-
-
-
-                boolean hasWhiteAlbumOut =user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet();
-                int whiteAlbumTicks = user.roundabout$getWhiteAlbumVanishTicks();
-                boolean hideExtraPartsWithSuit = false;
-                float heyFull = 0;
-                byte skin = user.roundabout$getStandSkin();
-                if (hasWhiteAlbumOut || whiteAlbumTicks > 0){
-                    if (user.roundabout$getLastStandSkin() != skin){
-                        user.roundabout$setLastStandSkin(skin);
-                        whiteAlbumTicks = 0;
-                        user.roundabout$setWhiteAlbumVanishTicks(0);
-                    }
-
-                    float partialTicks2 = partialTicks % 1;
-                    if (hasWhiteAlbumOut){
-                        heyFull = whiteAlbumTicks+partialTicks2;
-                        heyFull = Math.min(heyFull/10,1f);
-                    } else {
-                        heyFull = whiteAlbumTicks-partialTicks2;
-                        heyFull = Math.max(heyFull/10,0);
-                    }
-
-                    if (heyFull > 0){
-                        hideExtraPartsWithSuit = true;
-                    }
+        if (MainUtil.isHumanoid(entity)) {
+            Minecraft minecraft = Minecraft.getInstance();
+            if (minecraft != null) {
+                if (ClientUtil.getThrowFadePercent(entity, partialTicks) <= 0) {
+                    return;
                 }
+                boolean $$18 = !entity.isInvisible();
+                boolean $$19 = !$$18 && !entity.isInvisibleTo(minecraft.player);
+                boolean $$20 = minecraft.shouldEntityAppearGlowing(entity);
+                boolean $$21 = this.getRenderT($$18, $$19, $$20);
+                if ($$21) {
 
-                if (hasWhiteAlbumOut || whiteAlbumTicks > 0){
 
-                    if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pw) {
+                    boolean isHurt = entity.hurtTime > 0;
+                    float r = isHurt ? 1.0F : 1.0F;
+                    float g = isHurt ? 0.6F : 1.0F;
+                    float b = isHurt ? 0.6F : 1.0F;
+                    StandUser user = ((StandUser) entity);
 
-                        String path = PowersWhiteAlbum.getSkinString(skin);
-                        String path2 = path;
-                        if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
-                            path = "ice";
-                            path2 = null;
+
+                    boolean hasWhiteAlbumOut = user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet();
+                    int whiteAlbumTicks = user.roundabout$getWhiteAlbumVanishTicks();
+                    boolean hideExtraPartsWithSuit = false;
+                    float heyFull = 0;
+                    byte skin = user.roundabout$getStandSkin();
+                    if (hasWhiteAlbumOut || whiteAlbumTicks > 0) {
+                        if (user.roundabout$getLastStandSkin() != skin) {
+                            user.roundabout$setLastStandSkin(skin);
+                            whiteAlbumTicks = 0;
+                            user.roundabout$setWhiteAlbumVanishTicks(0);
                         }
-                        if (pw.cracked){
-                            path = "cracked/"+path;
-                        }
-                        poseStack.pushPose();
-                        renderWhiteAlbumHeadPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                                partialTicks, path, r, g, b, heyFull);
-                        renderWhiteAlbumBodyPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                                partialTicks, path, r, g, b, heyFull);
-                        if (skin == PowersWhiteAlbum.YUKI && path2 != null) {
-                            renderWhiteAlbumHeadPart(poseStack, bufferSource, 15728880, entity, xx, yy, zz,
-                                    partialTicks, path+"_glowing", r, g, b, heyFull);
-                            renderWhiteAlbumBodyPart(poseStack, bufferSource, 15728880, entity, xx, yy, zz,
-                                    partialTicks, path+"_glowing", r, g, b, heyFull);
-                        }
-                        renderWhiteAlbumRightLegPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                                partialTicks, path, r, g, b, heyFull);
-                        renderWhiteAlbumLeftLegPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                                partialTicks, path, r, g, b, heyFull);
 
-                        if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
-                            renderWhiteAlbumSlimRightArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                                    partialTicks, path, r, g, b, heyFull);
-                            renderWhiteAlbumSlimLeftArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                                    partialTicks, path, r, g, b, heyFull);
+                        float partialTicks2 = partialTicks % 1;
+                        if (hasWhiteAlbumOut) {
+                            heyFull = whiteAlbumTicks + partialTicks2;
+                            heyFull = Math.min(heyFull / 10, 1f);
                         } else {
-                            renderWhiteAlbumRightArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                                    partialTicks, path, r, g, b, heyFull);
-                            renderWhiteAlbumLeftArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                                    partialTicks, path, r, g, b, heyFull);
+                            heyFull = whiteAlbumTicks - partialTicks2;
+                            heyFull = Math.max(heyFull / 10, 0);
                         }
 
-                        if (pw.hasSkatesActivated()) {
-                            renderWhiteAlbumSkates(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                                    partialTicks, path, r, g, b, heyFull);
+                        if (heyFull > 0) {
+                            hideExtraPartsWithSuit = true;
                         }
+                    }
 
-                        poseStack.popPose();
+                    if (hasWhiteAlbumOut || whiteAlbumTicks > 0) {
+
+                        if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pw) {
+
+                            String path = PowersWhiteAlbum.getSkinString(skin);
+                            String path2 = path;
+                            if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+                                path = "ice";
+                                path2 = null;
+                            }
+                            if (pw.cracked) {
+                                path = "cracked/" + path;
+                            }
+                            poseStack.pushPose();
+                            renderWhiteAlbumHeadPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                    partialTicks, path, r, g, b, heyFull);
+                            renderWhiteAlbumBodyPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                    partialTicks, path, r, g, b, heyFull);
+                            if (skin == PowersWhiteAlbum.YUKI && path2 != null) {
+                                renderWhiteAlbumHeadPart(poseStack, bufferSource, 15728880, entity, xx, yy, zz,
+                                        partialTicks, path + "_glowing", r, g, b, heyFull);
+                                renderWhiteAlbumBodyPart(poseStack, bufferSource, 15728880, entity, xx, yy, zz,
+                                        partialTicks, path + "_glowing", r, g, b, heyFull);
+                            }
+                            renderWhiteAlbumRightLegPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                    partialTicks, path, r, g, b, heyFull);
+                            renderWhiteAlbumLeftLegPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                    partialTicks, path, r, g, b, heyFull);
+
+                            if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
+                                renderWhiteAlbumSlimRightArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                        partialTicks, path, r, g, b, heyFull);
+                                renderWhiteAlbumSlimLeftArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                        partialTicks, path, r, g, b, heyFull);
+                            } else {
+                                renderWhiteAlbumRightArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                        partialTicks, path, r, g, b, heyFull);
+                                renderWhiteAlbumLeftArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                        partialTicks, path, r, g, b, heyFull);
+                            }
+
+                            if (pw.hasSkatesActivated()) {
+                                renderWhiteAlbumSkates(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                        partialTicks, path, r, g, b, heyFull);
+                            }
+
+                            poseStack.popPose();
+                        }
                     }
                 }
+
+
+                if (ClientUtil.rendersRipperEyes(entity)) {
+                    boolean isHurt = entity.hurtTime > 0;
+                    renderRipperEyes(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
+                            1, 1, 1);
+                }
+
             }
-
-
-            if (ClientUtil.rendersRipperEyes(entity)) {
-                boolean isHurt = entity.hurtTime > 0;
-                renderRipperEyes(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
-                        1, 1, 1);
-            }
-
         }
     }
 
