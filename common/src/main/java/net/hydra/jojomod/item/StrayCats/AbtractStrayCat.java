@@ -73,7 +73,9 @@ abstract public class AbtractStrayCat extends Item {
     }
 
     static boolean isSleeping(Level level) {
-        return level.getDayTime() >= 13000 && level.getDayTime() <= 23750;
+        long dayTime = level.getDayTime() % 24000;
+
+        return dayTime >= 13000 && dayTime <= 23750;
     }
 
     public float getCurrentPredicateValue(Level level) {

@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -148,7 +149,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
 	public BlockBombEntity bombBlock = null;
     public ItemStack bombItemStack = null;
-	public Entity bombBubble = null;
+	public StrayCatAirBubble bombBubble = null;
 	public SheerHeartAttackEntity SHA = null;
 
     public int plantInventorySlot=1;
@@ -1263,9 +1264,8 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void tryBubbleSend() {
-        if (!this.onCooldown(PowerIndex.SKILL_2_GUARD) && this.canAttack2() && this.hasStrayCat) {
+        if (!this.onCooldown(PowerIndex.SKILL_2_GUARD) && (this.getActivePower() == PowerIndex.NONE || this.getActivePower() == PowerIndex.GUARD)) {
             bombConfigPacket();
-
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BLOCK, true);
             tryPowerPacket(PowerIndex.POWER_2_BLOCK);
         }
@@ -1355,17 +1355,20 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (this.bombConfig >= 2 && activePower != DETONATE) {
             this.bombEntity = ent;
             syncBombStatus(BUBBLE_CONTACT);
-            this.detonate();
+            this.explode();
         }
     }
 
     public boolean bubbleSend() {
-
+        if (!this.hasStrayCat) {
+            return false;
+        }
         if (!this.isClient()) {
             if (this.currentBombStatus == BOMB_NONE) {
                 LivingEntity user = this.getSelf();
                 StrayCatAirBubble bubble = ModEntities.STRAY_CAT_AIRBUBBLE.create(user.level());
                 if (bubble != null) {
+
                     bubble.setSped(getStrayCatAirBubbleSpeed());
 
                     bubble.setOwner(user);
@@ -1384,6 +1387,14 @@ public class PowersKillerQueen extends NewPunchingStand {
                     //bubble.shootFromRotation(P, P.getXRot(), P.getYRot(), -0.5F, SPEED, 0.00f);
 
                     user.level().addFreshEntity(bubble);
+
+                    this.bombBubble = bubble;
+
+                    syncBombStatus(BOMB_BUBBLE);
+
+                    return true;
+                }else {
+                    Roundabout.LOGGER.info("hey what?");
                 }
 
             }
@@ -1557,6 +1568,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (this.currentBombStatus == BOMB_BLOCK) {
             if (this.bombBlock.blockGotDestroyed()) { this.defuseServer(); }
             if (this.bombBlock.level() != this.getSelf().level()) { this.defuseServer(); }
+            if (this.bombBlock.isRemoved()) {this.defuseServer();}
         }
         else if (this.currentBombStatus == BOMB_ENTITY) {
             if (this.bombEntity == null) { this.defuseServer(); }
@@ -1968,6 +1980,12 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
 
                 this.bombEntity = null;
+            }else if (bStatus == PowersKillerQueen.BOMB_BUBBLE) {
+                target = this.bombBubble;
+
+                vPos = target.position();
+                bPos = new BlockPos(target.getBlockX(), target.getBlockY(), target.getBlockZ());
+                level = target.level();
             }
 
             if (canDestroyBlocks) {
