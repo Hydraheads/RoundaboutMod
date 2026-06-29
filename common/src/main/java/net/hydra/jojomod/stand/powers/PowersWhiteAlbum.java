@@ -1752,7 +1752,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             addEXP(1,LV);
         }
         if (targ instanceof Player PL){
-            HeatUtil.addHeat(PL,-2);
+            HeatUtil.addHeat(PL,-3);
         } else if (targ instanceof LivingEntity LE){
             HeatUtil.addHeat(LE,-13);
         }
