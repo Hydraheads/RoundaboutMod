@@ -24,7 +24,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.*;
@@ -291,7 +290,7 @@ public class ManhattanTransferEntity extends StandEntity {
                                     if(this.getHattanTarget() == 0 || PM.switchShootingMode()) {
                                         PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
                                     } else {
-                                            PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1F, (this.random.nextFloat() * 0.2F + 0.7F));
+                                        PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1F, (this.random.nextFloat() * 0.2F + 0.7F));
                                     }
                                 }
                                 if (direct instanceof AbstractArrow AA) {
@@ -443,28 +442,28 @@ public class ManhattanTransferEntity extends StandEntity {
             if (thrower.getUserData(thrower.getUser()) != null && thrower.getUserData(thrower.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
                 PM.isNotLoaded();
             }
-         if (item.getItem() instanceof ArrowItem) {
-            ArrowItem $$10 = (ArrowItem) item.getItem();
-            AbstractArrow $$11 = $$10.createArrow(thrower.getUser().level(), item, thrower.getUser());
-            $$11.setPos(pos.x, pos.y - 0.15, pos.z);
-            $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3F, getShotAccuracy);
-            $$11.setKnockback(thrower.knockbackArrow);
-            $$11.setCritArrow(false);
-            if(thrower.canAcquireHeldItem){
-                $$11.pickup =AbstractArrow.Pickup.ALLOWED;
-            }else {
-                $$11.pickup =AbstractArrow.Pickup.DISALLOWED;
-            }
-            thrower.level().addFreshEntity($$11);
-            ((IAbstractArrowAccess) $$11).roundabout$SetIsManhattan(true);
-            ((IAbstractArrowAccess) $$11).roundabout$setHattanDamage(thrower.manhattanDamageIncipit);
-            $$11.setRemainingFireTicks(thrower.fireTicksPrj);
-            thrower.hattanDeflected = $$11;
-            thrower.knockbackArrow = 0;
+            if (item.getItem() instanceof ArrowItem) {
+                ArrowItem $$10 = (ArrowItem) item.getItem();
+                AbstractArrow $$11 = $$10.createArrow(thrower.getUser().level(), item, thrower.getUser());
+                $$11.setPos(pos.x, pos.y - 0.15, pos.z);
+                $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3F, getShotAccuracy);
+                $$11.setKnockback(thrower.knockbackArrow);
+                $$11.setCritArrow(false);
+                if(thrower.canAcquireHeldItem){
+                    $$11.pickup =AbstractArrow.Pickup.ALLOWED;
+                }else {
+                    $$11.pickup =AbstractArrow.Pickup.DISALLOWED;
+                }
+                thrower.level().addFreshEntity($$11);
+                ((IAbstractArrowAccess) $$11).roundabout$SetIsManhattan(true);
+                ((IAbstractArrowAccess) $$11).roundabout$setHattanDamage(thrower.manhattanDamageIncipit);
+                $$11.setRemainingFireTicks(thrower.fireTicksPrj);
+                thrower.hattanDeflected = $$11;
+                thrower.knockbackArrow = 0;
             } else if (item.getItem() instanceof AmmoItem) {
                 RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity(thrower.getUser().level(), thrower.getUser());
                 $$7.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.5F, getShotAccuracy);
-                    $$7.setPos(pos.x, pos.y - 0.15, pos.z);
+                $$7.setPos(pos.x, pos.y - 0.15, pos.z);
                 if (item.getItem() instanceof SnubnoseAmmoItem) {
                     if (thrower.isSnubnose) {
                         $$7.setAmmoType(RoundaboutBulletEntity.SNUBNOSE);
@@ -539,14 +538,14 @@ public class ManhattanTransferEntity extends StandEntity {
                 $$7.isHattanKnife = true;
                 thrower.hattanDeflected = $$7;
             } else if (item.getItem() instanceof MatchItem) {
-            MatchEntity $$7 = new MatchEntity(thrower.getUser(), thrower.getUser().level());
-            $$7.setPos(pos.x, pos.y - 0.15, pos.z);
-            $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.5F * mult, getShotAccuracy);
-            $$7.setRemainingFireTicks(thrower.fireTicksPrj);
-            $$7.isHattanMatch = true;
-            thrower.level().addFreshEntity($$7);
-            thrower.hattanDeflected = $$7;
-        } else if (item.getItem() instanceof PotionItem) {
+                MatchEntity $$7 = new MatchEntity(thrower.getUser(), thrower.getUser().level());
+                $$7.setPos(pos.x, pos.y - 0.15, pos.z);
+                $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.5F * mult, getShotAccuracy);
+                $$7.setRemainingFireTicks(thrower.fireTicksPrj);
+                $$7.isHattanMatch = true;
+                thrower.level().addFreshEntity($$7);
+                thrower.hattanDeflected = $$7;
+            } else if (item.getItem() instanceof PotionItem) {
                 ThrownPotion $$4 = new ThrownPotion(thrower.getUser().level(), thrower.getUser());
                 $$4.setPos(pos.x, pos.y - 0.15, pos.z);
                 $$4.setItem(item);
@@ -666,7 +665,6 @@ public class ManhattanTransferEntity extends StandEntity {
     @Override
     public void tick() {
         validateUUID();
-        super.tick();
         float pitch = this.getXRot();
         float yaw = this.getYRot();
         if (dirPause > 0) {
@@ -879,13 +877,13 @@ public class ManhattanTransferEntity extends StandEntity {
         searchTarget();
         super.tick();
         if (!this.level().isClientSide()) {
-            if (isHattanPilotMode) {
-                    this.setXRot(pitch);
-                    this.setYRot(yaw);
-                    this.setYBodyRot(yaw);
-                    this.xRotO = pitch;
-                    this.yRotO = yaw;
-                }
+            if (!forceVisible) {
+                this.setXRot(pitch);
+                this.setYRot(yaw);
+                this.setYBodyRot(yaw);
+                this.xRotO = pitch;
+                this.yRotO = yaw;
+            }
         }
     }
 
