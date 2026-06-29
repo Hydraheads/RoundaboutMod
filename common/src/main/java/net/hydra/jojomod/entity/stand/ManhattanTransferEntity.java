@@ -11,6 +11,7 @@ import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -23,6 +24,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.*;
@@ -664,6 +666,7 @@ public class ManhattanTransferEntity extends StandEntity {
     @Override
     public void tick() {
         validateUUID();
+        super.tick();
         float pitch = this.getXRot();
         float yaw = this.getYRot();
         if (dirPause > 0) {
@@ -678,12 +681,35 @@ public class ManhattanTransferEntity extends StandEntity {
 
         if (this.getUser() != null) {
             if (stupidTicks >= 1) {
+                LivingEntity $$0 = this.getUser();
+                Direction gravityDirection = GravityAPI.getGravityDirection($$0);
                 if (stupidTicks == 10) {
-                    this.moveTo(this.getUser().getX(), this.getUser().getEyeY(), this.getUser().getZ() - 0.075F);
+                    if (gravityDirection == Direction.DOWN) {
+                        this.moveTo(this.getUser().getX(), this.getUser().getEyeY(), this.getUser().getZ() - 0.25F);
+                    } else if (gravityDirection == Direction.UP) {
+                        this.moveTo(this.getUser().getX(), this.getUser().getY() - $$0.getBbHeight(), this.getUser().getZ() - 0.25F);
+                    } else if (gravityDirection == Direction.NORTH) {
+                        this.moveTo(this.getUser().getX(), this.getUser().getY(), this.getUser().getZ() + $$0.getBbHeight());
+                    } else if (gravityDirection == Direction.SOUTH) {
+                        this.moveTo(this.getUser().getX(), this.getUser().getY(), this.getUser().getZ() - $$0.getBbHeight());
+                    } else if (gravityDirection == Direction.EAST) {
+                        this.moveTo(this.getUser().getX() - $$0.getBbHeight(), this.getUser().getY(), this.getUser().getZ() - 0.25F);
+                    } else if (gravityDirection == Direction.WEST) {
+                        this.moveTo(this.getUser().getX() + $$0.getBbHeight(), this.getUser().getY(), this.getUser().getZ() - 0.25F);
+                    }
                 } else {
-                    this.setXRot(this.getUser().getXRot() % 360);
-                    this.setYRot(this.getUser().getYHeadRot() % 360);
-                    this.setYBodyRot(this.getUser().getYHeadRot() % 360);
+                    if((this.getUser() instanceof Player && stupidTicks == 9) || (!(this.getUser() instanceof Player) && stupidTicks > 1)) {
+                        if (gravityDirection != Direction.DOWN) {
+                            Vec2 vecGravity = RotationUtil.rotPlayerToWorld($$0.getYRot(), $$0.getXRot(), gravityDirection);
+                            this.setXRot(vecGravity.y % 360);
+                            this.setYRot(vecGravity.x % 360);
+                            this.setYBodyRot(this.getUser().getYHeadRot() % 360);
+                        } else {
+                            this.setXRot(this.getUser().getXRot() % 360);
+                            this.setYRot(this.getUser().getYHeadRot() % 360);
+                            this.setYBodyRot(this.getUser().getYHeadRot() % 360);
+                        }
+                    }
                 }
                 stupidTicks--;
             }
@@ -853,7 +879,7 @@ public class ManhattanTransferEntity extends StandEntity {
         searchTarget();
         super.tick();
         if (!this.level().isClientSide()) {
-            if (!forceVisible) {
+            if (isHattanPilotMode) {
                     this.setXRot(pitch);
                     this.setYRot(yaw);
                     this.setYBodyRot(yaw);
