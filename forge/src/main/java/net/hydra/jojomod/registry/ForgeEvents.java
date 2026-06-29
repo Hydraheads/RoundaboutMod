@@ -214,11 +214,14 @@ public class ForgeEvents {
         ModBlocks.FROZEN_NETHERRACK = ForgeBlocks.FROZEN_NETHERRACK.get();
         ModBlocks.FROZEN_NETHER_BRICKS = ForgeBlocks.FROZEN_NETHER_BRICKS.get();
         ModBlocks.FROZEN_END_STONE = ForgeBlocks.FROZEN_END_STONE.get();
+        ModBlocks.COLD_AIR = ForgeBlocks.COLD_AIR.get();
+        ModBlocks.FREEZING_AIR = ForgeBlocks.FREEZING_AIR.get();
         ModBlocks.AJA_BLOCK = ForgeBlocks.AJA_BLOCK.get();
         ModBlocks.SHINY_QUARTZ = ForgeBlocks.SHINY_QUARTZ.get();
         ModBlocks.WHITE_ALBUM_ICE_BLOCK = ForgeBlocks.WHITE_ALBUM_ICE.get();
         ModBlocks.WHITE_ALBUM_ICE_WALL_BLOCK = ForgeBlocks.WHITE_ALBUM_ICE_WALL.get();
         ModBlocks.WHITE_ALBUM_ICE_SLAB = ForgeBlocks.WHITE_ALBUM_ICE_SLAB.get();
+        ModBlocks.STICKY_ICE = ForgeBlocks.STICKY_ICE_BLOCK.get();
         ModBlocks.SHINY_QUARTZ_TILES = ForgeBlocks.SHINY_QUARTZ_TILES.get();
         ModBlocks.LOCACACA_CACTUS = ForgeBlocks.LOCACACA_CACTUS.get();
         ModBlocks.LOCACACA_BLOCK = ForgeBlocks.LOCACACA_BLOCK.get();
@@ -307,6 +310,9 @@ public class ForgeEvents {
         ModItems.GASOLINE_BUCKET = ForgeItems.GASOLINE_BUCKET.get();
         ModItems.ROAD_ROLLER = ForgeItems.ROAD_ROLLER.get();
         ModItems.STAND_DISC = ForgeItems.STAND_DISC.get();
+
+        ModItems.STRAY_CAT_ANIME = ForgeItems.STRAY_CAT_ANIME.get();
+        ModItems.STRAY_CAT_MANGA = ForgeItems.STRAY_CAT_MANGA.get();
 
         ModItems.STAND_DISC_THE_WORLD = ForgeItems.STAND_DISC_THE_WORLD.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_THE_WORLD.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_THE_WORLD.get());
@@ -416,10 +422,10 @@ public class ForgeEvents {
         ModItems.METEORITE = ForgeItems.METEORITE.get();
         ModItems.METEORITE_INGOT = ForgeItems.METEORITE_INGOT.get();
         ModItems.AJA = ForgeItems.AJA.get();
-        ModItems.HAND = ForgeItems.HAND.get();
-        ModItems.VILLAGER_HAND = ForgeItems.VILLAGER_HAND.get();
-        ModItems.ILLAGER_HAND = ForgeItems.ILLAGER_HAND.get();
-        ModItems.ROTTEN_HAND = ForgeItems.ROTTEN_HAND.get();
+        //ModItems.HAND = ForgeItems.HAND.get();
+        //ModItems.VILLAGER_HAND = ForgeItems.VILLAGER_HAND.get();
+        //ModItems.ILLAGER_HAND = ForgeItems.ILLAGER_HAND.get();
+        //ModItems.ROTTEN_HAND = ForgeItems.ROTTEN_HAND.get();
         ModItems.ULTRAVIOLET_BLASTER = ForgeItems.ULTRAVIOLET_BLASTER.get();
         ModItems.LOCACACA_PIT = ForgeItems.LOCACACA_PIT.get();
         ModItems.LOCACACA = ForgeItems.LOCACACA.get();
@@ -458,6 +464,7 @@ public class ForgeEvents {
         ModItems.VALENTINE_MASK = ForgeItems.VALENTINE_MASK.get();
         ModItems.JOSUKE_PART_EIGHT_MASK = ForgeItems.JOSUKE_PART_EIGHT_MASK.get();
         ModItems.MISTA_MASK = ForgeItems.MISTA_MASK.get();
+        ModItems.GHIACCIO_MASK = ForgeItems.GHIACCIO_MASK.get();
         ModItems.AYA_MASK = ForgeItems.AYA_MASK.get();
         ModItems.AESTHETICIAN_MASK_1 = ForgeItems.AESTHETICIAN_MASK_1.get();
         ModItems.AESTHETICIAN_MASK_2 = ForgeItems.AESTHETICIAN_MASK_2.get();
@@ -645,15 +652,19 @@ public class ForgeEvents {
         ModEntities.RATT_DART = ForgeEntities.RATT_DART.get();
         ModEntities.POISON_LLAMA_SPIT = ForgeEntities.POISON_LLAMA_SPIT.get();
         ModEntities.THROWN_MATCH = ForgeEntities.THROWN_MATCH.get();
+        ModEntities.STRAY_CAT_AIRBUBBLE = ForgeEntities.STRAY_CAT_AIRBUBBLE.get();
         ModEntities.THROWN_WATER_BOTTLE = ForgeEntities.THROWN_WATER_BOTTLE.get();
         ModEntities.CROSSFIRE_HURRICANE = ForgeEntities.CROSSFIRE_HURRICANE.get();
         ModEntities.LIFE_TRACKER = ForgeEntities.LIFE_TRACKER.get();
         ModEntities.STAND_FIREBALL = ForgeEntities.STAND_FIREBALL.get();
         ModEntities.PW_BIG_METEOR = ForgeEntities.PW_BIG_METEOR.get();
         ModEntities.PW_METEOR = ForgeEntities.PW_METEOR.get();
+        ModEntities.COLD_TWISTER = ForgeEntities.COLD_TWISTER.get();
+        ModEntities.GENTLY_WEEPS = ForgeEntities.GENTLY_WEEPS.get();
         ModEntities.EVIL_AURA_PROJECTILE = ForgeEntities.EVIL_AURA_PROJECTILE.get();
         ModEntities.RIPPER_EYES_PROJECTILE = ForgeEntities.RIPPER_EYES_PROJECTILE.get();
         ModEntities.ULTRAVIOLET_PROJECTILE = ForgeEntities.ULTRAVIOLET_PROJECTILE.get();
+        ModEntities.COLD_BLAST_PROJECTILE = ForgeEntities.COLD_BLAST_PROJECTILE.get();
         ModEntities.GASOLINE_CAN = ForgeEntities.GASOLINE_CAN.get();
         ModEntities.GASOLINE_SPLATTER = ForgeEntities.GASOLINE_SPLATTER.get();
         ModEntities.BLOOD_SPLATTER = ForgeEntities.BLOOD_SPLATTER.get();

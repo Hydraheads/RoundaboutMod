@@ -17,10 +17,34 @@
       "roundabout:block_freeze"
     ]
   },
+  "ding": {
+    "subtitle": "sounds.roundabout.ding",
+    "sounds": [
+      "roundabout:ding"
+    ]
+  },
   "ice_blast_charge": {
     "subtitle": "sounds.roundabout.ice_blast_charge",
     "sounds": [
       "roundabout:ice_blast_charge"
+    ]
+  },
+  "icy_wind": {
+    "subtitle": "sounds.roundabout.icy_wind",
+    "sounds": [
+      "roundabout:icy_wind"
+    ]
+  },
+  "cold_shot": {
+    "subtitle": "sounds.roundabout.cold_shot",
+    "sounds": [
+      "roundabout:cold_shot"
+    ]
+  },
+  "gently_weeps": {
+    "subtitle": "sounds.roundabout.gently_weeps",
+    "sounds": [
+      "roundabout:gently_weeps"
     ]
   },
   "ice_skating": {
@@ -212,15 +236,15 @@
   "sha_moving": {
     	"subtitle": "sounds.roundabout.sha_moving",
     	"sounds": [
-    	"roundabout:sha_moving"
-    ]
+    	  "roundabout:sha_moving"
+      ]
 	},
   "summon_sha": {
     "subtitle": "sounds.roundabout.summon_sha",
     "sounds": [
         "roundabout:summon_sha"
     ]
-    },
+  },
   "killer_queen_bubble_launch": {
     "subtitle": "sounds.roundabout.killer_queen_bubble_launch",
     "sounds": [
@@ -251,6 +275,12 @@
         "roundabout:summon_killer_queen"
       ]
     },
+  "killer_queen_shiba": {
+    "subtitle": "sounds.roundabout.killer_queen_shiba",
+    "sounds": [
+      "roundabout:killer_queen_shiba"
+    ]
+  },
   "summon_magician": {
     "subtitle": "sounds.roundabout.summon_magician",
     "sounds": [

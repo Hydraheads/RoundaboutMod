@@ -26,6 +26,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.IceBlock;
+import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -64,13 +65,14 @@ public class WhiteAlbumCoatingBlock
     @Override
     public boolean canSurvive(BlockState $$0, LevelReader $$1, BlockPos $$2) {
         BlockPos $$3 = $$2.below();
-        return $$1.getBlockState($$3).isFaceSturdy($$1, $$3, Direction.UP) &&
+        return ($$1.getBlockState($$3).isFaceSturdy($$1, $$3, Direction.UP) ||
+                $$1.getBlockState($$3).getBlock() instanceof LeavesBlock ||
+                $$1.getBlockState($$3).is(Blocks.ICE)) &&
                 !$$1.getBlockState($$3).is(ModBlocks.WHITE_ALBUM_ICE_SLAB) &&
                 !$$1.getBlockState($$3).is(ModBlocks.WHITE_ALBUM_ICE_BLOCK);
     }
     @Override
     public void randomTick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource randomSource) {
-        this.tick(blockState, serverLevel, blockPos, randomSource);
     }
 
     @Override
@@ -116,11 +118,18 @@ public class WhiteAlbumCoatingBlock
                 mutableBlockPos.setWithOffset((Vec3i)blockPos, direction);
                 BlockState blockState2 = serverLevel.getBlockState(mutableBlockPos);
                 if (!blockState2.is(this) || this.slightlyMelt(blockState2, serverLevel, mutableBlockPos)) continue;
-                serverLevel.scheduleTick((BlockPos)mutableBlockPos, this, Mth.nextInt(randomSource, 30, 40));
+                serverLevel.scheduleTick((BlockPos)mutableBlockPos, this, Mth.nextInt(randomSource, range1(), range2()));
             }
             return;
         }
-        serverLevel.scheduleTick(blockPos, this, Mth.nextInt(randomSource, 30, 40));
+        serverLevel.scheduleTick(blockPos, this, Mth.nextInt(randomSource, range1(), range2()));
+    }
+
+    public int range1(){
+        return 30;
+    }
+    public int range2(){
+        return 40;
     }
 
     private boolean slightlyMelt(BlockState blockState, Level level, BlockPos blockPos) {

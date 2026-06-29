@@ -677,7 +677,6 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                             if (!this.level().isClientSide() && (((StandUser)this.getUser()).roundabout$getStandDisc().isEmpty() ||
                             ((StandUser)this.getUser()).roundabout$getStandDisc().is(ModItems.STAND_DISC))){
                                 this.discard();
-                                return;
                             }
                         } else {
                             handleTickDownIfDupe(thisStand);

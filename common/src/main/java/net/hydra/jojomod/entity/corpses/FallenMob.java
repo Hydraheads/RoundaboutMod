@@ -217,8 +217,10 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
         this.goalSelector.addGoal(1, thisBuildBreakGoal);
     }
     public void removeBuildBreakGoal(){
-        this.goalSelector.removeGoal(thisBuildBreakGoal);
-        thisBuildBreakGoal = null;
+        if (thisBuildBreakGoal != null) {
+            this.goalSelector.removeGoal(thisBuildBreakGoal);
+            thisBuildBreakGoal = null;
+        }
     }
 
     @Override

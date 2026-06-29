@@ -5,9 +5,7 @@ import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.block.ModBlocks;
-import net.hydra.jojomod.block.StandFireBlock;
-import net.hydra.jojomod.block.StandFireBlockEntity;
+import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -51,6 +49,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
@@ -873,9 +872,13 @@ public class PowersMagiciansRed extends NewPunchingStand {
             grabBlock2 = blockHit.getBlockPos();
             if (this.self.level().getBlockState(grabBlock2).is(Blocks.CAMPFIRE)){
                 return blockHit.getBlockPos();
-            } if (this.self.level().getBlockState(grabBlock2).is(Blocks.CANDLE)){
+            } else if (this.self.level().getBlockState(grabBlock2).is(Blocks.CANDLE)){
                 return blockHit.getBlockPos();
-            } if (this.self.level().getBlockState(grabBlock2).getBlock() instanceof TntBlock){
+            } else if (this.self.level().getBlockState(grabBlock2).getBlock() instanceof FrozenBlock){
+                return blockHit.getBlockPos();
+            } else if (this.self.level().getBlockState(grabBlock2).getBlock() instanceof WhiteAlbumCoatingBlock){
+                return blockHit.getBlockPos();
+            } else if (this.self.level().getBlockState(grabBlock2).getBlock() instanceof TntBlock){
                 return blockHit.getBlockPos();
             }
             return blockHit.getBlockPos().relative(blockHit.getDirection());
@@ -1449,14 +1452,9 @@ public class PowersMagiciansRed extends NewPunchingStand {
         if (this.self instanceof Player PE && PE.isCreative() && sealTime > 20){
             sealTime = 20;
         }
-        if (this.self.level().isClientSide()) {
-            user.roundabout$setMaxSealedTicks(sealTime);
-            user.roundabout$setSealedTicks(sealTime);
-        }
 
-        if (!this.self.level().isClientSide() && user instanceof Player PE){
-            S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) PE),
-                    PacketDataIndex.S2C_INT_SEAL, sealTime);
+        if (!this.self.level().isClientSide()){
+            user.roundabout$setSealedTicks(sealTime);
         }
         user.roundabout$setActive(false);
     }
@@ -2815,6 +2813,60 @@ public class PowersMagiciansRed extends NewPunchingStand {
             } else if (state.getBlock() instanceof CandleBlock){
                 if (!state.getValue(CandleBlock.LIT) && this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) && !(this.self instanceof ServerPlayer SP && SP.gameMode.getGameModeForPlayer() == GameType.ADVENTURE)){
                     this.getSelf().level().setBlockAndUpdate(grabBlock, state.setValue(CandleBlock.LIT,true));
+                }
+            } else if (state.getBlock() instanceof WhiteAlbumCoatingBlock fb){
+                self.level().setBlock(
+                        grabBlock,
+                        Blocks.AIR.defaultBlockState(),
+                        Block.UPDATE_ALL
+                );
+
+                self.level().playSound(
+                        null,
+                        grabBlock,
+                        SoundEvents.FLINTANDSTEEL_USE,
+                        SoundSource.BLOCKS,
+                        1.0F,
+                        self.level().random.nextFloat() * 0.4F + 0.8F
+                );
+            } else if (state.getBlock() instanceof FrozenBlock fb){
+                Block thawed = fb.getThawedBlock();
+                if (thawed != null) {
+                    if (!self.level().isClientSide) {
+                        self.level().setBlock(
+                                grabBlock,
+                                thawed.defaultBlockState(),
+                                Block.UPDATE_ALL
+                        );
+                        BlockPos.betweenClosed(grabBlock.offset(-2, -2, -2), grabBlock.offset(2, 2, 2))
+                                .forEach(targetPos -> {
+
+                                    BlockState targetState = self.level().getBlockState(targetPos);
+
+                                    // Only convert your frozen blocks
+                                    if (targetState.getBlock() instanceof FrozenBlock frozenBlock) {
+
+                                        Block thawedBlock = frozenBlock.getThawedBlock();
+
+                                        if (thawedBlock != null) {
+                                            self.level().setBlock(
+                                                    targetPos,
+                                                    thawedBlock.defaultBlockState(),
+                                                    Block.UPDATE_ALL
+                                            );
+                                        }
+                                    }
+                                });
+
+                        self.level().playSound(
+                                null,
+                                grabBlock,
+                                SoundEvents.FLINTANDSTEEL_USE,
+                                SoundSource.BLOCKS,
+                                1.0F,
+                                self.level().random.nextFloat() * 0.4F + 0.8F
+                        );
+                    }
                 }
             } else if (state.getBlock() instanceof TntBlock){
                 if (this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) && !(this.self instanceof ServerPlayer SP && SP.gameMode.getGameModeForPlayer() == GameType.ADVENTURE)){

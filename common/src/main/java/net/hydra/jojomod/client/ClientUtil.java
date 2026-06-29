@@ -42,6 +42,7 @@ import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
@@ -370,6 +371,16 @@ public class ClientUtil {
     }
     public static void handleSkatingSounds(Entity entity) {
         Minecraft.getInstance().getSoundManager().play(new RoadRollerAmbientSound(ModSounds.ROAD_ROLLER_AMBIENT_EVENT, SoundSource.PLAYERS, 1, 0, entity));
+    }
+    public static void handleTwisterSound(Entity entity) {
+        Minecraft.getInstance().getSoundManager().play(new EntityBoundSoundInstance(ModSounds.ICY_WIND_EVENT,
+                SoundSource.PLAYERS, 1, 1, entity,
+                entity.level().random.nextLong()));
+    }
+    public static void handleWeepsSound(Entity entity) {
+        Minecraft.getInstance().getSoundManager().play(new EntityBoundSoundInstance(ModSounds.GENTLY_WEEPS_EVENT,
+                SoundSource.PLAYERS, 1, 1, entity,
+                entity.level().random.nextLong()));
     }
 
     public static void handleRoadRollerExplosionSound(Entity entity) {
@@ -783,12 +794,13 @@ public class ClientUtil {
         } else if (context== PacketDataIndex.S2C_INT_ATD){
             ((StandUser) player).roundabout$getStandPowers().setAttackTimeDuring(data);
         } else if (context == PacketDataIndex.S2C_INT_SEAL){
-            if (data > 0){
-                ((StandUser) player).roundabout$setMaxSealedTicks(data);
-                ((StandUser) player).roundabout$setSealedTicks(data);
-            } else if (data == -1){
-                ((StandUser) player).roundabout$setSealedTicks(-1);
+            StandUser user = ((StandUser) player);
+            if (user.roundabout$getMaxSealedTicks() < data){
+                user.roundabout$setMaxSealedTicks(data);
             }
+            user.roundabout$setSealedTicks(data);
+        } else if (context == PacketDataIndex.S2C_INT_MAX_SEAL){
+            ((StandUser) player).roundabout$setMaxSealedTicks(data);
         } else if (context == PacketDataIndex.S2C_INT_BUBBLE_FINISH){
             Entity target = player.level().getEntity(data);
             if (target instanceof SoftAndWetPlunderBubbleEntity IE) {
@@ -877,15 +889,12 @@ public class ClientUtil {
     public static boolean checkIfClientCanSeeMobsForWindVision() {
 
         LocalPlayer player = Minecraft.getInstance().player;
-        if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersManhattanTransfer PMT && PMT.isPiloting()) {
-                    return true;
-        }
-        return false;
-    }
-    public static boolean checkIfClientCanSeeMobsForWindVisionFromPlayerPov() {
-        LocalPlayer player = Minecraft.getInstance().player;
-        if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersManhattanTransfer PMT && PMT.visionModeClient && PMT.isActive()) {
-            return true;
+        if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersManhattanTransfer PMT && (PMT.isPiloting() || PMT.visionModeClient)) {
+            if(PMT.isActive()) {
+                return true;
+            } else {
+                return false;
+            }
         }
         return false;
     }
@@ -1586,14 +1595,6 @@ public class ClientUtil {
     public static void handleSimpleBytePacketS2C(LocalPlayer player, byte context){
         if (context == 1) {
             ((StandUser) player).roundabout$setGasolineTime(context);
-        } else if (context == PacketDataIndex.S2C_SIMPLE_FREEZE_STAND) {
-                int switchTicks = ClientNetworking.getAppropriateConfig().itemSettings.switchStandDiscLength;
-                if (switchTicks > 0){
-                    if (((StandUser) player).roundabout$getSealedTicks() < switchTicks) {
-                        ((StandUser) player).roundabout$setMaxSealedTicks(switchTicks);
-                        ((StandUser) player).roundabout$setSealedTicks(switchTicks);
-                    }
-                }
         } else if (context == PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK) {
             ((StandUser) player).roundabout$getStandPowers().suspendGuard = true;
             ((StandUser) player).roundabout$getStandPowers().scopeLevel = 0;

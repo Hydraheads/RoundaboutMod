@@ -321,6 +321,8 @@ public class StandIcons {
     		"textures/gui/icons/killer_queen/plant_bomb_item.png");
     public static final ResourceLocation KILLER_QUEEN_BOMB_SETIINGS = new ResourceLocation(Roundabout.MOD_ID,
     		"textures/gui/icons/killer_queen/bomb_select.png");
+    public static final ResourceLocation KILLER_QUEEN_ADD_STRAY_CAT = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/killer_queen/add_stray_cat.png");
     public static final ResourceLocation KILLER_QUEEN_BOMB_DETONATE = new ResourceLocation(Roundabout.MOD_ID,
     		"textures/gui/icons/killer_queen/detonate.png");
     public static final ResourceLocation KILLER_QUEEN_BOMB_DEFUSE = new ResourceLocation(Roundabout.MOD_ID,
@@ -374,6 +376,10 @@ public class StandIcons {
             "textures/gui/icons/planet_waves/desintegration.png");
     public static final ResourceLocation PLANET_WAVES_METEOR_TRACKING= new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/planet_waves/meteor_tracking.png");
+    public static final ResourceLocation PLANET_WAVES_FORCED_DISINTEGRATION= new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/icons/planet_waves/forced_disintegration.png");
+    public static final ResourceLocation PLANET_WAVES_GRAB= new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/planet_waves/grab.png");
 
     public static final ResourceLocation MANDOM_VISION_ON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/mandom/vision_on.png");
@@ -706,6 +712,8 @@ public class StandIcons {
             "textures/gui/icons/white_album/freeze_cancel.png");
     public static final ResourceLocation SUIT_COMBAT = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/white_album/suit_combat.png");
+    public static final ResourceLocation SUIT_COMBAT_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/white_album/suit_combat_2.png");
     public static final ResourceLocation GENTLY_WEEPS = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/white_album/gently_weeps.png");
     public static final ResourceLocation FREEZE_BLOCKS = new ResourceLocation(Roundabout.MOD_ID,
@@ -718,6 +726,18 @@ public class StandIcons {
             "textures/gui/icons/white_album/ice_wall.png");
     public static final ResourceLocation ICE_WALL_BEHIND = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/white_album/ice_wall_behind.png");
+
+
+    public static final ResourceLocation WHITE_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/white_album/punch.png");
+    public static final ResourceLocation COLD_BLAST = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/white_album/cold_blast.png");
+    public static final ResourceLocation COLD_GUARD = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/white_album/cold_guard.png");
+    public static final ResourceLocation SUIT_POWER = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/white_album/suit_power.png");
+    public static final ResourceLocation FULL_ACCEL = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/white_album/full_accel.png");
 
     public static final ResourceLocation SELF_INVIS = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/achtung_baby/self_invis.png");

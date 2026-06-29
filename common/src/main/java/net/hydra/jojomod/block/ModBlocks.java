@@ -91,6 +91,9 @@ public class ModBlocks {
     public static Block DEEPSLATE_AJA_ORE;
     public static Block AJA_BLOCK;
 
+    public static Block COLD_AIR;
+    public static Block FREEZING_AIR;
+
     public static Block BARBED_WIRE;
     public static Block BARBED_WIRE_BUNDLE;
     public static Block GODDESS_STATUE_BLOCK;
@@ -157,6 +160,7 @@ public class ModBlocks {
     public static Block WHITE_ALBUM_ICE_BLOCK;
     public static Block WHITE_ALBUM_ICE_WALL_BLOCK;
     public static Block WHITE_ALBUM_ICE_SLAB;
+    public static Block STICKY_ICE;
 
     public static Block EQUIPPABLE_STONE_MASK_BLOCK;
     public static Block BLOODY_STONE_MASK_BLOCK;
@@ -188,8 +192,32 @@ public class ModBlocks {
                     .lightLevel((L) -> {
                         return 1;
                     }).
-                    randomTicks().strength(0.5F).forceSolidOff().sound(SoundType.GLASS).replaceable().noOcclusion().pushReaction(PushReaction.DESTROY));
+                    randomTicks().friction(0.98F).strength(0.5F).forceSolidOff().sound(SoundType.GLASS).replaceable().noOcclusion().pushReaction(PushReaction.DESTROY));
+    public static Block STICKY_ICE_PROPERTIES =
+            new StickyIceCoatingBlock(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).friction(0.98F)
+                    .lightLevel((L) -> {
+                        return 1;
+                    }).
+                    randomTicks().friction(0.98F).strength(0.5F).forceSolidOff().sound(SoundType.GLASS).replaceable().
+                    noCollission().noOcclusion().pushReaction(PushReaction.DESTROY));
 
+
+    public static Block COLD_AIR_PROPERTIES =
+            new ColdAirBlock(BlockBehaviour.Properties.of().mapColor(MapColor.ICE)
+                    .noOcclusion()
+                    .pushReaction(PushReaction.DESTROY)
+                    .strength(0F, 0F)
+                    .sound(SoundType.EMPTY)
+                    .noCollission()
+                    .replaceable());
+    public static Block FREEZING_AIR_PROPERTIES =
+            new FreezingAirBlock(BlockBehaviour.Properties.of().mapColor(MapColor.ICE)
+                    .noOcclusion()
+                    .pushReaction(PushReaction.DESTROY)
+                    .strength(0F, 0F)
+                    .sound(SoundType.EMPTY)
+                    .noCollission()
+                    .replaceable());
 
     public static Block ANCIENT_METEOR_PROPERTIES = new AncientMeteorBlock(
             BlockBehaviour.Properties.of()
@@ -512,8 +540,9 @@ public class ModBlocks {
                     .sound(SoundType.SLIME_BLOCK)
                     .replaceable()
                     .pushReaction(PushReaction.DESTROY)
-                    .ignitedByLava()
-                    .speedFactor(0.4F)
+                    .ignitedByLava().
+                    friction(0.96F)
+                    .speedFactor(0.3F)
     );
     public static BloodBlock BLOOD_SPLATTER_PROPERTIES = new BloodBlock(
             BlockBehaviour.Properties.of()

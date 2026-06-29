@@ -118,7 +118,8 @@ public enum FateTypes {
     public static float getDamageAdd(LivingEntity entity, DamageSource source, float amt){
         if (source.getEntity() != null) {
             if (source.getEntity() instanceof Player PE) {
-                return ((IFatePlayer) PE).rdbt$getFatePowers().getDamageAdd(source, amt,entity);
+                return ((IFatePlayer) PE).rdbt$getFatePowers().getDamageAdd(source, amt,entity)
+                        + ((StandUser) PE).roundabout$getStandPowers().getDamageAdd(source, amt,entity);
             }
             if (source.getEntity() instanceof Mob mb && ((IMob) mb).roundabout$isVampire()) {
                 if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)) {

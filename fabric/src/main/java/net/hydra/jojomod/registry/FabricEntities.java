@@ -651,6 +651,29 @@ public class FabricEntities {
                     EntityType.Builder.<UltravioletProjectile>of(UltravioletProjectile::new, MobCategory.MISC).
                             sized(1F, 1F).clientTrackingRange(15).build(Roundabout.MOD_ID+":uv")
             );
+    public static final EntityType<ColdBlastProjectile> COLD_BLAST_PROJECTILE =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "cold_blast"),
+                    EntityType.Builder.<ColdBlastProjectile>of(ColdBlastProjectile::new, MobCategory.MISC).
+                            sized(1F, 1F).clientTrackingRange(15).build(Roundabout.MOD_ID+":cold_blast")
+            );
+    public static final EntityType<IceTwisterEntity> COLD_TWISTER =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "cold_twister"),
+                    EntityType.Builder.<IceTwisterEntity>of(IceTwisterEntity::new, MobCategory.MISC).
+                            sized(IceTwisterEntity.height, IceTwisterEntity.width).clientTrackingRange(15).
+                            build(Roundabout.MOD_ID+":cold_twister")
+            );
+    public static final EntityType<GentlyWeepsEntity> GENTLY_WEEPS =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "gently_weeps"),
+                    EntityType.Builder.<GentlyWeepsEntity>of(GentlyWeepsEntity::new, MobCategory.MISC).
+                            sized(GentlyWeepsEntity.height, GentlyWeepsEntity.width).clientTrackingRange(15).
+                            build(Roundabout.MOD_ID+":gently_weeps")
+            );
         public static final EntityType<GasolineSplatterEntity> GASOLINE_SPLATTER =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -789,6 +812,14 @@ public class FabricEntities {
                                 sized(EncasementBubbleEntity.eWidth, EncasementBubbleEntity.eHeight).
                                 clientTrackingRange(10).build(Roundabout.MOD_ID+":encasement_bubble")
                 );
+    public static final EntityType<StrayCatAirBubble> STRAY_CAT_AIRBUBBLE =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "stray_cat_bubble"),
+                    EntityType.Builder.<StrayCatAirBubble>of(StrayCatAirBubble::new, MobCategory.MISC).
+                            sized(StrayCatAirBubble.eWidth, StrayCatAirBubble.eHeight).
+                            clientTrackingRange(10).build(Roundabout.MOD_ID+":stray_cat_bubble")
+            );
         public static final EntityType<VanGoughPainting> VAN_GOUGH_PAINTING =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -943,6 +974,7 @@ public class FabricEntities {
                 ModEntities.EVIL_AURA_PROJECTILE = EVIL_AURA_PROJECTILE;
                 ModEntities.RIPPER_EYES_PROJECTILE = RIPPER_EYES_PROJECTILE;
                 ModEntities.ULTRAVIOLET_PROJECTILE = ULTRAVIOLET_PROJECTILE;
+                ModEntities.COLD_BLAST_PROJECTILE = COLD_BLAST_PROJECTILE;
                 ModEntities.GASOLINE_CAN = GASOLINE_CAN;
                 ModEntities.GASOLINE_SPLATTER = GASOLINE_SPLATTER;
                 ModEntities.BLOOD_SPLATTER = BLOOD_SPLATTER;
@@ -950,6 +982,8 @@ public class FabricEntities {
                 ModEntities.IRON_BALL = IRON_BALL;
                 ModEntities.PW_METEOR = PW_METEOR;
                 ModEntities.PW_BIG_METEOR = PW_BIG_METEOR;
+                ModEntities.COLD_TWISTER = COLD_TWISTER;
+                ModEntities.GENTLY_WEEPS = GENTLY_WEEPS;
 
                 ModEntities.THROWN_OBJECT = THROWN_OBJECT;
                 ModEntities.THROWN_ANUBIS = THROWN_ANUBIS;
@@ -961,6 +995,7 @@ public class FabricEntities {
                 ModEntities.ITEM_LAUNCHING_BUBBLE_ENTITY = ITEM_LAUNCHING_BUBBLE_ENTITY;
                 ModEntities.GO_BEYOND = GO_BEYOND;
                 ModEntities.ENCASEMENT_BUBBLE = ENCASEMENT_BUBBLE;
+                ModEntities.STRAY_CAT_AIRBUBBLE = STRAY_CAT_AIRBUBBLE;
                 ModEntities.CINDERELLA_VISAGE_DISPLAY = CINDERELLA_VISAGE_DISPLAY;
                 ModEntities.ANUBIS_POSSESSOR = ANUBIS_POSSESSOR;
                 ModEntities.ANUBIS_SLIPSTREAM = ANUBIS_SLIPSTREAM;

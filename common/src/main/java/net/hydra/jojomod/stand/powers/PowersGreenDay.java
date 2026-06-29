@@ -40,6 +40,7 @@ import net.minecraft.client.gui.GuiGraphics;
 
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SculkChargeParticleOptions;
@@ -66,6 +67,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
@@ -665,6 +667,37 @@ public class PowersGreenDay extends NewPunchingStand {
 
     }
 
+    public Vec3 rayCastFromSelf(double dist){
+        int steps = (int) (Math.round(dist * 6) + 1);
+        Vec3 CurrentCheckPos = this.self.getEyePosition();
+        double xstep = (this.self.getLookAngle().x)/6 ;
+        double ystep = (self.getLookAngle().y)/6 ;
+        double zstep = (self.getLookAngle().z)/6 ;
+
+
+        for(int i = 0; i < steps ;i ++){
+            CurrentCheckPos = CurrentCheckPos.add(xstep,ystep,zstep);
+
+
+           // if(!this.self.level().isClientSide) {
+           //     ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.END_ROD, CurrentCheckPos.x, CurrentCheckPos.y, CurrentCheckPos.z, 1, 0, 0, 0, 0);
+           // }
+            BlockPos bp = (BlockPos.containing(CurrentCheckPos));
+            if(this.self.level().getBlockState(bp).getBlock() != Blocks.AIR){
+               // if(!this.self.level().isClientSide) {
+
+               //     ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.END_ROD, bp.getCenter().x, bp.getCenter().y, bp.getCenter().z, 1, 0, 0, 0, 0);
+               // }
+                return CurrentCheckPos;
+            }
+
+
+        }
+        return CurrentCheckPos;
+    }
+
+
+
 
     /**
      * Off Hand stuff
@@ -675,7 +708,9 @@ public class PowersGreenDay extends NewPunchingStand {
     public boolean HasOffHandCharge = true;
     public boolean HasOffHand = true;
 
+
     public boolean OffHandThrowServer(SeperatedArmEntity SAE){
+
         if (Off_hand_entity == null) {
             if (SAE != null) {
                 Off_hand_entity = SAE;
@@ -685,7 +720,7 @@ public class PowersGreenDay extends NewPunchingStand {
                 SAE.setPos(getRayBlock(this.self,0.5f).add(0,-0.3,0));
                 SAE.setItemInHand(InteractionHand.MAIN_HAND,this.self.getItemInHand(InteractionHand.OFF_HAND).copy());
                 this.self.level().addFreshEntity(SAE);
-                SAE.jump(this.getRayBlock(this.self, 20F));
+                SAE.jump(rayCastFromSelf(20));
                 Off_hand_entity= SAE;
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.GREEN_DAY_SPLIT_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
             }
@@ -703,7 +738,7 @@ public class PowersGreenDay extends NewPunchingStand {
             //    SAE.jump(((StandUser) this.self).roundabout$getTargetEntity(this.self,20F).getOnPos().);
             //}else{
 
-            Off_hand_entity.jump(this.getRayBlock(this.self, 20F));
+            Off_hand_entity.jump(rayCastFromSelf(20));
             if(((StandUser)this.self).roundabout$getTargetEntity(this.self,20) != null) {
                 Off_hand_entity.jump2(((StandUser) this.self).roundabout$getTargetEntity(this.self, 20).getEyePosition());
             }
@@ -842,7 +877,7 @@ public class PowersGreenDay extends NewPunchingStand {
                 SAE.setPos(getRayBlock(this.self,0.5f).add(0,-0.3,0));
                 SAE.setItemInHand(InteractionHand.MAIN_HAND,this.self.getItemInHand(InteractionHand.MAIN_HAND).copy());
                 this.self.level().addFreshEntity(SAE);
-                SAE.jump(this.getRayBlock(this.self,20F));
+                SAE.jump(rayCastFromSelf(20));
                 Main_arm = SAE;
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.GREEN_DAY_SPLIT_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
             }
@@ -857,7 +892,7 @@ public class PowersGreenDay extends NewPunchingStand {
                    // 0.1);
         }else{
 
-            Main_arm.jump(this.getRayBlock(this.self, 20F));
+            Main_arm.jump(rayCastFromSelf(20));
             if(((StandUser)this.self).roundabout$getTargetEntity(this.self,20) != null) {
                 Main_arm.jump2(((StandUser) this.self).roundabout$getTargetEntity(this.self, 20).getEyePosition());
             }
@@ -1055,7 +1090,7 @@ public class PowersGreenDay extends NewPunchingStand {
 
     @Override
     public boolean highlightsEntity(Entity ent, Player player) {
-        if(isStandEnabled()) {
+        if(hasStandActive(this.self)) {
             if (player.isCrouching()) {
                 if (ent instanceof LivingEntity) {
                     if (allies.contains(ent.getStringUUID()) && player.hasLineOfSight(ent)) {

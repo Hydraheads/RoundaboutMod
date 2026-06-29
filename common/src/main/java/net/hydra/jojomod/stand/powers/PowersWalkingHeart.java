@@ -79,7 +79,7 @@ public class PowersWalkingHeart extends NewDashPreset {
         return ClientNetworking.getAppropriateConfig().walkingHeartSettings.enableWalkingHeart;
     }
     public boolean canWallWalkConfig(){
-        return ClientNetworking.getAppropriateConfig().walkingHeartSettings.enableWallWalking;
+        return ClientNetworking.getAppropriateConfig().miscellaneousSettings.enableWallWalking;
     }
     public int walkingCDPerHit(){
         return ClientNetworking.getAppropriateConfig().walkingHeartSettings.walkingHeartCooldownPerHit;
@@ -127,9 +127,9 @@ public class PowersWalkingHeart extends NewDashPreset {
     public int getExpForLevelUp(int currentLevel){
         int amt;
         if (currentLevel == 1) {
-            amt = 200;
+            amt = 150;
         } else if (currentLevel == 2){
-            amt = 400;
+            amt = 300;
         } else {
             amt = 800;
         }

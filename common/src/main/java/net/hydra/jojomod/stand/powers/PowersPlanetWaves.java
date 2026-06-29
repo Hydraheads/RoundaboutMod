@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.particles.ParticleTypes;
@@ -135,7 +136,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
 
         if (isHoldingSneak()) {
-            setSkillIcon(context, x, y, 2, StandIcons.PLANET_WAVES_DESINTEGRATION, PowerIndex.SKILL_2_SNEAK);
+            setSkillIcon(context, x, y, 2, StandIcons.PLANET_WAVES_FORCED_DISINTEGRATION, PowerIndex.SKILL_2_SNEAK);
             if (canExecuteMoveWithLevel(MeteorTrackingLevel())) {
                 setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_METEOR_TRACKING, PowerIndex.SKILL_4_SNEAK);
             } else {
@@ -564,17 +565,26 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         Vec3 blockCenter = Vec3.atLowerCornerOf(pos).add(0.5, 0.5, 0.5);
         Vec3 faceNormal  = Vec3.atLowerCornerOf(hitResult.getDirection().getNormal());
-
-        // Stop exactly at the face surface, outside the block
         Vec3 faceCenter  = blockCenter.add(faceNormal.scale(0.5));
 
         this.standTargetPos    = faceCenter;
         this.standTravelTarget = faceCenter;
+
+        double sinkDepth;
+        switch (hitResult.getDirection()) {
+            case UP   -> sinkDepth = 0.8;  // floor: sink upward into block
+            case DOWN -> sinkDepth = -0.8; // ceiling: normal points DOWN, negate to go UP into block
+            default   -> sinkDepth = 0.55; // walls
+        }
+
+// This line uses sinkDepth — negative value flips the sink direction for ceiling
+        this.sinkTarget = faceCenter.subtract(faceNormal.scale(sinkDepth));
         this.standHitDirection = hitResult.getDirection();
         restrainAnimationType  = 0;
 
         targetingstand = true;
         isTravelling   = true;
+        isSinking      = false;
 
         StandEntity stand = this.getStandEntity(this.self);
         if (stand instanceof FollowingStandEntity FSE) {
@@ -593,10 +603,15 @@ public class PowersPlanetWaves extends NewDashPreset {
                             .PlanetWavesSettings.standtargetingCooldown);
         }
     }
+
     private LivingEntity restrainedEntity = null;
     private byte restrainAnimationType = 0; // 0 = side, 1 = above, 2 = below
     private int grabCooldownTicks = 0;
     private static final int GRAB_COOLDOWN = 100;
+    private boolean isSinking = false;
+    private Vec3 sinkTarget = null;
+    private boolean wasSinking = false;
+    private boolean wasTravelling = false;
 
     @Override
     public void tickPowerEnd() {
@@ -605,38 +620,17 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         StandEntity stand = this.getStandEntity(this.self);
 
-        // ── 1. TRAVEL PHASE ──────────────────────────────────────────────
-        if (isTravelling && standTargetPos != null && stand != null) {
+        // ── 1a. PHASE 1 — travel to block face ───────────────────────────────
+        if (isTravelling && standTravelTarget != null && stand != null) {
 
             Vec3   current = stand.position();
-            Vec3   dir     = standTargetPos.subtract(current);
+            Vec3   dir     = standTravelTarget.subtract(current);
             double dist    = dir.length();
 
             if (dist < 0.3) {
-                stand.setPos(standTargetPos.x, standTargetPos.y, standTargetPos.z);
+                stand.setPos(standTravelTarget.x, standTravelTarget.y, standTravelTarget.z);
                 isTravelling = false;
-
-                // Rotate to face outward from the block face
-                if (standHitDirection != null) {
-                    float yaw;
-                    float extraX;
-                    switch (standHitDirection) {
-                        case NORTH -> { yaw = 0.0F;   extraX = 0.0F;   }
-                        case SOUTH -> { yaw = 180.0F; extraX = 0.0F;   }
-                        case EAST  -> { yaw = 90.0F;  extraX = 0.0F;   }
-                        case WEST  -> { yaw = 270.0F; extraX = 0.0F;   }
-                        case UP    -> { yaw = 0.0F;   extraX = -90.0F; }  
-                        case DOWN  -> { yaw = 0.0F;   extraX = 90.0F;  }
-                        default    -> { yaw = 0.0F;   extraX = 0.0F;   }
-                    }
-                    stand.setYRot(yaw);
-                    stand.yRotO = yaw;
-                    stand.setXRot(0.0F);
-                    stand.xRotO = 0.0F;
-                    stand.setStandRotationX(extraX);
-                }
-
-                animateStand(PlanetWavesEntity.BURY_HORIZONTAL);
+                isSinking    = true;
                 syncStandMode();
             } else {
                 animateStand(PlanetWavesEntity.FLOATING);
@@ -650,8 +644,31 @@ public class PowersPlanetWaves extends NewDashPreset {
             }
         }
 
-        // ── 2. BURIED — GRAB DETECTION ───────────────────────────────────
-        if (!isTravelling && targetingstand && stand != null) {
+        // ── 1b. PHASE 2 — sink into block ────────────────────────────────────
+        if (isSinking && sinkTarget != null && stand != null) {
+
+            Vec3   current = stand.position();
+            Vec3   dir     = sinkTarget.subtract(current);
+            double dist    = dir.length();
+
+            if (dist < 0.15) {
+                stand.setPos(sinkTarget.x, sinkTarget.y, sinkTarget.z);
+                isSinking = false;
+                applyBurialRotation(stand);
+                syncStandMode();
+            } else {
+                double speed = Math.min(dist, 0.25);
+                Vec3   step  = dir.normalize().scale(speed);
+                stand.setPos(
+                        current.x + step.x,
+                        current.y + step.y,
+                        current.z + step.z
+                );
+            }
+        }
+
+        // ── 2. BURIED — GRAB DETECTION ───────────────────────────────────────
+        if (!isTravelling && !isSinking && targetingstand && stand != null) {
 
             if (restrainedEntity == null && grabCooldownTicks <= 0) {
                 List<LivingEntity> nearby = self.level().getEntitiesOfClass(
@@ -673,7 +690,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             }
         }
 
-        // ── 3. HOLD RESTRAINED ENTITY ────────────────────────────────────
+        // ── 3. HOLD RESTRAINED ENTITY ────────────────────────────────────────
         if (restrainedEntity != null && stand != null) {
 
             if (restrainedEntity instanceof StandUser SU) {
@@ -700,7 +717,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             }
         }
 
-        // ── 4. RELEASE if stand recalled ─────────────────────────────────
+        // ── 4. RELEASE if stand recalled ─────────────────────────────────────
         if (!targetingstand && restrainedEntity != null) {
             releaseRestrainedEntity(stand);
         }
@@ -722,6 +739,18 @@ public class PowersPlanetWaves extends NewDashPreset {
         restrainedEntity = null;
         this.animateStand(StandEntity.IDLE);
     }
+    private void applyBurialRotation(StandEntity stand) {
+        if (standHitDirection == null || stand == null) return;
+        float extraX;
+        switch (standHitDirection) {
+            case NORTH, SOUTH, EAST, WEST -> extraX = -90.0F * Mth.DEG_TO_RAD;
+            case DOWN  -> extraX = (float) Math.PI;
+            default    -> extraX = 0.0F; // UP
+        }
+        stand.setStandRotationX(extraX);
+        // Store the entity yRot at burial time so the model can use it
+        stand.setStandRotationY(this.self.getYRot() * Mth.DEG_TO_RAD);
+    }
     private boolean isBuried= false;
     private Vec3 buriedStandPos= null;
     private void usertargeting() {
@@ -729,6 +758,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         targetingstand    = false;
         isTravelling      = false;
+        isSinking      = false;
         standTravelTarget = null;
         standHitDirection = null;
 
@@ -771,6 +801,7 @@ public class PowersPlanetWaves extends NewDashPreset {
     public boolean canInterruptPower(DamageSource sauce, Entity interrupter) {
         if (isTravelling) {
             isTravelling = false;
+            isSinking     = false;
             targetingstand = false;
             standTravelTarget = null;
             standTargetPos = null;
@@ -997,6 +1028,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             releaseRestrainedEntity(stand);
             targetingstand    = false;
             isTravelling      = false;
+            isSinking     = false;
             standTargetPos    = null;
             standTravelTarget = null;
             standHitDirection = null;
@@ -1024,23 +1056,53 @@ public class PowersPlanetWaves extends NewDashPreset {
             if (targetingstand) mode |= 1;
             if (tracking)       mode |= 2;
             if (isTravelling)   mode |= 4;
-            mode |= (restrainAnimationType & 0x3) << 3;
-            // Pack direction ordinal into bits 5-7 (DOWN=0,UP=1,NORTH=2,SOUTH=3,WEST=4,EAST=5)
+            if (isSinking)      mode |= 8;                          // bit 3
+            mode |= (restrainAnimationType & 0x3) << 4;            // bits 4-5 (was 3-4)
             int dirOrdinal = (standHitDirection != null) ? standHitDirection.ordinal() : 0;
-            mode |= (dirOrdinal & 0x7) << 5;
-
+            mode |= (dirOrdinal & 0x7) << 6;                       // bits 6-8 (was 5-7)
+            System.out.println("DEBUG SERVER syncStandMode: standHitDirection=" + standHitDirection + " dirOrdinal=" + dirOrdinal + " mode=" + mode);
             S2CPacketUtil.sendGenericIntToClientPacket(
                     pl, PacketDataIndex.S2C_INT_STAND_MODE, mode);
         }
     }
 
     public void clientIntUpdated(int integer) {
+        boolean wasTravel = isTravelling;
+        boolean wasSink   = isSinking;
+
         targetingstand        = (integer & 1) != 0;
         tracking              = (integer & 2) != 0;
         isTravelling          = (integer & 4) != 0;
-        restrainAnimationType = (byte)((integer >> 3) & 0x3);
-        int dirOrdinal        = (integer >> 5) & 0x7;
+        isSinking             = (integer & 8) != 0;
+        restrainAnimationType = (byte)((integer >> 4) & 0x3);
+        int dirOrdinal        = (integer >> 6) & 0x7;
         standHitDirection     = net.minecraft.core.Direction.values()[dirOrdinal];
+
+        // phase 1 ended → phase 2 starting
+        if (wasTravel && !isTravelling && isSinking) {
+            animateStand(PlanetWavesEntity.FLOATING);
+        }
+
+        // phase 2 ended → play burial animation based on direction from THIS packet
+        if (wasSink && !isSinking && targetingstand) {
+            StandEntity stand = this.getStandEntity(this.self);
+
+            System.out.println("DEBUG CLIENT animating dirOrdinal=" + dirOrdinal);
+
+            if (dirOrdinal == 1) {
+                animateStand(PlanetWavesEntity.BURY_UPWARDS);
+            } else if (dirOrdinal == 0) {
+                animateStand(PlanetWavesEntity.BURY_DOWNWARDS);
+            } else {
+                animateStand(PlanetWavesEntity.BURY_HORIZONTAL);
+            }
+            applyBurialRotation(stand);
+        }
+
+        // grab happened
+        if (!targetingstand && !wasSink && restrainAnimationType != 0) {
+            animateStand(PlanetWavesEntity.GRAB_HORIZONTAL);
+        }
     }
 
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
@@ -1050,7 +1112,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.big_meteor",
                 "instruction.roundabout.press_skill", StandIcons.PLANET_WAVES_BIG_METEOR,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.forced_dissintegration",
-                "instruction.roundabout.press_skill_crouch", StandIcons.PLANET_WAVES_DESINTEGRATION,2,level,bypass));
+                "instruction.roundabout.press_skill_crouch", StandIcons.PLANET_WAVES_FORCED_DISINTEGRATION,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 3, "ability.roundabout.stand_targeting",
@@ -1061,6 +1123,8 @@ public class PowersPlanetWaves extends NewDashPreset {
                 "instruction.roundabout.press_skill_crouch", StandIcons.PLANET_WAVES_METEOR_TRACKING, 4, level, bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0, "ability.roundabout.desintegration",
                 "instruction.roundabout.passive", StandIcons.PLANET_WAVES_DESINTEGRATION, 4, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 118, 0, "ability.roundabout.",
+                "instruction.roundabout.passive", StandIcons.PLANET_WAVES_GRAB, 4, level, bypass));
 
         return $$1;
 

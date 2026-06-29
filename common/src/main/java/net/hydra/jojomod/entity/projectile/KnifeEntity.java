@@ -12,6 +12,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -21,6 +22,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -156,6 +158,13 @@ public class KnifeEntity extends AbstractArrow {
                 if(!ME.hasItem){
                     ItemStack ii = this.getPickupItem();
                     if (!ii.isEmpty()) {
+                        if(ME.getUser() instanceof Player PL && ((StandUser) PL).roundabout$getStandPowers() instanceof  PowersManhattanTransfer PM){
+                            if(ME.getHattanTarget() == 0 || PM.switchShootingMode()) {
+                                PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
+                            } else {
+                                PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1F, (this.random.nextFloat() * 0.2F + 0.7F));
+                            }
+                        }
                         ME.hasItemTwo = false;
                         ME.hasItem = true;
                         ME.success = true;
@@ -176,6 +185,9 @@ public class KnifeEntity extends AbstractArrow {
                 }
                // return;
             }
+        } else if ($$1 instanceof GentlyWeepsEntity gwe){
+            GentlyWeepsEntity.dealWithProjectile(this,gwe);
+            return;
         }
         float $$2;
 

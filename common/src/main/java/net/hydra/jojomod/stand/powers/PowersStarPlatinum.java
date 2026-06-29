@@ -601,7 +601,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public int getExpForLevelUp(int currentLevel){
         int amt;
         if (currentLevel == 1){
-            amt = 25;
+            amt = 30;
         } else {
             amt = (100+((currentLevel-1)*100));
         }

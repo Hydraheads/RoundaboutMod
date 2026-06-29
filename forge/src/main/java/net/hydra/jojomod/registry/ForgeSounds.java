@@ -88,6 +88,12 @@ public class ForgeSounds {
             register(ModSounds.BLOCK_FREEZE, ModSounds.BLOCK_FREEZE_ID);
     public static final RegistryObject<SoundEvent> ICE_BLAST_CHARGE_EVENT =
             register(ModSounds.ICE_BLAST_CHARGE, ModSounds.ICE_BLAST_CHARGE_ID);
+    public static final RegistryObject<SoundEvent> COLD_SHOT_EVENT =
+            register(ModSounds.COLD_SHOT, ModSounds.COLD_SHOT_ID);
+    public static final RegistryObject<SoundEvent> GENTLY_WEEPS_EVENT =
+            register(ModSounds.GENTLY_WEEPS, ModSounds.GENTLY_WEEPS_ID);
+    public static final RegistryObject<SoundEvent> DING_EVENT =
+            register(ModSounds.DING, ModSounds.DING_ID);
     public static final RegistryObject<SoundEvent> BANISH_EVENT =
             register(ModSounds.BANISH, ModSounds.BANISH_ID);
     public static final RegistryObject<SoundEvent> IRON_BALL_BOUNCE_EVENT =
@@ -259,6 +265,8 @@ public class ForgeSounds {
             register(ModSounds.STAND_BARRAGE_END_BLOCK, ModSounds.STAND_BARRAGE_END_BLOCK_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHIBA_EVENT =
             register(ModSounds.KILLER_QUEEN_SHIBA, ModSounds.KILLER_QUEEN_SHIBA_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHA_MOVING_EVENT =
+            register(ModSounds.KILLER_QUEEN_SHA_MOVING, ModSounds.KILLER_QUEEN_SHA_MOVING_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHA_SUMMON_EVENT =
             register(ModSounds.KILLER_QUEEN_SHA_SUMMON, ModSounds.KILLER_QUEEN_SHA_SUMMON_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_BARRAGE_EVENT =
@@ -560,6 +568,8 @@ public class ForgeSounds {
             register(ModSounds.BOWLER_HAT_AIM_SOUND, ModSounds.BOWLER_HAT_AIM_ID);
     public static final RegistryObject<SoundEvent> VAMPIRE_DASH =
             register(ModSounds.VAMPIRE_DASH, ModSounds.VAMPIRE_DASH_ID);
+    public static final RegistryObject<SoundEvent> ICY_WIND =
+            register(ModSounds.ICY_WIND, ModSounds.ICY_WIND_ID);
     public static final RegistryObject<SoundEvent> VAMPIRE_GLEAM =
             register(ModSounds.VAMPIRE_GLEAM, ModSounds.VAMPIRE_GLEAM_ID);
     public static final RegistryObject<SoundEvent> BOWLER_HAT_FLY =

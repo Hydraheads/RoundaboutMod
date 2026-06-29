@@ -1,12 +1,17 @@
 package net.hydra.jojomod.mixin.survivor;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.projectile.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -51,6 +56,13 @@ public abstract class SurvivorThrownPotion extends ThrowableItemProjectile imple
                                  ci.cancel();
                                  if(ci.isCancelled()) {
                                      ME.setHeldItemManhattan(ii.copyAndClear());
+                                     if(ME.getUser() instanceof Player PL && ((StandUser) PL).roundabout$getStandPowers() instanceof  PowersManhattanTransfer PM){
+                                         if(ME.getHattanTarget() == 0 || PM.switchShootingMode()) {
+                                             PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
+                                         } else {
+                                             PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1F, (this.random.nextFloat() * 0.2F + 0.7F));
+                                         }
+                                     }
                                      if (this.getOwner() == null || this.getOwner() instanceof Player) {
                                          ME.canAcquireHeldItem = true;
                                          ME.hasItemTwo = false;
@@ -81,6 +93,10 @@ public abstract class SurvivorThrownPotion extends ThrowableItemProjectile imple
                         }
                     }
                 }
+            } else if ($$2x instanceof GentlyWeepsEntity gwe){
+                GentlyWeepsEntity.dealWithProjectile(this,gwe);
+                ci.cancel();
+                return;
             }
         }
 

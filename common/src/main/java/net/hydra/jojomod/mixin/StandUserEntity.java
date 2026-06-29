@@ -64,6 +64,8 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Turtle;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.piglin.Piglin;
@@ -1488,10 +1490,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
         }
-        if (roundabout$isSealed()){
-            roundabout$setSealedTicks(roundabout$sealedTicks - 1);
+        if (roundabout$isSealed() && !level().isClientSide()){
+            roundabout$updateSealedTicks(roundabout$sealedTicks - 1);
             if (((LivingEntity)(Object)this) instanceof Player PE && PE.isCreative()){
-                roundabout$setSealedTicks(-1);
+                roundabout$updateSealedTicks(-1);
             }
             if (!roundabout$isSealed()){
                 this.roundabout$setDrowning(false);
@@ -2292,6 +2294,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 compoundtag.putInt("cooldown_" + i + "_max", ci.maxTime);
             }
         }
+        compoundtag.putInt("sealedTicks",roundabout$getSealedTicks());
 
 
         $$0.put("roundabout",compoundtag);
@@ -2320,6 +2323,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         roundabout$setBubbleEncased(compoundtag.getByte("bubbleEncased"));
         roundabout$setHeat(compoundtag.getByte("heat"));
+        if (compoundtag.contains("sealedTicks")) {
+            roundabout$sealedTicks = compoundtag.getInt("sealedTicks");
+        }
         if (compoundtag.contains("fleshBud")) {
             rdbt$fleshBudPlanted = compoundtag.getUUID("fleshBud");
         }
@@ -2557,6 +2563,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (!this.level().isClientSide && this.roundabout$getStandPowers().isGuarding()) {
             this.roundabout$getStandPowers().animateStand(StandEntity.BROKEN_GUARD);
         }
+        if (rdbt$this() instanceof Mob mb){
+            this.level().playSound(
+                    null,
+                    this.blockPosition(),
+                    SoundEvents.SHIELD_BREAK,
+                    SoundSource.HOSTILE,
+                    1.0F,
+                    1.0F
+            );
+        }
         this.roundabout$syncGuard();
     }
     @Unique
@@ -2570,6 +2586,27 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
     }
+
+    /**your shield does not take damage if the stand blocks it*/
+    @Inject(method = "hurtCurrentlyUsedShield", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundaboutDamageShield(float amount, CallbackInfo ci) {
+        StandUser user = ((StandUser) this);
+        if (user.roundabout$getLogSource() != null){
+            if (PowerTypes.hasStandActive(this)){
+                user.roundabout$getStandPowers().onHitGuard(amount,user.roundabout$getLogSource());
+            }
+        }
+        if (user.roundabout$isGuarding() || user.roundabout$getStandPowers().isSpecialGuarding()) {
+            if (user.roundabout$getLogSource() != null && !user.roundabout$getLogSource().is(DamageTypeTags.BYPASSES_COOLDOWN) && user.roundabout$getGuardCooldown() > 0) {
+                return;
+            }
+
+
+            user.roundabout$damageGuard(amount);
+            ci.cancel();
+        }
+    }
+
     @Unique
     public void roundabout$damageGuard(float damage){
         if (PowerTypes.hasStandActivelyEquipped(rdbt$this()) && roundabout$getLogSource() != null){
@@ -3042,15 +3079,61 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     @Unique
     public void roundabout$setSealedTicks(int ticks){
-        if (PowerTypes.hasStandActive(rdbt$this())){
+        if (PowerTypes.hasStandActive(rdbt$this()) && ticks > -1){
             roundabout$setSummonCD(8);
             roundabout$setActive(false);
+            roundabout$setMaxSealedTicks(ticks);
             roundabout$tryPower(PowerIndex.NONE, true);
             if (this.level().isClientSide()) {
                 C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_DESUMMON);
             }
         }
         roundabout$sealedTicks = ticks;
+        if (!level().isClientSide()){
+            if (rdbt$this() instanceof Player pl) {
+                S2CPacketUtil.sendGenericIntToClientPacket(
+                pl, PacketDataIndex.S2C_INT_MAX_SEAL, ticks);
+                S2CPacketUtil.sendGenericIntToClientPacket(
+                        pl, PacketDataIndex.S2C_INT_SEAL, ticks);
+            }
+        }
+    }
+
+
+
+    @Override
+    @Unique
+    public void roundabout$updateSealedTicks(int ticks){
+        roundabout$sealedTicks = ticks;
+        if (!level().isClientSide()){
+            if (rdbt$this() instanceof Player pl) {
+                S2CPacketUtil.sendGenericIntToClientPacket(
+                        pl, PacketDataIndex.S2C_INT_SEAL, ticks);
+            }
+        }
+    }
+
+    @Override
+    @Unique
+    public void roundabout$setSealedTicks(int ticks, int max){
+        if (PowerTypes.hasStandActive(rdbt$this())){
+            roundabout$setSummonCD(8);
+            roundabout$setActive(false);
+            roundabout$setMaxSealedTicks(max);
+            roundabout$tryPower(PowerIndex.NONE, true);
+            if (this.level().isClientSide()) {
+                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_DESUMMON);
+            }
+        }
+        roundabout$sealedTicks = ticks;
+        if (!level().isClientSide()){
+             if (rdbt$this() instanceof Player pl) {
+                 S2CPacketUtil.sendGenericIntToClientPacket(
+                         pl, PacketDataIndex.S2C_INT_MAX_SEAL, max);
+                    S2CPacketUtil.sendGenericIntToClientPacket(
+                    pl, PacketDataIndex.S2C_INT_SEAL, ticks);
+            }
+        }
     }
 
     @Override
@@ -4219,12 +4302,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
 
+        if (rdbt$this() instanceof Turtle){
+            return basis;
+        }
         BlockState state = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement());
         BlockState state2 = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement().above());
         if (state.is(ModBlocks.WHITE_ALBUM_ICE_BLOCK) || state.is(ModBlocks.WHITE_ALBUM_ICE_SLAB) ||
                 state2.is(ModBlocks.WHITE_ALBUM_ICE_SLAB)){
-            if (!(roundabout$getStandPowers() instanceof PowersWhiteAlbum PW && PW.hasSkatesActivated())){
-                basis *= (1.3f+(PowersWhiteAlbum.getMaxAccelerationTicks()*ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumAccelerationAmount));
+            StandPowers powers = roundabout$getStandPowers();
+            if (!(powers instanceof PowersWhiteAlbum PW && (PW.hasSkatesActivated() || rdbt$this() instanceof Animal)) && !powers.isGuardInput()){
+                basis *= (1.3f+(PowersWhiteAlbum.getMaxAccelerationTicks()*ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumAccelerationAmountv3));
             }
         }
 
@@ -5726,6 +5813,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         rdbt$PowerCooldowns = cooldownInstances;
     }
 
+    private double previousYposManhattan = 0.0;
+    private double previousXposManhattan = 0.0;
+    private double previousZposManhattan = 0.0;
+
     @Unique
     @Override
     public void roundabout$doWindVisionDetectionOther() {
@@ -5734,21 +5825,26 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         /*Last note: put every entity in the Vex check in case some other entity will need it*/
         if (!this.level().isClientSide) {
             IEntityAndData entityAndData = ((IEntityAndData) this);
-            SavedSecond lastSecond = entityAndData.roundabout$getLastSavedSecond();
-            SavedSecond firstSecond = entityAndData.roundabout$getFirstSavedSecond();
-            if (firstSecond != null && lastSecond != null) {
-                boolean posCompare = lastSecond.position.x != firstSecond.position.x || lastSecond.position.z != firstSecond.position.z;
-                boolean posCompareY = lastSecond.position.y != firstSecond.position.y;
+            boolean down = previousYposManhattan > this.getY();
+            boolean up = previousYposManhattan < this.getY();
+            boolean movementX = previousXposManhattan != this.getX();
+            boolean movementZ = previousZposManhattan != this.getZ();
                 if (((Entity) (Object) this).isEyeInFluid(FluidTags.WATER) || ((Entity)(Object) this).isEyeInFluid(FluidTags.LAVA)) {entityAndData.roundabout$setTrueInvisibilityManhattan(-1);}
                 if (((Entity) (Object) this) instanceof Vex v) {
                     if (v.isInWater()) {entityAndData.roundabout$setTrueInvisibilityManhattan(-1);
-                    } else {if (posCompare) {entityAndData.roundabout$setTrueInvisibilityManhattan(10);}
-                    else if (posCompareY) {entityAndData.roundabout$setTrueInvisibilityManhattan(75);}
-                     else {}
+                    } else {
+                        if (down || up) {
+                            entityAndData.roundabout$setTrueInvisibilityManhattan(120);
+                        }
+                        else if (movementX || movementZ) {
+                            entityAndData.roundabout$setTrueInvisibilityManhattan(120);
+                        }
                     }
                 }
-            }
         }
+        previousYposManhattan = this.getY();
+        previousXposManhattan = this.getX();
+        previousZposManhattan = this.getZ();
     }
 
     /**If you stand still enough, abilities recharge faster. But this could be overpowered for some abilties, so

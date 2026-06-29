@@ -153,8 +153,10 @@ public interface StandUser {
     StandPowers roundabout$getStandPowers();
 
     void roundabout$setSealedTicks(int ticks);
-
+    void roundabout$setSealedTicks(int ticks, int maxticks);
     int roundabout$getSealedTicks();
+    void roundabout$updateSealedTicks(int ticks);
+
     boolean roundabout$isSealed();
     int roundabout$getMaxSealedTicks();
     void roundabout$setMaxSealedTicks(int ticks);

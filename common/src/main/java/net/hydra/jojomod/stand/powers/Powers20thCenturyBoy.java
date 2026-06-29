@@ -101,10 +101,10 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     /** wip stuffz **/
     public boolean isWip(){return true;}
     public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
+        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.DARK_PURPLE);
     }
     public Component ifWipListDev(){
-        return Component.literal(  "Waiter").withStyle(ChatFormatting.YELLOW);
+        return Component.literal(  "Waiter").withStyle(ChatFormatting.WHITE);
     }
 
     @Override

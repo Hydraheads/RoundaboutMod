@@ -126,6 +126,8 @@ public abstract class EntityAndData implements IEntityAndData {
     @Unique
     public void rdbt$forceDeltaMovement(Vec3 $$0) {
         this.deltaMovement = $$0;
+        this.hurtMarked = true;
+        this.hasImpulse = true;
     }
 
 
@@ -264,13 +266,6 @@ public abstract class EntityAndData implements IEntityAndData {
         return null;
     }
 
-    @Unique
-    public SavedSecond roundabout$getFirstSavedSecond() {
-        if (!roundabout$secondQue.isEmpty()) {
-            return roundabout$secondQue.getFirst();
-        }
-        return null;
-    }
 
     @Unique
     public void roundabout$resetSecondQueue(){
@@ -729,6 +724,12 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Shadow private float maxUpStep;
 
+    @Shadow
+    public boolean hurtMarked;
+
+    @Shadow
+    public boolean hasImpulse;
+
     @Override
     @Unique
     public void roundabout$universalTick(){
@@ -840,6 +841,10 @@ public abstract class EntityAndData implements IEntityAndData {
         rdbt$doWindVisionDetection();
     }
 
+    private double previousYposManhattan = 0.0;
+    private double previousXposManhattan = 0.0;
+    private double previousZposManhattan = 0.0;
+
     @Unique
     @Override
     public void rdbt$doWindVisionDetection() {
@@ -850,27 +855,27 @@ public abstract class EntityAndData implements IEntityAndData {
             }
             if ((((Entity) (Object) this) instanceof Mob ME) || ((Entity) (Object) this) instanceof Player || ((Entity) (Object) this) instanceof LivingEntity) {
                 IEntityAndData entityAndData = ((IEntityAndData) this);
-                SavedSecond lastSecond = entityAndData.roundabout$getLastSavedSecond();
-                SavedSecond firstSecond = entityAndData.roundabout$getFirstSavedSecond();
-                if (firstSecond != null && lastSecond != null) {
-
-                    boolean posCompare = lastSecond.position.x != firstSecond.position.x || lastSecond.position.z != firstSecond.position.z;
-                    boolean posCompareY = lastSecond.position.y != firstSecond.position.y;
-
+                boolean down = previousYposManhattan > this.getY();
+                boolean up = previousYposManhattan < this.getY();
+                boolean movementX = previousXposManhattan != this.getX();
+                boolean movementZ = previousZposManhattan != this.getZ();
                     if (((Entity) (Object) this).isEyeInFluid(FluidTags.WATER) || ((Entity)(Object) this).isEyeInFluid(FluidTags.LAVA)) {entityAndData.roundabout$setTrueInvisibilityManhattan(-1);}
-
                     else {
-                        if (posCompare) {
+                       if (((LivingEntity) (Object) this) instanceof RoadRollerEntity) {
                             entityAndData.roundabout$setTrueInvisibilityManhattan(10);
-                        } else if (((LivingEntity) (Object) this) instanceof RoadRollerEntity) {
-                            entityAndData.roundabout$setTrueInvisibilityManhattan(10);
-                        } else if (posCompareY) {
-                            entityAndData.roundabout$setTrueInvisibilityManhattan(75);
                         } else {
-                        }
+                           if (down || up) {
+                               entityAndData.roundabout$setTrueInvisibilityManhattan(120);
+                           }
+                           else if (movementX || movementZ) {
+                               entityAndData.roundabout$setTrueInvisibilityManhattan(120);
+                           }
+                       }
                     }
-                }
             }
         }
+        previousYposManhattan = this.getY();
+        previousXposManhattan = this.getX();
+        previousZposManhattan = this.getZ();
     }
 }

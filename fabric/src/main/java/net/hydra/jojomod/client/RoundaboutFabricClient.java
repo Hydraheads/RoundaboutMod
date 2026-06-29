@@ -8,6 +8,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.item.IronBallCrossbowItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.StrayCats.AbtractStrayCat;
 import net.hydra.jojomod.particles.FabricParticlesClient;
 import net.hydra.jojomod.registry.FabricEntityClient;
 import net.hydra.jojomod.registry.FabricItems;
@@ -60,12 +61,14 @@ public class RoundaboutFabricClient implements ClientModInitializer {
                 ModBlocks.GLASS_DOOR,
                 ModBlocks.MELON_PARFAIT);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(), ModBlocks.WHITE_ALBUM_ICE_BLOCK,
+                ModBlocks.COLD_AIR, ModBlocks.FREEZING_AIR, ModBlocks.STICKY_ICE,
                 ModBlocks.WHITE_ALBUM_ICE_SLAB);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(), ModBlocks.WALL_LANTERN);
         FabricParticlesClient.registerClientParticles();
         FabricEntityClient.register();
         ClientPlayConnectionEvents.JOIN.register((clientPlayNetworkHandler, packetSender, minecraftClient) -> ClientNetworking.sendHandshake());
         ItemProperties.register(FabricItems.HARPOON, new ResourceLocation(Roundabout.MOD_ID,"throwing"), (itemStack, clientLevel, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == itemStack ? 1.0f : 0.0f);
-
+        ItemProperties.register(FabricItems.STRAY_CAT_ANIME, new ResourceLocation(Roundabout.MOD_ID,"anim"), (itemStack, clientLevel, livingEntity, i) ->  !itemStack.isEmpty() ? ((AbtractStrayCat)(itemStack.getItem())).getCurrentPredicateValue(clientLevel) : 0.0f);
+        ItemProperties.register(FabricItems.STRAY_CAT_MANGA, new ResourceLocation(Roundabout.MOD_ID,"anim"), (itemStack, clientLevel, livingEntity, i) ->  !itemStack.isEmpty() ? ((AbtractStrayCat)(itemStack.getItem())).getCurrentPredicateValue(clientLevel) : 0.0f);
     }
 }

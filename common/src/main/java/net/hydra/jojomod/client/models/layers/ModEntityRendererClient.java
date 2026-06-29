@@ -54,6 +54,8 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation DIVER_DOWN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "diver_down"), "main");
     public static final ModelLayerLocation HARPOON_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "harpoon"), "main");
     //public static final ModelLayerLocation CHESSBOARD_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "chessboard"), "main");
+    public static final ModelLayerLocation HAND_BLOCK_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "hand_normal"), "main");
+    public static final ModelLayerLocation HAND_SLIM_BLOCK_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "hand_slim"), "main");
     
     public static final ModelLayerLocation BLADED_BOWLER_HAT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "bladed_bowler_hat"), "main");
     public static final ModelLayerLocation TUSK_HOLE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk_hole"), "main");
@@ -68,6 +70,8 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation IRON_BALL_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "iron_ball"), "main");
     public static final ModelLayerLocation RIPPER_EYES_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "ripper_eyes"), "main");
     public static final ModelLayerLocation UV_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "uv"), "main");
+    public static final ModelLayerLocation ICE_TWISTER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "ice_twister"), "main");
+    public static final ModelLayerLocation GENTLY_WEEPS_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "gently_weeps"), "main");
     public static final ModelLayerLocation GASOLINE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "gasoline_can"), "main");
     public static final ModelLayerLocation ZOMBIE_AESTHETICIAN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "zombie_aesthetician"), "main");
     public static final ModelLayerLocation STEVE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_steve"), "main");

@@ -55,7 +55,8 @@ public abstract class ForgePlayer extends LivingEntity {
     protected void roundabout$getForgeDestroySpeed(BlockState $$0, BlockPos pos, CallbackInfoReturnable<Float> cir) {
         StandPowers powers = ((StandUser) this).roundabout$getStandPowers();
         GeneralPowers gp = ((IPowersPlayer)this).rdbt$getPowers();
-        if (PowerTypes.hasStandActive(this) && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()) {
+        if (PowerTypes.hasStandActive(this) &&
+                (powers.canUseMiningStand()) || powers.isMiningRegardless()) {
             cir.setReturnValue(((IPlayerEntity)this).rdbt$mutualMiningSpeedFunction($$0,powers));
             return;
         }
@@ -104,7 +105,8 @@ public abstract class ForgePlayer extends LivingEntity {
             }
         }
 
-        if (!(PowerTypes.hasStandActive(this) && ((((StandUser) this).roundabout$getStandPowers().canUseMiningStand())))) {
+        if (!(PowerTypes.hasStandActive(this) &&
+                ((((StandUser) this).roundabout$getStandPowers().canUseMiningStand())))) {
             float bpow = ((IFatePlayer) this).rdbt$getFatePowers().getBonusPassiveMiningSpeed();
             if (bpow != 1) {
                 f *= bpow;

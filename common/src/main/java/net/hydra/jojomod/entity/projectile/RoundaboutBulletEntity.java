@@ -207,28 +207,29 @@ public class RoundaboutBulletEntity extends AbstractArrow {
                 livingEntity.hurtTime = 0;
             }
 
-                float damage = getBulletDamage();
-                float damageManhattan = this.manhattanDamage;
+            float damage = getBulletDamage();
+            float damageManhattan = this.manhattanDamage;
 
-                if (getAmmoType() == SNIPER) {
-                    float multiplier = Math.min(travelTicks / 7.0F, 1.0F);
-                    damage = damage * multiplier;
+            if (getAmmoType() == SNIPER) {
+                float multiplier = Math.min(travelTicks / 7.0F, 1.0F);
+                damage = damage * multiplier;
 
-                    if (MainUtil.isBossMob(livingEntity)) {
-                        damage = Math.min(damage, ClientNetworking.getAppropriateConfig().itemSettings.rifleDamage / 3F);
-                    }
+                if (MainUtil.isBossMob(livingEntity)) {
+                    damage = Math.min(damage, ClientNetworking.getAppropriateConfig().itemSettings.rifleDamage / 3F);
                 }
+            }
 
-                if (getAmmoType() == SNUBNOSE && !hadIFrames) {
-                    damage += 1.0F;
-                }
-                if (livingEntity instanceof Player) {
-                    damage = (float) (damage * (ClientNetworking.getAppropriateConfig().itemSettings.gunDamageOnPlayers * 0.01));
-                } else {
-                    damage = (float) (damage * (ClientNetworking.getAppropriateConfig().itemSettings.gunDamageOnMobs * 0.01));
-                    ;
-                }
-            if(!isHattan) {
+            if (getAmmoType() == SNUBNOSE && !hadIFrames) {
+                damage += 1.0F;
+            }
+            if (livingEntity instanceof Player) {
+                damage = (float) (damage * (ClientNetworking.getAppropriateConfig().itemSettings.gunDamageOnPlayers * 0.01));
+                damage *= 0.85F;
+            } else {
+                damage = (float) (damage * (ClientNetworking.getAppropriateConfig().itemSettings.gunDamageOnMobs * 0.01));
+                ;
+            }
+            if (!isHattan) {
                 boolean didDamage = livingEntity.hurt(ModDamageTypes.of(level(), getDamageType(), this, this.getOwner()), damage);
 
                 if (didDamage) {
@@ -253,6 +254,9 @@ public class RoundaboutBulletEntity extends AbstractArrow {
 
                 doPostHurtXtraDamage(livingEntity);
             }
+        }else if (entity instanceof GentlyWeepsEntity gwe){
+                GentlyWeepsEntity.dealWithProjectile(this,gwe);
+                return;
         } else {
             entity.hurt(ModDamageTypes.of(level(), getDamageType(), this, this.getOwner()), 1);
         }
@@ -293,7 +297,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
 
     protected void doPostHurtXtraDamage(LivingEntity target) {
         /*Bonus stand damage for Manhattan Transfer*/
-        float mult = this.getAmmoType() == TOMMY_GUN ? 0.65F : 1F;
+        float mult = this.getAmmoType() == TOMMY_GUN ? 0.3F : 1F;
         float amount = 0;
         float finalDamage = 0;
         if(target instanceof Player || MainUtil.isBossMob(target)){

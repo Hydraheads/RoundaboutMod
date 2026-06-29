@@ -97,9 +97,12 @@ public class ModEntities {
     public static EntityType<EvilAuraProjectile> EVIL_AURA_PROJECTILE;
     public static EntityType<RipperEyesProjectile> RIPPER_EYES_PROJECTILE;
     public static EntityType<UltravioletProjectile> ULTRAVIOLET_PROJECTILE;
+    public static EntityType<ColdBlastProjectile> COLD_BLAST_PROJECTILE;
     public static EntityType<PWMeteorEntity> PW_METEOR;
     public static EntityType<PWBigMeteorEntity> PW_BIG_METEOR;
 
+    public static EntityType<IceTwisterEntity> COLD_TWISTER;
+    public static EntityType<GentlyWeepsEntity> GENTLY_WEEPS;
     public static EntityType<GasolineCanEntity> GASOLINE_CAN;
     public static EntityType<RoadRollerEntity> ROAD_ROLLER_ENTITY;
 
@@ -122,6 +125,7 @@ public class ModEntities {
     public static EntityType<TuskNailEntity> TUSK_NAIL;
     public static EntityType<TuskHoleEntity> TUSK_HOLE;
     public static EntityType<MoldSporesEntity> MOLD_SPORES;
+    public static EntityType<StrayCatAirBubble> STRAY_CAT_AIRBUBBLE;
 
     public static EntityType<GoBeyondEntity> GO_BEYOND;
     public static EntityType<EncasementBubbleEntity> ENCASEMENT_BUBBLE;

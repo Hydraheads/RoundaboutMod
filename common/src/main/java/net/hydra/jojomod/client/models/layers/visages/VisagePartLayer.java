@@ -284,8 +284,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pw) {
 
                         String path = PowersWhiteAlbum.getSkinString(skin);
+                        String path2 = path;
                         if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
                             path = "ice";
+                            path2 = null;
                         }
                         if (pw.cracked){
                             path = "cracked/"+path;
@@ -295,6 +297,12 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                 partialTicks, path, r, g, b, heyFull);
                         renderWhiteAlbumBodyPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
                                 partialTicks, path, r, g, b, heyFull);
+                        if (skin == PowersWhiteAlbum.YUKI && path2 != null && !pw.cracked) {
+                            renderWhiteAlbumHeadPart(poseStack, bufferSource, 15728880, entity, xx, yy, zz,
+                                    partialTicks, path+"_glowing", r, g, b, heyFull);
+                            renderWhiteAlbumBodyPart(poseStack, bufferSource, 15728880, entity, xx, yy, zz,
+                                    partialTicks, path+"_glowing", r, g, b, heyFull);
+                        }
                         renderWhiteAlbumRightLegPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
                                 partialTicks, path, r, g, b, heyFull);
                         renderWhiteAlbumLeftLegPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,

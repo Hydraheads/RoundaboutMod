@@ -31,15 +31,21 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 	private final ModelPart Body;
 	private final ModelPart RightArm;
 	private final ModelPart LeftArm;
+	private final ModelPart RightArmSlim;
+	private final ModelPart LeftArmSlim;
 	private final ModelPart Root;
+	private final ModelPart Breast;
 
 	public CenturyBoyModel() {
 		this.Root = createBodyLayer().bakeRoot();
-		this.Waist = Root.getChild("Waist");
-		this.Head = this.Waist.getChild("Head");
-		this.Body = this.Waist.getChild("Body");
-		this.RightArm = this.Waist.getChild("RightArm");
-		this.LeftArm = this.Waist.getChild("LeftArm");
+		this.Waist = Root.getChild("stand");
+		this.Head = this.Waist.getChild("head");
+		this.Body = this.Waist.getChild("body");
+		this.RightArm = this.Waist.getChild("rightArm");
+		this.RightArmSlim = this.Waist.getChild("rightArmSlim");
+		this.LeftArm = this.Waist.getChild("leftArm");
+		this.LeftArmSlim = this.Waist.getChild("leftArmSlim");
+		this.Breast = this.Waist.getChild("breast");
 	}
 
 
@@ -48,25 +54,33 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition Waist = partdefinition.addOrReplaceChild("Waist", CubeListBuilder.create(), PartPose.offset(0.0F, 12.0F, 0.0F));
+		PartDefinition stand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create(), PartPose.offset(0.0F, -1.0F, 8.4F));
 
-		PartDefinition Head = Waist.addOrReplaceChild("Head", CubeListBuilder.create().texOffs(32, 31).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.55F)), PartPose.offset(0.0F, -12.0F, 0.0F));
+		PartDefinition head = stand.addOrReplaceChild("head", CubeListBuilder.create().texOffs(32, 31).addBox(-4.0F, -7.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.55F)), PartPose.offset(0.0F, 0.0F, -8.4F));
 
-		PartDefinition RightAntenna_r1 = Head.addOrReplaceChild("RightAntenna_r1", CubeListBuilder.create().texOffs(28, 0).addBox(0.0F, -10.0F, -7.0F, 0.0F, 17.0F, 14.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-3.0F, -8.0F, -2.0F, 0.0F, 0.0F, -0.0873F));
+		PartDefinition rightAntennaR1 = head.addOrReplaceChild("RightAntenna_r1", CubeListBuilder.create().texOffs(28, 0).addBox(0.0F, -10.0F, -7.0F, 0.0F, 17.0F, 14.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-3.0F, -7.0F, -2.0F, 0.0F, 0.0F, -0.0873F));
 
-		PartDefinition leftAntenna_r1 = Head.addOrReplaceChild("leftAntenna_r1", CubeListBuilder.create().texOffs(28, 0).addBox(0.0F, -10.0F, -7.0F, 0.0F, 17.0F, 14.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, -8.0F, -2.0F, 0.0F, 0.0F, 0.0873F));
+		PartDefinition leftAntennaR1 = head.addOrReplaceChild("leftAntenna_r1", CubeListBuilder.create().texOffs(28, 0).addBox(0.0F, -10.0F, -7.0F, 0.0F, 17.0F, 14.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, -7.0F, -2.0F, 0.0F, 0.0F, 0.0873F));
 
-		PartDefinition Body = Waist.addOrReplaceChild("Body", CubeListBuilder.create().texOffs(0, 47).addBox(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(0.3F))
-		.texOffs(56, 0).addBox(-9.0F, -3.0F, -3.0F, 5.0F, 6.0F, 6.0F, new CubeDeformation(0.0F))
-		.texOffs(78, 0).addBox(4.0F, -3.0F, -3.0F, 5.0F, 6.0F, 6.0F, new CubeDeformation(0.0F))
-		.texOffs(64, 40).addBox(9.0F, -1.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-		.texOffs(64, 40).addBox(-11.0F, -1.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-		.texOffs(64, 59).addBox(-11.0F, -3.0F, -3.0F, 0.0F, 6.0F, 6.0F, new CubeDeformation(0.0F))
-		.texOffs(64, 59).addBox(11.0F, -3.0F, -3.0F, 0.0F, 6.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -12.0F, 0.0F));
+		PartDefinition body = stand.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 47).addBox(-4.0F, -1.0F, -2.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(0.3F))
+				.texOffs(64, 59).addBox(11.0F, -4.0F, -3.0F, 0.0F, 6.0F, 6.0F, new CubeDeformation(0.0F))
+				.texOffs(64, 59).addBox(-11.0F, -4.0F, -3.0F, 0.0F, 6.0F, 6.0F, new CubeDeformation(0.0F))
+				.texOffs(78, 0).addBox(4.0F, -4.0F, -3.0F, 5.0F, 6.0F, 6.0F, new CubeDeformation(0.0F))
+				.texOffs(64, 40).addBox(9.0F, -2.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
+				.texOffs(64, 40).addBox(-11.0F, -2.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
+				.texOffs(56, 0).addBox(-9.0F, -4.0F, -3.0F, 5.0F, 6.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 2.0F, -8.4F));
 
-		PartDefinition RightArm = Waist.addOrReplaceChild("RightArm", CubeListBuilder.create().texOffs(16, 80).addBox(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.3F)), PartPose.offset(-5.0F, -10.0F, 0.0F));
+		PartDefinition breast = stand.addOrReplaceChild("breast", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition LeftArm = Waist.addOrReplaceChild("LeftArm", CubeListBuilder.create().texOffs(16, 63).addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.3F)), PartPose.offset(5.0F, -10.0F, 0.0F));
+		PartDefinition chestR1 = breast.addOrReplaceChild("chest_r1", CubeListBuilder.create().texOffs(48, 75).addBox(-4.2F, 0.0F, -0.1F, 8.4F, 4.1F, 4.1F, new CubeDeformation(0.2F)), PartPose.offsetAndRotation(0.0F, -0.4F, -2.0F, -0.4363F, 0.0F, 0.0F));
+
+		PartDefinition rightArm = stand.addOrReplaceChild("rightArm", CubeListBuilder.create().texOffs(16, 80).addBox(0.0F, -3.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.3F)), PartPose.offset(-8.0F, 4.0F, -8.4F));
+
+		PartDefinition rightArmSlim = stand.addOrReplaceChild("rightArmSlim", CubeListBuilder.create().texOffs(112, 17).addBox(1.0F, -3.0F, -2.0F, 3.0F, 12.0F, 4.0F, new CubeDeformation(0.3F)), PartPose.offset(-8.0F, 4.0F, -8.4F));
+
+		PartDefinition leftArm = stand.addOrReplaceChild("leftArm", CubeListBuilder.create().texOffs(16, 63).addBox(-4.0F, -3.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.3F)), PartPose.offset(8.0F, 4.0F, -8.4F));
+
+		PartDefinition leftArmSlim = stand.addOrReplaceChild("leftArmSlim", CubeListBuilder.create().texOffs(112, 0).addBox(-4.0F, -3.0F, -2.0F, 3.0F, 12.0F, 4.0F, new CubeDeformation(0.3F)), PartPose.offset(8.0F, 4.0F, -8.4F));
 
 		return LayerDefinition.create(meshdefinition, 128, 128);
 	}
@@ -159,7 +173,7 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 		if (context instanceof LivingEntity LE) {
 			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
 
-			root().getChild("Waist").getChild("Body").render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+			Body.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
 		}
 	}
 	public void renderHead(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
@@ -167,7 +181,7 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 		if (context instanceof LivingEntity LE) {
 			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
 
-			root().getChild("Waist").getChild("Head").render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+			Head.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
 		}
 	}
 	public void renderRightArm(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
@@ -175,7 +189,7 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 		if (context instanceof LivingEntity LE) {
 			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
 
-			root().getChild("Waist").getChild("RightArm").render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+			RightArm.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
 		}
 	}
 	public void renderLeftArm(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
@@ -183,16 +197,46 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 		if (context instanceof LivingEntity) {
 			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
 
-			root().getChild("Waist").getChild("LeftArm").render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+			LeftArm.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
 		}
 	}
+	public void renderRightArmSlim(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
+							   int light, float r, float g, float b, float alpha, byte skin) {
+		if (context instanceof LivingEntity LE) {
+			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
 
+			RightArmSlim.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+		}
+	}
+	public void renderLeftArmSlim(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
+							  int light, float r, float g, float b, float alpha, byte skin) {
+		if (context instanceof LivingEntity) {
+			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
+
+			LeftArmSlim.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+		}
+	}
+	public void renderBreast(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
+							  int light, float r, float g, float b, float alpha, byte skin) {
+		if (context instanceof LivingEntity) {
+			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
+
+			if (ClientUtil.hasChangedBody(context)) {
+				consumer = bufferSource.getBuffer(RenderType.entityTranslucent(ClientUtil.getChangedBodyBreastTexture(context)));
+			}
+			Breast.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+
+		}
+	}
 	public void renderAll(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
 					   int light, float r, float g, float b, float alpha, byte skin) {
 		if (context instanceof LivingEntity) {
 			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
 
-			root().getChild("Waist").render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+			Body.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+			Head.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+			RightArm.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+			LeftArm.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
 		}
 	}
 

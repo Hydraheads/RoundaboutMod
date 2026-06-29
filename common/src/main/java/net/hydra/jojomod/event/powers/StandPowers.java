@@ -150,6 +150,10 @@ public class StandPowers extends AbilityScapeBasis {
     public void visualFrameTick() {};
 
 
+    public float getDamageAdd(DamageSource source, float amt, Entity target){
+        return 0;
+    }
+
 
     /**Runs this code while switching out of your stand with a disc*/
     public void onStandSwitch(){
@@ -163,6 +167,15 @@ public class StandPowers extends AbilityScapeBasis {
     }
     /**Runs this code while switching into stand with a disc*/
     public void onStandSwitchInto(){
+    }
+
+    public void onReleaseGuard(){
+        StandUser standComp = ((StandUser) self);
+        standComp.roundabout$tryPower(PowerIndex.NONE,true);
+        if (standComp.roundabout$getActivePowerPhase() > 0 ) {
+            standComp.roundabout$setInterruptCD(3);
+        }
+        C2SPacketUtil.guardCancelPacket();
     }
 
     /**Holds one arm out with the player model, override if you are using a stand like soft and wet or emperor that
@@ -413,6 +426,7 @@ public class StandPowers extends AbilityScapeBasis {
             if (!ipa.roundabout$getIsDeflected()){
                 if (PE instanceof RoundaboutBulletEntity) {
                     ((RoundaboutBulletEntity) PE).setSuperThrown(false);
+                    PE.setOwner(self);
                     PE.level().playSound(null, PE.blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
                 ipa.roundabout$setIsDeflected(true);
@@ -651,6 +665,10 @@ public class StandPowers extends AbilityScapeBasis {
                 this.getSelf().getMainHandItem().getItem() instanceof ShearsItem) || (this.getActivePower() == PowerIndex.MINING
                 && !(this.getSelf().getMainHandItem().getItem() instanceof ShearsItem))
         ));
+    }
+
+    public boolean isMiningRegardless() {
+        return isBrawling() && hasStandActive(self);
     }
 
     /**How fast does the block mine blocks that require pickaxes?*/

@@ -20,6 +20,7 @@ import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.paintings.RoundaboutPainting;
 import net.hydra.jojomod.entity.pathfinding.GroundPathfindingStandAttackEntity;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
+import net.hydra.jojomod.entity.projectile.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -215,6 +216,7 @@ public class MainUtil {
     public static ArrayList<String> addedMobsWithEnderBlood = Lists.newArrayList();
     public static ArrayList<String> removeBloodFromThese = Lists.newArrayList();
     public static ArrayList<String> unfreezableMobs = Lists.newArrayList();
+    public static ArrayList<String> powerfulMobs = Lists.newArrayList();
     public static ArrayList<String> foodThatHasEffectsForVampires = Lists.newArrayList();
     public static ArrayList<String> vampireSunDamageWorlds = Lists.newArrayList();
     public static Set<String> foodThatGivesBloodList = Set.of();
@@ -354,6 +356,15 @@ public class MainUtil {
             return false;
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
         if (unfreezableMobs != null && !unfreezableMobs.isEmpty() && rl != null && unfreezableMobs.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isPowerfulMob(Entity ent){
+        if (ent == null)
+            return false;
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        if (powerfulMobs != null && !powerfulMobs.isEmpty() && rl != null && powerfulMobs.contains(rl.toString())){
             return true;
         }
         return false;
@@ -667,9 +678,16 @@ public class MainUtil {
         return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.userAndWorthyBreedingOddsBonus;
     }
     public static boolean isHumanoid(LivingEntity LE){
-        return (LE instanceof Zombie || LE instanceof AbstractSkeleton
+        return ((LE instanceof Zombie || LE instanceof AbstractSkeleton
         || LE instanceof Player || LE instanceof Piglin
-                || LE instanceof JojoNPC);
+                || LE instanceof JojoNPC) && !LE.isBaby());
+
+    }
+
+    public static boolean isHumanoid2(LivingEntity LE){
+        return ((LE instanceof Zombie || LE instanceof AbstractSkeleton
+                || LE instanceof Player
+                || LE instanceof JojoNPC) && !LE.isBaby());
 
     }
 
@@ -964,7 +982,10 @@ public class MainUtil {
         };
         for (Entity value : hitEntities) {
             if (value instanceof LivingEntity mb){
-                if ((mb.isFallFlying() || mb instanceof Phantom|| mb instanceof FallenPhantom) && !(mb instanceof StandEntity)){
+                if ((mb.isFallFlying() || mb instanceof Phantom|| (mb instanceof FallenPhantom fm &&
+                        !(fm.getControllingPassenger() != null && owner != null &&
+                                owner.getUUID().equals(fm.getControllingPassenger().getUUID()))))
+                        && !(mb instanceof StandEntity)){
                     if (owner != null && owner.getUUID() == mb.getUUID()) {
                     } else {
                         return mb;
@@ -1032,6 +1053,11 @@ public class MainUtil {
     }
 
     public static boolean canFreeze(Entity mob){
+        if (mob instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA &&
+                PWA.hasStandActive(LE)) {
+            return false;
+        }
+
         return (!isFreezableMobBlacklisted(mob) && !(mob instanceof Mob mb && isBossMob(mb))
                 && !(mob != null && ((TimeStop)mob.level()).CanTimeStopEntity(mob))
         &&  !(mob instanceof LivingEntity le && FateTypes.isVampire(le)));
@@ -1260,11 +1286,13 @@ public class MainUtil {
             }
 
             if (!hasEnderBlood(entity) && !hasBlueBlood(entity)) {
+                //Bleeding activates stone masks
                 if (source != null && isWearingEitherStoneMask(source) && source.distanceTo(entity) < 5) {
                     activateStoneMask(source);
                 } else if (isWearingStoneMask(entity)) {
                     activateStoneMask(entity);
                 }
+
             }
 
             ((StandUser)entity).roundabout$setBleedLevel(level);
@@ -2433,7 +2461,8 @@ public class MainUtil {
         return $$8 == null ? null : new EntityHitResult($$8, $$9);
     }
     public static boolean isBossMob(Entity LE){
-        if (LE instanceof Warden || LE instanceof EnderDragon || LE instanceof WitherBoss ||
+        if (LE instanceof Warden || LE instanceof EnderDragon || LE instanceof WitherBoss
+            || isPowerfulMob(LE) ||
                 (LE instanceof LivingEntity ll && (ModPacketHandler.PLATFORM_ACCESS.getBoss(ll)))){
             return true;
         }
@@ -2908,6 +2937,7 @@ public class MainUtil {
     /**A generalized packet for sending floats to the server. Context is what to do with the data byte*/
     public static void handleFloatPacketC2S(Player player, float data, byte context){
         if (context == PacketDataIndex.FLOAT_VELOCITY_BARBED_WIRE) {
+            data = Math.min(data,15F);
             if (player.getVehicle() != null){
                 if (player.getVehicle().hurt(ModDamageTypes.of(player.level(), ModDamageTypes.BARBED_WIRE), data)){
                     MainUtil.makeBleed(player.getVehicle(),0,200,null);

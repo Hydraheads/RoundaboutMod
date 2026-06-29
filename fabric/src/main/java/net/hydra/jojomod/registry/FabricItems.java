@@ -5,11 +5,11 @@ import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StreetSignBlock;
-import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.event.powers.visagedata.aesthetician.*;
 import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.item.StrayCats.*;
 import net.hydra.jojomod.item.paintings.BirthOfVenusPaintingItem;
 import net.hydra.jojomod.item.paintings.MonaLisaPaintingItem;
 import net.hydra.jojomod.item.paintings.VanGoughPaintingItem;
@@ -20,16 +20,12 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class FabricItems {
     public static Item STAND_ARROW = registerItem("stand_arrow", new StandArrowItem(new Item.Properties().stacksTo(1).durability(5)));
@@ -197,14 +193,17 @@ public class FabricItems {
     public static Item GASOLINE_BUCKET = registerItem("gasoline_bucket", new GasolineBucketItem(new Item.Properties().stacksTo(1)));
     public static Item ROAD_ROLLER = registerItem("road_roller", new RoadRollerItem(new Item.Properties().stacksTo(1)));
 
+    public static Item STRAY_CAT_ANIME = registerItem("stray_cat_anime", new StrayCatAnime(new Item.Properties().stacksTo(1)));
+    public static Item STRAY_CAT_MANGA = registerItem("stray_cat_manga", new StrayCatManga(new Item.Properties().stacksTo(1)));
+
     public static Item STAND_DISC = registerItem("stand_disc", new EmptyStandDiscItem(new Item.Properties().stacksTo(1)));
     public static Item COFFEE_GUM = registerItem("coffee_gum", new Item(new Item.Properties().food(ModFoodComponents.COFFEE_GUM)));
     public static Item METEORITE = registerItem("meteorite", new Item(new Item.Properties()));
     public static Item AJA = registerItem("aja", new Item(new Item.Properties()));
-    public static Item HAND = registerItem("player_hand", new Item(new Item.Properties()));
-    public static Item VILLAGER_HAND = registerItem("villager_hand", new Item(new Item.Properties()));
-    public static Item ILLAGER_HAND = registerItem("illager_hand", new Item(new Item.Properties()));
-    public static Item ROTTEN_HAND = registerItem("rotten_hand", new Item(new Item.Properties()));
+    //public static Item HAND = registerItem("player_hand", new Item(new Item.Properties()));
+    //public static Item VILLAGER_HAND = registerItem("villager_hand", new Item(new Item.Properties()));
+    //public static Item ILLAGER_HAND = registerItem("illager_hand", new Item(new Item.Properties()));
+    //public static Item ROTTEN_HAND = registerItem("rotten_hand", new Item(new Item.Properties()));
     public static Item METEORITE_INGOT = registerItem("meteorite_ingot", new Item(new Item.Properties()));
     public static Item STREET_SIGN_DIO_BLOCK_ITEM = registerItem("street_sign_dio_item", (Item) new SignBlockItem(ModBlocks.STREET_SIGN_DIO, new Item.Properties().stacksTo(1)));
     public static Item STREET_SIGN_RIGHT_BLOCK_ITEM = registerItem("street_sign_right_item", (Item) new SignBlockItem(ModBlocks.STREET_SIGN_RIGHT, new Item.Properties().stacksTo(1)));
@@ -235,6 +234,7 @@ public class FabricItems {
     public static Item LUCY_MASK = registerItem("lucy_mask", new MaskItem(new Item.Properties().stacksTo(1), new LucyVisage(null)));
     public static Item JOHNNY_MASK = registerItem("johnny_mask", new MaskItem(new Item.Properties().stacksTo(1), new JohnnyVisage(null)));
     public static Item MISTA_MASK = registerItem("mista_mask", new MaskItem(new Item.Properties().stacksTo(1), new MistaVisage(null)));
+    public static Item GHIACCIO_MASK = registerItem("ghiaccio_mask", new MaskItem(new Item.Properties().stacksTo(1), new GhiaccioVisage(null)));
     public static Item JOSUKE_PART_EIGHT_MASK = registerItem("josuke_part_eight_mask", new MaskItem(new Item.Properties().stacksTo(1), new JosukePartEightVisage(null)));
     public static Item GUCCIO_MASK = registerItem("guccio_mask", new MaskItem(new Item.Properties().stacksTo(1), new GuccioVisage(null)));
     public static Item HATO_MASK = registerItem("hato_mask", new MaskItem(new Item.Properties().stacksTo(1), new HatoVisage(null)));
@@ -412,6 +412,7 @@ public class FabricItems {
                         entries.accept(JOTARO_4_MASK);
                         entries.accept(AYA_MASK);
                         entries.accept(MISTA_MASK);
+                        entries.accept(GHIACCIO_MASK);
                         entries.accept(JOTARO_6_MASK);
                         entries.accept(GUCCIO_MASK);
                         entries.accept(JOHNNY_MASK);
@@ -565,6 +566,8 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_MAGICIANS_RED);
                         entries.accept(STAND_DISC_RATT);
                         entries.accept(MAX_STAND_DISC_RATT);
+                        entries.accept(STAND_DISC_WHITE_ALBUM);
+                        entries.accept(MAX_STAND_DISC_WHITE_ALBUM);
                         entries.accept(STAND_DISC_SOFT_AND_WET);
                         entries.accept(MAX_STAND_DISC_SOFT_AND_WET);
                         entries.accept(STAND_DISC_WALKING_HEART);
@@ -585,10 +588,8 @@ public class FabricItems {
                     .icon(() -> new ItemStack(AJA)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here
                     	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
-                        entries.accept(HAND);
-                        entries.accept(VILLAGER_HAND);
-                        entries.accept(ILLAGER_HAND);
-                        entries.accept(ROTTEN_HAND);
+                        entries.accept(STRAY_CAT_ANIME);
+                        entries.accept(STRAY_CAT_MANGA);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_20_CENTURY_BOY);
@@ -601,8 +602,6 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_KILLER_QUEEN);
                         entries.accept(STAND_DISC_EMPEROR);
                         entries.accept(MAX_STAND_DISC_EMPEROR);
-                        entries.accept(STAND_DISC_WHITE_ALBUM);
-                        entries.accept(MAX_STAND_DISC_WHITE_ALBUM);
                         entries.accept(STAND_DISC_PLANET_WAVES);
                         entries.accept(MAX_STAND_DISC_PLANET_WAVES);
 
@@ -733,15 +732,17 @@ public class FabricItems {
         ModItems.COFFEE_GUM = COFFEE_GUM;
         ModItems.METEORITE = METEORITE;
         ModItems.AJA = AJA;
-        ModItems.HAND = HAND;
-        ModItems.VILLAGER_HAND = VILLAGER_HAND;
-        ModItems.ILLAGER_HAND = ILLAGER_HAND;
-        ModItems.ROTTEN_HAND = ROTTEN_HAND;
+        //ModItems.HAND = HAND;
+        //ModItems.VILLAGER_HAND = VILLAGER_HAND;
+        //ModItems.ILLAGER_HAND = ILLAGER_HAND;
+        //ModItems.ROTTEN_HAND = ROTTEN_HAND;
         ModItems.ROAD_ROLLER = ROAD_ROLLER;
         ModItems.METEORITE_INGOT = METEORITE_INGOT;
         ModItems.IRON_BALL_CROSSBOW = IRON_BALL_CROSSBOW;
         ModItems.LOCACACA_PIT = LOCACACA_PIT;
-        
+
+        ModItems.STRAY_CAT_ANIME = STRAY_CAT_ANIME;
+        ModItems.STRAY_CAT_MANGA = STRAY_CAT_MANGA;
 
         ((StreetSignBlock)FabricBlocks.STREET_SIGN_DIO).referenceItem = STREET_SIGN_DIO_BLOCK_ITEM.getDefaultInstance();
         ((StreetSignBlock)FabricBlocks.STREET_SIGN_RIGHT).referenceItem = STREET_SIGN_RIGHT_BLOCK_ITEM.getDefaultInstance();
@@ -776,6 +777,7 @@ public class FabricItems {
         ModItems.VALENTINE_MASK = VALENTINE_MASK;
         ModItems.LUCY_MASK = LUCY_MASK;
         ModItems.MISTA_MASK = MISTA_MASK;
+        ModItems.GHIACCIO_MASK = GHIACCIO_MASK;
         ModItems.JOHNNY_MASK = JOHNNY_MASK;
         ModItems.JOSUKE_PART_EIGHT_MASK = JOSUKE_PART_EIGHT_MASK;
         ModItems.GUCCIO_MASK = GUCCIO_MASK;

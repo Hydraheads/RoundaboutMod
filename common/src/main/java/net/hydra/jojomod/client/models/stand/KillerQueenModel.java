@@ -151,7 +151,7 @@ public class KillerQueenModel<T extends KillerQueenEntity> extends StandModel<T>
 		return LayerDefinition.create(meshdefinition, 128, 128);
 	}
 	
-	StandPowers Power = new PowersKillerQueen(null);
+	PowersKillerQueen Power = new PowersKillerQueen(null);
 
 	@Override
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
@@ -168,13 +168,16 @@ public class KillerQueenModel<T extends KillerQueenEntity> extends StandModel<T>
         this.animate(pEntity.itemThrow, KillerQueenAnimations.Item_Throw, pAgeInTicks, 1F);
         this.animate(pEntity.detonate, KillerQueenAnimations.detonate, pAgeInTicks, 1F);
         this.animate(pEntity.thirdBomb, KillerQueenAnimations.TertiaryBomb, pAgeInTicks, 1F);
-        this.animate(pEntity.mobBombPlant, KillerQueenAnimations.FirstBombTouchMob, pAgeInTicks, 0.45F);
-        this.animate(pEntity.mobBombPlant2, KillerQueenAnimations.FirstBombTouchMob2, pAgeInTicks, 0.45F);
+        this.animate(pEntity.mobBombPlant, KillerQueenAnimations.FirstBombTouchMob,   pAgeInTicks, (1/((float) (Power.getMobPlantWindup()) /20)) * 1.364f);
+        this.animate(pEntity.mobBombPlant2, KillerQueenAnimations.FirstBombTouchMob2, pAgeInTicks, (1/((float) (Power.getMobPlantWindup()) /20)) * 1.364f);
         this.animate(pEntity.bubbleLaunch, KillerQueenAnimations.bubble_launch, pAgeInTicks, 1F);
         this.animate(pEntity.bubbleRedirect, KillerQueenAnimations.bubble_redirection, pAgeInTicks, 1F);
         this.animate(pEntity.heavyStrike, KillerQueenAnimations.HeavyStrike, pAgeInTicks, 1F);
 		this.animate(pEntity.shaSend, KillerQueenAnimations.sha_deploy, pAgeInTicks, 2F);
 		this.animate(pEntity.impale, KillerQueenAnimations.Impale, pAgeInTicks, 1.04F);
+
+		this.animate(pEntity.blockThrowAnimation, StandAnimations.THROW_BLOCK, pAgeInTicks, 1.7f);
+		this.animate(pEntity.itemThrowAnimation, StandAnimations.THROW_ITEM, pAgeInTicks, 1.25f);
     }
 
 

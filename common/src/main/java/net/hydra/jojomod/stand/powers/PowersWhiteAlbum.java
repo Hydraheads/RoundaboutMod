@@ -2,13 +2,14 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IFatePlayer;
-import net.hydra.jojomod.block.ModBlocks;
-import net.hydra.jojomod.block.StandFireBlock;
-import net.hydra.jojomod.block.WhiteAlbumIceBlock;
+import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.BlockWallEntity;
-import net.hydra.jojomod.entity.stand.SurvivorEntity;
+import net.hydra.jojomod.entity.projectile.ColdBlastProjectile;
+import net.hydra.jojomod.entity.projectile.GentlyWeepsEntity;
+import net.hydra.jojomod.entity.projectile.IceTwisterEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
@@ -16,6 +17,9 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampiricFate;
+import net.hydra.jojomod.item.FirearmItem;
+import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -23,14 +27,18 @@ import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -41,11 +49,16 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Blaze;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -56,7 +69,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class PowersWhiteAlbum extends NewDashPreset {
@@ -120,11 +132,17 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
-
     @Override
     public float guardSpecialties(DamageSource sauce, float damage){
         if (sauce.is(DamageTypes.PLAYER_ATTACK)){
-            damage*=0.44F;
+            if (self instanceof Player){
+                damage*=ClientNetworking.getAppropriateConfig().whiteAlbumSettings.playerGuardDamageMultiplierv2;
+            } else {
+                damage*=ClientNetworking.getAppropriateConfig().whiteAlbumSettings.playerGuardDamageMultiplierMobs;
+            }
+        }
+        if (sauce.is(DamageTypes.MOB_ATTACK)){
+            damage*=ClientNetworking.getAppropriateConfig().whiteAlbumSettings.mobGuardDamageMultiplierv2;
         }
         if (sauce.is(ModDamageTypes.BULLET) ||
                 sauce.getEntity() instanceof Blaze){
@@ -132,30 +150,39 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
         return super.guardSpecialties(sauce,damage);
     }
+
+    public void onChangedFrozenWater(BlockPos blockPos, int j){
+        BlockState blockState = ModBlocks.WHITE_ALBUM_ICE_BLOCK.defaultBlockState();
+        BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
+        for (BlockPos blockPos2 : BlockPos.betweenClosed(blockPos.offset(-j, -1, -j), blockPos.offset(j, -1, j))) {
+            BlockState blockState3;
+            if (!blockPos2.closerToCenterThan(self.position(), j)) continue;
+            mutableBlockPos.set(blockPos2.getX(), blockPos2.getY() + 1, blockPos2.getZ());
+            BlockState blockState2 = self.level().getBlockState(mutableBlockPos);
+            if (!blockState2.isAir() || (blockState3 = self.level().getBlockState(blockPos2)) != FrostedIceBlock.meltsInto()
+                    || !blockState.canSurvive(self.level(), blockPos2) ||
+                    !self.level().isUnobstructed(blockState, blockPos2, CollisionContext.empty())) continue;
+            self.level().setBlockAndUpdate(blockPos2, blockState);
+            self.level().scheduleTick(blockPos2, ModBlocks.WHITE_ALBUM_ICE_BLOCK, Mth.nextInt(self.getRandom(), 110, 130));
+        }
+    }
     @Override
     public void onChangedBlock(BlockPos blockPos){
-        if (hasSkatesActivated() && acceleration > 0 && !self.isSwimming() &&
+        if (self instanceof Animal ah && ah.getPassengers() != null && !ah.getPassengers().isEmpty() &&
+                ah.getPassengers().get(0) instanceof Player) {
+            onChangedFrozenWater(blockPos,3);
+        } else if (hasSkatesActivated() && acceleration > 0 && !self.isSwimming() &&
         !self.isFallFlying()) {
+            boolean canFreezeGrass = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.freezesGrassv2;
+            boolean canFreezeSnow = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.freezesSnow;
             if (!self.onGround()) {
                 return;
             }
-            BlockState blockState = ModBlocks.WHITE_ALBUM_ICE_BLOCK.defaultBlockState();
-            int j = Math.min(16, 2 + 1);
-            BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
-            for (BlockPos blockPos2 : BlockPos.betweenClosed(blockPos.offset(-j, -1, -j), blockPos.offset(j, -1, j))) {
-                BlockState blockState3;
-                if (!blockPos2.closerToCenterThan(self.position(), j)) continue;
-                mutableBlockPos.set(blockPos2.getX(), blockPos2.getY() + 1, blockPos2.getZ());
-                BlockState blockState2 = self.level().getBlockState(mutableBlockPos);
-                if (!blockState2.isAir() || (blockState3 = self.level().getBlockState(blockPos2)) != FrostedIceBlock.meltsInto()
-                        || !blockState.canSurvive(self.level(), blockPos2) ||
-                        !self.level().isUnobstructed(blockState, blockPos2, CollisionContext.empty())) continue;
-                self.level().setBlockAndUpdate(blockPos2, blockState);
-                self.level().scheduleTick(blockPos2, ModBlocks.WHITE_ALBUM_ICE_BLOCK, Mth.nextInt(self.getRandom(), 110, 130));
-            }
+            onChangedFrozenWater(blockPos,3);
 
-            j = 2;
-            blockState = ModBlocks.WHITE_ALBUM_ICE_SLAB.defaultBlockState();
+            BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
+            int j = 2;
+            BlockState blockState = ModBlocks.WHITE_ALBUM_ICE_SLAB.defaultBlockState();
             for (BlockPos blockPos2 : BlockPos.betweenClosed(blockPos.offset(-j, 0, -j), blockPos.offset(j, 0, j))) {
 
                 mutableBlockPos.set(blockPos2.getX(), blockPos2.getY() + 1, blockPos2.getZ());
@@ -164,24 +191,26 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 if (!blockState.canSurvive(self.level(), blockPos2) ||
                         !self.level().isUnobstructed(blockState, blockPos2, CollisionContext.empty())) continue;
                     if (blockState3.isAir() ||
-                            (MainUtil.getIsGamemodeApproriateForGrief(self) &&
-                                    blockState3.canBeReplaced() &&
-                                    !(blockState3.getBlock() instanceof LiquidBlockContainer)&&
-                                    !(blockState3.getBlock() instanceof FireBlock)&&
-                                    !(blockState3.getBlock() instanceof StandFireBlock)
-                                    &&
-                            !blockState3.liquid() &&
-                            !(blockState3.hasProperty(BlockStateProperties.WATERLOGGED) &&
-                                    blockState3.getValue(BlockStateProperties.WATERLOGGED)
-                                    )
-                            )
-                    ) {
-                            self.level().setBlockAndUpdate(blockPos2, blockState);
-                            self.level().scheduleTick(blockPos2, ModBlocks.WHITE_ALBUM_ICE_SLAB, Mth.nextInt(self.getRandom(), 110, 130));
-                    }
+                        (MainUtil.getIsGamemodeApproriateForGrief(self) &&
+                                (canFreezeGrass || (blockState3.is(Blocks.SNOW) && canFreezeSnow))
+                                && blockState3.canBeReplaced() &&
+                                !(blockState3.getBlock() instanceof LiquidBlockContainer)&&
+                                !(blockState3.getBlock() instanceof FireBlock)&&
+                                !(blockState3.getBlock() instanceof StickyIceCoatingBlock)&&
+                                !(blockState3.getBlock() instanceof ColdAirBlock)&&
+                                !(blockState3.getBlock() instanceof StandFireBlock)
+                                &&
+                        !blockState3.liquid() &&
+                        !(blockState3.hasProperty(BlockStateProperties.WATERLOGGED) &&
+                                blockState3.getValue(BlockStateProperties.WATERLOGGED)
+                                )
+                        )
+                ) {
+                        self.level().setBlockAndUpdate(blockPos2, blockState);
+                        self.level().scheduleTick(blockPos2, ModBlocks.WHITE_ALBUM_ICE_SLAB, Mth.nextInt(self.getRandom(), 110, 130));
                 }
-
             }
+        }
     }
 
     @Override
@@ -209,6 +238,19 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 if ($$0.getEntity() instanceof LivingEntity LE && self instanceof Player player){
                     S2CPacketUtil.sendSimpleByteToClientPacket(player,PacketDataIndex.STALL);
                     ((StandUser)self).roundabout$tryPower(PowerIndex.NONE,true);
+                }
+            }
+
+            if (self instanceof Player pl) {
+                if ($$0.is(DamageTypes.FALL) ||
+                        ($$0.getEntity() != null &&
+                                ($$0.is(DamageTypes.MOB_ATTACK) || $$0.is(DamageTypes.PLAYER_ATTACK)))
+                ) {
+                    if (!self.level().isClientSide) {
+                        S2CPacketUtil.sendGenericIntToClientPacket(pl,
+                                PacketDataIndex.INT_WHITE_ALBUM_ACCELERATION, 0);
+                    }
+                    acceleration = 0;
                 }
             }
 
@@ -313,11 +355,20 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public int acceleration = 0;
     public float inputSpeedModifiers(float basis){
         if (hasSkatesActivated()){
-            basis *= 1.3f+(acceleration*ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumAccelerationAmount);
+            basis *= 1.3f+(acceleration*ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumAccelerationAmountv3);
         } if (isChargingCold()){
             basis *= 0.9f;
         }
         return super.inputSpeedModifiers(basis);
+    }
+
+    @Override
+    public void tickStandRejection(MobEffectInstance effect){
+        if (!this.getSelf().level().isClientSide()) {
+            if (effect.getDuration() == 80) {
+                HeatUtil.addHeat(self,-99);
+            }
+        }
     }
 
     public boolean canGuard(){
@@ -349,7 +400,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
     /**for stands that subvert guard mechanics like white album*/
     @Override
     public boolean isSpecialGuarding(){
-        return !isBlockingTraditionally() && hasStandActive(self) && !isBarraging();
+        return !isBlockingTraditionally() &&
+                ((self instanceof Player || MainUtil.isHumanoid2(self)) && hasStandActive(self))
+                && !isBarraging();
     }
 
     public int getMaxGuardPoints(){
@@ -395,6 +448,26 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     cracked = true;
                     saveDiscAndSync();
                 }
+
+                if (PowerTypes.hasStandActive(self)){
+                if (self.level() instanceof ServerLevel sl) {
+                    if ((self instanceof Mob mb && !MainUtil.isHumanoid2(mb)) ||  getStandUserSelf().roundabout$getStandSkin() == YUKI){
+                        if (self.tickCount % 10 == 0) {
+                            sl.sendParticles(
+                                    ParticleTypes.SNOWFLAKE,
+                                    self.getEyePosition().x,
+                                    self.getEyePosition().y,
+                                    self.getEyePosition().z,
+                                    1,     // count
+                                    0.5,    // x spread
+                                    0.2,    // y spread
+                                    0.5,    // z spread
+                                    0.01    // speed
+                            );
+                        }
+                    }
+                }
+                }
             }
             if (lastY < self.getY() && !self.onGround() && !self.isInWater() && !self.isSwimming()) {
                 fixThis();
@@ -420,6 +493,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             }
         }
         if (isPacketPlayer()){
+            playDing();
             lastAcceleration = acceleration;
             if (hasSkatesActivated()){
                 if (self.isInWater() || self.hurtTime > 0 || self.isUsingItem()
@@ -429,7 +503,15 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     if (lastY < self.getY()){
                         acceleration = 0;
                     } else {
-                        acceleration = Math.min(getMaxAccelerationTicks(),acceleration+5);
+                        if (acceleration > 10){
+                            if (self.getDeltaMovement().y > -0.3F) {
+                                if (self.level().getBlockState(self.getOnPos().below()).isSolid()) {
+                                    self.setDeltaMovement(self.getDeltaMovement().add(0, -0.3F, 0));
+                                    acceleration = Math.min(getMaxAccelerationTicks(), acceleration + 5);
+                                }
+                            }
+                            acceleration = Math.min(getMaxAccelerationTicks(),acceleration+5);
+                        }
                     }
                 } else {
                     if (!self.horizontalCollision){
@@ -491,7 +573,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
         BlockState state = level.getBlockState(pos);
 
-        if (state.is(ModBlocks.WHITE_ALBUM_ICE_SLAB)) {
+        if (state.is(ModBlocks.WHITE_ALBUM_ICE_SLAB) || state.is(ModBlocks.STICKY_ICE)
+                || state.is(ModBlocks.COLD_AIR)) {
 
             level.destroyBlock(pos, false);
             // or:
@@ -545,36 +628,40 @@ public class PowersWhiteAlbum extends NewDashPreset {
         // code for advanced icons
 
         if (!isHoldingSneak()){
-            setSkillIcon(context, x, y, 1, StandIcons.SUIT_COMBAT, PowerIndex.SKILL_4);
+            if (fistsOut){
+                setSkillIcon(context, x, y, 1, StandIcons.SUIT_COMBAT_2, PowerIndex.SKILL_4);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.SUIT_COMBAT, PowerIndex.SKILL_4);
+            }
         } else {
             setSkillIcon(context, x, y, 1, StandIcons.FREEZE_CANCEL, PowerIndex.SKILL_1_SNEAK);
         }
 
         if (!isHoldingSneak()){
-            setSkillIcon(context, x, y, 2, StandIcons.TWISTER, PowerIndex.NO_CD);
+            LockedOrNot(context, x, y, 2, StandIcons.TWISTER, PowerIndex.SKILL_2, getTwisterLevel());
         } else {
-            setSkillIcon(context, x, y, 2, StandIcons.GENTLY_WEEPS, PowerIndex.NO_CD);
+            LockedOrNot(context, x, y, 2, StandIcons.GENTLY_WEEPS, PowerIndex.SKILL_2_SNEAK,getGentlyWeepsLevel());
         }
 
 
         if (!isHoldingSneak()){
             if (hasSkatesActivated()){
-                setSkillIcon(context, x, y, 3, StandIcons.ICE_WALL_BEHIND, PowerIndex.SKILL_3);
+                LockedOrNot(context, x, y, 3, StandIcons.ICE_WALL_BEHIND, PowerIndex.SKILL_3, getIceWallLevel());
             } else {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
             }
         } else {
-            setSkillIcon(context, x, y, 3, StandIcons.ICE_WALL, PowerIndex.SKILL_3);
+            LockedOrNot(context, x, y, 3, StandIcons.ICE_WALL, PowerIndex.SKILL_3,getIceWallLevel());
         }
 
         if (!isHoldingSneak()){
             if (hasSkatesActivated()){
-                setSkillIcon(context, x, y, 4, StandIcons.SKATE_ACTIVE, PowerIndex.SKILL_1);
+                LockedOrNot(context, x, y, 4, StandIcons.SKATE_ACTIVE, PowerIndex.SKILL_1, getSkatesLevel());
             } else {
-                setSkillIcon(context, x, y, 4, StandIcons.SKATE_INACTIVE, PowerIndex.SKILL_1);
+                LockedOrNot(context, x, y, 4, StandIcons.SKATE_INACTIVE, PowerIndex.SKILL_1, getSkatesLevel());
             }
         } else {
-            setSkillIcon(context, x, y, 4, StandIcons.FREEZE_BLOCKS, PowerIndex.SKILL_4_SNEAK);
+            LockedOrNot(context, x, y, 4, StandIcons.FREEZE_BLOCKS, PowerIndex.SKILL_4_SNEAK, getBlockFreezeLevel());
         }
 
         super.renderIcons(context, x, y);
@@ -582,7 +669,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
 
     public void toggleBlockFreezeClient(){
-        if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK) && !self.isInWater()) {
+        if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK) && !self.isInWater()
+        && canExecuteMoveWithLevel(getBlockFreezeLevel())) {
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_SNEAK, true);
             tryPowerPacket(PowerIndex.POWER_4_SNEAK);
         }
@@ -590,16 +678,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
 
     public boolean renderHelmet(){
-        return PowerTypes.hasStandActive(self);
+        return (self instanceof Player pl || MainUtil.isHumanoid2(self)) && PowerTypes.hasStandActive(self);
     }
 
-    public List<SurvivorEntity> survivorsSpawned = new ArrayList<>();
-
-    public void listInit(){
-        if (survivorsSpawned == null) {
-            survivorsSpawned = new ArrayList<>();
-        }
-    }
     public Component getPosName(byte posID){
         return Component.empty();
     }
@@ -635,7 +716,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
 
     public void iceWallClient(){
-        if (!this.onCooldown(PowerIndex.SKILL_3)) {
+        if (!this.onCooldown(PowerIndex.SKILL_3) && canExecuteMoveWithLevel(getIceWallLevel())) {
             if (canUseIceWall()) {
                 tryPowerPacket(PowerIndex.POWER_3);
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
@@ -645,7 +726,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
 
     public void toggleSkatesClient(){
-        if (!this.onCooldown(PowerIndex.SKILL_1)) {
+        if (!this.onCooldown(PowerIndex.SKILL_1) && canExecuteMoveWithLevel(getSkatesLevel())) {
            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
            tryPowerPacket(PowerIndex.POWER_1);
         }
@@ -662,6 +743,12 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case SKILL_1_CROUCH-> {
                 iceCancelClient();
             }
+            case SKILL_2_NORMAL-> {
+                iceTwisterClient();
+            }
+            case SKILL_2_CROUCH-> {
+                gentlyWeepsClient();
+            }
             case SKILL_3_NORMAL -> {
                 dashOrWall();
             }
@@ -677,9 +764,72 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
+    public boolean isServerControlledCooldown(byte num){
+        if (num == PowerIndex.SKILL_2 || num == PowerIndex.SKILL_2_SNEAK) {
+            return true;
+        }
+        return super.isServerControlledCooldown(num);
+    }
+
+    public void iceTwisterClient(){
+        if (!onCooldown(PowerIndex.SKILL_2) && !isChargingCold() && canExecuteMoveWithLevel(getTwisterLevel())){
+            BlockHitResult hit = (BlockHitResult) self.pick(
+                    5.0D, // reach distance
+                    0.0F,
+                    false
+            );
+
+            tryBlockPosPowerPacket(PowerIndex.POWER_2,hit.getBlockPos());
+        }
+    }
+
+    public void gentlyWeepsClient(){
+        if (!onCooldown(PowerIndex.SKILL_2_SNEAK) && !isChargingCold()
+                && canExecuteMoveWithLevel(getGentlyWeepsLevel())){
+            tryPowerPacket(PowerIndex.POWER_2_SNEAK);
+        }
+    }
+    @Override
+    public float getBonusPassiveMiningSpeed(){
+        return 1f + ClientNetworking.getAppropriateConfig().whiteAlbumSettings.miningSpeedBuffWhite;
+    }
+
+    @Override
+    public float getMiningMultiplier() {
+        return (float) (1F*(ClientNetworking.getAppropriateConfig().
+                whiteAlbumSettings.miningSpeedMultiplierWhiteAlbum *0.01));
+    }
+
+
+    @Override
+    public int getMiningLevel() {
+        return ClientNetworking.getAppropriateConfig().whiteAlbumSettings.getMiningTierWhiteAlbum;
+    }
+
+    @Override
+    public float getPickMiningSpeed() {
+        return 12F;
+    }
+
+    @Override
+    public float getDamageAdd(DamageSource source, float amt, Entity target){
+        if (PowerTypes.hasStandActive(self)) {
+            if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)) {
+                if (target instanceof Player pl) {
+                    return ClientNetworking.getAppropriateConfig().whiteAlbumSettings.bonusPlayerDMGWhite;
+                } else {
+                    return ClientNetworking.getAppropriateConfig().whiteAlbumSettings.bonusMobDMGWhite;
+                }
+            }
+        }
+        return super.getDamageAdd(source,amt,target);
+    }
+
+
+
     public void dashOrWall(){
         if (hasSkatesActivated()){
-            if (!this.onCooldown(PowerIndex.SKILL_3)) {
+            if (!this.onCooldown(PowerIndex.SKILL_3) && canExecuteMoveWithLevel(getIceWallLevel())) {
                 if (canUseIceWall()) {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BLOCK, true);
                     tryPowerPacket(PowerIndex.POWER_3_BLOCK);
@@ -687,6 +837,66 @@ public class PowersWhiteAlbum extends NewDashPreset {
             }
         } else {
             dash();
+        }
+    }
+
+    public void iceTwister(){
+        BlockPos pos = twisterPos;
+        if (pos == null) {
+            return;
+        }
+
+        if (!onCooldown(PowerIndex.SKILL_2)) {
+
+            this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().whiteAlbumSettings.twisterCooldownv2);
+            this.setCooldown(PowerIndex.SKILL_2_SNEAK, 20);
+            Level level = self.level();
+
+            BlockPos checkPos = pos;
+
+            while (checkPos.getY() > level.getMinBuildHeight()) {
+                BlockState state = level.getBlockState(checkPos);
+
+                boolean replaceable = state.canBeReplaced();
+                boolean liquid = !state.getFluidState().isEmpty();
+
+                if (!replaceable && !liquid || checkPos.getCenter().distanceTo(self.position()) > 7) {
+                    // Found ground
+                    BlockPos twisterPos = checkPos.above();
+
+                    // Spawn twister here
+                    addEXP(1);
+                    IceTwisterEntity twister = new IceTwisterEntity(
+                            this.self.level(), twisterPos.getCenter().subtract(0, 0.5F, 0));
+                    addIceEntity(twister);
+                    this.getSelf().level().addFreshEntity(twister);
+                    twister.lifeSpan = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.twisterLifespan;
+                    break;
+                }
+
+                checkPos = checkPos.below();
+            }
+        }
+    }
+
+
+    public void gentlyWeeps(){
+        if (!onCooldown(PowerIndex.SKILL_2_SNEAK)) {
+            BlockPos pos = self.getOnPos();
+            if (self.level().getBlockState(pos).is(ModBlocks.WHITE_ALBUM_ICE_SLAB)){
+                pos = pos.below();
+            }
+            this.setCooldown(PowerIndex.SKILL_2_SNEAK,
+                    ClientNetworking.getAppropriateConfig().whiteAlbumSettings.gentlyWeepsCooldown);
+            this.setCooldown(PowerIndex.SKILL_2, 30);
+
+            Level level = self.level();
+            addEXP(3);
+            GentlyWeepsEntity twister = new GentlyWeepsEntity(
+                    level, pos.getCenter().add(0, 0.5F, 0));
+            addIceEntity(twister);
+            level.addFreshEntity(twister);
+            twister.lifeSpan = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.gentlyWeepsLifespan;
         }
     }
 
@@ -760,7 +970,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     BlockPos storeCenter = BlockPos.ZERO;
     Direction sideX = Direction.UP;
     public void iceWallServer(boolean special){
-        int cooldown = 110;
+        int cooldown = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.iceWallCooldown;
         this.setCooldown(PowerIndex.SKILL_3, cooldown);
         if (!this.self.level().isClientSide()){
 
@@ -827,6 +1037,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                         self.level().addFreshEntity(wall);
                     }
                 }
+                addEXP(1);
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.ICE_RISES_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
             }
         }
@@ -846,8 +1057,25 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
+    @Override
+    public void onReleaseGuard(){
+        boolean shoot = isChargingCold() && hasColdCharged();
+        StandUser standComp = ((StandUser) self);
+        standComp.roundabout$tryPower(PowerIndex.NONE,true);
+        stallTicks = 3;
+        if (standComp.roundabout$getActivePowerPhase() > 0 ) {
+            standComp.roundabout$setInterruptCD(3);
+        }
+        if (shoot){
+            tryPowerPacket(PowerIndex.EXTRA_2);
+        } else {
+            C2SPacketUtil.guardCancelPacket();
+        }
+    }
+
+
     public boolean toggleSkates(){
-        int cooldown = 5;
+        int cooldown = 25;
         this.setCooldown(PowerIndex.SKILL_1, cooldown);
         if (!this.self.level().isClientSide() && this.self instanceof Player PL){
             if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampiricFate vf &&
@@ -913,11 +1141,20 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case PowerIndex.POWER_1_BONUS -> {
                 toggleFists();
             }
+            case PowerIndex.POWER_2 -> {
+                iceTwister();
+            }
+            case PowerIndex.POWER_2_SNEAK -> {
+                gentlyWeeps();
+            }
             case PowerIndex.POWER_3 -> {
                 iceWallServer(false);
             }
             case PowerIndex.EXTRA -> {
                 setPowerColdBlast();
+            }
+            case PowerIndex.EXTRA_2 -> {
+                setPowerColdBlastShot();
             }
             case PowerIndex.POWER_3_BLOCK -> {
                 iceWallServer(true);
@@ -944,9 +1181,32 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
+    public void setPowerColdBlastShot() {
+
+        if (getActivePower() == PowerIndex.EXTRA && self instanceof Player pl){
+            if (getPlayerPos2() == PlayerPosIndex.CHARGE_SHOT) {
+
+                self.level().playSound((Player)null, self.getX(), self.getY(), self.getZ(), ModSounds.COLD_SHOT_EVENT,
+                        SoundSource.NEUTRAL, 1F, (float)(1F+Math.random()*0.08f));
+                if (!self.level().isClientSide) {
+                    ColdBlastProjectile bubble = new ColdBlastProjectile(self,self.level());
+                    bubble.absMoveTo(self.getX(), self.getY(), self.getZ());
+                    bubble.setUser(self);
+                    bubble.setOwner(self);
+                    bubble.shootThis(pl);
+                    self.level().addFreshEntity(bubble);
+                }
+            }
+        }
+
+        if (((StandUser) self).roundabout$isGuardInput()) {
+            ((StandUser) self).roundabout$tryPower(PowerIndex.NONE, true);
+        }
+    }
+
 
     public void freezeBlocksServer(){
-        int cooldown = 240;
+        int cooldown = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.freezeBlocksCooldown;
         this.setCooldown(PowerIndex.SKILL_4_SNEAK, cooldown);
         if (!this.self.level().isClientSide() && this.self instanceof Player PL && !PL.isInWater()){
             if (MainUtil.getIsGamemodeApproriateForGrief(PL)){
@@ -967,7 +1227,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
                             BlockState state = self.level().getBlockState(pos);
 
-                            if (canFreezeWater && state.is(Blocks.WATER) && self.level().getBlockState(pos.above()).isAir()){
+                            if (canFreezeWater && state.is(Blocks.WATER) &&
+                                    self.level().getBlockState(pos.above()).isAir()){
                                 if (self.level().isUnobstructed(Blocks.ICE.defaultBlockState(), pos, CollisionContext.empty())) {
                                     if (self.level().isUnobstructed(Blocks.ICE.defaultBlockState(),
                                             pos.above(), CollisionContext.empty())) {
@@ -1021,28 +1282,122 @@ public class PowersWhiteAlbum extends NewDashPreset {
                         0, 0, 0, 0, 0);
 
             }
+            addEXP(1);
             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BLOCK_FREEZE_EVENT,
                     SoundSource.PLAYERS, 1F, 1F);
         }
     }
 
-
+    int graceticks = 0;
     @Override
     public void tickMobAI(LivingEntity attackTarget){
+        if (attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf())) {
+            boolean upAiNow = upAi(attackTarget);
+            double dist = attackTarget.distanceTo(this.getSelf());
+            boolean isCreeper = this.getSelf() instanceof Creeper;
+            if (graceticks <= 0) {
+                if (isCreeper) {
+                    if (dist <= 6) {
+                        if (!onCooldown(PowerIndex.SKILL_3)){
+                            iceWallMob(attackTarget,self.getDirection());
+                            iceWallMob(attackTarget,self.getDirection().getClockWise());
+                            iceWallMob(attackTarget,self.getDirection().getCounterClockWise());
+                        }
+                    }
+                } else {
+                    if (dist <= 5) {
+                        if (upAiNow && !onCooldown(PowerIndex.SKILL_2_SNEAK) && ((self.getHealth() < (self.getMaxHealth()/2))
+                        || (!attackTarget.getUseItem().isEmpty() && (attackTarget.getUseItem().is(Items.BOW)
+                                || attackTarget.getUseItem().is(Items.CROSSBOW)
+                                || attackTarget.getUseItem().getItem() instanceof FirearmItem
+                            ))
+                        )){
+                            tryPower(PowerIndex.POWER_2_SNEAK,true);
+                            graceticks = 20;
+                        } else if (!onCooldown(PowerIndex.SKILL_2)) {
+                            tryBlockPosPower(PowerIndex.POWER_2,true,attackTarget.getOnPos());
+                            graceticks = 120;
+                        } else if (upAiNow && !onCooldown(PowerIndex.SKILL_3)){
+                            iceWallMob(attackTarget,self.getDirection());
+                            graceticks = 20;
+                        }
+                    }
+                }
+            } else {
+                graceticks--;
+            }
+        }
+        //tryBlockPosPowerPacket(PowerIndex.POWER_2,hit.getBlockPos());
     }
 
-    public void despawnSurvivorClient(){
-        tryPowerPacket(PowerIndex.POWER_2_SNEAK);
+
+    public void iceWallMob(Entity relativeEntity, Direction direction){
+        int cooldown = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.iceWallCooldown;
+        this.setCooldown(PowerIndex.SKILL_3, cooldown);
+        if (!this.self.level().isClientSide()){
+
+            Direction facing = direction;
+            BlockPos centerPos = relativeEntity.getOnPos().relative(facing).relative(facing);
+
+            boolean isSafe = false;
+            for (var i = 0; i < 5; i++) {
+                if (self.level().getBlockState(centerPos.below(i)).isSolid()){
+                    centerPos = centerPos.below(i);
+                    isSafe = true;
+                    i = 10;
+                }
+            }
+
+            if (isSafe) {
+                centerPos = new BlockPos(centerPos.getX(), Math.min(centerPos.getY(), self.blockPosition().getY()),
+                        centerPos.getZ());
+
+// Left/right axis
+                Direction side = facing.getClockWise();
+                sideX = side;
+                storeCenter = centerPos;
+                for (int width = -1; width <= 1; width++) {
+                    for (int height = 0; height < 2; height++) {
+
+                        BlockPos spawnPos = centerPos
+                                .relative(side, width)
+                                .above(height);
+
+                        Vector3f newVec = new Vector3f((float) (spawnPos.getX()+0.5),
+                                (float) (spawnPos.getY()),
+                                (float) (spawnPos.getZ() + 0.5)).add(0, -1, 0);
+
+                        BlockWallEntity wall =
+                                // slightly off to not z-fight
+                                new BlockWallEntity(
+                                        self.level(),
+                                        newVec.x,
+                                        newVec.y,
+                                        newVec.z,
+                                        Blocks.PACKED_ICE.defaultBlockState()
+                                );
+                        wall.setDataFinalPos(newVec.add(0, 2, 0));
+                        wall.timing = 200;
+                        wall.canGrief = MainUtil.getIsGamemodeApproriateForGrief(self);
+                        addIceEntity(wall);
+                        self.level().addFreshEntity(wall);
+                    }
+                }
+                addEXP(1);
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.ICE_RISES_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+            }
+        }
+    }
+
+    public BlockPos twisterPos = BlockPos.ZERO;
+    @Override
+    public boolean tryBlockPosPower(int move, boolean forced, BlockPos pos) {
+        twisterPos = pos;
+        return super.tryBlockPosPower(move, forced,pos);
     }
     @Override
     public boolean tryPosPower(int move, boolean forced, Vec3 pos) {
         return tryPower(move, forced);
-    }
-
-    @Override
-    public void tickStandRejection(MobEffectInstance effect) {
-        if (!this.getSelf().level().isClientSide()) {
-        }
     }
 
 
@@ -1072,17 +1427,44 @@ public class PowersWhiteAlbum extends NewDashPreset {
             BASE = 1,
             BETA =2,
             FIERCE =3,
-            BLACK =4;
+            BLACK =4,
+            SHADE =5,
+            KNIGHT =6,
+            ICEOLOGER =7,
+            STRAY =8,
+            FRIGID =9,
+            MANGA =10,
+            YUKI =11;
+
 
     @Override
-    public List<Byte> getSkinList() {
-        return Arrays.asList(
-                BASE,
-                FIERCE,
-                BLACK,
-                BETA
-        );
+    public List<Byte> getSkinList(){
+        List<Byte> $$1 = Lists.newArrayList();
+        $$1.add(BASE);
+        $$1.add(MANGA);
+        if (this.getSelf() instanceof Player PE){
+            byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
+            ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
+            boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+            if (Level > 1 || bypass){
+                $$1.add(FIERCE);
+                $$1.add(KNIGHT);
+            } if (Level > 2 || bypass){
+                $$1.add(SHADE);
+                $$1.add(BLACK);
+            } if (Level > 3 || bypass){
+                $$1.add(ICEOLOGER);
+                $$1.add(STRAY);
+            } if (Level > 4 || bypass){
+                $$1.add(FRIGID);
+                $$1.add(BETA);
+            } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
+                $$1.add(YUKI);
+            }
+        }
+        return $$1;
     }
+
 
     @Override public Component getSkinName(byte skinId) {
         return Component.translatable("skins.roundabout.white_album."+getSkinString(skinId));
@@ -1096,6 +1478,13 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case BETA -> "beta";
             case BLACK -> "black";
             case FIERCE -> "dramatic";
+            case KNIGHT -> "knight";
+            case STRAY -> "stray";
+            case FRIGID -> "frigid";
+            case ICEOLOGER -> "iceologer";
+            case SHADE -> "shade";
+            case MANGA -> "manga";
+            case YUKI -> "yuki";
             default -> "base";
         };
     }
@@ -1131,18 +1520,35 @@ public class PowersWhiteAlbum extends NewDashPreset {
             SHOCK = 63;
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.throw_bottle",
-                "instruction.roundabout.press_skill", StandIcons.BOTTLE, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.summon_survivor",
-                "instruction.roundabout.press_skill", StandIcons.SPAWN,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.desummon_survivor",
-                "instruction.roundabout.press_skill_crouch", StandIcons.DESPAWN,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.dodge",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.roundabout.toggle_brawl",
+                "instruction.roundabout.press_skill", StandIcons.SUIT_COMBAT_2,1,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+99,0, "ability.roundabout.cold_punch",
+                "instruction.roundabout.press_attack", StandIcons.WHITE_PUNCH,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.roundabout.cold_blast",
+                "instruction.roundabout.hold_block", StandIcons.COLD_BLAST,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.cold_guard",
+                "instruction.roundabout.passive", StandIcons.COLD_GUARD,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.freeze_cancel",
+                "instruction.roundabout.press_skill_crouch", StandIcons.FREEZE_CANCEL,1,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,getTwisterLevel(), "ability.roundabout.ice_twister",
+                "instruction.roundabout.press_skill", StandIcons.TWISTER,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,getGentlyWeepsLevel(), "ability.roundabout.gently_weeps",
+                "instruction.roundabout.press_skill_crouch", StandIcons.GENTLY_WEEPS,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
-        if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {
-            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.target_zap",
-                    "instruction.roundabout.press_skill", StandIcons.RAGE_SELECTION, 4, level, bypass));
-        }
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,getIceWallLevel(), "ability.roundabout.ice_wall",
+                "instruction.roundabout.press_skill_crouch", StandIcons.ICE_WALL,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,getIceWallLevel(), "ability.roundabout.ice_wall_behind",
+                "instruction.roundabout.press_skill", StandIcons.ICE_WALL_BEHIND,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,getSkatesLevel(), "ability.roundabout.skate_activate",
+                "instruction.roundabout.press_skill", StandIcons.SKATE_ACTIVE,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,getBlockFreezeLevel(), "ability.roundabout.block_freeze",
+                "instruction.roundabout.press_skill_crouch", StandIcons.FREEZE_BLOCKS,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,0, "ability.roundabout.suit_power",
+                "instruction.roundabout.passive", StandIcons.SUIT_POWER,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.roundabout.full_accel",
+                "instruction.roundabout.passive", StandIcons.FULL_ACCEL,0,level,bypass));
+
         return $$1;
     }
 
@@ -1228,6 +1634,12 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return attackTimeDuring > getWhiteAlbumChargeLength();
     }
 
+    public void playDing(){
+        if (isChargingCold() && attackTimeDuring == getWhiteAlbumChargeLength()){
+            this.self.playSound(ModSounds.DING_EVENT, 1F, (float) (1.1F+Math.random()*0.03F));
+        }
+    }
+
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
@@ -1289,28 +1701,63 @@ public class PowersWhiteAlbum extends NewDashPreset {
     @Override
     public float getBrawlPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
+            if (!MainUtil.canFreeze(entity)){
+                return 0.93F;
+            }
             return 0.7F;
         } else {
+            if (!MainUtil.canFreeze(entity)){
+                return 2.5F;
+            }
             return 2.2F;
         }
     }
 
     @Override
-    public boolean isWip() {
-        return true;
-    }
-
-    @Override
-    public Component ifWipListDev() {
-        return Component.literal("Hydra");
+    public void playSummonEffects(boolean forced){
+        if (!forced) {
+            Level lv = this.getSelf().level();
+            Holder<Biome> theBiome = lv.getBiome(this.getSelf().getOnPos());
+            if ((this.getSelf()) instanceof Player PE
+                    &&
+                    (theBiome.is(Biomes.ICE_SPIKES) ||
+                    theBiome.is(Biomes.SNOWY_PLAINS) ||
+                    theBiome.is(Biomes.SNOWY_BEACH) ||
+                            theBiome.is(Biomes.SNOWY_TAIGA) ||
+                            theBiome.is(Biomes.SNOWY_SLOPES)
+                    )
+            ){
+                StandUser user = ((StandUser)PE);
+                ItemStack stack = user.roundabout$getStandDisc();
+                if (!stack.isEmpty() && stack.is(ModItems.STAND_DISC_WHITE_ALBUM)){
+                    IPlayerEntity ipe = ((IPlayerEntity) PE);
+                    if (!ipe.roundabout$getUnlockedBonusSkin()){
+                        if (!lv.isClientSide()) {
+                            ipe.roundabout$setUnlockedBonusSkin(true);
+                            lv.playSound(null, PE.getX(), PE.getY(),
+                                    PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
+                            ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
+                                    PE.getY()+PE.getEyeHeight(), PE.getZ(),
+                                    10, 0.5, 0.5, 0.5, 0.2);
+                            user.roundabout$setStandSkin(YUKI);
+                            ((ServerPlayer) ipe).displayClientMessage(
+                                    Component.translatable("unlock_skin.roundabout.white_album.yuki"), true);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override
     public void addToCombo(Entity targ){
+        if (targ instanceof LivingEntity LV){
+            addEXP(1,LV);
+        }
         if (targ instanceof Player PL){
-            HeatUtil.addHeat(PL,-2);
+            HeatUtil.addHeat(PL,-3);
         } else if (targ instanceof LivingEntity LE){
-            HeatUtil.addHeat(LE,-14);
+            HeatUtil.addHeat(LE,-13);
         }
     }
 
@@ -1319,5 +1766,62 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return Component.translatable("roundabout.dev_status.active");
     }
 
+    //2- Ice Wall
+    //3- Twister
+    //4- Block Freeze
+    //5- Gently Weeps
+    @Override
+    public byte getMaxLevel(){
+        return 5;
+    }
 
+    public int getSkatesLevel(){return 1;}
+    public int getIceWallLevel(){return 2;}
+    public int getTwisterLevel(){return 3;}
+    public int getBlockFreezeLevel(){return 4;}
+    public int getGentlyWeepsLevel(){return 5;}
+
+    @Override
+    public int getExpForLevelUp(int currentLevel){
+        int amt;
+        if (currentLevel == 1) {
+            amt = 50;
+        } else {
+            amt = (100+((currentLevel-1)*150));
+        }
+        amt= (int) (amt*(getLevelMultiplier()));
+        return amt;
+    }
+    @Override
+    public void gainExpFromStandardMining(BlockState $$1, BlockPos $$2) {
+        if (!($$1.getBlock() instanceof IceBlock) && !$$1.is(Blocks.PACKED_ICE) &&
+                !($$1.getDestroySpeed(this.self.level(),$$2) < 0.5) && MainUtil.isBlockExpAble($$1)) {
+            if (Math.random() > 0.62) {
+                addEXP(1);
+            }
+        }
+    }
+    @Override
+    public void levelUp(){
+        if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE){
+            IPlayerEntity ipe = ((IPlayerEntity) PE);
+            byte level = ipe.roundabout$getStandLevel();
+            if (level == 5){
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.both").
+                        withStyle(ChatFormatting.AQUA), true);
+            } else {
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.both").
+                        withStyle(ChatFormatting.AQUA), true);
+            }
+        }
+        super.levelUp();
+    }
+
+    @Override
+    public boolean interceptSuccessfulDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
+        if ((hasStandActive(this.getSelf()) && $$0.is(DamageTypes.PLAYER_ATTACK))){
+            addEXP(1,target);
+        }
+        return false;
+    }
 }

@@ -1,5 +1,7 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.util.config.ClientConfig;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
@@ -84,7 +86,10 @@ public class KillerQueenEntity extends FollowingStandEntity {
     public final AnimationState heavyStrike = new AnimationState();
     public final AnimationState shaSend = new AnimationState();
     public final AnimationState impale = new AnimationState();
-    
+
+    public final AnimationState itemThrowAnimation = new AnimationState();
+    public final AnimationState blockThrowAnimation = new AnimationState();
+
     public static byte
 		KICK = 25,
 		KICK_CHARGE = 27,
@@ -99,14 +104,15 @@ public class KillerQueenEntity extends FollowingStandEntity {
     public void setupAnimationStates() {
         super.setupAnimationStates();
         if (this.getUser() != null) {
+            byte animation = this.getAnimation();
 
-            if (this.getAnimation() != BARRAGE) {
+            if (animation != BARRAGE) {
                 this.hideFists.startIfStopped(this.tickCount);
             } else {
                 this.hideFists.stop();
             }
 
-            if (this.getAnimation() != KICK_BARRAGE) {
+            if (animation != KICK_BARRAGE) {
                 this.hideLeg.startIfStopped(this.tickCount);
                 this.kick_barrage.stop();
             } else {
@@ -115,65 +121,80 @@ public class KillerQueenEntity extends FollowingStandEntity {
             }
 
 
-            if (this.getAnimation() == KICK_BARRAGE_WINDUP) {
+            if (animation == KICK_BARRAGE_WINDUP) {
                 this.kick_barrage_windup.startIfStopped(this.tickCount);
             } else {
                 this.kick_barrage_windup.stop();
             }
 
-            if (this.getAnimation() == KICK_BARRAGE_END) {
+            if (animation == KICK_BARRAGE_END) {
                 this.kick_barrage_end.startIfStopped(this.tickCount);
             } else {
                 this.kick_barrage_end.stop();
             }
             
-            if (this.getAnimation() == DETONATE) {
+            if (animation == DETONATE) {
             	this.detonate.startIfStopped(this.tickCount);
             } else {
                 this.detonate.stop();
             }
             
-            if (this.getAnimation() == BLOCK_PLANT) {
+            if (animation == BLOCK_PLANT) {
             	this.blockPlant.startIfStopped(this.tickCount);
             } else {
                 this.blockPlant.stop();
             }
             
-            if (this.getAnimation() == KICK) {
+            if (animation == KICK) {
             	this.finalKick.startIfStopped(this.tickCount);
             } else {
                 this.finalKick.stop();
             }
             
-            if (this.getAnimation() == KICK_CHARGE) {
+            if (animation == KICK_CHARGE) {
             	this.finalKickWindup.startIfStopped(this.tickCount);
             } else {
                 this.finalKickWindup.stop();
             }
-            if (this.getAnimation() == HEAVY_STRIKE) {
+            if (animation == HEAVY_STRIKE) {
             	this.heavyStrike.startIfStopped(this.tickCount);
             } else {
                 this.heavyStrike.stop();
             }
-            if (this.getAnimation() == SHA_SEND) {
+            if (animation == SHA_SEND) {
                 this.shaSend.startIfStopped(this.tickCount);
             } else {
                 this.shaSend.stop();
             }
-            if (this.getAnimation() == MOB_PLANT) {
+
+            if (animation == MOB_PLANT) {
                 this.mobBombPlant.startIfStopped(this.tickCount);
             } else {
                 this.mobBombPlant.stop();
             }
-            if (this.getAnimation() == MOB_PLANT_2) {
+
+            if (animation == MOB_PLANT_2) {
                 this.mobBombPlant2.startIfStopped(this.tickCount);
             } else {
                 this.mobBombPlant2.stop();
             }
-            if (this.getAnimation() == IMPALE) {
+
+            if (animation == IMPALE) {
                 this.impale.startIfStopped(this.tickCount);
             } else {
                 this.impale.stop();
+            }
+
+            if (animation == ITEM_THROW) {
+                this.itemThrowAnimation.startIfStopped(this.tickCount);
+            } else {
+                this.itemThrowAnimation.stop();
+            }
+
+            if (animation == BLOCK_THROW) {
+                this.blockThrowAnimation.startIfStopped(this.tickCount);
+            } else {
+                this.blockThrowAnimation.stop();
             }
         }
     }

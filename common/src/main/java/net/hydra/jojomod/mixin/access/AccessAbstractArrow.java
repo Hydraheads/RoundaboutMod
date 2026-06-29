@@ -5,6 +5,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.PenetratableWithProjectile;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.projectile.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -18,6 +19,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
@@ -109,10 +111,16 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
 
     @Override
     public void roundabout$SetIsManhattan(boolean isManhattanProjectile){
-        this.isManhattanProjectile = isManhattanProjectile;
+            this.isManhattanProjectile = isManhattanProjectile;
     }
 
     public boolean isManhattanProjectile;
+    public boolean isManhattanProjectileMobAI = false;
+
+    @Override
+    public void roundabout$isMobAiArrow(boolean isMobAIArrow){
+        this.isManhattanProjectileMobAI = isMobAIArrow;
+    }
 
     @Inject(method = "onHitEntity", at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$onHitEntity(EntityHitResult $$0, CallbackInfo ci) {
@@ -137,6 +145,10 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
                 ci.cancel();
                 return;
             }
+        } else if (entity instanceof GentlyWeepsEntity gwe){
+            GentlyWeepsEntity.dealWithProjectile(ABA,gwe);
+            ci.cancel();
+            return;
         }
 
 
@@ -147,13 +159,14 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
         }
 
         if(entity instanceof ManhattanTransferEntity ME && isManhattanProjectile){
-            ME.getUser().hurt(damageSources().arrow(ABA, entity), roundabout$lastHattanDamage);
+            ME.getUser().hurt(damageSources().arrow(ABA, ABA.getOwner()), roundabout$lastHattanDamage);
             this.discard();
             ci.cancel();
         }
 
-        if(isManhattanProjectile){
+        if(isManhattanProjectile && !isManhattanProjectileMobAI){
             ABA.setDeltaMovement(0.0001, 0.0001, 0.0001);
+            entity.invulnerableTime = 0;
             /** It's important to keep it here, because it should slow the arrow when it lands and then apply the damage at the very end*/
         }
 
@@ -164,8 +177,11 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
         Entity entity = $$0.getEntity();
         AbstractArrow ABA = (AbstractArrow) (Object) this;
         if(isManhattanProjectile){
-            entity.hurt(damageSources().arrow(ABA, entity), roundabout$lastHattanDamage);
-            doBonusDamageHattan(entity);
+            if(!isManhattanProjectileMobAI) {
+                entity.hurt(damageSources().arrow(ABA, ABA.getOwner()), roundabout$lastHattanDamage);
+            }
+                entity.invulnerableTime = 0;
+                doBonusDamageHattan(entity);
         }
     }
 
@@ -180,11 +196,16 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
         float amountPlayersAndBosses = 1 + (roundabout$lastHattanDamage / 8);
         float damagePlayersAndBosses = amountPlayersAndBosses <= 4 ? amountPlayersAndBosses : 4;
 
-        if(entity instanceof Player || MainUtil.isBossMob(entity)){
-            entity.hurt(damageSource, damagePlayersAndBosses);
+        if(!isManhattanProjectileMobAI) {
+            if (entity instanceof Player || MainUtil.isBossMob(entity)) {
+                entity.hurt(damageSource, damagePlayersAndBosses);
+            } else {
+                entity.hurt(damageSource, damage);
+            }
         } else {
-            entity.hurt(damageSource, damage);
+            entity.hurt(damageSource, 1);
         }
+
     }
 
     @Unique

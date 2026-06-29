@@ -899,7 +899,7 @@ public class PowersJustice extends NewDashPreset {
     @Override
     public List<Byte> getSkinList(){
         List<Byte> $$1 = Lists.newArrayList();
-        $$1.add(TheWorldEntity.PART_3_SKIN);
+        $$1.add(JusticeEntity.PART_3_SKIN);
         $$1.add(JusticeEntity.SKELETON_SKIN);
         if (this.getSelf() instanceof Player PE){
             byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
@@ -1084,6 +1084,8 @@ public class PowersJustice extends NewDashPreset {
                 done = true;
                 this.self.setDeltaMovement(this.self.getDeltaMovement().add(vector.x,vector.y+0.2F,vector.z
                 ));
+                this.self.hasImpulse = true;
+                this.self.hurtMarked = true;
             } else if (effect.getDuration() == 2) {
                 vector = new Vec3(0,
                         (this.self.getY()-10 - this.self.getY()),
@@ -1091,6 +1093,8 @@ public class PowersJustice extends NewDashPreset {
                 done = true;
                 this.self.setDeltaMovement(this.self.getDeltaMovement().add(vector.x,vector.y+0.2F,vector.z
                 ));
+                this.self.hasImpulse = true;
+                this.self.hurtMarked = true;
             }
             if (done){
                 this.self.hurtMarked = true;
@@ -1185,6 +1189,8 @@ public class PowersJustice extends NewDashPreset {
                                                 if (fm.manualTarget instanceof Player PE){
                                                     fm.setLastHurtByPlayer(PE);
                                                 }
+                                                fm.removeBuildBreakGoal();
+                                                fm.getNavigation().stop();
                                                 fm.setLastHurtByMob(fm.manualTarget);
                                                 fm.setTarget(fm.manualTarget);
                                             }
@@ -1331,6 +1337,8 @@ public class PowersJustice extends NewDashPreset {
                                         fm.setPersistentAngerTarget(null);
                                         fm.setLastHurtByPlayer(null);
                                         fm.setAggressive(false);
+                                        fm.removeBuildBreakGoal();
+                                        fm.getNavigation().stop();
                                         fm.getNavigation().moveTo(fm.getNavigation().createPath(blockPos, 0), 1);
                                     }
                                 }
@@ -1429,13 +1437,10 @@ public class PowersJustice extends NewDashPreset {
     }
     @Override
     public void gainExpFromStandardMining(BlockState $$1, BlockPos $$2) {
-        if (hasStandActive(this.getSelf())) {
-            if (!($$1.getBlock() instanceof IceBlock) && !$$1.is(Blocks.PACKED_ICE)
-                    &&
-                    !($$1.getDestroySpeed(this.self.level(),$$2) < 0.1)) {
-                if (Math.random() > 0.62) {
-                    addEXP(1);
-                }
+        if (!($$1.getBlock() instanceof IceBlock) && !$$1.is(Blocks.PACKED_ICE) &&
+                !($$1.getDestroySpeed(this.self.level(),$$2) < 0.5) && MainUtil.isBlockExpAble($$1)) {
+            if (Math.random() > 0.62) {
+                addEXP(1);
             }
         }
     }
@@ -1443,7 +1448,7 @@ public class PowersJustice extends NewDashPreset {
     public boolean interceptSuccessfulDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
         if ((hasStandActive(this.getSelf()) && $$0.is(DamageTypes.PLAYER_ATTACK)) || $$0.is(ModDamageTypes.CORPSE)
                 || $$0.is(ModDamageTypes.CORPSE_ARROW) || $$0.is(ModDamageTypes.CORPSE_EXPLOSION)){
-            addEXP(1);
+            addEXP(1,target);
         }
 
         return false;
@@ -1520,6 +1525,9 @@ public class PowersJustice extends NewDashPreset {
                                                 vector.z+random3,
                                                 0.15);
                                         vector = vector.scale(MainUtil.getNetheriteMultiplier(LE));
+                                        if (LE instanceof Player){
+                                            vector.scale(0.8F);
+                                        }
                                         LE.setDeltaMovement(LE.getDeltaMovement().add(vector.x,vector.y*0.55+0.2F,vector.z
                                         ));
                                         LE.hurtMarked = true;

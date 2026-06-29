@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.HeyYaAnimations;
 import net.hydra.jojomod.client.models.layers.animations.WhiteAlbumAnimations;
+import net.hydra.jojomod.entity.projectile.ColdBlastProjectile;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -19,6 +20,8 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+
+import java.util.logging.Level;
 
 public class WhiteAlbumColdPart extends PsuedoHierarchicalModel {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
@@ -80,14 +83,28 @@ public class WhiteAlbumColdPart extends PsuedoHierarchicalModel {
                 partialTicks = 0;
             }
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(path,context)));
-            if (ClientUtil.hasChangedBody(context)){
-                consumer = bufferSource.getBuffer(RenderType.entityTranslucent(ClientUtil.getChangedBodyBreastTexture(context)));
-            }
+
             //The number at the end is inversely proportional so 2 is half speed
 
             StandUser user = ((StandUser) LE);
             this.animate(user.roundabout$getWornStandIdleAnimation(), WhiteAlbumAnimations.SpinningBubble, partialTicks, 0.5f);
             user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
+            root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
+        }
+    }
+    public void render2(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
+                       int light, float r, float g, float b, float alpha) {
+        if (context instanceof ColdBlastProjectile cbp){
+            this.root().getAllParts().forEach(ModelPart::resetPose);
+            if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
+                partialTicks = 0;
+            }
+            VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation("",context)));
+
+            //The number at the end is inversely proportional so 2 is half speed
+
+            this.animate(cbp.ripperEyes, WhiteAlbumAnimations.SpinningBubble, context.tickCount+partialTicks, 0.5f);
+            cbp.ripperEyes.startIfStopped(context.tickCount);
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
         }
     }

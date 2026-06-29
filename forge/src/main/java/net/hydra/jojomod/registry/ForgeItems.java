@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.event.powers.visagedata.aesthetician.*;
 import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.item.StrayCats.*;
 import net.hydra.jojomod.item.paintings.BirthOfVenusPaintingItem;
 import net.hydra.jojomod.item.paintings.MonaLisaPaintingItem;
 import net.hydra.jojomod.item.paintings.VanGoughPaintingItem;
@@ -70,6 +71,12 @@ public class ForgeItems {
             () -> new OccultChargeItem(new Item.Properties().stacksTo(16))));
     public static final RegistryObject<Item> ROAD_ROLLER = addToTab(ITEMS.register("road_roller",
             () -> new RoadRollerItem(new Item.Properties().stacksTo(1))));
+
+    public static final RegistryObject<Item> STRAY_CAT_ANIME = addToWIPTab(ITEMS.register("stray_cat_anime",
+            () -> new StrayCatAnime(new Item.Properties().stacksTo(1))));
+    public static final RegistryObject<Item> STRAY_CAT_MANGA= addToWIPTab(ITEMS.register("stray_cat_manga",
+            () -> new StrayCatManga(new Item.Properties().stacksTo(1))));
+
     public static final RegistryObject<BlockItem> WIRE_TRAP = addToBuildingTab(ITEMS.register("wire_trap",
             () -> new BlockItem(ForgeBlocks.WIRE_TRAP.get(),
                     new Item.Properties()
@@ -209,6 +216,7 @@ public class ForgeItems {
             () -> new ChessBoardBlockItem(ForgeBlocks.CHESSBOARD_BLOCK.get(),
                     new Item.Properties().stacksTo(1)
             )));*/
+
     public static final RegistryObject<BlockItem> REGAL_WALL_ITEM = addToBuildingTab(ITEMS.register("regal_wall",
             () -> new BlockItem(ForgeBlocks.REGAL_WALL.get(),
                     new Item.Properties()
@@ -473,12 +481,6 @@ public class ForgeItems {
     ));
 
 
-    public static final RegistryObject<Item> STAND_DISC_WHITE_ALBUM = addToWIPTab(ITEMS.register("white_album_disc",
-            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersWhiteAlbum(null))));
-    public static final RegistryObject<Item> MAX_STAND_DISC_WHITE_ALBUM = addToWIPTab(ITEMS.register("max_white_album_disc",
-            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersWhiteAlbum(null))));
-
-
     public static final RegistryObject<Item> STAND_DISC_TUSK = addToWIPTab(ITEMS.register("tusk_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersTusk(null))));
     public static final RegistryObject<Item> MAX_STAND_DISC_TUSK = addToWIPTab(ITEMS.register("max_tusk_disc",
@@ -531,14 +533,14 @@ public class ForgeItems {
             () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> AJA = addToTab(ITEMS.register("aja",
             () -> new Item(new Item.Properties())));
-    public static final RegistryObject<Item> HAND = addToWIPTab(ITEMS.register("player_hand",
+    /*public static final RegistryObject<Item> HAND = addToWIPTab(ITEMS.register("player_hand",
             () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> VILLAGER_HAND = addToWIPTab(ITEMS.register("villager_hand",
             () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> ILLAGER_HAND = addToWIPTab(ITEMS.register("illager_hand",
             () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> ROTTEN_HAND = addToWIPTab(ITEMS.register("rotten_hand",
-            () -> new Item(new Item.Properties())));
+            () -> new Item(new Item.Properties())));*/
     public static final RegistryObject<Item> ULTRAVIOLET_BLASTER = addToTab(ITEMS.register("ultraviolet_blaster",
             () -> new UltravioletBlasterItem(new Item.Properties().stacksTo(1).durability(UltravioletBlasterItem.durability))));
     public static final RegistryObject<Item> WALL_STREET_SIGN_DIO_BLOCK_ITEM = addToBuildingTab(ITEMS.register("wall_street_sign_dio",
@@ -662,7 +664,13 @@ public class ForgeItems {
  	public static final RegistryObject<Item> STAND_DISC_KILLER_QUEEN = addToWIPTab(ITEMS.register("killer_queen_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null))));
     public static final RegistryObject<Item> MAX_STAND_DISC_KILLER_QUEEN = addToWIPTab(ITEMS.register("max_killer_queen_disc",
-            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null)))); 
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null))));
+
+
+    public static final RegistryObject<Item> STAND_DISC_WHITE_ALBUM = addToDiscTab(ITEMS.register("white_album_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersWhiteAlbum(null))));
+    public static final RegistryObject<Item> MAX_STAND_DISC_WHITE_ALBUM = addToDiscTab(ITEMS.register("max_white_album_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersWhiteAlbum(null))));
 
     public static final RegistryObject<Item> STAND_DISC_SOFT_AND_WET = addToDiscTab(ITEMS.register("soft_and_wet_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSoftAndWet(null))));
@@ -779,6 +787,8 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new AyaVisage(null))));
     public static final RegistryObject<Item> MISTA_MASK = addToTab(ITEMS.register("mista_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new MistaVisage(null))));
+    public static final RegistryObject<Item> GHIACCIO_MASK = addToTab(ITEMS.register("ghiaccio_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new GhiaccioVisage(null))));
     public static final RegistryObject<Item> GUCCIO_MASK = addToTab(ITEMS.register("guccio_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new GuccioVisage(null))));
     public static final RegistryObject<Item> POCOLOCO_MASK = addToTab(ITEMS.register("pocoloco_mask",

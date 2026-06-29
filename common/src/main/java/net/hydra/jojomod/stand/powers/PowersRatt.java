@@ -99,11 +99,11 @@ public class PowersRatt extends NewDashPreset {
             PLACE_BURST = 69,
             SET_TARGET = 70,
 
-            CHANGE_MODE = 7,
-            SETPLACE = 8,
-            SCOPE = 9,
-            MINING = 10,
-            RATT_LEAP = 5;
+            CHANGE_MODE = 71,
+            SETPLACE = 72,
+            SCOPE = 73,
+            MINING = 74,
+            RATT_LEAP = 75;
 
 
 
@@ -1077,22 +1077,34 @@ public class PowersRatt extends NewDashPreset {
     }
 
 
+    int desTicks =0;
     @Override
     public void tickMobAI(LivingEntity attackTarget) {
-        if (attackTarget != null) {
+        if (attackTarget != null && attackTarget.isAlive()) {
+            desTicks = 10;
             this.setShootTarget(attackTarget);
             // this.getStandUserSelf().roundabout$setCombatMode(true);
             //    double dist = attackTarget.getPosition(0).distanceTo(this.getSelf().getPosition(0));
             if (isPlaced()) {
                 if (this.shotcooldown == 0) {
-                    this.shotcooldown = PlaceShootCooldown;
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowersRatt.START_PLACE_BURST, true);
+                    if (MainUtil.canActuallyHit(self,attackTarget)) {
+                        this.shotcooldown = PlaceShootCooldown;
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowersRatt.START_PLACE_BURST, true);
+                    }
                 }
             } else {
                 if (!onCooldown(PowersRatt.SETPLACE)){
                     Vec3 vec3 = this.getSelf().getPosition(0);
                     blipStand(new Vec3(vec3.x, Math.floor(vec3.y), vec3.z));
                 }
+            }
+        } else {
+            if (desTicks <= 0){
+                if (isPlaced()) {
+                    tryPower(PowersRatt.NET_RECALL,true);
+                }
+            } else {
+                desTicks--;
             }
         }
 

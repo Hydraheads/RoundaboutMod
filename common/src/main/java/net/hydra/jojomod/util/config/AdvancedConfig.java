@@ -33,7 +33,7 @@ public class AdvancedConfig implements Cloneable {
         SERVER_OINLY_INSTANCE = config;
     }
 
-    public Set<String> standArrowPoolv4 = new HashSet<>(
+    public Set<String> standArrowPoolv5 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
                     "roundabout:the_world_disc",
@@ -41,6 +41,7 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:magicians_red_disc",
                     "roundabout:soft_and_wet_disc",
                     "roundabout:walking_heart_disc",
+                    "roundabout:white_album_disc",
                     "roundabout:ratt_disc"
                     //"roundabout:green_day_disc"
             )
@@ -54,7 +55,7 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:achtung_baby_disc"
             )
     );
-    public Set<String> naturalStandUserMobPoolv5 = new HashSet<>(
+    public Set<String> naturalStandUserMobPoolv6 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
                     "roundabout:the_world_disc",
@@ -164,6 +165,7 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
+
     public Set<String> standBlockGrabBlacklist = new HashSet<>(
             Arrays.asList(
                     "minecraft:crying_obsidian",
@@ -247,18 +249,25 @@ public class AdvancedConfig implements Cloneable {
                     "mod_id:add_other_entry_here"
             )
     );
-    public Set<String> removeFreezableMobs = new HashSet<>(
+    public Set<String> removeFreezableMobsv2 = new HashSet<>(
             Arrays.asList(
                     "minecraft:blaze",
                     "minecraft:vex",
                     "minecraft:stray",
                     "minecraft:magma_cube",
                     "minecraft:snow_golem",
-                    "minecraft:iron_golem",
-                    "minecraft:copper_golem",
                     "minecraft:allay"
             )
     );
+
+    public Set<String> powerfulMobs = new HashSet<>(
+            Arrays.asList(
+                    "mowziesmobs:frostmaw",
+                    "mowziesmobs:ferrous_wroughtnaut",
+                    "mowziesmobs:umvuthi"
+            )
+    );
+
     public Set<String> vampireSunDamageWorlds = new HashSet<>(
             Arrays.asList(
                     "overworld"

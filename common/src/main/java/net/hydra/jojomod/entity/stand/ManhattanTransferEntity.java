@@ -4,12 +4,14 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.*;
+import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -19,6 +21,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.*;
@@ -40,12 +46,10 @@ import java.util.List;
 
 public class ManhattanTransferEntity extends StandEntity {
 
-    //TODO: Manhattan Transfer Animations for piloting
-    //TODO: Manhattan Transfer Bullet Hit Sound
-
     public ManhattanTransferEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
     }
+
     public static final byte
             ANIME_SKIN = 1,
             MANGA_SKIN = 2,
@@ -61,14 +65,17 @@ public class ManhattanTransferEntity extends StandEntity {
     public boolean isNoGravity() {
         return true;
     }
+
     @Override
     public boolean lockPos() {
         return false;
     }
+
     @Override
     public boolean forceVisualRotation() {
         return true;
     }
+
     @Override
     public boolean canBeHitByProjectile() {
         if (this.getUserData(this.getUser()) != null) {
@@ -80,23 +87,27 @@ public class ManhattanTransferEntity extends StandEntity {
         }
         return true;
     }
+
     @Override
     public boolean hasNoPhysics() {
         return false;
     }
+
     @Override
     public boolean isAttackable() {
         return true;
     }
+
     @Override
     public boolean skipAttackInteraction(Entity $$0) {
         return false;
     }
+
     @Override
     public float getFlyingSpeed() {
         if (this.getUserData(this.getUser()) != null && this.getUser() != null) {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-                if(this.level().isClientSide) {
+                if (this.level().isClientSide) {
                     Options key = Minecraft.getInstance().options;
                     if (key.keyDown.isDown() || key.keyRight.isDown() || key.keyUp.isDown() || key.keyLeft.isDown()) {
                         if (PM.XtraSpdTick > 7) {
@@ -112,6 +123,7 @@ public class ManhattanTransferEntity extends StandEntity {
         }
         return 0.10F;
     }
+
     @Override
     public boolean isControlledByLocalInstance() {
         LivingEntity user = this.getUser();
@@ -123,6 +135,7 @@ public class ManhattanTransferEntity extends StandEntity {
         }
         return super.isControlledByLocalInstance();
     }
+
     @Override
     public void travel(Vec3 vec3) {
         super.travel(vec3);
@@ -133,6 +146,7 @@ public class ManhattanTransferEntity extends StandEntity {
         }
 
     }
+
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
         $$0.putBoolean("roundabout.AcquireHeldItem", this.canAcquireHeldItem);
@@ -141,6 +155,7 @@ public class ManhattanTransferEntity extends StandEntity {
         $$0.put("roundabout.HeldItem", this.getHeldItemManhattanFull().save(compoundtag));
         super.addAdditionalSaveData($$0);
     }
+
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
         this.canAcquireHeldItem = $$0.getBoolean("roundabout.AcquireHeldItem");
@@ -150,14 +165,18 @@ public class ManhattanTransferEntity extends StandEntity {
         this.setHeldItemManhattanFull(itemstack);
         super.readAdditionalSaveData($$0);
     }
+
     protected static final EntityDataAccessor<ItemStack> HELD_ITEM_MANHATTAN = SynchedEntityData.defineId(ManhattanTransferEntity.class,
             EntityDataSerializers.ITEM_STACK);
+
     public final ItemStack getHeldItemManhattan() {
         return this.entityData.get(HELD_ITEM_MANHATTAN);
     }
+
     public final void setHeldItemManhattan(ItemStack stack) {
         this.entityData.set(HELD_ITEM_MANHATTAN, stack);
     }
+
     @Override
     protected void defineSynchedData() {
         if (!this.entityData.hasItem(HELD_ITEM_MANHATTAN)) {
@@ -167,20 +186,26 @@ public class ManhattanTransferEntity extends StandEntity {
             this.entityData.define(MANHATTAN_TARGET, 0);
         }
     }
+
     protected static final EntityDataAccessor<ItemStack> HELD_ITEM_MANHATTAN_FULL = SynchedEntityData.defineId(ManhattanTransferEntity.class,
             EntityDataSerializers.ITEM_STACK);
+
     public final ItemStack getHeldItemManhattanFull() {
         return this.entityData.get(HELD_ITEM_MANHATTAN_FULL);
     }
+
     public final void setHeldItemManhattanFull(ItemStack stack) {
         this.entityData.set(HELD_ITEM_MANHATTAN_FULL, stack);
     }
+
     public int getHattanTarget() {
         return this.entityData.get(MANHATTAN_TARGET);
     }
+
     public void setHattanTarget(int d) {
         this.entityData.set(MANHATTAN_TARGET, d);
     }
+
     protected static final EntityDataAccessor<Integer> MANHATTAN_TARGET = SynchedEntityData.defineId(ManhattanTransferEntity.class,
             EntityDataSerializers.INT);
     public boolean isDesummoning = false;
@@ -190,49 +215,61 @@ public class ManhattanTransferEntity extends StandEntity {
     public boolean isSnubnose = false;
     public float manhattanDamageIncipit = 0;
     public boolean canAcquireHeldItem = false;
+
     public boolean getCanPlace() {
         return false;
     }
+
     public boolean canSnipe() {
         return false;
     }
+
     public float getShotAccuracy() {
         return 0.0F;
     }
+
     public float getBundleAccuracy() {
         return 0.0F;
     }
+
     public float getThrowAngle() {
         return 0.0F;
     }
+
     public float getThrowAngle2() {
         return 0.0F;
     }
+
     public float getThrowAngle3() {
         return 0.0F;
     }
+
     public boolean canOthersLoadMT = ClientNetworking.getAppropriateConfig().manhattanTransferSettings.canOtherMobsLoadManhattanTransfer;
     public int fireTicksPrj = 0;
-    Projectile hattanDeflected = null;
+    public Projectile hattanDeflected = null;
     public int fireworkLifeTicks = 0;
     public int setHatAnimDir = 1;
     public float heighHattanPilotNoMov = 0;
     private boolean isKeyEverPressed = false;
+
+    int knockbackArrow = 0;
+
     public StandUser getUserData(LivingEntity User) {
         return ((StandUser) User);
     }
+
     public int DodgeRainTicks = 0;
+
     public void setDodgeRainTicks(int val) {
         DodgeRainTicks = val;
     }
+
     int stupidTicks = 10;
     public int tickInWater = 100;
     int dirPause = 0;
     int randomDirection = 0;
     public boolean isHattanPilotMode = false;
     public float autoMoveBoost = 1;
-    public float rotationXHattan = 0;
-    public float rotationYHattan = 0;
     public float shootRotationXHattan = 0;
     public float shootRotationYHattan = 0;
     public float manhattanDetectionRange = ClientNetworking.getAppropriateConfig().manhattanTransferSettings.manhattanAutoShootingRange;
@@ -247,9 +284,16 @@ public class ManhattanTransferEntity extends StandEntity {
             if (directEntityWho != null && direct != null) {
                 if (direct instanceof Projectile PR && !source.is(ModDamageTypes.STAND)) {
                     if (directEntityWho != this) {
-                        if(PR instanceof AbstractArrow || PR instanceof ThrowableItemProjectile) {
+                        if (PR instanceof AbstractArrow || PR instanceof ThrowableItemProjectile) {
                             if (((directEntityWho.is(User) && !canOthersLoadMT) || canOthersLoadMT) && !hasItem) {
                                 hasItemTwo = false;
+                                if(this.getUser() instanceof Player PL && ((StandUser) PL).roundabout$getStandPowers() instanceof  PowersManhattanTransfer PM){
+                                    if(this.getHattanTarget() == 0 || PM.switchShootingMode()) {
+                                        PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
+                                    } else {
+                                            PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1F, (this.random.nextFloat() * 0.2F + 0.7F));
+                                    }
+                                }
                                 if (direct instanceof AbstractArrow AA) {
                                     ItemStack ii = ((IAbstractArrowAccess) direct).roundabout$GetPickupItem();
                                     if (!ii.isEmpty()) {
@@ -262,6 +306,7 @@ public class ManhattanTransferEntity extends StandEntity {
                                         }
                                         this.fireTicksPrj = AA.getRemainingFireTicks();
                                         this.setHeldItemManhattan(ii.copyAndClear());
+                                        knockbackArrow = AA.getKnockback();
                                         AA.discard();
                                     } else if (AA instanceof RoundaboutBulletEntity BE) {
                                         hasItem = true;
@@ -364,7 +409,6 @@ public class ManhattanTransferEntity extends StandEntity {
     }
 
     public boolean shootHattan() {
-        /***/
         if (!getHeldItemManhattan().isEmpty()) {
             Vec3 pos = new Vec3(this.getX(), this.getEyeY() - 0.1F, this.getZ());
             Direction gravD = ((IGravityEntity) this).roundabout$getGravityDirection();
@@ -383,40 +427,44 @@ public class ManhattanTransferEntity extends StandEntity {
         }
         return false;
     }
+
     public static boolean manhattanShoot(ManhattanTransferEntity thrower, boolean canSnipe, ItemStack item, float getShotAccuracy,
                                          float getBundleAccuracy,
                                          float getThrowAngle1, float getThrowAngle2, float getThrowAngle3,
                                          boolean getCanPlace, float xRot, float yRot, Vec3 pos,
                                          boolean playSounds, float mult, boolean canGiveYouItem) {
         thrower.playSound(ModSounds.BULLET_RICOCHET_EVENT, 1.0F, (thrower.random.nextFloat() * 0.2F + 0.7F));
+        if(thrower.getUser() instanceof Player PL && ((StandUser) PL).roundabout$getStandPowers() instanceof  PowersManhattanTransfer PM && MainUtil.cheapDistanceTo2(thrower.getX(), thrower.getZ(), thrower.getUser().getX(), thrower.getUser().getZ()) > 16){
+            if (PM.isClient()) {
+                PM.self.playSound(ModSounds.BULLET_RICOCHET_EVENT, 100F, (thrower.random.nextFloat() * 0.2F + 0.7F));
+            }
+        }
         if (!thrower.level().isClientSide) {
             if (thrower.getUserData(thrower.getUser()) != null && thrower.getUserData(thrower.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
                 PM.isNotLoaded();
             }
-            if (item.getItem() instanceof ArrowItem) {
-                ArrowItem $$10 = (ArrowItem) item.getItem();
-                AbstractArrow $$11 = $$10.createArrow(thrower.level(), item, thrower);
-                $$11.setPos(pos);
-                $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3, getShotAccuracy);
-                $$11.setCritArrow(false);
-                ((IAbstractArrowAccess) $$11).roundabout$SetIsManhattan(true);
-                ((IAbstractArrowAccess) $$11).roundabout$setHattanDamage(thrower.manhattanDamageIncipit);
-
-                if (thrower != null) {
-                    if (!thrower.canAcquireHeldItem) {
-                        $$11.pickup = AbstractArrow.Pickup.DISALLOWED;
-                    } else {
-                        $$11.pickup = AbstractArrow.Pickup.ALLOWED;
-                    }
-                }
-                $$11.setRemainingFireTicks(thrower.fireTicksPrj);
-                thrower.level().addFreshEntity($$11);
-                thrower.hattanDeflected = $$11;
-                $$11.setOwner(thrower.getUser());
+         if (item.getItem() instanceof ArrowItem) {
+            ArrowItem $$10 = (ArrowItem) item.getItem();
+            AbstractArrow $$11 = $$10.createArrow(thrower.getUser().level(), item, thrower.getUser());
+            $$11.setPos(pos.x, pos.y - 0.15, pos.z);
+            $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3F, getShotAccuracy);
+            $$11.setKnockback(thrower.knockbackArrow);
+            $$11.setCritArrow(false);
+            if(thrower.canAcquireHeldItem){
+                $$11.pickup =AbstractArrow.Pickup.ALLOWED;
+            }else {
+                $$11.pickup =AbstractArrow.Pickup.DISALLOWED;
+            }
+            thrower.level().addFreshEntity($$11);
+            ((IAbstractArrowAccess) $$11).roundabout$SetIsManhattan(true);
+            ((IAbstractArrowAccess) $$11).roundabout$setHattanDamage(thrower.manhattanDamageIncipit);
+            $$11.setRemainingFireTicks(thrower.fireTicksPrj);
+            thrower.hattanDeflected = $$11;
+            thrower.knockbackArrow = 0;
             } else if (item.getItem() instanceof AmmoItem) {
-                RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity(thrower.level(), thrower);
+                RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity(thrower.getUser().level(), thrower.getUser());
                 $$7.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.5F, getShotAccuracy);
-
+                    $$7.setPos(pos.x, pos.y - 0.15, pos.z);
                 if (item.getItem() instanceof SnubnoseAmmoItem) {
                     if (thrower.isSnubnose) {
                         $$7.setAmmoType(RoundaboutBulletEntity.SNUBNOSE);
@@ -433,104 +481,101 @@ public class ManhattanTransferEntity extends StandEntity {
                 $$7.manhattanDamage = thrower.manhattanDamageIncipit;
                 thrower.level().addFreshEntity($$7);
                 thrower.hattanDeflected = $$7;
-                $$7.setOwner(thrower.getUser());
             } else if (item.getItem() instanceof EnderpearlItem) {
-                ThrownEnderpearl $$7 = new ThrownEnderpearl(thrower.level(), thrower);
-                $$7.setPos(pos);
+                ThrownEnderpearl $$7 = new ThrownEnderpearl(thrower.getUser().level(), thrower.getUser());
+                $$7.setPos(pos.x, pos.y - 0.15, pos.z);
                 $$7.setItem(item);
-                $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
+                $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.5F * mult, getShotAccuracy);
                 $$7.setRemainingFireTicks(thrower.fireTicksPrj);
-                $$7.setOwner(thrower.getUser());
                 thrower.level().addFreshEntity($$7);
                 thrower.hattanDeflected = $$7;
             } else if (item.getItem() instanceof SnowballItem) {
-                Snowball $$7 = new Snowball(thrower.level(), thrower);
-                $$7.setPos(pos);
+                Snowball $$7 = new Snowball(thrower.getUser().level(), thrower.getUser());
+                $$7.setPos(pos.x, pos.y - 0.15, pos.z);
                 $$7.setItem(item);
-                $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
+                $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.5F * mult, getShotAccuracy);
                 $$7.setRemainingFireTicks(thrower.fireTicksPrj);
-                $$7.setOwner(thrower.getUser());
                 thrower.level().addFreshEntity($$7);
                 thrower.hattanDeflected = $$7;
             } else if (item.getItem() instanceof EggItem) {
-                ThrownEgg $$7 = new ThrownEgg(thrower.level(), thrower);
-                $$7.setPos(pos);
+                ThrownEgg $$7 = new ThrownEgg(thrower.getUser().level(), thrower.getUser());
+                $$7.setPos(pos.x, pos.y - 0.15, pos.z);
                 $$7.setItem(item);
-                $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
+                $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.5F * mult, getShotAccuracy);
                 $$7.setRemainingFireTicks(thrower.fireTicksPrj);
-                $$7.setOwner(thrower.getUser());
                 thrower.level().addFreshEntity($$7);
                 thrower.hattanDeflected = $$7;
             } else if (item.getItem() instanceof TridentItem || item.getItem() instanceof HarpoonItem) {
                 if (item.getItem() instanceof TridentItem) {
-                    ThrownTrident $$7 = new ThrownTrident(thrower.level(), thrower, item);
-                    $$7.setPos(pos);
+                    ThrownTrident $$7 = new ThrownTrident(thrower.getUser().level(), thrower.getUser(), item);
+                    $$7.setPos(pos.x, pos.y - 0.15, pos.z);
                     $$7.setRemainingFireTicks(thrower.fireTicksPrj);
-                    $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
-                    $$7.setOwner(thrower.getUser());
+                    $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.75F * mult, getShotAccuracy);
                     thrower.level().addFreshEntity($$7);
                     thrower.hattanDeflected = $$7;
                 } else {
-                    HarpoonEntity $$7 = new HarpoonEntity(thrower.level(), thrower, item);
-                    $$7.setPos(pos);
+                    HarpoonEntity $$7 = new HarpoonEntity(thrower.getUser().level(), thrower.getUser(), item);
+                    $$7.setPos(pos.x, pos.y - 0.15, pos.z);
                     $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
-                    $$7.setOwner(thrower.getUser());
                     $$7.setRemainingFireTicks(thrower.fireTicksPrj);
                     thrower.level().addFreshEntity($$7);
                     $$7.isMahattan = true;
                     thrower.hattanDeflected = $$7;
                 }
             } else if (item.is(Items.IRON_INGOT)) {
-                IronBallEntity $$7 = new IronBallEntity(thrower.level(), thrower, item);
-                $$7.setPos(pos);
+                IronBallEntity $$7 = new IronBallEntity(thrower.getUser().level(), thrower.getUser(), item);
+                $$7.setPos(pos.x, pos.y - 0.15, pos.z);
                 $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
                 $$7.setRemainingFireTicks(thrower.fireTicksPrj);
-                $$7.setOwner(thrower.getUser());
                 thrower.level().addFreshEntity($$7);
                 $$7.isHattanIronBall = true;
                 thrower.hattanDeflected = $$7;
             } else if (item.getItem() instanceof KnifeItem) {
-                KnifeEntity $$7 = new KnifeEntity(thrower.level(), thrower, item);
-                $$7.setPos(pos);
-                $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
+                KnifeEntity $$7 = new KnifeEntity(thrower.getUser().level(), thrower.getUser(), item);
+                $$7.setPos(pos.x, pos.y - 0.15, pos.z);
+                $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.5F * mult, getShotAccuracy);
                 $$7.setRemainingFireTicks(thrower.fireTicksPrj);
-                $$7.setOwner(thrower.getUser());
                 thrower.level().addFreshEntity($$7);
                 $$7.isHattanKnife = true;
                 thrower.hattanDeflected = $$7;
-            } else if (item.getItem() instanceof PotionItem) {
-                ThrownPotion $$4 = new ThrownPotion(thrower.level(), thrower);
-                $$4.setPos(pos);
+            } else if (item.getItem() instanceof MatchItem) {
+            MatchEntity $$7 = new MatchEntity(thrower.getUser(), thrower.getUser().level());
+            $$7.setPos(pos.x, pos.y - 0.15, pos.z);
+            $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.5F * mult, getShotAccuracy);
+            $$7.setRemainingFireTicks(thrower.fireTicksPrj);
+            $$7.isHattanMatch = true;
+            thrower.level().addFreshEntity($$7);
+            thrower.hattanDeflected = $$7;
+        } else if (item.getItem() instanceof PotionItem) {
+                ThrownPotion $$4 = new ThrownPotion(thrower.getUser().level(), thrower.getUser());
+                $$4.setPos(pos.x, pos.y - 0.15, pos.z);
                 $$4.setItem(item);
                 $$4.setRemainingFireTicks(thrower.fireTicksPrj);
-                $$4.setOwner(thrower.getUser());
-                $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.4F * mult, getShotAccuracy);
+                $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 0.75F * mult, getShotAccuracy);
                 thrower.level().addFreshEntity($$4);
                 thrower.hattanDeflected = $$4;
             } else if (item.getItem() instanceof BowlerHatItem) {
-                BladedBowlerHatEntity $$4 = new BladedBowlerHatEntity(thrower.level(), thrower, item);
-                $$4.setPos(pos);
+                BladedBowlerHatEntity $$4 = new BladedBowlerHatEntity(thrower.getUser().level(), thrower.getUser(), item);
+                $$4.setPos(pos.x, pos.y - 0.15, pos.z);
                 $$4.setItem(item);
                 $$4.setRemainingFireTicks(thrower.fireTicksPrj);
-                $$4.setOwner(thrower.getUser());
                 $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.4F * mult, getShotAccuracy);
                 $$4.isHattanHatProj = true;
                 thrower.level().addFreshEntity($$4);
                 thrower.hattanDeflected = $$4;
-            }else if (item.getItem() instanceof FireworkRocketItem){
-                FireworkRocketEntity $$4 = new FireworkRocketEntity(thrower.level(), item, thrower, thrower.getX(), thrower.getEyeY(), thrower.getZ(), true);
-                $$4.setPos(pos);
+            } else if (item.getItem() instanceof FireworkRocketItem) {
+                FireworkRocketEntity $$4 = new FireworkRocketEntity(thrower.getUser().level(), item, thrower.getUser(), thrower.getX(), thrower.getY() - 0.15, thrower.getZ(), true);
+                $$4.setPos(pos.x, pos.y - 0.15, pos.z);
                 $$4.setRemainingFireTicks(thrower.fireTicksPrj);
-                $$4.setOwner(thrower.getUser());
                 $$4.shootFromRotation(thrower, xRot, yRot, 0.0F, 1.4F * mult, getShotAccuracy);
                 thrower.level().addFreshEntity($$4);
                 thrower.hattanDeflected = $$4;
             } else {
                 getCanPlace = false;
-                ThrownObjectEntity $$14 = new ThrownObjectEntity(thrower, thrower.level(), item, getCanPlace);
-                $$14.setPos(pos);
+                ThrownObjectEntity $$14 = new ThrownObjectEntity(thrower.getUser(), thrower.getUser().level(), item, getCanPlace);
+                $$14.setPos(pos.x, pos.y - 0.15, pos.z);
                 $$14.shootFromRotation(thrower, xRot,
-                        yRot, getThrowAngle1, 1.7F * mult, getThrowAngle2);
+                        yRot, getThrowAngle1, 1.5F * mult, getThrowAngle2);
                 if (canSnipe) {
                     $$14.starThrowInit();
                 }
@@ -544,42 +589,45 @@ public class ManhattanTransferEntity extends StandEntity {
         return true;
     }
 
-    public void powerUpProjectile(){
-        if(this.hattanDeflected != null && !(this.hattanDeflected instanceof ThrownTrident) && !(this.hattanDeflected instanceof FireworkRocketEntity)) {
+    public void powerUpProjectile() {
+        if (this.hattanDeflected != null && !(this.hattanDeflected instanceof ThrownTrident) && !(this.hattanDeflected instanceof FireworkRocketEntity)) {
             ((IProjectileAccess) hattanDeflected).roundabout$setManhattanProjectile(true);
-        } else if(this.hattanDeflected instanceof ThrownTrident TR){
+        } else if (this.hattanDeflected instanceof ThrownTrident TR) {
             ((ISuperThrownAbstractArrow) TR).roundabout$setIsTridentManhattan(true);
-        } else if(this.hattanDeflected instanceof FireworkRocketEntity FER){
+        } else if (this.hattanDeflected instanceof FireworkRocketEntity FER) {
             ((IFireworkRocketAccess) FER).setIsHattanProj(true);
             ((IFireworkRocketAccess) FER).roundabout$SetFireworkRemainingLifeTicks(this.fireworkLifeTicks);
         }
     }
+
     public void changeMovementState() {
         if (this.getUserData(this.getUser()) != null && this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
             PM.isLoaded();
         }
     }
-    public Vec2 getStrangeVector(){
-        if(this.getUser() != null && this.getUserData(this.getUser()) != null && this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-            if(this.level().isClientSide) {
-                if(isKeyEverPressed) {
+
+    public Vec2 getStrangeVector() {
+        if (this.getUser() != null && this.getUserData(this.getUser()) != null && this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+            if (this.level().isClientSide) {
+                if (isKeyEverPressed) {
                     if (verticalLastPressed) {
                         if (pressS) {
-                            if(this.getXRot() < 15 || this.getXRot() > -15) {
+                            if (this.getXRot() < 15 || this.getXRot() > -15) {
                                 return new Vec2(this.getXRot() * -1 + heighHattanPilotNoMov, this.getYRot() - 180);
                             } else {
                                 return new Vec2(this.getXRot() * -1, this.getYRot() - 180);
                             }
                         }
                         if (!pressS) {
-                            if(this.getXRot() < 15 || this.getXRot() > -15) {
+                            if (this.getXRot() < 15 || this.getXRot() > -15) {
                                 return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot());
                             } else {
                                 return new Vec2(this.getXRot(), this.getYRot());
                             }
                         }
                     } else {
-                        if (pressA) {;
+                        if (pressA) {
+                            ;
                             return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot() - 90);
                         }
                         if (!pressA) {
@@ -587,7 +635,7 @@ public class ManhattanTransferEntity extends StandEntity {
                         }
                     }
                 } else {
-                    if(stupidTicks < 1) {
+                    if (stupidTicks < 1) {
                         if (this.getXRot() < 15 || this.getXRot() > -15) {
                             return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot());
                         } else {
@@ -599,7 +647,8 @@ public class ManhattanTransferEntity extends StandEntity {
         }
         return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot());
     }
-    public Vec3 getHattanDirection(){
+
+    public Vec3 getHattanDirection() {
         return Vec3.directionFromRotation(this.getStrangeVector());
     }
 
@@ -609,68 +658,122 @@ public class ManhattanTransferEntity extends StandEntity {
         super.die($$0);
     }
 
+    int ticksFixRot = 0;
+
+    private void setShootRotationX(float shootX){shootRotationXHattan = shootX;}
+    private void setShootRotationY(float shootY){shootRotationYHattan = shootY;}
+
     @Override
     public void tick() {
         validateUUID();
+        super.tick();
         float pitch = this.getXRot();
         float yaw = this.getYRot();
-        if(dirPause > 0){
+        if (dirPause > 0) {
             dirPause--;
         }
 
-if(this.getUser() != null) {
-    if(stupidTicks >= 1) {
-        if (stupidTicks == 10) {
-            this.moveTo(this.getUser().getX(), this.getUser().getEyeY(), this.getUser().getZ() - 0.075F);
+        if (!getHeldItemManhattan().isEmpty()) {
+            stopsManhattanAnimationsWhenHeldItem = true;
         } else {
-            this.setXRot(this.getUser().getXRot() % 360);
-            this.setYRot(this.getUser().getYHeadRot() % 360);
-            this.setYBodyRot(this.getUser().getYHeadRot() % 360);
-        }
-        stupidTicks--;
-    }
-}
-
-if(!isHattanPilotMode) {
-    if (horizontalCollision || verticalCollision) {
-        if (dirPause == 0) {
-            randomDirection = random.nextInt(2) + 1;
-            dirPause = 40;
+            stopsManhattanAnimationsWhenHeldItem = false;
         }
 
-        if (horizontalCollision) {
-            this.setYBodyRot(this.getYRot() % 360);
-            if (randomDirection <= 1) {
-                this.setYRot(yaw - 15);
-            } else {
-                this.setYRot(yaw + 15);
+        if (this.getUser() != null) {
+            if (stupidTicks >= 1) {
+                LivingEntity $$0 = this.getUser();
+                Direction gravityDirection = GravityAPI.getGravityDirection($$0);
+                if (stupidTicks == 10) {
+                    if (gravityDirection == Direction.DOWN) {
+                        this.moveTo(this.getUser().getX(), this.getUser().getEyeY(), this.getUser().getZ() - 0.25F);
+                    } else if (gravityDirection == Direction.UP) {
+                        this.moveTo(this.getUser().getX(), this.getUser().getY() - $$0.getBbHeight(), this.getUser().getZ() - 0.25F);
+                    } else if (gravityDirection == Direction.NORTH) {
+                        this.moveTo(this.getUser().getX(), this.getUser().getY(), this.getUser().getZ() + $$0.getBbHeight());
+                    } else if (gravityDirection == Direction.SOUTH) {
+                        this.moveTo(this.getUser().getX(), this.getUser().getY(), this.getUser().getZ() - $$0.getBbHeight());
+                    } else if (gravityDirection == Direction.EAST) {
+                        this.moveTo(this.getUser().getX() - $$0.getBbHeight(), this.getUser().getY(), this.getUser().getZ() - 0.25F);
+                    } else if (gravityDirection == Direction.WEST) {
+                        this.moveTo(this.getUser().getX() + $$0.getBbHeight(), this.getUser().getY(), this.getUser().getZ() - 0.25F);
+                    }
+                } else {
+                    if((this.getUser() instanceof Player && stupidTicks == 9) || (!(this.getUser() instanceof Player) && stupidTicks > 1)) {
+                        if (gravityDirection != Direction.DOWN) {
+                            Vec2 vecGravity = RotationUtil.rotPlayerToWorld($$0.getYRot(), $$0.getXRot(), gravityDirection);
+                            this.setXRot(vecGravity.y % 360);
+                            this.setYRot(vecGravity.x % 360);
+                            this.setYBodyRot(this.getUser().getYHeadRot() % 360);
+                        } else {
+                            this.setXRot(this.getUser().getXRot() % 360);
+                            this.setYRot(this.getUser().getYHeadRot() % 360);
+                            this.setYBodyRot(this.getUser().getYHeadRot() % 360);
+                        }
+                    }
+                }
+                stupidTicks--;
             }
         }
-        if (verticalCollision && !verticalCollisionBelow) {
-            this.setXRot(pitch + 15);
+
+        if (!isHattanPilotMode) {
+            if (horizontalCollision || verticalCollision) {
+                if (dirPause == 0) {
+                    randomDirection = random.nextInt(2) + 1;
+                    dirPause = 40;
+                }
+
+                if (horizontalCollision) {
+                    if(this.getUser() instanceof Player || this.getUser() instanceof ServerPlayer) {
+                        if (randomDirection <= 1) {
+                            this.setYRot(yaw - 15);
+                            this.setYHeadRot(yaw - 15);
+                        } else {
+                            this.setYRot(yaw + 15);
+                            this.setYHeadRot(yaw + 15);
+                        }
+                    } else {
+                        if (randomDirection <= 1) {
+                            this.setYRot(yaw - 15);
+                        } else {
+                            this.setYRot(yaw + 15);
+                        }
+                        ticksFixRot = 10;
+                    }
+                }
+                if (verticalCollision && !verticalCollisionBelow) {
+                    this.setXRot(pitch + 15);
+                }
+                if (verticalCollisionBelow) {
+                    this.setXRot(pitch - 15);
+                }
+            } else {
+                if(ticksFixRot > 1){
+                    if(randomDirection < 1) {
+                        setYRot(this.getYRot() + 1);
+                    } else {
+                        setYRot(this.getYRot() - 1);
+                    }
+                    ticksFixRot--;
+                }
+            }
         }
-        if (verticalCollisionBelow) {
-            this.setXRot(pitch - 15);
-        }
-    }
-}
 
         if (!this.level().isClientSide()) {
             if (this.getUserData(this.getUser()) != null) {
                 if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
                     Vec3 rots = this.getRotations(PM.targetHattan);
                     if (PM.switchShootingMode() || this.getHattanTarget() == 0) {
-                        shootRotationXHattan = rotationXHattan;
-                        shootRotationYHattan = rotationYHattan;
+                        setShootRotationX(this.getXRot());
+                        setShootRotationY(this.getYRot());
                     } else {
-                        shootRotationXHattan = (float) rots.x() * 180 / (float) Math.PI + 180;
-                        shootRotationYHattan = (float) rots.y * 180 / (float) Math.PI;
+                        setShootRotationX((float) rots.x() * 180 / (float) Math.PI + 180);
+                        setShootRotationY((float) rots.y * 180 / (float) Math.PI);
                     }
                 }
             }
         }
 
-        if(this.level().isClientSide) {
+        if (this.level().isClientSide) {
             Options options = Minecraft.getInstance().options;
             if (this.getUserData(this.getUser()) != null) {
                 if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
@@ -691,10 +794,99 @@ if(!isHattanPilotMode) {
             }
         }
 
+        if (this.getUser() != null && ((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+            if (PM.isClient()) {
+                Options options = Minecraft.getInstance().options;
+                if (PM.isPiloting()) {
+                    if (options.keyDown.isDown() || options.keyUp.isDown() || options.keyLeft.isDown() || options.keyRight.isDown()) {
+                        isKeyEverPressed = true;
+                    }
+                    if (options.keyUp.isDown()) {
+                        W = true;
+                        pressS = false;
+                        pressA = false;
+                        verticalLastPressed = true;
+                        this.setHatAnimDir = 1;
+                    }
+                    if (!options.keyUp.isDown()) {
+                        W = false;
+                    }
+                    if (options.keyDown.isDown()) {
+                        S = true;
+                        pressS = true;
+                        pressA = false;
+                        verticalLastPressed = true;
+                        this.setHatAnimDir = 2;
+                    }
+                    if (!options.keyDown.isDown()) {
+                        S = false;
+                    }
+
+                    if ((options.keyUp.isDown() && options.keyDown.isDown())) {
+                        W = false;
+                        S = false;
+                        pressS = false;
+                        pressA = false;
+                        verticalLastPressed = true;
+                        this.setHatAnimDir = 1;
+                    }
+
+                    if(options.keyLeft.isDown() && options.keyRight.isDown()){
+                        A = false;
+                        D = false;
+                        pressS = false;
+                        pressA = false;
+                        verticalLastPressed = true;
+                        this.setHatAnimDir = 1;
+                    }
+
+                    if((options.keyUp.isDown() && options.keyDown.isDown() && (options.keyLeft.isDown() && options.keyRight.isDown()))){
+                        W = false;
+                        A = false;
+                        S = false;
+                        D = false;
+                        pressS = false;
+                        pressA = false;
+                        verticalLastPressed = true;
+                        this.setHatAnimDir = 1;
+                    }
+
+                    if (options.keyLeft.isDown() && !options.keyRight.isDown()) {
+                        A = true;
+                        pressA = true;
+                        pressS = false;
+                        verticalLastPressed = false;
+                        this.setHatAnimDir = 3;
+                    }
+                    if (!options.keyLeft.isDown()) {
+                        A = false;
+                    }
+                    if (options.keyRight.isDown() && !options.keyLeft.isDown()) {
+                        D = true;
+                        pressA = false;
+                        pressS = false;
+                        verticalLastPressed = false;
+                        this.setHatAnimDir = 4;
+                    }
+                    if (!options.keyRight.isDown()) {
+                        D = false;
+                    }
+
+                }
+            }
+        }
+
         searchTarget();
-        rotationXHattan = this.getXRot();
-        rotationYHattan = this.getYRot();
         super.tick();
+        if (!this.level().isClientSide()) {
+            if (isHattanPilotMode) {
+                    this.setXRot(pitch);
+                    this.setYRot(yaw);
+                    this.setYBodyRot(yaw);
+                    this.xRotO = pitch;
+                    this.yRotO = yaw;
+                }
+        }
     }
 
     public void searchTarget() {
@@ -705,26 +897,26 @@ if(!isHattanPilotMode) {
             if (lvent != null && !lvent.isEmpty()) {
                 List<LivingEntity> targent = new ArrayList<>(lvent);
                 for (LivingEntity value : lvent) {
-                        IEntityAndData entityAndData = ((IEntityAndData) value);
-                        if (value instanceof StandEntity || value.is(this.getUser())|| !this.hasLineOfSight(value)) {
-                            targent.remove(value);
-                            this.setHattanTarget(0);
-                            if (this.getUserData(this.getUser()) != null) {
-                                if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-                                    PM.targetHattan = null;
-                                }
-                            }
-                        }
-                        if (entityAndData.roundabout$getTrueInvisibilityManhattan() < 1 || this.isInWater() || this.isInLava()) {
-                            targent.remove(value);
-                            this.setHattanTarget(0);
-                            if (this.getUserData(this.getUser()) != null) {
-                                if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-                                    PM.targetHattan = null;
-                                }
+                    IEntityAndData entityAndData = ((IEntityAndData) value);
+                    if (value instanceof StandEntity || value.is(this.getUser()) || !this.hasLineOfSight(value)) {
+                        targent.remove(value);
+                        this.setHattanTarget(0);
+                        if (this.getUserData(this.getUser()) != null) {
+                            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                                PM.targetHattan = null;
                             }
                         }
                     }
+                    if (entityAndData.roundabout$getTrueInvisibilityManhattan() < 1 || this.isInWater() || this.isInLava()) {
+                        targent.remove(value);
+                        this.setHattanTarget(0);
+                        if (this.getUserData(this.getUser()) != null) {
+                            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                                PM.targetHattan = null;
+                            }
+                        }
+                    }
+                }
 
                 lvent = targent;
             }
@@ -743,7 +935,7 @@ if(!isHattanPilotMode) {
         }
     }
 
-    public static final float[] ShotPowerFloats = {3.55F,3.5F,4F};
+    public static final float[] ShotPowerFloats = {3.55F, 3.5F, 4F};
 
     public BlockHitResult getTargetPos() {
         Vec3 vec3d = this.getEyePosition(0);
@@ -755,42 +947,42 @@ if(!isHattanPilotMode) {
     }
 
     public Vec3 getEyeP(float d) {
-        return this.getPosition(d).add(0,0.15,0);
+        return this.getPosition(d).add(0, 0.15, 0);
     }
 
     public Vec3 getRotations(Entity target) {
 
 
-            Vec3 targetPos = getTargetPos().getLocation();
-            if (target != null) {
-                targetPos = target.getEyePosition(1);
+        Vec3 targetPos = getTargetPos().getLocation();
+        if (target != null) {
+            targetPos = target.getEyePosition(1);
 
-                    double dist = targetPos.distanceTo(this.getPosition(1));
-                    double time = dist / ShotPowerFloats[1];
-                    time *= 1.4;
-                    Vec3 vec = target.getDeltaMovement();
-                    if (target instanceof Player) {
-                        if (Math.abs(vec.y) < 3) {
-                            vec = new Vec3(vec.x, 0, vec.z);
-                        }
-                    }
-                    targetPos = targetPos.add(vec.multiply(time, time, time));
-
+            double dist = targetPos.distanceTo(this.getPosition(1));
+            double time = dist / ShotPowerFloats[1];
+            time *= 1.4;
+            Vec3 vec = target.getDeltaMovement();
+            if (target instanceof Player) {
+                if (Math.abs(vec.y) < 3) {
+                    vec = new Vec3(vec.x, 0, vec.z);
+                }
             }
-            double x = (targetPos.x() - this.getPosition(0).x());
-            double z = (targetPos.z() - this.getPosition(0).z());
-            float rot = (float) (Math.atan2(z, x) - Math.PI / 2);
+            targetPos = targetPos.add(vec.multiply(time, time, time));
 
-            double hy = (targetPos.y() - (this.getEyeP(0).y()));
-            double hd = Math.sqrt(Math.pow(x, 2) + Math.pow(z, 2));
+        }
+        double x = (targetPos.x() - this.getPosition(0).x());
+        double z = (targetPos.z() - this.getPosition(0).z());
+        float rot = (float) (Math.atan2(z, x) - Math.PI / 2);
 
-            float hrot = (float) (Math.atan2(hd, hy) + Math.PI / 2);
+        double hy = (targetPos.y() - (this.getEyeP(0).y()));
+        double hd = Math.sqrt(Math.pow(x, 2) + Math.pow(z, 2));
 
-            if (target != null) {
-                return new Vec3(hrot, rot, 0);
-            }
+        float hrot = (float) (Math.atan2(hd, hy) + Math.PI / 2);
 
-            return new Vec3(0, 0, 0);
+        if (target != null) {
+            return new Vec3(hrot, rot, 0);
+        }
+
+        return new Vec3(0, 0, 0);
 
 
     }
@@ -798,7 +990,7 @@ if(!isHattanPilotMode) {
     public boolean isInRain() {
         BlockPos $$0 = this.blockPosition();
         return this.level().isRainingAt($$0)
-                || this.level().isRainingAt(BlockPos.containing((double)$$0.getX(), this.getBoundingBox().maxY, (double)$$0.getZ()));
+                || this.level().isRainingAt(BlockPos.containing((double) $$0.getX(), this.getBoundingBox().maxY, (double) $$0.getZ()));
     }
 
     public boolean stopsManhattanAnimationsWhenHeldItem = false;
@@ -819,177 +1011,205 @@ if(!isHattanPilotMode) {
     public final AnimationState slow_manhattan_back = new AnimationState();
     public final AnimationState slow_manhattan_left = new AnimationState();
     public final AnimationState slow_manhattan_right = new AnimationState();
-    public final AnimationState manhattan_is_loaded= new AnimationState();
+    public final AnimationState manhattan_is_loaded = new AnimationState();
 
 
-    private boolean isPressingW = false;
-    private boolean isPressingA = false;
-    private boolean isPressingS = false;
-    private boolean isPressingD = false;
+    public boolean W = false;
+    public  boolean A = false;
+    public  boolean S = false;
+    public  boolean D = false;
 
-    private boolean pressS = false;
-    private boolean pressA = false;
+    public  boolean pressS = false;
+    public  boolean pressA = false;
 
-    private boolean verticalLastPressed = true;
+    public  boolean verticalLastPressed = true;
+
+    public  boolean isPressing = false;
 
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
-        Options options = Minecraft.getInstance().options;
-        if (this.getUserData(this.getUser()) != null && this.getUser() != null) {
-            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
-                AnimationState $$0 = this.slow_manhattan;
-                AnimationState $$1 = this.forward_manhattan_incipit;
-                AnimationState $$2 = this.forward_manhattan_loop;
-                AnimationState $$3 = this.back_manhattan_incipit;
-                AnimationState $$4 = this.back_manhattan_loop;
-                AnimationState $$5 = this.back_manhattan_stop;
-                AnimationState $$6 = this.forward_manhattan_stop;
-                AnimationState $$7 = this.left_manhattan_incipit;
-                AnimationState $$8 = this.left_manhattan_stop;
-                AnimationState $$9 = this.left_manhattan_loop;
-                AnimationState $$10 = this.right_manhattan_incipit;
-                AnimationState $$11 = this.right_manhattan_stop;
-                AnimationState $$12 = this.right_manhattan_loop;
-                AnimationState $$13 = this.slow_manhattan_back;
-                AnimationState $$14 = this.slow_manhattan_left;
-                AnimationState $$15 = this.slow_manhattan_right;
-                AnimationState afk = this.manhattan_is_loaded;
+        AnimationState rd = this.rain_dodging_manhattan;
+        AnimationState loaded = this.manhattan_is_loaded;
 
-                if (!PM.isActive()) {
-                } else {
-                    if (PM.isClient()) {
-                        if (PM.isPiloting()) {
-                            if (options.keyDown.isDown() || options.keyUp.isDown() || options.keyLeft.isDown() || options.keyRight.isDown()) {
-                                isKeyEverPressed = true;
-                            }
-                            if (options.keyUp.isDown()) {
-                                isPressingW = true;
-                                pressS = false;
-                                pressA = false;
-                                verticalLastPressed = true;
-                                this.setHatAnimDir = 1;
-                            }
-                            if (!options.keyUp.isDown()) {
-                                isPressingW = false;
-                            }
-                            if (options.keyDown.isDown()) {
-                                isPressingS = true;
-                                pressS = true;
-                                pressA = false;
-                                verticalLastPressed = true;
-                                this.setHatAnimDir = 2;
-                            }
-                            if (!options.keyDown.isDown()) {
-                                isPressingS = false;
-                            }
-                            if (options.keyLeft.isDown()) {
-                                isPressingA = true;
-                                pressA = true;
-                                pressS = false;
-                                verticalLastPressed = false;
-                                this.setHatAnimDir = 3;
-                            }
-                            if (!options.keyLeft.isDown()) {
-                                isPressingA = false;
-                            }
-                            if (options.keyRight.isDown()) {
-                                isPressingD = true;
-                                pressA = false;
-                                pressS = false;
-                                verticalLastPressed = false;
-                                this.setHatAnimDir = 4;
-                            }
-                            if (!options.keyRight.isDown()) {
-                                isPressingD = false;
-                            }
+        AnimationState forBeg = this.forward_manhattan_incipit;
+        AnimationState forLoop = this.forward_manhattan_loop;
+        AnimationState forStop = this.forward_manhattan_stop;
+
+        AnimationState backBeg = this.back_manhattan_incipit;
+        AnimationState backLoop = this.back_manhattan_loop;
+        AnimationState backStop = this.back_manhattan_stop;
+
+        AnimationState leftBeg = this.left_manhattan_incipit;
+        AnimationState leftLoop = this.left_manhattan_loop;
+        AnimationState leftStop = this.left_manhattan_stop;
+
+        AnimationState rightBeg = this.right_manhattan_incipit;
+        AnimationState rightLoop = this.right_manhattan_loop;
+        AnimationState rightStop = this.right_manhattan_stop;
+
+        AnimationState forSlow = this.slow_manhattan;
+        AnimationState backSlow = this.slow_manhattan_back;
+        AnimationState leftSlow = this.slow_manhattan_left;
+        AnimationState rightSlow = this.slow_manhattan_right;
+
+
+        if (this.level().isClientSide) {
+            if (!this.isInRain()) {
+                if ((W || A || S || D) && isHattanPilotMode) {
+                    isPressing = true;
+                } else if ((W && S) || (A && D)){
+                    isPressing = false;
+                }else {
+                    isPressing = false;
+                }
+                rd.stop();
+                if (!this.stopsManhattanAnimationsWhenHeldItem) {
+                    loaded.stop();
+                    if (isPressing) {
+                        forSlow.stop();
+                        backSlow.stop();
+                        leftSlow.stop();
+                        rightSlow.stop();
+                        if (W) {
+                            backLoop.stop();
+                            forStop.stop();
+                            forBeg.startIfStopped(this.tickCount);
+                            forLoop.startIfStopped(this.tickCount);
+                        }
+                        if (!W) {
+                            forBeg.stop();
+                            forLoop.stop();
+                            forStop.startIfStopped(this.tickCount);
+                        }
+                        if (S) {
+                            forLoop.stop();
+                            backStop.stop();
+                            backBeg.startIfStopped(this.tickCount);
+                            backLoop.startIfStopped(this.tickCount);
+                        }
+                        if (!S) {
+                            backLoop.stop();
+                            backBeg.stop();
+                            backStop.startIfStopped(this.tickCount);
                         }
 
-                        if (isInRain()) {
-                            this.rain_dodging_manhattan.startIfStopped(this.tickCount);
-                            $$2.stop();
-                            $$1.stop();
-                            $$3.stop();
-                            $$4.stop();
-                            $$5.stop();
-                            $$6.stop();
-                            $$7.stop();
-                            $$8.stop();
-                            $$9.stop();
-                            $$10.stop();
-                            $$11.stop();
-                            $$12.stop();
-                            $$13.stop();
-                            $$14.stop();
-                            $$15.stop();
-                            afk.stop();
+                        if (A) {
+                            rightLoop.stop();
+                            leftStop.stop();
+                            leftBeg.startIfStopped(this.tickCount);
+                            leftLoop.startIfStopped(this.tickCount);
                         }
-                        if (!isInRain()) {
-                            this.rain_dodging_manhattan.stop();
-                            if (PM.isClient()){
-                                if(!this.stopsManhattanAnimationsWhenHeldItem) {
-                                if (PM.isPiloting()) {
+                        if (!A) {
+                            leftBeg.stop();
+                            leftLoop.stop();
+                            leftStop.startIfStopped(this.tickCount);
+                        }
 
-                                } else if (!PM.isPiloting()) {
-                                    if (this.setHatAnimDir == 1) {
-                                        $$0.startIfStopped(this.tickCount);
-                                        $$13.stop();
-                                        $$14.stop();
-                                        $$15.stop();
-                                    }
-                                    if (this.setHatAnimDir == 2) {
-                                        $$13.startIfStopped(this.tickCount);
-                                        $$14.stop();
-                                        $$15.stop();
-                                        $$0.stop();
-                                    }
-                                    if (this.setHatAnimDir == 3) {
-                                        $$14.startIfStopped(this.tickCount);
-                                        $$13.stop();
-                                        $$15.stop();
-                                        $$0.stop();
-                                    }
-                                    if (this.setHatAnimDir == 4) {
-                                        $$15.startIfStopped(this.tickCount);
-                                        $$13.stop();
-                                        $$14.stop();
-                                        $$0.stop();
-                                    }
-                                    $$2.stop();
-                                    $$1.stop();
-                                    $$3.stop();
-                                    $$4.stop();
-                                    $$5.stop();
-                                    $$6.stop();
-                                    $$7.stop();
-                                    $$8.stop();
-                                    $$9.stop();
-                                    $$10.stop();
-                                    $$11.stop();
-                                    $$12.stop();
-                                }} else {
-                                    $$0.stop();
-                                    $$2.stop();
-                                    $$1.stop();
-                                    $$3.stop();
-                                    $$4.stop();
-                                    $$5.stop();
-                                    $$6.stop();
-                                    $$7.stop();
-                                    $$8.stop();
-                                    $$9.stop();
-                                    $$10.stop();
-                                    $$11.stop();
-                                    $$12.stop();
-                                    $$13.stop();
-                                    $$14.stop();
-                                    $$15.stop();
-                                    afk.startIfStopped(this.tickCount);
-                                }
-                            }
+                        if (D) {
+                            leftLoop.stop();
+                            rightStop.stop();
+                            rightBeg.startIfStopped(this.tickCount);
+                            rightLoop.startIfStopped(this.tickCount);
+                        }
+                        if (!D) {
+                            rightBeg.stop();
+                            rightLoop.stop();
+                            rightStop.startIfStopped(this.tickCount);
+                        }
+                    } else {
+                        if (forLoop.isStarted()) {
+                            forBeg.stop();
+                            forLoop.stop();
+                            backLoop.stop();
+                            backBeg.stop();
+                            forStop.startIfStopped(this.tickCount);
+                        }
+                        if (backLoop.isStarted()) {
+                            backLoop.stop();
+                            backBeg.stop();
+                            forBeg.stop();
+                            forLoop.stop();
+                            backStop.startIfStopped(this.tickCount);
+                        }
+                        if (leftLoop.isStarted()) {
+                            leftLoop.stop();
+                            leftBeg.stop();
+                            rightBeg.stop();
+                            rightLoop.stop();
+                            leftStop.startIfStopped(this.tickCount);
+                        }
+                        if (rightLoop.isStarted()) {
+                            leftLoop.stop();
+                            leftBeg.stop();
+                            rightBeg.stop();
+                            rightLoop.stop();
+                            rightStop.startIfStopped(this.tickCount);
+                        }
+
+                        if (setHatAnimDir == 1) {
+                            forSlow.startIfStopped(this.tickCount);
+                            backSlow.stop();
+                            leftSlow.stop();
+                            rightSlow.stop();
+                        }
+                        if (setHatAnimDir == 2) {
+                            backSlow.startIfStopped(this.tickCount);
+                            leftSlow.stop();
+                            rightSlow.stop();
+                            forSlow.stop();
+                        }
+                        if (setHatAnimDir == 3) {
+                            leftSlow.startIfStopped(this.tickCount);
+                            rightSlow.stop();
+                            forSlow.stop();
+                            backSlow.stop();
+                        }
+                        if (setHatAnimDir == 4) {
+                            rightSlow.startIfStopped(this.tickCount);
+                            leftSlow.stop();
+                            backSlow.stop();
+                            forSlow.stop();
                         }
                     }
+                } else {
+                    loaded.startIfStopped(this.tickCount);
+                    forLoop.stop();
+                    forBeg.stop();
+                    forStop.stop();
+                    forSlow.stop();
+                    backBeg.stop();
+                    backSlow.stop();
+                    backLoop.stop();
+                    backStop.stop();
+                    leftSlow.stop();
+                    leftBeg.stop();
+                    leftStop.stop();
+                    leftLoop.stop();
+                    rightBeg.stop();
+                    rightSlow.stop();
+                    rightStop.stop();
+                    rightLoop.stop();
                 }
+            } else {
+                rd.startIfStopped(this.tickCount);
+                loaded.stop();
+                forLoop.stop();
+                forBeg.stop();
+                forStop.stop();
+                forSlow.stop();
+                backBeg.stop();
+                backSlow.stop();
+                backLoop.stop();
+                backStop.stop();
+                leftSlow.stop();
+                leftBeg.stop();
+                leftStop.stop();
+                leftLoop.stop();
+                rightBeg.stop();
+                rightSlow.stop();
+                rightStop.stop();
+                rightLoop.stop();
             }
         }
     }

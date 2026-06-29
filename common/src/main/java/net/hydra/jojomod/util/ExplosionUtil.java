@@ -3,6 +3,7 @@ package net.hydra.jojomod.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
@@ -55,6 +56,14 @@ public class ExplosionUtil {
     	
     }
 
+	public static void explosionHurtWithMulti(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
+		explosionHurtBaseWithMulti(false, pos, dmgSource, level, damage, knockBack, range, mobMult, playerMult);
+	}
+
+	public static void explosionHurtSneakyWithMulti(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
+		explosionHurtBaseWithMulti(true, pos, dmgSource, level, damage, knockBack, range, mobMult, playerMult);
+	}
+
 	public static void explosionHurt(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
 		explosionHurtBase(false, pos, dmgSource, level, damage, knockBack, range);
 	}
@@ -64,18 +73,24 @@ public class ExplosionUtil {
 	}
 	
 	public static void explosionHurtBase(Boolean sneaky, Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
-    	List<Entity> damages = MainUtil.genHitbox(level, pos.x(), pos.y(), pos.z(), range, range, range);
+		explosionHurtBaseWithMulti(sneaky, pos, dmgSource, level, damage, knockBack, range, 1.0f, 1.0f);
+    }
+
+	public static void explosionHurtBaseWithMulti(Boolean sneaky, Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
+		List<Entity> damages = MainUtil.genHitbox(level, pos.x(), pos.y(), pos.z(), range, range, range);
 
 		Entity causer = dmgSource.getEntity();
 
 		DamageSource notSeenDamage =  ModDamageTypes.of(level, DamageTypes.EXPLOSION, null);
 
-    	for(int j = 0;j<damages.size();j++) {
-            Entity entity = damages.get(j);
-            double dist = entity.distanceToSqr(pos);
-            float percUnhand = ((float)dist/ (range * range * range));
-            float perc = 1.0f - (percUnhand*0.75f);
-            float percKnockback = 1.0f - (percUnhand*0.5f);
+		Roundabout.LOGGER.info("Damage on Players: " + damage * playerMult);
+
+		for(int j = 0;j<damages.size();j++) {
+			Entity entity = damages.get(j);
+			double dist = entity.distanceToSqr(pos);
+			float percUnhand = ((float)dist/ (range * range * range));
+			float perc = 1.0f - (percUnhand*0.75f);
+			float percKnockback = 1.0f - (percUnhand*0.5f);
 
 			boolean hasSeen = true;
 
@@ -84,18 +99,27 @@ public class ExplosionUtil {
 			}
 
 			if (hasSeen || MainUtil.isBossMob(entity)) {
-				entity.hurt(dmgSource, perc * damage);
+				if (MainUtil.getReducedDamage(entity)) {
+					entity.hurt(dmgSource, perc * damage * playerMult);
+				}else {
+					entity.hurt(dmgSource, perc * damage * mobMult);
+				}
 			} else {
-				entity.hurt(notSeenDamage, perc * damage);
+				if (MainUtil.getReducedDamage(entity)) {
+					entity.hurt(notSeenDamage, perc * damage * playerMult);
+				}else {
+					entity.hurt(notSeenDamage, perc * damage * mobMult);
+				}
 			}
 
-            Vec3 knockbackUnhand = new Vec3(entity.getX() - pos.x(), entity.getY() - pos.y(), entity.getZ() - pos.z());
-            Vec3 knockback = knockbackUnhand.normalize().scale(Math.min(knockBack, percKnockback*knockBack));
-            
-            MainUtil.takeLiteralUnresistableKnockbackWithY(entity, knockback.x, knockback.y, knockback.z);
-            
-        }
-    }
+
+			Vec3 knockbackUnhand = new Vec3(entity.getX() - pos.x(), entity.getY() - pos.y(), entity.getZ() - pos.z());
+			Vec3 knockback = knockbackUnhand.normalize().scale(Math.min(knockBack, percKnockback*knockBack));
+
+			MainUtil.takeLiteralUnresistableKnockbackWithY(entity, knockback.x, knockback.y, knockback.z);
+
+		}
+	}
 
 	public static void explodeBlocks(BlockPos location, Level level, Float range) {
 		explodeBlocksBase(location, level, range, false);

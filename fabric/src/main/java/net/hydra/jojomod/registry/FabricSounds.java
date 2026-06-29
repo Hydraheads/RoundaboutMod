@@ -102,6 +102,9 @@ public class FabricSounds {
         addSound(ModSounds.ICE_RISES_ID, ModSounds.ICE_RISES_EVENT);
         addSound(ModSounds.BLOCK_FREEZE_ID, ModSounds.BLOCK_FREEZE_EVENT);
         addSound(ModSounds.ICE_BLAST_CHARGE_ID, ModSounds.ICE_BLAST_CHARGE_EVENT);
+        addSound(ModSounds.COLD_SHOT_ID, ModSounds.COLD_SHOT_EVENT);
+        addSound(ModSounds.GENTLY_WEEPS_ID, ModSounds.GENTLY_WEEPS_EVENT);
+        addSound(ModSounds.DING_ID, ModSounds.DING_EVENT);
         addSound(ModSounds.BANISH_ID, ModSounds.BANISH_EVENT);
 
         addSound(ModSounds.IRON_BALL_BOUNCE_ID, ModSounds.IRON_BALL_BOUNCE_EVENT);
@@ -291,6 +294,7 @@ public class FabricSounds {
 
         addSound(ModSounds.KILLER_QUEEN_SHIBA_ID, ModSounds.KILLER_QUEEN_SHIBA_EVENT);
         addSound(ModSounds.KILLER_QUEEN_SHA_SUMMON_ID, ModSounds.KILLER_QUEEN_SHA_SUMMON_EVENT);
+        addSound(ModSounds.KILLER_QUEEN_SHA_MOVING_ID, ModSounds.KILLER_QUEEN_SHA_MOVING_EVENT);
         addSound(ModSounds.KILLER_QUEEN_BARRAGE_ID, ModSounds.KILLER_QUEEN_BARRAGE_EVENT);
         addSound(ModSounds.KILLER_QUEEN_SUMMON_ID, ModSounds.KILLER_QUEEN_SUMMON_EVENT);
         addSound(ModSounds.KILLER_QUEEN_EXPLOSION_ID, ModSounds.KILLER_QUEEN_EXPLOSION_EVENT);
@@ -319,6 +323,7 @@ public class FabricSounds {
         addSound(ModSounds.VAMPIRE_DASH_ID, ModSounds.VAMPIRE_DASH_EVENT);
         addSound(ModSounds.VAMPIRE_GLEAM_ID, ModSounds.VAMPIRE_GLEAM_EVENT);
 
+        addSound(ModSounds.ICY_WIND_ID, ModSounds.ICY_WIND_EVENT);
         addSound(ModSounds.GLAIVE_CHARGE_ID, ModSounds.GLAIVE_CHARGE_EVENT);
         addSound(ModSounds.GLAIVE_ATTACK_ID, ModSounds.GLAIVE_ATTACK_EVENT);
         addSound(ModSounds.FOG_CLONE_ID, ModSounds.FOG_CLONE_EVENT);

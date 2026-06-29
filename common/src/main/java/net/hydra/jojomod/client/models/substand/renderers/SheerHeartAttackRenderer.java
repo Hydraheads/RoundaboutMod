@@ -102,7 +102,7 @@ public class SheerHeartAttackRenderer extends StandRenderer<SheerHeartAttackEnti
             } else if (BT == KillerQueenEntity.MEMENTO) {
                 //return MEMENTO_SKIN;
             } else if (BT == KillerQueenEntity.STARDUST) {
-                //return STARDUST_SKIN;
+                return STARDUST_SKIN;
             }
         }
         return PART_4_SKIN;

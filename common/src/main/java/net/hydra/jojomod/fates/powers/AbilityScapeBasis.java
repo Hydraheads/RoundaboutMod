@@ -59,6 +59,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
@@ -1213,6 +1214,9 @@ public class AbilityScapeBasis {
         return getStandUserSelf().roundabout$getMaxGuardPoints() / 220;
     }
     public float guardSpecialties(DamageSource sauce, float damage){
+        if (sauce.is(ModDamageTypes.BULLET) || sauce.is(ModDamageTypes.KNIFE)){
+            damage*=0.25F;
+        }
         return damage;
     }
 
@@ -1233,12 +1237,15 @@ public class AbilityScapeBasis {
     /**set an ability on cooldown*/
     public void setCooldown(byte power, int cooldown){
         if (!getPowerCooldowns().isEmpty() && getPowerCooldowns().size() >= power){
-            getPowerCooldowns().get(power).time = cooldown;
-            getPowerCooldowns().get(power).maxTime = cooldown;
+            if ((self instanceof Player pl && pl.isCreative()) || cooldown > getPowerCooldowns().get(power).time ||
+                    cooldown <= 1) {
+                getPowerCooldowns().get(power).time = cooldown;
+                getPowerCooldowns().get(power).maxTime = cooldown;
 
-            if (self instanceof ServerPlayer sp && getStandUserSelf().rdbt$isServerControlledCooldown(getPowerCooldowns().get(power),power)){
+                if (self instanceof ServerPlayer sp && getStandUserSelf().rdbt$isServerControlledCooldown(getPowerCooldowns().get(power), power)) {
 
-                S2CPacketUtil.sendMaxCooldownSyncPacket(sp, power, cooldown, cooldown);
+                    S2CPacketUtil.sendMaxCooldownSyncPacket(sp, power, cooldown, cooldown);
+                }
             }
         }
     }

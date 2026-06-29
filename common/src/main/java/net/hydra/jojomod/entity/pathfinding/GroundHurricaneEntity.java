@@ -80,6 +80,10 @@ public class GroundHurricaneEntity extends GroundPathfindingStandAttackEntity {
         LivingEntity user = this.getUser();
         if (user != null &&
                 ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+
+            if ($$0 != null && $$0.getUUID().equals(user.getUUID())){
+                return false;
+            }
             burst(PMR);
             if ($$0 instanceof LivingEntity LE){
                 PMR.addEXP(7,LE);

@@ -115,6 +115,7 @@ public class PacketDataIndex {
     public static final byte S2C_SNYC_ACTIVE_POWER = 18;
     public static final byte S2C_INT_RIPPER_EYES = 19;
     public static final byte S2C_INT_RESET_ACCELERATION = 20;
+    public static final byte S2C_INT_MAX_SEAL = 21;
 
 
     /**S2C BUNDLE packets*/

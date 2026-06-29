@@ -29,6 +29,9 @@
   "text.roundabout.bullets.tommy": "Compatible with Tommy Guns.",
   "text.roundabout.bullets.sniper": "Compatible with Jackal Rifles.",
 
+  "text.roundabout.stray_cat.anime": "Anime Color",
+  "text.roundabout.stray_cat.manga": "Manga Color",
+
   "text.roundabout.respawn_as_human": "Respawn as Human",
 
   "text.roundabout.out_of_bullets": "Shift right click to reload!",
@@ -92,6 +95,8 @@
   "item.roundabout.hairspray": "Hairspray",
   "item.roundabout.occult_charge": "Occult Charge",
   "item.roundabout.iron_ball_crossbow": "Iron Ball Crossbow",
+  "item.roundabout.stray_cat_anime": "Stray Cat",
+  "item.roundabout.stray_cat_manga": "Stray Cat",
 
   "roundabout.coffin_sleep": "Leave Coffin",
 
@@ -243,6 +248,9 @@
   "item.roundabout.mista_mask": "Mista Visage",
   "item.roundabout.mista_mask.desc": "Guido Mista",
   "item.roundabout.mista_mask.tag": "Mista",
+  "item.roundabout.ghiaccio_mask": "Ghiaccio Visage",
+  "item.roundabout.ghiaccio_mask.desc": "Ghiaccio",
+  "item.roundabout.ghiaccio_mask.tag": "Ghiaccio ",
   "item.roundabout.pocoloco_mask": "Pocoloco Visage",
   "item.roundabout.pocoloco_mask.desc": "Pocoloco",
   "item.roundabout.pocoloco_mask.tag": "Pocoloco",
@@ -366,6 +374,8 @@
 
   "entity.roundabout.terrier": "Boston Terrier",
   "entity.roundabout.anubis_guardian": "Anubis Guardian",
+  "entity.roundabout.cold_twister": "Cold Twister",
+  "entity.roundabout.gently_weeps": "Gently Weeps",
   "entity.roundabout.the_world": "The World",
   "entity.roundabout.iron_ball": "Iron Ball",
   "entity.roundabout.the_world_ultimate": "The World",
@@ -454,6 +464,7 @@
   "entity.roundabout.evil_aura_projectile": "Evil Aura",
   "entity.roundabout.ripper_eyes": "Ripper Eyes",
   "entity.roundabout.uv": "UV Blast",
+  "entity.roundabout.cold_blast": "Cold Blast",
   "entity.roundabout.thrown_object": "Thrown Object",
   "entity.roundabout.ratt_dart": "Ratt Dart",
   "entity.roundabout.painting_van_gough": "VG Painting",
@@ -490,6 +501,7 @@
   "block.roundabout.frozen_red_sand": "Frozen Red Sand",
   "block.roundabout.frozen_red_sandstone": "Frozen Red Sandstone",
   "block.roundabout.frozen_gravel": "Frozen Gravel",
+  "block.roundabout.sticky_ice": "Sticky Ice",
   "block.roundabout.white_album_ice": "White Album Ice",
   "block.roundabout.white_album_ice_wall": "Ice Wall",
   "block.roundabout.white_album_coating": "Ice Coating",
@@ -579,6 +591,8 @@
   "block.roundabout.melon_parfait": "Melon Parfait",
   "block.roundabout.acid_puddle": "Acid Puddle",
   "block.roundabout.poison_trail_mushroom": "Poison Trail Mushroom",
+  "block.roundabout.cold_air": "Cold Air",
+  "block.roundabout.freezing_air": "Freezing Air",
 
   "itemgroup.jojo": "Roundabout",
   "itemgroup.jojo_discs": "Stand Discs",
@@ -645,7 +659,11 @@
   "sounds.roundabout.hammer_clink": "Hammer Clink",
   "sounds.roundabout.bone_chomp": "Devour",
   "sounds.roundabout.ice_wall": "Ice rises",
+  "sounds.roundabout.icy_wind": "Wind howls",
   "sounds.roundabout.ice_blast_charge": "Cold charging",
+  "sounds.roundabout.cold_shot": "Frost",
+  "sounds.roundabout.gently_weeps": "Gently Weeps",
+  "sounds.roundabout.ding": "Ready",
 
   "sounds.roundabout.iron_ball_impact": "Iron ball impact",
   "sounds.roundabout.iron_ball_bounce": "Iron ball bounce",
@@ -1285,6 +1303,47 @@
   "ability.roundabout.punch_fate": "Punch",
   "ability.roundabout.punch_fate.desc": "Throws a punch directly in front of you. Hold it down for nonstop attacks!",
 
+
+  "ability.roundabout.toggle_brawl": "Brawl Mode",
+  "ability.roundabout.toggle_brawl.desc": "Activate to change your attack and interact buttons to special abilities! Can be toggled on and off. While in brawl mode, you break blocks quickly.",
+
+  "ability.roundabout.cold_punch": "Cold Punch",
+  "ability.roundabout.cold_punch.desc": "Must activate brawling to use! Throws a punch directly in front of you. Hold it down for nonstop attacks! Hits make opponents colder!",
+
+  "ability.roundabout.cold_guard": "Ice Armor",
+  "ability.roundabout.cold_guard.desc": "While the stand is active, you cover yourself in ice that transforms into your stand's vision. Provides a passive stand guard 180 degrees in front of you, like using a shield. This guard protects from a number of things including fall damage, fire, and sunlight. When the guard runs out, the armor is temporarily cracked. Grants you resistances to heat and cold.",
+
+  "ability.roundabout.freeze_cancel": "Freeze Cancel",
+  "ability.roundabout.freeze_cancel.desc": "Negate your ice, gradually removing it. This ability deactivates your skates.",
+
+  "ability.roundabout.ice_twister": "Cold Twister",
+  "ability.roundabout.ice_twister.desc": "Creates a miniature blizzard where you are looking. It freezes the ground into sticky ice that slows and traps opponents. Those standing in the twister get colder.",
+
+  "ability.roundabout.gently_weeps": "Gently Weeps",
+  "ability.roundabout.gently_weeps.desc": "Uses massive amounts of stand power to freeze the air surrounding you, reaching -215 degrees Celsius. Rapidly freezes anything in its radius. Unless covered in blood, deflects many types of incoming projectiles.",
+
+  "ability.roundabout.ice_wall": "Ice Wall",
+  "ability.roundabout.ice_wall.desc": "Makes a wall of ice appear from the ground. In front of you, it can block mobs and projectiles. If aimed beneath you, you can rise up along with it. Damaging the blocks with enough force breaks them. You can use this to your advantage to carve into the wall and jump on top of it.",
+
+  "ability.roundabout.ice_wall_behind": "Ice Wall (Behind)",
+  "ability.roundabout.ice_wall_behind.desc": "Makes a wall of ice appear from the ground behind you. This replaces dash while skating, and is good from blocking those chasing you using with your trail.",
+
+  "ability.roundabout.skate_activate": "Skate Activation",
+  "ability.roundabout.skate_activate.desc": "Attaches skates to your armor, granting you speed and gradual acceleration. Skating uphill lowers your acceleration, while skating downhill increases it. You leave a trail of ice that others swiftly slide across to catch up to you, and you can easily use your other abilities to lace it with traps. Freezes water in a manner similar to frost walker.",
+
+  "ability.roundabout.block_freeze": "Block Freeze",
+  "ability.roundabout.block_freeze.desc": "Using your ability to freeze any material, you turn certain blocks into cold variants. Cold blocks can be mined rapidly, so you can easily break obsidian and the like. They drop as unique building materials, and can easily be reverted with a flint and steel.",
+
+  "ability.roundabout.suit_power": "Suit Power",
+  "ability.roundabout.suit_power.desc": "The suit provides a slight passive increase in attack power.",
+
+  "ability.roundabout.full_accel": "Full Accel",
+  "ability.roundabout.full_accel.desc": "If you build up maximum acceleration with your skates active, the final icon's border will become yellow. If you jump while this is active, you do a trick jump and twirl around, going slightly further. If you instead attack an opponent in this state, it is a critical hit and deals significant knockback.",
+
+
+  "ability.roundabout.cold_blast": "Cold Air Blast",
+  "ability.roundabout.cold_blast.desc": "Must activate brawling to use! Release interact after the meter reaches the end to fire a projectile that freezes the blocks it passes by into stand ice. Mobs it passes through become colder.",
+
   "ability.roundabout.sweep_kick": "Sweep/Stomp",
   "ability.roundabout.sweep_kick.desc": "Throws a kick in a short range directly in front of you. The knockback is quite high. If used in the air, it instead makes you slam into the ground, briefly dazing mobs it hits.",
 
@@ -1736,17 +1795,19 @@
   "ability.roundabout.meteor_tracking.desc":"Toggle between meteor tracking on/off. When meteor tracking is on all meteors in the meteor shower will follow you.",
   "ability.roundabout.forced_dissintegration":"Forced Disintegration",
   "ability.roundabout.forced_dissintegration.desc":"Makes all current big meteors disintegrate. This move is useful to avoid destruction.",
+  "ability.roundabout.grab":"Grab",
+  "ability.roundabout.gra.desc":"When in stand targeting mode if anyone gets close enough to planet waves they will get grabbed.",
 
   "ability.roundabout.manual_shooting": "Shooting Mode",
-  "ability.roundabout.manual_shooting.desc": "Allows you to press left click with your mouse shoot in the direction you want if you are controlling the stand and it contains any storable projectile. If you decide to keep automatic shooting, the stand will instantly redirect it towards the nearest moving entity when it's able to.",
+  "ability.roundabout.manual_shooting.desc": "There are two shooting modes: Auto Shooting and Manual Shooting. The if the former one is selected, the stand will redirect automatically the projectiles it stores at the closest moving entity if the mob is in range which is also indicated with a brighter highlight than other mobs (if they're also highlighted); if the latter one is selected, you have to enter control mode, aim where to shoot the stored projectile, and left click to fire it out of the stand",
   "ability.roundabout.control_mode": "Control Mode",
-  "ability.roundabout.control_mode.desc": "Lets you control the stand. If in manual shooting mode, press left click with your mouse if the stand contains a bullet to shoot it into the direction you are pointing at. If you don't enter control mode, the stand will slowly float forwards. The same counts if you don't give any input to the stand's movement, although if you're controlling it you can rotate you vision to decide where the stand goes.",
+  "ability.roundabout.control_mode.desc": "If you are not controlling the stand, it will always move forwards, and if you enter control mode you can override it's movement direction and if you don't press any key or go out of control mode, it will go to the last direction you inputted.",
   "ability.roundabout.wind_vision": "Wind Vision",
-  "ability.roundabout.wind_vision.desc": "Lets you see your stand's wind reading from your perspective, giving you similar visuals as if you would pilot your stand.",
+  "ability.roundabout.wind_vision.desc": "Lets you see your stand's wind reading from your perspective, giving you identical visuals as if you would pilot your stand.",
   "ability.roundabout.bonus_damage": "Bonus Stand Damage",
-  "ability.roundabout.bonus_damage.desc": "When the stand redirects a bullet, a little stand damage is added to the projectile. It affects all projectiles",
+  "ability.roundabout.bonus_damage.desc": "When the stand redirects a bullet, stand damage is added to the projectile. It affects all deflectable projectiles",
   "ability.roundabout.wind_reading": "Wind Reading",
-  "ability.roundabout.wind_reading.desc": "The stand senses entities that move or have recently moved. When you pilot the stand, only the mobs which are 'seen' by the stand render, glowing and highlighted, else you can't see them. If you have wind vision, you can see which mobs are perceived by the stand. Also you see your circumstances with a greenish filter.",
+  "ability.roundabout.wind_reading.desc": "The stand senses entities that move or have recently moved. When you pilot the stand or turn on Wind Vision, only the mobs which move or have recently by the stand render, glowing and highlighted, else you can't see them. You also see your circumstances with a greenish filter.",
   "ability.roundabout.manhattan_dodge": "Manhattan Transfer Dash",
   "ability.roundabout.manhattan_dodge.desc": "Your stand gets a quick burst of speed. Ideal for dodging stand projectiles, which are one of your greatest weakness",
 
@@ -2071,7 +2132,14 @@
   "skins.roundabout.white_album.base": "Part 5",
   "skins.roundabout.white_album.beta": "Beta",
   "skins.roundabout.white_album.dramatic": "Fierce",
-  "skins.roundabout.white_album.black": "Dark",
+  "skins.roundabout.white_album.black": "Black Ice",
+  "skins.roundabout.white_album.knight": "Knight",
+  "skins.roundabout.white_album.shade": "Midnight",
+  "skins.roundabout.white_album.frigid": "FRIGID",
+  "skins.roundabout.white_album.stray": "Stray",
+  "skins.roundabout.white_album.iceologer": "Iceologer",
+  "skins.roundabout.white_album.manga": "Manga",
+  "skins.roundabout.white_album.yuki": "Yuki-onna",
 
   "skins.roundabout.killer_queen.anime": "Part 4",
   "skins.roundabout.killer_queen.agogo": "A-Go!Go!",
@@ -2212,6 +2280,7 @@
   "unlock_skin.roundabout.ratt.rat": "Rat? Unlocked!",
   "unlock_skin.roundabout.walking_heart.spider": "Webbing Heart Skin Unlocked!",
   "unlock_skin.roundabout.anubis.traitor": "Traitor Skins Unlocked!",
+  "unlock_skin.roundabout.white_album.yuki": "Yuki-onna Skin Unlocked!",
   "unlock_skin.roundabout.green_day.silence": "Silence Skin Absorbed",
 
   "justice.morph.player": "Player",
@@ -2450,6 +2519,19 @@
   "config.roundabout.fixModLoaderCreatedBugs.name": "Fix Modloader Bugs",
   "config.roundabout.fixModLoaderCreatedBugs.desc": "Forge especially replaces a lot of vanilla code with its own creating new bugs. For instance, on forge you can block the warden without your shield being disabled (this is not true of vanilla). Turning on this setting fixes any bug I find like that which is actively causing the mod problems.",
 
+  "config.roundabout.bufferServerDistance.name": "Fix Moved Wrongly",
+  "config.roundabout.bufferServerDistance.desc": "Provides a buffer to accommodate roundabout movement skills that provide short bursts of speed. Disable if it is causing problems with other mods.",
+
+  "config.roundabout.mobGuardDamageMultiplierv2.name": "Mob DMG Mult",
+  "config.roundabout.mobGuardDamageMultiplierv2.desc": "For stand Guard. Mobs do this many times more damage to your guard with their melee attacks (mob damage). This is to make fighting zombies and such not a joke.",
+
+  "config.roundabout.playerGuardDamageMultiplierv2.name": "Player DMG Mult",
+  "config.roundabout.playerGuardDamageMultiplierv2.desc": "For stand Guard. Player damage (melee) is modified by this amount so they can't instantly crack your guard.",
+
+  "config.roundabout.playerGuardDamageMultiplierMobs.name": "WA Mob Reduction",
+  "config.roundabout.playerGuardDamageMultiplierMobs.desc": "The above but for mob users instead of yourself.",
+
+
   "config.roundabout.enableKillerQueen.name": "Enable Stand",
   "config.roundabout.enableKillerQueen.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableMagiciansRed.name": "Enable Stand",
@@ -2674,6 +2756,18 @@
   "config.roundabout.bypassAllNametagHidesInCreativeMode.name": "Creative Tag Vision",
   "config.roundabout.bypassAllNametagHidesInCreativeMode.desc": "In creative mode, bypass all settings and see real nametags.",
 
+  "config.roundabout.gentlyWeepsCooldown.name": "Gently Weeps CD",
+  "config.roundabout.defaceAttackCooldowngentlyWeepsCooldown.desc": "The cooldown in ticks.",
+  "config.roundabout.twisterCooldownv2.name": "Cold Twister CD",
+  "config.roundabout.twisterCooldownv2.desc": "The cooldown in ticks.",
+  "config.roundabout.freezeBlocksCooldown.name": "Block Freeze CD",
+  "config.roundabout.freezeBlocksCooldown.desc": "The cooldown in ticks.",
+  "config.roundabout.iceWallCooldown.name": "Ice Wall Cooldown",
+  "config.roundabout.iceWallCooldown.desc": "The cooldown in ticks.",
+  "config.roundabout.twisterLifespan.name": "Twister Lifespan",
+  "config.roundabout.twisterLifespan.desc": "How long does the ability stay active?",
+  "config.roundabout.gentlyWeepsLifespan.name": "Gently Weeps Lifespan",
+  "config.roundabout.gentlyWeepsLifespan.desc": "How long does the ability stay active?",
 
 
   "config.roundabout.cinderellaAttackMultOnPlayers.name": "Player Damage Multiplier",
@@ -2728,7 +2822,8 @@
   "config.roundabout.canOtherMobsLoadManhattanTransfer.desc":"Decide if other mobs can load your stand. Remember that projectiles shot by your MT become yours, so you can manipulate an another players Enderpearl to teleport you instead of teleporting the other player. It's set to false to simulate how the stand works in the original source, but you can turn it on.",
   "config.roundabout.manhattanAutoShootingRange.name":"Automatic Shooting Mode Detection Range",
   "config.roundabout.manhattanAutoShootingRange.desc":"Select how close does the stand need to be to shoot at an entity in automatic mode",
-
+  "config.roundabout.windVisionUsesNightVision.name":"Wind Vision uses Potion Effect",
+  "config.roundabout.windVisionUsesNightVision.desc":"If you have a mod like Bad Optimizations that deletes the vanilla code that wind vision uses to light things up, turn this on so it works regardless.",
 
   "config.roundabout.walkingHeartAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.walkingHeartAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
@@ -2930,8 +3025,8 @@
   "config.roundabout.whiteAlbumGuardPoints.name": "Guard Points",
   "config.roundabout.whiteAlbumGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
 
-  "config.roundabout.whiteAlbumAccelerationAmount.name": "Acceleration",
-  "config.roundabout.whiteAlbumAccelerationAmount.desc": "How much speed is gained per acceleration build tick? The default caps you off at just beneath the maximum wild horse speed.",
+  "config.roundabout.whiteAlbumAccelerationAmountv2.name": "Acceleration",
+  "config.roundabout.whiteAlbumAccelerationAmountv2.desc": "How much speed is gained per acceleration build tick? The default caps you off at just beneath the maximum wild horse speed.",
 
   "config.roundabout.whiteAlbumMaxAcceleration.name": "Max Acceleration",
   "config.roundabout.whiteAlbumMaxAcceleration.desc": "How many ticks of building speed? 100 ticks = 5 seconds of uninterrupted running.",
@@ -2945,6 +3040,11 @@
   "config.roundabout.freezesSurfaceWater.name": "Block Freeze Water",
   "config.roundabout.freezesSurfaceWater.desc": "Enable frozen world to coat the raging seas in ice.",
 
+  "config.roundabout.freezesGrassv2.name": "Freezes Grass",
+  "config.roundabout.freezesGrassv2.desc": "If disabled, white album won't replace grass and tallgrass, and other non-air blocks, even with stand griefing on.",
+
+  "config.roundabout.freezesSnow.name": "Freezes Snow",
+  "config.roundabout.freezesSnow.desc": "If disabled, white album won't replace snow.",
 
   "config.roundabout.magicianAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.magicianAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
@@ -3033,6 +3133,12 @@
   "config.roundabout.attackSpeedBuff.desc": "Increases the speed of swinging weapons with justice active. By default, the stand increases your attack speed by 30%.",
   "config.roundabout.miningSpeedBuff.name": "Mining Speed Buff",
   "config.roundabout.miningSpeedBuff.desc": "Increases the speed of breaking blocks with justice active. By default, the stand increases your mining speed by 30%.",
+  "config.roundabout.miningSpeedBuffWhite.name": "Mining Speed Buff",
+  "config.roundabout.miningSpeedBuffWhite.desc": "Increases the speed of breaking blocks with white album active. By default, the stand increases your mining speed by 15%.",
+  "config.roundabout.bonusPlayerDMGWhite.name": "Bonus Player Damage",
+  "config.roundabout.bonusPlayerDMGWhite.desc": "This % melee damage increase.",
+  "config.roundabout.bonusMobDMGWhite.name": "Bonus Mob Damage",
+  "config.roundabout.bonusMobDMGWhite.desc": "This % melee damage increase.",
 
   "config.roundabout.numberOfYapLines.name": "Yap Line Count",
   "config.roundabout.numberOfYapLines.desc": "Change this if you want to add more yap lines to the lang file in a resource pack.",
@@ -3151,7 +3257,7 @@
   "config.roundabout.fallProtectionOnRelease.name": "Release Fall Protection",
   "config.roundabout.fallProtectionOnRelease.desc": "When you exit a wall, grants fall immunity like a stand leap.",
   "config.roundabout.enableWallWalking.name": "Enable Wall Walking",
-  "config.roundabout.enableWallWalking.desc": "Allows flipping directions to walk on walls. Generally, this feature is stable, but if you have a modpack that causes it to bug out/not work smoothly turn this off. Without wall walking, you gain an additional block of step height while your spikes are planted.",
+  "config.roundabout.enableWallWalking.desc": "Allows flipping directions to walk on walls. Generally, this feature is stable, but if you have a modpack that causes it to bug out/not work smoothly turn this off. Without wall walking, you gain an additional block of step height while your spikes are planted with walking heart.",
 
   "config.roundabout.enableCornerCutting.name": "Enable Corner Cutting",
   "config.roundabout.enableCornerCutting.desc": "Allows training wheel mode of Walking Heart by pressing V, so you can flip over corners.",
@@ -3175,6 +3281,11 @@
   "config.roundabout.revealLocationWhenFinishedEating.desc": "If finishing eating removes your invisibility.",
   "config.roundabout.invisiBurstCooldown.name": "Invisiburst Cooldown",
   "config.roundabout.invisiBurstCooldown.desc": "The amount of ticks in between turning invisible.",
+  "config.roundabout.invisiBurstCooldownMobs.name": "Invisiburst Mob CD",
+  "config.roundabout.invisiBurstCooldownMobs.desc": "The amount of ticks in between turning invisible for mobs.",
+
+
+
   "config.roundabout.invisiBurstCooldownUsesServerLatency.name": "Invis Cooldown Uses Latency",
   "config.roundabout.invisiBurstCooldownUsesServerLatency.desc": "Let the server fully manage invisiburst's cooldown. This is advisable if you want a second of being visable between bursts for balancing reasons, because bad server tps could make it limitless..",
   "config.roundabout.invisiBurstAlertsMobs.name": "Invisiburst Alerts Mobs",
@@ -3233,10 +3344,28 @@
   "config.roundabout.blocksDestruction.desc": "Turn on/off the action of blocks destructions",
   "config.roundabout.explosionDetonateMaxDamage.name": "Explosion maximun damage",
   "config.roundabout.explosionDetonateMaxDamage.desc": "Set the maximun amount of damages that a Killer Queen explosion can give",
+  "config.roundabout.sheerHeartAttackCooldown.name": "Sheer Heart Attack Summon cooldown",
+  "config.roundabout.sheerHeartAttackCooldown.desc": "Set the coold which the player can summon sheer heart attack",
+  "config.roundabout.SheerHeartAttackMaxDamage.name": "Sheer Heart Attack maximun damaga",
+  "config.roundabout.SheerHeartAttackMaxDamage.desc": "Set the maximun amount of damages that a sheer heart attack explosion can give",
+  "config.roundabout.killerQueenAttackMultOnPlayers.name": "Killer queen damage multiplier",
+  "config.roundabout.killerQueenAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
+  "config.roundabout.killerQueenAttackMultOnMobs.name": "Mob Damage Multiplier",
+  "config.roundabout.killerQueenAttackMultOnMobs.desc": "How much damage the stand deals to every other mob, same math as above.",
   "config.roundabout.blockPlantCooldown.name": "block plant cooldown",
   "config.roundabout.blockPlantCooldown.desc": "Set the cooldown of block bomb plant move",
+  "config.roundabout.mobPlantCooldown.name": "mob plant cooldown",
+  "config.roundabout.mobPlantCooldown.desc": "Set the cooldown of mob bomb plant move",
   "config.roundabout.explosionActivationCooldown.name": "explosion activation delay",
   "config.roundabout.explosionActivationCooldown.desc": "Set the delay of the explosion",
+  "config.roundabout.mobPlantDesintegrationDamage.name": "explosion desintegration damage",
+  "config.roundabout.mobPlantDesintegrationDamage.desc": "Set the amount of damage dealt by mob bomb explosions (which were planted with mob plant move)",
+  "config.roundabout.mobPlantWindup.name": "mob plant windup",
+  "config.roundabout.mobPlantWindup.desc": "Set the amount of windup of Mob Plant move (3 seconds by default, 20 ticks = 1 second)",
+  "config.roundabout.mobPlantHitkillPlayers.name": "mob plant one shots players",
+  "config.roundabout.mobPlantHitkillPlayers.desc": "Toggle on/off if the mob plant should Hitkill players (on by default)",
+  "config.roundabout.mobPlantHitkillMobs.name": "mob plant one shots mobs",
+  "config.roundabout.mobPlantHitkillMobs.desc": "Toggle on/off if the mob plant should Hitkill mobs (off by default)",
   
   "config.roundabout.theWorldAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.theWorldAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
@@ -3340,6 +3469,12 @@
   "config.roundabout.starFingerInterruptCooldown.desc": "Change the length of interrupt time if you are hit our of star finger. (default is 80 or 4 seconds)",
   "config.roundabout.blitzAttackCooldown.name": "Star Blitz Cooldown",
   "config.roundabout.blitzAttackCooldown.desc": "Change the length in between ending impale early with the attack button and using Star Blitz.",
+
+
+  "config.roundabout.miningSpeedMultiplierWhiteAlbum.name": "Mining Speed Multiplier",
+  "config.roundabout.miningSpeedMultiplierWhiteAlbum.desc": "Adjust how fast the stand can mine.",
+  "config.roundabout.getMiningTierWhiteAlbum.name": "Mining Tier",
+  "config.roundabout.getMiningTierWhiteAlbum.desc": "Tier 0 is the default, it does not replace tools for harvesting blocks. Tier 1 is wood tier, tier 2 is stone tier, tier 3 is iron tier, and tier 4 is diamond tier.",
 
 
   "config.roundabout.vampireUsesPotionEffectForNightVision.name": "Vampire Uses NV Potion",
@@ -3543,8 +3678,6 @@
   "config.roundabout.mandomRewindAttemptsToSkipInterpolation.desc": "Turn this off if you have a mod that makes mobs invisible after using mandom. Whether or not time rewind attempts to skip interpolation, so mobs instantly blip into their new locations instead of visually sliding really fast like endermen teleports.",
   "config.roundabout.tuskUsesShootMode.name": "Tusk Gun Mode",
   "config.roundabout.tuskUsesShootMode.desc": "Whether you  need to hold right click and then press left click, or just right click",
-  "config.roundabout.windVisionMode.name": "Wind Vision Toggle",
-  "config.roundabout.windVisionMode.desc": "Toggle on and off Wind Vision from your perspective. To change it in-game, press Skill 4",
 
   "config.roundabout.renderJusticeParticlesWhilePilotingInFirstPerson.name": "1st Person Fog",
   "config.roundabout.renderJusticeParticlesWhilePilotingInFirstPerson.desc": "Fog particles can be disabled for first person rendering of justice control mode.",

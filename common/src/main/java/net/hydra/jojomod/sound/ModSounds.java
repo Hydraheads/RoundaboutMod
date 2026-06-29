@@ -201,6 +201,19 @@ public class ModSounds {
     public static final ResourceLocation ICE_BLAST_CHARGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ICE_BLAST_CHARGE);
     public static SoundEvent ICE_BLAST_CHARGE_EVENT = SoundEvent.createVariableRangeEvent(ICE_BLAST_CHARGE_ID);
 
+    public static final String COLD_SHOT = "cold_shot";
+    public static final ResourceLocation COLD_SHOT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+COLD_SHOT);
+    public static SoundEvent COLD_SHOT_EVENT = SoundEvent.createVariableRangeEvent(COLD_SHOT_ID);
+
+    public static final String GENTLY_WEEPS = "gently_weeps";
+    public static final ResourceLocation GENTLY_WEEPS_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GENTLY_WEEPS);
+    public static SoundEvent GENTLY_WEEPS_EVENT = SoundEvent.createVariableRangeEvent(GENTLY_WEEPS_ID);
+
+    public static final String DING = "ding";
+    public static final ResourceLocation DING_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DING);
+    public static SoundEvent DING_EVENT = SoundEvent.createVariableRangeEvent(DING_ID);
+
+
 
 
     public static final String BANISH = "banish";
@@ -572,6 +585,9 @@ public class ModSounds {
     public static final String KILLER_QUEEN_SHA_SUMMON = "sha_summon";
     public static final ResourceLocation KILLER_QUEEN_SHA_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SHA_SUMMON);
     public static SoundEvent KILLER_QUEEN_SHA_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SHA_SUMMON_ID);
+    public static final String KILLER_QUEEN_SHA_MOVING = "sha_moving";
+    public static final ResourceLocation KILLER_QUEEN_SHA_MOVING_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SHA_MOVING);
+    public static SoundEvent KILLER_QUEEN_SHA_MOVING_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SHA_MOVING_ID);
     public static final String KILLER_QUEEN_BARRAGE = "killer_queen_barrage";
     public static final ResourceLocation KILLER_QUEEN_BARRAGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_BARRAGE);
     public static SoundEvent KILLER_QUEEN_BARRAGE_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_BARRAGE_ID);
@@ -987,6 +1003,10 @@ public class ModSounds {
     public static final String VAMPIRE_GLEAM = "vampire_gleam";
     public static final ResourceLocation VAMPIRE_GLEAM_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VAMPIRE_GLEAM);
     public static SoundEvent VAMPIRE_GLEAM_EVENT = SoundEvent.createVariableRangeEvent(VAMPIRE_GLEAM_ID);
+
+    public static final String ICY_WIND = "icy_wind";
+    public static final ResourceLocation ICY_WIND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ICY_WIND);
+    public static SoundEvent ICY_WIND_EVENT = SoundEvent.createVariableRangeEvent(ICY_WIND_ID);
 
 
     public static final String GLAIVE_CHARGE = "glaive_charge";

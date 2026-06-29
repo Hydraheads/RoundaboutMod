@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.block.RoundaboutDoor;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.GoBeyondEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -33,6 +34,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.JumpControl;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.animal.goat.Goat;
@@ -86,6 +88,8 @@ public class SeperatedArmEntity extends StandEntity {
         }
     }
 
+
+
     public SeperatedArmEntity(EntityType<? extends StandEntity> $$0, Level $$1) {
         super($$0, $$1);
     }
@@ -115,13 +119,7 @@ public class SeperatedArmEntity extends StandEntity {
         LaunchAngle = this.getDeltaMovement();
         Can_activate = true;
         flyingTicks=0;
-        MiningPos = new BlockPos(
-                ((Double)(jumpT0Pos.x)).intValue(),
-                ((Double)(jumpT0Pos.y)).intValue(),
-                ((Double)(jumpT0Pos.z)).intValue());
-        Roundabout.LOGGER.info(level().getBlockState(MiningPos).getBlock().toString());
-
-
+        MiningPos =  (BlockPos.containing(jumpT0Pos));
     }
 
     public void jump2(Vec3 jumpT0Pos){
@@ -149,8 +147,10 @@ public class SeperatedArmEntity extends StandEntity {
         LaunchAngle = this.getDeltaMovement();
         Can_activate = true;
         flyingTicks=0;
+        MiningPos = (BlockPos.containing(jumpT0Pos));
 
     }
+
 
     public BlockPos IsArmContactingBlock(){
         
@@ -281,6 +281,10 @@ public class SeperatedArmEntity extends StandEntity {
                             if (pickaxeable) {
                                 level.destroyBlock(targetpos, true,this);
                                 this.setDeltaMovement(0, 0, 0);
+
+                                if(Can_activate) {
+                                    this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
+                                }
                                 Can_activate = false;
                             }
 
@@ -289,6 +293,10 @@ public class SeperatedArmEntity extends StandEntity {
                             if (shovelable) {
                                 level.destroyBlock(targetpos, true, this);
                                 this.setDeltaMovement(0, 0, 0);
+
+                                if(Can_activate) {
+                                    this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
+                                }
                                 Can_activate = false;
                             }
 
@@ -298,6 +306,9 @@ public class SeperatedArmEntity extends StandEntity {
                                 level.destroyBlock(targetpos, true,this);
 
                                 this.setDeltaMovement(0, 0, 0);
+                                if(Can_activate) {
+                                    this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
+                                }
                                 Can_activate = false;
                             }
 
@@ -483,6 +494,10 @@ public class SeperatedArmEntity extends StandEntity {
 
 
         for(int j = 0;j<damages.size();j++) {
+            if(SpinTicks == 0) {
+                this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
+            }
+
 
             Entity entity = damages.get(j);
             if (!(SpinTicks > 0) && (Math.random() > 0.5)) {

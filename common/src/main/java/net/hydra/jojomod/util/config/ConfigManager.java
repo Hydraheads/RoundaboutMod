@@ -185,10 +185,15 @@ public abstract class ConfigManager {
             MainUtil.removeBloodFromThese.clear();
             MainUtil.removeBloodFromThese.addAll(getAdvancedConfig().removeBloodFromThese);
         }
-        if (getAdvancedConfig().removeFreezableMobs != null)
+        if (getAdvancedConfig().removeFreezableMobsv2 != null)
         {
             MainUtil.unfreezableMobs.clear();
-            MainUtil.unfreezableMobs.addAll(getAdvancedConfig().removeFreezableMobs);
+            MainUtil.unfreezableMobs.addAll(getAdvancedConfig().removeFreezableMobsv2);
+        }
+        if (getAdvancedConfig().powerfulMobs != null)
+        {
+            MainUtil.powerfulMobs.clear();
+            MainUtil.powerfulMobs.addAll(getAdvancedConfig().powerfulMobs);
         }
         if (getAdvancedConfig().vampireSunDamageWorlds != null)
         {
@@ -208,11 +213,11 @@ public abstract class ConfigManager {
 
     public static void loadStandArrowPool()
     {
-        if (getAdvancedConfig().standArrowPoolv4 != null)
+        if (getAdvancedConfig().standArrowPoolv5 != null)
         {
             ModItems.STAND_ARROW_POOL.clear();
 
-            for (String disc : getAdvancedConfig().standArrowPoolv4)
+            for (String disc : getAdvancedConfig().standArrowPoolv5)
             {
                 String[] split = disc.split(":");
 
@@ -233,11 +238,11 @@ public abstract class ConfigManager {
                 }
             }
         }
-        if (getAdvancedConfig().naturalStandUserMobPoolv5 != null)
+        if (getAdvancedConfig().naturalStandUserMobPoolv6 != null)
         {
             ModItems.STAND_ARROW_POOL_FOR_MOBS.clear();
 
-            for (String disc : getAdvancedConfig().naturalStandUserMobPoolv5)
+            for (String disc : getAdvancedConfig().naturalStandUserMobPoolv6)
             {
                 String[] split = disc.split(":");
 
