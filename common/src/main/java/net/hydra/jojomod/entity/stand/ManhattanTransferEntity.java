@@ -6,6 +6,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
@@ -877,13 +878,15 @@ public class ManhattanTransferEntity extends StandEntity {
         searchTarget();
         super.tick();
         if (!this.level().isClientSide()) {
-            if (!forceVisible) {
-                this.setXRot(pitch);
-                this.setYRot(yaw);
-                this.setYBodyRot(yaw);
-                this.xRotO = pitch;
-                this.yRotO = yaw;
+            if (this.getUser() != null) {
+                if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM && PM.isPiloting()) {
+                    this.setXRot(pitch);
+                    this.setYRot(yaw);
+                    this.setYBodyRot(yaw);
+                    this.xRotO = pitch;
+                    this.yRotO = yaw;
             }
+        }
         }
     }
 
