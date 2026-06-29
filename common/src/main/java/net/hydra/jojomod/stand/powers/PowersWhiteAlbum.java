@@ -387,7 +387,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
     /**for stands that subvert guard mechanics like white album*/
     @Override
     public boolean isSpecialGuarding(){
-        return !isBlockingTraditionally() && hasStandActive(self) && !isBarraging();
+        return !isBlockingTraditionally() &&
+                ((self instanceof Player || MainUtil.isHumanoid(self)) && hasStandActive(self))
+                && !isBarraging();
     }
 
     public int getMaxGuardPoints(){
