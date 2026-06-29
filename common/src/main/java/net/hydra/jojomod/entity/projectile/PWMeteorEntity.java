@@ -605,7 +605,7 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
     public void getEntity(Entity gotten, PowersPlanetWaves PPW, LivingEntity user) {
         if (gotten != null && gotten.getId() != getUserID()) {
             float dmg = PPW.getFireballDamage(gotten);
-            float strength = 0.85F;
+            float strength = METEOR_HIT_KNOCKBACK; //estaba en 0,85
             if (!(user instanceof Player) && !(user instanceof Monster)) {
                 if (!(gotten instanceof Monster)) {
                     if (!(user instanceof Mob mb && mb.getTarget() != null && mb.getTarget().is(gotten))) {
@@ -632,6 +632,7 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
         }
     }
     private boolean missedPlayer = false;
+    public static final float METEOR_HIT_KNOCKBACK = 0.0F;
 
     @Override
     public boolean fireImmune() {
