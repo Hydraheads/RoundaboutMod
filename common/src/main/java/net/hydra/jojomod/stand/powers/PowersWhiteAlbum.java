@@ -142,7 +142,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             }
         }
         if (sauce.is(DamageTypes.MOB_ATTACK)){
-            damage*=ClientNetworking.getAppropriateConfig().whiteAlbumSettings.mobGuardDamageMultiplier;
+            damage*=ClientNetworking.getAppropriateConfig().whiteAlbumSettings.mobGuardDamageMultiplierv2;
         }
         if (sauce.is(ModDamageTypes.BULLET) ||
                 sauce.getEntity() instanceof Blaze){

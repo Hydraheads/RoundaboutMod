@@ -874,8 +874,8 @@ public class Config implements Cloneable {
         public Boolean enableWhiteAlbum;
         @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
         public Integer whiteAlbumGuardPoints;
-        @FloatOption(group = "inherit", value = 2F, min = 0F, max = 100F)
-        public Float mobGuardDamageMultiplier;
+        @FloatOption(group = "inherit", value = 1.2F, min = 0F, max = 100F)
+        public Float mobGuardDamageMultiplierv2;
         @FloatOption(group = "inherit", value = 0.5F, min = 0F, max = 100F)
         public Float playerGuardDamageMultiplierv2;
         @FloatOption(group = "inherit", value = 0.7F, min = 0F, max = 100F)
