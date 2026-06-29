@@ -3043,6 +3043,9 @@
   "config.roundabout.freezesGrassv2.name": "Freezes Grass",
   "config.roundabout.freezesGrassv2.desc": "If disabled, white album won't replace grass and tallgrass, and other non-air blocks, even with stand griefing on.",
 
+  "config.roundabout.freezesSnow.name": "Freezes Snow",
+  "config.roundabout.freezesSnow.desc": "If disabled, white album won't replace snow.",
+
   "config.roundabout.magicianAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.magicianAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
   "config.roundabout.magicianAttackMultOnMobs.name": "Mob Damage Multiplier",

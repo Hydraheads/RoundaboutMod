@@ -73,7 +73,7 @@ public class StickyIceCoatingBlock
                         $$3.makeStuckInBlock($$0, new Vec3((double) 0.4F, (double) 0.3F, (double) 0.4F));
                     } else {
                         if (LE instanceof Player) {
-                            $$3.makeStuckInBlock($$0, new Vec3((double) 0.6F, (double) 0.8F, (double) 0.6F));
+                            $$3.makeStuckInBlock($$0, new Vec3((double) 0.5F, (double) 0.8F, (double) 0.5F));
                         } else {
                             $$3.makeStuckInBlock($$0, new Vec3((double) 0.85F, (double) 0.8F, (double) 0.85F));
                         }

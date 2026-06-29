@@ -892,6 +892,8 @@ public class Config implements Cloneable {
         public Boolean freezesSurfaceWater;
         @BooleanOption(group = "inherit", value = false)
         public Boolean freezesGrassv2;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean freezesSnow;
         @FloatOption(group = "inherit", value = 0.15F, min = 0, max = 72000F)
         public Float miningSpeedBuffWhite;
         @FloatOption(group = "inherit", value = 0.1F, min = 0, max = 72000F)
