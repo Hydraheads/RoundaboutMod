@@ -39,12 +39,6 @@ public abstract class VisageHumanoidArmorLayer<T extends LivingEntity, M extends
             ){
                 ci.cancel();
                 return;
-            } else if (((StandUser)PE).roundabout$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet()
-                    && ClientUtil.canSeeStands(ClientUtil.getPlayer()) &&
-                    !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)
-            ){
-                ci.cancel();
-                return;
             }
         } else if ($$3 instanceof CloneEntity CE && CE.player != null) {
             if (!((IPlayerEntity)CE.player).roundabout$getMaskSlot().isEmpty()
@@ -55,6 +49,13 @@ public abstract class VisageHumanoidArmorLayer<T extends LivingEntity, M extends
                 ci.cancel();
                 return;
             }
+        }
+
+        if (((StandUser)$$3).roundabout$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet() &&
+                !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)
+        ){
+            ci.cancel();
+            return;
         }
         if ($$3 != null && ClientUtil.hideArmor($$3) && !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)){
             ci.cancel();

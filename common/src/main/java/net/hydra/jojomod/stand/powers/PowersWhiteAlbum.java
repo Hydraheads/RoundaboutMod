@@ -437,20 +437,20 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
                 if (PowerTypes.hasStandActive(self)){
                 if (self.level() instanceof ServerLevel sl) {
-                    if ((self instanceof Mob mb && MainUtil.isHumanoid(mb)) ||  getStandUserSelf().roundabout$getStandSkin() == YUKI){
-                    if (self.tickCount % 10 == 0) {
-                        sl.sendParticles(
-                                ParticleTypes.SNOWFLAKE,
-                                self.getEyePosition().x,
-                                self.getEyePosition().y,
-                                self.getEyePosition().z,
-                                1,     // count
-                                0.5,    // x spread
-                                0.2,    // y spread
-                                0.5,    // z spread
-                                0.01    // speed
-                        );
-                    }
+                    if ((self instanceof Mob mb && !MainUtil.isHumanoid(mb)) ||  getStandUserSelf().roundabout$getStandSkin() == YUKI){
+                        if (self.tickCount % 10 == 0) {
+                            sl.sendParticles(
+                                    ParticleTypes.SNOWFLAKE,
+                                    self.getEyePosition().x,
+                                    self.getEyePosition().y,
+                                    self.getEyePosition().z,
+                                    1,     // count
+                                    0.5,    // x spread
+                                    0.2,    // y spread
+                                    0.5,    // z spread
+                                    0.01    // speed
+                            );
+                        }
                     }
                 }
                 }
@@ -664,7 +664,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
 
     public boolean renderHelmet(){
-        return PowerTypes.hasStandActive(self);
+        return (self instanceof Player pl || MainUtil.isHumanoid(self)) && PowerTypes.hasStandActive(self);
     }
 
     public Component getPosName(byte posID){
