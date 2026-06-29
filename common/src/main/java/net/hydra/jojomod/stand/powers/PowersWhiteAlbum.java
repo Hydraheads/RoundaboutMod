@@ -435,8 +435,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     saveDiscAndSync();
                 }
 
-                if (PowerTypes.hasStandActive(self) && getStandUserSelf().roundabout$getStandSkin() == YUKI){
+                if (PowerTypes.hasStandActive(self)){
                 if (self.level() instanceof ServerLevel sl) {
+                    if ((self instanceof Mob mb && MainUtil.isHumanoid(mb)) ||  getStandUserSelf().roundabout$getStandSkin() == YUKI){
                     if (self.tickCount % 10 == 0) {
                         sl.sendParticles(
                                 ParticleTypes.SNOWFLAKE,
@@ -449,6 +450,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                                 0.5,    // z spread
                                 0.01    // speed
                         );
+                    }
                     }
                 }
                 }
