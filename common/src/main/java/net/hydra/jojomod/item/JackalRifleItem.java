@@ -205,7 +205,7 @@ public class JackalRifleItem extends FirearmItem implements Vanishable {
         if (!(itemStack.getItem() instanceof JackalRifleItem)) {
             return InteractionResultHolder.fail(itemStack);
         }
-            if ((isCrouchingOrSomething(player) && hasSniperAmmo(player) && getAmmo(itemStack) != maxAmmo) || (isCrouchingOrSomething(player) && player.isCreative())) {
+            if ((isCrouchingOrSomething(player,itemStack) && hasSniperAmmo(player) && getAmmo(itemStack) != maxAmmo) || (isCrouchingOrSomething(player,itemStack) && player.isCreative())) {
                 if (!isReloading(itemStack)) {
                     setReloading(itemStack, true);
                     player.getCooldowns().addCooldown(this, 20);
@@ -214,11 +214,11 @@ public class JackalRifleItem extends FirearmItem implements Vanishable {
 
                 return InteractionResultHolder.consume(itemStack);
             } else {
-                if (isCrouchingOrSomething(player) && getAmmo(itemStack) == maxAmmo) {
+                if (isCrouchingOrSomething(player,itemStack) && getAmmo(itemStack) == maxAmmo) {
                     if (player instanceof ServerPlayer SP) {
                         SP.displayClientMessage(Component.translatable("text.roundabout.already_reloaded").withStyle(ChatFormatting.GRAY), true);
                     }
-                } else if (isCrouchingOrSomething(player) && getAmmo(itemStack) != maxAmmo && !hasSniperAmmo(player)) {
+                } else if (isCrouchingOrSomething(player,itemStack) && getAmmo(itemStack) != maxAmmo && !hasSniperAmmo(player)) {
                     if (player instanceof ServerPlayer SP) {
                         SP.displayClientMessage(Component.translatable("text.roundabout.no_more_usable_ammo").withStyle(ChatFormatting.GRAY), true);
                     }

@@ -52,8 +52,8 @@ public class FirearmItem extends Item {
         return false;
     }
 
-    public boolean isCrouchingOrSomething(Player player){
-        return player.isCrouching() || cycleReload;
+    public boolean isCrouchingOrSomething(Player player, ItemStack stack){
+        return (player.isCrouching() && !(player.getUseItem() == stack)) || cycleReload;
     }
 
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {

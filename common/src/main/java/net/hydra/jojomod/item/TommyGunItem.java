@@ -208,7 +208,7 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
         if (!(itemStack.getItem() instanceof TommyGunItem)) {
             return InteractionResultHolder.fail(itemStack);
         }
-            if ((isCrouchingOrSomething(player) && hasTommyAmmo(player) && getAmmo(itemStack) != maxAmmo) || (isCrouchingOrSomething(player) && player.isCreative())) {
+            if ((isCrouchingOrSomething(player,itemStack) && hasTommyAmmo(player) && getAmmo(itemStack) != maxAmmo) || (isCrouchingOrSomething(player,itemStack) && player.isCreative())) {
                 if (!isReloading(itemStack)) {
                     setReloading(itemStack, true);
                     player.getCooldowns().addCooldown(this, 70);
@@ -217,11 +217,11 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
 
                 return InteractionResultHolder.consume(itemStack);
             } else {
-                if (isCrouchingOrSomething(player) && getAmmo(itemStack) == maxAmmo) {
+                if (isCrouchingOrSomething(player,itemStack) && getAmmo(itemStack) == maxAmmo) {
                     if (player instanceof ServerPlayer SP) {
                         SP.displayClientMessage(Component.translatable("text.roundabout.already_reloaded").withStyle(ChatFormatting.GRAY), true);
                     }
-                } else if (isCrouchingOrSomething(player) && getAmmo(itemStack) != maxAmmo && !hasTommyAmmo(player)) {
+                } else if (isCrouchingOrSomething(player,itemStack) && getAmmo(itemStack) != maxAmmo && !hasTommyAmmo(player)) {
                     if (player instanceof ServerPlayer SP) {
                         SP.displayClientMessage(Component.translatable("text.roundabout.no_more_usable_ammo").withStyle(ChatFormatting.GRAY), true);
                     }
