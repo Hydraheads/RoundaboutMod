@@ -12,6 +12,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -45,6 +46,7 @@ import java.util.UUID;
 public class StrayCatAirBubble extends AbstractHurtingProjectile implements UnburnableProjectile, NoVibrationEntity, PenetratableWithProjectile {
     public StrayCatAirBubble(EntityType<? extends StrayCatAirBubble> $$0, Level $$1) {
         super($$0, $$1);
+        this.lifeSpan = 300;
     }
 
     /*public StrayCatAirBubble(LivingEntity living, Level $$1) {
@@ -52,14 +54,14 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         setOwner(living);
         //places = false;
     }*/
+    private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.INT);
 
-
-    public int lifeSpan = 0;
+    public int lifeSpan = 300;
     public LivingEntity standUser;
     public UUID standUserUUID;
-    private static final EntityDataAccessor<Boolean> ACTIVATED = SynchedEntityData.defineId(SoftAndWetBubbleEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> LAUNCHED = SynchedEntityData.defineId(SoftAndWetBubbleEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Float> SPEED = SynchedEntityData.defineId(SoftAndWetBubbleEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Boolean> ACTIVATED = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> LAUNCHED = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Float> SPEED = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.FLOAT);
 
 
     public boolean getActivated() {
@@ -83,6 +85,10 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
     static final float damagePoints = 2.5f;
 
+    public float getDamagePoints() {
+        return damagePoints;
+    }
+
     @Override
     public boolean hurt(DamageSource $$0, float $$1) {
         if (this.isInvulnerableTo($$0)) {
@@ -96,13 +102,42 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         //return true;
     }
 
+    public byte skinID = 0;
+
+    public byte getSkin() {
+        return this.skinID;
+    }
+
+    public void setSkin(byte skin) {
+        this.skinID = skin;
+    }
+
+    public boolean hasTimeLimit = true;
+
+    public void setHasTimeLimit(boolean value) {
+        this.hasTimeLimit = value;
+    }
+
+    public boolean isKillerQueenBubble = false;
+
+    public void setIsKQAirBubble(boolean value) {
+        this.isKillerQueenBubble = value;
+    }
+
+
+    public boolean isPlanted = false;
+
+    public void setIsPlanted(boolean value) {
+        this.isPlanted = value;
+    }
+
     @Override
     public boolean dealWithPenetration(Entity proj){
         popBubble();
         return true;
     }
 
-    private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(SoftAndWetBubbleEntity.class, EntityDataSerializers.INT);
+
     /*protected StrayCatAirBubble(EntityType<? extends StrayCatAirBubble> $$0, double $$1, double $$2, double $$3, Level $$4) {
         this($$0, $$4);
         this.setPos($$1, $$2, $$3);
@@ -123,7 +158,11 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
     public void tick() {
         if (!this.level().isClientSide()) {
-            if (this.getOwner() == null || !this.getOwner().isAlive() || this.getOwner().isRemoved() ||
+            if (this.hasTimeLimit) {
+                this.lifeSpan--;
+            }
+
+            if (this.lifeSpan <= 0 || this.getOwner() == null || !this.getOwner().isAlive() || this.getOwner().isRemoved() ||
                     this.getOwner().distanceTo(this) > getDistanceUntilPopping() && distancePops()){
                 popBubble();
                 return;
@@ -208,14 +247,12 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         Entity target = $$0.getEntity();
         Entity user = this.getOwner();
         DamageSource dmg = ModDamageTypes.of(target.level(), ModDamageTypes.STAND);
-        float damage = damagePoints;
-
-
+        float damage = getDamagePoints();
 
         if (user != null) {
             dmg = ModDamageTypes.of(target.level(), ModDamageTypes.STAND, this, user);
 
-            if (((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ) {
+            if (((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
                 damage = KQ.getAirBubbleDamage(target);
             }
         }
@@ -234,7 +271,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
             if (user instanceof LivingEntity LE) {
 
-                if (((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ) {
+                if (((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
                     if (target instanceof LivingEntity l) {
                         KQ.addEXP(4, l);
                     }
@@ -253,11 +290,24 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                 } else {
                     $$7 = ((EnderDragonPart) target).parentMob;
                 }
-                //applyEffect($$7);
-                //target.setDeltaMovement(target.getDeltaMovement().multiply(0.4, 0.4, 0.4));
+
+                Vec3 launchVec = this.getDeltaMovement();
+                Vec3 vec3d2 = launchVec.normalize().scale(0.6F);
+                vec3d2 = vec3d2.add(0, 0.5F, 0);
+
+                MainUtil.takeLiteralUnresistableKnockbackWithY(target,
+                        vec3d2.x,
+                        vec3d2.y,
+                        vec3d2.z);
+
                 if (user instanceof LivingEntity) {
                     EnchantmentHelper.doPostHurtEffects($$7, user);
                     EnchantmentHelper.doPostDamageEffects((LivingEntity) user, $$7);
+                }
+                if (user instanceof LivingEntity LE && this.isPlanted) {
+                    if (((StandUser) LE).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
+                        KQ.bubbleContacted(target);
+                    }
                 }
 
                 this.doPostHurtEffects($$7);

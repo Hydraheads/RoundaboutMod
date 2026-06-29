@@ -678,9 +678,16 @@ public class MainUtil {
         return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.userAndWorthyBreedingOddsBonus;
     }
     public static boolean isHumanoid(LivingEntity LE){
-        return (LE instanceof Zombie || LE instanceof AbstractSkeleton
+        return ((LE instanceof Zombie || LE instanceof AbstractSkeleton
         || LE instanceof Player || LE instanceof Piglin
-                || LE instanceof JojoNPC);
+                || LE instanceof JojoNPC) && !LE.isBaby());
+
+    }
+
+    public static boolean isHumanoid2(LivingEntity LE){
+        return ((LE instanceof Zombie || LE instanceof AbstractSkeleton
+                || LE instanceof Player
+                || LE instanceof JojoNPC) && !LE.isBaby());
 
     }
 

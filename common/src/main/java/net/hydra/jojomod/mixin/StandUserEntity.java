@@ -1493,7 +1493,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (roundabout$isSealed() && !level().isClientSide()){
             roundabout$updateSealedTicks(roundabout$sealedTicks - 1);
             if (((LivingEntity)(Object)this) instanceof Player PE && PE.isCreative()){
-                roundabout$updateSealedTicks(0);
+                roundabout$updateSealedTicks(-1);
             }
             if (!roundabout$isSealed()){
                 this.roundabout$setDrowning(false);

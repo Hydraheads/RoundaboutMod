@@ -59,7 +59,7 @@ public class VisagePartLayer2<T extends LivingEntity, A extends HumanoidModel<T>
     float scale = 1;
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, float var9, float var10) {
-        if (MainUtil.isHumanoid(entity)) {
+        if (MainUtil.isHumanoid2(entity)) {
             Minecraft minecraft = Minecraft.getInstance();
             if (minecraft != null) {
                 if (ClientUtil.getThrowFadePercent(entity, partialTicks) <= 0) {
@@ -123,7 +123,7 @@ public class VisagePartLayer2<T extends LivingEntity, A extends HumanoidModel<T>
                                     partialTicks, path, r, g, b, heyFull);
                             renderWhiteAlbumBodyPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
                                     partialTicks, path, r, g, b, heyFull);
-                            if (skin == PowersWhiteAlbum.YUKI && path2 != null) {
+                            if (skin == PowersWhiteAlbum.YUKI && path2 != null && !pw.cracked) {
                                 renderWhiteAlbumHeadPart(poseStack, bufferSource, 15728880, entity, xx, yy, zz,
                                         partialTicks, path + "_glowing", r, g, b, heyFull);
                                 renderWhiteAlbumBodyPart(poseStack, bufferSource, 15728880, entity, xx, yy, zz,

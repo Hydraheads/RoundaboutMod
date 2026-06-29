@@ -2522,8 +2522,8 @@
   "config.roundabout.bufferServerDistance.name": "Fix Moved Wrongly",
   "config.roundabout.bufferServerDistance.desc": "Provides a buffer to accommodate roundabout movement skills that provide short bursts of speed. Disable if it is causing problems with other mods.",
 
-  "config.roundabout.mobGuardDamageMultiplier.name": "Mob DMG Mult",
-  "config.roundabout.mobGuardDamageMultiplier.desc": "For stand Guard. Mobs do this many times more damage to your guard with their melee attacks (mob damage). This is to make fighting zombies and such not a joke.",
+  "config.roundabout.mobGuardDamageMultiplierv2.name": "Mob DMG Mult",
+  "config.roundabout.mobGuardDamageMultiplierv2.desc": "For stand Guard. Mobs do this many times more damage to your guard with their melee attacks (mob damage). This is to make fighting zombies and such not a joke.",
 
   "config.roundabout.playerGuardDamageMultiplierv2.name": "Player DMG Mult",
   "config.roundabout.playerGuardDamageMultiplierv2.desc": "For stand Guard. Player damage (melee) is modified by this amount so they can't instantly crack your guard.",
