@@ -1990,11 +1990,11 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 this.bombEntity = null;
             }else if (bStatus == PowersKillerQueen.BOMB_BUBBLE) {
-                target = this.bombBubble;
+                vPos = this.bombBubble.position();
+                bPos = new BlockPos(this.bombBubble.getBlockX(), this.bombBubble.getBlockY(), this.bombBubble.getBlockZ());
+                level = this.bombBubble.level();
+                this.bombBubble.discard();
 
-                vPos = target.position();
-                bPos = new BlockPos(target.getBlockX(), target.getBlockY(), target.getBlockZ());
-                level = target.level();
             }
 
             if (canDestroyBlocks) {

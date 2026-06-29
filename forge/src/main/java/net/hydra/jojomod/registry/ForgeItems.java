@@ -422,7 +422,7 @@ public class ForgeItems {
             () -> new IronBallCrossbowItem(new Item.Properties().stacksTo(1).durability(565))
     ));
     public static final RegistryObject<Item> WOODEN_GLAIVE = addToTab(ITEMS.register("wooden_glaive",
-            () -> new GlaiveItem(Tiers.STONE, 4F, -2.9F, new Item.Properties(),4)
+            () -> new GlaiveItem(Tiers.WOOD, 4F, -2.9F, new Item.Properties(),4)
     ));
     public static final RegistryObject<Item> STONE_GLAIVE = addToTab(ITEMS.register("stone_glaive",
             () -> new GlaiveItem(Tiers.STONE, 4F, -2.9F, new Item.Properties(),6)
