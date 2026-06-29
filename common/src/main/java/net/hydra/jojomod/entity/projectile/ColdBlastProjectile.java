@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.projectile;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StandFireBlock;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.util.HeatUtil;
@@ -17,6 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.FrostedIceBlock;
 import net.minecraft.world.level.block.LiquidBlockContainer;
+import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
@@ -77,6 +79,11 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
         if (!level().isClientSide()) {
             Entity ent = $$0.getEntity();
             if (ent != null && ent.isAlive()) {
+                if (ent instanceof BlockWallEntity){
+                    discard();
+                    return;
+                }
+
                 if (!alreadyHitEntity($$0.getEntity())) {
                     if (ent instanceof LivingEntity lv && !(getOwner() != null && getOwner().getUUID() == ent.getUUID())) {
                         blastEntity(lv);
