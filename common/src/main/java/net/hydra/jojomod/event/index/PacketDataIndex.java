@@ -75,6 +75,7 @@ public class PacketDataIndex {
     public static final byte SINGLE_BYTE_LEFT_POWERS = 36;
     public static final byte SINGLE_BYTE_RIGHT_POWERS = 37;
     public static final byte FIX_COOLDOWN_FOR_SERVER = 38;
+    public static final byte RELOAD_GUN = 39;
 
     /**Byte packets*/
     public static final byte BYTE_CHANGE_MORPH = 6;

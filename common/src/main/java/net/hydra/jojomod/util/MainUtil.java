@@ -2872,6 +2872,23 @@ public class MainUtil {
                     user.roundabout$getStandPowers().setActivePowerPhase((byte) 0);
                 }
             }
+        } else if (context == PacketDataIndex.RELOAD_GUN) {
+            Roundabout.LOGGER.info("1");
+            if (player.getUseItem().getItem() instanceof FirearmItem fm){
+                Roundabout.LOGGER.info("2");
+
+                FirearmItem.cycleReload = true;
+
+                ItemStack stack = player.getUseItem();
+                InteractionHand hand= InteractionHand.MAIN_HAND;
+                if (ItemStack.isSameItemSameTags(player.getMainHandItem(), stack)) {
+                    hand = InteractionHand.MAIN_HAND;
+                } else if (ItemStack.isSameItemSameTags(player.getOffhandItem(), stack)) {
+                    hand = InteractionHand.OFF_HAND;
+                }
+                fm.use(player.level(),player,hand);
+                FirearmItem.cycleReload = false;
+            }
         }
     }
 

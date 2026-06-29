@@ -1,4 +1,5 @@
 package net.hydra.jojomod.item;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -194,14 +195,17 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        Roundabout.LOGGER.info("3");
         super.use(level, player, hand);
         ItemStack itemStack = player.getItemInHand(hand);
         if (!(itemStack.getItem() instanceof SnubnoseRevolverItem)) {
             return InteractionResultHolder.fail(itemStack);
         }
-        if (!(player.getUseItem() == itemStack)) {
-            if ((player.isCrouching() && hasSnubnoseAmmo(player) && getAmmo(itemStack) != maxAmmo) || (player.isCrouching() && player.isCreative())) {
+        Roundabout.LOGGER.info("4");
+            Roundabout.LOGGER.info("5");
+            if ((isCrouchingOrSomething(player) && hasSnubnoseAmmo(player) && getAmmo(itemStack) != maxAmmo) || (isCrouchingOrSomething(player) && player.isCreative())) {
                 if (!isReloading(itemStack)) {
+                    Roundabout.LOGGER.info("6");
                     setReloading(itemStack, true);
                     player.getCooldowns().addCooldown(this, 60);
                     ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.REVOLVER_RELOAD, 10, false);
@@ -209,11 +213,11 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
 
                 return InteractionResultHolder.consume(itemStack);
             } else {
-                if (player.isCrouching() && getAmmo(itemStack) == maxAmmo) {
+                if (isCrouchingOrSomething(player) && getAmmo(itemStack) == maxAmmo) {
                     if (player instanceof ServerPlayer SP) {
                         SP.displayClientMessage(Component.translatable("text.roundabout.already_reloaded").withStyle(ChatFormatting.GRAY), true);
                     }
-                } else if (player.isCrouching() && getAmmo(itemStack) != maxAmmo && !hasSnubnoseAmmo(player)) {
+                } else if (isCrouchingOrSomething(player) && getAmmo(itemStack) != maxAmmo && !hasSnubnoseAmmo(player)) {
                     if (player instanceof ServerPlayer SP) {
                         SP.displayClientMessage(Component.translatable("text.roundabout.no_more_usable_ammo").withStyle(ChatFormatting.GRAY), true);
                     }
@@ -221,7 +225,6 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
                     player.startUsingItem(hand);
                 }
             }
-        }
         return InteractionResultHolder.consume(itemStack);
     }
 

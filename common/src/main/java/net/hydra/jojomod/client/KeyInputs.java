@@ -8,6 +8,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.FirearmItem;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.PlayerMaskSlots;
@@ -23,7 +24,12 @@ public class KeyInputs {
     public static int roundaboutClickCount = 0;
 
     public static void summonKey(Player player, Minecraft client){
-        if (PowerTypes.hasStandActivelyEquipped(player)){
+        if (player.isUsingItem() && player.getUseItem().getItem() instanceof FirearmItem fi){
+            if (roundaboutClickCount == 0) {
+                roundaboutClickCount = 2;
+                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.RELOAD_GUN);
+            }
+        } if (PowerTypes.hasStandActivelyEquipped(player)){
             StandUser user = ((StandUser) player);
             if (user.roundabout$getStandPowers().canSummonStand() && !user.roundabout$isSealed() && !user.roundabout$isPossessed()) {
                 if (((StandUser) player).roundabout$getSummonCD() && roundaboutClickCount == 0) {
