@@ -15,6 +15,9 @@ public class StrayCatManga extends AbtractStrayCat{
     }
 
     @Override
+    public byte getBubbleSkin() { return 1; }
+
+    @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.translatable("text.roundabout.stray_cat.manga").withStyle(ChatFormatting.DARK_GREEN));
     }

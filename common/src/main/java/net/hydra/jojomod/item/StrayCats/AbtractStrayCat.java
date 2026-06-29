@@ -33,6 +33,8 @@ abstract public class AbtractStrayCat extends Item {
 
     private static final float SPEED = 0.6f;
 
+    public byte getBubbleSkin() { return 0; }
+
     @Override
     public ItemStack finishUsingItem(ItemStack $$0, Level level, LivingEntity livingEntity) {
         if (livingEntity instanceof Player P) {
@@ -44,17 +46,17 @@ abstract public class AbtractStrayCat extends Item {
                 if (bubble != null) {
                     bubble.setSped(SPEED);
                     bubble.setOwner(P);
+                    bubble.setSkin(this.getBubbleSkin());
 
-
-                    Vec3 addToPosition = new Vec3(0, P.getEyeHeight(), 0);
+                    Vec3 addToPosition = new Vec3(0, P.getEyeHeight() * 0.85f, 0);
                     Direction direction = ((IGravityEntity) P).roundabout$getGravityDirection();
                     if (direction != Direction.DOWN) {
                         addToPosition = RotationUtil.vecPlayerToWorld(addToPosition, direction);
                     }
                     Vec3 pos = P.getPosition(1).add(addToPosition.x, addToPosition.y, addToPosition.z).add(P.getForward().scale(P.getBbWidth() * 1));
                     bubble.setPos(pos.x(), pos.y(), pos.z());
-                    //bubble.shootFromRotationDeltaAgnostic(P, P.getXRot(), P.getYRot(), 1.0F, SPEED, 0);
-                    bubble.shootFromRotation(P, P.getXRot(), P.getYRot(), -0.5F, SPEED, 0.00f);
+                    bubble.shootFromRotationDeltaAgnostic(P, P.getXRot(), P.getYRot(), 1.0F, SPEED, 0);
+                    //bubble.shootFromRotation(P, P.getXRot(), P.getYRot(), -0.5F, SPEED, 0.00f);
 
                     level.addFreshEntity(bubble);
                 }

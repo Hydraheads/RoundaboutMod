@@ -24,6 +24,7 @@ import org.joml.Vector3f;
 
 public class StrayCatAirBubbleRenderer extends EntityRenderer<StrayCatAirBubble> {
     private static final ResourceLocation PINK_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/killer_queen/projectiles/pink.png");
+    private static final ResourceLocation GREEN_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/killer_queen/projectiles/green.png");
 
     private final float scale;
 
@@ -44,46 +45,46 @@ public class StrayCatAirBubbleRenderer extends EntityRenderer<StrayCatAirBubble>
                 partialTicks = 0;
             }
             //if (!(entity instanceof StrayCatAirBubble sp)) {
-                poseStack.pushPose();
+            poseStack.pushPose();
 
-                // Orient the texture
-                poseStack.scale(this.scale, this.scale, this.scale);
-                poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-                poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
-                poseStack.translate(0, entity.getBbHeight() / 2, 0);
+            // Orient the texture
+            poseStack.scale(this.scale, this.scale, this.scale);
+            poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
+            poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+            poseStack.translate(0, entity.getBbHeight() / 2, 0);
 
-                // Draw flat quad here
-                VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
-                Matrix4f matrix = poseStack.last().pose();
-                Vector3f normal = Minecraft.getInstance().gameRenderer.getMainCamera().getLookVector();
-                normal.normalize();
+            // Draw flat quad here
+            VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
+            Matrix4f matrix = poseStack.last().pose();
+            Vector3f normal = Minecraft.getInstance().gameRenderer.getMainCamera().getLookVector();
+            normal.normalize();
 
-                /**This ome is good*/
-                Vector3f coursecorrect = new Vector3f(0.577f, 0.577f, 0.577f);
-                if (normal.y > 0) {
-                    /**This ome needs serial fixing*/
-                    coursecorrect = new Vector3f(0.01f, 1f, 0.01f);
-                    if (normal.y > 0.95) {
-                        coursecorrect = new Vector3f(-0.577f, -0.577f, -0.577f);
-                    }
+            /**This ome is good*/
+            Vector3f coursecorrect = new Vector3f(0.577f, 0.577f, 0.577f);
+            if (normal.y > 0) {
+                /**This ome needs serial fixing*/
+                coursecorrect = new Vector3f(0.01f, 1f, 0.01f);
+                if (normal.y > 0.95) {
+                    coursecorrect = new Vector3f(-0.577f, -0.577f, -0.577f);
                 }
+            }
 
-                float scaleIt = 0.3f;
+            float scaleIt = 0.3f;
 
 
-                float size = (float) Math.min(scaleIt, (((float) entity.tickCount) + partialTicks) * (scaleIt * 0.1)); // Adjust to your needs
-                /*if (entity instanceof SoftAndWetExplosiveBubbleEntity seb || entity instanceof SoftAndWetItemLaunchingBubbleEntity itemn){
-                    size = scaleIt;
-                }*/
-                vertexConsumer.vertex(matrix, -size, -size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-                vertexConsumer.vertex(matrix, size, -size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-                vertexConsumer.vertex(matrix, size, size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-                vertexConsumer.vertex(matrix, -size, size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+            float size = (float) Math.min(scaleIt, (((float) entity.tickCount) + partialTicks) * (scaleIt * 0.1)); // Adjust to your needs
 
-                vertexConsumer.color(1.0f, 1.0f, 1.0f, 0.7f);
+            //vertexConsumer.color(1.0f, 1.0f, 1.0f, 0.7f);
 
-                poseStack.popPose();
-                super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
+            vertexConsumer.vertex(matrix, -size, -size, 0.0f).color(255, 255, 255, 155).uv(0.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+            vertexConsumer.vertex(matrix, size, -size, 0.0f).color(255, 255, 255, 155).uv(1.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+            vertexConsumer.vertex(matrix, size, size, 0.0f).color(255, 255, 255, 155).uv(1.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+            vertexConsumer.vertex(matrix, -size, size, 0.0f).color(255, 255, 255, 155).uv(0.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+
+
+
+            poseStack.popPose();
+            super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
             //}
         }
     }
@@ -91,7 +92,11 @@ public class StrayCatAirBubbleRenderer extends EntityRenderer<StrayCatAirBubble>
     @Override
     public ResourceLocation getTextureLocation(StrayCatAirBubble entity) {
 
-        return PINK_BUBBLE;
+        return switch (entity.getSkin()) {
+            case 0 -> PINK_BUBBLE;
+            case 1 -> GREEN_BUBBLE;
+            default -> PINK_BUBBLE;
+        };
     }
 }
 
