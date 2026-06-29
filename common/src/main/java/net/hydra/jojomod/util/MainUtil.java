@@ -2873,12 +2873,9 @@ public class MainUtil {
                 }
             }
         } else if (context == PacketDataIndex.RELOAD_GUN) {
-            Roundabout.LOGGER.info("1");
             if (player.getUseItem().getItem() instanceof FirearmItem fm){
-                Roundabout.LOGGER.info("2");
 
                 FirearmItem.cycleReload = true;
-
                 ItemStack stack = player.getUseItem();
                 InteractionHand hand= InteractionHand.MAIN_HAND;
                 if (ItemStack.isSameItemSameTags(player.getMainHandItem(), stack)) {

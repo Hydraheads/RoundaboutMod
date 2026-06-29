@@ -205,7 +205,6 @@ public class JackalRifleItem extends FirearmItem implements Vanishable {
         if (!(itemStack.getItem() instanceof JackalRifleItem)) {
             return InteractionResultHolder.fail(itemStack);
         }
-        if (!(player.getUseItem() == itemStack)) {
             if ((isCrouchingOrSomething(player) && hasSniperAmmo(player) && getAmmo(itemStack) != maxAmmo) || (isCrouchingOrSomething(player) && player.isCreative())) {
                 if (!isReloading(itemStack)) {
                     setReloading(itemStack, true);
@@ -227,7 +226,6 @@ public class JackalRifleItem extends FirearmItem implements Vanishable {
                     player.startUsingItem(hand);
                 }
             }
-        }
         return InteractionResultHolder.consume(itemStack);
     }
 

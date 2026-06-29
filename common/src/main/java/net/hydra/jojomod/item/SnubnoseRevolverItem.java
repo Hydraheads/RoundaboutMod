@@ -195,17 +195,13 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        Roundabout.LOGGER.info("3");
         super.use(level, player, hand);
         ItemStack itemStack = player.getItemInHand(hand);
         if (!(itemStack.getItem() instanceof SnubnoseRevolverItem)) {
             return InteractionResultHolder.fail(itemStack);
         }
-        Roundabout.LOGGER.info("4");
-            Roundabout.LOGGER.info("5");
             if ((isCrouchingOrSomething(player) && hasSnubnoseAmmo(player) && getAmmo(itemStack) != maxAmmo) || (isCrouchingOrSomething(player) && player.isCreative())) {
                 if (!isReloading(itemStack)) {
-                    Roundabout.LOGGER.info("6");
                     setReloading(itemStack, true);
                     player.getCooldowns().addCooldown(this, 60);
                     ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.REVOLVER_RELOAD, 10, false);

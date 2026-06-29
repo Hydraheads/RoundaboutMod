@@ -203,7 +203,6 @@ public class ColtRevolverItem extends FirearmItem implements Vanishable {
         if (!(itemStack.getItem() instanceof ColtRevolverItem)) {
             return InteractionResultHolder.fail(itemStack);
         }
-        if (!(player.getUseItem() == itemStack)) {
             if ((isCrouchingOrSomething(player) && hasColtAmmo(player) && getAmmo(itemStack) != maxAmmo) || (isCrouchingOrSomething(player) && player.isCreative())) {
                 if (!isReloading(itemStack)) {
                     setReloading(itemStack, true);
@@ -224,7 +223,6 @@ public class ColtRevolverItem extends FirearmItem implements Vanishable {
                 } else {
                     player.startUsingItem(hand);
                 }
-            }
         }
         return InteractionResultHolder.consume(itemStack);
     }

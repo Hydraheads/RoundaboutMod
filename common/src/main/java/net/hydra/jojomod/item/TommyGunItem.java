@@ -208,7 +208,6 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
         if (!(itemStack.getItem() instanceof TommyGunItem)) {
             return InteractionResultHolder.fail(itemStack);
         }
-        if (!(player.getUseItem() == itemStack)) {
             if ((isCrouchingOrSomething(player) && hasTommyAmmo(player) && getAmmo(itemStack) != maxAmmo) || (isCrouchingOrSomething(player) && player.isCreative())) {
                 if (!isReloading(itemStack)) {
                     setReloading(itemStack, true);
@@ -230,7 +229,6 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
                     player.startUsingItem(hand);
                 }
             }
-        }
         return InteractionResultHolder.consume(itemStack);
     }
 
