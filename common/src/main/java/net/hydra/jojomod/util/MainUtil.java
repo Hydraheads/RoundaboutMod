@@ -2937,7 +2937,7 @@ public class MainUtil {
     /**A generalized packet for sending floats to the server. Context is what to do with the data byte*/
     public static void handleFloatPacketC2S(Player player, float data, byte context){
         if (context == PacketDataIndex.FLOAT_VELOCITY_BARBED_WIRE) {
-            data = Math.min(data,15F);
+            data = Math.min(data,10F);
             if (player.getVehicle() != null){
                 if (player.getVehicle().hurt(ModDamageTypes.of(player.level(), ModDamageTypes.BARBED_WIRE), data)){
                     MainUtil.makeBleed(player.getVehicle(),0,200,null);
