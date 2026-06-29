@@ -1591,7 +1591,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
         else if (this.currentBombStatus == BOMB_BUBBLE) {
             if (this.bombBubble == null) { this.defuseServer(); }
-            else if (this.bombEntity.isRemoved()) { this.defuseServer(); }
+            else if (this.bombBubble.isRemoved()) { this.defuseServer(); }
         }
 
     }
@@ -1736,7 +1736,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         for (Entity entity : contact) {
 
             if (entity == this.bombEntity || entity instanceof StandEntity || !(entity instanceof LivingEntity) ||
-                    entity.equals(this.getStandUserSelf()) || entity.equals(((StandUser)this.getStandUserSelf()).roundabout$getStand())) {
+                    entity.equals(this.getSelf()) || entity.equals(((StandUser)this.getStandUserSelf()).roundabout$getStand())) {
                 continue;
             }
             Vec3 pos = new Vec3(this.bombEntity.getX(), this.bombEntity.getY(), this.bombEntity.getZ());
@@ -2046,7 +2046,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                         }
                     }
                 } else {
-                    if (mobsHitkill && !isBoss) { target.kill();}
+                    if (mobsHitkill && !isBoss) { target.hurt(dmg, 9999999999.0f);}
                     else {target.hurt(dmg, hitPoints);}
                 }
             }
