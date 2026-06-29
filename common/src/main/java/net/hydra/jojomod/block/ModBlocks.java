@@ -541,7 +541,7 @@ public class ModBlocks {
                     .replaceable()
                     .pushReaction(PushReaction.DESTROY)
                     .ignitedByLava()
-                    .speedFactor(0.4F)
+                    .speedFactor(0.2F)
     );
     public static BloodBlock BLOOD_SPLATTER_PROPERTIES = new BloodBlock(
             BlockBehaviour.Properties.of()
