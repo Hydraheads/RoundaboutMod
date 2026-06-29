@@ -365,7 +365,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     	if (inBitesTheDustMode()) {
             setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_BTD_DAY, PowerIndex.SKILL_EXTRA);
         } else if (canAddStrayCatto()) {
-            setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_BOMB_SETIINGS, PowerIndex.NO_CD);
+            setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_ADD_STRAY_CAT, PowerIndex.NO_CD);
     	} else if (isGuarding()) {
             setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_BOMB_SETIINGS, PowerIndex.NO_CD);
         } else if (this.currentBombStatus != BOMB_NONE) {
@@ -1343,6 +1343,12 @@ public class PowersKillerQueen extends NewPunchingStand {
                 this.bombBlock = null;
             }else if (currentBombStatus == BOMB_ENTITY) {
                 this.bombEntity = null;
+            }else if (currentBombStatus == BOMB_BUBBLE) {
+                if (this.bombBubble != null) {
+                    this.bombBubble.setHasTimeLimit(true);
+                    this.bombBubble.setIsPlanted(false);
+                }
+                this.bombBubble = null;
             }
     	}
     	
@@ -1356,6 +1362,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             this.bombEntity = ent;
             syncBombStatus(BUBBLE_CONTACT);
             this.explode();
+        }else {
+            syncBombStatus(NONE);
         }
     }
 
@@ -1374,6 +1382,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     bubble.setOwner(user);
                     bubble.setSkin(this.getBubbleSkin());
                     bubble.setIsKQAirBubble(true);
+                    bubble.setIsPlanted(true);
                     bubble.setHasTimeLimit(false);
 
                     Vec3 addToPosition = new Vec3(0, user.getEyeHeight() * 0.85f, 0);

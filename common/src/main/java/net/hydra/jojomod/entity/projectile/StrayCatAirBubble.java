@@ -124,6 +124,13 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         this.isKillerQueenBubble = value;
     }
 
+
+    public boolean isPlanted = false;
+
+    public void setIsPlanted(boolean value) {
+        this.isPlanted = value;
+    }
+
     @Override
     public boolean dealWithPenetration(Entity proj){
         popBubble();
@@ -297,7 +304,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                     EnchantmentHelper.doPostHurtEffects($$7, user);
                     EnchantmentHelper.doPostDamageEffects((LivingEntity) user, $$7);
                 }
-                if (user instanceof LivingEntity LE) {
+                if (user instanceof LivingEntity LE && this.isPlanted) {
                     if (((StandUser) LE).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
                         KQ.bubbleContacted(target);
                     }
