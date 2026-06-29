@@ -93,7 +93,8 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
                 HeatUtil.addHeat(entity,-25);
             } else {
                 HeatUtil.addHeat(entity,-40);
-                if (entity instanceof Mob mob && !(entity instanceof AbstractVillager) && getUser() != null) {
+                if (entity instanceof Mob mob && !(entity instanceof AbstractVillager) && getUser() != null
+                && !(getUser() instanceof Player pl && pl.isCreative())) {
                     mob.setTarget(getUser());
                     getUser().setLastHurtMob(mob);
                 }
