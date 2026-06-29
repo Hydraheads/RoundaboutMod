@@ -68,13 +68,15 @@ public class StickyIceCoatingBlock
         if ($$3 instanceof LivingEntity LE && !LE.isInvulnerable() && !MainUtil.isBossMob($$3)) {
             if (!(((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW &&
                     PowerTypes.hasStandActive(LE))) {
-                if (FateTypes.isVampire(LE)) {
-                    $$3.makeStuckInBlock($$0, new Vec3((double) 0.4F, (double) 0.3F, (double) 0.4F));
-                } else {
-                    if (LE instanceof Player){
-                        $$3.makeStuckInBlock($$0, new Vec3((double) 0.57F, (double) 0.8F, (double) 0.57F));
+                if (LE.onGround()) {
+                    if (FateTypes.isVampire(LE)) {
+                        $$3.makeStuckInBlock($$0, new Vec3((double) 0.4F, (double) 0.3F, (double) 0.4F));
                     } else {
-                        $$3.makeStuckInBlock($$0, new Vec3((double) 0.85F, (double) 0.8F, (double) 0.85F));
+                        if (LE instanceof Player) {
+                            $$3.makeStuckInBlock($$0, new Vec3((double) 0.6F, (double) 0.8F, (double) 0.6F));
+                        } else {
+                            $$3.makeStuckInBlock($$0, new Vec3((double) 0.85F, (double) 0.8F, (double) 0.85F));
+                        }
                     }
                 }
             }

@@ -143,7 +143,7 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
                                 if (this.tickCount > 10) {
                                     if (mob instanceof Player pl) {
                                         int amt = -3;
-                                        if (this.tickCount > 20) {
+                                        if (this.tickCount > 30) {
                                             amt = -4;
                                         }
                                         HeatUtil.addHeat(mob, amt);

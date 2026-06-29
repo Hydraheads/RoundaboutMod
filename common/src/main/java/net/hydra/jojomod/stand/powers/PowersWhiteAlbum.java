@@ -17,6 +17,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampiricFate;
+import net.hydra.jojomod.item.FirearmItem;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
@@ -51,6 +52,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Blaze;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
@@ -1283,9 +1285,105 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
-
+    int graceticks = 0;
     @Override
     public void tickMobAI(LivingEntity attackTarget){
+        if (attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf())) {
+            boolean upAiNow = upAi(attackTarget);
+            double dist = attackTarget.distanceTo(this.getSelf());
+            boolean isCreeper = this.getSelf() instanceof Creeper;
+            if (graceticks <= 0) {
+                if (isCreeper) {
+                    if (dist <= 6) {
+                        if (!onCooldown(PowerIndex.SKILL_3)){
+                            iceWallMob(attackTarget,self.getDirection());
+                            iceWallMob(attackTarget,self.getDirection().getClockWise());
+                            iceWallMob(attackTarget,self.getDirection().getCounterClockWise());
+                        }
+                    }
+                } else {
+                    if (dist <= 5) {
+                        if (upAiNow && !onCooldown(PowerIndex.SKILL_2_SNEAK) && ((self.getHealth() < (self.getMaxHealth()/2))
+                        || (!attackTarget.getUseItem().isEmpty() && (attackTarget.getUseItem().is(Items.BOW)
+                                || attackTarget.getUseItem().is(Items.CROSSBOW)
+                                || attackTarget.getUseItem().getItem() instanceof FirearmItem
+                            ))
+                        )){
+                            tryPower(PowerIndex.POWER_2_SNEAK,true);
+                            graceticks = 20;
+                        } else if (!onCooldown(PowerIndex.SKILL_2)) {
+                            tryBlockPosPower(PowerIndex.POWER_2,true,attackTarget.getOnPos());
+                            graceticks = 120;
+                        } else if (upAiNow && !onCooldown(PowerIndex.SKILL_3)){
+                            iceWallMob(attackTarget,self.getDirection());
+                            graceticks = 20;
+                        }
+                    }
+                }
+            } else {
+                graceticks--;
+            }
+        }
+        //tryBlockPosPowerPacket(PowerIndex.POWER_2,hit.getBlockPos());
+    }
+
+
+    public void iceWallMob(Entity relativeEntity, Direction direction){
+        int cooldown = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.iceWallCooldown;
+        this.setCooldown(PowerIndex.SKILL_3, cooldown);
+        if (!this.self.level().isClientSide()){
+
+            Direction facing = direction;
+            BlockPos centerPos = relativeEntity.getOnPos().relative(facing).relative(facing);
+
+            boolean isSafe = false;
+            for (var i = 0; i < 5; i++) {
+                if (self.level().getBlockState(centerPos.below(i)).isSolid()){
+                    centerPos = centerPos.below(i);
+                    isSafe = true;
+                    i = 10;
+                }
+            }
+
+            if (isSafe) {
+                centerPos = new BlockPos(centerPos.getX(), Math.min(centerPos.getY(), self.blockPosition().getY()),
+                        centerPos.getZ());
+
+// Left/right axis
+                Direction side = facing.getClockWise();
+                sideX = side;
+                storeCenter = centerPos;
+                for (int width = -1; width <= 1; width++) {
+                    for (int height = 0; height < 2; height++) {
+
+                        BlockPos spawnPos = centerPos
+                                .relative(side, width)
+                                .above(height);
+
+                        Vector3f newVec = new Vector3f((float) (spawnPos.getX()+0.5),
+                                (float) (spawnPos.getY()),
+                                (float) (spawnPos.getZ() + 0.5)).add(0, -1, 0);
+
+                        BlockWallEntity wall =
+                                // slightly off to not z-fight
+                                new BlockWallEntity(
+                                        self.level(),
+                                        newVec.x,
+                                        newVec.y,
+                                        newVec.z,
+                                        Blocks.PACKED_ICE.defaultBlockState()
+                                );
+                        wall.setDataFinalPos(newVec.add(0, 2, 0));
+                        wall.timing = 200;
+                        wall.canGrief = MainUtil.getIsGamemodeApproriateForGrief(self);
+                        addIceEntity(wall);
+                        self.level().addFreshEntity(wall);
+                    }
+                }
+                addEXP(1);
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.ICE_RISES_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+            }
+        }
     }
 
     public BlockPos twisterPos = BlockPos.ZERO;
