@@ -10,8 +10,6 @@ import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.projectile.ColdBlastProjectile;
 import net.hydra.jojomod.entity.projectile.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.projectile.IceTwisterEntity;
-import net.hydra.jojomod.entity.stand.JusticeEntity;
-import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
@@ -43,7 +41,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -53,7 +50,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -71,7 +67,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class PowersWhiteAlbum extends NewDashPreset {
@@ -138,7 +133,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
     @Override
     public float guardSpecialties(DamageSource sauce, float damage){
         if (sauce.is(DamageTypes.PLAYER_ATTACK)){
-            damage*=ClientNetworking.getAppropriateConfig().whiteAlbumSettings.playerGuardDamageMultiplier;
+            if (self instanceof Player){
+                damage*=ClientNetworking.getAppropriateConfig().whiteAlbumSettings.playerGuardDamageMultiplierv2;
+            } else {
+                damage*=ClientNetworking.getAppropriateConfig().whiteAlbumSettings.playerGuardDamageMultiplierMobs;
+            }
         }
         if (sauce.is(DamageTypes.MOB_ATTACK)){
             damage*=ClientNetworking.getAppropriateConfig().whiteAlbumSettings.mobGuardDamageMultiplier;

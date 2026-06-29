@@ -2563,6 +2563,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (!this.level().isClientSide && this.roundabout$getStandPowers().isGuarding()) {
             this.roundabout$getStandPowers().animateStand(StandEntity.BROKEN_GUARD);
         }
+        if (rdbt$this() instanceof Mob mb){
+            this.level().playSound(
+                    null,
+                    this.blockPosition(),
+                    SoundEvents.SHIELD_BREAK,
+                    SoundSource.HOSTILE,
+                    1.0F,
+                    1.0F
+            );
+        }
         this.roundabout$syncGuard();
     }
     @Unique
@@ -2576,6 +2586,27 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
     }
+
+    /**your shield does not take damage if the stand blocks it*/
+    @Inject(method = "hurtCurrentlyUsedShield", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundaboutDamageShield(float amount, CallbackInfo ci) {
+        StandUser user = ((StandUser) this);
+        if (user.roundabout$getLogSource() != null){
+            if (PowerTypes.hasStandActive(this)){
+                user.roundabout$getStandPowers().onHitGuard(amount,user.roundabout$getLogSource());
+            }
+        }
+        if (user.roundabout$isGuarding() || user.roundabout$getStandPowers().isSpecialGuarding()) {
+            if (user.roundabout$getLogSource() != null && !user.roundabout$getLogSource().is(DamageTypeTags.BYPASSES_COOLDOWN) && user.roundabout$getGuardCooldown() > 0) {
+                return;
+            }
+
+
+            user.roundabout$damageGuard(amount);
+            ci.cancel();
+        }
+    }
+
     @Unique
     public void roundabout$damageGuard(float damage){
         if (PowerTypes.hasStandActivelyEquipped(rdbt$this()) && roundabout$getLogSource() != null){

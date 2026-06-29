@@ -2525,8 +2525,11 @@
   "config.roundabout.mobGuardDamageMultiplier.name": "Mob DMG Mult",
   "config.roundabout.mobGuardDamageMultiplier.desc": "For stand Guard. Mobs do this many times more damage to your guard with their melee attacks (mob damage). This is to make fighting zombies and such not a joke.",
 
-  "config.roundabout.playerGuardDamageMultiplier.name": "Player DMG Mult",
-  "config.roundabout.playerGuardDamageMultiplier.desc": "For stand Guard. Player damage (melee) is modified by this amount so they can't instantly crack your guard.",
+  "config.roundabout.playerGuardDamageMultiplierv2.name": "Player DMG Mult",
+  "config.roundabout.playerGuardDamageMultiplierv2.desc": "For stand Guard. Player damage (melee) is modified by this amount so they can't instantly crack your guard.",
+
+  "config.roundabout.playerGuardDamageMultiplierMobs.name": "WA Mob Reduction",
+  "config.roundabout.playerGuardDamageMultiplierMobs.desc": "The above but for mob users instead of yourself.",
 
 
   "config.roundabout.enableKillerQueen.name": "Enable Stand",
