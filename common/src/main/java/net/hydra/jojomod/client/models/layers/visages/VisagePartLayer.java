@@ -297,7 +297,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                 partialTicks, path, r, g, b, heyFull);
                         renderWhiteAlbumBodyPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
                                 partialTicks, path, r, g, b, heyFull);
-                        if (skin == PowersWhiteAlbum.YUKI && path2 != null) {
+                        if (skin == PowersWhiteAlbum.YUKI && path2 != null && !pw.cracked) {
                             renderWhiteAlbumHeadPart(poseStack, bufferSource, 15728880, entity, xx, yy, zz,
                                     partialTicks, path+"_glowing", r, g, b, heyFull);
                             renderWhiteAlbumBodyPart(poseStack, bufferSource, 15728880, entity, xx, yy, zz,

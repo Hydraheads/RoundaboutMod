@@ -399,7 +399,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     @Override
     public boolean isSpecialGuarding(){
         return !isBlockingTraditionally() &&
-                ((self instanceof Player || MainUtil.isHumanoid(self)) && hasStandActive(self))
+                ((self instanceof Player || MainUtil.isHumanoid2(self)) && hasStandActive(self))
                 && !isBarraging();
     }
 
@@ -449,7 +449,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
                 if (PowerTypes.hasStandActive(self)){
                 if (self.level() instanceof ServerLevel sl) {
-                    if ((self instanceof Mob mb && !MainUtil.isHumanoid(mb)) ||  getStandUserSelf().roundabout$getStandSkin() == YUKI){
+                    if ((self instanceof Mob mb && !MainUtil.isHumanoid2(mb)) ||  getStandUserSelf().roundabout$getStandSkin() == YUKI){
                         if (self.tickCount % 10 == 0) {
                             sl.sendParticles(
                                     ParticleTypes.SNOWFLAKE,
@@ -676,7 +676,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
 
     public boolean renderHelmet(){
-        return (self instanceof Player pl || MainUtil.isHumanoid(self)) && PowerTypes.hasStandActive(self);
+        return (self instanceof Player pl || MainUtil.isHumanoid2(self)) && PowerTypes.hasStandActive(self);
     }
 
     public Component getPosName(byte posID){
@@ -1530,7 +1530,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,getTwisterLevel(), "ability.roundabout.ice_twister",
                 "instruction.roundabout.press_skill", StandIcons.TWISTER,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,getGentlyWeepsLevel(), "ability.roundabout.gently_weeps",
-                "instruction.roundabout.press_skill_crouch", StandIcons.GENTLY_WEEPS,0,level,bypass));
+                "instruction.roundabout.press_skill_crouch", StandIcons.GENTLY_WEEPS,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,getIceWallLevel(), "ability.roundabout.ice_wall",
