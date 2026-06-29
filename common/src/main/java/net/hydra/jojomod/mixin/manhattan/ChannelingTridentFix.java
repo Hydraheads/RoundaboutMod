@@ -49,7 +49,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
                                 }
                                 ME.setHeldItemManhattan(ii.copyAndClear());
                                 if (this.getOwner() == null || this.getOwner() instanceof Player) {
-                                    ME.canAcquireHeldItem = true;
+                                    if (thrownTr.pickup.equals(AbstractArrow.Pickup.ALLOWED)) {
+                                        ME.canAcquireHeldItem = true;
+                                    } else {
+                                        ME.canAcquireHeldItem = false;
+                                    }
                                     ME.hasItemTwo = false;
                                 } else {
                                     ME.canAcquireHeldItem = false;

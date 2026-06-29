@@ -453,7 +453,7 @@ public class ManhattanTransferEntity extends StandEntity {
                 if(thrower.canAcquireHeldItem){
                     $$11.pickup =AbstractArrow.Pickup.ALLOWED;
                 }else {
-                    $$11.pickup =AbstractArrow.Pickup.DISALLOWED;
+                    $$11.pickup =AbstractArrow.Pickup.CREATIVE_ONLY;
                 }
                 thrower.level().addFreshEntity($$11);
                 ((IAbstractArrowAccess) $$11).roundabout$SetIsManhattan(true);
@@ -513,6 +513,11 @@ public class ManhattanTransferEntity extends StandEntity {
                     $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.75F * mult, getShotAccuracy);
                     thrower.level().addFreshEntity($$7);
                     thrower.hattanDeflected = $$7;
+                    if(!thrower.canAcquireHeldItem){
+                        $$7.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
+                    } else {
+                        $$7.pickup = AbstractArrow.Pickup.ALLOWED;
+                    }
                 } else {
                     HarpoonEntity $$7 = new HarpoonEntity(thrower.getUser().level(), thrower.getUser(), item);
                     $$7.setPos(pos.x, pos.y - 0.15, pos.z);
@@ -521,6 +526,11 @@ public class ManhattanTransferEntity extends StandEntity {
                     thrower.level().addFreshEntity($$7);
                     $$7.isMahattan = true;
                     thrower.hattanDeflected = $$7;
+                    if(!thrower.canAcquireHeldItem){
+                        $$7.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
+                    } else {
+                        $$7.pickup = AbstractArrow.Pickup.ALLOWED;
+                    }
                 }
             } else if (item.is(Items.IRON_INGOT)) {
                 IronBallEntity $$7 = new IronBallEntity(thrower.getUser().level(), thrower.getUser(), item);
