@@ -572,8 +572,8 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         double sinkDepth;
         switch (hitResult.getDirection()) {
-            case UP   -> sinkDepth = 0.4;  // floor: sink upward into block
-            case DOWN -> sinkDepth = -0.4; // ceiling: normal points DOWN, negate to go UP into block
+            case UP   -> sinkDepth = 0.8;  // floor: sink upward into block
+            case DOWN -> sinkDepth = -0.8; // ceiling: normal points DOWN, negate to go UP into block
             default   -> sinkDepth = 0.55; // walls
         }
 
