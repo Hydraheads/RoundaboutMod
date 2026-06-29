@@ -174,6 +174,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         } else if (hasSkatesActivated() && acceleration > 0 && !self.isSwimming() &&
         !self.isFallFlying()) {
             boolean canFreezeGrass = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.freezesGrassv2;
+            boolean canFreezeSnow = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.freezesSnow;
             if (!self.onGround()) {
                 return;
             }
@@ -190,8 +191,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 if (!blockState.canSurvive(self.level(), blockPos2) ||
                         !self.level().isUnobstructed(blockState, blockPos2, CollisionContext.empty())) continue;
                     if (blockState3.isAir() ||
-                        (MainUtil.getIsGamemodeApproriateForGrief(self) && canFreezeGrass &&
-                                blockState3.canBeReplaced() &&
+                        (MainUtil.getIsGamemodeApproriateForGrief(self) &&
+                                (canFreezeGrass || (blockState3.is(Blocks.SNOW) && canFreezeSnow))
+                                && blockState3.canBeReplaced() &&
                                 !(blockState3.getBlock() instanceof LiquidBlockContainer)&&
                                 !(blockState3.getBlock() instanceof FireBlock)&&
                                 !(blockState3.getBlock() instanceof StickyIceCoatingBlock)&&
@@ -1225,7 +1227,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
                             BlockState state = self.level().getBlockState(pos);
 
-                            if (canFreezeWater && state.is(Blocks.WATER) && self.level().getBlockState(pos.above()).isAir()){
+                            if (canFreezeWater && state.is(Blocks.WATER) &&
+                                    self.level().getBlockState(pos.above()).isAir()){
                                 if (self.level().isUnobstructed(Blocks.ICE.defaultBlockState(), pos, CollisionContext.empty())) {
                                     if (self.level().isUnobstructed(Blocks.ICE.defaultBlockState(),
                                             pos.above(), CollisionContext.empty())) {

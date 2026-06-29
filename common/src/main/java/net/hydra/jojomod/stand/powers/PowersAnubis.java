@@ -30,6 +30,7 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
+import net.hydra.jojomod.util.DebugParticles;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -1606,7 +1607,6 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     public void StartQuickdraw(float dist) {
-        addEXP(2);
         Level level = this.getSelf().level();
         BlockHitResult bh = MainUtil.getAheadVec(this.getSelf(),dist);
         BlockPos bp = bh.getBlockPos();
@@ -1623,16 +1623,18 @@ public class PowersAnubis extends NewDashPreset {
             bp = bp.above();
             Vec3 pos = this.getSelf().getPosition(1F);
             Vec3 npos = new Vec3(bp.getX(),bp.getY(),bp.getZ());
-            Vec3 dpos = npos.subtract(pos);
             List<Entity> entities = new ArrayList<>();
             int intervals = 5;
             for(int i=0;i<intervals;i++) {
                 float d = 1F/intervals*i;
-                Vec3 spos = pos.add(dpos.scale(d));
+                Vec3 spos = pos.lerp(npos,d);
+
                 List<Entity> targets = MainUtil.genHitbox(level,spos.x,spos.y,spos.z,2,1.5,2);
                 targets = doAttackChecks(targets);
                 for (Entity entity : targets) {
-                    if (!entities.contains(entity)) {entities.add(entity);}
+                    if (!entities.contains(entity)) {
+                        entities.add(entity);
+                    }
                 }
             }
             this.targets = entities;
@@ -1682,6 +1684,11 @@ public class PowersAnubis extends NewDashPreset {
             }
         }
 
+    }
+
+    @Override
+    public float getRushDistance() {
+        return 50;
     }
 
     public void BarrageSlash() {
@@ -1882,25 +1889,34 @@ public class PowersAnubis extends NewDashPreset {
 
     @Override
     public void onStandSummon(boolean desummon) {
-        if (!desummon && this.getSelf() instanceof Player PE && !isClient()) {
-            Level lv = PE.level();
-            ItemStack disc = this.getStandUserSelf().roundabout$getStandDisc();
-            CompoundTag tag = disc.getTagElement("Memory");
-            if (tag != null) {
-                if (tag.contains("AnubisSkin")) {
+        if (!desummon) {
 
-                    this.getStandUserSelf().roundabout$setStandSkin(tag.getByte("AnubisSkin"));
-                    lv.playSound(null, PE.getX(), PE.getY(),
-                            PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
-                    ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
-                            PE.getY() + PE.getEyeHeight(), PE.getZ(),
-                            10, 0.5, 0.5, 0.5, 0.2);
-                    PE.displayClientMessage(
-                            Component.translatable("unlock_skin.roundabout.anubis.traitor"), true);
+            if (this.getStandUserSelf().roundabout$getStandSkin() == (byte)0) {
+                this.getStandUserSelf().roundabout$setStandSkin((byte) 1);
+            }
 
-                    tag.remove("AnubisSkin");
+            if (this.getSelf() instanceof Player PE && !isClient()) {
+
+                Level lv = PE.level();
+                ItemStack disc = this.getStandUserSelf().roundabout$getStandDisc();
+                CompoundTag tag = disc.getTagElement("Memory");
+                if (tag != null) {
+                    if (tag.contains("AnubisSkin")) {
+
+                        this.getStandUserSelf().roundabout$setStandSkin(tag.getByte("AnubisSkin"));
+                        lv.playSound(null, PE.getX(), PE.getY(),
+                                PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
+                        ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
+                                PE.getY() + PE.getEyeHeight(), PE.getZ(),
+                                10, 0.5, 0.5, 0.5, 0.2);
+                        PE.displayClientMessage(
+                                Component.translatable("unlock_skin.roundabout.anubis.traitor"), true);
+
+                        tag.remove("AnubisSkin");
+                    }
                 }
             }
+
         }
         super.onStandSummon(desummon);
     }

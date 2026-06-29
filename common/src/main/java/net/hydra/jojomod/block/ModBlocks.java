@@ -540,8 +540,9 @@ public class ModBlocks {
                     .sound(SoundType.SLIME_BLOCK)
                     .replaceable()
                     .pushReaction(PushReaction.DESTROY)
-                    .ignitedByLava()
-                    .speedFactor(0.2F)
+                    .ignitedByLava().
+                    friction(0.96F)
+                    .speedFactor(0.3F)
     );
     public static BloodBlock BLOOD_SPLATTER_PROPERTIES = new BloodBlock(
             BlockBehaviour.Properties.of()
