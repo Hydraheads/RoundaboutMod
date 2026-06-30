@@ -227,7 +227,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
                 damage *= 0.85F;
 
                 if (getAmmoType() == TOMMY_GUN) {
-                    damage *= 0.7F;
+                    damage *= 0.6F;
                 }
             } else {
                 damage = (float) (damage * (ClientNetworking.getAppropriateConfig().itemSettings.gunDamageOnMobs * 0.01));
@@ -256,7 +256,9 @@ public class RoundaboutBulletEntity extends AbstractArrow {
                     livingEntity.hurtTime = 10;
                 }
 
-                doPostHurtXtraDamage(livingEntity);
+                if (livingEntity.isAlive()) {
+                    doPostHurtXtraDamage(livingEntity);
+                }
             }
         }else if (entity instanceof GentlyWeepsEntity gwe){
                 GentlyWeepsEntity.dealWithProjectile(this,gwe);
@@ -301,7 +303,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
 
     protected void doPostHurtXtraDamage(LivingEntity target) {
         /*Bonus stand damage for Manhattan Transfer*/
-        float mult = this.getAmmoType() == TOMMY_GUN ? 0.3F : 1F;
+        float mult = this.getAmmoType() == TOMMY_GUN ? 0.09F : 1F;
         float amount = 0;
         float finalDamage = 0;
         if(target instanceof Player || MainUtil.isBossMob(target)){

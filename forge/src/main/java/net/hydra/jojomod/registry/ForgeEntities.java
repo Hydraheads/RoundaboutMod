@@ -415,7 +415,7 @@ public class ForgeEntities {
     public static final RegistryObject<EntityType<ManhattanTransferEntity>> MANHATTAN_TRANSFER =
             ENTITY_TYPES.register("manhattan_transfer", () ->
                     EntityType.Builder.of(ManhattanTransferEntity::new, MobCategory.MISC).sized(0.70F, 0.60f).
-                            clientTrackingRange(14).
+                            clientTrackingRange(16).
                             build(new ResourceLocation(Roundabout.MOD_ID, "manhattan_transfer").toString())
             );
 
