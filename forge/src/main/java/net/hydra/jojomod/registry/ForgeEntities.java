@@ -386,6 +386,12 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "cinderella").toString())
             );
+    public static final RegistryObject<EntityType<CaliforniaKingBedEntity>> CALIFORNIA_KING_BED =
+            ENTITY_TYPES.register("california_king_bed", () ->
+                    EntityType.Builder.of(CaliforniaKingBedEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "california_king_bed").toString())
+            );
     public static final RegistryObject<EntityType<PlanetWavesEntity>> PLANET_WAVES =
             ENTITY_TYPES.register("planet_waves", () ->
                     EntityType.Builder.of(PlanetWavesEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).

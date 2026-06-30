@@ -440,6 +440,13 @@ public class FabricEntities {
                         EntityType.Builder.of(CinderellaEntity::new, MobCategory.MISC).
                                 sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":cinderella")
                 );
+    public static final EntityType<CaliforniaKingBedEntity> CALIFORNIA_KING_BED =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    Roundabout.location("california_king_bed"),
+                    EntityType.Builder.of(CaliforniaKingBedEntity::new, MobCategory.MISC).
+                            sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":california_king_bed")
+            );
         public static final EntityType<PlanetWavesEntity> PLANET_WAVES =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -942,6 +949,7 @@ public class FabricEntities {
                 ModEntities.KILLER_QUEEN = KILLER_QUEEN;
                 ModEntities.BLOCK_BOMB = BLOCK_BOMB;
                 ModEntities.CINDERELLA = CINDERELLA;
+                ModEntities.CALIFORNIA_KING_BED = CALIFORNIA_KING_BED;
                 ModEntities.PLANET_WAVES = PLANET_WAVES;
                 ModEntities.MANHATTAN_TRANSFER = MANHATTAN_TRANSFER;
                 ModEntities.POLLINATION_TRANSFER = POLLINATION_TRANSFER;
@@ -1115,7 +1123,8 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(TUSK_A2, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(TUSK_A3, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(TUSK_A4, StandEntity.createStandAttributes());
-                FabricDefaultAttributeRegistry.register(CINDERELLA, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(CINDERELLA, CinderellaEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(CALIFORNIA_KING_BED, CaliforniaKingBedEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(PLANET_WAVES, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(MANHATTAN_TRANSFER, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(POLLINATION_TRANSFER, StandEntity.createStandAttributes());

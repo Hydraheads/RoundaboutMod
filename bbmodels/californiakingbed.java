@@ -24,6 +24,8 @@ public class californiakingbed<T extends Entity> extends EntityModel<T> {
 	private final ModelPart left_arm_string;
 	private final ModelPart left_arm_substring;
 	private final ModelPart left_arm;
+	private final ModelPart head;
+	private final ModelPart head2;
 
 	public californiakingbed(ModelPart root) {
 		this.stand = root.getChild("stand");
@@ -44,6 +46,8 @@ public class californiakingbed<T extends Entity> extends EntityModel<T> {
 		this.left_arm_string = this.stand2.getChild("left_arm_string");
 		this.left_arm_substring = this.left_arm_string.getChild("left_arm_substring");
 		this.left_arm = this.left_arm_substring.getChild("left_arm");
+		this.head = this.stand2.getChild("head");
+		this.head2 = this.head.getChild("head2");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -52,16 +56,7 @@ public class californiakingbed<T extends Entity> extends EntityModel<T> {
 
 		PartDefinition stand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create(), PartPose.offset(0.0F, -9.0F, 2.0F));
 
-		PartDefinition stand2 = stand.addOrReplaceChild("stand2", CubeListBuilder.create().texOffs(23, 27).addBox(4.0F, -4.0F, -1.0F, 4.0F, 10.0F, 3.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 28).addBox(-8.0F, -4.0F, -1.0F, 4.0F, 10.0F, 3.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 0).addBox(-8.0F, -6.0F, -1.0F, 16.0F, 2.0F, 3.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 49).addBox(-4.0F, -4.0F, -3.0F, 8.0F, 8.0F, 7.0F, new CubeDeformation(0.0F))
-		.texOffs(39, 14).addBox(-6.0F, -6.0F, -2.0F, 12.0F, 12.0F, 0.0F, new CubeDeformation(0.0F))
-		.texOffs(55, 14).addBox(4.5F, 2.0F, -1.1F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
-		.texOffs(55, 14).addBox(4.5F, 2.0F, 2.1F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
-		.texOffs(55, 14).addBox(-7.5F, 2.0F, 2.1F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
-		.texOffs(55, 14).addBox(-1.5F, -2.0F, 4.1F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
-		.texOffs(55, 14).addBox(-7.5F, 2.0F, -1.1F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition stand2 = stand.addOrReplaceChild("stand2", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
 		PartDefinition body = stand2.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, 6.0F, -0.5F));
 
@@ -105,6 +100,19 @@ public class californiakingbed<T extends Entity> extends EntityModel<T> {
 		PartDefinition left_arm = left_arm_substring.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(34, 59).addBox(-2.0F, 0.0F, -2.75F, 4.0F, 5.0F, 0.0F, new CubeDeformation(0.0F))
 		.texOffs(16, 40).addBox(-3.0F, 0.0F, -2.5F, 6.0F, 6.0F, 3.0F, new CubeDeformation(0.0F))
 		.texOffs(55, 14).addBox(-1.5F, 1.5F, 0.6F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.5F, 4.0F, 0.0F));
+
+		PartDefinition head = stand2.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(0.0F, 6.0F, 0.0F));
+
+		PartDefinition head2 = head.addOrReplaceChild("head2", CubeListBuilder.create().texOffs(23, 27).addBox(4.0F, -10.0F, -1.0F, 4.0F, 10.0F, 3.0F, new CubeDeformation(0.01F))
+		.texOffs(55, 14).addBox(-7.5F, -4.0F, -1.1F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
+		.texOffs(55, 14).addBox(-1.5F, -8.0F, 4.1F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
+		.texOffs(55, 14).addBox(-7.5F, -4.0F, 2.1F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
+		.texOffs(55, 14).addBox(4.5F, -4.0F, 2.1F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
+		.texOffs(55, 14).addBox(4.5F, -4.0F, -1.1F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
+		.texOffs(39, 14).addBox(-6.0F, -12.0F, -2.0F, 12.0F, 12.0F, 0.0F, new CubeDeformation(0.0F))
+		.texOffs(0, 49).addBox(-4.0F, -10.0F, -3.0F, 8.0F, 8.0F, 7.0F, new CubeDeformation(0.0F))
+		.texOffs(0, 0).addBox(-8.0F, -12.0F, -1.0F, 16.0F, 2.0F, 3.0F, new CubeDeformation(0.0F))
+		.texOffs(0, 28).addBox(-8.0F, -10.0F, -1.0F, 4.0F, 10.0F, 3.0F, new CubeDeformation(0.01F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}

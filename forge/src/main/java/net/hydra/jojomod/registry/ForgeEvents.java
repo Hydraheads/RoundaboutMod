@@ -17,6 +17,8 @@ import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
+import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
+import net.hydra.jojomod.entity.stand.CinderellaEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
@@ -66,7 +68,8 @@ public class ForgeEvents {
         event.put(ForgeEntities.SOFT_AND_WET_KILLER_QUEEN.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.KILLER_QUEEN.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.BLOCK_BOMB.get(), StandEntity.createStandAttributes().build());
-        event.put(ForgeEntities.CINDERELLA.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.CINDERELLA.get(), CinderellaEntity.createStandAttributes().build());
+        event.put(ForgeEntities.CALIFORNIA_KING_BED.get(), CaliforniaKingBedEntity.createStandAttributes().build());
         event.put(ForgeEntities.PLANET_WAVES.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.MANHATTAN_TRANSFER.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.POLLINATION_TRANSFER.get(), StandEntity.createStandAttributes().build());
@@ -355,6 +358,7 @@ public class ForgeEvents {
         ModItems.MAX_STAND_DISC_PLANET_WAVES = ForgeItems.MAX_STAND_DISC_PLANET_WAVES.get();
 
         ModItems.STAND_DISC_CINDERELLA = ForgeItems.STAND_DISC_CINDERELLA.get();
+        ModItems.STAND_DISC_CALIFORNIA_KING_BED = ForgeItems.STAND_DISC_CALIFORNIA_KING_BED.get();
         ModItems.STAND_DISC_HEY_YA = ForgeItems.STAND_DISC_HEY_YA.get();
         ModItems.STAND_DISC_MANDOM = ForgeItems.STAND_DISC_MANDOM.get();
         ModItems.STAND_DISC_CENTURY_BOY = ForgeItems.STAND_DISC_CENTURY_BOY.get();
@@ -631,6 +635,7 @@ public class ForgeEvents {
         ModEntities.BLOCK_BOMB = ForgeEntities.BLOCK_BOMB.get();
         ModEntities.SHEER_HEART_ATTACK = ForgeEntities.SHEER_HEART_ATTACK.get();
         ModEntities.CINDERELLA = ForgeEntities.CINDERELLA.get();
+        ModEntities.CALIFORNIA_KING_BED = ForgeEntities.CALIFORNIA_KING_BED.get();
         ModEntities.PLANET_WAVES = ForgeEntities.PLANET_WAVES.get();
         ModEntities.MANHATTAN_TRANSFER = ForgeEntities.MANHATTAN_TRANSFER.get();
         ModEntities.POLLINATION_TRANSFER = ForgeEntities.POLLINATION_TRANSFER.get();

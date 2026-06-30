@@ -62,6 +62,7 @@ public class ModEntities {
     public static EntityType<BlockBombEntity> BLOCK_BOMB;
     public static EntityType<SheerHeartAttackEntity> SHEER_HEART_ATTACK;
     public static EntityType<CinderellaEntity> CINDERELLA;
+    public static EntityType<CaliforniaKingBedEntity> CALIFORNIA_KING_BED;
     public static EntityType<PlanetWavesEntity> PLANET_WAVES;
     public static EntityType<ManhattanTransferEntity> MANHATTAN_TRANSFER;
     public static EntityType<PollinationTransferEntity> POLLINATION_TRANSFER;

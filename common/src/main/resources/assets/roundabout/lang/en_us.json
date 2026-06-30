@@ -109,6 +109,7 @@
   "item.roundabout.green_day_disc": "Stand Disc",
   "item.roundabout.soft_and_wet_disc": "Stand Disc",
   "item.roundabout.cinderella_disc": "Stand Disc",
+  "item.roundabout.california_king_bed_disc": "Stand Disc",
   "item.roundabout.survivor_disc": "Stand Disc",
   "item.roundabout.emperor_disc": "Stand Disc",
   "item.roundabout.max_emperor_disc": "Stand Disc+",
@@ -177,6 +178,7 @@
   "item.roundabout.max_diver_down_disc.desc": "Diver Down",
   "item.roundabout.manhattan_transfer_disc.desc": "Manhattan Transfer",
   "item.roundabout.white_album_disc.desc": "White Album",
+  "item.roundabout.california_king_bed_disc.desc": "California King Bed",
   "item.roundabout.none_disc.desc": "None",
 
   "item.roundabout.ocelot_remains": "Ocelot Remains",
@@ -376,6 +378,7 @@
   "entity.roundabout.anubis_guardian": "Anubis Guardian",
   "entity.roundabout.cold_twister": "Cold Twister",
   "entity.roundabout.gently_weeps": "Gently Weeps",
+  "entity.roundabout.block_wall_entity": "Block Wall",
   "entity.roundabout.the_world": "The World",
   "entity.roundabout.iron_ball": "Iron Ball",
   "entity.roundabout.the_world_ultimate": "The World",
@@ -388,6 +391,7 @@
   "entity.roundabout.justice_pirate": "Justice",
   "entity.roundabout.dark_mirage": "Dark Mirage",
   "entity.roundabout.cinderella": "Cinderella",
+  "entity.roundabout.california_king_bed": "California King Bed",
   "entity.roundabout.ratt": "Ratt",
   "entity.roundabout.chair_ratt": "Ratt",
   "entity.roundabout.redd": "Redd",
@@ -2071,6 +2075,8 @@
   "skins.roundabout.cinderella.jack_in_the_box": "Jack",
   "skins.roundabout.cinderella.business": "Business",
   "skins.roundabout.cinderella.face_off": "Face Off",
+
+  "skins.roundabout.california_king_bed.base": "Part 8",
 
   "skins.roundabout.hey_ya.manga": "Manga",
   "skins.roundabout.hey_ya.gothic": "Gothic",

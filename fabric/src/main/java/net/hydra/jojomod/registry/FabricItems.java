@@ -120,6 +120,8 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMandom(null)));
     public static Item STAND_DISC_SURVIVOR = registerItem("survivor_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSurvivor(null)));
+    public static Item STAND_DISC_CALIFORNIA_KING_BED = registerItem("california_king_bed_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCalifornia(null)));
     public static Item STAND_DISC_ACHTUNG = registerItem("achtung_baby_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAchtungBaby(null)));
 
@@ -590,6 +592,7 @@ public class FabricItems {
                     	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
                         entries.accept(STRAY_CAT_ANIME);
                         entries.accept(STRAY_CAT_MANGA);
+                        entries.accept(STAND_DISC_CALIFORNIA_KING_BED);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_20_CENTURY_BOY);
@@ -676,6 +679,7 @@ public class FabricItems {
         ModItems.STAND_DISC_HEY_YA = STAND_DISC_HEY_YA;
         ModItems.STAND_DISC_MANDOM = STAND_DISC_MANDOM;
         ModItems.STAND_DISC_SURVIVOR = STAND_DISC_SURVIVOR;
+        ModItems.STAND_DISC_CALIFORNIA_KING_BED = STAND_DISC_CALIFORNIA_KING_BED;
         ModItems.STAND_DISC_ACHTUNG = STAND_DISC_ACHTUNG;
         ModItems.STAND_DISC_CENTURY_BOY = STAND_DISC_20_CENTURY_BOY;
         ModItems.STAND_DISC_METALLICA = STAND_DISC_METALLICA;

@@ -52,6 +52,7 @@ public class ModItems {
     public static Item STAND_DISC_PLANET_WAVES;
     public static Item MAX_STAND_DISC_PLANET_WAVES;
     public static Item STAND_DISC_CINDERELLA;
+    public static Item STAND_DISC_CALIFORNIA_KING_BED;
     public static Item STAND_DISC_MANHATTAN_TRANSFER;
     public static Item STAND_DISC_HEY_YA;
     public static Item STAND_DISC_MANDOM;
