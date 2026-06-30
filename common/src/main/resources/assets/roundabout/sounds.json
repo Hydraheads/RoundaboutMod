@@ -287,6 +287,12 @@
       "roundabout:killer_queen_shiba"
     ]
   },
+  "stray_cat_shoot": {
+    "subtitle": "sounds.roundabout.stray_cat_shoot",
+    "sounds": [
+      "roundabout:stray_cat_shoot"
+    ]
+  },
   "summon_magician": {
     "subtitle": "sounds.roundabout.summon_magician",
     "sounds": [

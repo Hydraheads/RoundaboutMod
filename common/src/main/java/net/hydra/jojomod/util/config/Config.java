@@ -456,6 +456,8 @@ public class Config implements Cloneable {
         public Float SheerHeartAttackMaxDamage;
     	@IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer blockPlantCooldown;
+        @IntOption(group = "inherit", value = 140, min = 0, max = 72000)
+        public Integer bubbleShootCooldown;
         @IntOption(group = "inherit", value = 220, min = 0, max = 72000)
         public Integer mobPlantCooldown;
     	@IntOption(group = "inherit", value = 8, min = 0, max = 72000)
@@ -472,6 +474,8 @@ public class Config implements Cloneable {
         public Boolean mobPlantHitkillPlayers;
         @BooleanOption(group = "inherit", value = false)
         public Boolean mobPlantHitkillMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer maxAirBubbleTravelDistanceBeforePopping;
     }
     
     public static class SoftAndWetSettings {
