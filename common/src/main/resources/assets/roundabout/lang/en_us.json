@@ -177,8 +177,10 @@
   "item.roundabout.diver_down_disc.desc": "Diver Down",
   "item.roundabout.max_diver_down_disc.desc": "Diver Down",
   "item.roundabout.manhattan_transfer_disc.desc": "Manhattan Transfer",
+  "item.roundabout.manhattan_transfer_disc.desc.short": "Manhattan T.",
   "item.roundabout.white_album_disc.desc": "White Album",
   "item.roundabout.california_king_bed_disc.desc": "California King Bed",
+  "item.roundabout.california_king_bed_disc.desc.short": "CA King Bed",
   "item.roundabout.none_disc.desc": "None",
 
   "item.roundabout.ocelot_remains": "Ocelot Remains",
@@ -3034,8 +3036,8 @@
   "config.roundabout.whiteAlbumGuardPoints.name": "Guard Points",
   "config.roundabout.whiteAlbumGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
 
-  "config.roundabout.whiteAlbumAccelerationAmountv2.name": "Acceleration",
-  "config.roundabout.whiteAlbumAccelerationAmountv2.desc": "How much speed is gained per acceleration build tick? The default caps you off at just beneath the maximum wild horse speed.",
+  "config.roundabout.whiteAlbumAccelerationAmountv3.name": "Acceleration",
+  "config.roundabout.whiteAlbumAccelerationAmountv3.desc": "How much speed is gained per acceleration build tick? The default caps you off at just beneath the maximum wild horse speed.",
 
   "config.roundabout.whiteAlbumMaxAcceleration.name": "Max Acceleration",
   "config.roundabout.whiteAlbumMaxAcceleration.desc": "How many ticks of building speed? 100 ticks = 5 seconds of uninterrupted running.",
@@ -3728,6 +3730,9 @@
 
   "config.roundabout.mobThrowRecoilTicks.name": "Player Throw Recoil",
   "config.roundabout.mobThrowRecoilTicks.desc": "How many ticks after throwing a player you can attack with basic punches again.",
+
+  "config.roundabout.mobNonPlayerThrowRecoilTicks.name": "Mob Throw Recoil",
+  "config.roundabout.mobNonPlayerThrowRecoilTicks.desc": "How many ticks after throwing a mob you can attack with basic punches again.",
 
   "config.roundabout.mobPlayerThrowRecoilTicks.name": "Mob Throw Recoil",
   "config.roundabout.mobPlayerThrowRecoilTicks.desc": "How many ticks after throwing a mob you can attack with basic punches again.",

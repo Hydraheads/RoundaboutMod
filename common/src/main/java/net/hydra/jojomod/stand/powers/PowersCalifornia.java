@@ -22,6 +22,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.LuckyLipstickItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -153,7 +154,15 @@ public class PowersCalifornia extends NewDashPreset {
         }
         return super.getSoundFromByte(soundChoice);
     }
-
+    @Override
+    /**The stand is named on the disc so we just use that*/
+    public Component getStandName(){
+        ItemStack disc = ((StandUser)this.getSelf()).roundabout$getStandDisc();
+        if (!disc.isEmpty() && disc.getItem() instanceof StandDiscItem SDI){
+            return Component.translatable(SDI.getDescriptionId() + ".desc.short");
+        }
+        return Component.empty();
+    }
     @Override
     public boolean tryPower(int move, boolean forced) {
         return super.tryPower(move,forced);
