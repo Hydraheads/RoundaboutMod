@@ -355,14 +355,12 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         if (ipe.roundabout$GetPoseEmote() != Poses.NONE.id) {
                             ipe.roundabout$SetPoseEmote(Poses.NONE.id);
                         }
-                        this.leftArm.xRot = 0;
-                        this.leftArm.yRot = 0;
-                        this.rightArm.xRot = 0;
-                        this.rightArm.yRot = 0;
-                        this.leftLeg.xRot = 0;
-                        this.leftLeg.yRot = 0;
-                        this.rightLeg.xRot = 0;
-                        this.rightLeg.yRot = 0;
+                        this.leftArm.resetPose();
+                        this.rightArm.resetPose();
+                        this.leftLeg.resetPose();
+                        this.rightLeg.resetPose();
+                        this.body.resetPose();
+                        this.cloak.resetPose();
                         SU.roundabout$getWornStandAnimation().startIfStopped($$0.tickCount);
                         this.roundabout$animate(SU.roundabout$getWornStandAnimation(),anim,$$3,1F);
                     } else {
