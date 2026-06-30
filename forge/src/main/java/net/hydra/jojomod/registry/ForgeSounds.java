@@ -337,6 +337,8 @@ public class ForgeSounds {
             register(ModSounds.TWAU_USHA, ModSounds.TWAU_USHA_ID);
     public static final RegistryObject<SoundEvent> DSP_SUMMON_EVENT =
             register(ModSounds.DSP_SUMMON, ModSounds.DSP_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> SUMMON_CALIFORNIA_EVENT =
+            register(ModSounds.SUMMON_CALIFORNIA, ModSounds.SUMMON_CALIFORNIA_ID);
     public static final RegistryObject<SoundEvent> OVA_PLATINUM_BARRAGE_EVENT =
             register(ModSounds.OVA_PLATINUM_BARRAGE, ModSounds.OVA_PLATINUM_BARRAGE_ID);
     public static final RegistryObject<SoundEvent> OVA_PLATINUM_ORA =

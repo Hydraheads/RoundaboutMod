@@ -11,6 +11,12 @@
       "roundabout:summon_diver_down"
     ]
   },
+  "summon_california": {
+    "subtitle": "sounds.roundabout.summon_california",
+    "sounds": [
+      "roundabout:summon_california"
+    ]
+  },
   "block_freeze": {
     "subtitle": "sounds.roundabout.block_freeze",
     "sounds": [

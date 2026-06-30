@@ -149,7 +149,7 @@ public class PowersCalifornia extends NewDashPreset {
     public SoundEvent getSoundFromByte(byte soundChoice){
         byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
-            return ModSounds.CINDERELLA_SUMMON_EVENT;
+            return ModSounds.SUMMON_CALIFORNIA_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }

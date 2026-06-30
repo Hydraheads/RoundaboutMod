@@ -673,6 +673,7 @@
   "sounds.roundabout.iron_ball_bounce": "Iron ball bounce",
   "sounds.roundabout.anubis_unsheathe": "Unsheathe",
   "sounds.roundabout.summon_anubis": "Summon Stand",
+  "sounds.roundabout.summon_california": "Summon Stand",
   "sounds.roundabout.white_album_summon": "Summon Stand",
   "sounds.roundabout.vampire_dash": "Fwoosh",
   "sounds.roundabout.vampire_gleam": "Sparkle",
@@ -2078,7 +2079,7 @@
   "skins.roundabout.cinderella.business": "Business",
   "skins.roundabout.cinderella.face_off": "Face Off",
 
-  "skins.roundabout.california_king_bed.base": "Part 8",
+  "skins.roundabout.california_king_bed.base": "Manga",
 
   "skins.roundabout.hey_ya.manga": "Manga",
   "skins.roundabout.hey_ya.gothic": "Gothic",

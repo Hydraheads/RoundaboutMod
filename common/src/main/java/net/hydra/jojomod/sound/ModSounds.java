@@ -122,6 +122,12 @@ public class ModSounds {
     public static final ResourceLocation DSP_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DSP_SUMMON);
     public static SoundEvent DSP_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(DSP_SUMMON_ID);
 
+
+    public static final String SUMMON_CALIFORNIA = "summon_california";
+    public static final ResourceLocation SUMMON_CALIFORNIA_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_CALIFORNIA);
+    public static SoundEvent SUMMON_CALIFORNIA_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_CALIFORNIA_ID);
+
+
     public static final String STAR_SUMMON_SOUND = "summon_star";
     public static final ResourceLocation STAR_SUMMON_SOUND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+STAR_SUMMON_SOUND);
     public static SoundEvent STAR_SUMMON_SOUND_EVENT = SoundEvent.createVariableRangeEvent(STAR_SUMMON_SOUND_ID);
