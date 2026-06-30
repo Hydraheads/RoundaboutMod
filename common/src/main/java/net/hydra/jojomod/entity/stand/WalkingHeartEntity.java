@@ -26,5 +26,7 @@ public class WalkingHeartEntity extends FollowingStandEntity {
     public void setupAnimationStates() {
         super.setupAnimationStates();
     }
+    @Override
+    public float getAnchorPlaceModified() {return getAnchorPlace()+11;}
 
 }
