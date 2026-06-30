@@ -6,6 +6,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.layers.animations.CenturyBoyAnimations;
+import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -24,6 +25,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ServerPacketListener;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
@@ -96,6 +98,26 @@ public class Powers20thCenturyBoy extends NewDashPreset {
 
         setSkillIcon(context,x,y,3,StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         super.renderIcons(context, x, y);
+
+    }
+
+    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
+        List<AbilityIconInstance> $$1 = com.google.common.collect.Lists.newArrayList();
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.changing_stance",
+                "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_BOMB_SETIINGS, 1, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.ground_stance",
+                "", StandIcons.GROUND_STANCE,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.neutral_stance",
+                "instruction.roundabout.press_skill", StandIcons.NEUTRAL_STANCE,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.knockback_stance",
+                "instruction.roundabout.press_skill", StandIcons.KNOCKBACK_STANCE,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.redstone_stance",
+                "instruction.roundabout.press_skill", StandIcons.REDSTONE_STANCE,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.activate_invincibility",
+                "instruction.roundabout.press_skill", StandIcons.TOGGLE_INVINCIBILITY,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.dodge",
+                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
+        return $$1;
     }
 
     /** wip stuffz **/
@@ -224,10 +246,18 @@ public class Powers20thCenturyBoy extends NewDashPreset {
 
 
     public void switchMode(){
-        if (mode < 4){
+        if (mode == 1){
             mode += 1;
+            if (!isClient()){((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.century_stances.neutral_stance").withStyle(ChatFormatting.AQUA), true);}
+        } else if (mode == 2) {
+            mode +=1;
+            if (!isClient()){((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.century_stances.knockback_stance").withStyle(ChatFormatting.GREEN), true);}
+        } else if (mode == 3) {
+            mode += 1;
+            if (!isClient()){((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.century_stances.redstone_stance").withStyle(ChatFormatting.RED), true);}
         } else{
             mode = 1;
+            if (!isClient()){((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.century_stances.ground_stance").withStyle(ChatFormatting.DARK_GREEN), true);}
         }
     }
 
@@ -297,7 +327,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             return false;
         }
         if(invincibleState){
-            /** ps: don't forget to put TA4 shot when it gets added **/
+            /** ps: don't forget to put TA4 shot & infinite spin when it gets added **/
             if (damageSource.is(DamageTypes.FELL_OUT_OF_WORLD) ||
                     damageSource.is(DamageTypes.WITHER) ||
                     damageSource.is(DamageTypes.DRAGON_BREATH) ||

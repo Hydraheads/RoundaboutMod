@@ -178,7 +178,7 @@ public class Config implements Cloneable {
         public Float coltDamage;
         @FloatOption(group = "inherit", value = 4.5F, min = 0, max = 72000)
         public Float snubnoseDamage;
-        @FloatOption(group = "inherit", value = 2.1F, min = 0, max = 72000)
+        @FloatOption(group = "inherit", value = 2.0F, min = 0, max = 72000)
         public Float tommyGunDamage;
         @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
         public Integer maxKnivesInOneHit;

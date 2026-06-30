@@ -70,10 +70,10 @@ public class StickyIceCoatingBlock
                     PowerTypes.hasStandActive(LE))) {
                 if (LE.onGround()) {
                     if (FateTypes.isVampire(LE)) {
-                        $$3.makeStuckInBlock($$0, new Vec3((double) 0.4F, (double) 0.3F, (double) 0.4F));
+                        $$3.makeStuckInBlock($$0, new Vec3((double) 0.3F, (double) 0.8F, (double) 0.3F));
                     } else {
                         if (LE instanceof Player) {
-                            $$3.makeStuckInBlock($$0, new Vec3((double) 0.5F, (double) 0.8F, (double) 0.5F));
+                            $$3.makeStuckInBlock($$0, new Vec3((double) 0.35F, (double) 0.8F, (double) 0.35F));
                         } else {
                             $$3.makeStuckInBlock($$0, new Vec3((double) 0.85F, (double) 0.8F, (double) 0.85F));
                         }

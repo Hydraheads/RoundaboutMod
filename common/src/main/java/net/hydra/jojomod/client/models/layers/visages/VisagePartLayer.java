@@ -15,11 +15,13 @@ import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.HeatUtil;
@@ -174,6 +176,8 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         hideExtraPartsWithSuit = true;
                     }
                 }
+
+                if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PowerTypes.hasStandActive(entity) && user.roundabout$getIdlePos() == 0){hideExtraPartsWithSuit = true;}
 
                 ItemStack hand = entity.getMainHandItem();
                 ItemStack offHand = entity.getOffhandItem();

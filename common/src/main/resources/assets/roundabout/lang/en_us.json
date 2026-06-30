@@ -1815,7 +1815,7 @@
   "ability.roundabout.wind_vision": "Wind Vision",
   "ability.roundabout.wind_vision.desc": "Lets you see your stand's wind reading from your perspective, giving you identical visuals to control mode. It is useful if the stand sees something you cannot from its position.",
   "ability.roundabout.bonus_damage": "Bonus Stand Damage",
-  "ability.roundabout.bonus_damage.desc": "When the stand redirects a bullet, stand damage is added to the projectile. It affects all deflectable projectiles",
+  "ability.roundabout.bonus_damage.desc": "When the stand redirects a bullet or other select projectiles, stand damage is added to the projectile.",
   "ability.roundabout.wind_reading": "Wind Reading",
   "ability.roundabout.wind_reading.desc": "The stand senses entities that are moving or have recently moved. When you control the stand or turn on Wind Vision, only those mobs are visible, glowing and highlighted. You also see your circumstances with a greenish filter.",
   "ability.roundabout.manhattan_dodge": "Manhattan Transfer Dash",
@@ -1844,6 +1844,19 @@
   "ability.roundabout.emperor_speed_up.desc": "Your bullets speed up as you hold this ability. The faster a bullet goes, the more damage it does.",
   "ability.roundabout.emperor_speed_down": "Bullet speed down",
   "ability.roundabout.emperor_speed_down.desc": "Your bullets slow down as you hold this ability. The slower a bullet goes, the less damage it does.",
+
+  "ability.roundabout.changing_stance": "Changing Stance",
+  "ability.roundabout.changing_stance.desc": "Rotate between the 4 different stances, ground, neutral, knockback and redstone",
+  "ability.roundabout.ground_stance": "Ground Stance",
+  "ability.roundabout.ground_stance.desc": "Redirect almost all attacks taken to nearby blocks, slowly breaking the blocks beneath you",
+  "ability.roundabout.neutral_stance": "Neutral Stance",
+  "ability.roundabout.neutral_stance.desc": "Makes you immune to almost all attacks",
+  "ability.roundabout.knockback_stance": "Knockback Stance",
+  "ability.roundabout.knockback_stance.desc": "Protects you from almost all attacks and make you take double the knockback of them",
+  "ability.roundabout.redstone_stance": "Redstone Stance",
+  "ability.roundabout.redstone_stance.desc": "Redirects almost all attacks taken to nearby blocks as redstone signal that can be captured by observers, sculk, tnt, iron doors and redstone lamps",
+  "ability.roundabout.activate_invincibility": "Activate Invincibility",
+  "ability.roundabout.activate_invincibility.desc": "Activates the chosen stance, you can't move, use items, place blocks, heal or attacks in this state",
 
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Locked",
@@ -1917,9 +1930,9 @@
   "idle.roundabout.anubis_3": "Back",
   "idle.roundabout.anubis_4": "None",
 
-  "idle.roundabout.century_boy1": "latched",
-  "idle.roundabout.century_boy2": "unlatched",
-  "idle.roundabout.century_boy3": "hat",
+  "idle.roundabout.century_boy1": "Latched",
+  "idle.roundabout.century_boy2": "Unlatched",
+  "idle.roundabout.century_boy3": "Hat",
 
   "idle.roundabout.ckb_1": "Fun",
   "idle.roundabout.ckb_2": "Dangle",
@@ -2525,6 +2538,11 @@
 
   "text.roundabout.planet_waves.meteor_tracking_message": "Meteor Tracking On",
   "text.roundabout.planet_waves.meteor_tracking_message_off": "Meteor Tracking Off",
+
+  "text.roundabout.century_stances.neutral_stance": "Neutral Stance",
+  "text.roundabout.century_stances.knockback_stance": "Knockback Stance",
+  "text.roundabout.century_stances.redstone_stance": "Redstone Stance",
+  "text.roundabout.century_stances.ground_stance": "Ground Stance",
 
   "config_translatiors_note": "(Text of this string not ingame): Hello, translators of the mod! I have no expectations",
   "config_translatiors_note_2": "of everything beneath this being translated, it is a lot of work. But if you really",

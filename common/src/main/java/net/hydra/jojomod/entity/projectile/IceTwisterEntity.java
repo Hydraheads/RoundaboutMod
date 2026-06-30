@@ -74,13 +74,18 @@ public class IceTwisterEntity extends WhiteAlbumFreezingEntity {
                                 HeatUtil.addHeat(mob, -1);
                             }
                         }
+                        if (this.tickCount <5){
+                            if (!mob.onGround()){
+                                MainUtil.takeLiteralUnresistableKnockbackWithY(mob,0,-0.5F,0);
+                            }
+                        }
                     }
                 }
             }
 
-            if (tickCount > 7) {
+            if (tickCount > 6) {
                 int range = 0;
-                if (tickCount > 12) {
+                if (tickCount > 10) {
                     range = 1;
                 }
                 for (int y = 0; y < 3; y++) {
