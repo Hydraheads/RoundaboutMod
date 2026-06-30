@@ -227,7 +227,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
                 damage *= 0.85F;
 
                 if (getAmmoType() == TOMMY_GUN) {
-                    damage *= 0.6F;
+                    damage *= 0.57F;
                 }
             } else {
                 damage = (float) (damage * (ClientNetworking.getAppropriateConfig().itemSettings.gunDamageOnMobs * 0.01));

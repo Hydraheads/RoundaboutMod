@@ -439,13 +439,14 @@ public class PowersWhiteAlbum extends NewDashPreset {
             }
 
             ticklIceEntities();
+            boolean broken = !getStandUserSelf().roundabout$shieldNotDisabled() || getStandUserSelf().roundabout$getGuardBroken();
             if (cracked){
-                if (!getStandUserSelf().roundabout$getGuardBroken()) {
+                if (!broken) {
                     cracked = false;
                     saveDiscAndSync();
                 }
             } else {
-                if (getStandUserSelf().roundabout$getGuardBroken()) {
+                if (broken) {
                     cracked = true;
                     saveDiscAndSync();
                 }
