@@ -125,7 +125,7 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             getParentModel().leftArm.translateAndRotate(poseStack);
 
 
-                            poseStack.translate(-.3, -0.23, 0.52);
+                            poseStack.translate(-.3, -0.2, 0.52);
 
                             if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
                                 ModStrayModels.CENTURY_BOY.renderLeftArmSlim(entity, partialTicks, poseStack, bufferSource,
@@ -147,7 +147,7 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
                             getParentModel().rightArm.translateAndRotate(poseStack);
 
-                            poseStack.translate(.3, -0.23, 0.52);
+                            poseStack.translate(.3, -0.2, 0.52);
 
                             if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
                             ModStrayModels.CENTURY_BOY.renderRightArmSlim(entity, partialTicks, poseStack, bufferSource,
