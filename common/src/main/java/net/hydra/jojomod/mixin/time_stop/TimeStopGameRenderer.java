@@ -80,6 +80,7 @@ public class TimeStopGameRenderer {
     private void roundabout$RenderHandsWithItems(PoseStack $$0, Camera $$1, float $$2, CallbackInfo ci){
         //$$0 is matrcices, $$1 is tickdelta
 
+        ClientUtil.isBlocked = false;
 
         Minecraft mc = Minecraft.getInstance();
        Player player = mc.player;
@@ -102,11 +103,7 @@ public class TimeStopGameRenderer {
                 // Check if ANY block collision shape intersects this box
                 boolean insideCollision = !level.noCollision(cameraBox);
                 if (insideCollision){
-                    powers.setPiloting(0);
-                    IPlayerEntity ipe = ((IPlayerEntity) player);
-                    ipe.roundabout$setIsControlling(0);
-                    C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_UPDATE_PILOT,0);
-                    ClientUtil.setCameraEntity(null);
+                    ClientUtil.isBlocked = true;
                 }
             }
         }

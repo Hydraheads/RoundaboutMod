@@ -137,6 +137,8 @@ public class StandIcons {
             "textures/misc/super_hearing.png");
     public static final ResourceLocation RATT_SCOPE_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/ratt_scope.png");
+    public static final ResourceLocation ANTI_XRAY_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/misc/ambient.png");
     public static final ResourceLocation TIME_REWIND = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/time_rewind.png");
     public static final ResourceLocation NO_FACE_LAYER = new ResourceLocation(Roundabout.MOD_ID,

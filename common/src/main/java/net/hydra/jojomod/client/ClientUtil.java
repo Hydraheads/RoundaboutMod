@@ -147,6 +147,8 @@ public class ClientUtil {
     }
 
 
+    public static boolean isBlocked = false;
+
     public static double getCameradDistance(Entity ent){
         return Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().distanceTo(ent.position());
     }

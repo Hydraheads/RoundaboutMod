@@ -65,10 +65,10 @@ public class PilotingScreenEffectRenderer {
                 if (!$$2.noPhysics) {
                     BlockState $$3 = roundabout$getViewBlockingState(piloting);
                     if ($$3 != null) {
-                        renderTex($$0.getBlockRenderer().getBlockModelShaper().getParticleIcon($$3), $$1);
+                        //renderTex($$0.getBlockRenderer().getBlockModelShaper().getParticleIcon($$3), $$1);
                     } else {
                         if (insideCollision){
-                            renderTex($$0.getBlockRenderer().getBlockModelShaper().getParticleIcon(Blocks.STONE.defaultBlockState()), $$1);
+                            //renderTex($$0.getBlockRenderer().getBlockModelShaper().getParticleIcon(Blocks.STONE.defaultBlockState()), $$1);
                         }
                     }
                 }
