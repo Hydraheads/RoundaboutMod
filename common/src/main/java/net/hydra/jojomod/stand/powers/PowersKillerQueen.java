@@ -220,7 +220,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override public float getSwordMiningSpeed() { return 8F;}
     @Override public float getShovelMiningSpeed() {return 8F;}
 
-    public float getStrayCatAirBubbleSpeed() { return 0.6f;}
+    public float getStrayCatAirBubbleSpeed() { return 0.3f;}
 
     @Override public float getBarrageDamagePlayer(){ return 8; }
     @Override public float getBarrageDamageMob(){ return 18;}
@@ -1358,10 +1358,12 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void bubbleContacted(Entity ent) {
-        if (this.bombConfig >= 2 && activePower != DETONATE) {
+        if (this.bombConfig >= 2 || this.getActivePower() == DETONATE) {
             this.bombEntity = ent;
             syncBombStatus(BUBBLE_CONTACT);
-            this.explode();
+            if (this.getActivePower() != DETONATE) {
+                this.explode();
+            }
         }else {
             syncBombStatus(NONE);
         }
