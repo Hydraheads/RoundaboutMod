@@ -14,4 +14,8 @@ public class CaliforniaKingBedEntity extends FollowingStandEntity {
     public void setupAnimationStates() {
         super.setupAnimationStates();
     }
+    @Override
+    public float getDistanceOutModified() {return getDistanceOut()*1.15F;}
+    @Override
+    public float getAnchorPlaceModified() {return getAnchorPlace()+10;}
 }

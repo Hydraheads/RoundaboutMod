@@ -127,7 +127,7 @@ public class californiakingbedAnimation {
 			new Keyframe(11.0F, KeyframeAnimations.degreeVec(3.2967F, 12.7425F, -62.915F), AnimationChannel.Interpolations.CATMULLROM),
 			new Keyframe(12.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -12.5F), AnimationChannel.Interpolations.CATMULLROM)
 		))
-		.addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.ROTATION, 
+		.addAnimation("stand2", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 			new Keyframe(0.0F, KeyframeAnimations.degreeVec(7.5F, 15.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
 			new Keyframe(1.0F, KeyframeAnimations.degreeVec(-2.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
 			new Keyframe(2.0F, KeyframeAnimations.degreeVec(7.5F, -15.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -142,7 +142,7 @@ public class californiakingbedAnimation {
 			new Keyframe(11.0F, KeyframeAnimations.degreeVec(-2.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
 			new Keyframe(12.0F, KeyframeAnimations.degreeVec(7.5F, 15.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
 		))
-		.addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.POSITION, 
+		.addAnimation("stand2", new AnimationChannel(AnimationChannel.Targets.POSITION,
 			new Keyframe(0.0F, KeyframeAnimations.posVec(-2.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
 			new Keyframe(1.0F, KeyframeAnimations.posVec(0.0F, -7.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
 			new Keyframe(2.0F, KeyframeAnimations.posVec(2.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -201,10 +201,10 @@ public class californiakingbedAnimation {
 		.addAnimation("right_arm_string", new AnimationChannel(AnimationChannel.Targets.ROTATION, 
 			new Keyframe(0.0F, KeyframeAnimations.degreeVec(-7.3866F, -17.4412F, -45.4333F), AnimationChannel.Interpolations.LINEAR)
 		))
-		.addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.ROTATION, 
+		.addAnimation("stand2", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 			new Keyframe(0.0F, KeyframeAnimations.degreeVec(-72.5F, 20.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
 		))
-		.addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.POSITION, 
+		.addAnimation("stand2", new AnimationChannel(AnimationChannel.Targets.POSITION,
 			new Keyframe(0.0F, KeyframeAnimations.posVec(3.0F, -25.0F, 10.0F), AnimationChannel.Interpolations.LINEAR)
 		))
 		.addAnimation("left_arm_substring", new AnimationChannel(AnimationChannel.Targets.ROTATION, 
@@ -235,11 +235,11 @@ public class californiakingbedAnimation {
 			new Keyframe(2.0F, KeyframeAnimations.degreeVec(23.9759F, 7.301F, -30.9476F), AnimationChannel.Interpolations.CATMULLROM),
 			new Keyframe(4.0F, KeyframeAnimations.degreeVec(24.2476F, 6.2796F, -28.6496F), AnimationChannel.Interpolations.CATMULLROM)
 		))
-		.addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.ROTATION, 
+		.addAnimation("stand2", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 			new Keyframe(0.0F, KeyframeAnimations.degreeVec(-87.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
 			new Keyframe(4.0F, KeyframeAnimations.degreeVec(-87.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
 		))
-		.addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.POSITION, 
+		.addAnimation("stand2", new AnimationChannel(AnimationChannel.Targets.POSITION,
 			new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, -25.0F, 11.0F), AnimationChannel.Interpolations.CATMULLROM),
 			new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, -24.8F, 11.0F), AnimationChannel.Interpolations.CATMULLROM),
 			new Keyframe(4.0F, KeyframeAnimations.posVec(0.0F, -25.0F, 11.0F), AnimationChannel.Interpolations.CATMULLROM)
@@ -257,7 +257,7 @@ public class californiakingbedAnimation {
 		.build();
 
 	public static final AnimationDefinition Wind = AnimationDefinition.Builder.withLength(1.3333F).looping()
-		.addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.ROTATION, 
+		.addAnimation("stand2", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 			new Keyframe(0.0F, KeyframeAnimations.degreeVec(30.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
 			new Keyframe(0.3333F, KeyframeAnimations.degreeVec(30.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
 			new Keyframe(0.6667F, KeyframeAnimations.degreeVec(30.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
