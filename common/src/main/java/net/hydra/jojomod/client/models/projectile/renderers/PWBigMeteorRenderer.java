@@ -30,7 +30,7 @@ public class PWBigMeteorRenderer extends EntityRenderer<PWBigMeteorEntity> {
 
     public PWBigMeteorRenderer(EntityRendererProvider.Context $$0) {
         super($$0);
-        this.model = new PWBigMeteorModel($$0.bakeLayer(ModEntityRendererClient.STAND_FIREBALL_LAYER));
+        this.model = new PWBigMeteorModel($$0.bakeLayer(ModEntityRendererClient.PLANET_WAVES_METEROID));
     }
 
 
