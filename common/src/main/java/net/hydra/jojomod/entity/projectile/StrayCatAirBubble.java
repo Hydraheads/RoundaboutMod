@@ -62,6 +62,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     private static final EntityDataAccessor<Boolean> ACTIVATED = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> LAUNCHED = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Float> SPEED = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Byte> SKIN = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.BYTE);
 
 
     public boolean getActivated() {
@@ -82,6 +83,13 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     public void setSped(float sped) {
         this.getEntityData().set(SPEED, sped);
     }
+    public byte getSkin() {
+        return this.getEntityData().get(SKIN);
+    }
+    public void setSkin(byte skin) {
+        this.getEntityData().set(SKIN, skin);
+    }
+
 
     static final float damagePoints = 2.5f;
 
@@ -100,16 +108,6 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         return false;
 
         //return true;
-    }
-
-    public byte skinID = 0;
-
-    public byte getSkin() {
-        return this.skinID;
-    }
-
-    public void setSkin(byte skin) {
-        this.skinID = skin;
     }
 
     public boolean hasTimeLimit = true;
@@ -336,6 +334,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         this.entityData.define(LAUNCHED, false);
         this.entityData.define(USER_ID, -1);
         this.entityData.define(SPEED, 1F);
+        this.entityData.define(SKIN, (byte)0);
     }
 
     public void shootFromRotationDeltaAgnosticR(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
