@@ -54,6 +54,7 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -144,7 +145,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (sauce.is(DamageTypes.MOB_ATTACK)){
             damage*=ClientNetworking.getAppropriateConfig().whiteAlbumSettings.mobGuardDamageMultiplierv2;
         }
-        if (sauce.is(ModDamageTypes.BULLET) ||
+        if (sauce.is(ModDamageTypes.BULLET) || sauce.getDirectEntity() instanceof Projectile ||
                 sauce.getEntity() instanceof Blaze){
             damage*=0.5F;
         }
