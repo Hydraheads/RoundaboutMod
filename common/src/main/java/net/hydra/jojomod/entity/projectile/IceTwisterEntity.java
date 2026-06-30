@@ -78,9 +78,9 @@ public class IceTwisterEntity extends WhiteAlbumFreezingEntity {
                 }
             }
 
-            if (tickCount > 7) {
+            if (tickCount > 6) {
                 int range = 0;
-                if (tickCount > 12) {
+                if (tickCount > 10) {
                     range = 1;
                 }
                 for (int y = 0; y < 3; y++) {
