@@ -19,6 +19,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
@@ -343,6 +344,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 					ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage, 0.3f, explosionRadius);
 
 			ExplosionUtil.explodeEffects(this.position(), this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, 0.3f, 8);
+			this.level().playSound(null, this.blockPosition(), ModSounds.KILLER_QUEEN_EXPLOSION_EVENT, SoundSource.PLAYERS, 0.65F, 1.0f);
 
 			if (this.entityTarget != null) {
 
@@ -363,6 +365,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 					ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage, 0.3f, explosionRadius);
 
 			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, 0.12f, 4);
+			this.level().playSound(null, this.blockTarget, ModSounds.KILLER_QUEEN_EXPLOSION_EVENT, SoundSource.PLAYERS, 0.65F, 1.0f);
 
 			boolean shouldDrop = !this.level().getBlockState(this.blockTarget).requiresCorrectToolForDrops();
 			this.level().destroyBlock(this.blockTarget, shouldDrop);
@@ -487,7 +490,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			// blockHit.getType() == HitResult.Type.BLOCK &&
 			if (this.isInWall()) {
 				Vec3 mov = this.getDeltaMovement();
-				this.setDeltaMovement(mov.x, 0.8f, mov.y);
+				this.setDeltaMovement(mov.x, 0.3f, mov.y);
 			}
 		//}
 	}

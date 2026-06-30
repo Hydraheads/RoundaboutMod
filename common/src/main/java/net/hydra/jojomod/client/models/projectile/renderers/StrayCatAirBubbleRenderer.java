@@ -53,8 +53,15 @@ public class StrayCatAirBubbleRenderer extends EntityRenderer<StrayCatAirBubble>
             poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
             poseStack.translate(0, entity.getBbHeight() / 2, 0);
 
+
+            float transparency = 0.3f;
+            if (ClientUtil.checkIfClientCanSeeMobsForWindVision()) {
+                transparency = 1.0f;
+            }
+
+
             // Draw flat quad here
-            VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
+            VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity))).color(1.0f, 1.0f, 1.0f, transparency);
             Matrix4f matrix = poseStack.last().pose();
             Vector3f normal = Minecraft.getInstance().gameRenderer.getMainCamera().getLookVector();
             normal.normalize();
@@ -73,18 +80,10 @@ public class StrayCatAirBubbleRenderer extends EntityRenderer<StrayCatAirBubble>
 
             float size = (float) Math.min(scaleIt, (((float) entity.tickCount) + partialTicks) * (scaleIt * 0.1)); // Adjust to your needs
 
-            float transparency = 0.4f;
-            if (ClientUtil.checkIfClientCanSeeMobsForWindVision()) {
-                transparency = 1.0f;
-            }
-
-            vertexConsumer.color(1.0f, 1.0f, 1.0f, transparency);
-
             vertexConsumer.vertex(matrix, -size, -size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
             vertexConsumer.vertex(matrix, size, -size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
             vertexConsumer.vertex(matrix, size, size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
             vertexConsumer.vertex(matrix, -size, size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-
 
             poseStack.popPose();
             super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);

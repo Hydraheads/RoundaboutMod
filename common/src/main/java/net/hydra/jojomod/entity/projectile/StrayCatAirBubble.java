@@ -173,7 +173,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         return true;
     }
     public int getDistanceUntilPopping(){
-        return ClientNetworking.getAppropriateConfig().softAndWetSettings.maxPlunderBubbleTravelDistanceBeforePopping;
+        return ClientNetworking.getAppropriateConfig().killerQueenSettings.maxAirBubbleTravelDistanceBeforePopping;
     }
 
     /**No sculker noises*/
@@ -183,6 +183,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     }
     public void setUser(LivingEntity User) {
         standUser = User;
+
         this.getEntityData().set(USER_ID, User.getId());
         if (!this.level().isClientSide()){
             standUserUUID = User.getUUID();
@@ -257,22 +258,12 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
         if (target.hurt(dmg,damage)) {
 
-
-            /*if (this.getShotType() == BASIC && $$4 != null) {
-                if (((StandUser) $$4).roundabout$getStandPowers() instanceof PowersRatt PR) {
-                    if ($$4 instanceof Player P) {
-                        S2CPacketUtil.sendIntPowerDataPacket(P, PowersRatt.UPDATE_CHARGE, Math.min(PR.getChargeTime() + ClientNetworking.getAppropriateConfig().rattSettings.rattChargePerHit, 100));
-                    }
-                }
-            }*/
-
             if (user instanceof LivingEntity LE) {
 
                 if (((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
                     if (target instanceof LivingEntity l) {
                         KQ.addEXP(4, l);
                     }
-
                 }
 
                 LE.setLastHurtMob(target);
@@ -290,7 +281,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
                 Vec3 launchVec = this.getDeltaMovement();
                 Vec3 vec3d2 = launchVec.normalize().scale(0.6F);
-                vec3d2 = vec3d2.add(0, 0.5F, 0);
+                vec3d2 = vec3d2.add(0, 0.4F, 0);
 
                 MainUtil.takeLiteralUnresistableKnockbackWithY(target,
                         vec3d2.x,
