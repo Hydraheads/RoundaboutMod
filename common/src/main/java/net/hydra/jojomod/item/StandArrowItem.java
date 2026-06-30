@@ -7,7 +7,6 @@ import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -65,10 +64,10 @@ public class StandArrowItem extends RoundaboutArrowItem {
             CompoundTag tag = $$3.isEmpty() ? null : $$3.getTagElement("StandDisc");
             CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
             if (tag2 != null) {
-                if ($$1.isCrouching() && !ConfigManager.getAdvancedConfig().standArrowSecondaryPoolv5.isEmpty()) {
+                if ($$1.isCrouching() && !ConfigManager.getAdvancedConfig().standArrowSecondaryPoolv6.isEmpty()) {
                     int reroll = ClientNetworking.getAppropriateConfig().itemSettings.levelsToRerollStandWithArrow;
                     if ($$1.experienceLevel >= reroll || $$1.isCreative()) {
-                        if (ConfigManager.getAdvancedConfig().standArrowSecondaryPoolv5.isEmpty()) {
+                        if (ConfigManager.getAdvancedConfig().standArrowSecondaryPoolv6.isEmpty()) {
                              if (!$$1.isCreative()) {
                              $$1.giveExperienceLevels(-reroll);
                              }
@@ -91,7 +90,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
                     return InteractionResultHolder.consume($$3);
                 }
             } else {
-                if (ConfigManager.getAdvancedConfig().standArrowSecondaryPoolv5.isEmpty()) {
+                if (ConfigManager.getAdvancedConfig().standArrowSecondaryPoolv6.isEmpty()) {
                     if (!$$0.isClientSide) {
                         rollStand($$0, $$1, $$3, true);
                         return InteractionResultHolder.consume($$3);

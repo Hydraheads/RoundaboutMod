@@ -46,16 +46,17 @@ public class AdvancedConfig implements Cloneable {
                     //"roundabout:green_day_disc"
             )
     );
-    public Set<String> standArrowSecondaryPoolv5 = new HashSet<>(
+    public Set<String> standArrowSecondaryPoolv6 = new HashSet<>(
             Arrays.asList(
                     "roundabout:cinderella_disc",
                     "roundabout:hey_ya_disc",
                     "roundabout:mandom_disc",
                     "roundabout:survivor_disc",
-                    "roundabout:achtung_baby_disc"
+                    "roundabout:achtung_baby_disc",
+                    "roundabout:manhattan_transfer_disc"
             )
     );
-    public Set<String> naturalStandUserMobPoolv6 = new HashSet<>(
+    public Set<String> naturalStandUserMobPoolv7 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
                     "roundabout:the_world_disc",
@@ -65,8 +66,9 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:soft_and_wet_disc",
                     "roundabout:achtung_baby_disc",
                     "roundabout:walking_heart_disc",
-                    "roundabout:ratt_disc"
-                   // "roundabout:green_day_disc"
+                    "roundabout:ratt_disc",
+                    "roundabout:white_album_disc",
+                    "roundabout:manhattan_transfer_disc"
             )
     );
 
