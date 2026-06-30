@@ -1252,11 +1252,11 @@ public abstract class InputEvents implements IInputEvents {
                             }
                         } else {
                             if (!roundabout$sameKeyUseOverride(KeyInputRegistry.guardKey)) {
-                                if (this.rightClickDelay == 0 && !this.player.isUsingItem()) {
+                                if (this.rightClickDelay == 0 && !this.player.isUsingItem() && !((StandUser)player).roundabout$getStandPowers().isPiloting()) {
                                     roundabout$startUseOppositeItem();
                                 }
                             } else {
-                                if (this.rightClickDelay == 0 && !this.player.isUsingItem()) {
+                                if (this.rightClickDelay == 0 && !this.player.isUsingItem() && !((StandUser)player).roundabout$getStandPowers().isPiloting()) {
                                     startUseItem();
                                 }
                             }
