@@ -609,7 +609,7 @@
   "roundabout.dev_status.dropped": "DROPPED",
   "roundabout.dev_status.dev_name": "Developer:",
 
-  "key.roundabout.summon.stand": "Summon Stand",
+  "key.roundabout.summon.stand": "Stand summoned",
   "key.roundabout.ability.one": "Skill 1",
   "key.roundabout.ability.two": "Skill 2",
   "key.roundabout.ability.three": "Skill 3",
@@ -672,9 +672,9 @@
   "sounds.roundabout.iron_ball_impact": "Iron ball impact",
   "sounds.roundabout.iron_ball_bounce": "Iron ball bounce",
   "sounds.roundabout.anubis_unsheathe": "Unsheathe",
-  "sounds.roundabout.summon_anubis": "Summon Stand",
-  "sounds.roundabout.summon_california": "Summon Stand",
-  "sounds.roundabout.white_album_summon": "Summon Stand",
+  "sounds.roundabout.summon_anubis": "Stand summoned",
+  "sounds.roundabout.summon_california": "Stand summoned",
+  "sounds.roundabout.white_album_summon": "Stand summoned",
   "sounds.roundabout.vampire_dash": "Fwoosh",
   "sounds.roundabout.vampire_gleam": "Sparkle",
   "sounds.roundabout.evil_aura_blast": "Chilling Breeze",
@@ -684,7 +684,7 @@
   "sounds.roundabout.ice_skating": "Skating",
   "sounds.roundabout.skating_land": "Skate land",
 
-  "sounds.roundabout.emperor_summon": "Summon Stand",
+  "sounds.roundabout.emperor_summon": "Stand summoned",
   "sounds.roundabout.emperor_shoot": "Shoot the emperor",
   "sounds.roundabout.emperor_impact": "Emperor bullet impact",
 
@@ -1572,7 +1572,7 @@
 
   "ability.roundabout.throw_bottle": "Water Bottle Throw",
   "ability.roundabout.throw_bottle.desc": "Throws a held water bottle directly from your inventory, it travels far and is good for activating the stand.",
-  "ability.roundabout.summon_survivor": "Summon Stand",
+  "ability.roundabout.summon_survivor": "Stand summoned",
   "ability.roundabout.summon_survivor.desc": "Place your stand down where you are looking, up to a certain range. When it is doused with water, it activates, and zaps the nerves of nearby mobs. This causes them to fight each other to the death. You can be zapped as well, locking you into a fight. When zapped, melee power increases, and you resist damage that is not melee.",
   "ability.roundabout.desummon_survivor": "Retract Stand",
   "ability.roundabout.desummon_survivor.desc": "Every instance of your stand that you place down starts to disappear. This does not remove existing anger, so be careful what violence you choose to incite.",
