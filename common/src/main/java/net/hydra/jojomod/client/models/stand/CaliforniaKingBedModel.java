@@ -34,7 +34,7 @@ public class CaliforniaKingBedModel<T extends CaliforniaKingBedEntity> extends S
 
         PartDefinition torso = torso_string.addOrReplaceChild("torso", CubeListBuilder.create().texOffs(45, 55).addBox(-4.0F, 0.0F, -2.75F, 8.0F, 7.0F, 0.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 17).addBox(-4.0F, 0.0F, -2.5F, 8.0F, 8.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(55, 14).addBox(-1.55F, 2.5F, 0.6F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 4.0F, 0.0F));
+                .texOffs(23, 53).addBox(-1.55F, 2.5F, 0.6F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 4.0F, 0.0F));
 
         PartDefinition left_leg_string = torso.addOrReplaceChild("left_leg_string", CubeListBuilder.create().texOffs(44, 45).addBox(-4.5F, 0.0F, 0.0F, 5.0F, 5.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-3.0F, 8.0F, 0.0F));
 
@@ -42,7 +42,7 @@ public class CaliforniaKingBedModel<T extends CaliforniaKingBedEntity> extends S
 
         PartDefinition left_leg = left_leg_substring.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(34, 59).addBox(-2.0F, 0.0F, -2.75F, 4.0F, 5.0F, 0.0F, new CubeDeformation(0.0F))
                 .texOffs(38, 27).addBox(-3.0F, 0.0F, -2.5F, 6.0F, 6.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(55, 14).addBox(-1.5F, 1.5F, 0.6F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-1.5F, 4.0F, 0.0F));
+                .texOffs(23, 53).addBox(-1.5F, 1.5F, 0.6F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-1.5F, 4.0F, 0.0F));
 
         PartDefinition right_leg_string = torso.addOrReplaceChild("right_leg_string", CubeListBuilder.create().texOffs(34, 45).addBox(-0.5F, 0.0F, 0.0F, 5.0F, 5.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(3.0F, 8.0F, 0.0F));
 
@@ -50,7 +50,7 @@ public class CaliforniaKingBedModel<T extends CaliforniaKingBedEntity> extends S
 
         PartDefinition right_leg = right_leg_substring.addOrReplaceChild("right_leg", CubeListBuilder.create().texOffs(34, 59).addBox(-2.0F, 0.0F, -2.75F, 4.0F, 5.0F, 0.0F, new CubeDeformation(0.0F))
                 .texOffs(24, 5).addBox(-3.0F, 0.0F, -2.5F, 6.0F, 6.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(55, 14).addBox(-1.5F, 1.5F, 0.6F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(1.5F, 4.0F, 0.0F));
+                .texOffs(23, 53).addBox(-1.5F, 1.5F, 0.6F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(1.5F, 4.0F, 0.0F));
 
         PartDefinition right_arm_string = stand2.addOrReplaceChild("right_arm_string", CubeListBuilder.create().texOffs(42, 6).addBox(-0.5F, 0.0F, 0.0F, 7.0F, 5.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(7.0F, 6.0F, -0.5F));
 
@@ -58,7 +58,7 @@ public class CaliforniaKingBedModel<T extends CaliforniaKingBedEntity> extends S
 
         PartDefinition right_arm = right_arm_substring.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(34, 59).addBox(-2.0F, 0.0F, -2.75F, 4.0F, 5.0F, 0.0F, new CubeDeformation(0.0F))
                 .texOffs(38, 36).addBox(-3.0F, 0.0F, -2.5F, 6.0F, 6.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(55, 14).addBox(-1.5F, 1.5F, 0.6F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(1.5F, 3.0F, 0.0F));
+                .texOffs(23, 53).addBox(-1.5F, 1.5F, 0.6F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(1.5F, 3.0F, 0.0F));
 
         PartDefinition left_arm_string = stand2.addOrReplaceChild("left_arm_string", CubeListBuilder.create().texOffs(5, 41).addBox(-1.5F, 0.0F, 0.0F, 2.0F, 4.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-7.0F, 6.0F, -0.5F));
 
@@ -66,16 +66,16 @@ public class CaliforniaKingBedModel<T extends CaliforniaKingBedEntity> extends S
 
         PartDefinition left_arm = left_arm_substring.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(34, 59).addBox(-2.0F, 0.0F, -2.75F, 4.0F, 5.0F, 0.0F, new CubeDeformation(0.0F))
                 .texOffs(16, 40).addBox(-3.0F, 0.0F, -2.5F, 6.0F, 6.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(55, 14).addBox(-1.5F, 1.5F, 0.6F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.5F, 4.0F, 0.0F));
+                .texOffs(23, 53).addBox(-1.5F, 1.5F, 0.6F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.5F, 4.0F, 0.0F));
 
         PartDefinition head = stand2.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(0.0F, 6.0F, 0.0F));
 
         PartDefinition head2 = head.addOrReplaceChild("head2", CubeListBuilder.create().texOffs(23, 27).addBox(4.0F, -10.0F, -1.0F, 4.0F, 10.0F, 3.0F, new CubeDeformation(0.01F))
-                .texOffs(55, 14).addBox(-7.5F, -4.0F, -1.1F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
-                .texOffs(55, 14).addBox(-1.5F, -8.0F, 4.1F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
+                .texOffs(23, 50).addBox(-7.5F, -4.0F, -1.1F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
+                .texOffs(23, 53).addBox(-1.5F, -8.0F, 4.1F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
                 .texOffs(55, 14).addBox(-7.5F, -4.0F, 2.1F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
                 .texOffs(55, 14).addBox(4.5F, -4.0F, 2.1F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
-                .texOffs(55, 14).addBox(4.5F, -4.0F, -1.1F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
+                .texOffs(23, 50).addBox(4.5F, -4.0F, -1.1F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
                 .texOffs(39, 14).addBox(-6.0F, -12.0F, -2.0F, 12.0F, 12.0F, 0.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 49).addBox(-4.0F, -10.0F, -3.0F, 8.0F, 8.0F, 7.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 0).addBox(-8.0F, -12.0F, -1.0F, 16.0F, 2.0F, 3.0F, new CubeDeformation(0.0F))
