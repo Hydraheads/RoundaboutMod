@@ -90,9 +90,9 @@ public class PowersCalifornia extends NewDashPreset {
     @Override
     public Component getPosName(byte posID){
         if (posID == 1){
-            return Component.translatable(  "idle.roundabout.ckb_1");
-        } else {
             return Component.translatable(  "idle.roundabout.ckb_2");
+        } else {
+            return Component.translatable(  "idle.roundabout.ckb_1");
         }
     }
 
