@@ -1815,7 +1815,7 @@
   "ability.roundabout.wind_vision": "Wind Vision",
   "ability.roundabout.wind_vision.desc": "Lets you see your stand's wind reading from your perspective, giving you identical visuals to control mode. It is useful if the stand sees something you cannot from its position.",
   "ability.roundabout.bonus_damage": "Bonus Stand Damage",
-  "ability.roundabout.bonus_damage.desc": "When the stand redirects a bullet, stand damage is added to the projectile. It affects all deflectable projectiles",
+  "ability.roundabout.bonus_damage.desc": "When the stand redirects a bullet, stand damage is added to the projectile.",
   "ability.roundabout.wind_reading": "Wind Reading",
   "ability.roundabout.wind_reading.desc": "The stand senses entities that are moving or have recently moved. When you control the stand or turn on Wind Vision, only those mobs are visible, glowing and highlighted. You also see your circumstances with a greenish filter.",
   "ability.roundabout.manhattan_dodge": "Manhattan Transfer Dash",

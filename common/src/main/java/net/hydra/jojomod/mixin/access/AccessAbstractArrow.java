@@ -181,7 +181,9 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
                 entity.hurt(damageSources().arrow(ABA, ABA.getOwner()), roundabout$lastHattanDamage);
             }
                 entity.invulnerableTime = 0;
+            if (entity.isAlive()) {
                 doBonusDamageHattan(entity);
+            }
         }
     }
 
@@ -194,7 +196,7 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
         float damage = amount <= 4 ? amount : 4;
 
         float amountPlayersAndBosses = 1 + (roundabout$lastHattanDamage / 8);
-        float damagePlayersAndBosses = amountPlayersAndBosses <= 4 ? amountPlayersAndBosses : 4;
+        float damagePlayersAndBosses = Math.min(amountPlayersAndBosses, 1.5F);
 
         if(!isManhattanProjectileMobAI) {
             if (entity instanceof Player || MainUtil.isBossMob(entity)) {
