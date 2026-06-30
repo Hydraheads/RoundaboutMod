@@ -40,7 +40,7 @@ public class StrayCatAirBubbleRenderer extends EntityRenderer<StrayCatAirBubble>
 
     @Override
     public void render(StrayCatAirBubble entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
-        if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+        if (ClientUtil.canSeeStands(ClientUtil.getPlayer()) || ClientUtil.checkIfClientCanSeeMobsForWindVision()) {
             if (((TimeStop)entity.level()).inTimeStopRange(entity)){
                 partialTicks = 0;
             }
@@ -73,17 +73,17 @@ public class StrayCatAirBubbleRenderer extends EntityRenderer<StrayCatAirBubble>
 
             float size = (float) Math.min(scaleIt, (((float) entity.tickCount) + partialTicks) * (scaleIt * 0.1)); // Adjust to your needs
 
-            float transparency = 70;
+            float transparency = 0.4f;
             if (ClientUtil.checkIfClientCanSeeMobsForWindVision()) {
-                transparency = 255;
+                transparency = 1.0f;
             }
 
-            //vertexConsumer.color(1.0f, 1.0f, 1.0f, 0.7f);
+            vertexConsumer.color(1.0f, 1.0f, 1.0f, transparency);
 
-            vertexConsumer.vertex(matrix, -size, -size, 0.0f).color(255, 255, 255, transparency).uv(0.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-            vertexConsumer.vertex(matrix, size, -size, 0.0f).color(255, 255, 255, transparency).uv(1.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-            vertexConsumer.vertex(matrix, size, size, 0.0f).color(255, 255, 255, transparency).uv(1.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-            vertexConsumer.vertex(matrix, -size, size, 0.0f).color(255, 255, 255, transparency).uv(0.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+            vertexConsumer.vertex(matrix, -size, -size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+            vertexConsumer.vertex(matrix, size, -size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+            vertexConsumer.vertex(matrix, size, size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+            vertexConsumer.vertex(matrix, -size, size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
 
 
             poseStack.popPose();

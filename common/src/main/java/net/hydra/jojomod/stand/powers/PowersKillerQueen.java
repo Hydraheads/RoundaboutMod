@@ -79,7 +79,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override public boolean isStandEnabled(){ return ClientNetworking.getAppropriateConfig().killerQueenSettings.enableKillerQueen; }
 
-	// TODO Make air bubble bomb spawn and entity
+	// TODO Air bubble redirect
 	// TODO Make bomb item
 	// TODO Bites The Dust
 	
@@ -1577,9 +1577,10 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void detectIfShouldDefuse() {
         if (this.currentBombStatus == BOMB_BLOCK) {
-            if (this.bombBlock.blockGotDestroyed()) { this.defuseServer(); }
-            if (this.bombBlock.level() != this.getSelf().level()) { this.defuseServer(); }
-            if (this.bombBlock.isRemoved()) {this.defuseServer();}
+            if (this.bombBlock == null) { this.defuseServer(); }
+            else if (this.bombBlock.blockGotDestroyed()) { this.defuseServer(); }
+            else if (this.bombBlock.level() != this.getSelf().level()) { this.defuseServer(); }
+            else if (this.bombBlock.isRemoved()) {this.defuseServer();}
         }
         else if (this.currentBombStatus == BOMB_ENTITY) {
             if (this.bombEntity == null) { this.defuseServer(); }
