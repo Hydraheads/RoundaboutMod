@@ -3,17 +3,13 @@ package net.hydra.jojomod.entity.projectile;
 import net.hydra.jojomod.access.NoVibrationEntity;
 import net.hydra.jojomod.access.PenetratableWithProjectile;
 import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.UnburnableProjectile;
-import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
-import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.MainUtil;
-import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.Direction;
@@ -29,7 +25,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.boss.EnderDragonPart;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
@@ -62,6 +57,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     private static final EntityDataAccessor<Boolean> ACTIVATED = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> LAUNCHED = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Float> SPEED = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Byte> SKIN = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.BYTE);
 
 
     public boolean getActivated() {
@@ -82,6 +78,13 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     public void setSped(float sped) {
         this.getEntityData().set(SPEED, sped);
     }
+    public byte getSkin() {
+        return this.getEntityData().get(SKIN);
+    }
+    public void setSkin(byte skin) {
+        this.getEntityData().set(SKIN, skin);
+    }
+
 
     static final float damagePoints = 2.5f;
 
@@ -102,34 +105,23 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         //return true;
     }
 
-    public byte skinID = 0;
-
-    public byte getSkin() {
-        return this.skinID;
-    }
-
-    public void setSkin(byte skin) {
-        this.skinID = skin;
-    }
-
     public boolean hasTimeLimit = true;
-
     public void setHasTimeLimit(boolean value) {
         this.hasTimeLimit = value;
     }
 
     public boolean isKillerQueenBubble = false;
-
     public void setIsKQAirBubble(boolean value) {
         this.isKillerQueenBubble = value;
     }
 
-
     public boolean isPlanted = false;
-
     public void setIsPlanted(boolean value) {
         this.isPlanted = value;
     }
+
+    public boolean followOwnerView = false;
+    public void setFollowOwnerView(boolean value) {this.followOwnerView = value;}
 
     @Override
     public boolean dealWithPenetration(Entity proj){
@@ -166,6 +158,11 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                     this.getOwner().distanceTo(this) > getDistanceUntilPopping() && distancePops()){
                 popBubble();
                 return;
+            }
+
+            if (this.followOwnerView) {
+                Entity owner = this.getOwner();
+                this.shootFromRotationDeltaAgnostic2(owner, owner.getXRot(), owner.getYRot(), 1.0F, getSped());
             }
 
         }
@@ -336,6 +333,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         this.entityData.define(LAUNCHED, false);
         this.entityData.define(USER_ID, -1);
         this.entityData.define(SPEED, 1F);
+        this.entityData.define(SKIN, (byte)0);
     }
 
     public void shootFromRotationDeltaAgnosticR(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {

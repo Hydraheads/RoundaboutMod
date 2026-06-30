@@ -79,7 +79,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override public boolean isStandEnabled(){ return ClientNetworking.getAppropriateConfig().killerQueenSettings.enableKillerQueen; }
 
-	// TODO Make air bubble bomb spawn and entity
+	// TODO Air bubble redirect
 	// TODO Make bomb item
 	// TODO Bites The Dust
 	
@@ -220,7 +220,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override public float getSwordMiningSpeed() { return 8F;}
     @Override public float getShovelMiningSpeed() {return 8F;}
 
-    public float getStrayCatAirBubbleSpeed() { return 0.6f;}
+    public float getStrayCatAirBubbleSpeed() { return 0.3f;}
 
     @Override public float getBarrageDamagePlayer(){ return 8; }
     @Override public float getBarrageDamageMob(){ return 18;}
@@ -1358,10 +1358,12 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void bubbleContacted(Entity ent) {
-        if (this.bombConfig >= 2 && activePower != DETONATE) {
+        if (this.bombConfig >= 2 || this.getActivePower() == DETONATE) {
             this.bombEntity = ent;
             syncBombStatus(BUBBLE_CONTACT);
-            this.explode();
+            if (this.getActivePower() != DETONATE) {
+                this.explode();
+            }
         }else {
             syncBombStatus(NONE);
         }
@@ -1575,9 +1577,10 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void detectIfShouldDefuse() {
         if (this.currentBombStatus == BOMB_BLOCK) {
-            if (this.bombBlock.blockGotDestroyed()) { this.defuseServer(); }
-            if (this.bombBlock.level() != this.getSelf().level()) { this.defuseServer(); }
-            if (this.bombBlock.isRemoved()) {this.defuseServer();}
+            if (this.bombBlock == null) { this.defuseServer(); }
+            else if (this.bombBlock.blockGotDestroyed()) { this.defuseServer(); }
+            else if (this.bombBlock.level() != this.getSelf().level()) { this.defuseServer(); }
+            else if (this.bombBlock.isRemoved()) {this.defuseServer();}
         }
         else if (this.currentBombStatus == BOMB_ENTITY) {
             if (this.bombEntity == null) { this.defuseServer(); }

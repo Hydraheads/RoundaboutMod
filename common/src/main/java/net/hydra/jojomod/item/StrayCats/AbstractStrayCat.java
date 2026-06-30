@@ -1,15 +1,10 @@
 package net.hydra.jojomod.item.StrayCats;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
-import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.gravity.RotationUtil;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,8 +15,8 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-abstract public class AbtractStrayCat extends Item {
-    public AbtractStrayCat(Properties $$0) { super($$0); }
+abstract public class AbstractStrayCat extends Item {
+    public AbstractStrayCat(Properties $$0) { super($$0); }
 
     @Override public int getUseDuration(ItemStack $$0) {
         return 1;
@@ -31,7 +26,7 @@ abstract public class AbtractStrayCat extends Item {
         return UseAnim.NONE;
     }
 
-    private static final float SPEED = 0.6f;
+    private static final float SPEED = 0.4f;
 
     public byte getBubbleSkin() { return 0; }
 
@@ -47,6 +42,7 @@ abstract public class AbtractStrayCat extends Item {
                     bubble.setSped(SPEED);
                     bubble.setOwner(P);
                     bubble.setSkin(this.getBubbleSkin());
+                    bubble.setFollowOwnerView(true);
 
                     Vec3 addToPosition = new Vec3(0, P.getEyeHeight() * 0.85f, 0);
                     Direction direction = ((IGravityEntity) P).roundabout$getGravityDirection();

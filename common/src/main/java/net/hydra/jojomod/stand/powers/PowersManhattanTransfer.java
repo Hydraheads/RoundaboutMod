@@ -363,8 +363,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
         }
     }
 
-    public boolean isSoundRainInterrupted = false;
-
     public int visionTicks = -1;
 
     @Override
@@ -378,22 +376,20 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 if(this.someTicks > 0){
                     someTicks--;
                 }
+            } else {
+                this.setSomeTicks(5);
             }
         }
 
         if (this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME) {
             if (ME.isInRain()) {
-                if (isSoundRainInterrupted) {
-                    isSoundRainInterrupted = false;
-                }
                 if (ME.DodgeRainTicks >= 1) {
                     ME.DodgeRainTicks--;
-                } else if (ME.DodgeRainTicks < 1) {
+                } else {
                     ME.setDodgeRainTicks(440);
-                    ((StandUser) ME).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.MANHATTAN_RAIN, 12, false);
+                    ((StandUser) ME).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.MANHATTAN_RAIN, 100, false);
                 }
-            }
-            if (!ME.isInRain()) {
+            } else {
                 ME.setDodgeRainTicks(0);
                 ((StandUser) ME).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 100, false);
             }
