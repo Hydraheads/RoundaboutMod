@@ -376,6 +376,8 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 if(this.someTicks > 0){
                     someTicks--;
                 }
+            } else {
+                this.setSomeTicks(5);
             }
         }
 
