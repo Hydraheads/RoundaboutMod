@@ -298,7 +298,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
     @Override
     public void pilotInputAttack(){
         LivingEntity ent = getPilotingStand();
-        if (ent != null && switchShootingMode()) {
+        if (ent != null) {
             tryPower(PowersManhattanTransfer.DEFLECT_PROJECTILE, true);
             tryPowerPacket(PowersManhattanTransfer.DEFLECT_PROJECTILE);
 
