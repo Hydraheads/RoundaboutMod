@@ -1848,6 +1848,11 @@ public class AbilityScapeBasis {
             if (!this.getSelf().level().isClientSide()) {
                 ((IPlayerEntity)this.getSelf()).roundabout$setClientDodgeTime(0);
                 ((IPlayerEntity) this.getSelf()).roundabout$setDodgeTime(0);
+                boolean yes = false;
+                if (storedInt > 500){
+                    storedInt-=1000;
+                    yes = true;
+                }
                 if (storedInt < 0) {
                     ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_BACKWARD);
                 } else {
@@ -1877,6 +1882,13 @@ public class AbilityScapeBasis {
                     if (gravD != Direction.DOWN){
                         cvec = RotationUtil.vecPlayerToWorld(cvec,gravD);
                         dvec = RotationUtil.vecPlayerToWorld(dvec,gravD);
+                    }
+                    if (yes){
+                        this.setCooldown(PowerIndex.GLOBAL_DASH,
+                                ClientNetworking.getAppropriateConfig().generalStandSettings.jumpingDashCooldown);
+                    } else {
+                        this.setCooldown(PowerIndex.GLOBAL_DASH,
+                                ClientNetworking.getAppropriateConfig().generalStandSettings.dashCooldown);
                     }
 
                     ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
@@ -1942,11 +1954,13 @@ public class AbilityScapeBasis {
                         backwards = -3;
                     }
 
+                    int buffer = 0;
                     int cdTime = ClientNetworking.getAppropriateConfig().generalStandSettings.dashCooldown;
                     if (this.getSelf() instanceof Player) {
                         ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(0);
                         if (options.keyJump.isDown()) {
                             cdTime = ClientNetworking.getAppropriateConfig().generalStandSettings.jumpingDashCooldown;
+                            buffer = 1000;
                         }
                     }
                     this.setCooldown(PowerIndex.GLOBAL_DASH, cdTime);
@@ -1956,7 +1970,7 @@ public class AbilityScapeBasis {
                             -Mth.cos(degrees * ((float) Math.PI / 180)));
 
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.MOVEMENT, true);
-                    tryIntPowerPacket(PowerIndex.MOVEMENT, backwards);
+                    tryIntPowerPacket(PowerIndex.MOVEMENT, backwards+buffer);
                 }
             }
         }
