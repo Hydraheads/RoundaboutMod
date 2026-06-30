@@ -42,6 +42,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.ExplosionUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.CameraType;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
@@ -54,6 +55,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
@@ -61,8 +64,12 @@ import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
@@ -128,14 +135,17 @@ public class PowersKillerQueen extends NewPunchingStand {
 
          this.currentBombStatus = status;
          this.updatePowerInt(PowersKillerQueen.PLANTED, status);
-         S2CPacketUtil.sendIntPowerDataPacket((Player)this.getSelf(),PowersKillerQueen.PLANTED, status);
-
+         if (this.getSelf() instanceof Player) {
+             S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersKillerQueen.PLANTED, status);
+         }
     }
 
     public void syncShaStatus(byte status) {
         this.currentShaStatus = status;
         this.updatePowerInt(PowersKillerQueen.SHEER_HEART_ATTACK, status);
-        S2CPacketUtil.sendIntPowerDataPacket((Player)this.getSelf(),PowersKillerQueen.SHEER_HEART_ATTACK, status);
+        if (this.getSelf() instanceof Player) {
+            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersKillerQueen.SHEER_HEART_ATTACK, status);
+        }
     }
 
 	public Entity bombEntity = null;
@@ -395,6 +405,34 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
 
         return l;
+    }
+
+    public void rollSkin(){
+        StandUser user = getUserData(this.self);
+        if (this.self instanceof Creeper) {
+            user.roundabout$setStandSkin(KillerQueenEntity.CREEPER);
+        } else if (this.self instanceof WanderingTrader) {
+            user.roundabout$setStandSkin(KillerQueenEntity.GUNPOWDER);
+        }else if (this.self instanceof AbstractVillager) {
+            user.roundabout$setStandSkin(KillerQueenEntity.JOJOLION);
+        }else if (this.self instanceof EnderMan || this.self instanceof EnderDragon) {
+            user.roundabout$setStandSkin(KillerQueenEntity.UMBRA);
+        }else if (this.self instanceof Raider) {
+            user.roundabout$setStandSkin(KillerQueenEntity.DEADLY);
+        }else if (this.self instanceof Slime) {
+            user.roundabout$setStandSkin(KillerQueenEntity.GOGO);
+        } else if (this.self instanceof Piglin) {
+            user.roundabout$setStandSkin(KillerQueenEntity.FINAL);
+        } else if (this.self instanceof Rabbit) {
+            user.roundabout$setStandSkin(KillerQueenEntity.ARTWORK);
+        } else if (this.self instanceof IronGolem) {
+            user.roundabout$setStandSkin(KillerQueenEntity.LIMBUSMORTIS);
+        } else if (this.self instanceof Warden) {
+            user.roundabout$setStandSkin(KillerQueenEntity.STRAY);
+        } else if (this.self instanceof Cat) {
+            user.roundabout$setStandSkin(KillerQueenEntity.TAMA);
+        }
+
     }
     
     @Override public boolean isWip(){return true;}
