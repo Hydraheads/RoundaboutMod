@@ -37,7 +37,7 @@ public class FirearmItem extends Item {
     public FirearmItem(Properties $$0) {
         super($$0);
     }
-
+    public static boolean cycleReload = false;
     @Override
     public int getUseDuration(ItemStack stack) {
         return 72000;
@@ -50,6 +50,10 @@ public class FirearmItem extends Item {
             }
         }
         return false;
+    }
+
+    public boolean isCrouchingOrSomething(Player player, ItemStack stack){
+        return (player.isCrouching() && !(player.getUseItem() == stack)) || cycleReload;
     }
 
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {

@@ -2872,6 +2872,20 @@ public class MainUtil {
                     user.roundabout$getStandPowers().setActivePowerPhase((byte) 0);
                 }
             }
+        } else if (context == PacketDataIndex.RELOAD_GUN) {
+            if (player.getUseItem().getItem() instanceof FirearmItem fm){
+
+                FirearmItem.cycleReload = true;
+                ItemStack stack = player.getUseItem();
+                InteractionHand hand= InteractionHand.MAIN_HAND;
+                if (ItemStack.isSameItemSameTags(player.getMainHandItem(), stack)) {
+                    hand = InteractionHand.MAIN_HAND;
+                } else if (ItemStack.isSameItemSameTags(player.getOffhandItem(), stack)) {
+                    hand = InteractionHand.OFF_HAND;
+                }
+                fm.use(player.level(),player,hand);
+                FirearmItem.cycleReload = false;
+            }
         }
     }
 
@@ -2937,7 +2951,7 @@ public class MainUtil {
     /**A generalized packet for sending floats to the server. Context is what to do with the data byte*/
     public static void handleFloatPacketC2S(Player player, float data, byte context){
         if (context == PacketDataIndex.FLOAT_VELOCITY_BARBED_WIRE) {
-            data = Math.min(data,15F);
+            data = Math.min(data,10F);
             if (player.getVehicle() != null){
                 if (player.getVehicle().hurt(ModDamageTypes.of(player.level(), ModDamageTypes.BARBED_WIRE), data)){
                     MainUtil.makeBleed(player.getVehicle(),0,200,null);

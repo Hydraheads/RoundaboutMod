@@ -417,12 +417,12 @@ public class ForgeItems {
                     , Blocks.TRIPWIRE)));
     public static final RegistryObject<Item> LUCK_SWORD = addToTab(ITEMS.register("luck_sword",
             () -> new LuckSwordItem(Tiers.IRON, 5F, -2.8F, new Item.Properties())
-            ));
+    ));
     public static final RegistryObject<Item> IRON_BALL_CROSSBOW = addToTab(ITEMS.register("iron_ball_crossbow",
             () -> new IronBallCrossbowItem(new Item.Properties().stacksTo(1).durability(565))
     ));
     public static final RegistryObject<Item> WOODEN_GLAIVE = addToTab(ITEMS.register("wooden_glaive",
-            () -> new GlaiveItem(Tiers.STONE, 4F, -2.9F, new Item.Properties(),4)
+            () -> new GlaiveItem(Tiers.WOOD, 4F, -2.9F, new Item.Properties(),4)
     ));
     public static final RegistryObject<Item> STONE_GLAIVE = addToTab(ITEMS.register("stone_glaive",
             () -> new GlaiveItem(Tiers.STONE, 4F, -2.9F, new Item.Properties(),6)
@@ -439,7 +439,6 @@ public class ForgeItems {
     public static final RegistryObject<Item> NETHERITE_GLAIVE = addToTab(ITEMS.register("netherite_glaive",
             () -> new GlaiveItem(Tiers.NETHERITE, 4F, -2.9F, new Item.Properties().fireResistant(),12)
     ));
-
 
     public static final RegistryObject<Item> WOODEN_WAR_HAMMER = addToTab(ITEMS.register("wooden_war_hammer",
             () -> new WarhammerItem(Tiers.STONE, 6.0F, -3.6F, new Item.Properties())
@@ -475,7 +474,6 @@ public class ForgeItems {
     public static final RegistryObject<Item> BOWLER_HAT = addToTab(ITEMS.register("bowler_hat",
             () -> new BowlerHatItem(Tiers.IRON, 0F, -1.6F, new Item.Properties())
     ));
-
     public static final RegistryObject<Item> ANUBIS_ITEM = addToTab(ITEMS.register("anubis_item",
             () -> new AnubisItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC))
     ));

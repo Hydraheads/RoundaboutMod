@@ -203,8 +203,7 @@ public class ColtRevolverItem extends FirearmItem implements Vanishable {
         if (!(itemStack.getItem() instanceof ColtRevolverItem)) {
             return InteractionResultHolder.fail(itemStack);
         }
-        if (!(player.getUseItem() == itemStack)) {
-            if ((player.isCrouching() && hasColtAmmo(player) && getAmmo(itemStack) != maxAmmo) || (player.isCrouching() && player.isCreative())) {
+            if ((isCrouchingOrSomething(player,itemStack) && hasColtAmmo(player) && getAmmo(itemStack) != maxAmmo) || (isCrouchingOrSomething(player,itemStack) && player.isCreative())) {
                 if (!isReloading(itemStack)) {
                     setReloading(itemStack, true);
                     player.getCooldowns().addCooldown(this, 60);
@@ -213,11 +212,11 @@ public class ColtRevolverItem extends FirearmItem implements Vanishable {
 
                 return InteractionResultHolder.consume(itemStack);
             } else {
-                if (player.isCrouching() && getAmmo(itemStack) == maxAmmo) {
+                if (isCrouchingOrSomething(player,itemStack) && getAmmo(itemStack) == maxAmmo) {
                     if (player instanceof ServerPlayer SP) {
                         SP.displayClientMessage(Component.translatable("text.roundabout.already_reloaded").withStyle(ChatFormatting.GRAY), true);
                     }
-                } else if (player.isCrouching() && getAmmo(itemStack) != maxAmmo && !hasColtAmmo(player)) {
+                } else if (isCrouchingOrSomething(player,itemStack) && getAmmo(itemStack) != maxAmmo && !hasColtAmmo(player)) {
                     if (player instanceof ServerPlayer SP) {
                         SP.displayClientMessage(Component.translatable("text.roundabout.no_more_usable_ammo").withStyle(ChatFormatting.GRAY), true);
                     }
@@ -225,7 +224,6 @@ public class ColtRevolverItem extends FirearmItem implements Vanishable {
                     player.startUsingItem(hand);
                 }
             }
-        }
         return InteractionResultHolder.consume(itemStack);
     }
 

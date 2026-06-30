@@ -4,9 +4,11 @@ import net.hydra.jojomod.Utils.commands.ForgeCommandRegistry;
 import net.hydra.jojomod.biome_modifiers.BiomeCodec;
 import net.hydra.jojomod.registry.*;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
@@ -67,6 +69,13 @@ public class RoundaboutModForge {
     private void commonSetup(final FMLCommonSetupEvent event){
     }
 
+    @Mod.EventBusSubscriber(modid = Roundabout.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    public static class ClientModEvents {
+        @SubscribeEvent
+        public static void onClientSetup(FMLCommonSetupEvent event) {
+            ForgeItemProperties.addCustomItemProperties();
+        }
+    }
 
     public void entityLifeCycle(ServerStartedEvent event) {
         RoundaboutModForgeServer.entityLifeCycle(event);

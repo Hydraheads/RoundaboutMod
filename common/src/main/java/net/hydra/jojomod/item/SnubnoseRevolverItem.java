@@ -1,4 +1,5 @@
 package net.hydra.jojomod.item;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -199,8 +200,7 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
         if (!(itemStack.getItem() instanceof SnubnoseRevolverItem)) {
             return InteractionResultHolder.fail(itemStack);
         }
-        if (!(player.getUseItem() == itemStack)) {
-            if ((player.isCrouching() && hasSnubnoseAmmo(player) && getAmmo(itemStack) != maxAmmo) || (player.isCrouching() && player.isCreative())) {
+            if ((isCrouchingOrSomething(player,itemStack) && hasSnubnoseAmmo(player) && getAmmo(itemStack) != maxAmmo) || (isCrouchingOrSomething(player,itemStack) && player.isCreative())) {
                 if (!isReloading(itemStack)) {
                     setReloading(itemStack, true);
                     player.getCooldowns().addCooldown(this, 60);
@@ -209,11 +209,11 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
 
                 return InteractionResultHolder.consume(itemStack);
             } else {
-                if (player.isCrouching() && getAmmo(itemStack) == maxAmmo) {
+                if (isCrouchingOrSomething(player,itemStack) && getAmmo(itemStack) == maxAmmo) {
                     if (player instanceof ServerPlayer SP) {
                         SP.displayClientMessage(Component.translatable("text.roundabout.already_reloaded").withStyle(ChatFormatting.GRAY), true);
                     }
-                } else if (player.isCrouching() && getAmmo(itemStack) != maxAmmo && !hasSnubnoseAmmo(player)) {
+                } else if (isCrouchingOrSomething(player,itemStack) && getAmmo(itemStack) != maxAmmo && !hasSnubnoseAmmo(player)) {
                     if (player instanceof ServerPlayer SP) {
                         SP.displayClientMessage(Component.translatable("text.roundabout.no_more_usable_ammo").withStyle(ChatFormatting.GRAY), true);
                     }
@@ -221,7 +221,6 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
                     player.startUsingItem(hand);
                 }
             }
-        }
         return InteractionResultHolder.consume(itemStack);
     }
 

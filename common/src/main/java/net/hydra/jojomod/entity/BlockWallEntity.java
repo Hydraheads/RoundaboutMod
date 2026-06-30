@@ -356,5 +356,11 @@ public class BlockWallEntity extends Entity {
         DATA_FINAL_POS = SynchedEntityData.defineId(BlockWallEntity.class, EntityDataSerializers.VECTOR3);
     }
 
+    public boolean fireImmune() {
+        return true;
+    }
+    public boolean isOnFire() {
+        return false;
+    }
 
 }

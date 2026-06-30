@@ -22,6 +22,12 @@ public class WhiteAlbumFreezingEntity extends Entity {
         super($$0, $$1);
     }
 
+    public boolean fireImmune() {
+        return true;
+    }
+    public boolean isOnFire() {
+        return false;
+    }
 
     public boolean started = false;
 
