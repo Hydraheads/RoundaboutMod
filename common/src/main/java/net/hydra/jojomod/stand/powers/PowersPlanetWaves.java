@@ -15,6 +15,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.hydra.jojomod.client.StandIcons;
@@ -394,8 +395,6 @@ public class PowersPlanetWaves extends NewDashPreset {
     public void tick() {
         if (self.level().isClientSide()) return;
 
-        if (grabCooldownTicks > 0) grabCooldownTicks--;
-
         for (int i = 0; i < meteorQueue.size(); i++) {
             ScheduledMeteor m = meteorQueue.get(i);
             m.delay--;
@@ -540,6 +539,7 @@ public class PowersPlanetWaves extends NewDashPreset {
     public double buryCenterHorizontal = 1.0;   //0 es el punto de contacto, 1 el centro
     public double buryCenterUp = 1.0;
     public double buryCenterDown = 1.0;
+    private float standTargetYaw = 0f;
 
     private void standtargeting() {
         Level level = this.self.level();
@@ -550,15 +550,18 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         ClipContext clipContext = new ClipContext(
                 eyePos, endPos,
-                ClipContext.Block.OUTLINE,
+                ClipContext.Block.COLLIDER,
                 ClipContext.Fluid.NONE,
                 this.self
         );
-
         BlockHitResult hitResult = this.self.level().clip(clipContext);
         if (hitResult.getType() != HitResult.Type.BLOCK) return;
 
         BlockPos pos   = hitResult.getBlockPos();
+        Vec3 hitLoc    = hitResult.getLocation();
+        //System.out.println("DEBUG hit pos=" + pos + " hitLoc=" + hitLoc + " dir=" + hitResult.getDirection()
+        //        + " playerPos=" + this.self.position() + " playerBlockPos=" + this.self.blockPosition());
+
         var      state = this.self.level().getBlockState(pos);
         if (!state.isCollisionShapeFullBlock(this.self.level(), pos) || !state.canOcclude()) return;
         if (state.isAir()) return;
@@ -572,9 +575,9 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         double sinkDepth;
         switch (hitResult.getDirection()) {
-            case UP   -> sinkDepth = 0.8;  // floor: sink upward into block
-            case DOWN -> sinkDepth = -0.8; // ceiling: normal points DOWN, negate to go UP into block
-            default   -> sinkDepth = 0.55; // walls
+            case UP   -> sinkDepth = 0.75;  // floor: sink upward into block
+            case DOWN -> sinkDepth = -0.75; // ceiling: normal points DOWN, negate to go UP into block
+            default   -> sinkDepth = 0; // walls
         }
 
 // This line uses sinkDepth — negative value flips the sink direction for ceiling
@@ -607,19 +610,33 @@ public class PowersPlanetWaves extends NewDashPreset {
     private LivingEntity restrainedEntity = null;
     private byte restrainAnimationType = 0; // 0 = side, 1 = above, 2 = below
     private int grabCooldownTicks = 0;
-    private static final int GRAB_COOLDOWN = 100;
+    private static final int GRAB_COOLDOWN = 60;
     private boolean isSinking = false;
     private Vec3 sinkTarget = null;
     private boolean wasSinking = false;
     private boolean wasTravelling = false;
+    private int restrainHoldTicks = 0;
 
     @Override
     public void tickPowerEnd() {
         super.tickPowerEnd();
         if (self.level().isClientSide()) return;
-
+        if (grabCooldownTicks > 0) grabCooldownTicks--;
         StandEntity stand = this.getStandEntity(this.self);
-
+        // ── 0. CHECK IF BLOCK WAS DESTROYED ────────────────────────────────────
+        if (targetingstand && !isTravelling && !isSinking && standTargetPos != null) {
+            BlockPos checkPos = BlockPos.containing(standTargetPos.x, standTargetPos.y, standTargetPos.z);
+            // shift slightly into the block using the face normal to check the actual block, not the air in front
+            if (standHitDirection != null) {
+                Vec3 normal = Vec3.atLowerCornerOf(standHitDirection.getNormal());
+                Vec3 insideBlock = standTargetPos.subtract(normal.scale(0.5));
+                checkPos = BlockPos.containing(insideBlock.x, insideBlock.y, insideBlock.z);
+            }
+            var blockState = this.self.level().getBlockState(checkPos);
+            if (!blockState.isCollisionShapeFullBlock(this.self.level(), checkPos) || !blockState.canOcclude() || blockState.isAir()) {
+                usertargeting();
+            }
+        }
         // ── 1a. PHASE 1 — travel to block face ───────────────────────────────
         if (isTravelling && standTravelTarget != null && stand != null) {
 
@@ -669,21 +686,60 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         // ── 2. BURIED — GRAB DETECTION ───────────────────────────────────────
         if (!isTravelling && !isSinking && targetingstand && stand != null) {
+            System.out.println("DEBUG section2 check: restrainedEntity=" + restrainedEntity + " grabCooldownTicks=" + grabCooldownTicks);
 
-            if (restrainedEntity == null && grabCooldownTicks <= 0) {
+            if (restrainedEntity == null && grabCooldownTicks <= 0 && standTargetPos != null && standHitDirection != null) {
+
+                AABB grabBox;
+                double reach = 0.8;
+                double width = 0.6;
+
+                switch (standHitDirection) {
+                    case UP -> grabBox = new AABB(
+                            standTargetPos.x - width, standTargetPos.y, standTargetPos.z - width,
+                            standTargetPos.x + width, standTargetPos.y + reach, standTargetPos.z + width
+                    );
+                    case DOWN -> grabBox = new AABB(
+                            standTargetPos.x - width, standTargetPos.y - reach, standTargetPos.z - width,
+                            standTargetPos.x + width, standTargetPos.y, standTargetPos.z + width
+                    );
+                    default -> {
+                        Vec3 normal = Vec3.atLowerCornerOf(standHitDirection.getNormal());
+                        grabBox = new AABB(
+                                standTargetPos.x - width, standTargetPos.y - width, standTargetPos.z - width,
+                                standTargetPos.x + width, standTargetPos.y + width, standTargetPos.z + width
+                        ).expandTowards(normal.scale(reach));
+                    }
+                }
+
                 List<LivingEntity> nearby = self.level().getEntitiesOfClass(
                         LivingEntity.class,
-                        stand.getBoundingBox().inflate(1.2)
+                        grabBox
                 );
+
+                System.out.println("DEBUG grabBox=" + grabBox + " nearby found=" + nearby.size());
+
                 for (LivingEntity entity : nearby) {
                     if (entity.is(this.self))         continue;
                     if (!entity.isAlive())             continue;
                     if (entity instanceof StandEntity) continue;
 
                     restrainedEntity = entity;
+                    restrainHoldTicks = 60; // 3 seconds
+                    System.out.println("Grabbed Mob: " + entity);
+
                     if (restrainedEntity instanceof Mob mob) mob.setNoAi(true);
-                    if (entity instanceof StandUser SU)      SU.roundabout$setRestrainedTicks(200);
-                    animateStand(PlanetWavesEntity.GRAB_HORIZONTAL);
+                    if (entity instanceof StandUser SU)      SU.roundabout$setRestrainedTicks(60); // 3 seconds
+
+                    byte grabAnim;
+                    byte animType;
+                    switch (standHitDirection) {
+                        case UP -> { grabAnim = PlanetWavesEntity.GRAB_UPWARDS; animType = 1; }
+                        case DOWN -> { grabAnim = PlanetWavesEntity.GRAB_DOWNWARDS; animType = 2; }
+                        default -> { grabAnim = PlanetWavesEntity.GRAB_HORIZONTAL; animType = 0; }
+                    }
+                    restrainAnimationType = animType;
+                    animateStand(grabAnim);
                     syncStandMode();
                     break;
                 }
@@ -694,13 +750,17 @@ public class PowersPlanetWaves extends NewDashPreset {
         if (restrainedEntity != null && stand != null) {
 
             if (restrainedEntity instanceof StandUser SU) {
-                SU.roundabout$setRestrainedTicks(60);
+                SU.roundabout$setRestrainedTicks(20); // refresh just above tick rate
             }
 
             boolean lost = !restrainedEntity.isAlive()
                     || restrainedEntity.distanceTo(stand) > 4.0;
 
-            if (lost) {
+            if (restrainHoldTicks > 0) {
+                restrainHoldTicks--;
+            }
+
+            if (lost || restrainHoldTicks <= 0) {
                 releaseRestrainedEntity(stand);
             } else {
                 restrainedEntity.setDeltaMovement(Vec3.ZERO);
@@ -709,11 +769,17 @@ public class PowersPlanetWaves extends NewDashPreset {
                     mob.getNavigation().stop();
                     mob.setTarget(null);
                 }
-                restrainedEntity.teleportTo(
-                        stand.getX(),
-                        stand.getY(),
-                        stand.getZ()
-                );
+                double tpX = standTargetPos.x;
+                double tpY = standTargetPos.y;
+                double tpZ = standTargetPos.z;
+
+                if (standHitDirection == net.minecraft.core.Direction.UP) {
+                    tpY += 0.5;
+                } else if (standHitDirection == net.minecraft.core.Direction.DOWN) {
+                    tpY -= 2.0;
+                }
+
+                restrainedEntity.teleportTo(tpX, tpY, tpZ);
             }
         }
 
@@ -728,17 +794,19 @@ public class PowersPlanetWaves extends NewDashPreset {
         if (restrainedEntity instanceof Mob mob) mob.setNoAi(false);
         restrainedEntity = null;
         grabCooldownTicks = GRAB_COOLDOWN;
-        if (stand != null) this.animateStand(StandEntity.IDLE);
+        if (stand != null && targetingstand && standHitDirection != null) {
+            byte burialAnim = switch (standHitDirection) {
+                case UP -> PlanetWavesEntity.BURY_UPWARDS;
+                case DOWN -> PlanetWavesEntity.BURY_DOWNWARDS;
+                default -> PlanetWavesEntity.BURY_HORIZONTAL;
+            };
+            this.animateStand(burialAnim);
+        } else if (stand != null) {
+            this.animateStand(StandEntity.IDLE);
+        }
         syncStandMode();
     }
 
-    private void releaseRestrainedEntity() {
-        if (restrainedEntity instanceof Mob mob) {
-            mob.setNoAi(false);
-        }
-        restrainedEntity = null;
-        this.animateStand(StandEntity.IDLE);
-    }
     private void applyBurialRotation(StandEntity stand) {
         if (standHitDirection == null || stand == null) return;
         float extraX;
@@ -748,8 +816,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             default    -> extraX = 0.0F; // UP
         }
         stand.setStandRotationX(extraX);
-        // Store the entity yRot at burial time so the model can use it
-        stand.setStandRotationY(this.self.getYRot() * Mth.DEG_TO_RAD);
+        stand.setStandRotationY(this.standTargetYaw * Mth.DEG_TO_RAD); // use stored yaw, not live
     }
     private boolean isBuried= false;
     private Vec3 buriedStandPos= null;
@@ -1060,7 +1127,6 @@ public class PowersPlanetWaves extends NewDashPreset {
             mode |= (restrainAnimationType & 0x3) << 4;            // bits 4-5 (was 3-4)
             int dirOrdinal = (standHitDirection != null) ? standHitDirection.ordinal() : 0;
             mode |= (dirOrdinal & 0x7) << 6;                       // bits 6-8 (was 5-7)
-            System.out.println("DEBUG SERVER syncStandMode: standHitDirection=" + standHitDirection + " dirOrdinal=" + dirOrdinal + " mode=" + mode);
             S2CPacketUtil.sendGenericIntToClientPacket(
                     pl, PacketDataIndex.S2C_INT_STAND_MODE, mode);
         }
@@ -1087,7 +1153,6 @@ public class PowersPlanetWaves extends NewDashPreset {
         if (wasSink && !isSinking && targetingstand) {
             StandEntity stand = this.getStandEntity(this.self);
 
-            System.out.println("DEBUG CLIENT animating dirOrdinal=" + dirOrdinal);
 
             if (dirOrdinal == 1) {
                 animateStand(PlanetWavesEntity.BURY_UPWARDS);
@@ -1100,8 +1165,13 @@ public class PowersPlanetWaves extends NewDashPreset {
         }
 
         // grab happened
-        if (!targetingstand && !wasSink && restrainAnimationType != 0) {
-            animateStand(PlanetWavesEntity.GRAB_HORIZONTAL);
+        if (targetingstand && restrainAnimationType != 0) {
+            byte grabAnim = switch (restrainAnimationType) {
+                case 1 -> PlanetWavesEntity.GRAB_UPWARDS;
+                case 2 -> PlanetWavesEntity.GRAB_DOWNWARDS;
+                default -> PlanetWavesEntity.GRAB_HORIZONTAL;
+            };
+            animateStand(grabAnim);
         }
     }
 
