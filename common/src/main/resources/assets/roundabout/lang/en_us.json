@@ -648,7 +648,7 @@
   "roundabout:upgrade.roundabout.execution_upgrade": "Execution Upgrade",
 
   "key.category.roundabout.jojo": "Roundabout Controls",
-  "hud.roundabout.standout": "Stand Summoned",
+  "hud.roundabout.standout": "Stand summoned",
   "sounds.roundabout.dsp_summon": "Explosive Stand Summon",
   "sounds.roundabout.vampire_message": "-serrated-",
   "sounds.roundabout.vampire_camo": "Whoosh",
@@ -907,7 +907,7 @@
   "sounds.roundabout.soft_and_wet_kick":  "Impact",
   "sounds.roundabout.extend_spikes":  "Spikes",
   "sounds.roundabout.wall_latch":  "Wall Latch",
-  "sounds.roundabout.summon_walking":  "Stand Summoned",
+  "sounds.roundabout.summon_walking":  "Stand summoned",
   "sounds.roundabout.heel_raise":  "Limb Raises",
   "sounds.roundabout.heel_stomp":  "Leg lowers",
   "sounds.roundabout.spike_hit":  "Spike hit",
@@ -930,12 +930,12 @@
 
   "sounds.roundabout.cream_void_attack":  "Cream eating",
 
-  "sounds.roundabout.manhattan_summoning":  "Stand Summoned",
+  "sounds.roundabout.manhattan_summoning":  "Stand summoned",
   "sounds.roundabout.manhattan_rain_dodging":  "Manhattan Transfer Dodging Rain",
   "sounds.roundabout.manhattan_vision":  "Wind Reading ON",
   "sounds.roundabout.manhattan_bullet_deflect":  "Manhattan Deflects Bullet",
 
-  "sounds.roundabout.planet_waves_summon":  "Stand Summoned",
+  "sounds.roundabout.planet_waves_summon":  "Stand summoned",
   "sounds.roundabout.planet_waves_meteor_shower":  "Meteors Approaching",
   "sounds.roundabout.planet_waves_big_meteor":  "Big Meteor Approaching",
   "sounds.roundabout.planet_waves_target":  "Meteor Target Switched",
@@ -1057,14 +1057,14 @@
   "sounds.roundabout.explosive_bat":  "Home Run",
   "sounds.roundabout.fog_clone":  "Illusionary formation",
 
-  "sounds.roundabout.cinderella_summon":  "Stand Summoned",
+  "sounds.roundabout.cinderella_summon":  "Stand summoned",
   "sounds.roundabout.cinderella_attack":  "Mechanical Attack",
   "sounds.roundabout.cinderella_sparkle":  "Magic sparkle",
   "sounds.roundabout.cinderella_fail":  "Uh oh",
   "sounds.roundabout.cinderella_visage_creation":  "Mechanical whirl",
 
   "sounds.roundabout.ratt_summon":  "Chittering Noises",
-  "sounds.roundabout.ratt_place":  "Stand Summoned",
+  "sounds.roundabout.ratt_place":  "Stand summoned",
   "sounds.roundabout.ratt_deplace":  "Ratt Desummoned",
   "sounds.roundabout.ratt_scope":  "Scope Whirr",
   "sounds.roundabout.ratt_dart_impact": "Dart Impact",
@@ -1141,7 +1141,7 @@
   "sounds.roundabout.hey_ya_6": "Stand Talking",
   "sounds.roundabout.hey_ya_7": "Stand Talking",
 
-  "sounds.roundabout.killer_queen_summon": "Stand Summoned!",
+  "sounds.roundabout.killer_queen_summon": "Stand summoned",
   "sounds.roundabout.killer_queen_barrage": "Shibabababa!",
 
   "sounds.roundabout.levelup": "Development Level Up!",
