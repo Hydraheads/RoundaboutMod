@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IMob;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
@@ -12,6 +13,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
@@ -194,6 +196,15 @@ public class PowersKillerQueen extends NewPunchingStand {
                 pl.isCreative()));
     }
 
+
+    private boolean hasBitesTheDust = false;
+    public boolean canBitesTheDust() {
+
+        return this.hasBitesTheDust || (this.getSelf() instanceof Player pl && ((!((StandUser) pl).roundabout$getStandDisc().isEmpty() &&
+                ((StandUser) pl).roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem) ||
+                pl.isCreative()));
+    }
+
 	public boolean wentForCharge = false;
 	public int chargedFinal;
 	public boolean holdDownClick = false;
@@ -292,16 +303,21 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     static final String strayCatTag = "hasStrayCat";
+    static final String BitesTheDustTag = "hasBTD";
 
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
         $$0.putBoolean(strayCatTag, this.hasStrayCat);
+        $$0.putBoolean(BitesTheDustTag, this.hasBitesTheDust);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
         if ($$0.contains(strayCatTag)) {
             this.hasStrayCat = $$0.getBoolean(strayCatTag);
+        }
+        if ($$0.contains(BitesTheDustTag)) {
+            this.hasBitesTheDust = $$0.getBoolean(BitesTheDustTag);
         }
     }
 
@@ -337,28 +353,48 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     @Override
     public List<Byte> getSkinList() {
-        return Arrays.asList(
-        		PART_4 ,
-        		MANGA,
-        		UMBRA,
-        		GOGO,
-        		ARTWORK,
-        		CRACKED,
-        		CREEPER,
-        		STRAY,
-        		NIGHTMARE,
-        		LIMBUSMORTIS,
-        		JOJOLION,
-        		GUNPOWDER,
-        		FINAL,
-        		DEADLY,
-        		YELLOW,
-        		TAMA,
-        		MINESWEEPER,
-        		NOTW,
-        		MEMENTO,
-        		STARDUST
-        );
+        List<Byte> l = Lists.newArrayList();
+        l.add(PART_4);
+        if (this.getSelf() instanceof Player PE) {
+            byte Level = ((IPlayerEntity) PE).roundabout$getStandLevel();
+            ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();
+            boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+            if (Level > 1 || bypass){
+                l.add(MANGA);
+                l.add(GOGO);
+                l.add(JOJOLION);
+            }
+            if (Level > 2 || bypass){
+                l.add(ARTWORK);
+                l.add(FINAL);
+                l.add(YELLOW);
+            }
+            if (Level > 3 || bypass){
+                l.add(CRACKED);
+                l.add(DEADLY);
+                l.add(CREEPER);
+                l.add(TAMA);
+            }
+            if (Level > 4 || bypass){
+                l.add(UMBRA);
+                l.add(NIGHTMARE);
+                l.add(LIMBUSMORTIS);
+            }
+            if (Level > 5 || bypass){
+                l.add(MEMENTO);
+                l.add(GUNPOWDER);
+                l.add(MINESWEEPER);
+            }
+            if (Level > 6 || bypass){
+                l.add(NOTW);
+                l.add(STARDUST);
+            }
+             if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
+                l.add(STRAY);
+            }
+        }
+
+        return l;
     }
     
     @Override public boolean isWip(){return true;}
@@ -1385,6 +1421,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     bubble.setIsKQAirBubble(true);
                     bubble.setIsPlanted(true);
                     bubble.setHasTimeLimit(false);
+                    bubble.setFollowOwnerView(!(this.getSelf() instanceof Player));
 
                     Vec3 addToPosition = new Vec3(0, user.getEyeHeight() * 0.85f, 0);
                     Direction direction = ((IGravityEntity) user).roundabout$getGravityDirection();
@@ -1622,6 +1659,9 @@ public class PowersKillerQueen extends NewPunchingStand {
             double dist = attackTarget.distanceTo(this.getSelf());
             boolean isCreeper = this.getSelf() instanceof Creeper;
             if (isCreeper) {
+                if (this.currentShaStatus == SHA_NONE) {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+                }
             } else {
                 if ((this.getActivePower() != PowerIndex.NONE)
                         || dist <= 5){
@@ -1650,8 +1690,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                         }
                     } else if ((this.getSelf() instanceof Piglin
                             || upAiNow
-                            || this.getSelf() instanceof AbstractVillager) && dist <= 11 && dist >= 6) {
-                        if (!onCooldown(PowerIndex.SKILL_3)) {
+                            || this.getSelf() instanceof AbstractIllager) && dist <= 11 && dist >= 6) {
+                        if (!onCooldown(PowerIndex.SKILL_3) && this.currentShaStatus == SHA_NONE) {
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BLOCK, true);
                         }
                     } else if ((this.getSelf() instanceof Spider || this.getSelf() instanceof Slime
@@ -1659,12 +1699,15 @@ public class PowersKillerQueen extends NewPunchingStand {
                             || this.getSelf() instanceof Rabbit || this.getSelf() instanceof AbstractVillager
                             || this.getSelf() instanceof Piglin || this.getSelf() instanceof Vindicator) &&
                             this.getSelf().onGround() && dist <= 19 && dist >= 5) {
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BLOCK, true);
 
-                    } else if (this.currentBombStatus == BOMB_NONE) {
-                        //double RNG = Math.random(); "&& RNG >= 0.90"
-                        if (!onCooldown(PowerIndex.SKILL_2) && dist <= (mobPlantRange - 0.3) && !wentForCharge) {
+                    } else if (this.currentBombStatus == BOMB_NONE && !wentForCharge) {
+                        double RNG = Math.random();
+                        if (!onCooldown(PowerIndex.SKILL_2) && dist <= (mobPlantRange - 0.3)
+                                && RNG >= 0.70) {
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
                         }
+
                     } else if (this.currentBombStatus != BOMB_BUBBLE) {
                         if (dist > 1.4 && !wentForCharge) {
                             ((StandUser) this.getSelf()).roundabout$tryPower(DETONATE, true);
