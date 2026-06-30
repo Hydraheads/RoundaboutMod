@@ -1805,6 +1805,9 @@
   "ability.roundabout.grab":"Grab",
   "ability.roundabout.gra.desc":"When in stand targeting mode if anyone gets close enough to planet waves they will get grabbed.",
 
+  "ability.roundabout.manhattan_premise": "How To Use",
+  "ability.roundabout.manhattan_premise.desc": "Manhattan Transfer absorbs projectiles shot at it. So if you aim a bow or a firearm at it, it will hold onto that projectile and use it for shooting mobs.",
+
   "ability.roundabout.manual_shooting": "Shooting Mode",
   "ability.roundabout.manual_shooting.desc": "There are two shooting modes: auto and manual. In auto mode, the stand will automatically redirect projectiles it stores at the closest moving entity, so long as the mob is in range. The range is indicated with a brighter highlight. In manual mode, you have to enter control mode, aim, and press attack to shoot the stored projectile.",
   "ability.roundabout.control_mode": "Control Mode",
@@ -2059,7 +2062,7 @@
   "skins.roundabout.planet_waves.ocean_waves": "Ocean Waves",
   "skins.roundabout.planet_waves.symphony_waves": "Symphony",
 
-  "skins.roundabout.ratt.anime" : "Anime",
+  "skins.roundabout.ratt.anime" : "Part 4",
   "skins.roundabout.ratt.manga" : "Manga",
   "skins.roundabout.ratt.melon" : "Melon",
   "skins.roundabout.ratt.sand" : "Sand",
@@ -2201,7 +2204,7 @@
   "skins.roundabout.20_centuryboy.beta": "Beta",
 
 
-  "skins.roundabout.manhattan_transfer.manhattan_part_6": "Anime",
+  "skins.roundabout.manhattan_transfer.manhattan_part_6": "Part 6",
   "skins.roundabout.manhattan_transfer.manhattan_manga_part_6": "Manga",
   "skins.roundabout.manhattan_transfer.manhattan_aerosmith": "Aerosmith",
   "skins.roundabout.manhattan_transfer.brazilian_transfer": "Brazilian",
@@ -2219,7 +2222,7 @@
   "item.roundabout.anubis_item.failure" : "Nobody to kill...",
   "item.roundabout.anubis_item.sword_cleansed": "Anubis Cleansed!",
 
-  "skins.roundabout.anubis.anime" : "Anime",
+  "skins.roundabout.anubis.anime" : "Part 3",
   "skins.roundabout.anubis.evil" : "Evil",
   "skins.roundabout.anubis.wooden" : "Sacrifical",
   "skins.roundabout.anubis.stone" : "Stone",

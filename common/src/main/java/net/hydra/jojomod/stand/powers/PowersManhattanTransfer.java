@@ -814,19 +814,21 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.manual_shooting",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.manhattan_premise",
+                "instruction.roundabout.press_skill", StandIcons.MT_PREMISE, 1, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.manual_shooting",
                 "instruction.roundabout.press_skill", StandIcons.MANUAL_SHOOTING_OFF, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.control_mode",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.control_mode",
                 "instruction.roundabout.press_skill", StandIcons.CONTROL_MODE_ON, 2, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE, 3, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.wind_vision",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.wind_vision",
                 "instruction.roundabout.press_skill", StandIcons.WIND_VISION_ON, 4, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.wind_reading",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.wind_reading",
                 "instruction.roundabout.passive_manhattan",  StandIcons.WIND_READING, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.bonus_damage",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.bonus_damage",
                 "instruction.roundabout.passive",  StandIcons.MANHATTAN_DAMAGE_BOOST, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.manhattan_dodge",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0, "ability.roundabout.manhattan_dodge",
                 "instruction.roundabout.press_skill",  StandIcons.MANHATTAN_DODGE, 3, level, bypass));
         return $$1;
     }
@@ -872,18 +874,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 }
             }
         }
-    }
-    @Override
-    public boolean isWip(){
-        return true;
-    }
-    @Override
-    public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.RED);
-    }
-    @Override
-    public Component ifWipListDev(){
-        return Component.literal(  "14Kacper").withStyle(ChatFormatting.DARK_RED);
     }
 
     private int mobShootArrow = 80;

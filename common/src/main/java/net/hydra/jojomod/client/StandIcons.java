@@ -564,6 +564,8 @@ public class StandIcons {
     public static final ResourceLocation CINDERELLA_VISAGES = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/cinderella/visages.png");
 
+    public static final ResourceLocation MT_PREMISE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/manhattan_transfer/premise.png");
     public static final ResourceLocation MANUAL_SHOOTING_OFF = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/manhattan_transfer/auto_shooting_off.png");
     public static final ResourceLocation MANUAL_SHOOTING_ON = new ResourceLocation(Roundabout.MOD_ID,
