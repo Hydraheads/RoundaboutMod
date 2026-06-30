@@ -849,7 +849,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (!onCooldown(PowerIndex.SKILL_2)) {
 
             this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().whiteAlbumSettings.twisterCooldownv2);
-            this.setCooldown(PowerIndex.SKILL_2_SNEAK, 20);
+            this.setCooldown(PowerIndex.SKILL_2_SNEAK, 40);
             Level level = self.level();
 
             BlockPos checkPos = pos;
@@ -888,7 +888,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             }
             this.setCooldown(PowerIndex.SKILL_2_SNEAK,
                     ClientNetworking.getAppropriateConfig().whiteAlbumSettings.gentlyWeepsCooldown);
-            this.setCooldown(PowerIndex.SKILL_2, 30);
+            this.setCooldown(PowerIndex.SKILL_2, 40);
 
             Level level = self.level();
             addEXP(3);
@@ -1756,11 +1756,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
         if (targ instanceof Player PL){
             int heat = HeatUtil.getHeat(PL);
-            if (heat > -50) {
-                HeatUtil.addHeat(PL, -4);
-            } else {
-                HeatUtil.addHeat(PL,-3);
-            }
+            HeatUtil.addHeat(PL, -4);
         } else if (targ instanceof LivingEntity LE){
             HeatUtil.addHeat(LE,-13);
         }
