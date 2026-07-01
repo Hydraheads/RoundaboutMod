@@ -928,6 +928,15 @@ public class ManhattanTransferEntity extends StandEntity {
                             }
                         }
                     }
+                    if(this.getUser() instanceof Mob M && M.getTarget() != null && !(value.is(M.getTarget()))){
+                        targent.remove(value);
+                        this.setHattanTarget(0);
+                        if (this.getUserData(this.getUser()) != null) {
+                            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                                PM.targetHattan = null;
+                            }
+                        }
+                    }
                 }
 
                 lvent = targent;
