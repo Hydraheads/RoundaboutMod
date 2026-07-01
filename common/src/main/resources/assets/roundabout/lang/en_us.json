@@ -25,6 +25,10 @@
   "text.roundabout.fate.vampire_hair": "Change Hair Color",
   "text.roundabout.fate.zombie": "Zombie",
 
+  "text.roundabout.ckb_rule_0": "Don't Step Here",
+  "text.roundabout.ckb_rule_1": "Don't Hurt Me",
+  "text.roundabout.ckb_rule_2": "Don't Leave Me",
+
   "text.roundabout.bullets.revolver": "Compatible with Snubnosed Revolvers and Colt Revolvers.",
   "text.roundabout.bullets.tommy": "Compatible with Tommy Guns.",
   "text.roundabout.bullets.sniper": "Compatible with Jackal Rifles.",

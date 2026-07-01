@@ -219,6 +219,14 @@ public class StandIcons {
     public static final ResourceLocation DODGE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/dodge.png");
 
+    public static final ResourceLocation FORBID_RULE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/forbid_rule.png");
+    public static final ResourceLocation HURT_RULE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/hurt_rule.png");
+    public static final ResourceLocation LEAVE_RULE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/leave_rule.png");
+    public static final ResourceLocation EXPERIENCE_BISHOP = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/experience_bishop.png");
     public static final ResourceLocation VAMP_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/powers/vampire/punch.png");
     public static final ResourceLocation VAMP_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,

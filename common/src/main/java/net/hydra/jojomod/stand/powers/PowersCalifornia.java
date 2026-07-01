@@ -27,28 +27,20 @@ import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
-import net.hydra.jojomod.util.MainUtil;
-import net.hydra.jojomod.util.S2CPacketUtil;
-import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec3;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class PowersCalifornia extends NewDashPreset {
 
@@ -56,11 +48,53 @@ public class PowersCalifornia extends NewDashPreset {
         super(self);
     }
 
-
     @Override
     /**Override to add disable config*/
     public boolean isStandEnabled(){
         return ClientNetworking.getAppropriateConfig().cinderellaSettings.enableCinderella;
+    }
+
+    public static final byte DO_NOT_STEP_HERE = 0;
+    public static final byte DO_NOT_HURT_ME = 1;
+    public static final byte DO_NOT_LEAVE_ME = 2;
+    public byte currentRule = DO_NOT_STEP_HERE;
+    public byte getCurrentRule(){
+        return currentRule;
+    }
+    public void setCurrentRule(byte rule){
+        currentRule = rule;
+        if (!self.level().isClientSide()){
+            saveDiscAndSync();
+        }
+    }
+    public void nextRule(){
+        currentRule++;
+        if (currentRule > DO_NOT_LEAVE_ME){
+            currentRule = DO_NOT_STEP_HERE;
+        }
+        if (!self.level().isClientSide()){
+            saveDiscAndSync();
+        }
+    }
+    public boolean isDoNotStep(){
+        return currentRule == DO_NOT_STEP_HERE;
+    }
+    public boolean isDoNotLeave(){
+        return currentRule == DO_NOT_LEAVE_ME;
+    }
+    public boolean isDoNotHurt(){
+        return currentRule == DO_NOT_HURT_ME;
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag $$0) {
+        $$0.putByte("currentRule",currentRule);
+    }
+    @Override
+    public void readAdditionalSaveData(CompoundTag $$0) {
+        if ($$0.contains("currentRule")) {
+            currentRule = $$0.getByte("currentRule");
+        }
     }
 
     @Override
@@ -108,6 +142,16 @@ public class PowersCalifornia extends NewDashPreset {
             case SKILL_3_CROUCH -> {
                 tryToDash2Client();
             }
+            case SKILL_4_NORMAL -> {
+                ruleSwitchClient();
+            }
+        }
+    }
+
+    public void ruleSwitchClient(){
+        if (!onCooldown(PowerIndex.SKILL_4)){
+            setCooldown(PowerIndex.SKILL_4,6);
+            tryPowerPacket(PowerIndex.POWER_4);
         }
     }
 
@@ -148,17 +192,29 @@ public class PowersCalifornia extends NewDashPreset {
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        setSkillIcon(context, x, y, 1, StandIcons.CINDERELLA_MASK, PowerIndex.NO_CD);
-        setSkillIcon(context, x, y, 2, StandIcons.CINDERELLA_SCALP, PowerIndex.SKILL_2);
 
         if (this.getSelf().fallDistance > 3) {
             setSkillIcon(context, x, y, 3, StandIcons.CALIFORNIA_FALL_CATCH, PowerIndex.SKILL_EXTRA);
         } else {
             if (isHoldingSneak()){
-                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+                setSkillIcon(context, x, y, 3, StandIcons.EXPERIENCE_BISHOP, PowerIndex.GLOBAL_DASH);
             } else {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
             }
+        }
+
+        if (isHoldingSneak()){
+            setSkillIcon(context, x, y, 4, StandIcons.GO_BEYOND, PowerIndex.SKILL_4_SNEAK);
+        } else {
+            ResourceLocation icon;
+            if (isDoNotHurt()){
+                icon = StandIcons.HURT_RULE;
+            } else if (isDoNotLeave()){
+                icon = StandIcons.LEAVE_RULE;
+            } else {
+                icon = StandIcons.FORBID_RULE;
+            }
+            setSkillIcon(context, x, y, 4, icon, PowerIndex.SKILL_4);
         }
     }
 
@@ -201,8 +257,18 @@ public class PowersCalifornia extends NewDashPreset {
             return this.fallBraceInit();
         } else if (move == PowerIndex.FALL_BRACE_FINISH){
             return this.fallBrace();
+        } else if (move == PowerIndex.POWER_4){
+            switchRules();
         }
         return super.setPowerOther(move,lastMove);
+    }
+
+    public void switchRules(){
+        setCooldown(PowerIndex.SKILL_4,6);
+        nextRule();
+        if (self instanceof ServerPlayer pl){
+            pl.displayClientMessage(Component.translatable("text.roundabout.ckb_rule_"+currentRule).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        }
     }
 
     @Override
