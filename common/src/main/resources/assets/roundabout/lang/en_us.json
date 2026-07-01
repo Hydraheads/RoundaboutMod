@@ -25,9 +25,9 @@
   "text.roundabout.fate.vampire_hair": "Change Hair Color",
   "text.roundabout.fate.zombie": "Zombie",
 
-  "text.roundabout.ckb_rule_0": "Don't Step Here",
-  "text.roundabout.ckb_rule_1": "Don't Hurt Me",
-  "text.roundabout.ckb_rule_2": "Don't Leave Me",
+  "text.roundabout.ckb_rule_0": "\"Don't Step Here!\"",
+  "text.roundabout.ckb_rule_1": "\"Don't Hurt Me!\"",
+  "text.roundabout.ckb_rule_2": "\"Don't Leave Me!\"",
 
   "text.roundabout.bullets.revolver": "Compatible with Snubnosed Revolvers and Colt Revolvers.",
   "text.roundabout.bullets.tommy": "Compatible with Tommy Guns.",
@@ -677,6 +677,7 @@
   "sounds.roundabout.cold_shot": "Frost",
   "sounds.roundabout.gently_weeps": "Gently Weeps",
   "sounds.roundabout.ding": "Ready",
+  "sounds.roundabout.magic_ding": "Ding",
 
   "sounds.roundabout.iron_ball_impact": "Iron ball impact",
   "sounds.roundabout.iron_ball_bounce": "Iron ball bounce",

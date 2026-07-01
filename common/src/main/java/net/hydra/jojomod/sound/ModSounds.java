@@ -341,6 +341,11 @@ public class ModSounds {
     public static final ResourceLocation BULLET_RICOCHET_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BULLET_RICOCHET);
     public static SoundEvent BULLET_RICOCHET_EVENT = SoundEvent.createVariableRangeEvent(BULLET_RICOCHET_ID);
 
+    public static final String MAGIC_DING = "magic_ding";
+    public static final ResourceLocation MAGIC_DING_ID = new ResourceLocation(Roundabout.MOD_ID+":"+MAGIC_DING);
+    public static SoundEvent MAGIC_DING_EVENT = SoundEvent.createVariableRangeEvent(MAGIC_DING_ID);
+
+
 
     public static final String ROAD_ROLLER_AMBIENT = "road_roller_ambient";
     public static final ResourceLocation ROAD_ROLLER_AMBIENT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ROAD_ROLLER_AMBIENT);
