@@ -14,6 +14,7 @@ import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
@@ -111,7 +112,7 @@ public class PowersWalkingHeart extends NewDashPreset {
     @Override
     public boolean interceptSuccessfulDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
         if ((hasStandActive(this.getSelf()) && $$0.is(DamageTypes.PLAYER_ATTACK)) && hasExtendedHeelsForWalking()){
-            addEXP(1);
+            addEXP(2);
         }
 
         return false;
@@ -314,7 +315,9 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
     public void onActuallyHurt(DamageSource $$0, float $$1){
         if ($$0.getEntity() != null && !$$0.is(DamageTypes.THORNS)) {
-            hitHeelExtendedState();
+            if (!$$0.is(ModDamageTypes.KNIFE) && !$$0.is(ModDamageTypes.BULLET)) {
+                hitHeelExtendedState();
+            }
         }
     }
 

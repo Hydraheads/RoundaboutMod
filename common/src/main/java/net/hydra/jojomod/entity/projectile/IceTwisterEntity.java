@@ -4,6 +4,7 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
@@ -64,6 +65,11 @@ public class IceTwisterEntity extends WhiteAlbumFreezingEntity {
                     wallBox.inflate(0.1))) {
 
                 if (mob.getBoundingBox().intersects(wallBox)) {
+                    if (mob.isOnFire()){
+                        mob.setRemainingFireTicks(0);
+                    } if ( ((StandUser)mob).roundabout$isOnStandFire()){
+                        ((StandUser)mob).roundabout$setRemainingStandFireTicks(0);
+                    }
                     if (MainUtil.canFreeze(mob)) {
                         if (mob instanceof Player pl){
                             if (this.tickCount%2==0){

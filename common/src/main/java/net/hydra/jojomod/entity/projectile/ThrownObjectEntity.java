@@ -83,6 +83,9 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         this.entityData.set(ROUNDABOUT$SUPER_THROWN, true);
         superThrowTicks = 50;
     }
+    public void disableThrow(){
+        this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
+    }
 
     public ThrownObjectEntity(Level world, double p_36862_, double p_36863_, double p_36864_, ItemStack itemStack, boolean places) {
         super(ModEntities.THROWN_OBJECT, p_36862_, p_36863_, p_36864_, world);
