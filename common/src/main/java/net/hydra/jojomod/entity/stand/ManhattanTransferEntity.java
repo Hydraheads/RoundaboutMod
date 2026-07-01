@@ -909,7 +909,7 @@ public class ManhattanTransferEntity extends StandEntity {
                 List<LivingEntity> targent = new ArrayList<>(lvent);
                 for (LivingEntity value : lvent) {
                     IEntityAndData entityAndData = ((IEntityAndData) value);
-                    if (value instanceof StandEntity || value.is(this.getUser()) || !this.hasLineOfSight(value)) {
+                    if (value instanceof RoadRollerEntity || value instanceof StandEntity || value.is(this.getUser()) || !this.hasLineOfSight(value)) {
                         targent.remove(value);
                         this.setHattanTarget(0);
                         if (this.getUserData(this.getUser()) != null) {
