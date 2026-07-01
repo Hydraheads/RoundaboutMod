@@ -1459,7 +1459,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     bubble.setIsKQAirBubble(true);
                     bubble.setIsPlanted(true);
                     bubble.setHasTimeLimit(false);
-                    bubble.setFollowOwnerView(!(this.getSelf() instanceof Player));
+                    bubble.setFollowOwnerView(true);
 
                     Vec3 addToPosition = new Vec3(0, user.getEyeHeight() * 0.85f, 0);
                     Direction direction = ((IGravityEntity) user).roundabout$getGravityDirection();
@@ -1726,9 +1726,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                                 }
                             }
                         }
-                    } else if ((this.getSelf() instanceof Piglin
-                            || upAiNow
-                            || this.getSelf() instanceof AbstractIllager) && dist <= 11 && dist >= 6) {
+                    } else if ((this.getSelf() instanceof Piglin || upAiNow
+                            || this.getSelf() instanceof AbstractIllager || this.getSelf() instanceof Raider) && dist <= 15 && dist >= 13) {
                         if (!onCooldown(PowerIndex.SKILL_3) && this.currentShaStatus == SHA_NONE) {
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BLOCK, true);
                         }
@@ -1736,12 +1735,12 @@ public class PowersKillerQueen extends NewPunchingStand {
                             || this.getSelf() instanceof JotaroNPC || upAiNow
                             || this.getSelf() instanceof Rabbit || this.getSelf() instanceof AbstractVillager
                             || this.getSelf() instanceof Piglin || this.getSelf() instanceof Vindicator) &&
-                            this.getSelf().onGround() && dist <= 19 && dist >= 5) {
+                            dist <= 19 && dist >= 5 && this.currentBombStatus == BOMB_NONE && !wentForCharge) {
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BLOCK, true);
 
                     } else if (this.currentBombStatus == BOMB_NONE && !wentForCharge) {
                         double RNG = Math.random();
-                        if (!onCooldown(PowerIndex.SKILL_2) && dist <= (mobPlantRange - 0.3)
+                        if (!onCooldown(PowerIndex.SKILL_2) && dist <= (mobPlantRange + 3.5)
                                 && RNG >= 0.70) {
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
                         }
