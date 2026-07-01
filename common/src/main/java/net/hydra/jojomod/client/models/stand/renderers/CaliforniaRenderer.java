@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.models.stand.CaliforniaKingBedModel;
 import net.hydra.jojomod.client.models.stand.CinderellaModel;
 import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.stand.CinderellaEntity;
+import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -15,7 +16,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class CaliforniaRenderer extends StandRenderer<CaliforniaKingBedEntity> {
 
-    private static final ResourceLocation PART_8_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/base.png");
+    private static final ResourceLocation PART_8_SKIN = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/california_king_bed/base.png");
+    private static final ResourceLocation SUNSHINE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/sunshine.png");
 
     public CaliforniaRenderer(EntityRendererProvider.Context context) {
         super(context, new CaliforniaKingBedModel<>(context.bakeLayer(ModEntityRendererClient.CALIFORNIA_LAYER)), 0f);
@@ -23,11 +25,11 @@ public class CaliforniaRenderer extends StandRenderer<CaliforniaKingBedEntity> {
 
     @Override
     public ResourceLocation getTextureLocation(CaliforniaKingBedEntity entity) {
-        switch (entity.getSkin())
+        return switch (entity.getSkin())
         {
-            default:
-                return PART_8_SKIN;
-        }
+            case (CaliforniaKingBedEntity.SUNSHINE) -> SUNSHINE;
+            default -> PART_8_SKIN;
+        };
     }
 
     @Override

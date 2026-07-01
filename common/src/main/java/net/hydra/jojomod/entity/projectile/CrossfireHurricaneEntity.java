@@ -484,9 +484,10 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         strength*=multi;
         if (direct) {
             dmg = PMR.getHurricaneDirectDamage(gotten, size,fireStorm);
-            strength *= 2;
+            strength *= 2.5F;
         } else {
             dmg = PMR.getHurricaneDamage(gotten, size,fireStorm);
+            strength *= 1.5F;
         }
         if (gotten.hurt(ModDamageTypes.of(gotten.level(), ModDamageTypes.CROSSFIRE, user),
                 dmg)) {
@@ -522,10 +523,18 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
     }
 
     public void getEntity(Entity gotten, boolean direct,PowersMagiciansRed PMR){
-        if (gotten !=null && !MainUtil.isMobOrItsMounts(gotten,getUser())) {
+        if (gotten !=null && getUser() != null && !MainUtil.isMobOrItsMounts(gotten,getUser())) {
             int size = this.getSize();
             float special = 1;
-            if (isSpecial){special*=1.2f;}
+            if (isSpecial){
+                if (gotten instanceof Player pl && gotten.distanceTo(getUser()) < 3) {
+                    special *= 1.5f;
+                } else if (gotten instanceof Player pl && gotten.distanceTo(getUser()) < 5){
+                    special*=1.35f;
+                } else {
+                    special*=1.2f;
+                }
+            }
             blastEntity(gotten,this,size,this.standUser,direct,PMR,fireStormCreated,special);
         }
     }

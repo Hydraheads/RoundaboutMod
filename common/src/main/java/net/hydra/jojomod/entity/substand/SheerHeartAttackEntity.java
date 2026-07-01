@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.ExplosionUtil;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
@@ -380,14 +381,14 @@ public class SheerHeartAttackEntity extends StandEntity {
 		if (this.onGround()) {
 			this.lookAt(EntityAnchorArgument.Anchor.EYES, jumpT0Pos);
 			this.jumpTick = jumpTickMax;
-			this.setDeltaMovement((this.getLookAngle().multiply(1.5, 1.5, 1.5)).add(0, 0.21, 0));
+			this.setDeltaMovement((this.getLookAngle().multiply(1.3, 0.4, 1.3)).add(0, 0.31, 0));
 		}
 	}
 
 	public void shoot(Vec3 shootToPos){
 		this.lookAt(EntityAnchorArgument.Anchor.EYES,shootToPos);
 
-		this.setDeltaMovement((this.getLookAngle().multiply(1.6,1.6,1.6)).add(0,0.01,0));
+		this.setDeltaMovement((this.getLookAngle().multiply(1.6,1.6,1.6)).add(0,0.001,0));
 	}
 
 	public boolean shaIsNear() {
@@ -459,6 +460,13 @@ public class SheerHeartAttackEntity extends StandEntity {
 			if (LE.isOnFire() || LE.wasOnFire || HeatUtil.isHot(LE)) { points += 70;}
 			if (LE.isFullyFrozen()) { points -= 80;
 			}else if (LE.isFreezing()) { points -= 40;}
+			
+			if (((StandUser)LE).roundabout$hasAStand()) {
+				StandUser SU = (StandUser)LE;
+				if(SU.roundabout$getStandPowers() instanceof PowersWhiteAlbum && SU.roundabout$getActive()) {
+					points -= 130;
+				}
+			}
 
 			MobType mobType = LE.getMobType();
 			if (mobType.equals(MobType.UNDEAD)) { points -= 30;}
@@ -490,7 +498,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			// blockHit.getType() == HitResult.Type.BLOCK &&
 			if (this.isInWall()) {
 				Vec3 mov = this.getDeltaMovement();
-				this.setDeltaMovement(mov.x, 0.3f, mov.y);
+				this.setDeltaMovement(mov.x, 0.6f, mov.y);
 			}
 		//}
 	}

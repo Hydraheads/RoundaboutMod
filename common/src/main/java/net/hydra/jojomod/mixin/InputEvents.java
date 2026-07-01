@@ -643,7 +643,6 @@ public abstract class InputEvents implements IInputEvents {
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     public void roundabout$tickTick(CallbackInfo ci) {
         ClientUtil.tickClientUtilStuff();
-
         if (ClientUtil.getScreenFreeze()) {
             if (player != null && level != null) {
                 boolean canTS = ((TimeStop) level).CanTimeStopEntity(player);
@@ -756,7 +755,7 @@ public abstract class InputEvents implements IInputEvents {
             }
 
             if(powers instanceof PowersGreenDay PGD){
-                if(!PGD.HasMainArm){
+                if(!PGD.HasMainArm && !roundabout$TryGuard()){
                     ci.cancel();
                 }
             }

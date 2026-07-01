@@ -360,14 +360,16 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public void tickPower() {
         /**This little excerpt lets the server know you're ready to catch another projectile*/
         if (this.getSelf().level().isClientSide()) {
-            if (this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
-                if (!letServerKnowScopeCatchIsReady) {
-                    letServerKnowScopeCatchIsReady = true;
-                }
-            } else {
-                if (letServerKnowScopeCatchIsReady) {
-                    C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_UPDATE_COOLDOWN,PowerIndex.SKILL_EXTRA_2);
-                    letServerKnowScopeCatchIsReady = false;
+            if (isPacketPlayer()) {
+                if (this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+                    if (!letServerKnowScopeCatchIsReady) {
+                        letServerKnowScopeCatchIsReady = true;
+                    }
+                } else {
+                    if (letServerKnowScopeCatchIsReady) {
+                        C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_UPDATE_COOLDOWN, PowerIndex.SKILL_EXTRA_2);
+                        letServerKnowScopeCatchIsReady = false;
+                    }
                 }
             }
         } else {

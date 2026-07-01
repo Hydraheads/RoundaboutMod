@@ -10,7 +10,8 @@ public class CaliforniaKingBedEntity extends FollowingStandEntity {
         super(entityType, world);
     }
     public static final byte
-            PART_8_SKIN = 1;
+            PART_8_SKIN = 1,
+            SUNSHINE = 2;
 
     public final AnimationState fall_brace = new AnimationState();
     public static final byte

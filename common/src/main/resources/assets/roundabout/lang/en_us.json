@@ -25,6 +25,10 @@
   "text.roundabout.fate.vampire_hair": "Change Hair Color",
   "text.roundabout.fate.zombie": "Zombie",
 
+  "text.roundabout.ckb_rule_0": "Don't Step Here",
+  "text.roundabout.ckb_rule_1": "Don't Hurt Me",
+  "text.roundabout.ckb_rule_2": "Don't Leave Me",
+
   "text.roundabout.bullets.revolver": "Compatible with Snubnosed Revolvers and Colt Revolvers.",
   "text.roundabout.bullets.tommy": "Compatible with Tommy Guns.",
   "text.roundabout.bullets.sniper": "Compatible with Jackal Rifles.",
@@ -2105,6 +2109,7 @@
   "skins.roundabout.cinderella.face_off": "Face Off",
 
   "skins.roundabout.california_king_bed.base": "Manga",
+  "skins.roundabout.california_king_bed.sunshine": "Sunshine",
 
   "skins.roundabout.hey_ya.manga": "Manga",
   "skins.roundabout.hey_ya.gothic": "Gothic",
@@ -3374,6 +3379,8 @@
   "config.roundabout.moldDMGMobsMultiplier.desc": "Controls the damage mobs take when they fall in green days mold fields",
   "config.roundabout.moldDMGPlayersMultiplier.name": "Mold Damage Multiplier (Players)",
   "config.roundabout.moldDMGPlayersMultiplier.desc": "Controls the damage players take when they fall in green days mold fields",
+  "config.roundabout.moldMaxSize.name": "Green Day Maximum Mold Range",
+  "config.roundabout.moldMaxSize.desc": "Controls the maximum range of green day's mold fields",
 
   "config.roundabout.enableBitesTheDustDayMode.name": "Enable Bites the dust (Day Mode)",
   "config.roundabout.enableBitesTheDustDayMode.desc": "Turn on/off the Bites the Dust Day mode, that restart the day of the game when detonating (disabled by default)",
