@@ -220,7 +220,7 @@
   "item.roundabout.modification_mask": "Modification Visage",
   "item.roundabout.modification_mask.desc": "Interact To Customize Your Looks",
   "item.roundabout.speedwagon_mask": "Speedwagon Visage",
-  "item.roundabout.speedwagon_mask.desc": "Robert E O Speedwagon (Part 1)",
+  "item.roundabout.speedwagon_mask.desc": "Robert E.O. Speedwagon (Part 1)",
   "item.roundabout.speedwagon_mask.tag": "Speedwagon",
   "item.roundabout.jotaro_mask": "Jotaro Visage",
   "item.roundabout.jotaro_mask.desc": "Jotaro Kujo (Part 3)",
@@ -2789,7 +2789,7 @@
   "config.roundabout.bypassAllNametagHidesInCreativeMode.desc": "In creative mode, bypass all settings and see real nametags.",
 
   "config.roundabout.gentlyWeepsCooldown.name": "Gently Weeps CD",
-  "config.roundabout.defaceAttackCooldowngentlyWeepsCooldown.desc": "The cooldown in ticks.",
+  "config.roundabout.gentlyWeepsCooldown.desc": "The cooldown in ticks.",
   "config.roundabout.twisterCooldownv2.name": "Cold Twister CD",
   "config.roundabout.twisterCooldownv2.desc": "The cooldown in ticks.",
   "config.roundabout.freezeBlocksCooldown.name": "Block Freeze CD",
