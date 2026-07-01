@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StoneMaskBlock;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -1628,7 +1629,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$Tick(CallbackInfo ci) {
         if (this.level().isClientSide()) {
-            if (FateTypes.isVampire(this)){
+            if (FateTypes.isVampire(this) && ClientUtil.isPlayer(this)){
                 if (rdbt$getVampireData().vampireLevel == -1){
                     rdbt$getVampireData().vampireLevel = 0;
                     C2SPacketUtil.trySingleBytePacket(PacketDataIndex.QUERY_VAMPIRE_UPDATE);
@@ -1638,7 +1639,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             roundabout$setupAnimationStates();
 
 
-            if (!rdbt$getCooldownQuery()){
+            if (!rdbt$getCooldownQuery() && ClientUtil.isPlayer(this)){
                 if (!rdbt$attemptedQuery){
                     rdbt$attemptedQuery = true;
                     C2SPacketUtil.handShakeCooldownPacket();
