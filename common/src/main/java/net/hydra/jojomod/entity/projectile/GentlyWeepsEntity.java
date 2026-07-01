@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.projectile;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IProjectileAccess;
+import net.hydra.jojomod.access.ISuperThrownAbstractArrow;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
@@ -95,6 +96,9 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
                             if (!ipa.roundabout$getIsDeflected()) {
                                 if (pj instanceof ThrownObjectEntity ttt){
                                     ttt.disableThrow();
+                                }
+                                if (pj instanceof AbstractArrow ttt && ((ISuperThrownAbstractArrow)ttt).roundabout$getSuperThrow()){
+                                    ((ISuperThrownAbstractArrow)ttt).roundabout$cancelSuperThrow();
                                 }
                                 ((ServerLevel) this2.level()).sendParticles(ModParticles.ICE_SPARKLE,
                                         pj.getX(),
