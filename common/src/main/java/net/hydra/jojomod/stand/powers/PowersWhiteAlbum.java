@@ -1706,7 +1706,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             if (!MainUtil.canFreeze(entity)){
                 return 0.93F;
             }
-            return 0.7F;
+            return 0.8F;
         } else {
             if (!MainUtil.canFreeze(entity)){
                 return 2.5F;
