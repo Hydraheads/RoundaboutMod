@@ -459,6 +459,14 @@ public class ModSounds {
     public static final ResourceLocation FALL_BRACE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FALL_BRACE);
     public static SoundEvent FALL_BRACE_EVENT = SoundEvent.createVariableRangeEvent(FALL_BRACE_ID);
 
+    public static final String FLUFF_BRACE_INIT = "fluff_brace_init";
+    public static final ResourceLocation FLUFF_BRACE_INIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FLUFF_BRACE_INIT);
+    public static SoundEvent FLUFF_BRACE_INIT_EVENT = SoundEvent.createVariableRangeEvent(FLUFF_BRACE_INIT_ID);
+    public static final String FLUFF_FALL_BRACE = "fluff_fall_brace";
+    public static final ResourceLocation FLUFF_FALL_BRACE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FLUFF_FALL_BRACE);
+    public static SoundEvent FLUFF_FALL_BRACE_EVENT = SoundEvent.createVariableRangeEvent(FLUFF_FALL_BRACE_ID);
+
+
     public static final String LEVELUP = "levelup";
     public static final ResourceLocation LEVELUP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+LEVELUP);
     public static SoundEvent LEVELUP_EVENT = SoundEvent.createVariableRangeEvent(LEVELUP_ID);

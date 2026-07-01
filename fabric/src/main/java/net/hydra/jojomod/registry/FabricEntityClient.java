@@ -79,6 +79,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.CINDERELLA, CinderellaRenderer::new);
         EntityRendererRegistry.register(FabricEntities.CALIFORNIA_KING_BED, CaliforniaRenderer::new);
         EntityRendererRegistry.register(FabricEntities.PLANET_WAVES, PlanetWavesRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.PLANET_WAVES_SPARTA, PlanetWavesSpartaRenderer::new);
         EntityRendererRegistry.register(FabricEntities.MANHATTAN_TRANSFER, ManhattanTransferRenderer::new);
         EntityRendererRegistry.register(FabricEntities.POLLINATION_TRANSFER, PollinationTransferRenderer::new);
         EntityRendererRegistry.register(FabricEntities.WALKING_HEART, WalkingHeartRenderer::new);
@@ -216,6 +217,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.CINDERELLA_LAYER, CinderellaModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.CALIFORNIA_LAYER, CaliforniaKingBedModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.PLANET_WAVES_LAYER, PlanetWavesModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.PLANET_WAVES_SPARTA_LAYER, PlanetWavesSpartaModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.MANHATTAN_TRANSFER_LAYER, ManhattanTransferModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.POLLINATION_TRANSFER_LAYER, PollinationTransferModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DARK_MIRAGE_LAYER, DarkMirageModel::getTexturedModelData);

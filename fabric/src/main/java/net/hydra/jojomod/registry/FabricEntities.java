@@ -454,6 +454,13 @@ public class FabricEntities {
                         EntityType.Builder.of(PlanetWavesEntity::new, MobCategory.MISC).
                                 sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":planet_waves")
                 );
+        public static final EntityType<PlanetWavesSpartaEntity> PLANET_WAVES_SPARTA =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "planet_waves_sparta"),
+                        EntityType.Builder.of(PlanetWavesSpartaEntity::new, MobCategory.MISC).
+                                sized(0.75F, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":planet_waves_sparta")
+                );
 
 
     public static final EntityType<ManhattanTransferEntity> MANHATTAN_TRANSFER =
@@ -951,6 +958,7 @@ public class FabricEntities {
                 ModEntities.CINDERELLA = CINDERELLA;
                 ModEntities.CALIFORNIA_KING_BED = CALIFORNIA_KING_BED;
                 ModEntities.PLANET_WAVES = PLANET_WAVES;
+                ModEntities.PLANET_WAVES_SPARTA = PLANET_WAVES_SPARTA;
                 ModEntities.MANHATTAN_TRANSFER = MANHATTAN_TRANSFER;
                 ModEntities.POLLINATION_TRANSFER = POLLINATION_TRANSFER;
                 ModEntities.WALKING_HEART = WALKING_HEART;
@@ -1126,6 +1134,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(CINDERELLA, CinderellaEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(CALIFORNIA_KING_BED, CaliforniaKingBedEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(PLANET_WAVES, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(PLANET_WAVES_SPARTA, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(MANHATTAN_TRANSFER, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(POLLINATION_TRANSFER, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(WALKING_HEART, StandEntity.createStandAttributes());

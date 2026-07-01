@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.stand.CinderellaEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -101,23 +102,30 @@ public class PowersCalifornia extends NewDashPreset {
     public void powerActivate(PowerContext context) {
         switch (context)
         {
-            case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
-                dash();
+            case SKILL_3_NORMAL -> {
+                tryToDashClient();
+            }
+            case SKILL_3_CROUCH -> {
+                tryToDash2Client();
             }
         }
     }
 
-    public void doDefaceClient(){
-        if (!this.onCooldown(PowerIndex.SKILL_2)) {
-            if (this.activePower == PowerIndex.POWER_2) {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                tryPowerPacket(PowerIndex.NONE);
-            } else {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
-                tryPowerPacket(PowerIndex.POWER_2);
-            }
+    public void tryToDashClient(){
+        if (canFallBrace()) {
+            doFallBraceClient();
+        } else {
+            dash();
         }
     }
+    public void tryToDash2Client(){
+        if (canFallBrace()) {
+            doFallBraceClient();
+        } else {
+            dash();
+        }
+    }
+
     @Override
     public void tickPowerEnd() {
         super.tickPowerEnd();
@@ -140,7 +148,16 @@ public class PowersCalifornia extends NewDashPreset {
     public void renderIcons(GuiGraphics context, int x, int y) {
         setSkillIcon(context, x, y, 1, StandIcons.CINDERELLA_MASK, PowerIndex.NO_CD);
         setSkillIcon(context, x, y, 2, StandIcons.CINDERELLA_SCALP, PowerIndex.SKILL_2);
-        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+
+        if (this.getSelf().fallDistance > 3) {
+            setSkillIcon(context, x, y, 3, StandIcons.CALIFORNIA_FALL_CATCH, PowerIndex.SKILL_EXTRA);
+        } else {
+            if (isHoldingSneak()){
+                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+            } else {
+                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+            }
+        }
     }
 
     @Override
@@ -178,9 +195,22 @@ public class PowersCalifornia extends NewDashPreset {
     }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
+        if (move == PowerIndex.EXTRA){
+            return this.fallBraceInit();
+        } else if (move == PowerIndex.FALL_BRACE_FINISH){
+            return this.fallBrace();
+        }
         return super.setPowerOther(move,lastMove);
     }
 
+    @Override
+    public void playFallBraceInitSound(){
+        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.FLUFF_BRACE_INIT_EVENT, SoundSource.PLAYERS, 2.3F, (float) (0.78 + (Math.random() * 0.04)));
+    }
+    @Override
+    public void playFallBraceImpactSounds(){
+        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.FLUFF_FALL_BRACE_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
+    }
 
     @Override
     public void tickMobAI(LivingEntity attackTarget){
@@ -205,6 +235,27 @@ public class PowersCalifornia extends NewDashPreset {
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
+    }
+
+
+    @Override
+    public boolean fallBraceInit() {
+        this.getSelf().fallDistance -= 20;
+        if (this.getSelf().fallDistance < 0){
+            this.getSelf().fallDistance = 0;
+        }
+        impactBrace = true;
+        impactAirTime = 15;
+
+        animateStand(StandEntity.BLOCK);
+        this.setAttackTimeDuring(0);
+        this.setActivePower(PowerIndex.EXTRA);
+        this.poseStand(OffsetIndex.BENEATH_2);
+        animateStand(CaliforniaKingBedEntity.FALL_BRACE);
+        if (!this.getSelf().level().isClientSide()) {
+            playFallBraceInitSound();
+        }
+        return true;
     }
 
 

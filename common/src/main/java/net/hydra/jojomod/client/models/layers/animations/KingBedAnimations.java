@@ -415,10 +415,10 @@ public class KingBedAnimations {
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(12.5F, 0.0F, 55.0F), AnimationChannel.Interpolations.LINEAR)
             ))
             .addAnimation("stand2", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(-72.5F, 20.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(105.0001F, -20.0002F, 180.0002F), AnimationChannel.Interpolations.LINEAR)
             ))
             .addAnimation("stand2", new AnimationChannel(AnimationChannel.Targets.POSITION,
-                    new Keyframe(0.0F, KeyframeAnimations.posVec(3.0F, -25.0F, 10.0F), AnimationChannel.Interpolations.LINEAR)
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(-3.7F, -25.0F, -12.3F), AnimationChannel.Interpolations.LINEAR)
             ))
             .addAnimation("left_leg_substring", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(-65.0962F, 21.1616F, 60.7821F), AnimationChannel.Interpolations.LINEAR)

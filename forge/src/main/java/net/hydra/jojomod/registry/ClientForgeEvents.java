@@ -82,6 +82,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.CINDERELLA.get(), CinderellaRenderer::new);
         event.registerEntityRenderer(ForgeEntities.CALIFORNIA_KING_BED.get(), CaliforniaRenderer::new);
         event.registerEntityRenderer(ForgeEntities.PLANET_WAVES.get(), PlanetWavesRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.PLANET_WAVES_SPARTA.get(), PlanetWavesSpartaRenderer::new);
         event.registerEntityRenderer(ForgeEntities.MANHATTAN_TRANSFER.get(), ManhattanTransferRenderer::new);
         event.registerEntityRenderer(ForgeEntities.POLLINATION_TRANSFER.get(), PollinationTransferRenderer::new);
         event.registerEntityRenderer(ForgeEntities.WALKING_HEART.get(), WalkingHeartRenderer::new);
@@ -226,6 +227,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.CINDERELLA_LAYER, CinderellaModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.CALIFORNIA_LAYER, CaliforniaKingBedModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.PLANET_WAVES_LAYER, PlanetWavesModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.PLANET_WAVES_SPARTA_LAYER, PlanetWavesSpartaModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.MANHATTAN_TRANSFER_LAYER, ManhattanTransferModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.POLLINATION_TRANSFER_LAYER, PollinationTransferModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.DARK_MIRAGE_LAYER, DarkMirageModel::getTexturedModelData);

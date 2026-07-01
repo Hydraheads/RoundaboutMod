@@ -3355,7 +3355,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     stand.setYHeadRot(roundabout$User.getYHeadRot() % 360);
                     if (OffsetIndex.OffsetStyle(OT) == OffsetIndex.FIXED_STYLE) {
                         float rot;
-                        if (OT == OffsetIndex.BENEATH) {
+                        if (OT == OffsetIndex.BENEATH || OT == OffsetIndex.BENEATH_2) {
                             rot = (roundabout$User.getYRot()) % 360;
                         } else if (OT == OffsetIndex.GUARD_AND_TRACE) {
                             BlockHitResult dd = roundabout$getStandPowers().getAheadVec(30);
@@ -4871,6 +4871,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     } else {
                         hurt(ModDamageTypes.of(level(), ModDamageTypes.ICE_SHATTER, damageSource.getEntity()), 30F);
                     }
+                    if (damageSource.getEntity() instanceof LivingEntity LE
+                            && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW){
+                        PW.addEXP(5,rdbt$this());
+                    }
                     S2CPacketUtil.shatterIce(getId());
                     ci.cancel();
                     return;
@@ -5057,7 +5061,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             if (roundabout$stackedKnivesAndMatches >= knifeCap) {
                                 roundabout$extraIFrames = 8;
                             }
-                            if (damageSource.is(ModDamageTypes.KNIFE) && entity instanceof Player) {
+                            if (damageSource.is(ModDamageTypes.KNIFE) && entity instanceof Player play && !play.isBlocking()) {
                                 ((IPlayerEntity) entity).roundabout$addKnife();
                             }
                         } else {

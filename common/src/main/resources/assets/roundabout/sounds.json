@@ -185,6 +185,18 @@
       "roundabout:iron_ball_bounce"
     ]
   },
+  "fluff_brace_init": {
+    "subtitle": "sounds.roundabout.fluff_brace_init",
+    "sounds": [
+      "roundabout:fluff_brace_init"
+    ]
+  },
+  "fluff_fall_brace": {
+    "subtitle": "sounds.roundabout.fluff_fall_brace",
+    "sounds": [
+      "roundabout:fluff_fall_brace"
+    ]
+  },
   "iron_ball_impact": {
     "subtitle": "sounds.roundabout.iron_ball_impact",
     "sounds": [

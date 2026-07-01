@@ -954,7 +954,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             if (ticksForFinger < 26) {
                 pow *= (1 - (((float) (26 - ticksForFinger) / 26) * 0.95F));
                 if (getReducedDamage(entity)){
-                    pow*=0.8F;
+                    pow*=0.55F;
                 }
             }
 
@@ -964,7 +964,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                     takeDeterminedKnockback(this.self, entity, knockbackStrength);
                     if (entity instanceof LivingEntity LE) {
                         addEXP(1, LE);
-                        if (ticksForFinger > 13) {
+                        if (ticksForFinger > 19) {
                             if (canFingerBleed) {
                                 MainUtil.makeBleed(LE, 0, 200, this.self);
                             }

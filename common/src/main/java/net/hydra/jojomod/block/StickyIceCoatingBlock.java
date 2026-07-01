@@ -72,8 +72,12 @@ public class StickyIceCoatingBlock
                     if (FateTypes.isVampire(LE)) {
                         $$3.makeStuckInBlock($$0, new Vec3((double) 0.3F, (double) 0.8F, (double) 0.3F));
                     } else {
-                        if (LE instanceof Player) {
-                            $$3.makeStuckInBlock($$0, new Vec3((double) 0.35F, (double) 0.8F, (double) 0.35F));
+                        if (LE instanceof Player pl) {
+                            if (!(pl.level().getBlockState(
+                                            BlockPos.containing(pl.getPosition(1).subtract(0,0.5f,0))).getBlock() instanceof FrozenBlock)
+                            ) {
+                                $$3.makeStuckInBlock($$0, new Vec3((double) 0.4F, (double) 0.8F, (double) 0.4F));
+                            }
                         } else {
                             $$3.makeStuckInBlock($$0, new Vec3((double) 0.85F, (double) 0.8F, (double) 0.85F));
                         }

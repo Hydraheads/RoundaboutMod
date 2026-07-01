@@ -66,6 +66,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec2;
@@ -1765,10 +1766,10 @@ public class AbilityScapeBasis {
         this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.FALL_BRACE_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
     }
     public void playFallBraceImpactParticles(){
-        ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
+        ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.FALLING_DUST, Blocks.WHITE_WOOL.defaultBlockState()),
                 this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
                 50, 1.1, 0.05, 1.1, 0.4);
-        ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
+        ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.FALLING_DUST, Blocks.WHITE_WOOL.defaultBlockState()),
                 this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
                 30, 1, 0.05, 1, 0.4);
     }
@@ -1848,6 +1849,11 @@ public class AbilityScapeBasis {
             if (!this.getSelf().level().isClientSide()) {
                 ((IPlayerEntity)this.getSelf()).roundabout$setClientDodgeTime(0);
                 ((IPlayerEntity) this.getSelf()).roundabout$setDodgeTime(0);
+                boolean yes = false;
+                if (storedInt > 500){
+                    storedInt-=1000;
+                    yes = true;
+                }
                 if (storedInt < 0) {
                     ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_BACKWARD);
                 } else {
@@ -1877,6 +1883,13 @@ public class AbilityScapeBasis {
                     if (gravD != Direction.DOWN){
                         cvec = RotationUtil.vecPlayerToWorld(cvec,gravD);
                         dvec = RotationUtil.vecPlayerToWorld(dvec,gravD);
+                    }
+                    if (yes){
+                        this.setCooldown(PowerIndex.GLOBAL_DASH,
+                                ClientNetworking.getAppropriateConfig().generalStandSettings.jumpingDashCooldown);
+                    } else {
+                        this.setCooldown(PowerIndex.GLOBAL_DASH,
+                                ClientNetworking.getAppropriateConfig().generalStandSettings.dashCooldown);
                     }
 
                     ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
@@ -1942,11 +1955,13 @@ public class AbilityScapeBasis {
                         backwards = -3;
                     }
 
+                    int buffer = 0;
                     int cdTime = ClientNetworking.getAppropriateConfig().generalStandSettings.dashCooldown;
                     if (this.getSelf() instanceof Player) {
                         ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(0);
                         if (options.keyJump.isDown()) {
                             cdTime = ClientNetworking.getAppropriateConfig().generalStandSettings.jumpingDashCooldown;
+                            buffer = 1000;
                         }
                     }
                     this.setCooldown(PowerIndex.GLOBAL_DASH, cdTime);
@@ -1956,7 +1971,7 @@ public class AbilityScapeBasis {
                             -Mth.cos(degrees * ((float) Math.PI / 180)));
 
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.MOVEMENT, true);
-                    tryIntPowerPacket(PowerIndex.MOVEMENT, backwards);
+                    tryIntPowerPacket(PowerIndex.MOVEMENT, backwards+buffer);
                 }
             }
         }
