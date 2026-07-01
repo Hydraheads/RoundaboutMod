@@ -4873,7 +4873,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     }
                     if (damageSource.getEntity() instanceof LivingEntity LE
                             && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW){
-                        PW.addEXP(5,rdbt$this());
+                        PW.addEXP(7,rdbt$this());
                     }
                     S2CPacketUtil.shatterIce(getId());
                     ci.cancel();
