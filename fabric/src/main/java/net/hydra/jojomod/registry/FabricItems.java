@@ -227,6 +227,7 @@ public class FabricItems {
     public static Item JOTARO_MASK = registerItem("jotaro_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroVisage(null)));
     public static Item JOTARO_4_MASK = registerItem("jotaro_4_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroFourVisage(null)));
     public static Item JOTARO_6_MASK = registerItem("jotaro_6_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroSixVisage(null)));
+    public static Item JOHNGALLIA_MASK = registerItem("johngallia_mask", new MaskItem(new Item.Properties().stacksTo(1), new JohngalliaVisage(null)));
     public static Item DIO_MASK = registerItem("dio_mask", new MaskItem(new Item.Properties().stacksTo(1), new DIOVisage(null)));
     public static Item DIO_VAMPIRE_MASK = registerItem("dio_vampire_mask", new MaskItem(new Item.Properties().stacksTo(1), new DioVampireVisage(null)));
     public static Item AVDOL_MASK = registerItem("avdol_mask", new MaskItem(new Item.Properties().stacksTo(1), new AvdolVisage(null)));
@@ -416,6 +417,7 @@ public class FabricItems {
                         entries.accept(MISTA_MASK);
                         entries.accept(GHIACCIO_MASK);
                         entries.accept(JOTARO_6_MASK);
+                        entries.accept(JOHNGALLIA_MASK);
                         entries.accept(GUCCIO_MASK);
                         entries.accept(JOHNNY_MASK);
                         entries.accept(LUCY_MASK);
@@ -783,6 +785,7 @@ public class FabricItems {
         ModItems.MISTA_MASK = MISTA_MASK;
         ModItems.GHIACCIO_MASK = GHIACCIO_MASK;
         ModItems.JOHNNY_MASK = JOHNNY_MASK;
+        ModItems.JOHNGALLIA_MASK = JOHNGALLIA_MASK;
         ModItems.JOSUKE_PART_EIGHT_MASK = JOSUKE_PART_EIGHT_MASK;
         ModItems.GUCCIO_MASK = GUCCIO_MASK;
         ModItems.HATO_MASK = HATO_MASK;

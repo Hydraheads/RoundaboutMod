@@ -758,6 +758,8 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new JotaroFourVisage(null))));
     public static final RegistryObject<Item> JOTARO_6_MASK = addToTab(ITEMS.register("jotaro_6_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new JotaroSixVisage(null))));
+    public static final RegistryObject<Item> JOHNGALLIA_MASK = addToTab(ITEMS.register("johngallia_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new JohngalliaVisage(null))));
     public static final RegistryObject<Item> DIO_VAMPIRE_MASK = addToTab(ITEMS.register("dio_vampire_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new DioVampireVisage(null))));
     public static final RegistryObject<Item> DIO_MASK = addToTab(ITEMS.register("dio_mask",

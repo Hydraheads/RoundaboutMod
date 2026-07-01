@@ -207,10 +207,8 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
 
     public void switchShooting(){
-        if(!isPiloting()) {
             this.tryPower(PowerIndex.POWER_1, true);
             tryPowerPacket(PowerIndex.POWER_1);
-        }
     }
 
     public boolean switchShootingOther(){
@@ -222,9 +220,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
-        if (slot == 1 && isPiloting()){
-            return true;
-        }
         if(slot == 3 && this.currentHattanStatus == LOADED_HATTAN && isPiloting()){
             return  true;
         }

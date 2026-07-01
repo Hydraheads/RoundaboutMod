@@ -299,6 +299,7 @@ public class FabricEntityClient {
         ModStrayModels.KakyoinHairPart = new KakyoinHairPart();
         ModStrayModels.DiegoHatPart = new DiegoHatPart();
         ModStrayModels.JohnnyHatPart = new JohnnyHatPart();
+        ModStrayModels.JohngalliaHairPart = new JohngalliaHairPart();
         ModStrayModels.ripperEyesPart = new RipperEyesPart();
         ModStrayModels.SpeedwagonFoundationHatPart = new SpeedwagonFoundationHatPart();
         ModStrayModels.BasicHatPart = new BasicHatPart();
@@ -323,6 +324,7 @@ public class FabricEntityClient {
         ModStrayModels.RightLeg = new RightLegPart();
         ModStrayModels.LeftLeg = new LeftLegPart();
         ModStrayModels.RightHeel = new RightHeelPart();
+        ModStrayModels.JohngalliaTiePart = new JohngalliaTiePart();
 
         ModStrayModels.GoatHeadPart = new GoatHeadPart();
         ModStrayModels.CatHeadPart = new CatHeadPart();
