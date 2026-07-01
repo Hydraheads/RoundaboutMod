@@ -653,7 +653,6 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                 this.setHeldItem(new ItemStack(MainUtil.SHEEP_DYE.get(S.getColor()), 1 + this.random.nextInt(3)));
                 this.startReturning();
                 return;
-
             } else if ($$0.getEntity() instanceof GentlyWeepsEntity gwe && this.getPlunderType() == PlunderTypes.MOISTURE.id && this.getLiquidStolen() == 4) {
                 gwe.setBled(true);
                 super.onHitEntity($$0);
