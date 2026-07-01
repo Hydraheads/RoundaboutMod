@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.ExplosionUtil;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
@@ -459,6 +460,13 @@ public class SheerHeartAttackEntity extends StandEntity {
 			if (LE.isOnFire() || LE.wasOnFire || HeatUtil.isHot(LE)) { points += 70;}
 			if (LE.isFullyFrozen()) { points -= 80;
 			}else if (LE.isFreezing()) { points -= 40;}
+			
+			if (((StandUser)LE).roundabout$hasAStand()) {
+				StandUser SU = (StandUser)LE;
+				if(SU.roundabout$getStandPowers() instanceof PowersWhiteAlbum && SU.roundabout$getActive()) {
+					points -= 130;
+				}
+			}
 
 			MobType mobType = LE.getMobType();
 			if (mobType.equals(MobType.UNDEAD)) { points -= 30;}
