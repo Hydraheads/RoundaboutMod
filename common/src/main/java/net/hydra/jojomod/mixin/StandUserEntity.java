@@ -5057,7 +5057,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             if (roundabout$stackedKnivesAndMatches >= knifeCap) {
                                 roundabout$extraIFrames = 8;
                             }
-                            if (damageSource.is(ModDamageTypes.KNIFE) && entity instanceof Player) {
+                            if (damageSource.is(ModDamageTypes.KNIFE) && entity instanceof Player play && !play.isBlocking()) {
                                 ((IPlayerEntity) entity).roundabout$addKnife();
                             }
                         } else {
