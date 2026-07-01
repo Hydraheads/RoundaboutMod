@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.*;
+import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -909,7 +910,7 @@ public class ManhattanTransferEntity extends StandEntity {
                 List<LivingEntity> targent = new ArrayList<>(lvent);
                 for (LivingEntity value : lvent) {
                     IEntityAndData entityAndData = ((IEntityAndData) value);
-                    if (value instanceof RoadRollerEntity || value instanceof StandEntity || value.is(this.getUser()) || !this.hasLineOfSight(value)) {
+                    if (value instanceof LifeTrackerEntity || value instanceof RoadRollerEntity || value instanceof StandEntity || value.is(this.getUser()) || !this.hasLineOfSight(value)) {
                         targent.remove(value);
                         this.setHattanTarget(0);
                         if (this.getUserData(this.getUser()) != null) {
