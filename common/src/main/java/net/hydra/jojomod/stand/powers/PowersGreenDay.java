@@ -1112,10 +1112,10 @@ public class PowersGreenDay extends NewPunchingStand {
         if(allies.contains(ent.getStringUUID())){
             if(!(((StandUser) player).roundabout$getTargetEntity(player,16)== null)) {
                 if (((StandUser) player).roundabout$getTargetEntity(player, 16).equals(ent)) {
-                    return 12379456;
+                    return 14352324;
                 }
             }
-            return 10349135;
+            return 51062;
         }
         return 15526430;
     }
@@ -1369,7 +1369,10 @@ public class PowersGreenDay extends NewPunchingStand {
             }
             if(this.self instanceof FlyingMob || this.self instanceof Phantom){
                 if( (RNG > 0.99)){
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
+                    if(!onCooldown(PowerIndex.POWER_4)) {
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
+                        setCooldown(PowerIndex.POWER_4,200);
+                    }
                 }
             }else
             if( (RNG > 0.95) && (this.self.getHealth() < this.self.getMaxHealth())){
@@ -1395,9 +1398,11 @@ public class PowersGreenDay extends NewPunchingStand {
     public void levelUp(){
         if(Main_arm != null) {
             Main_arm.discard();
+            Main_arm = null;
         }
         if(Off_hand_entity != null) {
             Off_hand_entity.discard();
+            Off_hand_entity = null;
         }
         if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE){
             IPlayerEntity ipe = ((IPlayerEntity) PE);

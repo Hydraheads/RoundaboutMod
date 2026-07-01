@@ -63,7 +63,6 @@ public class MoldSporesEntity extends StandEntity {
         if (!client) {
 
             if (user == null) {
-                spawnAtLocation(this.getMainHandItem());
                 this.discard();
             }
             if (this.getDeltaMovement().y > 0.2){
@@ -148,8 +147,10 @@ public class MoldSporesEntity extends StandEntity {
                             }
                             if(!entity.isAlive()){
                                 range += 4;
-                                lifetime += lifetime_add;
-                                lifetime_add -= 10;
+                                if(lifetime_add > 0) {
+                                    lifetime += lifetime_add;
+                                    lifetime_add -= 10;
+                                }
                                 entity.discard();
                             }
                             if(Math.random()<0.2) {
