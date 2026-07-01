@@ -40,6 +40,7 @@ public class JohngalliaVisage extends VisageData{
     public float getNametagHeight(){
         return 0.52f;
     }
+    public boolean renderJohngalliaHair(){return true;}
     public String getSkinPath(){
         return "johngallia";
     }

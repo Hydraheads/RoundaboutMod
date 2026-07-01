@@ -280,6 +280,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             renderSmallPlayerBreastPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
                                     r, g, b);
                         }
+                        if(vd.renderJohngalliaHair() && !hideExtraPartsWithSuit){
+                            renderJohngalliaHairPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
+                                    r, g, b);
+                        }
                     }
                 }
 
@@ -943,5 +947,13 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ModStrayModels.PlayerSmallChestPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1);
         ClientUtil.popPoseAndCooperate(poseStack,44);
+    }
+    public void renderJohngalliaHairPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                                         float r, float g, float b) {
+        ClientUtil.pushPoseAndCooperate(poseStack,46);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.JohngalliaHairPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, "johngallia");
+        ClientUtil.popPoseAndCooperate(poseStack,46);
     }
 }

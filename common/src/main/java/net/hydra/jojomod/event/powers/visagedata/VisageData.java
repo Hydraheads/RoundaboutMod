@@ -111,6 +111,7 @@ public class VisageData {
     public boolean rendersPlayerBreast(){
         return false;
     }
+    public boolean renderJohngalliaHair(){return false;}
     public boolean rendersArmor(){
         return false;
     }
