@@ -91,10 +91,10 @@ public class PowersPlanetWaves extends NewDashPreset {
             } if (Level > 2 || bypass){
                 $$1.add(PlanetWavesEntity.OCEAN_WAVES);
                 $$1.add(PlanetWavesEntity.SYMPHONY_WAVES);
-            }/* if (Level > 3 || bypass){
-                $$1.add(MagiciansRedEntity.PURPLE_SKIN);
-                $$1.add(MagiciansRedEntity.PURPLE_ABLAZE);
-            } if (Level > 4 || bypass){
+            }if (Level > 3 || bypass){
+                $$1.add(PlanetWavesEntity.SPARTA);
+                $$1.add(PlanetWavesEntity.SPARTA2);
+            }/* if (Level > 4 || bypass){
                 $$1.add(MagiciansRedEntity.GREEN_SKIN);
                 $$1.add(MagiciansRedEntity.GREEN_ABLAZE);
             } if (Level > 5 || bypass){
@@ -127,6 +127,9 @@ public class PowersPlanetWaves extends NewDashPreset {
             case GREEN_SKIN  -> {return Component.translatable("skins.roundabout.planet_waves.green");}
             case OCEAN_WAVES  -> {return Component.translatable("skins.roundabout.planet_waves.ocean_waves");}
             case SYMPHONY_WAVES  -> {return Component.translatable("skins.roundabout.planet_waves.symphony_waves");}
+            case SPARTA  -> {return Component.translatable("skins.roundabout.planet_waves.sparta");}
+            case SPARTA2  -> {return Component.translatable("skins.roundabout.planet_waves.sparta2");}
+
         }
         return Component.translatable("skins.roundabout.planet_waves.base");
 
@@ -323,10 +326,16 @@ public class PowersPlanetWaves extends NewDashPreset {
         Vec3 spawnPos = eyePos.add(lookVec.scale(spawnDistance));
 
         if (this.self.level().dimension() != Level.END) {
-            if (spawnPos.y < this.self.getY() + 5.0) {
+            double minSpawnY;
+            if (instandtargeting() && standTargetPos != null) {
+                minSpawnY = standTargetPos.y + 5.0; // no nacer debajo del nivel del objetivo
+            } else {
+                minSpawnY = this.self.getY() + 5.0;
+            }
+            if (spawnPos.y < minSpawnY) {
                 spawnPos = new Vec3(
                         spawnPos.x,
-                        this.self.getY() + 5.0,
+                        minSpawnY,
                         spawnPos.z
                 );
             }
@@ -439,10 +448,16 @@ public class PowersPlanetWaves extends NewDashPreset {
 
 
         if (this.self.level().dimension() != Level.END) {
-            if (spawnPos.y < this.self.getY() + 5.0) {
+            double minSpawnY;
+            if (instandtargeting() && standTargetPos != null) {
+                minSpawnY = standTargetPos.y + 5.0; // no nacer debajo del nivel del objetivo
+            } else {
+                minSpawnY = this.self.getY() + 5.0;
+            }
+            if (spawnPos.y < minSpawnY) {
                 spawnPos = new Vec3(
                         spawnPos.x,
-                        this.self.getY() + 5.0,
+                        minSpawnY,
                         spawnPos.z
                 );
             }
@@ -543,7 +558,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
     private void standtargeting() {
         Level level = this.self.level();
-
+        if (this.onCooldown(PowerIndex.SKILL_4)) return;
         Vec3 eyePos  = this.self.getEyePosition(1.0F);
         Vec3 lookVec = this.self.getViewVector(1.0F);
         Vec3 endPos  = eyePos.add(lookVec.scale(128.0D));
@@ -575,8 +590,8 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         double sinkDepth;
         switch (hitResult.getDirection()) {
-            case UP   -> sinkDepth = 0.75;  // floor: sink upward into block
-            case DOWN -> sinkDepth = -0.75; // ceiling: normal points DOWN, negate to go UP into block
+            case UP   -> sinkDepth = 0.85;  // floor: sink upward into block
+            case DOWN -> sinkDepth = -0.85; // ceiling: normal points DOWN, negate to go UP into block
             default   -> sinkDepth = 0; // walls
         }
 
@@ -822,7 +837,7 @@ public class PowersPlanetWaves extends NewDashPreset {
     private Vec3 buriedStandPos= null;
     private void usertargeting() {
         Level level = this.self.level();
-
+        if (this.onCooldown(PowerIndex.SKILL_4)) return;
         targetingstand    = false;
         isTravelling      = false;
         isSinking      = false;

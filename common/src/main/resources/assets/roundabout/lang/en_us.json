@@ -1803,7 +1803,7 @@
   "ability.roundabout.forced_dissintegration":"Forced Disintegration",
   "ability.roundabout.forced_dissintegration.desc":"Makes all current big meteors disintegrate. This move is useful to avoid destruction.",
   "ability.roundabout.grab":"Grab",
-  "ability.roundabout.gra.desc":"When in stand targeting mode if anyone gets close enough to planet waves they will get grabbed.",
+  "ability.roundabout.grab.desc":"When in stand targeting mode if anyone gets close enough to planet waves they will get grabbed.",
 
   "ability.roundabout.manhattan_premise": "How To Use",
   "ability.roundabout.manhattan_premise.desc": "Manhattan Transfer absorbs projectiles shot at it. So if you aim a bow or a firearm at it, it will hold onto that projectile and use it for shooting mobs.",
@@ -2074,6 +2074,8 @@
   "skins.roundabout.planet_waves.green": "Green",
   "skins.roundabout.planet_waves.ocean_waves": "Ocean Waves",
   "skins.roundabout.planet_waves.symphony_waves": "Symphony",
+  "skins.roundabout.planet_waves.sparta": "Spartan",
+  "skins.roundabout.planet_waves.sparta2": "Spartan Nights",
 
   "skins.roundabout.ratt.anime" : "Part 4",
   "skins.roundabout.ratt.manga" : "Manga",
