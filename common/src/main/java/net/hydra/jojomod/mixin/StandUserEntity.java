@@ -4871,6 +4871,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     } else {
                         hurt(ModDamageTypes.of(level(), ModDamageTypes.ICE_SHATTER, damageSource.getEntity()), 30F);
                     }
+                    if (damageSource.getEntity() instanceof LivingEntity LE
+                            && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW){
+                        PW.addEXP(5,rdbt$this());
+                    }
                     S2CPacketUtil.shatterIce(getId());
                     ci.cancel();
                     return;
