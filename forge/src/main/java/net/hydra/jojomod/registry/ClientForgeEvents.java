@@ -325,6 +325,7 @@ public class ClientForgeEvents {
         ModStrayModels.LeftLeg = new LeftLegPart();
         ModStrayModels.LeftHeel = new LeftHeelPart();
         ModStrayModels.RightHeel = new RightHeelPart();
+        ModStrayModels.JohngalliaTiePart = new JohngalliaTiePart();
 
         ModStrayModels.GoatHeadPart = new GoatHeadPart();
         ModStrayModels.CatHeadPart = new CatHeadPart();

@@ -41,6 +41,7 @@ public class JohngalliaVisage extends VisageData{
         return 0.52f;
     }
     public boolean renderJohngalliaHair(){return true;}
+    public boolean renderJohngalliaTie(){return true;}
     public String getSkinPath(){
         return "johngallia";
     }

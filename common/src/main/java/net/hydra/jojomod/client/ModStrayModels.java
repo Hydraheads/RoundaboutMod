@@ -75,6 +75,7 @@ public class ModStrayModels {
     public static LeftLegPart LeftLeg;
     public static LeftHeelPart LeftHeel;
     public static RightHeelPart RightHeel;
+    public static JohngalliaTiePart JohngalliaTiePart;
 
 
     public static CatHeadPart CatHeadPart;

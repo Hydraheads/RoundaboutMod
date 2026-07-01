@@ -253,7 +253,7 @@ public class ModItems {
         addToVisageStore(MISTA_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(GHIACCIO_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(JOTARO_6_MASK,1, characterCostExp, characterCostEmerald);
-        addToVisageStore(JOHNGALLIA_MASK,2, characterCostExp, characterCostEmerald);
+        addToVisageStore(JOHNGALLIA_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(GUCCIO_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(JOHNNY_MASK,2, characterCostExp, characterCostEmerald);
         addToVisageStore(LUCY_MASK,2, characterCostExp, characterCostEmerald);

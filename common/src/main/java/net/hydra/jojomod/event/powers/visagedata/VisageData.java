@@ -112,6 +112,7 @@ public class VisageData {
         return false;
     }
     public boolean renderJohngalliaHair(){return false;}
+    public boolean renderJohngalliaTie(){return false;}
     public boolean rendersArmor(){
         return false;
     }
