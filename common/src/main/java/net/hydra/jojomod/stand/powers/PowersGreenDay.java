@@ -185,9 +185,9 @@ public class PowersGreenDay extends NewPunchingStand {
 
             else if (isGuarding())
                 if (canExecuteMoveWithLevel(2)) {
-                    setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_STITCH, PowerIndex.SKILL_4_GUARD);
+                    setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_STITCH, PowerIndex.SKILL_EXTRA);
                 } else {
-                    setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                    setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_EXTRA,true);
                 }
 
             else
@@ -1122,9 +1122,9 @@ public class PowersGreenDay extends NewPunchingStand {
 
     public void Stitch() {
         if (canExecuteMoveWithLevel(2)) {
-            if (!this.onCooldown(PowerIndex.SKILL_4_GUARD)) {
-                this.setCooldown(PowerIndex.SKILL_4_GUARD, ClientNetworking.getAppropriateConfig().greenDaySettings.gDStitchcooldown);
-
+            if (!this.onCooldown(PowerIndex.SKILL_EXTRA)) {
+                this.setCooldown(PowerIndex.SKILL_EXTRA, ClientNetworking.getAppropriateConfig().greenDaySettings.gDStitchcooldown);
+                //Roundabout.LOGGER.info(this.getCooldown(PowerIndex.SKILL_4).toString());
                 this.tryPower(PowerIndex.POWER_4_SNEAK, true);
                 tryPowerPacket(PowerIndex.POWER_4_SNEAK);
             }

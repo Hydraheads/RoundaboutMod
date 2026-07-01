@@ -655,6 +655,8 @@ public class Config implements Cloneable {
         public Integer moldDefaultRange;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer moldGrowthRate;
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
+        public Integer moldMaxSize;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer moldSpreadCooldown;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
