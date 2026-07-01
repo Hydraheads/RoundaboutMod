@@ -211,6 +211,10 @@ public class ForgeSounds {
             register(ModSounds.STAND_LEAP, ModSounds.STAND_LEAP_ID);
     public static final RegistryObject<SoundEvent> FALL_BRACE_EVENT =
             register(ModSounds.FALL_BRACE, ModSounds.FALL_BRACE_ID);
+    public static final RegistryObject<SoundEvent> FLUFF_BRACE_INIT =
+            register(ModSounds.FLUFF_BRACE_INIT, ModSounds.FLUFF_BRACE_INIT_ID);
+    public static final RegistryObject<SoundEvent> FLUFF_FALL_BRACE =
+            register(ModSounds.FLUFF_FALL_BRACE, ModSounds.FLUFF_FALL_BRACE_ID);
     public static final RegistryObject<SoundEvent> TIME_SNAP_EVENT =
             register(ModSounds.TIME_SNAP, ModSounds.TIME_SNAP_ID);
     public static final RegistryObject<SoundEvent> THE_WORLD_ASSAULT_EVENT =

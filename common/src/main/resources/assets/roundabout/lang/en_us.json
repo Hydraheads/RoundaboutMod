@@ -1008,6 +1008,8 @@
   "sounds.roundabout.inhale":  "Air vacuum",
   "sounds.roundabout.stand_leap":  "Stand Jump",
   "sounds.roundabout.fall_brace":  "Braced Impact",
+  "sounds.roundabout.fluff_brace_init":  "Pillow",
+  "sounds.roundabout.fluff_fall_brace":  "Soft landing",
   "sounds.roundabout.stand_barrage_windup":  "Preparing Barrage",
   "sounds.roundabout.stand_barrage_miss":  "Barrage",
   "sounds.roundabout.stand_barrage_block":  "Barrage",

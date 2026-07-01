@@ -160,6 +160,8 @@ public class FabricSounds {
         addSound(ModSounds.DODGE_ID, ModSounds.DODGE_EVENT);
         addSound(ModSounds.STAND_LEAP_ID, ModSounds.STAND_LEAP_EVENT);
         addSound(ModSounds.FALL_BRACE_ID, ModSounds.FALL_BRACE_EVENT);
+        addSound(ModSounds.FLUFF_BRACE_INIT_ID, ModSounds.FLUFF_BRACE_INIT_EVENT);
+        addSound(ModSounds.FLUFF_FALL_BRACE_ID, ModSounds.FLUFF_FALL_BRACE_EVENT);
 
         addSound(ModSounds.TIME_SNAP_ID, ModSounds.TIME_SNAP_EVENT);
 

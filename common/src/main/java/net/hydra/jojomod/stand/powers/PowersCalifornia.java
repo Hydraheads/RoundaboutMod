@@ -204,9 +204,12 @@ public class PowersCalifornia extends NewDashPreset {
 
     @Override
     public void playFallBraceInitSound(){
-        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 2.3F, (float) (0.78 + (Math.random() * 0.04)));
+        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.FLUFF_BRACE_INIT_EVENT, SoundSource.PLAYERS, 2.3F, (float) (0.78 + (Math.random() * 0.04)));
     }
-
+    @Override
+    public void playFallBraceImpactSounds(){
+        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.FLUFF_FALL_BRACE_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
+    }
 
     @Override
     public void tickMobAI(LivingEntity attackTarget){

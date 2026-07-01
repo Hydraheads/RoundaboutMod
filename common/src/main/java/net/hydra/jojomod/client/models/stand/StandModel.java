@@ -262,6 +262,9 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
             this.setStandRotations(rotX, rotY, rotZ);
         }
     }
+    public float rotationStrength(){
+        return 1f;
+    }
     public void rotateBody(T mobEntity,  ModelPart body, float tickDelta){
         if (mobEntity instanceof FollowingStandEntity FSE) {
             if (mobEntity.getDisplay()) {
@@ -294,6 +297,7 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
                     }
                     cRot *= -0.6F;
                 }
+                cRot *= rotationStrength();
                 rotX = MainUtil.controlledLerpRadianDegrees(tickDelta, rotX, cRot, 0.15f);
                 rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, 0, 0.8f);
             } else if (animationStyle == OffsetIndex.FIXED_STYLE) {

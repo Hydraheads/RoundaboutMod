@@ -95,6 +95,11 @@ public class CaliforniaKingBedModel<T extends CaliforniaKingBedEntity> extends S
     }
 
     @Override
+    public float rotationStrength(){
+        return 3f;
+    }
+
+    @Override
     public ModelPart root() {
         return stand;
     }
