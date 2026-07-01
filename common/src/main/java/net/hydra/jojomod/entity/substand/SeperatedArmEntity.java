@@ -206,6 +206,10 @@ public class SeperatedArmEntity extends StandEntity {
     }
 
     public void tickeffects() {
+        if (getMainHandItem().getDamageValue() == getMainHandItem().getMaxDamage()-1){
+            Can_activate = false;
+            Can_activate_special = false;
+        }
         this.setFadeOut((byte)1);
         boolean client = this.level().isClientSide();
         LivingEntity user = this.getUser();
@@ -487,16 +491,17 @@ public class SeperatedArmEntity extends StandEntity {
     public void doAttack() {
         LivingEntity user = this.getUser();
         Item item = (this.getMainHandItem().getItem());
-        List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),1,1,1);
-        if(SpinTicks >0){
-            damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),2,2,2);
+        List<Entity> damages = List.of();
+        if(Can_activate_special || Can_activate) {
+             damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), 1, 1, 1);
+            if (SpinTicks > 0) {
+                damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), 2, 2, 2);
+            }
         }
 
 
         for(int j = 0;j<damages.size();j++) {
-            if(SpinTicks == 0) {
-                this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
-            }
+
 
 
             Entity entity = damages.get(j);
@@ -507,13 +512,17 @@ public class SeperatedArmEntity extends StandEntity {
             }
 
 
-                if (!((entity.equals(this) || entity.equals(user)) || entity instanceof StandEntity || entity instanceof ItemEntity)) {
+                if ((entity instanceof LivingEntity) && !((entity.equals(this) || entity.equals(user)) || entity instanceof StandEntity || entity instanceof ItemEntity)) {
                     if (flyingTicks > 2 && SpinTicks > 0) {
                         BlockPos pos = new BlockPos(new Vec3i((int) this.getX(), (int) (this.getY() - 0.2), (int) this.getZ()));
                         if ((level().getBlockState(new BlockPos(pos)).isAir())) {
                             this.level().addParticle(ParticleTypes.FLASH, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
                             entity.addDeltaMovement(new Vec3(0, 0.2, 0));
                         }
+                    }
+
+                    if(SpinTicks == 0) {
+                        this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
                     }
 
                     if (item instanceof KnifeItem) {

@@ -5612,7 +5612,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Shadow
     public abstract ItemStack getMainHandItem();
 
-    public double previousYpos = 0.0;
+    public double previousYpos = getY();
 
 
 
@@ -5713,7 +5713,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public float MoldLevel = 0.0f;
     public int jumpImmunityTicks = 0;
 
-    public double StartingYPos = 0;
+    public double StartingYPos = getY();
 
     @Override
     public double getStaringYPos() {
