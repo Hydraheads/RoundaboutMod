@@ -1823,7 +1823,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     @Override
     public boolean interceptSuccessfulDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
         if ((hasStandActive(this.getSelf()) && $$0.is(DamageTypes.PLAYER_ATTACK))){
-            addEXP(1,target);
+            addEXP(2,target);
         }
         return false;
     }

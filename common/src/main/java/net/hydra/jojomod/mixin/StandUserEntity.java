@@ -5204,7 +5204,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
                     int amtdown = -1;
                     if (this.isInWaterRainOrBubble())
-                        amtdown = -10;
+                        amtdown = -4;
                     roundabout$setRemainingStandFireTicks(roundabout$remainingFireTicks + amtdown);
 
                 }

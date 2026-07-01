@@ -3377,6 +3377,9 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 /*The last hit in a string has more power and knockback if you commit to it*/
                 pow = getHeavyPunchStrength(entity);
                 knockbackStrength = 0.2F;
+                if (entity instanceof Player){
+                    knockbackStrength = 0.3F;
+                }
                 lasthit = true;
             } else {
                 pow = getPunchStrength(entity);
