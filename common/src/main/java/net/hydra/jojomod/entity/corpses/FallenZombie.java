@@ -91,7 +91,7 @@ public class FallenZombie extends FallenMob{
                 if (player.isSpectator()) {
                     return InteractionResult.SUCCESS;
                 }
-                if (getRealController() != null && player.getUUID() == getRealController().getUUID()) {
+                if (!getActivated() || (getRealController() != null && player.getUUID() == getRealController().getUUID())) {
                     this.setItemSlotAndDropWhenKilled(EquipmentSlot.MAINHAND, plrItem);
                     player.setItemInHand(intHand, corpseItem);
                 }
