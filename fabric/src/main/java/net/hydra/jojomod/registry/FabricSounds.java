@@ -136,6 +136,7 @@ public class FabricSounds {
 
         addSound(ModSounds.BULLET_PENTRATION_ID, ModSounds.BULLET_PENTRATION_EVENT);
         addSound(ModSounds.BULLET_RICOCHET_ID, ModSounds.BULLET_RICOCHET_EVENT);
+        addSound(ModSounds.MAGIC_DING_ID, ModSounds.MAGIC_DING_EVENT);
 
         addSound(ModSounds.ROAD_ROLLER_AMBIENT_ID, ModSounds.ROAD_ROLLER_AMBIENT_EVENT);
         addSound(ModSounds.ROAD_ROLLER_EXPLOSION_ID, ModSounds.ROAD_ROLLER_EXPLOSION_EVENT);

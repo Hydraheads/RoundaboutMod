@@ -150,7 +150,8 @@ public class PowersCalifornia extends NewDashPreset {
 
     public void ruleSwitchClient(){
         if (!onCooldown(PowerIndex.SKILL_4)){
-            setCooldown(PowerIndex.SKILL_4,6);
+            this.self.playSound(ModSounds.MAGIC_DING_EVENT, 1F, 1.0F);
+            setCooldown(PowerIndex.SKILL_4,7);
             tryPowerPacket(PowerIndex.POWER_4);
         }
     }

@@ -137,6 +137,12 @@
       "roundabout:banish"
     ]
   },
+  "magic_ding": {
+    "subtitle": "sounds.roundabout.magic_ding",
+    "sounds": [
+      "roundabout:magic_ding"
+    ]
+  },
   "anubis_unsheathe": {
     "subtitle": "sounds.roundabout.anubis_unsheathe",
     "sounds": [
