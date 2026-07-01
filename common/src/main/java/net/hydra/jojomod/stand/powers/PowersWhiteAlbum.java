@@ -53,6 +53,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
@@ -148,6 +149,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (sauce.is(ModDamageTypes.BULLET) || sauce.getDirectEntity() instanceof Projectile ||
                 sauce.getEntity() instanceof Blaze){
             damage*=0.5F;
+        }
+        if (sauce.is(DamageTypes.ARROW) && sauce.getEntity() instanceof Player){
+            damage*=0.4F;
         }
         return super.guardSpecialties(sauce,damage);
     }
