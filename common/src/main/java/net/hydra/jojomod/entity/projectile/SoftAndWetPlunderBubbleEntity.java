@@ -654,6 +654,9 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                 this.startReturning();
                 return;
 
+            } else if ($$0.getEntity() instanceof GentlyWeepsEntity gwe && this.getPlunderType() == PlunderTypes.MOISTURE.id && this.getLiquidStolen() == 4) {
+                gwe.setBled(true);
+                super.onHitEntity($$0);
             } else if ($$0.getEntity() instanceof Cow && this.getPlunderType() == PlunderTypes.MOISTURE.id && this.getLiquidStolen() == -1) {
                 this.setLiquidStolen(7);
                 this.setFloating();
