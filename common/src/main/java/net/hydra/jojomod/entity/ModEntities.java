@@ -64,6 +64,7 @@ public class ModEntities {
     public static EntityType<CinderellaEntity> CINDERELLA;
     public static EntityType<CaliforniaKingBedEntity> CALIFORNIA_KING_BED;
     public static EntityType<PlanetWavesEntity> PLANET_WAVES;
+    public static EntityType<PlanetWavesSpartaEntity> PLANET_WAVES_SPARTA;
     public static EntityType<ManhattanTransferEntity> MANHATTAN_TRANSFER;
     public static EntityType<PollinationTransferEntity> POLLINATION_TRANSFER;
     public static EntityType<WalkingHeartEntity> WALKING_HEART;

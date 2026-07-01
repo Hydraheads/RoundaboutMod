@@ -169,6 +169,8 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
     public boolean isBundle = false;
     public int saneAgeTicking;
     public int inWaterTicks = 0;
+    private Vec3 spawnPosition = null;
+    private static final double MAX_TRAVEL_DISTANCE = 200.0;
 
     public void tickWater() {
         inWaterTicks++;
@@ -196,6 +198,15 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
         super.tick();
 
         if (this.level().isClientSide()) return;
+        if (spawnPosition == null) {
+            spawnPosition = this.position();
+        } else {
+            double traveled = spawnPosition.distanceTo(this.position());
+            if (traveled >= MAX_TRAVEL_DISTANCE) {
+                this.discard();
+                return;
+            }
+        }
         if (this.isEffectivelyInWater()) {
             tickWater();
         } else {
