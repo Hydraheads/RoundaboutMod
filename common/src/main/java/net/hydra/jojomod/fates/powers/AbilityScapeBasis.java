@@ -2024,6 +2024,7 @@ public class AbilityScapeBasis {
                         backwards = -3;
                     }
 
+                    int buffer = 1000;
                     int cdTime = ClientNetworking.getAppropriateConfig().generalStandSettings.jumpingDashCooldown;
                     if (this.getSelf() instanceof Player) {
                         ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(0);
@@ -2034,7 +2035,7 @@ public class AbilityScapeBasis {
                             Mth.sin(-20 * ((float) Math.PI / 180)),
                             -Mth.cos(degrees * ((float) Math.PI / 180)));
 
-                    doDashMove(backwards);
+                    doDashMove(backwards+buffer);
                 }
             }
         }
