@@ -296,8 +296,8 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
                         cRot = 0;
                     }
                     cRot *= -0.6F;
+                    cRot *= rotationStrength();
                 }
-                cRot *= rotationStrength();
                 rotX = MainUtil.controlledLerpRadianDegrees(tickDelta, rotX, cRot, 0.15f);
                 rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, 0, 0.8f);
             } else if (animationStyle == OffsetIndex.FIXED_STYLE) {
