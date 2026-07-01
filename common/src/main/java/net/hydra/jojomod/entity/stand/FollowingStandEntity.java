@@ -168,7 +168,10 @@ public class FollowingStandEntity extends StandEntity{
     public Vec3 getAttackOffset(LivingEntity standUser, byte ot) {
         if (ot == OffsetIndex.BENEATH) {
             Vec3 frontVectors = FrontVectors(standUser, 180, 0F);
-            return new Vec3(frontVectors.x, frontVectors.y-1.1, frontVectors.z);
+            return new Vec3(frontVectors.x, frontVectors.y - 1.1, frontVectors.z);
+        } else if (ot == OffsetIndex.BENEATH_2){
+            Vec3 frontVectors = FrontVectors(standUser, 180, 0F);
+            return new Vec3(frontVectors.x, frontVectors.y - 0.5, frontVectors.z);
         } else {
             float distanceFront;
             float standrotDir2 = 0;

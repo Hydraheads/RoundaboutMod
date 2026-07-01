@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.stand.CinderellaEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -234,6 +235,27 @@ public class PowersCalifornia extends NewDashPreset {
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
+    }
+
+
+    @Override
+    public boolean fallBraceInit() {
+        this.getSelf().fallDistance -= 20;
+        if (this.getSelf().fallDistance < 0){
+            this.getSelf().fallDistance = 0;
+        }
+        impactBrace = true;
+        impactAirTime = 15;
+
+        animateStand(StandEntity.BLOCK);
+        this.setAttackTimeDuring(0);
+        this.setActivePower(PowerIndex.EXTRA);
+        this.poseStand(OffsetIndex.BENEATH_2);
+        animateStand(CaliforniaKingBedEntity.FALL_BRACE);
+        if (!this.getSelf().level().isClientSide()) {
+            playFallBraceInitSound();
+        }
+        return true;
     }
 
 

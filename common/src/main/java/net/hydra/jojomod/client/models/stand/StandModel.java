@@ -227,6 +227,8 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
                 if (animationNumber == OffsetIndex.BENEATH) {
                     cRX = 90 * Mth.DEG_TO_RAD;
                     cRZ = 180 * Mth.DEG_TO_RAD;
+                } else if (animationNumber == OffsetIndex.BENEATH_2) {
+                    cRX = 0;
                 }
             } else if (animationStyle == OffsetIndex.LOOSE_STYLE || animationNumber == OffsetIndex.GUARD_AND_TRACE) {
                 cRX = (mobEntity.getViewXRot(tickDelta) % 360) * Mth.DEG_TO_RAD;

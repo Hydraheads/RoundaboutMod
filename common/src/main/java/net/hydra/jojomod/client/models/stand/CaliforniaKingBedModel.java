@@ -91,6 +91,7 @@ public class CaliforniaKingBedModel<T extends CaliforniaKingBedEntity> extends S
         defaultModifiers(pEntity);
 
         this.animate(pEntity.barrageHurtAnimationState, StandAnimations.BARRAGEDAMAGE, pAgeInTicks, 2.5f);
+        this.animate(pEntity.fall_brace, KingBedAnimations.Fall_Brace, pAgeInTicks, 1f);
         this.animate(pEntity.idleAnimationState2, KingBedAnimations.Normal, pAgeInTicks, 1f);
         this.animate(pEntity.idleAnimationState, KingBedAnimations.Whimsical, pAgeInTicks, 0.9F);
     }

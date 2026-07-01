@@ -3355,7 +3355,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     stand.setYHeadRot(roundabout$User.getYHeadRot() % 360);
                     if (OffsetIndex.OffsetStyle(OT) == OffsetIndex.FIXED_STYLE) {
                         float rot;
-                        if (OT == OffsetIndex.BENEATH) {
+                        if (OT == OffsetIndex.BENEATH || OT == OffsetIndex.BENEATH_2) {
                             rot = (roundabout$User.getYRot()) % 360;
                         } else if (OT == OffsetIndex.GUARD_AND_TRACE) {
                             BlockHitResult dd = roundabout$getStandPowers().getAheadVec(30);
