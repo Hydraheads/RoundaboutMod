@@ -93,6 +93,9 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
                                 && !(pj instanceof RoundaboutBulletEntity abe && abe.isHattan)) {
                             IProjectileAccess ipa = (IProjectileAccess) pj;
                             if (!ipa.roundabout$getIsDeflected()) {
+                                if (pj instanceof ThrownObjectEntity ttt){
+                                    ttt.disableThrow();
+                                }
                                 ((ServerLevel) this2.level()).sendParticles(ModParticles.ICE_SPARKLE,
                                         pj.getX(),
                                         pj.getY(),
