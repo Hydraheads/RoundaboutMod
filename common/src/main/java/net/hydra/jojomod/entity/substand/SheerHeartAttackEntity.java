@@ -54,6 +54,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	protected static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(SheerHeartAttackEntity.class,
 			EntityDataSerializers.INT);
 
+
 	@Override
 	protected PathNavigation createNavigation(Level $$0) {
 		StandEntityNavigation nav = new StandEntityNavigation(this, $$0);
@@ -92,16 +93,30 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public BlockPos blockTarget = null;
 	public int ticksUntilNextPathRecalculation = 15;
 	public int returnTicks = 0;
-	private static int returnMaxTicks = 300;
+	private static final int returnMaxTicks = 300;
+	public int inativeTicks = 0;
+	private static final int inativeMaxTicks = 80;
+
+	public int explosions = 0;
 
 	public float viewRange = 10.0f;
 
 	private boolean haveToReturn = false;
 
-	public boolean getHaveToReturn() { return this.haveToReturn;}
+	public int getMaxExplosions() {
+		return ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackMaxExplosions;
+	}
+
+	public boolean getHaveToReturn() {
+		return this.haveToReturn || (this.explosions >= getMaxExplosions() && getMaxExplosions() != 0)
+				|| this.inativeTicks >= inativeMaxTicks;
+	}
+
 	public void setHaveToReturn(boolean value) {
-		this.returnTicks = 0;
-		this.haveToReturn = value;
+		this.haveToReturn = value || (this.explosions >= getMaxExplosions() && getMaxExplosions() != 0);
+		if (!this.haveToReturn) {
+			this.returnTicks = 0;
+		}
 	}
 
 	public static AttributeSupplier.Builder createStandAttributes() {
@@ -111,16 +126,18 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	@Override
 	public void setupAnimationStates() {
-		//super.setupAnimationStates();
 		if (this.getUser() != null) {
-			if (this.getDeltaMovement() == Vec3.ZERO) {
+			if (this.getAnimation() == IDLE) {
 				this.idle.startIfStopped(this.tickCount);
-				this.moving.stop();
 			} else {
 				this.idle.stop();
-				this.moving.startIfStopped(this.tickCount);
 			}
 
+			if (this.getAnimation() == WALK) {
+				this.moving.startIfStopped(this.tickCount);
+			} else {
+				this.moving.stop();
+			}
 		}
 	}
 
@@ -150,7 +167,11 @@ public class SheerHeartAttackEntity extends StandEntity {
 				}else {
 					this.tickTargetFindCount--;
 				}
-
+				if (this.currentTarget == NONE) {
+					this.inativeTicks++;
+				}else {
+					this.inativeTicks = 0;
+				}
 
 				if (this.attackTick > 0) { this.attackTick--;}
 				if (this.jumpTick > 0) { this.jumpTick--;}
@@ -162,13 +183,19 @@ public class SheerHeartAttackEntity extends StandEntity {
 				}
 				this.moveToTarget();
 
-				if (this.haveToReturn) { this.returnTicks++; }
+				if (this.getHaveToReturn()) { this.returnTicks++; }
 
 
 				if (flyngTicks > 2 && this.hasTarget()) {
 					if (this.shouldExplode(this.getTargetPosition())) {
 						this.attack();
 					}
+				}
+
+				if (this.getDeltaMovement().length() > 0) {
+					this.setAnimation(WALK);
+				}else {
+					this.setAnimation(IDLE);
 				}
 			}
 		}
@@ -177,7 +204,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
 	protected void moveToTarget() {
-		if (this.haveToReturn) {
+		if (this.getHaveToReturn()) {
 			Vec3 pos = this.getUser().position();
 			this.shaMove(pos);
 		} else if (this.hasTarget()) {
@@ -340,6 +367,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		DamageSource dmg = ModDamageTypes.of(this.level(), ModDamageTypes.EXPLOSIVE_STAND, this.getUser());;
 
+		this.explosions++;
+
 		if (this.getTargetType() == ENTITY){
 			ExplosionUtil.explosionHurt(this.position(), dmg, this.level(),
 					ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage, 0.3f, explosionRadius);
@@ -413,7 +442,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			ticksUntilNextPathRecalculation = 15; // + mob.getRandom().nextInt(7);
 
 			Path newPath;
-			if (this.haveToReturn) {
+			if (this.getHaveToReturn()) {
 				newPath = this.getNavigation().createPath(this.getUser(), 1);
 			}else if (this.currentTarget == ENTITY) {
 				newPath = this.getNavigation().createPath(this.entityTarget, 0);
@@ -496,7 +525,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			//Vec3 pos =  blockHit.getLocation();
 
 			// blockHit.getType() == HitResult.Type.BLOCK &&
-			if (this.isInWall()) {
+			if (this.isTechnicallyInImpassableWall()) {
 				Vec3 mov = this.getDeltaMovement();
 				this.setDeltaMovement(mov.x, 0.6f, mov.y);
 			}
