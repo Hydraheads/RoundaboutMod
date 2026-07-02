@@ -7,4 +7,6 @@ public interface IFireworkRocketAccess {
     void roundabout$Explode();
 
     void setIsHattanProj(boolean hattanProj);
+
+    void setIsShotFromCrossbow(boolean isCrossbowF);
 }

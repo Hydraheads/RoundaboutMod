@@ -81,14 +81,15 @@ public abstract class SurvivorThrownPotion extends ThrowableItemProjectile imple
                             ci.cancel();
                             if(ci.isCancelled()) {
                                 ME.setHeldItemManhattanFull(ii.copyAndClear());
-                                if (this.getOwner() == null || this.getOwner() instanceof Player) {
+                                if (this.getOwner() instanceof Player P && !(P.isCreative() || P.isSpectator())) {
                                     ME.canAcquireHeldItem = true;
+                                    ME.hasItemTwo = true;
+                                    ME.itemEject();
+                                    this.discard();
                                 } else {
+                                    this.discard();
                                     ME.canAcquireHeldItem = false;
                                 }
-                                ME.hasItemTwo = true;
-                                ME.itemEject();
-                                this.discard();
                             }
                         }
                     }
