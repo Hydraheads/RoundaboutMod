@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.core.BlockPos;
@@ -45,6 +46,7 @@ public class BlockWallEntity extends Entity {
     private BlockState blockState;
     public int time;
     public boolean dropItem;
+    public boolean tsmove;
     public boolean canGrief = false;
     private boolean cancelDrop;
     private boolean hurtEntities;
@@ -165,7 +167,7 @@ public class BlockWallEntity extends Entity {
     public void tick() {
 
         if (!level().isClientSide()) {
-            if (timing > -1){
+            if (timing > -1 && !((TimeStop)level()).inTimeStopRange(this)){
                 timing--;
                 if (timing <= 0){
                     breakAndDiscard();

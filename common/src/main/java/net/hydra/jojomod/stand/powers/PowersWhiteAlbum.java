@@ -1038,6 +1038,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                                 );
                         wall.setDataFinalPos(newVec.add(0, 2, 0));
                         wall.timing = 200;
+                        wall.tsmove = true;
                         wall.canGrief = MainUtil.getIsGamemodeApproriateForGrief(self);
                         addIceEntity(wall);
                         self.level().addFreshEntity(wall);
