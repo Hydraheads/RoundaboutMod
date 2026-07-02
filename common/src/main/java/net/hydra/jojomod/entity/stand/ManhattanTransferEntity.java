@@ -345,10 +345,16 @@ public class ManhattanTransferEntity extends StandEntity {
                             } else {
                                 success = false;
                                 if (direct instanceof AbstractArrow AA) {
-                                    if (AA instanceof IronBallEntity) {
-                                        return this.getUser().hurt(source, amount / 2);
-                                    }
                                     ItemStack ii = ((IAbstractArrowAccess) AA).roundabout$GetPickupItem();
+                                    if (AA instanceof IronBallEntity) {
+                                        IronBallEntity $$7 = new IronBallEntity(this.getUser().level(), this.getUser(), ii);
+                                        $$7.setPos(this.getX(), this.getY() - 0.15, this.getZ());
+                                        $$7.shootFromRotation(this, this.getXRot(), this.getYRot(), -3.0F, 2F, 0.0F);
+                                        $$7.setRemainingFireTicks(this.fireTicksPrj);
+                                        this.level().addFreshEntity($$7);
+                                        $$7.isHattanIronBall = true;
+                                        this.hattanDeflected = $$7;
+                                    }
                                     if (!ii.isEmpty()) {
                                         if (AA.pickup.equals(AbstractArrow.Pickup.ALLOWED)) {
                                             this.setHeldItemManhattanFull(ii.copyAndClear());
@@ -374,12 +380,12 @@ public class ManhattanTransferEntity extends StandEntity {
                                     ItemStack ii = TH.getItem();
                                     if (!ii.isEmpty()) {
                                         this.setHeldItemManhattanFull(ii.copyAndClear());
-                                        if(TH.getOwner() instanceof Player) {
+                                        if(TH.getOwner() instanceof Player P && !(P.isCreative() || P.isSpectator())) {
                                             this.canAcquireHeldItem = true;
+                                            hasItemTwo = true;
                                         } else {
                                             this.canAcquireHeldItem = false;
                                         }
-                                        hasItemTwo = true;
                                         TH.discard();
                                     }
                                 }
