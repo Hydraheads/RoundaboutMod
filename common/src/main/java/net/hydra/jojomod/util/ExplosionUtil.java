@@ -90,7 +90,7 @@ public class ExplosionUtil {
 
 		for(int j = 0;j<damages.size();j++) {
 			Entity entity = damages.get(j);
-			if (entity instanceof StandEntity) {
+			if (entity instanceof StandEntity || !entity.isAttackable()) {
 				continue;
 			}
 			if (entity instanceof Player PL && (PL.isCreative() || PL.isSpectator())) {
