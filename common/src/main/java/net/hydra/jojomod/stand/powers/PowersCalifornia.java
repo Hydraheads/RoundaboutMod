@@ -9,7 +9,9 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -18,27 +20,33 @@ import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 
-import java.util.List;
+import java.util.*;
 
 public class PowersCalifornia extends NewDashPreset {
 
     public PowersCalifornia(LivingEntity self) {
         super(self);
     }
-
+    private final Map<Entity, Integer> hurtEntities = new HashMap<>();
     @Override
     /**Override to add disable config*/
     public boolean isStandEnabled(){
@@ -86,6 +94,36 @@ public class PowersCalifornia extends NewDashPreset {
         if ($$0.contains("currentRule")) {
             currentRule = $$0.getByte("currentRule");
         }
+    }
+
+    public void removeFromList(Entity entity){
+
+    }
+    public void addToList(Entity entity){
+        hurtEntities.put(entity, entity.tickCount + 200);
+        if (self instanceof ServerPlayer sp) {
+            S2CPacketUtil.sendGenericIntToClientPacket(
+                    sp,
+                    PacketDataIndex.S2C_INT_CKB_ADD,
+                    entity.getId()
+            );
+        }
+    }
+
+    private final Set<Integer> clientEntityIds = new HashSet<>();
+    public boolean isCapturedEntity(Entity entity) {
+        return clientEntityIds.contains(entity.getId());
+    }
+
+    public Set<Integer> getCapturedEntityIds() {
+        return clientEntityIds;
+    }
+    public void addToClientList(int entityId) {
+        clientEntityIds.add(entityId);
+    }
+
+    public void removeFromClientList(int entityId) {
+        clientEntityIds.remove(entityId);
     }
 
     @Override
@@ -192,9 +230,30 @@ public class PowersCalifornia extends NewDashPreset {
         return Component.translatable("skins.roundabout.california_king_bed.base");
     }
 
+    public void onActuallyHurt(DamageSource source, float $$1){
+        if (source.getEntity() != null && !source.is(DamageTypes.THORNS)) {
+            if (inCowerStance()){
+                if (attackTimeDuring >= 5){
+                    setCowerLeaveStance();
+                    addToList(source.getEntity());
+                } else {
+                    setNoStance();
+                }
+            }
+        }
+    }
+
+    @Override
+    public ResourceLocation getIconYes(int slot){
+        if (slot == 1 && !getCapturedEntityIds().isEmpty())
+            return StandIcons.SQUARE_PINK;
+        return super.getIconYes(slot);
+    }
+
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
 
+        setSkillIcon(context, x, y, 1, StandIcons.STEAL_MEMORIES, PowerIndex.SKILL_1);
 
         if (isDoNotHurt()){
             setSkillIcon(context, x, y, 2, StandIcons.HURT_RULE, PowerIndex.SKILL_2);
@@ -203,7 +262,6 @@ public class PowersCalifornia extends NewDashPreset {
         } else {
             setSkillIcon(context, x, y, 2, StandIcons.FORBID_RULE, PowerIndex.SKILL_EXTRA_2);
         }
-
 
         if (this.getSelf().fallDistance > 3) {
             setSkillIcon(context, x, y, 3, StandIcons.CALIFORNIA_FALL_CATCH, PowerIndex.SKILL_EXTRA);
@@ -257,12 +315,39 @@ public class PowersCalifornia extends NewDashPreset {
 
     public int timeSinceSwitch = 0;
     public void tickPower() {
+        super.tickPower();
         if (!self.level().isClientSide()) {
+            if (!hurtEntities.isEmpty() && self instanceof ServerPlayer sp) {
+                Iterator<Map.Entry<Entity, Integer>> it = hurtEntities.entrySet().iterator();
+
+                while (it.hasNext()) {
+                    Map.Entry<Entity, Integer> entry = it.next();
+
+                    Entity entity = entry.getKey();
+
+                    if (!entity.isAlive() || entry.getValue() <= entity.tickCount) {
+                        S2CPacketUtil.sendGenericIntToClientPacket(
+                                sp,
+                                PacketDataIndex.S2C_INT_CKB_REMOVE,
+                                entity.getId()
+                        );
+
+                        it.remove();
+                    }
+                }
+            }
             if (getActivePower() == PowerIndex.POWER_2) {
-                if (inCowerStance() && attackTimeDuring >= 20) {
-                    xTryPower(PowerIndex.NONE,true);
-                    timeSinceSwitch = 20;
-                    setCowerLeaveStance();
+                if (inCowerStance()) {
+                    if (attackTimeDuring >= 20) {
+                        xTryPower(PowerIndex.NONE, true);
+                        timeSinceSwitch = 12;
+                        setCowerLeaveStance();
+                    } else if (attackTimeDuring == 5) {
+                        Vec3 posPo = self.getEyePosition().add(self.getLookAngle().scale(1f));
+                        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.STAR,
+                                posPo.x, posPo.y, posPo.z,
+                                0, 0, 0, 0, 0.8);
+                    }
                 }
             } else {
                 if (inCowerStance()) {
@@ -273,12 +358,45 @@ public class PowersCalifornia extends NewDashPreset {
             if (inCowerLeaveStance()){
                 timeSinceSwitch--;
                 if (timeSinceSwitch <= 0){
-                    Roundabout.LOGGER.info("4");
                     setNoStance();
                 }
             }
         }
-        super.tickPower();
+    }
+
+    @Override
+    public float inputSpeedModifiers(float basis){
+        if (inCowerStance()) {
+            basis*=0.0f;
+        }
+        return super.inputSpeedModifiers(basis);
+    }
+    @Override
+    public boolean cancelJump(){
+        if (inCowerStance()) {
+            return true;
+        }
+        return super.cancelJump();
+    }
+    @Override
+    public boolean cancelSprintParticles(){
+        if (inCowerStance()) {
+            return true;
+        }
+        return cancelSprintParticles();
+    }
+
+    @Override
+    public boolean highlightsEntity(Entity ent,Player player){
+        if (!getCapturedEntityIds().isEmpty() && isCapturedEntity(ent)){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int highlightsEntityColor(Entity ent, Player player){
+        return 16254719;
     }
 
     @Override
@@ -330,6 +448,7 @@ public class PowersCalifornia extends NewDashPreset {
     public void cowerServer(){
         if (!onCooldown(PowerIndex.SKILL_2)){
             if (self instanceof ServerPlayer pl){
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.HEEL_RAISE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.00f + Math.random() * 0.03f));
                 setActivePower(PowerIndex.POWER_2);
                 this.setAttackTimeDuring(0);
                 ((IPlayerEntity)pl).roundabout$SetPoseEmote((byte) 35);

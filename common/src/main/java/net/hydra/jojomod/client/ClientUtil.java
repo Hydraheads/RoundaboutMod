@@ -16,6 +16,7 @@ import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerMixingSound;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
+import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -838,6 +839,16 @@ public class ClientUtil {
             StandUser user = ((StandUser) player);
             if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pwa){
                 pwa.acceleration =data;
+            }
+        } else if (context == PacketDataIndex.S2C_INT_CKB_ADD) {
+            StandUser user = ((StandUser) player);
+            if (user.roundabout$getStandPowers() instanceof PowersCalifornia ckb){
+                ckb.addToClientList(data);
+            }
+        } else if (context == PacketDataIndex.S2C_INT_CKB_REMOVE) {
+            StandUser user = ((StandUser) player);
+            if (user.roundabout$getStandPowers() instanceof PowersCalifornia ckb){
+                ckb.removeFromClientList(data);
             }
         }
     }

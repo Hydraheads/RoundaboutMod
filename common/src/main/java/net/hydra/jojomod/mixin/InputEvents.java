@@ -1156,8 +1156,10 @@ public abstract class InputEvents implements IInputEvents {
 
                 Poses poseEmote = Poses.getPosFromByte(((IPlayerEntity) player).roundabout$GetPoseEmote());
                 if (poseEmote != Poses.NONE && poseEmote != Poses.VAMPIRE_TRANSFORMATION){
-                    if (options.keyUp.isDown() || options.keyDown.isDown() ||
-                    options.keyLeft.isDown() || options.keyRight.isDown() || options.keyJump.isDown() ||
+                    if (((options.keyUp.isDown() || options.keyDown.isDown() ||
+                    options.keyLeft.isDown() || options.keyRight.isDown() || options.keyJump.isDown())
+                            && poseEmote != Poses.COWER)
+                            ||
                     player.isUsingItem() || player.swinging || player.hurtTime > 0){
                         ((IPlayerEntity) player).roundabout$SetPos(Poses.NONE.id);
                         C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_STRIKE_POSE,Poses.NONE.id);

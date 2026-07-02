@@ -1767,7 +1767,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
         if (targ instanceof Player PL){
             int heat = HeatUtil.getHeat(PL);
-            HeatUtil.addHeat(PL, -4);
+            HeatUtil.addHeat(PL, -3);
         } else if (targ instanceof LivingEntity LE){
             HeatUtil.addHeat(LE,-13);
         }

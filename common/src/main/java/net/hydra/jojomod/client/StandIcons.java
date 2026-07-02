@@ -24,6 +24,8 @@ public class StandIcons {
             "textures/gui/move_square2.png");
     public static final ResourceLocation SQUARE_GOLD = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_square_gold.png");
+    public static final ResourceLocation SQUARE_PINK = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/move_square_pink.png");
     public static final ResourceLocation SQUARE_ICON_BLOOD = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_square4.png");
     public static final ResourceLocation NOVELTY_ICON = new ResourceLocation(Roundabout.MOD_ID,
@@ -227,6 +229,8 @@ public class StandIcons {
             "textures/gui/icons/california_king_bed/leave_rule.png");
     public static final ResourceLocation EXPERIENCE_BISHOP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/california_king_bed/experience_bishop.png");
+    public static final ResourceLocation STEAL_MEMORIES = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/steal_memories.png");
     public static final ResourceLocation VAMP_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/powers/vampire/punch.png");
     public static final ResourceLocation VAMP_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,

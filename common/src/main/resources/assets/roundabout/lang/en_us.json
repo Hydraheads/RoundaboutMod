@@ -1396,7 +1396,7 @@
   "ability.roundabout.impale": "Impale",
   "ability.roundabout.impale.desc": "Winds up a deadly attack that may inflict level 3 bleed. You have to get within close range to land it.",
   "ability.roundabout.impale_blitz": "Impale/Blitz",
-  "ability.roundabout.impale_blitz.desc": "Winds up a deadly attack that may inflict level 3 bleed. You have to get within close range to land it. Press the attack key to use the move early, this alternative version is a fast uppercut that disables shields, it is called Star Blitz.",
+  "ability.roundabout.impale_blitz.desc": "Winds up a deadly attack that may inflict level 3 bleed. You have to get within close range to land it. Press the attack key to use the move early, this alternative version is a fast uppercut, it is called Star Blitz.",
   "ability.roundabout.block_grab": "Power Grab (Blocks)",
   "ability.roundabout.block_grab.desc": "Grabs the block you are facing. Attack to throw, Guard to pocket. The harder the block, the more powerful it is. Useful for building in survival mode.",
   "ability.roundabout.item_grab": "Power Grab (Items)",

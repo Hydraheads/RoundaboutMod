@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.util.HeatUtil;
 import net.minecraft.client.player.LocalPlayer;
@@ -27,6 +28,12 @@ public abstract class FatesLocalPlayerMixin extends Entity {
     @Inject(method = "canSpawnSprintParticle", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$applyEffectTick(CallbackInfoReturnable<Boolean> cir)
     {
+
+        if (((StandUser)this).roundabout$getStandPowers().cancelSprintJump()){
+            cir.setReturnValue(false);
+            return;
+        }
+
         if (((IFatePlayer)this).rdbt$getFatePowers() instanceof VampiricFate VP
         && VP.isPlantedInWall()){
             cir.setReturnValue(this.walkDist > VP.walkDistLast && !this.isInWater() && !this.isSpectator() && !this.isCrouching() && !this.isInLava() && this.isAlive() && !this.isInWater());
@@ -36,12 +43,14 @@ public abstract class FatesLocalPlayerMixin extends Entity {
 
         if (((IPowersPlayer)this).rdbt$getPowers().cancelSprintParticles()){
             cir.setReturnValue(false);
+            return;
         }
 
             if (FateTypes.isTransforming(((LocalPlayer)(Object)this))||
                     ((IFatePlayer)this).rdbt$getFatePowers().cancelSprintParticles()
     || HeatUtil.isBodyFrozen(this)) {
                 cir.setReturnValue(false);
+                return;
             }
     }
     /**Vampires can sprint even at low food*/
