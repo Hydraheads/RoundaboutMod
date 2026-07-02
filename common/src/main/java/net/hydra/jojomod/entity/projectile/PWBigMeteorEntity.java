@@ -12,6 +12,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.stand.powers.PowersPlanetWaves;
+import net.hydra.jojomod.util.ExplosionUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -140,7 +141,7 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
     }
 
     private boolean isProtectedBlock(BlockState state) {
-        return MainUtil.confirmIsOre(state);
+        return MainUtil.confirmIsOre(state) || ExplosionUtil.isBlockBlackListed(state);
     }
 
     public PWBigMeteorEntity(LivingEntity $$1, Level $$2) {
