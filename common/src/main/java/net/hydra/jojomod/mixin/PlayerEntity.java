@@ -496,7 +496,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$POS_2);
     }
     public void roundabout$SetPoseEmote(byte Pos){
+                byte posEmote = ((Player) (Object) this).getEntityData().get(ROUNDABOUT$POSE_EMOTE);
         ((Player) (Object) this).getEntityData().set(ROUNDABOUT$POSE_EMOTE, Pos);
+        ((StandUser)this).roundabout$getStandPowers().onPoseEmoteSwitch(posEmote,Pos);
     }
     public byte roundabout$GetPoseEmote(){
         return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$POSE_EMOTE);
@@ -1022,6 +1024,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
 
     @Unique
+    private byte rdbt$lastAnimation = 0;
+    @Unique
     public void roundabout$setupAnimationStates() {
         if (roundabout$GetPos2() == PlayerPosIndex.BARRAGE) {
             this.roundabout$barrageArms.startIfStopped(this.tickCount);
@@ -1030,11 +1034,13 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
 
 
-        if (this.roundabout$GetPoseEmote() != Poses.NONE.id) {
+        byte posEmote = this.roundabout$GetPoseEmote();
+        if (posEmote != Poses.NONE.id) {
             this.getStyleAnimation().startIfStopped(this.tickCount);
         } else {
             this.getStyleAnimation().stop();
         }
+        rdbt$lastAnimation = this.roundabout$GetPoseEmote();
     }
 
     /**Break free from stand grab*/
@@ -1734,6 +1740,18 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     public void roundabout$setVoiceData(VoiceData vd) {
         roundabout$voiceData = vd;
+    }
+    @Override
+    @Unique
+    public void rdbt$onSyncedDataUpdated(EntityDataAccessor<?> $$0){
+        if ($$0.equals(ROUNDABOUT$POSE_EMOTE)){
+            byte posEmote = this.roundabout$GetPoseEmote();
+            if (posEmote != Poses.NONE.id) {
+                this.getStyleAnimation().start(this.tickCount);
+            } else {
+                this.getStyleAnimation().stop();
+            }
+        }
     }
     @Override
     @Unique

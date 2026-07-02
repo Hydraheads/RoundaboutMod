@@ -18,11 +18,8 @@ public enum Poses {
     JONATHAN((byte) 9, PoseAnimations.Jonathan),
 
     WATCH((byte) 10, PoseAnimations.watch),
-
     SITTING((byte) 11, PoseAnimations.SITTING),
-
     VAMPIRE_TRANSFORMATION((byte) 12, PoseAnimations.VAMPIRE),
-
     SITTING_CHAIR((byte) 12, PoseAnimations.SITTING),
 
     SNUBNOSE_AIM((byte) 13, FirearmFirstPersonAnimations.snubnose_aim),
@@ -46,8 +43,11 @@ public enum Poses {
     COLT_MODEL_AIM((byte) 31, FirearmFirstPersonAnimations.colt_model_aim),
     COLT_MODEL_RECOIL((byte) 32, FirearmFirstPersonAnimations.colt_model_recoil),
     COLT_MODEL_AIM_LEFT((byte) 33, FirearmFirstPersonAnimations.colt_model_aim_left),
-    COLT_MODEL_RECOIL_LEFT((byte) 34, FirearmFirstPersonAnimations.colt_model_recoil_left);
+    COLT_MODEL_RECOIL_LEFT((byte) 34, FirearmFirstPersonAnimations.colt_model_recoil_left),
 
+    COWER((byte) 35, PoseAnimations.Cower),
+
+    UNCOWER((byte) 36, PoseAnimations.Uncower);
 
     public final byte id;
 
@@ -123,6 +123,10 @@ public enum Poses {
             return COLT_MODEL_AIM_LEFT;
         } if (bt== COLT_MODEL_RECOIL_LEFT.id) {
             return COLT_MODEL_RECOIL_LEFT;
+        } if (bt== COWER.id) {
+            return COWER;
+        } if (bt== UNCOWER.id) {
+            return UNCOWER;
         }
         return NONE;
     }
@@ -130,32 +134,37 @@ public enum Poses {
     public static AnimationDefinition getAnimation(Player player) {
 
         IPlayerEntity ipe = (IPlayerEntity) player;
+        byte poseEmote = ipe.roundabout$GetPoseEmote();
 
         AnimationDefinition emote = null;
-        if (Poses.WRY.id == ipe.roundabout$GetPoseEmote()) {
+        if (Poses.WRY.id == poseEmote) {
             emote = Poses.WRY.ad;
-        } else if (Poses.GIORNO.id == ipe.roundabout$GetPoseEmote() ) {
+        } else if (Poses.GIORNO.id == poseEmote) {
             emote = Poses.GIORNO.ad;
-        } else if (Poses.JOSEPH.id == ipe.roundabout$GetPoseEmote() ) {
+        } else if (Poses.JOSEPH.id == poseEmote) {
             emote = Poses.JOSEPH.ad;
-        } else if (Poses.KOICHI.id == ipe.roundabout$GetPoseEmote() ) {
+        } else if (Poses.KOICHI.id == poseEmote) {
             emote = Poses.KOICHI.ad;
-        } else if (Poses.OH_NO.id == ipe.roundabout$GetPoseEmote() ) {
+        } else if (Poses.OH_NO.id == poseEmote) {
             emote = Poses.OH_NO.ad;
-        } else if (Poses.TORTURE_DANCE.id == ipe.roundabout$GetPoseEmote() ) {
+        } else if (Poses.TORTURE_DANCE.id == poseEmote) {
             emote = Poses.TORTURE_DANCE.ad;
-        } else if (Poses.WAMUU.id == ipe.roundabout$GetPoseEmote() ) {
+        } else if (Poses.WAMUU.id == poseEmote) {
             emote = Poses.WAMUU.ad;
-        } else if (Poses.JOTARO.id == ipe.roundabout$GetPoseEmote() ) {
+        } else if (Poses.JOTARO.id == poseEmote) {
             emote = Poses.JOTARO.ad;
-        } else if (Poses.JONATHAN.id == ipe.roundabout$GetPoseEmote() ) {
+        } else if (Poses.JONATHAN.id == poseEmote) {
             emote = Poses.JONATHAN.ad;
-        } else if (Poses.WATCH.id == ipe.roundabout$GetPoseEmote() ) {
+        } else if (Poses.WATCH.id == poseEmote) {
             emote = Poses.WATCH.ad;
-        } else if (Poses.SITTING.id == ipe.roundabout$GetPoseEmote() ) {
+        } else if (Poses.SITTING.id == poseEmote) {
             emote = Poses.SITTING.ad;
-        } else if (Poses.VAMPIRE_TRANSFORMATION.id == ipe.roundabout$GetPoseEmote() ) {
+        } else if (Poses.VAMPIRE_TRANSFORMATION.id == poseEmote) {
             emote = Poses.VAMPIRE_TRANSFORMATION.ad;
+        } else if (Poses.COWER.id == poseEmote) {
+            emote = Poses.COWER.ad;
+        } else if (Poses.UNCOWER.id == poseEmote) {
+            emote = Poses.UNCOWER.ad;
         }
         return emote;
     }

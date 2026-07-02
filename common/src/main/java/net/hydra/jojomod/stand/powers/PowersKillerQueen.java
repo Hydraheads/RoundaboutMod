@@ -112,6 +112,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         BITES_THE_DUST_DAY = 61,
         BITES_THE_DUST_PLANT = 62,
         STRAY_CAT_ADD = 63,
+        BUBBLE_BOMB = 63,
         IMPALE_NOISE = 105,
 
     // Bomb Status things
@@ -166,6 +167,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 	public BlockBombEntity bombBlock = null;
     public ItemStack bombItemStack = null;
 	public StrayCatAirBubble bombBubble = null;
+    public int bombBubbleID = -1;
 	public SheerHeartAttackEntity SHA = null;
 
     public int plantInventorySlot=1;
@@ -638,7 +640,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (this.getSelf() instanceof Player PE) {
             IPlayerEntity ipe = ((IPlayerEntity) PE);
             int zint = ipe.roundabout$getControlling();
-            StrayCatAirBubble sde = this.bombBubble;
+            Entity sde = ((StandUser)PE).roundabout$getStand();
             if (sde != null && zint == sde.getId()) {
                 return true;
             }
@@ -1178,6 +1180,10 @@ public class PowersKillerQueen extends NewPunchingStand {
                 this.bombEntityID = data;
                 this.bombEntity = this.getSelf().level().getEntity(data);
             }
+            case PowersKillerQueen.BUBBLE_BOMB -> {
+                this.bombBubbleID = data;
+                this.bombBubble = (StrayCatAirBubble) this.getSelf().level().getEntity(data);
+            }
 
         }
         super.updatePowerInt(activePower,data);
@@ -1507,6 +1513,11 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                     this.bombBubble = bubble;
 
+                    int entID = this.bombBubble.getId();
+                    this.bombBubbleID = entID;
+
+                    S2CPacketUtil.sendIntPowerDataPacket((Player)this.getSelf(),PowersKillerQueen.BUBBLE_BOMB, entID);
+
                     syncBombStatus(BOMB_BUBBLE);
 
                     return true;
@@ -1814,26 +1825,36 @@ public class PowersKillerQueen extends NewPunchingStand {
             float flyingSpeed = getStrayCatAirBubbleSpeed();
 
             LivingEntity ent = getPilotingStand();
-            IEntityAndData entityAndData = ((IEntityAndData) ent);
+           // IEntityAndData entityAndData = ((IEntityAndData) ent);
             if(this.isClient()){
-                entity.xxa = kpi.leftImpulse;
-                entity.zza = kpi.forwardImpulse;
-                Vec3 delta = entity.getDeltaMovement();
+                Roundabout.LOGGER.info("is been called");
+
 
                 if (kpi.shiftKeyDown) { $$13--; }
                 if (kpi.jumping) { $$13++; }
 
+                //entity.xxa = kpi.leftImpulse;
+                //entity.zza = kpi.forwardImpulse;
+                Vec3 direction = this.getSelf().getViewVector(0);
+                Vec3 directionFix = new Vec3(direction.x, $$13, direction.z).normalize();
+                Vec3 axis = directionFix.normalize().yRot((float)(Math.PI / 2.0) * kpi.leftImpulse);;
+
+                if (kpi.forwardImpulse < 0) {
+                    axis = axis.yRot((float)Math.PI);
+                }
+
+                Vec3 delta = axis.scale(flyingSpeed);
+
                 if (ent != null) {
-                    if ($$13 != 0) {
-                        entity.setDeltaMovement(delta.x * flyingSpeed, $$13 * flyingSpeed, delta.z * 0.025);
+                    this.bombBubble.setDeltaMovement(delta);
+                    /*if ($$13 != 0) {
+                        this.bombBubble.setDeltaMovement(delta.x * flyingSpeed, $$13 * flyingSpeed, delta.z * 0.025);
                     } else {
-                        entity.setDeltaMovement(delta.x * flyingSpeed, 0, delta.z * 0.025);
-                    }
+                        this.bombBubble.setDeltaMovement(delta.x * flyingSpeed, 0, delta.z * 0.025);
+                    }*/
                 }
             }else {
-                entity.setDeltaMovement(Vec3.ZERO);
-                entity.xxa = 0;
-                entity.zza = 0;
+                this.bombBubble.setDeltaMovement(Vec3.ZERO);
             }
         }
     }
@@ -2105,12 +2126,10 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         switch (this.getStandUserSelf().roundabout$getStandSkin())
         {
-            case KillerQueenEntity.PART_4 -> {return 0;}
-            case KillerQueenEntity.MANGA -> {return 1;}
-            case KillerQueenEntity.CREEPER -> {return 1;}
+            case KillerQueenEntity.MANGA, KillerQueenEntity.NOTW,
+                 KillerQueenEntity.GOGO, KillerQueenEntity.CREEPER -> {return 1;}
+            default -> {return 0;}
         }
-
-        return 0;
     }
 
     public boolean explode() {
