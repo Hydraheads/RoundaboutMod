@@ -108,7 +108,7 @@ public class BlockBombEntity extends StandEntity {
             }
 		
         }else if (this.tickIndicator > 0 && this.tickIndicator % 2 == 0){
-			Vec3 pos = this.getBlockPos().getCenter();
+			Vec3 pos = this.getPosition(0).add(0, 0.5f, 0);
 
 
 			/*((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0.02F, 0.02F, 0.04F), 2.5f),
