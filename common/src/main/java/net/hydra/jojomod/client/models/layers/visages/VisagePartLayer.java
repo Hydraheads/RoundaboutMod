@@ -179,7 +179,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     }
                 }
 
-                if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PowerTypes.hasStandActive(entity) && user.roundabout$getIdlePos() == 0){hideExtraPartsWithSuit = true;}
+                if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy && PowerTypes.hasStandActive(entity) && user.roundabout$getIdlePos() == 0){hideExtraPartsWithSuit = true;}
 
                 ItemStack hand = entity.getMainHandItem();
                 ItemStack offHand = entity.getOffhandItem();
