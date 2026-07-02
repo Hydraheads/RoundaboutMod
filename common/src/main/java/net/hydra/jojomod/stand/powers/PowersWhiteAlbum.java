@@ -146,6 +146,10 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (sauce.is(DamageTypes.MOB_ATTACK)){
             damage*=ClientNetworking.getAppropriateConfig().whiteAlbumSettings.mobGuardDamageMultiplierv2;
         }
+
+        if (MainUtil.isStandDamage(sauce)){
+            damage*=2F;
+        }
         if (sauce.is(ModDamageTypes.BULLET) || sauce.getDirectEntity() instanceof Projectile ||
                 sauce.getEntity() instanceof Blaze){
             damage*=0.5F;
