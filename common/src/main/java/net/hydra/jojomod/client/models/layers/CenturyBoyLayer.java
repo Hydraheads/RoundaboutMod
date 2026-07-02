@@ -174,8 +174,10 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
                             /// breast
                             if (entity instanceof  IPlayerEntity IPL && IPL.roundabout$getMaskSlot().getItem() instanceof
-                                    MaskItem MI && MI.visageData.generateVisageData(entity).rendersBreast()) {
-                                ClientUtil.pushPoseAndCooperate(poseStack, 26);
+                                    MaskItem MI) {
+                                if (MI.visageData.generateVisageData(entity).rendersBreast() || MI.visageData.generateVisageData(entity).rendersPlayerBreastPart() ||
+                                        (MI.visageData.generateVisageData(entity).rendersSmallBreast() && user.roundabout$getIdlePos() != 0)){
+                                    ClientUtil.pushPoseAndCooperate(poseStack, 26);
                                 if (entity.isBaby()) {
                                     poseStack.scale(0.6F, 0.6F, 0.6F);
                                     poseStack.translate(0.3, 1, -0.3);
@@ -189,6 +191,7 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
                                 ClientUtil.popPoseAndCooperate(poseStack, 26);
                             }
+                                }
                         }
 
                     }

@@ -103,22 +103,26 @@ public class BlockBombEntity extends StandEntity {
 				}
 				this.setYRot(0f);
 				this.setYBodyRot(0);
-            	if (this.tickIndicator > 0 && this.tickIndicator % 2 == 0){   
-	            	Vec3 pos = bombPos.getCenter();
-	            	
-	            	
-	            	((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0.02F, 0.02F, 0.04F), 2.5f),
-	            			pos.x,
-	                        pos.y+1.0f,
-	                        pos.z,
-	                        2, 0, 0, 0, 1.2);
-	            	this.tickIndicator--;
-	            }
             	
             	//this.detectInside();
             }
 		
-        }
+        }else if (this.tickIndicator > 0 && this.tickIndicator % 2 == 0){
+			Vec3 pos = this.getPosition(0).add(0, 0.5f, 0);
+
+
+			/*((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0.02F, 0.02F, 0.04F), 2.5f),
+					pos.x,
+					pos.y+1.0f,
+					pos.z,
+					2, 0, 0, 0, 1.2);*/
+			this.level().addAlwaysVisibleParticle(new DustParticleOptions(new Vector3f(0.02F, 0.02F, 0.04F), 2.5f),
+					pos.x,
+					pos.y+1.0f,
+					pos.z,
+					0, 1.2, 0);
+			this.tickIndicator--;
+		}
         super.tick();
     }
 	
