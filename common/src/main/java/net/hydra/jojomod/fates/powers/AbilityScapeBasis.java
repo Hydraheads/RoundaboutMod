@@ -2174,6 +2174,10 @@ public class AbilityScapeBasis {
     }
     public Entity getTargetEntity(LivingEntity User, float distMax, float angle){
         /*First, attempts to hit what you are looking at*/
+        if (!(distMax >= 0)) {
+            distMax = this.getDistanceOut(User, this.getReach(), false);
+            distMax = Math.min(this.getDistanceOut(User, this.getReach(), false),distMax);
+        }
         Entity targetEntity = this.rayCastEntity(User,distMax);
 
         if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
