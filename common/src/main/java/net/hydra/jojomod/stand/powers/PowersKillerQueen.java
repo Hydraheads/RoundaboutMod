@@ -38,6 +38,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.entity.substand.BlockBombEntity;
+import net.hydra.jojomod.util.config.Config;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.hydra.jojomod.util.C2SPacketUtil;
@@ -275,11 +276,12 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public float getAirBubbleDamage(Entity entity){
+        float damage = ClientNetworking.getAppropriateConfig().killerQueenSettings.StrayCatAirBubblesDamage;
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(((float) ((float) 2.5f * (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod(((float) ((float) damage * (ClientNetworking.getAppropriateConfig().
                     killerQueenSettings.killerQueenAttackMultOnPlayers*0.01))));
         } else {
-            return levelupDamageMod(((float) ((float) 3.0f * (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod(((float) ((float) damage * (ClientNetworking.getAppropriateConfig().
                     killerQueenSettings.killerQueenAttackMultOnMobs*0.01))));
         }
     }
@@ -2185,18 +2187,21 @@ public class PowersKillerQueen extends NewPunchingStand {
                 ExplosionUtil.explodeBlocksBase(bPos, level, 1.0f, this.getSelf().isCrouching());
             }
 
+            Config.KillerQueenSettings config = ClientNetworking.getAppropriateConfig().killerQueenSettings;
 
-            float dmgOnPlayers = (ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnPlayers/100.0f);
-            float dmgOnMobs = (ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnMobs/100.0f);
+            float damage = bStatus == BOMB_BUBBLE ? config.StrayCatAirBubblesDamage : config.explosionDetonateMaxDamage;
+
+            float dmgOnPlayers = (config.killerQueenAttackMultOnPlayers/100.0f);
+            float dmgOnMobs = (config.killerQueenAttackMultOnMobs/100.0f);
 
             DamageSource dmg = ModDamageTypes.of(level, ModDamageTypes.EXPLOSIVE_STAND, this.getSelf());
             DamageSource sneakyDmg = ModDamageTypes.of(level, ModDamageTypes.EXPLOSIVE_STAND, null);
             ExplosionUtil.explosionHurtSneakyWithMulti(vPos, dmg, level,
-                    ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionDetonateMaxDamage,
+                    damage,
                     0.4f, 1.5f, dmgOnMobs, dmgOnPlayers);
 
             if (target != null && bStatus == BOMB_ENTITY) {
-                float hitPoints = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantDesintegrationDamage;
+                float hitPoints = config.mobPlantDesintegrationDamage;
 
                 if (this.getReducedDamage(target)) {
                     hitPoints *= dmgOnPlayers;
@@ -2204,8 +2209,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                     hitPoints *= dmgOnMobs;
                 }
 
-                boolean playersHitkill = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantHitkillPlayers;
-                boolean mobsHitkill = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantHitkillMobs;
+                boolean playersHitkill = config.mobPlantHitkillPlayers;
+                boolean mobsHitkill = config.mobPlantHitkillMobs;
 
                 boolean isBoss = MainUtil.isBossMob(target);
 
