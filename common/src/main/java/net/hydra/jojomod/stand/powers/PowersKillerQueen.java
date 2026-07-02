@@ -1091,7 +1091,7 @@ public class PowersKillerQueen extends NewPunchingStand {
          if (!this.self.level().isClientSide()) {
              this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
              //if (chargedFinal >= maxKickTime && entity instanceof LivingEntity) {
-             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_SHIBA_EVENT, SoundSource.PLAYERS, 0.6F, shibapitch);
+             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_SHIBA_EVENT, SoundSource.PLAYERS, 0.8F, shibapitch);
              //}
          }
     }
@@ -1970,9 +1970,10 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void explosionSFX(Vec3 pos, float range) {
     	if (!this.self.level().isClientSide) {
-            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            //ServerLevel serverWorld = ((ServerLevel) this.self.level());
 
-            for (int j = 0; j < serverWorld.players().size(); ++j) {
+
+            /*for (int j = 0; j < serverWorld.players().size(); ++j) {
                 ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
 
                 if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
@@ -1983,7 +1984,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (blockPos.closerToCenterThan(pos, range)) {
                     S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, serverPlayerEntity.getId(), EXPLOSION);
                 }
-            }
+            }*/
         }
     }
 
@@ -2130,6 +2131,12 @@ public class PowersKillerQueen extends NewPunchingStand {
         {
             case KillerQueenEntity.MANGA, KillerQueenEntity.NOTW,
                  KillerQueenEntity.GOGO, KillerQueenEntity.CREEPER -> {return 1;}
+            case KillerQueenEntity.LIMBUSMORTIS, KillerQueenEntity.GUNPOWDER,
+                 KillerQueenEntity.TAMA, KillerQueenEntity.STRAY-> {return 2;}
+            case KillerQueenEntity.FINAL, KillerQueenEntity.YELLOW,
+                 KillerQueenEntity.ARTWORK -> {return 3;}
+            case KillerQueenEntity.MINESWEEPER -> {return 4;}
+            
             default -> {return 0;}
         }
     }
@@ -2241,8 +2248,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
 
             ExplosionUtil.explodeEffects(vPos, level, ModParticles.KILLER_QUEEN_EXPLOSION, 0.6f);
-
-            explosionSFX(vPos, 10);
+            this.getSelf().level().playSound(null, bPos, ModSounds.KILLER_QUEEN_EXPLOSION_EVENT, SoundSource.PLAYERS, 0.65F, 1.0f);
+            //explosionSFX(vPos, 10);
 
         }
 		this.syncBombStatus(BOMB_NONE);
