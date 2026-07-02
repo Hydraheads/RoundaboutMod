@@ -551,6 +551,7 @@ public abstract class InputEvents implements IInputEvents {
                 }
             }
         }
+
         @Inject(method = "startUseItem", at = @At("TAIL"), cancellable = true)
         public void roundabout$DoItemUse(CallbackInfo ci) {
             if (player != null) {

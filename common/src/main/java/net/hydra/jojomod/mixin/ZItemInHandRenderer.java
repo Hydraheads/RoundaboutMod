@@ -36,6 +36,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.AbstractIllager;
@@ -78,6 +79,9 @@ public abstract class ZItemInHandRenderer {
     private static boolean isChargedCrossbow(ItemStack $$0) {
         return false;
     }
+
+    @Shadow
+    protected abstract void renderArmWithItem(AbstractClientPlayer $$0, float $$1, float $$2, InteractionHand $$3, float $$4, ItemStack $$5, float $$6, PoseStack $$7, MultiBufferSource $$8, int $$9);
 
     @Inject(method = "renderHandsWithItems", at = @At(value = "HEAD"), cancellable = true)
     public<T extends LivingEntity, M extends EntityModel<T>>
@@ -217,6 +221,9 @@ public abstract class ZItemInHandRenderer {
             cir.setReturnValue(true);
         }
     }
+
+    @Unique
+    public boolean rdbt$returnToZero = false;
     @Inject(method = "renderArmWithItem", at = @At(value = "HEAD"), cancellable = true, require = 0)
     public void roundabout$renderArmWithItemAbstractClientPlayer(AbstractClientPlayer abstractClientPlayer,
                                                                  float partialTick, float g,
@@ -276,6 +283,20 @@ public abstract class ZItemInHandRenderer {
                 ClientUtil.popPoseAndCooperate(poseStack,4);
                 ci.cancel();
                 return;
+            }
+        } else {
+            if (!abstractClientPlayer.isUsingItem()) {
+                EquipmentSlot es;
+                es = interactionHand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+                if (!rdbt$returnToZero) {
+                    ItemStack newStack = MainUtil.xHandCancelItem(es, abstractClientPlayer, itemStack);
+                    if (!newStack.equals(itemStack)) {
+                        rdbt$returnToZero = true;
+                        renderArmWithItem(abstractClientPlayer, partialTick, g, interactionHand, h, newStack, attackProg, poseStack, multiBufferSource, j);
+                        ci.cancel();
+                        return;
+                    }
+                }
             }
         }
 

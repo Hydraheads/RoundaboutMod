@@ -62,6 +62,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
@@ -104,6 +105,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.zetalasis.networking.message.api.ModMessageEvents;
+import org.spongepowered.asm.mixin.Unique;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -1050,6 +1052,67 @@ public class MainUtil {
         hitbox = RotationUtil.vecPlayerToWorld(hitbox,
                 ((IGravityEntity)entity).roundabout$getGravityDirection());
         return start.add(hitbox);
+    }
+
+    public static boolean absolveBlockStateForCombatMode(BlockHitResult blockHitResult, Entity ent){
+        if (blockHitResult != null){
+            BlockPos blockpos = blockHitResult.getBlockPos();
+            BlockState state = ent.level().getBlockState(blockpos);
+            Block blk = state.getBlock();
+            if ((state.hasBlockEntity() && (ent.level().getBlockEntity(blockpos) instanceof MenuProvider
+            || (ent.level().getBlockEntity(blockpos) instanceof Container))) || ((blk instanceof LeverBlock) || (blk instanceof ButtonBlock)
+                    || (blk instanceof DoorBlock) || (blk instanceof TrapDoorBlock) || (blk instanceof BedBlock)
+                    || (blk instanceof FenceGateBlock))){
+                return true;
+            }
+            if (ent.isCrouching()){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static ItemStack xHandCancelItem(EquipmentSlot ES, Entity ent, ItemStack stack) {
+        if (ent instanceof Player pl) {
+            StandUser su = ((StandUser) pl);
+            if (su.roundabout$getStandPowers() instanceof PowersGreenDay PGD && ES == EquipmentSlot.MAINHAND) {
+                if (!PGD.HasMainArm && (PGD.self.getMainArm() == HumanoidArm.RIGHT)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+            if (su.roundabout$getStandPowers() instanceof PowersGreenDay PGD && ES == EquipmentSlot.OFFHAND) {
+                if (!PGD.HasOffHand && (PGD.self.getMainArm() == HumanoidArm.RIGHT)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+            if (su.roundabout$getStandPowers() instanceof PowersGreenDay PGD && ES == EquipmentSlot.MAINHAND) {
+                if (!PGD.HasMainArm && (PGD.self.getMainArm() == HumanoidArm.LEFT)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+            if (su.roundabout$getStandPowers() instanceof PowersGreenDay PGD && ES == EquipmentSlot.OFFHAND) {
+                if (!PGD.HasOffHand && (PGD.self.getMainArm() == HumanoidArm.LEFT)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+            if (pl.isUsingItem()){
+                return stack;
+            }
+
+            if (su.roundabout$isPossessed()) {
+                return ItemStack.EMPTY;
+            }
+            if (su.roundabout$getEffectiveCombatMode()) {
+                StandPowers SP = su.roundabout$getStandPowers();
+                if (SP != null) {
+                    if (!SP.canCombatModeUse(pl.getItemBySlot(ES))) {
+                        return ItemStack.EMPTY;
+                    }
+                }
+            }
+        }
+        return stack;
     }
 
     public static boolean canFreeze(Entity mob){

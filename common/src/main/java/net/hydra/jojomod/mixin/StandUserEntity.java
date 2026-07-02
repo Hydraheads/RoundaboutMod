@@ -2144,29 +2144,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     }
 
-    /// does what getItemInHand does
-    @Inject(method = "getMainHandItem",at = @At(value = "HEAD"),cancellable = true, require = 0)
-    public void roundabout$getMainHandItem(CallbackInfoReturnable<ItemStack> cir) {
-        if (!(rdbt$this() instanceof Player))
-            return;
-
-        ItemStack ret = roundabout$XHandCancelItem(EquipmentSlot.MAINHAND);
-        if (ret.equals(ItemStack.EMPTY)) {
-            cir.setReturnValue(ret);
-            cir.cancel();
-        }
-    }
-    @Inject(method = "getOffhandItem",at = @At(value = "HEAD"),cancellable = true, require = 0)
-    public void roundabout$getOffHandItem(CallbackInfoReturnable<ItemStack> cir) {
-        if (!(rdbt$this() instanceof Player))
-            return;
-
-        ItemStack ret = roundabout$XHandCancelItem(EquipmentSlot.OFFHAND);
-        if (ret.equals(ItemStack.EMPTY)) {
-            cir.setReturnValue(ret);
-            cir.cancel();
-        }
-    }
 
     //Zombies are undead
     @Inject(method = "getMobType",at = @At(value = "HEAD"),cancellable = true, require = 0)
@@ -2183,72 +2160,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             cir.setReturnValue(false);
         }
     }
-
-    @Unique
-    public ItemStack roundabout$XHandCancelItem(EquipmentSlot ES) {
-        if (this.roundabout$isPossessed()) {return ItemStack.EMPTY;}
-        if (roundabout$getEffectiveCombatMode()) {
-            StandPowers SP = roundabout$getStandPowers();
-            if (SP != null) {
-                if (!SP.canCombatModeUse(getItemBySlot(ES))) {
-                    return ItemStack.EMPTY;
-                }
-            }
-        }
-        if(roundabout$getStandPowers() instanceof PowersGreenDay  PGD && ES == EquipmentSlot.MAINHAND) {
-            if (!PGD.HasMainArm && (PGD.self.getMainArm() ==HumanoidArm.RIGHT)) {
-                return ItemStack.EMPTY;
-            }
-        }
-        if(roundabout$getStandPowers() instanceof PowersGreenDay  PGD && ES == EquipmentSlot.OFFHAND) {
-            if (!PGD.HasOffHand && (PGD.self.getMainArm() == HumanoidArm.RIGHT)) {
-                return ItemStack.EMPTY;
-            }
-        }
-        if(roundabout$getStandPowers() instanceof PowersGreenDay  PGD && ES == EquipmentSlot.MAINHAND) {
-            if (!PGD.HasMainArm && (PGD.self.getMainArm() == HumanoidArm.LEFT)) {
-                return ItemStack.EMPTY;
-            }
-        }
-        if(roundabout$getStandPowers() instanceof PowersGreenDay  PGD && ES == EquipmentSlot.OFFHAND   ) {
-            if (!PGD.HasOffHand && (PGD.self.getMainArm() ==HumanoidArm.LEFT)) {
-                return ItemStack.EMPTY;
-            }
-        }
-        return getItemBySlot(ES);
-    }
-
-    /**The items that shoot and brawl mode are allowed to use*/
-    @Inject(method = "getItemInHand(Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/item/ItemStack;", at = @At(value = "HEAD"), cancellable = true, require = 0)
-    public void roundabout$getItemInHand(InteractionHand $$0, CallbackInfoReturnable<ItemStack> cir){
-        if (this.roundabout$isPossessed()) {
-            cir.setReturnValue(ItemStack.EMPTY);
-            return;
-        }
-        if (roundabout$getEffectiveCombatMode()){
-            ItemStack stack = ItemStack.EMPTY;
-            if ($$0 == InteractionHand.MAIN_HAND) {
-                stack = this.getItemBySlot(EquipmentSlot.MAINHAND);
-            } else if ($$0 == InteractionHand.OFF_HAND) {
-                stack = this.getItemBySlot(EquipmentSlot.OFFHAND);
-            }
-            AbilityScapeBasis SP = this.roundabout$getStandPowers();
-            if (rdbt$this() instanceof Player P) {
-                if (PowerTypes.isBrawling(P)) {
-                    SP = ((IPowersPlayer)P).rdbt$getPowers();
-                }
-            }
-            if (SP != null) {
-                if (SP.canCombatModeUse(stack)) {
-                    cir.setReturnValue(stack);
-                    return;
-                }
-            }
-            cir.setReturnValue(ItemStack.EMPTY);
-        }
-    }
-
-
 
     @Inject(method = "canFreeze()Z", at = @At(value = "HEAD"), require = 0, cancellable = true)
     public void roundabout$canFreeze(CallbackInfoReturnable<Boolean> cir){

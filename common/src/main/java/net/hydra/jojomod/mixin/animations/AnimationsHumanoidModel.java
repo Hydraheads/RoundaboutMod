@@ -32,6 +32,21 @@ public class AnimationsHumanoidModel<T extends LivingEntity> extends AgeableList
      * for blockbench crafted animations, just manual context sensitive animations*/
 
 
+    @Inject(method = "poseRightArm", at = @At(value = "HEAD"),cancellable = true)
+    public void roundabout$poseRightArm(T $$0, CallbackInfo ci){
+        if ($$0 instanceof Player pl && ((StandUser)pl).roundabout$getEffectiveCombatMode() && !pl.isUsingItem()) {
+            this.rightArm.yRot = 0.0F;
+            ci.cancel();
+        }
+    }
+    @Inject(method = "poseLeftArm", at = @At(value = "HEAD"),cancellable = true)
+    public void roundabout$poseLeftArm(T $$0, CallbackInfo ci){
+        if ($$0 instanceof Player pl && ((StandUser)pl).roundabout$getEffectiveCombatMode() && !pl.isUsingItem()) {
+            this.leftArm.yRot = 0.0F;
+            ci.cancel();
+        }
+    }
+
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isUsingItem()Z", shift = At.Shift.BEFORE, ordinal = 0))
     public void roundabout$SetupAnim(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci){
         if ($$0 instanceof Player && ((IPlayerEntity)$$0).roundabout$GetPos() == PlayerPosIndex.TS_FLOAT) {

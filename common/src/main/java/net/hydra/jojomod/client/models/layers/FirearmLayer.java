@@ -6,6 +6,7 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.model.HumanoidModel;
@@ -112,9 +113,12 @@ public class FirearmLayer<T extends LivingEntity, A extends HumanoidModel<T>> ex
             if(((IEntityAndData)entity).roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()){
                 return;
             }
+        } else {
+            return;
         }
 
-        LivingEntity livent = entity;
+        if (((StandUser)entity).roundabout$getEffectiveCombatMode() && !entity.isUsingItem())
+            return;
 
         ItemStack held = entity.getMainHandItem();
         ItemStack offHeld = entity.getOffhandItem();
