@@ -2201,7 +2201,7 @@ public class AbilityScapeBasis {
         }
 
 
-        if (distMax > 0 && targetEntity.distanceTo(User) > distMax) {
+        if (targetEntity != null && distMax > 0 && targetEntity.distanceTo(User) > distMax) {
             return null;
         }
 

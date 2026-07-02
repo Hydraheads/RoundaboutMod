@@ -26,13 +26,8 @@ public abstract class FatesLocalPlayerMixin extends Entity {
 
     /**You cannot spawn sprint particles while transforming*/
     @Inject(method = "canSpawnSprintParticle", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$applyEffectTick(CallbackInfoReturnable<Boolean> cir)
+    protected void roundabout$canSpawnSprintParticle(CallbackInfoReturnable<Boolean> cir)
     {
-
-        if (((StandUser)this).roundabout$getStandPowers().cancelSprintJump()){
-            cir.setReturnValue(false);
-            return;
-        }
 
         if (((IFatePlayer)this).rdbt$getFatePowers() instanceof VampiricFate VP
         && VP.isPlantedInWall()){
@@ -41,6 +36,11 @@ public abstract class FatesLocalPlayerMixin extends Entity {
             return;
         }
 
+
+        if (((StandUser)this).roundabout$getStandPowers().cancelSprintParticles()){
+            cir.setReturnValue(false);
+            return;
+        }
         if (((IPowersPlayer)this).rdbt$getPowers().cancelSprintParticles()){
             cir.setReturnValue(false);
             return;

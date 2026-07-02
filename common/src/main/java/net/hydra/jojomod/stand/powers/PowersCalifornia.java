@@ -17,6 +17,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -127,6 +128,9 @@ public class PowersCalifornia extends NewDashPreset {
     public void removeFromClientList(int entityId) {
         clientEntityIds.remove(entityId);
     }
+    public void clearClientList() {
+        clientEntityIds.clear();
+    }
 
     @Override
     public StandEntity getNewStandEntity(){
@@ -167,7 +171,10 @@ public class PowersCalifornia extends NewDashPreset {
     public void powerActivate(PowerContext context) {
         switch (context)
         {
-            case SKILL_2_NORMAL -> {
+            case SKILL_1_NORMAL,SKILL_1_CROUCH -> {
+                tryCatchEnemies();
+            }
+            case SKILL_2_NORMAL,SKILL_2_CROUCH -> {
                 tryStrategyClient();
             }
             case SKILL_3_NORMAL -> {
@@ -181,7 +188,24 @@ public class PowersCalifornia extends NewDashPreset {
             }
         }
     }
+    @Override
+    public boolean isAttackIneptVisually(byte activeP, int slot){
 
+        if (slot == 1){
+            if (clientEntityIds.isEmpty()){
+                return true;
+            }
+        }
+        return super.isAttackIneptVisually(activeP,slot);
+    }
+    public void tryCatchEnemies(){
+        if (!clientEntityIds.isEmpty()) {
+            if (!onCooldown(PowerIndex.SKILL_1)) {
+                clearClientList();
+                tryPowerPacket(PowerIndex.POWER_1);
+            }
+        }
+    }
     public void tryStrategyClient(){
         if (isDoNotHurt()) {
             if (!onCooldown(PowerIndex.SKILL_2)) {
@@ -380,12 +404,13 @@ public class PowersCalifornia extends NewDashPreset {
         }
         return super.cancelJump();
     }
+
     @Override
     public boolean cancelSprintParticles(){
         if (inCowerStance()) {
             return true;
         }
-        return cancelSprintParticles();
+        return super.cancelSprintParticles();
     }
 
     @Override
@@ -415,8 +440,27 @@ public class PowersCalifornia extends NewDashPreset {
             switchRules();
         } else if (move == PowerIndex.POWER_2){
             cowerServer();
+        } else if (move == PowerIndex.POWER_1){
+            punishServer();
         }
         return super.setPowerOther(move,lastMove);
+    }
+
+    public void punishServer(){
+        if (!hurtEntities.isEmpty() && self instanceof ServerPlayer sp) {
+            Iterator<Map.Entry<Entity, Integer>> it = hurtEntities.entrySet().iterator();
+
+            while (it.hasNext()) {
+                Map.Entry<Entity, Integer> entry = it.next();
+
+                Entity entity = entry.getKey();
+
+                if (entity.isAlive()) {
+                    entity.setDeltaMovement(0,0.2,0);
+                }
+            }
+            hurtEntities.clear();
+        }
     }
 
     public boolean inCowerStance(){
