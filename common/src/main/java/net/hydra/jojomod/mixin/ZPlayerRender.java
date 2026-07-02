@@ -95,6 +95,9 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     @Inject(method = "renderRightHand", at = @At(value = "TAIL"))
     public void roundabout$renderRightHand(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, AbstractClientPlayer player, CallbackInfo ci) {
 
+        if (AnubisLayer.shouldRender(player) != null){
+            return;
+        }
         byte curse = ((StandUser) player).roundabout$getLocacacaCurse();
         float delta = ClientUtil.getDelta();
         if (((TimeStop) player.level()).CanTimeStopEntity(player)) {

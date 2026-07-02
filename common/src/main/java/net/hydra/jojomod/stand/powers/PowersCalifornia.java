@@ -201,7 +201,7 @@ public class PowersCalifornia extends NewDashPreset {
         } else if (isDoNotLeave()){
             setSkillIcon(context, x, y, 2, StandIcons.LEAVE_RULE, PowerIndex.SKILL_EXTRA);
         } else {
-            setSkillIcon(context, x, y, 2, StandIcons.LEAVE_RULE, PowerIndex.SKILL_EXTRA_2);
+            setSkillIcon(context, x, y, 2, StandIcons.FORBID_RULE, PowerIndex.SKILL_EXTRA_2);
         }
 
 

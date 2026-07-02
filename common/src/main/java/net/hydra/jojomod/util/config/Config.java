@@ -450,11 +450,15 @@ public class Config implements Cloneable {
         public Boolean enableBitesTheDustDayMode;
     	@BooleanOption(group = "inherit", value = true)
         public Boolean blocksDestruction;
-    	@FloatOption(group = "inherit", value = 4.0F, min = 0, max = 200F)
+    	@FloatOption(group = "inherit", value = 8.0F, min = 0, max = 200F)
         public Float explosionDetonateMaxDamage;
-        @FloatOption(group = "inherit", value = 3.0F, min = 0, max = 200F)
+        @FloatOption(group = "inherit", value = 6.0F, min = 0, max = 200F)
         public Float SheerHeartAttackMaxDamage;
-    	@IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        @FloatOption(group = "inherit", value = 2.5F, min = 0, max = 200F)
+        public Float StrayCatAirBubblesDamage;
+        @FloatOption(group = "inherit", value = 3.0F, min = 0, max = 200F)
+        public Float StrayCatAirBubblesExplosionDamage;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer blockPlantCooldown;
         @IntOption(group = "inherit", value = 140, min = 0, max = 72000)
         public Integer bubbleShootCooldown;

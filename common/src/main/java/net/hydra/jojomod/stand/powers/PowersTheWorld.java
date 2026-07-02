@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
@@ -709,11 +710,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                             }
                             AABB BB2 = stand.getBoundingBox();
-                            if (this.attackTimeDuring > 11) {
                                 if (this.getActivePower() != PowerIndex.POWER_1_BONUS){
                                     tryAssaultHit(stand, BB1, BB2);
                                 }
-                            }
                         }
                     }
                 }
@@ -895,28 +894,34 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         AABB $$2 = bb1.minmax(bb2);
         List<Entity> $$3 = stand.level().getEntities(stand, $$2);
         if (!$$3.isEmpty()) {
+            boolean atd =this.attackTimeDuring > 11;
             for (int $$4 = 0; $$4 < $$3.size(); $$4++) {
                 Entity $$5 = $$3.get($$4);
-                if ($$5 instanceof LivingEntity LE && !$$5.is(this.getSelf()) && $$5.showVehicleHealth() &&
+                if (((atd && $$5 instanceof LivingEntity LE && !$$5.is(this.getSelf()) && $$5.showVehicleHealth() &&
                         !$$5.isInvulnerable() && $$5.isAlive() && !(this.self.isPassenger() &&
                         this.self.getVehicle().getUUID() == $$5.getUUID()) && stand.getSensing().hasLineOfSight($$5)
+                        &&
+                        !($$5 instanceof FollowingStandEntity SE && (OffsetIndex.OffsetStyle(SE.getOffsetType()) == OffsetIndex.FOLLOW_STYLE ||
+                                OffsetIndex.OffsetStyle(SE.getOffsetType()) == OffsetIndex.FIXED_STYLE))
+                ) || ($$5 instanceof BlockWallEntity))
 
                         && ($$5.distanceTo(stand) < 3)
-                &&
-                        !($$5 instanceof FollowingStandEntity SE && (OffsetIndex.OffsetStyle(SE.getOffsetType()) == OffsetIndex.FOLLOW_STYLE ||
-                                OffsetIndex.OffsetStyle(SE.getOffsetType()) == OffsetIndex.FIXED_STYLE))){
+                ){
 
-                    hitParticlesCenter(LE);
+
+                    hitParticlesCenter($$5);
 
                     if (build >= 80){
                         MainUtil.knockShieldPlusStand($$5,40);
                     }
 
                     if (this.StandDamageEntityAttack($$5,getAssaultStrength($$5), 0.4F, this.self)){
-                        addEXP(3,LE);
+                        if ($$5 instanceof LivingEntity LE){
+                            addEXP(3,LE);
+                        }
                         if (build >= 80) {
                             MainUtil.makeBleed($$5, 0, 400, null);
-                            MainUtil.makeMobBleed(LE);
+                            MainUtil.makeMobBleed($$5);
                         } else if (build > 50) {
                             MainUtil.makeBleed($$5, 0, 300, null);
                         } else if (!getAssaultEarlyTime()) {

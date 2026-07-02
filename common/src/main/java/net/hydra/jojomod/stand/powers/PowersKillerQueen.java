@@ -38,6 +38,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.entity.substand.BlockBombEntity;
+import net.hydra.jojomod.util.config.Config;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.hydra.jojomod.util.C2SPacketUtil;
@@ -275,11 +276,12 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public float getAirBubbleDamage(Entity entity){
+        float damage = ClientNetworking.getAppropriateConfig().killerQueenSettings.StrayCatAirBubblesDamage;
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(((float) ((float) 2.5f * (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod(((float) ((float) damage * (ClientNetworking.getAppropriateConfig().
                     killerQueenSettings.killerQueenAttackMultOnPlayers*0.01))));
         } else {
-            return levelupDamageMod(((float) ((float) 3.0f * (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod(((float) ((float) damage * (ClientNetworking.getAppropriateConfig().
                     killerQueenSettings.killerQueenAttackMultOnMobs*0.01))));
         }
     }
@@ -1089,7 +1091,7 @@ public class PowersKillerQueen extends NewPunchingStand {
          if (!this.self.level().isClientSide()) {
              this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
              //if (chargedFinal >= maxKickTime && entity instanceof LivingEntity) {
-             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_SHIBA_EVENT, SoundSource.PLAYERS, 0.6F, shibapitch);
+             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_SHIBA_EVENT, SoundSource.PLAYERS, 0.8F, shibapitch);
              //}
          }
     }
@@ -1968,9 +1970,10 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void explosionSFX(Vec3 pos, float range) {
     	if (!this.self.level().isClientSide) {
-            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            //ServerLevel serverWorld = ((ServerLevel) this.self.level());
 
-            for (int j = 0; j < serverWorld.players().size(); ++j) {
+
+            /*for (int j = 0; j < serverWorld.players().size(); ++j) {
                 ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
 
                 if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
@@ -1981,7 +1984,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (blockPos.closerToCenterThan(pos, range)) {
                     S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, serverPlayerEntity.getId(), EXPLOSION);
                 }
-            }
+            }*/
         }
     }
 
@@ -2128,6 +2131,12 @@ public class PowersKillerQueen extends NewPunchingStand {
         {
             case KillerQueenEntity.MANGA, KillerQueenEntity.NOTW,
                  KillerQueenEntity.GOGO, KillerQueenEntity.CREEPER -> {return 1;}
+            case KillerQueenEntity.LIMBUSMORTIS, KillerQueenEntity.GUNPOWDER,
+                 KillerQueenEntity.TAMA, KillerQueenEntity.STRAY-> {return 2;}
+            case KillerQueenEntity.FINAL, KillerQueenEntity.YELLOW,
+                 KillerQueenEntity.ARTWORK -> {return 3;}
+            case KillerQueenEntity.MINESWEEPER -> {return 4;}
+            
             default -> {return 0;}
         }
     }
@@ -2185,18 +2194,21 @@ public class PowersKillerQueen extends NewPunchingStand {
                 ExplosionUtil.explodeBlocksBase(bPos, level, 1.0f, this.getSelf().isCrouching());
             }
 
+            Config.KillerQueenSettings config = ClientNetworking.getAppropriateConfig().killerQueenSettings;
 
-            float dmgOnPlayers = (ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnPlayers/100.0f);
-            float dmgOnMobs = (ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenAttackMultOnMobs/100.0f);
+            float damage = bStatus == BOMB_BUBBLE ? config.StrayCatAirBubblesDamage : config.explosionDetonateMaxDamage;
+
+            float dmgOnPlayers = (config.killerQueenAttackMultOnPlayers/100.0f);
+            float dmgOnMobs = (config.killerQueenAttackMultOnMobs/100.0f);
 
             DamageSource dmg = ModDamageTypes.of(level, ModDamageTypes.EXPLOSIVE_STAND, this.getSelf());
             DamageSource sneakyDmg = ModDamageTypes.of(level, ModDamageTypes.EXPLOSIVE_STAND, null);
             ExplosionUtil.explosionHurtSneakyWithMulti(vPos, dmg, level,
-                    ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionDetonateMaxDamage,
+                    damage,
                     0.4f, 1.5f, dmgOnMobs, dmgOnPlayers);
 
             if (target != null && bStatus == BOMB_ENTITY) {
-                float hitPoints = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantDesintegrationDamage;
+                float hitPoints = config.mobPlantDesintegrationDamage;
 
                 if (this.getReducedDamage(target)) {
                     hitPoints *= dmgOnPlayers;
@@ -2204,8 +2216,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                     hitPoints *= dmgOnMobs;
                 }
 
-                boolean playersHitkill = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantHitkillPlayers;
-                boolean mobsHitkill = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantHitkillMobs;
+                boolean playersHitkill = config.mobPlantHitkillPlayers;
+                boolean mobsHitkill = config.mobPlantHitkillMobs;
 
                 boolean isBoss = MainUtil.isBossMob(target);
 
@@ -2236,8 +2248,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
 
             ExplosionUtil.explodeEffects(vPos, level, ModParticles.KILLER_QUEEN_EXPLOSION, 0.6f);
-
-            explosionSFX(vPos, 10);
+            this.getSelf().level().playSound(null, bPos, ModSounds.KILLER_QUEEN_EXPLOSION_EVENT, SoundSource.PLAYERS, 0.65F, 1.0f);
+            //explosionSFX(vPos, 10);
 
         }
 		this.syncBombStatus(BOMB_NONE);

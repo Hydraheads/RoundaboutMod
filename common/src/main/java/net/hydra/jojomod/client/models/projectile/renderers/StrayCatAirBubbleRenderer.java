@@ -25,6 +25,9 @@ import org.joml.Vector3f;
 public class StrayCatAirBubbleRenderer extends EntityRenderer<StrayCatAirBubble> {
     private static final ResourceLocation PINK_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/killer_queen/projectiles/pink.png");
     private static final ResourceLocation GREEN_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/killer_queen/projectiles/green.png");
+    private static final ResourceLocation CYAN_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/killer_queen/projectiles/cyan.png");
+    private static final ResourceLocation YELLOW_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/killer_queen/projectiles/yellow.png");
+    private static final ResourceLocation BOMB_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/killer_queen/projectiles/bomb.png");
 
     private final float scale;
 
@@ -95,8 +98,10 @@ public class StrayCatAirBubbleRenderer extends EntityRenderer<StrayCatAirBubble>
     public ResourceLocation getTextureLocation(StrayCatAirBubble entity) {
 
         return switch (entity.getSkin()) {
-            case 0 -> PINK_BUBBLE;
             case 1 -> GREEN_BUBBLE;
+            case 2 -> CYAN_BUBBLE;
+            case 3 -> YELLOW_BUBBLE;
+            case 4 -> BOMB_BUBBLE;
             default -> PINK_BUBBLE;
         };
     }
