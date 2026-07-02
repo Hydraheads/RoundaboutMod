@@ -89,24 +89,12 @@ public class BlockBombEntity extends StandEntity {
 		boolean client = this.level().isClientSide();
         LivingEntity user = this.getUser();
         if (!client) {
-
             if(user == null){
                 this.discard();
             }else if((!(((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen)) || (!user.isAlive())){
                 this.discard();
             }
             else{
-				if (this.tickIndicator > 0 && this.tickIndicator % 2 == 0){
-					Vec3 pos = bombPos.getCenter();
-					this.tickIndicator--;
-
-				((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0.02F, 0.02F, 0.04F), 2.5f),
-						pos.x,
-						pos.y+1.0f,
-						pos.z,
-						2, 0, 0, 0, 1.2);
-				}
-
 				if ((((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ)) {
 					if (this != PKQ.bombBlock) {
 						this.discard();
@@ -119,13 +107,21 @@ public class BlockBombEntity extends StandEntity {
             	//this.detectInside();
             }
 		
-        }else {
-			/*this.level().addAlwaysVisibleParticle(new DustParticleOptions(new Vector3f(0.02F, 0.02F, 0.04F), 2.5f),
+        }else if (this.tickIndicator > 0 && this.tickIndicator % 2 == 0){
+			Vec3 pos = this.getBlockPos().getCenter();
+
+
+			/*((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0.02F, 0.02F, 0.04F), 2.5f),
 					pos.x,
 					pos.y+1.0f,
 					pos.z,
-					0, 1.2, 0);*/
-			//this.tickIndicator--;
+					2, 0, 0, 0, 1.2);*/
+			this.level().addAlwaysVisibleParticle(new DustParticleOptions(new Vector3f(0.02F, 0.02F, 0.04F), 2.5f),
+					pos.x,
+					pos.y+1.0f,
+					pos.z,
+					0, 1.2, 0);
+			this.tickIndicator--;
 		}
         super.tick();
     }
