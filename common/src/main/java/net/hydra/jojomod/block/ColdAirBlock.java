@@ -30,10 +30,12 @@ public class ColdAirBlock extends RoundaboutAttackBlock {
                             !(pl.level().getBlockState(
                                     BlockPos.containing(pl.getPosition(1).subtract(0, 0.5f, 0))).getBlock() instanceof FrozenBlock)
                     ) {
-                        if (MainUtil.canFreeze(pl)) {
-                            $$3.makeStuckInBlock($$0, new Vec3((double) 0.8F, (double) 0.8F, (double) 0.8F));
-                        } else {
-                            $$3.makeStuckInBlock($$0, new Vec3((double) 0.4F, (double) 0.9F, (double) 0.4F));
+                        if (!(pl.hurtTime > 0)){
+                            if (MainUtil.canFreeze(pl)) {
+                                $$3.makeStuckInBlock($$0, new Vec3((double) 0.8F, (double) 0.8F, (double) 0.8F));
+                            } else {
+                                $$3.makeStuckInBlock($$0, new Vec3((double) 0.4F, (double) 0.9F, (double) 0.4F));
+                            }
                         }
                     }
                 } else {
