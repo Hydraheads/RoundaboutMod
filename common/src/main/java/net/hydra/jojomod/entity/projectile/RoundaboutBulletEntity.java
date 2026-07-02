@@ -307,7 +307,8 @@ public class RoundaboutBulletEntity extends AbstractArrow {
         float amount = 0;
         float finalDamage = 0;
         if(target instanceof Player || MainUtil.isBossMob(target)){
-            amount = (1 + manhattanDamage / 8)*0.45F;
+            amount = (1 + manhattanDamage / 8)*0.7F;
+            if (this.getAmmoType() == SNIPER){amount+=0.5F;}
         } else {
             amount = 1 + manhattanDamage / 5;
         }

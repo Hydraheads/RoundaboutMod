@@ -2175,7 +2175,7 @@ public class AbilityScapeBasis {
     public Entity getTargetEntity(LivingEntity User, float distMax, float angle){
         /*First, attempts to hit what you are looking at*/
         if (!(distMax >= 0)) {
-            distMax = this.getDistanceOut(User, this.getReach(), false);
+            distMax = Math.min(this.getDistanceOut(User, this.getReach(), false),distMax);
         }
 
 
@@ -2208,7 +2208,10 @@ public class AbilityScapeBasis {
             targetEntity = EDP.parentMob;
         }
 
-        return targetEntity;
+        if (targetEntity.distanceTo(User) <= distMax){
+            return targetEntity;
+        }
+        return null;
     }
 
     public int getTargetEntityId(){

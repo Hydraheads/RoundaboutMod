@@ -10,6 +10,7 @@ import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.SavedSecond;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -53,6 +54,7 @@ public class PowersCalifornia extends NewDashPreset {
         return ClientNetworking.getAppropriateConfig().cinderellaSettings.enableCinderella;
     }
 
+    public SavedSecond rewindSnap = null;
     public static final byte DO_NOT_STEP_HERE = 0;
     public static final byte DO_NOT_HURT_ME = 1;
     public static final byte DO_NOT_LEAVE_ME = 2;
