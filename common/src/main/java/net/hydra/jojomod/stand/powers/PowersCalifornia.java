@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
@@ -194,6 +195,16 @@ public class PowersCalifornia extends NewDashPreset {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
 
+
+        if (isDoNotHurt()){
+            setSkillIcon(context, x, y, 2, StandIcons.HURT_RULE, PowerIndex.SKILL_2);
+        } else if (isDoNotLeave()){
+            setSkillIcon(context, x, y, 2, StandIcons.LEAVE_RULE, PowerIndex.SKILL_EXTRA);
+        } else {
+            setSkillIcon(context, x, y, 2, StandIcons.LEAVE_RULE, PowerIndex.SKILL_EXTRA_2);
+        }
+
+
         if (this.getSelf().fallDistance > 3) {
             setSkillIcon(context, x, y, 3, StandIcons.CALIFORNIA_FALL_CATCH, PowerIndex.SKILL_EXTRA);
         } else {
@@ -244,7 +255,29 @@ public class PowersCalifornia extends NewDashPreset {
         return super.tryPower(move,forced);
     }
 
+    public int timeSinceSwitch = 0;
     public void tickPower() {
+        if (!self.level().isClientSide()) {
+            if (getActivePower() == PowerIndex.POWER_2) {
+                if (inCowerStance() && attackTimeDuring >= 20) {
+                    xTryPower(PowerIndex.NONE,true);
+                    timeSinceSwitch = 20;
+                    setCowerLeaveStance();
+                }
+            } else {
+                if (inCowerStance()) {
+                    setCowerLeaveStance();
+                }
+            }
+
+            if (inCowerLeaveStance()){
+                timeSinceSwitch--;
+                if (timeSinceSwitch <= 0){
+                    Roundabout.LOGGER.info("4");
+                    setNoStance();
+                }
+            }
+        }
         super.tickPower();
     }
 
@@ -269,12 +302,28 @@ public class PowersCalifornia extends NewDashPreset {
     public boolean inCowerStance(){
         return self instanceof Player pl && ((IPlayerEntity)pl).roundabout$GetPoseEmote() == 35;
     }
+    public boolean inCowerLeaveStance(){
+        return self instanceof Player pl && ((IPlayerEntity)pl).roundabout$GetPoseEmote() == 36;
+    }
+
+    public void setCowerLeaveStance(){
+        if (self instanceof Player pl ){
+            ((IPlayerEntity)pl).roundabout$SetPoseEmote((byte) 36);
+        }
+    }
+    public void setNoStance(){
+        if (self instanceof Player pl ){
+            ((IPlayerEntity)pl).roundabout$SetPoseEmote((byte) 0);
+        }
+    }
 
 
     @Override
     public void onPoseEmoteSwitch(byte from, byte to){
-        if (from == 35 && !(to == 35 || to == 36)){
-            setCooldown(PowerIndex.SKILL_4,200);
+        if (!self.level().isClientSide()){
+            if (from == 35 && !(to == 35)){
+                setCooldown(PowerIndex.SKILL_2,200);
+            }
         }
     }
 
@@ -282,6 +331,7 @@ public class PowersCalifornia extends NewDashPreset {
         if (!onCooldown(PowerIndex.SKILL_2)){
             if (self instanceof ServerPlayer pl){
                 setActivePower(PowerIndex.POWER_2);
+                this.setAttackTimeDuring(0);
                 ((IPlayerEntity)pl).roundabout$SetPoseEmote((byte) 35);
             }
         }

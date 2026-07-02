@@ -2141,6 +2141,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
          **/
+
     }
 
     /// does what getItemInHand does

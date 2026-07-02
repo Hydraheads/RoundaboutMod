@@ -5,6 +5,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.util.PlayerMaskSlots;
+import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
@@ -72,6 +73,7 @@ public interface IPlayerEntity {
     byte roundabout$GetPos();
     byte roundabout$GetPos2();
     void roundabout$SetPoseEmote(byte Pos);
+    void rdbt$onSyncedDataUpdated(EntityDataAccessor<?> $$0);
     byte roundabout$GetPoseEmote();
     void roundabout$addKnife();
     void roundabout$setKnife(byte knives);
