@@ -5,6 +5,7 @@ import net.hydra.jojomod.client.models.projectile.PWMeteorModel;
 import net.hydra.jojomod.entity.FireProjectile;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.UnburnableProjectile;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -413,12 +414,13 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
         }
 
         if (!missedPlayer) {
-            BlockPos pos = hit.getBlockPos();
-            BlockState state = this.level().getBlockState(pos);
-            if (state.getBlock() instanceof net.minecraft.world.level.block.AbstractGlassBlock) {
-                this.level().destroyBlock(pos, true);
+            if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
+                BlockPos pos = hit.getBlockPos();
+                BlockState state = this.level().getBlockState(pos);
+                if (state.getBlock() instanceof net.minecraft.world.level.block.AbstractGlassBlock) {
+                    this.level().destroyBlock(pos, true);
+                }
             }
-
             checkEntityCollisionThroughBlock();
             return;
         }

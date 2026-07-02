@@ -5,12 +5,14 @@ import net.hydra.jojomod.client.models.projectile.PWMeteorModel;
 import net.hydra.jojomod.entity.FireProjectile;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.UnburnableProjectile;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.stand.powers.PowersPlanetWaves;
+import net.hydra.jojomod.util.ExplosionUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -137,23 +139,11 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
         this($$0, $$1.getX(), $$1.getEyeY() - 0.1F, $$1.getZ(), $$2);
         this.setOwner($$1);
     }
+
     private boolean isProtectedBlock(BlockState state) {
-
-        if (state.is(BlockTags.COAL_ORES)) return true;
-        if (state.is(BlockTags.IRON_ORES)) return true;
-        if (state.is(BlockTags.GOLD_ORES)) return true;
-        if (state.is(BlockTags.REDSTONE_ORES)) return true;
-        if (state.is(BlockTags.LAPIS_ORES)) return true;
-        if (state.is(BlockTags.DIAMOND_ORES)) return true;
-        if (state.is(BlockTags.EMERALD_ORES)) return true;
-        if (state.is(BlockTags.COPPER_ORES)) return true;
-
-        if (state.is(Blocks.NETHER_QUARTZ_ORE)) return true;
-        if (state.is(Blocks.NETHER_GOLD_ORE)) return true;
-        if (state.is(Blocks.ANCIENT_DEBRIS)) return true;
-
-        return false;
+        return MainUtil.confirmIsOre(state) || ExplosionUtil.isBlockBlackListed(state);
     }
+
     public PWBigMeteorEntity(LivingEntity $$1, Level $$2) {
         this(ModEntities.PW_BIG_METEOR, $$1.getX(), $$1.getEyeY() - 0.1F, $$1.getZ(), $$2);
         this.setOwner($$1);
@@ -319,56 +309,58 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
         radialExplosion(null);
 
         BlockPos center = this.blockPosition();
+        if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
+            int explosionRadius = 4;
 
-        int explosionRadius = 4;
 
+            for (BlockPos pos : BlockPos.betweenClosed(
+                    center.offset(-explosionRadius, -explosionRadius, -explosionRadius),
+                    center.offset(explosionRadius, explosionRadius, explosionRadius))) {
 
-        for (BlockPos pos : BlockPos.betweenClosed(
-                center.offset(-explosionRadius, -explosionRadius, -explosionRadius),
-                center.offset(explosionRadius, explosionRadius, explosionRadius))) {
+                double dist = pos.distSqr(center);
 
-            double dist = pos.distSqr(center);
+                if (dist > explosionRadius * explosionRadius) continue;
 
-            if (dist > explosionRadius * explosionRadius) continue;
+                BlockState state = this.level().getBlockState(pos);
 
-            BlockState state = this.level().getBlockState(pos);
+                if (state.isAir()) continue;
 
-            if (state.isAir()) continue;
+                if (state.is(Blocks.BEDROCK)) continue;
+                if (state.is(Blocks.BARRIER)) continue;
 
-            if (state.is(Blocks.BEDROCK)) continue;
-            if (state.is(Blocks.BARRIER)) continue;
+                if (isProtectedBlock(state)) continue;
 
-            if (isProtectedBlock(state)) continue;
-
-            this.level().destroyBlock(pos, false);
-        }
-
-        // fire inside crater
-        int fireRadius = 5;
-
-        for (BlockPos pos : BlockPos.betweenClosed(
-                center.offset(-fireRadius, -fireRadius, -fireRadius),
-                center.offset(fireRadius, 1, fireRadius))) {
-
-            if (this.random.nextFloat() > 0.22F) {
-                continue;
+                this.level().destroyBlock(pos, false);
             }
 
-            if (!this.level().isEmptyBlock(pos)) {
-                continue;
-            }
 
-            BlockPos below = pos.below();
-            BlockState belowState = this.level().getBlockState(below);
+            // fire inside crater
+            int fireRadius = 5;
 
-            if (!belowState.isFaceSturdy(this.level(), below, Direction.UP)) {
-                continue;
-            }
+            for (BlockPos pos : BlockPos.betweenClosed(
+                    center.offset(-fireRadius, -fireRadius, -fireRadius),
+                    center.offset(fireRadius, 1, fireRadius))) {
 
-            BlockState fire = Blocks.FIRE.defaultBlockState();
+                if (this.random.nextFloat() > 0.22F) {
+                    continue;
+                }
 
-            if (fire.canSurvive(this.level(), pos)) {
-                this.level().setBlock(pos, fire, 3);
+                if (!this.level().isEmptyBlock(pos)) {
+                    continue;
+                }
+
+                BlockPos below = pos.below();
+                BlockState belowState = this.level().getBlockState(below);
+
+                if (!belowState.isFaceSturdy(this.level(), below, Direction.UP)) {
+                    continue;
+                }
+
+                BlockState fire = Blocks.FIRE.defaultBlockState();
+
+                if (fire.canSurvive(this.level(), pos)) {
+                    this.level().setBlock(pos, fire, 3);
+                }
             }
         }
         LivingEntity user = this.getStandUser();

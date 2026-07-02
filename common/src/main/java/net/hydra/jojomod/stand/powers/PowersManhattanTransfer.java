@@ -894,6 +894,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                                     if (ME.hasLineOfSight(this.targetHattan)) {
                                         if (this.getSelf() instanceof SnowGolem) {
                                             Snowball $$7 = new Snowball(ME.getUser().level(), ME.getUser());
+                                            $$7.setOwner(this.getSelf());
                                             $$7.setPos(ME.getX(), ME.getY() - 0.15, ME.getZ());
                                             $$7.setItem($$7.getItem());
                                             $$7.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, -3.0F, 2F, 0.0F);
@@ -901,6 +902,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                                             ME.hattanDeflected = $$7;
                                         } else {
                                             Arrow $$11 = new Arrow(this.getSelf().level(), ME.getX(), ME.getY(), ME.getZ());
+                                            $$11.setOwner(this.getSelf());
                                             $$11.setPos(ME.getX(), ME.getY() - 0.15, ME.getZ());
                                             $$11.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, 0.0F, 2.5F, 0.0F);
                                             $$11.pickup = AbstractArrow.Pickup.DISALLOWED;
