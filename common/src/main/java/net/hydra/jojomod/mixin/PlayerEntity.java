@@ -496,7 +496,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$POS_2);
     }
     public void roundabout$SetPoseEmote(byte Pos){
+                byte posEmote = ((Player) (Object) this).getEntityData().get(ROUNDABOUT$POSE_EMOTE);
         ((Player) (Object) this).getEntityData().set(ROUNDABOUT$POSE_EMOTE, Pos);
+        ((StandUser)this).roundabout$getStandPowers().onPoseEmoteSwitch(posEmote,Pos);
     }
     public byte roundabout$GetPoseEmote(){
         return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$POSE_EMOTE);

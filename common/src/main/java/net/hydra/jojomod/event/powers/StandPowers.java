@@ -1467,6 +1467,9 @@ public class StandPowers extends AbilityScapeBasis {
         //playBarrageGuardSound();
     }
 
+    public void onPoseEmoteSwitch(byte from, byte to){
+    }
+
     /**Initiates a stand barrage clash. This code should probably not be overridden, it is a very mutual event*/
     public void initiateClash(Entity entity){
         ((StandUser) entity).roundabout$getStandPowers().setClashOp(this.self);

@@ -801,7 +801,7 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public void useSpikeAttackF(boolean rightClick){
-        this.setCooldown(PowerIndex.SKILL_4, 3);
+        this.setCooldown(PowerIndex.SKILL_1, 3);
         this.setAttackTimeDuring(-10);
         this.setActivePower(PowerIndex.POWER_4_EXTRA);
         MainUtil.playPop(self);
@@ -1283,7 +1283,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                 if (keyIsDown) {
                     if (inCombatMode()){
                         if (!holdDownClick){
-                            if (!this.onCooldown(PowerIndex.SKILL_4) && ((getActivePower() == PowerIndex.NONE)
+                            if (!this.onCooldown(PowerIndex.SKILL_1) && ((getActivePower() == PowerIndex.NONE)
                                     || getActivePower() == PowerIndex.POWER_4_EXTRA)) {
                                 if (confirmShot(getUseTicks())) {
                                     if (this.self instanceof Player PE){
