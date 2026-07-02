@@ -640,7 +640,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (this.getSelf() instanceof Player PE) {
             IPlayerEntity ipe = ((IPlayerEntity) PE);
             int zint = ipe.roundabout$getControlling();
-            StrayCatAirBubble sde = ((StandUser)PE).roundabout$getStand();
+            Entity sde = ((StandUser)PE).roundabout$getStand();
             if (sde != null && zint == sde.getId()) {
                 return true;
             }
