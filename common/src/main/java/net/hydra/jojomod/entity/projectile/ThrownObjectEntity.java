@@ -683,6 +683,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
         Vec3 DM = $$1.getDeltaMovement();
 
+        ItemStack ist = this.getItem();
+
         boolean fire = false;
         boolean onFire = $$1.isOnFire();
         if (!this.getItem().isEmpty()) {
@@ -794,15 +796,18 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                         $$7.knockback(0.15f, this.getX() - $$7.getX(), this.getZ() - $$7.getZ());
                     }
                 }
-
-                if (this.getItem().isDamageableItem()) {
-                    if (!this.getItem().hurt(1, this.level().getRandom(), null)) {
+                if (!(ist.getTag() != null && ist.getTag().getBoolean("Unbreakable"))) {
+                    if (this.getItem().isDamageableItem()) {
+                        if (!this.getItem().hurt(1, this.level().getRandom(), null)) {
+                            this.dropItem($$1.getOnPos());
+                        }
+                    } else if (this.getItem().getItem() instanceof TieredItem) {
                         this.dropItem($$1.getOnPos());
+                    } else if (this.getItem().getItem() instanceof BlockItem) {
+                        blockBreakParticles((((BlockItem) this.getItem().getItem()).getBlock()), $$0.getEntity().getPosition(0F).add(0, $$0.getEntity().getEyeHeight(), 0));
                     }
-                } else if (this.getItem().getItem() instanceof TieredItem){
+                } else {
                     this.dropItem($$1.getOnPos());
-                } else if (this.getItem().getItem() instanceof BlockItem){
-                    blockBreakParticles((((BlockItem) this.getItem().getItem()).getBlock()),$$0.getEntity().getPosition(0F).add(0,$$0.getEntity().getEyeHeight(),0));
                 }
             }
         } else {
