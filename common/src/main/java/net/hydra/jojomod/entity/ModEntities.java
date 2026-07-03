@@ -166,6 +166,7 @@ public class ModEntities {
     public static EntityType<FallenCreeper> FALLEN_CREEPER;
 
     public static EntityType<BlockWallEntity> BLOCK_WALL;
+    public static EntityType<StepRuleEntity> STEP_RULE;
 
 
     public static final ResourceLocation HARPOON_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_harpoon.png");

@@ -222,6 +222,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.SOFT_AND_WET_KING_LAYER, SoftAndWetKingModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.KILLER_QUEEN_LAYER, KillerQueenModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.KILLER_QUEEN_BLOCKBOMB, BlockBombModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.STEP_RULE, StepRuleModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.SHEER_HEART_ATTACK_LAYER, SheerHeartAttackModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.SOFT_AND_WET_KILLER_QUEEN_LAYER, SoftAndWetKillerQueenModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.CINDERELLA_LAYER, CinderellaModel::getTexturedModelData);
