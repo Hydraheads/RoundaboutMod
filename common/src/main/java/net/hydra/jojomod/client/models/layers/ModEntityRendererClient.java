@@ -69,6 +69,8 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation CROSSFIRE_FIRESTORM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "crossfire_firestorm"), "main");
     public static final ModelLayerLocation LIFE_DETECTOR = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "life_detector"), "main");
     public static final ModelLayerLocation STAND_FIREBALL_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "stand_fireball"), "main");
+    public static final ModelLayerLocation PW_METEOR_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "pw_meteor"), "main");
+    public static final ModelLayerLocation PW_BIG_METEOR_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "pw_big_meteor"), "main");
     public static final ModelLayerLocation IRON_BALL_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "iron_ball"), "main");
     public static final ModelLayerLocation RIPPER_EYES_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "ripper_eyes"), "main");
     public static final ModelLayerLocation UV_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "uv"), "main");

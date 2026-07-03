@@ -253,6 +253,8 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.LEFT_SEPERATED_ARM_LAYER, LeftSeperatedArmModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.LEFT_SEPERATED_ARM_SLIM_LAYER, LeftSeperatedArmSlimModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.STAND_FIREBALL_LAYER, StandFireballModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.PW_METEOR_LAYER, PWMeteorModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.PW_BIG_METEOR_LAYER, PWBigMeteorModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.IRON_BALL_LAYER, StandFireballModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.RIPPER_EYES_LAYER, RipperEyesModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.UV_LAYER, UVModel::createBodyLayer);

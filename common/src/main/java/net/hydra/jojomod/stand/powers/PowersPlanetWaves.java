@@ -382,9 +382,10 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig()
                 .PlanetWavesSettings.meteorshowerCooldown);
-        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
-                PowerIndex.SKILL_1,ClientNetworking.getAppropriateConfig()
-                        .PlanetWavesSettings.meteorshowerCooldown);
+        if (this.getSelf() instanceof ServerPlayer sp) {
+            S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_1,
+                    ClientNetworking.getAppropriateConfig().PlanetWavesSettings.meteorshowerCooldown);
+        }
         syncStandMode();
     }
 
@@ -504,11 +505,10 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig()
                 .PlanetWavesSettings.bigmeteorCooldown);
-        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
-                PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig()
-                        .PlanetWavesSettings.bigmeteorCooldown);
-
-        syncStandMode();
+        if (this.getSelf() instanceof ServerPlayer sp) {
+            S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_2,
+                    ClientNetworking.getAppropriateConfig().PlanetWavesSettings.bigmeteorCooldown);
+        }
 
         level.playSound(
                 null,
@@ -551,9 +551,6 @@ public class PowersPlanetWaves extends NewDashPreset {
     public double buryDepthUp = 0.5;
     public double buryDepthDown = 0.5;
 
-    public double buryCenterHorizontal = 1.0;   //0 es el punto de contacto, 1 el centro
-    public double buryCenterUp = 1.0;
-    public double buryCenterDown = 1.0;
     private float standTargetYaw = 0f;
 
     private void standtargeting() {
@@ -572,12 +569,25 @@ public class PowersPlanetWaves extends NewDashPreset {
         BlockHitResult hitResult = this.self.level().clip(clipContext);
         if (hitResult.getType() != HitResult.Type.BLOCK) return;
 
-        BlockPos pos   = hitResult.getBlockPos();
-        Vec3 hitLoc    = hitResult.getLocation();
-        //System.out.println("DEBUG hit pos=" + pos + " hitLoc=" + hitLoc + " dir=" + hitResult.getDirection()
-        //        + " playerPos=" + this.self.position() + " playerBlockPos=" + this.self.blockPosition());
+        BlockPos hitPos = hitResult.getBlockPos();
+        Vec3 hitLoc     = hitResult.getLocation();
 
-        var      state = this.self.level().getBlockState(pos);
+        BlockPos pos = hitPos;
+
+        switch (hitResult.getDirection()) {
+            case NORTH, SOUTH, EAST, WEST -> {
+                BlockPos belowPos = hitPos.below();
+                var belowState = this.self.level().getBlockState(belowPos);
+                boolean belowIsSolid = belowState.isCollisionShapeFullBlock(this.self.level(), belowPos)
+                        && belowState.canOcclude() && !belowState.isAir();
+                if (belowIsSolid) {
+                    pos = belowPos;
+                }
+            }
+            default -> {}
+        }
+
+        var state = this.self.level().getBlockState(pos);
         if (!state.isCollisionShapeFullBlock(this.self.level(), pos) || !state.canOcclude()) return;
         if (state.isAir()) return;
 
@@ -586,16 +596,23 @@ public class PowersPlanetWaves extends NewDashPreset {
         Vec3 faceCenter  = blockCenter.add(faceNormal.scale(0.5));
 
         this.standTargetPos    = faceCenter;
-        this.standTravelTarget = faceCenter;
 
         double sinkDepth;
         switch (hitResult.getDirection()) {
-            case UP   -> sinkDepth = 0.85;  // floor: sink upward into block
-            case DOWN -> sinkDepth = -0.85; // ceiling: normal points DOWN, negate to go UP into block
-            default   -> sinkDepth = 0; // walls
+            case UP -> {
+                sinkDepth = 0.85;
+                this.standTravelTarget = faceCenter;
+            }
+            case DOWN -> {
+                sinkDepth = -0.85;
+                this.standTravelTarget = faceCenter;
+            }
+            default -> {
+                sinkDepth = 0.0;
+                this.standTravelTarget = faceCenter.add(faceNormal.scale(0.85));
+            }
         }
 
-// This line uses sinkDepth — negative value flips the sink direction for ceiling
         this.sinkTarget = faceCenter.subtract(faceNormal.scale(sinkDepth));
         this.standHitDirection = hitResult.getDirection();
         restrainAnimationType  = 0;
@@ -631,6 +648,9 @@ public class PowersPlanetWaves extends NewDashPreset {
     private boolean wasSinking = false;
     private boolean wasTravelling = false;
     private int restrainHoldTicks = 0;
+    private int preSinkTicks = 0;
+    private static final int PRE_SINK_DURATION = 10; // 0.5 segundos = 10 ticks
+    private boolean isPreSinking = false;
 
     @Override
     public void tickPowerEnd() {
@@ -661,8 +681,18 @@ public class PowersPlanetWaves extends NewDashPreset {
 
             if (dist < 0.3) {
                 stand.setPos(standTravelTarget.x, standTravelTarget.y, standTravelTarget.z);
-                isTravelling = false;
-                isSinking    = true;
+                isTravelling  = false;
+                isPreSinking  = true;
+                preSinkTicks  = PRE_SINK_DURATION;
+                // arrancá la animación de enterrarse acá
+                if (standHitDirection != null) {
+                    switch (standHitDirection) {
+                        case UP   -> animateStand(PlanetWavesEntity.BURY_UPWARDS);
+                        case DOWN -> animateStand(PlanetWavesEntity.BURY_DOWNWARDS);
+                        default   -> animateStand(PlanetWavesEntity.BURY_HORIZONTAL);
+                    }
+                    applyBurialRotation(stand);
+                }
                 syncStandMode();
             } else {
                 animateStand(PlanetWavesEntity.FLOATING);
@@ -698,7 +728,16 @@ public class PowersPlanetWaves extends NewDashPreset {
                 );
             }
         }
-
+        // ── 1.5. PRE-SINK — wait for bury animation before moving ────────────
+        if (isPreSinking && stand != null) {
+            if (preSinkTicks > 0) {
+                preSinkTicks--;
+            } else {
+                isPreSinking = false;
+                isSinking    = true;
+                syncStandMode();
+            }
+        }
         // ── 2. BURIED — GRAB DETECTION ───────────────────────────────────────
         if (!isTravelling && !isSinking && targetingstand && stand != null) {
             System.out.println("DEBUG section2 check: restrainedEntity=" + restrainedEntity + " grabCooldownTicks=" + grabCooldownTicks);
@@ -765,13 +804,13 @@ public class PowersPlanetWaves extends NewDashPreset {
         if (restrainedEntity != null && stand != null) {
 
             if (restrainedEntity instanceof StandUser SU) {
-                SU.roundabout$setRestrainedTicks(20); // refresh just above tick rate
+                SU.roundabout$setRestrainedTicks(20);
             }
 
-            boolean lost = !restrainedEntity.isAlive()
-                    || restrainedEntity.distanceTo(stand) > 4.0;
+            boolean dead = !restrainedEntity.isAlive();
+            boolean lost = dead || restrainedEntity.distanceTo(stand) > 4.0;
 
-            if (restrainHoldTicks > 0) {
+            if (restrainHoldTicks > 0 && !dead) {
                 restrainHoldTicks--;
             }
 
@@ -831,7 +870,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             default    -> extraX = 0.0F; // UP
         }
         stand.setStandRotationX(extraX);
-        stand.setStandRotationY(this.standTargetYaw * Mth.DEG_TO_RAD); // use stored yaw, not live
+        stand.setStandRotationY(this.standTargetYaw * Mth.DEG_TO_RAD);
     }
     private boolean isBuried= false;
     private Vec3 buriedStandPos= null;
@@ -964,12 +1003,9 @@ public class PowersPlanetWaves extends NewDashPreset {
             );
 
             this.setCooldown(PowerIndex.SKILL_2_SNEAK, 60);
-
-            S2CPacketUtil.sendCooldownSyncPacket(
-                    (ServerPlayer)this.getSelf(),
-                    PowerIndex.SKILL_2_SNEAK,
-                    60
-            );
+            if (this.getSelf() instanceof ServerPlayer sp) {
+                S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_2_SNEAK, 60);
+            }
         }
     }
     @Override
@@ -1138,10 +1174,11 @@ public class PowersPlanetWaves extends NewDashPreset {
             if (targetingstand) mode |= 1;
             if (tracking)       mode |= 2;
             if (isTravelling)   mode |= 4;
-            if (isSinking)      mode |= 8;                          // bit 3
-            mode |= (restrainAnimationType & 0x3) << 4;            // bits 4-5 (was 3-4)
+            if (isSinking)      mode |= 8;
+            mode |= (restrainAnimationType & 0x3) << 4;   // bits 4-5
             int dirOrdinal = (standHitDirection != null) ? standHitDirection.ordinal() : 0;
-            mode |= (dirOrdinal & 0x7) << 6;                       // bits 6-8 (was 5-7)
+            mode |= (dirOrdinal & 0x7) << 6;               // bits 6-8
+            if (isPreSinking) mode |= 512;                 // bit 9, movido antes del envío
             S2CPacketUtil.sendGenericIntToClientPacket(
                     pl, PacketDataIndex.S2C_INT_STAND_MODE, mode);
         }
@@ -1158,28 +1195,19 @@ public class PowersPlanetWaves extends NewDashPreset {
         restrainAnimationType = (byte)((integer >> 4) & 0x3);
         int dirOrdinal        = (integer >> 6) & 0x7;
         standHitDirection     = net.minecraft.core.Direction.values()[dirOrdinal];
+        isPreSinking          = (integer & 512) != 0;
 
-        // phase 1 ended → phase 2 starting
-        if (wasTravel && !isTravelling && isSinking) {
-            animateStand(PlanetWavesEntity.FLOATING);
-        }
-
-        // phase 2 ended → play burial animation based on direction from THIS packet
-        if (wasSink && !isSinking && targetingstand) {
+        if (wasTravel && !isTravelling) {
             StandEntity stand = this.getStandEntity(this.self);
-
-
-            if (dirOrdinal == 1) {
-                animateStand(PlanetWavesEntity.BURY_UPWARDS);
-            } else if (dirOrdinal == 0) {
-                animateStand(PlanetWavesEntity.BURY_DOWNWARDS);
-            } else {
-                animateStand(PlanetWavesEntity.BURY_HORIZONTAL);
-            }
+            byte burialAnim = switch (standHitDirection) {
+                case UP   -> PlanetWavesEntity.BURY_UPWARDS;
+                case DOWN -> PlanetWavesEntity.BURY_DOWNWARDS;
+                default   -> PlanetWavesEntity.BURY_HORIZONTAL;
+            };
+            animateStand(burialAnim);
             applyBurialRotation(stand);
         }
 
-        // grab happened
         if (targetingstand && restrainAnimationType != 0) {
             byte grabAnim = switch (restrainAnimationType) {
                 case 1 -> PlanetWavesEntity.GRAB_UPWARDS;
@@ -1208,7 +1236,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                 "instruction.roundabout.press_skill_crouch", StandIcons.PLANET_WAVES_METEOR_TRACKING, 4, level, bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0, "ability.roundabout.desintegration",
                 "instruction.roundabout.passive", StandIcons.PLANET_WAVES_DESINTEGRATION, 4, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 118, 0, "ability.roundabout.",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 118, 0, "ability.roundabout.grab",
                 "instruction.roundabout.passive", StandIcons.PLANET_WAVES_GRAB, 4, level, bypass));
 
         return $$1;
