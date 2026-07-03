@@ -497,6 +497,7 @@ public class PowersCalifornia extends NewDashPreset {
         if (!hurtEntities.isEmpty() && self instanceof ServerPlayer sp) {
             if (rewindSnap != null){
                 rewindSnap.loadTime(self);
+                setCooldown(PowerIndex.SKILL_2,200);
                 ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PINK_SMOKE,
                         this.getSelf().getX(), this.getSelf().getY() + 1, this.getSelf().getZ(),
                         12, 2, 0.5,2, 0.015);
@@ -543,7 +544,7 @@ public class PowersCalifornia extends NewDashPreset {
     public void onPoseEmoteSwitch(byte from, byte to){
         if (!self.level().isClientSide()){
             if (from == 35 && !(to == 35)){
-                setCooldown(PowerIndex.SKILL_2,200);
+                setCooldown(PowerIndex.SKILL_2,160);
             }
         }
     }
