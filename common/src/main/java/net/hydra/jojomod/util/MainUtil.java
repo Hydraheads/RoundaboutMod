@@ -221,6 +221,7 @@ public class MainUtil {
     public static ArrayList<String> powerfulMobs = Lists.newArrayList();
     public static ArrayList<String> foodThatHasEffectsForVampires = Lists.newArrayList();
     public static ArrayList<String> vampireSunDamageWorlds = Lists.newArrayList();
+    public static ArrayList<String> unbreakableThrownItems = Lists.newArrayList();
     public static Set<String> foodThatGivesBloodList = Set.of();
     Map<String, FoodBloodStats> foodThatGivesBloodMap;
 
@@ -352,6 +353,15 @@ public class MainUtil {
             return true;
         }
         return false;
+    }
+    public static boolean isIndestructibleThrownItem(ItemStack stack){
+        if (stack == null || stack.isEmpty())
+            return false;
+        ResourceLocation rl = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        if(unbreakableThrownItems != null && !unbreakableThrownItems.isEmpty() && rl != null && unbreakableThrownItems.contains(rl.toString())){
+             return true;
+        }
+        return  false;
     }
     public static boolean isFreezableMobBlacklisted(Entity ent){
         if (ent == null)

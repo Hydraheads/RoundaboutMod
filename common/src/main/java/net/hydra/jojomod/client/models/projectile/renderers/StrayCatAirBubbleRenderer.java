@@ -43,7 +43,10 @@ public class StrayCatAirBubbleRenderer extends EntityRenderer<StrayCatAirBubble>
 
     @Override
     public void render(StrayCatAirBubble entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
-        if (ClientUtil.canSeeStands(ClientUtil.getPlayer()) || ClientUtil.checkIfClientCanSeeMobsForWindVision()) {
+
+
+        if (ClientUtil.canSeeStands(ClientUtil.getPlayer()) || (ClientUtil.checkIfClientCanSeeMobsForWindVision()
+            || entity.canSeeBubble(ClientUtil.getPlayer()))) {
             if (((TimeStop)entity.level()).inTimeStopRange(entity)){
                 partialTicks = 0;
             }

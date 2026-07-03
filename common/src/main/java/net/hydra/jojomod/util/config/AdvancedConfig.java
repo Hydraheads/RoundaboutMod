@@ -193,6 +193,12 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:reinforced_deepslate"
             )
     );
+    public Set<String> unbreakableThrownItems = new HashSet<>(
+            Arrays.asList(
+                    "mod_id:add_mod_item",
+                    "mod_id:add_other_mod_item"
+            )
+    );
     public Set<String> occultChargeEffectsToBanishv2 = new HashSet<>(
             Arrays.asList(
                     "minecraft:absorption",
