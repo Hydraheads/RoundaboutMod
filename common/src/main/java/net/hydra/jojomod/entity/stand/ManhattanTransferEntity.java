@@ -26,6 +26,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.*;
@@ -190,23 +191,18 @@ public class ManhattanTransferEntity extends StandEntity {
 
     protected static final EntityDataAccessor<ItemStack> HELD_ITEM_MANHATTAN_FULL = SynchedEntityData.defineId(ManhattanTransferEntity.class,
             EntityDataSerializers.ITEM_STACK);
-
     public final ItemStack getHeldItemManhattanFull() {
         return this.entityData.get(HELD_ITEM_MANHATTAN_FULL);
     }
-
     public final void setHeldItemManhattanFull(ItemStack stack) {
         this.entityData.set(HELD_ITEM_MANHATTAN_FULL, stack);
     }
-
     public int getHattanTarget() {
         return this.entityData.get(MANHATTAN_TARGET);
     }
-
     public void setHattanTarget(int d) {
         this.entityData.set(MANHATTAN_TARGET, d);
     }
-
     protected static final EntityDataAccessor<Integer> MANHATTAN_TARGET = SynchedEntityData.defineId(ManhattanTransferEntity.class,
             EntityDataSerializers.INT);
     public boolean isDesummoning = false;
@@ -216,35 +212,27 @@ public class ManhattanTransferEntity extends StandEntity {
     public boolean isSnubnose = false;
     public float manhattanDamageIncipit = 0;
     public boolean canAcquireHeldItem = false;
-
     public boolean getCanPlace() {
         return false;
     }
-
     public boolean canSnipe() {
         return false;
     }
-
     public float getShotAccuracy() {
         return 0.0F;
     }
-
     public float getBundleAccuracy() {
         return 0.0F;
     }
-
     public float getThrowAngle() {
         return 0.0F;
     }
-
     public float getThrowAngle2() {
         return 0.0F;
     }
-
     public float getThrowAngle3() {
         return 0.0F;
     }
-
     public boolean canOthersLoadMT = ClientNetworking.getAppropriateConfig().manhattanTransferSettings.canOtherMobsLoadManhattanTransfer;
     public int fireTicksPrj = 0;
     public Projectile hattanDeflected = null;
@@ -252,21 +240,16 @@ public class ManhattanTransferEntity extends StandEntity {
     public int setHatAnimDir = 1;
     public float heighHattanPilotNoMov = 0;
     private boolean isKeyEverPressed = false;
-
     int knockbackArrow = 0;
     void setKnockbackArrow(int necessary){knockbackArrow = necessary;}
     int piercingArrow = 0;
-
     public StandUser getUserData(LivingEntity User) {
         return ((StandUser) User);
     }
-
     public int DodgeRainTicks = 0;
-
     public void setDodgeRainTicks(int val) {
         DodgeRainTicks = val;
     }
-
     int stupidTicks = 10;
     public int tickInWater = 100;
     int dirPause = 0;
@@ -278,7 +261,6 @@ public class ManhattanTransferEntity extends StandEntity {
     public float manhattanDetectionRange = ClientNetworking.getAppropriateConfig().manhattanTransferSettings.manhattanAutoShootingRange;
 
     /*actual methods*/
-
     @Override
     public boolean hurt(DamageSource source, float amount) {
         Entity direct = source.getDirectEntity();
@@ -919,6 +901,7 @@ public class ManhattanTransferEntity extends StandEntity {
         }
     }
 
+    /*This is how it searches the nearest moving target*/
     public void searchTarget() {
         if (this.level() != null) {
             List<LivingEntity> lvent = this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(this.manhattanDetectionRange), (livingEntity) -> {
