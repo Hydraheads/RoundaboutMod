@@ -12,6 +12,8 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
+import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
@@ -23,11 +25,7 @@ import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.OffsetIndex;
-import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.PowerTypes;
-import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -84,6 +82,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.nbt.CompoundTag;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -599,6 +598,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         	case SKILL_2_NORMAL -> {
         		if (!this.inBitesTheDustMode()) {
                     if (this.isPiloting()) {
+
                         //toggleControlModeClient();
                     }else if (this.currentBombStatus == BOMB_NONE) {
                         tryMobPlantBomb();
@@ -610,7 +610,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             case SKILL_2_CROUCH_GUARD, SKILL_2_GUARD -> {
                 if (!this.inBitesTheDustMode()) {
                     if (this.currentBombStatus == BOMB_BUBBLE) {
-                        toggleControlModeClient();
+                        airBubbleRedirectClient();
+                        //toggleControlModeClient();
                     } else if (this.currentBombStatus == BOMB_NONE) {
                         tryBubbleSend();
                     } else {
@@ -1140,6 +1141,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             return impale();
         } else if (move == PowerIndex.POWER_2_BLOCK) {
             return this.bubbleSend();
+        } else if (move == PowerIndex.POWER_2_EXTRA) {
+            return this.bubbleRedirect();
     	} else if (move == PowerIndex.POWER_3) {
     		return this.sendOrReturnSHA(false);
         } else if (move == PowerIndex.POWER_3_BLOCK) {
@@ -1186,6 +1189,12 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override
     public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos){
     	return super.tryBlockPosPower(move, forced, blockPos);
+    }
+
+    @Override
+    public boolean tryPosPower(int move, boolean forced, Vec3 pos){
+        savedPos = pos;
+        return tryPower(move, forced);
     }
     
     // Server2Client Receiver Methods
@@ -1439,6 +1448,15 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
+    public void airBubbleRedirectClient(){
+        if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+            Vec3 pos = MainUtil.getRaytracePointOnMobOrBlock(this.self, 30);
+            this.tryPosPower(PowerIndex.POWER_2_EXTRA, true, pos);
+            tryPosPowerPacket(PowerIndex.POWER_2_EXTRA, pos);
+        }
+
+    }
+
     public void tryMobPlantBomb() {
         if (!this.onCooldown(PowerIndex.SKILL_2) && this.canAttack2()) {
             bombConfigPacket();
@@ -1556,6 +1574,44 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
 
         return false;
+    }
+
+    public boolean bubbleRedirect(){
+        if (this.bombBubble != null){
+            this.setCooldown(PowerIndex.SKILL_EXTRA_2, 3);
+
+            if (!this.self.level().isClientSide()) {
+                if (savedPos != null) {
+
+                    StrayCatAirBubble value = this.bombBubble;
+                    value.setFollowOwnerView(false);
+
+                    Vec3 vector = new Vec3((savedPos.x() - value.getX()),
+                            (savedPos.y() - value.getY()),
+                            (savedPos.z() - value.getZ())).normalize().scale(value.getSped());
+
+                    value.setDeltaMovement(vector);
+                    value.hurtMarked = true;
+                    value.hasImpulse = true;
+                }
+            } else {
+                if (savedPos != null){
+                    this.self.playSound(ModSounds.BUBBLE_HOVERED_OVER_EVENT, 0.2F, (float) (0.95F+Math.random()*0.1F));
+                    this.self.level()
+                            .addParticle(
+                                    ModParticles.POINTER_SOFT,
+                                    savedPos.x(),
+                                    savedPos.y() + 0.5,
+                                    savedPos.z(),
+                                    0,
+                                    0,
+                                    0
+                            );
+                }
+            }
+
+        }
+        return true;
     }
 
 
