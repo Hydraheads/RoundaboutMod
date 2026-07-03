@@ -429,6 +429,11 @@ public class PowersCalifornia extends NewDashPreset {
                     setNoStance();
                 }
             }
+
+
+            if (hurtEntities.isEmpty() && rewindSnap != null){
+                rewindSnap = null;
+            }
         }
     }
 
