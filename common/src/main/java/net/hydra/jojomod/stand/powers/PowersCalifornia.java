@@ -1,7 +1,6 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
@@ -9,15 +8,14 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.DietSavedSecond;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.SavedSecond;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -55,7 +53,7 @@ public class PowersCalifornia extends NewDashPreset {
         return ClientNetworking.getAppropriateConfig().cinderellaSettings.enableCinderella;
     }
 
-    public SavedSecond rewindSnap = null;
+    public DietSavedSecond rewindSnap = null;
     public static final byte DO_NOT_STEP_HERE = 0;
     public static final byte DO_NOT_HURT_ME = 1;
     public static final byte DO_NOT_LEAVE_ME = 2;
@@ -216,6 +214,7 @@ public class PowersCalifornia extends NewDashPreset {
     public void ruleSwitchClient(){
         if (!onCooldown(PowerIndex.SKILL_4)){
             this.self.playSound(ModSounds.MAGIC_DING_EVENT, 1F, 1.0F);
+            clearClientList();
             setCooldown(PowerIndex.SKILL_4,7);
             tryPowerPacket(PowerIndex.POWER_4);
         }
@@ -267,6 +266,7 @@ public class PowersCalifornia extends NewDashPreset {
         if (source.getEntity() != null && !source.is(DamageTypes.THORNS)) {
             if (inCowerStance()){
                 if (attackTimeDuring >= 5){
+                    rewindSnap = DietSavedSecond.saveEntitySecond(self);
                     setCowerLeaveStance();
                     addToList(source.getEntity());
                 } else {
@@ -452,6 +452,12 @@ public class PowersCalifornia extends NewDashPreset {
 
     public void punishServer(){
         if (!hurtEntities.isEmpty() && self instanceof ServerPlayer sp) {
+            if (rewindSnap != null){
+                rewindSnap.loadTime(self);
+                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PINK_SMOKE,
+                        this.getSelf().getX(), this.getSelf().getY() + 0.3, this.getSelf().getZ(),
+                        10, 2, 0.5,2, 0.015);
+            }
             Iterator<Map.Entry<Entity, Integer>> it = hurtEntities.entrySet().iterator();
 
             while (it.hasNext()) {
@@ -514,6 +520,8 @@ public class PowersCalifornia extends NewDashPreset {
 
     public void switchRules(){
         setCooldown(PowerIndex.SKILL_4,6);
+        rewindSnap = null;
+        hurtEntities.clear();
         nextRule();
         if (self instanceof ServerPlayer pl){
             pl.displayClientMessage(Component.translatable("text.roundabout.ckb_rule_"+currentRule).withStyle(ChatFormatting.LIGHT_PURPLE), true);
