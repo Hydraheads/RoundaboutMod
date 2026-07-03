@@ -20,6 +20,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 
 public class PWMeteorRenderer extends EntityRenderer<PWMeteorEntity> {
@@ -28,7 +29,7 @@ public class PWMeteorRenderer extends EntityRenderer<PWMeteorEntity> {
 
     public PWMeteorRenderer(EntityRendererProvider.Context ctx) {
         super(ctx);
-        this.model = new PWMeteorModel(ctx.bakeLayer(ModEntityRendererClient.STAND_FIREBALL_LAYER));
+        this.model = new PWMeteorModel(ctx.bakeLayer(ModEntityRendererClient.PW_METEOR_LAYER));
     }
 
     @Override
@@ -46,8 +47,11 @@ public class PWMeteorRenderer extends EntityRenderer<PWMeteorEntity> {
         poseStack.pushPose();
 
 
-        poseStack.mulPose(Axis.YP.rotationDegrees(entity.getYRot()));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(entity.getXRot()));
+        float yaw   = Mth.rotLerp(partialTick, entity.yRotO, entity.getYRot());
+        float pitch = Mth.lerp(partialTick, entity.xRotO, entity.getXRot());
+
+        poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
+        poseStack.mulPose(Axis.XP.rotationDegrees(pitch));
 
 
         float scale = entity.getMeteorScale();
@@ -74,21 +78,13 @@ public class PWMeteorRenderer extends EntityRenderer<PWMeteorEntity> {
     }
 
 
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE =
-            new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball.png");
+    public static final ResourceLocation PW_METEOR_TEXTURE =
+            new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_meteor.png");
 
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_2 =
-            new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_2.png");
 
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_3 =
-            new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_3.png");
 
     @Override
     public ResourceLocation getTextureLocation(PWMeteorEntity entity) {
-        int tc = entity.tickCount % 5;
-
-        if (tc > 3) return STAND_FIREBALL_TEXTURE_3;
-        if (tc > 1) return STAND_FIREBALL_TEXTURE_2;
-        return STAND_FIREBALL_TEXTURE;
+        return PW_METEOR_TEXTURE;
     }
 }
