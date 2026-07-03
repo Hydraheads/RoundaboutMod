@@ -128,6 +128,19 @@ public class ModSounds {
     public static SoundEvent SUMMON_CALIFORNIA_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_CALIFORNIA_ID);
 
 
+    public static final String CKB_STEAL = "ckb_steal";
+    public static final ResourceLocation CKB_STEAL_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CKB_STEAL);
+    public static SoundEvent CKB_STEAL_EVENT = SoundEvent.createVariableRangeEvent(CKB_STEAL_ID);
+
+    public static final String CKB_YES = "ckb_yes";
+    public static final ResourceLocation CKB_YES_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CKB_YES);
+    public static SoundEvent CKB_YES_EVENT = SoundEvent.createVariableRangeEvent(CKB_YES_ID);
+
+    public static final String CKB_NO = "ckb_no";
+    public static final ResourceLocation CKB_NO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CKB_NO);
+    public static SoundEvent CKB_NO_EVENT = SoundEvent.createVariableRangeEvent(CKB_NO_ID);
+
+
     public static final String STAR_SUMMON_SOUND = "summon_star";
     public static final ResourceLocation STAR_SUMMON_SOUND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+STAR_SUMMON_SOUND);
     public static SoundEvent STAR_SUMMON_SOUND_EVENT = SoundEvent.createVariableRangeEvent(STAR_SUMMON_SOUND_ID);

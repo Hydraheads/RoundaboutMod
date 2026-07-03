@@ -100,7 +100,16 @@ public class PowersCalifornia extends NewDashPreset {
 
     public void playUnfairSound(){
         if (self.level() instanceof ServerLevel sl){
-
+            this.self.level().playSound(null, this.self.blockPosition(),
+                    ModSounds.CKB_NO_EVENT, SoundSource.PLAYERS, 1F,
+                    (float) (1.00f + Math.random() * 0.01f));
+        }
+    }
+    public void playGotchaSound(){
+        if (self.level() instanceof ServerLevel sl){
+            this.self.level().playSound(null, this.self.blockPosition(),
+                    ModSounds.CKB_YES_EVENT, SoundSource.PLAYERS, 1F,
+                    (float) (1.00f + Math.random() * 0.01f));
         }
     }
 
@@ -296,6 +305,7 @@ public class PowersCalifornia extends NewDashPreset {
                 if (attackTimeDuring >= 5){
                     rewindSnap = DietSavedSecond.saveEntitySecond(self);
                     setCowerLeaveStance();
+                    playGotchaSound();
                     addToList(source.getEntity());
                 } else {
                     setNoStance();
@@ -487,6 +497,10 @@ public class PowersCalifornia extends NewDashPreset {
                         12, 2, 0.5,2, 0.015);
             }
             Iterator<Map.Entry<Entity, Integer>> it = hurtEntities.entrySet().iterator();
+            this.self.level().playSound(null, this.self.blockPosition(),
+                    ModSounds.CKB_STEAL_EVENT, SoundSource.PLAYERS, 1F,
+                    (float) (1.00f + Math.random() * 0.01f));
+
 
             while (it.hasNext()) {
                 Map.Entry<Entity, Integer> entry = it.next();

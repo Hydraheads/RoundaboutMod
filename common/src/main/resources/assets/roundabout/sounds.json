@@ -29,6 +29,24 @@
       "roundabout:ding"
     ]
   },
+  "ckb_steal": {
+    "subtitle": "sounds.roundabout.ckb_steal",
+    "sounds": [
+      "roundabout:ckb_steal"
+    ]
+  },
+  "ckb_yes": {
+    "subtitle": "sounds.roundabout.ckb_yes",
+    "sounds": [
+      "roundabout:ckb_yes"
+    ]
+  },
+  "ckb_no": {
+    "subtitle": "sounds.roundabout.ckb_no",
+    "sounds": [
+      "roundabout:ckb_no"
+    ]
+  },
   "ice_blast_charge": {
     "subtitle": "sounds.roundabout.ice_blast_charge",
     "sounds": [
