@@ -54,6 +54,7 @@ public abstract class ConfigManager {
         loadServerConfig();
         loadAdvancedConfig();
         ConfigManager.loadBlacklists();
+        ConfigManager.loadThrownItemDestructionBlacklist();
         loaded = true;
     }
 
@@ -121,6 +122,13 @@ public abstract class ConfigManager {
                 }
             }
         }
+    }
+    public static void loadThrownItemDestructionBlacklist()
+    {
+      if(getAdvancedConfig().unbreakableThrownItems != null){
+          MainUtil.unbreakableThrownItems.clear();
+          MainUtil.unbreakableThrownItems.addAll(getAdvancedConfig().unbreakableThrownItems);
+      }
     }
     public static void loadBlacklists()
     {
