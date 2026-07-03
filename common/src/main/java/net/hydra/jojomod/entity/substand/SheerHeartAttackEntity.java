@@ -182,7 +182,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 				if (!this.onGround()) {
 					flyngTicks++;
 				}else {
-					if (this.getDeltaMovement().length() > 0 && this.tickCount % 60 == 0) {
+					if (this.getDeltaMovement().length() > 0 && this.tickCount % 55 == 0) {
 						this.level().playSound(null, this.blockPosition(), ModSounds.SHA_MOVING_EVENT, SoundSource.AMBIENT, 0.5F, 1.0f);
 					}
 
