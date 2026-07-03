@@ -2176,12 +2176,8 @@ public class AbilityScapeBasis {
         /*First, attempts to hit what you are looking at*/
         if (!(distMax >= 0)) {
             distMax = this.getDistanceOut(User, this.getReach(), false);
+            distMax = Math.min(this.getDistanceOut(User, this.getReach(), false),distMax);
         }
-
-
-
-
-
         Entity targetEntity = this.rayCastEntity(User,distMax);
 
         if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
@@ -2206,6 +2202,11 @@ public class AbilityScapeBasis {
         }
         if (targetEntity instanceof EnderDragonPart EDP){
             targetEntity = EDP.parentMob;
+        }
+
+
+        if (targetEntity != null && distMax > 0 && targetEntity.distanceTo(User) > distMax) {
+            return null;
         }
 
         return targetEntity;

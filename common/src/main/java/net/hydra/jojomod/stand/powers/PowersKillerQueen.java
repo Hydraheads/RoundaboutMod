@@ -255,7 +255,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override public float getSwordMiningSpeed() { return 8F;}
     @Override public float getShovelMiningSpeed() {return 8F;}
 
-    public float getStrayCatAirBubbleSpeed() { return 0.3f;}
+    public float getStrayCatAirBubbleSpeed() { return 0.2f;}
 
     @Override public float getBarrageDamagePlayer(){ return 8; }
     @Override public float getBarrageDamageMob(){ return 18;}
@@ -1118,7 +1118,7 @@ public class PowersKillerQueen extends NewPunchingStand {
          if (!this.self.level().isClientSide()) {
              this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
              //if (chargedFinal >= maxKickTime && entity instanceof LivingEntity) {
-             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_SHIBA_EVENT, SoundSource.PLAYERS, 0.8F, shibapitch);
+             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_SHIBA_EVENT, SoundSource.PLAYERS, 0.95F, shibapitch);
              //}
          }
     }
@@ -1865,10 +1865,10 @@ public class PowersKillerQueen extends NewPunchingStand {
                     axis = axis.yRot((float)Math.PI);
                 }
 
-                Vec3 delta = axis.scale(flyingSpeed);
+                //Vec3 delta = axis.scale(flyingSpeed);
 
                 if (ent != null && kpi.leftImpulse != 0 && kpi.forwardImpulse != 0 && $$13 != 0) {
-                    this.bombBubble.setDeltaMovement(delta);
+                    this.bombBubble.shoot((double)axis.x, (double)axis.y, (double)axis.z, getStrayCatAirBubbleSpeed(), 0);
                 }
             }else {
                 this.bombBubble.setDeltaMovement(Vec3.ZERO);

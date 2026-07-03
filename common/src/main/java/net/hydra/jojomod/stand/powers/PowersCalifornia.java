@@ -1,7 +1,6 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
@@ -9,7 +8,10 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.DietSavedSecond;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -18,33 +20,40 @@ import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 
-import java.util.List;
+import java.util.*;
 
 public class PowersCalifornia extends NewDashPreset {
 
     public PowersCalifornia(LivingEntity self) {
         super(self);
     }
-
+    private final Map<Entity, Integer> hurtEntities = new HashMap<>();
     @Override
     /**Override to add disable config*/
     public boolean isStandEnabled(){
         return ClientNetworking.getAppropriateConfig().cinderellaSettings.enableCinderella;
     }
 
+    public DietSavedSecond rewindSnap = null;
     public static final byte DO_NOT_STEP_HERE = 0;
     public static final byte DO_NOT_HURT_ME = 1;
     public static final byte DO_NOT_LEAVE_ME = 2;
@@ -88,6 +97,76 @@ public class PowersCalifornia extends NewDashPreset {
         }
     }
 
+
+    public void playUnfairSound(){
+        if (self.level() instanceof ServerLevel sl){
+            this.self.level().playSound(null, this.self.blockPosition(),
+                    ModSounds.CKB_NO_EVENT, SoundSource.PLAYERS, 1F,
+                    (float) (1.00f + Math.random() * 0.01f));
+        }
+    }
+    public void playGotchaSound(){
+        if (self.level() instanceof ServerLevel sl){
+            this.self.level().playSound(null, this.self.blockPosition(),
+                    ModSounds.CKB_YES_EVENT, SoundSource.PLAYERS, 1F,
+                    (float) (1.00f + Math.random() * 0.01f));
+        }
+    }
+
+    /**When you deal damage, intercept or run code based off of it, or potentially cancel it*/
+    public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
+        if (!$$0.is(DamageTypes.THORNS)){
+            if (isDoNotHurt()){
+                if (hurtEntities.containsKey(target)){
+                    removeFromList(target);
+                    playUnfairSound();
+                }
+            }
+        }
+        return false;
+    }
+
+
+    public void removeFromList(Entity entity){
+        hurtEntities.remove(entity);
+        if (self instanceof ServerPlayer sp) {
+            S2CPacketUtil.sendGenericIntToClientPacket(
+                    sp,
+                    PacketDataIndex.S2C_INT_CKB_REMOVE,
+                    entity.getId()
+            );
+        }
+    }
+    public void addToList(Entity entity){
+        hurtEntities.put(entity, entity.tickCount + 200);
+        if (self instanceof ServerPlayer sp) {
+            S2CPacketUtil.sendGenericIntToClientPacket(
+                    sp,
+                    PacketDataIndex.S2C_INT_CKB_ADD,
+                    entity.getId()
+            );
+        }
+    }
+
+    private final Set<Integer> clientEntityIds = new HashSet<>();
+    public boolean isCapturedEntity(Entity entity) {
+        return clientEntityIds.contains(entity.getId());
+    }
+
+    public Set<Integer> getCapturedEntityIds() {
+        return clientEntityIds;
+    }
+    public void addToClientList(int entityId) {
+        clientEntityIds.add(entityId);
+    }
+
+    public void removeFromClientList(int entityId) {
+        clientEntityIds.remove(entityId);
+    }
+    public void clearClientList() {
+        clientEntityIds.clear();
+    }
+
     @Override
     public StandEntity getNewStandEntity(){
         return ModEntities.CALIFORNIA_KING_BED.create(this.getSelf().level());
@@ -127,7 +206,10 @@ public class PowersCalifornia extends NewDashPreset {
     public void powerActivate(PowerContext context) {
         switch (context)
         {
-            case SKILL_2_NORMAL -> {
+            case SKILL_1_NORMAL,SKILL_1_CROUCH -> {
+                tryCatchEnemies();
+            }
+            case SKILL_2_NORMAL,SKILL_2_CROUCH -> {
                 tryStrategyClient();
             }
             case SKILL_3_NORMAL -> {
@@ -141,7 +223,24 @@ public class PowersCalifornia extends NewDashPreset {
             }
         }
     }
+    @Override
+    public boolean isAttackIneptVisually(byte activeP, int slot){
 
+        if (slot == 1){
+            if (clientEntityIds.isEmpty()){
+                return true;
+            }
+        }
+        return super.isAttackIneptVisually(activeP,slot);
+    }
+    public void tryCatchEnemies(){
+        if (!clientEntityIds.isEmpty()) {
+            if (!onCooldown(PowerIndex.SKILL_1)) {
+                clearClientList();
+                tryPowerPacket(PowerIndex.POWER_1);
+            }
+        }
+    }
     public void tryStrategyClient(){
         if (isDoNotHurt()) {
             if (!onCooldown(PowerIndex.SKILL_2)) {
@@ -152,6 +251,7 @@ public class PowersCalifornia extends NewDashPreset {
     public void ruleSwitchClient(){
         if (!onCooldown(PowerIndex.SKILL_4)){
             this.self.playSound(ModSounds.MAGIC_DING_EVENT, 1F, 1.0F);
+            clearClientList();
             setCooldown(PowerIndex.SKILL_4,7);
             tryPowerPacket(PowerIndex.POWER_4);
         }
@@ -183,6 +283,13 @@ public class PowersCalifornia extends NewDashPreset {
         return getSkinNameT(skinId);
     }
 
+
+
+    /**If the standard left click input should be canceled while your stand is active*/
+    public boolean interceptAttack(){
+        return inCowerStance();
+    }
+
     public static Component getSkinNameT(byte skinId){
         if (skinId == CaliforniaKingBedEntity.PART_8_SKIN) {
             return Component.translatable("skins.roundabout.california_king_bed.base");
@@ -192,9 +299,32 @@ public class PowersCalifornia extends NewDashPreset {
         return Component.translatable("skins.roundabout.california_king_bed.base");
     }
 
+    public void onActuallyHurt(DamageSource source, float $$1){
+        if (source.getEntity() != null && !source.is(DamageTypes.THORNS)) {
+            if (inCowerStance()){
+                if (attackTimeDuring >= 5){
+                    rewindSnap = DietSavedSecond.saveEntitySecond(self);
+                    setCowerLeaveStance();
+                    playGotchaSound();
+                    addToList(source.getEntity());
+                } else {
+                    setNoStance();
+                }
+            }
+        }
+    }
+
+    @Override
+    public ResourceLocation getIconYes(int slot){
+        if (slot == 1 && !getCapturedEntityIds().isEmpty())
+            return StandIcons.SQUARE_PINK;
+        return super.getIconYes(slot);
+    }
+
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
 
+        setSkillIcon(context, x, y, 1, StandIcons.STEAL_MEMORIES, PowerIndex.SKILL_1);
 
         if (isDoNotHurt()){
             setSkillIcon(context, x, y, 2, StandIcons.HURT_RULE, PowerIndex.SKILL_2);
@@ -203,7 +333,6 @@ public class PowersCalifornia extends NewDashPreset {
         } else {
             setSkillIcon(context, x, y, 2, StandIcons.FORBID_RULE, PowerIndex.SKILL_EXTRA_2);
         }
-
 
         if (this.getSelf().fallDistance > 3) {
             setSkillIcon(context, x, y, 3, StandIcons.CALIFORNIA_FALL_CATCH, PowerIndex.SKILL_EXTRA);
@@ -257,12 +386,36 @@ public class PowersCalifornia extends NewDashPreset {
 
     public int timeSinceSwitch = 0;
     public void tickPower() {
+        super.tickPower();
         if (!self.level().isClientSide()) {
+            if (!hurtEntities.isEmpty() && self instanceof ServerPlayer sp) {
+                Iterator<Map.Entry<Entity, Integer>> it = hurtEntities.entrySet().iterator();
+
+                while (it.hasNext()) {
+                    Map.Entry<Entity, Integer> entry = it.next();
+
+                    Entity entity = entry.getKey();
+
+                    if (!entity.isAlive() || entry.getValue() <= entity.tickCount) {
+                        S2CPacketUtil.sendGenericIntToClientPacket(
+                                sp,
+                                PacketDataIndex.S2C_INT_CKB_REMOVE,
+                                entity.getId()
+                        );
+
+                        it.remove();
+                    }
+                }
+            }
             if (getActivePower() == PowerIndex.POWER_2) {
-                if (inCowerStance() && attackTimeDuring >= 20) {
-                    xTryPower(PowerIndex.NONE,true);
-                    timeSinceSwitch = 20;
-                    setCowerLeaveStance();
+                if (inCowerStance()) {
+                    if (attackTimeDuring >= 30) {
+                        xTryPower(PowerIndex.NONE, true);
+                        timeSinceSwitch = 12;
+                        setCowerLeaveStance();
+                    } else if (attackTimeDuring == 5) {
+                        Vec3 posPo = self.getEyePosition().add(self.getLookAngle().scale(1.5f));
+                    }
                 }
             } else {
                 if (inCowerStance()) {
@@ -273,12 +426,46 @@ public class PowersCalifornia extends NewDashPreset {
             if (inCowerLeaveStance()){
                 timeSinceSwitch--;
                 if (timeSinceSwitch <= 0){
-                    Roundabout.LOGGER.info("4");
                     setNoStance();
                 }
             }
         }
-        super.tickPower();
+    }
+
+    @Override
+    public float inputSpeedModifiers(float basis){
+        if (inCowerStance()) {
+            basis*=0.0f;
+        }
+        return super.inputSpeedModifiers(basis);
+    }
+    @Override
+    public boolean cancelJump(){
+        if (inCowerStance()) {
+            return true;
+        }
+        return super.cancelJump();
+    }
+
+    @Override
+    public boolean cancelSprintParticles(){
+        if (inCowerStance()) {
+            return true;
+        }
+        return super.cancelSprintParticles();
+    }
+
+    @Override
+    public boolean highlightsEntity(Entity ent,Player player){
+        if (!getCapturedEntityIds().isEmpty() && isCapturedEntity(ent)){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int highlightsEntityColor(Entity ent, Player player){
+        return 16254719;
     }
 
     @Override
@@ -295,8 +482,37 @@ public class PowersCalifornia extends NewDashPreset {
             switchRules();
         } else if (move == PowerIndex.POWER_2){
             cowerServer();
+        } else if (move == PowerIndex.POWER_1){
+            punishServer();
         }
         return super.setPowerOther(move,lastMove);
+    }
+
+    public void punishServer(){
+        if (!hurtEntities.isEmpty() && self instanceof ServerPlayer sp) {
+            if (rewindSnap != null){
+                rewindSnap.loadTime(self);
+                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PINK_SMOKE,
+                        this.getSelf().getX(), this.getSelf().getY() + 1, this.getSelf().getZ(),
+                        12, 2, 0.5,2, 0.015);
+            }
+            Iterator<Map.Entry<Entity, Integer>> it = hurtEntities.entrySet().iterator();
+            this.self.level().playSound(null, this.self.blockPosition(),
+                    ModSounds.CKB_STEAL_EVENT, SoundSource.PLAYERS, 1F,
+                    (float) (1.00f + Math.random() * 0.01f));
+
+
+            while (it.hasNext()) {
+                Map.Entry<Entity, Integer> entry = it.next();
+
+                Entity entity = entry.getKey();
+
+                if (entity.isAlive()) {
+                    entity.setDeltaMovement(0,0.2,0);
+                }
+            }
+            hurtEntities.clear();
+        }
     }
 
     public boolean inCowerStance(){
@@ -330,6 +546,7 @@ public class PowersCalifornia extends NewDashPreset {
     public void cowerServer(){
         if (!onCooldown(PowerIndex.SKILL_2)){
             if (self instanceof ServerPlayer pl){
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.HEEL_RAISE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.00f + Math.random() * 0.03f));
                 setActivePower(PowerIndex.POWER_2);
                 this.setAttackTimeDuring(0);
                 ((IPlayerEntity)pl).roundabout$SetPoseEmote((byte) 35);
@@ -337,7 +554,9 @@ public class PowersCalifornia extends NewDashPreset {
         }
     }
     public boolean isServerControlledCooldown(byte num){
-        if (num == PowerIndex.SKILL_2) {
+        if (num == PowerIndex.SKILL_2 ||
+                num == PowerIndex.SKILL_EXTRA ||
+                num == PowerIndex.SKILL_EXTRA_2) {
             return true;
         }
         return super.isServerControlledCooldown(num);
@@ -345,6 +564,8 @@ public class PowersCalifornia extends NewDashPreset {
 
     public void switchRules(){
         setCooldown(PowerIndex.SKILL_4,6);
+        rewindSnap = null;
+        hurtEntities.clear();
         nextRule();
         if (self instanceof ServerPlayer pl){
             pl.displayClientMessage(Component.translatable("text.roundabout.ckb_rule_"+currentRule).withStyle(ChatFormatting.LIGHT_PURPLE), true);

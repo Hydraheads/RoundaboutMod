@@ -345,6 +345,12 @@ public class ForgeSounds {
             register(ModSounds.DSP_SUMMON, ModSounds.DSP_SUMMON_ID);
     public static final RegistryObject<SoundEvent> SUMMON_CALIFORNIA_EVENT =
             register(ModSounds.SUMMON_CALIFORNIA, ModSounds.SUMMON_CALIFORNIA_ID);
+    public static final RegistryObject<SoundEvent> CKB_STEAL =
+            register(ModSounds.CKB_STEAL, ModSounds.CKB_STEAL_ID);
+    public static final RegistryObject<SoundEvent> CKB_YES =
+            register(ModSounds.CKB_YES, ModSounds.CKB_YES_ID);
+    public static final RegistryObject<SoundEvent> CKB_NO =
+            register(ModSounds.CKB_NO, ModSounds.CKB_NO_ID);
     public static final RegistryObject<SoundEvent> OVA_PLATINUM_BARRAGE_EVENT =
             register(ModSounds.OVA_PLATINUM_BARRAGE, ModSounds.OVA_PLATINUM_BARRAGE_ID);
     public static final RegistryObject<SoundEvent> OVA_PLATINUM_ORA =

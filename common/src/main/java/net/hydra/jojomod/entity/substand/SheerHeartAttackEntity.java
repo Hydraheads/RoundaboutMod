@@ -38,8 +38,11 @@ import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.Shapes;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -179,6 +182,10 @@ public class SheerHeartAttackEntity extends StandEntity {
 				if (!this.onGround()) {
 					flyngTicks++;
 				}else {
+					if (this.getDeltaMovement().length() > 0 && this.tickCount % 60 == 0) {
+						this.level().playSound(null, this.blockPosition(), ModSounds.SHA_MOVING_EVENT, SoundSource.AMBIENT, 0.5F, 1.0f);
+					}
+
 					flyngTicks = 0;
 				}
 				this.moveToTarget();
@@ -503,37 +510,29 @@ public class SheerHeartAttackEntity extends StandEntity {
 		return points;
 	}
 
-	public void tryClimb() {
-		/*float targetY = this.getBlockY();
-		if (this.haveToReturn) {
-			targetY = this.getUser().getBlockY();
+	public boolean climbDetect() {
+		if (this.noPhysics) {
+			return false;
+		} else {
+			float $$0 = 1.4f;
+			AABB $$1 = AABB.ofSize(this.getEyePosition(), (double)$$0, 1.0E-6, (double)$$0);
+			return BlockPos.betweenClosedStream($$1).anyMatch(($$1x) -> {
+				BlockState $$2 = this.level().getBlockState($$1x);
+				return !$$2.isAir() && $$2.isSuffocating(this.level(), $$1x) && Shapes.joinIsNotEmpty($$2.getCollisionShape(this.level(), $$1x).move((double)$$1x.getX(), (double)$$1x.getY(), (double)$$1x.getZ()), Shapes.create($$1), BooleanOp.AND);
+			});
 		}
-		else if (this.currentTarget == BLOCK) {
-			targetY = this.blockTarget.getY();
-		}else if (this.currentTarget == ENTITY) {
-			targetY = this.entityTarget.getBlockY();
-		}*/
+	}
 
-		//if (targetY - this.getBlockY() > 1.2) {
-			/*
-			float range = 1.0f;
-			Vec3 vec3d = this.position();
-			Vec3 vec3d2 = this.getViewVector(0);
-			Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
-			HitResult blockHit = this.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
-			*/
-			//Vec3 pos =  blockHit.getLocation();
+	public void tryClimb() {
+		if (this.climbDetect()) {
+			Vec3 mov = this.getDeltaMovement();
+			this.setDeltaMovement(mov.x, 0.6f, mov.y);
+		}
 
-			// blockHit.getType() == HitResult.Type.BLOCK &&
-			if (this.isTechnicallyInImpassableWall()) {
-				Vec3 mov = this.getDeltaMovement();
-				this.setDeltaMovement(mov.x, 0.6f, mov.y);
-			}
-		//}
 	}
 	@Override
 	protected void playStepSound(BlockPos blockPos, BlockState blockState) {
-		this.playSound(ModSounds.KILLER_QUEEN_SHA_MOVING_EVENT, 0.15f, 1.0f);
+		//this.playSound(ModSounds.KILLER_QUEEN_SHA_MOVING_EVENT, 0.15f, 1.0f);
 
 		//SoundType soundType = blockState.getSoundType();
 		//this.playSound(soundType.getStepSound(), soundType.getVolume() * 0.15f, soundType.getPitch());

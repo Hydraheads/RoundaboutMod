@@ -150,6 +150,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
     public void tick() {
         if (!this.level().isClientSide()) {
+
             if (this.hasTimeLimit) {
                 this.lifeSpan--;
             }
@@ -164,7 +165,10 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                 Entity owner = this.getOwner();
                 this.shootFromRotationDeltaAgnostic2(owner, owner.getXRot(), owner.getYRot(), 1.0F, getSped());
             }
-
+        }else if( this.tickCount % 40 == 9) {
+            this.level().addAlwaysVisibleParticle(ModParticles.AIR_CRACKLE, true,
+                    this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(),
+                    0, 0, 0);
         }
         super.tick();
     }
@@ -309,9 +313,11 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
                 SoundSource.PLAYERS, 2F, (float)(0.98+(Math.random()*0.04)));
         if (!this.level().isClientSide()){
-            ((ServerLevel) this.level()).sendParticles(ModParticles.SMALL_EXPLOSION,
-                    this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
-                    1, 0, 0,0, 0.015);
+            if (this.tickCount % 40 == 9) {
+                this.level().addAlwaysVisibleParticle(ModParticles.AIR_CRACKLE, true,
+                        this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(),
+                        0, 0, 0);
+            }
         }
 
         this.discard();

@@ -57,6 +57,9 @@ public class FabricSounds {
         addSound(ModSounds.OVA_PLATINUM_ORA_4_ID, ModSounds.OVA_PLATINUM_ORA_4_EVENT);
         addSound(ModSounds.DSP_SUMMON_ID, ModSounds.DSP_SUMMON_EVENT);
         addSound(ModSounds.SUMMON_CALIFORNIA_ID, ModSounds.SUMMON_CALIFORNIA_EVENT);
+        addSound(ModSounds.CKB_STEAL_ID, ModSounds.CKB_STEAL_EVENT);
+        addSound(ModSounds.CKB_YES_ID, ModSounds.CKB_YES_EVENT);
+        addSound(ModSounds.CKB_NO_ID, ModSounds.CKB_NO_EVENT);
 
         addSound(ModSounds.OVA_BARRAGE_ID, ModSounds.OVA_BARRAGE_EVENT);
         addSound(ModSounds.OVA_BARRAGE_2_ID, ModSounds.OVA_BARRAGE_2_EVENT);
