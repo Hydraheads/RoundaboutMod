@@ -140,7 +140,7 @@ public class MoldSporesEntity extends StandEntity {
                             //     lifetime += 200;
                             //     range += 4;
                             //}
-                            if (entity instanceof Player) {
+                            if (MainUtil.getReducedDamage(entity)) {
                                 entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), 4 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGPlayersMultiplier / 100F));
                             } else {
                                 entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), 8 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGMobsMultiplier / 100F));

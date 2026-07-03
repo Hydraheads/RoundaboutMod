@@ -161,11 +161,14 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                 return;
             }
 
-            if (this.followOwnerView) {
+            if (this.followOwnerView && !(((StandUser)this.getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ
+                    && this.isKillerQueenBubble && PKQ.isPiloting())) {
+
                 Entity owner = this.getOwner();
                 this.shootFromRotationDeltaAgnostic2(owner, owner.getXRot(), owner.getYRot(), 1.0F, getSped());
             }
-        }else if( this.tickCount % 40 == 9) {
+
+        }else if( this.tickCount % 30 == 9) {
             this.level().addAlwaysVisibleParticle(ModParticles.AIR_CRACKLE, true,
                     this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(),
                     0, 0, 0);
@@ -192,6 +195,12 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         if (!this.level().isClientSide()){
             standUserUUID = User.getUUID();
         }
+    }
+
+    public boolean canSeeBubble(Entity ent) {
+        float dist = this.distanceTo(ent);
+
+        return dist < 6.0f || this.ownedBy(ent);
     }
 
     /**Bubbles Don't alert skulk at all*/
@@ -331,6 +340,17 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         this.entityData.define(USER_ID, -1);
         this.entityData.define(SPEED, 1F);
         this.entityData.define(SKIN, (byte)0);
+    }
+
+    @Override
+    public void shoot(double $$0, double $$1, double $$2, float $$3, float $$4) {
+        Vec3 $$5 = (new Vec3($$0, $$1, $$2)).normalize().add(this.random.triangle((double)0.0F, 0.0172275 * (double)$$4), this.random.triangle((double)0.0F, 0.0172275 * (double)$$4), this.random.triangle((double)0.0F, 0.0172275 * (double)$$4)).scale((double)$$3);
+        this.setDeltaMovement($$5);
+        double $$6 = $$5.horizontalDistance();
+        this.setYRot((float)(Mth.atan2($$5.x, $$5.z) * (double)(180F / (float)Math.PI)));
+        this.setXRot((float)(Mth.atan2($$5.y, $$6) * (double)(180F / (float)Math.PI)));
+        this.yRotO = this.getYRot();
+        this.xRotO = this.getXRot();
     }
 
     public void shootFromRotationDeltaAgnosticR(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
