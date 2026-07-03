@@ -1100,6 +1100,11 @@ public class MainUtil {
                 return stack;
             }
 
+            byte posByte2 = ((IPlayerEntity) pl).roundabout$GetPoseEmote();
+            if (posByte2 == 35){
+                return ItemStack.EMPTY;
+            }
+
             if (su.roundabout$isPossessed()) {
                 return ItemStack.EMPTY;
             }

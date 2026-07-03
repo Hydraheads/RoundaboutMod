@@ -247,6 +247,13 @@ public class PowersCalifornia extends NewDashPreset {
         return getSkinNameT(skinId);
     }
 
+
+
+    /**If the standard left click input should be canceled while your stand is active*/
+    public boolean interceptAttack(){
+        return inCowerStance();
+    }
+
     public static Component getSkinNameT(byte skinId){
         if (skinId == CaliforniaKingBedEntity.PART_8_SKIN) {
             return Component.translatable("skins.roundabout.california_king_bed.base");
@@ -364,15 +371,12 @@ public class PowersCalifornia extends NewDashPreset {
             }
             if (getActivePower() == PowerIndex.POWER_2) {
                 if (inCowerStance()) {
-                    if (attackTimeDuring >= 20) {
+                    if (attackTimeDuring >= 30) {
                         xTryPower(PowerIndex.NONE, true);
                         timeSinceSwitch = 12;
                         setCowerLeaveStance();
                     } else if (attackTimeDuring == 5) {
-                        Vec3 posPo = self.getEyePosition().add(self.getLookAngle().scale(1f));
-                        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.STAR,
-                                posPo.x, posPo.y, posPo.z,
-                                0, 0, 0, 0, 0.8);
+                        Vec3 posPo = self.getEyePosition().add(self.getLookAngle().scale(1.5f));
                     }
                 }
             } else {

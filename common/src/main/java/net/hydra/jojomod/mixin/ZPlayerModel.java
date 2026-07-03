@@ -142,7 +142,8 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
 
             byte posByte = ((IPlayerEntity) $$0).roundabout$GetPos2();
-            if (posByte == PlayerPosIndex.GUARD) {
+            byte posByte2 = ((IPlayerEntity) $$0).roundabout$GetPoseEmote();
+            if (posByte == PlayerPosIndex.GUARD || posByte2 == 35) {
                 this.rightArm.yRot = 0.1F;
                 this.leftArm.yRot = -0.1F;
 

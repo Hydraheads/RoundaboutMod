@@ -1160,7 +1160,7 @@ public abstract class InputEvents implements IInputEvents {
                     options.keyLeft.isDown() || options.keyRight.isDown() || options.keyJump.isDown())
                             && poseEmote != Poses.COWER)
                             ||
-                    player.isUsingItem() || player.swinging || player.hurtTime > 0){
+                    player.isUsingItem() || player.swinging || (player.hurtTime > 0 && poseEmote != Poses.COWER)){
                         ((IPlayerEntity) player).roundabout$SetPos(Poses.NONE.id);
                         C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_STRIKE_POSE,Poses.NONE.id);
                     }

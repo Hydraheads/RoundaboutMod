@@ -5,6 +5,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.AccessLoweringRenderer;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
@@ -236,10 +238,13 @@ public abstract class ZItemInHandRenderer {
             return;
         }
 
+        byte posByte2 = ((IPlayerEntity) abstractClientPlayer).roundabout$GetPoseEmote();
         if (abstractClientPlayer != null && ((StandUser)abstractClientPlayer).roundabout$getEffectiveCombatMode() && !abstractClientPlayer.isUsingItem() ||
-                AnubisLayer.shouldRender(abstractClientPlayer) != null || abstractClientPlayer.getItemInHand(interactionHand).is(ModItems.ANUBIS_ITEM)) {
+                AnubisLayer.shouldRender(abstractClientPlayer) != null || abstractClientPlayer.getItemInHand(interactionHand).is(ModItems.ANUBIS_ITEM) ||
+                posByte2 == 35) {
+            ((AccessLoweringRenderer)this).rdbt$assertSelf();
 
-            if (PowerTypes.isBrawling(abstractClientPlayer)){
+            if (PowerTypes.isBrawling(abstractClientPlayer) || posByte2 == 35){
                 boolean $$10 = interactionHand == InteractionHand.MAIN_HAND;
                 if ($$10){
                     poseStack.pushPose();
