@@ -554,7 +554,9 @@ public class PowersCalifornia extends NewDashPreset {
         }
     }
     public boolean isServerControlledCooldown(byte num){
-        if (num == PowerIndex.SKILL_2) {
+        if (num == PowerIndex.SKILL_2 ||
+                num == PowerIndex.SKILL_EXTRA ||
+                num == PowerIndex.SKILL_EXTRA_2) {
             return true;
         }
         return super.isServerControlledCooldown(num);
