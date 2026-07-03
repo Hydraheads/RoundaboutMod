@@ -859,7 +859,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (!onCooldown(PowerIndex.SKILL_2)) {
 
             if (self instanceof Mob){
-                this.setCooldown(PowerIndex.SKILL_2, 320);
+                this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().whiteAlbumSettings.twisterCooldownv2+10);
             } else {
                 this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().whiteAlbumSettings.twisterCooldownv2);
             }
