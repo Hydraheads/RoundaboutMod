@@ -509,8 +509,12 @@ public class Config implements Cloneable {
         public Boolean moisturePoppingPlacesLiquidsInAir;
         @BooleanOption(group = "inherit", value = false)
         public Boolean frictionStopsJumping;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean directFrictionStopsJumping;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer frictionStealingDurationInTicks;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer playerFrictionStealingDurationInTicks;
         @BooleanOption(group = "inherit", value = true)
         public Boolean bossesCannotLoseFriction;
         @BooleanOption(group = "inherit", value = true)

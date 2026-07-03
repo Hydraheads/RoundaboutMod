@@ -417,7 +417,11 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             }
             theatricPop();
         } else if (this.getPlunderType() == PlunderTypes.FRICTION.id) {
-            lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.frictionStealingDurationInTicks;
+            if (this.getEntityStolen() > 0 && this.level().getEntity(this.getEntityStolen()) instanceof Player PL){
+                lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.playerFrictionStealingDurationInTicks;
+            } else {
+                lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.frictionStealingDurationInTicks;
+            }
             theatricPop();
         }
     }
