@@ -97,8 +97,36 @@ public class PowersCalifornia extends NewDashPreset {
         }
     }
 
-    public void removeFromList(Entity entity){
 
+    public void playUnfairSound(){
+        if (self.level() instanceof ServerLevel sl){
+
+        }
+    }
+
+    /**When you deal damage, intercept or run code based off of it, or potentially cancel it*/
+    public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
+        if (!$$0.is(DamageTypes.THORNS)){
+            if (isDoNotHurt()){
+                if (hurtEntities.containsKey(target)){
+                    removeFromList(target);
+                    playUnfairSound();
+                }
+            }
+        }
+        return false;
+    }
+
+
+    public void removeFromList(Entity entity){
+        hurtEntities.remove(entity);
+        if (self instanceof ServerPlayer sp) {
+            S2CPacketUtil.sendGenericIntToClientPacket(
+                    sp,
+                    PacketDataIndex.S2C_INT_CKB_REMOVE,
+                    entity.getId()
+            );
+        }
     }
     public void addToList(Entity entity){
         hurtEntities.put(entity, entity.tickCount + 200);
@@ -455,8 +483,8 @@ public class PowersCalifornia extends NewDashPreset {
             if (rewindSnap != null){
                 rewindSnap.loadTime(self);
                 ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PINK_SMOKE,
-                        this.getSelf().getX(), this.getSelf().getY() + 0.3, this.getSelf().getZ(),
-                        10, 2, 0.5,2, 0.015);
+                        this.getSelf().getX(), this.getSelf().getY() + 1, this.getSelf().getZ(),
+                        12, 2, 0.5,2, 0.015);
             }
             Iterator<Map.Entry<Entity, Integer>> it = hurtEntities.entrySet().iterator();
 
