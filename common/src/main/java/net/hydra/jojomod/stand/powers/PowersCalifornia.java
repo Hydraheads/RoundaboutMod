@@ -399,22 +399,25 @@ public class PowersCalifornia extends NewDashPreset {
 
     public void doTheStepRule(){
         if (!this.self.level().isClientSide()){
+            if (!onCooldown(PowerIndex.SKILL_EXTRA)) {
+                setCooldown(PowerIndex.SKILL_EXTRA, 15);
 
-            Vector3f newVec = new Vector3f((float) (spawnPos.getX()+0.5),
-                    (float) (spawnPos.getY() + 1),
-                    (float) (spawnPos.getZ() + 0.5));
+                Vector3f newVec = new Vector3f((float) (spawnPos.getX() + 0.5),
+                        (float) (spawnPos.getY() + 1),
+                        (float) (spawnPos.getZ() + 0.5));
 
-            StepRuleEntity step =
-                    // slightly off to not z-fight
-                    new StepRuleEntity(
-                            self.level(),
-                            newVec.x,
-                            newVec.y,
-                            newVec.z
-                    );
-            step.userEntity = self;
-            step.timing = 200;
-            self.level().addFreshEntity(step);
+                StepRuleEntity step =
+                        // slightly off to not z-fight
+                        new StepRuleEntity(
+                                self.level(),
+                                newVec.x,
+                                newVec.y,
+                                newVec.z
+                        );
+                step.userEntity = self;
+                step.timing = 200;
+                self.level().addFreshEntity(step);
+            }
         }
     }
 
