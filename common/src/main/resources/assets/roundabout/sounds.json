@@ -365,6 +365,48 @@
       "roundabout:killer_queen_shiba"
     ]
   },
+  "killer_queen_shibaba": {
+    "subtitle": "sounds.roundabout.killer_queen_shibaba",
+    "sounds": [
+      "roundabout:killer_queen_shibaba"
+    ]
+  },
+  "sha_jump": {
+    "subtitle": "sounds.roundabout.sha_jump",
+    "sounds": [
+      "roundabout:sha_jump"
+    ]
+  },
+  "sha_cracked_dede": {
+    "subtitle": "sounds.roundabout.sha_cracked_dede",
+    "sounds": [
+      "roundabout:sha_cracked_dede"
+    ]
+  },
+  "sha_cracked_kocchi": {
+    "subtitle": "sounds.roundabout.sha_cracked_kocchi",
+    "sounds": [
+      "roundabout:sha_cracked_kocchi"
+    ]
+  },
+  "sha_dededede": {
+    "subtitle": "sounds.roundabout.sha_dededede",
+    "sounds": [
+      "roundabout:sha_dededede"
+    ]
+  },
+  "sha_kocchi_2": {
+    "subtitle": "sounds.roundabout.sha_kocchi_2",
+    "sounds": [
+      "roundabout:sha_kocchi_2"
+    ]
+  },
+  "sha_kocchi_1": {
+    "subtitle": "sounds.roundabout.sha_kocchi_1",
+    "sounds": [
+      "roundabout:sha_kocchi_1"
+    ]
+  },
   "stray_cat_shoot": {
     "subtitle": "sounds.roundabout.stray_cat_shoot",
     "sounds": [

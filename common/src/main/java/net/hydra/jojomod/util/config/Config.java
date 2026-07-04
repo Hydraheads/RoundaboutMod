@@ -470,7 +470,7 @@ public class Config implements Cloneable {
         public Integer kickMinimumCooldown;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer sheerHeartAttackCooldown;
-        @IntOption(group = "inherit", value = 8, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
         public Integer sheerHeartAttackMaxExplosions;
         @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
         public Integer mobPlantDesintegrationDamage;

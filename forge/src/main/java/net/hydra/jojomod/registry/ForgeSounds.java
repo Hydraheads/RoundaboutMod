@@ -275,8 +275,24 @@ public class ForgeSounds {
             register(ModSounds.KILLER_QUEEN_PUNCH, ModSounds.KILLER_QUEEN_PUNCH_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHIBA_EVENT =
             register(ModSounds.KILLER_QUEEN_SHIBA, ModSounds.KILLER_QUEEN_SHIBA_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHIBABA_EVENT =
+            register(ModSounds.KILLER_QUEEN_SHIBABA, ModSounds.KILLER_QUEEN_SHIBABA_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHA_MOVING_EVENT =
             register(ModSounds.KILLER_QUEEN_SHA_MOVING, ModSounds.KILLER_QUEEN_SHA_MOVING_ID);
+    public static final RegistryObject<SoundEvent> SHA_JUMP_EVENT =
+            register(ModSounds.SHA_JUMP, ModSounds.SHA_JUMP_ID);
+
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHA_KOCCHI_1_EVENT =
+            register(ModSounds.KILLER_QUEEN_SHA_KOCCHI_1, ModSounds.KILLER_QUEEN_SHA_KOCCHI_1_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHA_KOCCHI_2_EVENT =
+            register(ModSounds.KILLER_QUEEN_SHA_KOCCHI_2, ModSounds.KILLER_QUEEN_SHA_KOCCHI_2_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHA_DEDEDEDE_EVENT =
+            register(ModSounds.KILLER_QUEEN_SHA_DEDEDEDE, ModSounds.KILLER_QUEEN_SHA_DEDEDEDE_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHA_CRACKED_DEDE_EVENT =
+            register(ModSounds.KILLER_QUEEN_SHA_CRACKED_DEDE, ModSounds.KILLER_QUEEN_SHA_CRACKED_DEDE_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHA_CRACKED_KOCCHI_EVENT =
+            register(ModSounds.KILLER_QUEEN_SHA_CRACKED_KOCCHI, ModSounds.KILLER_QUEEN_SHA_CRACKED_KOCCHI_ID);
+
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHA_SUMMON_EVENT =
             register(ModSounds.KILLER_QUEEN_SHA_SUMMON, ModSounds.KILLER_QUEEN_SHA_SUMMON_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_BARRAGE_EVENT =
