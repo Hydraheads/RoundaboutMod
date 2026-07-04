@@ -82,6 +82,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public ManhattanTransferSettings manhattanTransferSettings;
     @NestedOption(group = "modded")
+    public BlackSabbathSettings blackSabbathSettings;
+    @NestedOption(group = "modded")
     public HeyYaSettings heyYaSettings;
     @NestedOption(group = "modded")
     public MandomSettings mandomSettings;
@@ -862,9 +864,13 @@ public class Config implements Cloneable {
         public Float manhattanAutoShootingRange;
         @BooleanOption(group = "inherit", value = false)
         public Boolean windVisionUsesNightVision;
-
     }
-
+    public static class BlackSabbathSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableBlackSabbath;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer fingerBiteCooldown;
+    }
     public static class CenturyBoySettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableCenturyBoy;

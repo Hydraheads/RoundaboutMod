@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.IItemEntityAccess;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.block.MiningAlertBlock;
 import net.hydra.jojomod.block.ModBlocks;
@@ -15,6 +16,8 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.item.MatchItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.mixin.InputEvents;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -38,11 +41,15 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Shadow;
 
@@ -57,7 +64,7 @@ public class PowersBlackSabbath extends NewDashPreset {
     @Override
     /**Override to add disable config*/
     public boolean isStandEnabled(){
-        return ClientNetworking.getAppropriateConfig().heyYaSettings.enableHeyYa;
+        return ClientNetworking.getAppropriateConfig().blackSabbathSettings.enableBlackSabbath;
     }
 
     @Override
@@ -98,27 +105,55 @@ public class PowersBlackSabbath extends NewDashPreset {
             }
             case SKILL_4_NORMAL, SKILL_4_CROUCH -> {
                 if(!onCooldown(PowerIndex.SKILL_4)) {
-                    if(this.isClient()) {
-                        this.setCooldown(PowerIndex.SKILL_4, 20);
-                    }
+                    biteFingersClient();
                 }
             }
         }
     }
 
+    public int cooldownFinger = ClientNetworking.getAppropriateConfig().blackSabbathSettings.fingerBiteCooldown;
+
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         switch (move)
         {
-
+            case PowerIndex.POWER_4 -> {
+                if(this.getSelf().getHealth() > 1) {
+                    return biteFingers(this.self);
+                }
+            }
         }
         return super.setPowerOther(move,lastMove);
+    }
+
+    private void biteFingersClient(){
+        if (!this.onCooldown(PowerIndex.SKILL_4) && !isAttackIneptVisually(PowerIndex.SKILL_4, 4)) {
+            this.setCooldown(PowerIndex.SKILL_4, cooldownFinger);
+            this.tryPower(PowerIndex.POWER_4, true);
+            tryPowerPacket(PowerIndex.POWER_4);
+        }
+    }
+
+
+    private boolean biteFingers(LivingEntity ojiroSasame){
+        if(this.self.isAlive()) {
+            if (!isClient()) {
+                ojiroSasame.hurt(ModDamageTypes.of(ojiroSasame.level(), DamageTypes.GENERIC_KILL), 1F);
+                ItemEntity $$4 = new ItemEntity(ojiroSasame.level(), ojiroSasame.getX(),
+                        ojiroSasame.getY() + ojiroSasame.getBbHeight() - 0.10, ojiroSasame.getZ(),
+                        ModItems.MATCH.getDefaultInstance());
+                $$4.setPickUpDelay(0);
+                $$4.setDeltaMovement(Vec3.ZERO);
+                ojiroSasame.level().addFreshEntity($$4);
+                ojiroSasame.level().playSound(null, ojiroSasame, SoundEvents.GENERIC_EAT, SoundSource.PLAYERS, 0.85F, 1.0F);
+            }
+        }
+         return true;
     }
 
     public void openPolpoInventory(){
         if(this.self instanceof Player player){
             if(player.level() != null) {
-                player.level().addParticle(ModParticles.BLOOD,(double) player.getX(),(double) player.getY() + 1.25D,(double) player.getZ(), 0, 0, 0);
                 this.self.playSound(SoundEvents.ENDER_CHEST_OPEN);
             }
         }
@@ -139,6 +174,9 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
+        if(slot == 4 && this.getSelf().getHealth() <= 1) {
+            return  true;
+        }
         return super.isAttackIneptVisually(activeP, slot);
     }
 

@@ -2619,6 +2619,8 @@
   "config.roundabout.enableCinderella.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableManhattanTransfer.name": "Enable Stand",
   "config.roundabout.enableManhattanTransfer.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+  "config.roundabout.enableBlackSabbath.name": "Enable Stand",
+  "config.roundabout.enableBlackSabbath.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableSurvivor.name": "Enable Stand",
   "config.roundabout.enableSurvivor.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableWhiteAlbum.name": "Enable Stand",
@@ -2877,6 +2879,9 @@
   "config.roundabout.manhattanAutoShootingRange.desc":"Select how close does the stand need to be to shoot at an entity in automatic mode",
   "config.roundabout.windVisionUsesNightVision.name":"Wind Vision uses Potion Effect",
   "config.roundabout.windVisionUsesNightVision.desc":"If you have a mod like Bad Optimizations that deletes the vanilla code that wind vision uses to light things up, turn this on so it works regardless.",
+
+  "config.roundabout.fingerBiteCooldown.name":"Finger Bite Cooldown",
+  "config.roundabout.fingerBiteCooldown.desc":"Cooldown for biting your fingers (skill 4)",
 
   "config.roundabout.walkingHeartAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.walkingHeartAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
@@ -3682,6 +3687,7 @@
   "config.roundabout.justiceSettings.name": "Justice",
   "config.roundabout.cinderellaSettings.name": "Cinderella",
   "config.roundabout.manhattanTransferSettings.name": "Manhattan Transfer",
+  "config.roundabout.blackSabbathSettings.name": "Black Sabbath",
   "config.roundabout.centuryBoySettings.name": "20cb",
   "config.roundabout.heyYaSettings.name": "Hey Ya",
   "config.roundabout.mandomSettings.name": "Mandom",
