@@ -1,6 +1,8 @@
 package net.hydra.jojomod.client.models.substand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
@@ -8,10 +10,13 @@ import net.hydra.jojomod.client.models.substand.StepRuleModel;
 import net.hydra.jojomod.entity.StepRuleEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 
 public class StepRuleRenderer extends EntityRenderer<StepRuleEntity> {
@@ -35,6 +40,15 @@ public class StepRuleRenderer extends EntityRenderer<StepRuleEntity> {
         //matrixStack.scale(0.95f, 0.95f, 0.95f);
 
         if (ClientUtil.canSeeStands(ClientPlayer)) {
+            matrixStack.pushPose();
+
+            VertexConsumer vertex = vertexConsumerProvider.getBuffer(RenderType.entityTranslucent(getTextureLocation(stepRuleEntity)));
+
+            matrixStack.mulPose(Axis.ZP.rotationDegrees(180f));
+            matrixStack.translate(0,-1.5,0);
+
+            model.renderToBuffer(matrixStack, vertex, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1f);
+            matrixStack.popPose();
              super.render(stepRuleEntity, 0, partialTicks, matrixStack, vertexConsumerProvider, i);
         }
     }

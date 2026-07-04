@@ -1,10 +1,7 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.entity.BlockWallEntity;
-import net.hydra.jojomod.entity.FogCloneEntity;
-import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.Zombiefish;
+import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
@@ -499,6 +496,14 @@ public class ForgeEntities {
                             clientTrackingRange(10)
                             .updateInterval(1).
                             build(new ResourceLocation(Roundabout.MOD_ID, "block_wall").toString())
+            );
+    public static final RegistryObject<EntityType<StepRuleEntity>> STEP_RULE =
+            ENTITY_TYPES.register("step_rule", () ->
+                    EntityType.Builder.<StepRuleEntity>of(StepRuleEntity::new, MobCategory.MISC)
+                            .sized(StepRuleEntity.dimensions, StepRuleEntity.dimensions).
+                            clientTrackingRange(10)
+                            .updateInterval(1).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "step_rule").toString())
             );
     public static final RegistryObject<EntityType<MetallicaKnifeEntity>> METALLICA_KNIFE =
             ENTITY_TYPES.register("metallica_knife", () ->

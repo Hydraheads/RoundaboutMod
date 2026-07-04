@@ -2394,6 +2394,12 @@ public class AbilityScapeBasis {
         Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
         HitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
         return blockHit.getLocation();
+    }  public BlockHitResult getRayBlockHit(Entity entity, float range){
+        Vec3 vec3d = entity.getEyePosition(0);
+        Vec3 vec3d2 = entity.getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+        BlockHitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
+        return blockHit;
     }
 
     public float getPivotPoint(Vector3d pointToRotate, Vector3d axisStart, Vector3d axisEnd) {

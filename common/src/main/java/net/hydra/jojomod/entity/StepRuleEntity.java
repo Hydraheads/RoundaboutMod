@@ -43,7 +43,6 @@ public class StepRuleEntity extends Entity {
     public boolean dropItem;
     public int timing = -1;
     protected static final EntityDataAccessor<BlockPos> DATA_START_POS;
-    protected static final EntityDataAccessor<Vector3f> DATA_FINAL_POS;
 
     public StepRuleEntity(EntityType<? extends StepRuleEntity> $$0, Level $$1) {
         super($$0, $$1);
@@ -53,7 +52,7 @@ public class StepRuleEntity extends Entity {
 
     public static final float dimensions = 1F;
 
-    public StepRuleEntity(Level $$0, double $$1, double $$2, double $$3, BlockState $$4) {
+    public StepRuleEntity(Level $$0, double $$1, double $$2, double $$3) {
         this(ModEntities.STEP_RULE, $$0);
         this.setPos($$1, $$2, $$3);
         this.setDeltaMovement(Vec3.ZERO);
@@ -70,16 +69,6 @@ public class StepRuleEntity extends Entity {
     public void setStartPos(BlockPos $$0) {
         this.entityData.set(DATA_START_POS, $$0);
     }
-    public void setDataFinalPos(Vector3f $$0) {
-        this.entityData.set(DATA_FINAL_POS, $$0);
-    }
-
-    public BlockPos getStartPos() {
-        return (BlockPos)this.entityData.get(DATA_START_POS);
-    }
-    public Vector3f getFinalPos() {
-        return (Vector3f) this.entityData.get(DATA_FINAL_POS);
-    }
 
     protected MovementEmission getMovementEmission() {
         return MovementEmission.NONE;
@@ -87,7 +76,6 @@ public class StepRuleEntity extends Entity {
 
     protected void defineSynchedData() {
         this.entityData.define(DATA_START_POS, BlockPos.ZERO);
-        this.entityData.define(DATA_FINAL_POS, new Vector3f(0,0,0));
     }
 
     public boolean isPickable() {
@@ -144,11 +132,13 @@ public class StepRuleEntity extends Entity {
 
         AABB wallBox = this.getBoundingBox();
 
+        AABB searchBox = wallBox.expandTowards(0, 1, 0);
+
         for (LivingEntity mob : level().getEntitiesOfClass(
                 LivingEntity.class,
-                wallBox.inflate(0.1))) {
+                searchBox)) {
 
-            if (mob.getBoundingBox().intersects(wallBox)) {
+            if (mob.getBoundingBox().intersects(searchBox)) {
                 mob.push(0, 0.2, 0);
             }
         }
@@ -187,7 +177,6 @@ public class StepRuleEntity extends Entity {
 
     static {
         DATA_START_POS = SynchedEntityData.defineId(StepRuleEntity.class, EntityDataSerializers.BLOCK_POS);
-        DATA_FINAL_POS = SynchedEntityData.defineId(StepRuleEntity.class, EntityDataSerializers.VECTOR3);
     }
 
     public boolean fireImmune() {
