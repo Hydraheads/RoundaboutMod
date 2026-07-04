@@ -1,6 +1,9 @@
 package net.hydra.jojomod.entity;
 
+import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersCalifornia;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
@@ -21,6 +24,7 @@ public class StepRuleEntity extends Entity {
     public boolean dropItem;
     public int timing = -1;
     public int timing2 = 0;
+    public Entity userEntity;
     protected static final EntityDataAccessor<BlockPos> DATA_START_POS;
 
     public StepRuleEntity(EntityType<? extends StepRuleEntity> $$0, Level $$1) {
@@ -115,16 +119,46 @@ public class StepRuleEntity extends Entity {
     public void tick() {
 
         if (!level().isClientSide()) {
-            if (timing > -1 && !((TimeStop)level()).inTimeStopRange(this)){
-                timing2++;
-                timing--;
-                if (timing <= 0){
-                    breakAndDiscard();
-                } else {
-                    if (timing2 >= 15){
-                        setTurnedBad(true);
+            if (userEntity instanceof LivingEntity LE &&
+                    ((StandUser)LE).roundabout$getStandPowers() instanceof PowersCalifornia pca) {
+                if (timing > -1 && !((TimeStop) level()).inTimeStopRange(this)) {
+                    timing2++;
+                    timing--;
+                    if (timing <= 0) {
+                        breakAndDiscard();
+                    } else {
+                        if (timing2 >= 15) {
+                            setTurnedBad(true);
+                        }
                     }
                 }
+
+                if (getTurnedBad()) {
+                    AABB wallBox = this.getBoundingBox();
+
+                    for (LivingEntity mob : level().getEntitiesOfClass(
+                            LivingEntity.class,
+                            wallBox)) {
+
+                        if (!(mob instanceof StandEntity se && se.getUser().getUUID() == LE.getUUID())) {
+                            if (mob.getBoundingBox().intersects(wallBox)) {
+                                if (mob.getUUID() == userEntity.getUUID()) {
+                                    pca.playUnfairSound();
+                                    pca.clearListServer();
+                                    discard();
+                                    break;
+                                } else {
+                                    if (!pca.hurtEntities.containsKey(mob)) {
+                                        pca.addToList(mob);
+                                        pca.playGotchaSound();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                discard();
             }
         } else {
             if (renderFadeIn < 20) {
@@ -134,16 +168,6 @@ public class StepRuleEntity extends Entity {
         super.tick();
         refreshDimensions();
 
-        AABB wallBox = this.getBoundingBox();
-
-        for (LivingEntity mob : level().getEntitiesOfClass(
-                LivingEntity.class,
-                wallBox)) {
-
-            if (mob.getBoundingBox().intersects(wallBox)) {
-                mob.push(0, 0.2, 0);
-            }
-        }
 
     }
 

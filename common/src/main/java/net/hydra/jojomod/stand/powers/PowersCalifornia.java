@@ -54,7 +54,7 @@ public class PowersCalifornia extends NewDashPreset {
     public PowersCalifornia(LivingEntity self) {
         super(self);
     }
-    private final Map<Entity, Integer> hurtEntities = new HashMap<>();
+    public final Map<Entity, Integer> hurtEntities = new HashMap<>();
     @Override
     /**Override to add disable config*/
     public boolean isStandEnabled(){
@@ -146,13 +146,15 @@ public class PowersCalifornia extends NewDashPreset {
         }
     }
     public void addToList(Entity entity){
-        hurtEntities.put(entity, entity.tickCount + 200);
-        if (self instanceof ServerPlayer sp) {
-            S2CPacketUtil.sendGenericIntToClientPacket(
-                    sp,
-                    PacketDataIndex.S2C_INT_CKB_ADD,
-                    entity.getId()
-            );
+        if (entity.isAlive()) {
+            hurtEntities.put(entity, entity.tickCount + 200);
+            if (self instanceof ServerPlayer sp) {
+                S2CPacketUtil.sendGenericIntToClientPacket(
+                        sp,
+                        PacketDataIndex.S2C_INT_CKB_ADD,
+                        entity.getId()
+                );
+            }
         }
     }
 
@@ -410,6 +412,7 @@ public class PowersCalifornia extends NewDashPreset {
                             newVec.y,
                             newVec.z
                     );
+            step.userEntity = self;
             step.timing = 200;
             self.level().addFreshEntity(step);
         }
@@ -438,6 +441,25 @@ public class PowersCalifornia extends NewDashPreset {
     @Override
     public boolean tryPower(int move, boolean forced) {
         return super.tryPower(move,forced);
+    }
+
+    public void clearListServer(){
+        if (!hurtEntities.isEmpty() && self instanceof ServerPlayer sp) {
+            Iterator<Map.Entry<Entity, Integer>> it = hurtEntities.entrySet().iterator();
+
+            while (it.hasNext()) {
+                Map.Entry<Entity, Integer> entry = it.next();
+
+                Entity entity = entry.getKey();
+                S2CPacketUtil.sendGenericIntToClientPacket(
+                        sp,
+                        PacketDataIndex.S2C_INT_CKB_REMOVE,
+                        entity.getId()
+                );
+
+                it.remove();
+            }
+        }
     }
 
     public int timeSinceSwitch = 0;
