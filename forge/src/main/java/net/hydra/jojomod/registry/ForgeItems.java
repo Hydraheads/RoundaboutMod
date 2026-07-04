@@ -702,6 +702,8 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAchtungBaby(null))));
     public static final RegistryObject<Item> STAND_DISC_MANHATTAN_TRANSFER = addToDiscTab(ITEMS.register("manhattan_transfer_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersManhattanTransfer(null))));
+    public static final RegistryObject<Item> STAND_DISC_BLACK_SABBATH = addToWIPTab(ITEMS.register("black_sabbath_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersBlackSabbath(null))));
     public static final RegistryObject<Item> STAND_DISC_SURVIVOR = addToDiscTab(ITEMS.register("survivor_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSurvivor(null))));
     public static final RegistryObject<Item> STAND_DISC_HEY_YA = addToDiscTab(ITEMS.register("hey_ya_disc",
