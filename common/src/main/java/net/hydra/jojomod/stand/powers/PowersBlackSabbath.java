@@ -5,27 +5,46 @@ import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.block.MiningAlertBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.gui.PowerInventoryMenu;
+import net.hydra.jojomod.client.gui.PowerInventoryScreen;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.mixin.InputEvents;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.Arrays;
 import java.util.List;
@@ -55,10 +74,10 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        //setSkillIcon(context, x, y, 1, StandIcons.DANGER_YAP_DISABLE, PowerIndex.SKILL_1);
+        setSkillIcon(context, x, y, 1, StandIcons.ANUBIS_EXP, PowerIndex.SKILL_1);
        // setSkillIcon(context, x, y, 2, StandIcons.MINING_YAP, PowerIndex.SKILL_2);
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
-        //setSkillIcon(context, x, y, 4, StandIcons.YAP_YAP, PowerIndex.SKILL_4);
+        setSkillIcon(context, x, y, 4, StandIcons.METALLICA_HEAL, PowerIndex.SKILL_4);
 
         super.renderIcons(context, x, y);
     }
@@ -68,10 +87,22 @@ public class PowersBlackSabbath extends NewDashPreset {
         /**Making dash usable on both key presses*/
         switch (context)
         {
+            case SKILL_1_NORMAL, SKILL_1_CROUCH ->{
+                if(!onCooldown(PowerIndex.SKILL_1)) {
+                    openPolpoInventory();
+                    this.setCooldown(PowerIndex.SKILL_1, 10);
+                }
+            }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 dash();
             }
-
+            case SKILL_4_NORMAL, SKILL_4_CROUCH -> {
+                if(!onCooldown(PowerIndex.SKILL_4)) {
+                    if(this.isClient()) {
+                        this.setCooldown(PowerIndex.SKILL_4, 20);
+                    }
+                }
+            }
         }
     }
 
@@ -82,6 +113,15 @@ public class PowersBlackSabbath extends NewDashPreset {
 
         }
         return super.setPowerOther(move,lastMove);
+    }
+
+    public void openPolpoInventory(){
+        if(this.self instanceof Player player){
+            if(player.level() != null) {
+                player.level().addParticle(ModParticles.BLOOD,(double) player.getX(),(double) player.getY() + 1.25D,(double) player.getZ(), 0, 0, 0);
+                this.self.playSound(SoundEvents.ENDER_CHEST_OPEN);
+            }
+        }
     }
 
     @Override
@@ -104,7 +144,6 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     @Override
     public void tickPower() {
-
         super.tickPower();
     }
 
