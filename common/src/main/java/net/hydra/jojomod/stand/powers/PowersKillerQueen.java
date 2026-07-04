@@ -321,6 +321,11 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
+    @Override
+    public Byte getLastHitSound(){
+        return 120;
+    }
+
     static final String strayCatTag = "hasStrayCat";
     static final String BitesTheDustTag = "hasBTD";
 
@@ -1001,7 +1006,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public SoundEvent getImpaleSound(){
-        return ModSounds.IMPALE_HIT_EVENT;
+        return ModSounds.KILLER_QUEEN_IMPALE_EVENT;
     }
 
     public void mobPlantImpact(Entity entity) {

@@ -347,6 +347,18 @@
         "roundabout:summon_killer_queen"
       ]
     },
+  "killer_queen_punch": {
+    "subtitle": "sounds.roundabout.killer_queen_punch",
+    "sounds": [
+      "roundabout:killer_queen_punch"
+    ]
+  },
+  "killer_queen_impale": {
+    "subtitle": "sounds.roundabout.killer_queen_impale",
+    "sounds": [
+      "roundabout:killer_queen_impale"
+    ]
+  },
   "killer_queen_shiba": {
     "subtitle": "sounds.roundabout.killer_queen_shiba",
     "sounds": [
