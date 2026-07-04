@@ -2229,11 +2229,6 @@ public class AbilityScapeBasis {
             targetEntity = EDP.parentMob;
         }
 
-
-        if (targetEntity != null && distMax > 0 && targetEntity.distanceTo(User) > distMax) {
-            return null;
-        }
-
         return targetEntity;
     }
 

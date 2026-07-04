@@ -227,7 +227,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (((StandUser)self).roundabout$getStandPowers() instanceof
                 PowersWhiteAlbum PWA &&
                 !(((StandUser)self).roundabout$getGuardBroken())
-                && hasStandActive(self)
+                && (hasStandActive(self) || self instanceof Mob)
         ){
             return true;
         }
@@ -1681,7 +1681,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
         } else {
             int barTexture = 0;
-            Entity TE = getTargetEntity(playerEntity, 3, getBrawlPunchAngle());
+            Entity TE = getTargetEntity(playerEntity, 2.9F, getBrawlPunchAngle());
             float attackTimeMax = getAttackTimeMax();
             if (attackTimeMax > 0) {
                 float attackTime = getAttackTime();
