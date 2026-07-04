@@ -67,10 +67,7 @@ import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 
@@ -2227,6 +2224,15 @@ public class AbilityScapeBasis {
         }
         if (targetEntity instanceof EnderDragonPart EDP){
             targetEntity = EDP.parentMob;
+        }
+
+
+        if (targetEntity != null && distMax > 0){
+            double distSq = targetEntity.getBoundingBox().distanceToSqr(User.position());
+
+            if (distSq > distMax * distMax) {
+                return null;
+            }
         }
 
         return targetEntity;
