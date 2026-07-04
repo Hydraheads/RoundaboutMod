@@ -39,6 +39,7 @@ public abstract class CenturyBoyStances {
     public abstract void knockback(double $$0, double $$1, double $$2);
 
     private static final Map<BlockPos, Integer> BLOCK_DMG_MAP = new HashMap<>();
+    private static final Map<UUID, Long> GROUND_STANCE_COOLDOWN = new HashMap<>();
 
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
     private void knockbackStance(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
@@ -68,9 +69,9 @@ public abstract class CenturyBoyStances {
                         }
 
                         if (entity.getType() == EntityType.IRON_GOLEM) {
-                            knockback((double) 2.8F, x * 2, z * 2);
+                            knockback(2.8F, x * 2, z * 2);
                         } else {
-                            knockback((double) 0.8F, x * 2, z * 2);
+                            knockback(0.8F, x * 2, z * 2);
                         }
                     }
 
@@ -126,7 +127,7 @@ public abstract class CenturyBoyStances {
                                 door.setOpen(null, level, state, targetPos, !isOpen);
 
                             }
-                        } else if (block instanceof TrapDoorBlock door) {
+                        } else if (block instanceof TrapDoorBlock) {
                             boolean isOpen = state.getValue(DoorBlock.OPEN);
                             level.setBlock(targetPos, state.setValue(TrapDoorBlock.OPEN, !isOpen), 3);
 
@@ -160,32 +161,24 @@ public abstract class CenturyBoyStances {
                     player.hurtMarked = true;
                     Level level = player.level();
 
-                    BlockPos impactPos = getClosestImpactBlock(player);
-                    int breakstat = (amount <= 12) ? 1 : (amount <= 18) ? 2 : (amount <= 35) ? 3 : 5;
-
-                    BlockPos[] blocks;
-
-
-                    if (impactPos.getX() == player.blockPosition().getX() && impactPos.getZ() == player.blockPosition().getZ()) {
-                        blocks = new BlockPos[]{
-                                impactPos, impactPos.north(), impactPos.south(),
-                                impactPos.east(), impactPos.west(), impactPos.north().east(),
-                                impactPos.north().west(), impactPos.south().east(), impactPos.south().west()
-                        };
-                    } else {
-                        blocks = new BlockPos[]{
-                                impactPos, impactPos.above(), impactPos.below(),
-                                impactPos.north(), impactPos.south(), impactPos.east(), impactPos.west(),
-                                impactPos.above().north(), impactPos.below().south()
-                        };
+                    long currentTime = System.currentTimeMillis();
+                    UUID playerUUID = player.getUUID();
+                    long lastTriggered = GROUND_STANCE_COOLDOWN.getOrDefault(playerUUID, 0L);
+                    if (currentTime - lastTriggered < 1000) {
+                        cir.setReturnValue(false);
+                        return;
                     }
+
+                    int breakstat = (amount <= 12) ? 2 : (amount <= 18) ? 3 : (amount <= 35) ? 5 : 10;
+
+                    List<BlockPos> blocks = getClosestImpactBlock(player);
 
                     for (BlockPos pos : blocks) {
                         BlockPos immut = pos.immutable();
                         BlockState state = level.getBlockState(immut);
 
 
-                        if (state.isAir() || state.getDestroySpeed(level, immut) < 0) continue;
+                        if (state.getDestroySpeed(level, immut) < 0) continue;
 
                         int currentDmg = BLOCK_DMG_MAP.getOrDefault(immut, 0);
                         int newDmg = currentDmg + breakstat;
@@ -197,6 +190,7 @@ public abstract class CenturyBoyStances {
                             level.destroyBlock(immut, true);
                             BLOCK_DMG_MAP.remove(immut);
                             level.destroyBlockProgress(crackId, immut, -1);
+                            GROUND_STANCE_COOLDOWN.put(playerUUID, currentTime);
                         } else {
                             BLOCK_DMG_MAP.put(immut, newDmg);
                             level.destroyBlockProgress(crackId, immut, newDmg);
@@ -208,29 +202,27 @@ public abstract class CenturyBoyStances {
         }
     }
 
-    private BlockPos getClosestImpactBlock(Player player) {
+    private List<BlockPos> getClosestImpactBlock(Player player) {
         Level level = player.level();
 
 
-        BlockPos floor = player.getOnPos().immutable();
-        if (!level.getBlockState(floor).isAir()) {
-            return floor;
-        }
+        BlockPos floor = player.blockPosition().immutable();
 
+        BlockPos[] poss = new BlockPos[]{floor, floor.north(), floor.south(), floor.west(), floor.east(),
+                floor.north().west(), floor.south().west(),floor.north().east(), floor.south().east(), floor.above(),
+                floor.below(), floor.above().north(), floor.below().north(), floor.above().south(), floor.below().south(),
+                floor.above().west(), floor.below().west(),floor.above().east(), floor.below().east(),
+                floor.above().north().west(), floor.below().north().west(), floor.above().north().east(), floor.below().north().east(),
+                floor.above().south().west(), floor.below().south().west(),floor.above().south().east(), floor.below().south().east()};
 
-        BlockPos feet = player.blockPosition().immutable();
-        if (!level.getBlockState(feet).isAir()) {
-            return feet;
-        }
+        List<BlockPos> trupos = new ArrayList<>();
 
-
-        BlockPos[] sides = {feet.north(), feet.south(), feet.east(), feet.west(), feet.above()};
-        for (BlockPos p : sides) {
-            if (!level.getBlockState(p).isAir()) {
-                return p.immutable();
+        for (int i = 0; i < poss.length; i++) {
+            if (!level.getBlockState(poss[i]).isAir()){
+                trupos.add(poss[i].immutable());
             }
         }
 
-        return floor;
+        return trupos;
     }
 }

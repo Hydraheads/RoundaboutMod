@@ -112,6 +112,8 @@ public class FabricItems {
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersPlanetWaves(null)));
     public static Item STAND_DISC_MANHATTAN_TRANSFER = registerItem("manhattan_transfer_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersManhattanTransfer(null)));
+    public static Item STAND_DISC_BLACK_SABBATH = registerItem("black_sabbath_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersBlackSabbath(null)));
     public static Item STAND_DISC_20_CENTURY_BOY = registerItem("20th_century_boy_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new Powers20thCenturyBoy(null)));
     public static Item STAND_DISC_HEY_YA = registerItem("hey_ya_disc",
@@ -609,6 +611,7 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_EMPEROR);
                         entries.accept(STAND_DISC_PLANET_WAVES);
                         entries.accept(MAX_STAND_DISC_PLANET_WAVES);
+                        entries.accept(STAND_DISC_BLACK_SABBATH);
 
 
                     }).build());
@@ -678,6 +681,7 @@ public class FabricItems {
         ModItems.MAX_STAND_DISC_KILLER_QUEEN = MAX_STAND_DISC_KILLER_QUEEN;
         ModItems.STAND_DISC_CINDERELLA = STAND_DISC_CINDERELLA;
         ModItems.STAND_DISC_MANHATTAN_TRANSFER = STAND_DISC_MANHATTAN_TRANSFER;
+        ModItems.STAND_DISC_BLACK_SABBATH = STAND_DISC_BLACK_SABBATH;
         ModItems.STAND_DISC_HEY_YA = STAND_DISC_HEY_YA;
         ModItems.STAND_DISC_MANDOM = STAND_DISC_MANDOM;
         ModItems.STAND_DISC_SURVIVOR = STAND_DISC_SURVIVOR;
