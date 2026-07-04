@@ -2226,15 +2226,6 @@ public class AbilityScapeBasis {
             targetEntity = EDP.parentMob;
         }
 
-
-        if (targetEntity != null && distMax > 0){
-            double distSq = targetEntity.getBoundingBox().distanceToSqr(User.position());
-
-            if (distSq > distMax * distMax) {
-                return null;
-            }
-        }
-
         return targetEntity;
     }
 
