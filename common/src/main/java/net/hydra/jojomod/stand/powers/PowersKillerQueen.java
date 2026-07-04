@@ -3,7 +3,6 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -12,13 +11,9 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
-import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
-import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
@@ -44,7 +39,6 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.ExplosionUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.CameraType;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
@@ -53,6 +47,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -82,8 +77,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.nbt.CompoundTag;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -97,7 +90,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override public StandPowers generateStandPowers(LivingEntity entity){ return new PowersKillerQueen(entity);}
     @Override public StandEntity getNewStandEntity(){ return ModEntities.KILLER_QUEEN.create(this.getSelf().level());}
 
-	// TODO Air bubble redirect
+	// TODO Air bubble redirect ( Remake)
 	// TODO Make bomb item
 	// TODO Bites The Dust
 	
@@ -133,8 +126,6 @@ public class PowersKillerQueen extends NewPunchingStand {
         SHA_NONE = 0,
         SHA_SEND = 1,
         SHA_RETREAT = 3;
-
-
 	
 	private byte currentBombStatus = BOMB_NONE;
     private byte currentShaStatus = SHA_NONE;
@@ -174,6 +165,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 	public StrayCatAirBubble bombBubble = null;
     public int bombBubbleID = -1;
 	public SheerHeartAttackEntity SHA = null;
+
+    public int detonateTimer = -1;
 
     public int plantInventorySlot=1;
 
@@ -263,6 +256,11 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override public float getBarrageDamagePlayer(){ return 8; }
     @Override public float getBarrageDamageMob(){ return 18;}
+
+    static int getDetonateWindup() {
+        return ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionActivationCooldown;
+    }
+
     public float getImpaleKnockback(){
         return 1.3F;
     }
@@ -321,6 +319,11 @@ public class PowersKillerQueen extends NewPunchingStand {
         } else {
             return (((float)this.chargedFinal/(float)maxKickTime)*punchD)+1;
         }
+    }
+
+    @Override
+    public Byte getLastHitSound(){
+        return SoundIndex.SPECIAL_MOVE_SOUND;
     }
 
     static final String strayCatTag = "hasStrayCat";
@@ -1003,7 +1006,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public SoundEvent getImpaleSound(){
-        return ModSounds.IMPALE_HIT_EVENT;
+        return ModSounds.KILLER_QUEEN_IMPALE_EVENT;
     }
 
     public void mobPlantImpact(Entity entity) {
@@ -1245,9 +1248,12 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void updateDetonate() {
-        if (this.attackTimeDuring >= ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionActivationCooldown) {
+        if (this.detonateTimer >= getDetonateWindup()) {
             this.setAttackTimeDuring(-10);
             this.explode();
+            this.detonateTimer = -1;
+        }else if (this.detonateTimer != -1) {
+            this.detonateTimer++;
         }
     }
 
@@ -2022,22 +2028,31 @@ public class PowersKillerQueen extends NewPunchingStand {
     public byte chooseBarrageSound(){ return SoundIndex.BARRAGE_CRY_SOUND;}
     
     @Override
-    protected Byte getSummonSound() { return SoundIndex.SUMMON_SOUND;}
+    protected Byte getSummonSound() {
+        return SoundIndex.SUMMON_SOUND;
+    }
     
     @Override
     public SoundEvent getSoundFromByte(byte soundChoice){
        if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND) {
     	   return ModSounds.KILLER_QUEEN_BARRAGE_EVENT;
        }else if (soundChoice == SoundIndex.SUMMON_SOUND) {
-    	   return ModSounds.KILLER_QUEEN_SUMMON_EVENT;
+           byte skin = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+           if (skin == DEADLY || skin == NIGHTMARE) {
+               return ModSounds.KILLER_QUEEN_SUMMON_EVENT_2;
+           } else if (skin == CREEPER) {
+               return SoundEvents.CREEPER_PRIMED;
+           }else {
+               return ModSounds.KILLER_QUEEN_SUMMON_EVENT_5;
+           }
        }else if (soundChoice == PowersKillerQueen.DETONATE) {
     	   return ModSounds.KILLER_QUEEN_DETONATE_EVENT;
-       }else if (soundChoice == PowersKillerQueen.EXPLOSION) {
-    	   return ModSounds.KILLER_QUEEN_EXPLOSION_EVENT;
        }else if (soundChoice == IMPALE_NOISE) {
            return ModSounds.IMPALE_CHARGE_EVENT;
        }else if (soundChoice == SHEER_HEART_ATTACK) {
            return ModSounds.KILLER_QUEEN_SHA_SUMMON_EVENT;
+       }else if (soundChoice == SoundIndex.SPECIAL_MOVE_SOUND) {
+           return ModSounds.KILLER_QUEEN_PUNCH_EVENT;
        }
        
         return super.getSoundFromByte(soundChoice);
@@ -2048,6 +2063,12 @@ public class PowersKillerQueen extends NewPunchingStand {
         if(this.currentBombStatus == BOMB_ENTITY) {
             if (this.getBombEntity() != null) {
                 return this.getSelf().hasLineOfSight(ent) && ent == this.getBombEntity();
+            }
+        }
+        if (this.currentBombStatus == BOMB_BUBBLE) {
+            Entity target = this.getTargetEntity(this.self, 30);
+            if (target != null) {
+                return ent == target && this.getSelf().hasLineOfSight(ent);
             }
         }
 
@@ -2063,6 +2084,11 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             }
         }
+
+        if (this.currentBombStatus == BOMB_BUBBLE) {
+            return 0x6e44b3;
+        }
+
         return super.highlightsEntityColor(ent, player);
     }
 
@@ -2303,8 +2329,6 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             ExplosionUtil.explodeEffects(vPos, level, ModParticles.KILLER_QUEEN_EXPLOSION, 0.6f);
             this.getSelf().level().playSound(null, bPos, ModSounds.KILLER_QUEEN_EXPLOSION_EVENT, SoundSource.PLAYERS, 0.65F, 1.0f);
-            //explosionSFX(vPos, 10);
-
         }
 		this.syncBombStatus(BOMB_NONE);
 		this.setPowerNone();
@@ -2316,7 +2340,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     	if (!this.isClient() && this.getActivePower() == PowerIndex.NONE) {
             this.playSoundsIfNearby(DETONATE, 27, true);
 
-            int detonateWindup = ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionActivationCooldown;
+            int detonateWindup = getDetonateWindup();
 
             if (this.currentBombStatus == BOMB_BLOCK || this.currentBombStatus == BLOCK_CONTACT) {
                 this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().killerQueenSettings.blockPlantCooldown + detonateWindup);
@@ -2360,6 +2384,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             }else {
                 this.setAttackTimeDuring(0);
+                this.detonateTimer = 0;
                 this.poseStand(OffsetIndex.GUARD);
                 this.animateStand(KillerQueenEntity.DETONATE);
                 this.setActivePower(DETONATE);

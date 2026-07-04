@@ -877,7 +877,7 @@ public int speedActivated = 0;
     }
     @Override
     public boolean cancelSprintJump(){
-        return getActivePower() == BLOOD_SUCK || getActivePower() == BLOOD_REGEN;
+        return getActivePower() == BLOOD_SUCK || getActivePower() == BLOOD_REGEN || super.cancelSprintJump();
     }
     @Override
     /**Cancel all sprinting*/

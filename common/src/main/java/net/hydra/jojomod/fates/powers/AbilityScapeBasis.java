@@ -67,10 +67,7 @@ import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 
@@ -1188,6 +1185,31 @@ public class AbilityScapeBasis {
         }
         ((StandUser) entity).roundabout$setDazed(dazeTime);
     }
+
+    public static void setDazedTrue(LivingEntity entity, byte dazeTime){
+        if (MainUtil.isBossMob(entity)){
+            /*Bosses can't be dazed**/
+            return;
+        }
+
+        /**Stand Drops item when user is dazed*/
+        StandEntity stand = getStandEntity2(entity);
+        if (stand != null && !stand.getHeldItem().isEmpty()){
+            double $$3 = stand.getEyeY() - 0.3F;
+            ItemEntity $$4 = new ItemEntity(stand.level(), stand.getX(), $$3, stand.getZ(), stand.getHeldItem());
+            $$4.setPickUpDelay(40);
+            $$4.setThrower(stand.getUUID());
+            stand.level().addFreshEntity($$4);
+            stand.setHeldItem(ItemStack.EMPTY);
+        }
+        if (dazeTime > 0){
+            ((StandUser) entity).roundabout$tryPower(PowerIndex.NONE,true);
+            ((StandUser) entity).roundabout$getStandPowers().animateStand(StandEntity.HURT_BY_BARRAGE);
+        } else {
+            ((StandUser) entity).roundabout$getStandPowers().animateStand(StandEntity.IDLE);
+        }
+        ((StandUser) entity).roundabout$setDazed(dazeTime);
+    }
     public void setDazedSafely(LivingEntity entity, byte dazeTime){
         if (dazeTime > 0){
             ((StandUser) entity).roundabout$tryPower(PowerIndex.NONE,true);
@@ -2205,8 +2227,12 @@ public class AbilityScapeBasis {
         }
 
 
-        if (targetEntity != null && distMax > 0 && targetEntity.distanceTo(User) > distMax) {
-            return null;
+        if (targetEntity != null && distMax > 0){
+            double distSq = targetEntity.getBoundingBox().distanceToSqr(User.position());
+
+            if (distSq > distMax * distMax) {
+                return null;
+            }
         }
 
         return targetEntity;
@@ -2368,6 +2394,12 @@ public class AbilityScapeBasis {
         Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
         HitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
         return blockHit.getLocation();
+    }  public BlockHitResult getRayBlockHit(Entity entity, float range){
+        Vec3 vec3d = entity.getEyePosition(0);
+        Vec3 vec3d2 = entity.getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+        BlockHitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
+        return blockHit;
     }
 
     public float getPivotPoint(Vector3d pointToRotate, Vector3d axisStart, Vector3d axisEnd) {

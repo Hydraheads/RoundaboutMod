@@ -4,7 +4,9 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.StepRuleEntity;
 import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -20,9 +22,12 @@ import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -37,7 +42,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 import java.util.*;
 
@@ -231,6 +239,11 @@ public class PowersCalifornia extends NewDashPreset {
                 return true;
             }
         }
+        if (slot == 2 && isDoNotStep()){
+            if (!canUseStepRule()){
+                return true;
+            }
+        }
         return super.isAttackIneptVisually(activeP,slot);
     }
     public void tryCatchEnemies(){
@@ -245,6 +258,13 @@ public class PowersCalifornia extends NewDashPreset {
         if (isDoNotHurt()) {
             if (!onCooldown(PowerIndex.SKILL_2)) {
                 tryPowerPacket(PowerIndex.POWER_2);
+            }
+        } else if (isDoNotStep()){
+            if (!onCooldown(PowerIndex.SKILL_EXTRA)) {
+                BlockHitResult result = getRayBlockHit(self,5);
+                if (!self.level().getBlockState(result.getBlockPos()).isAir()){
+                    tryBlockPosPowerPacket(PowerIndex.SKILL_EXTRA,result.getBlockPos());
+                }
             }
         }
     }
@@ -298,6 +318,9 @@ public class PowersCalifornia extends NewDashPreset {
         }
         return Component.translatable("skins.roundabout.california_king_bed.base");
     }
+
+
+
 
     public void onActuallyHurt(DamageSource source, float $$1){
         if (source.getEntity() != null && !source.is(DamageTypes.THORNS)) {
@@ -356,6 +379,39 @@ public class PowersCalifornia extends NewDashPreset {
                 icon = StandIcons.FORBID_RULE;
             }
             setSkillIcon(context, x, y, 4, icon, PowerIndex.SKILL_4);
+        }
+    }
+
+
+    public boolean canUseStepRule(){
+        BlockHitResult result = getRayBlockHit(self,5);
+        return !self.level().getBlockState(result.getBlockPos()).isAir();
+    }
+
+    @Override
+    public boolean tryBlockPosPower(int move, boolean forced, BlockPos pos) {
+        spawnPos = pos;
+        return super.tryBlockPosPower(move, forced,pos);
+    }
+    public BlockPos spawnPos = BlockPos.ZERO;
+
+    public void doTheStepRule(){
+        if (!this.self.level().isClientSide()){
+
+            Vector3f newVec = new Vector3f((float) (spawnPos.getX()+0.5),
+                    (float) (spawnPos.getY()),
+                    (float) (spawnPos.getZ() + 0.5));
+
+            StepRuleEntity step =
+                    // slightly off to not z-fight
+                    new StepRuleEntity(
+                            self.level(),
+                            newVec.x,
+                            newVec.y,
+                            newVec.z
+                    );
+            step.timing = 200;
+            self.level().addFreshEntity(step);
         }
     }
 
@@ -429,6 +485,11 @@ public class PowersCalifornia extends NewDashPreset {
                     setNoStance();
                 }
             }
+
+
+            if (hurtEntities.isEmpty() && rewindSnap != null){
+                rewindSnap = null;
+            }
         }
     }
 
@@ -484,6 +545,8 @@ public class PowersCalifornia extends NewDashPreset {
             cowerServer();
         } else if (move == PowerIndex.POWER_1){
             punishServer();
+        } else if (move == PowerIndex.SKILL_EXTRA){
+            doTheStepRule();
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -492,6 +555,7 @@ public class PowersCalifornia extends NewDashPreset {
         if (!hurtEntities.isEmpty() && self instanceof ServerPlayer sp) {
             if (rewindSnap != null){
                 rewindSnap.loadTime(self);
+                setCooldown(PowerIndex.SKILL_2,200);
                 ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PINK_SMOKE,
                         this.getSelf().getX(), this.getSelf().getY() + 1, this.getSelf().getZ(),
                         12, 2, 0.5,2, 0.015);
@@ -538,7 +602,7 @@ public class PowersCalifornia extends NewDashPreset {
     public void onPoseEmoteSwitch(byte from, byte to){
         if (!self.level().isClientSide()){
             if (from == 35 && !(to == 35)){
-                setCooldown(PowerIndex.SKILL_2,200);
+                setCooldown(PowerIndex.SKILL_2,160);
             }
         }
     }

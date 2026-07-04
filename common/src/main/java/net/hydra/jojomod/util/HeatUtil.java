@@ -144,7 +144,7 @@ public class HeatUtil {
                     heat = Mth.clamp(heat+sub,-110,0);
                     su.roundabout$setHeat(heat);
                 } if (heat <= -100){
-                    AbilityScapeBasis.setDazed(LE,(byte)3);
+                    AbilityScapeBasis.setDazedTrue(LE,(byte)3);
                     LE.hurtMarked = true;
                     LE.hasImpulse = true;
                     LE.setDeltaMovement(RotationUtil.vecPlayerToWorld(new Vec3(0,-0.4,0),

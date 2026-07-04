@@ -5403,10 +5403,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             return;
         }
 
-        if (ClientNetworking.getAppropriateConfig().softAndWetSettings.frictionStopsJumping) {
+        boolean frictionStop =
+                ClientNetworking.getAppropriateConfig().softAndWetSettings.frictionStopsJumping;
+        boolean frictionStop2 =
+                ClientNetworking.getAppropriateConfig().softAndWetSettings.directFrictionStopsJumping;
+        if (frictionStop || frictionStop2) {
             if (MainUtil.canHaveFrictionTaken(((LivingEntity) (Object) this))) {
-                if (((ILevelAccess) this.level()).roundabout$isFrictionPlundered(this.blockPosition()) ||
-                        ((ILevelAccess) this.level()).roundabout$isFrictionPlunderedEntity(this)
+                if ((frictionStop &&((ILevelAccess) this.level()).roundabout$isFrictionPlundered(this.blockPosition())) ||
+                        ((frictionStop2 || frictionStop) && ((ILevelAccess) this.level()).roundabout$isFrictionPlunderedEntity(this))
                 ) {
                     ci.cancel();
                     return;

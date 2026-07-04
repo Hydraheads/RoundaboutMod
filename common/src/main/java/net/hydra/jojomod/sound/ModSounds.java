@@ -611,6 +611,12 @@ public class ModSounds {
     public static final ResourceLocation STAND_BARRAGE_END_ID = new ResourceLocation(Roundabout.MOD_ID+":"+STAND_BARRAGE_END);
     public static SoundEvent STAND_BARRAGE_END_EVENT = SoundEvent.createVariableRangeEvent(STAND_BARRAGE_END_ID);
 
+    public static final String KILLER_QUEEN_IMPALE = "killer_queen_impale";
+    public static final ResourceLocation KILLER_QUEEN_IMPALE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_IMPALE);
+    public static SoundEvent KILLER_QUEEN_IMPALE_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_IMPALE_ID);
+    public static final String KILLER_QUEEN_PUNCH = "killer_queen_punch";
+    public static final ResourceLocation KILLER_QUEEN_PUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_PUNCH);
+    public static SoundEvent KILLER_QUEEN_PUNCH_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_PUNCH_ID);
     public static final String KILLER_QUEEN_SHIBA = "killer_queen_shiba";
     public static final ResourceLocation KILLER_QUEEN_SHIBA_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SHIBA);
     public static SoundEvent KILLER_QUEEN_SHIBA_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SHIBA_ID);
@@ -623,9 +629,26 @@ public class ModSounds {
     public static final String KILLER_QUEEN_BARRAGE = "killer_queen_barrage";
     public static final ResourceLocation KILLER_QUEEN_BARRAGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_BARRAGE);
     public static SoundEvent KILLER_QUEEN_BARRAGE_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_BARRAGE_ID);
+
     public static final String KILLER_QUEEN_SUMMON = "summon_killer_queen";
     public static final ResourceLocation KILLER_QUEEN_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SUMMON);
     public static SoundEvent KILLER_QUEEN_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SUMMON_ID);
+    public static final String KILLER_QUEEN_SUMMON_1 = "summon_killer_queen_1";
+    public static final ResourceLocation KILLER_QUEEN_SUMMON_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SUMMON_1);
+    public static SoundEvent KILLER_QUEEN_SUMMON_EVENT_1 = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SUMMON_1_ID);
+    public static final String KILLER_QUEEN_SUMMON_2 = "summon_killer_queen_2";
+    public static final ResourceLocation KILLER_QUEEN_SUMMON_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SUMMON_2);
+    public static SoundEvent KILLER_QUEEN_SUMMON_EVENT_2 = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SUMMON_2_ID);
+    public static final String KILLER_QUEEN_SUMMON_3 = "summon_killer_queen_3";
+    public static final ResourceLocation KILLER_QUEEN_SUMMON_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SUMMON_3);
+    public static SoundEvent KILLER_QUEEN_SUMMON_EVENT_3 = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SUMMON_3_ID);
+    public static final String KILLER_QUEEN_SUMMON_4 = "summon_killer_queen_4";
+    public static final ResourceLocation KILLER_QUEEN_SUMMON_4_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SUMMON_4);
+    public static SoundEvent KILLER_QUEEN_SUMMON_EVENT_4 = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SUMMON_4_ID);
+    public static final String KILLER_QUEEN_SUMMON_5 = "summon_killer_queen_5";
+    public static final ResourceLocation KILLER_QUEEN_SUMMON_5_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SUMMON_5);
+    public static SoundEvent KILLER_QUEEN_SUMMON_EVENT_5 = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SUMMON_5_ID);
+
     public static final String KILLER_QUEEN_DETONATE = "killer_queen_bomb_detonate";
     public static final ResourceLocation KILLER_QUEEN_DETONATE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_DETONATE);
     public static SoundEvent KILLER_QUEEN_DETONATE_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_DETONATE_ID);

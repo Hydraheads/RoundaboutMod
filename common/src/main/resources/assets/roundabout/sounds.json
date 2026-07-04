@@ -311,12 +311,54 @@
       "roundabout:killer_queen_barrage"
     ]
   },
+  "summon_killer_queen_5": {
+    "subtitle": "sounds.roundabout.summon_killer_queen_5",
+    "sounds": [
+      "roundabout:summon_killer_queen_5"
+    ]
+  },
+  "summon_killer_queen_4": {
+    "subtitle": "sounds.roundabout.summon_killer_queen_4",
+    "sounds": [
+      "roundabout:summon_killer_queen_4"
+    ]
+  },
+  "summon_killer_queen_3": {
+    "subtitle": "sounds.roundabout.summon_killer_queen_3",
+    "sounds": [
+      "roundabout:summon_killer_queen_3"
+    ]
+  },
+  "summon_killer_queen_2": {
+    "subtitle": "sounds.roundabout.summon_killer_queen_2",
+    "sounds": [
+      "roundabout:summon_killer_queen_2"
+    ]
+  },
+  "summon_killer_queen_1": {
+    "subtitle": "sounds.roundabout.summon_killer_queen_1",
+    "sounds": [
+      "roundabout:summon_killer_queen_1"
+    ]
+  },
   "summon_killer_queen": {
       "subtitle": "sounds.roundabout.summon_killer_queen",
       "sounds": [
         "roundabout:summon_killer_queen"
       ]
     },
+  "killer_queen_punch": {
+    "subtitle": "sounds.roundabout.killer_queen_punch",
+    "sounds": [
+      "roundabout:killer_queen_punch"
+    ]
+  },
+  "killer_queen_impale": {
+    "subtitle": "sounds.roundabout.killer_queen_impale",
+    "sounds": [
+      "roundabout:killer_queen_impale"
+    ]
+  },
   "killer_queen_shiba": {
     "subtitle": "sounds.roundabout.killer_queen_shiba",
     "sounds": [

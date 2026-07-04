@@ -227,7 +227,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (((StandUser)self).roundabout$getStandPowers() instanceof
                 PowersWhiteAlbum PWA &&
                 !(((StandUser)self).roundabout$getGuardBroken())
-                && hasStandActive(self)
+                && (hasStandActive(self) || self instanceof Mob)
         ){
             return true;
         }
@@ -858,7 +858,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
         if (!onCooldown(PowerIndex.SKILL_2)) {
 
-            this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().whiteAlbumSettings.twisterCooldownv2);
+            if (self instanceof Mob){
+                this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().whiteAlbumSettings.twisterCooldownv2+10);
+            } else {
+                this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().whiteAlbumSettings.twisterCooldownv2);
+            }
             this.setCooldown(PowerIndex.SKILL_2_SNEAK, 40);
             Level level = self.level();
 
