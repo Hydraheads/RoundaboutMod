@@ -399,7 +399,7 @@ public class PowersCalifornia extends NewDashPreset {
         if (!this.self.level().isClientSide()){
 
             Vector3f newVec = new Vector3f((float) (spawnPos.getX()+0.5),
-                    (float) (spawnPos.getY()),
+                    (float) (spawnPos.getY() + 1),
                     (float) (spawnPos.getZ() + 0.5));
 
             StepRuleEntity step =

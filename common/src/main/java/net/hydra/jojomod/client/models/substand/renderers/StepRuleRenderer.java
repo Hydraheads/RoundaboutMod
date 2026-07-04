@@ -16,12 +16,13 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 
 public class StepRuleRenderer extends EntityRenderer<StepRuleEntity> {
     private static final ResourceLocation STEP_RULE =
             new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/no_walk/no_walk.png");
+    private static final ResourceLocation STEP_RULE_ACTIVE =
+            new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/no_walk/no_walk_active.png");
 
     protected StepRuleModel model;
 
@@ -32,6 +33,8 @@ public class StepRuleRenderer extends EntityRenderer<StepRuleEntity> {
 
     @Override
     public ResourceLocation getTextureLocation(StepRuleEntity stepRuleEntity) {
+        if (stepRuleEntity.getTurnedBad())
+            return STEP_RULE_ACTIVE;
         return STEP_RULE;
     }
 
@@ -45,9 +48,10 @@ public class StepRuleRenderer extends EntityRenderer<StepRuleEntity> {
             VertexConsumer vertex = vertexConsumerProvider.getBuffer(RenderType.entityTranslucent(getTextureLocation(stepRuleEntity)));
 
             matrixStack.mulPose(Axis.ZP.rotationDegrees(180f));
-            matrixStack.translate(0,-1.5,0);
+            matrixStack.translate(0,-0.5,0);
 
-            model.renderToBuffer(matrixStack, vertex, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1f);
+            model.renderToBuffer(matrixStack, vertex, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F,
+                    Math.min((((float) stepRuleEntity.renderFadeIn) / 20) + (partialTicks * 0.05F),1f));
             matrixStack.popPose();
              super.render(stepRuleEntity, 0, partialTicks, matrixStack, vertexConsumerProvider, i);
         }
