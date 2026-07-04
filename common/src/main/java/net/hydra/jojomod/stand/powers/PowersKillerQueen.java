@@ -323,7 +323,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public Byte getLastHitSound(){
-        return 120;
+        return SoundIndex.SPECIAL_MOVE_SOUND;
     }
 
     static final String strayCatTag = "hasStrayCat";
@@ -2047,12 +2047,12 @@ public class PowersKillerQueen extends NewPunchingStand {
            }
        }else if (soundChoice == PowersKillerQueen.DETONATE) {
     	   return ModSounds.KILLER_QUEEN_DETONATE_EVENT;
-       }else if (soundChoice == PowersKillerQueen.EXPLOSION) {
-    	   return ModSounds.KILLER_QUEEN_EXPLOSION_EVENT;
        }else if (soundChoice == IMPALE_NOISE) {
            return ModSounds.IMPALE_CHARGE_EVENT;
        }else if (soundChoice == SHEER_HEART_ATTACK) {
            return ModSounds.KILLER_QUEEN_SHA_SUMMON_EVENT;
+       }else if (soundChoice == SoundIndex.SPECIAL_MOVE_SOUND) {
+           return ModSounds.KILLER_QUEEN_PUNCH_EVENT;
        }
        
         return super.getSoundFromByte(soundChoice);
