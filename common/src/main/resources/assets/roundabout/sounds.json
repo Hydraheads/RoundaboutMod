@@ -47,6 +47,12 @@
       "roundabout:ckb_no"
     ]
   },
+  "ckb_tile": {
+    "subtitle": "sounds.roundabout.ckb_tile",
+    "sounds": [
+      "roundabout:ckb_tile"
+    ]
+  },
   "ice_blast_charge": {
     "subtitle": "sounds.roundabout.ice_blast_charge",
     "sounds": [

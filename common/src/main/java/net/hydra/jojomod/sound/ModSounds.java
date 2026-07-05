@@ -140,6 +140,10 @@ public class ModSounds {
     public static final ResourceLocation CKB_NO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CKB_NO);
     public static SoundEvent CKB_NO_EVENT = SoundEvent.createVariableRangeEvent(CKB_NO_ID);
 
+    public static final String CKB_TILE = "ckb_tile";
+    public static final ResourceLocation CKB_TILE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CKB_TILE);
+    public static SoundEvent CKB_TILE_EVENT = SoundEvent.createVariableRangeEvent(CKB_TILE_ID);
+
 
     public static final String STAR_SUMMON_SOUND = "summon_star";
     public static final ResourceLocation STAR_SUMMON_SOUND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+STAR_SUMMON_SOUND);

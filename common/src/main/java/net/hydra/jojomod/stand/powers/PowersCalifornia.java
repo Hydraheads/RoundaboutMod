@@ -27,7 +27,6 @@ import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -43,6 +42,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
@@ -110,14 +110,14 @@ public class PowersCalifornia extends NewDashPreset {
         if (self.level() instanceof ServerLevel sl){
             this.self.level().playSound(null, this.self.blockPosition(),
                     ModSounds.CKB_NO_EVENT, SoundSource.PLAYERS, 1F,
-                    (float) (1.00f + Math.random() * 0.01f));
+                    (float) (0.99f + Math.random() * 0.02f));
         }
     }
     public void playGotchaSound(){
         if (self.level() instanceof ServerLevel sl){
             this.self.level().playSound(null, this.self.blockPosition(),
                     ModSounds.CKB_YES_EVENT, SoundSource.PLAYERS, 1F,
-                    (float) (1.00f + Math.random() * 0.01f));
+                    (float) (0.99f + Math.random() * 0.02f));
         }
     }
 
@@ -241,11 +241,7 @@ public class PowersCalifornia extends NewDashPreset {
                 return true;
             }
         }
-        if (slot == 2 && isDoNotStep()){
-            if (!canUseStepRule()){
-                return true;
-            }
-        }
+
         return super.isAttackIneptVisually(activeP,slot);
     }
     public void tryCatchEnemies(){
@@ -256,6 +252,7 @@ public class PowersCalifornia extends NewDashPreset {
             }
         }
     }
+    @SuppressWarnings("deprecation")
     public void tryStrategyClient(){
         if (isDoNotHurt()) {
             if (!onCooldown(PowerIndex.SKILL_2)) {
@@ -264,7 +261,10 @@ public class PowersCalifornia extends NewDashPreset {
         } else if (isDoNotStep()){
             if (!onCooldown(PowerIndex.SKILL_EXTRA)) {
                 BlockHitResult result = getRayBlockHit(self,5);
-                if (!self.level().getBlockState(result.getBlockPos()).isAir()){
+                BlockState state = self.level().getBlockState(result.getBlockPos());
+                if (!state.isAir() &&
+                        (state.isSolid()
+                        || !state.getFluidState().isEmpty())){
                     tryBlockPosPowerPacket(PowerIndex.SKILL_EXTRA,result.getBlockPos());
                 }
             }
@@ -354,9 +354,9 @@ public class PowersCalifornia extends NewDashPreset {
         if (isDoNotHurt()){
             setSkillIcon(context, x, y, 2, StandIcons.HURT_RULE, PowerIndex.SKILL_2);
         } else if (isDoNotLeave()){
-            setSkillIcon(context, x, y, 2, StandIcons.LEAVE_RULE, PowerIndex.SKILL_EXTRA);
+            setSkillIcon(context, x, y, 2, StandIcons.LEAVE_RULE, PowerIndex.SKILL_EXTRA_2);
         } else {
-            setSkillIcon(context, x, y, 2, StandIcons.FORBID_RULE, PowerIndex.SKILL_EXTRA_2);
+            setSkillIcon(context, x, y, 2, StandIcons.FORBID_RULE, PowerIndex.SKILL_EXTRA);
         }
 
         if (this.getSelf().fallDistance > 3) {
@@ -414,6 +414,9 @@ public class PowersCalifornia extends NewDashPreset {
                                 newVec.y,
                                 newVec.z
                         );
+                this.self.level().playSound(null, this.self.blockPosition(),
+                        ModSounds.CKB_TILE_EVENT, SoundSource.PLAYERS, 1F,
+                        (float) (1.00f + Math.random() * 0.01f));
                 step.userEntity = self;
                 step.timing = 200;
                 self.level().addFreshEntity(step);

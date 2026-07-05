@@ -381,6 +381,8 @@ public class ForgeSounds {
             register(ModSounds.CKB_YES, ModSounds.CKB_YES_ID);
     public static final RegistryObject<SoundEvent> CKB_NO =
             register(ModSounds.CKB_NO, ModSounds.CKB_NO_ID);
+    public static final RegistryObject<SoundEvent> CKB_TILE =
+            register(ModSounds.CKB_TILE, ModSounds.CKB_TILE_ID);
     public static final RegistryObject<SoundEvent> OVA_PLATINUM_BARRAGE_EVENT =
             register(ModSounds.OVA_PLATINUM_BARRAGE, ModSounds.OVA_PLATINUM_BARRAGE_ID);
     public static final RegistryObject<SoundEvent> OVA_PLATINUM_ORA =
