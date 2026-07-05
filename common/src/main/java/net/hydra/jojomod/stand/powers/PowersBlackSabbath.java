@@ -16,6 +16,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.item.FancyLighterItem;
 import net.hydra.jojomod.item.MatchItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.mixin.InputEvents;
@@ -143,7 +144,10 @@ public class PowersBlackSabbath extends NewDashPreset {
                 }
                 ItemEntity $$4 = new ItemEntity(ojiroSasame.level(), ojiroSasame.getX(),
                         ojiroSasame.getY() + ojiroSasame.getBbHeight() - 0.10, ojiroSasame.getZ(),
-                        ModItems.MATCH.getDefaultInstance());
+                        ModItems.FANCY_LIGHTER.getDefaultInstance());
+                if($$4.getItem().getItem() instanceof FancyLighterItem FI){
+                    FI.setLighterOwner(this.getSelf());
+                }
                 $$4.setPickUpDelay(0);
                 $$4.setDeltaMovement(Vec3.ZERO);
                 ojiroSasame.level().addFreshEntity($$4);
