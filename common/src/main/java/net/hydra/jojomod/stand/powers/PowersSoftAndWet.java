@@ -290,6 +290,9 @@ public class PowersSoftAndWet extends NewPunchingStand {
 
     public void shootingModeToggleClient(){
         if (canExecuteMoveWithLevel(getShootingModeLevel())) {
+            if (self instanceof Player pl){
+                pl.resetAttackStrengthTicker();
+            }
             this.tryPower(PowerIndex.POWER_4, true);
             tryPowerPacket(PowerIndex.POWER_4);
 
