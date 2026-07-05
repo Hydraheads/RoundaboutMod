@@ -305,12 +305,6 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
-    @Override
-    public Byte getLastHitSound(){
-        if (Math.random() <= 0.4) { return SHIBA; }
-        return SHIBABA;
-    }
-
     // Data save system:
 
     static final String strayCatTag = "hasStrayCat";
@@ -1067,9 +1061,9 @@ public class PowersKillerQueen extends NewPunchingStand {
          }
 
          SoundEvent SE;
+        SoundEvent SHIBAE;
          float shibapitch = 1F;
          float pitch = 1F;
-         byte skin = this.getStandUserSelf().roundabout$getStandSkin();
 
          if (entity != null) {
         	 SE = ModSounds.KILLER_QUEEN_PUNCH_EVENT;
@@ -1077,13 +1071,17 @@ public class PowersKillerQueen extends NewPunchingStand {
          } else {
              SE = ModSounds.PUNCH_2_SOUND_EVENT;
          }
+         if (this.attackTimeDuring >= this.attackTimeMax) {
+             SHIBAE = ModSounds.KILLER_QUEEN_SHIBABA_EVENT;
+         }else {
+             SHIBAE = ModSounds.KILLER_QUEEN_SHIBA_EVENT;
+         }
 
 
          if (!this.self.level().isClientSide()) {
              this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
-             //if (chargedFinal >= maxKickTime && entity instanceof LivingEntity) {
-             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_SHIBABA_EVENT, SoundSource.PLAYERS, 1.15F, shibapitch);
-             //}
+
+             this.self.level().playSound(null, this.self.blockPosition(), SHIBAE, SoundSource.PLAYERS, 1.15F, shibapitch);
          }
     }
     
@@ -1479,7 +1477,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     	return true;
     }
 
-    public void bubbleContactedBlock(BlockPos pos) {
+    public void bubbleContactedBlock() {
 
         if (this.detonateTimer > -1) {
             this.explode();
@@ -1523,9 +1521,9 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
-    public boolean bubbleSend() {
+    public void bubbleSend() {
         if (!canUseStrayCat() || this.currentBombStatus != BOMB_NONE) {
-            return false;
+            return;
         }
         if (!this.isClient()) {
 
@@ -1563,15 +1561,11 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 syncBombStatus(BOMB_BUBBLE);
                 this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().killerQueenSettings.bubbleShootCooldown);
-
-                return true;
             }
         }
-
-        return false;
     }
 
-    public boolean bubbleRedirect(){
+    public void bubbleRedirect(){
         if (this.bombBubble != null){
             this.setCooldown(PowerIndex.SKILL_EXTRA_2, 3);
 
@@ -1602,7 +1596,6 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             }
         }
-        return true;
     }
 
 
@@ -1728,8 +1721,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
 
                 this.poseStand(OffsetIndex.FOLLOW);
-                this.setAttackTimeDuring(-15);
                 this.setActivePower(PowerIndex.POWER_3);
+                this.setAttackTimeDuring(-15);
             }
 
             if (!this.getSelf().level().isClientSide()) {

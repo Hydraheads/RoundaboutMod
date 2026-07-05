@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.substand;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.navigation.StandEntityNavigation;
+import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -69,6 +70,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public final AnimationState idle = new AnimationState();
 	public final AnimationState moving = new AnimationState();
+
+	static final int dededeSoundTimerMax = 90;
+	public int dededeSoundTimer = 50;
 
 	int tickTargetFindCount = 0;
 	static final int tickTargetFindMax = 4;
@@ -151,6 +155,20 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		boolean client = this.level().isClientSide();
 		LivingEntity user = this.getUser();
+
+		dededeSoundTimer--;
+
+		if (dededeSoundTimer <= 0) {
+
+			if (user != null && ((StandUser)user).roundabout$getStandSkin() != KillerQueenEntity.CRACKED) {
+				this.level().playSound(null, this.blockPosition(), ModSounds.KILLER_QUEEN_SHA_DEDEDEDE_EVENT, SoundSource.AMBIENT, 0.6F, 1.0f);
+			}else {
+				this.level().playSound(null, this.blockPosition(), ModSounds.KILLER_QUEEN_SHA_CRACKED_DEDE_EVENT, SoundSource.AMBIENT, 0.6F, 1.0f);
+			}
+			dededeSoundTimer = dededeSoundTimerMax;
+		}
+
+
 		if (!client) {
 			if(user == null){
 				this.discard();
@@ -415,12 +433,17 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	 public void jump(Vec3 jumpT0Pos){
 		if (this.onGround()) {
-			this.level().playSound(null, this.blockPosition(), ModSounds.SHA_JUMP_EVENT, SoundSource.PLAYERS, 0.4F, 1.0f);
-			double rand = Math.random();
-			if (rand <= 0.3) {
-				this.level().playSound(null, this.blockPosition(), ModSounds.KILLER_QUEEN_SHA_KOCCHI_1_EVENT, SoundSource.PLAYERS, 0.7F, 1.0f);
-			}else if (rand <= 0.7) {
-				this.level().playSound(null, this.blockPosition(), ModSounds.KILLER_QUEEN_SHA_KOCCHI_2_EVENT, SoundSource.PLAYERS, 0.7F, 1.0f);
+			LivingEntity user = this.getUser();
+			this.level().playSound(null, this.blockPosition(), ModSounds.SHA_JUMP_EVENT, SoundSource.PLAYERS, 0.5F, 1.0f);
+			if (user != null && ((StandUser)user).roundabout$getStandSkin() != KillerQueenEntity.CRACKED) {
+				double rand = Math.random();
+				if (rand <= 0.3) {
+					this.level().playSound(null, this.blockPosition(), ModSounds.KILLER_QUEEN_SHA_KOCCHI_1_EVENT, SoundSource.PLAYERS, 0.7F, 1.0f);
+				} else if (rand <= 0.7) {
+					this.level().playSound(null, this.blockPosition(), ModSounds.KILLER_QUEEN_SHA_KOCCHI_2_EVENT, SoundSource.PLAYERS, 0.7F, 1.0f);
+				}
+			} else {
+				this.level().playSound(null, this.blockPosition(), ModSounds.KILLER_QUEEN_SHA_CRACKED_KOCCHI_EVENT, SoundSource.PLAYERS, 0.7F, 1.0f);
 			}
 			this.lookAt(EntityAnchorArgument.Anchor.EYES, jumpT0Pos);
 			this.jumpTick = jumpTickMax;
@@ -521,18 +544,18 @@ public class SheerHeartAttackEntity extends StandEntity {
 		if (this.noPhysics) {
 			return false;
 		} else {
-			float $$0 = 1.4f;
+			float $$0 = 1.6f;
 			AABB $$1 = AABB.ofSize(this.getEyePosition(), (double)$$0, 1.0E-6, (double)$$0);
 			return BlockPos.betweenClosedStream($$1).anyMatch(($$1x) -> {
 				BlockState $$2 = this.level().getBlockState($$1x);
-				return !$$2.isAir() && $$2.isSuffocating(this.level(), $$1x) && Shapes.joinIsNotEmpty($$2.getCollisionShape(this.level(), $$1x).move((double)$$1x.getX(), (double)$$1x.getY(), (double)$$1x.getZ()), Shapes.create($$1), BooleanOp.AND);
+				return !$$2.isAir() && Shapes.joinIsNotEmpty($$2.getCollisionShape(this.level(), $$1x).move((double)$$1x.getX(), (double)$$1x.getY(), (double)$$1x.getZ()), Shapes.create($$1), BooleanOp.AND);
 			});
 		}
 	}
 
 	public void tryClimb() {
 		if (this.climbDetect()) {
-			this.setDeltaMovement(0, 0.6f, 0);
+			this.setDeltaMovement(0, 0.7f, 0);
 		}
 
 	}

@@ -54,6 +54,15 @@ public class BlockBombEntity extends StandEntity {
 		
 		super($$0, $$1);
 	}
+
+	@Override
+	public void lerpTo(double $$0, double $$1, double $$2, float $$3, float $$4, int $$5, boolean $$6) {
+		this.lerpX = $$0;
+		this.lerpY = $$1;
+		this.lerpZ = $$2;
+		this.setRot($$3, $$4);
+		this.lerpSteps = $$5;
+	}
 	
 	public static AttributeSupplier.Builder createStandAttributes() {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,

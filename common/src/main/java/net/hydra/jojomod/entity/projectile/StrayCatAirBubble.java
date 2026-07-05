@@ -252,12 +252,8 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
-
-        BlockPos pos = $$0.getBlockPos();
-        BlockState state = this.level().getBlockState(pos);
-
-        if (((StandUser) this.getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
-            KQ.bubbleContactedBlock(pos);
+        if (this.getOwner() != null && ((StandUser) this.getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
+            KQ.bubbleContactedBlock();
         } else {
             popBubble();
         }
@@ -271,7 +267,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         if ((user != null && target.is(user)) || (user != null && target instanceof StandEntity SE && user.is(SE.getUser()))) {
             return;
         }
-        if (((StandUser) this.getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble && KQ.bubbleTarget != null) {
+        if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble && KQ.bubbleTarget != null) {
             if (!KQ.bubbleTarget.is(target) && !KQ.isContactModeEnabled()) {
                 return;
             }
