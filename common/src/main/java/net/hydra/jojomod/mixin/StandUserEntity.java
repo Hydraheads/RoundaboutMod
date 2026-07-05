@@ -2987,7 +2987,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     /** Turns your stand "on". This updates the HUD, and is necessary in case the stand doesn't have a body.*/
     public void roundabout$setActive(boolean active){
-        roundabout$getStandPowers().onStandSummon(!active); // this could cause an issue but it doesn't look like it
+        if (PowerTypes.hasStandActivelyEquipped(rdbt$this())){
+            roundabout$getStandPowers().onStandSummon(!active); // this could cause an issue but it doesn't look like it
+        } else {
+            if (rdbt$this() instanceof Player pl){
+                ((IPowersPlayer)pl).rdbt$getPowers().onStandSummon(!active);
+            }
+        }
 
         if (!active){
             roundabout$tryPower(PowerIndex.NONE, true);

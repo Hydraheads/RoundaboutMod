@@ -917,8 +917,18 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     public void toggleFistsClient(){
         if (!onCooldown(PowerIndex.SKILL_4) && !isChargingCold()){
+            if (self instanceof Player pl){
+                pl.resetAttackStrengthTicker();
+            }
             this.setCooldown(PowerIndex.SKILL_4, 9);
             tryPowerPacket(PowerIndex.POWER_1_BONUS);
+        }
+    }
+
+    @Override
+    public void onStandSummon(boolean desummon){
+        if (self instanceof Player pl && fistsOut){
+            pl.resetAttackStrengthTicker();
         }
     }
 
