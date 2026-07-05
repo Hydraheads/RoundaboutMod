@@ -49,6 +49,9 @@ public class StepRuleRenderer extends EntityRenderer<StepRuleEntity> {
 
             matrixStack.mulPose(Axis.ZP.rotationDegrees(180f));
             matrixStack.translate(0,-0.5,0);
+            if (stepRuleEntity.getTurnedBad()){
+                matrixStack.scale(1.01f,1.01f,1.01f);
+            }
 
             model.renderToBuffer(matrixStack, vertex, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F,
                     Math.min((((float) stepRuleEntity.renderFadeIn) / 20) + (partialTicks * 0.05F),1f));
