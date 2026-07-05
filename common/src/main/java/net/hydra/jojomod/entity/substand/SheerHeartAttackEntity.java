@@ -415,8 +415,13 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	 public void jump(Vec3 jumpT0Pos){
 		if (this.onGround()) {
-			this.level().playSound(null, this.blockPosition(), ModSounds.SHA_JUMP_EVENT, SoundSource.PLAYERS, 0.65F, 1.0f);
-			this.level().playSound(null, this.blockPosition(), ModSounds.KILLER_QUEEN_SHA_KOCCHI_1_EVENT, SoundSource.PLAYERS, 0.8F, 1.0f);
+			this.level().playSound(null, this.blockPosition(), ModSounds.SHA_JUMP_EVENT, SoundSource.PLAYERS, 0.4F, 1.0f);
+			double rand = Math.random();
+			if (rand <= 0.3) {
+				this.level().playSound(null, this.blockPosition(), ModSounds.KILLER_QUEEN_SHA_KOCCHI_1_EVENT, SoundSource.PLAYERS, 0.7F, 1.0f);
+			}else if (rand <= 0.7) {
+				this.level().playSound(null, this.blockPosition(), ModSounds.KILLER_QUEEN_SHA_KOCCHI_2_EVENT, SoundSource.PLAYERS, 0.7F, 1.0f);
+			}
 			this.lookAt(EntityAnchorArgument.Anchor.EYES, jumpT0Pos);
 			this.jumpTick = jumpTickMax;
 			this.setDeltaMovement((this.getLookAngle().multiply(1.3, 0.4, 1.3)).add(0, 0.31, 0));
@@ -527,8 +532,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public void tryClimb() {
 		if (this.climbDetect()) {
-			Vec3 mov = this.getDeltaMovement();
-			this.setDeltaMovement(mov.x, 0.6f, mov.y);
+			this.setDeltaMovement(0, 0.6f, 0);
 		}
 
 	}

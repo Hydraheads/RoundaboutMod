@@ -353,6 +353,12 @@
         "roundabout:summon_killer_queen"
       ]
     },
+  "summon_creeper_queen": {
+    "subtitle": "sounds.roundabout.summon_creeper_queen",
+    "sounds": [
+      "roundabout:summon_creeper_queen"
+    ]
+  },
   "killer_queen_punch": {
     "subtitle": "sounds.roundabout.killer_queen_punch",
     "sounds": [

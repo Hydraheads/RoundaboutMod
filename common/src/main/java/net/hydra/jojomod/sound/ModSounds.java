@@ -654,6 +654,10 @@ public class ModSounds {
     public static final ResourceLocation KILLER_QUEEN_BARRAGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_BARRAGE);
     public static SoundEvent KILLER_QUEEN_BARRAGE_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_BARRAGE_ID);
 
+    public static final String CREEPER_QUEEN_SUMMON = "summon_creeper_queen";
+    public static final ResourceLocation CREEPER_QUEEN_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CREEPER_QUEEN_SUMMON);
+    public static SoundEvent CREEPER_QUEEN_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(CREEPER_QUEEN_SUMMON_ID);
+
     public static final String KILLER_QUEEN_SUMMON = "summon_killer_queen";
     public static final ResourceLocation KILLER_QUEEN_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SUMMON);
     public static SoundEvent KILLER_QUEEN_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SUMMON_ID);
