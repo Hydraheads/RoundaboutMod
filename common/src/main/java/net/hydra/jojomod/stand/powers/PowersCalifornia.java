@@ -22,7 +22,6 @@ import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
-import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
@@ -41,7 +40,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -352,11 +350,11 @@ public class PowersCalifornia extends NewDashPreset {
         setSkillIcon(context, x, y, 1, StandIcons.STEAL_MEMORIES, PowerIndex.SKILL_1);
 
         if (isDoNotHurt()){
-            setSkillIcon(context, x, y, 2, StandIcons.HURT_RULE, PowerIndex.SKILL_2);
+            setSkillIcon(context, x, y, 2, StandIcons.HURT, PowerIndex.SKILL_2);
         } else if (isDoNotLeave()){
-            setSkillIcon(context, x, y, 2, StandIcons.LEAVE_RULE, PowerIndex.SKILL_EXTRA_2);
+            setSkillIcon(context, x, y, 2, StandIcons.LEAVE, PowerIndex.SKILL_EXTRA_2);
         } else {
-            setSkillIcon(context, x, y, 2, StandIcons.FORBID_RULE, PowerIndex.SKILL_EXTRA);
+            setSkillIcon(context, x, y, 2, StandIcons.FORBID, PowerIndex.SKILL_EXTRA);
         }
 
         if (this.getSelf().fallDistance > 3) {
@@ -419,6 +417,7 @@ public class PowersCalifornia extends NewDashPreset {
                         (float) (1.00f + Math.random() * 0.01f));
                 step.userEntity = self;
                 step.timing = 200;
+                addSpawnedEntity(step);
                 self.level().addFreshEntity(step);
             }
         }
@@ -472,6 +471,7 @@ public class PowersCalifornia extends NewDashPreset {
     public void tickPower() {
         super.tickPower();
         if (!self.level().isClientSide()) {
+            tickSpawnedEntities();
             if (!hurtEntities.isEmpty() && self instanceof ServerPlayer sp) {
                 Iterator<Map.Entry<Entity, Integer>> it = hurtEntities.entrySet().iterator();
 
@@ -658,6 +658,7 @@ public class PowersCalifornia extends NewDashPreset {
         setCooldown(PowerIndex.SKILL_4,6);
         rewindSnap = null;
         hurtEntities.clear();
+        clearAllSpawnedEntities();
         nextRule();
         if (self instanceof ServerPlayer pl){
             pl.displayClientMessage(Component.translatable("text.roundabout.ckb_rule_"+currentRule).withStyle(ChatFormatting.LIGHT_PURPLE), true);
@@ -734,5 +735,48 @@ public class PowersCalifornia extends NewDashPreset {
     @Override
     public Component ifWipListDevStatus() {
         return Component.translatable("roundabout.dev_status.active");
+    }
+
+
+    public List<Entity> spawnedEntities = new ArrayList<>();
+
+    public void addSpawnedEntity(Entity che){
+        spawnedEntityInit();
+        spawnedEntities.add(che);
+    }
+    public void spawnedEntityInit(){
+        if (spawnedEntities == null) {
+            spawnedEntities = new ArrayList<>();
+        }
+    }
+    public void clearAllSpawnedEntities(){
+        spawnedEntityInit();
+
+        List<Entity> hurricaneSpecial2 = new ArrayList<>(spawnedEntities) {
+        };
+        if (!spawnedEntities.isEmpty()) {
+            for (Entity value : hurricaneSpecial2) {
+                spawnedEntities.remove(value);
+                if (value instanceof BlockWallEntity bwe){
+                    bwe.breakAndDiscard();
+                } else {
+                    value.discard();
+                }
+            }
+        }
+    }
+
+    public void tickSpawnedEntities(){
+        spawnedEntityInit();
+
+        List<Entity> hurricaneSpecial2 = new ArrayList<>(spawnedEntities) {
+        };
+        if (!spawnedEntities.isEmpty()) {
+            for (Entity value : hurricaneSpecial2) {
+                if (value.isRemoved() || !(value.isAlive())){
+                    spawnedEntities.remove(value);
+                }
+            }
+        }
     }
 }
