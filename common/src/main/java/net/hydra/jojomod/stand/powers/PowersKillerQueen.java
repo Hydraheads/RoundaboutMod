@@ -316,12 +316,14 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
+        super.addAdditionalSaveData($$0);
         $$0.putBoolean(strayCatTag, this.hasStrayCat);
         $$0.putBoolean(BitesTheDustTag, this.hasBitesTheDust);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
+        super.readAdditionalSaveData($$0);
         if ($$0.contains(strayCatTag)) {
             this.hasStrayCat = $$0.getBoolean(strayCatTag); }
         if ($$0.contains(BitesTheDustTag)) {

@@ -94,10 +94,12 @@ public class PowersCalifornia extends NewDashPreset {
 
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
+        super.addAdditionalSaveData($$0);
         $$0.putByte("currentRule",currentRule);
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
+        super.readAdditionalSaveData($$0);
         if ($$0.contains("currentRule")) {
             currentRule = $$0.getByte("currentRule");
         }

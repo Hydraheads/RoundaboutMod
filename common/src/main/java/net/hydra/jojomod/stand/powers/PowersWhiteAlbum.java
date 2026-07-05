@@ -708,12 +708,14 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public boolean fistsOut = false;
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
+        super.addAdditionalSaveData($$0);
         $$0.putBoolean("skatesActive",skatesActive);
         $$0.putBoolean("cracked",cracked);
         $$0.putBoolean("fistsOut",fistsOut);
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
+        super.readAdditionalSaveData($$0);
         if ($$0.contains("skatesActive")) {
             skatesActive = $$0.getBoolean("skatesActive");
         } if ($$0.contains("cracked")) {
