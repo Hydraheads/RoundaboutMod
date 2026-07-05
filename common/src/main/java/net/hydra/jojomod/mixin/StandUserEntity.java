@@ -1628,10 +1628,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     @Unique
     public byte roundabout$getStandSkin(){
-        if (this.getEntityData().hasItem(ROUNDABOUT$STAND_SKIN)) {
-            return this.getEntityData().get(ROUNDABOUT$STAND_SKIN);
-        }
-        return 0;
+        return roundabout$getStandPowers().standSkin;
     }
     @Override
     @Unique
@@ -1678,28 +1675,45 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     @Unique
     public void roundabout$setStandSkin(byte skin){
-        this.getEntityData().set(ROUNDABOUT$STAND_SKIN, skin);
+        roundabout$getStandPowers().standSkin = skin;
+        roundabout$getStandPowers().saveDiscAndSync();
+
+        StandEntity stand = roundabout$getStand();
+        if (stand != null){
+            stand.setSkin(skin);
+        }
+    }
+    @Override
+    @Unique
+    public void roundabout$setStandSkinLight(byte skin){
+        roundabout$getStandPowers().standSkin = skin;
+
         StandEntity stand = roundabout$getStand();
         if (stand != null){
             stand.setSkin(skin);
         }
     }
 
-    @Unique
-    private static final EntityDataAccessor<Byte> ROUNDABOUT$IDLE_POS = SynchedEntityData.defineId(LivingEntity.class,
-            EntityDataSerializers.BYTE);
+
     @Override
     @Unique
     public byte roundabout$getIdlePos(){
-        if (this.getEntityData().hasItem(ROUNDABOUT$IDLE_POS)) {
-            return this.getEntityData().get(ROUNDABOUT$IDLE_POS);
-        }
-        return 0;
+        return roundabout$getStandPowers().idlePos;
     }
     @Override
     @Unique
     public void roundabout$setIdlePosX(byte pos){
-        this.getEntityData().set(ROUNDABOUT$IDLE_POS, pos);
+        roundabout$getStandPowers().idlePos = pos;
+        roundabout$getStandPowers().saveDiscAndSync();
+        StandEntity stand = roundabout$getStand();
+        if (stand != null){
+            stand.setIdleAnimation(pos);
+        }
+    }
+    @Override
+    @Unique
+    public void roundabout$setIdlePosLight(byte pos){
+        roundabout$getStandPowers().idlePos = pos;
         StandEntity stand = roundabout$getStand();
         if (stand != null){
             stand.setIdleAnimation(pos);
@@ -3320,8 +3334,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$COMBAT_MODE, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_DISC, ItemStack.EMPTY);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_ACTIVE, false);
-            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IDLE_POS, (byte) 0);
-            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_SKIN, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_ANIMATION, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$UNIQUE_STAND_MODE_TOGGLE, false);
         }
