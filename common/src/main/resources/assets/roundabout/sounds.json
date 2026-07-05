@@ -17,6 +17,12 @@
       "roundabout:summon_california"
     ]
   },
+  "summon_black_sabbath": {
+    "subtitle": "sounds.roundabout.summon_black_sabbath",
+    "sounds": [
+      "roundabout:summon_black_sabbath"
+    ]
+  },
   "block_freeze": {
     "subtitle": "sounds.roundabout.block_freeze",
     "sounds": [

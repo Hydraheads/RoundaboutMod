@@ -296,6 +296,10 @@ public class ModSounds {
     public static final ResourceLocation MANHATTAN_VISION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+MANHATTAN_VISION);
     public static SoundEvent MANHATTAN_VISION_EVENT = SoundEvent.createVariableRangeEvent(MANHATTAN_VISION_ID);
 
+    public static final String BLACK_SABBATH_SUMMON = "summon_black_sabbath";
+    public static final ResourceLocation BLACK_SABBATH_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLACK_SABBATH_SUMMON);
+    public static SoundEvent BLACK_SABBATH_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(BLACK_SABBATH_SUMMON_ID);
+
     public static final String CENTURY_BOY_SUMMON = "century_boy_summon";
     public static final ResourceLocation CENTURY_BOY_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CENTURY_BOY_SUMMON);
     public static SoundEvent CENTURY_BOY_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(CENTURY_BOY_SUMMON_ID);

@@ -138,7 +138,9 @@ public class PowersBlackSabbath extends NewDashPreset {
     private boolean biteFingers(LivingEntity ojiroSasame){
         if(this.self.isAlive()) {
             if (!isClient()) {
-                ojiroSasame.hurt(ModDamageTypes.of(ojiroSasame.level(), DamageTypes.GENERIC_KILL), 1F);
+                if(ojiroSasame instanceof Player P && (!P.isCreative() || P.isSpectator())) {
+                    ojiroSasame.hurt(ModDamageTypes.of(ojiroSasame.level(), DamageTypes.GENERIC_KILL), 1F);
+                }
                 ItemEntity $$4 = new ItemEntity(ojiroSasame.level(), ojiroSasame.getX(),
                         ojiroSasame.getY() + ojiroSasame.getBbHeight() - 0.10, ojiroSasame.getZ(),
                         ModItems.MATCH.getDefaultInstance());
@@ -197,28 +199,6 @@ public class PowersBlackSabbath extends NewDashPreset {
         super.updateUniqueMoves();
     }
 
-
-
-    public int yapTime = 0;
-    public boolean isYapping(){
-        return yapTime > 0;
-    }
-    public int getYapTime(){
-        return yapTime;
-    }
-    public void setYapTime(int yapTime){
-        this.yapTime = yapTime;
-    }
-    public void tickYapping(){
-        if (this.yapTime > 0){
-
-            this.yapTime--;
-        }
-    }
-
-    public static final byte
-            YAP = 1;
-
     public static final byte
             MANGA = 1,
             GOTHIC = 2;
@@ -253,7 +233,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         switch (soundChoice)
         {
             case SoundIndex.SUMMON_SOUND -> {
-                return ModSounds.SUMMON_JUSTICE_2_EVENT;
+                return ModSounds.BLACK_SABBATH_SUMMON_EVENT;
             }
 
         }

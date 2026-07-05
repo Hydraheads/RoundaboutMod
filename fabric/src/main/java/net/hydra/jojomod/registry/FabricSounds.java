@@ -261,6 +261,8 @@ public class FabricSounds {
         addSound(ModSounds.MANHATTAN_DODGING_ID, ModSounds.MANHATTAN_DODGING_EVENT);
         addSound(ModSounds.MANHATTAN_VISION_ID, ModSounds.MANHATTAN_VISION_EVENT);
 
+        addSound(ModSounds.BLACK_SABBATH_SUMMON_ID, ModSounds.BLACK_SABBATH_SUMMON_EVENT);
+
         addSound(ModSounds.CENTURY_BOY_SUMMON_ID, ModSounds.CENTURY_BOY_SUMMON_EVENT);
         addSound(ModSounds.CENTURY_BOY_HIT_ID, ModSounds.CENTURY_BOY_HIT_EVENT);
         addSound(ModSounds.CENTURY_BOY_NORMAL_STANCE_ID, ModSounds.CENTURY_BOY_NORMAL_STANCE_EVENT);
