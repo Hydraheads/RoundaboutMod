@@ -189,7 +189,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             onChangedFrozenWater(blockPos,3);
 
             BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
-            int j = 2;
+            int j = 1;
             BlockState blockState = ModBlocks.WHITE_ALBUM_ICE_SLAB.defaultBlockState();
             for (BlockPos blockPos2 : BlockPos.betweenClosed(blockPos.offset(-j, 0, -j), blockPos.offset(j, 0, j))) {
 
