@@ -1936,8 +1936,6 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         AABB wallBox = bomb.getBoundingBox().inflate(inflate);
 
-        Roundabout.LOGGER.info("Size: " + wallBox.getXsize());
-
         for (LivingEntity entity : bomb.level().getEntitiesOfClass(
                 LivingEntity.class,
                 wallBox)) {
