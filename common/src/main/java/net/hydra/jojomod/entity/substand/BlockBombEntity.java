@@ -48,7 +48,8 @@ public class BlockBombEntity extends StandEntity {
 	private static final int maxTickIndicator = 6;
 	private int tickIndicator = maxTickIndicator;
 	private Vec3 blockSize = new Vec3(1.0f, 1.0f, 1.0f);
-	
+	public int renderFadeIn = 1;
+
 	public BlockBombEntity(EntityType<? extends StandEntity> $$0, Level $$1) {
 		
 		super($$0, $$1);
@@ -107,39 +108,37 @@ public class BlockBombEntity extends StandEntity {
             	//this.detectInside();
             }
 		
-        }else if (this.tickIndicator > 0 && this.tickIndicator % 2 == 0){
-			Vec3 pos = this.getPosition(0).add(0, 0.5f, 0);
+        }else {
+	        if (this.tickIndicator > 0 && this.tickIndicator % 2 == 0) {
+				Vec3 pos = this.getPosition(0).add(0, 0.5f, 0);
 
-
-			/*((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0.02F, 0.02F, 0.04F), 2.5f),
-					pos.x,
-					pos.y+1.0f,
-					pos.z,
-					2, 0, 0, 0, 1.2);*/
-			this.level().addAlwaysVisibleParticle(new DustParticleOptions(new Vector3f(0.02F, 0.02F, 0.04F), 2.5f),
-					pos.x,
-					pos.y+1.0f,
-					pos.z,
-					0, 1.2, 0);
-			this.tickIndicator--;
+				this.level().addAlwaysVisibleParticle(new DustParticleOptions(new Vector3f(0.02F, 0.02F, 0.04F), 2.5f),
+						pos.x,
+						pos.y + 1.0f,
+						pos.z,
+						0, 1.2, 0);
+				this.tickIndicator--;
+			}
+			if (this.fadePercent < 20) {
+				this.fadePercent++;
+			}
 		}
         super.tick();
+		refreshDimensions();
     }
 	
 	public Entity detectContact() {
-		Vec3 pos = this.bombPos.getCenter();
-		float skinSize = 0.10f;
-
-		
-		List<Entity> entitiesDetect = MainUtil.genHitbox(this.level(), pos.x(), pos.y(), pos.z(),
-				this.blockSize.x() + skinSize, this.blockSize.y() + skinSize, this.blockSize.z() + skinSize);
-
 		double distRecord = -1.0;
 		Entity blowTarget = null;
 
-		for (Entity entity : entitiesDetect) {
-			if (entity.equals(this.getUser()) || entity.equals(((StandUser)this.getUser()).roundabout$getStand()) || entity.equals(this)
-				|| entity instanceof StandEntity || !(entity instanceof LivingEntity)) {
+		AABB wallBox = this.getBoundingBox();
+
+		for (LivingEntity entity : level().getEntitiesOfClass(
+				LivingEntity.class,
+				wallBox)) {
+
+
+			if (entity.equals(this.getUser()) || entity.equals(((StandUser)this.getUser()).roundabout$getStand()) || entity.equals(this)) {
 				continue;
 			}
 
@@ -189,12 +188,7 @@ public class BlockBombEntity extends StandEntity {
 		}
 		
 	}*/
-	
 
-	
-	
-	@Override
-    protected AABB makeBoundingBox() { return super.makeBoundingBox();}
 	
 	@Override
     public boolean isPickable() { return false;}
