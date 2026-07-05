@@ -40,6 +40,10 @@ public class GeneralPowers extends AbilityScapeBasis {
             S2CPacketUtil.sendActivePowerPowersPacket(SP,activePower);
         }
     }
+
+    /**Runs this code while pressing R to activate powers*/
+    public void onStandSummon(boolean desummon){
+    }
     /**The text name of the power*/
     public Component getPowerName(){
         return Component.empty();

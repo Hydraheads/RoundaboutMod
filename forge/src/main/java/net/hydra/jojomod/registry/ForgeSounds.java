@@ -278,8 +278,24 @@ public class ForgeSounds {
             register(ModSounds.KILLER_QUEEN_PUNCH, ModSounds.KILLER_QUEEN_PUNCH_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHIBA_EVENT =
             register(ModSounds.KILLER_QUEEN_SHIBA, ModSounds.KILLER_QUEEN_SHIBA_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHIBABA_EVENT =
+            register(ModSounds.KILLER_QUEEN_SHIBABA, ModSounds.KILLER_QUEEN_SHIBABA_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHA_MOVING_EVENT =
             register(ModSounds.KILLER_QUEEN_SHA_MOVING, ModSounds.KILLER_QUEEN_SHA_MOVING_ID);
+    public static final RegistryObject<SoundEvent> SHA_JUMP_EVENT =
+            register(ModSounds.SHA_JUMP, ModSounds.SHA_JUMP_ID);
+
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHA_KOCCHI_1_EVENT =
+            register(ModSounds.KILLER_QUEEN_SHA_KOCCHI_1, ModSounds.KILLER_QUEEN_SHA_KOCCHI_1_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHA_KOCCHI_2_EVENT =
+            register(ModSounds.KILLER_QUEEN_SHA_KOCCHI_2, ModSounds.KILLER_QUEEN_SHA_KOCCHI_2_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHA_DEDEDEDE_EVENT =
+            register(ModSounds.KILLER_QUEEN_SHA_DEDEDEDE, ModSounds.KILLER_QUEEN_SHA_DEDEDEDE_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHA_CRACKED_DEDE_EVENT =
+            register(ModSounds.KILLER_QUEEN_SHA_CRACKED_DEDE, ModSounds.KILLER_QUEEN_SHA_CRACKED_DEDE_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHA_CRACKED_KOCCHI_EVENT =
+            register(ModSounds.KILLER_QUEEN_SHA_CRACKED_KOCCHI, ModSounds.KILLER_QUEEN_SHA_CRACKED_KOCCHI_ID);
+
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHA_SUMMON_EVENT =
             register(ModSounds.KILLER_QUEEN_SHA_SUMMON, ModSounds.KILLER_QUEEN_SHA_SUMMON_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_BARRAGE_EVENT =
@@ -368,6 +384,8 @@ public class ForgeSounds {
             register(ModSounds.CKB_YES, ModSounds.CKB_YES_ID);
     public static final RegistryObject<SoundEvent> CKB_NO =
             register(ModSounds.CKB_NO, ModSounds.CKB_NO_ID);
+    public static final RegistryObject<SoundEvent> CKB_TILE =
+            register(ModSounds.CKB_TILE, ModSounds.CKB_TILE_ID);
     public static final RegistryObject<SoundEvent> OVA_PLATINUM_BARRAGE_EVENT =
             register(ModSounds.OVA_PLATINUM_BARRAGE, ModSounds.OVA_PLATINUM_BARRAGE_ID);
     public static final RegistryObject<SoundEvent> OVA_PLATINUM_ORA =

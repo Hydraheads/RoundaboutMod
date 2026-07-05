@@ -68,6 +68,12 @@ public class PunchingGeneralPowers extends GeneralPowers {
     }
 
     @Override
+    public void onStandSummon(boolean desummon){
+        if (self instanceof Player pl){
+            pl.resetAttackStrengthTicker();
+        }
+    }
+    @Override
     /**Stand related things that slow you down or speed you up, override and call super to make
      * any stand ability slow you down*/
     public float inputSpeedModifiers(float basis){

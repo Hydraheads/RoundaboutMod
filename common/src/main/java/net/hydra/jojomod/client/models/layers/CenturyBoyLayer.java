@@ -182,7 +182,7 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                     poseStack.scale(0.6F, 0.6F, 0.6F);
                                     poseStack.translate(0.3, 1, -0.3);
                                 }
-
+                                    poseStack.translate(0, 0.1, 0);
                                 getParentModel().body.translateAndRotate(poseStack);
 
 

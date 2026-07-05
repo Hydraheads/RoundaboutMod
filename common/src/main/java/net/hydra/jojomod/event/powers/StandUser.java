@@ -89,6 +89,8 @@ public interface StandUser {
     ItemStack roundabout$getStandDisc();
     void roundabout$setStandDisc(ItemStack stack);
     void roundabout$updateStandDisc(ItemStack stack);
+    void roundabout$setStandSkinLight(byte skin);
+    void roundabout$setIdlePosLight(byte pos);
     void roundabout$setMetallicaInvisibility(int fade);
     int roundabout$getMetallicaInvisibility();
     void roundabout$setMetalMeter(float amount);

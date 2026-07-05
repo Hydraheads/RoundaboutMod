@@ -227,6 +227,12 @@ public class StandIcons {
             "textures/gui/icons/california_king_bed/hurt_rule.png");
     public static final ResourceLocation LEAVE_RULE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/california_king_bed/leave_rule.png");
+    public static final ResourceLocation FORBID = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/forbid.png");
+    public static final ResourceLocation HURT = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/hurt.png");
+    public static final ResourceLocation LEAVE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/leave.png");
     public static final ResourceLocation EXPERIENCE_BISHOP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/california_king_bed/experience_bishop.png");
     public static final ResourceLocation STEAL_MEMORIES = new ResourceLocation(Roundabout.MOD_ID,

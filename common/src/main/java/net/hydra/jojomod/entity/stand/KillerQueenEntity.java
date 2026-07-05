@@ -97,6 +97,7 @@ public class KillerQueenEntity extends FollowingStandEntity {
     	BLOCK_PLANT = 122,
         MOB_PLANT = 123,
         MOB_PLANT_2 = 124,
+        BUBBLE_SEND = 125,
         SHA_SEND = 88,
     	HEAVY_STRIKE = 26;
     
@@ -183,6 +184,12 @@ public class KillerQueenEntity extends FollowingStandEntity {
                 this.impale.startIfStopped(this.tickCount);
             } else {
                 this.impale.stop();
+            }
+
+            if (animation == BUBBLE_SEND) {
+                this.bubbleLaunch.startIfStopped(this.tickCount);
+            } else {
+                this.bubbleLaunch.stop();
             }
 
             if (animation == ITEM_THROW) {

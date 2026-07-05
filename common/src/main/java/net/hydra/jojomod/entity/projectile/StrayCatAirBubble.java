@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.NoVibrationEntity;
 import net.hydra.jojomod.access.PenetratableWithProjectile;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.UnburnableProjectile;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -12,6 +13,7 @@ import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -29,6 +31,7 @@ import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -249,14 +252,33 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
-        popBubble();
+
+        BlockPos pos = $$0.getBlockPos();
+        BlockState state = this.level().getBlockState(pos);
+
+        if (((StandUser) this.getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
+            KQ.bubbleContactedBlock(pos);
+        } else {
+            popBubble();
+        }
     }
 
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
-        super.onHitEntity($$0);
         Entity target = $$0.getEntity();
         Entity user = this.getOwner();
+
+        if ((user != null && target.is(user)) || (user != null && target instanceof StandEntity SE && user.is(SE.getUser()))) {
+            return;
+        }
+        if (((StandUser) this.getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble && KQ.bubbleTarget != null) {
+            if (!KQ.bubbleTarget.is(target) && !KQ.isContactModeEnabled()) {
+                return;
+            }
+        }
+
+        super.onHitEntity($$0);
+
         DamageSource dmg = ModDamageTypes.of(target.level(), ModDamageTypes.STAND);
         float damage = getDamagePoints();
 

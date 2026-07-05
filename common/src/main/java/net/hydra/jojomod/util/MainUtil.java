@@ -734,8 +734,6 @@ public class MainUtil {
                 stack.getOrCreateTagElement("Memory").putBoolean("BonusSkin",IPE.roundabout$getUnlockedBonusSkin());
             }
         }
-        stack.getOrCreateTagElement("Memory").putByte("Skin",((StandUser)ent).roundabout$getStandSkin());
-        stack.getOrCreateTagElement("Memory").putByte("Pose",((StandUser)ent).roundabout$getIdlePos());
         if (stack.getItem() instanceof StandDiscItem SD) {
             ((StandUser)ent).roundabout$getStandPowers().addAdditionalSaveData(stack.getOrCreateTagElement("Memory"));
         }
@@ -963,18 +961,6 @@ public class MainUtil {
                 }
             }
 
-            if ($$4.contains("Skin")) {
-                byte skn = ($$4.getByte("Skin"));
-                user.roundabout$setStandSkin(skn);
-            } else {
-                user.roundabout$setStandSkin((byte) 0);
-            }
-            if ($$4.contains("Pose")) {
-                byte skn = ($$4.getByte("Pose"));
-                user.roundabout$setIdlePosX(skn);
-            } else {
-                user.roundabout$setIdlePosX((byte) 0);
-            }
         } else {
             if (ent instanceof Player PE) {
                 IPlayerEntity IPE = ((IPlayerEntity) PE);
@@ -982,8 +968,8 @@ public class MainUtil {
                 IPE.roundabout$setStandExp(0);
                 IPE.roundabout$setUnlockedBonusSkin(false);
             };
-            user.roundabout$setStandSkin((byte) 0);
-            user.roundabout$setIdlePosX((byte) 0);
+            user.roundabout$setStandSkinLight((byte) 0);
+            user.roundabout$setIdlePosLight((byte) 0);
         }
 
     }

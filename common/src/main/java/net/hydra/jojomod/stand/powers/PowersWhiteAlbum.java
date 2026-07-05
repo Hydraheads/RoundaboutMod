@@ -53,7 +53,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.Creeper;
-import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
@@ -190,7 +189,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             onChangedFrozenWater(blockPos,3);
 
             BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
-            int j = 2;
+            int j = 1;
             BlockState blockState = ModBlocks.WHITE_ALBUM_ICE_SLAB.defaultBlockState();
             for (BlockPos blockPos2 : BlockPos.betweenClosed(blockPos.offset(-j, 0, -j), blockPos.offset(j, 0, j))) {
 
@@ -709,12 +708,14 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public boolean fistsOut = false;
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
+        super.addAdditionalSaveData($$0);
         $$0.putBoolean("skatesActive",skatesActive);
         $$0.putBoolean("cracked",cracked);
         $$0.putBoolean("fistsOut",fistsOut);
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
+        super.readAdditionalSaveData($$0);
         if ($$0.contains("skatesActive")) {
             skatesActive = $$0.getBoolean("skatesActive");
         } if ($$0.contains("cracked")) {
@@ -916,8 +917,18 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     public void toggleFistsClient(){
         if (!onCooldown(PowerIndex.SKILL_4) && !isChargingCold()){
+            if (self instanceof Player pl){
+                pl.resetAttackStrengthTicker();
+            }
             this.setCooldown(PowerIndex.SKILL_4, 9);
             tryPowerPacket(PowerIndex.POWER_1_BONUS);
+        }
+    }
+
+    @Override
+    public void onStandSummon(boolean desummon){
+        if (self instanceof Player pl && fistsOut){
+            pl.resetAttackStrengthTicker();
         }
     }
 

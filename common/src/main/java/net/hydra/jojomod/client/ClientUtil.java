@@ -1577,7 +1577,6 @@ public class ClientUtil {
     public void pauseGame(boolean $$0) {
     }
 
-
     /**A generalized packet for sending bytes to the client. Only a context is provided.*/
     public static void handleBundlePacketS2C(LocalPlayer player, byte context, byte byte1, byte byte2){
         if (context == PacketDataIndex.S2C_BUNDLE_POWER_INV){

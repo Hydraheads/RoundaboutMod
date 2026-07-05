@@ -178,8 +178,8 @@ public class PowersAnubis extends NewDashPreset {
     public final List<Byte> playBytes = new ArrayList<>();
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
-        if ( ((StandUser)entity).roundabout$getStandSkin() == (byte)0 ) {
-            ((StandUser)entity).roundabout$setStandSkin((byte)1);
+        if (standSkin == (byte)0 ) {
+            standSkin = 1;
         }
         return new PowersAnubis(entity);
     }

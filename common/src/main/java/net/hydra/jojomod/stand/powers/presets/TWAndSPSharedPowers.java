@@ -754,7 +754,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
 
             if (isBarrageAttacking() && !this.self.level().isClientSide()){
-                if (ClientNetworking.getAppropriateConfig().griefSettings.SuperBlockDestructionBarragePunches){
+                if (ClientNetworking.getAppropriateConfig().griefSettings.SuperBlockDestructionBarragePunches && !forwardBarrage){
 
                     Vec3 vec3d = this.self.getEyePosition(0);
                     Vec3 vec3d2 = this.self.getViewVector(0);

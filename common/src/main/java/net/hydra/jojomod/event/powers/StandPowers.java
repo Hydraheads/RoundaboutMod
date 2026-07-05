@@ -2118,16 +2118,37 @@ public class StandPowers extends AbilityScapeBasis {
         return Component.empty();
     }
 
+
+    public byte standSkin =0;
+    public byte idlePos =0;
     // adds additional save data to discs. An example of what this could be used for is mandom watch styles and tusk nail colors
     // also consider that skins are also saved onto the data, so anything that's cosmetic in that regard would work
     public void addAdditionalSaveData(CompoundTag $$0) {
-
+        $$0.putByte("Skin",standSkin);
+        $$0.putByte("Pose",idlePos);
     }
     public void readAdditionalSaveData(CompoundTag $$0) {
+        StandUser user = getStandUserSelf();
+        if ($$0.contains("Skin")) {
+            byte skn = ($$0.getByte("Skin"));
+            user.roundabout$setStandSkinLight(skn);
+        } else {
+            user.roundabout$setStandSkinLight((byte) 0);
+        }
 
+        if ($$0.contains("Pose")) {
+            byte skn = ($$0.getByte("Pose"));
+            user.roundabout$setIdlePosLight(skn);
+        } else {
+            user.roundabout$setIdlePosLight((byte) 0);
+        }
     }
     // run this to trigger the disc saving and syncing
     public void saveDiscAndSync(){
+        if (self.level().isClientSide())
+            return;
+        if (getStandUserSelf().roundabout$getStandDisc().isEmpty())
+            return;
         this.getStandUserSelf().roundabout$updateStandDisc(MainUtil.saveToDiscData(self,((StandUser)self).roundabout$getStandDisc().copy()));
     }
 

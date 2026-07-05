@@ -60,6 +60,7 @@ public class FabricSounds {
         addSound(ModSounds.CKB_STEAL_ID, ModSounds.CKB_STEAL_EVENT);
         addSound(ModSounds.CKB_YES_ID, ModSounds.CKB_YES_EVENT);
         addSound(ModSounds.CKB_NO_ID, ModSounds.CKB_NO_EVENT);
+        addSound(ModSounds.CKB_TILE_ID, ModSounds.CKB_TILE_EVENT);
 
         addSound(ModSounds.OVA_BARRAGE_ID, ModSounds.OVA_BARRAGE_EVENT);
         addSound(ModSounds.OVA_BARRAGE_2_ID, ModSounds.OVA_BARRAGE_2_EVENT);
@@ -301,10 +302,17 @@ public class FabricSounds {
         addSound(ModSounds.ANUBIS_SHIELDBREAK_ID, ModSounds.ANUBIS_SHIELDBREAK_EVENT);
         addSound(ModSounds.ANUBIS_EXTRA_ID, ModSounds.ANUBIS_EXTRA_EVENT);
 
+        addSound(ModSounds.SHA_JUMP_ID, ModSounds.SHA_JUMP_EVENT);
         addSound(ModSounds.KILLER_QUEEN_IMPALE_ID, ModSounds.KILLER_QUEEN_IMPALE_EVENT);
         addSound(ModSounds.KILLER_QUEEN_PUNCH_ID, ModSounds.KILLER_QUEEN_PUNCH_EVENT);
         addSound(ModSounds.KILLER_QUEEN_SHIBA_ID, ModSounds.KILLER_QUEEN_SHIBA_EVENT);
+        addSound(ModSounds.KILLER_QUEEN_SHIBABA_ID, ModSounds.KILLER_QUEEN_SHIBABA_EVENT);
         addSound(ModSounds.KILLER_QUEEN_SHA_SUMMON_ID, ModSounds.KILLER_QUEEN_SHA_SUMMON_EVENT);
+        addSound(ModSounds.KILLER_QUEEN_SHA_DEDEDEDE_ID, ModSounds.KILLER_QUEEN_SHA_DEDEDEDE_EVENT);
+        addSound(ModSounds.KILLER_QUEEN_SHA_CRACKED_DEDE_ID, ModSounds.KILLER_QUEEN_SHA_CRACKED_DEDE_EVENT);
+        addSound(ModSounds.KILLER_QUEEN_SHA_CRACKED_KOCCHI_ID, ModSounds.KILLER_QUEEN_SHA_CRACKED_KOCCHI_EVENT);
+        addSound(ModSounds.KILLER_QUEEN_SHA_KOCCHI_1_ID, ModSounds.KILLER_QUEEN_SHA_KOCCHI_1_EVENT);
+        addSound(ModSounds.KILLER_QUEEN_SHA_KOCCHI_2_ID, ModSounds.KILLER_QUEEN_SHA_KOCCHI_2_EVENT);
         addSound(ModSounds.KILLER_QUEEN_SHA_MOVING_ID, ModSounds.KILLER_QUEEN_SHA_MOVING_EVENT);
         addSound(ModSounds.KILLER_QUEEN_BARRAGE_ID, ModSounds.KILLER_QUEEN_BARRAGE_EVENT);
         addSound(ModSounds.KILLER_QUEEN_SUMMON_ID, ModSounds.KILLER_QUEEN_SUMMON_EVENT);

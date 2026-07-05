@@ -78,15 +78,15 @@ public class PowersMandom extends NewDashPreset {
     public byte watchStyle = WATCHLESS;
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
-        $$0.putByte("watchStyle",watchStyle);
         super.addAdditionalSaveData($$0);
+        $$0.putByte("watchStyle",watchStyle);
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
+        super.readAdditionalSaveData($$0);
         if ($$0.contains("watchStyle")) {
             watchStyle = $$0.getByte("watchStyle");
         }
-        super.readAdditionalSaveData($$0);
     }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
