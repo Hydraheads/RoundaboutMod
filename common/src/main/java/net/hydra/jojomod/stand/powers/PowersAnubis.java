@@ -179,7 +179,7 @@ public class PowersAnubis extends NewDashPreset {
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
         if ( ((StandUser)entity).roundabout$getStandSkin() == (byte)0 ) {
-            ((StandUser)entity).roundabout$setStandSkin((byte)1);
+            ((StandUser)entity).roundabout$setStandSkinLight((byte)1);
         }
         return new PowersAnubis(entity);
     }
