@@ -107,11 +107,8 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                     packedLight, r, g, b, heyfull, skin);
                             ClientUtil.popPoseAndCooperate(poseStack, 26);
                         } else {
-                            if (entity instanceof  IPlayerEntity IPL && IPL.roundabout$getMaskSlot().getItem() instanceof
-                                    MaskItem MI) {
-                                poseStack.scale(1F,1F,1.1F);
-                            }
-                            poseStack.translate(0, -0.1, 0.52);
+                            poseStack.scale(1F,1F,1.1F);
+                            poseStack.translate(0, -0.1, 0.54);
                             ModStrayModels.CENTURY_BOY.renderBody(entity, partialTicks, poseStack, bufferSource,
                                     packedLight, r, g, b, heyfull, skin);
 
@@ -124,6 +121,11 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             }
 
                             getParentModel().head.translateAndRotate(poseStack);
+
+                            if (entity instanceof  IPlayerEntity IPL && IPL.roundabout$getMaskSlot().getItem() instanceof
+                                    MaskItem MI) {
+                                poseStack.scale(1F,1F,1.1F);
+                            }
 
                             poseStack.translate(0, -0.1, 0.52);
 
@@ -186,7 +188,10 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                     poseStack.scale(0.6F, 0.6F, 0.6F);
                                     poseStack.translate(0.3, 1, -0.3);
                                 }
-                                    poseStack.translate(0, 0.1, 0);
+                                    poseStack.translate(0, 0.1, -0.01);
+                                if (MI.visageData.generateVisageData(entity).rendersBreast()){
+                                    poseStack.translate(0, -0.05, -0.05);
+                                }
                                 getParentModel().body.translateAndRotate(poseStack);
 
 
