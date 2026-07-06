@@ -1967,11 +1967,13 @@ public class ClientUtil {
         int l = victim.level().getBrightness(LightLayer.SKY, blockpos1);
 
         for(int i1 = 0; i1 <= 24; ++i1) {
-            roundabout$addVertexPair(binder, vertexconsumer, matrix4f, f, f1, f2, i, j, k, l, 0.025F, 0.025F, f5, f6, i1, false,focus);
+            roundabout$addVertexPair(binder, vertexconsumer, matrix4f, f, f1, f2, i, j, k, l, 0.025F,
+                    0.025F, f5, f6, i1, false,focus, getBindType);
         }
 
         for(int j1 = 24; j1 >= 0; --j1) {
-            roundabout$addVertexPair(binder, vertexconsumer, matrix4f, f, f1, f2, i, j, k, l, 0.025F, 0.0F, f5, f6, j1, true,focus);
+            roundabout$addVertexPair(binder, vertexconsumer, matrix4f, f, f1, f2, i, j, k, l, 0.025F,
+                    0.0F, f5, f6, j1, true,focus,getBindType);
         }
 
         poseStack.popPose();
@@ -1980,23 +1982,24 @@ public class ClientUtil {
         return $$0.isOnFire() ? 15 : $$0.level().getBrightness(LightLayer.BLOCK, $$1);
     }
 
-    public static void roundabout$addVertexPair(Entity binder, VertexConsumer p_174308_, Matrix4f p_254405_, float p_174310_, float p_174311_, float p_174312_, int p_174313_, int p_174314_, int p_174315_, int p_174316_, float p_174317_, float p_174318_, float p_174319_, float p_174320_, int p_174321_, boolean p_174322_, float focus) {
-
-        boolean isMR = false;
-        if (binder instanceof LivingEntity LE && ((StandUser)binder).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
-            isMR = true;
-        }
+    public static void roundabout$addVertexPair(Entity binder, VertexConsumer p_174308_, Matrix4f p_254405_, float p_174310_, float p_174311_, float p_174312_, int p_174313_, int p_174314_, int p_174315_, int p_174316_, float p_174317_, float p_174318_, float p_174319_, float p_174320_, int p_174321_, boolean p_174322_, float focus,
+                                                int getBindType) {
+        boolean isMr = getBindType == 2;
+        boolean isCKB = getBindType == 1;
         float f = (float)p_174321_ / 24.0F;
         int i = (int)Mth.lerp(f, (float)p_174313_, (float)p_174314_);
         int j = (int)Mth.lerp(f, (float)p_174315_, (float)p_174316_);
         int k = LightTexture.pack(i, j);
         int tc = binder.tickCount % 9;
-        float f1 = 0.7F + (float)(Math.random()*0.3);
-        if (tc > 5) {
-            f1*=0.92F;
-        }
-        if (tc > 2) {
-            f1*=0.84F;
+        float f1 = 1f;
+        if (isMr) {
+            f1 = 0.7F + (float) (Math.random() * 0.3);
+            if (tc > 5) {
+                f1 *= 0.92F;
+            }
+            if (tc > 2) {
+                f1 *= 0.84F;
+            }
         }
         Vec3 color = roundabout$getBindColor(binder);
         float f2 = (float) (color.x() * f1);
@@ -2006,8 +2009,12 @@ public class ClientUtil {
         float f6 = p_174311_ > 0.0F ? p_174311_ * f * f : p_174311_ - p_174311_ * (1.0F - f) * (1.0F - f);
         float f7 = p_174312_ * f;
         float width = 0.05F;
-        p_174308_.vertex(p_254405_, f5 - p_174319_ - width, f6 + p_174318_ + width - focus, f7 + p_174320_ + width).color(f2, f3, f4, 1.0F).uv2(k).endVertex();
-        p_174308_.vertex(p_254405_, f5 + p_174319_ + width, f6 + p_174317_ - p_174318_ - width - focus, f7 - p_174320_ - width).color(f2, f3, f4, 1.0F).uv2(k).endVertex();
+        float alpha = 1;
+        if (isCKB){
+            alpha = 0.3F;
+        }
+        p_174308_.vertex(p_254405_, f5 - p_174319_ - width, f6 + p_174318_ + width - focus, f7 + p_174320_ + width).color(f2, f3, f4, alpha).uv2(k).endVertex();
+        p_174308_.vertex(p_254405_, f5 + p_174319_ + width, f6 + p_174317_ - p_174318_ - width - focus, f7 - p_174320_ - width).color(f2, f3, f4, alpha).uv2(k).endVertex();
     }
 
     public static Vec3 roundabout$getBindColor(Entity binder) {
