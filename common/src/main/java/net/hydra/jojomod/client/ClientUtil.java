@@ -1897,20 +1897,46 @@ public class ClientUtil {
 
     }
 
+    protected static Vec3 getLeashOffset2(Entity ent) {
+        return new Vec3((double)0.0F, (double)ent.getEyeHeight()*0.8F, (double)(ent.getBbWidth() * 0.4F));
+    }
+    protected static Vec3 getLeashOffset3(Entity ent) {
+        return new Vec3((double)0.0F, (double)ent.getEyeHeight()*1.1F, (double)(ent.getBbWidth() * 0.4F));
+    }
+    public static Vec3 getRopeHoldPosition2(Entity ent, float $$0) {
+        return ent.getEyePosition($$0).subtract(ent.getPosition($$0)).scale(0.8F).add(ent.getPosition($$0));
+    }
+
     // Red Bind rendering
     @Unique
     public static void roundabout$renderBound(LivingEntity victim, float delta, PoseStack poseStack, MultiBufferSource mb, Entity binder, float focus) {
         poseStack.pushPose();
+        int getBindType = 0;
+        if (victim != null){
+            getBindType = ((StandUser)victim).rdbt$getBoundType(binder);
+        }
+        boolean isMr = getBindType == 2;
+        boolean isCKB = getBindType == 1;
+
         Vec3 vec3 = binder.getRopeHoldPosition(delta);
-        if (binder instanceof LivingEntity lv){
-            StandUser su = ((StandUser)lv);
-            StandEntity stand = su.roundabout$getStand();
-            if (stand != null){
-                vec3 = stand.getRopeHoldPosition(delta);
+        if (isMr){
+            if (binder instanceof LivingEntity lv){
+                StandUser su = ((StandUser)lv);
+                StandEntity stand = su.roundabout$getStand();
+                if (stand != null){
+                    vec3 = stand.getRopeHoldPosition(delta);
+                }
             }
+        } else if (isCKB){
+            vec3 = getRopeHoldPosition2(binder,delta);
         }
         double d0 = (double)(Mth.lerp(delta, victim.yBodyRotO, victim.yBodyRot) * ((float)Math.PI / 180F)) + (Math.PI / 2D);
-        Vec3 vec31 = victim.getLeashOffset(delta);
+        Vec3 vec31;
+        if (isCKB){
+            vec31 = getLeashOffset2(victim);
+        } else  {
+            vec31 = victim.getLeashOffset(delta);
+        }
         double d1 = Math.cos(d0) * vec31.z + Math.sin(d0) * vec31.x;
         double d2 = Math.sin(d0) * vec31.z - Math.cos(d0) * vec31.x;
         double d3 = Mth.lerp((double)delta, victim.xo, victim.getX()) + d1;
@@ -1955,6 +1981,11 @@ public class ClientUtil {
     }
 
     public static void roundabout$addVertexPair(Entity binder, VertexConsumer p_174308_, Matrix4f p_254405_, float p_174310_, float p_174311_, float p_174312_, int p_174313_, int p_174314_, int p_174315_, int p_174316_, float p_174317_, float p_174318_, float p_174319_, float p_174320_, int p_174321_, boolean p_174322_, float focus) {
+
+        boolean isMR = false;
+        if (binder instanceof LivingEntity LE && ((StandUser)binder).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+            isMR = true;
+        }
         float f = (float)p_174321_ / 24.0F;
         int i = (int)Mth.lerp(f, (float)p_174313_, (float)p_174314_);
         int j = (int)Mth.lerp(f, (float)p_174315_, (float)p_174316_);
@@ -1993,6 +2024,8 @@ public class ClientUtil {
             } else if (sft == StandFireType.CREAM.id){
                 return new Vec3(0.949F,0.945F,0.718F);
             }
+        } else if (binder instanceof LivingEntity LE && ((StandUser)binder).roundabout$getStandPowers() instanceof PowersCalifornia){
+            return new Vec3(0.992F,0.843F,1F);
         }
         return new Vec3(0.969F,0.569F,0.102F);
     }

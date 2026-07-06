@@ -401,11 +401,31 @@ public class PowersCalifornia extends NewDashPreset {
     }
 
     @Override
+    public boolean tryIntPower(int move, boolean forced, int chargeTime){
+        storedInt = chargeTime;
+        return super.tryIntPower(move, forced, chargeTime);
+    }
+    @Override
     public boolean tryBlockPosPower(int move, boolean forced, BlockPos pos) {
         spawnPos = pos;
         return super.tryBlockPosPower(move, forced,pos);
     }
     public BlockPos spawnPos = BlockPos.ZERO;
+
+    public void doTheLeaveRule() {
+        if (!this.self.level().isClientSide()) {
+            if (!onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+                setCooldown(PowerIndex.SKILL_EXTRA_2, 15);
+                if (storedInt > -1){
+                    Entity zent = self.level().getEntity(storedInt);
+                    if (zent instanceof LivingEntity LV){
+                        ((StandUser)LV).roundabout$setBoundTo(self);
+
+                    }
+                }
+            }
+        }
+    }
 
     public void doTheStepRule(){
         if (!this.self.level().isClientSide()){
@@ -569,7 +589,9 @@ public class PowersCalifornia extends NewDashPreset {
             return true;
         }
         if (isDoNotLeave() && targEnt != null && ent != null && ent.getId() == targEnt.getId()){
-            return true;
+            if (hasStandActive(self)) {
+                return true;
+            }
         }
         return false;
     }
@@ -600,6 +622,8 @@ public class PowersCalifornia extends NewDashPreset {
             punishServer();
         } else if (move == PowerIndex.SKILL_EXTRA){
             doTheStepRule();
+        } else if (move == PowerIndex.SKILL_EXTRA_2){
+            doTheLeaveRule();
         }
         return super.setPowerOther(move,lastMove);
     }
