@@ -276,6 +276,8 @@ public class PowersCalifornia extends NewDashPreset {
             if (!onCooldown(PowerIndex.SKILL_EXTRA_2)) {
                 if (targEnt != null){
                     tryIntPowerPacket(PowerIndex.SKILL_EXTRA_2,targEnt.getId());
+                } else {
+                    tryIntPowerPacket(PowerIndex.SKILL_EXTRA_2,-1);
                 }
             }
         }
@@ -602,7 +604,12 @@ public class PowersCalifornia extends NewDashPreset {
         clearLeaded();
         super.onPowerSwitch();
     }
-    public LivingEntity leaded;
+    @Override
+    public void onStandSwitch(){
+        clearLeaded();
+        super.onStandSwitch();
+    }
+    public LivingEntity leaded = null;
     public void clearLeaded(){
         if (leaded != null){
             ((StandUser)leaded).roundabout$dropString();

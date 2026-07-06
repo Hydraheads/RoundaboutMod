@@ -187,6 +187,11 @@ public class PowersMagiciansRed extends NewPunchingStand {
     }
 
 
+    @Override
+    public void onStandSwitch(){
+        clearEverything();
+        super.onStandSwitch();
+    }
 
     @Override
     public void onPowerSwitch(){

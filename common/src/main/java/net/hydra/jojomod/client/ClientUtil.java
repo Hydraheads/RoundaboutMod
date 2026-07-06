@@ -1904,7 +1904,7 @@ public class ClientUtil {
         return new Vec3((double)0.0F, (double)ent.getEyeHeight()*1.1F, (double)(ent.getBbWidth() * 0.4F));
     }
     public static Vec3 getRopeHoldPosition2(Entity ent, float $$0) {
-        return ent.getEyePosition($$0).subtract(ent.getPosition($$0)).scale(0.8F).add(ent.getPosition($$0));
+        return ent.getEyePosition($$0).subtract(ent.getPosition($$0)).scale(0.73F).add(ent.getPosition($$0));
     }
 
     // Red Bind rendering
