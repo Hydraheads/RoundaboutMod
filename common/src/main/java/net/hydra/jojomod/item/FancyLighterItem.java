@@ -6,6 +6,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -26,58 +28,70 @@ public class FancyLighterItem extends BlockItem {
         super($$0, $$1);
     }
 
-    @Nullable
-    public LivingEntity lighterOwner = null;
 
-    public void setLighterOwner(LivingEntity liv){lighterOwner = liv;}
+    private static final String OWNER_IS_WHO = "WhoIsOwner";
+    private static final String IS_LIT_TAG = "IsLighterLit";
 
-    public boolean isLit = true;
-    public void setLit(boolean lit){isLit = lit;}
+    private boolean getIsLit(ItemStack stack) {
+        return stack.getOrCreateTag().getBoolean(IS_LIT_TAG);
+    }
+
+    private void setIsNotLit(ItemStack stack, boolean value) {
+        stack.getOrCreateTag().putBoolean(IS_LIT_TAG, value);
+    }
+
     @Override
-    public InteractionResult useOn(UseOnContext context) {
-        Level level = context.getLevel();
-        BlockPos blockPos = context.getClickedPos();
-        Player player = context.getPlayer();
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+        super.inventoryTick(stack, level, entity, slot, selected);
 
-        if (player == null) return InteractionResult.FAIL;
-
-        BlockPos abovePos = blockPos.above();
-        BlockState aboveState = level.getBlockState(abovePos);
-        if (!aboveState.isAir()) return InteractionResult.FAIL;
-
-        if (level.isClientSide) {
-            System.out.println(lighterOwner);
+        if(entity.isInWaterOrRain()){
+            if(!getIsLit(stack)) {
+                setIsNotLit(stack, true);
+                checkIsLitOrNot(stack);
+            }
         }
+    }
 
-        return InteractionResult.sidedSuccess(level.isClientSide);
+    public int getLighterOwner(ItemStack stack){return stack.getOrCreateTag().getInt(OWNER_IS_WHO);}
+    public void setLighterOwner(ItemStack stack, int value){
+        stack.getOrCreateTag().putInt(OWNER_IS_WHO, value);
     }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
         ItemStack $$3 = $$1.getItemInHand($$2);
         if(!$$1.isInWaterOrRain()) {
-            if (!isLit) {
-                setLit(true);
+            if (!getIsLit($$3)) {
+                setIsNotLit($$3, true);
+                checkIsLitOrNot($$3);
             } else {
-                setLit(false);
+                setIsNotLit($$3, false);
+                checkIsLitOrNot($$3);
             }
-        }else {
-            setLit(false);
-            return InteractionResultHolder.fail($$3);
+            if ($$0.isClientSide) {
+                System.out.println(getLighterOwner($$3));
+            }
         }
         return InteractionResultHolder.fail($$3);
     }
 
-    public void tick(){
-        System.out.println(isLit);
+    public void checkIsLitOrNot(ItemStack stack){
+        System.out.println(stack.getOrCreateTag().getBoolean(IS_LIT_TAG));
     }
 
-    public float getIsLitOrNot(Level level) {
+    public void unlit(ItemStack stack){
+        this.setIsNotLit(stack, true);
+    }
+
+    public float getCurrentPredicateValue(Level level, ItemStack stack) {
+
         if (level != null) {
-            if (!isLit) {
+
+            if (getIsLit(stack)) {
                 return 0.2f;
             }
         }
         return 0.0f;
     }
+
 }
