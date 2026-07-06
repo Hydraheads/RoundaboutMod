@@ -39,7 +39,7 @@ public abstract class FancyLighterItemEntity extends Entity{
             ItemStack stack = getItem();
             if (stack != null && !stack.isEmpty() && stack.is(ModItems.FANCY_LIGHTER.asItem())
                     && stack.getCount() > 0) {
-                if (this.isInWater()) {
+                if (this.isInWaterOrRain()) {
                     rdbt$transformLighter(stack);
                 } else {
                     AABB box = this.getBoundingBox();
