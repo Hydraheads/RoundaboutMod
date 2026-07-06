@@ -56,19 +56,19 @@ public class StrayCatBegGoal
 
     @Override
     public void start() {
-        this.stray.setIsInterested(true);
+        //this.stray.setIsInterested(true);
         this.timer = this.adjustedTickDelay(40 + this.stray.getRandom().nextInt(40));
     }
 
     @Override
     public void stop() {
-        this.stray.setIsInterested(false);
+        //this.stray.setIsInterested(false);
         this.begFrom = null;
     }
 
     @Override
     public void tick() {
-        this.stray.getLookControl().setLookAt(this.begFrom.getX(), this.begFrom.getEyeY(), this.begFrom.getZ(), 10.0f, this.wolf.getMaxHeadXRot());
+        //this.stray.getLookControl().setLookAt(this.begFrom.getX(), this.begFrom.getEyeY(), this.begFrom.getZ(), 10.0f, this.wolf.getMaxHeadXRot());
         --this.timer;
     }
 

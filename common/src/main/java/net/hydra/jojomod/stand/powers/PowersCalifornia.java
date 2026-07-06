@@ -416,11 +416,12 @@ public class PowersCalifornia extends NewDashPreset {
         if (!this.self.level().isClientSide()) {
             if (!onCooldown(PowerIndex.SKILL_EXTRA_2)) {
                 setCooldown(PowerIndex.SKILL_EXTRA_2, 15);
+                clearLeaded();
                 if (storedInt > -1){
                     Entity zent = self.level().getEntity(storedInt);
                     if (zent instanceof LivingEntity LV){
                         ((StandUser)LV).roundabout$setBoundTo(self);
-
+                        leaded = LV;
                     }
                 }
             }
@@ -594,6 +595,19 @@ public class PowersCalifornia extends NewDashPreset {
             }
         }
         return false;
+    }
+
+    @Override
+    public void onPowerSwitch(){
+        clearLeaded();
+        super.onPowerSwitch();
+    }
+    public LivingEntity leaded;
+    public void clearLeaded(){
+        if (leaded != null){
+            ((StandUser)leaded).roundabout$dropString();
+            leaded = null;
+        }
     }
 
     @Override

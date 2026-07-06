@@ -2064,10 +2064,14 @@ public class ClientUtil {
 
     public static boolean forceEntityRendering(Entity entity){
         if (entity instanceof Player pl){
-            if (((StandUser)pl).roundabout$hasStandOut()){
+            if (((IPlayerEntity)pl).roundabout$GetPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE){
                 return true;
             }
-            if (((IPlayerEntity)pl).roundabout$GetPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE){
+        } if (entity instanceof LivingEntity LE){
+            StandUser su = ((StandUser)LE);
+            if (su.roundabout$hasStandOut()){
+                return true;
+            } else if (su.roundabout$getBoundTo() != null){
                 return true;
             }
         }
