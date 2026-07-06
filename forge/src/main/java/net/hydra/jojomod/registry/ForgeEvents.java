@@ -433,6 +433,7 @@ public class ForgeEvents {
         //ModItems.ILLAGER_HAND = ForgeItems.ILLAGER_HAND.get();
         //ModItems.ROTTEN_HAND = ForgeItems.ROTTEN_HAND.get();
         ModItems.ULTRAVIOLET_BLASTER = ForgeItems.ULTRAVIOLET_BLASTER.get();
+        ModItems.FANCY_LIGHTER = ForgeItems.FANCY_LIGHTER.get();
         ModItems.LOCACACA_PIT = ForgeItems.LOCACACA_PIT.get();
         ModItems.LOCACACA = ForgeItems.LOCACACA.get();
         ModItems.LOCACACA_BRANCH = ForgeItems.LOCACACA_BRANCH.get();
