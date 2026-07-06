@@ -900,6 +900,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
     @Inject(method = "actuallyHurt(Lnet/minecraft/world/damagesource/DamageSource;F)V", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$actuallyHurt(DamageSource $$0, float $$1, CallbackInfo ci) {
+        StandUser userthis = ((StandUser)this);
         if (!this.isInvulnerableTo($$0) && $$1 > 0) {
 
 
@@ -930,13 +931,15 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             }
 
 
-            Entity bound = ((StandUser)this).roundabout$getBoundTo();
+            Entity bound = userthis.roundabout$getBoundTo();
             if (bound != null && !$$0.isIndirect() && !$$0.is(ModDamageTypes.STAND_FIRE)){
-                ((StandUser)this).roundabout$dropString();
+                if (userthis.rdbt$getBoundType(bound) == 2) {
+                    userthis.roundabout$dropString();
+                }
             }
         }
 
-        if (((StandUser)this).roundabout$mutualActuallyHurt($$0,$$1)){
+        if (userthis.roundabout$mutualActuallyHurt($$0,$$1)){
             ci.cancel();
         }
     }

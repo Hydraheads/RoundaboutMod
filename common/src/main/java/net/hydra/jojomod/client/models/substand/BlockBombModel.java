@@ -45,12 +45,10 @@ public class BlockBombModel<T extends BlockBombEntity> extends StandModel<T> {
 
 	@Override
 	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
-		super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
+		this.root().getAllParts().forEach(ModelPart::resetPose);
 		
 		this.stand.xRot = 0.0f;
 		this.stand.yRot = 0.0f;
-		pEntity.setStandRotationX(0.0f);
-		pEntity.setStandRotationY(0.0f);
 	}
 
 	@Override

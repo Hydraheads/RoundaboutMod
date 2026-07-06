@@ -5,25 +5,13 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.stand.StandModel;
-import net.hydra.jojomod.client.models.stand.animations.RattAnimations;
 import net.hydra.jojomod.client.models.substand.renderers.animations.SheerHeartAttackAnimations;
 import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;
-import net.hydra.jojomod.event.powers.DamageHandler;
-import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.stand.powers.PowersGreenDay;
-import net.hydra.jojomod.stand.powers.PowersKillerQueen;
-import net.hydra.jojomod.stand.powers.PowersRatt;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.phys.Vec3;
 
 public class SheerHeartAttackModel<T extends SheerHeartAttackEntity> extends StandModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
@@ -72,7 +60,6 @@ public class SheerHeartAttackModel<T extends SheerHeartAttackEntity> extends Sta
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
 
-	StandPowers Power = new PowersKillerQueen(null);
 
 	@Override
 	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {

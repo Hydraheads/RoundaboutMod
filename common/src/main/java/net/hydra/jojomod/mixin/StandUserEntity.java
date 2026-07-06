@@ -65,6 +65,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.entity.animal.CatVariant;
 import net.minecraft.world.entity.animal.Turtle;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.monster.*;
@@ -957,11 +959,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Unique
     @Override
-    public boolean roundabout$canBeBound(Player $$0) {
-        return !this.roundabout$isStringBound() && !(this instanceof Enemy);
-    }
-    @Unique
-    @Override
     public void roundabout$tickString() {
         if (!this.level().isClientSide) {
             if (this.roundabout$stringHolder != null) {
@@ -1044,11 +1041,27 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     @javax.annotation.Nullable
     public Entity roundabout$getBoundTo() {
-        if (this.roundabout$getBoundToID() != 0 && this.level().isClientSide) {
+        int zid = this.roundabout$getBoundToID();
+        if (zid != 0 && this.level().isClientSide) {
             this.roundabout$stringHolder = this.level().getEntity(this.roundabout$getBoundToID());
         }
 
         return this.roundabout$stringHolder;
+    }
+
+    @Unique
+    public int rdbt$getBoundType(Entity holder){
+        if (holder instanceof LivingEntity lv){
+            StandUser user = ((StandUser) lv);
+            StandPowers powers2 = ((StandUser) lv).roundabout$getStandPowers();
+            if (powers2 instanceof PowersCalifornia){
+                return 1;
+            } else if (powers2 instanceof PowersMagiciansRed){
+                return 2;
+            }
+        }
+        return 0;
+
     }
 
     @Unique
@@ -5581,7 +5594,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
 
         }
-
+        /// Stray Cat Spawn
+        if (me instanceof Cat) {
+            if (this.getEffect(ModEffects.STAND_VIRUS) != null) {
+                // do spawn here lol
+            }
+        }
 
         ///  ratt skin unlocking
         if (cause != null) {

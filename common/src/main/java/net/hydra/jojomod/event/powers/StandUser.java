@@ -59,6 +59,7 @@ public interface StandUser {
     Entity roundabout$getBoundTo();
     void roundabout$setBoundTo(Entity $$0);
     int roundabout$getBoundToID();
+    int rdbt$getBoundType(Entity holder);
 
 
     void rdbt$setFleshBud(UUID bud);
@@ -66,7 +67,6 @@ public interface StandUser {
 
     void roundabout$setBoundToID(int bound);
     boolean roundabout$isStringBound();
-    boolean roundabout$canBeBound(Player $$0);
     void roundabout$dropString();
     void roundabout$tickString();
 

@@ -3,6 +3,8 @@ package net.hydra.jojomod.client.models.substand.renderers;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
@@ -17,6 +19,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.SkinManager;
 import net.minecraft.core.BlockPos;
@@ -50,7 +53,18 @@ public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
     	if (ClientUtil.canSeeStands(ClientPlayer) && !(Minecraft.getInstance().options.hideGui && hidesOnF1)) {
         	Player UserPlayer =((Player)blockBombEntity.getUser());
         	if (UserPlayer == ClientPlayer) {
-        		super.render(blockBombEntity, 0, partialTicks, matrixStack, vertexConsumerProvider, i);	
+                matrixStack.pushPose();
+
+                VertexConsumer vertex = vertexConsumerProvider.getBuffer(RenderType.entityTranslucent(getTextureLocation(blockBombEntity)));
+
+                matrixStack.mulPose(Axis.ZP.rotationDegrees(180f));
+                matrixStack.translate(0,-0.5,0);
+
+
+                model.renderToBuffer(matrixStack, vertex, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F,
+                        Math.min((((float) blockBombEntity.renderFadeIn) / 20) + (partialTicks * 0.05F), 1f));
+                matrixStack.popPose();
+                super.render(blockBombEntity, 0, partialTicks, matrixStack, vertexConsumerProvider, i);
         	}
         }
     }

@@ -190,6 +190,10 @@ public class PowersCalifornia extends NewDashPreset {
         return new PowersCalifornia(entity);
     }
 
+    public Entity getCaliforniaTargetEntity(){
+        return getTargetEntity(self,5);
+    }
+
     @Override
     public boolean isSecondaryStand(){
         return true;
@@ -266,6 +270,14 @@ public class PowersCalifornia extends NewDashPreset {
                         (state.isSolid()
                         || !state.getFluidState().isEmpty())){
                     tryBlockPosPowerPacket(PowerIndex.SKILL_EXTRA,result.getBlockPos());
+                }
+            }
+        } else if (isDoNotLeave()){
+            if (!onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+                if (targEnt != null){
+                    tryIntPowerPacket(PowerIndex.SKILL_EXTRA_2,targEnt.getId());
+                } else {
+                    tryIntPowerPacket(PowerIndex.SKILL_EXTRA_2,-1);
                 }
             }
         }
@@ -391,11 +403,32 @@ public class PowersCalifornia extends NewDashPreset {
     }
 
     @Override
+    public boolean tryIntPower(int move, boolean forced, int chargeTime){
+        storedInt = chargeTime;
+        return super.tryIntPower(move, forced, chargeTime);
+    }
+    @Override
     public boolean tryBlockPosPower(int move, boolean forced, BlockPos pos) {
         spawnPos = pos;
         return super.tryBlockPosPower(move, forced,pos);
     }
     public BlockPos spawnPos = BlockPos.ZERO;
+
+    public void doTheLeaveRule() {
+        if (!this.self.level().isClientSide()) {
+            if (!onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+                setCooldown(PowerIndex.SKILL_EXTRA_2, 15);
+                clearLeaded();
+                if (storedInt > -1){
+                    Entity zent = self.level().getEntity(storedInt);
+                    if (zent instanceof LivingEntity LV){
+                        ((StandUser)LV).roundabout$setBoundTo(self);
+                        leaded = LV;
+                    }
+                }
+            }
+        }
+    }
 
     public void doTheStepRule(){
         if (!this.self.level().isClientSide()){
@@ -520,6 +553,11 @@ public class PowersCalifornia extends NewDashPreset {
             if (hurtEntities.isEmpty() && rewindSnap != null){
                 rewindSnap = null;
             }
+        } else {
+            if (isDoNotLeave()){
+                targEnt = getCaliforniaTargetEntity();
+
+            }
         }
     }
 
@@ -546,16 +584,44 @@ public class PowersCalifornia extends NewDashPreset {
         return super.cancelSprintParticles();
     }
 
+    Entity targEnt = null;
+
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
         if (!getCapturedEntityIds().isEmpty() && isCapturedEntity(ent)){
             return true;
         }
+        if (isDoNotLeave() && targEnt != null && ent != null && ent.getId() == targEnt.getId()){
+            if (hasStandActive(self)) {
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
+    public void onPowerSwitch(){
+        clearLeaded();
+        super.onPowerSwitch();
+    }
+    @Override
+    public void onStandSwitch(){
+        clearLeaded();
+        super.onStandSwitch();
+    }
+    public LivingEntity leaded = null;
+    public void clearLeaded(){
+        if (leaded != null){
+            ((StandUser)leaded).roundabout$dropString();
+            leaded = null;
+        }
+    }
+
+    @Override
     public int highlightsEntityColor(Entity ent, Player player){
+        if (isDoNotLeave() && targEnt != null && ent != null && ent.getId() == targEnt.getId()){
+            return 16635903;
+        }
         return 16254719;
     }
 
@@ -577,6 +643,8 @@ public class PowersCalifornia extends NewDashPreset {
             punishServer();
         } else if (move == PowerIndex.SKILL_EXTRA){
             doTheStepRule();
+        } else if (move == PowerIndex.SKILL_EXTRA_2){
+            doTheLeaveRule();
         }
         return super.setPowerOther(move,lastMove);
     }
