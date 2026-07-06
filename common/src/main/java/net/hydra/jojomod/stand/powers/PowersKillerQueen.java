@@ -26,6 +26,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.item.StrayCats.AbstractStrayCat;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
@@ -532,9 +533,14 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
     		}
     	}
-    	if (slot == 2 && this.currentBombStatus == BOMB_NONE && !this.BitesTheDustMode && isGuarding()){
+    	if (slot == 2 && !this.BitesTheDustMode && isGuarding()){
+            if (this.currentBombStatus == BOMB_NONE) {
+                return !canUseStrayCat();
+            } else if (this.currentBombStatus == BOMB_NONE) {
+                Entity target = this.getTargetEntity(this.self, 30);
+                return !canBubbleTarget(target);
+            }
 
-            return !canUseStrayCat();
     	}
 
        if (slot == 4 && !this.BitesTheDustMode) {
@@ -681,7 +687,14 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         // for now, I am using parrot as placeholder
         if (maybeStraycat instanceof Parrot StrayCatForSure) {
-            return StrayCatForSure.isTame() && StrayCatForSure.isOwnedBy(this.getSelf()) && !this.hasStrayCat;
+            if (StrayCatForSure.isTame() && StrayCatForSure.isOwnedBy(this.getSelf()) && !this.hasStrayCat) {
+                return true;
+            }
+        }
+
+        ItemStack item = this.getSelf().getMainHandItem();
+        if (item.getItem() instanceof AbstractStrayCat) {
+            return true;
         }
 
         return false;
@@ -733,9 +746,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean canBubbleTarget(Entity target) {
-        if (target == null) {
-            return false;
-        }
+        if (target == null) { return false; }
 
         if (target instanceof StandEntity SE && this.self.is(SE.getUser())) {
             return false;
@@ -1450,6 +1461,16 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                     return true;
                 }
+            }
+
+            ItemStack item = this.getSelf().getMainHandItem();
+            if (item.getItem() instanceof AbstractStrayCat) {
+                Player PL = (Player)this.getSelf();
+                PL.getInventory().removeItem(item);
+                this.hasStrayCat = true;
+                this.saveDiscAndSync();
+
+                return true;
             }
         }
         
