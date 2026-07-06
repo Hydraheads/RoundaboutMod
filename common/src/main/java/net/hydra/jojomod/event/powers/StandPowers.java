@@ -1928,9 +1928,9 @@ public class StandPowers extends AbilityScapeBasis {
                 //}
                     this.setActivePowerPhase((byte) 0);
                 }
-                if (this.interruptCD > 0) {
-                    this.interruptCD--;
-                }
+            }
+            if (this.interruptCD > 0) {
+                this.interruptCD--;
             }
             this.tickDash();
         } else {
