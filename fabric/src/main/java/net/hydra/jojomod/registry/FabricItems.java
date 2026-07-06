@@ -15,6 +15,7 @@ import net.hydra.jojomod.item.paintings.MonaLisaPaintingItem;
 import net.hydra.jojomod.item.paintings.VanGoughPaintingItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.*;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -255,7 +256,7 @@ public class FabricItems {
             new CoffinBlockItem(DyeColor.BLACK, FabricBlocks.COFFIN_BLOCK, new Item.Properties().stacksTo(1)));
     /*public static Item CHESSBOARD_BLOCK_ITEM = registerItem("chessboard_block",
             new ChessBoardBlockItem(FabricBlocks.CHESSBOARD_BLOCK, new Item.Properties().stacksTo(1)));*/
-
+    public static Item FANCY_LIGHTER = registerItem("fancy_lighter", new FancyLighterItem(Blocks.CANDLE, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
 
     public static Item CAT_REMAINS = registerItem("cat_remains", new HeadRemainsItem(new Item.Properties().stacksTo(64)));
     public static Item MOOSHROOM_REMAINS = registerItem("mooshroom_remains", new HeadRemainsItem(new Item.Properties().stacksTo(64)));
@@ -612,6 +613,7 @@ public class FabricItems {
                         entries.accept(STAND_DISC_PLANET_WAVES);
                         entries.accept(MAX_STAND_DISC_PLANET_WAVES);
                         entries.accept(STAND_DISC_BLACK_SABBATH);
+                        entries.accept(FANCY_LIGHTER);
 
 
                     }).build());
@@ -742,6 +744,7 @@ public class FabricItems {
         ModItems.COFFEE_GUM = COFFEE_GUM;
         ModItems.METEORITE = METEORITE;
         ModItems.AJA = AJA;
+        ModItems.FANCY_LIGHTER = FANCY_LIGHTER;
         //ModItems.HAND = HAND;
         //ModItems.VILLAGER_HAND = VILLAGER_HAND;
         //ModItems.ILLAGER_HAND = ILLAGER_HAND;

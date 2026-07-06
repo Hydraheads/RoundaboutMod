@@ -160,6 +160,7 @@
     "items.BucketItemMixin",
     "items.ExecutionerAxeRaid",
     "items.MaskItemEntity",
+    "items.FancyLighterItemEntity",
     "items.RaidItemEntity",
     "items.StandArrowBowItem",
     "items.StandCancelsShieldItem",
