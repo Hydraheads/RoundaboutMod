@@ -1,6 +1,7 @@
 package net.hydra.jojomod.client;
 
 import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -1904,11 +1905,10 @@ public class ClientUtil {
         return new Vec3((double)0.0F, (double)ent.getEyeHeight()*1.1F, (double)(ent.getBbWidth() * 0.4F));
     }
     public static Vec3 getRopeHoldPosition2(Entity ent, float $$0) {
-        return ent.getEyePosition($$0).subtract(ent.getPosition($$0)).scale(0.73F).add(ent.getPosition($$0));
+        return ent.getEyePosition($$0).subtract(ent.getPosition($$0)).scale(0.78F).add(ent.getPosition($$0));
     }
 
     // Red Bind rendering
-    @Unique
     public static void roundabout$renderBound(LivingEntity victim, float delta, PoseStack poseStack, MultiBufferSource mb, Entity binder, float focus) {
         poseStack.pushPose();
         int getBindType = 0;
@@ -2000,6 +2000,8 @@ public class ClientUtil {
             if (tc > 2) {
                 f1 *= 0.84F;
             }
+        } else if (isCKB) {
+            f1 = 0.9F + (float) (Math.random() * 0.1f);
         }
         Vec3 color = roundabout$getBindColor(binder);
         float f2 = (float) (color.x() * f1);
@@ -2012,8 +2014,11 @@ public class ClientUtil {
         float alpha = 1;
         if (isCKB){
             alpha = 0.3F;
+            width = 0.003F;
         }
+        RenderSystem.enableBlend();
         p_174308_.vertex(p_254405_, f5 - p_174319_ - width, f6 + p_174318_ + width - focus, f7 + p_174320_ + width).color(f2, f3, f4, alpha).uv2(k).endVertex();
+        RenderSystem.enableBlend();
         p_174308_.vertex(p_254405_, f5 + p_174319_ + width, f6 + p_174317_ - p_174318_ - width - focus, f7 - p_174320_ - width).color(f2, f3, f4, alpha).uv2(k).endVertex();
     }
 
