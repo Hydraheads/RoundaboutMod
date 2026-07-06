@@ -190,6 +190,10 @@ public class PowersCalifornia extends NewDashPreset {
         return new PowersCalifornia(entity);
     }
 
+    public Entity getCaliforniaTargetEntity(){
+        return getTargetEntity(self,5);
+    }
+
     @Override
     public boolean isSecondaryStand(){
         return true;
@@ -266,6 +270,12 @@ public class PowersCalifornia extends NewDashPreset {
                         (state.isSolid()
                         || !state.getFluidState().isEmpty())){
                     tryBlockPosPowerPacket(PowerIndex.SKILL_EXTRA,result.getBlockPos());
+                }
+            }
+        } else if (isDoNotLeave()){
+            if (!onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+                if (targEnt != null){
+                    tryIntPowerPacket(PowerIndex.SKILL_EXTRA_2,targEnt.getId());
                 }
             }
         }
@@ -520,6 +530,11 @@ public class PowersCalifornia extends NewDashPreset {
             if (hurtEntities.isEmpty() && rewindSnap != null){
                 rewindSnap = null;
             }
+        } else {
+            if (isDoNotLeave()){
+                targEnt = getCaliforniaTargetEntity();
+
+            }
         }
     }
 
@@ -546,9 +561,14 @@ public class PowersCalifornia extends NewDashPreset {
         return super.cancelSprintParticles();
     }
 
+    Entity targEnt = null;
+
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
         if (!getCapturedEntityIds().isEmpty() && isCapturedEntity(ent)){
+            return true;
+        }
+        if (isDoNotLeave() && targEnt != null && ent != null && ent.getId() == targEnt.getId()){
             return true;
         }
         return false;
@@ -556,6 +576,9 @@ public class PowersCalifornia extends NewDashPreset {
 
     @Override
     public int highlightsEntityColor(Entity ent, Player player){
+        if (isDoNotLeave() && targEnt != null && ent != null && ent.getId() == targEnt.getId()){
+            return 16635903;
+        }
         return 16254719;
     }
 
