@@ -538,6 +538,11 @@ public class PowersCalifornia extends NewDashPreset {
         }
     }
 
+
+    public static int getCKBrange(){
+        return 20;
+    }
+
     public int timeSinceSwitch = 0;
     public void tickPower() {
         super.tickPower();
@@ -597,6 +602,12 @@ public class PowersCalifornia extends NewDashPreset {
                                 leaded instanceof WaterAnimal) {
                             ((IMob) mb).roundabout$setHypnotizedBy(self);
                         }
+                    }
+
+                    if (leaded.distanceTo(self) > getCKBrange()){
+                        addToList(leaded);
+                        playGotchaSound();
+                        clearLeaded();
                     }
                 } else {
                     clearLeaded();
