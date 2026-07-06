@@ -252,8 +252,8 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
-        if (this.getOwner() != null && ((StandUser) this.getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
-            KQ.bubbleContactedBlock();
+        if (this.getOwner() != null && ((StandUser) this.getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble && KQ.detonateTimer > -1) {
+            KQ.explode();
         } else {
             popBubble();
         }

@@ -536,7 +536,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     	if (slot == 2 && !this.BitesTheDustMode && isGuarding()){
             if (this.currentBombStatus == BOMB_NONE) {
                 return !canUseStrayCat();
-            } else if (this.currentBombStatus == BOMB_NONE) {
+            } else if (this.currentBombStatus == BOMB_BUBBLE) {
                 Entity target = this.getTargetEntity(this.self, 30);
                 return !canBubbleTarget(target);
             }
@@ -637,7 +637,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public boolean canGuard(){
-    	if (this.getActivePower() == PowerIndex.POWER_2_BLOCK || this.getActivePower() == DETONATE || isBitesTheDustPlanted()) {
+    	if (this.getActivePower() == PowerIndex.POWER_2_BLOCK || this.detonateTimer > -1 || isBitesTheDustPlanted()) {
     		return false;
     	}
         return super.canGuard();
@@ -645,7 +645,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     @Override
     public boolean canAttack() {
-    	if (this.getActivePower() == DETONATE || isBitesTheDustPlanted()) {
+    	if (this.detonateTimer > -1 || isBitesTheDustPlanted()) {
     		return false;
     	}
     	
@@ -1073,7 +1073,6 @@ public class PowersKillerQueen extends NewPunchingStand {
 
          SoundEvent SE;
         SoundEvent SHIBAE;
-         float shibapitch = 1F;
          float pitch = 1F;
 
          if (entity != null) {
@@ -1082,7 +1081,7 @@ public class PowersKillerQueen extends NewPunchingStand {
          } else {
              SE = ModSounds.PUNCH_2_SOUND_EVENT;
          }
-         if (this.attackTimeDuring >= this.attackTimeMax) {
+         if (chargedFinal >= maxKickTime) {
              SHIBAE = ModSounds.KILLER_QUEEN_SHIBABA_EVENT;
          }else {
              SHIBAE = ModSounds.KILLER_QUEEN_SHIBA_EVENT;
@@ -1091,8 +1090,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
          if (!this.self.level().isClientSide()) {
              this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
-
-             this.self.level().playSound(null, this.self.blockPosition(), SHIBAE, SoundSource.PLAYERS, 1.15F, shibapitch);
+             this.self.level().playSound(null, this.self.blockPosition(), SHIBAE, SoundSource.PLAYERS, 1.0F, 1.0f);
          }
     }
     
@@ -1144,6 +1142,17 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     @Override
     public boolean tryPower(int move, boolean forced) {
+        if (!isClient()) {
+            if ((this.getActivePower() == PowerIndex.BARRAGE || this.getActivePower() == PowerIndex.BARRAGE_CHARGE)
+                    && (move != PowerIndex.BARRAGE && move != PowerIndex.BARRAGE_CHARGE)){
+                this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100, false);
+            }
+            if (this.getActivePower() == PowerIndex.POWER_2_BLOCK && move != PowerIndex.POWER_2_BLOCK) {
+                this.stopSoundsIfNearby(AIRBUBBLE, 100, false);
+            }
+        }
+
+
         return super.tryPower(move, forced);
     }
 
@@ -1237,6 +1246,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             } else  {
                 this.detonateTimer++;
             }
+        }else if (this.getActivePower() == DETONATE) {
+            this.setPowerNone();
         }
     }
 
@@ -1354,7 +1365,6 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
     
     public void detonateClient() {
-    	//if (!this.onCooldown(PowerIndex.SKILL_1)) {
         if (this.currentBombStatus != BOMB_NONE && this.canAttack() && this.canAttack2()) {
 
             ((StandUser) this.getSelf()).roundabout$tryPower(PowersKillerQueen.DETONATE, true);
@@ -1499,12 +1509,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void bubbleContactedBlock() {
-
-        if (this.detonateTimer > -1) {
-            this.explode();
-        }else {
-            syncBombStatus(NONE);
-        }
+        this.explode();
     }
 
     public void bubbleContacted(Entity ent) {
@@ -1524,6 +1529,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             return false;
         }
         if (!this.isClient()) {
+            this.setCooldown(PowerIndex.SKILL_2_GUARD, ClientNetworking.getAppropriateConfig().killerQueenSettings.bubbleShootCooldown);
             this.setAttackTimeDuring(0);
             this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
             playSoundsIfNearby(AIRBUBBLE, 27, false);
@@ -1581,7 +1587,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 S2CPacketUtil.sendIntPowerDataPacket((Player)this.getSelf(),PowersKillerQueen.BUBBLE_BOMB, entID);
 
                 syncBombStatus(BOMB_BUBBLE);
-                this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().killerQueenSettings.bubbleShootCooldown);
+
             }
         }
     }
@@ -2028,7 +2034,7 @@ public class PowersKillerQueen extends NewPunchingStand {
        }else if (soundChoice == SoundIndex.SUMMON_SOUND) {
            byte skin = ((StandUser)this.getSelf()).roundabout$getStandSkin();
            if (skin == DEADLY || skin == NIGHTMARE) {
-               return ModSounds.KILLER_QUEEN_SUMMON_EVENT_4;
+               return ModSounds.KILLER_QUEEN_SUMMON_EVENT_2;
            } else if (skin == CREEPER) {
                return ModSounds.CREEPER_QUEEN_SUMMON_EVENT;
            }else {
@@ -2325,6 +2331,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             ExplosionUtil.explodeEffects(vPos, level, ModParticles.KILLER_QUEEN_EXPLOSION, 0.6f);
             this.getSelf().level().playSound(null, bPos, ModSounds.KILLER_QUEEN_EXPLOSION_EVENT, SoundSource.PLAYERS, 0.65F, 1.0f);
         }
+        this.detonateTimer = -1;
 		this.syncBombStatus(BOMB_NONE);
 		this.setPowerNone();
 		
@@ -2380,7 +2387,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }else {
                 this.detonateTimer = 0;
                 if (this.getActivePower() == PowerIndex.NONE) {
-                    this.setAttackTimeDuring(0);
+                    //this.setAttackTimeDuring(0);
                     this.poseStand(OffsetIndex.GUARD);
                     this.animateStand(KillerQueenEntity.DETONATE);
                     this.setActivePower(DETONATE);
