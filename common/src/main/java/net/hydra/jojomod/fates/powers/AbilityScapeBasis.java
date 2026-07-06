@@ -1817,6 +1817,7 @@ public class AbilityScapeBasis {
             cancelConsumableItem(this.getSelf());
             this.setAttackTimeDuring(-15);
             if (!this.getSelf().level().isClientSide()) {
+                //
                 playFallBraceImpactParticles();
                 playFallBraceImpactSounds();
                 int degrees = (int) (this.getSelf().getYRot() % 360);
@@ -2844,7 +2845,7 @@ public class AbilityScapeBasis {
     /**Inflict knockback*/
     public static void takeKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
 
-        if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+        if (entity instanceof LivingEntity && (strength * (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
             return;
         }
         if (MainUtil.isKnockbackImmune(entity)){
@@ -2861,7 +2862,7 @@ public class AbilityScapeBasis {
 
     /**Inflict knockback with push upwards*/
     public static void takeKnockbackUp(Entity entity, double strength) {
-        if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+        if (entity instanceof LivingEntity && (strength * (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
             return;
         }
         if (MainUtil.isKnockbackImmune(entity)){

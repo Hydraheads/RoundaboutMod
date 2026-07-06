@@ -1547,7 +1547,7 @@ public class MainUtil {
     }
     public static void takeKnockback(Entity entity, double strength, double x, double y, double z) {
 
-        if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+        if (entity instanceof LivingEntity && (strength * (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
             return;
         }
 
@@ -1558,7 +1558,7 @@ public class MainUtil {
     }
     public static void takeKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
 
-        if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+        if (entity instanceof LivingEntity && (strength * (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
             return;
         }
 
@@ -1578,7 +1578,6 @@ public class MainUtil {
 
     public static void takeUnresistableKnockback(Entity entity, double strength, double x, double y, double z) {
         entity.hurtMarked = true;
-        strength*=getNetheriteMultiplier(entity);
         Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
         entity.setDeltaMovement(- vec3d2.x,
                 0.4F,
@@ -1588,7 +1587,6 @@ public class MainUtil {
     public static void takeUnresistableKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
         entity.hurtMarked = true;
 
-        strength*=getNetheriteMultiplier(entity);
         Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
         entity.setDeltaMovement(- vec3d2.x,
                 -vec3d2.y,
@@ -1597,10 +1595,6 @@ public class MainUtil {
     }
     public static void takeLiteralUnresistableKnockbackWithY(Entity entity,  double x, double y, double z) {
         entity.hurtMarked = true;
-        float multi = getNetheriteMultiplier(entity);
-        x*=multi;
-        y*=multi;
-        z*=multi;
         entity.setDeltaMovement(x,
                 y,
                z);
@@ -1609,7 +1603,6 @@ public class MainUtil {
 
     public static void takeUnresistableKnockbackWithYBias2(Entity entity, double strength, double x, double y, double z, float yBias, float yscalp) {
         entity.hurtMarked = true;
-        strength*=getNetheriteMultiplier(entity);
         Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
         Vec3 vec3d3 = vec3d2.multiply(yBias,1-yscalp,yBias);
         entity.setDeltaMovement(- vec3d3.x,
@@ -1619,7 +1612,6 @@ public class MainUtil {
     }
     public static void takeUnresistableKnockbackWithYBias(Entity entity, double strength, double x, double y, double z, float yBias) {
         entity.hurtMarked = true;
-        strength*=getNetheriteMultiplier(entity);
         Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
         Vec3 vec3d3 = vec3d2.multiply(yBias,1,yBias);
         entity.setDeltaMovement(- vec3d3.x,
@@ -1629,10 +1621,6 @@ public class MainUtil {
     }
     public static void takeUnresistableKnockbackWithY2(Entity entity,double x, double y, double z) {
         entity.hurtMarked = true;
-        float multi = getNetheriteMultiplier(entity);
-        x*=multi;
-        y*=multi;
-        z*=multi;
         entity.setDeltaMovement( x,
                 y,
                 z);
@@ -1654,7 +1642,7 @@ public class MainUtil {
     }
 
     public static void knockback(Entity entity, double d, double e, double f) {
-        if (entity instanceof LivingEntity le && (d *= 1.0 - le.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)) <= 0.0) {
+        if (entity instanceof LivingEntity le && (d *(1.0 - le.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
             return;
         }
         if (MainUtil.isKnockbackImmune(entity)){
@@ -1668,7 +1656,7 @@ public class MainUtil {
         entity.hurtMarked = true;
     }
     public static void knockbackWithoutBumpUp(Entity entity, double d, double e, double f) {
-        if (entity instanceof LivingEntity le && (d *= 1.0 - le.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)) <= 0.0) {
+        if (entity instanceof LivingEntity le && (d * (1.0 - le.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
             return;
         }
         if (MainUtil.isKnockbackImmune(entity)){

@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
+import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
@@ -578,6 +579,15 @@ public class FabricEntities {
                             .updateInterval(1).
                             clientTrackingRange(10).build(Roundabout.MOD_ID+":step_rule")
             );
+    public static final EntityType<StrayCatEntity> STRAY_CAT =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "stray_cat_entity"),
+                    EntityType.Builder.<StrayCatEntity>of(StrayCatEntity::new, MobCategory.MISC).
+                            sized(0.7f, 0.7f)
+                            .updateInterval(1).
+                            clientTrackingRange(10).build(Roundabout.MOD_ID+":stray_cat_entity")
+            );
         public static final EntityType<RattDartEntity> RATT_DART =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -981,6 +991,7 @@ public class FabricEntities {
                 ModEntities.THROWN_KNIFE = THROWN_KNIFE;
                 ModEntities.BLOCK_WALL = BLOCK_WALL;
                 ModEntities.STEP_RULE = STEP_RULE;
+                ModEntities.STRAY_CAT = STRAY_CAT;
                 ModEntities.RATT_DART = RATT_DART;
                 ModEntities.POISON_LLAMA_SPIT = POISON_LLAMA_SPIT;
                 ModEntities.THROWN_MATCH = THROWN_MATCH;

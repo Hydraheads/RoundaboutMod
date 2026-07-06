@@ -962,42 +962,44 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$tickString() {
         if (!this.level().isClientSide) {
             if (this.roundabout$stringHolder != null) {
-                if (!this.isAlive() || !roundabout$stringHolder.isAlive()|| roundabout$stringHolder.level() != this.level()) {
-                    roundabout$dropString();
-                } else {
-                    LivingEntity live = ((LivingEntity)(Object)this);
-                    if (live instanceof Mob mb){
-                        mb.restrictTo(roundabout$stringHolder.blockPosition(), 5);
-                    }
-                    float f = this.distanceTo(roundabout$stringHolder);
-                    if (live instanceof TamableAnimal tm && tm.isInSittingPose()) {
+                if (rdbt$getBoundType(roundabout$stringHolder) != 1) {
+                    if (!this.isAlive() || !roundabout$stringHolder.isAlive() || roundabout$stringHolder.level() != this.level()) {
+                        roundabout$dropString();
+                    } else {
+                        LivingEntity live = ((LivingEntity) (Object) this);
+                        if (live instanceof Mob mb) {
+                            mb.restrictTo(roundabout$stringHolder.blockPosition(), 5);
+                        }
+                        float f = this.distanceTo(roundabout$stringHolder);
+                        if (live instanceof TamableAnimal tm && tm.isInSittingPose()) {
+                            if (f > 10.0F) {
+                                this.roundabout$dropString();
+                            }
+
+                            return;
+                        }
+
                         if (f > 10.0F) {
                             this.roundabout$dropString();
-                        }
-
-                        return;
-                    }
-
-                    if (f > 10.0F) {
-                        this.roundabout$dropString();
-                        if (live instanceof Mob mb) {
-                            ((IMob)mb).roundabout$getGoalSelector().disableControlFlag(Goal.Flag.MOVE);
-                        }
-                    } else if (f > 6.0F) {
-                        double d0 = (roundabout$stringHolder.getX() - this.getX()) / (double)f;
-                        double d1 = (roundabout$stringHolder.getY() - this.getY()) / (double)f;
-                        double d2 = (roundabout$stringHolder.getZ() - this.getZ()) / (double)f;
-                        this.setDeltaMovement(this.getDeltaMovement().add(Math.copySign(d0 * d0 * 0.4D, d0), Math.copySign(d1 * d1 * 0.4D, d1), Math.copySign(d2 * d2 * 0.4D, d2)));
-                        this.checkSlowFallDistance();
-                    } else {
-                        if (live instanceof Mob mb) {
-                            ((IMob)mb).roundabout$getGoalSelector().enableControlFlag(Goal.Flag.MOVE);
-                            float f1 = 2.0F;
-                            Vec3 vec3 = (new Vec3(roundabout$stringHolder.getX() - this.getX(),
-                                    roundabout$stringHolder.getY() - this.getY(),
-                                    roundabout$stringHolder.getZ() - this.getZ())).normalize().scale((double) Math.max(f - 2.0F, 0.0F));
-                            float speed = 1;
-                            mb.getNavigation().moveTo(this.getX() + vec3.x, this.getY() + vec3.y, this.getZ() + vec3.z, speed);
+                            if (live instanceof Mob mb) {
+                                ((IMob) mb).roundabout$getGoalSelector().disableControlFlag(Goal.Flag.MOVE);
+                            }
+                        } else if (f > 6.0F) {
+                            double d0 = (roundabout$stringHolder.getX() - this.getX()) / (double) f;
+                            double d1 = (roundabout$stringHolder.getY() - this.getY()) / (double) f;
+                            double d2 = (roundabout$stringHolder.getZ() - this.getZ()) / (double) f;
+                            this.setDeltaMovement(this.getDeltaMovement().add(Math.copySign(d0 * d0 * 0.4D, d0), Math.copySign(d1 * d1 * 0.4D, d1), Math.copySign(d2 * d2 * 0.4D, d2)));
+                            this.checkSlowFallDistance();
+                        } else {
+                            if (live instanceof Mob mb) {
+                                ((IMob) mb).roundabout$getGoalSelector().enableControlFlag(Goal.Flag.MOVE);
+                                float f1 = 2.0F;
+                                Vec3 vec3 = (new Vec3(roundabout$stringHolder.getX() - this.getX(),
+                                        roundabout$stringHolder.getY() - this.getY(),
+                                        roundabout$stringHolder.getZ() - this.getZ())).normalize().scale((double) Math.max(f - 2.0F, 0.0F));
+                                float speed = 1;
+                                mb.getNavigation().moveTo(this.getX() + vec3.x, this.getY() + vec3.y, this.getZ() + vec3.z, speed);
+                            }
                         }
                     }
                 }
@@ -4406,8 +4408,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$getStandPowers().onActuallyHurt($$0,$$1);
 
             Entity bound = roundabout$getBoundTo();
-            if (bound != null && ($$0.getEntity() != null || $$0.is(DamageTypes.MAGIC) || $$0.is(DamageTypes.EXPLOSION)) && !$$0.is(ModDamageTypes.STAND_FIRE)){
-                roundabout$dropString();
+            if (bound != null && ($$0.getEntity() != null || $$0.is(DamageTypes.MAGIC) || $$0.is(DamageTypes.EXPLOSION)) && !$$0.is(ModDamageTypes.STAND_FIRE)
+            ){
+                if (rdbt$getBoundType(bound) == 2) {
+                    roundabout$dropString();
+                }
             }
 
 

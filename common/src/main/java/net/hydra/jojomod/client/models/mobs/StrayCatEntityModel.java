@@ -3,13 +3,11 @@ package net.hydra.jojomod.client.models.mobs;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-
+import net.hydra.jojomod.client.models.mobs.animations.StrayCatEntityAnimations;
 import net.hydra.jojomod.Roundabout;
 
 import net.hydra.jojomod.client.models.substand.renderers.animations.SheerHeartAttackAnimations;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
-import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.minecraft.client.model.HeadedModel;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -120,7 +118,12 @@ public class StrayCatEntityModel<T extends StrayCatEntity> extends HierarchicalM
 
 
 	@Override
-	public void setupAnim(T strayCat, float v, float v1, float v2, float v3, float v4) {
-
+	public void setupAnim(T strayCat, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+		this.animate(strayCat.idle, StrayCatEntityAnimations.idle, pAgeInTicks, 1f);
+		this.animate(strayCat.begging, StrayCatEntityAnimations.interest_start, pAgeInTicks, 1f);
+		this.animate(strayCat.unpotted, StrayCatEntityAnimations.unpotted, pAgeInTicks, 1f);
+		this.animate(strayCat.shooting, StrayCatEntityAnimations.shoot, pAgeInTicks, 1f);
+		this.animate(strayCat.sleeping, StrayCatEntityAnimations.sleeping, pAgeInTicks, 1f);
+		this.animate(strayCat.sleepingPotted, StrayCatEntityAnimations.sleeping_potted, pAgeInTicks, 1f);
 	}
 }

@@ -33,6 +33,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
@@ -782,6 +783,41 @@ public class StandHudRender {
         context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
         context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
         context.drawString(renderer, $$6, $$7, $$8, y, false);
+    }
+
+    public static void renderCKBDistance(GuiGraphics context, Player playerEntity,
+                                                 int scaledWidth, int scaledHeight, int x, int targ) {
+        Minecraft client = Minecraft.getInstance();
+        int l;
+        float maxDistance = 20;
+        float distance = maxDistance;
+        int distance2 = (int) maxDistance;
+        Entity getNermie = playerEntity.level().getEntity(targ);
+        if (getNermie instanceof LivingEntity lv) {
+            distance = (float) lv.position().distanceTo(playerEntity.position());
+            distance = Math.min(distance,maxDistance);
+            distance2 = (int) distance;
+        }
+
+
+            int blt =  (int) Math.floor(((double) 182 / maxDistance) * (distance));
+            l = scaledHeight - 32 + 3;
+            context.blit(StandIcons.JOJO_ICONS, x, l, 0, 131, 182, 5);
+            if (blt > 0) {
+                context.blit(StandIcons.JOJO_ICONS, x, l, 0, 136, blt, 5);
+            }
+
+
+            int y = 16173823;
+            Font renderer = client.font;
+            String $$6 = distance2 + "";
+            int $$7 = (scaledWidth - renderer.width($$6)) / 2;
+            int $$8 = scaledHeight - 31 - 4;
+            context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);
+            context.drawString(renderer, $$6, $$7 - 1, $$8, 0, false);
+            context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
+            context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
+            context.drawString(renderer, $$6, $$7, $$8, y, false);
     }
     public static void renderGuardHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                       int scaledWidth, int scaledHeight, int ticks, int x,
