@@ -1,9 +1,12 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.StepRuleEntity;
@@ -12,10 +15,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.DietSavedSecond;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.OffsetIndex;
-import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.StandDiscItem;
@@ -38,6 +38,10 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -134,6 +138,27 @@ public class PowersCalifornia extends NewDashPreset {
         return false;
     }
 
+
+
+    public int leadedInt = 0;
+    public void setLeadTarget(Entity leaded2){
+        if (leaded2 instanceof LivingEntity LE){
+            leaded = LE;
+        } else {
+            leaded = null;
+        }
+        int sendint = 0;
+        if (leaded != null){
+            sendint= leaded.getId();
+        }
+        if (self instanceof ServerPlayer sp) {
+            S2CPacketUtil.sendGenericIntToClientPacket(
+                    sp,
+                    PacketDataIndex.S2C_INT_LEADED,
+                    sendint
+            );
+        }
+    }
 
     public void removeFromList(Entity entity){
         hurtEntities.remove(entity);
@@ -412,19 +437,30 @@ public class PowersCalifornia extends NewDashPreset {
         spawnPos = pos;
         return super.tryBlockPosPower(move, forced,pos);
     }
+
+    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
+                                  boolean removeNum){
+        StandHudRender.renderCKBDistance(context,cameraPlayer,screenWidth,screenHeight,x,leadedInt);
+    }
     public BlockPos spawnPos = BlockPos.ZERO;
 
+    public boolean replaceHudActively(){
+        return leadedInt > 0;
+    }
     public void doTheLeaveRule() {
         if (!this.self.level().isClientSide()) {
             if (!onCooldown(PowerIndex.SKILL_EXTRA_2)) {
                 setCooldown(PowerIndex.SKILL_EXTRA_2, 15);
-                clearLeaded();
                 if (storedInt > -1){
                     Entity zent = self.level().getEntity(storedInt);
                     if (zent instanceof LivingEntity LV){
                         ((StandUser)LV).roundabout$setBoundTo(self);
-                        leaded = LV;
+                        setLeadTarget(LV);
+                    } else {
+                        clearLeaded();
                     }
+                } else {
+                    clearLeaded();
                 }
             }
         }
@@ -553,6 +589,19 @@ public class PowersCalifornia extends NewDashPreset {
             if (hurtEntities.isEmpty() && rewindSnap != null){
                 rewindSnap = null;
             }
+
+            if (leaded != null) {
+                if (leaded.isAlive()) {
+                    if (leaded instanceof Mob mb) {
+                        if (leaded instanceof AbstractVillager || leaded instanceof Animal ||
+                                leaded instanceof WaterAnimal) {
+                            ((IMob) mb).roundabout$setHypnotizedBy(self);
+                        }
+                    }
+                } else {
+                    clearLeaded();
+                }
+            }
         } else {
             if (isDoNotLeave()){
                 targEnt = getCaliforniaTargetEntity();
@@ -613,7 +662,7 @@ public class PowersCalifornia extends NewDashPreset {
     public void clearLeaded(){
         if (leaded != null){
             ((StandUser)leaded).roundabout$dropString();
-            leaded = null;
+            setLeadTarget(null);
         }
     }
 

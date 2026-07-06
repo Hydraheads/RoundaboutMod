@@ -851,6 +851,11 @@ public class ClientUtil {
             if (user.roundabout$getStandPowers() instanceof PowersCalifornia ckb){
                 ckb.removeFromClientList(data);
             }
+        } else if (context == PacketDataIndex.S2C_INT_LEADED) {
+            StandUser user = ((StandUser) player);
+            if (user.roundabout$getStandPowers() instanceof PowersCalifornia ckb){
+                ckb.leadedInt = data;
+            }
         }
     }
     public static void handleDoubleIntPacketS2C(Player player, int data, int data2, byte context) {
