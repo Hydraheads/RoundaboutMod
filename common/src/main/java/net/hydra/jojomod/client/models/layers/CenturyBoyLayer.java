@@ -125,6 +125,11 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
                             getParentModel().head.translateAndRotate(poseStack);
 
+                            if (entity instanceof  IPlayerEntity IPL && IPL.roundabout$getMaskSlot().getItem() instanceof
+                                    MaskItem MI) {
+                                poseStack.scale(1F,1F,1.1F);
+                            }
+
                             poseStack.translate(0, -0.1, 0.52);
 
                             ModStrayModels.CENTURY_BOY.renderHead(entity, partialTicks, poseStack, bufferSource,
@@ -186,7 +191,7 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                     poseStack.scale(0.6F, 0.6F, 0.6F);
                                     poseStack.translate(0.3, 1, -0.3);
                                 }
-                                    poseStack.translate(0, 0.1, 0);
+                                    poseStack.translate(0, 0.1, -0.01);
                                 getParentModel().body.translateAndRotate(poseStack);
 
 
