@@ -66,6 +66,6 @@ public class RoundaboutFabricClient implements ClientModInitializer {
         ItemProperties.register(FabricItems.HARPOON, new ResourceLocation(Roundabout.MOD_ID,"throwing"), (itemStack, clientLevel, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == itemStack ? 1.0f : 0.0f);
         ItemProperties.register(FabricItems.STRAY_CAT_ANIME, new ResourceLocation(Roundabout.MOD_ID,"anim"), (itemStack, clientLevel, livingEntity, i) ->  !itemStack.isEmpty() ? ((AbstractStrayCat)(itemStack.getItem())).getCurrentPredicateValue(clientLevel) : 0.0f);
         ItemProperties.register(FabricItems.STRAY_CAT_MANGA, new ResourceLocation(Roundabout.MOD_ID,"anim"), (itemStack, clientLevel, livingEntity, i) ->  !itemStack.isEmpty() ? ((AbstractStrayCat)(itemStack.getItem())).getCurrentPredicateValue(clientLevel) : 0.0f);
-        ItemProperties.register(FabricItems.FANCY_LIGHTER, new ResourceLocation(Roundabout.MOD_ID,"anim"), (itemStack, clientLevel, livingEntity, i) ->  !itemStack.isEmpty() ? ((FancyLighterItem)(itemStack.getItem())).getCurrentPredicateValue(clientLevel, itemStack) : 0.0f);
+        ItemProperties.register(FabricItems.FANCY_LIGHTER, new ResourceLocation(Roundabout.MOD_ID,"islit"), (itemStack, clientLevel, livingEntity, i) ->  !itemStack.isEmpty() ? ((FancyLighterItem)(itemStack.getItem())).getCurrentPredicateValue(clientLevel, itemStack) : 0.0f);
     }
 }

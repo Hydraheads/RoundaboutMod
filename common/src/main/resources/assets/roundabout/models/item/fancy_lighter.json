@@ -1,13 +1,14 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "roundabout:item/lighter_on"
-  },  "overrides": [
-  {
-    "predicate": {
-      "roundabout:anim" : 0.1
-    },
-    "model" : "roundabout:item/stray_cat_anime_sleep"
-  }
-]
+  "parent" : "item/generated",
+  "textures" : {
+    "layer0" : "roundabout:item/lighter_on_0"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "roundabout:islit" : 0.1
+      },
+      "model" : "roundabout:item/fancy_lighter_off"
+    }
+  ]
 }
