@@ -65,6 +65,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.entity.animal.CatVariant;
 import net.minecraft.world.entity.animal.Turtle;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.monster.*;
@@ -5581,7 +5583,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
 
         }
-
+        /// Stray Cat Spawn
+        if (me instanceof Cat) {
+            if (this.getEffect(ModEffects.STAND_VIRUS) != null) {
+                // do spawn here lol
+            }
+        }
 
         ///  ratt skin unlocking
         if (cause != null) {
