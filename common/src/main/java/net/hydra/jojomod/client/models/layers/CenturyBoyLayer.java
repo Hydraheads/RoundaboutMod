@@ -107,6 +107,10 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                     packedLight, r, g, b, heyfull, skin);
                             ClientUtil.popPoseAndCooperate(poseStack, 26);
                         } else {
+                            if (entity instanceof  IPlayerEntity IPL && IPL.roundabout$getMaskSlot().getItem() instanceof
+                                    MaskItem MI) {
+                                poseStack.scale(1F,1F,1.1F);
+                            }
                             poseStack.translate(0, -0.1, 0.52);
                             ModStrayModels.CENTURY_BOY.renderBody(entity, partialTicks, poseStack, bufferSource,
                                     packedLight, r, g, b, heyfull, skin);

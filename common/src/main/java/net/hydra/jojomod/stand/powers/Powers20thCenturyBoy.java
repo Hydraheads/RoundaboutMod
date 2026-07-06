@@ -151,7 +151,10 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         OLDER_CENTURY_BOY = 15,
         OLDEST_CENTURY_BOY = 16,
         SALMONBERRY = 17,
-        BETA = 18;
+        BETA = 18,
+        PUMPKIN = 19,
+        EVIL_PUMPKIN = 20,
+        GHOST = 21;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
@@ -172,7 +175,10 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                 CHICKEN,
                 OLDER_CENTURY_BOY,
                 OLDEST_CENTURY_BOY,
-                BETA
+                BETA,
+                PUMPKIN,
+                EVIL_PUMPKIN,
+                GHOST
 
         );
     }
@@ -197,6 +203,9 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             case Powers20thCenturyBoy.OLDEST_CENTURY_BOY -> Component.translatable("skins.roundabout.20_centuryboy.11th_century_boy");
             case Powers20thCenturyBoy.SALMONBERRY -> Component.translatable("skins.roundabout.20_centuryboy.salmonberry");
             case Powers20thCenturyBoy.BETA -> Component.translatable("skins.roundabout.20_centuryboy.beta");
+            case Powers20thCenturyBoy.PUMPKIN -> Component.translatable("skins.roundabout.20_centuryboy.pumpkin");
+            case Powers20thCenturyBoy.EVIL_PUMPKIN -> Component.translatable("skins.roundabout.20_centuryboy.evil_pumpkin");
+            case Powers20thCenturyBoy.GHOST -> Component.translatable("skins.roundabout.20_centuryboy.ghost");
             default -> Component.translatable("skins.roundabout.20_centuryboy.manga");
         };
     }
