@@ -20,6 +20,11 @@ public class PowersOasis extends NewDashPreset {
         return false;
     }
 
+    @Override
+    public boolean rendersPlayer(){
+        return true;
+    }
+
 
 
 }
