@@ -450,9 +450,14 @@ public class PowersCalifornia extends NewDashPreset {
     }
     public void doTheLeaveRule() {
         if (!this.self.level().isClientSide()) {
+            boolean dupe = false;
+            if (leaded != null &&
+                    leaded.getId() == storedInt){
+                dupe = true;
+            }
             if (!onCooldown(PowerIndex.SKILL_EXTRA_2)) {
                 setCooldown(PowerIndex.SKILL_EXTRA_2, 15);
-                if (storedInt > -1){
+                if (storedInt > -1 && !dupe){
                     Entity zent = self.level().getEntity(storedInt);
                     if (zent instanceof LivingEntity LV){
                         ((StandUser)LV).roundabout$setBoundTo(self);
@@ -658,7 +663,9 @@ public class PowersCalifornia extends NewDashPreset {
         }
         if (isDoNotLeave() && targEnt != null && ent != null && ent.getId() == targEnt.getId()){
             if (hasStandActive(self)) {
-                return true;
+                if (ent.getId() != leadedInt) {
+                    return true;
+                }
             }
         }
         return false;
