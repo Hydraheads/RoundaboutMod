@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.StepRuleEntity;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -17,6 +18,7 @@ import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.DietSavedSecond;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.StandDiscItem;
@@ -41,7 +43,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Pufferfish;
 import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -65,6 +69,7 @@ public class PowersCalifornia extends NewDashPreset {
     }
 
     public DietSavedSecond rewindSnap = null;
+    public Entity snapEntity = null;
     public static final byte DO_NOT_STEP_HERE = 0;
     public static final byte DO_NOT_HURT_ME = 1;
     public static final byte DO_NOT_LEAVE_ME = 2;
@@ -129,11 +134,9 @@ public class PowersCalifornia extends NewDashPreset {
     /**When you deal damage, intercept or run code based off of it, or potentially cancel it*/
     public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
         if (!$$0.is(DamageTypes.THORNS)){
-            if (isDoNotHurt()){
-                if (hurtEntities.containsKey(target)){
-                    removeFromList(target);
-                    playUnfairSound();
-                }
+            if (isDoNotHurt() && !hurtEntities.isEmpty()){
+                clearListServer();
+                playUnfairSound();
             }
         }
         return false;
@@ -363,10 +366,15 @@ public class PowersCalifornia extends NewDashPreset {
 
 
     public void onActuallyHurt(DamageSource source, float $$1){
-        if (source.getEntity() != null && !source.is(DamageTypes.THORNS)) {
+        if (source.getEntity() != null && !source.is(DamageTypes.THORNS)
+                && !source.is(ModDamageTypes.STAND_FIRE)
+                && !(source.getEntity() instanceof Pufferfish)
+                && !(source.getEntity() instanceof Axolotl)
+                && !(source.getEntity() instanceof FallenMob)) {
             if (inCowerStance()){
                 if (attackTimeDuring >= 5){
                     rewindSnap = DietSavedSecond.saveEntitySecond(self);
+                    snapEntity = source.getEntity();
                     setCowerLeaveStance();
                     playGotchaSound();
                     addToList(source.getEntity());
@@ -742,7 +750,7 @@ public class PowersCalifornia extends NewDashPreset {
 
     public void punishServer(){
         if (!hurtEntities.isEmpty() && self instanceof ServerPlayer sp) {
-            if (rewindSnap != null){
+            if (rewindSnap != null && snapEntity != null && snapEntity.isAlive()){
                 rewindSnap.loadTime(self);
                 setCooldown(PowerIndex.SKILL_2,200);
                 ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PINK_SMOKE,
@@ -765,6 +773,7 @@ public class PowersCalifornia extends NewDashPreset {
                 }
             }
             hurtEntities.clear();
+            snapEntity = null;
         }
     }
 
