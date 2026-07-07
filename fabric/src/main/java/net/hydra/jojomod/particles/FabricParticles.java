@@ -49,6 +49,7 @@ public class FabricParticles {
     public static final SimpleParticleType GREEN_CLOCK = FabricParticleTypes.simple();
     public static final SimpleParticleType ORANGE_CLOCK = FabricParticleTypes.simple();
     public static final SimpleParticleType TIME_EMBER = FabricParticleTypes.simple();
+    public static final SimpleParticleType MAGIC_HEART = FabricParticleTypes.simple();
     public static final SimpleParticleType CLOCK = FabricParticleTypes.simple();
     public static final SimpleParticleType CINDERELLA_GLOW = FabricParticleTypes.simple();
     public static final SimpleParticleType PINK_SMOKE = FabricParticleTypes.simple();
@@ -149,6 +150,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("green_clock"), GREEN_CLOCK);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("orange_clock"), ORANGE_CLOCK);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("time_ember"), TIME_EMBER);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("magic_heart"), MAGIC_HEART);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("baby_crackle"), BABY_CRACKLE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("cold_crackle"), COLD_CRACKLE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("magic_dust"), MAGIC_DUST);
@@ -204,6 +206,7 @@ public class FabricParticles {
         ModParticles.GREEN_CLOCK = GREEN_CLOCK;
         ModParticles.ORANGE_CLOCK = ORANGE_CLOCK;
         ModParticles.TIME_EMBER = TIME_EMBER;
+        ModParticles.MAGIC_HEART = MAGIC_HEART;
         ModParticles.POINTER = POINTER;
         ModParticles.ZAP = ZAP;
         ModParticles.POINTER_SOFT = POINTER_SOFT;

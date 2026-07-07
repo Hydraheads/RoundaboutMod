@@ -140,7 +140,8 @@ public class StepRuleEntity extends Entity {
                             LivingEntity.class,
                             wallBox)) {
 
-                        if (!(mob instanceof StandEntity se && se.getUser().getUUID() == LE.getUUID())) {
+                        if (!(mob instanceof StandEntity se && se.getUser().getUUID() == LE.getUUID())
+                        && mob.isAlive()) {
                             if (mob.getBoundingBox().intersects(wallBox)) {
                                 if (mob.getUUID() == userEntity.getUUID()) {
                                     pca.playUnfairSound();

@@ -457,6 +457,9 @@ public class PowersCalifornia extends NewDashPreset {
                     if (zent instanceof LivingEntity LV){
                         ((StandUser)LV).roundabout$setBoundTo(self);
                         setLeadTarget(LV);
+                        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MAGIC_HEART,
+                                LV.getEyePosition().x, LV.getEyePosition().y, LV.getEyePosition().z,
+                                0, 0, 1,0, 0.15);
                     } else {
                         clearLeaded();
                     }
