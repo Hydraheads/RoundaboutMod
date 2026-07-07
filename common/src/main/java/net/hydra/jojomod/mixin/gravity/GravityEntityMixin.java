@@ -72,6 +72,12 @@ import java.util.Objects;
 public abstract class GravityEntityMixin implements IGravityEntity {
     // NEW FEATURES
 
+    @Shadow
+    public abstract boolean isInWater();
+
+    @Shadow
+    public abstract boolean isInWall();
+
     @Shadow public abstract boolean isInLava();
 
     @Shadow @Deprecated public abstract BlockPos getOnPosLegacy();
@@ -1102,6 +1108,19 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         }
     }
 
+
+    @Inject(
+            method = "isPushedByFluid",
+            at = @At("HEAD"),
+            cancellable = true, require = 0
+    )
+    private void roundabout$isPushedByFluid(CallbackInfoReturnable<Boolean> cir) {
+        if (rdbt$this() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW
+                && PW.hasExtendedHeelsForWalking()){
+            cir.setReturnValue(false);
+        }
+    }
+
         @Inject(
             method = "updateFluidHeightAndDoFluidPushing(Lnet/minecraft/tags/TagKey;D)Z",
             at = @At("HEAD"),
@@ -1109,7 +1128,6 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     )
     private void roundabout$updateFluidHeightAndDoFluidPushing(TagKey<Fluid> $$0, double $$1, CallbackInfoReturnable<Boolean> cir) {
         if (Objects.equals(ModPacketHandler.PLATFORM_ACCESS.getPlatformName(), "Forge")) {
-            if (isInLava())
                 return;
         }
 
