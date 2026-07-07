@@ -21,10 +21,13 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.MemoryChessPieceItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
@@ -49,6 +52,7 @@ import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -773,11 +777,32 @@ public class PowersCalifornia extends NewDashPreset {
 
                 if (entity.isAlive()) {
                     entity.setDeltaMovement(0,0.2,0);
+                    ItemStack piece = getPieceType(entity);
+                    MainUtil.addItem(sp,piece);
                 }
             }
             hurtEntities.clear();
             snapEntity = null;
         }
+    }
+
+    public ItemStack getPieceType(Entity victim){
+        double rand = Math.random();
+        ItemStack stack;
+        if (rand < 0.1){
+            stack = new ItemStack(ModItems.MEMORY_KING);
+        } else if (rand < 0.2){
+            stack = new ItemStack(ModItems.MEMORY_QUEEN);
+        } else if (rand < 0.35){
+            stack = new ItemStack(ModItems.MEMORY_BISHOP);
+        } else if (rand < 0.5){
+            stack = new ItemStack(ModItems.MEMORY_KNIGHT);
+        } else if (rand < 0.65){
+            stack = new ItemStack(ModItems.MEMORY_ROOK);
+        } else {
+            stack = new ItemStack(ModItems.MEMORY_PAWN);
+        }
+        return MemoryChessPieceItem.initializePiece(stack,victim,0);
     }
 
     public boolean inCowerStance(){
