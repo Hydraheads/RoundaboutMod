@@ -367,6 +367,7 @@ public class PowersCalifornia extends NewDashPreset {
 
     public void onActuallyHurt(DamageSource source, float $$1){
         if (source.getEntity() != null && !source.is(DamageTypes.THORNS)
+                && !source.is(ModDamageTypes.GO_BEYOND)
                 && !source.is(ModDamageTypes.STAND_FIRE)
                 && !(source.getEntity() instanceof Pufferfish)
                 && !(source.getEntity() instanceof Axolotl)
@@ -750,7 +751,8 @@ public class PowersCalifornia extends NewDashPreset {
 
     public void punishServer(){
         if (!hurtEntities.isEmpty() && self instanceof ServerPlayer sp) {
-            if (rewindSnap != null && snapEntity != null && snapEntity.isAlive()){
+            if (rewindSnap != null && snapEntity != null && snapEntity.isAlive()
+            && hurtEntities != null && hurtEntities.containsKey(snapEntity)){
                 rewindSnap.loadTime(self);
                 setCooldown(PowerIndex.SKILL_2,200);
                 ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PINK_SMOKE,
