@@ -14,6 +14,7 @@ import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.DietSavedSecond;
 import net.hydra.jojomod.event.ModParticles;
@@ -51,6 +52,7 @@ import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
@@ -787,21 +789,49 @@ public class PowersCalifornia extends NewDashPreset {
     }
 
     public ItemStack getPieceType(Entity victim){
+        int skin = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        boolean isWhite = skin == CaliforniaKingBedEntity.SUNSHINE;
         double rand = Math.random();
         ItemStack stack;
+        Item result;
         if (rand < 0.1){
-            stack = new ItemStack(ModItems.MEMORY_KING);
+            if (isWhite){
+                result= ModItems.MEMORY_KING_WHITE;
+            } else {
+                result= ModItems.MEMORY_KING;
+            }
         } else if (rand < 0.2){
-            stack = new ItemStack(ModItems.MEMORY_QUEEN);
+            if (isWhite){
+                result= ModItems.MEMORY_QUEEN_WHITE;
+            } else {
+                result= ModItems.MEMORY_QUEEN;
+            }
         } else if (rand < 0.35){
-            stack = new ItemStack(ModItems.MEMORY_BISHOP);
+            if (isWhite){
+                result= ModItems.MEMORY_BISHOP_WHITE;
+            } else {
+                result= ModItems.MEMORY_BISHOP;
+            }
         } else if (rand < 0.5){
-            stack = new ItemStack(ModItems.MEMORY_KNIGHT);
+            if (isWhite){
+                result= ModItems.MEMORY_KNIGHT_WHITE;
+            } else {
+                result= ModItems.MEMORY_KNIGHT;
+            }
         } else if (rand < 0.65){
-            stack = new ItemStack(ModItems.MEMORY_ROOK);
+            if (isWhite){
+                result= ModItems.MEMORY_ROOK_WHITE;
+            } else {
+                result= ModItems.MEMORY_ROOK;
+            }
         } else {
-            stack = new ItemStack(ModItems.MEMORY_PAWN);
+            if (isWhite){
+                result= ModItems.MEMORY_PAWN_WHITE;
+            } else {
+                result= ModItems.MEMORY_PAWN;
+            }
         }
+        stack = new ItemStack(result);
         return MemoryChessPieceItem.initializePiece(stack,victim,0);
     }
 

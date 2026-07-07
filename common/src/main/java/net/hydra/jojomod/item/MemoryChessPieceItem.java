@@ -42,7 +42,7 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
     @Override
     public void appendHoverText(ItemStack $$0, @Nullable Level $$1, List<Component> $$2, TooltipFlag $$3) {
         String comp = $$0.getOrCreateTag().getString("vicName");
-        if (comp != null){
+        if (comp != null && !comp.isBlank()){
              $$2.add(Component.literal(comp).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
