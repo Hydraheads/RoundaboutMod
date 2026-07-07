@@ -264,7 +264,7 @@ public class FabricItems {
             new CoffinBlockItem(DyeColor.BLACK, FabricBlocks.COFFIN_BLOCK, new Item.Properties().stacksTo(1)));
     /*public static Item CHESSBOARD_BLOCK_ITEM = registerItem("chessboard_block",
             new ChessBoardBlockItem(FabricBlocks.CHESSBOARD_BLOCK, new Item.Properties().stacksTo(1)));*/
-    public static Item FANCY_LIGHTER = registerItem("fancy_lighter", new FancyLighterItem(Blocks.CANDLE, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
+    public static Item FANCY_LIGHTER = registerItem("fancy_lighter", new FancyLighterItem(ModBlocks.FANCY_LIGHTER_BLOCK, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
 
     public static Item CAT_REMAINS = registerItem("cat_remains", new HeadRemainsItem(new Item.Properties().stacksTo(64)));
     public static Item MOOSHROOM_REMAINS = registerItem("mooshroom_remains", new HeadRemainsItem(new Item.Properties().stacksTo(64)));
