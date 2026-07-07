@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.mobs;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.goals.StrayCatBegGoal;
 import net.hydra.jojomod.entity.goals.TerrierBegGoal;
@@ -18,10 +19,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.BegGoal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.RangedAttackMob;
@@ -32,6 +30,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.EnumSet;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -54,6 +53,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
 
     @Override
     protected void defineSynchedData() {
+        super.defineSynchedData();
         this.entityData.define(BREED, (byte) 0);
         this.entityData.define(ANIM, (byte) 0);
         this.entityData.define(POTTED, false);
@@ -61,26 +61,26 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
         this.entityData.define(SLEEPING, false);
     }
 
-    public void setBreed(byte b) { this.entityData.define(BREED, b); }
+    public void setBreed(byte b) { this.entityData.set(BREED, b); }
     public byte getBreed() { return this.entityData.get(BREED); }
 
-    public void setAnim(byte a) { this.entityData.define(ANIM, a); }
+    public void setAnim(byte a) { this.entityData.set(ANIM, a); }
     public byte getAnim() { return this.entityData.get(ANIM); }
 
     public void setPotted(boolean pot) {
-        this.entityData.define(POTTED, pot);
+        this.entityData.set(POTTED, pot);
     }
     public boolean getPotted() {return this.entityData.get(POTTED); }
     public void setInterested(boolean pot) {
-        this.entityData.define(INTERESTED, pot);
+        this.entityData.set(INTERESTED, pot);
     }
     public boolean getInterested() {return this.entityData.get(INTERESTED); }
     public void setSleeping(boolean pot) {
-        this.entityData.define(SLEEPING, pot);
+        this.entityData.set(SLEEPING, pot);
     }
     public boolean getSleeping() {return this.entityData.get(SLEEPING); }
 
-    public static AttributeSupplier.Builder createStandAttributes() {
+    public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,
                 0.0F).add(Attributes.MAX_HEALTH, 18.0).add(Attributes.ATTACK_DAMAGE, 5.0);
     }
@@ -160,11 +160,18 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
              }
 
             setSleeping(this.shouldSleep());
-             if (getSleeping()) {
-                 setAnim(SLEEP);
-             }else if (getInterested()) {
-                 setAnim(BEGGING);
+             if (this.shootWindup == -1) {
+                 if (getSleeping()) {
+                     setAnim(SLEEP);
+                 } else {
+                     setAnim(IDLE);
+                 }
+
+                 if (getInterested()) {
+                     setAnim(BEGGING);
+                 }
              }
+
 
             // detect things lol
         }
@@ -184,10 +191,11 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
     @Override
     protected void registerGoals() {
         //super.registerGoals();
-        this.goalSelector.addGoal(2, new RangedAttackGoal(this, 0D, 30, 7.5F));
+        this.goalSelector.addGoal(1, new StrayCatSleepGoal(this));
+        this.goalSelector.addGoal(3, new RangedAttackGoal(this, 0D, 30, 7.5F));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(1, new StrayCatBegGoal(this, 8.0f));
+        this.goalSelector.addGoal(3, new StrayCatBegGoal(this, 8.0f));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(3, (new HurtByTargetGoal(this, new Class[0])));
@@ -231,11 +239,15 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
         return SoundEvents.CAT_DEATH;
     }
 
+    @Override public void push(Entity ent) { }
+    @Override public void doPush(Entity ent) { }
+
     public boolean shouldSleep() {
         BlockPos pos = this.getOnPos();
-        BlockState state = this.level().getBlockState(pos);
+        //BlockState state = this.level().getBlockState(pos);
+        long dayTime = this.level().getDayTime() % 24000;
 
-        if (state.getLightBlock(this.level(), pos) > 2 || this.level().isRainingAt(pos)) {
+        if ((dayTime >= 13000 && dayTime <= 23750) || this.level().isRainingAt(pos)) {
             return true;
         }
 
@@ -253,6 +265,43 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
         StrayCatAirBubble bubble = ModEntities.STRAY_CAT_AIRBUBBLE.create(this.level());
         if (bubble != null) {
 
+        }
+    }
+
+
+    static public class StrayCatSleepGoal extends Goal {
+        StrayCatEntity stray;
+
+
+        public StrayCatSleepGoal(StrayCatEntity stray) {
+            this.stray = stray;
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Flag.LOOK, Flag.JUMP, Flag.TARGET));
+        }
+
+        @Override
+        public boolean isInterruptable() {
+            return false;
+        }
+
+        @Override
+        public void start() {
+
+        }
+
+        public void stop() { }
+
+        public boolean requiresUpdateEveryTick() {
+            return false;
+        }
+
+        @Override
+        public boolean canUse() {
+            return this.stray.isSleeping();
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return this.stray.isSleeping();
         }
     }
 }
