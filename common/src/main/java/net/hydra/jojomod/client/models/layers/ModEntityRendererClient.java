@@ -18,6 +18,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation AXOLOTL_MINION_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "axolotl_minion"), "main");
     public static final ModelLayerLocation CHICKEN_MINION_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "chicken_minion"), "main");
 
+    public static final ModelLayerLocation STRAY_CAT_ENTITY_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "stray_cat_entity"), "main");
     public static final ModelLayerLocation ANUBIS_GUARDIAN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "anubis_guardian"), "main");
     public static final ModelLayerLocation THE_WORLD_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "the_world"), "main");
     public static final ModelLayerLocation THE_WORLD_ULTIMATE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "the_world_ultimate"), "main");

@@ -8,6 +8,7 @@ import net.hydra.jojomod.block.StreetSignBlock;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
+import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
@@ -50,6 +51,7 @@ public class ForgeEvents {
     public static void entityAttributes(EntityAttributeCreationEvent event) {
         event.put(ForgeEntities.TERRIER_DOG.get(), Wolf.createAttributes().build());
         event.put(ForgeEntities.ZOMBIEFISH.get(), Zombiefish.createAttributes().build());
+        event.put(ForgeEntities.STRAY_CAT.get(), StrayCatEntity.createAttributes().build());
         event.put(ForgeEntities.ANUBIS_GUARDIAN.get(), AnubisGuardian.createAttributes().build());
         event.put(ForgeEntities.THE_WORLD.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.THE_WORLD_ULTIMATE.get(), StandEntity.createStandAttributes().build());
@@ -658,6 +660,7 @@ public class ForgeEvents {
         ModEntities.ROUNDABOUT_BULLET_ENTITY = ForgeEntities.ROUNDABOUT_BULLET_ENTITY.get();
         ModEntities.THROWN_KNIFE = ForgeEntities.THROWN_KNIFE.get();
         ModEntities.BLOCK_WALL = ForgeEntities.BLOCK_WALL.get();
+        ModEntities.STRAY_CAT = ForgeEntities.STRAY_CAT.get();
         ModEntities.STEP_RULE = ForgeEntities.STEP_RULE.get();
         ModEntities.METALLICA_KNIFE = ForgeEntities.METALLICA_KNIFE.get();
         ModEntities.RATT_DART = ForgeEntities.RATT_DART.get();

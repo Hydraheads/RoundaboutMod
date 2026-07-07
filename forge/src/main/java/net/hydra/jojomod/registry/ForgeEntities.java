@@ -3,6 +3,7 @@ package net.hydra.jojomod.registry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
+import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
@@ -504,6 +505,14 @@ public class ForgeEntities {
                             clientTrackingRange(10)
                             .updateInterval(1).
                             build(new ResourceLocation(Roundabout.MOD_ID, "step_rule").toString())
+            );
+    public static final RegistryObject<EntityType<StrayCatEntity>> STRAY_CAT =
+            ENTITY_TYPES.register("stray_cat_entity", () ->
+                    EntityType.Builder.<StrayCatEntity>of(StrayCatEntity::new, MobCategory.MISC)
+                            .sized(0.7f, 0.7f).
+                            clientTrackingRange(10)
+                            .updateInterval(1).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "stray_cat_entity").toString())
             );
     public static final RegistryObject<EntityType<MetallicaKnifeEntity>> METALLICA_KNIFE =
             ENTITY_TYPES.register("metallica_knife", () ->

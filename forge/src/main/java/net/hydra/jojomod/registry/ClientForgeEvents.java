@@ -9,7 +9,9 @@ import net.hydra.jojomod.client.models.minions.*;
 import net.hydra.jojomod.client.models.minions.head_parts.*;
 import net.hydra.jojomod.client.models.minions.renderers.*;
 import net.hydra.jojomod.client.models.mobs.AnubisGuardianModel;
+import net.hydra.jojomod.client.models.mobs.StrayCatEntityModel;
 import net.hydra.jojomod.client.models.mobs.renderers.AnubisGuardianRenderer;
+import net.hydra.jojomod.client.models.mobs.renderers.StrayCatEntityRenderer;
 import net.hydra.jojomod.client.models.mobs.renderers.ZombiefishRenderer;
 import net.hydra.jojomod.client.models.paintings.MonaLisaPaintingRenderer;
 import net.hydra.jojomod.client.models.paintings.VanGoghPaintingRenderer;
@@ -99,6 +101,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.THROWN_KNIFE.get(), KnifeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BLOCK_WALL.get(), BlockWallEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STEP_RULE.get(), StepRuleRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.STRAY_CAT.get(), StrayCatEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.METALLICA_KNIFE.get(), MetallicaKnifeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.RATT_DART.get(), RattDartRenderer::new);
         event.registerEntityRenderer(ForgeEntities.POISON_LLAMA_SPIT.get(), PoisonLlamaSpitRenderer::new);
@@ -191,6 +194,7 @@ public class ClientForgeEvents {
 
     @SubscribeEvent
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(ModEntityRendererClient.STRAY_CAT_ENTITY_LAYER, StrayCatEntityModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.WOLF_LAYER, TerrierEntityModel::createBodyLayerTerrier);
         event.registerLayerDefinition(ModEntityRendererClient.ZOMBIEFISH_LAYER, SilverfishModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.ANUBIS_GUARDIAN_LAYER, AnubisGuardianModel::createBodyLayer);
