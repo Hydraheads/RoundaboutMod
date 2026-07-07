@@ -894,7 +894,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public float getSweepStrength(Entity entity){
         if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
             if (this.getReducedDamage(entity)){
-                return playerDmgMult(1.3F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
+                return playerDmgMult(1F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             } else {
                 return mobDmgMult(3.7F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             }
@@ -1725,7 +1725,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if (attackTargetId > 0) {
                 target = self.level().getEntity(attackTargetId);
             }
-            sweepImpact(target);
+            sweepKickImpact(target);
         }
     }
 
@@ -1736,13 +1736,14 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 || activePow == ICE_CLUTCH_2) && $$0.is(DamageTypes.MOB_ATTACK)){
             return true;
         } else if (activePow == BLOOD_CLUTCH
-                || activePow == ICE_CLUTCH){
+                || activePow == ICE_CLUTCH || activePow == BLOOD_CLUTCH_2
+                || activePow == ICE_CLUTCH_2){
             xTryPower(PowerIndex.NONE,true);
         }
         return false;
     }
 
-    public void sweepImpact(Entity entity) {
+    public void sweepKickImpact(Entity entity) {
         if (!this.self.level().isClientSide()) {
             if (impactTimeStamp != self.level().getGameTime()) {
                 impactTimeStamp = self.level().getGameTime();
