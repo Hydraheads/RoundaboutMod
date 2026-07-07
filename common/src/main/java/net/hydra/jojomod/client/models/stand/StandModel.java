@@ -265,7 +265,7 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
         }
     }
     public float rotationStrength(){
-        return 1f;
+        return 1.4f;
     }
     public void rotateBody(T mobEntity,  ModelPart body, float tickDelta){
         if (mobEntity instanceof FollowingStandEntity FSE) {
