@@ -415,6 +415,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
+
+        if (self instanceof Player pl &&  ((IPlayerEntity)pl).roundabout$getAttackStrengthTicker() < 5) {
+            return;
+        }
         if (self.isCrouching() && canUseAirAttack()) {
             if (keyIsDown) {
                 if (activePowerPhase == 0) {
@@ -1457,6 +1461,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     }
 
     public void sweepAttack(){
+
+
         this.attackTimeMax= 5;
         this.attackTimeDuring = 0;
         this.setAttackTime(0);
@@ -1476,7 +1482,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             doSweepHit();
         } else {
 
-            Entity TE = getTargetEntity(self, 1.5F, getBrawlPunchAngle());
+            Entity TE = getTargetEntity(self, 1.7F, getBrawlPunchAngle());
             int id = 0;
             if (TE != null){
                 id = TE.getId();

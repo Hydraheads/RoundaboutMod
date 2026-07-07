@@ -762,6 +762,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     @Override
     @Unique
+    public int roundabout$getAttackStrengthTicker(){
+        return attackStrengthTicker;
+    }
+    @Override
+    @Unique
     public void roundabout$setIsControlling(int pilot){
         ((Player) (Object) this).getEntityData().set(ROUNDABOUT$IS_CONTROLLING, pilot);
     }

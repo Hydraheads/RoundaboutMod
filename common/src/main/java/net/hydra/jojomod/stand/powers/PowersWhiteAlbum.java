@@ -1629,6 +1629,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
+        if (self instanceof Player pl &&  ((IPlayerEntity)pl).roundabout$getAttackStrengthTicker() < 5) {
+            return;
+        }
         if (keyIsDown) {
             if (activePowerPhase == 0){
                 if (isBrawling()) {

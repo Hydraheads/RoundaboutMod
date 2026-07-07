@@ -24,6 +24,7 @@ public interface IPlayerEntity {
     int roundabout$getAirTime();
     int roundabout$getClientDodgeTime();
     int roundabout$getControlling();
+    int roundabout$getAttackStrengthTicker();
     void roundabout$setIsControlling(int pilot);
     int roundabout$getDodgeTime();
     void roundabout$addStandExp(int amt);
