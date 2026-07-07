@@ -17,7 +17,7 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public class StrayCatEntityModel<T extends StrayCatEntity> extends HierarchicalModel<T> /*implements HeadedModel*/ {
+public class StrayCatEntityModel<T extends StrayCatEntity> extends HierarchicalModel<T> implements HeadedModel {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "stray_cat_entity_model"), "main");
 
@@ -38,7 +38,7 @@ public class StrayCatEntityModel<T extends StrayCatEntity> extends HierarchicalM
 	private final ModelPart pot;
 
 	@Override public ModelPart root() { return this.StrayCat; }
-	//@Override public ModelPart getHead() { return this.StemP3; }
+	@Override public ModelPart getHead() { return this.StemP3; }
 
 	public StrayCatEntityModel(ModelPart root) {
 		this.StrayCat = root.getChild("StrayCat");
@@ -120,8 +120,12 @@ public class StrayCatEntityModel<T extends StrayCatEntity> extends HierarchicalM
 	@Override
 	public void setupAnim(T strayCat, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
+
+		this.getHead().yRot = pNetHeadYaw * ((float)Math.PI / 180F);
+		this.getHead().xRot = pHeadPitch * ((float)Math.PI / 180F);
+
 		this.animate(strayCat.idle, StrayCatEntityAnimations.idle, pAgeInTicks, 1f);
-		this.animate(strayCat.begging, StrayCatEntityAnimations.interest_start, pAgeInTicks, 1f);
+		this.animate(strayCat.begging, StrayCatEntityAnimations.meow, pAgeInTicks, 1f);
 		this.animate(strayCat.unpotted, StrayCatEntityAnimations.unpotted, pAgeInTicks, 1f);
 		this.animate(strayCat.shooting, StrayCatEntityAnimations.shoot, pAgeInTicks, 1f);
 		this.animate(strayCat.sleeping, StrayCatEntityAnimations.sleeping, pAgeInTicks, 1f);

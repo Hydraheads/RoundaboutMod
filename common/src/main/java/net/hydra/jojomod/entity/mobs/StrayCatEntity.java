@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.mobs;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.goals.StrayCatBegGoal;
 import net.hydra.jojomod.entity.goals.TerrierBegGoal;
@@ -8,13 +9,17 @@ import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -22,12 +27,14 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.*;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Salmon;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
@@ -39,6 +46,8 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
     public StrayCatEntity(EntityType<? extends TamableAnimal> $$0, Level $$1) {
         super($$0, $$1);
     }
+
+    private static final Ingredient TEMPT_INGREDIENT = Ingredient.of(Items.COD, Items.SALMON);
 
     private static final EntityDataAccessor<Byte> BREED = SynchedEntityData.defineId(StrayCatEntity.class,
             EntityDataSerializers.BYTE);;
@@ -97,6 +106,8 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
         SHOOTING = 1,
         SLEEP = 2,
         BEGGING = 3;
+
+    public byte getBubbleSkin() { return 0; }
 
     private static final int shootWindupMax = 10;
     private int shootWindup = shootWindupMax;
@@ -167,7 +178,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
                      setAnim(IDLE);
                  }
 
-                 if (getInterested()) {
+                 if (getInterested() && !getSleeping()) {
                      setAnim(BEGGING);
                  }
              }
@@ -184,22 +195,100 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
 
     @Override
     public boolean isFood(ItemStack stack) {
-        Item item = stack.getItem();
-        return item.isEdible() && (Objects.requireNonNull(item.getFoodProperties()).isMeat() || stack.is(ModItems.COFFEE_GUM));
+        return isYummy(stack);
     }
+
+    @Override
+    public void knockback(double x, double y, double z) {
+
+    }
+
+    public boolean isYummy(ItemStack stack) {
+        return TEMPT_INGREDIENT.test(stack);
+    }
+
+    @Override
+    public InteractionResult mobInteract(Player $$0, InteractionHand $$1) {
+        ItemStack $$2 = $$0.getItemInHand($$1);
+        Item $$3 = $$2.getItem();
+        if (this.level().isClientSide) {
+            boolean $$4 = this.isOwnedBy($$0) || this.isTame() || this.isYummy($$2) && !this.isTame();
+            //boolean $$4 = this.isOwnedBy($$0) || this.isTame() || $$2.is(Items.BONE) && !this.isTame() && !this.isAngry();
+            return $$4 ? InteractionResult.CONSUME : InteractionResult.PASS;
+        } else if (this.isTame()) {
+            if (this.isFood($$2) && this.getHealth() < this.getMaxHealth()) {
+                if (!$$0.getAbilities().instabuild) {
+                    $$2.shrink(1);
+                }
+
+                this.heal((float)$$3.getFoodProperties().getNutrition());
+                return InteractionResult.SUCCESS;
+            } else {
+                if ($$2.is(Items.FLOWER_POT)) {
+                    if (this.isOwnedBy($$0)) {
+                        if (!$$0.getAbilities().instabuild) {
+                            $$2.shrink(1);
+                        }
+
+
+                        return InteractionResult.SUCCESS;
+                    }
+                }
+                /*if ($$3 instanceof DyeItem) {
+                    DyeItem $$5 = (DyeItem)$$3;
+                    if (this.isOwnedBy($$0)) {
+                        DyeColor $$6 = $$5.getDyeColor();
+                        if ($$6 != this.getCollarColor()) {
+                            this.setCollarColor($$6);
+                            if (!$$0.getAbilities().instabuild) {
+                                $$2.shrink(1);
+                            }
+
+                            return InteractionResult.SUCCESS;
+                        }
+
+                        return super.mobInteract($$0, $$1);
+                    }
+                }*/
+
+                InteractionResult $$7 = super.mobInteract($$0, $$1);
+                return $$7;
+            }
+        } else if (isYummy($$2)) {
+            if (!$$0.getAbilities().instabuild) {
+                $$2.shrink(1);
+            }
+
+            if (this.random.nextInt(3) == 0) {
+                this.tame($$0);
+                this.setTarget((LivingEntity)null);
+                //this.setOrderedToSit(true);
+                this.level().broadcastEntityEvent(this, (byte)7);
+            } else {
+                this.level().broadcastEntityEvent(this, (byte)6);
+            }
+
+            return InteractionResult.SUCCESS;
+        } else {
+            return super.mobInteract($$0, $$1);
+        }
+    }
+
 
     @Override
     protected void registerGoals() {
         //super.registerGoals();
         this.goalSelector.addGoal(1, new StrayCatSleepGoal(this));
-        this.goalSelector.addGoal(3, new RangedAttackGoal(this, 0D, 30, 7.5F));
+        this.goalSelector.addGoal(3, new RangedAttackGoal(this, 0D, 75, 83, 6.5F));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(3, new StrayCatBegGoal(this, 8.0f));
-        this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
-        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this, new Class[0])));
-        this.targetSelector.addGoal(4, new NonTameRandomTargetGoal<Player>(this, Player.class, false, null));
+        this.goalSelector.addGoal(2, new StrayCatBegGoal(this, 8.0f));
+        this.goalSelector.addGoal(1, new StrayCatSleepGoal(this));
+        this.targetSelector.addGoal(2, new OwnerHurtByTargetGoal(this));
+        this.targetSelector.addGoal(3, new OwnerHurtTargetGoal(this));
+        this.targetSelector.addGoal(4, (new HurtByTargetGoal(this, new Class[0])));
+        this.targetSelector.addGoal(5, new StrayCatBegGoal(this, 8.0f));
+        this.targetSelector.addGoal(6, new NonTameRandomTargetGoal<Player>(this, Player.class, false, null));
     }
 
     /*
@@ -230,6 +319,17 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
     */
     // TODO add sounds :>
     protected SoundEvent getAmbientSound() {
+        if (this.shouldSleep()) {
+            return SoundEvents.CAT_PURR;
+        }
+        if (this.getInterested()) {
+            return SoundEvents.CAT_BEG_FOR_FOOD;
+        }
+
+        if (this.getTarget() != null && this.getTarget().isAlive()) {
+            return SoundEvents.CAT_HISS;
+        }
+
         return SoundEvents.CAT_STRAY_AMBIENT;
     }
     protected SoundEvent getHurtSound(DamageSource p_34195_) {
@@ -250,7 +350,6 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
         if ((dayTime >= 13000 && dayTime <= 23750) || this.level().isRainingAt(pos)) {
             return true;
         }
-
         return false;
     }
 
@@ -264,9 +363,26 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
 
         StrayCatAirBubble bubble = ModEntities.STRAY_CAT_AIRBUBBLE.create(this.level());
         if (bubble != null) {
+            bubble.setSped(0.2f);
+            bubble.setOwner(this);
+            bubble.setSkin(this.getBubbleSkin());
+            bubble.setFollowOwnerView(true);
 
+            Vec3 addToPosition = new Vec3(0, this.getEyeHeight() * 0.85f, 0);
+            Direction direction = ((IGravityEntity) this).roundabout$getGravityDirection();
+            if (direction != Direction.DOWN) {
+                addToPosition = RotationUtil.vecPlayerToWorld(addToPosition, direction);
+            }
+            Vec3 pos = this.getPosition(1).add(addToPosition.x, addToPosition.y, addToPosition.z).add(this.getForward().scale(this.getBbWidth() * 1));
+            bubble.setPos(pos.x(), pos.y(), pos.z());
+            bubble.shootFromRotationDeltaAgnostic(this, this.getXRot(), this.getYRot(), 1.0F, 0.2f, 0);
+            //bubble.shootFromRotation(P, P.getXRot(), P.getYRot(), -0.5F, SPEED, 0.00f);
+
+            this.level().addFreshEntity(bubble);
         }
     }
+
+
 
 
     static public class StrayCatSleepGoal extends Goal {
@@ -278,6 +394,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
             this.setFlags(EnumSet.of(Goal.Flag.MOVE, Flag.LOOK, Flag.JUMP, Flag.TARGET));
         }
 
+
         @Override
         public boolean isInterruptable() {
             return false;
@@ -285,7 +402,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
 
         @Override
         public void start() {
-
+            this.stray.setTarget(null);
         }
 
         public void stop() { }
@@ -296,12 +413,12 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
 
         @Override
         public boolean canUse() {
-            return this.stray.isSleeping();
+            return this.stray.shouldSleep();
         }
 
         @Override
         public boolean canContinueToUse() {
-            return this.stray.isSleeping();
+            return this.stray.shouldSleep();
         }
     }
 }
