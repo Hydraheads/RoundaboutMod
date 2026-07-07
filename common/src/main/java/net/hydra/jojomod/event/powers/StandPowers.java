@@ -123,6 +123,9 @@ public class StandPowers extends AbilityScapeBasis {
     public void tickPowerEnd(){
     }
 
+    public boolean canWalkThroughDaze(){
+        return false;
+    }
 
     /// used to make mobs look at you during tickMobAi
     public void rotateMobHead(LivingEntity attackTarget) {
