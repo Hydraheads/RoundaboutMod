@@ -761,6 +761,18 @@ public class ForgeItems {
             () -> new MemoryChessPieceItem(new Item.Properties())));
     public static final RegistryObject<Item> MEMORY_KING = addToWIPTab(ITEMS.register("memory_king",
             () -> new MemoryChessPieceItem(new Item.Properties())));
+    public static final RegistryObject<Item> MEMORY_PAWN_WHITE = addToWIPTab(ITEMS.register("memory_pawn_white",
+            () -> new MemoryChessPieceItem(new Item.Properties())));
+    public static final RegistryObject<Item> MEMORY_ROOK_WHITE = addToWIPTab(ITEMS.register("memory_rook_white",
+            () -> new MemoryChessPieceItem(new Item.Properties())));
+    public static final RegistryObject<Item> MEMORY_KNIGHT_WHITE = addToWIPTab(ITEMS.register("memory_knight_white",
+            () -> new MemoryChessPieceItem(new Item.Properties())));
+    public static final RegistryObject<Item> MEMORY_BISHOP_WHITE = addToWIPTab(ITEMS.register("memory_bishop_white",
+            () -> new MemoryChessPieceItem(new Item.Properties())));
+    public static final RegistryObject<Item> MEMORY_QUEEN_WHITE = addToWIPTab(ITEMS.register("memory_queen_white",
+            () -> new MemoryChessPieceItem(new Item.Properties())));
+    public static final RegistryObject<Item> MEMORY_KING_WHITE = addToWIPTab(ITEMS.register("memory_king_white",
+            () -> new MemoryChessPieceItem(new Item.Properties())));
 
     public static final RegistryObject<Item> BLANK_MASK = addToTab(ITEMS.register("blank_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new NonCharacterVisage(null))));

@@ -448,6 +448,12 @@ public class ForgeEvents {
         ModItems.MEMORY_BISHOP = ForgeItems.MEMORY_BISHOP.get();
         ModItems.MEMORY_ROOK = ForgeItems.MEMORY_ROOK.get();
         ModItems.MEMORY_KNIGHT = ForgeItems.MEMORY_KNIGHT.get();
+        ModItems.MEMORY_PAWN_WHITE = ForgeItems.MEMORY_PAWN_WHITE.get();
+        ModItems.MEMORY_KING_WHITE = ForgeItems.MEMORY_KING_WHITE.get();
+        ModItems.MEMORY_QUEEN_WHITE = ForgeItems.MEMORY_QUEEN_WHITE.get();
+        ModItems.MEMORY_BISHOP_WHITE = ForgeItems.MEMORY_BISHOP_WHITE.get();
+        ModItems.MEMORY_ROOK_WHITE = ForgeItems.MEMORY_ROOK_WHITE.get();
+        ModItems.MEMORY_KNIGHT_WHITE = ForgeItems.MEMORY_KNIGHT_WHITE.get();
 
         ModItems.BLANK_MASK = ForgeItems.BLANK_MASK.get();
         ModItems.RAT_MASK = ForgeItems.RAT_MASK.get();

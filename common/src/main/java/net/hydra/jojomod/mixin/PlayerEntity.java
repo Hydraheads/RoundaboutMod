@@ -183,6 +183,18 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         return rdbt$zombieFish;
     }
 
+    @Inject(
+            method = "isPushedByFluid",
+            at = @At("HEAD"),
+            cancellable = true, require = 0
+    )
+    private void roundabout$isPushedByFluid(CallbackInfoReturnable<Boolean> cir) {
+        if (((StandUser)this).roundabout$getStandPowers() instanceof PowersWalkingHeart PW
+                && PW.hasExtendedHeelsForWalking()){
+            cir.setReturnValue(false);
+        }
+    }
+
     //0.00392156862
     @Unique
     private static final float rdbt$hairColorX =245f/255f;

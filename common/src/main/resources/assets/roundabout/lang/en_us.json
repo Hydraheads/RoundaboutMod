@@ -108,6 +108,12 @@
   "item.roundabout.memory_bishop": "Stolen Memory",
   "item.roundabout.memory_queen": "Stolen Memory",
   "item.roundabout.memory_king": "Stolen Memory",
+  "item.roundabout.memory_pawn_white": "Stolen Memory",
+  "item.roundabout.memory_rook_white": "Stolen Memory",
+  "item.roundabout.memory_knight_white": "Stolen Memory",
+  "item.roundabout.memory_bishop_white": "Stolen Memory",
+  "item.roundabout.memory_queen_white": "Stolen Memory",
+  "item.roundabout.memory_king_white": "Stolen Memory",
 
   "roundabout.coffin_sleep": "Leave Coffin",
 

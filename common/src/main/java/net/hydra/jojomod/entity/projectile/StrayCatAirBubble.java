@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.NoVibrationEntity;
 import net.hydra.jojomod.access.PenetratableWithProjectile;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -95,6 +96,14 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         return damagePoints;
     }
 
+    public Entity target;
+    public void setTarget(Entity t) {
+        this.target = t;
+    }
+
+    private static final int redirectCooldownMax = 15;
+    private int redirectCooldown = redirectCooldownMax;
+
     @Override
     public boolean hurt(DamageSource $$0, float $$1) {
         if (this.isInvulnerableTo($$0)) {
@@ -169,6 +178,15 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
                 Entity owner = this.getOwner();
                 this.shootFromRotationDeltaAgnostic2(owner, owner.getXRot(), owner.getYRot(), 1.0F, getSped());
+            }else if (this.target != null && this.target.isAlive()) {
+                if (this.redirectCooldown <= 0) {
+                    this.bubbleRedirect();
+                    this.redirectCooldown = redirectCooldownMax;
+                }else {
+                    this.redirectCooldown--;
+                }
+            }else {
+                this.redirectCooldown = 0;
             }
 
         }else if( this.tickCount % 30 == 9) {
@@ -359,6 +377,32 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         this.entityData.define(SPEED, 1F);
         this.entityData.define(SKIN, (byte)0);
     }
+
+
+    public void bubbleRedirect(){
+        StrayCatAirBubble value = this;
+        value.setFollowOwnerView(false);
+
+        Vec3 pos = this.target.getPosition(0);
+        Vec3 addToPosition = new Vec3(0, this.target.getBbHeight() * 0.5f, 0);
+        Direction direction = ((IGravityEntity) this.target).roundabout$getGravityDirection();
+        if (direction != Direction.DOWN) {
+            addToPosition = RotationUtil.vecPlayerToWorld(addToPosition, direction);
+        }
+
+        Vec3 targetPos = pos.add(addToPosition);
+
+        Vec3 vector = new Vec3(
+                (targetPos.x() - this.getX()),
+                (targetPos.y() - this.getY()),
+                (targetPos.z() - this.getZ())
+        ).normalize().scale(this.getSped() * 0.75);
+
+        this.setDeltaMovement(vector);
+        this.hurtMarked = true;
+        this.hasImpulse = true;
+    }
+
 
     @Override
     public void shoot(double $$0, double $$1, double $$2, float $$3, float $$4) {

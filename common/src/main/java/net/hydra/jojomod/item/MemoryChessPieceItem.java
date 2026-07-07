@@ -1,19 +1,20 @@
 package net.hydra.jojomod.item;
 
-import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.sound.ModSounds;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.stats.Stats;
+import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.Vanishable;
 import net.minecraft.world.level.Level;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class MemoryChessPieceItem extends Item implements Vanishable {
     public MemoryChessPieceItem(Properties $$0) {
@@ -26,26 +27,23 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
     }
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
         ItemStack $$3 = $$1.getItemInHand($$2);
-        $$0.playSound((Player)null, $$1.getX(), $$1.getY(), $$1.getZ(), ModSounds.CINDERELLA_SPARKLE_EVENT, SoundSource.NEUTRAL, 1F, 1F);
-        $$1.getCooldowns().addCooldown(this, 50);
-
-        if (!$$0.isClientSide) {
-            if (!$$1.hasEffect(ModEffects.FACELESS)) {
-                ((StandUser) $$1).roundabout$setGlow((byte) 2);
-                ((LivingEntity) $$1).addEffect(new MobEffectInstance(ModEffects.CAPTURING_LOVE, 3600, 0, false, true), null);
-            }
-        }
-        $$1.awardStat(Stats.ITEM_USED.get(this));
-        if (!$$1.getAbilities().instabuild) {
-            if (!$$0.isClientSide) {
-                if (!$$1.hasEffect(ModEffects.FACELESS)) {
-                    $$3.hurtAndBreak(1, $$1, ($$1x) -> {
-                        $$1x.broadcastBreakEvent($$2);
-                    });
-                }
-            }
-        }
 
         return InteractionResultHolder.sidedSuccess($$3, $$0.isClientSide());
+    }
+
+    public static ItemStack initializePiece(ItemStack stack, Entity victim, int stealType){
+        if (victim != null){
+            stack.getOrCreateTag().putUUID("victim",victim.getUUID());
+            stack.getOrCreateTag().putInt("stealType",stealType);
+            stack.getOrCreateTag().putString("vicName", victim.getName().getString());
+        }
+        return stack;
+    }
+    @Override
+    public void appendHoverText(ItemStack $$0, @Nullable Level $$1, List<Component> $$2, TooltipFlag $$3) {
+        String comp = $$0.getOrCreateTag().getString("vicName");
+        if (comp != null && !comp.isBlank()){
+             $$2.add(Component.literal(comp).withStyle(ChatFormatting.LIGHT_PURPLE));
+        }
     }
 }

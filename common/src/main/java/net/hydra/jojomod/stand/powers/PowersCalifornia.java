@@ -14,6 +14,7 @@ import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.DietSavedSecond;
 import net.hydra.jojomod.event.ModParticles;
@@ -21,10 +22,13 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.MemoryChessPieceItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
@@ -48,7 +52,9 @@ import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -773,11 +779,60 @@ public class PowersCalifornia extends NewDashPreset {
 
                 if (entity.isAlive()) {
                     entity.setDeltaMovement(0,0.2,0);
+                    ItemStack piece = getPieceType(entity);
+                    MainUtil.addItem(sp,piece);
                 }
             }
             hurtEntities.clear();
             snapEntity = null;
         }
+    }
+
+    public ItemStack getPieceType(Entity victim){
+        int skin = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        boolean isWhite = skin == CaliforniaKingBedEntity.SUNSHINE;
+        double rand = Math.random();
+        ItemStack stack;
+        Item result;
+        if (rand < 0.1){
+            if (isWhite){
+                result= ModItems.MEMORY_KING_WHITE;
+            } else {
+                result= ModItems.MEMORY_KING;
+            }
+        } else if (rand < 0.2){
+            if (isWhite){
+                result= ModItems.MEMORY_QUEEN_WHITE;
+            } else {
+                result= ModItems.MEMORY_QUEEN;
+            }
+        } else if (rand < 0.35){
+            if (isWhite){
+                result= ModItems.MEMORY_BISHOP_WHITE;
+            } else {
+                result= ModItems.MEMORY_BISHOP;
+            }
+        } else if (rand < 0.5){
+            if (isWhite){
+                result= ModItems.MEMORY_KNIGHT_WHITE;
+            } else {
+                result= ModItems.MEMORY_KNIGHT;
+            }
+        } else if (rand < 0.65){
+            if (isWhite){
+                result= ModItems.MEMORY_ROOK_WHITE;
+            } else {
+                result= ModItems.MEMORY_ROOK;
+            }
+        } else {
+            if (isWhite){
+                result= ModItems.MEMORY_PAWN_WHITE;
+            } else {
+                result= ModItems.MEMORY_PAWN;
+            }
+        }
+        stack = new ItemStack(result);
+        return MemoryChessPieceItem.initializePiece(stack,victim,0);
     }
 
     public boolean inCowerStance(){

@@ -1476,7 +1476,9 @@ public class PowersKillerQueen extends NewPunchingStand {
             ItemStack item = this.getSelf().getMainHandItem();
             if (item.getItem() instanceof AbstractStrayCat) {
                 Player PL = (Player)this.getSelf();
-                PL.getInventory().removeItem(item);
+                if (!PL.getAbilities().instabuild) {
+                    item.shrink(1);
+                }
                 this.hasStrayCat = true;
                 this.saveDiscAndSync();
 
@@ -1594,7 +1596,6 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void bubbleRedirect(){
         if (this.bombBubble != null){
-            this.setCooldown(PowerIndex.SKILL_EXTRA_2, 3);
 
             if (!this.self.level().isClientSide()) {
                 if (this.bubbleTarget != null && this.self.hasLineOfSight(this.bubbleTarget)) {

@@ -1162,11 +1162,16 @@ public class AbilityScapeBasis {
         return this.getUserData(entity).roundabout$isDazed();
     }
     public static void setDazed(LivingEntity entity, byte dazeTime){
+        if (entity == null){return;}
         if ((1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)) <= 0.0) {
             /*Warden, iron golems, and anything else knockback immmune can't be dazed**/
             return;
         } else if (MainUtil.isBossMob(entity)){
             /*Bosses can't be dazed**/
+            return;
+        }
+        StandPowers powers = ((StandUser)entity).roundabout$getStandPowers();
+        if (powers.canWalkThroughDaze()){
             return;
         }
 
@@ -1190,6 +1195,7 @@ public class AbilityScapeBasis {
     }
 
     public static void setDazedTrue(LivingEntity entity, byte dazeTime){
+        if (entity == null){return;}
         if (MainUtil.isBossMob(entity)){
             /*Bosses can't be dazed**/
             return;
