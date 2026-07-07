@@ -494,6 +494,8 @@ public class AbilityScapeBasis {
     public int getAttackTimeDuring(){
         return this.attackTimeDuring;
     }
+    public void onEnderPearlThrow(){
+    }
     public byte getActivePower(){
         return this.activePower;
     }

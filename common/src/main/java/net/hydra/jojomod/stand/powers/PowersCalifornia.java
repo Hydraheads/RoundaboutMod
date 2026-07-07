@@ -300,7 +300,7 @@ public class PowersCalifornia extends NewDashPreset {
             }
         } else if (isDoNotLeave()){
             if (!onCooldown(PowerIndex.SKILL_EXTRA_2)) {
-                if (targEnt != null){
+                if (targEnt != null && !self.isPassenger()){
                     tryIntPowerPacket(PowerIndex.SKILL_EXTRA_2,targEnt.getId());
                 } else {
                     tryIntPowerPacket(PowerIndex.SKILL_EXTRA_2,-1);
@@ -478,6 +478,18 @@ public class PowersCalifornia extends NewDashPreset {
         }
     }
 
+
+    public void clearLeadAndPunish(){
+        if (!self.level().isClientSide() && leaded != null){
+            playUnfairSound();
+            clearLeaded();
+        }
+    }
+
+    public void onEnderPearlThrow(){
+        clearLeadAndPunish();
+    }
+
     public void doTheStepRule(){
         if (!this.self.level().isClientSide()){
             if (!onCooldown(PowerIndex.SKILL_EXTRA)) {
@@ -625,6 +637,10 @@ public class PowersCalifornia extends NewDashPreset {
                 } else {
                     clearLeaded();
                 }
+            }
+
+            if (self.isFallFlying() || self.isPassenger() || self.isAutoSpinAttack()){
+                clearLeadAndPunish();
             }
         } else {
             if (isDoNotLeave()){
@@ -804,6 +820,7 @@ public class PowersCalifornia extends NewDashPreset {
         rewindSnap = null;
         hurtEntities.clear();
         clearAllSpawnedEntities();
+        clearLeaded();
         nextRule();
         if (self instanceof ServerPlayer pl){
             pl.displayClientMessage(Component.translatable("text.roundabout.ckb_rule_"+currentRule).withStyle(ChatFormatting.LIGHT_PURPLE), true);
