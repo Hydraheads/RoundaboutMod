@@ -1349,42 +1349,44 @@ public abstract class InputEvents implements IInputEvents {
                 }
 
 
-                if (rdbt$isInitialized(player)) {
-                powers.preCheckButtonInputUse(this.options.keyUse.isDown(),this.options);
-                generalPowers.preCheckButtonInputUse(this.options.keyUse.isDown(),this.options);
-                }
+                    if (rdbt$isInitialized(player)) {
+                        powers.preCheckButtonInputUse(this.options.keyUse.isDown(), this.options);
+                        generalPowers.preCheckButtonInputUse(this.options.keyUse.isDown(), this.options);
+                    }
 
-                if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
-                    if (!isMining && !roundabout$activeMining && standComp.roundabout$getInterruptCD()) {
-                        if (rdbt$isInitialized(player) && !((StandUser)player).roundabout$isDazed()) {
-                            powers.preCheckButtonInputAttack(this.options.keyAttack.isDown(), this.options);
+                    if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
+                        if (!isMining && !roundabout$activeMining && standComp.roundabout$getInterruptCD()) {
+                            if (rdbt$isInitialized(player) && !((StandUser) player).roundabout$isDazed()) {
+                                powers.preCheckButtonInputAttack(this.options.keyAttack.isDown(), this.options);
+                            }
                         }
                     }
-                }
 
-                if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
-                    if (!isMining && standComp.roundabout$isGuardInput() && !standComp.roundabout$isBarraging()) {
-                        if (rdbt$isInitialized(player)) {
-                            powers.preCheckButtonInputBarrage(this.options.keyAttack.isDown(), this.options);
+                    if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
+                        if (!isMining && standComp.roundabout$isGuardInput() && !standComp.roundabout$isBarraging()) {
+                            if (rdbt$isInitialized(player)) {
+                                powers.preCheckButtonInputBarrage(this.options.keyAttack.isDown(), this.options);
+                            }
                         }
                     }
-                }
             }
 
 
-            if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
-                if (!isMining && !roundabout$activeMining && generalPowers.getInterruptCD()) {
-                    if (rdbt$isInitialized(player)) {
-                        if (!generalPowers.isBarraging() && !((StandUser)player).roundabout$isDazed()) {
-                            ((IFatePlayer) player).rdbt$getFatePowers().buttonInputAttack(this.options.keyAttack.isDown(), this.options);
-                            generalPowers.preCheckButtonInputAttack(this.options.keyAttack.isDown(), this.options);
+            if (!((TimeStop)player.level()).CanTimeStopEntity(player)) {
+                if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
+                    if (!isMining && !roundabout$activeMining && generalPowers.getInterruptCD()) {
+                        if (rdbt$isInitialized(player)) {
+                            if (!generalPowers.isBarraging() && !((StandUser) player).roundabout$isDazed()) {
+                                ((IFatePlayer) player).rdbt$getFatePowers().buttonInputAttack(this.options.keyAttack.isDown(), this.options);
+                                generalPowers.preCheckButtonInputAttack(this.options.keyAttack.isDown(), this.options);
+                            }
                         }
                     }
-                }
-                if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
-                    if (!isMining && standComp.roundabout$isGuardInput() && !generalPowers.isBarraging()) {
-                        if (rdbt$isInitialized(player)) {
-                            generalPowers.preCheckButtonInputBarrage(this.options.keyAttack.isDown(), this.options);
+                    if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
+                        if (!isMining && standComp.roundabout$isGuardInput() && !generalPowers.isBarraging()) {
+                            if (rdbt$isInitialized(player)) {
+                                generalPowers.preCheckButtonInputBarrage(this.options.keyAttack.isDown(), this.options);
+                            }
                         }
                     }
                 }

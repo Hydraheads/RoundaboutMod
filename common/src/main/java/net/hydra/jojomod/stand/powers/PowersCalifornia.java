@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.StepRuleEntity;
+import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -599,6 +600,7 @@ public class PowersCalifornia extends NewDashPreset {
                 if (leaded.isAlive()) {
                     if (leaded instanceof Mob mb) {
                         if (leaded instanceof AbstractVillager || leaded instanceof Animal ||
+                                leaded instanceof Aesthetician ||
                                 leaded instanceof WaterAnimal) {
                             ((IMob) mb).roundabout$setHypnotizedBy(self);
                         }
