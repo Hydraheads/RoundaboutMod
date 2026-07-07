@@ -29,6 +29,12 @@
       "roundabout:block_freeze"
     ]
   },
+  "heart_sparkle": {
+    "subtitle": "sounds.roundabout.heart_sparkle",
+    "sounds": [
+      "roundabout:heart_sparkle"
+    ]
+  },
   "ding": {
     "subtitle": "sounds.roundabout.ding",
     "sounds": [

@@ -460,8 +460,11 @@ public class PowersCalifornia extends NewDashPreset {
                 if (storedInt > -1 && !dupe){
                     Entity zent = self.level().getEntity(storedInt);
                     if (zent instanceof LivingEntity LV){
+                        clearLeaded();
                         ((StandUser)LV).roundabout$setBoundTo(self);
                         setLeadTarget(LV);
+                        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.HEART_SPARKLE_EVENT,
+                                SoundSource.PLAYERS, 1F, (float) (0.99f + Math.random() * 0.03f));
                         ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MAGIC_HEART,
                                 LV.getEyePosition().x, LV.getEyePosition().y, LV.getEyePosition().z,
                                 0, 0, 1,0, 0.15);
