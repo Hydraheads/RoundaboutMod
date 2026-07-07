@@ -102,6 +102,13 @@
   "item.roundabout.stray_cat_anime": "Stray Cat",
   "item.roundabout.stray_cat_manga": "Stray Cat",
 
+  "item.roundabout.memory_pawn": "Stolen Memory",
+  "item.roundabout.memory_rook": "Stolen Memory",
+  "item.roundabout.memory_knight": "Stolen Memory",
+  "item.roundabout.memory_bishop": "Stolen Memory",
+  "item.roundabout.memory_queen": "Stolen Memory",
+  "item.roundabout.memory_king": "Stolen Memory",
+
   "roundabout.coffin_sleep": "Leave Coffin",
 
   "item.roundabout.star_platinum_disc": "Stand Disc",

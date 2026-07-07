@@ -145,6 +145,12 @@ public class ModItems {
     public static Item MUSIC_DISC_TORTURE_DANCE;
     public static Item MUSIC_DISC_HALLELUJAH;
     public static Item LUCKY_LIPSTICK;
+    public static Item MEMORY_PAWN;
+    public static Item MEMORY_BISHOP;
+    public static Item MEMORY_KNIGHT;
+    public static Item MEMORY_ROOK;
+    public static Item MEMORY_KING;
+    public static Item MEMORY_QUEEN;
     public static Item BLANK_MASK;
     public static Item RAT_MASK;
     public static Item MODIFICATION_MASK;

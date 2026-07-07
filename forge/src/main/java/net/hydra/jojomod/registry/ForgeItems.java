@@ -748,6 +748,20 @@ public class ForgeItems {
             () -> new WorthyArrowItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> LUCKY_LIPSTICK = addToTab(ITEMS.register("lucky_lipstick",
             () -> new LuckyLipstickItem(new Item.Properties())));
+
+    public static final RegistryObject<Item> MEMORY_PAWN = addToWIPTab(ITEMS.register("memory_pawn",
+            () -> new MemoryChessPieceItem(new Item.Properties())));
+    public static final RegistryObject<Item> MEMORY_ROOK = addToWIPTab(ITEMS.register("memory_rook",
+            () -> new MemoryChessPieceItem(new Item.Properties())));
+    public static final RegistryObject<Item> MEMORY_KNIGHT = addToWIPTab(ITEMS.register("memory_knight",
+            () -> new MemoryChessPieceItem(new Item.Properties())));
+    public static final RegistryObject<Item> MEMORY_BISHOP = addToWIPTab(ITEMS.register("memory_bishop",
+            () -> new MemoryChessPieceItem(new Item.Properties())));
+    public static final RegistryObject<Item> MEMORY_QUEEN = addToWIPTab(ITEMS.register("memory_queen",
+            () -> new MemoryChessPieceItem(new Item.Properties())));
+    public static final RegistryObject<Item> MEMORY_KING = addToWIPTab(ITEMS.register("memory_king",
+            () -> new MemoryChessPieceItem(new Item.Properties())));
+
     public static final RegistryObject<Item> BLANK_MASK = addToTab(ITEMS.register("blank_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new NonCharacterVisage(null))));
     public static final RegistryObject<Item> MODIFICATION_MASK = addToTab(ITEMS.register("modification_mask",

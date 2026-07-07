@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.items;
 
 import net.hydra.jojomod.item.FleshBucketItem;
 import net.hydra.jojomod.item.LuckyLipstickItem;
+import net.hydra.jojomod.item.MemoryChessPieceItem;
 import net.hydra.jojomod.item.RoundaboutArrowItem;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.*;
@@ -25,18 +26,24 @@ public abstract class UnenchantAnvilMenu extends ItemCombinerMenu {
         ItemStack itemstack = this.inputSlots.getItem(0);
         if (!itemstack.isEmpty()) {
             ItemStack itemstack2 = this.inputSlots.getItem(1);
-            if (!itemstack2.isEmpty() && itemstack.getItem() instanceof RoundaboutArrowItem && itemstack2.getItem() instanceof EnchantedBookItem) {
+            if (!itemstack2.isEmpty()) {
+                if (itemstack.getItem() instanceof RoundaboutArrowItem && itemstack2.getItem() instanceof EnchantedBookItem) {
                     this.resultSlots.setItem(0, ItemStack.EMPTY);
                     this.cost.set(0);
                     ci.cancel();
-            } else if (!itemstack2.isEmpty() && itemstack.getItem() instanceof FleshBucketItem && itemstack2.getItem() instanceof EnchantedBookItem) {
-                this.resultSlots.setItem(0, ItemStack.EMPTY);
-                this.cost.set(0);
-                ci.cancel();
-            } else if (!itemstack2.isEmpty() && itemstack.getItem() instanceof LuckyLipstickItem && itemstack2.getItem() instanceof EnchantedBookItem) {
-                this.resultSlots.setItem(0, ItemStack.EMPTY);
-                this.cost.set(0);
-                ci.cancel();
+                } else if (itemstack.getItem() instanceof FleshBucketItem && itemstack2.getItem() instanceof EnchantedBookItem) {
+                    this.resultSlots.setItem(0, ItemStack.EMPTY);
+                    this.cost.set(0);
+                    ci.cancel();
+                } else if (itemstack.getItem() instanceof LuckyLipstickItem && itemstack2.getItem() instanceof EnchantedBookItem) {
+                    this.resultSlots.setItem(0, ItemStack.EMPTY);
+                    this.cost.set(0);
+                    ci.cancel();
+                } else if (itemstack.getItem() instanceof MemoryChessPieceItem && itemstack2.getItem() instanceof EnchantedBookItem) {
+                    this.resultSlots.setItem(0, ItemStack.EMPTY);
+                    this.cost.set(0);
+                    ci.cancel();
+                }
             }
         }
     }

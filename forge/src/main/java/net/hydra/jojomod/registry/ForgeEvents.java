@@ -441,6 +441,14 @@ public class ForgeEvents {
         ModItems.LOCACACA_BRANCH = ForgeItems.LOCACACA_BRANCH.get();
         ModItems.NEW_LOCACACA = ForgeItems.NEW_LOCACACA.get();
         ModItems.LUCKY_LIPSTICK = ForgeItems.LUCKY_LIPSTICK.get();
+
+        ModItems.MEMORY_PAWN = ForgeItems.MEMORY_PAWN.get();
+        ModItems.MEMORY_KING = ForgeItems.MEMORY_KING.get();
+        ModItems.MEMORY_QUEEN = ForgeItems.MEMORY_QUEEN.get();
+        ModItems.MEMORY_BISHOP = ForgeItems.MEMORY_BISHOP.get();
+        ModItems.MEMORY_ROOK = ForgeItems.MEMORY_ROOK.get();
+        ModItems.MEMORY_KNIGHT = ForgeItems.MEMORY_KNIGHT.get();
+
         ModItems.BLANK_MASK = ForgeItems.BLANK_MASK.get();
         ModItems.RAT_MASK = ForgeItems.RAT_MASK.get();
 
