@@ -367,6 +367,7 @@ public class PowersCalifornia extends NewDashPreset {
 
     public void onActuallyHurt(DamageSource source, float $$1){
         if (source.getEntity() != null && !source.is(DamageTypes.THORNS)
+                && !source.getEntity().getUUID().equals(self.getUUID())
                 && !source.is(ModDamageTypes.GO_BEYOND)
                 && !source.is(ModDamageTypes.STAND_FIRE)
                 && !(source.getEntity() instanceof Pufferfish)
