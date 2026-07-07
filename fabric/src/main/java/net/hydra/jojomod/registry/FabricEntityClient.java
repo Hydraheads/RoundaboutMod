@@ -351,6 +351,16 @@ public class FabricEntityClient {
         ModStrayModels.WhiteAlbumLeftArm = new WhiteAlbumLeftArmPart();
         ModStrayModels.WhiteAlbumSlimLeftArm = new WhiteAlbumSlimLeftArmPart();
 
+        ModStrayModels.OasisHead = new OasisHeadPart();
+        ModStrayModels.OasisChest = new OasisChestPart();
+        ModStrayModels.OasisBody = new OasisBodyPart();
+        ModStrayModels.OasisLeftLeg = new OasisLeftLegPart();
+        ModStrayModels.OasisRightLeg = new OasisRightLegPart();
+        ModStrayModels.OasisRightArm = new OasisRightArmPart();
+        ModStrayModels.OasisSlimRightArm = new OasisSlimRightArmPart();
+        ModStrayModels.OasisLeftArm = new OasisLeftArmPart();
+        ModStrayModels.OasisSlimLeftArm = new OasisSlimLeftArmPart();
+
         ModStrayModels.VampireHairOne = new VampireHairOnePart();
         ModStrayModels.VampireHairTwo = new VampireHairTwoPart();
         ModStrayModels.VampireHairFlesh = new VampireHairFleshBudLayer();
