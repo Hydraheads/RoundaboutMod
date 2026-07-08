@@ -2027,7 +2027,19 @@ public class PowersKillerQueen extends NewPunchingStand {
     protected Byte getSummonSound() {
         return SoundIndex.SUMMON_SOUND;
     }
-    
+
+    @Override
+    public byte getSoundCancelingGroupByte(byte soundChoice) {
+        if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND) {
+            return SoundIndex.BARRAGE_SOUND_GROUP;
+        }
+        if (soundChoice == AIRBUBBLE) {
+            return AIRBUBBLE;
+        }
+
+        return super.getSoundCancelingGroupByte(soundChoice);
+    }
+
     @Override
     public SoundEvent getSoundFromByte(byte soundChoice){
        if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND) {
