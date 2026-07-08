@@ -60,6 +60,7 @@ public class FabricSounds {
         addSound(ModSounds.CKB_STEAL_ID, ModSounds.CKB_STEAL_EVENT);
         addSound(ModSounds.CKB_YES_ID, ModSounds.CKB_YES_EVENT);
         addSound(ModSounds.CKB_NO_ID, ModSounds.CKB_NO_EVENT);
+        addSound(ModSounds.CKB_ATTACK_ID, ModSounds.CKB_ATTACK_EVENT);
         addSound(ModSounds.CKB_TILE_ID, ModSounds.CKB_TILE_EVENT);
         addSound(ModSounds.HEART_SPARKLE_ID, ModSounds.HEART_SPARKLE_EVENT);
 

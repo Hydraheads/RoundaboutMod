@@ -1,10 +1,13 @@
 package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -23,7 +26,7 @@ import java.util.UUID;
 
 public class MemoryChessPieceItem extends Item implements Vanishable {
     public MemoryChessPieceItem(Properties $$0) {
-        super($$0.defaultDurability(6));
+        super($$0.defaultDurability(3));
     }
 
     @Override
@@ -75,14 +78,27 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
 
         Entity entity = serverLevel.getEntity(uuid);
 
-        if (entity instanceof LivingEntity living && living.hurtTime <= 0) {
+        if (entity == null || (!entity.isAlive())){
+            player.getMainHandItem().hurtAndBreak(4, player, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+        } else if (entity instanceof LivingEntity living && living.hurtTime <= 0) {
             float dmg = 3;
             if (living instanceof Player pl){
-                dmg = 2;
+                dmg = 1.5F;
             }
-            living.hurt(ModDamageTypes.of(living.level(), ModDamageTypes.CHESS_STRIKE, player), dmg);
+            if (living.hurt(ModDamageTypes.of(living.level(), ModDamageTypes.CHESS_STRIKE, player), dmg) && !living.isAlive()) {
+                MainUtil.makeBleed(living,0,200,player);
+                player.getMainHandItem().hurtAndBreak(4, player, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+            } else {
+                player.getMainHandItem().hurtAndBreak(1, player, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+            }
+            if (!player.getMainHandItem().isEmpty()){
+                if (player.level() instanceof ServerLevel sl){
+                    sl.playSound(null, player.blockPosition(),
+                            ModSounds.CKB_ATTACK_EVENT, SoundSource.PLAYERS, 1F,
+                            (float) (0.99f + Math.random() * 0.02f));
+                }
+            }
 
-            player.getMainHandItem().hurtAndBreak(2, player, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
         }
     }
 }

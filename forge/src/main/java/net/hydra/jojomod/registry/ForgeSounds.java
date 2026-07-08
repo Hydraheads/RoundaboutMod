@@ -376,6 +376,8 @@ public class ForgeSounds {
             register(ModSounds.CKB_YES, ModSounds.CKB_YES_ID);
     public static final RegistryObject<SoundEvent> CKB_NO =
             register(ModSounds.CKB_NO, ModSounds.CKB_NO_ID);
+    public static final RegistryObject<SoundEvent> CKB_ATTACK =
+            register(ModSounds.CKB_ATTACK, ModSounds.CKB_ATTACK_ID);
     public static final RegistryObject<SoundEvent> CKB_TILE =
             register(ModSounds.CKB_TILE, ModSounds.CKB_TILE_ID);
     public static final RegistryObject<SoundEvent> HEART_SPARKLE =
