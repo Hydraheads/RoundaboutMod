@@ -180,6 +180,16 @@ public class PowersCalifornia extends NewDashPreset {
             );
         }
     }
+
+    public static boolean canSteal(Entity entity){
+        if (entity instanceof LivingEntity LE){
+            if (MainUtil.isBossMob(LE)){
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
     public void addToList(Entity entity){
         if (entity.isAlive()) {
             hurtEntities.put(entity, entity.tickCount + 200);
@@ -255,8 +265,11 @@ public class PowersCalifornia extends NewDashPreset {
     public void powerActivate(PowerContext context) {
         switch (context)
         {
-            case SKILL_1_NORMAL,SKILL_1_CROUCH -> {
+            case SKILL_1_NORMAL -> {
                 tryCatchEnemies();
+            }
+            case SKILL_1_CROUCH -> {
+                tryCatchEnemiesEXP();
             }
             case SKILL_2_NORMAL,SKILL_2_CROUCH -> {
                 tryStrategyClient();
@@ -288,6 +301,14 @@ public class PowersCalifornia extends NewDashPreset {
             if (!onCooldown(PowerIndex.SKILL_1)) {
                 clearClientList();
                 tryPowerPacket(PowerIndex.POWER_1);
+            }
+        }
+    }
+    public void tryCatchEnemiesEXP(){
+        if (!clientEntityIds.isEmpty()) {
+            if (!onCooldown(PowerIndex.SKILL_1)) {
+                clearClientList();
+                tryPowerPacket(PowerIndex.POWER_1_SNEAK);
             }
         }
     }
@@ -380,7 +401,7 @@ public class PowersCalifornia extends NewDashPreset {
                 && !(source.getEntity() instanceof Axolotl)
                 && !(source.getEntity() instanceof FallenMob)) {
             if (inCowerStance()){
-                if (attackTimeDuring >= 5){
+                if (attackTimeDuring >= 5 && PowersCalifornia.canSteal(source.getEntity())){
                     rewindSnap = DietSavedSecond.saveEntitySecond(self);
                     snapEntity = source.getEntity();
                     setCowerLeaveStance();
@@ -403,7 +424,11 @@ public class PowersCalifornia extends NewDashPreset {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
 
-        setSkillIcon(context, x, y, 1, StandIcons.STEAL_MEMORIES, PowerIndex.SKILL_1);
+        if (isHoldingSneak()){
+            setSkillIcon(context, x, y, 1, StandIcons.STEAL_MEMORIES_2, PowerIndex.SKILL_1);
+        } else {
+            setSkillIcon(context, x, y, 1, StandIcons.STEAL_MEMORIES, PowerIndex.SKILL_1);
+        }
 
         if (isDoNotHurt()){
             setSkillIcon(context, x, y, 2, StandIcons.HURT, PowerIndex.SKILL_2);
@@ -645,7 +670,7 @@ public class PowersCalifornia extends NewDashPreset {
                         }
                     }
 
-                    if (leaded.distanceTo(self) > getCKBrange()){
+                    if (leaded.distanceTo(self) > getCKBrange() && PowersCalifornia.canSteal(leaded)){
                         addToList(leaded);
                         playGotchaSound();
                         clearLeaded();
@@ -660,8 +685,10 @@ public class PowersCalifornia extends NewDashPreset {
             }
         } else {
             if (isDoNotLeave()){
-                targEnt = getCaliforniaTargetEntity();
-
+                Entity targent = getCaliforniaTargetEntity();
+                if (PowersCalifornia.canSteal(targent)){
+                    targEnt = targent;
+                }
             }
         }
     }
@@ -748,12 +775,19 @@ public class PowersCalifornia extends NewDashPreset {
             cowerServer();
         } else if (move == PowerIndex.POWER_1){
             punishServer();
+        } else if (move == PowerIndex.POWER_1_SNEAK){
+            punishServer2();
         } else if (move == PowerIndex.SKILL_EXTRA){
             doTheStepRule();
         } else if (move == PowerIndex.SKILL_EXTRA_2){
             doTheLeaveRule();
         }
         return super.setPowerOther(move,lastMove);
+    }
+
+
+    public void punishServer2(){
+        punishServer();
     }
 
     public void punishServer(){
