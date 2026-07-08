@@ -51,6 +51,7 @@ import net.minecraft.world.entity.animal.Pufferfish;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -121,6 +122,38 @@ public class PowersCalifornia extends NewDashPreset {
         }
     }
 
+
+    //Hording player pieces would be toxic
+    @Override
+    public boolean onKilledEntity(ServerLevel $$0, LivingEntity victim){
+        if (self instanceof Player player) {
+            UUID victimId = victim.getUUID();
+
+            Inventory inv = player.getInventory();
+
+            for (int i = 0; i < inv.getContainerSize(); i++) {
+                ItemStack invStack = inv.getItem(i);
+
+                if (!(invStack.getItem() instanceof MemoryChessPieceItem)) {
+                    continue;
+                }
+
+                CompoundTag tag = invStack.getTag();
+                if (tag != null &&
+                        tag.hasUUID("victim") &&
+                        victimId.equals(tag.getUUID("victim"))) {
+
+                        tag.remove("stealType");
+                        tag.remove("victim");
+                        invStack.setDamageValue(0);
+                        inv.setItem(i,invStack);
+                }
+            }
+        }
+
+
+        return super.onKilledEntity($$0,victim);
+    }
 
     public void playUnfairSound(){
         if (self.level() instanceof ServerLevel sl){

@@ -14,10 +14,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.Vanishable;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
@@ -55,7 +52,8 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
         }
     }
 
-    public static void attackThePerson(Player player, ItemStack stack) {
+    public static void attackThePerson(Player player) {
+        ItemStack stack = player.getMainHandItem();
         if (stack != null && !(stack.getItem() instanceof MemoryChessPieceItem)) {
             return;
         }
@@ -78,27 +76,41 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
 
         Entity entity = serverLevel.getEntity(uuid);
 
-        if (entity == null || (!entity.isAlive())){
-            player.getMainHandItem().hurtAndBreak(4, player, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
-        } else if (entity instanceof LivingEntity living && living.hurtTime <= 0) {
-            float dmg = 3;
-            if (living instanceof Player pl){
-                dmg = 1.5F;
-            }
-            if (living.hurt(ModDamageTypes.of(living.level(), ModDamageTypes.CHESS_STRIKE, player), dmg) && !living.isAlive()) {
-                MainUtil.makeBleed(living,0,200,player);
-                player.getMainHandItem().hurtAndBreak(4, player, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
-            } else {
-                player.getMainHandItem().hurtAndBreak(1, player, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
-            }
-            if (!player.getMainHandItem().isEmpty()){
-                if (player.level() instanceof ServerLevel sl){
-                    sl.playSound(null, player.blockPosition(),
-                            ModSounds.CKB_ATTACK_EVENT, SoundSource.PLAYERS, 1F,
-                            (float) (0.99f + Math.random() * 0.02f));
-                }
-            }
+        if (entity != null) {
+            if (!entity.isAlive()) {
+                if (tag.hasUUID("victim") &&
+                        entity.getUUID().equals(tag.getUUID("victim"))) {
 
+                    tag.remove("stealType");
+                    tag.remove("victim");
+                    stack.setDamageValue(0);
+                    player.setItemSlot(EquipmentSlot.MAINHAND, stack);
+                }
+            } else if (entity instanceof LivingEntity living && living.hurtTime <= 0) {
+                float dmg = 3;
+                if (living instanceof Player pl){
+                    dmg = 1.5F;
+                }
+                if (living.hurt(ModDamageTypes.of(living.level(), ModDamageTypes.CHESS_STRIKE, player), dmg) && !living.isAlive()) {
+                    MainUtil.makeBleed(living,0,200,player);
+                    player.getMainHandItem().hurtAndBreak(4, player, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                } else {
+                    player.getMainHandItem().hurtAndBreak(1, player, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                }
+                if (!player.getMainHandItem().isEmpty()){
+                    if (player.level() instanceof ServerLevel sl){
+                        sl.playSound(null, player.blockPosition(),
+                                ModSounds.CKB_ATTACK_EVENT, SoundSource.PLAYERS, 1F,
+                                (float) (0.99f + Math.random() * 0.02f));
+                    }
+                }
+
+            }
+        } else {
+            tag.remove("stealType");
+            tag.remove("victim");
+            stack.setDamageValue(0);
+            player.setItemSlot(EquipmentSlot.MAINHAND, stack);
         }
     }
 }
