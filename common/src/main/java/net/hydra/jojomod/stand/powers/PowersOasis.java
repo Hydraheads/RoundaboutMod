@@ -42,7 +42,7 @@ public class PowersOasis extends NewDashPreset {
         return (self instanceof Player pl || MainUtil.isHumanoid2(self)) && PowerTypes.hasStandActive(self);
     }
 
-    // stand fading
+    // stand fading for first person
     public static float getOasisAmt(Entity entity, float partialTicks){
         float heyFull = 0;
         if (entity instanceof LivingEntity LE) {

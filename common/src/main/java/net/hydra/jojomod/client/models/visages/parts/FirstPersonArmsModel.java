@@ -24,6 +24,7 @@ import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
+import net.hydra.jojomod.stand.powers.PowersOasis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.model.HumanoidModel;
@@ -376,6 +377,7 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
 
                 if (rightSleeve != null) {
                     float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(context, partialTicks);
+                    float oasisAmt = PowersOasis.getOasisAmt(context, partialTicks);
                     if (whiteAmt > 0) {
 
                         poseStack.pushPose();
@@ -388,14 +390,32 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
                         String path = PowersWhiteAlbum.getSkinString(skin);
                         if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
                             path = "ice";
-                        }if (((StandUser)player).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW
-                                && PW.cracked){
-                            path = "cracked/"+path;
+                        }
+                        if (((StandUser) player).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW
+                                && PW.cracked) {
+                            path = "cracked/" + path;
                         }
                         ModStrayModels.WhiteAlbumRightArm.render(
                                 context, partialTicks, poseStack, bufferSource, light,
                                 r, g, b, whiteAmt, path);
                         poseStack.popPose();
+
+                    } else if (oasisAmt > 0) {
+
+                        poseStack.pushPose();
+
+                        this.transform.translateAndRotate(poseStack);
+                        this.rform.translateAndRotate(poseStack);
+                        this.right_arm.translateAndRotate(poseStack);
+
+                        byte skin = ((StandUser) player).roundabout$getStandSkin();
+                        String path = PowersOasis.getSkinString(skin);
+
+                        ModStrayModels.OasisRightArm.render(
+                                context, partialTicks, poseStack, bufferSource, light,
+                                r, g, b, oasisAmt, path);
+                        poseStack.popPose();
+
                     } else if (bt == LocacacaCurseIndex.RIGHT_HAND) {
                         poseStack.pushPose();
 
@@ -489,8 +509,8 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
                     }
                 }
                 if (leftSleeve != null) {
-
                     float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(context, partialTicks);
+                    float oasisAmt = PowersOasis.getOasisAmt(context, partialTicks);
                     if (whiteAmt > 0){
 
                         poseStack.pushPose();
@@ -511,6 +531,23 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
                                 context, partialTicks, poseStack, bufferSource, light,
                                 r, g, b, whiteAmt, path);
                         poseStack.popPose();
+
+                    } else if (oasisAmt > 0) {
+
+                        poseStack.pushPose();
+
+                        this.transform.translateAndRotate(poseStack);
+                        this.lform.translateAndRotate(poseStack);
+                        this.left_arm.translateAndRotate(poseStack);
+
+                        byte skin = ((StandUser) player).roundabout$getStandSkin();
+                        String path = PowersOasis.getSkinString(skin);
+
+                        ModStrayModels.OasisLeftArm.render(
+                                context, partialTicks, poseStack, bufferSource, light,
+                                r, g, b, oasisAmt, path);
+                        poseStack.popPose();
+
                     } else if (bt == LocacacaCurseIndex.LEFT_HAND) {
                         poseStack.pushPose();
 
