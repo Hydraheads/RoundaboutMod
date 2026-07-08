@@ -16,8 +16,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.Vec3;
@@ -30,6 +32,8 @@ import javax.annotation.Nullable;
 
 public class FancyLighterBlock extends BaseEntityBlock {
 
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+
     protected FancyLighterBlock(Properties $$0) {
         super($$0);
     }
@@ -40,16 +44,40 @@ public class FancyLighterBlock extends BaseEntityBlock {
         };
     }
 
-    protected static final VoxelShape SHAPE = Block.box(7.5, 0.0, 7.0, 8.5, 6.0, 9.0);
+    protected static final VoxelShape SHAPEA = Block.box(7.5, 0.0, 7.0, 8.5, 5.0, 9.0);
+    protected static final VoxelShape SHAPEB = Block.box(7.0, 0.0, 7.5, 9.0, 5.0, 8.5);
 
+    @Nullable
     @Override
-    public VoxelShape getShape(BlockState $$0, BlockGetter $$1, BlockPos $$2, CollisionContext $$3) {
-        return SHAPE;
+    public BlockState getStateForPlacement(BlockPlaceContext $$0) {
+        return this.defaultBlockState()
+                .setValue(FACING, $$0.getHorizontalDirection());
     }
 
     @Override
     public RenderShape getRenderShape(BlockState $$0) {
         return RenderShape.MODEL;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public VoxelShape getShape(BlockState $$0, BlockGetter $$1, BlockPos $$2, CollisionContext $$3) {
+        if ($$0.getValue(FACING).getAxis() == Direction.Axis.X){
+            return SHAPEA;
+        } else {
+            return SHAPEB;
+        }
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> $$0) {
+        $$0.add(FACING);
+        super.createBlockStateDefinition($$0);
+    }
+    @SuppressWarnings("deprecation")
+    @Override
+    public BlockState rotate(BlockState $$0, Rotation $$1) {
+        return $$0.setValue(FACING, $$1.rotate($$0.getValue(FACING)));
     }
 
     @SuppressWarnings("deprecation")
