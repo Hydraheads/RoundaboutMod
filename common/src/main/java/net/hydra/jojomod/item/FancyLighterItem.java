@@ -3,6 +3,7 @@ package net.hydra.jojomod.item;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.FancyLighterBlock;
 import net.hydra.jojomod.block.FancyLighterBlockEntity;
+import net.hydra.jojomod.block.ModBlocks;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -24,17 +25,17 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.gameevent.GameEvent;
 
 public class FancyLighterItem extends BlockItem {
 
-    //TODO: remove the loggers after I finished everything, rn they are vital
+    //TODO: maybe remove the loggers after I finished everything, rn they are vital
 
     public FancyLighterItem(Block $$0, Properties $$1) {
         super($$0, $$1);
     }
-
 
     private static final String IS_LIT_TAG = "IsLighterLit";
 

@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -33,9 +34,11 @@ import javax.annotation.Nullable;
 public class FancyLighterBlock extends BaseEntityBlock {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final BooleanProperty LIT = ModBlocks.LIT;
 
     protected FancyLighterBlock(Properties $$0) {
         super($$0);
+        this.registerDefaultState(this.stateDefinition.any().setValue(LIT, Boolean.valueOf(false)));
     }
 
     @Override
@@ -50,8 +53,10 @@ public class FancyLighterBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext $$0) {
+        Level level = $$0.getLevel();
+        ItemStack stack = $$0.getItemInHand();
         return this.defaultBlockState()
-                .setValue(FACING, $$0.getHorizontalDirection());
+                .setValue(FACING, $$0.getHorizontalDirection()).setValue(LIT, hasLitNeighbor(level, stack));
     }
 
     @Override
@@ -72,6 +77,7 @@ public class FancyLighterBlock extends BaseEntityBlock {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> $$0) {
         $$0.add(FACING);
+        $$0.add(LIT);
         super.createBlockStateDefinition($$0);
     }
     @SuppressWarnings("deprecation")
@@ -98,6 +104,19 @@ public class FancyLighterBlock extends BaseEntityBlock {
 
 
         }
+    }
+
+    public boolean hasLitNeighbor(Level level, ItemStack stack) {
+
+        if(stack.getItem() instanceof FancyLighterItem FI){
+            if(FI.getCurrentPredicateValue(level, stack) > 0.1){
+                return  false;
+            } else {
+                return  true;
+            }
+        }
+
+        return false;
     }
 
 }
