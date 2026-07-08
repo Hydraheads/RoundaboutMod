@@ -893,7 +893,7 @@ public class PowersRatt extends NewDashPreset {
                     this.animateStand(RattEntity.LOADING);
                 }
             }
-            case PowersRatt.MINING_2 -> {
+            case PowersRatt.MINING -> {
                 Entity stand = getStandEntity(self);
                 if (stand instanceof RattEntity ratt) {
                     if (!isAutoMining()) {

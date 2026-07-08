@@ -210,12 +210,12 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
         ItemStack $$2 = $$0.getItemInHand($$1);
         Item $$3 = $$2.getItem();
         if (this.level().isClientSide) {
-            boolean $$4 = this.isOwnedBy($$0) || this.isTame() || this.isYummy($$2) && !this.isTame()
+            boolean $$4 = (this.isOwnedBy($$0) || this.isTame()) && !this.getSleeping() || this.isYummy($$2) && !this.getSleeping() && !this.isTame()
                     || (this.isOwnedBy($$0) && ($$2.is(Items.FLOWER_POT) || this.getPotted()));
             //boolean $$4 = this.isOwnedBy($$0) || this.isTame() || $$2.is(Items.BONE) && !this.isTame() && !this.isAngry();
             return $$4 ? InteractionResult.CONSUME : InteractionResult.PASS;
         } else if (this.isTame()) {
-            if (this.isFood($$2) && this.getHealth() < this.getMaxHealth()) {
+            if (this.isFood($$2) && this.getHealth() < this.getMaxHealth() && !this.getSleeping()) {
                 if (!$$0.getAbilities().instabuild) {
                     $$2.shrink(1);
                 }
@@ -267,7 +267,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
                 InteractionResult $$7 = super.mobInteract($$0, $$1);
                 return $$7;
             }
-        } else if (isYummy($$2)) {
+        } else if (isYummy($$2) && !this.getSleeping()) {
             if (!$$0.getAbilities().instabuild) {
                 $$2.shrink(1);
             }

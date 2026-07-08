@@ -55,8 +55,14 @@ public class SheerHeartAttackEntity extends StandEntity {
 		super($$0, $$1);
 	}
 
-	protected static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(SheerHeartAttackEntity.class,
-			EntityDataSerializers.INT);
+	protected static final EntityDataAccessor<Byte> TARGET_STATUS = SynchedEntityData.defineId(SheerHeartAttackEntity.class,
+			EntityDataSerializers.BYTE);
+
+	@Override
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.entityData.define(TARGET_STATUS, NONE);
+	}
 
 
 	@Override
@@ -70,9 +76,6 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public final AnimationState idle = new AnimationState();
 	public final AnimationState moving = new AnimationState();
-
-	static final int dededeSoundTimerMax = 90;
-	public int dededeSoundTimer = 50;
 
 	int tickTargetFindCount = 0;
 	static final int tickTargetFindMax = 4;
@@ -95,7 +98,6 @@ public class SheerHeartAttackEntity extends StandEntity {
 		IDLE = 0,
 		WALK = 1;
 
-	public byte currentTarget = NONE;
 	public Entity entityTarget = null;
 	public BlockPos blockTarget = null;
 	public int ticksUntilNextPathRecalculation = 15;
@@ -155,19 +157,21 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		boolean client = this.level().isClientSide();
 		LivingEntity user = this.getUser();
-
+		/*
 		dededeSoundTimer--;
 
 		if (dededeSoundTimer <= 0) {
 
-			if (user != null && ((StandUser)user).roundabout$getStandSkin() != KillerQueenEntity.CRACKED) {
-				this.level().playSound(null, this.blockPosition(), ModSounds.KILLER_QUEEN_SHA_DEDEDEDE_EVENT, SoundSource.AMBIENT, 0.6F, 1.0f);
-			}else {
-				this.level().playSound(null, this.blockPosition(), ModSounds.KILLER_QUEEN_SHA_CRACKED_DEDE_EVENT, SoundSource.AMBIENT, 0.6F, 1.0f);
-			}
-			dededeSoundTimer = dededeSoundTimerMax;
-		}
+			float pitchRand = 0.07f*((float)(Math.random() - 0.5));
 
+			if (user != null && ((StandUser)user).roundabout$getStandSkin() != KillerQueenEntity.CRACKED) {
+				this.level().playSound(null, this.blockPosition(), ModSounds.KILLER_QUEEN_SHA_DEDEDEDE_EVENT, SoundSource.AMBIENT, 0.6F, 1.0f + pitchRand);
+			}else {
+				this.level().playSound(null, this.blockPosition(), ModSounds.KILLER_QUEEN_SHA_CRACKED_DEDE_EVENT, SoundSource.AMBIENT, 0.6F, 1.0f + pitchRand);
+			}
+			dededeSoundTimer = dededeSoundTimerMax + this.random.nextInt(20, 70);
+		}
+		*/
 
 		if (!client) {
 			if(user == null){
@@ -188,7 +192,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 				}else {
 					this.tickTargetFindCount--;
 				}
-				if (this.currentTarget == NONE) {
+				if (this.getTargetType() == NONE) {
 					this.inativeTicks++;
 				}else {
 					this.inativeTicks = 0;
@@ -249,28 +253,28 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
 	public boolean hasTarget() {
-		if (this.currentTarget == ENTITY) {
+		if (this.getTargetType() == ENTITY) {
 			if (this.entityTarget == null) {
-				this.currentTarget = NONE;
+				this.setTargetType(NONE);
 				return false;
 			}
 			if (!this.entityTarget.isAlive()) {
-				this.currentTarget = NONE;
+				this.setTargetType(NONE);
 			}
 			if (this.entityTarget instanceof LivingEntity LE) {
 				if (LE.isDeadOrDying()) {
-					this.currentTarget = NONE;
+					this.setTargetType(NONE);
 				}
 			}
-		}else if (this.currentTarget == BLOCK) {
+		}else if (this.getTargetType() == BLOCK) {
 			BlockState BlockInfo = this.level().getBlockState(this.blockTarget);
 			if (ExplosionUtil.isBlockBlackListed(BlockInfo)) {
-				this.currentTarget = NONE;
+				this.setTargetType(NONE);
 				this.blockTarget = null;
 			}
 		}
 
-		return this.currentTarget != NONE;
+		return this.getTargetType() != NONE;
 	}
 
 	public void findTarget() {
@@ -331,7 +335,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		if (currentChoice == ENTITY) {
 			this.entityTarget = targetEnt;
-			this.currentTarget = ENTITY;
+			this.setTargetType(ENTITY);
 		}else if (currentChoice == BLOCK) {
 			//Vec3 bt = targetPos.subtract(0.5, 0.5, 0.5);
 			this.blockTarget = new BlockPos(
@@ -339,10 +343,10 @@ public class SheerHeartAttackEntity extends StandEntity {
 					targetPosY,
 					targetPosZ
 			);
-			this.currentTarget = BLOCK;
+			this.setTargetType(BLOCK);
 		}else {
 			this.entityTarget = null;
-			this.currentTarget = NONE;
+			this.setTargetType(NONE);
 		}
 	}
 
@@ -362,14 +366,15 @@ public class SheerHeartAttackEntity extends StandEntity {
 		double dist = Math.abs(this.position().distanceTo(targetPos));
 
 		float minDist = (explosionRadius-0.12f);
-		if (this.currentTarget == BLOCK) {
+		if (this.getTargetType() == BLOCK) {
 			minDist = 1.4f;
 		}
 
 		return (float)dist < minDist;
 	}
 
-	public byte getTargetType() { return this.currentTarget;}
+	public byte getTargetType() {return this.entityData.get(TARGET_STATUS);}
+	public void setTargetType(byte value) {this.entityData.set(TARGET_STATUS, value);}
 
 	public Vec3 getTargetPosition() {
 		byte type = this.getTargetType();
@@ -407,11 +412,11 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 				if (!this.entityTarget.isAlive()) {
 					this.entityTarget = null;
-					this.currentTarget = NONE;
+					this.setTargetType(NONE);
 				} else if (this.entityTarget instanceof LivingEntity LE) {
 					if (LE.isDeadOrDying()) {
 						this.entityTarget = null;
-						this.currentTarget = NONE;
+						this.setTargetType(NONE);
 					}
 				}
 			}
@@ -425,7 +430,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			boolean shouldDrop = !this.level().getBlockState(this.blockTarget).requiresCorrectToolForDrops();
 			this.level().destroyBlock(this.blockTarget, shouldDrop);
 			this.blockTarget = null;
-			this.currentTarget = NONE;
+			this.setTargetType(NONE);
 		}
 
 		this.attackTick = attackTickMax;
@@ -481,9 +486,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 			Path newPath;
 			if (this.getHaveToReturn()) {
 				newPath = this.getNavigation().createPath(this.getUser(), 1);
-			}else if (this.currentTarget == ENTITY) {
+			}else if (this.getTargetType() == ENTITY) {
 				newPath = this.getNavigation().createPath(this.entityTarget, 0);
-			}else if (this.currentTarget == BLOCK) {
+			}else if (this.getTargetType() == BLOCK) {
 				BlockState BS = this.level().getBlockState(this.blockTarget);
 				if (BS.isPathfindable(this.level(), this.blockTarget, PathComputationType.LAND)) {
 					newPath = this.getNavigation().createPath(this.blockTarget.below(), 0);
@@ -569,7 +574,35 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return null;
+
+		LivingEntity user = this.getUser();
+
+		if (user == null) {
+			return null;
+		}
+
+		byte skin = ((StandUser)user).roundabout$getStandSkin();
+
+		double rand = Math.random();
+
+		if (skin == KillerQueenEntity.CRACKED || rand >= 0.7) {
+			if (this.getTargetType() != NONE && rand >= 0.82) {
+				return ModSounds.KILLER_QUEEN_SHA_CRACKED_KOCCHI_EVENT;
+			}
+
+			return ModSounds.KILLER_QUEEN_SHA_CRACKED_DEDE_EVENT;
+		}else {
+			if (this.getTargetType() != NONE && rand >= 0.3) {
+				if (rand >= 0.5) {
+					return ModSounds.KILLER_QUEEN_SHA_KOCCHI_1_EVENT;
+				}
+
+				return ModSounds.KILLER_QUEEN_SHA_KOCCHI_2_EVENT;
+			}
+
+			return ModSounds.KILLER_QUEEN_SHA_DEDEDEDE_EVENT;
+		}
+
 	}
 
     @Override public boolean hurt(DamageSource source, float amount) { return false;}
