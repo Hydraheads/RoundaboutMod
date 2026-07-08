@@ -165,6 +165,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
     public boolean roundabout$isNaturalStandUser = false;
     @Unique
     public boolean roundabout$isBred = false;
+    @Unique
+    public int roundabout$confusionTicks = 0;
 
     @Override
     @Unique
@@ -196,6 +198,18 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Unique
     public LivingEntity roundabout$getHypnotizedBy() {
         return roundabout$hypnotizedBy;
+    }
+
+
+    @Override
+    @Unique
+    public void roundabout$setConfusionTicks(int set) {
+        roundabout$confusionTicks = set;
+    }
+    @Override
+    @Unique
+    public int roundabout$getConfusionTicks() {
+        return roundabout$confusionTicks;
     }
 
     //Injects universal behaviors that all mobs can share
@@ -484,6 +498,9 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Unique
     protected double roundabout$getFollowDistance() {
         /**Soft and Wet Plunder sight*/
+        if (roundabout$getConfusionTicks() > 0){
+            return 0;
+        }
         if (((StandUser)this).roundabout$getEyeSightTaken() != null && this.getLastHurtByMob() == null){
             return (this.getAttributeValue(Attributes.FOLLOW_RANGE)*0.07);
         }
@@ -943,6 +960,9 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private void roundabout$Tick(CallbackInfo ci) {
         if (this.isAlive() && !this.level().isClientSide()) {
+            if (roundabout$confusionTicks > 0){
+                roundabout$confusionTicks--;
+            }
             if (getHealth() < getMaxHealth()){
                 if (roundabout$isVampire()){
                     if (tickCount % 82 == 0){

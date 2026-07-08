@@ -7,6 +7,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -30,10 +31,38 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
     public boolean isEnchantable(ItemStack p_41456_) {
         return false;
     }
+    @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
         ItemStack $$3 = $$1.getItemInHand($$2);
+        $$1.startUsingItem($$2);
+        return InteractionResultHolder.consume($$3);
+    }
+    /**Default 72000*/
+    @Override
+    public int getUseDuration(ItemStack $$0) {
+        return 72000;
+    }
+    @Override
+    public void releaseUsing(ItemStack $$0, Level $$1, LivingEntity $$2, int $$3) {
+        if ($$2 instanceof Player $$4) {
+            int $$5 = this.getUseDuration($$0) - $$3;
+            int itemTime = 7;
+            if ($$5 >= itemTime) {
 
-        return InteractionResultHolder.sidedSuccess($$3, $$0.isClientSide());
+                if (!$$1.isClientSide) {
+                    String comp = $$0.getOrCreateTag().getString("vicName");
+                    if (comp != null && !comp.isBlank()){
+                        $$1.playSound(null, $$4.getX(), $$4.getY(), $$4.getZ(), ModSounds.CINDERELLA_SPARKLE_EVENT, SoundSource.NEUTRAL, 1F, 1F);
+                        $$4.displayClientMessage(Component.translatable("text.roundabout.memory."+
+                                $$0.getOrCreateTag().getInt("stealType")).withStyle(ChatFormatting.AQUA), true);
+                    }
+                }
+            }
+        }
+    }
+    @Override
+    public UseAnim getUseAnimation(ItemStack $$0) {
+        return UseAnim.BOW;
     }
 
     public static ItemStack initializePiece(ItemStack stack, Entity victim, int stealType){
@@ -58,6 +87,8 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
             }
         }
     }
+
+
 
     public static void attackThePerson(Player player) {
         ItemStack stack = player.getMainHandItem();

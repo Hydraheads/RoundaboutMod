@@ -914,6 +914,9 @@ public class PowersCalifornia extends NewDashPreset {
     public int getStealType(Entity victim){
         if (victim instanceof LivingEntity LE){
             ((StandUser)LE).roundabout$deeplyRemoveAttackTarget();
+            if (victim instanceof Mob mb){
+                ((IMob)mb).roundabout$setConfusionTicks(30);
+            }
         }
         if (victim instanceof Skeleton sk) {
             return 7;

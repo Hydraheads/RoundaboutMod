@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin.soft_and_wet;
 
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,6 +27,10 @@ public abstract class SoftAndWetNearestAttackableTargetGoal<T extends LivingEnti
     @Inject(method = "findTarget", at = @At(value = "TAIL"))
     protected void roundabout$findTarget(CallbackInfo ci) {
         if (!(this.target instanceof StandEntity)) {
+            if (((IMob)this.mob).roundabout$getConfusionTicks() <= 0){
+                this.target = null;
+                return;
+            }
             if (((StandUser)this.mob).roundabout$getEyeSightTaken() != null && mob.getLastHurtByMob() == null){
                 this.target = this.mob.level().getNearestEntity(this.mob.level().getEntitiesOfClass(this.targetType, this.getTargetSearchArea(this.getFollowDistance()), (p_148152_) -> {
                     return true;
