@@ -46,11 +46,15 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Pufferfish;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
+import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -904,7 +908,39 @@ public class PowersCalifornia extends NewDashPreset {
             }
         }
         stack = new ItemStack(result);
-        return MemoryChessPieceItem.initializePiece(stack,victim,0);
+        return MemoryChessPieceItem.initializePiece(stack,victim,getStealType(victim));
+    }
+
+    public int getStealType(Entity victim){
+        if (victim instanceof LivingEntity LE){
+            ((StandUser)LE).roundabout$deeplyRemoveAttackTarget();
+        }
+        if (victim instanceof Skeleton sk) {
+            return 7;
+        } else if (victim instanceof Player pl && PowerTypes.hasStandActive(pl)) {
+            return 8;
+        } else if (victim instanceof Witch wt) {
+            return 6;
+        } else if (victim instanceof TamableAnimal ta && ta.getOwner() != null) {
+            return 9;
+        } else if (victim instanceof AbstractIllager al) {
+            return 5;
+        } else if (victim instanceof Villager vg) {
+            return 11;
+        } else if (victim instanceof Phantom ph) {
+            return 4;
+        } else if (victim instanceof IronGolem ig) {
+            if (ig.isPlayerCreated()){
+                ig.setPlayerCreated(false);
+                return 3;
+            } else {
+                ig.setPlayerCreated(true);
+                return 2;
+            }
+        } if (victim instanceof Monster || (victim instanceof Mob mb && mb.getTarget() != null)){
+            return 1;
+        }
+        return 0;
     }
 
     public boolean inCowerStance(){

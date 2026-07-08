@@ -51,6 +51,8 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
         if (comp != null && !comp.isBlank()){
             ChatFormatting formatting = ChatFormatting.LIGHT_PURPLE;
              $$2.add(Component.literal(comp).withStyle(formatting));
+            //$$2.add(Component.translatable("text.roundabout.memory."+
+            //        $$0.getOrCreateTag().getInt("stealType")).withStyle(ChatFormatting.BLUE));
             if (!comp2){
                 $$2.add(Component.translatable("text.roundabout.inactive_piece").withStyle(ChatFormatting.AQUA));
             }
