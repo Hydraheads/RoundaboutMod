@@ -201,6 +201,8 @@ public class FabricItems {
     public static Item STRAY_CAT_ANIME = registerItem("stray_cat_anime", new StrayCatAnime(new Item.Properties().stacksTo(1)));
     public static Item STRAY_CAT_MANGA = registerItem("stray_cat_manga", new StrayCatManga(new Item.Properties().stacksTo(1)));
 
+    public static Item FANCY_LIGHTER = registerItem("fancy_lighter_block", new FancyLighterItem(ModBlocks.FANCY_LIGHTER_BLOCK, new Item.Properties().stacksTo(1)));
+
     public static Item STAND_DISC = registerItem("stand_disc", new EmptyStandDiscItem(new Item.Properties().stacksTo(1)));
     public static Item COFFEE_GUM = registerItem("coffee_gum", new Item(new Item.Properties().food(ModFoodComponents.COFFEE_GUM)));
     public static Item METEORITE = registerItem("meteorite", new Item(new Item.Properties()));
@@ -270,7 +272,6 @@ public class FabricItems {
             new CoffinBlockItem(DyeColor.BLACK, FabricBlocks.COFFIN_BLOCK, new Item.Properties().stacksTo(1)));
     /*public static Item CHESSBOARD_BLOCK_ITEM = registerItem("chessboard_block",
             new ChessBoardBlockItem(FabricBlocks.CHESSBOARD_BLOCK, new Item.Properties().stacksTo(1)));*/
-    public static Item FANCY_LIGHTER = registerItem("fancy_lighter", new FancyLighterItem(ModBlocks.FANCY_LIGHTER_BLOCK, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
 
     public static Item CAT_REMAINS = registerItem("cat_remains", new HeadRemainsItem(new Item.Properties().stacksTo(64)));
     public static Item MOOSHROOM_REMAINS = registerItem("mooshroom_remains", new HeadRemainsItem(new Item.Properties().stacksTo(64)));

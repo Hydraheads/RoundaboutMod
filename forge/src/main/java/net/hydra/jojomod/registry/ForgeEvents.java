@@ -278,6 +278,8 @@ public class ForgeEvents {
         ModBlocks.INVISIBLE_BLOCK_ENTITY = ForgeBlocks.INVISIBLE_BLOCK_ENTITY.get();
         ModBlocks.FOG_TRAP_BLOCK_ENTITY = ForgeBlocks.FOG_TRAP_BLOCK_ENTITY.get();
         ModBlocks.COFFIN_BLOCK_ENTITY = ForgeBlocks.COFFIN_BLOCK_ENTITY.get();
+        ModBlocks.FANCY_LIGHTER_BLOCK_ENTITY = ForgeBlocks.FANCY_LIGHTER_BLOCK_ENTITY.get();
+        ModBlocks.FANCY_LIGHTER_BLOCK = ForgeBlocks.FANCY_LIGHTER_BLOCK.get();
         //ModBlocks.CHESSBOARD_BLOCK_ENTITY = ForgeBlocks.CHESSBOARD_BLOCK_ENTITY.get();
 
         ModItems.STAND_ARROW = ForgeItems.STAND_ARROW.get();

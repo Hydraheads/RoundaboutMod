@@ -234,7 +234,7 @@ public class FabricBlocks {
     public static final Block EQUIPPABLE_STONE_MASK = registerStoneMask("stone_mask", ModBlocks.EQUIPPABLE_STONE_MASK_PROPERTIES);
     public static final Block BLOODY_STONE_MASK = registerStoneMaskBloody("bloody_stone_mask", BLOODY_STONE_MASK_PROPERTIES);
     public static final Block COFFIN_BLOCK = registerCoffinBlock("coffin_block", COFFIN_BLOCK_PROPERTIES);
-    public static final Block FANCY_LIGHTER_BLOCK = registerFancyLighter("fancy_lighter_blick", FANCY_LIGHTER_PROPRETIES);
+    public static final Block FANCY_LIGHTER_BLOCK = registerFancyLighter("fancy_lighter_block", FANCY_LIGHTER_PROPRETIES);
     //public static final Block CHESSBOARD_BLOCK = registerChessBoardBlock("chessboard_block", CHESSBOARD_BLOCK_PROPERTIES);
 
 
@@ -253,7 +253,7 @@ public class FabricBlocks {
     public static final BlockEntityType<CoffinBlockEntity> COFFIN_BLOCK_ENTITY =
             registerBE("coffin_block",BlockEntityType.Builder.of(CoffinBlockEntity::new, COFFIN_BLOCK) );
     public static final BlockEntityType<FancyLighterBlockEntity> FANCY_LIGHTER_BLOCK_ENTITY =
-            registerBE("fancy_lighter",BlockEntityType.Builder.of(FancyLighterBlockEntity::new, FANCY_LIGHTER_BLOCK) );
+            registerBE("fancy_lighter_block",BlockEntityType.Builder.of(FancyLighterBlockEntity::new, FANCY_LIGHTER_BLOCK) );
     /*public static final BlockEntityType<ChessBoardBlockEntity> CHESSBOARD_BLOCK_ENTITY =
             registerBE("chessboard_block",BlockEntityType.Builder.of(ChessBoardBlockEntity::new, CHESSBOARD_BLOCK) );*/
 

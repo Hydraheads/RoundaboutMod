@@ -37,7 +37,7 @@ public class FancyLighterBlockEntity extends BlockEntity {
     }
 
 
-    public void setValues(LivingEntity thisowner, String thisname){
+    public void setValues(Entity thisowner, String thisname){
         if(owner == null && name == null){
             owner = thisowner.getUUID();
             name = thisname;
@@ -69,7 +69,7 @@ public class FancyLighterBlockEntity extends BlockEntity {
 
 
     public ItemStack getItem() {
-        ItemStack $$0 = new ItemStack(ModItems.FANCY_LIGHTER);
+       // ItemStack $$0 = new ItemStack(ModItems.FANCY_LIGHTER);
         /*if (this.itemPatterns != null && !this.itemPatterns.isEmpty()) {
             CompoundTag $$1 = new CompoundTag();
             $$1.put("Patterns", this.itemPatterns.copy());
@@ -80,7 +80,8 @@ public class FancyLighterBlockEntity extends BlockEntity {
             $$0.setHoverName(this.name);
         }*/
 
-        return $$0;
+       // return $$0;
+        return  null;
     }
 
 }

@@ -3,53 +3,39 @@ package net.hydra.jojomod.item;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.FancyLighterBlock;
 import net.hydra.jojomod.block.FancyLighterBlockEntity;
-import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
-import net.hydra.jojomod.entity.paintings.RoundaboutPainting;
-import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.decoration.HangingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.BlockCollisions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.gameevent.BlockPositionSource;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
-import java.util.Optional;
 
 public class FancyLighterItem extends BlockItem {
+
+    //TODO: remove the loggers after I finished everything, rn they are vital
 
     public FancyLighterItem(Block $$0, Properties $$1) {
         super($$0, $$1);
     }
 
 
-    private static final String OWNER_IS_WHO = "WhoIsOwner";
     private static final String IS_LIT_TAG = "IsLighterLit";
 
     private boolean getIsLit(ItemStack stack) {
@@ -60,35 +46,36 @@ public class FancyLighterItem extends BlockItem {
         stack.getOrCreateTag().putBoolean(IS_LIT_TAG, value);
     }
 
+    public static ItemStack stuff(ItemStack $$0, Player p){
+        Item item = ModItems.FANCY_LIGHTER;
+        if(!$$0.hasTag()){
+             $$0.getOrCreateTagElement("UserId").putString("Stuff", p.getStringUUID());
+             $$0.getOrCreateTagElement("UserIdUUID").putUUID("StuffOther", p.getUUID());
+        }
+
+        ItemStack itemStack = item.getDefaultInstance();
+
+        return itemStack;
+    }
+
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
         super.inventoryTick(stack, level, entity, slot, selected);
-
         if(entity.isInWaterOrRain()){
             if(!getIsLit(stack)) {
-                setIsNotLit(stack, true);
-                checkIsLitOrNot(stack);
+                unlit(stack);
             }
         }
-    }
-
-    public int getLighterOwner(ItemStack stack){return stack.getOrCreateTag().getInt(OWNER_IS_WHO);}
-    public void setLighterOwner(ItemStack stack, int value){
-        stack.getOrCreateTag().putInt(OWNER_IS_WHO, value);
     }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
         ItemStack $$3 = $$1.getItemInHand($$2);
-        InteractionResultHolder<ItemStack> placed = super.use($$0,$$1,$$2);
-        if (!$$0.isClientSide()){
-            this.lirOrUnlit($$0, $$1, $$3);
+        if($$3.getItem() instanceof FancyLighterItem FI){
+            FI.lirOrUnlit($$0, $$1, $$3);
         }
+        InteractionResultHolder<ItemStack> placed = super.use($$0,$$1,$$2);
         return placed;
-    }
-
-    public void checkIsLitOrNot(ItemStack stack){
-        System.out.println(stack.getOrCreateTag().getBoolean(IS_LIT_TAG));
     }
 
     public void unlit(ItemStack stack){
@@ -99,20 +86,46 @@ public class FancyLighterItem extends BlockItem {
         if(!$$1.isInWaterOrRain()) {
             if (!getIsLit($$2)) {
                 setIsNotLit($$2, true);
-                checkIsLitOrNot($$2);
             } else {
                 setIsNotLit($$2, false);
-                checkIsLitOrNot($$2);
+                blackSabbathCheck($$0, $$1, $$2);
             }
         }
     }
 
+    private void blackSabbathCheck(Level $$0, Player $$1, ItemStack $$2){
+            if($$2.getItem() instanceof  FancyLighterItem FI){
+                if($$2.hasTag() && $$2 != null && $$2.getTag() != null) {
+                    if ($$0 instanceof ServerLevel SL) {
+                        Entity ownerEntity = null;
+                        if ($$2.getTag().contains("UserIdUUID")) {
+                            ownerEntity = SL.getEntity($$2.getTagElement("UserIdUUID").getUUID("StuffOther"));
+
+                            if(SL.getEntity($$2.getTagElement("UserIdUUID").getUUID("StuffOther")) != null) {
+                                System.out.println(ownerEntity);
+
+                                if($$1 == SL.getEntity($$2.getTagElement("UserIdUUID").getUUID("StuffOther"))){
+                                    System.out.println("Black Sabbath is Bing Chillin'");
+                                } else {
+                                    System.out.println("Black Sabbath is definitely NOT Bing Chillin'");
+                                }
+                            } else {
+                                System.out.println("Owner Entity doesn't exist");
+                            }
+                        } else {
+                            System.out.println("Does not contain UUID");
+                        }
+                    }
+                }
+            }
+    }
+
     public float getCurrentPredicateValue(Level level, ItemStack stack) {
 
-        if (level != null) {
+    if(level != null) {
             return getIsLit(stack) ? 0.2f : 0.0f;
         }
-        return 0.0f;
+          return  0.0f;
     }
 
     @Override
@@ -131,6 +144,7 @@ public class FancyLighterItem extends BlockItem {
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
+    /* this to bottom is copied and modified code for assigning the owner of the lighter block, putting everything in private/protected is evil, cuz I can't just super.[method] :/ */
     public InteractionResult placeLighter(BlockPlaceContext $$0) {
         if (!this.getBlock().isEnabled($$0.getLevel().enabledFeatures())) {
             return InteractionResult.FAIL;
@@ -160,11 +174,29 @@ public class FancyLighterItem extends BlockItem {
                             CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayer)$$5, $$3, $$6);
                             if($$2.getBlock() instanceof FancyLighterBlock FB){
                                 if(FB.newBlockEntity($$3, $$7) instanceof FancyLighterBlockEntity FLBE){
-                                    System.out.println(this.getLighterOwner(FLBE.getItem()));
-                                   /* if(this.getLighterOwner() != null) {
-                                        FLBE.setValues(this.getLighterOwner(), this.getLighterOwner().toString());
-                                        System.out.println(this.getLighterOwner().getUUID() + ", " + this.getLighterOwner().toString());
-                                    }*/
+                                    if($$6.getItem() instanceof FancyLighterItem FI){
+                                        if($$4 instanceof ServerLevel $$8) {
+                                            if ($$6.getTag().contains("UserIdUUID")) {
+
+                                                if ($$8.getEntity($$6.getTagElement("UserIdUUID").getUUID("StuffOther")) != null) {
+
+                                                    FLBE.setValues($$8.getEntity($$6.getTagElement("UserIdUUID").getUUID("StuffOther")), $$8.getEntity($$6.getTagElement("UserIdUUID").getUUID("StuffOther")).getDisplayName().getString());
+
+                                                    if ($$5 == $$8.getEntity($$6.getTagElement("UserIdUUID").getUUID("StuffOther"))) {
+                                                        System.out.println(FLBE.getOwner());
+                                                        System.out.println(FLBE.getName());
+                                                        System.out.println("Black Sabbath is Bing Chillin'");
+                                                    } else {
+                                                        System.out.println("Black Sabbath is definitely NOT Bing Chillin'");
+                                                    }
+                                                } else {
+                                                    System.out.println("Owner Entity doesn't exist");
+                                                }
+                                            } else {
+                                                System.out.println("Does not contain UUID");
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }

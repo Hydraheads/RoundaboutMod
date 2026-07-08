@@ -125,8 +125,8 @@ public class PowersBlackSabbath extends NewDashPreset {
                 ItemEntity $$4 = new ItemEntity(ojiroSasame.level(), ojiroSasame.getX(),
                         ojiroSasame.getY() + ojiroSasame.getBbHeight() - 0.10, ojiroSasame.getZ(),
                         ModItems.FANCY_LIGHTER.getDefaultInstance());
-                if($$4.getItem().getItem() instanceof FancyLighterItem FI){
-                    FI.setLighterOwner($$4.getItem(), this.self.getId());
+                if($$4.getItem().getItem() instanceof FancyLighterItem FI && this.getSelf() instanceof ServerPlayer P){
+                    FI.stuff($$4.getItem(), P);
                 }
                 $$4.setPickUpDelay(0);
                 $$4.setDeltaMovement(Vec3.ZERO);
