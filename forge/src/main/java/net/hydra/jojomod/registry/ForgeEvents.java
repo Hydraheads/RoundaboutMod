@@ -571,6 +571,7 @@ public class ForgeEvents {
         ModParticles.ORANGE_CLOCK = ForgeParticles.ORANGE_CLOCK.get();
         ModParticles.TIME_EMBER = ForgeParticles.TIME_EMBER.get();
         ModParticles.MAGIC_HEART = ForgeParticles.MAGIC_HEART.get();
+        ModParticles.QUESTION = ForgeParticles.QUESTION.get();
         ModParticles.ZAP = ForgeParticles.ZAP.get();
         ModParticles.BLUE_CLOCK = ForgeParticles.BLUE_CLOCK.get();
         ModParticles.CINDERELLA_GLOW = ForgeParticles.CINDERELLA_GLOW.get();

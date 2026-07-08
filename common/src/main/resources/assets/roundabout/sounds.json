@@ -47,6 +47,12 @@
       "roundabout:ckb_steal"
     ]
   },
+  "ckb_attack": {
+    "subtitle": "sounds.roundabout.ckb_attack",
+    "sounds": [
+      "roundabout:ckb_attack"
+    ]
+  },
   "ckb_yes": {
     "subtitle": "sounds.roundabout.ckb_yes",
     "sounds": [

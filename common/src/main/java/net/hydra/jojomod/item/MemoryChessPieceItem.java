@@ -1,24 +1,29 @@
 package net.hydra.jojomod.item;
 
+import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.Vanishable;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.UUID;
 
 public class MemoryChessPieceItem extends Item implements Vanishable {
     public MemoryChessPieceItem(Properties $$0) {
-        super($$0.defaultDurability(6));
+        super($$0.defaultDurability(3));
     }
 
     @Override
@@ -42,8 +47,77 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
     @Override
     public void appendHoverText(ItemStack $$0, @Nullable Level $$1, List<Component> $$2, TooltipFlag $$3) {
         String comp = $$0.getOrCreateTag().getString("vicName");
+        boolean comp2 = $$0.getOrCreateTag().hasUUID("victim");
         if (comp != null && !comp.isBlank()){
-             $$2.add(Component.literal(comp).withStyle(ChatFormatting.LIGHT_PURPLE));
+            ChatFormatting formatting = ChatFormatting.LIGHT_PURPLE;
+             $$2.add(Component.literal(comp).withStyle(formatting));
+            //$$2.add(Component.translatable("text.roundabout.memory."+
+            //        $$0.getOrCreateTag().getInt("stealType")).withStyle(ChatFormatting.BLUE));
+            if (!comp2){
+                $$2.add(Component.translatable("text.roundabout.inactive_piece").withStyle(ChatFormatting.AQUA));
+            }
+        }
+    }
+
+    public static void attackThePerson(Player player) {
+        ItemStack stack = player.getMainHandItem();
+        if (stack != null && !(stack.getItem() instanceof MemoryChessPieceItem)) {
+            return;
+        }
+
+        if (player.level().isClientSide()) {
+            return;
+        }
+        player.swing(InteractionHand.MAIN_HAND,true);
+
+        CompoundTag tag = stack.getTag();
+        if (tag == null || !tag.hasUUID("victim")) {
+            return;
+        }
+
+        UUID uuid = tag.getUUID("victim");
+
+        if (!(player.level() instanceof ServerLevel serverLevel)) {
+            return;
+        }
+
+        Entity entity = serverLevel.getEntity(uuid);
+
+        if (entity != null) {
+            if (!entity.isAlive()) {
+                if (tag.hasUUID("victim") &&
+                        entity.getUUID().equals(tag.getUUID("victim"))) {
+
+                    tag.remove("stealType");
+                    tag.remove("victim");
+                    stack.setDamageValue(0);
+                    player.setItemSlot(EquipmentSlot.MAINHAND, stack);
+                }
+            } else if (entity instanceof LivingEntity living && living.hurtTime <= 0) {
+                float dmg = 3;
+                if (living instanceof Player pl){
+                    dmg = 1.5F;
+                }
+                if (living.hurt(ModDamageTypes.of(living.level(), ModDamageTypes.CHESS_STRIKE, player), dmg) && !living.isAlive()) {
+                    MainUtil.makeBleed(living,0,200,player);
+                    player.getMainHandItem().hurtAndBreak(4, player, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                } else {
+                    player.getMainHandItem().hurtAndBreak(1, player, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                }
+                if (!player.getMainHandItem().isEmpty()){
+                    if (player.level() instanceof ServerLevel sl){
+                        sl.playSound(null, player.blockPosition(),
+                                ModSounds.CKB_ATTACK_EVENT, SoundSource.PLAYERS, 1F,
+                                (float) (0.99f + Math.random() * 0.02f));
+                    }
+                }
+
+            }
+        } else {
+            tag.remove("stealType");
+            tag.remove("victim");
+            stack.setDamageValue(0);
+            player.setItemSlot(EquipmentSlot.MAINHAND, stack);
         }
     }
 }

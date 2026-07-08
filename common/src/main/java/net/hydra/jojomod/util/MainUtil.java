@@ -2050,6 +2050,7 @@ public class MainUtil {
         if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.PENETRATING_STAND) || sauce.is(ModDamageTypes.STAR_FINGER)
                 || sauce.is(ModDamageTypes.STAND_RUSH)|| sauce.is(ModDamageTypes.CROSSFIRE)|| sauce.is(ModDamageTypes.EXPLOSIVE_STAND)
                 || sauce.is(ModDamageTypes.GO_BEYOND)
+                || sauce.is(ModDamageTypes.CHESS_STRIKE)
                 || sauce.is(ModDamageTypes.CORPSE) || sauce.is(ModDamageTypes.CORPSE_EXPLOSION) || sauce.is(ModDamageTypes.CORPSE_ARROW)
                 || sauce.is(ModDamageTypes.MELTING)
                 || sauce.is(ModDamageTypes.HEEL_SPIKE)
@@ -2895,7 +2896,8 @@ public class MainUtil {
                 queryNumber = 0;
             }
             ((IPlayerEntity)player).roundabout$setPowerWithPenalty((byte)powerTypes.get(queryNumber).ordinal());
-
+        } else if (context == PacketDataIndex.CALIFORNIA_CHESS_HURT) {
+            MemoryChessPieceItem.attackThePerson(player);
         } else if (context == PacketDataIndex.SINGLE_BYTE_RIGHT_POWERS) {
             List<PowerTypes> powerTypes = PowerTypes.getAvailablePowers(player);
             int queryNumber = 0;

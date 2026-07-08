@@ -20,6 +20,7 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.FirearmItem;
+import net.hydra.jojomod.item.MemoryChessPieceItem;
 import net.hydra.jojomod.item.WarhammerItem;
 import net.hydra.jojomod.mixin.access.MinecraftAccessor;
 import net.hydra.jojomod.powers.GeneralPowers;
@@ -237,8 +238,14 @@ public abstract class InputEvents implements IInputEvents {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
             ItemStack itemStack = player.getUseItem();
+            ItemStack mainhand = player.getMainHandItem();
 
             if (standComp.roundabout$isPossessed()) {
+                ci.setReturnValue(false);
+                return;
+            }
+            if (mainhand != null && mainhand.getItem() instanceof MemoryChessPieceItem && powers instanceof PowersCalifornia){
+                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.CALIFORNIA_CHESS_HURT);
                 ci.setReturnValue(false);
                 return;
             }

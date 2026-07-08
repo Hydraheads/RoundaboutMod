@@ -28,15 +28,19 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.compress.utils.Lists;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /*
 things to do before release:
@@ -69,6 +73,150 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
         return new Powers20thCenturyBoy(entity);
+    }
+    private List<BlockPos> getClosestImpactBlock(LivingEntity player) {
+        Level level = player.level();
+
+
+        BlockPos floor = player.blockPosition().immutable();
+
+        BlockPos[] poss = new BlockPos[]{floor, floor.north(), floor.south(), floor.west(), floor.east(),
+                floor.north().west(), floor.south().west(),floor.north().east(), floor.south().east(), floor.above(),
+                floor.below(), floor.above().north(), floor.below().north(), floor.above().south(), floor.below().south(),
+                floor.above().west(), floor.below().west(),floor.above().east(), floor.below().east(),
+                floor.above().north().west(), floor.below().north().west(), floor.above().north().east(), floor.below().north().east(),
+                floor.above().south().west(), floor.below().south().west(),floor.above().south().east(), floor.below().south().east()};
+
+        List<BlockPos> trupos = new ArrayList<>();
+
+        for (int i = 0; i < poss.length; i++) {
+            if (!level.getBlockState(poss[i]).isAir()){
+                trupos.add(poss[i].immutable());
+            }
+        }
+
+        return trupos;
+    }
+    private static final Map<BlockPos, Integer> BLOCK_DMG_MAP = new HashMap<>();
+    private static final Map<UUID, Long> GROUND_STANCE_COOLDOWN = new HashMap<>();
+    @Override
+    /**When you take damage, intercept or run code based off of it, or potentially cancel it*/
+    public boolean interceptIncomingHarm(DamageSource source, float amount){
+        StandUser user = ((StandUser) self);
+            if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB) {
+
+                if (source.is(DamageTypes.FELL_OUT_OF_WORLD) ||
+                        source.is(DamageTypes.WITHER) ||
+                        source.is(DamageTypes.DRAGON_BREATH) ||
+                        source.is(ModDamageTypes.GO_BEYOND) ||
+                        source.is(DamageTypes.GENERIC_KILL)
+                ) {
+                    return false;
+                }
+                if (PCB.staticMode == 4) {
+
+                    self.hurtMarked = true;
+                    BlockPos playerPos = self.getOnPos();
+                    Level level = self.level();
+
+                    int range = (amount < 10) ? 2 : (amount <= 20) ? 3 : (amount > 20) ? 4 : 2;
+                    BlockPos corner1 = playerPos.offset(-range, -range, -range);
+                    BlockPos corner2 = playerPos.offset(range, range, range);
+
+                    for (BlockPos targetPos : BlockPos.betweenClosed(corner1, corner2)) {
+                        BlockState state = level.getBlockState(targetPos);
+                        Block block = state.getBlock();
+                        if (block instanceof TntBlock tnt) {
+                            tnt.explode(level, targetPos);
+                            level.setBlock(targetPos, Blocks.AIR.defaultBlockState(), 11);
+
+                        } else if (block instanceof ObserverBlock observer) {
+                            if (!level.getBlockTicks().hasScheduledTick(targetPos, observer)) {
+                                level.scheduleTick(targetPos, observer, 2);
+                            }
+                        } else if (block instanceof SculkSensorBlock || block instanceof CalibratedSculkSensorBlock) {
+                            if (!level.getBlockTicks().hasScheduledTick(targetPos, block)) {
+                                level.gameEvent(self, GameEvent.PROJECTILE_LAND, self.position());
+                            }
+                        } else if (block instanceof DoorBlock door) {
+                            if (state.getValue(DoorBlock.HALF) != DoubleBlockHalf.LOWER) {
+                                boolean isOpen = state.getValue(DoorBlock.OPEN);
+                                door.setOpen(null, level, state, targetPos, !isOpen);
+
+                            }
+                        } else if (block instanceof TrapDoorBlock) {
+                            boolean isOpen = state.getValue(DoorBlock.OPEN);
+                            level.setBlock(targetPos, state.setValue(TrapDoorBlock.OPEN, !isOpen), 3);
+
+                        } else if (block instanceof RedstoneLampBlock lamp) {
+                            boolean lit = state.getValue(RedstoneLampBlock.LIT);
+                            level.setBlock(targetPos, state.setValue(RedstoneLampBlock.LIT, !lit), 3);
+
+                            level.scheduleTick(targetPos, lamp, 50);
+                        }
+                    }
+                    return true;
+                } else if (PCB.staticMode == 1) {
+                    self.hurtMarked = true;
+                    Level level = self.level();
+
+                    long currentTime = System.currentTimeMillis();
+                    UUID playerUUID = self.getUUID();
+                    long lastTriggered = GROUND_STANCE_COOLDOWN.getOrDefault(playerUUID, 0L);
+                    if (currentTime - lastTriggered < 1000) {
+                        return true;
+                    }
+
+                    int breakstat = (amount <= 12) ? 2 : (amount <= 18) ? 3 : (amount <= 35) ? 5 : 10;
+
+                    List<BlockPos> blocks = getClosestImpactBlock(self);
+
+                    for (BlockPos pos : blocks) {
+                        BlockPos immut = pos.immutable();
+                        BlockState state = level.getBlockState(immut);
+
+
+                        if (state.getDestroySpeed(level, immut) < 0) continue;
+
+                        int currentDmg = BLOCK_DMG_MAP.getOrDefault(immut, 0);
+                        int newDmg = currentDmg + breakstat;
+
+
+                        int crackId = immut.hashCode();
+
+                        if (newDmg >= 10) {
+                            level.destroyBlock(immut, true);
+                            BLOCK_DMG_MAP.remove(immut);
+                            level.destroyBlockProgress(crackId, immut, -1);
+                            GROUND_STANCE_COOLDOWN.put(playerUUID, currentTime);
+                        } else {
+                            BLOCK_DMG_MAP.put(immut, newDmg);
+                            level.destroyBlockProgress(crackId, immut, newDmg);
+                        }
+                    }
+                    return true;
+                } else if (PCB.staticMode == 3) {
+                    self.hurtMarked = true;
+
+                    Entity entity = source.getEntity();
+                    if (entity != null) {
+                        double x = entity.getX() - self.getX();
+                        double z;
+                        for (z = entity.getZ() - self.getZ(); x * x + z * z < 1.0E-4; z = (Math.random() - Math.random()) * 0.01) {
+                            x = (Math.random() - Math.random()) * 0.01;
+                        }
+
+                        if (entity.getType() == EntityType.IRON_GOLEM) {
+                            self.knockback(2.8F, x * 2, z * 2);
+                        } else {
+                            self.knockback(0.8F, x * 2, z * 2);
+                        }
+                    }
+
+                    return true;
+                }
+            }
+        return false;
     }
 
     @Override

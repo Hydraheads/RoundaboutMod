@@ -46,11 +46,16 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Pufferfish;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
+import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -122,6 +127,38 @@ public class PowersCalifornia extends NewDashPreset {
     }
 
 
+    //Hording player pieces would be toxic
+    @Override
+    public boolean onKilledEntity(ServerLevel $$0, LivingEntity victim){
+        if (self instanceof Player player) {
+            UUID victimId = victim.getUUID();
+
+            Inventory inv = player.getInventory();
+
+            for (int i = 0; i < inv.getContainerSize(); i++) {
+                ItemStack invStack = inv.getItem(i);
+
+                if (!(invStack.getItem() instanceof MemoryChessPieceItem)) {
+                    continue;
+                }
+
+                CompoundTag tag = invStack.getTag();
+                if (tag != null &&
+                        tag.hasUUID("victim") &&
+                        victimId.equals(tag.getUUID("victim"))) {
+
+                        tag.remove("stealType");
+                        tag.remove("victim");
+                        invStack.setDamageValue(0);
+                        inv.setItem(i,invStack);
+                }
+            }
+        }
+
+
+        return super.onKilledEntity($$0,victim);
+    }
+
     public void playUnfairSound(){
         if (self.level() instanceof ServerLevel sl){
             this.self.level().playSound(null, this.self.blockPosition(),
@@ -179,6 +216,16 @@ public class PowersCalifornia extends NewDashPreset {
                     entity.getId()
             );
         }
+    }
+
+    public static boolean canSteal(Entity entity){
+        if (entity instanceof LivingEntity LE){
+            if (MainUtil.isBossMob(LE)){
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
     public void addToList(Entity entity){
         if (entity.isAlive()) {
@@ -255,8 +302,11 @@ public class PowersCalifornia extends NewDashPreset {
     public void powerActivate(PowerContext context) {
         switch (context)
         {
-            case SKILL_1_NORMAL,SKILL_1_CROUCH -> {
+            case SKILL_1_NORMAL -> {
                 tryCatchEnemies();
+            }
+            case SKILL_1_CROUCH -> {
+                tryCatchEnemiesEXP();
             }
             case SKILL_2_NORMAL,SKILL_2_CROUCH -> {
                 tryStrategyClient();
@@ -288,6 +338,14 @@ public class PowersCalifornia extends NewDashPreset {
             if (!onCooldown(PowerIndex.SKILL_1)) {
                 clearClientList();
                 tryPowerPacket(PowerIndex.POWER_1);
+            }
+        }
+    }
+    public void tryCatchEnemiesEXP(){
+        if (!clientEntityIds.isEmpty()) {
+            if (!onCooldown(PowerIndex.SKILL_1)) {
+                clearClientList();
+                tryPowerPacket(PowerIndex.POWER_1_SNEAK);
             }
         }
     }
@@ -380,7 +438,7 @@ public class PowersCalifornia extends NewDashPreset {
                 && !(source.getEntity() instanceof Axolotl)
                 && !(source.getEntity() instanceof FallenMob)) {
             if (inCowerStance()){
-                if (attackTimeDuring >= 5){
+                if (attackTimeDuring >= 5 && PowersCalifornia.canSteal(source.getEntity())){
                     rewindSnap = DietSavedSecond.saveEntitySecond(self);
                     snapEntity = source.getEntity();
                     setCowerLeaveStance();
@@ -403,7 +461,11 @@ public class PowersCalifornia extends NewDashPreset {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
 
-        setSkillIcon(context, x, y, 1, StandIcons.STEAL_MEMORIES, PowerIndex.SKILL_1);
+        if (isHoldingSneak()){
+            setSkillIcon(context, x, y, 1, StandIcons.STEAL_MEMORIES_2, PowerIndex.SKILL_1);
+        } else {
+            setSkillIcon(context, x, y, 1, StandIcons.STEAL_MEMORIES, PowerIndex.SKILL_1);
+        }
 
         if (isDoNotHurt()){
             setSkillIcon(context, x, y, 2, StandIcons.HURT, PowerIndex.SKILL_2);
@@ -645,7 +707,7 @@ public class PowersCalifornia extends NewDashPreset {
                         }
                     }
 
-                    if (leaded.distanceTo(self) > getCKBrange()){
+                    if (leaded.distanceTo(self) > getCKBrange() && PowersCalifornia.canSteal(leaded)){
                         addToList(leaded);
                         playGotchaSound();
                         clearLeaded();
@@ -660,8 +722,10 @@ public class PowersCalifornia extends NewDashPreset {
             }
         } else {
             if (isDoNotLeave()){
-                targEnt = getCaliforniaTargetEntity();
-
+                Entity targent = getCaliforniaTargetEntity();
+                if (PowersCalifornia.canSteal(targent)){
+                    targEnt = targent;
+                }
             }
         }
     }
@@ -748,12 +812,19 @@ public class PowersCalifornia extends NewDashPreset {
             cowerServer();
         } else if (move == PowerIndex.POWER_1){
             punishServer();
+        } else if (move == PowerIndex.POWER_1_SNEAK){
+            punishServer2();
         } else if (move == PowerIndex.SKILL_EXTRA){
             doTheStepRule();
         } else if (move == PowerIndex.SKILL_EXTRA_2){
             doTheLeaveRule();
         }
         return super.setPowerOther(move,lastMove);
+    }
+
+
+    public void punishServer2(){
+        punishServer();
     }
 
     public void punishServer(){
@@ -778,12 +849,17 @@ public class PowersCalifornia extends NewDashPreset {
                 Entity entity = entry.getKey();
 
                 if (entity.isAlive()) {
-                    entity.setDeltaMovement(0,0.2,0);
+                    entity.setDeltaMovement(0,0.15,0);
                     ItemStack piece = getPieceType(entity);
                     MainUtil.addItem(sp,piece);
+                    ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.QUESTION,
+                            entity.getEyePosition().x, entity.getEyePosition().y+0.5F, entity.getEyePosition().z,
+                            0, 0, 0.5,0, 0.15);
                 }
             }
             hurtEntities.clear();
+            clearAllSpawnedEntities();
+            clearLeaded();
             snapEntity = null;
         }
     }
@@ -832,7 +908,39 @@ public class PowersCalifornia extends NewDashPreset {
             }
         }
         stack = new ItemStack(result);
-        return MemoryChessPieceItem.initializePiece(stack,victim,0);
+        return MemoryChessPieceItem.initializePiece(stack,victim,getStealType(victim));
+    }
+
+    public int getStealType(Entity victim){
+        if (victim instanceof LivingEntity LE){
+            ((StandUser)LE).roundabout$deeplyRemoveAttackTarget();
+        }
+        if (victim instanceof Skeleton sk) {
+            return 7;
+        } else if (victim instanceof Player pl && PowerTypes.hasStandActive(pl)) {
+            return 8;
+        } else if (victim instanceof Witch wt) {
+            return 6;
+        } else if (victim instanceof TamableAnimal ta && ta.getOwner() != null) {
+            return 9;
+        } else if (victim instanceof AbstractIllager al) {
+            return 5;
+        } else if (victim instanceof Villager vg) {
+            return 11;
+        } else if (victim instanceof Phantom ph) {
+            return 4;
+        } else if (victim instanceof IronGolem ig) {
+            if (ig.isPlayerCreated()){
+                ig.setPlayerCreated(false);
+                return 3;
+            } else {
+                ig.setPlayerCreated(true);
+                return 2;
+            }
+        } if (victim instanceof Monster || (victim instanceof Mob mb && mb.getTarget() != null)){
+            return 1;
+        }
+        return 0;
     }
 
     public boolean inCowerStance(){

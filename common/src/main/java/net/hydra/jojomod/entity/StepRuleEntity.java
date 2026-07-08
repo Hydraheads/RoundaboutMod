@@ -149,7 +149,7 @@ public class StepRuleEntity extends Entity {
                                     discard();
                                     break;
                                 } else {
-                                    if (!pca.hurtEntities.containsKey(mob)) {
+                                    if (!pca.hurtEntities.containsKey(mob) && PowersCalifornia.canSteal(mob)) {
                                         pca.addToList(mob);
                                         pca.playGotchaSound();
                                     }
