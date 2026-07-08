@@ -2897,7 +2897,7 @@ public class MainUtil {
             }
             ((IPlayerEntity)player).roundabout$setPowerWithPenalty((byte)powerTypes.get(queryNumber).ordinal());
         } else if (context == PacketDataIndex.CALIFORNIA_CHESS_HURT) {
-            MemoryChessPieceItem.attackThePerson(player,player.getMainHandItem());
+            MemoryChessPieceItem.attackThePerson(player);
         } else if (context == PacketDataIndex.SINGLE_BYTE_RIGHT_POWERS) {
             List<PowerTypes> powerTypes = PowerTypes.getAvailablePowers(player);
             int queryNumber = 0;

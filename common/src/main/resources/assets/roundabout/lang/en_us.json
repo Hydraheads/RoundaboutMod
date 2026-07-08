@@ -8,6 +8,7 @@
   "text.roundabout.warn_trap_triggered": " has been triggered!",
   "text.roundabout.warn_unnamed_trap_triggered": "A fog trap has been triggered!",
   "text.roundabout.stole_minion": "Claimed Minion",
+  "text.roundabout.inactive_piece": "Inactive",
 
   "text.roundabout.powers.stand": "Stand User",
   "text.roundabout.powers.stand_select": "Yuhamon",
