@@ -1365,7 +1365,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         roundabout$tickStandOrStandless();
         //if (StandID > -1) {
         if (!this.level().isClientSide()) {
-            if (roundabout$getBoundTo() != null && !roundabout$getBoundTo().isAlive()){
+            if (roundabout$getBoundTo() != null && (!roundabout$getBoundTo().isAlive()
+            || roundabout$getBoundToID() != roundabout$getBoundTo().getId())){
                 roundabout$setBoundTo(null);
             }
             if (!onGround()){
