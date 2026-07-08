@@ -2035,11 +2035,11 @@ public class PowersKillerQueen extends NewPunchingStand {
        }else if (soundChoice == SoundIndex.SUMMON_SOUND) {
            byte skin = ((StandUser)this.getSelf()).roundabout$getStandSkin();
            if (skin == DEADLY || skin == NIGHTMARE) {
-               return ModSounds.KILLER_QUEEN_SUMMON_EVENT_2;
+               return ModSounds.KILLER_QUEEN_SUMMON_DARK_EVENT;
            } else if (skin == CREEPER) {
                return ModSounds.CREEPER_QUEEN_SUMMON_EVENT;
            }else {
-               return ModSounds.KILLER_QUEEN_SUMMON_EVENT_5;
+               return ModSounds.KILLER_QUEEN_SUMMON_EVENT;
            }
        }else if (soundChoice == PowersKillerQueen.DETONATE) {
     	   return ModSounds.KILLER_QUEEN_DETONATE_EVENT;
