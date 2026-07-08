@@ -818,6 +818,8 @@ public class PowersCalifornia extends NewDashPreset {
                 }
             }
             hurtEntities.clear();
+            clearAllSpawnedEntities();
+            clearLeaded();
             snapEntity = null;
         }
     }

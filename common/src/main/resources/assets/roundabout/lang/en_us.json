@@ -837,6 +837,8 @@
   "death.attack.iron_ball.item": "%1$s was blown away by %2$s",
   "death.attack.ultraviolet": "%1$s saw things in a new light thanks to %2$s",
   "death.attack.ultraviolet.item": "%1$s saw things in a new light thanks to %2$s",
+  "death.attack.chess_strike": "%1$s was put in checkmate by %2$s",
+  "death.attack.chess_strike.item": "%1$s was put in checkmate by %2$s",
 
   "item.glaive.charge_power": "Charge Attack",
 
