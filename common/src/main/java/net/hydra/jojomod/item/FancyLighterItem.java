@@ -176,24 +176,28 @@ public class FancyLighterItem extends BlockItem {
                                 if(FB.newBlockEntity($$3, $$7) instanceof FancyLighterBlockEntity FLBE){
                                     if($$6.getItem() instanceof FancyLighterItem FI){
                                         if($$4 instanceof ServerLevel $$8) {
-                                            if ($$6.getTag().contains("UserIdUUID")) {
+                                            if ($$6.getTag() != null) {
+                                                if ($$6.getTag().contains("UserIdUUID")) {
 
-                                                if ($$8.getEntity($$6.getTagElement("UserIdUUID").getUUID("StuffOther")) != null) {
+                                                    if ($$8.getEntity($$6.getTagElement("UserIdUUID").getUUID("StuffOther")) != null) {
 
-                                                    FLBE.setValues($$8.getEntity($$6.getTagElement("UserIdUUID").getUUID("StuffOther")), $$8.getEntity($$6.getTagElement("UserIdUUID").getUUID("StuffOther")).getDisplayName().getString());
+                                                        FLBE.setValues($$8.getEntity($$6.getTagElement("UserIdUUID").getUUID("StuffOther")), $$8.getEntity($$6.getTagElement("UserIdUUID").getUUID("StuffOther")).getDisplayName().getString());
 
-                                                    if ($$5 == $$8.getEntity($$6.getTagElement("UserIdUUID").getUUID("StuffOther"))) {
-                                                        System.out.println(FLBE.getOwner());
-                                                        System.out.println(FLBE.getName());
-                                                        System.out.println("Black Sabbath is Bing Chillin'");
+                                                        if ($$5 == $$8.getEntity($$6.getTagElement("UserIdUUID").getUUID("StuffOther"))) {
+                                                            System.out.println(FLBE.getOwner());
+                                                            System.out.println(FLBE.getName());
+                                                            System.out.println("Black Sabbath is Bing Chillin'");
+                                                        } else {
+                                                            System.out.println("Black Sabbath is definitely NOT Bing Chillin'");
+                                                        }
                                                     } else {
-                                                        System.out.println("Black Sabbath is definitely NOT Bing Chillin'");
+                                                        System.out.println("Owner Entity doesn't exist");
                                                     }
                                                 } else {
-                                                    System.out.println("Owner Entity doesn't exist");
+                                                    System.out.println("Does not contain UUID");
                                                 }
                                             } else {
-                                                System.out.println("Does not contain UUID");
+                                                System.out.println("Does not contain a Tag");
                                             }
                                         }
                                     }
