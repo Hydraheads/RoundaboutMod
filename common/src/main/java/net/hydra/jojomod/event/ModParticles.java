@@ -42,6 +42,7 @@ public class ModParticles {
     public static SimpleParticleType ORANGE_CLOCK;
     public static SimpleParticleType TIME_EMBER;
     public static SimpleParticleType MAGIC_HEART;
+    public static SimpleParticleType QUESTION;
     public static SimpleParticleType ZAP;
     public static SimpleParticleType POINTER;
     public static SimpleParticleType POINTER_SOFT;

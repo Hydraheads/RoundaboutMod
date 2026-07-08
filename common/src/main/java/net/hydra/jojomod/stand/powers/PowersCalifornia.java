@@ -845,9 +845,12 @@ public class PowersCalifornia extends NewDashPreset {
                 Entity entity = entry.getKey();
 
                 if (entity.isAlive()) {
-                    entity.setDeltaMovement(0,0.2,0);
+                    entity.setDeltaMovement(0,0.15,0);
                     ItemStack piece = getPieceType(entity);
                     MainUtil.addItem(sp,piece);
+                    ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.QUESTION,
+                            entity.getEyePosition().x, entity.getEyePosition().y+0.5F, entity.getEyePosition().z,
+                            0, 0, 0.5,0, 0.15);
                 }
             }
             hurtEntities.clear();

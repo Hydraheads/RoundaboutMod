@@ -415,6 +415,7 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.ORANGE_CLOCK.get(), MandomClockParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.TIME_EMBER.get(), MandomClockParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.MAGIC_HEART.get(), MagicHeartParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.QUESTION.get(), ConfusionParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.ZAP.get(), ZapParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.CINDERELLA_GLOW.get(), CinderellaGlowParticle.CinderellaGlowProvider::new);
         event.registerSpriteSet(ForgeParticles.PINK_SMOKE.get(), CinderellaSmokeParticle.CosyProvider::new);
