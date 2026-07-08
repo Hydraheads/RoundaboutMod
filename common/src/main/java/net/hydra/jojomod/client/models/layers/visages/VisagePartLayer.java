@@ -180,12 +180,29 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     }
                 }
 
-                boolean hasOasisOut =user.roundabout$getStandPowers() instanceof PowersOasis pw && pw.renderHelmet();
-                int OasisTicks = 1;
-                if (user.roundabout$getLastStandSkin() != skin) {
-                    user.roundabout$setLastStandSkin(skin);
-                    whiteAlbumTicks = 0;
-                    user.roundabout$setWhiteAlbumVanishTicks(0);
+                boolean hasOasisOut =user.roundabout$getStandPowers() instanceof PowersOasis po && po.renderSuit();
+                int oasisTicks = user.roundabout$getOasisVanishTicks();
+                float fadeAmt = 0;
+                byte oasisSkin = user.roundabout$getStandSkin();
+                if (hasOasisOut || oasisTicks > 0){
+                    if (user.roundabout$getLastStandSkin() != oasisSkin){
+                        user.roundabout$setLastStandSkin(oasisSkin);
+                        oasisTicks = 0;
+                        user.roundabout$setOasisVanishTicks(0);
+                    }
+
+                    float partialTicks2 = partialTicks % 1;
+                    if (hasOasisOut){
+                        fadeAmt = oasisTicks+partialTicks2;
+                        fadeAmt = Math.min(fadeAmt/10,1f);
+                    } else {
+                        fadeAmt = oasisTicks-partialTicks2;
+                        fadeAmt = Math.max(fadeAmt/10,0);
+                    }
+
+                    if (fadeAmt > 0){
+                        hideExtraPartsWithSuit = true;
+                    }
                 }
 
 
@@ -367,41 +384,41 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     }
                 }
 
-                if (hasOasisOut || whiteAlbumTicks > 0){
+                if (hasOasisOut || oasisTicks > 0){
 
-                    if (user.roundabout$getStandPowers() instanceof PowersOasis pw) {
+                    if (user.roundabout$getStandPowers() instanceof PowersOasis po) {
 
-                        String path = PowersWhiteAlbum.getSkinString(skin);
+                        String path = PowersOasis.getSkinString(oasisSkin);
 
                         poseStack.pushPose();
                         renderOasisHeadPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                                partialTicks, path, r, g, b, 1);
+                                partialTicks, path, r, g, b, fadeAmt);
                         renderOasisBodyPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                                partialTicks, path, r, g, b, 1);
+                                partialTicks, path, r, g, b, fadeAmt);
 
                         renderOasisRightLegPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                                partialTicks, path, r, g, b, 1);
+                                partialTicks, path, r, g, b, fadeAmt);
                         renderOasisLeftLegPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                                partialTicks, path, r, g, b, 1);
+                                partialTicks, path, r, g, b, fadeAmt);
 
                         if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
                             renderOasisSlimRightArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                                    partialTicks, path, r, g, b, 1);
+                                    partialTicks, path, r, g, b, fadeAmt);
                             renderOasisSlimLeftArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                                    partialTicks, path, r, g, b, 1);
+                                    partialTicks, path, r, g, b, fadeAmt);
                         } else {
                             renderOasisRightArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                                    partialTicks, path, r, g, b, 1);
+                                    partialTicks, path, r, g, b, fadeAmt);
                             renderOasisLeftArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                                    partialTicks, path, r, g, b, 1);
+                                    partialTicks, path, r, g, b, fadeAmt);
                         }
 
                         if (visage.getItem() instanceof MaskItem MI) {
                             VisageData vd = MI.visageData.generateVisageData(entity);
                             if (vd.rendersBreast() ||
                                     vd.rendersPlayerBreastPart()) {
-                                renderWhiteAlbumChestPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
-                                        partialTicks, path, r, g, b, heyFull);
+                                renderOasisChestPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                        partialTicks, path, r, g, b, fadeAmt);
                             }
                         }
                         poseStack.popPose();
