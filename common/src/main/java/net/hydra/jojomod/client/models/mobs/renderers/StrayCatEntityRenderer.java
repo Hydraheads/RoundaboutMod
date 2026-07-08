@@ -21,7 +21,7 @@ public class StrayCatEntityRenderer<T extends StrayCatEntity>
             new ResourceLocation(Roundabout.MOD_ID,"textures/entity/stray_cat/entity/anime.png");
 
     public StrayCatEntityRenderer(EntityRendererProvider.Context context) {
-        super(context,new StrayCatEntityModel<>(context.bakeLayer(ModEntityRendererClient.STRAY_CAT_ENTITY_LAYER)),0.4F);
+        super(context,new StrayCatEntityModel<>(context.bakeLayer(ModEntityRendererClient.STRAY_CAT_ENTITY_LAYER)),0.15F);
         
     }
 

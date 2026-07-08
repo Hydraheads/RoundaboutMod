@@ -31,11 +31,14 @@ public class StrayCatBegGoal
         this.world = stray.level();
         this.begDistance = begDistance;
         this.validPlayerPredicate = TargetingConditions.forNonCombat().range(begDistance);
-        this.setFlags(EnumSet.of(Flag.LOOK));
+        this.setFlags(EnumSet.of(Flag.LOOK, Flag.TARGET));
     }
 
     @Override
     public boolean canUse() {
+        if (this.stray.shouldSleep()) {
+            return false;
+        }
         this.begFrom = this.world.getNearestPlayer(this.validPlayerPredicate, this.stray);
         if (this.begFrom == null) {
             return false;
@@ -45,6 +48,9 @@ public class StrayCatBegGoal
 
     @Override
     public boolean canContinueToUse() {
+        if (this.stray.shouldSleep()) {
+            return false;
+        }
         if (!this.begFrom.isAlive()) {
             return false;
         }
@@ -56,29 +62,26 @@ public class StrayCatBegGoal
 
     @Override
     public void start() {
-        //this.stray.setIsInterested(true);
+        this.stray.setInterested(true);
         this.timer = this.adjustedTickDelay(40 + this.stray.getRandom().nextInt(40));
     }
 
     @Override
     public void stop() {
-        //this.stray.setIsInterested(false);
+        this.stray.setInterested(false);
         this.begFrom = null;
     }
 
     @Override
     public void tick() {
-        //this.stray.getLookControl().setLookAt(this.begFrom.getX(), this.begFrom.getEyeY(), this.begFrom.getZ(), 10.0f, this.wolf.getMaxHeadXRot());
+        this.stray.getLookControl().setLookAt(this.begFrom.getX(), this.begFrom.getEyeY(), this.begFrom.getZ(), 10.0f, this.stray.getMaxHeadXRot());
         --this.timer;
     }
 
     private boolean isAttractive(Player player) {
         for (InteractionHand hand : InteractionHand.values()) {
             ItemStack itemStack = player.getItemInHand(hand);
-            if (this.stray.isTame() && itemStack.is(Items.BONE)) {
-                return true;
-            }
-            if (!this.stray.isFood(itemStack)) continue;
+            if (!this.stray.isYummy(itemStack)) continue;
             return true;
         }
         return false;
