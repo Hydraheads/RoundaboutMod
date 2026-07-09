@@ -230,7 +230,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 				}
 
 				if (this.getDeltaMovement().length() > 0 && (this.onGround() || this.onClimbable())) {
-					Roundabout.LOGGER.info("Lenght: " + this.getDeltaMovement().length());
+
 					this.setAnim(WALK);
 				}else {
 					this.setAnim(IDLE);
