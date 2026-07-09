@@ -725,6 +725,8 @@ public class PowersCalifornia extends NewDashPreset {
                 Entity targent = getCaliforniaTargetEntity();
                 if (PowersCalifornia.canSteal(targent)){
                     targEnt = targent;
+                } else {
+                    targEnt = null;
                 }
             }
         }
