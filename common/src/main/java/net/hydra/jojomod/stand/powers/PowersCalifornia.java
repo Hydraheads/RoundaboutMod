@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import com.mojang.serialization.Dynamic;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -35,6 +36,9 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -935,7 +939,7 @@ public class PowersCalifornia extends NewDashPreset {
         && !((StandUser)pl).roundabout$getStandPowers().isSecondaryStand()
                 && ((IPlayerEntity)pl).rdbt$getLevelDecreaseTicks() <= 0
         ) {
-            ((IPlayerEntity)pl).rdbt$setLevelDecreaseTicks(300);
+            ((IPlayerEntity)pl).rdbt$setLevelDecreaseTicks(200);
             return 8;
         } else if (victim instanceof Player pl && pl.isUsingItem()) {
             ItemStack stack = pl.getUseItem();
@@ -950,7 +954,7 @@ public class PowersCalifornia extends NewDashPreset {
             return 6;
         } else if (!isMemortaken && victim instanceof AbstractIllager al && !(al instanceof AnubisGuardian)) {
             return 5;
-        } else if (!isMemortaken && victim instanceof Villager vg) {
+        } else if (victim instanceof Villager vg) {
             return 11;
         } else if (victim instanceof FlyingMob ph) {
             return 4;
@@ -970,7 +974,7 @@ public class PowersCalifornia extends NewDashPreset {
 
     public boolean isRestoreType(int restype){
 
-        return (restype == 3 || restype == 2 || restype == 4 || restype == 11 || restype == 5 || restype == 6
+        return (restype == 3 || restype == 2 || restype == 4 || restype == 5 || restype == 6
                 || restype == 7);
     }
 
@@ -1007,6 +1011,12 @@ public class PowersCalifornia extends NewDashPreset {
                         }
                         if (entity instanceof Player pl && getKey == 8){
                             ((IPlayerEntity)pl).rdbt$setLevelDecreaseTicks(0);
+                        }
+                        if (getKey == 11 && entity instanceof Villager vg &&
+                                tag.contains("StoredGossip")) {
+
+                            ListTag gossipTag = tag.getList("StoredGossip", 10);
+                            vg.getGossips().update(new Dynamic(NbtOps.INSTANCE, gossipTag));
                         }
                         release = true;
                         inv.setItem(i,ItemStack.EMPTY);
