@@ -130,9 +130,9 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
                     dmg = 1.5F;
                 }
                 if (living.hurt(ModDamageTypes.of(living.level(), ModDamageTypes.CHESS_STRIKE, player), dmg) && !living.isAlive()) {
-                    MainUtil.makeBleed(living,0,200,player);
                     player.getMainHandItem().hurtAndBreak(4, player, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
                 } else {
+                    MainUtil.makeBleed(living,0,200,player);
                     player.getMainHandItem().hurtAndBreak(1, player, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
                 }
                 if (!player.getMainHandItem().isEmpty()){
