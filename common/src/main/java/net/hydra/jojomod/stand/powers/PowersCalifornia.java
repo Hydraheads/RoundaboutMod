@@ -952,6 +952,12 @@ public class PowersCalifornia extends NewDashPreset {
         return 0;
     }
 
+    public boolean isRestoreType(int restype){
+
+        return (restype == 3 || restype == 2 || restype == 4 || restype == 11 || restype == 5 || restype == 6
+                || restype == 7);
+    }
+
     public boolean onCollide(Entity entity){
         if (!self.level().isClientSide()) {
             if (entity instanceof LivingEntity lv && self instanceof Player player) {
@@ -980,7 +986,7 @@ public class PowersCalifornia extends NewDashPreset {
                         } else if (getKey == 2 && entity instanceof IronGolem ig){
                             ig.setPlayerCreated(false);
                         }
-                        if (entity instanceof Mob mb){
+                        if (entity instanceof Mob mb && isRestoreType(getKey)){
                             ((IMob)mb).rdbt$setStolen(false);
                         }
                         release = true;
