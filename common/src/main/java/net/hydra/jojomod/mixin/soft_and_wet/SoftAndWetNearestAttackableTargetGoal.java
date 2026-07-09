@@ -34,8 +34,7 @@ public abstract class SoftAndWetNearestAttackableTargetGoal<T extends LivingEnti
             if (imob.roundabout$getConfusionTicks() > 0){
                 this.target = null;
                 return;
-            } else if (this.mob instanceof AbstractIllager && !(this.mob instanceof AnubisGuardian)
-                    && !(this.mob instanceof Evoker)){
+            } else if (this.mob instanceof AbstractIllager && !(this.mob instanceof AnubisGuardian)){
                 if (imob.rdbt$getStolen()){
                     this.target = null;
                     return;
