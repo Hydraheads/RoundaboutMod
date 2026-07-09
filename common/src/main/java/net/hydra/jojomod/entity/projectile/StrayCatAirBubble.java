@@ -23,6 +23,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -48,20 +49,15 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         this.lifeSpan = 300;
     }
 
-    /*public StrayCatAirBubble(LivingEntity living, Level $$1) {
-        super(ModEntities.STRAY_CAT_AIRBUBBLE, $$1);
-        setOwner(living);
-        //places = false;
-    }*/
     private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.INT);
-
-    public int lifeSpan = 300;
-    public LivingEntity standUser;
-    public UUID standUserUUID;
     private static final EntityDataAccessor<Boolean> ACTIVATED = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> LAUNCHED = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Float> SPEED = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Byte> SKIN = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.BYTE);
+
+    public int lifeSpan = 300;
+    public LivingEntity standUser;
+    public UUID standUserUUID;
 
 
     public boolean getActivated() {
@@ -97,12 +93,13 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     }
 
     public Entity target;
-    public void setTarget(Entity t) {
-        this.target = t;
-    }
+    public void setTarget(Entity t) {this.target = t; }
 
-    private static final int redirectCooldownMax = 15;
+    private static final int redirectCooldownMax = 30;
     private int redirectCooldown = redirectCooldownMax;
+
+    private static final int soundEffectCooldownMax = 50;
+    private int soundEffectCooldown = 30;
 
     @Override
     public boolean hurt(DamageSource $$0, float $$1) {
@@ -162,6 +159,17 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
     public void tick() {
         if (!this.level().isClientSide()) {
+            this.soundEffectCooldown--;
+            if (this.soundEffectCooldown <= 0) {
+                SoundEvent SE = ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_EVENT;
+                if (Math.random() > 0.5) {
+                    SE = ModSounds.STRAY_CAT_BUBBLE_REDIRECT_2_EVENT;
+                }
+
+                this.level().playSound(null, this.blockPosition(), SE,
+                        SoundSource.PLAYERS, 0.7F, (float)(0.58+(Math.random()*0.04)));
+                this.soundEffectCooldown = soundEffectCooldownMax;
+            }
 
             if (this.hasTimeLimit) {
                 this.lifeSpan--;
@@ -173,23 +181,26 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                 return;
             }
 
-            if (this.followOwnerView && !(((StandUser)this.getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ
-                    && this.isKillerQueenBubble && PKQ.isPiloting())) {
-
-                Entity owner = this.getOwner();
-                this.shootFromRotationDeltaAgnostic2(owner, owner.getXRot(), owner.getYRot(), 1.0F, getSped());
-            }else if (this.target != null && this.target.isAlive()) {
+            if (this.target != null && this.target.isAlive()) {
                 if (this.redirectCooldown <= 0) {
-                    this.bubbleRedirect();
-                    this.redirectCooldown = redirectCooldownMax;
-                }else {
+                    if (!this.isKillerQueenBubble || ((LivingEntity) this.getOwner()).hasLineOfSight(this)) {
+                        this.bubbleRedirect();
+                        this.redirectCooldown = redirectCooldownMax;
+                    }
+                } else {
                     this.redirectCooldown--;
                 }
             }else {
                 this.redirectCooldown = 0;
+                if (this.followOwnerView && !(((StandUser)this.getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ
+                        && this.isKillerQueenBubble && PKQ.isPiloting())) {
+
+                    Entity owner = this.getOwner();
+                    this.shootFromRotationDeltaAgnostic2(owner, owner.getXRot(), owner.getYRot(), 1.0F, getSped());
+                }
             }
 
-        }else if( this.tickCount % 30 == 9) {
+        }else if( this.tickCount % 35 == 9) {
             this.level().addAlwaysVisibleParticle(ModParticles.AIR_CRACKLE, true,
                     this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(),
                     0, 0, 0);
@@ -257,11 +268,16 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     }
 
     protected void doPostHurtEffects(LivingEntity $$0) {
-    }
+        Entity user = this.getOwner();
+        if (this.isKillerQueenBubble) {
+            if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ
+            && KQ.isContactModeEnabled()) {
+                return;
+            }
+        }
 
-    /*public boolean isEffectivelyInWater() {
-        return this.wasTouchingWater;
-    }*/
+        MainUtil.makeBleed($$0, 1, 70, user);
+    }
 
     @Override
     protected boolean shouldBurn() {
@@ -279,60 +295,63 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
-        Entity target = $$0.getEntity();
+        Entity hitTarget = $$0.getEntity();
         Entity user = this.getOwner();
 
-        if ((user != null && target.is(user)) || (user != null && target instanceof StandEntity SE && user.is(SE.getUser()))) {
+        if ((user != null && hitTarget.is(user)) || (user != null && hitTarget instanceof StandEntity SE && user.is(SE.getUser()))) {
             return;
         }
-        if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble && KQ.bubbleTarget != null) {
-            if (!KQ.bubbleTarget.is(target) && !KQ.isContactModeEnabled()) {
+        if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble && this.target != null) {
+            if (!this.target.is(target) && !KQ.isContactModeEnabled()) {
                 return;
             }
         }
 
         super.onHitEntity($$0);
 
-        DamageSource dmg = ModDamageTypes.of(target.level(), ModDamageTypes.STAND);
+        DamageSource dmg = ModDamageTypes.of(hitTarget.level(), ModDamageTypes.STAND);
         float damage = getDamagePoints();
 
         if (user != null) {
-            dmg = ModDamageTypes.of(target.level(), ModDamageTypes.STAND, this, user);
+            dmg = ModDamageTypes.of(hitTarget.level(), ModDamageTypes.STAND, this, user);
 
             if (((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
-                damage = KQ.getAirBubbleDamage(target);
+                damage = KQ.getAirBubbleDamage(hitTarget);
             }
         }
 
+        if (this.target != null) {
+            damage *= 0.75f;
+        }
 
-        if (target.hurt(dmg,damage)) {
+        if (hitTarget.hurt(dmg,damage)) {
 
             if (user instanceof LivingEntity LE) {
 
                 if (((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
-                    if (target instanceof LivingEntity l) {
+                    if (hitTarget instanceof LivingEntity l) {
                         KQ.addEXP(4, l);
                     }
                 }
 
-                LE.setLastHurtMob(target);
+                LE.setLastHurtMob(hitTarget);
             }
 
-            if (target.getType() == EntityType.ENDERMAN) { return; }
+            if (hitTarget.getType() == EntityType.ENDERMAN) { return; }
 
-            if (target instanceof LivingEntity || (target instanceof EnderDragonPart)) {
+            if (hitTarget instanceof LivingEntity || (hitTarget instanceof EnderDragonPart)) {
                 LivingEntity $$7;
-                if (target instanceof LivingEntity L) {
+                if (hitTarget instanceof LivingEntity L) {
                     $$7 = L;
                 } else {
-                    $$7 = ((EnderDragonPart) target).parentMob;
+                    $$7 = ((EnderDragonPart) hitTarget).parentMob;
                 }
 
                 Vec3 launchVec = this.getDeltaMovement();
                 Vec3 vec3d2 = launchVec.normalize().scale(0.6F);
                 vec3d2 = vec3d2.add(0, 0.4F, 0);
 
-                MainUtil.takeLiteralUnresistableKnockbackWithY(target,
+                MainUtil.takeLiteralUnresistableKnockbackWithY(hitTarget,
                         vec3d2.x,
                         vec3d2.y,
                         vec3d2.z);
@@ -343,7 +362,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                 }
                 if (user instanceof LivingEntity LE && this.isPlanted) {
                     if (((StandUser) LE).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
-                        KQ.bubbleContacted(target);
+                        KQ.bubbleContacted(hitTarget);
                     }
                 }
 
@@ -355,8 +374,8 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     }
 
     public void popBubble(){
-        this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
-                SoundSource.PLAYERS, 2F, (float)(0.98+(Math.random()*0.04)));
+        this.level().playSound(null, this.blockPosition(), ModSounds.STRAY_CAT_BUBBLE_SOUND_2_EVENT,
+                SoundSource.PLAYERS, 1.5F, (float)(0.78+(Math.random()*0.04)));
         if (!this.level().isClientSide()){
             if (this.tickCount % 40 == 9) {
                 this.level().addAlwaysVisibleParticle(ModParticles.AIR_CRACKLE, true,
@@ -380,6 +399,8 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
 
     public void bubbleRedirect(){
+
+
         StrayCatAirBubble value = this;
         value.setFollowOwnerView(false);
 

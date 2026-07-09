@@ -607,6 +607,7 @@ public class ModBlocks {
                     .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
                     .strength(1.5F, 1.0F)
                     .sound(SoundType.METAL)
+                    .pushReaction(PushReaction.DESTROY)
                     .forceSolidOn().noCollission().requiresCorrectToolForDrops()
     );
     public static GoddessStatueBlock GODDESS_STATUE_BLOCK_PROPERTIES = new GoddessStatueBlock(

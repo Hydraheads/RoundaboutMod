@@ -71,6 +71,12 @@
       "roundabout:ckb_tile"
     ]
   },
+  "chess_piece": {
+    "subtitle": "sounds.roundabout.chess_piece",
+    "sounds": [
+      "roundabout:chess_piece"
+    ]
+  },
   "ice_blast_charge": {
     "subtitle": "sounds.roundabout.ice_blast_charge",
     "sounds": [
@@ -336,7 +342,7 @@
     ]
   },
   "summon_killer_queen_dark": {
-    "subtitle": "sounds.roundabout.summon_killer_queen_dark",
+    "subtitle": "sounds.roundabout.summon_killer_queen",
     "sounds": [
       "roundabout:summon_killer_queen_dark"
     ]
@@ -411,6 +417,42 @@
     "subtitle": "sounds.roundabout.sha_kocchi_1",
     "sounds": [
       "roundabout:sha_kocchi_1"
+    ]
+  },
+  "sha_alt_kocchi_2": {
+    "subtitle": "sounds.roundabout.sha_alt_kocchi_2",
+    "sounds": [
+      "roundabout:sha_alt_kocchi_2"
+    ]
+  },
+  "sha_alt_dede": {
+    "subtitle": "sounds.roundabout.sha_alt_dede",
+    "sounds": [
+      "roundabout:sha_alt_dede"
+    ]
+  },
+  "straycat_bubble_sound": {
+    "subtitle": "sounds.roundabout.straycat_bubble_sound",
+    "sounds": [
+      "roundabout:straycat_bubble_sound"
+    ]
+  },
+  "straycat_bubble_sound_2": {
+    "subtitle": "sounds.roundabout.straycat_bubble_sound",
+    "sounds": [
+      "roundabout:straycat_bubble_sound_2"
+    ]
+  },
+  "straycat_bubble_redirect": {
+    "subtitle": "sounds.roundabout.straycat_bubble_redirect",
+    "sounds": [
+      "roundabout:straycat_bubble_redirect"
+    ]
+  },
+  "straycat_bubble_redirect_2": {
+    "subtitle": "sounds.roundabout.straycat_bubble_redirect",
+    "sounds": [
+      "roundabout:straycat_bubble_redirect_2"
     ]
   },
   "stray_cat_shoot": {

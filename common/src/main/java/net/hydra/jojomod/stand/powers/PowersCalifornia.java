@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.StepRuleEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -43,10 +44,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Pufferfish;
@@ -147,7 +145,6 @@ public class PowersCalifornia extends NewDashPreset {
                         tag.hasUUID("victim") &&
                         victimId.equals(tag.getUUID("victim"))) {
 
-                        tag.remove("stealType");
                         tag.remove("victim");
                         invStack.setDamageValue(0);
                         inv.setItem(i,invStack);
@@ -220,7 +217,9 @@ public class PowersCalifornia extends NewDashPreset {
 
     public static boolean canSteal(Entity entity){
         if (entity instanceof LivingEntity LE){
-            if (MainUtil.isBossMob(LE)){
+            if (MainUtil.isBossMob(LE) || LE instanceof FallenMob ||
+            LE instanceof StandEntity || !entity.isAlive() ||
+                    (entity instanceof Player pl && pl.isCreative())){
                 return false;
             }
             return true;
@@ -228,7 +227,7 @@ public class PowersCalifornia extends NewDashPreset {
         return false;
     }
     public void addToList(Entity entity){
-        if (entity.isAlive()) {
+        if (entity.isAlive() && !entity.is(self)) {
             hurtEntities.put(entity, entity.tickCount + 200);
             if (self instanceof ServerPlayer sp) {
                 S2CPacketUtil.sendGenericIntToClientPacket(
@@ -725,6 +724,8 @@ public class PowersCalifornia extends NewDashPreset {
                 Entity targent = getCaliforniaTargetEntity();
                 if (PowersCalifornia.canSteal(targent)){
                     targEnt = targent;
+                } else {
+                    targEnt = null;
                 }
             }
         }
@@ -837,6 +838,8 @@ public class PowersCalifornia extends NewDashPreset {
                         this.getSelf().getX(), this.getSelf().getY() + 1, this.getSelf().getZ(),
                         12, 2, 0.5,2, 0.015);
             }
+            //Uncomment below to test player removal stuff on self
+            //hurtEntities.put(self, self.tickCount+200);
             Iterator<Map.Entry<Entity, Integer>> it = hurtEntities.entrySet().iterator();
             this.self.level().playSound(null, this.self.blockPosition(),
                     ModSounds.CKB_STEAL_EVENT, SoundSource.PLAYERS, 1F,
@@ -861,6 +864,11 @@ public class PowersCalifornia extends NewDashPreset {
             clearAllSpawnedEntities();
             clearLeaded();
             snapEntity = null;
+            int length = 70;
+            setCooldown(PowerIndex.SKILL_1, length);
+            setCooldown(PowerIndex.SKILL_2, length);
+            setCooldown(PowerIndex.SKILL_EXTRA_2, length);
+            setCooldown(PowerIndex.SKILL_EXTRA, length);
         }
     }
 
@@ -912,24 +920,41 @@ public class PowersCalifornia extends NewDashPreset {
     }
 
     public int getStealType(Entity victim){
+        boolean isMemortaken = false;
         if (victim instanceof LivingEntity LE){
             ((StandUser)LE).roundabout$deeplyRemoveAttackTarget();
+            if (victim instanceof Mob mb){
+                isMemortaken = ((IMob)victim).rdbt$getStolen();
+                ((IMob)victim).rdbt$setStolen(true);
+                ((IMob)mb).roundabout$setConfusionTicks(30);
+            }
         }
-        if (victim instanceof Skeleton sk) {
+        if (!isMemortaken && (victim instanceof Skeleton || victim instanceof Stray)) {
             return 7;
-        } else if (victim instanceof Player pl && PowerTypes.hasStandActive(pl)) {
+        } else if (victim instanceof Player pl && PowerTypes.hasStandActive(pl)
+        && !((StandUser)pl).roundabout$getStandPowers().isSecondaryStand()
+                && ((IPlayerEntity)pl).rdbt$getLevelDecreaseTicks() <= 0
+        ) {
+            ((IPlayerEntity)pl).rdbt$setLevelDecreaseTicks(300);
             return 8;
-        } else if (victim instanceof Witch wt) {
-            return 6;
-        } else if (victim instanceof TamableAnimal ta && ta.getOwner() != null) {
+        } else if (victim instanceof Player pl && pl.isUsingItem()) {
+            ItemStack stack = pl.getUseItem();
+            if (!stack.isEmpty()) {
+                if (!pl.getCooldowns().isOnCooldown(stack.getItem())) {
+                    pl.getCooldowns().addCooldown(stack.getItem(), 50);
+                }
+                pl.stopUsingItem();
+            }
             return 9;
-        } else if (victim instanceof AbstractIllager al) {
+        } else if (!isMemortaken && victim instanceof Witch wt) {
+            return 6;
+        } else if (!isMemortaken && victim instanceof AbstractIllager al && !(al instanceof AnubisGuardian)) {
             return 5;
-        } else if (victim instanceof Villager vg) {
+        } else if (!isMemortaken && victim instanceof Villager vg) {
             return 11;
-        } else if (victim instanceof Phantom ph) {
+        } else if (victim instanceof FlyingMob ph) {
             return 4;
-        } else if (victim instanceof IronGolem ig) {
+        } else if (!isMemortaken && victim instanceof IronGolem ig) {
             if (ig.isPlayerCreated()){
                 ig.setPlayerCreated(false);
                 return 3;
@@ -941,6 +966,65 @@ public class PowersCalifornia extends NewDashPreset {
             return 1;
         }
         return 0;
+    }
+
+    public boolean isRestoreType(int restype){
+
+        return (restype == 3 || restype == 2 || restype == 4 || restype == 11 || restype == 5 || restype == 6
+                || restype == 7);
+    }
+
+    public boolean onCollide(Entity entity){
+        if (!self.level().isClientSide()) {
+            if (entity instanceof LivingEntity lv && self instanceof Player player) {
+                if (self.level().getMaxLocalRawBrightness(BlockPos.containing(self.getEyePosition())) < 2) {
+                    return false;
+                }
+                boolean release = false;
+                UUID victimId = lv.getUUID();
+
+                Inventory inv = player.getInventory();
+
+                for (int i = 0; i < inv.getContainerSize(); i++) {
+                    ItemStack invStack = inv.getItem(i);
+
+                    if (!(invStack.getItem() instanceof MemoryChessPieceItem)) {
+                        continue;
+                    }
+
+                    CompoundTag tag = invStack.getTag();
+                    if (tag != null &&
+                            tag.hasUUID("victim") &&
+                            victimId.equals(tag.getUUID("victim"))) {
+                        int getKey = tag.getInt("stealType");
+                        if (getKey == 3 && entity instanceof IronGolem ig){
+                            ig.setPlayerCreated(true);
+                        } else if (getKey == 2 && entity instanceof IronGolem ig){
+                            ig.setPlayerCreated(false);
+                        }
+                        if (entity instanceof Mob mb && isRestoreType(getKey)){
+                            ((IMob)mb).rdbt$setStolen(false);
+                        }
+                        if (entity instanceof Player pl && getKey == 8){
+                            ((IPlayerEntity)pl).rdbt$setLevelDecreaseTicks(0);
+                        }
+                        release = true;
+                        inv.setItem(i,ItemStack.EMPTY);
+                    }
+                }
+
+                if (release){
+                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.CHESS_PIECE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.00f + Math.random() * 0.03f));
+
+                    ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PINK_SMOKE,
+                            this.getSelf().getX(), this.getSelf().getY() + 1, this.getSelf().getZ(),
+                            5, 0.5, 0.5,0.5, 0.015);
+                }
+            }
+        }
+
+
+        return false;
     }
 
     public boolean inCowerStance(){
@@ -983,6 +1067,7 @@ public class PowersCalifornia extends NewDashPreset {
     }
     public boolean isServerControlledCooldown(byte num){
         if (num == PowerIndex.SKILL_2 ||
+                num == PowerIndex.SKILL_1 ||
                 num == PowerIndex.SKILL_EXTRA ||
                 num == PowerIndex.SKILL_EXTRA_2) {
             return true;

@@ -856,6 +856,9 @@ public class ClientUtil {
             if (user.roundabout$getStandPowers() instanceof PowersCalifornia ckb){
                 ckb.leadedInt = data;
             }
+        } else if (context == PacketDataIndex.S2C_INT_LVL_DECREASE) {
+            IPlayerEntity ipe = ((IPlayerEntity) player);
+            ipe.rdbt$setLevelDecreaseTicks(data);
         }
     }
     public static void handleDoubleIntPacketS2C(Player player, int data, int data2, byte context) {

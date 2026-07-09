@@ -165,6 +165,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
     public boolean roundabout$isNaturalStandUser = false;
     @Unique
     public boolean roundabout$isBred = false;
+    @Unique
+    public int roundabout$confusionTicks = 0;
 
     @Override
     @Unique
@@ -196,6 +198,32 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Unique
     public LivingEntity roundabout$getHypnotizedBy() {
         return roundabout$hypnotizedBy;
+    }
+
+
+
+    @Unique
+    public boolean rdbt$stolen = false;
+    @Override
+    @Unique
+    public void rdbt$setStolen(boolean steal){
+        rdbt$stolen = steal;
+    }
+    @Override
+    @Unique
+    public boolean rdbt$getStolen(){
+        return rdbt$stolen;
+    }
+
+    @Override
+    @Unique
+    public void roundabout$setConfusionTicks(int set) {
+        roundabout$confusionTicks = set;
+    }
+    @Override
+    @Unique
+    public int roundabout$getConfusionTicks() {
+        return roundabout$confusionTicks;
     }
 
     //Injects universal behaviors that all mobs can share
@@ -281,6 +309,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
         $$0.putBoolean("roundabout.isBred", roundabout$getIsBred());
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         compoundtag.putBoolean("vampire",roundabout$isVampire());
+        compoundtag.putBoolean("stolenMemory", rdbt$getStolen());
         $$0.put("roundabout",compoundtag);
         return $$0;
     }
@@ -292,6 +321,9 @@ public abstract class ZMob extends LivingEntity implements IMob {
         this.roundabout$setIsBred($$0.getBoolean("roundabout.isBred"));
         CompoundTag compoundtag = $$0.getCompound("roundabout");
             roundabout$setVampire(compoundtag.getBoolean("vampire"));
+        if (compoundtag.contains("stolenMemory")) {
+            rdbt$stolen = compoundtag.getBoolean("stolenMemory");
+        }
     }
 
     @Shadow
@@ -484,6 +516,9 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Unique
     protected double roundabout$getFollowDistance() {
         /**Soft and Wet Plunder sight*/
+        if (roundabout$getConfusionTicks() > 0){
+            return 0;
+        }
         if (((StandUser)this).roundabout$getEyeSightTaken() != null && this.getLastHurtByMob() == null){
             return (this.getAttributeValue(Attributes.FOLLOW_RANGE)*0.07);
         }
@@ -943,6 +978,9 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private void roundabout$Tick(CallbackInfo ci) {
         if (this.isAlive() && !this.level().isClientSide()) {
+            if (roundabout$confusionTicks > 0){
+                roundabout$confusionTicks--;
+            }
             if (getHealth() < getMaxHealth()){
                 if (roundabout$isVampire()){
                     if (tickCount % 82 == 0){

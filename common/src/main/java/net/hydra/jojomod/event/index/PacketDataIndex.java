@@ -121,6 +121,7 @@ public class PacketDataIndex {
     public static final byte S2C_INT_CKB_ADD = 22;
     public static final byte S2C_INT_CKB_REMOVE = 23;
     public static final byte S2C_INT_LEADED = 24;
+    public static final byte S2C_INT_LVL_DECREASE = 25;
 
 
     /**S2C BUNDLE packets*/

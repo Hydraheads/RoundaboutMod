@@ -378,11 +378,14 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
         if (hasBlock() || hasEntity())
             return;
+        boolean exTS = canExecuteMoveWithLevel(getTSLevel());
+        boolean exImpTS = canExecuteMoveWithLevel(getImpulseTSLevel());
+        if (!exTS && !exImpTS)
+            return;
 
         if (!this.onCooldown(PowerIndex.SKILL_4) || (((Player)this.getSelf()).isCreative() && ClientNetworking.getAppropriateConfig().timeStopSettings.creativeModeInfiniteTimeStop)) {
             if ((((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) || !this.isAttackInept(this.getActivePower()))) {
-                boolean exTS = canExecuteMoveWithLevel(getTSLevel());
-                boolean exImpTS = canExecuteMoveWithLevel(getImpulseTSLevel());
+
                 boolean sendPacket = false;
                 if (this.isStoppingTime()) {
                     KeyInputs.roundaboutClickCount = 2;

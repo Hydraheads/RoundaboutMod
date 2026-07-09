@@ -454,13 +454,13 @@ public class Config implements Cloneable {
         public Boolean blocksDestruction;
     	@FloatOption(group = "inherit", value = 8.0F, min = 0, max = 200F)
         public Float explosionDetonateMaxDamage;
-        @FloatOption(group = "inherit", value = 6.0F, min = 0, max = 200F)
+        @FloatOption(group = "inherit", value = 7.0F, min = 0, max = 200F)
         public Float SheerHeartAttackMaxDamage;
         @FloatOption(group = "inherit", value = 2.5F, min = 0, max = 200F)
         public Float StrayCatAirBubblesDamage;
         @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
         public Integer blockPlantCooldown;
-        @IntOption(group = "inherit", value = 140, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
         public Integer bubbleShootCooldown;
         @IntOption(group = "inherit", value = 220, min = 0, max = 72000)
         public Integer mobPlantCooldown;
