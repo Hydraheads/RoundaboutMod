@@ -1005,6 +1005,9 @@ public class PowersCalifornia extends NewDashPreset {
                         if (entity instanceof Mob mb && isRestoreType(getKey)){
                             ((IMob)mb).rdbt$setStolen(false);
                         }
+                        if (entity instanceof Player pl && getKey == 8){
+                            ((IPlayerEntity)pl).rdbt$setLevelDecreaseTicks(0);
+                        }
                         release = true;
                         inv.setItem(i,ItemStack.EMPTY);
                     }
