@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.goals.StrayCatBegGoal;
+import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StrayCats.AbstractStrayCat;
@@ -32,9 +33,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.EnumSet;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
@@ -55,6 +54,11 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
     private static final EntityDataAccessor<Boolean> SLEEPING = SynchedEntityData.defineId(StrayCatEntity.class,
             EntityDataSerializers.BOOLEAN);;
 
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,
+                0.0F).add(Attributes.MAX_HEALTH, 18.0);
+    }
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
@@ -66,11 +70,11 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
     }
 
     public void setBreed(byte b) { this.entityData.set(BREED, b); }
+
     public byte getBreed() { return this.entityData.get(BREED); }
-
     public void setAnim(byte a) { this.entityData.set(ANIM, a); }
-    public byte getAnim() { return this.entityData.get(ANIM); }
 
+    public byte getAnim() { return this.entityData.get(ANIM); }
     public void setPotted(boolean pot) {
         this.entityData.set(POTTED, pot);
     }
@@ -82,12 +86,8 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
     public void setSleeping(boolean pot) {
         this.entityData.set(SLEEPING, pot);
     }
-    public boolean getSleeping() {return this.entityData.get(SLEEPING); }
 
-    public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,
-                0.0F).add(Attributes.MAX_HEALTH, 18.0).add(Attributes.ATTACK_DAMAGE, 5.0);
-    }
+    public boolean getSleeping() {return this.entityData.get(SLEEPING); }
 
     public final AnimationState idle = new AnimationState();
     public final AnimationState unpotted = new AnimationState();
@@ -107,6 +107,14 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
 
     private static final int shootWindupMax = 10;
     private int shootWindup = shootWindupMax;
+
+    private List<StrayCatAirBubble> bubblesList;
+
+    public void bubbleListInit(){
+        if (this.bubblesList == null) {
+            this.bubblesList = new ArrayList<>();
+        }
+    }
 
     public void setupAnimationStates() {
         if (this.getPotted()) {
@@ -161,6 +169,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
         if (this.level().isClientSide()){
             setupAnimationStates();
         } else {
+            this.unloadBubbles();
              if (shootWindup > 0 ) {
                  shootWindup--;
              }else if (shootWindup == 0) {
@@ -247,22 +256,6 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
                         return InteractionResult.SUCCESS;
                     }
                 }
-                /*if ($$3 instanceof DyeItem) {
-                    DyeItem $$5 = (DyeItem)$$3;
-                    if (this.isOwnedBy($$0)) {
-                        DyeColor $$6 = $$5.getDyeColor();
-                        if ($$6 != this.getCollarColor()) {
-                            this.setCollarColor($$6);
-                            if (!$$0.getAbilities().instabuild) {
-                                $$2.shrink(1);
-                            }
-
-                            return InteractionResult.SUCCESS;
-                        }
-
-                        return super.mobInteract($$0, $$1);
-                    }
-                }*/
 
                 InteractionResult $$7 = super.mobInteract($$0, $$1);
                 return $$7;
@@ -292,7 +285,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
     protected void registerGoals() {
         //super.registerGoals();
         this.goalSelector.addGoal(1, new StrayCatSleepGoal(this));
-        this.goalSelector.addGoal(3, new RangedAttackGoal(this, 0D, 75, 100, 6.5F));
+        this.goalSelector.addGoal(3, new RangedAttackGoal(this, 0D, 180, 240, 6.5F));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(2, new StrayCatBegGoal(this, 8.0f));
@@ -331,8 +324,13 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
 
     public boolean shouldSleep() {
         BlockPos pos = this.getOnPos();
-        //BlockState state = this.level().getBlockState(pos);
+        boolean lastState = this.getSleeping();
+        if (!lastState && this.getTarget() != null) {
+            return false;
+        }
+
         long dayTime = this.level().getDayTime() % 24000;
+
 
         if ((dayTime >= 13000 && dayTime <= 23750) || this.level().isRainingAt(pos)) {
             return true;
@@ -361,16 +359,17 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
 
         StrayCatAirBubble bubble = ModEntities.STRAY_CAT_AIRBUBBLE.create(this.level());
         if (bubble != null) {
-            bubble.setSped(0.2f);
+            bubble.setSped(0.15f);
             bubble.setOwner(this);
             bubble.setSkin(this.getBubbleSkin());
+            bubble.setTarget(livingEntity);
 
             Vec3 addToPosition = new Vec3(0, this.getEyeHeight() * 0.85f, 0);
             Direction direction = ((IGravityEntity) this).roundabout$getGravityDirection();
             if (direction != Direction.DOWN) {
                 addToPosition = RotationUtil.vecPlayerToWorld(addToPosition, direction);
             }
-            Vec3 pos = this.getPosition(1).add(addToPosition.x, addToPosition.y, addToPosition.z).add(this.getForward().scale(this.getBbWidth() * 1));
+            Vec3 pos = this.getPosition(1).add(addToPosition.x, addToPosition.y, addToPosition.z);
             bubble.setPos(pos.x(), pos.y(), pos.z());
             this.level().addFreshEntity(bubble);
 
@@ -392,6 +391,42 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
             bubble.setDeltaMovement(vector);
             bubble.hasImpulse = true;
             bubble.hurtMarked = true;
+
+            this.bubbleListInit();
+            this.bubblesList.add(bubble);
+
+        }
+    }
+
+    public void unloadBubbles(){
+        bubbleListInit();
+        List<StrayCatAirBubble> bubbleList2 = new ArrayList<>(bubblesList) {};
+        if (!bubbleList2.isEmpty()) {
+            for (StrayCatAirBubble value : bubbleList2) {
+                if (value == null || value.isRemoved() || !value.isAlive()) {
+                    bubblesList.remove(value);
+                }else if (this.isSleeping() || this.getInterested()) {
+                    value.popBubble();
+                    bubblesList.remove(value);
+                } else {
+                    Entity target = value.target;
+                    Entity actualTarget = this.getTarget();
+                    if (target != actualTarget) {
+                        if (actualTarget == this.getOwner() || actualTarget instanceof TamableAnimal TA && TA.getOwner() == this.getOwner()) {
+                            actualTarget = null;
+                        }
+
+                        if (actualTarget == null) {
+                            value.popBubble();
+                            bubblesList.remove(value);
+                        }else {
+
+                            value.setTarget(this.getTarget());
+                        }
+                    }
+
+                }
+            }
         }
     }
 
