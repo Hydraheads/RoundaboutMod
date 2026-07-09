@@ -58,8 +58,7 @@ public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
                 VertexConsumer vertex = vertexConsumerProvider.getBuffer(RenderType.entityTranslucent(getTextureLocation(blockBombEntity)));
 
                 matrixStack.mulPose(Axis.ZP.rotationDegrees(180f));
-                matrixStack.translate(0,-0.5,0);
-
+                matrixStack.translate(0,0,0);
 
                 model.renderToBuffer(matrixStack, vertex, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F,
                         Math.min((((float) blockBombEntity.renderFadeIn) / 20) + (partialTicks * 0.05F), 1f));

@@ -95,7 +95,7 @@ abstract public class AbstractStrayCat extends Item {
         BlockState aboveState = level.getBlockState(abovePos);
         if (!aboveState.isAir()) return InteractionResult.FAIL;
 
-        if (!level.isClientSide) {
+        if (!level.isClientSide && player.isCrouching()) {
             Vec3 spawnPos = Vec3.atCenterOf(abovePos);
 
             StrayCatEntity stray = ModEntities.STRAY_CAT.create(level);
