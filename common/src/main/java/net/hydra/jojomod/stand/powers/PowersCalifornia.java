@@ -922,10 +922,11 @@ public class PowersCalifornia extends NewDashPreset {
         if (victim instanceof LivingEntity LE){
             ((StandUser)LE).roundabout$deeplyRemoveAttackTarget();
             if (victim instanceof Mob mb){
+                ((IMob)victim).rdbt$setStolen(true);
                 ((IMob)mb).roundabout$setConfusionTicks(30);
             }
         }
-        if (victim instanceof Skeleton sk) {
+        if (victim instanceof Skeleton || victim instanceof Stray) {
             return 7;
         } else if (victim instanceof Player pl && PowerTypes.hasStandActive(pl)) {
             return 8;
@@ -980,6 +981,9 @@ public class PowersCalifornia extends NewDashPreset {
                             ig.setPlayerCreated(true);
                         } else if (getKey == 2 && entity instanceof IronGolem ig){
                             ig.setPlayerCreated(false);
+                        }
+                        if (entity instanceof Mob mb){
+                            ((IMob)mb).rdbt$setStolen(false);
                         }
                         release = true;
                         inv.setItem(i,ItemStack.EMPTY);

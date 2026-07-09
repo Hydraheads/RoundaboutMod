@@ -201,6 +201,20 @@ public abstract class ZMob extends LivingEntity implements IMob {
     }
 
 
+
+    @Unique
+    public boolean rdbt$stolen = false;
+    @Override
+    @Unique
+    public void rdbt$setStolen(boolean steal){
+        rdbt$stolen = steal;
+    }
+    @Override
+    @Unique
+    public boolean rdbt$getStolen(){
+        return rdbt$stolen;
+    }
+
     @Override
     @Unique
     public void roundabout$setConfusionTicks(int set) {
@@ -295,6 +309,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
         $$0.putBoolean("roundabout.isBred", roundabout$getIsBred());
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         compoundtag.putBoolean("vampire",roundabout$isVampire());
+        compoundtag.putBoolean("stolenMemory", rdbt$getStolen());
         $$0.put("roundabout",compoundtag);
         return $$0;
     }
@@ -306,6 +321,9 @@ public abstract class ZMob extends LivingEntity implements IMob {
         this.roundabout$setIsBred($$0.getBoolean("roundabout.isBred"));
         CompoundTag compoundtag = $$0.getCompound("roundabout");
             roundabout$setVampire(compoundtag.getBoolean("vampire"));
+        if (compoundtag.contains("stolenMemory")) {
+            rdbt$stolen = compoundtag.getBoolean("stolenMemory");
+        }
     }
 
     @Shadow
