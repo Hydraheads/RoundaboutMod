@@ -151,7 +151,7 @@ public class BlockBombEntity extends StandEntity {
 						0, 1.2, 0);
 				this.tickIndicator--;
 			}
-			if (this.renderFadeIn < 20) {
+			if (this.renderFadeIn < 12) {
 				this.renderFadeIn++;
 			}
 		}

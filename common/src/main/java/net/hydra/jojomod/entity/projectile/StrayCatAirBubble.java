@@ -23,6 +23,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -48,11 +49,6 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         this.lifeSpan = 300;
     }
 
-    /*public StrayCatAirBubble(LivingEntity living, Level $$1) {
-        super(ModEntities.STRAY_CAT_AIRBUBBLE, $$1);
-        setOwner(living);
-        //places = false;
-    }*/
     private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> ACTIVATED = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> LAUNCHED = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.BOOLEAN);
@@ -101,6 +97,9 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
     private static final int redirectCooldownMax = 30;
     private int redirectCooldown = redirectCooldownMax;
+
+    private static final int soundEffectCooldownMax = 50;
+    private int soundEffectCooldown = 30;
 
     @Override
     public boolean hurt(DamageSource $$0, float $$1) {
@@ -160,6 +159,17 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
     public void tick() {
         if (!this.level().isClientSide()) {
+            this.soundEffectCooldown--;
+            if (this.soundEffectCooldown <= 0) {
+                SoundEvent SE = ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_EVENT;
+                if (Math.random() > 0.5) {
+                    SE = ModSounds.STRAY_CAT_BUBBLE_REDIRECT_2_EVENT;
+                }
+
+                this.level().playSound(null, this.blockPosition(), SE,
+                        SoundSource.PLAYERS, 0.7F, (float)(0.58+(Math.random()*0.04)));
+                this.soundEffectCooldown = soundEffectCooldownMax;
+            }
 
             if (this.hasTimeLimit) {
                 this.lifeSpan--;
@@ -364,8 +374,8 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     }
 
     public void popBubble(){
-        this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
-                SoundSource.PLAYERS, 2F, (float)(0.98+(Math.random()*0.04)));
+        this.level().playSound(null, this.blockPosition(), ModSounds.STRAY_CAT_BUBBLE_SOUND_2_EVENT,
+                SoundSource.PLAYERS, 1.5F, (float)(0.78+(Math.random()*0.04)));
         if (!this.level().isClientSide()){
             if (this.tickCount % 40 == 9) {
                 this.level().addAlwaysVisibleParticle(ModParticles.AIR_CRACKLE, true,
@@ -389,6 +399,8 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
 
     public void bubbleRedirect(){
+
+
         StrayCatAirBubble value = this;
         value.setFollowOwnerView(false);
 

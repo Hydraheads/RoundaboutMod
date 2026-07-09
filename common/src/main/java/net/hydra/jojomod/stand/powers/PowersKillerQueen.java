@@ -109,6 +109,10 @@ public class PowersKillerQueen extends NewPunchingStand {
         STRAY_CAT_ADD = 63,
         BUBBLE_BOMB = 63,
 
+    // COOLDOWN INDEXES
+        BUBBLE_SEND_COOLDOWN = 10,
+        SHA_COOLDOWN = 11,
+
     // SOUNDS ID
         IMPALE_NOISE = -108,
         SHIBA = -109,
@@ -166,7 +170,6 @@ public class PowersKillerQueen extends NewPunchingStand {
     public ItemStack bombItemStack = null;
 	public StrayCatAirBubble bombBubble = null;
     public int bombBubbleID = -1;
-	public Entity bubbleTarget = null;
     public SheerHeartAttackEntity SHA = null;
 
     public int detonateTimer = -1;;
@@ -462,7 +465,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (!canExecuteMoveWithLevel(getStrayCatLevel()) || !this.canUseStrayCat()) {
                 setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD,true);
             } else {
-        		 setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BUBBLE_LAUNCH, PowerIndex.SKILL_2_GUARD);
+        		 setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BUBBLE_LAUNCH, BUBBLE_SEND_COOLDOWN);
         	}
     	} else if (isHoldingSneak()){
             if (canExecuteMoveWithLevel(getImpaleLevel())) {
@@ -484,7 +487,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_RETREAT_CANCEL, PowerIndex.NO_CD);
                 }
         	}else {
-        		setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_SUMMON, PowerIndex.SKILL_3);
+        		setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_SUMMON, SHA_COOLDOWN);
         	}
         } else if (isGuarding() && !(inBitesTheDustMode())){
             if (!canExecuteMoveWithLevel(getSheerHeartAttackLevel())) {
@@ -496,7 +499,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_RETREAT_CANCEL, PowerIndex.NO_CD);
                 }
             }else {
-                setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_THROW, PowerIndex.SKILL_3);
+                setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_THROW, SHA_COOLDOWN);
             }
     	} else {
 
@@ -1946,23 +1949,15 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (!isClient()) {
             this.detectIfShouldDefuse();
             this.updateDetonate();
-            /*if (this.bubbleTarget != null && this.bubbleTarget.isAlive() && this.bombBubble != null) {
-                if (this.redirectCooldown <= 0) {
-                    this.bubbleRedirect();
-                }else {
-                    this.redirectCooldown--;
-                }
-            }else {
-                this.redirectCooldown = 0;
-            }*/
 
             if (this.SHA != null) {
                 if ((this.SHA.shaIsNear() && this.SHA.getHaveToReturn()) || this.SHA.isRemoved() || this.inBitesTheDustMode()) {
                     this.SHA.discard();
                     this.syncShaStatus(SHA_NONE);
-                    this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackCooldown);
+                    this.setCooldown(SHA_COOLDOWN, ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackCooldown);
                 }
             }else if (this.currentShaStatus != SHA_NONE){
+                this.setCooldown(SHA_COOLDOWN, ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackCooldown);
                 this.syncShaStatus(SHA_NONE);
             }
 
@@ -2251,29 +2246,29 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             byte skillCooldown = PowerIndex.NONE;
             int cooldownAmount = 0;
+            byte bStatus = this.currentBombStatus;
 
-            if (this.currentBombStatus == BOMB_BLOCK || this.currentBombStatus == BLOCK_CONTACT) {
+            if (bStatus == BOMB_BLOCK || bStatus == BLOCK_CONTACT) {
                 skillCooldown = PowerIndex.SKILL_1;
                 cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.blockPlantCooldown;
-            }else if (this.currentBombStatus == BOMB_ENTITY) {
+            }else if (bStatus == BOMB_ENTITY) {
                 skillCooldown = PowerIndex.SKILL_2;
                 cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantCooldown;
-            }else if (this.currentBombStatus == BUBBLE_CONTACT || this.currentBombStatus == BOMB_BUBBLE) {
-                skillCooldown = PowerIndex.SKILL_2_GUARD;
+            }else if (bStatus == BUBBLE_CONTACT || bStatus == BOMB_BUBBLE) {
+                skillCooldown = BUBBLE_SEND_COOLDOWN;
                 cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.bubbleShootCooldown;
             }
 
             if (skillCooldown != PowerIndex.NONE) {
                 this.setCooldown(skillCooldown, cooldownAmount);
-                if (this.getSelf() instanceof Player P) {
+                /*if (this.getSelf() instanceof Player P) {
                     S2CPacketUtil.sendCooldownSyncPacket(P, skillCooldown, cooldownAmount);
-                }
+                }*/
             }
 
             BlockPos bPos = BlockPos.ZERO;
             Vec3 vPos = Vec3.ZERO;
             Level level = this.getSelf().level();
-            byte bStatus = this.currentBombStatus;
 
             boolean canDestroyBlocks = ((this.bombConfig % 2) == 1) &&
                     ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&

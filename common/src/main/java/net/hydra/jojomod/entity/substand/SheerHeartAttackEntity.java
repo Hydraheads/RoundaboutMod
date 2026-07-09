@@ -230,7 +230,6 @@ public class SheerHeartAttackEntity extends StandEntity {
 				}
 
 				if (this.getDeltaMovement().length() > 0 && (this.onGround() || this.onClimbable())) {
-
 					this.setAnim(WALK);
 				}else {
 					this.setAnim(IDLE);

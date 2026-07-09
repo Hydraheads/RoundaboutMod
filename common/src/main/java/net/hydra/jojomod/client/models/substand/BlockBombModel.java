@@ -54,7 +54,7 @@ public class BlockBombModel<T extends BlockBombEntity> extends StandModel<T> {
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
 		
-		stand.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		stand.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha*0.75f);
 	}
 	
 }
