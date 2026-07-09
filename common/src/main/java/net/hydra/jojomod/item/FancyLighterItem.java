@@ -53,7 +53,6 @@ public class FancyLighterItem extends BlockItem {
     public static ItemStack stuff(ItemStack $$0, Player p){
         Item item = ModItems.FANCY_LIGHTER;
         if(!$$0.hasTag()){
-             $$0.getOrCreateTagElement("UserId").putString("Stuff", p.getStringUUID());
              $$0.getOrCreateTagElement("UserIdUUID").putUUID("StuffOther", p.getUUID());
         }
 
@@ -92,36 +91,8 @@ public class FancyLighterItem extends BlockItem {
                 setIsNotLit($$2, true);
             } else {
                 setIsNotLit($$2, false);
-                blackSabbathCheck($$0, $$1, $$2);
             }
         }
-    }
-
-    private void blackSabbathCheck(Level $$0, Player $$1, ItemStack $$2){
-            if($$2.getItem() instanceof  FancyLighterItem FI){
-                if($$2.hasTag() && $$2 != null && $$2.getTag() != null) {
-                    if ($$0 instanceof ServerLevel SL) {
-                        Entity ownerEntity = null;
-                        if ($$2.getTag().contains("UserIdUUID")) {
-                            ownerEntity = SL.getEntity($$2.getTagElement("UserIdUUID").getUUID("StuffOther"));
-
-                            if(SL.getEntity($$2.getTagElement("UserIdUUID").getUUID("StuffOther")) != null) {
-                                System.out.println(ownerEntity);
-
-                                if($$1 == SL.getEntity($$2.getTagElement("UserIdUUID").getUUID("StuffOther"))){
-                                    System.out.println("Black Sabbath is Bing Chillin'");
-                                } else {
-                                    System.out.println("Black Sabbath is definitely NOT Bing Chillin'");
-                                }
-                            } else {
-                                System.out.println("Owner Entity doesn't exist");
-                            }
-                        } else {
-                            System.out.println("Does not contain UUID");
-                        }
-                    }
-                }
-            }
     }
 
     public float getCurrentPredicateValue(Level level, ItemStack stack) {
@@ -179,29 +150,12 @@ public class FancyLighterItem extends BlockItem {
                             if($$2.getBlock() instanceof FancyLighterBlock FB){
                                 if($$4.getBlockEntity($$3) instanceof FancyLighterBlockEntity FLBE){
                                     if($$6.getItem() instanceof FancyLighterItem FI){
+                                        CompoundTag compoundtag = $$6.getTagElement("UserIdUUID");
                                         if($$4 instanceof ServerLevel $$8) {
-                                            if ($$6.getTag() != null) {
-                                                if ($$6.getTag().contains("UserIdUUID")) {
-
-                                                    if ($$6.getTagElement("UserIdUUID").getUUID("StuffOther") != null) {
-
-                                                        FLBE.setValue($$8.getEntity($$6.getTagElement("UserIdUUID").getUUID("StuffOther")));
-
-                                                        if ($$5 == $$8.getEntity($$6.getTagElement("UserIdUUID").getUUID("StuffOther"))) {
-                                                            System.out.println(FLBE.getOwner());
-                                                            System.out.println("Black Sabbath is Bing Chillin'");
-                                                        } else {
-                                                            System.out.println("Black Sabbath is definitely NOT Bing Chillin'");
-                                                        }
-                                                    } else {
-                                                        System.out.println("Owner Entity doesn't exist");
-                                                    }
-                                                } else {
-                                                    System.out.println("Does not contain UUID");
-                                                }
-                                            } else {
-                                                System.out.println("Does not contain a Tag");
-                                            }
+                                            if (compoundtag != null || compoundtag.hasUUID("StuffOther")) {
+                                                        FLBE.setValue($$6.getTagElement("UserIdUUID").getUUID("StuffOther"));
+                                                        System.out.println(FLBE.getOwner());
+                                            } else {}
                                         }
                                     }
                                 }

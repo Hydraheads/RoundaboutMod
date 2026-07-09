@@ -6,12 +6,16 @@ import net.hydra.jojomod.item.FancyLighterItem;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -21,11 +25,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
@@ -104,11 +110,31 @@ public class FancyLighterBlock extends BaseEntityBlock implements CancelDataDriv
     }
 
     @Override
+    public InteractionResult use(BlockState $$0, Level $$1, BlockPos $$2, Player $$3, InteractionHand $$4, BlockHitResult $$5) {
+            if ($$1.getBlockEntity($$2) instanceof FancyLighterBlockEntity FE) {
+                if(!$$1.isClientSide()) {
+                    System.out.println(FE.getOwner());
+                }
+                return InteractionResult.sidedSuccess($$1.isClientSide);
+            } else {
+                return InteractionResult.PASS;
+            }
+    }
+
+    @Override
     public void onRemove(BlockState $$0, Level $$1, BlockPos $$2, BlockState $$3, boolean $$4) {
-        if (!$$0.is($$3.getBlock())) {
-
-
-        }
+            if (!$$0.is($$3.getBlock())) {
+                if ($$1.getBlockEntity($$2) instanceof FancyLighterBlockEntity FE) {
+                 /*   CompoundTag compoundtag = referenceItem.getTagElement("UserIdUUID");
+                    if (!referenceItem.hasTag()) {
+                        if(compoundtag == null || !compoundtag.hasUUID("StuffOther")) {
+                            if (FE.getOwner() != null) {
+                                referenceItem.getOrCreateTagElement("UserIdUUID").putUUID("StuffOther", FE.getOwner());
+                            }
+                        }
+                    }*/
+                }
+            }
     }
 
     public boolean hasLitNeighbor(Level level, ItemStack stack) {
@@ -129,10 +155,23 @@ public class FancyLighterBlock extends BaseEntityBlock implements CancelDataDriv
         if (state.getBlock() instanceof FancyLighterBlock FB) {
             List<ItemStack> drops = new ArrayList<>();
             ItemStack stack = referenceItem.copy();
+            if (sl.getBlockEntity(bpos) instanceof FancyLighterBlockEntity FE) {
+                CompoundTag compoundtag = referenceItem.getTagElement("UserIdUUID");
+                if (!stack.hasTag()) {
+                    if(compoundtag == null || !compoundtag.hasUUID("StuffOther")) {
+                        if (FE.getOwner() != null) {
+                            stack.getOrCreateTagElement("UserIdUUID").putUUID("StuffOther", FE.getOwner());
+                            System.out.println(stack.getOrCreateTagElement("UserIdUUID").getUUID("StuffOther"));
+                        }
+                    }
+                }
+            }
+            if(stack.getItem() instanceof FancyLighterItem FI){
+                FI.setIsNotLit(stack, !state.getValue(LIT));
+            }
             drops.add(stack);
             return drops;
         }
-
         return new ArrayList<>();
     }
 

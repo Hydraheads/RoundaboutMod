@@ -34,9 +34,9 @@ public class FancyLighterBlockEntity extends BlockEntity {
     }
 
 
-    public void setValue(Entity thisowner){
+    public void setValue(UUID thisowner){
         if(owner == null){
-            owner = thisowner.getUUID();
+            owner = thisowner;
         }
     }
     @Override
@@ -56,6 +56,11 @@ public class FancyLighterBlockEntity extends BlockEntity {
         }
     }
 
+    public void transferUUID(){
+        if (this.getBlockState() != null){
+            System.out.println(getOwner());
+        }
+    }
 
 
 
