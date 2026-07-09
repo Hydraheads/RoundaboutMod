@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.soft_and_wet;
 
 import net.hydra.jojomod.access.IMob;
+import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.server.level.ServerPlayer;
@@ -9,6 +10,8 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.monster.AbstractIllager;
+import net.minecraft.world.entity.monster.Evoker;
 import net.minecraft.world.phys.AABB;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -27,9 +30,16 @@ public abstract class SoftAndWetNearestAttackableTargetGoal<T extends LivingEnti
     @Inject(method = "findTarget", at = @At(value = "TAIL"))
     protected void roundabout$findTarget(CallbackInfo ci) {
         if (!(this.target instanceof StandEntity)) {
-            if (((IMob)this.mob).roundabout$getConfusionTicks() > 0){
+            IMob imob = ((IMob)this.mob);
+            if (imob.roundabout$getConfusionTicks() > 0){
                 this.target = null;
                 return;
+            } else if (this.mob instanceof AbstractIllager && !(this.mob instanceof AnubisGuardian)
+                    && !(this.mob instanceof Evoker)){
+                if (imob.rdbt$getStolen()){
+                    this.target = null;
+                    return;
+                }
             }
             if (((StandUser)this.mob).roundabout$getEyeSightTaken() != null && mob.getLastHurtByMob() == null){
                 this.target = this.mob.level().getNearestEntity(this.mob.level().getEntitiesOfClass(this.targetType, this.getTargetSearchArea(this.getFollowDistance()), (p_148152_) -> {

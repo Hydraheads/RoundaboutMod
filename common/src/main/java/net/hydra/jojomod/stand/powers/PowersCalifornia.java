@@ -930,6 +930,8 @@ public class PowersCalifornia extends NewDashPreset {
             return 8;
         } else if (victim instanceof Witch wt) {
             return 6;
+        } else if (victim instanceof Evoker wt) {
+            return 9;
         } else if (victim instanceof AbstractIllager al && !(al instanceof AnubisGuardian)) {
             return 5;
         } else if (victim instanceof Villager vg) {
