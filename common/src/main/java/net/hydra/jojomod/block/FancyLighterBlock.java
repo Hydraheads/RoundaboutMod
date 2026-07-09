@@ -1,12 +1,15 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.access.CancelDataDrivenDropLimits;
 import net.hydra.jojomod.entity.projectile.IronBallEntity;
 import net.hydra.jojomod.item.FancyLighterItem;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -30,8 +33,10 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
-public class FancyLighterBlock extends BaseEntityBlock {
+public class FancyLighterBlock extends BaseEntityBlock implements CancelDataDrivenDropLimits {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = ModBlocks.LIT;
@@ -117,6 +122,28 @@ public class FancyLighterBlock extends BaseEntityBlock {
         }
 
         return false;
+    }
+
+    public ItemStack referenceItem = ItemStack.EMPTY;
+    public List<ItemStack> dropGen(BlockState state, ServerLevel sl, BlockPos bpos, @Nullable BlockEntity be){
+        if (state.getBlock() instanceof FancyLighterBlock FB) {
+            List<ItemStack> drops = new ArrayList<>();
+            ItemStack stack = referenceItem.copy();
+            drops.add(stack);
+            return drops;
+        }
+
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<ItemStack> getRealDrops(BlockState state, ServerLevel sl, BlockPos bpos, @Nullable BlockEntity be) {
+        return dropGen(state,sl,bpos,be);
+    }
+
+    @Override
+    public List<ItemStack> getRealDrops(BlockState state, ServerLevel sl, BlockPos bpos, @Nullable BlockEntity be, @Nullable Entity p_49879_, ItemStack p_49880_) {
+        return dropGen(state,sl,bpos,be);
     }
 
 }

@@ -3,6 +3,7 @@ package net.hydra.jojomod.item;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.FancyLighterBlock;
 import net.hydra.jojomod.block.FancyLighterBlockEntity;
+import net.hydra.jojomod.block.FogTrapBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -14,6 +15,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -28,6 +30,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.gameevent.GameEvent;
+import org.jetbrains.annotations.Nullable;
 
 public class FancyLighterItem extends BlockItem {
 
@@ -43,7 +46,7 @@ public class FancyLighterItem extends BlockItem {
         return stack.getOrCreateTag().getBoolean(IS_LIT_TAG);
     }
 
-    private void setIsNotLit(ItemStack stack, boolean value) {
+    public void setIsNotLit(ItemStack stack, boolean value) {
         stack.getOrCreateTag().putBoolean(IS_LIT_TAG, value);
     }
 
@@ -174,19 +177,18 @@ public class FancyLighterItem extends BlockItem {
                         if ($$5 instanceof ServerPlayer) {
                             CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayer)$$5, $$3, $$6);
                             if($$2.getBlock() instanceof FancyLighterBlock FB){
-                                if(FB.newBlockEntity($$3, $$7) instanceof FancyLighterBlockEntity FLBE){
+                                if($$4.getBlockEntity($$3) instanceof FancyLighterBlockEntity FLBE){
                                     if($$6.getItem() instanceof FancyLighterItem FI){
                                         if($$4 instanceof ServerLevel $$8) {
                                             if ($$6.getTag() != null) {
                                                 if ($$6.getTag().contains("UserIdUUID")) {
 
-                                                    if ($$8.getEntity($$6.getTagElement("UserIdUUID").getUUID("StuffOther")) != null) {
+                                                    if ($$6.getTagElement("UserIdUUID").getUUID("StuffOther") != null) {
 
-                                                        FLBE.setValues($$8.getEntity($$6.getTagElement("UserIdUUID").getUUID("StuffOther")), $$8.getEntity($$6.getTagElement("UserIdUUID").getUUID("StuffOther")).getDisplayName().getString());
+                                                        FLBE.setValue($$8.getEntity($$6.getTagElement("UserIdUUID").getUUID("StuffOther")));
 
                                                         if ($$5 == $$8.getEntity($$6.getTagElement("UserIdUUID").getUUID("StuffOther"))) {
                                                             System.out.println(FLBE.getOwner());
-                                                            System.out.println(FLBE.getName());
                                                             System.out.println("Black Sabbath is Bing Chillin'");
                                                         } else {
                                                             System.out.println("Black Sabbath is definitely NOT Bing Chillin'");
