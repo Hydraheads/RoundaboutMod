@@ -43,10 +43,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Pufferfish;
@@ -219,7 +216,8 @@ public class PowersCalifornia extends NewDashPreset {
 
     public static boolean canSteal(Entity entity){
         if (entity instanceof LivingEntity LE){
-            if (MainUtil.isBossMob(LE)){
+            if (MainUtil.isBossMob(LE) || LE instanceof FallenMob ||
+            LE instanceof StandEntity){
                 return false;
             }
             return true;
@@ -937,7 +935,7 @@ public class PowersCalifornia extends NewDashPreset {
             return 5;
         } else if (victim instanceof Villager vg) {
             return 11;
-        } else if (victim instanceof Phantom ph) {
+        } else if (victim instanceof FlyingMob ph) {
             return 4;
         } else if (victim instanceof IronGolem ig) {
             if (ig.isPlayerCreated()){

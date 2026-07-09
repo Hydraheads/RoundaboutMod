@@ -16,6 +16,7 @@
     "ZAbstractSkeleton",
     "ZLevel",
     "ZMob",
+    "ZFlyingMob",
     "ZSkeletonMixin",
     "ZStrayMixin",
     "access.AccessAbstractArrow",
