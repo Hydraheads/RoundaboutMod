@@ -1229,13 +1229,29 @@ public class StandPowers extends AbilityScapeBasis {
 
     /**Call this to verify your stand is leveled enough to use a move*/
     public boolean canExecuteMoveWithLevel(int minLevel){
-        if (!ClientNetworking.getAppropriateConfig().standLevelingSettings.enableStandLeveling) {
+        boolean decreaseLevel = false;
+        if (self instanceof Player pl && ((IPlayerEntity)pl).rdbt$getLevelDecreaseTicks()
+                > 0){
+            decreaseLevel = true;
+        }
+
+        if (!ClientNetworking.getAppropriateConfig().standLevelingSettings.enableStandLeveling
+        && !decreaseLevel) {
             return true;
         }
 
         if (this.getSelf() instanceof Player pl){
-            if (((IPlayerEntity)pl).roundabout$getStandLevel() >= minLevel || hasGoldenDisc() ||
-                    pl.isCreative()){
+            int level;
+            boolean skipsCheck = hasGoldenDisc() || pl.isCreative();
+            if (!skipsCheck){
+                level = ((IPlayerEntity)pl).roundabout$getStandLevel();
+            } else {
+                level = getMaxLevel();
+            }
+            if (decreaseLevel){
+                level = 1;
+            }
+            if (level >= minLevel){
                 return true;
             }
             return false;

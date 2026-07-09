@@ -494,6 +494,27 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         return inventory;
     }
 
+
+    @Unique
+    public int rdbt$levelDecreaseTicks = 0;
+    @Unique
+    @Override
+    public void rdbt$setLevelDecreaseTicks(int decreaseTicks){
+        rdbt$levelDecreaseTicks = decreaseTicks;
+        if (!level().isClientSide()){
+            S2CPacketUtil.sendGenericIntToClientPacket(
+                    ((Player) (Object)this),
+                    PacketDataIndex.S2C_INT_LVL_DECREASE,
+                    decreaseTicks
+            );
+        }
+    }
+    @Unique
+    @Override
+    public int rdbt$getLevelDecreaseTicks(){
+        return rdbt$levelDecreaseTicks;
+    }
+
     /**Keep track of unique player animations like floating passive anims like dodging or posing*/
     public void roundabout$SetPos(byte Pos){
         ((Player) (Object) this).getEntityData().set(ROUNDABOUT$POS, Pos);
@@ -1654,6 +1675,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$Tick(CallbackInfo ci) {
+        if (rdbt$levelDecreaseTicks > 0){
+            rdbt$levelDecreaseTicks--;
+        }
         if (this.level().isClientSide()) {
             if (FateTypes.isVampire(this) && ClientUtil.isPlayer(this)){
                 if (rdbt$getVampireData().vampireLevel == -1){

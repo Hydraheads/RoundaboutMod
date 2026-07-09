@@ -226,7 +226,7 @@ public class PowersCalifornia extends NewDashPreset {
         return false;
     }
     public void addToList(Entity entity){
-        if (entity.isAlive()) {
+        if (entity.isAlive() && !entity.is(self)) {
             hurtEntities.put(entity, entity.tickCount + 200);
             if (self instanceof ServerPlayer sp) {
                 S2CPacketUtil.sendGenericIntToClientPacket(
@@ -837,6 +837,8 @@ public class PowersCalifornia extends NewDashPreset {
                         this.getSelf().getX(), this.getSelf().getY() + 1, this.getSelf().getZ(),
                         12, 2, 0.5,2, 0.015);
             }
+            //Uncomment below to test player removal stuff on self
+            //hurtEntities.put(self, self.tickCount+200);
             Iterator<Map.Entry<Entity, Integer>> it = hurtEntities.entrySet().iterator();
             this.self.level().playSound(null, this.self.blockPosition(),
                     ModSounds.CKB_STEAL_EVENT, SoundSource.PLAYERS, 1F,
@@ -928,8 +930,21 @@ public class PowersCalifornia extends NewDashPreset {
         }
         if (!isMemortaken && (victim instanceof Skeleton || victim instanceof Stray)) {
             return 7;
-        } else if (victim instanceof Player pl && PowerTypes.hasStandActive(pl)) {
+        } else if (victim instanceof Player pl && PowerTypes.hasStandActive(pl)
+        && !((StandUser)pl).roundabout$getStandPowers().isSecondaryStand()
+                && ((IPlayerEntity)pl).rdbt$getLevelDecreaseTicks() <= 0
+        ) {
+            ((IPlayerEntity)pl).rdbt$setLevelDecreaseTicks(300);
             return 8;
+        } else if (victim instanceof Player pl && pl.isUsingItem()) {
+            ItemStack stack = pl.getUseItem();
+            if (!stack.isEmpty()) {
+                if (!pl.getCooldowns().isOnCooldown(stack.getItem())) {
+                    pl.getCooldowns().addCooldown(stack.getItem(), 50);
+                }
+                pl.stopUsingItem();
+            }
+            return 9;
         } else if (!isMemortaken && victim instanceof Witch wt) {
             return 6;
         } else if (!isMemortaken && victim instanceof AbstractIllager al && !(al instanceof AnubisGuardian)) {

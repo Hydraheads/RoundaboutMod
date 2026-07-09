@@ -21,6 +21,8 @@ public interface IPlayerEntity {
     void roundabout$setBlinded(boolean blinded);
     void roundabout$SetPos(byte Pos);
     void roundabout$SetPos2(byte Pos);
+    void rdbt$setLevelDecreaseTicks(int decreaseTicks);
+    int rdbt$getLevelDecreaseTicks();
     int roundabout$getAirTime();
     int roundabout$getClientDodgeTime();
     int roundabout$getControlling();
