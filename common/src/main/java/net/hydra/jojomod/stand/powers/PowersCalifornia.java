@@ -929,7 +929,7 @@ public class PowersCalifornia extends NewDashPreset {
             return 8;
         } else if (victim instanceof Witch wt) {
             return 6;
-        } else if (victim instanceof TamableAnimal ta && ta.getOwner() != null) {
+        } else if (victim instanceof Evoker) {
             return 9;
         } else if (victim instanceof AbstractIllager al) {
             return 5;
