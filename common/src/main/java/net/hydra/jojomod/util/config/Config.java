@@ -460,7 +460,7 @@ public class Config implements Cloneable {
         public Float StrayCatAirBubblesDamage;
         @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
         public Integer blockPlantCooldown;
-        @IntOption(group = "inherit", value = 140, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
         public Integer bubbleShootCooldown;
         @IntOption(group = "inherit", value = 220, min = 0, max = 72000)
         public Integer mobPlantCooldown;
