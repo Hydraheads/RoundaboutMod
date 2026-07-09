@@ -917,26 +917,28 @@ public class PowersCalifornia extends NewDashPreset {
     }
 
     public int getStealType(Entity victim){
+        boolean isMemortaken = false;
         if (victim instanceof LivingEntity LE){
             ((StandUser)LE).roundabout$deeplyRemoveAttackTarget();
             if (victim instanceof Mob mb){
+                isMemortaken = ((IMob)victim).rdbt$getStolen();
                 ((IMob)victim).rdbt$setStolen(true);
                 ((IMob)mb).roundabout$setConfusionTicks(30);
             }
         }
-        if (victim instanceof Skeleton || victim instanceof Stray) {
+        if (!isMemortaken && (victim instanceof Skeleton || victim instanceof Stray)) {
             return 7;
         } else if (victim instanceof Player pl && PowerTypes.hasStandActive(pl)) {
             return 8;
-        } else if (victim instanceof Witch wt) {
+        } else if (!isMemortaken && victim instanceof Witch wt) {
             return 6;
-        } else if (victim instanceof AbstractIllager al && !(al instanceof AnubisGuardian)) {
+        } else if (!isMemortaken && victim instanceof AbstractIllager al && !(al instanceof AnubisGuardian)) {
             return 5;
-        } else if (victim instanceof Villager vg) {
+        } else if (!isMemortaken && victim instanceof Villager vg) {
             return 11;
         } else if (victim instanceof FlyingMob ph) {
             return 4;
-        } else if (victim instanceof IronGolem ig) {
+        } else if (!isMemortaken && victim instanceof IronGolem ig) {
             if (ig.isPlayerCreated()){
                 ig.setPlayerCreated(false);
                 return 3;
