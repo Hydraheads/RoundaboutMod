@@ -69,6 +69,7 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
         if (victim != null){
             stack.getOrCreateTag().putUUID("victim",victim.getUUID());
             stack.getOrCreateTag().putInt("stealType",stealType);
+            stack.getOrCreateTag().putInt("swings",0);
             stack.getOrCreateTag().putString("vicName", victim.getName().getString());
         }
         return stack;
@@ -130,9 +131,24 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
                 }
                 if (living.hurt(ModDamageTypes.of(living.level(), ModDamageTypes.CHESS_STRIKE, player), dmg) && !living.isAlive()) {
                     player.getMainHandItem().hurtAndBreak(4, player, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                    if (!player.getMainHandItem().isEmpty() && player.getMainHandItem().getItem() instanceof MemoryChessPieceItem){
+                        player.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+                    }
                 } else {
+                    int destroy = tag.getInt("swings");
+                    if (!player.getAbilities().instabuild) {
+                        destroy++;
+                    }
                     MainUtil.makeBleed(living,0,200,player);
                     player.getMainHandItem().hurtAndBreak(1, player, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+
+                    if (destroy >= 3 && !player.getMainHandItem().isEmpty() && player.getMainHandItem().getItem() instanceof MemoryChessPieceItem){
+                        player.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+                    } else {
+                        if (!player.getAbilities().instabuild) {
+                            tag.putInt("swings", destroy);
+                        }
+                    }
                 }
                 if (!player.getMainHandItem().isEmpty()){
                     if (player.level() instanceof ServerLevel sl){
