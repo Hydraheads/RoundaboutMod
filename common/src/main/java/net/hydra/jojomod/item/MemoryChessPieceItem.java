@@ -119,7 +119,6 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
                 if (tag.hasUUID("victim") &&
                         entity.getUUID().equals(tag.getUUID("victim"))) {
 
-                    tag.remove("stealType");
                     tag.remove("victim");
                     stack.setDamageValue(0);
                     player.setItemSlot(EquipmentSlot.MAINHAND, stack);
@@ -145,7 +144,6 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
 
             }
         } else {
-            tag.remove("stealType");
             tag.remove("victim");
             stack.setDamageValue(0);
             player.setItemSlot(EquipmentSlot.MAINHAND, stack);

@@ -147,7 +147,6 @@ public class PowersCalifornia extends NewDashPreset {
                         tag.hasUUID("victim") &&
                         victimId.equals(tag.getUUID("victim"))) {
 
-                        tag.remove("stealType");
                         tag.remove("victim");
                         invStack.setDamageValue(0);
                         inv.setItem(i,invStack);
