@@ -863,6 +863,11 @@ public class PowersCalifornia extends NewDashPreset {
             clearAllSpawnedEntities();
             clearLeaded();
             snapEntity = null;
+            int length = 70;
+            setCooldown(PowerIndex.SKILL_1, length);
+            setCooldown(PowerIndex.SKILL_2, length);
+            setCooldown(PowerIndex.SKILL_EXTRA_2, length);
+            setCooldown(PowerIndex.SKILL_EXTRA, length);
         }
     }
 
@@ -1035,6 +1040,7 @@ public class PowersCalifornia extends NewDashPreset {
     }
     public boolean isServerControlledCooldown(byte num){
         if (num == PowerIndex.SKILL_2 ||
+                num == PowerIndex.SKILL_1 ||
                 num == PowerIndex.SKILL_EXTRA ||
                 num == PowerIndex.SKILL_EXTRA_2) {
             return true;
