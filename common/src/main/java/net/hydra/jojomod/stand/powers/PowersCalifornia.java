@@ -218,7 +218,8 @@ public class PowersCalifornia extends NewDashPreset {
     public static boolean canSteal(Entity entity){
         if (entity instanceof LivingEntity LE){
             if (MainUtil.isBossMob(LE) || LE instanceof FallenMob ||
-            LE instanceof StandEntity){
+            LE instanceof StandEntity || !entity.isAlive() ||
+                    (entity instanceof Player pl && pl.isCreative())){
                 return false;
             }
             return true;
