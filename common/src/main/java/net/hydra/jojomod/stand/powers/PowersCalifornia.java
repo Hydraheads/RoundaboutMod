@@ -949,6 +949,9 @@ public class PowersCalifornia extends NewDashPreset {
     public boolean onCollide(Entity entity){
         if (!self.level().isClientSide()) {
             if (entity instanceof LivingEntity lv && self instanceof Player player) {
+                if (self.level().getMaxLocalRawBrightness(BlockPos.containing(self.getEyePosition())) < 2) {
+                    return false;
+                }
                 boolean release = false;
                 UUID victimId = lv.getUUID();
 
@@ -965,6 +968,12 @@ public class PowersCalifornia extends NewDashPreset {
                     if (tag != null &&
                             tag.hasUUID("victim") &&
                             victimId.equals(tag.getUUID("victim"))) {
+                        int getKey = tag.getInt("stealType");
+                        if (getKey == 3 && entity instanceof IronGolem ig){
+                            ig.setPlayerCreated(true);
+                        } else if (getKey == 2 && entity instanceof IronGolem ig){
+                            ig.setPlayerCreated(false);
+                        }
                         release = true;
                         inv.setItem(i,ItemStack.EMPTY);
                     }
