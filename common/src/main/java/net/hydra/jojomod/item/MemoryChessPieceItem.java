@@ -124,7 +124,7 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
                     stack.setDamageValue(0);
                     player.setItemSlot(EquipmentSlot.MAINHAND, stack);
                 }
-            } else if (entity instanceof LivingEntity living && living.hurtTime <= 0) {
+            } else if (entity instanceof LivingEntity living && living.hurtTime <= 7) {
                 float dmg = 3;
                 if (living instanceof Player pl){
                     dmg = 1.5F;
