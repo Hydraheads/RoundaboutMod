@@ -946,6 +946,44 @@ public class PowersCalifornia extends NewDashPreset {
         return 0;
     }
 
+    public boolean onCollide(Entity entity){
+        if (!self.level().isClientSide()) {
+            if (entity instanceof LivingEntity lv && self instanceof Player player) {
+                boolean release = false;
+                UUID victimId = lv.getUUID();
+
+                Inventory inv = player.getInventory();
+
+                for (int i = 0; i < inv.getContainerSize(); i++) {
+                    ItemStack invStack = inv.getItem(i);
+
+                    if (!(invStack.getItem() instanceof MemoryChessPieceItem)) {
+                        continue;
+                    }
+
+                    CompoundTag tag = invStack.getTag();
+                    if (tag != null &&
+                            tag.hasUUID("victim") &&
+                            victimId.equals(tag.getUUID("victim"))) {
+                        release = true;
+                        inv.setItem(i,ItemStack.EMPTY);
+                    }
+                }
+
+                if (release){
+                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.CHESS_PIECE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.00f + Math.random() * 0.03f));
+
+                    ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PINK_SMOKE,
+                            this.getSelf().getX(), this.getSelf().getY() + 1, this.getSelf().getZ(),
+                            5, 0.5, 0.5,0.5, 0.015);
+                }
+            }
+        }
+
+
+        return false;
+    }
+
     public boolean inCowerStance(){
         return self instanceof Player pl && ((IPlayerEntity)pl).roundabout$GetPoseEmote() == 35;
     }

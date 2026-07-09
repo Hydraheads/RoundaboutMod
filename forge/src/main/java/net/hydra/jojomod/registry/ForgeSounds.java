@@ -380,6 +380,8 @@ public class ForgeSounds {
             register(ModSounds.CKB_ATTACK, ModSounds.CKB_ATTACK_ID);
     public static final RegistryObject<SoundEvent> CKB_TILE =
             register(ModSounds.CKB_TILE, ModSounds.CKB_TILE_ID);
+    public static final RegistryObject<SoundEvent> CHESS_PIECE =
+            register(ModSounds.CHESS_PIECE, ModSounds.CHESS_PIECE_ID);
     public static final RegistryObject<SoundEvent> HEART_SPARKLE =
             register(ModSounds.HEART_SPARKLE, ModSounds.HEART_SPARKLE_ID);
     public static final RegistryObject<SoundEvent> OVA_PLATINUM_BARRAGE_EVENT =

@@ -422,6 +422,10 @@ public class StandPowers extends AbilityScapeBasis {
     public boolean onKilledEntity(ServerLevel $$0, LivingEntity $$1){
         return false;
     }
+    /**return true to cancel the push event*/
+    public boolean onCollide(Entity entity){
+        return false;
+    }
 
     public void deflectArrowsAndBullets(Entity ent){
         if (ent instanceof Projectile PE){

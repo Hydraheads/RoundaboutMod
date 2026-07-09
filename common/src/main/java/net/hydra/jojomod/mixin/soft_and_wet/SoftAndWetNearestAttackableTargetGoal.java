@@ -27,7 +27,7 @@ public abstract class SoftAndWetNearestAttackableTargetGoal<T extends LivingEnti
     @Inject(method = "findTarget", at = @At(value = "TAIL"))
     protected void roundabout$findTarget(CallbackInfo ci) {
         if (!(this.target instanceof StandEntity)) {
-            if (((IMob)this.mob).roundabout$getConfusionTicks() <= 0){
+            if (((IMob)this.mob).roundabout$getConfusionTicks() > 0){
                 this.target = null;
                 return;
             }

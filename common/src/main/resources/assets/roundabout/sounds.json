@@ -71,6 +71,12 @@
       "roundabout:ckb_tile"
     ]
   },
+  "chess_piece": {
+    "subtitle": "sounds.roundabout.chess_piece",
+    "sounds": [
+      "roundabout:chess_piece"
+    ]
+  },
   "ice_blast_charge": {
     "subtitle": "sounds.roundabout.ice_blast_charge",
     "sounds": [
