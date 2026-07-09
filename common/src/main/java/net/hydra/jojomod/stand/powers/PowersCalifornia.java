@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.StepRuleEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -929,9 +930,7 @@ public class PowersCalifornia extends NewDashPreset {
             return 8;
         } else if (victim instanceof Witch wt) {
             return 6;
-        } else if (victim instanceof Evoker) {
-            return 9;
-        } else if (victim instanceof AbstractIllager al) {
+        } else if (victim instanceof AbstractIllager al && !(al instanceof AnubisGuardian)) {
             return 5;
         } else if (victim instanceof Villager vg) {
             return 11;
