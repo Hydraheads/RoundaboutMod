@@ -3,6 +3,7 @@ package net.hydra.jojomod.stand.powers;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.gui.GuiGraphics;
@@ -31,12 +32,6 @@ public class PowersOasis extends NewDashPreset {
         return true;
     }
 
-
-
-    @Override
-    public void renderIcons(GuiGraphics context, int x, int y) {
-
-    }
 
     public boolean renderSuit(){
         return (self instanceof Player pl || MainUtil.isHumanoid2(self)) && PowerTypes.hasStandActive(self);
@@ -69,6 +64,40 @@ public class PowersOasis extends NewDashPreset {
         }
         return heyFull;
     }
+
+
+    @Override
+    public void powerActivate(PowerContext context) {
+        switch (context) {
+
+            case SKILL_1_NORMAL -> {
+                //assaultOrFBarrageClient();
+            }
+
+        }
+    }
+
+    @Override
+    public boolean setPowerOther(int move, int lastMove) {
+
+        return true;
+    }
+
+
+
+    @Override
+    public void tickPower() {
+
+    }
+
+
+
+    @Override
+    public void renderIcons(GuiGraphics context, int x, int y) {
+
+    }
+
+
 
 
 
