@@ -81,6 +81,7 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
             return;
         }
 
+
         if (!tag.contains("vicName")) {
             return;
         }
@@ -110,6 +111,19 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
 
         int stealType = tag.getInt("stealType");
 
+        if (stealType == 10) {
+            if (tag.contains("experience", Tag.TAG_INT)) {
+                int xp = tag.getInt("experience");
+
+                if (xp > 0) {
+                    player.giveExperiencePoints(xp);
+
+                    // Destroy the memory piece
+                    stack.shrink(1);
+                    return;
+                }
+            }
+        }
         if (stealType != 12 && stealType != 13) {
             return;
         }
@@ -196,14 +210,16 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
     }
 
     public static ItemStack initializePiece(ItemStack stack, Entity victim, int stealType){
-        if (victim != null){
+        if (victim instanceof LivingEntity livingEntity){
             CompoundTag tag = stack.getOrCreateTag();
             tag.putUUID("victim",victim.getUUID());
             tag.putInt("stealType",stealType);
             tag.putInt("swings",0);
             tag.putBoolean("activated",true);
             tag.putString("vicName", victim.getName().getString());
-            if (stealType == 11 && victim instanceof Villager vg){
+            if (stealType == 10) {
+                tag.putInt("experience",livingEntity.getExperienceReward());
+            } else if (stealType == 11 && victim instanceof Villager vg){
                 GossipContainer gossips = vg.getGossips();
                 Tag gossipTag = gossips.store(NbtOps.INSTANCE);
                 tag.put("StoredGossip", gossipTag);
