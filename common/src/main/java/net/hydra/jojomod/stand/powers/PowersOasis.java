@@ -12,9 +12,11 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -56,6 +58,18 @@ public class PowersOasis extends NewDashPreset {
 
     public boolean fistsOut = false;
 
+    @Override
+    public boolean isWip() {
+        return true;
+    }
+    @Override
+    public Component ifWipListDevStatus(){
+        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.WHITE);
+    }
+    @Override
+    public Component ifWipListDev(){
+        return Component.literal(  "kepich").withStyle(ChatFormatting.WHITE);
+    }
 
 
     public boolean renderSuit(){
@@ -243,7 +257,10 @@ public class PowersOasis extends NewDashPreset {
 
 
 
-
+    @Override
+    public Component getSkinName(byte skinId) {
+        return Component.translatable("skins.roundabout.oasis."+getSkinString(skinId));
+    }
 
     public static String getSkinString(byte skinId) {
         return switch (skinId)
