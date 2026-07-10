@@ -1343,6 +1343,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.setLastHurtByMob(null);
         this.setLastHurtByPlayer(null);
         this.setLastHurtMob(null);
+        if (((LivingEntity)(Object)this) instanceof NeutralMob mb){
+            mb.setPersistentAngerTarget(null);
+        }
         if (((LivingEntity)(Object)this) instanceof Mob mb){
             mb.setTarget(null);
             ((IMob)mb).roundabout$deeplyRemoveTargets();

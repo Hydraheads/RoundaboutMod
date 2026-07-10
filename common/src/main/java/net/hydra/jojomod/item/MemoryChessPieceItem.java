@@ -217,47 +217,51 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
             tag.putInt("swings",0);
             tag.putBoolean("activated",true);
             tag.putString("vicName", victim.getName().getString());
-            if (stealType == 10) {
-                tag.putInt("experience",livingEntity.getExperienceReward());
-            } else if (stealType == 11 && victim instanceof Villager vg){
-                GossipContainer gossips = vg.getGossips();
-                Tag gossipTag = gossips.store(NbtOps.INSTANCE);
-                tag.put("StoredGossip", gossipTag);
-                ((IVillagerAccess)vg).roundabout$clearGossips();
-            } else if (stealType == 12 && victim instanceof Villager vg){
-                Brain<Villager> brain = vg.getBrain();
-                if (brain.hasMemoryValue(MemoryModuleType.JOB_SITE)) {
-                    Optional<GlobalPos> jobSite = brain.getMemory(MemoryModuleType.JOB_SITE);
+            if (stealType == 14) {
+                tag.putLong("Pos", victim.getOnPos().above().asLong());
+                tag.putString("Dimension", victim.level().dimension().location().toString());
+            } else if (stealType == 10) {
+                    tag.putInt("experience",livingEntity.getExperienceReward());
+                } else if (stealType == 11 && victim instanceof Villager vg){
+                    GossipContainer gossips = vg.getGossips();
+                    Tag gossipTag = gossips.store(NbtOps.INSTANCE);
+                    tag.put("StoredGossip", gossipTag);
+                    ((IVillagerAccess)vg).roundabout$clearGossips();
+                } else if (stealType == 12 && victim instanceof Villager vg){
+                    Brain<Villager> brain = vg.getBrain();
+                    if (brain.hasMemoryValue(MemoryModuleType.JOB_SITE)) {
+                        Optional<GlobalPos> jobSite = brain.getMemory(MemoryModuleType.JOB_SITE);
 
-                    if (jobSite.isPresent()) {
-                        // Save the block position
-                        tag.putLong("Pos", jobSite.get().pos().asLong());
+                        if (jobSite.isPresent()) {
+                            // Save the block position
+                            tag.putLong("Pos", jobSite.get().pos().asLong());
 
-                        // Save the dimension
-                        tag.putString("Dimension",
-                                jobSite.get().dimension().location().toString());
+                            // Save the dimension
+                            tag.putString("Dimension",
+                                    jobSite.get().dimension().location().toString());
 
+                        }
                     }
+
+                } else if (stealType == 13 && victim instanceof ServerPlayer pl){
+                    BlockPos spawnPos;
+                    ResourceKey<Level> spawnDimension;
+
+                    if (pl.getRespawnPosition() != null) {
+                        // Player has a bed/respawn anchor
+                        spawnPos = pl.getRespawnPosition();
+                        spawnDimension = pl.getRespawnDimension();
+                    } else {
+                        // Fall back to world spawn
+                        ServerLevel world = pl.serverLevel();
+                        spawnPos = world.getSharedSpawnPos();
+                        spawnDimension = Level.OVERWORLD;
+                    }
+
+                    tag.putLong("Pos", spawnPos.asLong());
+                    tag.putString("Dimension", spawnDimension.location().toString());
                 }
 
-            } else if (stealType == 13 && victim instanceof ServerPlayer pl){
-                BlockPos spawnPos;
-                ResourceKey<Level> spawnDimension;
-
-                if (pl.getRespawnPosition() != null) {
-                    // Player has a bed/respawn anchor
-                    spawnPos = pl.getRespawnPosition();
-                    spawnDimension = pl.getRespawnDimension();
-                } else {
-                    // Fall back to world spawn
-                    ServerLevel world = pl.serverLevel();
-                    spawnPos = world.getSharedSpawnPos();
-                    spawnDimension = Level.OVERWORLD;
-                }
-
-                tag.putLong("Pos", spawnPos.asLong());
-                tag.putString("Dimension", spawnDimension.location().toString());
-            }
         }
         return stack;
     }

@@ -319,8 +319,11 @@ public class PowersCalifornia extends NewDashPreset {
             case SKILL_1_CROUCH -> {
                 tryCatchEnemiesEXP();
             }
-            case SKILL_2_NORMAL,SKILL_2_CROUCH -> {
+            case SKILL_2_NORMAL -> {
                 tryStrategyClient();
+            }
+            case SKILL_2_CROUCH -> {
+                trySaveLocationClient();
             }
             case SKILL_3_NORMAL -> {
                 tryToDashClient();
@@ -358,6 +361,12 @@ public class PowersCalifornia extends NewDashPreset {
                 clearClientList();
                 tryPowerPacket(PowerIndex.POWER_1_SNEAK);
             }
+        }
+    }
+
+    public void trySaveLocationClient(){
+        if (!onCooldown(PowerIndex.SKILL_2_SNEAK)) {
+            tryPowerPacket(PowerIndex.POWER_2_SNEAK);
         }
     }
     @SuppressWarnings("deprecation")
@@ -478,12 +487,16 @@ public class PowersCalifornia extends NewDashPreset {
             setSkillIcon(context, x, y, 1, StandIcons.STEAL_MEMORIES, PowerIndex.SKILL_1);
         }
 
-        if (isDoNotHurt()){
-            setSkillIcon(context, x, y, 2, StandIcons.HURT, PowerIndex.SKILL_2);
-        } else if (isDoNotLeave()){
-            setSkillIcon(context, x, y, 2, StandIcons.LEAVE, PowerIndex.SKILL_EXTRA_2);
+        if (isHoldingSneak()){
+            setSkillIcon(context, x, y, 2, StandIcons.SAVE_LOCATION, PowerIndex.SKILL_2_SNEAK);
         } else {
-            setSkillIcon(context, x, y, 2, StandIcons.FORBID, PowerIndex.SKILL_EXTRA);
+            if (isDoNotHurt()) {
+                setSkillIcon(context, x, y, 2, StandIcons.HURT, PowerIndex.SKILL_2);
+            } else if (isDoNotLeave()) {
+                setSkillIcon(context, x, y, 2, StandIcons.LEAVE, PowerIndex.SKILL_EXTRA_2);
+            } else {
+                setSkillIcon(context, x, y, 2, StandIcons.FORBID, PowerIndex.SKILL_EXTRA);
+            }
         }
 
         if (this.getSelf().fallDistance > 3) {
@@ -823,6 +836,8 @@ public class PowersCalifornia extends NewDashPreset {
             switchRules();
         } else if (move == PowerIndex.POWER_2){
             cowerServer();
+        } else if (move == PowerIndex.POWER_2_SNEAK){
+            saveLocation();
         } else if (move == PowerIndex.POWER_1){
             punishServer(false);
         } else if (move == PowerIndex.POWER_1_SNEAK){
@@ -865,7 +880,7 @@ public class PowersCalifornia extends NewDashPreset {
 
                 if (entity.isAlive()) {
                     entity.setDeltaMovement(0,0.15,0);
-                    ItemStack piece = getPieceType(entity, exp);
+                    ItemStack piece = getPieceType(entity, exp, true, -1);
                     MainUtil.addItem(sp,piece);
                     ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.QUESTION,
                             entity.getEyePosition().x, entity.getEyePosition().y+0.5F, entity.getEyePosition().z,
@@ -884,9 +899,8 @@ public class PowersCalifornia extends NewDashPreset {
         }
     }
 
-    public ItemStack getPieceType(Entity victim,boolean exp){
-        int skin = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-        boolean isWhite = skin == CaliforniaKingBedEntity.SUNSHINE;
+    public ItemStack getPieceType(Entity victim,boolean exp, boolean style, int force){
+        boolean isWhite = !style;
         double rand = Math.random();
         ItemStack stack;
         Item result;
@@ -928,7 +942,11 @@ public class PowersCalifornia extends NewDashPreset {
             }
         }
         stack = new ItemStack(result);
-        return MemoryChessPieceItem.initializePiece(stack,victim,getStealType(victim,exp));
+        int num = force;
+        if (force < 0){
+            num = getStealType(victim,exp);
+        }
+        return MemoryChessPieceItem.initializePiece(stack,victim,num);
     }
 
     public int getStealType(Entity victim, boolean exp){
@@ -1092,6 +1110,19 @@ public class PowersCalifornia extends NewDashPreset {
         }
     }
 
+    public void saveLocation(){
+        if (!onCooldown(PowerIndex.SKILL_2_SNEAK)){
+            if (self instanceof ServerPlayer pl){
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.HEART_SPARKLE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.20f + Math.random() * 0.03f));
+                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.HYPNO_SWIRL,
+        self.getEyePosition().x, self.getEyePosition().y, self.getEyePosition().z,
+        0, 0, 1,0, 0.15);
+                ItemStack piece = getPieceType(self, false, false,14);
+                MainUtil.addItem(pl,piece);
+                setCooldown(PowerIndex.SKILL_2_SNEAK,1200);
+            }
+        }
+    }
     public void cowerServer(){
         if (!onCooldown(PowerIndex.SKILL_2)){
             if (self instanceof ServerPlayer pl){
