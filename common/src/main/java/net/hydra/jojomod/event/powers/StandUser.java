@@ -153,6 +153,8 @@ public interface StandUser {
     void roundabout$setSafeToRemoveLove(boolean safe);
 
     StandPowers roundabout$getStandPowers();
+    boolean rdbt$getExperienceTaken();
+    void rdbt$setExperienceTaken(boolean taken);
 
     void roundabout$setSealedTicks(int ticks);
     void roundabout$setSealedTicks(int ticks, int maxticks);

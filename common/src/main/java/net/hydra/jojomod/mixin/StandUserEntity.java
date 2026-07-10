@@ -356,6 +356,25 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private int roundabout$IdleTime = -1;
 
     @Unique
+    public boolean rdbt$experienceTaken = false;
+    @Unique
+    @Override
+    public boolean rdbt$getExperienceTaken(){
+        return rdbt$experienceTaken;
+    }
+    @Unique
+    @Override
+    public void rdbt$setExperienceTaken(boolean taken){
+        rdbt$experienceTaken = taken;
+    }
+    @Inject(method = "dropExperience", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    public void roundabout$dropExperience(CallbackInfo ci) {
+        if (rdbt$getExperienceTaken()){
+            ci.cancel();
+        }
+    }
+
+    @Unique
     @Override
     public int roundabout$getIdleTime() {
         return this.roundabout$IdleTime;
@@ -2220,6 +2239,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         compoundtag.putByte("bubbleEncased",roundabout$getBubbleEncased());
         compoundtag.putInt("heat",roundabout$getHeat());
+        compoundtag.putBoolean("expTaken",rdbt$getExperienceTaken());
 
         if (rdbt$fleshBudPlanted !=null){
             compoundtag.putUUID("fleshBud", rdbt$fleshBudPlanted);
@@ -2275,6 +2295,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             rdbt$fleshBudPlanted = compoundtag.getUUID("fleshBud");
         }
 
+        rdbt$experienceTaken = rdbt$getExperienceTaken();
         StandPowers powers = roundabout$getStandPowers();
         List<CooldownInstance> CDCopy = new ArrayList<>(rdbt$PowerCooldowns) {
         };

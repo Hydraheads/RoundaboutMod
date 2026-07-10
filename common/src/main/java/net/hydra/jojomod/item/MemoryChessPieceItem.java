@@ -6,11 +6,17 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -19,14 +25,18 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.gossip.GossipContainer;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class MemoryChessPieceItem extends Item implements Vanishable {
@@ -50,22 +60,113 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
         return 72000;
     }
     @Override
-    public void releaseUsing(ItemStack $$0, Level $$1, LivingEntity $$2, int $$3) {
-        if ($$2 instanceof Player $$4) {
-            int $$5 = this.getUseDuration($$0) - $$3;
-            int itemTime = 7;
-            if ($$5 >= itemTime) {
-
-                if (!$$1.isClientSide) {
-                    String comp = $$0.getOrCreateTag().getString("vicName");
-                    if (comp != null && !comp.isBlank()){
-                        $$1.playSound(null, $$4.getX(), $$4.getY(), $$4.getZ(), ModSounds.CINDERELLA_SPARKLE_EVENT, SoundSource.NEUTRAL, 1F, 1F);
-                        $$4.displayClientMessage(Component.translatable("text.roundabout.memory."+
-                                $$0.getOrCreateTag().getInt("stealType")).withStyle(ChatFormatting.AQUA), true);
-                    }
-                }
-            }
+    public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
+        if (!(entity instanceof Player player)) {
+            return;
         }
+
+        int usedTime = this.getUseDuration(stack) - timeLeft;
+        int itemTime = 7;
+
+        if (usedTime < itemTime) {
+            return;
+        }
+
+        if (level.isClientSide || !(level instanceof ServerLevel serverLevel)) {
+            return;
+        }
+
+        CompoundTag tag = stack.getTag();
+        if (tag == null) {
+            return;
+        }
+
+        if (!tag.contains("vicName")) {
+            return;
+        }
+
+        String name = tag.getString("vicName");
+        if (name.isBlank()) {
+            return;
+        }
+
+        level.playSound(
+                null,
+                player.getX(),
+                player.getY(),
+                player.getZ(),
+                ModSounds.CINDERELLA_SPARKLE_EVENT,
+                SoundSource.NEUTRAL,
+                1F,
+                1F
+        );
+
+        player.displayClientMessage(
+                Component.translatable(
+                        "text.roundabout.memory." + tag.getInt("stealType")
+                ).withStyle(ChatFormatting.AQUA),
+                true
+        );
+
+        int stealType = tag.getInt("stealType");
+
+        if (stealType != 12 && stealType != 13) {
+            return;
+        }
+
+        // Check stored position exists
+        if (!tag.contains("Pos") || !tag.contains("Dimension")) {
+            return;
+        }
+
+        String dimensionString = tag.getString("Dimension");
+        if (dimensionString.isBlank()) {
+            return;
+        }
+
+        ResourceLocation dimensionLocation;
+        try {
+            dimensionLocation = new ResourceLocation(dimensionString);
+        } catch (Exception e) {
+            return;
+        }
+
+        ResourceKey<Level> storedDimension = ResourceKey.create(
+                Registries.DIMENSION,
+                dimensionLocation
+        );
+
+        if (!level.dimension().equals(storedDimension)) {
+            return;
+        }
+
+        BlockPos targetPos = BlockPos.of(tag.getLong("Pos"));
+
+        Vec3 start = player.position()
+                .add(0, player.getEyeHeight(), 0);
+
+        Vec3 target = Vec3.atCenterOf(targetPos);
+
+        Vec3 direction = target.subtract(start);
+
+        // Avoid normalize() on zero-length vectors
+        if (direction.lengthSqr() == 0) {
+            return;
+        }
+
+        direction = direction.normalize();
+
+        serverLevel.sendParticles(
+                ParticleTypes.END_ROD,
+                start.x,
+                start.y,
+                start.z,
+                0,
+                direction.x * 0.5,
+                direction.y * 0.5,
+                direction.z * 0.5,
+                1.0
+        );
     }
     @Override
     public UseAnim getUseAnimation(ItemStack $$0) {
@@ -74,17 +175,50 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
 
     public static ItemStack initializePiece(ItemStack stack, Entity victim, int stealType){
         if (victim != null){
-            stack.getOrCreateTag().putUUID("victim",victim.getUUID());
-            stack.getOrCreateTag().putInt("stealType",stealType);
-            stack.getOrCreateTag().putInt("swings",0);
-            stack.getOrCreateTag().putBoolean("activated",true);
-            stack.getOrCreateTag().putString("vicName", victim.getName().getString());
+            CompoundTag tag = stack.getOrCreateTag();
+            tag.putUUID("victim",victim.getUUID());
+            tag.putInt("stealType",stealType);
+            tag.putInt("swings",0);
+            tag.putBoolean("activated",true);
+            tag.putString("vicName", victim.getName().getString());
             if (stealType == 11 && victim instanceof Villager vg){
-                Roundabout.LOGGER.info("1");
                 GossipContainer gossips = vg.getGossips();
                 Tag gossipTag = gossips.store(NbtOps.INSTANCE);
-                stack.getOrCreateTag().put("StoredGossip", gossipTag);
+                tag.put("StoredGossip", gossipTag);
                 ((IVillagerAccess)vg).roundabout$clearGossips();
+            } else if (stealType == 12 && victim instanceof Villager vg){
+                Brain<Villager> brain = vg.getBrain();
+                if (brain.hasMemoryValue(MemoryModuleType.JOB_SITE)) {
+                    Optional<GlobalPos> jobSite = brain.getMemory(MemoryModuleType.JOB_SITE);
+
+                    if (jobSite.isPresent()) {
+                        // Save the block position
+                        tag.putLong("Pos", jobSite.get().pos().asLong());
+
+                        // Save the dimension
+                        tag.putString("Dimension",
+                                jobSite.get().dimension().location().toString());
+
+                    }
+                }
+
+            } else if (stealType == 13 && victim instanceof ServerPlayer pl){
+                BlockPos spawnPos;
+                ResourceKey<Level> spawnDimension;
+
+                if (pl.getRespawnPosition() != null) {
+                    // Player has a bed/respawn anchor
+                    spawnPos = pl.getRespawnPosition();
+                    spawnDimension = pl.getRespawnDimension();
+                } else {
+                    // Fall back to world spawn
+                    ServerLevel world = pl.serverLevel();
+                    spawnPos = world.getSharedSpawnPos();
+                    spawnDimension = Level.OVERWORLD;
+                }
+
+                tag.putLong("Pos", spawnPos.asLong());
+                tag.putString("Dimension", spawnDimension.location().toString());
             }
         }
         return stack;

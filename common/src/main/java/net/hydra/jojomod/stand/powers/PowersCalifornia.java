@@ -35,11 +35,13 @@ import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -49,6 +51,8 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Pufferfish;
@@ -62,6 +66,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -819,7 +824,7 @@ public class PowersCalifornia extends NewDashPreset {
         } else if (move == PowerIndex.POWER_2){
             cowerServer();
         } else if (move == PowerIndex.POWER_1){
-            punishServer();
+            punishServer(false);
         } else if (move == PowerIndex.POWER_1_SNEAK){
             punishServer2();
         } else if (move == PowerIndex.SKILL_EXTRA){
@@ -832,10 +837,10 @@ public class PowersCalifornia extends NewDashPreset {
 
 
     public void punishServer2(){
-        punishServer();
+        punishServer(true);
     }
 
-    public void punishServer(){
+    public void punishServer(boolean exp){
         if (!hurtEntities.isEmpty() && self instanceof ServerPlayer sp) {
             if (rewindSnap != null && snapEntity != null && snapEntity.isAlive()
             && hurtEntities != null && hurtEntities.containsKey(snapEntity)){
@@ -860,7 +865,7 @@ public class PowersCalifornia extends NewDashPreset {
 
                 if (entity.isAlive()) {
                     entity.setDeltaMovement(0,0.15,0);
-                    ItemStack piece = getPieceType(entity);
+                    ItemStack piece = getPieceType(entity, exp);
                     MainUtil.addItem(sp,piece);
                     ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.QUESTION,
                             entity.getEyePosition().x, entity.getEyePosition().y+0.5F, entity.getEyePosition().z,
@@ -879,7 +884,7 @@ public class PowersCalifornia extends NewDashPreset {
         }
     }
 
-    public ItemStack getPieceType(Entity victim){
+    public ItemStack getPieceType(Entity victim,boolean exp){
         int skin = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         boolean isWhite = skin == CaliforniaKingBedEntity.SUNSHINE;
         double rand = Math.random();
@@ -923,12 +928,31 @@ public class PowersCalifornia extends NewDashPreset {
             }
         }
         stack = new ItemStack(result);
-        return MemoryChessPieceItem.initializePiece(stack,victim,getStealType(victim));
+        return MemoryChessPieceItem.initializePiece(stack,victim,getStealType(victim,exp));
     }
 
-    public int getStealType(Entity victim){
+    public int getStealType(Entity victim, boolean exp){
         boolean isMemortaken = false;
         if (victim instanceof LivingEntity LE){
+            if (exp){
+                if (LE instanceof Villager vg){
+                    Brain<Villager> brain = vg.getBrain();
+                    if (brain.hasMemoryValue(MemoryModuleType.JOB_SITE)) {
+                        Optional<GlobalPos> jobSite = brain.getMemory(MemoryModuleType.JOB_SITE);
+                        if (jobSite.isPresent()) {
+                            return 12;
+                        }
+                    }
+                }
+                if (LE instanceof Player pl){
+                    return 13;
+                }
+                if (!((StandUser)LE).rdbt$getExperienceTaken()) {
+                    ((StandUser)LE).rdbt$setExperienceTaken(true);
+                    return 10;
+                }
+            }
+
             ((StandUser)LE).roundabout$deeplyRemoveAttackTarget();
             if (victim instanceof Mob mb){
                 isMemortaken = ((IMob)victim).rdbt$getStolen();
