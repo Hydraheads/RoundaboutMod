@@ -2,16 +2,20 @@ package net.hydra.jojomod.client.models.projectile;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.projectile.PWBigMeteorEntity;
 import net.hydra.jojomod.entity.projectile.PWMeteorEntity;
 import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.ResourceLocation;
 
 public class PWBigMeteorModel <T extends PWBigMeteorEntity> extends HierarchicalModel<T> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "pw_big_meteor"), "main");
     private final ModelPart Fireball;
     private final ModelPart Root;
 
@@ -25,9 +29,12 @@ public class PWBigMeteorModel <T extends PWBigMeteorEntity> extends Hierarchical
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition Fireball = partdefinition.addOrReplaceChild("Fireball", CubeListBuilder.create().texOffs(0, 0).addBox(-1.5F, -2.0F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 2.0F, 0.0F, 0.0F, 0.0F, -3.1416F));
+        PartDefinition meteoroid = partdefinition.addOrReplaceChild("meteoroid", CubeListBuilder.create().texOffs(0, 18).addBox(-4.0F, -7.0F, -4.0F, 7.0F, 7.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.5F, 23.0F, 0.5F));
 
-        return LayerDefinition.create(meshdefinition, 16, 16);
+        PartDefinition layer = meteoroid.addOrReplaceChild("layer", CubeListBuilder.create().texOffs(0, 0).addBox(-5.0F, -8.0F, -5.0F, 9.0F, 9.0F, 9.0F, new CubeDeformation(0.0F))
+                .texOffs(28, 18).addBox(-3.0F, -16.0F, -3.0F, 5.0F, 8.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        return LayerDefinition.create(meshdefinition, 64, 64);
     }
 
     @Override
