@@ -302,6 +302,12 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
             return;
         }
 
+        int stealType = tag.getInt("stealType");
+
+        if (stealType == 14) {
+            return;
+        }
+
         UUID uuid = tag.getUUID("victim");
 
         if (!(player.level() instanceof ServerLevel serverLevel)) {
