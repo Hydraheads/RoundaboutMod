@@ -165,7 +165,29 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
                 direction.x * 0.5,
                 direction.y * 0.5,
                 direction.z * 0.5,
-                1.0
+                1.8
+        );
+        serverLevel.sendParticles(
+                ParticleTypes.END_ROD,
+                start.x,
+                start.y,
+                start.z,
+                0,
+                direction.x * 0.5,
+                direction.y * 0.5,
+                direction.z * 0.5,
+                1.5
+        );
+        serverLevel.sendParticles(
+                ParticleTypes.END_ROD,
+                start.x,
+                start.y,
+                start.z,
+                0,
+                direction.x * 0.5,
+                direction.y * 0.5,
+                direction.z * 0.5,
+                1.2
         );
     }
     @Override
