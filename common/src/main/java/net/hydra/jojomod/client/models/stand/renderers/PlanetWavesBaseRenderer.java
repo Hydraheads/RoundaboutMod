@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 
 public class PlanetWavesBaseRenderer<M extends StandEntity> extends StandRenderer<PlanetWavesEntity> {
 
@@ -69,12 +70,6 @@ public class PlanetWavesBaseRenderer<M extends StandEntity> extends StandRendere
         float factor = 0.5F + (mobEntity.getSizePercent() / 2);
 
         matrixStack.pushPose();
-
-        float rotX = mobEntity.getStandRotationX();
-        if (rotX != 0.0F) {
-            matrixStack.mulPose(com.mojang.math.Axis.XP.rotationDegrees(rotX));
-        }
-
         if (mobEntity.isBaby()) {
             matrixStack.scale(0.5f * factor, 0.5f * factor, 0.5f * factor);
         } else {

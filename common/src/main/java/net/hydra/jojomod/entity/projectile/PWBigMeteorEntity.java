@@ -182,7 +182,9 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
     public void setBigMeteorScale(float scale) {
         this.entityData.set(BIG_METEOR_SCALE, scale);
     }
-
+    public float getMeteorScale() {
+        return this.entityData.get(BIG_METEOR_SCALE);
+    }
     @Override
     public void tick() {
         super.tick();
