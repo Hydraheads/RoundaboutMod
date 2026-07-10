@@ -315,6 +315,10 @@ public class ModSounds {
     public static final String BLACK_SABBATH_SUMMON = "summon_black_sabbath";
     public static final ResourceLocation BLACK_SABBATH_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLACK_SABBATH_SUMMON);
     public static SoundEvent BLACK_SABBATH_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(BLACK_SABBATH_SUMMON_ID);
+    public static final String TURNING_ON_LIGHTER = "lighter_click";
+    public static final ResourceLocation TURNING_ON_LIGHTER_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TURNING_ON_LIGHTER);
+    public static SoundEvent TURNING_ON_LIGHTER_EVENT = SoundEvent.createVariableRangeEvent(TURNING_ON_LIGHTER_ID);
+
 
     public static final String CENTURY_BOY_SUMMON = "century_boy_summon";
     public static final ResourceLocation CENTURY_BOY_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CENTURY_BOY_SUMMON);

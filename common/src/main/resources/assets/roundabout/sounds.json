@@ -515,6 +515,12 @@
       "roundabout:manhattan_vision"
     ]
   },
+  "lighter_click": {
+    "subtitle": "sounds.roundabout.lighter_click",
+    "sounds": [
+      "roundabout:lighter_click"
+    ]
+  },
   "century_boy_summon": {
     "subtitle": "sounds.roundabout.century_boy_summon",
     "sounds": [

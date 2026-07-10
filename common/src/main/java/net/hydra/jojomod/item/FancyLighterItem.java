@@ -5,6 +5,7 @@ import net.hydra.jojomod.block.FancyLighterBlock;
 import net.hydra.jojomod.block.FancyLighterBlockEntity;
 import net.hydra.jojomod.block.FogTrapBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -74,6 +75,8 @@ public class FancyLighterItem extends BlockItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
         ItemStack $$3 = $$1.getItemInHand($$2);
+        $$0.playSound(null, $$1.getX(), $$1.getY(), $$1.getZ(), ModSounds.TURNING_ON_LIGHTER_EVENT, SoundSource.PLAYERS, 1F, (float)(0.96F+Math.random()*0.08f));
+        $$1.getCooldowns().addCooldown(this, 30);
         if($$3.getItem() instanceof FancyLighterItem FI){
             FI.lirOrUnlit($$0, $$1, $$3);
         }

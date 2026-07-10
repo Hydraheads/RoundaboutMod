@@ -774,7 +774,7 @@ public class ModBlocks {
             }));
 
     public static FancyLighterBlock FANCY_LIGHTER_PROPRETIES = new FancyLighterBlock(
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_GRAY).strength(0.01F, 0.01F).sound(SoundType.METAL).pushReaction(PushReaction.DESTROY).lightLevel(litBlockEmission(10)).noOcclusion());
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_GRAY).strength(0.01F, 0.01F).sound(SoundType.METAL).pushReaction(PushReaction.DESTROY).lightLevel(litBlockEmission(10)).noOcclusion().noCollission());
     /*public static ChessBoardBlock CHESSBOARD_BLOCK_PROPERTIES = new ChessBoardBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(0.35F).sound(SoundType.WOOD).pushReaction(PushReaction.DESTROY).lightLevel((L) -> {
                 return 1;
