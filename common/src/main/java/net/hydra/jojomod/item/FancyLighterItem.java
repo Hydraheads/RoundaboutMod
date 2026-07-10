@@ -5,7 +5,9 @@ import net.hydra.jojomod.block.FancyLighterBlock;
 import net.hydra.jojomod.block.FancyLighterBlockEntity;
 import net.hydra.jojomod.block.FogTrapBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -94,8 +96,32 @@ public class FancyLighterItem extends BlockItem {
                 setIsNotLit($$2, true);
             } else {
                 setIsNotLit($$2, false);
+                blackSabbathGetsMad($$0, $$1, $$2);
             }
         }
+    }
+
+    private void blackSabbathGetsMad(Level lv, Player $$0, ItemStack $$1){
+            CompoundTag compoundtag = $$1.getTagElement("UserIdUUID");
+            if(lv instanceof ServerLevel $$8) {
+                if ($$1.getTag() != null) {
+                    if (compoundtag != null) {
+                        if (compoundtag.hasUUID("StuffOther")) {
+                            if(compoundtag.getUUID("StuffOther") != null) {
+                                Entity user = $$8.getEntity(compoundtag.getUUID("StuffOther"));
+                                //FLBE.setValue($$6.getTagElement("UserIdUUID").getUUID("StuffOther"));
+                                // System.out.println(FLBE.getOwner());
+                                if (user != null && $$0 != null) {
+                                    if(user != $$0){
+                                      //  System.out.println("ANGRI STANDOH");
+                                    }
+                                }
+                            }
+                        } else {
+                        }
+                    }
+                }
+            }
     }
 
     public float getCurrentPredicateValue(Level level, ItemStack stack) {
