@@ -54,6 +54,7 @@ public abstract class ConfigManager {
         loadServerConfig();
         loadAdvancedConfig();
         ConfigManager.loadBlacklists();
+        ConfigManager.loadThrownItemDestructionBlacklist();
         loaded = true;
     }
 
@@ -121,6 +122,13 @@ public abstract class ConfigManager {
                 }
             }
         }
+    }
+    public static void loadThrownItemDestructionBlacklist()
+    {
+      if(getAdvancedConfig().unbreakableThrownItems != null){
+          MainUtil.unbreakableThrownItems.clear();
+          MainUtil.unbreakableThrownItems.addAll(getAdvancedConfig().unbreakableThrownItems);
+      }
     }
     public static void loadBlacklists()
     {
@@ -238,11 +246,11 @@ public abstract class ConfigManager {
                 }
             }
         }
-        if (getAdvancedConfig().naturalStandUserMobPoolv6 != null)
+        if (getAdvancedConfig().naturalStandUserMobPoolv7 != null)
         {
             ModItems.STAND_ARROW_POOL_FOR_MOBS.clear();
 
-            for (String disc : getAdvancedConfig().naturalStandUserMobPoolv6)
+            for (String disc : getAdvancedConfig().naturalStandUserMobPoolv7)
             {
                 String[] split = disc.split(":");
 
@@ -294,11 +302,11 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().standArrowSecondaryPoolv5 != null)
+        if (getAdvancedConfig().standArrowSecondaryPoolv6 != null)
         {
             ModItems.STAND_ARROW_SECONDARY_STAND_POOL.clear();
 
-            for (String disc : getAdvancedConfig().standArrowSecondaryPoolv5)
+            for (String disc : getAdvancedConfig().standArrowSecondaryPoolv6)
             {
                 String[] split = disc.split(":");
 
@@ -552,16 +560,14 @@ public abstract class ConfigManager {
     }
     private static void saveClient(ClientConfig config, Path path) {
         try {
-            String parsed = String.join(System.lineSeparator(), ConfigParser.parse(config));
-            Files.write(path, parsed.getBytes());
+            Files.write(path, GSON.toJson(config).getBytes());
         } catch (IOException e) {
             Roundabout.LOGGER.error("Failed to save config", e);
         }
     }
     private static void saveAdvanced(AdvancedConfig config, Path path) {
         try {
-            String parsed = String.join(System.lineSeparator(), ConfigParser.parse(config));
-            Files.write(path, parsed.getBytes());
+            Files.write(path, GSON.toJson(config).getBytes());
         } catch (IOException e) {
             Roundabout.LOGGER.error("Failed to save config", e);
         }

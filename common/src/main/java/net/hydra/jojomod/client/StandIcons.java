@@ -24,6 +24,8 @@ public class StandIcons {
             "textures/gui/move_square2.png");
     public static final ResourceLocation SQUARE_GOLD = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_square_gold.png");
+    public static final ResourceLocation SQUARE_PINK = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/move_square_pink.png");
     public static final ResourceLocation SQUARE_ICON_BLOOD = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_square4.png");
     public static final ResourceLocation NOVELTY_ICON = new ResourceLocation(Roundabout.MOD_ID,
@@ -137,6 +139,8 @@ public class StandIcons {
             "textures/misc/super_hearing.png");
     public static final ResourceLocation RATT_SCOPE_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/ratt_scope.png");
+    public static final ResourceLocation ANTI_XRAY_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/misc/ambient.png");
     public static final ResourceLocation TIME_REWIND = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/time_rewind.png");
     public static final ResourceLocation NO_FACE_LAYER = new ResourceLocation(Roundabout.MOD_ID,
@@ -217,6 +221,24 @@ public class StandIcons {
     public static final ResourceLocation DODGE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/dodge.png");
 
+    public static final ResourceLocation FORBID_RULE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/forbid_rule.png");
+    public static final ResourceLocation HURT_RULE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/hurt_rule.png");
+    public static final ResourceLocation LEAVE_RULE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/leave_rule.png");
+    public static final ResourceLocation FORBID = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/forbid.png");
+    public static final ResourceLocation HURT = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/hurt.png");
+    public static final ResourceLocation LEAVE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/leave.png");
+    public static final ResourceLocation EXPERIENCE_BISHOP = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/experience_bishop.png");
+    public static final ResourceLocation STEAL_MEMORIES = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/steal_memories.png");
+    public static final ResourceLocation STEAL_MEMORIES_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/steal_memories_2.png");
     public static final ResourceLocation VAMP_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/powers/vampire/punch.png");
     public static final ResourceLocation VAMP_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
@@ -505,6 +527,9 @@ public class StandIcons {
     public static final ResourceLocation STAR_PLATINUM_PHASE_GRAB = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/star_platinum/phase_grab.png");
 
+    public static final ResourceLocation CALIFORNIA_FALL_CATCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/fall_brace.png");
+
     public static final ResourceLocation JUSTICE_FOG_SWORD = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/justice/fog_sword.png");
     public static final ResourceLocation JUSTICE_CAST_FOG = new ResourceLocation(Roundabout.MOD_ID,
@@ -562,6 +587,8 @@ public class StandIcons {
     public static final ResourceLocation CINDERELLA_VISAGES = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/cinderella/visages.png");
 
+    public static final ResourceLocation MT_PREMISE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/manhattan_transfer/premise.png");
     public static final ResourceLocation MANUAL_SHOOTING_OFF = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/manhattan_transfer/auto_shooting_off.png");
     public static final ResourceLocation MANUAL_SHOOTING_ON = new ResourceLocation(Roundabout.MOD_ID,

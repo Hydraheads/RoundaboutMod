@@ -66,10 +66,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.*;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 
@@ -496,6 +494,8 @@ public class AbilityScapeBasis {
     public int getAttackTimeDuring(){
         return this.attackTimeDuring;
     }
+    public void onEnderPearlThrow(){
+    }
     public byte getActivePower(){
         return this.activePower;
     }
@@ -791,9 +791,10 @@ public class AbilityScapeBasis {
                         this.setActivePowerPhase((byte) 0);
                     }
                 }
-                if (this.interruptCD > 0) {
-                    this.interruptCD--;
-                }
+            }
+
+            if (this.interruptCD > 0) {
+                this.interruptCD--;
             }
             this.tickDash();
         }
@@ -1161,10 +1162,41 @@ public class AbilityScapeBasis {
         return this.getUserData(entity).roundabout$isDazed();
     }
     public static void setDazed(LivingEntity entity, byte dazeTime){
+        if (entity == null){return;}
         if ((1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)) <= 0.0) {
             /*Warden, iron golems, and anything else knockback immmune can't be dazed**/
             return;
         } else if (MainUtil.isBossMob(entity)){
+            /*Bosses can't be dazed**/
+            return;
+        }
+        StandPowers powers = ((StandUser)entity).roundabout$getStandPowers();
+        if (powers.canWalkThroughDaze()){
+            return;
+        }
+
+        /**Stand Drops item when user is dazed*/
+        StandEntity stand = getStandEntity2(entity);
+        if (stand != null && !stand.getHeldItem().isEmpty()){
+            double $$3 = stand.getEyeY() - 0.3F;
+            ItemEntity $$4 = new ItemEntity(stand.level(), stand.getX(), $$3, stand.getZ(), stand.getHeldItem());
+            $$4.setPickUpDelay(40);
+            $$4.setThrower(stand.getUUID());
+            stand.level().addFreshEntity($$4);
+            stand.setHeldItem(ItemStack.EMPTY);
+        }
+        if (dazeTime > 0){
+            ((StandUser) entity).roundabout$tryPower(PowerIndex.NONE,true);
+            ((StandUser) entity).roundabout$getStandPowers().animateStand(StandEntity.HURT_BY_BARRAGE);
+        } else {
+            ((StandUser) entity).roundabout$getStandPowers().animateStand(StandEntity.IDLE);
+        }
+        ((StandUser) entity).roundabout$setDazed(dazeTime);
+    }
+
+    public static void setDazedTrue(LivingEntity entity, byte dazeTime){
+        if (entity == null){return;}
+        if (MainUtil.isBossMob(entity)){
             /*Bosses can't be dazed**/
             return;
         }
@@ -1765,10 +1797,10 @@ public class AbilityScapeBasis {
         this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.FALL_BRACE_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
     }
     public void playFallBraceImpactParticles(){
-        ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
+        ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.FALLING_DUST, Blocks.WHITE_WOOL.defaultBlockState()),
                 this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
                 50, 1.1, 0.05, 1.1, 0.4);
-        ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
+        ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.FALLING_DUST, Blocks.WHITE_WOOL.defaultBlockState()),
                 this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
                 30, 1, 0.05, 1, 0.4);
     }
@@ -1794,6 +1826,7 @@ public class AbilityScapeBasis {
             cancelConsumableItem(this.getSelf());
             this.setAttackTimeDuring(-15);
             if (!this.getSelf().level().isClientSide()) {
+                //
                 playFallBraceImpactParticles();
                 playFallBraceImpactSounds();
                 int degrees = (int) (this.getSelf().getYRot() % 360);
@@ -1848,6 +1881,11 @@ public class AbilityScapeBasis {
             if (!this.getSelf().level().isClientSide()) {
                 ((IPlayerEntity)this.getSelf()).roundabout$setClientDodgeTime(0);
                 ((IPlayerEntity) this.getSelf()).roundabout$setDodgeTime(0);
+                boolean yes = false;
+                if (storedInt > 500){
+                    storedInt-=1000;
+                    yes = true;
+                }
                 if (storedInt < 0) {
                     ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_BACKWARD);
                 } else {
@@ -1877,6 +1915,13 @@ public class AbilityScapeBasis {
                     if (gravD != Direction.DOWN){
                         cvec = RotationUtil.vecPlayerToWorld(cvec,gravD);
                         dvec = RotationUtil.vecPlayerToWorld(dvec,gravD);
+                    }
+                    if (yes){
+                        this.setCooldown(PowerIndex.GLOBAL_DASH,
+                                ClientNetworking.getAppropriateConfig().generalStandSettings.jumpingDashCooldown);
+                    } else {
+                        this.setCooldown(PowerIndex.GLOBAL_DASH,
+                                ClientNetworking.getAppropriateConfig().generalStandSettings.dashCooldown);
                     }
 
                     ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
@@ -1942,11 +1987,13 @@ public class AbilityScapeBasis {
                         backwards = -3;
                     }
 
+                    int buffer = 0;
                     int cdTime = ClientNetworking.getAppropriateConfig().generalStandSettings.dashCooldown;
                     if (this.getSelf() instanceof Player) {
                         ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(0);
                         if (options.keyJump.isDown()) {
                             cdTime = ClientNetworking.getAppropriateConfig().generalStandSettings.jumpingDashCooldown;
+                            buffer = 1000;
                         }
                     }
                     this.setCooldown(PowerIndex.GLOBAL_DASH, cdTime);
@@ -1956,7 +2003,7 @@ public class AbilityScapeBasis {
                             -Mth.cos(degrees * ((float) Math.PI / 180)));
 
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.MOVEMENT, true);
-                    tryIntPowerPacket(PowerIndex.MOVEMENT, backwards);
+                    tryIntPowerPacket(PowerIndex.MOVEMENT, backwards+buffer);
                 }
             }
         }
@@ -2009,6 +2056,7 @@ public class AbilityScapeBasis {
                         backwards = -3;
                     }
 
+                    int buffer = 1000;
                     int cdTime = ClientNetworking.getAppropriateConfig().generalStandSettings.jumpingDashCooldown;
                     if (this.getSelf() instanceof Player) {
                         ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(0);
@@ -2019,7 +2067,7 @@ public class AbilityScapeBasis {
                             Mth.sin(-20 * ((float) Math.PI / 180)),
                             -Mth.cos(degrees * ((float) Math.PI / 180)));
 
-                    doDashMove(backwards);
+                    doDashMove(backwards+buffer);
                 }
             }
         }
@@ -2160,12 +2208,8 @@ public class AbilityScapeBasis {
         /*First, attempts to hit what you are looking at*/
         if (!(distMax >= 0)) {
             distMax = this.getDistanceOut(User, this.getReach(), false);
+            distMax = Math.min(this.getDistanceOut(User, this.getReach(), false),distMax);
         }
-
-
-
-
-
         Entity targetEntity = this.rayCastEntity(User,distMax);
 
         if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
@@ -2190,6 +2234,15 @@ public class AbilityScapeBasis {
         }
         if (targetEntity instanceof EnderDragonPart EDP){
             targetEntity = EDP.parentMob;
+        }
+
+
+        if (targetEntity != null && distMax > 0){
+            double distSq = targetEntity.getBoundingBox().distanceToSqr(User.position());
+
+            if (distSq > distMax * distMax) {
+                return null;
+            }
         }
 
         return targetEntity;
@@ -2351,6 +2404,12 @@ public class AbilityScapeBasis {
         Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
         HitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
         return blockHit.getLocation();
+    }  public BlockHitResult getRayBlockHit(Entity entity, float range){
+        Vec3 vec3d = entity.getEyePosition(0);
+        Vec3 vec3d2 = entity.getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+        BlockHitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
+        return blockHit;
     }
 
     public float getPivotPoint(Vector3d pointToRotate, Vector3d axisStart, Vector3d axisEnd) {
@@ -2795,7 +2854,7 @@ public class AbilityScapeBasis {
     /**Inflict knockback*/
     public static void takeKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
 
-        if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+        if (entity instanceof LivingEntity && (strength * (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
             return;
         }
         if (MainUtil.isKnockbackImmune(entity)){
@@ -2812,7 +2871,7 @@ public class AbilityScapeBasis {
 
     /**Inflict knockback with push upwards*/
     public static void takeKnockbackUp(Entity entity, double strength) {
-        if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+        if (entity instanceof LivingEntity && (strength * (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
             return;
         }
         if (MainUtil.isKnockbackImmune(entity)){

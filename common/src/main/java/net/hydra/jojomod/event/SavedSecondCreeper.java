@@ -2,6 +2,7 @@ package net.hydra.jojomod.event;
 
 import net.hydra.jojomod.access.ICreeper;
 import net.hydra.jojomod.access.IFoodData;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -17,17 +18,18 @@ import java.util.Collection;
 public class SavedSecondCreeper extends SavedSecondLiving {
 
     public int swell;
-
+    public int heatLevel;
 
     public SavedSecondCreeper(float headYRotation, Vec2 rotationVec, Vec3 position, Vec3 deltaMovement, float fallDistance,
                               ResourceKey<DimensionType> dimensionId, Direction gravityDirection,
                               Collection<MobEffectInstance> activeEffects, float health, int onFireTicks,
                               int onStandFireTicks, byte onStandFireType, int gasolineTicks, int airtime, byte locacaca,
                               int leapTicks, byte bubbleEncased,
-                              int swell) {
+                              int swell, int heatLevel) {
         super(headYRotation, rotationVec, position, deltaMovement, fallDistance, dimensionId, gravityDirection, activeEffects, health, onFireTicks,
-                onStandFireTicks, onStandFireType, gasolineTicks, airtime, locacaca, leapTicks, bubbleEncased);
+                onStandFireTicks, onStandFireType, gasolineTicks, airtime, locacaca, leapTicks, bubbleEncased, heatLevel);
         this.swell = swell;
+        this.heatLevel = heatLevel;
     }
 
     @Override
@@ -37,6 +39,7 @@ public class SavedSecondCreeper extends SavedSecondLiving {
         super.loadTime(ent);
         if (ent instanceof Creeper CE) {
             ((ICreeper)CE).roundabout$setSwell(swell);
+            ((StandUser)CE).roundabout$setHeat(heatLevel);
         }
     }
 }

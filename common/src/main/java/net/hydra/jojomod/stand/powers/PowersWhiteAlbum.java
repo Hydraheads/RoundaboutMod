@@ -54,6 +54,7 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -144,9 +145,16 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (sauce.is(DamageTypes.MOB_ATTACK)){
             damage*=ClientNetworking.getAppropriateConfig().whiteAlbumSettings.mobGuardDamageMultiplierv2;
         }
-        if (sauce.is(ModDamageTypes.BULLET) ||
+
+        if (MainUtil.isStandDamage(sauce)){
+            damage*=2F;
+        }
+        if (sauce.is(ModDamageTypes.BULLET) || sauce.getDirectEntity() instanceof Projectile ||
                 sauce.getEntity() instanceof Blaze){
             damage*=0.5F;
+        }
+        if (sauce.is(DamageTypes.ARROW) && sauce.getEntity() instanceof Player){
+            damage*=0.4F;
         }
         return super.guardSpecialties(sauce,damage);
     }
@@ -181,7 +189,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             onChangedFrozenWater(blockPos,3);
 
             BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
-            int j = 2;
+            int j = 1;
             BlockState blockState = ModBlocks.WHITE_ALBUM_ICE_SLAB.defaultBlockState();
             for (BlockPos blockPos2 : BlockPos.betweenClosed(blockPos.offset(-j, 0, -j), blockPos.offset(j, 0, j))) {
 
@@ -218,7 +226,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (((StandUser)self).roundabout$getStandPowers() instanceof
                 PowersWhiteAlbum PWA &&
                 !(((StandUser)self).roundabout$getGuardBroken())
-                && hasStandActive(self)
+                && (hasStandActive(self) || self instanceof Mob)
         ){
             return true;
         }
@@ -438,13 +446,14 @@ public class PowersWhiteAlbum extends NewDashPreset {
             }
 
             ticklIceEntities();
+            boolean broken = !getStandUserSelf().roundabout$shieldNotDisabled() || getStandUserSelf().roundabout$getGuardBroken();
             if (cracked){
-                if (!getStandUserSelf().roundabout$getGuardBroken()) {
+                if (!broken) {
                     cracked = false;
                     saveDiscAndSync();
                 }
             } else {
-                if (getStandUserSelf().roundabout$getGuardBroken()) {
+                if (broken) {
                     cracked = true;
                     saveDiscAndSync();
                 }
@@ -699,12 +708,14 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public boolean fistsOut = false;
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
+        super.addAdditionalSaveData($$0);
         $$0.putBoolean("skatesActive",skatesActive);
         $$0.putBoolean("cracked",cracked);
         $$0.putBoolean("fistsOut",fistsOut);
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
+        super.readAdditionalSaveData($$0);
         if ($$0.contains("skatesActive")) {
             skatesActive = $$0.getBoolean("skatesActive");
         } if ($$0.contains("cracked")) {
@@ -848,8 +859,12 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
         if (!onCooldown(PowerIndex.SKILL_2)) {
 
-            this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().whiteAlbumSettings.twisterCooldownv2);
-            this.setCooldown(PowerIndex.SKILL_2_SNEAK, 20);
+            if (self instanceof Mob){
+                this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().whiteAlbumSettings.twisterCooldownv2+10);
+            } else {
+                this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().whiteAlbumSettings.twisterCooldownv2);
+            }
+            this.setCooldown(PowerIndex.SKILL_2_SNEAK, 40);
             Level level = self.level();
 
             BlockPos checkPos = pos;
@@ -888,7 +903,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             }
             this.setCooldown(PowerIndex.SKILL_2_SNEAK,
                     ClientNetworking.getAppropriateConfig().whiteAlbumSettings.gentlyWeepsCooldown);
-            this.setCooldown(PowerIndex.SKILL_2, 30);
+            this.setCooldown(PowerIndex.SKILL_2, 40);
 
             Level level = self.level();
             addEXP(3);
@@ -902,8 +917,18 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     public void toggleFistsClient(){
         if (!onCooldown(PowerIndex.SKILL_4) && !isChargingCold()){
+            if (self instanceof Player pl){
+                pl.resetAttackStrengthTicker();
+            }
             this.setCooldown(PowerIndex.SKILL_4, 9);
             tryPowerPacket(PowerIndex.POWER_1_BONUS);
+        }
+    }
+
+    @Override
+    public void onStandSummon(boolean desummon){
+        if (self instanceof Player pl && fistsOut){
+            pl.resetAttackStrengthTicker();
         }
     }
 
@@ -1032,6 +1057,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                                 );
                         wall.setDataFinalPos(newVec.add(0, 2, 0));
                         wall.timing = 200;
+                        wall.tsmove = true;
                         wall.canGrief = MainUtil.getIsGamemodeApproriateForGrief(self);
                         addIceEntity(wall);
                         self.level().addFreshEntity(wall);
@@ -1603,6 +1629,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
+        if (self instanceof Player pl &&  ((IPlayerEntity)pl).roundabout$getAttackStrengthTicker() < 5) {
+            return;
+        }
         if (keyIsDown) {
             if (activePowerPhase == 0){
                 if (isBrawling()) {
@@ -1704,7 +1733,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             if (!MainUtil.canFreeze(entity)){
                 return 0.93F;
             }
-            return 0.7F;
+            return 0.8F;
         } else {
             if (!MainUtil.canFreeze(entity)){
                 return 2.5F;
@@ -1755,7 +1784,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
             addEXP(1,LV);
         }
         if (targ instanceof Player PL){
-            HeatUtil.addHeat(PL,-3);
+            int heat = HeatUtil.getHeat(PL);
+            HeatUtil.addHeat(PL, -3);
         } else if (targ instanceof LivingEntity LE){
             HeatUtil.addHeat(LE,-13);
         }
@@ -1820,7 +1850,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     @Override
     public boolean interceptSuccessfulDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
         if ((hasStandActive(this.getSelf()) && $$0.is(DamageTypes.PLAYER_ATTACK))){
-            addEXP(1,target);
+            addEXP(2,target);
         }
         return false;
     }

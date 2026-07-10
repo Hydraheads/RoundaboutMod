@@ -25,6 +25,9 @@ import org.joml.Vector3f;
 public class StrayCatAirBubbleRenderer extends EntityRenderer<StrayCatAirBubble> {
     private static final ResourceLocation PINK_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/killer_queen/projectiles/pink.png");
     private static final ResourceLocation GREEN_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/killer_queen/projectiles/green.png");
+    private static final ResourceLocation CYAN_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/killer_queen/projectiles/cyan.png");
+    private static final ResourceLocation YELLOW_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/killer_queen/projectiles/yellow.png");
+    private static final ResourceLocation BOMB_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/killer_queen/projectiles/bomb.png");
 
     private final float scale;
 
@@ -40,7 +43,10 @@ public class StrayCatAirBubbleRenderer extends EntityRenderer<StrayCatAirBubble>
 
     @Override
     public void render(StrayCatAirBubble entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
-        if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+
+
+        if (ClientUtil.checkIfClientCanSeeMobsForWindVision()
+            || (ClientUtil.canSeeStands(ClientUtil.getPlayer()) && entity.canSeeBubble(ClientUtil.getPlayer()))) {
             if (((TimeStop)entity.level()).inTimeStopRange(entity)){
                 partialTicks = 0;
             }
@@ -53,8 +59,15 @@ public class StrayCatAirBubbleRenderer extends EntityRenderer<StrayCatAirBubble>
             poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
             poseStack.translate(0, entity.getBbHeight() / 2, 0);
 
+
+            float transparency = 0.4f;
+            if (ClientUtil.checkIfClientCanSeeMobsForWindVision()) {
+                transparency = 1.0f;
+            }
+
+
             // Draw flat quad here
-            VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
+            VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity))).color(1.0f, 1.0f, 1.0f, transparency);
             Matrix4f matrix = poseStack.last().pose();
             Vector3f normal = Minecraft.getInstance().gameRenderer.getMainCamera().getLookVector();
             normal.normalize();
@@ -71,17 +84,13 @@ public class StrayCatAirBubbleRenderer extends EntityRenderer<StrayCatAirBubble>
 
             float scaleIt = 0.3f;
 
+            //float size = (float) Math.min(scaleIt, (((float) entity.tickCount) + partialTicks) * (scaleIt * 0.1)); // Adjust to your needs
+            float size = scaleIt;
 
-            float size = (float) Math.min(scaleIt, (((float) entity.tickCount) + partialTicks) * (scaleIt * 0.1)); // Adjust to your needs
-
-            //vertexConsumer.color(1.0f, 1.0f, 1.0f, 0.7f);
-
-            vertexConsumer.vertex(matrix, -size, -size, 0.0f).color(255, 255, 255, 155).uv(0.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-            vertexConsumer.vertex(matrix, size, -size, 0.0f).color(255, 255, 255, 155).uv(1.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-            vertexConsumer.vertex(matrix, size, size, 0.0f).color(255, 255, 255, 155).uv(1.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-            vertexConsumer.vertex(matrix, -size, size, 0.0f).color(255, 255, 255, 155).uv(0.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-
-
+            vertexConsumer.vertex(matrix, -size, -size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+            vertexConsumer.vertex(matrix, size, -size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+            vertexConsumer.vertex(matrix, size, size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+            vertexConsumer.vertex(matrix, -size, size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
 
             poseStack.popPose();
             super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
@@ -93,8 +102,10 @@ public class StrayCatAirBubbleRenderer extends EntityRenderer<StrayCatAirBubble>
     public ResourceLocation getTextureLocation(StrayCatAirBubble entity) {
 
         return switch (entity.getSkin()) {
-            case 0 -> PINK_BUBBLE;
             case 1 -> GREEN_BUBBLE;
+            case 2 -> CYAN_BUBBLE;
+            case 3 -> YELLOW_BUBBLE;
+            case 4 -> BOMB_BUBBLE;
             default -> PINK_BUBBLE;
         };
     }

@@ -20,6 +20,7 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.FirearmItem;
+import net.hydra.jojomod.item.MemoryChessPieceItem;
 import net.hydra.jojomod.item.WarhammerItem;
 import net.hydra.jojomod.mixin.access.MinecraftAccessor;
 import net.hydra.jojomod.powers.GeneralPowers;
@@ -237,8 +238,14 @@ public abstract class InputEvents implements IInputEvents {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
             ItemStack itemStack = player.getUseItem();
+            ItemStack mainhand = player.getMainHandItem();
 
             if (standComp.roundabout$isPossessed()) {
+                ci.setReturnValue(false);
+                return;
+            }
+            if (mainhand != null && mainhand.getItem() instanceof MemoryChessPieceItem && powers instanceof PowersCalifornia){
+                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.CALIFORNIA_CHESS_HURT);
                 ci.setReturnValue(false);
                 return;
             }
@@ -551,6 +558,7 @@ public abstract class InputEvents implements IInputEvents {
                 }
             }
         }
+
         @Inject(method = "startUseItem", at = @At("TAIL"), cancellable = true)
         public void roundabout$DoItemUse(CallbackInfo ci) {
             if (player != null) {
@@ -643,7 +651,6 @@ public abstract class InputEvents implements IInputEvents {
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     public void roundabout$tickTick(CallbackInfo ci) {
         ClientUtil.tickClientUtilStuff();
-
         if (ClientUtil.getScreenFreeze()) {
             if (player != null && level != null) {
                 boolean canTS = ((TimeStop) level).CanTimeStopEntity(player);
@@ -756,7 +763,7 @@ public abstract class InputEvents implements IInputEvents {
             }
 
             if(powers instanceof PowersGreenDay PGD){
-                if(!PGD.HasMainArm){
+                if(!PGD.HasMainArm && !roundabout$TryGuard()){
                     ci.cancel();
                 }
             }
@@ -1156,9 +1163,11 @@ public abstract class InputEvents implements IInputEvents {
 
                 Poses poseEmote = Poses.getPosFromByte(((IPlayerEntity) player).roundabout$GetPoseEmote());
                 if (poseEmote != Poses.NONE && poseEmote != Poses.VAMPIRE_TRANSFORMATION){
-                    if (options.keyUp.isDown() || options.keyDown.isDown() ||
-                    options.keyLeft.isDown() || options.keyRight.isDown() || options.keyJump.isDown() ||
-                    player.isUsingItem() || player.swinging || player.hurtTime > 0){
+                    if (((options.keyUp.isDown() || options.keyDown.isDown() ||
+                    options.keyLeft.isDown() || options.keyRight.isDown() || options.keyJump.isDown())
+                            && poseEmote != Poses.COWER)
+                            ||
+                    player.isUsingItem() || player.swinging || (player.hurtTime > 0 && poseEmote != Poses.COWER)){
                         ((IPlayerEntity) player).roundabout$SetPos(Poses.NONE.id);
                         C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_STRIKE_POSE,Poses.NONE.id);
                     }
@@ -1252,11 +1261,11 @@ public abstract class InputEvents implements IInputEvents {
                             }
                         } else {
                             if (!roundabout$sameKeyUseOverride(KeyInputRegistry.guardKey)) {
-                                if (this.rightClickDelay == 0 && !this.player.isUsingItem()) {
+                                if (this.rightClickDelay == 0 && !this.player.isUsingItem() && !((StandUser)player).roundabout$getStandPowers().isPiloting()) {
                                     roundabout$startUseOppositeItem();
                                 }
                             } else {
-                                if (this.rightClickDelay == 0 && !this.player.isUsingItem()) {
+                                if (this.rightClickDelay == 0 && !this.player.isUsingItem() && !((StandUser)player).roundabout$getStandPowers().isPiloting()) {
                                     startUseItem();
                                 }
                             }
@@ -1347,42 +1356,44 @@ public abstract class InputEvents implements IInputEvents {
                 }
 
 
-                if (rdbt$isInitialized(player)) {
-                powers.preCheckButtonInputUse(this.options.keyUse.isDown(),this.options);
-                generalPowers.preCheckButtonInputUse(this.options.keyUse.isDown(),this.options);
-                }
+                    if (rdbt$isInitialized(player)) {
+                        powers.preCheckButtonInputUse(this.options.keyUse.isDown(), this.options);
+                        generalPowers.preCheckButtonInputUse(this.options.keyUse.isDown(), this.options);
+                    }
 
-                if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
-                    if (!isMining && !roundabout$activeMining && standComp.roundabout$getInterruptCD()) {
-                        if (rdbt$isInitialized(player) && !((StandUser)player).roundabout$isDazed()) {
-                            powers.preCheckButtonInputAttack(this.options.keyAttack.isDown(), this.options);
+                    if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
+                        if (!isMining && !roundabout$activeMining && standComp.roundabout$getInterruptCD()) {
+                            if (rdbt$isInitialized(player) && !((StandUser) player).roundabout$isDazed()) {
+                                powers.preCheckButtonInputAttack(this.options.keyAttack.isDown(), this.options);
+                            }
                         }
                     }
-                }
 
-                if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
-                    if (!isMining && standComp.roundabout$isGuardInput() && !standComp.roundabout$isBarraging()) {
-                        if (rdbt$isInitialized(player)) {
-                            powers.preCheckButtonInputBarrage(this.options.keyAttack.isDown(), this.options);
+                    if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
+                        if (!isMining && standComp.roundabout$isGuardInput() && !standComp.roundabout$isBarraging()) {
+                            if (rdbt$isInitialized(player)) {
+                                powers.preCheckButtonInputBarrage(this.options.keyAttack.isDown(), this.options);
+                            }
                         }
                     }
-                }
             }
 
 
-            if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
-                if (!isMining && !roundabout$activeMining && generalPowers.getInterruptCD()) {
-                    if (rdbt$isInitialized(player)) {
-                        if (!generalPowers.isBarraging() && !((StandUser)player).roundabout$isDazed()) {
-                            ((IFatePlayer) player).rdbt$getFatePowers().buttonInputAttack(this.options.keyAttack.isDown(), this.options);
-                            generalPowers.preCheckButtonInputAttack(this.options.keyAttack.isDown(), this.options);
+            if (!((TimeStop)player.level()).CanTimeStopEntity(player)) {
+                if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
+                    if (!isMining && !roundabout$activeMining && generalPowers.getInterruptCD()) {
+                        if (rdbt$isInitialized(player)) {
+                            if (!generalPowers.isBarraging() && !((StandUser) player).roundabout$isDazed()) {
+                                ((IFatePlayer) player).rdbt$getFatePowers().buttonInputAttack(this.options.keyAttack.isDown(), this.options);
+                                generalPowers.preCheckButtonInputAttack(this.options.keyAttack.isDown(), this.options);
+                            }
                         }
                     }
-                }
-                if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
-                    if (!isMining && standComp.roundabout$isGuardInput() && !generalPowers.isBarraging()) {
-                        if (rdbt$isInitialized(player)) {
-                            generalPowers.preCheckButtonInputBarrage(this.options.keyAttack.isDown(), this.options);
+                    if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
+                        if (!isMining && standComp.roundabout$isGuardInput() && !generalPowers.isBarraging()) {
+                            if (rdbt$isInitialized(player)) {
+                                generalPowers.preCheckButtonInputBarrage(this.options.keyAttack.isDown(), this.options);
+                            }
                         }
                     }
                 }

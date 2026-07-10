@@ -2,6 +2,8 @@ package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.PenetratableWithProjectile;
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.StepRuleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -18,6 +20,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -37,21 +40,51 @@ import java.util.UUID;
 import org.joml.Vector3f;
 
 public class BlockBombEntity extends StandEntity {
-	
+
 	protected static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(BlockBombEntity .class,
-            EntityDataSerializers.INT);
-	
-	
+			EntityDataSerializers.INT);
+
+
+	public Entity userEntity;
+
 	private BlockPos bombPos;
-	//private BlockEntity blockInfo;
 	private BlockState originalState;
 	private static final int maxTickIndicator = 6;
 	private int tickIndicator = maxTickIndicator;
 	private Vec3 blockSize = new Vec3(1.0f, 1.0f, 1.0f);
-	
+	public int renderFadeIn = 1;
+
 	public BlockBombEntity(EntityType<? extends StandEntity> $$0, Level $$1) {
-		
 		super($$0, $$1);
+	}
+
+	public static final float dimensions = 1F;
+
+	@Override
+	public void push(Entity $$0) {
+	}
+
+	protected MovementEmission getMovementEmission() {
+		return MovementEmission.NONE;
+	}
+
+	public float distanceToClearWhileTicked(){
+		return 0.3f;
+	}
+	private int lerpSteps;
+	private double lerpX;
+	private double lerpY;
+	private double lerpZ;
+
+	public boolean updated = false;
+
+	@Override
+	public void lerpTo(double $$0, double $$1, double $$2, float $$3, float $$4, int $$5, boolean $$6) {
+		this.lerpX = $$0;
+		this.lerpY = $$1;
+		this.lerpZ = $$2;
+		this.setRot($$3, $$4);
+		this.lerpSteps = $$5;
 	}
 	
 	public static AttributeSupplier.Builder createStandAttributes() {
@@ -103,60 +136,29 @@ public class BlockBombEntity extends StandEntity {
 				}
 				this.setYRot(0f);
 				this.setYBodyRot(0);
-            	if (this.tickIndicator > 0 && this.tickIndicator % 2 == 0){   
-	            	Vec3 pos = bombPos.getCenter();
-	            	
-	            	
-	            	((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0.02F, 0.02F, 0.04F), 2.5f),
-	            			pos.x,
-	                        pos.y+1.0f,
-	                        pos.z,
-	                        2, 0, 0, 0, 1.2);
-	            	this.tickIndicator--;
-	            }
             	
             	//this.detectInside();
             }
 		
-        }
-        super.tick();
-    }
-	
-	public Entity detectContact() {
-		Vec3 pos = this.bombPos.getCenter();
-		float skinSize = 0.10f;
+        }else {
+	        if (this.tickIndicator > 0 && this.tickIndicator % 2 == 0) {
+				Vec3 pos = this.getPosition(0).add(0, 0.5f, 0);
 
-		
-		List<Entity> entitiesDetect = MainUtil.genHitbox(this.level(), pos.x(), pos.y(), pos.z(),
-				this.blockSize.x() + skinSize, this.blockSize.y() + skinSize, this.blockSize.z() + skinSize);
-
-		double distRecord = -1.0;
-		Entity blowTarget = null;
-
-		for (Entity entity : entitiesDetect) {
-			if (entity.equals(this.getUser()) || entity.equals(((StandUser)this.getUser()).roundabout$getStand()) || entity.equals(this)
-				|| entity instanceof StandEntity || !(entity instanceof LivingEntity)) {
-				continue;
+				this.level().addAlwaysVisibleParticle(new DustParticleOptions(new Vector3f(0.02F, 0.02F, 0.04F), 2.5f),
+						pos.x,
+						pos.y + 1.0f,
+						pos.z,
+						0, 1.2, 0);
+				this.tickIndicator--;
 			}
-
-
-			double dist = MainUtil.cheapDistanceTo(
-					this.getX(),
-					this.getY(),
-					this.getZ(),
-					entity.getX(),
-					entity.getY(),
-					entity.getZ()
-			);
-
-			if (distRecord == -1 || dist < distRecord) {
-				blowTarget = entity;
-				distRecord = dist;
+			if (this.renderFadeIn < 12) {
+				this.renderFadeIn++;
 			}
 		}
+        super.tick();
+		refreshDimensions();
+    }
 
-		return blowTarget;
-	}
 	
 	public void getBlockSize() {
 		AABB shape;
@@ -185,16 +187,23 @@ public class BlockBombEntity extends StandEntity {
 		}
 		
 	}*/
-	
 
-	
-	
 	@Override
-    protected AABB makeBoundingBox() { return super.makeBoundingBox();}
-	
+	public boolean canAttack(LivingEntity le){
+		super.canAttack(le);
+		return false;
+	}
+	@Override
+	public boolean canBeSeenAsEnemy() {return false; }
+
+	@Override
+	public boolean canBeAffected(MobEffectInstance $$0) {
+		return false;
+	}
+
 	@Override
     public boolean isPickable() { return false;}
-	
+
     @Override
     public boolean isInvulnerable() { return true;}	
 	
@@ -216,16 +225,15 @@ public class BlockBombEntity extends StandEntity {
     @Override
     public boolean canBeHitByProjectile() { return false;}
     
-    @Override
-    public boolean canBeHitByStands() { return false;}
+    //@Override
+    //public boolean canBeHitByStands() { return false;}
     
     @Override
     public boolean mayInteract(Level $$0, BlockPos pos) { return false;}
     
 
-    @Override
-    public boolean forceVisualRotation(){
+    //@Override
+    /*public boolean forceVisualRotation(){
         return true;
-    }
-  
+    }*/
 }

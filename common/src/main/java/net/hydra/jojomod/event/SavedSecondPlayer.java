@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event;
 
 import net.hydra.jojomod.access.IFoodData;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -17,18 +18,20 @@ public class SavedSecondPlayer extends SavedSecondLiving {
     public int foodLevel;
     public float saturationLevel;
     public float exhaustionLevel;
+    public int heatLevel;
 
     public SavedSecondPlayer(float headYRotation, Vec2 rotationVec, Vec3 position, Vec3 deltaMovement, float fallDistance,
                              ResourceKey<DimensionType> dimensionId, Direction gravityDirection,
                              Collection<MobEffectInstance> activeEffects, float health, int onFireTicks,
                              int onStandFireTicks, byte onStandFireType, int gasolineTicks, int airtime, byte locacaca,
                              int leapTicks, byte bubbleEncased,
-                             int foodLevel, float saturationLevel, float exhaustionLevel) {
+                             int foodLevel, float saturationLevel, float exhaustionLevel, int heatLevel) {
         super(headYRotation, rotationVec, position, deltaMovement, fallDistance, dimensionId, gravityDirection, activeEffects, health, onFireTicks,
-                onStandFireTicks, onStandFireType, gasolineTicks, airtime, locacaca, leapTicks, bubbleEncased);
+                onStandFireTicks, onStandFireType, gasolineTicks, airtime, locacaca, leapTicks, bubbleEncased, heatLevel);
         this.foodLevel = foodLevel;
         this.saturationLevel = saturationLevel;
         this.exhaustionLevel = exhaustionLevel;
+        this.heatLevel = heatLevel;
     }
 
     @Override
@@ -41,6 +44,7 @@ public class SavedSecondPlayer extends SavedSecondLiving {
             ifp.roundabout$setExhaustionLevel(this.exhaustionLevel);
             ifp.roundabout$setSaturationLevel(this.saturationLevel);
             ifp.roundabout$setFoodLevel(this.foodLevel);
+            ((StandUser)PE).roundabout$setHeat(heatLevel);
         }
     }
 }

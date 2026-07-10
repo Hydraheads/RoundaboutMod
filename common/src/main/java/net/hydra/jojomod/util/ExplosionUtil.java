@@ -4,9 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import org.joml.Vector3f;
 
 import com.google.common.collect.Lists;
@@ -83,10 +88,15 @@ public class ExplosionUtil {
 
 		DamageSource notSeenDamage =  ModDamageTypes.of(level, DamageTypes.EXPLOSION, null);
 
-		Roundabout.LOGGER.info("Damage on Players: " + damage * playerMult);
-
 		for(int j = 0;j<damages.size();j++) {
 			Entity entity = damages.get(j);
+			if (entity instanceof StandEntity || !entity.isAttackable()) {
+				continue;
+			}
+			if (entity instanceof Player PL && (PL.isCreative() || PL.isSpectator())) {
+				continue;
+			}
+
 			double dist = entity.distanceToSqr(pos);
 			float percUnhand = ((float)dist/ (range * range * range));
 			float perc = 1.0f - (percUnhand*0.75f);
@@ -117,7 +127,6 @@ public class ExplosionUtil {
 			Vec3 knockback = knockbackUnhand.normalize().scale(Math.min(knockBack, percKnockback*knockBack));
 
 			MainUtil.takeLiteralUnresistableKnockbackWithY(entity, knockback.x, knockback.y, knockback.z);
-
 		}
 	}
 
@@ -138,10 +147,10 @@ public class ExplosionUtil {
 
 		for (BlockPos pos : BlockPos.betweenClosed(location.offset(intSize, intSize, intSize), location.offset(-intSize, -intSize, -intSize))) {
 			BlockState info = level.getBlockState(pos);
-			if (isBlockBlackListed(info) || (MainUtil.confirmIsOre(info) && ignoreOres)) {
+			if (isBlockBlackListed(info) || (MainUtil.confirmIsOre(info) && ignoreOres)
+					|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)) {
 				continue;
 			}
-
 
 			// Simulate natural explosions
 			Double explosionDistance = explosionDistanceMax + ((double) level.getRandom().nextIntBetweenInclusive(-intSize * 2, intSize * 2) / 7.5);

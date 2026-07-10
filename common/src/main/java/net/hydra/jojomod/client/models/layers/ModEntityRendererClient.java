@@ -18,6 +18,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation AXOLOTL_MINION_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "axolotl_minion"), "main");
     public static final ModelLayerLocation CHICKEN_MINION_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "chicken_minion"), "main");
 
+    public static final ModelLayerLocation STRAY_CAT_ENTITY_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "stray_cat_entity"), "main");
     public static final ModelLayerLocation ANUBIS_GUARDIAN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "anubis_guardian"), "main");
     public static final ModelLayerLocation THE_WORLD_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "the_world"), "main");
     public static final ModelLayerLocation THE_WORLD_ULTIMATE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "the_world_ultimate"), "main");
@@ -41,7 +42,9 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation KILLER_QUEEN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "soft_and_wet_killer_queen"), "main");
     public static final ModelLayerLocation SOFT_AND_WET_KILLER_QUEEN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "killer_queen"), "main");
     public static final ModelLayerLocation CINDERELLA_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "cinderella"), "main");
+    public static final ModelLayerLocation CALIFORNIA_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "california_king_bed"), "main");
     public static final ModelLayerLocation PLANET_WAVES_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "planet_waves"), "main");
+    public static final ModelLayerLocation PLANET_WAVES_SPARTA_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "planet_waves_sparta"), "main");
     public static final ModelLayerLocation MANHATTAN_TRANSFER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "manhattan_transfer"), "main");
     public static final ModelLayerLocation POLLINATION_TRANSFER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "pollination_transfer"), "main");
     public static final ModelLayerLocation JUSTICE_PIRATE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "justice_pirate"), "main");
@@ -67,6 +70,8 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation CROSSFIRE_FIRESTORM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "crossfire_firestorm"), "main");
     public static final ModelLayerLocation LIFE_DETECTOR = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "life_detector"), "main");
     public static final ModelLayerLocation STAND_FIREBALL_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "stand_fireball"), "main");
+    public static final ModelLayerLocation PW_METEOR_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "pw_meteor"), "main");
+    public static final ModelLayerLocation PW_BIG_METEOR_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "pw_big_meteor"), "main");
     public static final ModelLayerLocation IRON_BALL_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "iron_ball"), "main");
     public static final ModelLayerLocation RIPPER_EYES_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "ripper_eyes"), "main");
     public static final ModelLayerLocation UV_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "uv"), "main");
@@ -86,7 +91,8 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation LEFT_SEPERATED_ARM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "left_seperated_arm"), "main");
     public static final ModelLayerLocation LEFT_SEPERATED_ARM_SLIM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "left_seperated_arm_slim"), "main");
     public static final ModelLayerLocation KILLER_QUEEN_BLOCKBOMB = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "block_bomb"), "main");
-    
+    public static final ModelLayerLocation STEP_RULE = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "step_rule"), "main");
+
     public static final ModelLayerLocation ROAD_ROLLER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "road_roller"), "main");
 
     public static final ModelLayerLocation PAINTING_VAN_GOUGH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "van_gough"), "main");

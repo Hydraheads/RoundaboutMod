@@ -52,7 +52,9 @@ public class ModItems {
     public static Item STAND_DISC_PLANET_WAVES;
     public static Item MAX_STAND_DISC_PLANET_WAVES;
     public static Item STAND_DISC_CINDERELLA;
+    public static Item STAND_DISC_CALIFORNIA_KING_BED;
     public static Item STAND_DISC_MANHATTAN_TRANSFER;
+    public static Item STAND_DISC_BLACK_SABBATH;
     public static Item STAND_DISC_HEY_YA;
     public static Item STAND_DISC_MANDOM;
     public static Item STAND_DISC_SURVIVOR;
@@ -110,6 +112,8 @@ public class ModItems {
 
     public static Item HAIRSPRAY;
 
+    public static Item FANCY_LIGHTER;
+
     public static Item GASOLINE_CAN;
     public static Item GASOLINE_BUCKET;
     public static Item LUCK_SWORD;
@@ -141,6 +145,20 @@ public class ModItems {
     public static Item MUSIC_DISC_TORTURE_DANCE;
     public static Item MUSIC_DISC_HALLELUJAH;
     public static Item LUCKY_LIPSTICK;
+
+    public static Item MEMORY_PAWN;
+    public static Item MEMORY_BISHOP;
+    public static Item MEMORY_KNIGHT;
+    public static Item MEMORY_ROOK;
+    public static Item MEMORY_KING;
+    public static Item MEMORY_QUEEN;
+    public static Item MEMORY_PAWN_WHITE;
+    public static Item MEMORY_BISHOP_WHITE;
+    public static Item MEMORY_KNIGHT_WHITE;
+    public static Item MEMORY_ROOK_WHITE;
+    public static Item MEMORY_KING_WHITE;
+    public static Item MEMORY_QUEEN_WHITE;
+
     public static Item BLANK_MASK;
     public static Item RAT_MASK;
     public static Item MODIFICATION_MASK;
@@ -163,6 +181,7 @@ public class ModItems {
     public static Item MISTA_MASK;
     public static Item GHIACCIO_MASK;
     public static Item JOHNNY_MASK;
+    public static Item JOHNGALLIA_MASK;
     public static Item LUCY_MASK;
     public static Item AESTHETICIAN_MASK_1;
     public static Item AESTHETICIAN_MASK_2;
@@ -251,6 +270,7 @@ public class ModItems {
         addToVisageStore(MISTA_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(GHIACCIO_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(JOTARO_6_MASK,1, characterCostExp, characterCostEmerald);
+        addToVisageStore(JOHNGALLIA_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(GUCCIO_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(JOHNNY_MASK,2, characterCostExp, characterCostEmerald);
         addToVisageStore(LUCY_MASK,2, characterCostExp, characterCostEmerald);

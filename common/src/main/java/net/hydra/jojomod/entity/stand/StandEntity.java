@@ -117,6 +117,12 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         return false;
     }
 
+    /**Prevents stands from getting effects at all*/
+    @Override
+    public boolean canBeAffected(MobEffectInstance $$0){
+        return false;
+    }
+
     public void setUser(LivingEntity StandSet){
         this.User = StandSet;
         int standSetId = -1;

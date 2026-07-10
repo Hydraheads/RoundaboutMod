@@ -2,6 +2,8 @@ package net.hydra.jojomod.mixin.networking;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersCream;
+import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.minecraft.network.protocol.PacketUtils;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.zetalasis.networking.packet.api.IClientNetworking;
@@ -39,6 +41,12 @@ public class ZServerGamePacketListenerImpl implements IClientNetworking {
                 if (((StandUser)this.player).roundabout$getEffectiveCombatMode() || ((StandUser) this.player).roundabout$isPossessed()){
                     ci.cancel();
                 }
+                if(((StandUser)this.player).roundabout$getStandPowers() instanceof PowersGreenDay PGD){
+                    if(!(PGD.HasMainArm && PGD.HasOffHand)){
+                        ci.cancel();
+                    }
+                }
+
         }
     }
 

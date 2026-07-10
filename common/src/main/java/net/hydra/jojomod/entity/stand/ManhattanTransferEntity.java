@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.*;
+import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -25,6 +26,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.*;
@@ -189,23 +191,18 @@ public class ManhattanTransferEntity extends StandEntity {
 
     protected static final EntityDataAccessor<ItemStack> HELD_ITEM_MANHATTAN_FULL = SynchedEntityData.defineId(ManhattanTransferEntity.class,
             EntityDataSerializers.ITEM_STACK);
-
     public final ItemStack getHeldItemManhattanFull() {
         return this.entityData.get(HELD_ITEM_MANHATTAN_FULL);
     }
-
     public final void setHeldItemManhattanFull(ItemStack stack) {
         this.entityData.set(HELD_ITEM_MANHATTAN_FULL, stack);
     }
-
     public int getHattanTarget() {
         return this.entityData.get(MANHATTAN_TARGET);
     }
-
     public void setHattanTarget(int d) {
         this.entityData.set(MANHATTAN_TARGET, d);
     }
-
     protected static final EntityDataAccessor<Integer> MANHATTAN_TARGET = SynchedEntityData.defineId(ManhattanTransferEntity.class,
             EntityDataSerializers.INT);
     public boolean isDesummoning = false;
@@ -215,35 +212,27 @@ public class ManhattanTransferEntity extends StandEntity {
     public boolean isSnubnose = false;
     public float manhattanDamageIncipit = 0;
     public boolean canAcquireHeldItem = false;
-
     public boolean getCanPlace() {
         return false;
     }
-
     public boolean canSnipe() {
         return false;
     }
-
     public float getShotAccuracy() {
         return 0.0F;
     }
-
     public float getBundleAccuracy() {
         return 0.0F;
     }
-
     public float getThrowAngle() {
         return 0.0F;
     }
-
     public float getThrowAngle2() {
         return 0.0F;
     }
-
     public float getThrowAngle3() {
         return 0.0F;
     }
-
     public boolean canOthersLoadMT = ClientNetworking.getAppropriateConfig().manhattanTransferSettings.canOtherMobsLoadManhattanTransfer;
     public int fireTicksPrj = 0;
     public Projectile hattanDeflected = null;
@@ -251,19 +240,16 @@ public class ManhattanTransferEntity extends StandEntity {
     public int setHatAnimDir = 1;
     public float heighHattanPilotNoMov = 0;
     private boolean isKeyEverPressed = false;
-
     int knockbackArrow = 0;
-
+    void setKnockbackArrow(int necessary){knockbackArrow = necessary;}
+    int piercingArrow = 0;
     public StandUser getUserData(LivingEntity User) {
         return ((StandUser) User);
     }
-
     public int DodgeRainTicks = 0;
-
     public void setDodgeRainTicks(int val) {
         DodgeRainTicks = val;
     }
-
     int stupidTicks = 10;
     public int tickInWater = 100;
     int dirPause = 0;
@@ -275,7 +261,6 @@ public class ManhattanTransferEntity extends StandEntity {
     public float manhattanDetectionRange = ClientNetworking.getAppropriateConfig().manhattanTransferSettings.manhattanAutoShootingRange;
 
     /*actual methods*/
-
     @Override
     public boolean hurt(DamageSource source, float amount) {
         Entity direct = source.getDirectEntity();
@@ -306,7 +291,8 @@ public class ManhattanTransferEntity extends StandEntity {
                                         }
                                         this.fireTicksPrj = AA.getRemainingFireTicks();
                                         this.setHeldItemManhattan(ii.copyAndClear());
-                                        knockbackArrow = AA.getKnockback();
+                                        setKnockbackArrow(AA.getKnockback());
+                                        piercingArrow = AA.getPierceLevel();
                                         AA.discard();
                                     } else if (AA instanceof RoundaboutBulletEntity BE) {
                                         hasItem = true;
@@ -327,7 +313,11 @@ public class ManhattanTransferEntity extends StandEntity {
                                     if (!ii.isEmpty()) {
                                         hasItem = true;
                                         success = true;
-                                        this.canAcquireHeldItem = true;
+                                        if(TO.getOwner() instanceof Player) {
+                                            this.canAcquireHeldItem = true;
+                                        } else {
+                                            this.canAcquireHeldItem = false;
+                                        }
                                         this.fireTicksPrj = TO.getRemainingFireTicks();
                                         this.setHeldItemManhattan(ii.copyAndClear());
                                         TO.discard();
@@ -337,10 +327,16 @@ public class ManhattanTransferEntity extends StandEntity {
                             } else {
                                 success = false;
                                 if (direct instanceof AbstractArrow AA) {
-                                    if (AA instanceof IronBallEntity) {
-                                        return this.getUser().hurt(source, amount / 2);
-                                    }
                                     ItemStack ii = ((IAbstractArrowAccess) AA).roundabout$GetPickupItem();
+                                    if (AA instanceof IronBallEntity) {
+                                        IronBallEntity $$7 = new IronBallEntity(this.getUser().level(), this.getUser(), ii);
+                                        $$7.setPos(this.getX(), this.getY() - 0.15, this.getZ());
+                                        $$7.shootFromRotation(this, this.getXRot(), this.getYRot(), -3.0F, 2F, 0.0F);
+                                        $$7.setRemainingFireTicks(this.fireTicksPrj);
+                                        this.level().addFreshEntity($$7);
+                                        $$7.isHattanIronBall = true;
+                                        this.hattanDeflected = $$7;
+                                    }
                                     if (!ii.isEmpty()) {
                                         if (AA.pickup.equals(AbstractArrow.Pickup.ALLOWED)) {
                                             this.setHeldItemManhattanFull(ii.copyAndClear());
@@ -366,7 +362,12 @@ public class ManhattanTransferEntity extends StandEntity {
                                     ItemStack ii = TH.getItem();
                                     if (!ii.isEmpty()) {
                                         this.setHeldItemManhattanFull(ii.copyAndClear());
-                                        hasItemTwo = true;
+                                        if(TH.getOwner() instanceof Player P && !(P.isCreative() || P.isSpectator())) {
+                                            this.canAcquireHeldItem = true;
+                                            hasItemTwo = true;
+                                        } else {
+                                            this.canAcquireHeldItem = false;
+                                        }
                                         TH.discard();
                                     }
                                 }
@@ -449,6 +450,7 @@ public class ManhattanTransferEntity extends StandEntity {
                 $$11.setPos(pos.x, pos.y - 0.15, pos.z);
                 $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3F, getShotAccuracy);
                 $$11.setKnockback(thrower.knockbackArrow);
+                $$11.setPierceLevel((byte)thrower.piercingArrow);
                 $$11.setCritArrow(false);
                 if(thrower.canAcquireHeldItem){
                     $$11.pickup =AbstractArrow.Pickup.ALLOWED;
@@ -460,7 +462,6 @@ public class ManhattanTransferEntity extends StandEntity {
                 ((IAbstractArrowAccess) $$11).roundabout$setHattanDamage(thrower.manhattanDamageIncipit);
                 $$11.setRemainingFireTicks(thrower.fireTicksPrj);
                 thrower.hattanDeflected = $$11;
-                thrower.knockbackArrow = 0;
             } else if (item.getItem() instanceof AmmoItem) {
                 RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity(thrower.getUser().level(), thrower.getUser());
                 $$7.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.5F, getShotAccuracy);
@@ -900,6 +901,7 @@ public class ManhattanTransferEntity extends StandEntity {
         }
     }
 
+    /*This is how it searches the nearest moving target*/
     public void searchTarget() {
         if (this.level() != null) {
             List<LivingEntity> lvent = this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(this.manhattanDetectionRange), (livingEntity) -> {
@@ -909,7 +911,7 @@ public class ManhattanTransferEntity extends StandEntity {
                 List<LivingEntity> targent = new ArrayList<>(lvent);
                 for (LivingEntity value : lvent) {
                     IEntityAndData entityAndData = ((IEntityAndData) value);
-                    if (value instanceof StandEntity || value.is(this.getUser()) || !this.hasLineOfSight(value)) {
+                    if (value instanceof LifeTrackerEntity || value instanceof RoadRollerEntity || value instanceof StandEntity || value.is(this.getUser()) || !this.hasLineOfSight(value)) {
                         targent.remove(value);
                         this.setHattanTarget(0);
                         if (this.getUserData(this.getUser()) != null) {
@@ -919,6 +921,15 @@ public class ManhattanTransferEntity extends StandEntity {
                         }
                     }
                     if (entityAndData.roundabout$getTrueInvisibilityManhattan() < 1 || this.isInWater() || this.isInLava()) {
+                        targent.remove(value);
+                        this.setHattanTarget(0);
+                        if (this.getUserData(this.getUser()) != null) {
+                            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                                PM.targetHattan = null;
+                            }
+                        }
+                    }
+                    if(this.getUser() instanceof Mob M && M.getTarget() != null && !(value.is(M.getTarget()))){
                         targent.remove(value);
                         this.setHattanTarget(0);
                         if (this.getUserData(this.getUser()) != null) {

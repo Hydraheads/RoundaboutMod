@@ -187,6 +187,11 @@ public class PowersMagiciansRed extends NewPunchingStand {
     }
 
 
+    @Override
+    public void onStandSwitch(){
+        clearEverything();
+        super.onStandSwitch();
+    }
 
     @Override
     public void onPowerSwitch(){
@@ -599,7 +604,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                     }
                 } else if (hasSingle){
                     if (canExecuteMoveWithLevel(3)) {
-                        setSkillIcon(context, x, y, 3, StandIcons.HIDDEN_HURRICANE, PowerIndex.SKILL_EXTRA);
+                        setSkillIcon(context, x, y, 3, StandIcons.HIDDEN_HURRICANE, PowerIndex.SKILL_4_SNEAK);
                     } else {
                         setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                     }
@@ -644,7 +649,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                     }
                 } else if (hasSingle){
                     if (canExecuteMoveWithLevel(3)) {
-                        setSkillIcon(context, x, y, 3, StandIcons.HIDDEN_HURRICANE, PowerIndex.SKILL_EXTRA);
+                        setSkillIcon(context, x, y, 3, StandIcons.HIDDEN_HURRICANE, PowerIndex.SKILL_4_SNEAK);
                     } else {
                         setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                     }
@@ -1138,10 +1143,13 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public boolean crossfireVariationClient(){
         boolean hasSingle = isChargingCrossfireSingle() || hasHurricaneSingle();
         if (hasSingle) {
-            if (canExecuteMoveWithLevel(3)) {
-                this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.ankhHiddenCooldown));
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BONUS, true);
-                tryPowerPacket(PowerIndex.POWER_3_BONUS);
+            if (!onCooldown(PowerIndex.SKILL_4_SNEAK)) {
+                if (canExecuteMoveWithLevel(3)) {
+                    this.setCooldown(PowerIndex.SKILL_4_SNEAK, multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.ankhHiddenCooldown));
+                    this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().magiciansRedSettings.ankhSuccessCooldown);
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BONUS, true);
+                    tryPowerPacket(PowerIndex.POWER_3_BONUS);
+                }
             }
             return true;
         }
@@ -2596,9 +2604,11 @@ public class PowersMagiciansRed extends NewPunchingStand {
             this.setAttackTimeDuring(-15);
             this.setActivePower(PowerIndex.POWER_3_BONUS);
             if (!this.self.level().isClientSide()) {
-                this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.ankhHiddenCooldown));
+                this.setCooldown(PowerIndex.SKILL_4_SNEAK, multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.ankhHiddenCooldown));
+                this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().magiciansRedSettings.ankhSuccessCooldown);
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_FLAME_HIT_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
                 GroundHurricaneEntity groundent = new GroundHurricaneEntity(this.getSelf().level(), this.self);
+                groundent.setLifeSpan(240);
                 groundent.setPos(this.self.position());
                 groundent.fireStormCreated = isUsingFirestorm();
                 if (this.hurricane != null){
@@ -2773,6 +2783,14 @@ public class PowersMagiciansRed extends NewPunchingStand {
         this.setCooldown(PowerIndex.SKILL_3,  multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.snapFireAwayCooldown));
         clearEverything();
         return true;
+    }
+
+    @Override
+    public boolean canWalkThroughDaze(){
+        if (hasHurricane()){
+            return true;
+        }
+        return super.canWalkThroughDaze();
     }
 
     public void clearEverything(){
@@ -3377,6 +3395,9 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 /*The last hit in a string has more power and knockback if you commit to it*/
                 pow = getHeavyPunchStrength(entity);
                 knockbackStrength = 0.2F;
+                if (entity instanceof Player){
+                    knockbackStrength = 0.3F;
+                }
                 lasthit = true;
             } else {
                 pow = getPunchStrength(entity);

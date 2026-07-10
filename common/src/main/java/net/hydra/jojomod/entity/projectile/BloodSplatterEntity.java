@@ -103,6 +103,9 @@ public class BloodSplatterEntity extends ThrowableProjectile {
         if (!this.level().isClientSide) {
             if ($$0.getEntity() != null && ownedBy($$0.getEntity()))
                 return;
+            if ($$0.getEntity() instanceof GentlyWeepsEntity gwe){
+                gwe.setBled(true);
+            }
             ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.BLOOD_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
                     15, 0.4, 0.4, 0.25, 0.4);
             SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;

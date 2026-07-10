@@ -14,6 +14,7 @@ import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.TuskAnimations;
+import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ColtRevolverItem;
@@ -127,6 +128,9 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
             boolean mainHandRight = true;
             if (LE instanceof Player player) {
+                if (AnubisLayer.shouldRender(player) != null){
+                    return;
+                }
                 mainHandRight = player.getMainArm() == HumanoidArm.RIGHT;
             }
             if (player.getUseItem().getItem() instanceof SnubnoseRevolverItem) {

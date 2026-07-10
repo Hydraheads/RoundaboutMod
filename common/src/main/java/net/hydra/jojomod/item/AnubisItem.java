@@ -44,6 +44,10 @@ public class AnubisItem extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack $$0, Level $$1, LivingEntity $$2) {
         if ($$2 instanceof Player P) {
+            if (P != null && ((StandUser)P).roundabout$getEffectiveCombatMode()){
+                P.stopUsingItem();
+                return $$0;
+            }
             StandUser SU = (StandUser)P;
             if (!$$1.isClientSide) {
                 P.getCooldowns().addCooldown($$0.getItem(),1200);
@@ -83,6 +87,10 @@ public class AnubisItem extends Item {
     public void onUseTick(Level $$0, LivingEntity $$1, ItemStack $$2, int $$3) {
         if (!$$0.isClientSide()) {
             if ($$1.isUsingItem()) {
+                if ($$1 != null && ((StandUser)$$1).roundabout$getEffectiveCombatMode()){
+                    $$1.stopUsingItem();
+                    return;
+                }
                 if ($$3 % 8 == 0) {
                     ((ServerLevel) $$1.level()).sendParticles(ModParticles.MENACING,
                             $$1.getX(), $$1.getY() + 0.3, $$1.getZ(),
@@ -99,8 +107,11 @@ public class AnubisItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
 
-
         ItemStack $$3 = $$1.getItemInHand($$2);
+        if ($$1 != null && ((StandUser)$$1).roundabout$getEffectiveCombatMode()){
+            return InteractionResultHolder.fail($$3);
+        }
+
         $$1.startUsingItem($$2);
         return InteractionResultHolder.fail($$3);
     }

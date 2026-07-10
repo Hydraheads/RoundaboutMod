@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.projectile;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IProjectileAccess;
+import net.hydra.jojomod.access.ISuperThrownAbstractArrow;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
@@ -93,6 +94,12 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
                                 && !(pj instanceof RoundaboutBulletEntity abe && abe.isHattan)) {
                             IProjectileAccess ipa = (IProjectileAccess) pj;
                             if (!ipa.roundabout$getIsDeflected()) {
+                                if (pj instanceof ThrownObjectEntity ttt){
+                                    ttt.disableThrow();
+                                }
+                                if (pj instanceof AbstractArrow ttt && ((ISuperThrownAbstractArrow)ttt).roundabout$getSuperThrow()){
+                                    ((ISuperThrownAbstractArrow)ttt).roundabout$cancelSuperThrow();
+                                }
                                 ((ServerLevel) this2.level()).sendParticles(ModParticles.ICE_SPARKLE,
                                         pj.getX(),
                                         pj.getY(),
@@ -139,14 +146,23 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
                             if (!getBled() && mob instanceof LivingEntity LE && LE.hasEffect(ModEffects.BLEED)){
                                 setBled(true);
                             }
+                            if (mob.isOnFire()){
+                                mob.setRemainingFireTicks(0);
+                            } if (mob instanceof LivingEntity lv && ((StandUser)lv).roundabout$isOnStandFire()){
+                                ((StandUser)lv).roundabout$setRemainingStandFireTicks(0);
+                            }
                             if (MainUtil.canFreeze(mob)) {
                                 if (this.tickCount > 10) {
                                     if (mob instanceof Player pl) {
-                                        int amt = -2;
-                                        if (this.tickCount > 30) {
-                                            amt = -3;
+                                        if (pl.hurtTime > 0){
+                                            HeatUtil.addHeat(mob, -1);
+                                        } else if (this.tickCount > 50) {
+                                            HeatUtil.addHeat(mob, -3);
+                                        } else if (this.tickCount > 30) {
+                                            HeatUtil.addHeat(mob, -2);
+                                        }else {
+                                            HeatUtil.addHeat(mob, -1);
                                         }
-                                        HeatUtil.addHeat(mob, amt);
                                     } else {
                                         if (this.tickCount > 30) {
                                             HeatUtil.addHeat(mob, -2);

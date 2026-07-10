@@ -59,6 +59,7 @@ public interface StandUser {
     Entity roundabout$getBoundTo();
     void roundabout$setBoundTo(Entity $$0);
     int roundabout$getBoundToID();
+    int rdbt$getBoundType(Entity holder);
 
 
     void rdbt$setFleshBud(UUID bud);
@@ -66,7 +67,6 @@ public interface StandUser {
 
     void roundabout$setBoundToID(int bound);
     boolean roundabout$isStringBound();
-    boolean roundabout$canBeBound(Player $$0);
     void roundabout$dropString();
     void roundabout$tickString();
 
@@ -89,6 +89,8 @@ public interface StandUser {
     ItemStack roundabout$getStandDisc();
     void roundabout$setStandDisc(ItemStack stack);
     void roundabout$updateStandDisc(ItemStack stack);
+    void roundabout$setStandSkinLight(byte skin);
+    void roundabout$setIdlePosLight(byte pos);
     void roundabout$setMetallicaInvisibility(int fade);
     int roundabout$getMetallicaInvisibility();
     void roundabout$setMetalMeter(float amount);
@@ -151,6 +153,8 @@ public interface StandUser {
     void roundabout$setSafeToRemoveLove(boolean safe);
 
     StandPowers roundabout$getStandPowers();
+    boolean rdbt$getExperienceTaken();
+    void rdbt$setExperienceTaken(boolean taken);
 
     void roundabout$setSealedTicks(int ticks);
     void roundabout$setSealedTicks(int ticks, int maxticks);

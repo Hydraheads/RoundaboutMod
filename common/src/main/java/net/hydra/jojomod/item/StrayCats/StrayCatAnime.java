@@ -9,7 +9,7 @@ import net.minecraft.world.level.Level;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class StrayCatAnime extends AbtractStrayCat{
+public class StrayCatAnime extends AbstractStrayCat {
     public StrayCatAnime(Properties $$0) {
         super($$0);
     }

@@ -4,6 +4,7 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
@@ -64,23 +65,37 @@ public class IceTwisterEntity extends WhiteAlbumFreezingEntity {
                     wallBox.inflate(0.1))) {
 
                 if (mob.getBoundingBox().intersects(wallBox)) {
+                    if (mob.isOnFire()){
+                        mob.setRemainingFireTicks(0);
+                    } if ( ((StandUser)mob).roundabout$isOnStandFire()){
+                        ((StandUser)mob).roundabout$setRemainingStandFireTicks(0);
+                    }
                     if (MainUtil.canFreeze(mob)) {
                         if (mob instanceof Player pl){
                             if (this.tickCount%2==0){
-                                HeatUtil.addHeat(mob,-1);
+                                if (HeatUtil.getHeat(pl)> -102) {
+                                    HeatUtil.addHeat(mob, -1);
+                                }
                             }
                         } else {
                             if (this.tickCount%2==0 || HeatUtil.getHeat(mob) > -33) {
-                                HeatUtil.addHeat(mob, -1);
+                                if (HeatUtil.getHeat(mob)> -102) {
+                                    HeatUtil.addHeat(mob, -1);
+                                }
+                            }
+                        }
+                        if (this.tickCount <5){
+                            if (!mob.onGround()){
+                                MainUtil.takeLiteralUnresistableKnockbackWithY(mob,0,-0.5F,0);
                             }
                         }
                     }
                 }
             }
 
-            if (tickCount > 7) {
+            if (tickCount > 6) {
                 int range = 0;
-                if (tickCount > 12) {
+                if (tickCount > 10) {
                     range = 1;
                 }
                 for (int y = 0; y < 3; y++) {

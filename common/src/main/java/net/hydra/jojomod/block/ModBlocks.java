@@ -110,6 +110,7 @@ public class ModBlocks {
     public static Block CEILING_LIGHT;
     public static Block MIRROR;
     public static Block STEREO;
+    public static Block FANCY_LIGHTER_BLOCK;
 
     public static Block MINING_ALERT_BLOCK;
     public static Block BUBBLE_SCAFFOLD;
@@ -173,6 +174,7 @@ public class ModBlocks {
 
     public static BlockEntityType<StandFireBlockEntity> STAND_FIRE_BLOCK_ENTITY;
     public static BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY;
+    public static BlockEntityType<FancyLighterBlockEntity> FANCY_LIGHTER_BLOCK_ENTITY;
     public static BlockEntityType<MirrorBlockEntity> MIRROR_BLOCK_ENTITY;
     public static BlockEntityType<BubbleScaffoldBlockEntity> BUBBLE_SCAFFOLD_BLOCK_ENTITY;
     public static BlockEntityType<InvisiBlockEntity> INVISIBLE_BLOCK_ENTITY;
@@ -605,6 +607,7 @@ public class ModBlocks {
                     .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
                     .strength(1.5F, 1.0F)
                     .sound(SoundType.METAL)
+                    .pushReaction(PushReaction.DESTROY)
                     .forceSolidOn().noCollission().requiresCorrectToolForDrops()
     );
     public static GoddessStatueBlock GODDESS_STATUE_BLOCK_PROPERTIES = new GoddessStatueBlock(
@@ -769,6 +772,9 @@ public class ModBlocks {
             DyeColor.BLACK, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(0.35F).sound(SoundType.STONE).pushReaction(PushReaction.DESTROY).lightLevel((L) -> {
                 return 1;
             }));
+
+    public static FancyLighterBlock FANCY_LIGHTER_PROPRETIES = new FancyLighterBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_GRAY).strength(0.01F, 0.01F).sound(SoundType.METAL).pushReaction(PushReaction.DESTROY).lightLevel(litBlockEmission(10)).noOcclusion());
     /*public static ChessBoardBlock CHESSBOARD_BLOCK_PROPERTIES = new ChessBoardBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(0.35F).sound(SoundType.WOOD).pushReaction(PushReaction.DESTROY).lightLevel((L) -> {
                 return 1;

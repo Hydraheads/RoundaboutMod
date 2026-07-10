@@ -204,6 +204,7 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
                 if (!isReloading(itemStack)) {
                     setReloading(itemStack, true);
                     player.getCooldowns().addCooldown(this, 60);
+                    player.stopUsingItem();
                     ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.REVOLVER_RELOAD, 10, false);
                 }
 

@@ -15,11 +15,13 @@ import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.HeatUtil;
@@ -37,6 +39,8 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -175,6 +179,8 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     }
                 }
 
+                if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy && PowerTypes.hasStandActive(entity) && user.roundabout$getIdlePos() == 0){hideExtraPartsWithSuit = true;}
+
                 ItemStack hand = entity.getMainHandItem();
                 ItemStack offHand = entity.getOffhandItem();
                 if (visage != null && !visage.isEmpty()) {
@@ -274,6 +280,14 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         }
                         if (vd.rendersPlayerSmallBreastPart() && !hideExtraPartsWithSuit) {
                             renderSmallPlayerBreastPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
+                                    r, g, b);
+                        }
+                        if(vd.renderJohngalliaHair() && !hideExtraPartsWithSuit){
+                            renderJohngalliaHairPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
+                                    r, g, b);
+                        }
+                        if(vd.renderJohngalliaTie() && !hideExtraPartsWithSuit){
+                            renderJohngalliaTiePart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
                                     r, g, b);
                         }
                     }
@@ -939,5 +953,21 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ModStrayModels.PlayerSmallChestPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1);
         ClientUtil.popPoseAndCooperate(poseStack,44);
+    }
+    public void renderJohngalliaHairPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                                         float r, float g, float b) {
+        ClientUtil.pushPoseAndCooperate(poseStack,46);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.JohngalliaHairPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, "johngallia");
+        ClientUtil.popPoseAndCooperate(poseStack,46);
+    }
+    public void  renderJohngalliaTiePart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                                         float r, float g, float b) {
+        ClientUtil.pushPoseAndCooperate(poseStack,47);
+        getParentModel().body.translateAndRotate(poseStack);
+        ModStrayModels.JohngalliaTiePart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, "johngallia");
+        ClientUtil.popPoseAndCooperate(poseStack,47);
     }
 }

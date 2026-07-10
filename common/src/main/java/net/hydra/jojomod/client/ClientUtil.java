@@ -1,6 +1,7 @@
 package net.hydra.jojomod.client;
 
 import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -16,6 +17,7 @@ import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerMixingSound;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
+import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -146,6 +148,8 @@ public class ClientUtil {
         return false;
     }
 
+
+    public static boolean isBlocked = false;
 
     public static double getCameradDistance(Entity ent){
         return Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().distanceTo(ent.position());
@@ -837,6 +841,24 @@ public class ClientUtil {
             if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pwa){
                 pwa.acceleration =data;
             }
+        } else if (context == PacketDataIndex.S2C_INT_CKB_ADD) {
+            StandUser user = ((StandUser) player);
+            if (user.roundabout$getStandPowers() instanceof PowersCalifornia ckb){
+                ckb.addToClientList(data);
+            }
+        } else if (context == PacketDataIndex.S2C_INT_CKB_REMOVE) {
+            StandUser user = ((StandUser) player);
+            if (user.roundabout$getStandPowers() instanceof PowersCalifornia ckb){
+                ckb.removeFromClientList(data);
+            }
+        } else if (context == PacketDataIndex.S2C_INT_LEADED) {
+            StandUser user = ((StandUser) player);
+            if (user.roundabout$getStandPowers() instanceof PowersCalifornia ckb){
+                ckb.leadedInt = data;
+            }
+        } else if (context == PacketDataIndex.S2C_INT_LVL_DECREASE) {
+            IPlayerEntity ipe = ((IPlayerEntity) player);
+            ipe.rdbt$setLevelDecreaseTicks(data);
         }
     }
     public static void handleDoubleIntPacketS2C(Player player, int data, int data2, byte context) {
@@ -1184,10 +1206,10 @@ public class ClientUtil {
     }
 
     public static boolean isPlayer(Entity PE){
-        if (PE != null){
+        if (PE instanceof Player){
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null) {
-                return PE.is(player);
+                return PE.is(player) || PE.getUUID() == player.getUUID();
             }
         }
         return false;
@@ -1564,7 +1586,6 @@ public class ClientUtil {
     public void pauseGame(boolean $$0) {
     }
 
-
     /**A generalized packet for sending bytes to the client. Only a context is provided.*/
     public static void handleBundlePacketS2C(LocalPlayer player, byte context, byte byte1, byte byte2){
         if (context == PacketDataIndex.S2C_BUNDLE_POWER_INV){
@@ -1885,20 +1906,45 @@ public class ClientUtil {
 
     }
 
+    protected static Vec3 getLeashOffset2(Entity ent) {
+        return new Vec3((double)0.0F, (double)ent.getEyeHeight()*0.8F, (double)(ent.getBbWidth() * 0.4F));
+    }
+    protected static Vec3 getLeashOffset3(Entity ent) {
+        return new Vec3((double)0.0F, (double)ent.getEyeHeight()*1.1F, (double)(ent.getBbWidth() * 0.4F));
+    }
+    public static Vec3 getRopeHoldPosition2(Entity ent, float $$0) {
+        return ent.getEyePosition($$0).subtract(ent.getPosition($$0)).scale(0.78F).add(ent.getPosition($$0));
+    }
+
     // Red Bind rendering
-    @Unique
     public static void roundabout$renderBound(LivingEntity victim, float delta, PoseStack poseStack, MultiBufferSource mb, Entity binder, float focus) {
         poseStack.pushPose();
+        int getBindType = 0;
+        if (victim != null){
+            getBindType = ((StandUser)victim).rdbt$getBoundType(binder);
+        }
+        boolean isMr = getBindType == 2;
+        boolean isCKB = getBindType == 1;
+
         Vec3 vec3 = binder.getRopeHoldPosition(delta);
-        if (binder instanceof LivingEntity lv){
-            StandUser su = ((StandUser)lv);
-            StandEntity stand = su.roundabout$getStand();
-            if (stand != null){
-                vec3 = stand.getRopeHoldPosition(delta);
+        if (isMr){
+            if (binder instanceof LivingEntity lv){
+                StandUser su = ((StandUser)lv);
+                StandEntity stand = su.roundabout$getStand();
+                if (stand != null){
+                    vec3 = stand.getRopeHoldPosition(delta);
+                }
             }
+        } else if (isCKB){
+            vec3 = getRopeHoldPosition2(binder,delta);
         }
         double d0 = (double)(Mth.lerp(delta, victim.yBodyRotO, victim.yBodyRot) * ((float)Math.PI / 180F)) + (Math.PI / 2D);
-        Vec3 vec31 = victim.getLeashOffset(delta);
+        Vec3 vec31;
+        if (isCKB){
+            vec31 = getLeashOffset2(victim);
+        } else  {
+            vec31 = victim.getLeashOffset(delta);
+        }
         double d1 = Math.cos(d0) * vec31.z + Math.sin(d0) * vec31.x;
         double d2 = Math.sin(d0) * vec31.z - Math.cos(d0) * vec31.x;
         double d3 = Mth.lerp((double)delta, victim.xo, victim.getX()) + d1;
@@ -1929,11 +1975,13 @@ public class ClientUtil {
         int l = victim.level().getBrightness(LightLayer.SKY, blockpos1);
 
         for(int i1 = 0; i1 <= 24; ++i1) {
-            roundabout$addVertexPair(binder, vertexconsumer, matrix4f, f, f1, f2, i, j, k, l, 0.025F, 0.025F, f5, f6, i1, false,focus);
+            roundabout$addVertexPair(binder, vertexconsumer, matrix4f, f, f1, f2, i, j, k, l, 0.025F,
+                    0.025F, f5, f6, i1, false,focus, getBindType);
         }
 
         for(int j1 = 24; j1 >= 0; --j1) {
-            roundabout$addVertexPair(binder, vertexconsumer, matrix4f, f, f1, f2, i, j, k, l, 0.025F, 0.0F, f5, f6, j1, true,focus);
+            roundabout$addVertexPair(binder, vertexconsumer, matrix4f, f, f1, f2, i, j, k, l, 0.025F,
+                    0.0F, f5, f6, j1, true,focus,getBindType);
         }
 
         poseStack.popPose();
@@ -1942,18 +1990,26 @@ public class ClientUtil {
         return $$0.isOnFire() ? 15 : $$0.level().getBrightness(LightLayer.BLOCK, $$1);
     }
 
-    public static void roundabout$addVertexPair(Entity binder, VertexConsumer p_174308_, Matrix4f p_254405_, float p_174310_, float p_174311_, float p_174312_, int p_174313_, int p_174314_, int p_174315_, int p_174316_, float p_174317_, float p_174318_, float p_174319_, float p_174320_, int p_174321_, boolean p_174322_, float focus) {
+    public static void roundabout$addVertexPair(Entity binder, VertexConsumer p_174308_, Matrix4f p_254405_, float p_174310_, float p_174311_, float p_174312_, int p_174313_, int p_174314_, int p_174315_, int p_174316_, float p_174317_, float p_174318_, float p_174319_, float p_174320_, int p_174321_, boolean p_174322_, float focus,
+                                                int getBindType) {
+        boolean isMr = getBindType == 2;
+        boolean isCKB = getBindType == 1;
         float f = (float)p_174321_ / 24.0F;
         int i = (int)Mth.lerp(f, (float)p_174313_, (float)p_174314_);
         int j = (int)Mth.lerp(f, (float)p_174315_, (float)p_174316_);
         int k = LightTexture.pack(i, j);
         int tc = binder.tickCount % 9;
-        float f1 = 0.7F + (float)(Math.random()*0.3);
-        if (tc > 5) {
-            f1*=0.92F;
-        }
-        if (tc > 2) {
-            f1*=0.84F;
+        float f1 = 1f;
+        if (isMr) {
+            f1 = 0.7F + (float) (Math.random() * 0.3);
+            if (tc > 5) {
+                f1 *= 0.92F;
+            }
+            if (tc > 2) {
+                f1 *= 0.84F;
+            }
+        } else if (isCKB) {
+            f1 = 0.9F + (float) (Math.random() * 0.1f);
         }
         Vec3 color = roundabout$getBindColor(binder);
         float f2 = (float) (color.x() * f1);
@@ -1963,8 +2019,15 @@ public class ClientUtil {
         float f6 = p_174311_ > 0.0F ? p_174311_ * f * f : p_174311_ - p_174311_ * (1.0F - f) * (1.0F - f);
         float f7 = p_174312_ * f;
         float width = 0.05F;
-        p_174308_.vertex(p_254405_, f5 - p_174319_ - width, f6 + p_174318_ + width - focus, f7 + p_174320_ + width).color(f2, f3, f4, 1.0F).uv2(k).endVertex();
-        p_174308_.vertex(p_254405_, f5 + p_174319_ + width, f6 + p_174317_ - p_174318_ - width - focus, f7 - p_174320_ - width).color(f2, f3, f4, 1.0F).uv2(k).endVertex();
+        float alpha = 1;
+        if (isCKB){
+            alpha = 0.3F;
+            width = 0.003F;
+        }
+        RenderSystem.enableBlend();
+        p_174308_.vertex(p_254405_, f5 - p_174319_ - width, f6 + p_174318_ + width - focus, f7 + p_174320_ + width).color(f2, f3, f4, alpha).uv2(k).endVertex();
+        RenderSystem.enableBlend();
+        p_174308_.vertex(p_254405_, f5 + p_174319_ + width, f6 + p_174317_ - p_174318_ - width - focus, f7 - p_174320_ - width).color(f2, f3, f4, alpha).uv2(k).endVertex();
     }
 
     public static Vec3 roundabout$getBindColor(Entity binder) {
@@ -1981,6 +2044,8 @@ public class ClientUtil {
             } else if (sft == StandFireType.CREAM.id){
                 return new Vec3(0.949F,0.945F,0.718F);
             }
+        } else if (binder instanceof LivingEntity LE && ((StandUser)binder).roundabout$getStandPowers() instanceof PowersCalifornia){
+            return new Vec3(0.992F,0.843F,1F);
         }
         return new Vec3(0.969F,0.569F,0.102F);
     }
@@ -2019,10 +2084,14 @@ public class ClientUtil {
 
     public static boolean forceEntityRendering(Entity entity){
         if (entity instanceof Player pl){
-            if (((StandUser)pl).roundabout$hasStandOut()){
+            if (((IPlayerEntity)pl).roundabout$GetPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE){
                 return true;
             }
-            if (((IPlayerEntity)pl).roundabout$GetPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE){
+        } if (entity instanceof LivingEntity LE){
+            StandUser su = ((StandUser)LE);
+            if (su.roundabout$hasStandOut()){
+                return true;
+            } else if (su.roundabout$getBoundTo() != null){
                 return true;
             }
         }

@@ -2,13 +2,11 @@ package net.hydra.jojomod.mixin.piloting;
 
 import net.hydra.jojomod.access.ICamera;
 import net.hydra.jojomod.access.IEntityAndData;
-import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.RotationAnimation;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.minecraft.client.Camera;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;

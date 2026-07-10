@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StoneMaskBlock;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -180,6 +181,18 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Override
     public int rdbt$getZombieFish(){
         return rdbt$zombieFish;
+    }
+
+    @Inject(
+            method = "isPushedByFluid",
+            at = @At("HEAD"),
+            cancellable = true, require = 0
+    )
+    private void roundabout$isPushedByFluid(CallbackInfoReturnable<Boolean> cir) {
+        if (((StandUser)this).roundabout$getStandPowers() instanceof PowersWalkingHeart PW
+                && PW.hasExtendedHeelsForWalking()){
+            cir.setReturnValue(false);
+        }
     }
 
     //0.00392156862
@@ -481,6 +494,27 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         return inventory;
     }
 
+
+    @Unique
+    public int rdbt$levelDecreaseTicks = 0;
+    @Unique
+    @Override
+    public void rdbt$setLevelDecreaseTicks(int decreaseTicks){
+        rdbt$levelDecreaseTicks = decreaseTicks;
+        if (!level().isClientSide()){
+            S2CPacketUtil.sendGenericIntToClientPacket(
+                    ((Player) (Object)this),
+                    PacketDataIndex.S2C_INT_LVL_DECREASE,
+                    decreaseTicks
+            );
+        }
+    }
+    @Unique
+    @Override
+    public int rdbt$getLevelDecreaseTicks(){
+        return rdbt$levelDecreaseTicks;
+    }
+
     /**Keep track of unique player animations like floating passive anims like dodging or posing*/
     public void roundabout$SetPos(byte Pos){
         ((Player) (Object) this).getEntityData().set(ROUNDABOUT$POS, Pos);
@@ -495,7 +529,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$POS_2);
     }
     public void roundabout$SetPoseEmote(byte Pos){
+                byte posEmote = ((Player) (Object) this).getEntityData().get(ROUNDABOUT$POSE_EMOTE);
         ((Player) (Object) this).getEntityData().set(ROUNDABOUT$POSE_EMOTE, Pos);
+        ((StandUser)this).roundabout$getStandPowers().onPoseEmoteSwitch(posEmote,Pos);
     }
     public byte roundabout$GetPoseEmote(){
         return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$POSE_EMOTE);
@@ -759,6 +795,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     @Override
     @Unique
+    public int roundabout$getAttackStrengthTicker(){
+        return attackStrengthTicker;
+    }
+    @Override
+    @Unique
     public void roundabout$setIsControlling(int pilot){
         ((Player) (Object) this).getEntityData().set(ROUNDABOUT$IS_CONTROLLING, pilot);
     }
@@ -897,6 +938,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
     @Inject(method = "actuallyHurt(Lnet/minecraft/world/damagesource/DamageSource;F)V", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$actuallyHurt(DamageSource $$0, float $$1, CallbackInfo ci) {
+        StandUser userthis = ((StandUser)this);
         if (!this.isInvulnerableTo($$0) && $$1 > 0) {
 
 
@@ -927,13 +969,15 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             }
 
 
-            Entity bound = ((StandUser)this).roundabout$getBoundTo();
+            Entity bound = userthis.roundabout$getBoundTo();
             if (bound != null && !$$0.isIndirect() && !$$0.is(ModDamageTypes.STAND_FIRE)){
-                ((StandUser)this).roundabout$dropString();
+                if (userthis.rdbt$getBoundType(bound) == 2) {
+                    userthis.roundabout$dropString();
+                }
             }
         }
 
-        if (((StandUser)this).roundabout$mutualActuallyHurt($$0,$$1)){
+        if (userthis.roundabout$mutualActuallyHurt($$0,$$1)){
             ci.cancel();
         }
     }
@@ -1021,6 +1065,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
 
     @Unique
+    private byte rdbt$lastAnimation = 0;
+    @Unique
     public void roundabout$setupAnimationStates() {
         if (roundabout$GetPos2() == PlayerPosIndex.BARRAGE) {
             this.roundabout$barrageArms.startIfStopped(this.tickCount);
@@ -1029,11 +1075,13 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
 
 
-        if (this.roundabout$GetPoseEmote() != Poses.NONE.id) {
+        byte posEmote = this.roundabout$GetPoseEmote();
+        if (posEmote != Poses.NONE.id) {
             this.getStyleAnimation().startIfStopped(this.tickCount);
         } else {
             this.getStyleAnimation().stop();
         }
+        rdbt$lastAnimation = this.roundabout$GetPoseEmote();
     }
 
     /**Break free from stand grab*/
@@ -1627,8 +1675,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$Tick(CallbackInfo ci) {
+        if (rdbt$levelDecreaseTicks > 0){
+            rdbt$levelDecreaseTicks--;
+        }
         if (this.level().isClientSide()) {
-            if (FateTypes.isVampire(this)){
+            if (FateTypes.isVampire(this) && ClientUtil.isPlayer(this)){
                 if (rdbt$getVampireData().vampireLevel == -1){
                     rdbt$getVampireData().vampireLevel = 0;
                     C2SPacketUtil.trySingleBytePacket(PacketDataIndex.QUERY_VAMPIRE_UPDATE);
@@ -1638,7 +1689,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             roundabout$setupAnimationStates();
 
 
-            if (!rdbt$getCooldownQuery()){
+            if (!rdbt$getCooldownQuery() && ClientUtil.isPlayer(this)){
                 if (!rdbt$attemptedQuery){
                     rdbt$attemptedQuery = true;
                     C2SPacketUtil.handShakeCooldownPacket();
@@ -1733,6 +1784,18 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     public void roundabout$setVoiceData(VoiceData vd) {
         roundabout$voiceData = vd;
+    }
+    @Override
+    @Unique
+    public void rdbt$onSyncedDataUpdated(EntityDataAccessor<?> $$0){
+        if ($$0.equals(ROUNDABOUT$POSE_EMOTE)){
+            byte posEmote = this.roundabout$GetPoseEmote();
+            if (posEmote != Poses.NONE.id) {
+                this.getStyleAnimation().start(this.tickCount);
+            } else {
+                this.getStyleAnimation().stop();
+            }
+        }
     }
     @Override
     @Unique
@@ -1891,6 +1954,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
     @Shadow
     public abstract FoodData getFoodData();
+
+    @Shadow
+    public abstract void resetAttackStrengthTicker();
 
     @Inject(method = "killedEntity", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$hasLineOfSight(ServerLevel $$0, LivingEntity $$1, CallbackInfoReturnable<Boolean> cir) {

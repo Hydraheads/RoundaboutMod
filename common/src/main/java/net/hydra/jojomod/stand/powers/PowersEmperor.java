@@ -215,7 +215,7 @@ public class PowersEmperor extends NewDashPreset {
         PA.controlMode = true;
         PA.autoMode = false;
 
-        ((StandUser)entity).roundabout$setStandSkin((byte) 1);
+        standSkin = 1;
         return PA;
     }
 

@@ -6,8 +6,10 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.visages.CloneEntity;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaskItem;
+import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.minecraft.client.model.HumanoidModel;
@@ -52,6 +54,12 @@ public abstract class VisageHumanoidArmorLayer<T extends LivingEntity, M extends
         }
 
         if (((StandUser)$$3).roundabout$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet() &&
+                !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)
+        ){
+            ci.cancel();
+            return;
+        }
+        if (((StandUser)$$3).roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PowerTypes.hasStandActive($$3) && ((StandUser) $$3).roundabout$getIdlePos() != 1 &&
                 !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)
         ){
             ci.cancel();

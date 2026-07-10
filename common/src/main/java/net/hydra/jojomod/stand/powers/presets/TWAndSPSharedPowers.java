@@ -378,11 +378,14 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
         if (hasBlock() || hasEntity())
             return;
+        boolean exTS = canExecuteMoveWithLevel(getTSLevel());
+        boolean exImpTS = canExecuteMoveWithLevel(getImpulseTSLevel());
+        if (!exTS && !exImpTS)
+            return;
 
         if (!this.onCooldown(PowerIndex.SKILL_4) || (((Player)this.getSelf()).isCreative() && ClientNetworking.getAppropriateConfig().timeStopSettings.creativeModeInfiniteTimeStop)) {
             if ((((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) || !this.isAttackInept(this.getActivePower()))) {
-                boolean exTS = canExecuteMoveWithLevel(getTSLevel());
-                boolean exImpTS = canExecuteMoveWithLevel(getImpulseTSLevel());
+
                 boolean sendPacket = false;
                 if (this.isStoppingTime()) {
                     KeyInputs.roundaboutClickCount = 2;
@@ -754,7 +757,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
 
             if (isBarrageAttacking() && !this.self.level().isClientSide()){
-                if (ClientNetworking.getAppropriateConfig().griefSettings.SuperBlockDestructionBarragePunches){
+                if (ClientNetworking.getAppropriateConfig().griefSettings.SuperBlockDestructionBarragePunches && !forwardBarrage){
 
                     Vec3 vec3d = this.self.getEyePosition(0);
                     Vec3 vec3d2 = this.self.getViewVector(0);

@@ -1698,6 +1698,7 @@ public class PowersTusk extends NewDashPreset {
 
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
+        super.addAdditionalSaveData($$0);
         $$0.putFloat("nailColorX",this.getNailColor().x);
         $$0.putFloat("nailColorY",this.getNailColor().y);
         $$0.putFloat("nailColorZ",this.getNailColor().z);
@@ -1706,6 +1707,7 @@ public class PowersTusk extends NewDashPreset {
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
+        super.readAdditionalSaveData($$0);
         if ($$0.contains("nailColorX")) {
             this.setNailColor(
                     $$0.getFloat("nailColorX"),

@@ -18,6 +18,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -195,11 +196,19 @@ public class PowersManhattanTransfer extends NewDashPreset {
             return super.setPowerOther(move, lastMove);
     }
 
+    @Override
+    /**The stand is named on the disc so we just use that*/
+    public Component getStandName(){
+        ItemStack disc = ((StandUser)this.getSelf()).roundabout$getStandDisc();
+        if (!disc.isEmpty() && disc.getItem() instanceof StandDiscItem SDI){
+            return Component.translatable(SDI.getDescriptionId() + ".desc.short");
+        }
+        return Component.empty();
+    }
+
     public void switchShooting(){
-        if(!isPiloting()) {
             this.tryPower(PowerIndex.POWER_1, true);
             tryPowerPacket(PowerIndex.POWER_1);
-        }
     }
 
     public boolean switchShootingOther(){
@@ -211,9 +220,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
-        if (slot == 1 && isPiloting()){
-            return true;
-        }
         if(slot == 3 && this.currentHattanStatus == LOADED_HATTAN && isPiloting()){
             return  true;
         }
@@ -287,7 +293,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
     @Override
     public void pilotInputAttack(){
         LivingEntity ent = getPilotingStand();
-        if (ent != null && switchShootingMode()) {
+        if (ent != null) {
             tryPower(PowersManhattanTransfer.DEFLECT_PROJECTILE, true);
             tryPowerPacket(PowersManhattanTransfer.DEFLECT_PROJECTILE);
 
@@ -363,8 +369,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
         }
     }
 
-    public boolean isSoundRainInterrupted = false;
-
     public int visionTicks = -1;
 
     @Override
@@ -378,22 +382,20 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 if(this.someTicks > 0){
                     someTicks--;
                 }
+            } else {
+                this.setSomeTicks(5);
             }
         }
 
         if (this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME) {
             if (ME.isInRain()) {
-                if (isSoundRainInterrupted) {
-                    isSoundRainInterrupted = false;
-                }
                 if (ME.DodgeRainTicks >= 1) {
                     ME.DodgeRainTicks--;
-                } else if (ME.DodgeRainTicks < 1) {
+                } else {
                     ME.setDodgeRainTicks(440);
-                    ((StandUser) ME).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.MANHATTAN_RAIN, 12, false);
+                    ((StandUser) ME).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.MANHATTAN_RAIN, 100, false);
                 }
-            }
-            if (!ME.isInRain()) {
+            } else {
                 ME.setDodgeRainTicks(0);
                 ((StandUser) ME).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 100, false);
             }
@@ -807,19 +809,21 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.manual_shooting",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.manhattan_premise",
+                "instruction.roundabout.passive", StandIcons.MT_PREMISE, 1, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.manual_shooting",
                 "instruction.roundabout.press_skill", StandIcons.MANUAL_SHOOTING_OFF, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.control_mode",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.control_mode",
                 "instruction.roundabout.press_skill", StandIcons.CONTROL_MODE_ON, 2, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE, 3, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.wind_vision",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.wind_vision",
                 "instruction.roundabout.press_skill", StandIcons.WIND_VISION_ON, 4, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.wind_reading",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.wind_reading",
                 "instruction.roundabout.passive_manhattan",  StandIcons.WIND_READING, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.bonus_damage",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.bonus_damage",
                 "instruction.roundabout.passive",  StandIcons.MANHATTAN_DAMAGE_BOOST, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.manhattan_dodge",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0, "ability.roundabout.manhattan_dodge",
                 "instruction.roundabout.press_skill",  StandIcons.MANHATTAN_DODGE, 3, level, bypass));
         return $$1;
     }
@@ -866,18 +870,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
             }
         }
     }
-    @Override
-    public boolean isWip(){
-        return true;
-    }
-    @Override
-    public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.RED);
-    }
-    @Override
-    public Component ifWipListDev(){
-        return Component.literal(  "14Kacper").withStyle(ChatFormatting.DARK_RED);
-    }
 
     private int mobShootArrow = 80;
     private int ticksOnFireBlaze = this.self instanceof Blaze || this.self instanceof  Ghast ? 100 : 0;
@@ -902,6 +894,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                                     if (ME.hasLineOfSight(this.targetHattan)) {
                                         if (this.getSelf() instanceof SnowGolem) {
                                             Snowball $$7 = new Snowball(ME.getUser().level(), ME.getUser());
+                                            $$7.setOwner(this.getSelf());
                                             $$7.setPos(ME.getX(), ME.getY() - 0.15, ME.getZ());
                                             $$7.setItem($$7.getItem());
                                             $$7.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, -3.0F, 2F, 0.0F);
@@ -909,6 +902,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                                             ME.hattanDeflected = $$7;
                                         } else {
                                             Arrow $$11 = new Arrow(this.getSelf().level(), ME.getX(), ME.getY(), ME.getZ());
+                                            $$11.setOwner(this.getSelf());
                                             $$11.setPos(ME.getX(), ME.getY() - 0.15, ME.getZ());
                                             $$11.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, 0.0F, 2.5F, 0.0F);
                                             $$11.pickup = AbstractArrow.Pickup.DISALLOWED;

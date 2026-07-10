@@ -209,6 +209,7 @@ public class JackalRifleItem extends FirearmItem implements Vanishable {
                 if (!isReloading(itemStack)) {
                     setReloading(itemStack, true);
                     player.getCooldowns().addCooldown(this, 20);
+                    player.stopUsingItem();
                     ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.SNIPER_RELOAD, 10, false);
                 }
 

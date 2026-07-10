@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -36,6 +37,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -51,8 +54,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -103,6 +108,11 @@ public abstract class HudRendering implements IHudAccess {
 
 
         if (this.minecraft.player != null) {
+
+            if (ClientUtil.isBlocked){
+                RenderSystem.enableBlend();
+                this.renderTextureOverlay($$1, StandIcons.ANTI_XRAY_OVERLAY, 1F);
+            }
             float tsdelta = ClientUtil.getDelta();
             tsdelta = tsdelta % 1;
 
@@ -277,6 +287,29 @@ public abstract class HudRendering implements IHudAccess {
         StandHudRender.renderStandHud($$1, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), roundabout$flashAlpha, roundabout$otherFlashAlpha);
 
         RenderSystem.enableBlend();
+    }
+
+    private void rdbt$renderTex(TextureAtlasSprite $$0, PoseStack $$1) {
+        RenderSystem.setShaderTexture(0, $$0.atlasLocation());
+        RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
+        BufferBuilder $$2 = Tesselator.getInstance().getBuilder();
+        float $$3 = 0.1F;
+        float $$4 = -1.0F;
+        float $$5 = 1.0F;
+        float $$6 = -1.0F;
+        float $$7 = 1.0F;
+        float $$8 = -0.5F;
+        float $$9 = $$0.getU0();
+        float $$10 = $$0.getU1();
+        float $$11 = $$0.getV0();
+        float $$12 = $$0.getV1();
+        Matrix4f $$13 = $$1.last().pose();
+        $$2.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX);
+        $$2.vertex($$13, -1.0F, -1.0F, -0.5F).color(0.1F, 0.1F, 0.1F, 1.0F).uv($$10, $$12).endVertex();
+        $$2.vertex($$13, 1.0F, -1.0F, -0.5F).color(0.1F, 0.1F, 0.1F, 1.0F).uv($$9, $$12).endVertex();
+        $$2.vertex($$13, 1.0F, 1.0F, -0.5F).color(0.1F, 0.1F, 0.1F, 1.0F).uv($$9, $$11).endVertex();
+        $$2.vertex($$13, -1.0F, 1.0F, -0.5F).color(0.1F, 0.1F, 0.1F, 1.0F).uv($$10, $$11).endVertex();
+        BufferUploader.drawWithShader($$2.end());
     }
 
     @Inject(method = "renderTextureOverlay", at = @At(value = "HEAD"), cancellable = true)

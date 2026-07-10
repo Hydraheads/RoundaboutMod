@@ -95,6 +95,9 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     @Inject(method = "renderRightHand", at = @At(value = "TAIL"))
     public void roundabout$renderRightHand(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, AbstractClientPlayer player, CallbackInfo ci) {
 
+        if (AnubisLayer.shouldRender(player) != null){
+            return;
+        }
         byte curse = ((StandUser) player).roundabout$getLocacacaCurse();
         float delta = ClientUtil.getDelta();
         if (((TimeStop) player.level()).CanTimeStopEntity(player)) {
@@ -357,6 +360,9 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         if (SU.roundabout$getStandPowers() instanceof PowersTusk && PowerTypes.isUsingStand($$3)) {
             arm = $$3.getMainArm();
         }
+       if (SU.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.invincibleState) {
+           arm = $$3.getMainArm();
+       }
 
         if (arm == HumanoidArm.RIGHT) {
             this.getModel().rightArm.visible = false;
@@ -495,6 +501,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         boolean shouldRenderArms = true; // make this an AbilityScapeBasis thing at some point idk
         StandUser standUser = (StandUser) acl;
         if (AnubisLayer.shouldRender(acl) != null) {shouldRenderArms = false;}
+        if (standUser.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.invincibleState){shouldRenderArms = false;}
         if (standUser.roundabout$getStandPowers() instanceof PowersTusk && PowerTypes.isUsingStand(acl)) {shouldRenderArms = false;}
 
         if ( (ClientUtil.getThrowFadeToTheEther() != 1 || ClientUtil.hasChangedArms(acl)) && shouldRenderArms ){

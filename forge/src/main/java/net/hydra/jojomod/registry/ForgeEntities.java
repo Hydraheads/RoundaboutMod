@@ -1,11 +1,9 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.entity.BlockWallEntity;
-import net.hydra.jojomod.entity.FogCloneEntity;
-import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.Zombiefish;
+import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
+import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
@@ -386,11 +384,23 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "cinderella").toString())
             );
+    public static final RegistryObject<EntityType<CaliforniaKingBedEntity>> CALIFORNIA_KING_BED =
+            ENTITY_TYPES.register("california_king_bed", () ->
+                    EntityType.Builder.of(CaliforniaKingBedEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "california_king_bed").toString())
+            );
     public static final RegistryObject<EntityType<PlanetWavesEntity>> PLANET_WAVES =
             ENTITY_TYPES.register("planet_waves", () ->
                     EntityType.Builder.of(PlanetWavesEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "planet_waves").toString())
+            );
+    public static final RegistryObject<EntityType<PlanetWavesSpartaEntity>> PLANET_WAVES_SPARTA =
+            ENTITY_TYPES.register("planet_waves_sparta", () ->
+                    EntityType.Builder.of(PlanetWavesSpartaEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "planet_waves_sparta").toString())
             );
 
     public static final RegistryObject<EntityType<PWMeteorEntity>> PW_METEOR =
@@ -409,7 +419,7 @@ public class ForgeEntities {
     public static final RegistryObject<EntityType<ManhattanTransferEntity>> MANHATTAN_TRANSFER =
             ENTITY_TYPES.register("manhattan_transfer", () ->
                     EntityType.Builder.of(ManhattanTransferEntity::new, MobCategory.MISC).sized(0.70F, 0.60f).
-                            clientTrackingRange(14).
+                            clientTrackingRange(20).
                             build(new ResourceLocation(Roundabout.MOD_ID, "manhattan_transfer").toString())
             );
 
@@ -487,6 +497,22 @@ public class ForgeEntities {
                             clientTrackingRange(10)
                             .updateInterval(1).
                             build(new ResourceLocation(Roundabout.MOD_ID, "block_wall").toString())
+            );
+    public static final RegistryObject<EntityType<StepRuleEntity>> STEP_RULE =
+            ENTITY_TYPES.register("step_rule", () ->
+                    EntityType.Builder.<StepRuleEntity>of(StepRuleEntity::new, MobCategory.MISC)
+                            .sized(StepRuleEntity.dimensions, StepRuleEntity.dimensions).
+                            clientTrackingRange(10)
+                            .updateInterval(1).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "step_rule").toString())
+            );
+    public static final RegistryObject<EntityType<StrayCatEntity>> STRAY_CAT =
+            ENTITY_TYPES.register("stray_cat_entity", () ->
+                    EntityType.Builder.<StrayCatEntity>of(StrayCatEntity::new, MobCategory.MISC)
+                            .sized(0.7f, 0.7f).
+                            clientTrackingRange(10)
+                            .updateInterval(1).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "stray_cat_entity").toString())
             );
     public static final RegistryObject<EntityType<MetallicaKnifeEntity>> METALLICA_KNIFE =
             ENTITY_TYPES.register("metallica_knife", () ->

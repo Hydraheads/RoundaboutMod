@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
+import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
@@ -62,7 +63,9 @@ public class ModEntities {
     public static EntityType<BlockBombEntity> BLOCK_BOMB;
     public static EntityType<SheerHeartAttackEntity> SHEER_HEART_ATTACK;
     public static EntityType<CinderellaEntity> CINDERELLA;
+    public static EntityType<CaliforniaKingBedEntity> CALIFORNIA_KING_BED;
     public static EntityType<PlanetWavesEntity> PLANET_WAVES;
+    public static EntityType<PlanetWavesSpartaEntity> PLANET_WAVES_SPARTA;
     public static EntityType<ManhattanTransferEntity> MANHATTAN_TRANSFER;
     public static EntityType<PollinationTransferEntity> POLLINATION_TRANSFER;
     public static EntityType<WalkingHeartEntity> WALKING_HEART;
@@ -164,7 +167,9 @@ public class ModEntities {
     public static EntityType<FallenCreeper> FALLEN_CREEPER;
 
     public static EntityType<BlockWallEntity> BLOCK_WALL;
+    public static EntityType<StepRuleEntity> STEP_RULE;
 
+    public static EntityType<StrayCatEntity> STRAY_CAT;
 
     public static final ResourceLocation HARPOON_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_harpoon.png");
     public static final ResourceLocation SNUBNOSE_IN_HAND_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/item/snubnose_revolver.png");

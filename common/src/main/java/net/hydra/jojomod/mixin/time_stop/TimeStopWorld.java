@@ -6,6 +6,8 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IBlockEntityAccess;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.BlockWallEntity;
+import net.hydra.jojomod.entity.StepRuleEntity;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.projectile.GoBeyondEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
@@ -345,7 +347,9 @@ public class TimeStopWorld implements TimeStop {
             return false;
         } else if (entity instanceof Warden && ClientNetworking.getAppropriateConfig().timeStopSettings.wardenMovesInStoppedTime) {
             return false;
-        } else if (entity instanceof GoBeyondEntity) {
+        } else if (entity instanceof GoBeyondEntity || entity instanceof StepRuleEntity) {
+            return false;
+        } else if (entity instanceof BlockWallEntity bw && bw.tsmove) {
             return false;
         } else if  (!(entity instanceof LivingEntity) && entity.getFirstPassenger() != null &&
                 entity.getFirstPassenger() instanceof LivingEntity && this.isTimeStoppingEntity((LivingEntity) entity.getFirstPassenger())){

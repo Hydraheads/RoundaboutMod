@@ -74,17 +74,18 @@ public class PacketDataIndex {
     public static final byte QUERY_VAMPIRE_UPDATE = 35;
     public static final byte SINGLE_BYTE_LEFT_POWERS = 36;
     public static final byte SINGLE_BYTE_RIGHT_POWERS = 37;
-    public static final byte FIX_COOLDOWN_FOR_SERVER = 38;
     public static final byte RELOAD_GUN = 39;
+    public static final byte CALIFORNIA_CHESS_HURT = 40;
+    public static final byte FIX_COOLDOWN_FOR_SERVER = 50;
 
     /**Byte packets*/
     public static final byte BYTE_CHANGE_MORPH = 6;
     public static final byte BYTE_STRIKE_POSE = 7;
-    public static final byte BYTE_UPDATE_COOLDOWN = 8;
     public static final byte BYTE_SUMMON_CORPSE = 9;
     public static final byte BYTE_CORPSE_TACTICS = 10;
     public static final byte BYTE_RESPAWN_STRATEGY = 11;
     public static final byte BYTE_SWITCH_POWERS = 12;
+    public static final byte BYTE_UPDATE_COOLDOWN = 51;
 
     /**S2C Simple packets*/
     public static final byte S2C_SIMPLE_GENERATE_POWERS = 1;
@@ -117,6 +118,10 @@ public class PacketDataIndex {
     public static final byte S2C_INT_RIPPER_EYES = 19;
     public static final byte S2C_INT_RESET_ACCELERATION = 20;
     public static final byte S2C_INT_MAX_SEAL = 21;
+    public static final byte S2C_INT_CKB_ADD = 22;
+    public static final byte S2C_INT_CKB_REMOVE = 23;
+    public static final byte S2C_INT_LEADED = 24;
+    public static final byte S2C_INT_LVL_DECREASE = 25;
 
 
     /**S2C BUNDLE packets*/

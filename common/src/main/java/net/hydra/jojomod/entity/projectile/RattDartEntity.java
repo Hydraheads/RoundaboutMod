@@ -359,7 +359,7 @@ public class RattDartEntity extends AbstractArrow {
         float degrees = MainUtil.getLookAtEntityYaw(this, $$1);
         float force = 0.6F;
         if (this.getShotType() == CHARGED) {
-            force = 1.9F;
+            force = 1.8F;
         }
 
 

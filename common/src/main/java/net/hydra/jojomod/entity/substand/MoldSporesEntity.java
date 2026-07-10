@@ -39,6 +39,7 @@ import java.util.Objects;
 public class MoldSporesEntity extends StandEntity {
     public float range = ClientNetworking.getAppropriateConfig().greenDaySettings.moldDefaultRange;
     public int lifetime = 600;
+    public int lifetime_add = 150;
     public MoldSporesEntity(EntityType<? extends StandEntity> $$0, Level $$1) {
         super($$0, $$1);
     }
@@ -62,7 +63,6 @@ public class MoldSporesEntity extends StandEntity {
         if (!client) {
 
             if (user == null) {
-                spawnAtLocation(this.getMainHandItem());
                 this.discard();
             }
             if (this.getDeltaMovement().y > 0.2){
@@ -71,8 +71,11 @@ public class MoldSporesEntity extends StandEntity {
                 this.setDeltaMovement(0, -0.2, 0);
             }
             if (!onGround()) {
-                range += 0.09 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldGrowthRate / 100);
+                range += (float) (0.09 * ((double) ClientNetworking.getAppropriateConfig().greenDaySettings.moldGrowthRate / 100));
                 //this.setDeltaMovement(0,-0.4,0);
+            }
+            if(range > ClientNetworking.getAppropriateConfig().greenDaySettings.moldMaxSize){
+                range = ClientNetworking.getAppropriateConfig().greenDaySettings.moldMaxSize;
             }
             tickeffect();
             ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST,
@@ -96,7 +99,6 @@ public class MoldSporesEntity extends StandEntity {
     }
 
     public void tickeffect(){
-        Roundabout.LOGGER.info(Float.toString(this.range));
         List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),range * 2,range * 2,range * 2);
         for(int j = 0;j<damages.size();j++) {
             if (Objects.nonNull(this.getUser())) {
@@ -138,14 +140,17 @@ public class MoldSporesEntity extends StandEntity {
                             //     lifetime += 200;
                             //     range += 4;
                             //}
-                            if (entity instanceof Player) {
+                            if (MainUtil.getReducedDamage(entity)) {
                                 entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), 4 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGPlayersMultiplier / 100F));
                             } else {
                                 entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), 8 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGMobsMultiplier / 100F));
                             }
                             if(!entity.isAlive()){
                                 range += 4;
-                                lifetime += 150;
+                                if(lifetime_add > 0) {
+                                    lifetime += lifetime_add;
+                                    lifetime_add -= 10;
+                                }
                                 entity.discard();
                             }
                             if(Math.random()<0.2) {

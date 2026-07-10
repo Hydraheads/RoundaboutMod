@@ -5,6 +5,7 @@ import net.hydra.jojomod.client.models.projectile.PWMeteorModel;
 import net.hydra.jojomod.entity.FireProjectile;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.UnburnableProjectile;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -171,6 +172,8 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
     public boolean isBundle = false;
     public int saneAgeTicking;
     public int inWaterTicks = 0;
+    private Vec3 spawnPosition = null;
+    private static final double MAX_TRAVEL_DISTANCE = 200.0;
 
     public void tickWater() {
         inWaterTicks++;
@@ -202,7 +205,31 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
     public void tick() {
         super.tick();
 
+
+        Vec3 vel = this.getDeltaMovement();
+        if (vel.lengthSqr() > 1.0E-7) {
+            float newYaw   = (float) (Mth.atan2(vel.x, vel.z) * (180F / Math.PI));
+            float newPitch = -(float) (Mth.atan2(vel.y, Math.sqrt(vel.x * vel.x + vel.z * vel.z)) * (180F / Math.PI));
+
+            this.setYRot(newYaw);
+            this.setXRot(newPitch);
+
+            if (this.tickCount <= 1) {
+                this.yRotO = newYaw;
+                this.xRotO = newPitch;
+            }
+        }
+
         if (this.level().isClientSide()) return;
+        if (spawnPosition == null) {
+            spawnPosition = this.position();
+        } else {
+            double traveled = spawnPosition.distanceTo(this.position());
+            if (traveled >= MAX_TRAVEL_DISTANCE) {
+                this.discard();
+                return;
+            }
+        }
         if (this.isEffectivelyInWater()) {
             tickWater();
         } else {
@@ -239,7 +266,7 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
                     force = towardUser.scale(0.35);
                 } else {
                     force = towardUser.scale((double) (ClientNetworking.getAppropriateConfig()
-                                    .PlanetWavesSettings.meteorTrackingPower) /200);// mientras mas grande mas targeting fuerte
+                            .PlanetWavesSettings.meteorTrackingPower) /200);// mientras mas grande mas targeting fuerte
 
 
                     if (velocity.y < 0) {
@@ -402,12 +429,13 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
         }
 
         if (!missedPlayer) {
-            BlockPos pos = hit.getBlockPos();
-            BlockState state = this.level().getBlockState(pos);
-            if (state.getBlock() instanceof net.minecraft.world.level.block.AbstractGlassBlock) {
-                this.level().destroyBlock(pos, true);
+            if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
+                BlockPos pos = hit.getBlockPos();
+                BlockState state = this.level().getBlockState(pos);
+                if (state.getBlock() instanceof net.minecraft.world.level.block.AbstractGlassBlock) {
+                    this.level().destroyBlock(pos, true);
+                }
             }
-
             checkEntityCollisionThroughBlock();
             return;
         }

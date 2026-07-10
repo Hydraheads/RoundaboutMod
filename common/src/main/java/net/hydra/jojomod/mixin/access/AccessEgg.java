@@ -70,14 +70,15 @@ public abstract class AccessEgg extends ThrowableItemProjectile {
                         ci.cancel();
                         if(ci.isCancelled()) {
                             ME.setHeldItemManhattanFull(ii.copyAndClear());
-                            if (this.getOwner() == null || this.getOwner() instanceof Player) {
+                            if (this.getOwner() instanceof Player P && !(P.isSpectator() || P.isCreative())) {
                                 ME.canAcquireHeldItem = true;
+                                ME.hasItemTwo = true;
+                                ME.itemEject();
+                                this.discard();
                             } else {
                                 ME.canAcquireHeldItem = false;
+                                this.discard();
                             }
-                            ME.hasItemTwo = true;
-                            ME.itemEject();
-                            this.discard();
                         }
                     }
                 }

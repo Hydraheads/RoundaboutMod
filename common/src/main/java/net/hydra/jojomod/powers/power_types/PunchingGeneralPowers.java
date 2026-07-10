@@ -1,5 +1,6 @@
 package net.hydra.jojomod.powers.power_types;
 
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.corpses.FallenMob;
@@ -47,6 +48,9 @@ public class PunchingGeneralPowers extends GeneralPowers {
         return true;
     }
     public void buttonInputAttack(boolean keyIsDown, Options options) {
+        if (self instanceof Player pl &&  ((IPlayerEntity)pl).roundabout$getAttackStrengthTicker() < 5) {
+            return;
+        }
         if (keyIsDown) {
             if (activePowerPhase == 0){
                 this.tryPower(PowerIndex.ATTACK);
@@ -67,6 +71,12 @@ public class PunchingGeneralPowers extends GeneralPowers {
         return false;
     }
 
+    @Override
+    public void onStandSummon(boolean desummon){
+        if (self instanceof Player pl){
+            pl.resetAttackStrengthTicker();
+        }
+    }
     @Override
     /**Stand related things that slow you down or speed you up, override and call super to make
      * any stand ability slow you down*/

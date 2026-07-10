@@ -13,6 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,12 +24,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class AccessFireworkRocket implements IFireworkRocketAccess {
 
     int remainingLifeTicks = 0;
-    void setRemainingLifeTicks(int ticks){remainingLifeTicks = ticks;}
+
+    void setRemainingLifeTicks(int ticks) {
+        remainingLifeTicks = ticks;
+    }
 
     boolean isHat = false;
 
     @Override
-    public void setIsHattanProj(boolean proj){
+    public void setIsHattanProj(boolean proj) {
         isHat = proj;
     }
 
@@ -37,45 +41,47 @@ public abstract class AccessFireworkRocket implements IFireworkRocketAccess {
         Entity Hattan = ((EntityHitResult) $$0).getEntity();
         FireworkRocketEntity fwork = (FireworkRocketEntity) (Object) (this);
         if(Hattan instanceof ManhattanTransferEntity ME){
-
             ci.cancel();
-            fwork.discard();
             ItemStack ii = fwork.getItem();
-
-                if ((fwork.getOwner().is(ME.getUser()) && !ME.canOthersLoadMT || ME.canOthersLoadMT) && !ME.hasItem) {
-                    if (!ii.isEmpty()) {
-                        ci.cancel();
-                        if (ci.isCancelled()) {
-                            ME.setHeldItemManhattan(ii.copyAndClear());
-                            if(ME.getUser() instanceof Player PL && ((StandUser) PL).roundabout$getStandPowers() instanceof  PowersManhattanTransfer PM){
-                                if(ME.getHattanTarget() == 0 || PM.switchShootingMode()) {
-                                    PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
-                                } else {
-                                    PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1F, (ME.getRandom().nextFloat() * 0.2F + 0.7F));
-                                }
-                            }
-                            if (fwork.getOwner() == null || fwork.getOwner() instanceof Player) {
-                                ME.canAcquireHeldItem = true;
-                                ME.hasItemTwo = false;
+            if(fwork.isShotAtAngle()) {
+            if ((fwork.getOwner().is(ME.getUser()) && !ME.canOthersLoadMT || ME.canOthersLoadMT) && !ME.hasItem) {
+                if (!ii.isEmpty()) {
+                    ci.cancel();
+                    if (ci.isCancelled()) {
+                        ME.setHeldItemManhattan(ii.copyAndClear());
+                        if (ME.getUser() instanceof Player PL && ((StandUser) PL).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                            if (ME.getHattanTarget() == 0 || PM.switchShootingMode()) {
+                                PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
                             } else {
-                                ME.canAcquireHeldItem = false;
-                                ME.hasItemTwo = false;
+                                PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1F, (ME.getRandom().nextFloat() * 0.2F + 0.7F));
                             }
-                            ME.hasItem = true;
-                            ME.changeMovementState();
-                            ME.fireworkLifeTicks = this.life;
-                            fwork.discard();
                         }
+                        if (fwork.getOwner() == null || fwork.getOwner() instanceof Player) {
+                            ME.canAcquireHeldItem = true;
+                            ME.hasItemTwo = false;
+                        } else {
+                            ME.canAcquireHeldItem = false;
+                            ME.hasItemTwo = false;
+                        }
+                        ME.hasItem = true;
+                        ME.changeMovementState();
+                        ME.fireworkLifeTicks = this.life;
+                        fwork.discard();
                     }
-                } else {
-                    FireworkRocketEntity $$4 = new FireworkRocketEntity(ME.level(), ii, ME, ME.getX(), ME.getEyeY(), ME.getZ(), true);
-                    $$4.setRemainingFireTicks(ME.fireTicksPrj);
-                    $$4.setOwner(ME.getUser());
-                    $$4.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, 0.0F, 1.4F, 0.0F);
-                    ((IFireworkRocketAccess) $$4).roundabout$SetFireworkRemainingLifeTicks(this.roundabout$GetFireworkRemainingLifeTicks());
-                    ME.level().addFreshEntity($$4);
                 }
-
+            } else {
+                FireworkRocketEntity $$4 = new FireworkRocketEntity(ME.level(), ii, ME, ME.getX(), ME.getEyeY(), ME.getZ(), true);
+                $$4.setRemainingFireTicks(ME.fireTicksPrj);
+                $$4.setOwner(ME.getUser());
+                $$4.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, 0.0F, 1.4F, 0.0F);
+                ((IFireworkRocketAccess) $$4).roundabout$SetFireworkRemainingLifeTicks(this.roundabout$GetFireworkRemainingLifeTicks());
+                ((IFireworkRocketAccess) $$4).setIsHattanProj(true);
+                ME.level().addFreshEntity($$4);
+            }
+        }else {
+                ci.cancel();
+                return;
+            }
         }
     }
 

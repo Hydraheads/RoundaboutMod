@@ -23,6 +23,8 @@ public class AbilityCancelsEnderPearlItem {
         if (((StandUser)$$1).roundabout$getStandPowers().getAttackTimeDuring() > -1){
             ItemStack $$3 = $$1.getItemInHand($$2);
             cir.setReturnValue(InteractionResultHolder.sidedSuccess($$3, $$0.isClientSide()));
+        } else {
+            ((StandUser)$$1).roundabout$getStandPowers().onEnderPearlThrow();
         }
     }
 }

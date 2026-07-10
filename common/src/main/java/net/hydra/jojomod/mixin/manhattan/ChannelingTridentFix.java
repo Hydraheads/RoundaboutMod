@@ -69,15 +69,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
                         if (!ii.isEmpty()) {
                             ci.cancel();
                             if(ci.isCancelled()) {
-                                ME.setHeldItemManhattanFull(ii.copyAndClear());
-                                if (this.getOwner() == null || this.getOwner() instanceof Player) {
-                                    ME.canAcquireHeldItem = true;
-                                } else {
-                                    ME.canAcquireHeldItem = false;
+                                if(this.getOwner() != null) {
+                                    if (this.getOwner() == null || this.getOwner() instanceof Player) {
+                                        if (thrownTr.pickup.equals(AbstractArrow.Pickup.ALLOWED)) {
+                                            ME.canAcquireHeldItem = true;
+                                            ME.setHeldItemManhattanFull(ii.copyAndClear());
+                                            ME.hasItemTwo = true;
+                                            ME.itemEject();
+                                        } else {
+                                            this.discard();
+                                        }
+                                    } else {
+                                        this.discard();
+                                    }
+                                    this.discard();
                                 }
-                                ME.hasItemTwo = true;
-                                ME.itemEject();
-                                this.discard();
                             }
                         }
                     }

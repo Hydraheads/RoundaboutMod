@@ -20,6 +20,7 @@ import net.minecraft.client.resources.sounds.AmbientSoundHandler;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.network.protocol.game.ServerboundMoveVehiclePacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerInputPacket;
+import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -176,6 +177,11 @@ public abstract class PlayerEntityClient extends AbstractClientPlayer implements
     @Inject(method = "canStartSprinting", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$canStartSprinting(CallbackInfoReturnable<Boolean> cir) {
 
+    }
+
+    @Inject(method = "onSyncedDataUpdated", at = @At(value = "TAIL"), require = 0)
+    public void roundabout$onSyncedDataUpdated(EntityDataAccessor<?> $$0, CallbackInfo ci) {
+        ((IPlayerEntity)this).rdbt$onSyncedDataUpdated($$0);
     }
 
     /**If you are stopping time, make it so that you gain a block placement cooldown for blocks with

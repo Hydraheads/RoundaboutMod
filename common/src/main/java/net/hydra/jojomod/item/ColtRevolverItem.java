@@ -206,6 +206,7 @@ public class ColtRevolverItem extends FirearmItem implements Vanishable {
             if ((isCrouchingOrSomething(player,itemStack) && hasColtAmmo(player) && getAmmo(itemStack) != maxAmmo) || (isCrouchingOrSomething(player,itemStack) && player.isCreative())) {
                 if (!isReloading(itemStack)) {
                     setReloading(itemStack, true);
+                    player.stopUsingItem();
                     player.getCooldowns().addCooldown(this, 60);
                     ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.COLT_RELOAD, 10, false);
                 }

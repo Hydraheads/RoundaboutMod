@@ -3,42 +3,37 @@ package net.hydra.jojomod.entity.substand;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.navigation.StandEntityNavigation;
+import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
-
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.ExplosionUtil;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.core.Vec3i;
+
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Path;
 
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -49,8 +44,43 @@ public class SheerHeartAttackEntity extends StandEntity {
 		super($$0, $$1);
 	}
 
-	protected static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(SheerHeartAttackEntity.class,
-			EntityDataSerializers.INT);
+	protected static final EntityDataAccessor<Byte> TARGET_STATUS = SynchedEntityData.defineId(SheerHeartAttackEntity.class,
+			EntityDataSerializers.BYTE);
+	private static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(SheerHeartAttackEntity.class,
+			EntityDataSerializers.BYTE);
+	private static final EntityDataAccessor<Byte> ANIM = SynchedEntityData.defineId(SheerHeartAttackEntity.class,
+			EntityDataSerializers.BYTE);
+
+	@Override
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.entityData.define(TARGET_STATUS, NONE);
+		this.entityData.define(DATA_FLAGS_ID, (byte)0);
+		this.entityData.define(ANIM, (byte)0);
+	}
+
+	public boolean isClimbing() {
+		return (this.entityData.get(DATA_FLAGS_ID) & 1) != 0;
+	}
+
+	public void setClimbing(boolean bl) {
+		byte $$1 = (Byte)this.entityData.get(DATA_FLAGS_ID);
+		if (bl) {
+			$$1 = (byte)($$1 | 1);
+		} else {
+			$$1 = (byte)($$1 & -2);
+		}
+
+		this.entityData.set(DATA_FLAGS_ID, $$1);
+	}
+
+	public byte getAnim() {
+		return this.entityData.get(ANIM);
+	}
+
+	public void setAnim(byte anim) {
+		this.entityData.set(ANIM, anim);
+	}
 
 	@Override
 	protected PathNavigation createNavigation(Level $$0) {
@@ -76,6 +106,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 	static final int struckMaxTicks = 12;
 	public int flyngTicks = 0;
 
+	private int soundsDelay = 40;
+
 	static final float explosionRadius = 1.3f;
 
 	static final byte
@@ -85,21 +117,34 @@ public class SheerHeartAttackEntity extends StandEntity {
 		IDLE = 0,
 		WALK = 1;
 
-	public byte currentTarget = NONE;
 	public Entity entityTarget = null;
 	public BlockPos blockTarget = null;
 	public int ticksUntilNextPathRecalculation = 15;
 	public int returnTicks = 0;
-	private static int returnMaxTicks = 300;
+	private static final int returnMaxTicks = 300;
+	public int inativeTicks = 0;
+	private static final int inativeMaxTicks = 140;
+
+	public int explosions = 0;
 
 	public float viewRange = 10.0f;
 
 	private boolean haveToReturn = false;
 
-	public boolean getHaveToReturn() { return this.haveToReturn;}
+	public int getMaxExplosions() {
+		return ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackMaxExplosions;
+	}
+
+	public boolean getHaveToReturn() {
+		return this.haveToReturn || (this.explosions >= getMaxExplosions() && getMaxExplosions() != 0)
+				|| this.inativeTicks >= inativeMaxTicks;
+	}
+
 	public void setHaveToReturn(boolean value) {
-		this.returnTicks = 0;
-		this.haveToReturn = value;
+		this.haveToReturn = value || (this.explosions >= getMaxExplosions() && getMaxExplosions() != 0);
+		if (!this.haveToReturn) {
+			this.returnTicks = 0;
+		}
 	}
 
 	public static AttributeSupplier.Builder createStandAttributes() {
@@ -109,17 +154,19 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	@Override
 	public void setupAnimationStates() {
-		//super.setupAnimationStates();
-		if (this.getUser() != null) {
-			if (this.getDeltaMovement() == Vec3.ZERO) {
-				this.idle.startIfStopped(this.tickCount);
-				this.moving.stop();
-			} else {
-				this.idle.stop();
-				this.moving.startIfStopped(this.tickCount);
-			}
 
+		if (getAnim() == IDLE) {
+			this.idle.startIfStopped(this.tickCount);
+		} else {
+			this.idle.stop();
 		}
+
+		if (getAnim() == WALK) {
+			this.moving.startIfStopped(this.tickCount);
+		} else {
+			this.moving.stop();
+		}
+
 	}
 
 	@Override
@@ -127,8 +174,11 @@ public class SheerHeartAttackEntity extends StandEntity {
 		this.setFadeOut((byte)1);
 		validateUUID();
 
+		this.soundsDelay--;
+
 		boolean client = this.level().isClientSide();
 		LivingEntity user = this.getUser();
+
 		if (!client) {
 			if(user == null){
 				this.discard();
@@ -142,13 +192,19 @@ public class SheerHeartAttackEntity extends StandEntity {
 					}
 				}
 
+				this.setClimbing(this.horizontalCollision);
+
 				if (this.tickTargetFindCount <= 0) {
 					this.findTarget();
 					this.tickTargetFindCount = tickTargetFindMax;
 				}else {
 					this.tickTargetFindCount--;
 				}
-
+				if (this.getTargetType() == NONE) {
+					this.inativeTicks++;
+				}else {
+					this.inativeTicks = 0;
+				}
 
 				if (this.attackTick > 0) { this.attackTick--;}
 				if (this.jumpTick > 0) { this.jumpTick--;}
@@ -156,17 +212,27 @@ public class SheerHeartAttackEntity extends StandEntity {
 				if (!this.onGround()) {
 					flyngTicks++;
 				}else {
+					if (this.getDeltaMovement().length() > 0.1 && this.tickCount % 18 == 0) {
+						this.level().playSound(null, this.blockPosition(), ModSounds.SHA_MOVING_EVENT, SoundSource.AMBIENT, 0.5F, 1.0f);
+					}
+
 					flyngTicks = 0;
 				}
 				this.moveToTarget();
 
-				if (this.haveToReturn) { this.returnTicks++; }
+				if (this.getHaveToReturn()) { this.returnTicks++; }
 
 
 				if (flyngTicks > 2 && this.hasTarget()) {
 					if (this.shouldExplode(this.getTargetPosition())) {
 						this.attack();
 					}
+				}
+
+				if (this.getDeltaMovement().length() > 0 && (this.onGround() || this.onClimbable())) {
+					this.setAnim(WALK);
+				}else {
+					this.setAnim(IDLE);
 				}
 			}
 		}
@@ -175,7 +241,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
 	protected void moveToTarget() {
-		if (this.haveToReturn) {
+		if (this.getHaveToReturn()) {
 			Vec3 pos = this.getUser().position();
 			this.shaMove(pos);
 		} else if (this.hasTarget()) {
@@ -195,28 +261,28 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
 	public boolean hasTarget() {
-		if (this.currentTarget == ENTITY) {
+		if (this.getTargetType() == ENTITY) {
 			if (this.entityTarget == null) {
-				this.currentTarget = NONE;
+				this.setTargetType(NONE);
 				return false;
 			}
 			if (!this.entityTarget.isAlive()) {
-				this.currentTarget = NONE;
+				this.setTargetType(NONE);
 			}
 			if (this.entityTarget instanceof LivingEntity LE) {
 				if (LE.isDeadOrDying()) {
-					this.currentTarget = NONE;
+					this.setTargetType(NONE);
 				}
 			}
-		}else if (this.currentTarget == BLOCK) {
+		}else if (this.getTargetType() == BLOCK) {
 			BlockState BlockInfo = this.level().getBlockState(this.blockTarget);
 			if (ExplosionUtil.isBlockBlackListed(BlockInfo)) {
-				this.currentTarget = NONE;
+				this.setTargetType(NONE);
 				this.blockTarget = null;
 			}
 		}
 
-		return this.currentTarget != NONE;
+		return this.getTargetType() != NONE;
 	}
 
 	public void findTarget() {
@@ -277,7 +343,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		if (currentChoice == ENTITY) {
 			this.entityTarget = targetEnt;
-			this.currentTarget = ENTITY;
+			this.setTargetType(ENTITY);
 		}else if (currentChoice == BLOCK) {
 			//Vec3 bt = targetPos.subtract(0.5, 0.5, 0.5);
 			this.blockTarget = new BlockPos(
@@ -285,20 +351,20 @@ public class SheerHeartAttackEntity extends StandEntity {
 					targetPosY,
 					targetPosZ
 			);
-			this.currentTarget = BLOCK;
+			this.setTargetType(BLOCK);
 		}else {
 			this.entityTarget = null;
-			this.currentTarget = NONE;
+			this.setTargetType(NONE);
 		}
 	}
 
 	public boolean shouldJump(Vec3 targetPos) {
-		if (this.jumpTick > 0) {
+		if ((this.attackTick > 0 || this.jumpTick > 0)|| this.isClimbing()) {
 			return false;
 		}
 		double dist = Math.abs(this.position().distanceTo(targetPos));
 
-		return (float)dist > (3.0f) && (float)dist < 4.0f;
+		return (float)dist > (2.5f) && (float)dist < 4.0f;
 	}
 	public boolean shouldExplode(Vec3 targetPos) {
 		if (this.attackTick > 0) {
@@ -308,14 +374,15 @@ public class SheerHeartAttackEntity extends StandEntity {
 		double dist = Math.abs(this.position().distanceTo(targetPos));
 
 		float minDist = (explosionRadius-0.12f);
-		if (this.currentTarget == BLOCK) {
+		if (this.getTargetType() == BLOCK) {
 			minDist = 1.4f;
 		}
 
 		return (float)dist < minDist;
 	}
 
-	public byte getTargetType() { return this.currentTarget;}
+	public byte getTargetType() {return this.entityData.get(TARGET_STATUS);}
+	public void setTargetType(byte value) {this.entityData.set(TARGET_STATUS, value);}
 
 	public Vec3 getTargetPosition() {
 		byte type = this.getTargetType();
@@ -338,11 +405,14 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		DamageSource dmg = ModDamageTypes.of(this.level(), ModDamageTypes.EXPLOSIVE_STAND, this.getUser());;
 
+		this.explosions++;
+
 		if (this.getTargetType() == ENTITY){
 			ExplosionUtil.explosionHurt(this.position(), dmg, this.level(),
 					ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage, 0.3f, explosionRadius);
 
 			ExplosionUtil.explodeEffects(this.position(), this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, 0.3f, 8);
+			this.level().playSound(null, this.blockPosition(), ModSounds.KILLER_QUEEN_EXPLOSION_EVENT, SoundSource.PLAYERS, 0.65F, 1.0f);
 
 			if (this.entityTarget != null) {
 
@@ -350,11 +420,11 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 				if (!this.entityTarget.isAlive()) {
 					this.entityTarget = null;
-					this.currentTarget = NONE;
+					this.setTargetType(NONE);
 				} else if (this.entityTarget instanceof LivingEntity LE) {
 					if (LE.isDeadOrDying()) {
 						this.entityTarget = null;
-						this.currentTarget = NONE;
+						this.setTargetType(NONE);
 					}
 				}
 			}
@@ -363,11 +433,12 @@ public class SheerHeartAttackEntity extends StandEntity {
 					ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage, 0.3f, explosionRadius);
 
 			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, 0.12f, 4);
+			this.level().playSound(null, this.blockTarget, ModSounds.KILLER_QUEEN_EXPLOSION_EVENT, SoundSource.PLAYERS, 0.65F, 1.0f);
 
 			boolean shouldDrop = !this.level().getBlockState(this.blockTarget).requiresCorrectToolForDrops();
 			this.level().destroyBlock(this.blockTarget, shouldDrop);
 			this.blockTarget = null;
-			this.currentTarget = NONE;
+			this.setTargetType(NONE);
 		}
 
 		this.attackTick = attackTickMax;
@@ -375,16 +446,23 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	 public void jump(Vec3 jumpT0Pos){
 		if (this.onGround()) {
+			this.level().playSound(null, this.blockPosition(), ModSounds.SHA_JUMP_EVENT, SoundSource.PLAYERS, 0.5F, 1.0f);
 			this.lookAt(EntityAnchorArgument.Anchor.EYES, jumpT0Pos);
 			this.jumpTick = jumpTickMax;
-			this.setDeltaMovement((this.getLookAngle().multiply(1.5, 1.5, 1.5)).add(0, 0.21, 0));
+			this.setDeltaMovement((this.getLookAngle().multiply(1.3, 0.54, 1.3)).add(0, 0.3, 0));
 		}
 	}
 
+	@Override
+	public boolean onClimbable() {
+		return this.isClimbing();
+	}
+
+
+
 	public void shoot(Vec3 shootToPos){
 		this.lookAt(EntityAnchorArgument.Anchor.EYES,shootToPos);
-
-		this.setDeltaMovement((this.getLookAngle().multiply(1.6,1.6,1.6)).add(0,0.01,0));
+		this.setDeltaMovement((this.getLookAngle().multiply(1.6,1.6,1.6)).add(0,0.001,0));
 	}
 
 	public boolean shaIsNear() {
@@ -409,11 +487,11 @@ public class SheerHeartAttackEntity extends StandEntity {
 			ticksUntilNextPathRecalculation = 15; // + mob.getRandom().nextInt(7);
 
 			Path newPath;
-			if (this.haveToReturn) {
+			if (this.getHaveToReturn()) {
 				newPath = this.getNavigation().createPath(this.getUser(), 1);
-			}else if (this.currentTarget == ENTITY) {
+			}else if (this.getTargetType() == ENTITY) {
 				newPath = this.getNavigation().createPath(this.entityTarget, 0);
-			}else if (this.currentTarget == BLOCK) {
+			}else if (this.getTargetType() == BLOCK) {
 				BlockState BS = this.level().getBlockState(this.blockTarget);
 				if (BS.isPathfindable(this.level(), this.blockTarget, PathComputationType.LAND)) {
 					newPath = this.getNavigation().createPath(this.blockTarget.below(), 0);
@@ -429,8 +507,6 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 			if (newPath == null) {
 				return;
-			} else {
-				this.tryClimb();
 			}
 
 			if (!this.getNavigation().moveTo(newPath, 0.5f))
@@ -456,6 +532,13 @@ public class SheerHeartAttackEntity extends StandEntity {
 			if (LE.isOnFire() || LE.wasOnFire || HeatUtil.isHot(LE)) { points += 70;}
 			if (LE.isFullyFrozen()) { points -= 80;
 			}else if (LE.isFreezing()) { points -= 40;}
+			
+			if (((StandUser)LE).roundabout$hasAStand()) {
+				StandUser SU = (StandUser)LE;
+				if(SU.roundabout$getStandPowers() instanceof PowersWhiteAlbum && SU.roundabout$getActive()) {
+					points -= 130;
+				}
+			}
 
 			MobType mobType = LE.getMobType();
 			if (mobType.equals(MobType.UNDEAD)) { points -= 30;}
@@ -463,37 +546,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 		return points;
 	}
 
-	public void tryClimb() {
-		/*float targetY = this.getBlockY();
-		if (this.haveToReturn) {
-			targetY = this.getUser().getBlockY();
-		}
-		else if (this.currentTarget == BLOCK) {
-			targetY = this.blockTarget.getY();
-		}else if (this.currentTarget == ENTITY) {
-			targetY = this.entityTarget.getBlockY();
-		}*/
-
-		//if (targetY - this.getBlockY() > 1.2) {
-			/*
-			float range = 1.0f;
-			Vec3 vec3d = this.position();
-			Vec3 vec3d2 = this.getViewVector(0);
-			Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
-			HitResult blockHit = this.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
-			*/
-			//Vec3 pos =  blockHit.getLocation();
-
-			// blockHit.getType() == HitResult.Type.BLOCK &&
-			if (this.isInWall()) {
-				Vec3 mov = this.getDeltaMovement();
-				this.setDeltaMovement(mov.x, 0.8f, mov.y);
-			}
-		//}
-	}
 	@Override
 	protected void playStepSound(BlockPos blockPos, BlockState blockState) {
-		this.playSound(ModSounds.KILLER_QUEEN_SHA_MOVING_EVENT, 0.15f, 1.0f);
+		//this.playSound(ModSounds.KILLER_QUEEN_SHA_MOVING_EVENT, 0.15f, 1.0f);
 
 		//SoundType soundType = blockState.getSoundType();
 		//this.playSound(soundType.getStepSound(), soundType.getVolume() * 0.15f, soundType.getPitch());
@@ -501,7 +556,46 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return null;
+
+		if (this.soundsDelay > 0) {
+			return  null;
+		}
+		this.soundsDelay = 70;
+
+		LivingEntity user = this.getUser();
+
+		if (user == null) { return null; }
+
+		byte skin = ((StandUser)user).roundabout$getStandSkin();
+
+		double rand = Math.random();
+
+		if ( skin == KillerQueenEntity.CRACKED || rand >= 0.7) {
+			if (this.getTargetType() != NONE && (rand >= 0.82 || (skin == KillerQueenEntity.CRACKED && rand >= 0.5))) {
+				return ModSounds.KILLER_QUEEN_SHA_CRACKED_KOCCHI_EVENT;
+			}
+
+			return ModSounds.KILLER_QUEEN_SHA_CRACKED_DEDE_EVENT;
+		}else {
+			if (this.getTargetType() != NONE && rand >= 0.3) {
+				if (rand >= 0.5) {
+					return ModSounds.KILLER_QUEEN_SHA_KOCCHI_1_EVENT;
+				}
+
+				return ModSounds.KILLER_QUEEN_SHA_KOCCHI_2_EVENT;
+			}
+
+			return ModSounds.KILLER_QUEEN_SHA_DEDEDEDE_EVENT;
+		}
+
+	}
+
+	protected float getSoundVolume() {
+		return 0.8f;
+	}
+
+	public float getVoicePitch() {
+		return 1.0f;
 	}
 
     @Override public boolean hurt(DamageSource source, float amount) { return false;}
@@ -511,7 +605,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	@Override public boolean hasNoPhysics() { return false;}
 	@Override public boolean isNoGravity() { return false;}
 	@Override public boolean isPushable() { return true;}
-	@Override public boolean isAttackable() { return false;}
+	@Override public boolean isAttackable() { return true;}
 	@Override public boolean canBeHitByProjectile() { return true;}
 	@Override public boolean canBeHitByStands() { return true;}
 	@Override public boolean mayInteract(Level $$0, BlockPos pos) { return false;}

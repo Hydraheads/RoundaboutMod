@@ -123,6 +123,9 @@ public class StandPowers extends AbilityScapeBasis {
     public void tickPowerEnd(){
     }
 
+    public boolean canWalkThroughDaze(){
+        return false;
+    }
 
     /// used to make mobs look at you during tickMobAi
     public void rotateMobHead(LivingEntity attackTarget) {
@@ -417,6 +420,10 @@ public class StandPowers extends AbilityScapeBasis {
     }
     /**return true to cancel the onkill event*/
     public boolean onKilledEntity(ServerLevel $$0, LivingEntity $$1){
+        return false;
+    }
+    /**return true to cancel the push event*/
+    public boolean onCollide(Entity entity){
         return false;
     }
 
@@ -1222,13 +1229,29 @@ public class StandPowers extends AbilityScapeBasis {
 
     /**Call this to verify your stand is leveled enough to use a move*/
     public boolean canExecuteMoveWithLevel(int minLevel){
-        if (!ClientNetworking.getAppropriateConfig().standLevelingSettings.enableStandLeveling) {
+        boolean decreaseLevel = false;
+        if (self instanceof Player pl && ((IPlayerEntity)pl).rdbt$getLevelDecreaseTicks()
+                > 0){
+            decreaseLevel = true;
+        }
+
+        if (!ClientNetworking.getAppropriateConfig().standLevelingSettings.enableStandLeveling
+        && !decreaseLevel) {
             return true;
         }
 
         if (this.getSelf() instanceof Player pl){
-            if (((IPlayerEntity)pl).roundabout$getStandLevel() >= minLevel || hasGoldenDisc() ||
-                    pl.isCreative()){
+            int level;
+            boolean skipsCheck = hasGoldenDisc() || pl.isCreative();
+            if (!skipsCheck){
+                level = ((IPlayerEntity)pl).roundabout$getStandLevel();
+            } else {
+                level = getMaxLevel();
+            }
+            if (decreaseLevel){
+                level = 1;
+            }
+            if (level >= minLevel){
                 return true;
             }
             return false;
@@ -1465,6 +1488,9 @@ public class StandPowers extends AbilityScapeBasis {
         }
         return true;
         //playBarrageGuardSound();
+    }
+
+    public void onPoseEmoteSwitch(byte from, byte to){
     }
 
     /**Initiates a stand barrage clash. This code should probably not be overridden, it is a very mutual event*/
@@ -1925,9 +1951,9 @@ public class StandPowers extends AbilityScapeBasis {
                 //}
                     this.setActivePowerPhase((byte) 0);
                 }
-                if (this.interruptCD > 0) {
-                    this.interruptCD--;
-                }
+            }
+            if (this.interruptCD > 0) {
+                this.interruptCD--;
             }
             this.tickDash();
         } else {
@@ -2115,16 +2141,37 @@ public class StandPowers extends AbilityScapeBasis {
         return Component.empty();
     }
 
+
+    public byte standSkin =0;
+    public byte idlePos =0;
     // adds additional save data to discs. An example of what this could be used for is mandom watch styles and tusk nail colors
     // also consider that skins are also saved onto the data, so anything that's cosmetic in that regard would work
     public void addAdditionalSaveData(CompoundTag $$0) {
-
+        $$0.putByte("Skin",standSkin);
+        $$0.putByte("Pose",idlePos);
     }
     public void readAdditionalSaveData(CompoundTag $$0) {
+        StandUser user = getStandUserSelf();
+        if ($$0.contains("Skin")) {
+            byte skn = ($$0.getByte("Skin"));
+            user.roundabout$setStandSkinLight(skn);
+        } else {
+            user.roundabout$setStandSkinLight((byte) 0);
+        }
 
+        if ($$0.contains("Pose")) {
+            byte skn = ($$0.getByte("Pose"));
+            user.roundabout$setIdlePosLight(skn);
+        } else {
+            user.roundabout$setIdlePosLight((byte) 0);
+        }
     }
     // run this to trigger the disc saving and syncing
     public void saveDiscAndSync(){
+        if (self.level().isClientSide())
+            return;
+        if (getStandUserSelf().roundabout$getStandDisc().isEmpty())
+            return;
         this.getStandUserSelf().roundabout$updateStandDisc(MainUtil.saveToDiscData(self,((StandUser)self).roundabout$getStandDisc().copy()));
     }
 

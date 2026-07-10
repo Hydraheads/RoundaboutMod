@@ -1,5 +1,7 @@
 package net.hydra.jojomod.fates;
 
+import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
@@ -44,6 +46,12 @@ public class FatePowers extends AbilityScapeBasis {
     public void xTryPower(byte index, boolean forced){
         tryPower(index, forced);
         tryPowerStuff();
+    }
+
+    @Override
+    public boolean cancelSprintJump(){
+        return self.level().getBlockState(self.getOnPos()).is(ModBlocks.WHITE_ALBUM_ICE_SLAB)
+                || super.cancelSprintJump();
     }
 
     @Override

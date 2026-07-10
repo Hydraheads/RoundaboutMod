@@ -98,12 +98,17 @@ public class PowersRatt extends NewDashPreset {
             CHECK_AUTO = 68,
             PLACE_BURST = 69,
             SET_TARGET = 70,
+            CHANGE_MODE = 7,
+            SETPLACE = 8,
+            SCOPE = 9,
+            MINING = 10,
+            RATT_LEAP = 5,
+            CHANGE_MODE_2 = 71,
+            SETPLACE_2 = 72,
+            SCOPE_2 = 73,
+            MINING_2 = 74,
+            RATT_LEAP_2 = 75;
 
-            CHANGE_MODE = 71,
-            SETPLACE = 72,
-            SCOPE = 73,
-            MINING = 74,
-            RATT_LEAP = 75;
 
 
 
@@ -675,8 +680,8 @@ public class PowersRatt extends NewDashPreset {
     }
     public void RattLeap() {
         if (!onCooldown(PowersRatt.RATT_LEAP) && !isAttackIneptVisually(PowersRatt.RATT_LEAP,4)) {
-            tryPower(PowersRatt.RATT_LEAP);
-            tryPowerPacket(PowersRatt.RATT_LEAP);
+            tryPower(PowersRatt.RATT_LEAP_2);
+            tryPowerPacket(PowersRatt.RATT_LEAP_2);
         }
     }
     public void RattScope() {
@@ -886,7 +891,7 @@ public class PowersRatt extends NewDashPreset {
                     }
                 }
             }
-            case PowersRatt.RATT_LEAP -> {
+            case PowersRatt.RATT_LEAP_2 -> {
                 this.setCooldown(PowersRatt.RATT_LEAP,ClientNetworking.getAppropriateConfig().rattSettings.rattLeapCooldown);
                 Vec3 dir = this.getSelf().getViewVector(1);
                 if (this.getStandEntity(this.getSelf()) != null) {

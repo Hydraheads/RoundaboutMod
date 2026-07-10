@@ -43,6 +43,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -288,7 +289,10 @@ public class PowersSoftAndWet extends NewPunchingStand {
     }
 
     public void shootingModeToggleClient(){
-        if (canExecuteMoveWithLevel(getShootingModeLevel())) {
+        if (canExecuteMoveWithLevel(getShootingModeLevel()) || inShootingMode()) {
+            if (self instanceof Player pl){
+                pl.resetAttackStrengthTicker();
+            }
             this.tryPower(PowerIndex.POWER_4, true);
             tryPowerPacket(PowerIndex.POWER_4);
 
@@ -319,7 +323,9 @@ public class PowersSoftAndWet extends NewPunchingStand {
                     if (!onCooldown(PowerIndex.SKILL_4_SNEAK)) {
                         if (canUseWoundPlug() && !self.isUsingItem()) {
                             ouchieTicks = 32;
-                            tryPowerPacket(PowerIndex.POWER_1_BLOCK);
+                            Entity lol = getPlugTarget();
+                            int id = lol != null ? lol.getId() : -1;
+                            tryIntPowerPacket(PowerIndex.POWER_1_BLOCK,id);
                         }
                     }
                 }
@@ -547,6 +553,14 @@ public class PowersSoftAndWet extends NewPunchingStand {
         return super.isAttackIneptVisually(activeP,slot);
     }
 
+    public LivingEntity getPlugTarget(){
+        Entity TE =getTargetEntity(this.self, 2);
+        if (TE instanceof LivingEntity LV){
+            return LV;
+        }
+        return null;
+    }
+
     public int waterShieldTicks = 0;
     public boolean hasWaterShield(){
         return waterShieldTicks > 0;
@@ -717,9 +731,16 @@ public class PowersSoftAndWet extends NewPunchingStand {
 
     }
 
+    @Override
+    public ResourceLocation getIconYes(int slot){
+        if (slot == 4 && getPlugTarget() != null && isHoldingSneak())
+            return StandIcons.SQUARE_PINK;
+        return super.getIconYes(slot);
+    }
+
     public boolean canUseWoundPlug(){
         return (self.getHealth() < self.getMaxHealth() || self.hasEffect(ModEffects.BLEED)) ||
-                (self instanceof Player PE && PE.isCreative());
+                (self instanceof Player PE && PE.isCreative() || getPlugTarget() != null);
     }
 
     @Override
@@ -1281,35 +1302,42 @@ public class PowersSoftAndWet extends NewPunchingStand {
 
     public void useWoundPlug(){
         if (!self.level().isClientSide() && !onCooldown(PowerIndex.SKILL_4_SNEAK)){
-             this.setCooldown(PowerIndex.SKILL_4_SNEAK, ClientNetworking.getAppropriateConfig().softAndWetSettings.woundPlugCooldown);
-             self.heal(1f);
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.CINDERELLA_SPARKLE_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
-
-            ((ServerLevel) self.level()).sendParticles(ModParticles.SMALL_EXPLOSION, self.getEyePosition().x,
-                    self.getEyePosition().y, self.getEyePosition().z,
-                    0, 0, 0, 0, 0.2);
-
-            byte sk = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-            if (sk == SoftAndWetEntity.KIRA) {
-                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.HEART_ATTACK_MINI,
-                       this.self.getEyePosition().x,this.self.getEyePosition().y,this.self.getEyePosition().z,
-                        10, 0.25F,0.1F, 0.25F, 0.02);
-            } else {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 1F, 0.8F);
-                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PURPLE_STAR,
-                        this.self.getEyePosition().x,this.self.getEyePosition().y,this.self.getEyePosition().z,
-                        10, 0.25F,0.1F, 0.25F, 0.02);
+            Entity ent = self;
+            if (plugTarget != -1){
+                ent = self.level().getEntity(plugTarget);
             }
-            MobEffectInstance bleed = self.getEffect(ModEffects.BLEED);
-             if (bleed != null){
-                 if (bleed.getAmplifier() > 0){
-                    int amp = bleed.getAmplifier()-1;
-                    self.removeEffect(bleed.getEffect());
-                    self.addEffect(new MobEffectInstance(ModEffects.BLEED, bleed.getDuration(), amp));
-                 } else {
-                     self.removeEffect(bleed.getEffect());
-                 }
-             }
+
+            if (ent instanceof LivingEntity LV && ent.isAlive()) {
+                this.setCooldown(PowerIndex.SKILL_4_SNEAK, ClientNetworking.getAppropriateConfig().softAndWetSettings.woundPlugCooldown);
+                LV.heal(1f);
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.CINDERELLA_SPARKLE_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
+
+                ((ServerLevel) self.level()).sendParticles(ModParticles.SMALL_EXPLOSION, LV.getEyePosition().x,
+                        LV.getEyePosition().y, LV.getEyePosition().z,
+                        0, 0, 0, 0, 0.2);
+
+                byte sk = ((StandUser) this.getSelf()).roundabout$getStandSkin();
+                if (sk == SoftAndWetEntity.KIRA) {
+                    ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.HEART_ATTACK_MINI,
+                            LV.getEyePosition().x, LV.getEyePosition().y, LV.getEyePosition().z,
+                            10, 0.25F, 0.1F, 0.25F, 0.02);
+                } else {
+                    this.self.level().playSound(null, LV.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 1F, 0.8F);
+                    ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PURPLE_STAR,
+                            LV.getEyePosition().x, LV.getEyePosition().y, LV.getEyePosition().z,
+                            10, 0.25F, 0.1F, 0.25F, 0.02);
+                }
+                MobEffectInstance bleed = LV.getEffect(ModEffects.BLEED);
+                if (bleed != null) {
+                    if (bleed.getAmplifier() > 0) {
+                        int amp = bleed.getAmplifier() - 1;
+                        LV.removeEffect(bleed.getEffect());
+                        LV.addEffect(new MobEffectInstance(ModEffects.BLEED, bleed.getDuration(), amp));
+                    } else {
+                        LV.removeEffect(bleed.getEffect());
+                    }
+                }
+            }
         }
     }
     @SuppressWarnings("deprecation")
@@ -1909,6 +1937,8 @@ public class PowersSoftAndWet extends NewPunchingStand {
         }
     }
 
+    int plugTarget;
+
     Entity goBeyondActiveTarget = null;
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime){
@@ -1916,6 +1946,8 @@ public class PowersSoftAndWet extends NewPunchingStand {
             bubbleType = (byte)chargeTime;
         } else if (move == PowerIndex.SNEAK_ATTACK) {
             this.chargedFinal = chargeTime;
+        } else if (move == PowerIndex.POWER_1_BLOCK) {
+            plugTarget = chargeTime;
         } else if (move == PowerIndex.SPECIAL_TRACKER){
             goBeyondActiveTarget = this.self.level().getEntity(chargeTime);
         } else if (move == PowerIndex.POWER_2_BONUS){

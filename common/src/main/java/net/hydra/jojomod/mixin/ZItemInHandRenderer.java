@@ -5,6 +5,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.AccessLoweringRenderer;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
@@ -36,6 +38,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.AbstractIllager;
@@ -78,6 +81,9 @@ public abstract class ZItemInHandRenderer {
     private static boolean isChargedCrossbow(ItemStack $$0) {
         return false;
     }
+
+    @Shadow
+    protected abstract void renderArmWithItem(AbstractClientPlayer $$0, float $$1, float $$2, InteractionHand $$3, float $$4, ItemStack $$5, float $$6, PoseStack $$7, MultiBufferSource $$8, int $$9);
 
     @Inject(method = "renderHandsWithItems", at = @At(value = "HEAD"), cancellable = true)
     public<T extends LivingEntity, M extends EntityModel<T>>
@@ -217,6 +223,9 @@ public abstract class ZItemInHandRenderer {
             cir.setReturnValue(true);
         }
     }
+
+    @Unique
+    public boolean rdbt$returnToZero = false;
     @Inject(method = "renderArmWithItem", at = @At(value = "HEAD"), cancellable = true, require = 0)
     public void roundabout$renderArmWithItemAbstractClientPlayer(AbstractClientPlayer abstractClientPlayer,
                                                                  float partialTick, float g,
@@ -229,10 +238,13 @@ public abstract class ZItemInHandRenderer {
             return;
         }
 
+        byte posByte2 = ((IPlayerEntity) abstractClientPlayer).roundabout$GetPoseEmote();
         if (abstractClientPlayer != null && ((StandUser)abstractClientPlayer).roundabout$getEffectiveCombatMode() && !abstractClientPlayer.isUsingItem() ||
-                AnubisLayer.shouldRender(abstractClientPlayer) != null || abstractClientPlayer.getItemInHand(interactionHand).is(ModItems.ANUBIS_ITEM)) {
+                AnubisLayer.shouldRender(abstractClientPlayer) != null || abstractClientPlayer.getItemInHand(interactionHand).is(ModItems.ANUBIS_ITEM) ||
+                posByte2 == 35) {
+            ((AccessLoweringRenderer)this).rdbt$assertSelf();
 
-            if (PowerTypes.isBrawling(abstractClientPlayer)){
+            if (PowerTypes.isBrawling(abstractClientPlayer) || posByte2 == 35){
                 boolean $$10 = interactionHand == InteractionHand.MAIN_HAND;
                 if ($$10){
                     poseStack.pushPose();
@@ -276,6 +288,20 @@ public abstract class ZItemInHandRenderer {
                 ClientUtil.popPoseAndCooperate(poseStack,4);
                 ci.cancel();
                 return;
+            }
+        } else {
+            if (!abstractClientPlayer.isUsingItem()) {
+                EquipmentSlot es;
+                es = interactionHand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+                if (!rdbt$returnToZero) {
+                    ItemStack newStack = MainUtil.xHandCancelItem(es, abstractClientPlayer, itemStack);
+                    if (!newStack.equals(itemStack)) {
+                        rdbt$returnToZero = true;
+                        renderArmWithItem(abstractClientPlayer, partialTick, g, interactionHand, h, newStack, attackProg, poseStack, multiBufferSource, j);
+                        ci.cancel();
+                        return;
+                    }
+                }
             }
         }
 
@@ -422,6 +448,7 @@ public abstract class ZItemInHandRenderer {
                     this.renderItem(abstractClientPlayer, itemStack, bl2 ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND :
                             ItemDisplayContext.FIRST_PERSON_LEFT_HAND, !bl2, poseStack, multiBufferSource, j);
                     ClientUtil.popPoseAndCooperate(poseStack,11);
+                    // Stand Arrow First Person rendering
                 } else if (itemStack.getUseAnimation() == UseAnim.BOW && itemStack.getItem() instanceof StandArrowItem) {
                     ci.cancel();
                     ClientUtil.pushPoseAndCooperate(poseStack,11);

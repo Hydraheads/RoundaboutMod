@@ -162,6 +162,14 @@ public class ForgeParticles {
             "time_ember",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> MAGIC_HEART = PARTICLES.register(
+            "magic_heart",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> QUESTION = PARTICLES.register(
+            "question",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> ZAP = PARTICLES.register(
             "zap",
             () -> new SimpleParticleType(true)

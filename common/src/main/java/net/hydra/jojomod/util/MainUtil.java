@@ -62,6 +62,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
@@ -104,6 +105,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.zetalasis.networking.message.api.ModMessageEvents;
+import org.spongepowered.asm.mixin.Unique;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -219,6 +221,7 @@ public class MainUtil {
     public static ArrayList<String> powerfulMobs = Lists.newArrayList();
     public static ArrayList<String> foodThatHasEffectsForVampires = Lists.newArrayList();
     public static ArrayList<String> vampireSunDamageWorlds = Lists.newArrayList();
+    public static ArrayList<String> unbreakableThrownItems = Lists.newArrayList();
     public static Set<String> foodThatGivesBloodList = Set.of();
     Map<String, FoodBloodStats> foodThatGivesBloodMap;
 
@@ -350,6 +353,15 @@ public class MainUtil {
             return true;
         }
         return false;
+    }
+    public static boolean isIndestructibleThrownItem(ItemStack stack){
+        if (stack == null || stack.isEmpty())
+            return false;
+        ResourceLocation rl = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        if(unbreakableThrownItems != null && !unbreakableThrownItems.isEmpty() && rl != null && unbreakableThrownItems.contains(rl.toString())){
+             return true;
+        }
+        return  false;
     }
     public static boolean isFreezableMobBlacklisted(Entity ent){
         if (ent == null)
@@ -722,8 +734,6 @@ public class MainUtil {
                 stack.getOrCreateTagElement("Memory").putBoolean("BonusSkin",IPE.roundabout$getUnlockedBonusSkin());
             }
         }
-        stack.getOrCreateTagElement("Memory").putByte("Skin",((StandUser)ent).roundabout$getStandSkin());
-        stack.getOrCreateTagElement("Memory").putByte("Pose",((StandUser)ent).roundabout$getIdlePos());
         if (stack.getItem() instanceof StandDiscItem SD) {
             ((StandUser)ent).roundabout$getStandPowers().addAdditionalSaveData(stack.getOrCreateTagElement("Memory"));
         }
@@ -951,18 +961,6 @@ public class MainUtil {
                 }
             }
 
-            if ($$4.contains("Skin")) {
-                byte skn = ($$4.getByte("Skin"));
-                user.roundabout$setStandSkin(skn);
-            } else {
-                user.roundabout$setStandSkin((byte) 0);
-            }
-            if ($$4.contains("Pose")) {
-                byte skn = ($$4.getByte("Pose"));
-                user.roundabout$setIdlePosX(skn);
-            } else {
-                user.roundabout$setIdlePosX((byte) 0);
-            }
         } else {
             if (ent instanceof Player PE) {
                 IPlayerEntity IPE = ((IPlayerEntity) PE);
@@ -970,8 +968,8 @@ public class MainUtil {
                 IPE.roundabout$setStandExp(0);
                 IPE.roundabout$setUnlockedBonusSkin(false);
             };
-            user.roundabout$setStandSkin((byte) 0);
-            user.roundabout$setIdlePosX((byte) 0);
+            user.roundabout$setStandSkinLight((byte) 0);
+            user.roundabout$setIdlePosLight((byte) 0);
         }
 
     }
@@ -1050,6 +1048,72 @@ public class MainUtil {
         hitbox = RotationUtil.vecPlayerToWorld(hitbox,
                 ((IGravityEntity)entity).roundabout$getGravityDirection());
         return start.add(hitbox);
+    }
+
+    public static boolean absolveBlockStateForCombatMode(BlockHitResult blockHitResult, Entity ent){
+        if (blockHitResult != null){
+            BlockPos blockpos = blockHitResult.getBlockPos();
+            BlockState state = ent.level().getBlockState(blockpos);
+            Block blk = state.getBlock();
+            if ((state.hasBlockEntity() && (ent.level().getBlockEntity(blockpos) instanceof MenuProvider
+            || (ent.level().getBlockEntity(blockpos) instanceof Container))) || ((blk instanceof LeverBlock) || (blk instanceof ButtonBlock)
+                    || (blk instanceof DoorBlock) || (blk instanceof TrapDoorBlock) || (blk instanceof BedBlock)
+                    || (blk instanceof FenceGateBlock))){
+                return true;
+            }
+            if (ent.isCrouching()){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static ItemStack xHandCancelItem(EquipmentSlot ES, Entity ent, ItemStack stack) {
+        if (ent instanceof Player pl) {
+            StandUser su = ((StandUser) pl);
+            if (su.roundabout$getStandPowers() instanceof PowersGreenDay PGD && ES == EquipmentSlot.MAINHAND) {
+                if (!PGD.HasMainArm && (PGD.self.getMainArm() == HumanoidArm.RIGHT)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+            if (su.roundabout$getStandPowers() instanceof PowersGreenDay PGD && ES == EquipmentSlot.OFFHAND) {
+                if (!PGD.HasOffHand && (PGD.self.getMainArm() == HumanoidArm.RIGHT)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+            if (su.roundabout$getStandPowers() instanceof PowersGreenDay PGD && ES == EquipmentSlot.MAINHAND) {
+                if (!PGD.HasMainArm && (PGD.self.getMainArm() == HumanoidArm.LEFT)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+            if (su.roundabout$getStandPowers() instanceof PowersGreenDay PGD && ES == EquipmentSlot.OFFHAND) {
+                if (!PGD.HasOffHand && (PGD.self.getMainArm() == HumanoidArm.LEFT)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+            if (pl.isUsingItem()){
+                return stack;
+            }
+
+            byte posByte2 = ((IPlayerEntity) pl).roundabout$GetPoseEmote();
+            if (posByte2 == 35){
+                return ItemStack.EMPTY;
+            }
+
+            if (su.roundabout$isPossessed()) {
+                return ItemStack.EMPTY;
+            }
+            if (su.roundabout$getEffectiveCombatMode()) {
+                StandPowers SP = su.roundabout$getStandPowers();
+                if (SP != null) {
+                    if (!SP.canCombatModeUse(pl.getItemBySlot(ES))) {
+                        return ItemStack.EMPTY;
+                    }
+                }
+            }
+        }
+        return stack;
     }
 
     public static boolean canFreeze(Entity mob){
@@ -1483,7 +1547,7 @@ public class MainUtil {
     }
     public static void takeKnockback(Entity entity, double strength, double x, double y, double z) {
 
-        if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+        if (entity instanceof LivingEntity && (strength * (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
             return;
         }
 
@@ -1494,7 +1558,7 @@ public class MainUtil {
     }
     public static void takeKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
 
-        if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+        if (entity instanceof LivingEntity && (strength * (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
             return;
         }
 
@@ -1514,7 +1578,6 @@ public class MainUtil {
 
     public static void takeUnresistableKnockback(Entity entity, double strength, double x, double y, double z) {
         entity.hurtMarked = true;
-        strength*=getNetheriteMultiplier(entity);
         Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
         entity.setDeltaMovement(- vec3d2.x,
                 0.4F,
@@ -1524,7 +1587,6 @@ public class MainUtil {
     public static void takeUnresistableKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
         entity.hurtMarked = true;
 
-        strength*=getNetheriteMultiplier(entity);
         Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
         entity.setDeltaMovement(- vec3d2.x,
                 -vec3d2.y,
@@ -1533,10 +1595,6 @@ public class MainUtil {
     }
     public static void takeLiteralUnresistableKnockbackWithY(Entity entity,  double x, double y, double z) {
         entity.hurtMarked = true;
-        float multi = getNetheriteMultiplier(entity);
-        x*=multi;
-        y*=multi;
-        z*=multi;
         entity.setDeltaMovement(x,
                 y,
                z);
@@ -1545,7 +1603,6 @@ public class MainUtil {
 
     public static void takeUnresistableKnockbackWithYBias2(Entity entity, double strength, double x, double y, double z, float yBias, float yscalp) {
         entity.hurtMarked = true;
-        strength*=getNetheriteMultiplier(entity);
         Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
         Vec3 vec3d3 = vec3d2.multiply(yBias,1-yscalp,yBias);
         entity.setDeltaMovement(- vec3d3.x,
@@ -1555,7 +1612,6 @@ public class MainUtil {
     }
     public static void takeUnresistableKnockbackWithYBias(Entity entity, double strength, double x, double y, double z, float yBias) {
         entity.hurtMarked = true;
-        strength*=getNetheriteMultiplier(entity);
         Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
         Vec3 vec3d3 = vec3d2.multiply(yBias,1,yBias);
         entity.setDeltaMovement(- vec3d3.x,
@@ -1565,10 +1621,6 @@ public class MainUtil {
     }
     public static void takeUnresistableKnockbackWithY2(Entity entity,double x, double y, double z) {
         entity.hurtMarked = true;
-        float multi = getNetheriteMultiplier(entity);
-        x*=multi;
-        y*=multi;
-        z*=multi;
         entity.setDeltaMovement( x,
                 y,
                 z);
@@ -1590,7 +1642,7 @@ public class MainUtil {
     }
 
     public static void knockback(Entity entity, double d, double e, double f) {
-        if (entity instanceof LivingEntity le && (d *= 1.0 - le.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)) <= 0.0) {
+        if (entity instanceof LivingEntity le && (d *(1.0 - le.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
             return;
         }
         if (MainUtil.isKnockbackImmune(entity)){
@@ -1604,7 +1656,7 @@ public class MainUtil {
         entity.hurtMarked = true;
     }
     public static void knockbackWithoutBumpUp(Entity entity, double d, double e, double f) {
-        if (entity instanceof LivingEntity le && (d *= 1.0 - le.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)) <= 0.0) {
+        if (entity instanceof LivingEntity le && (d * (1.0 - le.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
             return;
         }
         if (MainUtil.isKnockbackImmune(entity)){
@@ -1998,6 +2050,7 @@ public class MainUtil {
         if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.PENETRATING_STAND) || sauce.is(ModDamageTypes.STAR_FINGER)
                 || sauce.is(ModDamageTypes.STAND_RUSH)|| sauce.is(ModDamageTypes.CROSSFIRE)|| sauce.is(ModDamageTypes.EXPLOSIVE_STAND)
                 || sauce.is(ModDamageTypes.GO_BEYOND)
+                || sauce.is(ModDamageTypes.CHESS_STRIKE)
                 || sauce.is(ModDamageTypes.CORPSE) || sauce.is(ModDamageTypes.CORPSE_EXPLOSION) || sauce.is(ModDamageTypes.CORPSE_ARROW)
                 || sauce.is(ModDamageTypes.MELTING)
                 || sauce.is(ModDamageTypes.HEEL_SPIKE)
@@ -2729,7 +2782,6 @@ public class MainUtil {
             user.roundabout$getStandPowers().getPoseInDirection(true);
         } else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_POWER_INVENTORY) {
             StandUser standUser = ((StandUser) player);
-            standUser.roundabout$getStandPowers().setCooldown(context,-1);
             PowerTypes.initializeStandPower(player);
             IPlayerEntity iplay = ((IPlayerEntity) player);
             byte unlocked = 0;
@@ -2844,7 +2896,8 @@ public class MainUtil {
                 queryNumber = 0;
             }
             ((IPlayerEntity)player).roundabout$setPowerWithPenalty((byte)powerTypes.get(queryNumber).ordinal());
-
+        } else if (context == PacketDataIndex.CALIFORNIA_CHESS_HURT) {
+            MemoryChessPieceItem.attackThePerson(player);
         } else if (context == PacketDataIndex.SINGLE_BYTE_RIGHT_POWERS) {
             List<PowerTypes> powerTypes = PowerTypes.getAvailablePowers(player);
             int queryNumber = 0;
