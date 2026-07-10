@@ -2703,6 +2703,11 @@ public class MainUtil {
         ((StandUser)player).roundabout$getStandPowers().syncAllCooldowns();
         S2CPacketUtil.affirmCooldownsS2C(player);
         ((StandUser)player).roundabout$syncGuard();
+        S2CPacketUtil.sendGenericIntToClientPacket(
+                player,
+                PacketDataIndex.S2C_INT_LVL_DECREASE,
+                ((IPlayerEntity)player).rdbt$getLevelDecreaseTicks()
+        );
     }
 
 

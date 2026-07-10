@@ -1208,6 +1208,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         compoundtag.putInt("anchorPlace",roundabout$anchorPlace);
         compoundtag.putInt("anchorPlaceAttack",roundabout$anchorPlaceAttack);
+        compoundtag.putInt("forgotStand",rdbt$getLevelDecreaseTicks());
         compoundtag.putFloat("distanceOut",roundabout$distanceOut);
         compoundtag.putFloat("idleRotation",roundabout$idleRotation);
         compoundtag.putFloat("idleYOffset",roundabout$idleYOffset);
@@ -1290,6 +1291,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
         if (compoundtag2.contains("anchorPlaceAttack")) {
             roundabout$anchorPlaceAttack = compoundtag2.getInt("anchorPlaceAttack");
+        }
+        if (compoundtag2.contains("forgotStand")) {
+            rdbt$levelDecreaseTicks = compoundtag2.getInt("forgotStand");
         }
         if (compoundtag2.contains("distanceOut")) {
             roundabout$distanceOut = compoundtag2.getFloat("distanceOut");

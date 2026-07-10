@@ -239,6 +239,8 @@ public class StandIcons {
             "textures/gui/icons/california_king_bed/steal_memories.png");
     public static final ResourceLocation STEAL_MEMORIES_2 = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/california_king_bed/steal_memories_2.png");
+    public static final ResourceLocation SAVE_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/save_location.png");
     public static final ResourceLocation VAMP_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/powers/vampire/punch.png");
     public static final ResourceLocation VAMP_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,

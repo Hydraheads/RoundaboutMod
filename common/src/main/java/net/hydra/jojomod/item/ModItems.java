@@ -158,6 +158,7 @@ public class ModItems {
     public static Item MEMORY_ROOK_WHITE;
     public static Item MEMORY_KING_WHITE;
     public static Item MEMORY_QUEEN_WHITE;
+    public static Item EXP_BISHOP;
 
     public static Item BLANK_MASK;
     public static Item RAT_MASK;

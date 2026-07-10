@@ -237,6 +237,8 @@ public class FabricItems {
     public static Item MEMORY_BISHOP_WHITE = registerItem("memory_bishop_white", new MemoryChessPieceItem(new Item.Properties().stacksTo(1)));
     public static Item MEMORY_KING_WHITE = registerItem("memory_king_white", new MemoryChessPieceItem(new Item.Properties().stacksTo(1)));
     public static Item MEMORY_QUEEN_WHITE = registerItem("memory_queen_white", new MemoryChessPieceItem(new Item.Properties().stacksTo(1)));
+    public static Item EXP_BISHOP = registerItem("exp_bishop", new ExperienceBishopItem(new Item.Properties().stacksTo(1)));
+
 
     public static Item BLANK_MASK = registerItem("blank_mask", new MaskItem(new Item.Properties().stacksTo(1), new NonCharacterVisage(null)));
     public static Item RAT_MASK = registerItem("rat_mask", new MaskItem(new Item.Properties().stacksTo(1), new NonCharacterVisage(null)));
@@ -626,6 +628,7 @@ public class FabricItems {
                         entries.accept(MEMORY_BISHOP_WHITE);
                         entries.accept(MEMORY_QUEEN_WHITE);
                         entries.accept(MEMORY_KING_WHITE);
+                        entries.accept(EXP_BISHOP);
                         entries.accept(STAND_DISC_CALIFORNIA_KING_BED);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
@@ -813,6 +816,7 @@ public class FabricItems {
         ModItems.MEMORY_ROOK_WHITE = MEMORY_ROOK_WHITE;
         ModItems.MEMORY_KING_WHITE = MEMORY_KING_WHITE;
         ModItems.MEMORY_QUEEN_WHITE = MEMORY_QUEEN_WHITE;
+        ModItems.EXP_BISHOP = EXP_BISHOP;
 
         ModItems.BLANK_MASK = BLANK_MASK;
         ModItems.RAT_MASK = RAT_MASK;

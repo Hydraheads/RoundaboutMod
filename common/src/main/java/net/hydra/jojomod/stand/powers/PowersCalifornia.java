@@ -35,11 +35,15 @@ import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -49,6 +53,8 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Pufferfish;
@@ -62,6 +68,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -146,8 +154,11 @@ public class PowersCalifornia extends NewDashPreset {
 
                 CompoundTag tag = invStack.getTag();
                 if (tag != null &&
+                        tag.getBoolean("activated") &&
                         tag.hasUUID("victim") &&
                         victimId.equals(tag.getUUID("victim"))) {
+
+                        tag.putBoolean("activated",false);
 
                         tag.remove("victim");
                         invStack.setDamageValue(0);
@@ -311,8 +322,11 @@ public class PowersCalifornia extends NewDashPreset {
             case SKILL_1_CROUCH -> {
                 tryCatchEnemiesEXP();
             }
-            case SKILL_2_NORMAL,SKILL_2_CROUCH -> {
+            case SKILL_2_NORMAL -> {
                 tryStrategyClient();
+            }
+            case SKILL_2_CROUCH -> {
+                trySaveLocationClient();
             }
             case SKILL_3_NORMAL -> {
                 tryToDashClient();
@@ -350,6 +364,12 @@ public class PowersCalifornia extends NewDashPreset {
                 clearClientList();
                 tryPowerPacket(PowerIndex.POWER_1_SNEAK);
             }
+        }
+    }
+
+    public void trySaveLocationClient(){
+        if (!onCooldown(PowerIndex.SKILL_2_SNEAK)) {
+            tryPowerPacket(PowerIndex.POWER_2_SNEAK);
         }
     }
     @SuppressWarnings("deprecation")
@@ -470,12 +490,16 @@ public class PowersCalifornia extends NewDashPreset {
             setSkillIcon(context, x, y, 1, StandIcons.STEAL_MEMORIES, PowerIndex.SKILL_1);
         }
 
-        if (isDoNotHurt()){
-            setSkillIcon(context, x, y, 2, StandIcons.HURT, PowerIndex.SKILL_2);
-        } else if (isDoNotLeave()){
-            setSkillIcon(context, x, y, 2, StandIcons.LEAVE, PowerIndex.SKILL_EXTRA_2);
+        if (isHoldingSneak()){
+            setSkillIcon(context, x, y, 2, StandIcons.SAVE_LOCATION, PowerIndex.SKILL_2_SNEAK);
         } else {
-            setSkillIcon(context, x, y, 2, StandIcons.FORBID, PowerIndex.SKILL_EXTRA);
+            if (isDoNotHurt()) {
+                setSkillIcon(context, x, y, 2, StandIcons.HURT, PowerIndex.SKILL_2);
+            } else if (isDoNotLeave()) {
+                setSkillIcon(context, x, y, 2, StandIcons.LEAVE, PowerIndex.SKILL_EXTRA_2);
+            } else {
+                setSkillIcon(context, x, y, 2, StandIcons.FORBID, PowerIndex.SKILL_EXTRA);
+            }
         }
 
         if (this.getSelf().fallDistance > 3) {
@@ -815,8 +839,10 @@ public class PowersCalifornia extends NewDashPreset {
             switchRules();
         } else if (move == PowerIndex.POWER_2){
             cowerServer();
+        } else if (move == PowerIndex.POWER_2_SNEAK){
+            saveLocation();
         } else if (move == PowerIndex.POWER_1){
-            punishServer();
+            punishServer(false);
         } else if (move == PowerIndex.POWER_1_SNEAK){
             punishServer2();
         } else if (move == PowerIndex.SKILL_EXTRA){
@@ -829,10 +855,10 @@ public class PowersCalifornia extends NewDashPreset {
 
 
     public void punishServer2(){
-        punishServer();
+        punishServer(true);
     }
 
-    public void punishServer(){
+    public void punishServer(boolean exp){
         if (!hurtEntities.isEmpty() && self instanceof ServerPlayer sp) {
             if (rewindSnap != null && snapEntity != null && snapEntity.isAlive()
             && hurtEntities != null && hurtEntities.containsKey(snapEntity)){
@@ -857,7 +883,7 @@ public class PowersCalifornia extends NewDashPreset {
 
                 if (entity.isAlive()) {
                     entity.setDeltaMovement(0,0.15,0);
-                    ItemStack piece = getPieceType(entity);
+                    ItemStack piece = getPieceType(entity, exp, true, -1);
                     MainUtil.addItem(sp,piece);
                     ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.QUESTION,
                             entity.getEyePosition().x, entity.getEyePosition().y+0.5F, entity.getEyePosition().z,
@@ -876,9 +902,8 @@ public class PowersCalifornia extends NewDashPreset {
         }
     }
 
-    public ItemStack getPieceType(Entity victim){
-        int skin = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-        boolean isWhite = skin == CaliforniaKingBedEntity.SUNSHINE;
+    public ItemStack getPieceType(Entity victim,boolean exp, boolean style, int force){
+        boolean isWhite = !style;
         double rand = Math.random();
         ItemStack stack;
         Item result;
@@ -920,12 +945,39 @@ public class PowersCalifornia extends NewDashPreset {
             }
         }
         stack = new ItemStack(result);
-        return MemoryChessPieceItem.initializePiece(stack,victim,getStealType(victim));
+        int num = force;
+        if (force < 0){
+            num = getStealType(victim,exp);
+        }
+        return MemoryChessPieceItem.initializePiece(stack,victim,num);
     }
 
-    public int getStealType(Entity victim){
+    public int getStealType(Entity victim, boolean exp){
         boolean isMemortaken = false;
+        Entity lastTarget = null;
         if (victim instanceof LivingEntity LE){
+            if (exp){
+                if (LE instanceof Villager vg){
+                    Brain<Villager> brain = vg.getBrain();
+                    if (brain.hasMemoryValue(MemoryModuleType.JOB_SITE)) {
+                        Optional<GlobalPos> jobSite = brain.getMemory(MemoryModuleType.JOB_SITE);
+                        if (jobSite.isPresent()) {
+                            return 12;
+                        }
+                    }
+                }
+                if (LE instanceof Player pl){
+                    return 13;
+                }
+                if (!((StandUser)LE).rdbt$getExperienceTaken() && LE.getExperienceReward() > 0) {
+                    ((StandUser)LE).rdbt$setExperienceTaken(true);
+                    return 10;
+                }
+            }
+
+            if (victim instanceof Mob mb){
+                lastTarget = mb.getTarget();
+            }
             ((StandUser)LE).roundabout$deeplyRemoveAttackTarget();
             if (victim instanceof Mob mb){
                 isMemortaken = ((IMob)victim).rdbt$getStolen();
@@ -939,13 +991,13 @@ public class PowersCalifornia extends NewDashPreset {
         && !((StandUser)pl).roundabout$getStandPowers().isSecondaryStand()
                 && ((IPlayerEntity)pl).rdbt$getLevelDecreaseTicks() <= 0
         ) {
-            ((IPlayerEntity)pl).rdbt$setLevelDecreaseTicks(200);
+            ((IPlayerEntity)pl).rdbt$setLevelDecreaseTicks(400);
             return 8;
         } else if (victim instanceof Player pl && pl.isUsingItem()) {
             ItemStack stack = pl.getUseItem();
             if (!stack.isEmpty()) {
                 if (!pl.getCooldowns().isOnCooldown(stack.getItem())) {
-                    pl.getCooldowns().addCooldown(stack.getItem(), 50);
+                    pl.getCooldowns().addCooldown(stack.getItem(), 70);
                 }
                 pl.stopUsingItem();
             }
@@ -966,7 +1018,8 @@ public class PowersCalifornia extends NewDashPreset {
                 ig.setPlayerCreated(true);
                 return 2;
             }
-        } if (victim instanceof Monster || (victim instanceof Mob mb && mb.getTarget() != null)){
+        } if (!(victim instanceof NeutralMob nm && lastTarget ==null) &&
+                (victim instanceof Monster || (victim instanceof Mob mb && lastTarget != null))){
             return 1;
         }
         return 0;
@@ -1001,25 +1054,30 @@ public class PowersCalifornia extends NewDashPreset {
                             tag.hasUUID("victim") &&
                             victimId.equals(tag.getUUID("victim"))) {
                         int getKey = tag.getInt("stealType");
-                        if (getKey == 3 && entity instanceof IronGolem ig){
-                            ig.setPlayerCreated(true);
-                        } else if (getKey == 2 && entity instanceof IronGolem ig){
-                            ig.setPlayerCreated(false);
-                        }
-                        if (entity instanceof Mob mb && isRestoreType(getKey)){
-                            ((IMob)mb).rdbt$setStolen(false);
-                        }
-                        if (entity instanceof Player pl && getKey == 8){
-                            ((IPlayerEntity)pl).rdbt$setLevelDecreaseTicks(0);
-                        }
-                        if (getKey == 11 && entity instanceof Villager vg &&
-                                tag.contains("StoredGossip")) {
 
-                            ListTag gossipTag = tag.getList("StoredGossip", 10);
-                            vg.getGossips().update(new Dynamic(NbtOps.INSTANCE, gossipTag));
+                        if (getKey != 14 && getKey != 15) {
+                            if (getKey == 10 && entity instanceof LivingEntity mb) {
+                                ((StandUser) mb).rdbt$setExperienceTaken(false);
+                            } else if (getKey == 3 && entity instanceof IronGolem ig) {
+                                ig.setPlayerCreated(true);
+                            } else if (getKey == 2 && entity instanceof IronGolem ig) {
+                                ig.setPlayerCreated(false);
+                            }
+                            if (entity instanceof Mob mb && isRestoreType(getKey)) {
+                                ((IMob) mb).rdbt$setStolen(false);
+                            }
+                            if (entity instanceof Player pl && getKey == 8) {
+                                ((IPlayerEntity) pl).rdbt$setLevelDecreaseTicks(0);
+                            }
+                            if (getKey == 11 && entity instanceof Villager vg &&
+                                    tag.contains("StoredGossip")) {
+
+                                ListTag gossipTag = tag.getList("StoredGossip", 10);
+                                vg.getGossips().update(new Dynamic(NbtOps.INSTANCE, gossipTag));
+                            }
+                            release = true;
+                            inv.setItem(i, ItemStack.EMPTY);
                         }
-                        release = true;
-                        inv.setItem(i,ItemStack.EMPTY);
                     }
                 }
 
@@ -1055,6 +1113,16 @@ public class PowersCalifornia extends NewDashPreset {
         }
     }
 
+    @Override
+    public void playFallBraceImpactParticles(){
+        ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.FALLING_DUST, Blocks.WHITE_WOOL.defaultBlockState()),
+                this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
+                50, 1.1, 0.05, 1.1, 0.4);
+        ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.FALLING_DUST, Blocks.WHITE_WOOL.defaultBlockState()),
+                this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
+                30, 1, 0.05, 1, 0.4);
+    }
+
 
     @Override
     public void onPoseEmoteSwitch(byte from, byte to){
@@ -1065,6 +1133,19 @@ public class PowersCalifornia extends NewDashPreset {
         }
     }
 
+    public void saveLocation(){
+        if (!onCooldown(PowerIndex.SKILL_2_SNEAK)){
+            if (self instanceof ServerPlayer pl){
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.HEART_SPARKLE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.20f + Math.random() * 0.03f));
+                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.HYPNO_SWIRL,
+        self.getEyePosition().x, self.getEyePosition().y, self.getEyePosition().z,
+        0, 0, 1,0, 0.15);
+                ItemStack piece = getPieceType(self, false, false,14);
+                MainUtil.addItem(pl,piece);
+                setCooldown(PowerIndex.SKILL_2_SNEAK,1200);
+            }
+        }
+    }
     public void cowerServer(){
         if (!onCooldown(PowerIndex.SKILL_2)){
             if (self instanceof ServerPlayer pl){
@@ -1079,6 +1160,7 @@ public class PowersCalifornia extends NewDashPreset {
         if (num == PowerIndex.SKILL_2 ||
                 num == PowerIndex.SKILL_1 ||
                 num == PowerIndex.SKILL_EXTRA ||
+                num == PowerIndex.SKILL_2_SNEAK ||
                 num == PowerIndex.SKILL_EXTRA_2) {
             return true;
         }

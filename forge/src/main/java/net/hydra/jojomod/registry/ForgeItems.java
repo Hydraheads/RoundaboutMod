@@ -774,6 +774,8 @@ public class ForgeItems {
             () -> new MemoryChessPieceItem(new Item.Properties())));
     public static final RegistryObject<Item> MEMORY_KING_WHITE = addToWIPTab(ITEMS.register("memory_king_white",
             () -> new MemoryChessPieceItem(new Item.Properties())));
+    public static final RegistryObject<Item> EXP_BISHOP = addToWIPTab(ITEMS.register("exp_bishop",
+            () -> new ExperienceBishopItem(new Item.Properties())));
 
     public static final RegistryObject<Item> BLANK_MASK = addToTab(ITEMS.register("blank_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new NonCharacterVisage(null))));

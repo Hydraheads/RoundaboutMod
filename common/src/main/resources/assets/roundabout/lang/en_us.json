@@ -21,6 +21,10 @@
   "text.roundabout.memory.9": "Memory of Held Object",
   "text.roundabout.memory.10": "Experiences Flow Through",
   "text.roundabout.memory.11": "Memory of Reputation",
+  "text.roundabout.memory.12": "Memory of Work",
+  "text.roundabout.memory.13": "Memory of Home",
+  "text.roundabout.memory.14": "Memory of Location",
+  "text.roundabout.memory.15": "Experiences Stored",
 
   "text.roundabout.powers.stand": "Stand User",
   "text.roundabout.powers.stand_select": "Yuhamon",
@@ -127,6 +131,7 @@
   "item.roundabout.memory_bishop_white": "Stolen Memory",
   "item.roundabout.memory_queen_white": "Stolen Memory",
   "item.roundabout.memory_king_white": "Stolen Memory",
+  "item.roundabout.exp_bishop": "Experience Bishop",
 
   "roundabout.coffin_sleep": "Leave Coffin",
 
