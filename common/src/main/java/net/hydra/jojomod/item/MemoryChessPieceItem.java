@@ -77,6 +77,7 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
             stack.getOrCreateTag().putUUID("victim",victim.getUUID());
             stack.getOrCreateTag().putInt("stealType",stealType);
             stack.getOrCreateTag().putInt("swings",0);
+            stack.getOrCreateTag().putBoolean("activated",true);
             stack.getOrCreateTag().putString("vicName", victim.getName().getString());
             if (stealType == 11 && victim instanceof Villager vg){
                 Roundabout.LOGGER.info("1");
