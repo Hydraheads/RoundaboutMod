@@ -53,6 +53,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.memory.ExpirableValue;
@@ -621,9 +622,16 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Unique
     @Override
     public void roundabout$deeplyRemoveTargets(){
+
+        if (this.goalSelector != null) {
+            this.goalSelector.getAvailableGoals().stream()
+                    .map(WrappedGoal::getGoal)
+                    .forEach(this::roundabout$removeGoalTarget);
+        }
             if (this.targetSelector != null) {
-                Stream<WrappedGoal> wrappedGoalStream = this.targetSelector.getRunningGoals();
-                wrappedGoalStream.forEach(this::roundabout$removeGoalTarget);
+                this.targetSelector.getAvailableGoals().stream()
+                        .map(WrappedGoal::getGoal)
+                        .forEach(this::roundabout$removeGoalTarget);
 
 
                 Optional<? extends ExpirableValue<?>> $$1 = brain.getMemories().get(MemoryModuleType.ATTACK_TARGET);
@@ -736,6 +744,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
     public void roundabout$removeGoalTarget(Goal goal){
         if (goal instanceof TargetGoal tg) {
             ((ITargetGoal) tg).roundabout$removeTarget();
+        } else if (goal instanceof PanicGoal tg) {
+            tg.stop();
         }
     }
     @Unique

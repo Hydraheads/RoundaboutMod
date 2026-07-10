@@ -954,6 +954,7 @@ public class PowersCalifornia extends NewDashPreset {
 
     public int getStealType(Entity victim, boolean exp){
         boolean isMemortaken = false;
+        Entity lastTarget = null;
         if (victim instanceof LivingEntity LE){
             if (exp){
                 if (LE instanceof Villager vg){
@@ -974,6 +975,9 @@ public class PowersCalifornia extends NewDashPreset {
                 }
             }
 
+            if (victim instanceof Mob mb){
+                lastTarget = mb.getTarget();
+            }
             ((StandUser)LE).roundabout$deeplyRemoveAttackTarget();
             if (victim instanceof Mob mb){
                 isMemortaken = ((IMob)victim).rdbt$getStolen();
@@ -1014,8 +1018,8 @@ public class PowersCalifornia extends NewDashPreset {
                 ig.setPlayerCreated(true);
                 return 2;
             }
-        } if (!(victim instanceof NeutralMob nm && nm.getTarget() ==null) &&
-                (victim instanceof Monster || (victim instanceof Mob mb && mb.getTarget() != null))){
+        } if (!(victim instanceof NeutralMob nm && lastTarget ==null) &&
+                (victim instanceof Monster || (victim instanceof Mob mb && lastTarget != null))){
             return 1;
         }
         return 0;
