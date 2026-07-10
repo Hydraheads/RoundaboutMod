@@ -1051,27 +1051,29 @@ public class PowersCalifornia extends NewDashPreset {
                             victimId.equals(tag.getUUID("victim"))) {
                         int getKey = tag.getInt("stealType");
 
-                        if (getKey == 10 && entity instanceof LivingEntity mb) {
-                            ((StandUser)mb).rdbt$setExperienceTaken(false);
-                        } else if (getKey == 3 && entity instanceof IronGolem ig){
-                            ig.setPlayerCreated(true);
-                        } else if (getKey == 2 && entity instanceof IronGolem ig){
-                            ig.setPlayerCreated(false);
-                        }
-                        if (entity instanceof Mob mb && isRestoreType(getKey)){
-                            ((IMob)mb).rdbt$setStolen(false);
-                        }
-                        if (entity instanceof Player pl && getKey == 8){
-                            ((IPlayerEntity)pl).rdbt$setLevelDecreaseTicks(0);
-                        }
-                        if (getKey == 11 && entity instanceof Villager vg &&
-                                tag.contains("StoredGossip")) {
+                        if (getKey != 14) {
+                            if (getKey == 10 && entity instanceof LivingEntity mb) {
+                                ((StandUser) mb).rdbt$setExperienceTaken(false);
+                            } else if (getKey == 3 && entity instanceof IronGolem ig) {
+                                ig.setPlayerCreated(true);
+                            } else if (getKey == 2 && entity instanceof IronGolem ig) {
+                                ig.setPlayerCreated(false);
+                            }
+                            if (entity instanceof Mob mb && isRestoreType(getKey)) {
+                                ((IMob) mb).rdbt$setStolen(false);
+                            }
+                            if (entity instanceof Player pl && getKey == 8) {
+                                ((IPlayerEntity) pl).rdbt$setLevelDecreaseTicks(0);
+                            }
+                            if (getKey == 11 && entity instanceof Villager vg &&
+                                    tag.contains("StoredGossip")) {
 
-                            ListTag gossipTag = tag.getList("StoredGossip", 10);
-                            vg.getGossips().update(new Dynamic(NbtOps.INSTANCE, gossipTag));
+                                ListTag gossipTag = tag.getList("StoredGossip", 10);
+                                vg.getGossips().update(new Dynamic(NbtOps.INSTANCE, gossipTag));
+                            }
+                            release = true;
+                            inv.setItem(i, ItemStack.EMPTY);
                         }
-                        release = true;
-                        inv.setItem(i,ItemStack.EMPTY);
                     }
                 }
 
