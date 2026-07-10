@@ -1,15 +1,20 @@
 package net.hydra.jojomod.stand.powers;
 
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -37,6 +42,10 @@ public class PowersOasis extends NewDashPreset {
 
     @Override
     public boolean isBrawling(){
+        return fistsOut;
+    }
+    @Override
+    public boolean interceptAttack(){
         return fistsOut;
     }
 
@@ -78,7 +87,17 @@ public class PowersOasis extends NewDashPreset {
 
 
     public void toggleFistsClient() {
+        if (self instanceof Player pl){
+            pl.resetAttackStrengthTicker();
+        }
         tryPowerPacket(PowerIndex.POWER_1);
+    }
+
+    @Override
+    public void onStandSummon(boolean desummon){
+        if (self instanceof Player pl && fistsOut){
+            pl.resetAttackStrengthTicker();
+        }
     }
 
     public void toggleFists() {
@@ -87,6 +106,59 @@ public class PowersOasis extends NewDashPreset {
             saveDiscAndSync();
         }
     }
+
+
+    public void renderAttackHud(GuiGraphics context, Player playerEntity,
+                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
+                                float flashAlpha, float otherFlashAlpha) {
+        boolean powerOn = PowerTypes.hasStandActive(playerEntity);
+        int j = scaledHeight / 2 - 7 - 4;
+        int k = scaledWidth / 2 - 8;
+
+        float attackTimeDuring = getAttackTimeDuring();
+        if (powerOn && isBarrageAttacking() && attackTimeDuring > -1) {
+            int ClashTime = 15 - Math.round((attackTimeDuring / getBarrageLength()) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+        } else if (powerOn && isBarrageCharging()) {
+            int ClashTime = Math.round((attackTimeDuring / getBarrageWindup()) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+        } else {
+            int barTexture = 0;
+            Entity TE = getTargetEntity(playerEntity, 3, getBrawlPunchAngle());
+            float attackTimeMax = getAttackTimeMax();
+            if (attackTimeMax > 0) {
+                float attackTime = getAttackTime();
+                float finalATime = attackTime / attackTimeMax;
+                if (finalATime <= 1) {
+
+                    if (getActivePowerPhase() == getActivePowerPhaseMax()) {
+                        barTexture = 24;
+                    } else if (TE != null && isBrawling()) {
+                        barTexture = 12;
+                    } else {
+                        barTexture = 18;
+                    }
+
+
+                    context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+                    int finalATimeInt = Math.round(finalATime * 15);
+                    context.blit(StandIcons.JOJO_ICONS, k, j, 193, barTexture, finalATimeInt, 6);
+
+                }
+            }
+            if (powerOn && isBrawling()) {
+                if (TE != null) {
+                    if (barTexture == 0) {
+                        context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
+                    }
+                }
+            }
+        }
+    }
+
+
 
 
 
@@ -117,7 +189,7 @@ public class PowersOasis extends NewDashPreset {
 
     @Override
     public void tickPower() {
-
+        super.tickPower();
     }
 
     @Override
@@ -137,6 +209,22 @@ public class PowersOasis extends NewDashPreset {
     public boolean setPowerAttack(){
         setAttack();
         return false;
+    }
+
+    @Override
+    public void buttonInputAttack(boolean keyIsDown, Options options) {
+        if (self instanceof Player pl &&  ((IPlayerEntity)pl).roundabout$getAttackStrengthTicker() < 5) {
+            return;
+        }
+        if (keyIsDown) {
+            if (activePowerPhase == 0) {
+                if (isBrawling()) {
+                    if (!isBarraging()) {
+                        this.tryPower(PowerIndex.ATTACK);
+                    }
+                }
+            }
+        }
     }
 
 
@@ -160,6 +248,21 @@ public class PowersOasis extends NewDashPreset {
         {
             default -> "base";
         };
+    }
+
+    @Override
+    protected Byte getSummonSound() {
+        return SoundIndex.SUMMON_SOUND;
+    }
+
+    @Override
+    public SoundEvent getSoundFromByte(byte soundChoice) {
+        switch(soundChoice) {
+            case SoundIndex.SUMMON_SOUND -> {
+                return ModSounds.SUMMON_OASIS_EVENT;
+            }
+        }
+        return super.getSoundFromByte(soundChoice);
     }
 
 }
