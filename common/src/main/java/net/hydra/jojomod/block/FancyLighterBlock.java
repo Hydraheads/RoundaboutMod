@@ -1,14 +1,22 @@
 package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.access.CancelDataDrivenDropLimits;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.IronBallEntity;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.FancyLighterItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
+import net.hydra.jojomod.stand.powers.PowersJustice;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -112,6 +120,28 @@ public class FancyLighterBlock extends BaseEntityBlock implements CancelDataDriv
     }
 
 
+    public void stepped(ServerLevel $$0, BlockPos $$1, BlockState $$2, Entity stepper) {
+        FancyLighterBlockEntity fbe = (FancyLighterBlockEntity) $$0.getBlockEntity($$1);
+        Entity ownerEntity = null;
+        if(fbe != null && fbe.getOwner() != null) {
+            ownerEntity = $$0.getEntity(fbe.getOwner());
+        }
+        if($$2.getValue(LIT) &&
+                ownerEntity != null && !stepper.is(ownerEntity)
+                && ownerEntity instanceof StandUser se && se.roundabout$getStandPowers() instanceof PowersBlackSabbath bs){
+
+            if(ownerEntity instanceof ServerPlayer spl){
+                       if(stepper.getUUID() != fbe.getOwner()){
+                        //   System.out.println("Black Sabbath is really angy >: <");
+                       } else {
+                       //    System.out.println("You are the owner");
+                       }
+            }
+
+        }
+        super.stepOn($$0, $$1, $$2, stepper);
+    }
+
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         Direction dir = state.getValue(FACING);
@@ -145,6 +175,21 @@ public class FancyLighterBlock extends BaseEntityBlock implements CancelDataDriv
 
         if(state.getValue(LIT)) {
             level.addParticle(ParticleTypes.SMALL_FLAME, x, y, z, 0, 0, 0);
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+        if (!level.isClientSide()) {
+            if(state.getValue(LIT)) {
+                if(level instanceof ServerLevel sl){
+                    List<? extends Entity> entsIn = level.getEntities((Entity) null, state.getShape(level, pos).bounds().move(pos));
+                    if (!entsIn.isEmpty() && !entsIn.get(0).isIgnoringBlockTriggers()) {
+                        stepped(sl, pos, state, entsIn.get(0));
+                    }
+                }
+            }
         }
     }
 
