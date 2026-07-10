@@ -429,7 +429,12 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "pollination_transfer").toString())
             );
-
+    public static final RegistryObject<EntityType<BlackSabbathEntity>> BLACK_SABBATH =
+            ENTITY_TYPES.register("black_sabbath", () ->
+                    EntityType.Builder.of(BlackSabbathEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "black_sabbath").toString())
+            );
     public static final RegistryObject<EntityType<WalkingHeartEntity>> WALKING_HEART =
             ENTITY_TYPES.register("walking_heart", () ->
                     EntityType.Builder.of(WalkingHeartEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).

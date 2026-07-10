@@ -6,6 +6,10 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.layers.animations.CenturyBoyAnimations;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisAnimations;
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
+import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -229,26 +233,35 @@ public class PowersBlackSabbath extends NewDashPreset {
         super.updateUniqueMoves();
     }
 
-    public static final byte
-            MANGA = 1,
-            GOTHIC = 2;
-
-
-    @Override
-    public List<Byte> getSkinList() {
-        return Arrays.asList(
-                MANGA,
-                GOTHIC
-        );
-    }
-
 
     @Override public Component getSkinName(byte skinId) {
-        return switch (skinId)
-        {
-            case GOTHIC -> Component.translatable("skins.roundabout.hey_ya.gothic");
-            default -> Component.translatable("skins.roundabout.hey_ya.manga");
-        };
+            if (skinId == BlackSabbathEntity.PART_5_ANIME){
+                return Component.translatable(  "skins.roundabout.black_sabbath.anime");
+            } else if (skinId == BlackSabbathEntity.PART_5_MANGA){
+                return Component.translatable(  "skins.roundabout.black_sabbath.manga");
+            }else if (skinId == BlackSabbathEntity.BURNING) {
+                return Component.translatable("skins.roundabout.black_sabbath.burning");
+            }else if (skinId == BlackSabbathEntity.GIO_GIO){
+                return Component.translatable(  "skins.roundabout.black_sabbath.giogio");
+            } else if (skinId == BlackSabbathEntity.VERDANT){
+                return Component.translatable(  "skins.roundabout.black_sabbath.verdant");
+            } else if (skinId == BlackSabbathEntity.NIGHT){
+                return Component.translatable(  "skins.roundabout.black_sabbath.night");
+            } else if (skinId == BlackSabbathEntity.DEPARTURE){
+                return Component.translatable(  "skins.roundabout.black_sabbath.departure");
+            }else if (skinId == BlackSabbathEntity.PHANTOM){
+                return Component.translatable(  "skins.roundabout.black_sabbath.phantom");
+            }
+            return Component.translatable(  "skins.roundabout.black_sabbath.anime");
+    }
+
+    @Override
+    public int getDisplayPowerInventoryScale() {
+        return 40;
+    }
+    @Override
+    public int getDisplayPowerInventoryYOffset() {
+        return -10;
     }
 
     @Override
@@ -268,6 +281,57 @@ public class PowersBlackSabbath extends NewDashPreset {
 
         }
         return super.getSoundFromByte(soundChoice);
+    }
+
+    public Component getPosName(byte posID){
+        return Component.empty();
+    }
+    public List<Byte> getPosList(){
+        List<Byte> $$1 = Lists.newArrayList();
+        return $$1;
+    }
+
+    public static final byte
+            ANIME_SKIN = 1,
+            MANGA_SKIN = 2,
+            BURNING_SKIN = 3,
+            GIO_GIO_SKIN = 4,
+            VERDANT_SABBATH_SKIN = 5,
+            NIGHT_SKIN = 6,
+            DEPARTURE_SKIN = 7,
+            PHANTOM_SKIN = 8;
+
+    @Override
+    public List<Byte> getSkinList() {
+        return Arrays.asList(
+                ANIME_SKIN,
+                MANGA_SKIN,
+                BURNING_SKIN,
+                GIO_GIO_SKIN,
+                VERDANT_SABBATH_SKIN,
+                NIGHT_SKIN,
+                DEPARTURE_SKIN,
+                PHANTOM_SKIN
+        );
+    }
+
+    @Override
+    public boolean returnFakeStandForHud(){
+        return true;
+    }
+
+    public StandEntity getStandForHUDIfFake(){
+        if (displayStand == null){
+            displayStand = ModEntities.BLACK_SABBATH.create(this.getSelf().level());
+        }
+        if (this.self instanceof Player PL && ((IPlayerEntity) PL).roundabout$getStandSkin() != displayStand.getSkin()) {
+            displayStand = ModEntities.BLACK_SABBATH.create(this.getSelf().level());
+            displayStand.setSkin(((IPlayerEntity) PL).roundabout$getStandSkin());
+            if(displayStand instanceof BlackSabbathEntity BSE){
+                BSE.coat_open.start(BSE.tickCount);
+            }
+        }
+        return displayStand;
     }
 
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {

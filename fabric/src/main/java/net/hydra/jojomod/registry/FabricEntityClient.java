@@ -85,6 +85,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.PLANET_WAVES_SPARTA, PlanetWavesSpartaRenderer::new);
         EntityRendererRegistry.register(FabricEntities.MANHATTAN_TRANSFER, ManhattanTransferRenderer::new);
         EntityRendererRegistry.register(FabricEntities.POLLINATION_TRANSFER, PollinationTransferRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.BLACK_SABBATH, BlackSabbathRenderer::new);
         EntityRendererRegistry.register(FabricEntities.WALKING_HEART, WalkingHeartRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DARK_MIRAGE, DarkMirageRenderer::new);
         EntityRendererRegistry.register(FabricEntities.TUSK_A1, TuskAct1Renderer::new);
@@ -227,6 +228,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.PLANET_WAVES_SPARTA_LAYER, PlanetWavesSpartaModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.MANHATTAN_TRANSFER_LAYER, ManhattanTransferModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.POLLINATION_TRANSFER_LAYER, PollinationTransferModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.BLACK_SABBATH_LAYER, BlackSabbathModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DARK_MIRAGE_LAYER, DarkMirageModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_A1_LAYER, TuskAct1Model::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_A2_LAYER, TuskAct2Model::createBodyLayer);

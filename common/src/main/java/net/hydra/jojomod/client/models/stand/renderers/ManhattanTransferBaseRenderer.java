@@ -24,8 +24,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
 
-//import static net.hydra.jojomod.entity.stand.ManhattanTransferEntity.RADIOACTIVE_SKIN;
-
 public class ManhattanTransferBaseRenderer extends StandRenderer<ManhattanTransferEntity> {
 
     public ManhattanTransferBaseRenderer(EntityRendererProvider.Context context, StandModel<ManhattanTransferEntity> entityModel, float f) {

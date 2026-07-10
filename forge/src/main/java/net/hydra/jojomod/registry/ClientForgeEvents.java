@@ -87,6 +87,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.PLANET_WAVES_SPARTA.get(), PlanetWavesSpartaRenderer::new);
         event.registerEntityRenderer(ForgeEntities.MANHATTAN_TRANSFER.get(), ManhattanTransferRenderer::new);
         event.registerEntityRenderer(ForgeEntities.POLLINATION_TRANSFER.get(), PollinationTransferRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.BLACK_SABBATH.get(), BlackSabbathRenderer::new);
         event.registerEntityRenderer(ForgeEntities.WALKING_HEART.get(), WalkingHeartRenderer::new);
         event.registerEntityRenderer(ForgeEntities.JUSTICE_PIRATE.get(), JusticePirateRenderer::new);
         event.registerEntityRenderer(ForgeEntities.DARK_MIRAGE.get(), DarkMirageRenderer::new);
@@ -236,6 +237,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.PLANET_WAVES_SPARTA_LAYER, PlanetWavesSpartaModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.MANHATTAN_TRANSFER_LAYER, ManhattanTransferModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.POLLINATION_TRANSFER_LAYER, PollinationTransferModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.BLACK_SABBATH_LAYER,BlackSabbathModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.DARK_MIRAGE_LAYER, DarkMirageModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.TUSK_A1_LAYER, TuskAct1Model::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.TUSK_A2_LAYER, TuskAct2Model::createBodyLayer);
