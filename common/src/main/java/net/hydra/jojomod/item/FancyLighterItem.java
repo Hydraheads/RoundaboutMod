@@ -152,10 +152,15 @@ public class FancyLighterItem extends BlockItem {
                                     if($$6.getItem() instanceof FancyLighterItem FI){
                                         CompoundTag compoundtag = $$6.getTagElement("UserIdUUID");
                                         if($$4 instanceof ServerLevel $$8) {
-                                            if (compoundtag != null || compoundtag.hasUUID("StuffOther")) {
+                                            if ($$6.getTag() != null) {
+                                                if (compoundtag != null) {
+                                                    if(compoundtag.hasUUID("StuffOther")) {
                                                         FLBE.setValue($$6.getTagElement("UserIdUUID").getUUID("StuffOther"));
                                                         System.out.println(FLBE.getOwner());
-                                            } else {}
+                                                    }
+                                                } else {
+                                                }
+                                            }
                                         }
                                     }
                                 }
