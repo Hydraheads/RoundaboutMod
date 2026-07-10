@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
@@ -24,6 +25,10 @@ public class PowersOasis extends NewDashPreset {
         super(self);
     }
 
+    @Override
+    public boolean isStandEnabled(){
+        return ClientNetworking.getAppropriateConfig().oasisSettings.enableOasis;
+    }
 
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
@@ -157,9 +162,6 @@ public class PowersOasis extends NewDashPreset {
             }
         }
     }
-
-
-
 
 
     @Override
