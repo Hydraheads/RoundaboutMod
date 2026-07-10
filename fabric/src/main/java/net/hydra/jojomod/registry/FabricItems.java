@@ -3,6 +3,7 @@ package net.hydra.jojomod.registry;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistry;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.block.FancyLighterBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StreetSignBlock;
 import net.hydra.jojomod.event.ModEffects;
@@ -771,7 +772,6 @@ public class FabricItems {
         ModItems.COFFEE_GUM = COFFEE_GUM;
         ModItems.METEORITE = METEORITE;
         ModItems.AJA = AJA;
-        ModItems.FANCY_LIGHTER = FANCY_LIGHTER;
         //ModItems.HAND = HAND;
         //ModItems.VILLAGER_HAND = VILLAGER_HAND;
         //ModItems.ILLAGER_HAND = ILLAGER_HAND;
@@ -789,6 +789,8 @@ public class FabricItems {
         ((StreetSignBlock)FabricBlocks.STREET_SIGN_STOP).referenceItem = STREET_SIGN_STOP_BLOCK_ITEM.getDefaultInstance();
         ((StreetSignBlock)FabricBlocks.STREET_SIGN_YIELD).referenceItem = STREET_SIGN_YIELD_BLOCK_ITEM.getDefaultInstance();
         ((StreetSignBlock)FabricBlocks.STREET_SIGN_DANGER).referenceItem = STREET_SIGN_DANGER_BLOCK_ITEM.getDefaultInstance();
+        ((FancyLighterBlock)FabricBlocks.FANCY_LIGHTER_BLOCK).referenceItem = FANCY_LIGHTER.getDefaultInstance();
+        ModItems.FANCY_LIGHTER = FANCY_LIGHTER;
         ModItems.STREET_SIGN_DIO_BLOCK_ITEM = STREET_SIGN_DIO_BLOCK_ITEM;
         ModItems.STREET_SIGN_RIGHT_BLOCK_ITEM = STREET_SIGN_RIGHT_BLOCK_ITEM;
         ModItems.STREET_SIGN_STOP_BLOCK_ITEM = STREET_SIGN_STOP_BLOCK_ITEM;
