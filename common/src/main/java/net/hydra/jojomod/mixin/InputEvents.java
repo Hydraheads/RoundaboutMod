@@ -19,6 +19,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
+import net.hydra.jojomod.item.ExperienceBishopItem;
 import net.hydra.jojomod.item.FirearmItem;
 import net.hydra.jojomod.item.MemoryChessPieceItem;
 import net.hydra.jojomod.item.WarhammerItem;
@@ -244,10 +245,16 @@ public abstract class InputEvents implements IInputEvents {
                 ci.setReturnValue(false);
                 return;
             }
-            if (mainhand != null && mainhand.getItem() instanceof MemoryChessPieceItem && powers instanceof PowersCalifornia){
-                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.CALIFORNIA_CHESS_HURT);
-                ci.setReturnValue(false);
-                return;
+            if (mainhand != null) {
+                if (mainhand.getItem() instanceof ExperienceBishopItem){
+                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.CALIFORNIA_BISHOP_USE);
+                    ci.setReturnValue(false);
+                    return;
+                } else if (mainhand.getItem() instanceof MemoryChessPieceItem && powers instanceof PowersCalifornia) {
+                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.CALIFORNIA_CHESS_HURT);
+                    ci.setReturnValue(false);
+                    return;
+                }
             }
 
             if(powers instanceof PowersGreenDay PGD) {
