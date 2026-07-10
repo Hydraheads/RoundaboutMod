@@ -560,16 +560,14 @@ public abstract class ConfigManager {
     }
     private static void saveClient(ClientConfig config, Path path) {
         try {
-            String parsed = String.join(System.lineSeparator(), ConfigParser.parse(config));
-            Files.write(path, parsed.getBytes());
+            Files.write(path, GSON.toJson(config).getBytes());
         } catch (IOException e) {
             Roundabout.LOGGER.error("Failed to save config", e);
         }
     }
     private static void saveAdvanced(AdvancedConfig config, Path path) {
         try {
-            String parsed = String.join(System.lineSeparator(), ConfigParser.parse(config));
-            Files.write(path, parsed.getBytes());
+            Files.write(path, GSON.toJson(config).getBytes());
         } catch (IOException e) {
             Roundabout.LOGGER.error("Failed to save config", e);
         }
