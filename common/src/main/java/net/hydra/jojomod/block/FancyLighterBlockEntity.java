@@ -1,23 +1,9 @@
 package net.hydra.jojomod.block;
 
-import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.item.FancyLighterItem;
-import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.RecordItem;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BannerBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.gameevent.GameEvent;
 
 import java.util.UUID;
 

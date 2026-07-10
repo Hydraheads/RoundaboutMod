@@ -65,7 +65,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         setSkillIcon(context, x, y, 1, StandIcons.ANUBIS_EXP, PowerIndex.SKILL_1);
        // setSkillIcon(context, x, y, 2, StandIcons.MINING_YAP, PowerIndex.SKILL_2);
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
-        setSkillIcon(context, x, y, 4, StandIcons.METALLICA_HEAL, PowerIndex.SKILL_4);
+        setSkillIcon(context, x, y, 4, StandIcons.BITE_FINGERS_POLPO, PowerIndex.SKILL_4);
 
         super.renderIcons(context, x, y);
     }
@@ -121,9 +121,12 @@ public class PowersBlackSabbath extends NewDashPreset {
             if (!isClient()) {
                 if(ojiroSasame instanceof Player P && (!P.isCreative() || P.isSpectator())) {
                     ojiroSasame.hurt(ModDamageTypes.of(ojiroSasame.level(), DamageTypes.GENERIC_KILL), 1F);
+                } if(ojiroSasame instanceof ServerPlayer P && (!P.isCreative() || P.isSpectator())){
+                    this.eatFingerServer();
+                    ojiroSasame.level().playSound(null, ojiroSasame, SoundEvents.GENERIC_EAT, SoundSource.PLAYERS, 0.85F, 1.0F);
                 }
                 ItemEntity $$4 = new ItemEntity(ojiroSasame.level(), ojiroSasame.getX(),
-                        ojiroSasame.getY() + ojiroSasame.getBbHeight() - 0.10, ojiroSasame.getZ(),
+                        ojiroSasame.getY() + ojiroSasame.getBbHeight() - 0.20, ojiroSasame.getZ(),
                         ModItems.FANCY_LIGHTER.getDefaultInstance());
                 if($$4.getItem().getItem() instanceof FancyLighterItem FI && this.getSelf() instanceof ServerPlayer P){
                     FI.stuff($$4.getItem(), P);
@@ -131,7 +134,6 @@ public class PowersBlackSabbath extends NewDashPreset {
                 $$4.setPickUpDelay(0);
                 $$4.setDeltaMovement(Vec3.ZERO);
                 ojiroSasame.level().addFreshEntity($$4);
-                ojiroSasame.level().playSound(null, ojiroSasame, SoundEvents.GENERIC_EAT, SoundSource.PLAYERS, 0.85F, 1.0F);
             }
         }
          return true;
@@ -143,6 +145,15 @@ public class PowersBlackSabbath extends NewDashPreset {
                 this.self.playSound(SoundEvents.ENDER_CHEST_OPEN);
             }
         }
+    }
+
+    public int fingerEatingTick = 0;
+    private  void setFingerEatingTick(int tick){fingerEatingTick = tick;}
+    public void eatFingerServer(){
+            if (self instanceof ServerPlayer pl){
+                setFingerEatingTick(16);
+                ((IPlayerEntity)pl).roundabout$SetPoseEmote((byte) 37);
+            }
     }
 
     @Override
@@ -168,7 +179,42 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     @Override
     public void tickPower() {
+        if(fingerEatingTick > 0){
+            fingerEatingTick--;
+        } if (fingerEatingTick == 1){
+            if (self instanceof ServerPlayer pl){
+                this.setAttackTimeDuring(0);
+                ((IPlayerEntity)pl).roundabout$SetPoseEmote((byte) 0);
+            }
+        }
         super.tickPower();
+    }
+
+    @Override
+    public float inputSpeedModifiers(float basis){
+        if (isLarpingOjiroSasame()) {
+            basis*=0.0f;
+        }
+        return super.inputSpeedModifiers(basis);
+    }
+    @Override
+    public boolean cancelJump(){
+        if (isLarpingOjiroSasame()) {
+            return true;
+        }
+        return super.cancelJump();
+    }
+
+    @Override
+    public boolean cancelSprintParticles(){
+        if (isLarpingOjiroSasame()) {
+            return true;
+        }
+        return super.cancelSprintParticles();
+    }
+
+    public boolean isLarpingOjiroSasame(){
+        return self instanceof Player pl && ((IPlayerEntity)pl).roundabout$GetPoseEmote() == 37;
     }
 
 
@@ -233,7 +279,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.yap_yap",
-                "instruction.roundabout.press_skill", StandIcons.METALLICA_HEAL,4,level,bypass));
+                "instruction.roundabout.press_skill", StandIcons.BITE_FINGERS_POLPO,4,level,bypass));
         return $$1;
     }
 

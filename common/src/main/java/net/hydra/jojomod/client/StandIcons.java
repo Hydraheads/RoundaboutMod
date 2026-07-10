@@ -610,6 +610,9 @@ public class StandIcons {
     public static final ResourceLocation MANHATTAN_DODGE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/manhattan_transfer/manhattan_dash.png");
 
+    public static final ResourceLocation BITE_FINGERS_POLPO = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/black_sabbath/finger_bite_polpo.png");
+
     public static final ResourceLocation D4C_BETWEEN_VISION = Roundabout.location("textures/gui/icons/d4c/between_vision.png");
     public static final ResourceLocation D4C_DIMENSION_KIDNAP = Roundabout.location("textures/gui/icons/d4c/dimension_kidnap.png");
     public static final ResourceLocation D4C_CLONE_SUMMON = Roundabout.location("textures/gui/icons/d4c/clone_summon.png");

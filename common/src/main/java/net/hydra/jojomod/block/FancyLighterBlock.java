@@ -1,51 +1,33 @@
 package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.access.CancelDataDrivenDropLimits;
-import net.hydra.jojomod.entity.corpses.FallenMob;
-import net.hydra.jojomod.entity.projectile.IronBallEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.FancyLighterItem;
-import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
-import net.hydra.jojomod.stand.powers.PowersJustice;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.EntityCollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
@@ -178,6 +160,15 @@ public class FancyLighterBlock extends BaseEntityBlock implements CancelDataDriv
         }
     }
 
+    @Override
+    public void onRemove(BlockState $$0, Level $$1, BlockPos $$2, BlockState $$3, boolean $$4) {
+        if (!$$0.is($$3.getBlock())) {
+            if ($$1.getBlockEntity($$2) instanceof FancyLighterBlockEntity FE) {
+                 /*It seems dumb to leave an empty method but it's necessary to save the user when it gets broken*/
+            }
+        }
+    }
+
     @SuppressWarnings("deprecation")
     @Override
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
@@ -224,7 +215,7 @@ public class FancyLighterBlock extends BaseEntityBlock implements CancelDataDriv
             List<ItemStack> drops = new ArrayList<>();
             ItemStack stack = referenceItem.copy();
             if (sl.getBlockEntity(bpos) instanceof FancyLighterBlockEntity FE) {
-                CompoundTag compoundtag = referenceItem.getTagElement("UserIdUUID");
+                CompoundTag compoundtag = stack.getTagElement("UserIdUUID");
                 if (!stack.hasTag()) {
                     if(compoundtag == null || !compoundtag.hasUUID("StuffOther")) {
                         if (FE.getOwner() != null) {

@@ -1165,9 +1165,9 @@ public abstract class InputEvents implements IInputEvents {
                 if (poseEmote != Poses.NONE && poseEmote != Poses.VAMPIRE_TRANSFORMATION){
                     if (((options.keyUp.isDown() || options.keyDown.isDown() ||
                     options.keyLeft.isDown() || options.keyRight.isDown() || options.keyJump.isDown())
-                            && poseEmote != Poses.COWER)
+                            && (poseEmote != Poses.COWER && poseEmote != Poses.BITE_FINGERS))
                             ||
-                    player.isUsingItem() || player.swinging || (player.hurtTime > 0 && poseEmote != Poses.COWER)){
+                    player.isUsingItem() || player.swinging || (player.hurtTime > 0 && (poseEmote != Poses.COWER && poseEmote != Poses.BITE_FINGERS))){
                         ((IPlayerEntity) player).roundabout$SetPos(Poses.NONE.id);
                         C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_STRIKE_POSE,Poses.NONE.id);
                     }
