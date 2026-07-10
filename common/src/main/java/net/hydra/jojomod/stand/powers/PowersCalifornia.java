@@ -1014,7 +1014,8 @@ public class PowersCalifornia extends NewDashPreset {
                 ig.setPlayerCreated(true);
                 return 2;
             }
-        } if (victim instanceof Monster || (victim instanceof Mob mb && mb.getTarget() != null)){
+        } if (!(victim instanceof NeutralMob nm && nm.getTarget() ==null) &&
+                (victim instanceof Monster || (victim instanceof Mob mb && mb.getTarget() != null))){
             return 1;
         }
         return 0;
