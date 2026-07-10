@@ -36,6 +36,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
@@ -67,6 +69,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -984,13 +987,13 @@ public class PowersCalifornia extends NewDashPreset {
         && !((StandUser)pl).roundabout$getStandPowers().isSecondaryStand()
                 && ((IPlayerEntity)pl).rdbt$getLevelDecreaseTicks() <= 0
         ) {
-            ((IPlayerEntity)pl).rdbt$setLevelDecreaseTicks(200);
+            ((IPlayerEntity)pl).rdbt$setLevelDecreaseTicks(400);
             return 8;
         } else if (victim instanceof Player pl && pl.isUsingItem()) {
             ItemStack stack = pl.getUseItem();
             if (!stack.isEmpty()) {
                 if (!pl.getCooldowns().isOnCooldown(stack.getItem())) {
-                    pl.getCooldowns().addCooldown(stack.getItem(), 50);
+                    pl.getCooldowns().addCooldown(stack.getItem(), 70);
                 }
                 pl.stopUsingItem();
             }
@@ -1046,7 +1049,10 @@ public class PowersCalifornia extends NewDashPreset {
                             tag.hasUUID("victim") &&
                             victimId.equals(tag.getUUID("victim"))) {
                         int getKey = tag.getInt("stealType");
-                        if (getKey == 3 && entity instanceof IronGolem ig){
+
+                        if (getKey == 10 && entity instanceof LivingEntity mb) {
+                            ((StandUser)mb).rdbt$setExperienceTaken(false);
+                        } else if (getKey == 3 && entity instanceof IronGolem ig){
                             ig.setPlayerCreated(true);
                         } else if (getKey == 2 && entity instanceof IronGolem ig){
                             ig.setPlayerCreated(false);
@@ -1100,6 +1106,16 @@ public class PowersCalifornia extends NewDashPreset {
         }
     }
 
+    @Override
+    public void playFallBraceImpactParticles(){
+        ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.FALLING_DUST, Blocks.WHITE_WOOL.defaultBlockState()),
+                this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
+                50, 1.1, 0.05, 1.1, 0.4);
+        ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.FALLING_DUST, Blocks.WHITE_WOOL.defaultBlockState()),
+                this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
+                30, 1, 0.05, 1, 0.4);
+    }
+
 
     @Override
     public void onPoseEmoteSwitch(byte from, byte to){
@@ -1137,6 +1153,7 @@ public class PowersCalifornia extends NewDashPreset {
         if (num == PowerIndex.SKILL_2 ||
                 num == PowerIndex.SKILL_1 ||
                 num == PowerIndex.SKILL_EXTRA ||
+                num == PowerIndex.SKILL_2_SNEAK ||
                 num == PowerIndex.SKILL_EXTRA_2) {
             return true;
         }

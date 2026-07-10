@@ -124,7 +124,7 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
                 }
             }
         }
-        if (stealType != 12 && stealType != 13) {
+        if (stealType != 12 && stealType != 13 && stealType != 14) {
             return;
         }
 
