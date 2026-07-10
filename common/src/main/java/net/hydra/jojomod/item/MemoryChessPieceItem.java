@@ -304,7 +304,7 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
 
         int stealType = tag.getInt("stealType");
 
-        if (stealType == 14) {
+        if (stealType == 14 || stealType == 15) {
             return;
         }
 

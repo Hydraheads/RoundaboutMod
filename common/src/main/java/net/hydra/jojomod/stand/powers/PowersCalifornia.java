@@ -1051,7 +1051,7 @@ public class PowersCalifornia extends NewDashPreset {
                             victimId.equals(tag.getUUID("victim"))) {
                         int getKey = tag.getInt("stealType");
 
-                        if (getKey != 14) {
+                        if (getKey != 14 && getKey != 15) {
                             if (getKey == 10 && entity instanceof LivingEntity mb) {
                                 ((StandUser) mb).rdbt$setExperienceTaken(false);
                             } else if (getKey == 3 && entity instanceof IronGolem ig) {
