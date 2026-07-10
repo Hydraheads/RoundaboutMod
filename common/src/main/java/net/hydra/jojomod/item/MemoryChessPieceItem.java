@@ -1,10 +1,15 @@
 package net.hydra.jojomod.item;
 
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.event.IVillagerAccess;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,6 +19,8 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.gossip.GossipContainer;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
@@ -70,7 +77,15 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
             stack.getOrCreateTag().putUUID("victim",victim.getUUID());
             stack.getOrCreateTag().putInt("stealType",stealType);
             stack.getOrCreateTag().putInt("swings",0);
+            stack.getOrCreateTag().putBoolean("activated",true);
             stack.getOrCreateTag().putString("vicName", victim.getName().getString());
+            if (stealType == 11 && victim instanceof Villager vg){
+                Roundabout.LOGGER.info("1");
+                GossipContainer gossips = vg.getGossips();
+                Tag gossipTag = gossips.store(NbtOps.INSTANCE);
+                stack.getOrCreateTag().put("StoredGossip", gossipTag);
+                ((IVillagerAccess)vg).roundabout$clearGossips();
+            }
         }
         return stack;
     }

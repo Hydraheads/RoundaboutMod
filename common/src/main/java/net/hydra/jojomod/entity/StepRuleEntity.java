@@ -136,25 +136,29 @@ public class StepRuleEntity extends Entity {
                 if (getTurnedBad() && isAlive() && !isRemoved()) {
                     AABB wallBox = this.getBoundingBox();
 
-                    for (LivingEntity mob : level().getEntitiesOfClass(
-                            LivingEntity.class,
+                    for (Entity mob : level().getEntitiesOfClass(
+                            Entity.class,
                             wallBox)) {
 
-                        if (!(mob instanceof StandEntity se && se.getUser().getUUID() == LE.getUUID())
-                        && mob.isAlive()) {
-                            if (mob.getBoundingBox().intersects(wallBox)) {
-                                if (mob.getUUID() == userEntity.getUUID()) {
-                                    pca.playUnfairSound();
-                                    pca.clearListServer();
-                                    discard();
-                                    break;
-                                } else {
-                                    if (!pca.hurtEntities.containsKey(mob) && PowersCalifornia.canSteal(mob)) {
-                                        pca.addToList(mob);
-                                        pca.playGotchaSound();
+                        if (mob instanceof LivingEntity) {
+                            if (!(mob instanceof StandEntity se && se.getUser().getUUID() == LE.getUUID())
+                                    && mob.isAlive()) {
+                                if (mob.getBoundingBox().intersects(wallBox)) {
+                                    if (mob.getUUID() == userEntity.getUUID()) {
+                                        pca.playUnfairSound();
+                                        pca.clearListServer();
+                                        discard();
+                                        break;
+                                    } else {
+                                        if (!pca.hurtEntities.containsKey(mob) && PowersCalifornia.canSteal(mob)) {
+                                            pca.addToList(mob);
+                                            pca.playGotchaSound();
+                                        }
                                     }
                                 }
                             }
+                        } else if (mob instanceof StepRuleEntity sre && !sre.is(this)){
+                            discard();
                         }
                     }
                 }
