@@ -98,7 +98,7 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
              $$2.add(Component.literal(comp).withStyle(formatting));
             //$$2.add(Component.translatable("text.roundabout.memory."+
             //        $$0.getOrCreateTag().getInt("stealType")).withStyle(ChatFormatting.BLUE));
-            if (!comp2){
+            if (!$$0.getOrCreateTag().getBoolean("activated")){
                 $$2.add(Component.translatable("text.roundabout.inactive_piece").withStyle(ChatFormatting.AQUA));
             }
         }
@@ -118,7 +118,11 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
         player.swing(InteractionHand.MAIN_HAND,true);
 
         CompoundTag tag = stack.getTag();
-        if (tag == null || !tag.hasUUID("victim")) {
+        if (tag == null){
+            return;
+        }
+        boolean activated = tag.getBoolean("activated");
+        if (!tag.hasUUID("victim") || !activated) {
             return;
         }
 
@@ -135,7 +139,7 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
                 if (tag.hasUUID("victim") &&
                         entity.getUUID().equals(tag.getUUID("victim"))) {
 
-                    tag.remove("victim");
+                    tag.putBoolean("activated",false);
                     stack.setDamageValue(0);
                     player.setItemSlot(EquipmentSlot.MAINHAND, stack);
                 }
@@ -175,7 +179,7 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
 
             }
         } else {
-            tag.remove("victim");
+            tag.putBoolean("activated",false);
             stack.setDamageValue(0);
             player.setItemSlot(EquipmentSlot.MAINHAND, stack);
         }

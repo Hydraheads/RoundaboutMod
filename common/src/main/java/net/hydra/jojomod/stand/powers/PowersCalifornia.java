@@ -146,8 +146,11 @@ public class PowersCalifornia extends NewDashPreset {
 
                 CompoundTag tag = invStack.getTag();
                 if (tag != null &&
+                        tag.getBoolean("activated") &&
                         tag.hasUUID("victim") &&
                         victimId.equals(tag.getUUID("victim"))) {
+
+                        tag.putBoolean("activated",false);
 
                         tag.remove("victim");
                         invStack.setDamageValue(0);
