@@ -86,6 +86,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import org.joml.Vector3f;
 
 import java.util.*;
@@ -1189,6 +1190,7 @@ public class PowersCalifornia extends NewDashPreset {
         }
     }
 
+    @SuppressWarnings("deprecation")
     public void placeBedServer(){
         if (!onCooldown(PowerIndex.SKILL_4_SNEAK)){
             if (self instanceof ServerPlayer player){
@@ -1197,17 +1199,19 @@ public class PowersCalifornia extends NewDashPreset {
                 if (hit instanceof BlockHitResult blockHit) {
                     Entity stand = getStandEntity(self);
                     if (stand instanceof CaliforniaKingBedEntity cbe) {
-                        BlockPos pos = blockHit.getBlockPos().relative(blockHit.getDirection());
-                        Direction facing = player.getDirection();
-                        UUID standUUID = cbe.getUUID();
+                        if (self.level().getBlockState(blockHit.getBlockPos()).isSolid()){
+                            BlockPos pos = blockHit.getBlockPos().relative(blockHit.getDirection());
+                            Direction facing = player.getDirection();
+                            UUID standUUID = cbe.getUUID();
 
-                        if (placeKingBed(player, pos, facing,standUUID,cbe)) {
-                            setCooldown(PowerIndex.SKILL_4_SNEAK, 40);
-                            animateStand(CaliforniaKingBedEntity.SLEEP);
+                            if (placeKingBed(player, pos, facing,standUUID,cbe)) {
+                                setCooldown(PowerIndex.SKILL_4_SNEAK, 40);
+                                animateStand(CaliforniaKingBedEntity.SLEEP);
 
-                            cbe.bedBlockBind = pos;
-                            cbe.setPos(pos.getCenter().subtract(0,0.5,0));
-                            this.poseStand(OffsetIndex.LOOSE);
+                                cbe.bedBlockBind = pos;
+                                cbe.setPos(pos.getCenter().subtract(0,0.5,0));
+                                this.poseStand(OffsetIndex.LOOSE);
+                            }
                         }
                     }
                 }
@@ -1253,16 +1257,28 @@ public class PowersCalifornia extends NewDashPreset {
         if (!headState.canSurvive(level, headPos))
             return false;
 
+        if (!player.level().isUnobstructed(headState, headPos, CollisionContext.empty())){
+            return false;
+        }
+        if (!player.level().isUnobstructed(footState, pos, CollisionContext.empty())){
+            return false;
+        }
+
         // Place the blocks
         level.setBlock(pos, footState, Block.UPDATE_ALL);
         level.setBlock(headPos, headState, Block.UPDATE_ALL);
 
+        UUID bedUUID = UUID.randomUUID();
+        ckb.bedUUID = bedUUID;
+
         if (level.getBlockEntity(pos) instanceof KingBedBlockEntity bed) {
             bed.setStandUUID(standUUID);
+            bed.setBedUUID(bedUUID);
         }
 
         if (level.getBlockEntity(headPos) instanceof KingBedBlockEntity bed) {
             bed.setStandUUID(standUUID);
+            bed.setBedUUID(bedUUID);
         }
 
         float yaw = footState.getValue(BedBlock.FACING).getOpposite().toYRot();

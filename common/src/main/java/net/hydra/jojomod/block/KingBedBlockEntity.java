@@ -4,6 +4,7 @@ import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -27,10 +28,20 @@ public class KingBedBlockEntity extends BlockEntity {
     }
 
     private UUID standUUID;
+    private UUID bedUUID;
 
     public void setStandUUID(UUID uuid) {
         this.standUUID = uuid;
         setChanged();
+    }
+    public void setBedUUID(UUID uuid) {
+        this.bedUUID = uuid;
+        setChanged();
+    }
+
+    @Nullable
+    public UUID getBedUUID() {
+        return bedUUID;
     }
 
     @Nullable
@@ -71,9 +82,14 @@ public class KingBedBlockEntity extends BlockEntity {
 
         Entity entity = ((ServerLevel) level).getEntity(uuid);
 
-        if (!(entity instanceof CaliforniaKingBedEntity ckb && ckb.bedBlockBind != null)) {
+        if (entity instanceof CaliforniaKingBedEntity ckb){
+            if (ckb.bedUUID == null || !ckb.bedUUID.equals(bed.getBedUUID())){
+                removeBed(level, pos, state);
+            }
+        } else {
             removeBed(level, pos, state);
         }
+
     }
     private static void removeBed(Level level, BlockPos pos, BlockState state) {
         BedPart part = state.getValue(BedBlock.PART);

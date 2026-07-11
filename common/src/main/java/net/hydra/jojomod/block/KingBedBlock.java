@@ -2,17 +2,22 @@ package net.hydra.jojomod.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BedBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 
 public class KingBedBlock extends BedBlock {
+    protected static final VoxelShape BASE = Block.box((double)0.0F, (double)3.0F, (double)0.0F, (double)16.0F, (double)7.0F, (double)16.0F);
     public KingBedBlock(DyeColor $$0, Properties $$1) {
         super($$0, $$1);
     }
@@ -24,6 +29,11 @@ public class KingBedBlock extends BedBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level $$0, BlockState $$1, BlockEntityType<T> $$2) {
         return !$$0.isClientSide() ? createTickerHelper($$2, ModBlocks.KING_BED_BLOCK_ENTITY, KingBedBlockEntity::tickThis) : null;
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState $$0, BlockGetter $$1, BlockPos $$2, CollisionContext $$3) {
+        return BASE;
     }
 
     @Nullable
