@@ -5,6 +5,7 @@ import com.mojang.serialization.Dynamic;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.block.KingBedBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
@@ -78,6 +79,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -1193,17 +1195,24 @@ public class PowersCalifornia extends NewDashPreset {
                 HitResult hit = player.pick(5.0D, 0.0F, false);
 
                 if (hit instanceof BlockHitResult blockHit) {
-                    BlockPos pos = blockHit.getBlockPos().relative(blockHit.getDirection());
-                    Direction facing = player.getDirection();
+                    Entity stand = getStandEntity(self);
+                    if (stand instanceof CaliforniaKingBedEntity cbe) {
+                        BlockPos pos = blockHit.getBlockPos().relative(blockHit.getDirection());
+                        Direction facing = player.getDirection();
+                        UUID standUUID = cbe.getUUID();
 
-                    if (placeKingBed(player, pos, facing)){
-                        setCooldown(PowerIndex.SKILL_4_SNEAK, 40);
+                        if (placeKingBed(player, pos, facing,standUUID)) {
+                            setCooldown(PowerIndex.SKILL_4_SNEAK, 40);
+                            cbe.bedBlockBind = pos;
+                            cbe.setPos(pos.getCenter());
+                            this.poseStand(OffsetIndex.LOOSE);
+                        }
                     }
                 }
             }
         }
     }
-    public static boolean placeKingBed(ServerPlayer player, BlockPos pos, Direction facing) {
+    public static boolean placeKingBed(ServerPlayer player, BlockPos pos, Direction facing, UUID standUUID) {
         ServerLevel level = player.serverLevel();
 
         BlockState footState = ModBlocks.KING_BED_BLOCK
@@ -1245,6 +1254,15 @@ public class PowersCalifornia extends NewDashPreset {
         // Place the blocks
         level.setBlock(pos, footState, Block.UPDATE_ALL);
         level.setBlock(headPos, headState, Block.UPDATE_ALL);
+
+        if (level.getBlockEntity(pos) instanceof KingBedBlockEntity bed) {
+            bed.setStandUUID(standUUID);
+        }
+
+        if (level.getBlockEntity(headPos) instanceof KingBedBlockEntity bed) {
+            bed.setStandUUID(standUUID);
+        }
+
 
         // Vanilla callback
         footState.getBlock().setPlacedBy(level, pos, footState, player, ItemStack.EMPTY);

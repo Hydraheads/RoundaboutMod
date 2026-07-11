@@ -1,9 +1,11 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class CaliforniaKingBedEntity extends FollowingStandEntity {
     public CaliforniaKingBedEntity(EntityType<? extends Mob> entityType, Level world) {
@@ -31,4 +33,7 @@ public class CaliforniaKingBedEntity extends FollowingStandEntity {
     public float getDistanceOutModified() {return getDistanceOut()*1.15F;}
     @Override
     public float getAnchorPlaceModified() {return getAnchorPlace()+10;}
+
+    public BlockPos bedBlockBind = null;
+
 }
