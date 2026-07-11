@@ -230,6 +230,10 @@ public class ForgeParticles {
             "occult",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> AIRBUBBLE_PINK = PARTICLES.register(
+            "airbubble_pink",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> HYPNO_SWIRL = PARTICLES.register(
             "hypno_swirl",
             () -> new SimpleParticleType(true)
