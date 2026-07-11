@@ -618,6 +618,8 @@ public class StandIcons {
 
     public static final ResourceLocation BITE_FINGERS_POLPO = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/black_sabbath/finger_bite_polpo.png");
+    public static final ResourceLocation POLPO_INVENTORY = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/black_sabbath/black_sabbath_chest.png");
 
     public static final ResourceLocation D4C_BETWEEN_VISION = Roundabout.location("textures/gui/icons/d4c/between_vision.png");
     public static final ResourceLocation D4C_DIMENSION_KIDNAP = Roundabout.location("textures/gui/icons/d4c/dimension_kidnap.png");

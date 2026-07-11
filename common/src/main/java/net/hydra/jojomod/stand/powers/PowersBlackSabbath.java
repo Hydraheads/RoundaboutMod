@@ -3,7 +3,10 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.gui.PowerInventoryMenu;
+import net.hydra.jojomod.client.gui.PowerInventoryScreen;
 import net.hydra.jojomod.client.models.layers.animations.CenturyBoyAnimations;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisAnimations;
 import net.hydra.jojomod.entity.ModEntities;
@@ -23,8 +26,10 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -32,10 +37,12 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
@@ -66,7 +73,7 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        setSkillIcon(context, x, y, 1, StandIcons.ANUBIS_EXP, PowerIndex.SKILL_1);
+        setSkillIcon(context, x, y, 1, StandIcons.POLPO_INVENTORY, PowerIndex.SKILL_1);
        // setSkillIcon(context, x, y, 2, StandIcons.MINING_YAP, PowerIndex.SKILL_2);
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         setSkillIcon(context, x, y, 4, StandIcons.BITE_FINGERS_POLPO, PowerIndex.SKILL_4);
@@ -80,7 +87,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         switch (context)
         {
             case SKILL_1_NORMAL, SKILL_1_CROUCH ->{
-                if(!onCooldown(PowerIndex.SKILL_1)) {
+                if(!onCooldown(PowerIndex.SKILL_1) && !isAttackIneptVisually(PowerIndex.SKILL_1, 1)) {
                     openPolpoInventory();
                     this.setCooldown(PowerIndex.SKILL_1, 10);
                 }
@@ -143,10 +150,34 @@ public class PowersBlackSabbath extends NewDashPreset {
          return true;
     }
 
+    public boolean checkIfYouAreInDark(){
+        Entity $$0 = this.getSelf();
+        BlockPos pos = $$0.blockPosition();
+        long timeOfDay = $$0.level().getDayTime() % 24000L;
+        boolean isDay = timeOfDay < 12555L || timeOfDay > 23470;
+        if($$0.level().getBrightness(LightLayer.BLOCK, pos) < 11){
+            if(isDay){
+                if($$0.level().getBrightness(LightLayer.SKY, $$0.blockPosition()) < 11 || $$0.level().isRaining() || $$0.level().isThundering()){
+                    return true;
+                }
+            } else if (!isDay){
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return  false;
+       // return $$0.level().getBrightness(LightLayer.BLOCK, pos) < 11 && ((isDay && !($$0.level().canSeeSky(BlockPos.containing($$0.getEyePosition())) && $$0.level().canSeeSky(BlockPos.containing($$0.position())) || !isDay)));
+    }
+
     public void openPolpoInventory(){
         if(this.self instanceof Player player){
             if(player.level() != null) {
                 this.self.playSound(SoundEvents.ENDER_CHEST_OPEN);
+            }
+            if(isClient()) {
+                ClientUtil.openHairspryUI();
             }
         }
     }
@@ -177,6 +208,9 @@ public class PowersBlackSabbath extends NewDashPreset {
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         if(slot == 4 && this.getSelf().getHealth() <= 1) {
             return  true;
+        }
+        if(slot == 1 && !this.checkIfYouAreInDark()){
+            return true;
         }
         return super.isAttackIneptVisually(activeP, slot);
     }
@@ -341,7 +375,7 @@ public class PowersBlackSabbath extends NewDashPreset {
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.danger_yap",
-                "instruction.roundabout.press_skill", StandIcons.ANUBIS_EXP, 1, level, bypass));
+                "instruction.roundabout.press_skill", StandIcons.POLPO_INVENTORY, 1, level, bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.mining_yap",
                 "instruction.roundabout.press_skill", StandIcons.PLUNDER_SELECTION,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
