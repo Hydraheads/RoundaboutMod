@@ -30,6 +30,7 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
@@ -554,14 +555,17 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             if (visage != null && !visage.isEmpty()) {
                 if (visage.getItem() instanceof MaskItem MI) {
                     if (MI instanceof ModificationMaskItem MD){
-                        int faceSize = visage.getOrCreateTagElement("modifications").getInt("head");
-                        float yeah = (float) (0.73F + (faceSize*0.002));
-                        head.xScale *=yeah;
-                        head.yScale *= yeah;
-                        head.zScale *= yeah;
-                        hat.xScale *= yeah;
-                        hat.yScale *= yeah;
-                        hat.zScale *= yeah;
+                        CompoundTag tag = visage.getOrCreateTagElement("modifications");
+                        if (tag != null && tag.contains("head")) {
+                            int faceSize = tag.getInt("head");
+                            float yeah = (float) (0.73F + (faceSize * 0.002));
+                            head.xScale *= yeah;
+                            head.yScale *= yeah;
+                            head.zScale *= yeah;
+                            hat.xScale *= yeah;
+                            hat.yScale *= yeah;
+                            hat.zScale *= yeah;
+                        }
                     } else {
                         Vector3f scale = MI.visageData.scaleHead();
                         head.xScale *= scale.x;
