@@ -1184,7 +1184,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
 
          if (!this.self.level().isClientSide()) {
-             this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+             this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 1.05F, pitch);
              this.self.level().playSound(null, this.self.blockPosition(), SHIBAE, SoundSource.PLAYERS, 1.0F, 1.0f);
          }
     }
