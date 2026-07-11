@@ -204,13 +204,6 @@ public class PowersOasis extends NewDashPreset {
 
         }
 
-        /*
-        if (move == PowerIndex.BARRAGE_CHARGE) {
-            this.setPowerBarrageCharge();
-        } else if (move == PowerIndex.BARRAGE) {
-            this.setPowerBarrage();
-        }
-*/
         return super.setPowerOther(move,lastMove);
     }
 
@@ -265,9 +258,11 @@ public class PowersOasis extends NewDashPreset {
         }
         if (keyIsDown) {
             if (activePowerPhase == 0) {
-                if (isBrawling()) {
-                    if (!isBarraging()) {
+                if (isBrawling() && !isBarraging()) {
+                    if (!isHoldingSneak()) {
                         this.tryPower(PowerIndex.ATTACK);
+                    } else if (self.onGround()) {
+
                     }
                 }
             }
