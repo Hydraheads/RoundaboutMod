@@ -5,6 +5,7 @@ import com.mojang.serialization.Dynamic;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
@@ -35,6 +36,7 @@ import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Position;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -50,6 +52,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -69,10 +72,17 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BedPart;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
@@ -338,6 +348,15 @@ public class PowersCalifornia extends NewDashPreset {
             case SKILL_4_NORMAL -> {
                 ruleSwitchClient();
             }
+            case SKILL_4_CROUCH -> {
+                placeBedClient();
+            }
+        }
+    }
+
+    public void placeBedClient(){
+        if (!onCooldown(PowerIndex.SKILL_4_SNEAK)) {
+            tryPowerPacket(PowerIndex.POWER_4_SNEAK);
         }
     }
     @Override
@@ -858,6 +877,8 @@ public class PowersCalifornia extends NewDashPreset {
             doTheLeaveRule();
         } else if (move == PowerIndex.POWER_3){
             saveBishop();
+        } else if (move == PowerIndex.POWER_4_SNEAK){
+            placeBedServer();
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -1165,6 +1186,73 @@ public class PowersCalifornia extends NewDashPreset {
             }
         }
     }
+
+    public void placeBedServer(){
+        if (!onCooldown(PowerIndex.SKILL_4_SNEAK)){
+            if (self instanceof ServerPlayer player){
+                HitResult hit = player.pick(5.0D, 0.0F, false);
+
+                if (hit instanceof BlockHitResult blockHit) {
+                    BlockPos pos = blockHit.getBlockPos().relative(blockHit.getDirection());
+                    Direction facing = player.getDirection();
+
+                    if (placeKingBed(player, pos, facing)){
+                        setCooldown(PowerIndex.SKILL_4_SNEAK, 40);
+                    }
+                }
+            }
+        }
+    }
+    public static boolean placeKingBed(ServerPlayer player, BlockPos pos, Direction facing) {
+        ServerLevel level = player.serverLevel();
+
+        BlockState footState = ModBlocks.KING_BED_BLOCK
+                .defaultBlockState()
+                .setValue(BedBlock.FACING, facing)
+                .setValue(BedBlock.PART, BedPart.FOOT)
+                .setValue(BedBlock.OCCUPIED, false);
+
+        BlockPos headPos = pos.relative(facing);
+
+        BlockState headState = footState
+                .setValue(BedBlock.PART, BedPart.HEAD);
+
+        // Height limit
+        if (!level.isInWorldBounds(pos) || !level.isInWorldBounds(headPos))
+            return false;
+
+        // Can the player build here?
+        if (!player.mayUseItemAt(pos, facing, ItemStack.EMPTY))
+            return false;
+
+        if (!player.mayUseItemAt(headPos, facing, ItemStack.EMPTY))
+            return false;
+
+        // Both positions must be replaceable
+        if (!level.getBlockState(pos).canBeReplaced())
+            return false;
+
+        if (!level.getBlockState(headPos).canBeReplaced())
+            return false;
+
+        // Can both halves survive?
+        if (!footState.canSurvive(level, pos))
+            return false;
+
+        if (!headState.canSurvive(level, headPos))
+            return false;
+
+        // Place the blocks
+        level.setBlock(pos, footState, Block.UPDATE_ALL);
+        level.setBlock(headPos, headState, Block.UPDATE_ALL);
+
+        // Vanilla callback
+        footState.getBlock().setPlacedBy(level, pos, footState, player, ItemStack.EMPTY);
+
+        level.gameEvent(player, GameEvent.BLOCK_PLACE, pos);
+
+        return true;
+    }
     public void saveLocation(){
         if (!onCooldown(PowerIndex.SKILL_2_SNEAK)){
             if (self instanceof ServerPlayer pl){
@@ -1193,6 +1281,7 @@ public class PowersCalifornia extends NewDashPreset {
                 num == PowerIndex.SKILL_3 ||
                 num == PowerIndex.SKILL_EXTRA ||
                 num == PowerIndex.SKILL_2_SNEAK ||
+                num == PowerIndex.SKILL_4_SNEAK ||
                 num == PowerIndex.SKILL_EXTRA_2) {
             return true;
         }
