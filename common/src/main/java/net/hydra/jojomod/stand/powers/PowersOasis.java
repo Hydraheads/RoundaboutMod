@@ -3,6 +3,7 @@ package net.hydra.jojomod.stand.powers;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -53,6 +54,10 @@ public class PowersOasis extends NewDashPreset {
     }
     @Override
     public boolean interceptAttack(){
+        return fistsOut;
+    }
+    @Override
+    public boolean interceptGuard(){
         return fistsOut;
     }
 
@@ -198,6 +203,14 @@ public class PowersOasis extends NewDashPreset {
             }
 
         }
+
+        /*
+        if (move == PowerIndex.BARRAGE_CHARGE) {
+            this.setPowerBarrageCharge();
+        } else if (move == PowerIndex.BARRAGE) {
+            this.setPowerBarrage();
+        }
+*/
         return super.setPowerOther(move,lastMove);
     }
 
@@ -205,6 +218,7 @@ public class PowersOasis extends NewDashPreset {
 
     @Override
     public void tickPower() {
+
         super.tickPower();
     }
 
@@ -228,6 +242,23 @@ public class PowersOasis extends NewDashPreset {
     }
 
     @Override
+    public boolean setPowerGuard(){
+        if (!self.level().isClientSide()) {
+            if (getPlayerPos2() != PlayerPosIndex.GUARD) {
+                setPlayerPos2(PlayerPosIndex.GUARD);
+            }
+        }
+        return super.setPowerGuard();
+    }
+
+    /*
+    @Override
+    public void updateUniqueMoves(){
+        super.updateUniqueMoves();
+    }
+     */
+
+    @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (self instanceof Player pl &&  ((IPlayerEntity)pl).roundabout$getAttackStrengthTicker() < 5) {
             return;
@@ -238,6 +269,28 @@ public class PowersOasis extends NewDashPreset {
                     if (!isBarraging()) {
                         this.tryPower(PowerIndex.ATTACK);
                     }
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean buttonInputGuard(boolean keyIsDown, Options options) {
+        if (!this.isGuarding() && this.isBrawling()) {
+            this.tryPower(PowerIndex.GUARD, true);
+            tryPowerPacket(PowerIndex.GUARD);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void buttonInputBarrage(boolean keyIsDown, Options options) {
+        if (keyIsDown) {
+            if (activePowerPhase == 0 || this.getAttackTime() >= this.getAttackTimeMax()){
+                if (isBrawling() && !isBarraging()) {
+                    this.tryPower(PowerIndex.BARRAGE_CHARGE, true);
+                    tryPowerPacket(PowerIndex.BARRAGE_CHARGE);
                 }
             }
         }
