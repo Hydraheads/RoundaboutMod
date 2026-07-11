@@ -429,6 +429,7 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.D4C_LINES.get(), D4CLinesParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.STITCH.get(), StitchParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.OCCULT.get(), OccultParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.AIRBUBBLE_PINK.get(), AirBubblePink.Provider::new);
         event.registerSpriteSet(ForgeParticles.METALLICA_NAIL.get(), net.minecraft.client.particle.CritParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.METALLICA_RAZOR.get(), net.minecraft.client.particle.CritParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.METALLICA_SCISSORS.get(), net.minecraft.client.particle.CritParticle.Provider::new);
