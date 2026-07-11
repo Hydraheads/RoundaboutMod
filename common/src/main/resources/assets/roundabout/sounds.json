@@ -383,6 +383,24 @@
       "roundabout:killer_queen_shibaba"
     ]
   },
+  "killer_queen_punch_1": {
+    "subtitle": "sounds.roundabout.punch_sfx3",
+    "sounds": [
+      "roundabout:killer_queen_punch_1"
+    ]
+  },
+  "killer_queen_punch_2": {
+    "subtitle": "sounds.roundabout.punch_sfx4",
+    "sounds": [
+      "roundabout:killer_queen_punch_2"
+    ]
+  },
+  "killer_queen_heavy_punch": {
+    "subtitle": "sounds.roundabout.killer_queen_heavy_punch",
+    "sounds": [
+      "roundabout:killer_queen_heavy_punch"
+    ]
+  },
   "sha_jump": {
     "subtitle": "sounds.roundabout.sha_jump",
     "sounds": [

@@ -309,6 +309,9 @@ public class FabricSounds {
         addSound(ModSounds.SHA_JUMP_ID, ModSounds.SHA_JUMP_EVENT);
         addSound(ModSounds.KILLER_QUEEN_IMPALE_ID, ModSounds.KILLER_QUEEN_IMPALE_EVENT);
         addSound(ModSounds.KILLER_QUEEN_PUNCH_ID, ModSounds.KILLER_QUEEN_PUNCH_EVENT);
+        addSound(ModSounds.KILLER_QUEEN_PUNCH_1_ID, ModSounds.KILLER_QUEEN_PUNCH_1_EVENT);
+        addSound(ModSounds.KILLER_QUEEN_PUNCH_2_ID, ModSounds.KILLER_QUEEN_PUNCH_2_EVENT);
+        addSound(ModSounds.KILLER_QUEEN_HEAVY_PUNCH_ID, ModSounds.KILLER_QUEEN_HEAVY_PUNCH_EVENT);
         addSound(ModSounds.KILLER_QUEEN_SHIBA_ID, ModSounds.KILLER_QUEEN_SHIBA_EVENT);
         addSound(ModSounds.KILLER_QUEEN_SHIBABA_ID, ModSounds.KILLER_QUEEN_SHIBABA_EVENT);
         addSound(ModSounds.KILLER_QUEEN_SHA_SUMMON_ID, ModSounds.KILLER_QUEEN_SHA_SUMMON_EVENT);

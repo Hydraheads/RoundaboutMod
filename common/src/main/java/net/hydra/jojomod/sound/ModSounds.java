@@ -641,6 +641,17 @@ public class ModSounds {
     public static final String KILLER_QUEEN_PUNCH = "killer_queen_punch";
     public static final ResourceLocation KILLER_QUEEN_PUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_PUNCH);
     public static SoundEvent KILLER_QUEEN_PUNCH_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_PUNCH_ID);
+
+    public static final String KILLER_QUEEN_PUNCH_1 = "killer_queen_punch_1";
+    public static final ResourceLocation KILLER_QUEEN_PUNCH_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_PUNCH_1);
+    public static SoundEvent KILLER_QUEEN_PUNCH_1_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_PUNCH_1_ID);
+    public static final String KILLER_QUEEN_PUNCH_2 = "killer_queen_punch_2";
+    public static final ResourceLocation KILLER_QUEEN_PUNCH_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_PUNCH_2);
+    public static SoundEvent KILLER_QUEEN_PUNCH_2_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_PUNCH_2_ID);
+    public static final String KILLER_QUEEN_HEAVY_PUNCH = "killer_queen_heavy_punch";
+    public static final ResourceLocation KILLER_QUEEN_HEAVY_PUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_HEAVY_PUNCH);
+    public static SoundEvent KILLER_QUEEN_HEAVY_PUNCH_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_HEAVY_PUNCH_ID);
+
     public static final String KILLER_QUEEN_SHIBA = "killer_queen_shiba";
     public static final ResourceLocation KILLER_QUEEN_SHIBA_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SHIBA);
     public static SoundEvent KILLER_QUEEN_SHIBA_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SHIBA_ID);

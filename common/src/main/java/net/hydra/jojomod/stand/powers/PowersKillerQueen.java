@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -91,10 +92,9 @@ public class PowersKillerQueen extends NewPunchingStand {
 
 	// TODO Make bomb item
 	// TODO Bites The Dust
+    // TODO BUBBLES-SHIELD
 	
-	// TODO Audio Translations
-
-    // TODO sheer heart attack walk on wall
+	// TODO Audio Translations (WIP)
 	
 	private static final byte
 		PLANTED=53,
@@ -110,8 +110,8 @@ public class PowersKillerQueen extends NewPunchingStand {
         BUBBLE_BOMB = 63,
 
     // COOLDOWN INDEXES
-        BUBBLE_SEND_COOLDOWN = 10,
-        SHA_COOLDOWN = 11,
+        BUBBLE_SEND_COOLDOWN = PowerIndex.SKILL_4_SNEAK,
+        SHA_COOLDOWN = PowerIndex.SKILL_3,
 
     // SOUNDS ID
         IMPALE_NOISE = -108,
@@ -237,7 +237,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override
     public int getMaxGuardPoints(){
         if (this.canUseStrayCat()) {
-            return getNormalMaxGuardPoints() + ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantWindup;
+            return getNormalMaxGuardPoints() + ClientNetworking.getAppropriateConfig().killerQueenSettings.airBubbleGuardIncrease;
         }
 
         return getNormalMaxGuardPoints();
@@ -1081,14 +1081,14 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
 
             if (entity != null) {
-                SE = ModSounds.PUNCH_4_SOUND_EVENT;
+                SE = ModSounds.KILLER_QUEEN_PUNCH_2_EVENT;
                 pitch = 1.2F;
             } else {
                 SE = ModSounds.PUNCH_2_SOUND_EVENT;
             }
         } else {
             if (entity != null) {
-                SE = ModSounds.PUNCH_3_SOUND_EVENT;
+                SE = ModSounds.KILLER_QUEEN_PUNCH_1_EVENT;
                 pitch = 1.1F + 0.07F * activePowerPhase;
             } else {
                 SE = ModSounds.PUNCH_1_SOUND_EVENT;
@@ -1167,7 +1167,11 @@ public class PowersKillerQueen extends NewPunchingStand {
          float pitch = 1F;
 
          if (entity != null) {
-        	 SE = ModSounds.KILLER_QUEEN_PUNCH_EVENT;
+             if (chargedFinal >= maxKickTime) {
+                 SE = ModSounds.KILLER_QUEEN_HEAVY_PUNCH_EVENT;
+             }else {
+                 SE = ModSounds.KILLER_QUEEN_PUNCH_EVENT;
+             }
              pitch = 1.2F;
          } else {
              SE = ModSounds.PUNCH_2_SOUND_EVENT;
@@ -1180,7 +1184,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
 
          if (!this.self.level().isClientSide()) {
-             this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+             this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 1.05F, pitch);
              this.self.level().playSound(null, this.self.blockPosition(), SHIBAE, SoundSource.PLAYERS, 1.0F, 1.0f);
          }
     }
@@ -1421,7 +1425,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
     
     public void tryToSendOrReturnSHA(boolean shaThrow) {
-        if (canExecuteMoveWithLevel(getSheerHeartAttackLevel())) {
+        if (!this.onCooldown(SHA_COOLDOWN) && canExecuteMoveWithLevel(getSheerHeartAttackLevel())) {
             if (shaThrow) {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BLOCK, true);
                 tryPowerPacket(PowerIndex.POWER_3_BLOCK);
@@ -1478,7 +1482,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void tryBubbleSend() {
-        if (!this.onCooldown(PowerIndex.SKILL_2_GUARD) && (this.getActivePower() == PowerIndex.NONE || this.getActivePower() == PowerIndex.GUARD)
+        if (!this.onCooldown(BUBBLE_SEND_COOLDOWN) && (this.getActivePower() == PowerIndex.NONE || this.getActivePower() == PowerIndex.GUARD)
             && this.canUseStrayCat()) {
             bombConfigPacket();
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BLOCK, true);
@@ -1494,7 +1498,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void tryBlockPlantBomb() {
-    	if (!this.onCooldown(PowerIndex.SKILL_1) && this.canAttack2()) {
+    	if (!this.onCooldown(PowerIndex.SKILL_1) && this.activePower == NONE) {
             bombConfigPacket();
 
     		((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
@@ -1517,7 +1521,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void airBubbleRedirectClient(){
-        if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+        //if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
             Entity ent = this.getTargetEntity(this.self, 30);
             if (ent != null) {
                 int id = ent.getId();
@@ -1525,10 +1529,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 this.tryIntPower(PowerIndex.POWER_2_EXTRA, true, id);
                 tryIntPowerPacket(PowerIndex.POWER_2_EXTRA, id);
             }
-            //Vec3 pos = MainUtil.getRaytracePointOnMobOrBlock(this.self, 30);
-            //this.tryPosPower(PowerIndex.POWER_2_EXTRA, true, pos);
-            //tryPosPowerPacket(PowerIndex.POWER_2_EXTRA, pos);
-        }
+        //}
 
     }
 
@@ -1600,15 +1601,19 @@ public class PowersKillerQueen extends NewPunchingStand {
     	return true;
     }
 
-    public void bubbleContactedBlock() {
-        this.explode();
+    public void bubbleFailed() {
+        int cooldownAmount = (int)(ClientNetworking.getAppropriateConfig().killerQueenSettings.bubbleShootCooldown * 0.2);
+        this.setCooldown(BUBBLE_SEND_COOLDOWN, cooldownAmount);
+        if (this.getSelf() instanceof Player P) {
+            S2CPacketUtil.sendCooldownSyncPacket(P, BUBBLE_SEND_COOLDOWN, cooldownAmount);
+        }
     }
 
     public void bubbleContacted(Entity ent) {
-        if (this.isContactModeEnabled() || this.getActivePower() == DETONATE) {
+        if (this.isContactModeEnabled() || this.detonateTimer > -1) {
             this.bombEntity = ent;
             syncBombStatus(BUBBLE_CONTACT);
-            if (this.getActivePower() != DETONATE) {
+            if (this.detonateTimer > -1) {
                 this.explode();
             }
         }else {
@@ -1956,15 +1961,15 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (mobPlantTicks > 0){ mobPlantTicks--; }
         if (impaleTicks > 0){ impaleTicks--; }
 
-        if (isClient() && this.getActivePower() == PowerIndex.GUARD && this.self.tickCount % 4 == 0
-                && this.getStandUserSelf().roundabout$getGuardPoints() > getNormalMaxGuardPoints()) {
+        if (!isClient() && this.getActivePower() == PowerIndex.GUARD && this.self.tickCount % 4 == 0
+                && this.getStandUserSelf().roundabout$getGuardPoints() > getNormalMaxGuardPoints()*(ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardMultiplier*0.01)) {
             StandEntity KQE = this.getStandEntity(this.self);
 
             Vec3 pos = getRandPos(KQE);
 
-            this.self.level().addAlwaysVisibleParticle(getBubbleParticle(),
+            ((ServerLevel) this.self.level()).sendParticles(getBubbleParticle(),
                     (double)pos.x, (double)pos.y, (double)pos.z,
-                    0, 0.0, 0);
+                    0, 0, 0, 0.0, 1);
 
         }
 
@@ -1972,15 +1977,27 @@ public class PowersKillerQueen extends NewPunchingStand {
             this.detectIfShouldDefuse();
             this.updateDetonate();
 
-            if (this.SHA != null) {
+            if (this.SHA != null && !this.SHA.isRemoved()) {
                 if ((this.SHA.shaIsNear() && this.SHA.getHaveToReturn()) || this.SHA.isRemoved() || this.inBitesTheDustMode()) {
                     this.SHA.discard();
                     this.syncShaStatus(SHA_NONE);
-                    this.setCooldown(SHA_COOLDOWN, ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackCooldown);
+                    int shaCooldown = ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackCooldown;
+                    this.setCooldown(SHA_COOLDOWN, shaCooldown);
+                    if (this.getSelf() instanceof Player P) {
+                        S2CPacketUtil.sendCooldownSyncPacket(P, SHA_COOLDOWN, shaCooldown);
+                    }
+                    this.SHA = null;
+                    Roundabout.LOGGER.info("something something: " + this.currentShaStatus);
                 }
             }else if (this.currentShaStatus != SHA_NONE){
-                this.setCooldown(SHA_COOLDOWN, ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackCooldown);
+                int shaCooldown = ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackCooldown;
+                this.setCooldown(SHA_COOLDOWN, shaCooldown);
+                if (this.getSelf() instanceof Player P) {
+                    S2CPacketUtil.sendCooldownSyncPacket(P, SHA_COOLDOWN, shaCooldown);
+                }
+
                 this.syncShaStatus(SHA_NONE);
+
             }
 
             byte activePower = this.getActivePower();
@@ -2297,26 +2314,29 @@ public class PowersKillerQueen extends NewPunchingStand {
     public boolean explode() {
         if (!this.isClient()) {
 
-            byte skillCooldown = PowerIndex.NONE;
             int cooldownAmount = 0;
             byte bStatus = this.currentBombStatus;
 
             if (bStatus == BOMB_BLOCK || bStatus == BLOCK_CONTACT) {
-                skillCooldown = PowerIndex.SKILL_1;
                 cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.blockPlantCooldown;
+                this.setCooldown(PowerIndex.SKILL_1, cooldownAmount);
+                if (this.getSelf() instanceof Player P) {
+                    S2CPacketUtil.sendCooldownSyncPacket(P, PowerIndex.SKILL_1, cooldownAmount);
+                }
             }else if (bStatus == BOMB_ENTITY) {
-                skillCooldown = PowerIndex.SKILL_2;
-                cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantCooldown;
-            }else if (bStatus == BUBBLE_CONTACT || bStatus == BOMB_BUBBLE) {
-                skillCooldown = BUBBLE_SEND_COOLDOWN;
-                cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.bubbleShootCooldown;
-            }
 
-            if (skillCooldown != PowerIndex.NONE) {
-                this.setCooldown(skillCooldown, cooldownAmount);
-                /*if (this.getSelf() instanceof Player P) {
-                    S2CPacketUtil.sendCooldownSyncPacket(P, skillCooldown, cooldownAmount);
-                }*/
+                cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantCooldown;
+                this.setCooldown(PowerIndex.SKILL_2, cooldownAmount);
+                if (this.getSelf() instanceof Player P) {
+                    S2CPacketUtil.sendCooldownSyncPacket(P, PowerIndex.SKILL_2, cooldownAmount);
+                }
+            }else if (bStatus == BUBBLE_CONTACT || bStatus == BOMB_BUBBLE) {
+
+                cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.bubbleShootCooldown;
+                this.setCooldown(BUBBLE_SEND_COOLDOWN, cooldownAmount);
+                if (this.getSelf() instanceof Player P) {
+                    S2CPacketUtil.sendCooldownSyncPacket(P, BUBBLE_SEND_COOLDOWN, cooldownAmount);
+                }
             }
 
             BlockPos bPos = BlockPos.ZERO;
@@ -2435,8 +2455,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                 target.discard();
             }
 
-            ExplosionUtil.explodeEffects(vPos, level, ModParticles.KILLER_QUEEN_EXPLOSION, 0.6f);
-            this.getSelf().level().playSound(null, bPos, ModSounds.KILLER_QUEEN_EXPLOSION_EVENT, SoundSource.PLAYERS, 0.65F, 1.0f);
+            ExplosionUtil.explodeEffects(vPos, level, ModParticles.KILLER_QUEEN_EXPLOSION, 0.55f);
+            this.getSelf().level().playSound(null, bPos, ModSounds.KILLER_QUEEN_EXPLOSION_EVENT, SoundSource.PLAYERS, 0.3F, 1.0f);
         }
         this.detonateTimer = -1;
 		this.syncBombStatus(BOMB_NONE);
@@ -2450,10 +2470,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     	if (!this.isClient()) {
             this.playSoundsIfNearby(DETONATE, 27, true);
 
-            int detonateWindup = getDetonateWindup();
-
-
-
+            //int detonateWindup = getDetonateWindup();
 
             if (this.currentBombStatus == BOMB_ITEM) {
                 StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();

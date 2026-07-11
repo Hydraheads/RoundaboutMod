@@ -278,6 +278,12 @@ public class ForgeSounds {
             register(ModSounds.KILLER_QUEEN_IMPALE, ModSounds.KILLER_QUEEN_IMPALE_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_PUNCH_EVENT =
             register(ModSounds.KILLER_QUEEN_PUNCH, ModSounds.KILLER_QUEEN_PUNCH_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_HEAVY_PUNCH_EVENT =
+            register(ModSounds.KILLER_QUEEN_HEAVY_PUNCH, ModSounds.KILLER_QUEEN_HEAVY_PUNCH_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_PUNCH_1_EVENT =
+            register(ModSounds.KILLER_QUEEN_PUNCH_1, ModSounds.KILLER_QUEEN_PUNCH_1_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_PUNCH_2_EVENT =
+            register(ModSounds.KILLER_QUEEN_PUNCH_2, ModSounds.KILLER_QUEEN_PUNCH_2_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHIBA_EVENT =
             register(ModSounds.KILLER_QUEEN_SHIBA, ModSounds.KILLER_QUEEN_SHIBA_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHIBABA_EVENT =
